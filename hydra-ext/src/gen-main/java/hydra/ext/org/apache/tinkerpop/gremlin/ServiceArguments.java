@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class ServiceArguments implements Serializable, Comparable<ServiceArguments> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ServiceArguments");
-  
+
   public static final hydra.core.Name MAP = new hydra.core.Name("map");
-  
+
   public static final hydra.core.Name TRAVERSAL = new hydra.core.Name("traversal");
-  
+
   private ServiceArguments () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Map instance) ;
-    
+
     R visit(Traversal instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ServiceArguments instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Map instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Traversal instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Map extends hydra.ext.org.apache.tinkerpop.gremlin.ServiceArguments implements Serializable {
     public final hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapArgument> value;
-    
+
     public Map (hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapArgument> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Map)) {
@@ -54,12 +54,12 @@ public abstract class ServiceArguments implements Serializable, Comparable<Servi
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ServiceArguments other) {
@@ -70,20 +70,20 @@ public abstract class ServiceArguments implements Serializable, Comparable<Servi
       Map o = (Map) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Traversal extends hydra.ext.org.apache.tinkerpop.gremlin.ServiceArguments implements Serializable {
     public final hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
-    
+
     public Traversal (hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Traversal)) {
@@ -94,12 +94,12 @@ public abstract class ServiceArguments implements Serializable, Comparable<Servi
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ServiceArguments other) {
@@ -110,7 +110,7 @@ public abstract class ServiceArguments implements Serializable, Comparable<Servi
       Traversal o = (Traversal) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

@@ -6,60 +6,60 @@ import java.io.Serializable;
 
 public abstract class ConstantModifier implements Serializable, Comparable<ConstantModifier> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ConstantModifier");
-  
+
   public static final hydra.core.Name ANNOTATION = new hydra.core.Name("annotation");
-  
+
   public static final hydra.core.Name PUBLIC = new hydra.core.Name("public");
-  
+
   public static final hydra.core.Name STATIC = new hydra.core.Name("static");
-  
+
   public static final hydra.core.Name FINAL = new hydra.core.Name("final");
-  
+
   private ConstantModifier () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Annotation instance) ;
-    
+
     R visit(Public instance) ;
-    
+
     R visit(Static instance) ;
-    
+
     R visit(Final instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ConstantModifier instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Annotation instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Public instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Static instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Final instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Annotation extends hydra.ext.java.syntax.ConstantModifier implements Serializable {
     public final hydra.ext.java.syntax.Annotation value;
-    
+
     public Annotation (hydra.ext.java.syntax.Annotation value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Annotation)) {
@@ -70,12 +70,12 @@ public abstract class ConstantModifier implements Serializable, Comparable<Const
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ConstantModifier other) {
@@ -86,18 +86,18 @@ public abstract class ConstantModifier implements Serializable, Comparable<Const
       Annotation o = (Annotation) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Public extends hydra.ext.java.syntax.ConstantModifier implements Serializable {
     public Public () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Public)) {
@@ -106,12 +106,12 @@ public abstract class ConstantModifier implements Serializable, Comparable<Const
       Public o = (Public) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ConstantModifier other) {
@@ -121,18 +121,18 @@ public abstract class ConstantModifier implements Serializable, Comparable<Const
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Static extends hydra.ext.java.syntax.ConstantModifier implements Serializable {
     public Static () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Static)) {
@@ -141,12 +141,12 @@ public abstract class ConstantModifier implements Serializable, Comparable<Const
       Static o = (Static) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ConstantModifier other) {
@@ -156,18 +156,18 @@ public abstract class ConstantModifier implements Serializable, Comparable<Const
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Final extends hydra.ext.java.syntax.ConstantModifier implements Serializable {
     public Final () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Final)) {
@@ -176,12 +176,12 @@ public abstract class ConstantModifier implements Serializable, Comparable<Const
       Final o = (Final) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ConstantModifier other) {
@@ -191,7 +191,7 @@ public abstract class ConstantModifier implements Serializable, Comparable<Const
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

@@ -13,7 +13,7 @@ import hydra.show.core
 
 def graph(elements: frozenlist[hydra.core.Binding]) -> str:
     r"""Show a list of bindings as a string."""
-    
+
     @lru_cache(1)
     def element_strs() -> frozenlist[str]:
         return hydra.lib.lists.map((lambda x1: hydra.show.core.binding(x1)), elements)

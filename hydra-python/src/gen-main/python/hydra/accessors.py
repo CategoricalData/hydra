@@ -12,11 +12,11 @@ import hydra.core
 @dataclass(frozen=True)
 class AccessorEdge:
     r"""An edge in an accessor graph, connecting two nodes via a path."""
-    
+
     source: Annotated[AccessorNode, "The source node of the edge"]
     path: Annotated[AccessorPath, "The accessor path connecting source to target"]
     target: Annotated[AccessorNode, "The target node of the edge"]
-    
+
     TYPE_ = hydra.core.Name("hydra.accessors.AccessorEdge")
     SOURCE = hydra.core.Name("source")
     PATH = hydra.core.Name("path")
@@ -25,10 +25,10 @@ class AccessorEdge:
 @dataclass(frozen=True)
 class AccessorGraph:
     r"""A graph of accessor nodes and edges, representing term access patterns."""
-    
+
     nodes: Annotated[frozenlist[AccessorNode], "All nodes in the graph"]
     edges: Annotated[frozenlist[AccessorEdge], "All edges in the graph"]
-    
+
     TYPE_ = hydra.core.Name("hydra.accessors.AccessorGraph")
     NODES = hydra.core.Name("nodes")
     EDGES = hydra.core.Name("edges")
@@ -36,11 +36,11 @@ class AccessorGraph:
 @dataclass(frozen=True)
 class AccessorNode:
     r"""A node in an accessor graph, representing a term or subterm."""
-    
+
     name: Annotated[hydra.core.Name, "The qualified name of the term"]
     label: Annotated[str, "A human-readable label for the node"]
     id: Annotated[str, "A unique identifier for the node"]
-    
+
     TYPE_ = hydra.core.Name("hydra.accessors.AccessorNode")
     NAME = hydra.core.Name("name")
     LABEL = hydra.core.Name("label")
@@ -53,7 +53,7 @@ AccessorPath.TYPE_ = hydra.core.Name("hydra.accessors.AccessorPath")
 
 class TermAccessorAnnotatedBody:
     r"""Access the body of an annotated term"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, TermAccessorAnnotatedBody)
@@ -62,7 +62,7 @@ class TermAccessorAnnotatedBody:
 
 class TermAccessorApplicationFunction:
     r"""Access the function of an application term"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, TermAccessorApplicationFunction)
@@ -71,7 +71,7 @@ class TermAccessorApplicationFunction:
 
 class TermAccessorApplicationArgument:
     r"""Access the argument of an application term"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, TermAccessorApplicationArgument)
@@ -80,7 +80,7 @@ class TermAccessorApplicationArgument:
 
 class TermAccessorLambdaBody:
     r"""Access the body of a lambda term"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, TermAccessorLambdaBody)
@@ -89,7 +89,7 @@ class TermAccessorLambdaBody:
 
 class TermAccessorUnionCasesDefault:
     r"""Access the default case of a union elimination"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, TermAccessorUnionCasesDefault)
@@ -101,7 +101,7 @@ class TermAccessorUnionCasesBranch(Node["hydra.core.Name"]):
 
 class TermAccessorLetBody:
     r"""Access the body of a let term"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, TermAccessorLetBody)
@@ -122,7 +122,7 @@ class TermAccessorMapValue(Node[int]):
 
 class TermAccessorMaybeTerm:
     r"""Access the term inside a Just value"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, TermAccessorMaybeTerm)
@@ -140,7 +140,7 @@ class TermAccessorSetElement(Node[int]):
 
 class TermAccessorSumTerm:
     r"""Access the term inside a sum variant"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, TermAccessorSumTerm)
@@ -149,7 +149,7 @@ class TermAccessorSumTerm:
 
 class TermAccessorTypeLambdaBody:
     r"""Access the body of a type lambda term"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, TermAccessorTypeLambdaBody)
@@ -158,7 +158,7 @@ class TermAccessorTypeLambdaBody:
 
 class TermAccessorTypeApplicationTerm:
     r"""Access the term being applied to a type"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, TermAccessorTypeApplicationTerm)
@@ -167,7 +167,7 @@ class TermAccessorTypeApplicationTerm:
 
 class TermAccessorInjectionTerm:
     r"""Access the term inside a union injection"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, TermAccessorInjectionTerm)
@@ -176,7 +176,7 @@ class TermAccessorInjectionTerm:
 
 class TermAccessorWrappedTerm:
     r"""Access the term inside a wrapped term"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, TermAccessorWrappedTerm)
@@ -190,7 +190,7 @@ class _TermAccessorMeta(type):
 # A function which maps from a term to a particular immediate subterm.
 class TermAccessor(metaclass=_TermAccessorMeta):
     r"""TermAccessorAnnotatedBody | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetBody | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorMaybeTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeLambdaBody | TermAccessorTypeApplicationTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm"""
-    
+
     TYPE_ = hydra.core.Name("hydra.accessors.TermAccessor")
     ANNOTATED_BODY = hydra.core.Name("annotatedBody")
     APPLICATION_FUNCTION = hydra.core.Name("applicationFunction")

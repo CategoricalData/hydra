@@ -9,335 +9,335 @@ import java.io.Serializable;
  */
 public abstract class TestCase implements Serializable, Comparable<TestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TestCase");
-  
+
   public static final hydra.core.Name ALPHA_CONVERSION = new hydra.core.Name("alphaConversion");
-  
+
   public static final hydra.core.Name CASE_CONVERSION = new hydra.core.Name("caseConversion");
-  
+
   public static final hydra.core.Name DEANNOTATE_TERM = new hydra.core.Name("deannotateTerm");
-  
+
   public static final hydra.core.Name DEANNOTATE_TYPE = new hydra.core.Name("deannotateType");
-  
+
   public static final hydra.core.Name DELEGATED_EVALUATION = new hydra.core.Name("delegatedEvaluation");
-  
+
   public static final hydra.core.Name ETA_EXPANSION = new hydra.core.Name("etaExpansion");
-  
+
   public static final hydra.core.Name FLATTEN_LET_TERMS = new hydra.core.Name("flattenLetTerms");
-  
+
   public static final hydra.core.Name FREE_VARIABLES = new hydra.core.Name("freeVariables");
-  
+
   public static final hydra.core.Name EVALUATION = new hydra.core.Name("evaluation");
-  
+
   public static final hydra.core.Name INFERENCE = new hydra.core.Name("inference");
-  
+
   public static final hydra.core.Name INFERENCE_FAILURE = new hydra.core.Name("inferenceFailure");
-  
+
   public static final hydra.core.Name JSON_DECODE = new hydra.core.Name("jsonDecode");
-  
+
   public static final hydra.core.Name JSON_ENCODE = new hydra.core.Name("jsonEncode");
-  
+
   public static final hydra.core.Name JSON_PARSER = new hydra.core.Name("jsonParser");
-  
+
   public static final hydra.core.Name JSON_ROUNDTRIP = new hydra.core.Name("jsonRoundtrip");
-  
+
   public static final hydra.core.Name JSON_WRITER = new hydra.core.Name("jsonWriter");
-  
+
   public static final hydra.core.Name LIFT_LAMBDA_ABOVE_LET = new hydra.core.Name("liftLambdaAboveLet");
-  
+
   public static final hydra.core.Name SERIALIZATION = new hydra.core.Name("serialization");
-  
+
   public static final hydra.core.Name SIMPLIFY_TERM = new hydra.core.Name("simplifyTerm");
-  
+
   public static final hydra.core.Name TOPOLOGICAL_SORT = new hydra.core.Name("topologicalSort");
-  
+
   public static final hydra.core.Name TOPOLOGICAL_SORT_BINDINGS = new hydra.core.Name("topologicalSortBindings");
-  
+
   public static final hydra.core.Name TOPOLOGICAL_SORT_S_C_C = new hydra.core.Name("topologicalSortSCC");
-  
+
   public static final hydra.core.Name TYPE_CHECKING = new hydra.core.Name("typeChecking");
-  
+
   public static final hydra.core.Name TYPE_CHECKING_FAILURE = new hydra.core.Name("typeCheckingFailure");
-  
+
   public static final hydra.core.Name TYPE_REDUCTION = new hydra.core.Name("typeReduction");
-  
+
   public static final hydra.core.Name NORMALIZE_TYPE_VARIABLES = new hydra.core.Name("normalizeTypeVariables");
-  
+
   public static final hydra.core.Name FOLD_OVER_TERM = new hydra.core.Name("foldOverTerm");
-  
+
   public static final hydra.core.Name REWRITE_TERM = new hydra.core.Name("rewriteTerm");
-  
+
   public static final hydra.core.Name REWRITE_TYPE = new hydra.core.Name("rewriteType");
-  
+
   public static final hydra.core.Name HOIST_SUBTERMS = new hydra.core.Name("hoistSubterms");
-  
+
   public static final hydra.core.Name HOIST_CASE_STATEMENTS = new hydra.core.Name("hoistCaseStatements");
-  
+
   public static final hydra.core.Name HOIST_LET_BINDINGS = new hydra.core.Name("hoistLetBindings");
-  
+
   public static final hydra.core.Name HOIST_POLYMORPHIC_LET_BINDINGS = new hydra.core.Name("hoistPolymorphicLetBindings");
-  
+
   public static final hydra.core.Name SUBST_IN_TYPE = new hydra.core.Name("substInType");
-  
+
   public static final hydra.core.Name VARIABLE_OCCURS_IN_TYPE = new hydra.core.Name("variableOccursInType");
-  
+
   public static final hydra.core.Name UNIFY_TYPES = new hydra.core.Name("unifyTypes");
-  
+
   public static final hydra.core.Name JOIN_TYPES = new hydra.core.Name("joinTypes");
-  
+
   public static final hydra.core.Name UNSHADOW_VARIABLES = new hydra.core.Name("unshadowVariables");
-  
+
   private TestCase () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(AlphaConversion instance) ;
-    
+
     R visit(CaseConversion instance) ;
-    
+
     R visit(DeannotateTerm instance) ;
-    
+
     R visit(DeannotateType instance) ;
-    
+
     R visit(DelegatedEvaluation instance) ;
-    
+
     R visit(EtaExpansion instance) ;
-    
+
     R visit(FlattenLetTerms instance) ;
-    
+
     R visit(FreeVariables instance) ;
-    
+
     R visit(Evaluation instance) ;
-    
+
     R visit(Inference instance) ;
-    
+
     R visit(InferenceFailure instance) ;
-    
+
     R visit(JsonDecode instance) ;
-    
+
     R visit(JsonEncode instance) ;
-    
+
     R visit(JsonParser instance) ;
-    
+
     R visit(JsonRoundtrip instance) ;
-    
+
     R visit(JsonWriter instance) ;
-    
+
     R visit(LiftLambdaAboveLet instance) ;
-    
+
     R visit(Serialization instance) ;
-    
+
     R visit(SimplifyTerm instance) ;
-    
+
     R visit(TopologicalSort instance) ;
-    
+
     R visit(TopologicalSortBindings instance) ;
-    
+
     R visit(TopologicalSortSCC instance) ;
-    
+
     R visit(TypeChecking instance) ;
-    
+
     R visit(TypeCheckingFailure instance) ;
-    
+
     R visit(TypeReduction instance) ;
-    
+
     R visit(NormalizeTypeVariables instance) ;
-    
+
     R visit(FoldOverTerm instance) ;
-    
+
     R visit(RewriteTerm instance) ;
-    
+
     R visit(RewriteType instance) ;
-    
+
     R visit(HoistSubterms instance) ;
-    
+
     R visit(HoistCaseStatements instance) ;
-    
+
     R visit(HoistLetBindings instance) ;
-    
+
     R visit(HoistPolymorphicLetBindings instance) ;
-    
+
     R visit(SubstInType instance) ;
-    
+
     R visit(VariableOccursInType instance) ;
-    
+
     R visit(UnifyTypes instance) ;
-    
+
     R visit(JoinTypes instance) ;
-    
+
     R visit(UnshadowVariables instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(TestCase instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(AlphaConversion instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(CaseConversion instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(DeannotateTerm instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(DeannotateType instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(DelegatedEvaluation instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(EtaExpansion instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(FlattenLetTerms instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(FreeVariables instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Evaluation instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Inference instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(InferenceFailure instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(JsonDecode instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(JsonEncode instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(JsonParser instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(JsonRoundtrip instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(JsonWriter instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(LiftLambdaAboveLet instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Serialization instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(SimplifyTerm instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(TopologicalSort instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(TopologicalSortBindings instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(TopologicalSortSCC instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(TypeChecking instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(TypeCheckingFailure instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(TypeReduction instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(NormalizeTypeVariables instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(FoldOverTerm instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(RewriteTerm instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(RewriteType instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(HoistSubterms instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(HoistCaseStatements instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(HoistLetBindings instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(HoistPolymorphicLetBindings instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(SubstInType instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(VariableOccursInType instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(UnifyTypes instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(JoinTypes instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(UnshadowVariables instance) {
       return otherwise(instance);
     }
   }
-  
+
   /**
    * An alpha conversion test
    */
   public static final class AlphaConversion extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.AlphaConversionTestCase value;
-    
+
     public AlphaConversion (hydra.testing.AlphaConversionTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof AlphaConversion)) {
@@ -348,12 +348,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -364,23 +364,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       AlphaConversion o = (AlphaConversion) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A case conversion test
    */
   public static final class CaseConversion extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.CaseConversionTestCase value;
-    
+
     public CaseConversion (hydra.testing.CaseConversionTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof CaseConversion)) {
@@ -391,12 +391,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -407,23 +407,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       CaseConversion o = (CaseConversion) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A deannotate term test
    */
   public static final class DeannotateTerm extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.DeannotateTermTestCase value;
-    
+
     public DeannotateTerm (hydra.testing.DeannotateTermTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof DeannotateTerm)) {
@@ -434,12 +434,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -450,23 +450,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       DeannotateTerm o = (DeannotateTerm) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A deannotate type test
    */
   public static final class DeannotateType extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.DeannotateTypeTestCase value;
-    
+
     public DeannotateType (hydra.testing.DeannotateTypeTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof DeannotateType)) {
@@ -477,12 +477,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -493,23 +493,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       DeannotateType o = (DeannotateType) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A delegated evaluation test
    */
   public static final class DelegatedEvaluation extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.DelegatedEvaluationTestCase value;
-    
+
     public DelegatedEvaluation (hydra.testing.DelegatedEvaluationTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof DelegatedEvaluation)) {
@@ -520,12 +520,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -536,23 +536,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       DelegatedEvaluation o = (DelegatedEvaluation) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * An eta expansion test
    */
   public static final class EtaExpansion extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.EtaExpansionTestCase value;
-    
+
     public EtaExpansion (hydra.testing.EtaExpansionTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof EtaExpansion)) {
@@ -563,12 +563,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -579,23 +579,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       EtaExpansion o = (EtaExpansion) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A flatten let terms test
    */
   public static final class FlattenLetTerms extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.FlattenLetTermsTestCase value;
-    
+
     public FlattenLetTerms (hydra.testing.FlattenLetTermsTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof FlattenLetTerms)) {
@@ -606,12 +606,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -622,23 +622,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       FlattenLetTerms o = (FlattenLetTerms) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A free variables test
    */
   public static final class FreeVariables extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.FreeVariablesTestCase value;
-    
+
     public FreeVariables (hydra.testing.FreeVariablesTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof FreeVariables)) {
@@ -649,12 +649,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -665,23 +665,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       FreeVariables o = (FreeVariables) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A term evaluation test
    */
   public static final class Evaluation extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.EvaluationTestCase value;
-    
+
     public Evaluation (hydra.testing.EvaluationTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Evaluation)) {
@@ -692,12 +692,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -708,23 +708,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       Evaluation o = (Evaluation) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A type inference test
    */
   public static final class Inference extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.InferenceTestCase value;
-    
+
     public Inference (hydra.testing.InferenceTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Inference)) {
@@ -735,12 +735,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -751,23 +751,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       Inference o = (Inference) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A type inference failure test
    */
   public static final class InferenceFailure extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.InferenceFailureTestCase value;
-    
+
     public InferenceFailure (hydra.testing.InferenceFailureTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof InferenceFailure)) {
@@ -778,12 +778,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -794,23 +794,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       InferenceFailure o = (InferenceFailure) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A JSON decode test using Either-based decoder
    */
   public static final class JsonDecode extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.JsonDecodeTestCase value;
-    
+
     public JsonDecode (hydra.testing.JsonDecodeTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof JsonDecode)) {
@@ -821,12 +821,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -837,23 +837,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       JsonDecode o = (JsonDecode) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A JSON encode test using Either-based encoder
    */
   public static final class JsonEncode extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.JsonEncodeTestCase value;
-    
+
     public JsonEncode (hydra.testing.JsonEncodeTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof JsonEncode)) {
@@ -864,12 +864,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -880,23 +880,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       JsonEncode o = (JsonEncode) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A JSON parser test
    */
   public static final class JsonParser extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.ParserTestCase<hydra.json.model.Value> value;
-    
+
     public JsonParser (hydra.testing.ParserTestCase<hydra.json.model.Value> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof JsonParser)) {
@@ -907,12 +907,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -923,23 +923,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       JsonParser o = (JsonParser) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A JSON round-trip test using Either-based encoder/decoder
    */
   public static final class JsonRoundtrip extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.JsonRoundtripTestCase value;
-    
+
     public JsonRoundtrip (hydra.testing.JsonRoundtripTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof JsonRoundtrip)) {
@@ -950,12 +950,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -966,23 +966,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       JsonRoundtrip o = (JsonRoundtrip) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A JSON writer test
    */
   public static final class JsonWriter extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.WriterTestCase<hydra.json.model.Value> value;
-    
+
     public JsonWriter (hydra.testing.WriterTestCase<hydra.json.model.Value> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof JsonWriter)) {
@@ -993,12 +993,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1009,23 +1009,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       JsonWriter o = (JsonWriter) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A lift lambda above let test
    */
   public static final class LiftLambdaAboveLet extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.LiftLambdaAboveLetTestCase value;
-    
+
     public LiftLambdaAboveLet (hydra.testing.LiftLambdaAboveLetTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof LiftLambdaAboveLet)) {
@@ -1036,12 +1036,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1052,23 +1052,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       LiftLambdaAboveLet o = (LiftLambdaAboveLet) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * An AST serialization test
    */
   public static final class Serialization extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.SerializationTestCase value;
-    
+
     public Serialization (hydra.testing.SerializationTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Serialization)) {
@@ -1079,12 +1079,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1095,23 +1095,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       Serialization o = (Serialization) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A simplify term test
    */
   public static final class SimplifyTerm extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.SimplifyTermTestCase value;
-    
+
     public SimplifyTerm (hydra.testing.SimplifyTermTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof SimplifyTerm)) {
@@ -1122,12 +1122,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1138,23 +1138,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       SimplifyTerm o = (SimplifyTerm) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A topological sort test
    */
   public static final class TopologicalSort extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.TopologicalSortTestCase value;
-    
+
     public TopologicalSort (hydra.testing.TopologicalSortTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof TopologicalSort)) {
@@ -1165,12 +1165,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1181,23 +1181,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       TopologicalSort o = (TopologicalSort) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A topological sort bindings test
    */
   public static final class TopologicalSortBindings extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.TopologicalSortBindingsTestCase value;
-    
+
     public TopologicalSortBindings (hydra.testing.TopologicalSortBindingsTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof TopologicalSortBindings)) {
@@ -1208,12 +1208,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1224,23 +1224,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       TopologicalSortBindings o = (TopologicalSortBindings) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A topological sort with SCC detection test
    */
   public static final class TopologicalSortSCC extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.TopologicalSortSCCTestCase value;
-    
+
     public TopologicalSortSCC (hydra.testing.TopologicalSortSCCTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof TopologicalSortSCC)) {
@@ -1251,12 +1251,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1267,23 +1267,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       TopologicalSortSCC o = (TopologicalSortSCC) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A type checking test
    */
   public static final class TypeChecking extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.TypeCheckingTestCase value;
-    
+
     public TypeChecking (hydra.testing.TypeCheckingTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof TypeChecking)) {
@@ -1294,12 +1294,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1310,23 +1310,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       TypeChecking o = (TypeChecking) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A type checking failure test (currently unused)
    */
   public static final class TypeCheckingFailure extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.TypeCheckingFailureTestCase value;
-    
+
     public TypeCheckingFailure (hydra.testing.TypeCheckingFailureTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof TypeCheckingFailure)) {
@@ -1337,12 +1337,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1353,23 +1353,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       TypeCheckingFailure o = (TypeCheckingFailure) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A type reduction test
    */
   public static final class TypeReduction extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.TypeReductionTestCase value;
-    
+
     public TypeReduction (hydra.testing.TypeReductionTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof TypeReduction)) {
@@ -1380,12 +1380,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1396,23 +1396,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       TypeReduction o = (TypeReduction) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A normalize type variables test
    */
   public static final class NormalizeTypeVariables extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.NormalizeTypeVariablesTestCase value;
-    
+
     public NormalizeTypeVariables (hydra.testing.NormalizeTypeVariablesTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof NormalizeTypeVariables)) {
@@ -1423,12 +1423,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1439,23 +1439,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       NormalizeTypeVariables o = (NormalizeTypeVariables) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A fold over term test
    */
   public static final class FoldOverTerm extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.FoldOverTermTestCase value;
-    
+
     public FoldOverTerm (hydra.testing.FoldOverTermTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof FoldOverTerm)) {
@@ -1466,12 +1466,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1482,23 +1482,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       FoldOverTerm o = (FoldOverTerm) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A rewrite term test
    */
   public static final class RewriteTerm extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.RewriteTermTestCase value;
-    
+
     public RewriteTerm (hydra.testing.RewriteTermTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof RewriteTerm)) {
@@ -1509,12 +1509,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1525,23 +1525,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       RewriteTerm o = (RewriteTerm) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A rewrite type test
    */
   public static final class RewriteType extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.RewriteTypeTestCase value;
-    
+
     public RewriteType (hydra.testing.RewriteTypeTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof RewriteType)) {
@@ -1552,12 +1552,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1568,23 +1568,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       RewriteType o = (RewriteType) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A hoist subterms test
    */
   public static final class HoistSubterms extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.HoistSubtermsTestCase value;
-    
+
     public HoistSubterms (hydra.testing.HoistSubtermsTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof HoistSubterms)) {
@@ -1595,12 +1595,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1611,23 +1611,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       HoistSubterms o = (HoistSubterms) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A hoist case statements test
    */
   public static final class HoistCaseStatements extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.HoistCaseStatementsTestCase value;
-    
+
     public HoistCaseStatements (hydra.testing.HoistCaseStatementsTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof HoistCaseStatements)) {
@@ -1638,12 +1638,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1654,23 +1654,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       HoistCaseStatements o = (HoistCaseStatements) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A hoist all let bindings test (hoistAll=True, for Java)
    */
   public static final class HoistLetBindings extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.HoistLetBindingsTestCase value;
-    
+
     public HoistLetBindings (hydra.testing.HoistLetBindingsTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof HoistLetBindings)) {
@@ -1681,12 +1681,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1697,23 +1697,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       HoistLetBindings o = (HoistLetBindings) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A hoist polymorphic let bindings test
    */
   public static final class HoistPolymorphicLetBindings extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.HoistPolymorphicLetBindingsTestCase value;
-    
+
     public HoistPolymorphicLetBindings (hydra.testing.HoistPolymorphicLetBindingsTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof HoistPolymorphicLetBindings)) {
@@ -1724,12 +1724,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1740,23 +1740,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       HoistPolymorphicLetBindings o = (HoistPolymorphicLetBindings) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A type substitution test
    */
   public static final class SubstInType extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.SubstInTypeTestCase value;
-    
+
     public SubstInType (hydra.testing.SubstInTypeTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof SubstInType)) {
@@ -1767,12 +1767,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1783,23 +1783,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       SubstInType o = (SubstInType) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * An occur check test for type unification
    */
   public static final class VariableOccursInType extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.VariableOccursInTypeTestCase value;
-    
+
     public VariableOccursInType (hydra.testing.VariableOccursInTypeTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof VariableOccursInType)) {
@@ -1810,12 +1810,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1826,23 +1826,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       VariableOccursInType o = (VariableOccursInType) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A type unification test
    */
   public static final class UnifyTypes extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.UnifyTypesTestCase value;
-    
+
     public UnifyTypes (hydra.testing.UnifyTypesTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof UnifyTypes)) {
@@ -1853,12 +1853,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1869,23 +1869,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       UnifyTypes o = (UnifyTypes) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A join types test (produce type constraints)
    */
   public static final class JoinTypes extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.JoinTypesTestCase value;
-    
+
     public JoinTypes (hydra.testing.JoinTypesTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof JoinTypes)) {
@@ -1896,12 +1896,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1912,23 +1912,23 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       JoinTypes o = (JoinTypes) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * An unshadow variables test
    */
   public static final class UnshadowVariables extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.UnshadowVariablesTestCase value;
-    
+
     public UnshadowVariables (hydra.testing.UnshadowVariablesTestCase value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof UnshadowVariables)) {
@@ -1939,12 +1939,12 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
@@ -1955,7 +1955,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
       UnshadowVariables o = (UnshadowVariables) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

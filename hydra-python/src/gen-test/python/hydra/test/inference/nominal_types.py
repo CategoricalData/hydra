@@ -34,5 +34,5 @@ def test_group_for_wrappers() -> hydra.testing.TestGroup:
 @lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""Nominal type tests."""
-    
+
     return hydra.testing.TestGroup("Nominal terms", Nothing(), (test_group_for_case_statements(), test_group_for_projections(), test_group_for_records(), test_group_for_variants(), test_group_for_wrappers()), ())

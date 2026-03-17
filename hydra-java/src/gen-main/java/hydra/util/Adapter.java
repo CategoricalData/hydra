@@ -9,42 +9,42 @@ import java.io.Serializable;
  */
 public class Adapter<T1, T2, V1, V2> implements Serializable, Comparable<Adapter<T1, T2, V1, V2>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.util.Adapter");
-  
+
   public static final hydra.core.Name IS_LOSSY = new hydra.core.Name("isLossy");
-  
+
   public static final hydra.core.Name SOURCE = new hydra.core.Name("source");
-  
+
   public static final hydra.core.Name TARGET = new hydra.core.Name("target");
-  
+
   public static final hydra.core.Name CODER = new hydra.core.Name("coder");
-  
+
   /**
    * Whether information may be lost in the course of this adaptation
    */
   public final Boolean isLossy;
-  
+
   /**
    * The source type
    */
   public final T1 source;
-  
+
   /**
    * The target type
    */
   public final T2 target;
-  
+
   /**
    * The coder for transforming instances of the source type to instances of the target type
    */
   public final hydra.util.Coder<V1, V2> coder;
-  
+
   public Adapter (Boolean isLossy, T1 source, T2 target, hydra.util.Coder<V1, V2> coder) {
     this.isLossy = isLossy;
     this.source = source;
     this.target = target;
     this.coder = coder;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Adapter)) {
@@ -61,12 +61,12 @@ public class Adapter<T1, T2, V1, V2> implements Serializable, Comparable<Adapter
       this.coder,
       o.coder);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(isLossy) + 3 * java.util.Objects.hashCode(source) + 5 * java.util.Objects.hashCode(target) + 7 * java.util.Objects.hashCode(coder);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Adapter other) {
@@ -85,19 +85,19 @@ public class Adapter<T1, T2, V1, V2> implements Serializable, Comparable<Adapter
     }
     return ((Comparable) coder).compareTo(other.coder);
   }
-  
+
   public Adapter withIsLossy(Boolean isLossy) {
     return new Adapter(isLossy, source, target, coder);
   }
-  
+
   public Adapter withSource(T1 source) {
     return new Adapter(isLossy, source, target, coder);
   }
-  
+
   public Adapter withTarget(T2 target) {
     return new Adapter(isLossy, source, target, coder);
   }
-  
+
   public Adapter withCoder(hydra.util.Coder<V1, V2> coder) {
     return new Adapter(isLossy, source, target, coder);
   }

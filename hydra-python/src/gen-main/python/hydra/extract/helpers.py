@@ -27,7 +27,7 @@ def decode_either(left_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], E
         match v1:
             case hydra.core.TermEither(value=e):
                 return hydra.lib.eithers.either((lambda lv: hydra.lib.eithers.map((lambda x: Left(x)), left_decoder(g, lv))), (lambda rv: hydra.lib.eithers.map((lambda x: Right(x)), right_decoder(g, rv))), e)
-            
+
             case _:
                 return Left(hydra.error.DecodingError("expected either value"))
     return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.error.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_helpers_decode_either_1(g, left_decoder, right_decoder, stripped)))
@@ -37,7 +37,7 @@ def decode_list(elem_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Eit
         match v1:
             case hydra.core.TermList(value=els):
                 return hydra.lib.eithers.map_list((lambda v12: elem_decoder(g, v12)), els)
-            
+
             case _:
                 return Left(hydra.error.DecodingError("expected list"))
     return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.error.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_helpers_decode_list_1(elem_decoder, g, stripped)))
@@ -47,7 +47,7 @@ def decode_map(key_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Eithe
         match v1:
             case hydra.core.TermMap(value=m):
                 return hydra.lib.eithers.map((lambda x1: hydra.lib.maps.from_list(x1)), hydra.lib.eithers.map_list((lambda kv: hydra.lib.eithers.bind(key_decoder(g, hydra.lib.pairs.first(kv)), (lambda k: hydra.lib.eithers.map((lambda v: (k, v)), val_decoder(g, hydra.lib.pairs.second(kv)))))), hydra.lib.maps.to_list(m)))
-            
+
             case _:
                 return Left(hydra.error.DecodingError("expected map"))
     return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.error.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_helpers_decode_map_1(g, key_decoder, val_decoder, stripped)))
@@ -57,7 +57,7 @@ def decode_maybe(elem_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Ei
         match v1:
             case hydra.core.TermMaybe(value=opt):
                 return hydra.lib.eithers.map_maybe((lambda v12: elem_decoder(g, v12)), opt)
-            
+
             case _:
                 return Left(hydra.error.DecodingError("expected optional value"))
     return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.error.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_helpers_decode_maybe_1(elem_decoder, g, stripped)))
@@ -67,7 +67,7 @@ def decode_pair(first_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Ei
         match v1:
             case hydra.core.TermPair(value=p):
                 return hydra.lib.eithers.bind(first_decoder(g, hydra.lib.pairs.first(p)), (lambda f: hydra.lib.eithers.map((lambda s: (f, s)), second_decoder(g, hydra.lib.pairs.second(p)))))
-            
+
             case _:
                 return Left(hydra.error.DecodingError("expected pair"))
     return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.error.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_helpers_decode_pair_1(first_decoder, g, second_decoder, stripped)))
@@ -77,7 +77,7 @@ def decode_set(elem_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], Eith
         match v1:
             case hydra.core.TermSet(value=s):
                 return hydra.lib.eithers.map((lambda x1: hydra.lib.sets.from_list(x1)), hydra.lib.eithers.map_list((lambda v12: elem_decoder(g, v12)), hydra.lib.sets.to_list(s)))
-            
+
             case _:
                 return Left(hydra.error.DecodingError("expected set"))
     return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.error.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_helpers_decode_set_1(elem_decoder, g, stripped)))
@@ -87,7 +87,7 @@ def decode_unit(g: hydra.graph.Graph, term: hydra.core.Term):
         match v1:
             case hydra.core.TermUnit():
                 return Right(None)
-            
+
             case _:
                 return Left(hydra.error.DecodingError("expected a unit value"))
     return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.error.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_helpers_decode_unit_1(stripped)))
@@ -97,17 +97,17 @@ def decode_wrapped(body_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], 
         match v1:
             case hydra.core.TermWrap(value=wt):
                 return body_decoder(g, wt.body)
-            
+
             case _:
                 return Left(hydra.error.DecodingError("expected wrapped value"))
     return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x: hydra.error.DecodingError(x)), (lambda x: x), hydra.lexical.strip_and_dereference_term_either(g, term)), (lambda stripped: _hoist_hydra_extract_helpers_decode_wrapped_1(body_decoder, g, stripped)))
 
 def require_field(field_name: str, decoder: Callable[[T0, T1], Either[hydra.error.DecodingError, T2]], field_map: FrozenDict[hydra.core.Name, T1], g: T0) -> Either[hydra.error.DecodingError, T2]:
     r"""Require a field from a record's field map and decode it."""
-    
+
     return hydra.lib.maybes.maybe((lambda : Left(hydra.error.DecodingError(hydra.lib.strings.cat(("missing field ", field_name, " in record"))))), (lambda field_term: decoder(g, field_term)), hydra.lib.maps.lookup(hydra.core.Name(field_name), field_map))
 
 def to_field_map(record: hydra.core.Record) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
     r"""Convert a Record's fields to a Map from Name to Term."""
-    
+
     return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda f: (f.name, f.term)), record.fields))

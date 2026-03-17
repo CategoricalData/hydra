@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class Expression implements Serializable, Comparable<Expression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.Expression");
-  
+
   public static final hydra.core.Name LAMBDA = new hydra.core.Name("lambda");
-  
+
   public static final hydra.core.Name ASSIGNMENT = new hydra.core.Name("assignment");
-  
+
   private Expression () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Lambda instance) ;
-    
+
     R visit(Assignment instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Expression instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Lambda instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Assignment instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Lambda extends hydra.ext.java.syntax.Expression implements Serializable {
     public final hydra.ext.java.syntax.LambdaExpression value;
-    
+
     public Lambda (hydra.ext.java.syntax.LambdaExpression value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Lambda)) {
@@ -54,12 +54,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
@@ -70,20 +70,20 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       Lambda o = (Lambda) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Assignment extends hydra.ext.java.syntax.Expression implements Serializable {
     public final hydra.ext.java.syntax.AssignmentExpression value;
-    
+
     public Assignment (hydra.ext.java.syntax.AssignmentExpression value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Assignment)) {
@@ -94,12 +94,12 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expression other) {
@@ -110,7 +110,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
       Assignment o = (Assignment) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

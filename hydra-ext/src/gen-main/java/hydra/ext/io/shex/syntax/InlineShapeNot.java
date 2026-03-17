@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class InlineShapeNot implements Serializable, Comparable<InlineShapeNot> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeNot");
-  
+
   public static final hydra.core.Name N_O_T = new hydra.core.Name("NOT");
-  
+
   public static final hydra.core.Name INLINE_SHAPE_ATOM = new hydra.core.Name("InlineShapeAtom");
-  
+
   public final hydra.util.Maybe<java.lang.Void> NOT;
-  
+
   public final hydra.ext.io.shex.syntax.InlineShapeAtom InlineShapeAtom;
-  
+
   public InlineShapeNot (hydra.util.Maybe<java.lang.Void> NOT, hydra.ext.io.shex.syntax.InlineShapeAtom InlineShapeAtom) {
     this.NOT = NOT;
     this.InlineShapeAtom = InlineShapeAtom;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof InlineShapeNot)) {
@@ -32,12 +32,12 @@ public class InlineShapeNot implements Serializable, Comparable<InlineShapeNot> 
       this.InlineShapeAtom,
       o.InlineShapeAtom);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(NOT) + 3 * java.util.Objects.hashCode(InlineShapeAtom);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InlineShapeNot other) {
@@ -48,11 +48,11 @@ public class InlineShapeNot implements Serializable, Comparable<InlineShapeNot> 
     }
     return ((Comparable) InlineShapeAtom).compareTo(other.InlineShapeAtom);
   }
-  
+
   public InlineShapeNot withNOT(hydra.util.Maybe<java.lang.Void> NOT) {
     return new InlineShapeNot(NOT, InlineShapeAtom);
   }
-  
+
   public InlineShapeNot withInlineShapeAtom(hydra.ext.io.shex.syntax.InlineShapeAtom InlineShapeAtom) {
     return new InlineShapeNot(NOT, InlineShapeAtom);
   }

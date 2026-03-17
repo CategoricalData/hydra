@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class ConcatArgs implements Serializable, Comparable<ConcatArgs> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ConcatArgs");
-  
+
   public static final hydra.core.Name TRAVERSAL = new hydra.core.Name("traversal");
-  
+
   public static final hydra.core.Name STRING = new hydra.core.Name("string");
-  
+
   private ConcatArgs () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Traversal instance) ;
-    
+
     R visit(String_ instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ConcatArgs instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Traversal instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(String_ instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Traversal extends hydra.ext.org.apache.tinkerpop.gremlin.ConcatArgs implements Serializable {
     public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
-    
+
     public Traversal (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Traversal)) {
@@ -54,12 +54,12 @@ public abstract class ConcatArgs implements Serializable, Comparable<ConcatArgs>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ConcatArgs other) {
@@ -70,20 +70,20 @@ public abstract class ConcatArgs implements Serializable, Comparable<ConcatArgs>
       Traversal o = (Traversal) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class String_ extends hydra.ext.org.apache.tinkerpop.gremlin.ConcatArgs implements Serializable {
     public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
-    
+
     public String_ (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof String_)) {
@@ -94,12 +94,12 @@ public abstract class ConcatArgs implements Serializable, Comparable<ConcatArgs>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ConcatArgs other) {
@@ -110,7 +110,7 @@ public abstract class ConcatArgs implements Serializable, Comparable<ConcatArgs>
       String_ o = (String_) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

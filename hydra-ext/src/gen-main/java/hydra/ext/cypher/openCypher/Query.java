@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class Query implements Serializable, Comparable<Query> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.Query");
-  
+
   public static final hydra.core.Name REGULAR = new hydra.core.Name("regular");
-  
+
   public static final hydra.core.Name STANDALONE = new hydra.core.Name("standalone");
-  
+
   private Query () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Regular instance) ;
-    
+
     R visit(Standalone instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Query instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Regular instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Standalone instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Regular extends hydra.ext.cypher.openCypher.Query implements Serializable {
     public final hydra.ext.cypher.openCypher.RegularQuery value;
-    
+
     public Regular (hydra.ext.cypher.openCypher.RegularQuery value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Regular)) {
@@ -54,12 +54,12 @@ public abstract class Query implements Serializable, Comparable<Query> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Query other) {
@@ -70,20 +70,20 @@ public abstract class Query implements Serializable, Comparable<Query> {
       Regular o = (Regular) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Standalone extends hydra.ext.cypher.openCypher.Query implements Serializable {
     public final hydra.ext.cypher.openCypher.StandaloneCall value;
-    
+
     public Standalone (hydra.ext.cypher.openCypher.StandaloneCall value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Standalone)) {
@@ -94,12 +94,12 @@ public abstract class Query implements Serializable, Comparable<Query> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Query other) {
@@ -110,7 +110,7 @@ public abstract class Query implements Serializable, Comparable<Query> {
       Standalone o = (Standalone) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

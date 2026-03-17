@@ -9,55 +9,55 @@ import java.io.Serializable;
  */
 public abstract class Path implements Serializable, Comparable<Path> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.Path");
-  
+
   public static final hydra.core.Name STEP = new hydra.core.Name("step");
-  
+
   public static final hydra.core.Name REGEX = new hydra.core.Name("regex");
-  
+
   public static final hydra.core.Name INVERSE = new hydra.core.Name("inverse");
-  
+
   private Path () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Step instance) ;
-    
+
     R visit(Regex instance) ;
-    
+
     R visit(Inverse instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Path instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Step instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Regex instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Inverse instance) {
       return otherwise(instance);
     }
   }
-  
+
   /**
    * A path given by a single step
    */
   public static final class Step extends hydra.query.Path implements Serializable {
     public final hydra.query.Step value;
-    
+
     public Step (hydra.query.Step value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Step)) {
@@ -68,12 +68,12 @@ public abstract class Path implements Serializable, Comparable<Path> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Path other) {
@@ -84,23 +84,23 @@ public abstract class Path implements Serializable, Comparable<Path> {
       Step o = (Step) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A path given by a regular expression quantifier applied to another path
    */
   public static final class Regex extends hydra.query.Path implements Serializable {
     public final hydra.query.RegexSequence value;
-    
+
     public Regex (hydra.query.RegexSequence value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Regex)) {
@@ -111,12 +111,12 @@ public abstract class Path implements Serializable, Comparable<Path> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Path other) {
@@ -127,23 +127,23 @@ public abstract class Path implements Serializable, Comparable<Path> {
       Regex o = (Regex) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A path given by the inverse of another path
    */
   public static final class Inverse extends hydra.query.Path implements Serializable {
     public final hydra.query.Path value;
-    
+
     public Inverse (hydra.query.Path value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Inverse)) {
@@ -154,12 +154,12 @@ public abstract class Path implements Serializable, Comparable<Path> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Path other) {
@@ -170,7 +170,7 @@ public abstract class Path implements Serializable, Comparable<Path> {
       Inverse o = (Inverse) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

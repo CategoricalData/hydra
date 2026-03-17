@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class PostIncrementExpression implements Serializable, Comparable<PostIncrementExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.PostIncrementExpression");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.ext.java.syntax.PostfixExpression value;
-  
+
   public PostIncrementExpression (hydra.ext.java.syntax.PostfixExpression value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof PostIncrementExpression)) {
@@ -25,12 +25,12 @@ public class PostIncrementExpression implements Serializable, Comparable<PostInc
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PostIncrementExpression other) {

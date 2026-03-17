@@ -9,119 +9,119 @@ import java.io.Serializable;
  */
 public abstract class Pattern implements Serializable, Comparable<Pattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.grammar.Pattern");
-  
+
   public static final hydra.core.Name ALTERNATIVES = new hydra.core.Name("alternatives");
-  
+
   public static final hydra.core.Name CONSTANT = new hydra.core.Name("constant");
-  
+
   public static final hydra.core.Name IGNORED = new hydra.core.Name("ignored");
-  
+
   public static final hydra.core.Name LABELED = new hydra.core.Name("labeled");
-  
+
   public static final hydra.core.Name NIL = new hydra.core.Name("nil");
-  
+
   public static final hydra.core.Name NONTERMINAL = new hydra.core.Name("nonterminal");
-  
+
   public static final hydra.core.Name OPTION = new hydra.core.Name("option");
-  
+
   public static final hydra.core.Name PLUS = new hydra.core.Name("plus");
-  
+
   public static final hydra.core.Name REGEX = new hydra.core.Name("regex");
-  
+
   public static final hydra.core.Name SEQUENCE = new hydra.core.Name("sequence");
-  
+
   public static final hydra.core.Name STAR = new hydra.core.Name("star");
-  
+
   private Pattern () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Alternatives instance) ;
-    
+
     R visit(Constant instance) ;
-    
+
     R visit(Ignored instance) ;
-    
+
     R visit(Labeled instance) ;
-    
+
     R visit(Nil instance) ;
-    
+
     R visit(Nonterminal instance) ;
-    
+
     R visit(Option instance) ;
-    
+
     R visit(Plus instance) ;
-    
+
     R visit(Regex instance) ;
-    
+
     R visit(Sequence instance) ;
-    
+
     R visit(Star instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Pattern instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Alternatives instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Constant instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Ignored instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Labeled instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Nil instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Nonterminal instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Option instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Plus instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Regex instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Sequence instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Star instance) {
       return otherwise(instance);
     }
   }
-  
+
   /**
    * A choice between alternative patterns
    */
   public static final class Alternatives extends hydra.grammar.Pattern implements Serializable {
     public final hydra.util.ConsList<hydra.grammar.Pattern> value;
-    
+
     public Alternatives (hydra.util.ConsList<hydra.grammar.Pattern> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Alternatives)) {
@@ -132,12 +132,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -148,23 +148,23 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Alternatives o = (Alternatives) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A constant (terminal) pattern
    */
   public static final class Constant extends hydra.grammar.Pattern implements Serializable {
     public final hydra.grammar.Constant value;
-    
+
     public Constant (hydra.grammar.Constant value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Constant)) {
@@ -175,12 +175,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -191,23 +191,23 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Constant o = (Constant) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A pattern to be ignored (not captured)
    */
   public static final class Ignored extends hydra.grammar.Pattern implements Serializable {
     public final hydra.grammar.Pattern value;
-    
+
     public Ignored (hydra.grammar.Pattern value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Ignored)) {
@@ -218,12 +218,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -234,23 +234,23 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Ignored o = (Ignored) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A labeled pattern
    */
   public static final class Labeled extends hydra.grammar.Pattern implements Serializable {
     public final hydra.grammar.LabeledPattern value;
-    
+
     public Labeled (hydra.grammar.LabeledPattern value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Labeled)) {
@@ -261,12 +261,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -277,21 +277,21 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Labeled o = (Labeled) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * An empty pattern
    */
   public static final class Nil extends hydra.grammar.Pattern implements Serializable {
     public Nil () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Nil)) {
@@ -300,12 +300,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Nil o = (Nil) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -315,23 +315,23 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A nonterminal symbol reference
    */
   public static final class Nonterminal extends hydra.grammar.Pattern implements Serializable {
     public final hydra.grammar.Symbol value;
-    
+
     public Nonterminal (hydra.grammar.Symbol value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Nonterminal)) {
@@ -342,12 +342,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -358,23 +358,23 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Nonterminal o = (Nonterminal) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * An optional pattern (zero or one occurrence)
    */
   public static final class Option extends hydra.grammar.Pattern implements Serializable {
     public final hydra.grammar.Pattern value;
-    
+
     public Option (hydra.grammar.Pattern value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Option)) {
@@ -385,12 +385,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -401,23 +401,23 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Option o = (Option) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * One or more occurrences of a pattern
    */
   public static final class Plus extends hydra.grammar.Pattern implements Serializable {
     public final hydra.grammar.Pattern value;
-    
+
     public Plus (hydra.grammar.Pattern value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Plus)) {
@@ -428,12 +428,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -444,23 +444,23 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Plus o = (Plus) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A regular expression pattern
    */
   public static final class Regex extends hydra.grammar.Pattern implements Serializable {
     public final hydra.grammar.Regex value;
-    
+
     public Regex (hydra.grammar.Regex value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Regex)) {
@@ -471,12 +471,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -487,23 +487,23 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Regex o = (Regex) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A sequence of patterns
    */
   public static final class Sequence extends hydra.grammar.Pattern implements Serializable {
     public final hydra.util.ConsList<hydra.grammar.Pattern> value;
-    
+
     public Sequence (hydra.util.ConsList<hydra.grammar.Pattern> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Sequence)) {
@@ -514,12 +514,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -530,23 +530,23 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Sequence o = (Sequence) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Zero or more occurrences of a pattern
    */
   public static final class Star extends hydra.grammar.Pattern implements Serializable {
     public final hydra.grammar.Pattern value;
-    
+
     public Star (hydra.grammar.Pattern value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Star)) {
@@ -557,12 +557,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -573,7 +573,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Star o = (Star) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class AsPattern implements Serializable, Comparable<AsPattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.AsPattern");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name INNER = new hydra.core.Name("inner");
-  
+
   /**
    * The bound name
    */
   public final hydra.ext.haskell.ast.Name name;
-  
+
   /**
    * The inner pattern
    */
   public final hydra.ext.haskell.ast.Pattern inner;
-  
+
   public AsPattern (hydra.ext.haskell.ast.Name name, hydra.ext.haskell.ast.Pattern inner) {
     this.name = name;
     this.inner = inner;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof AsPattern)) {
@@ -41,12 +41,12 @@ public class AsPattern implements Serializable, Comparable<AsPattern> {
       this.inner,
       o.inner);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(inner);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AsPattern other) {
@@ -57,11 +57,11 @@ public class AsPattern implements Serializable, Comparable<AsPattern> {
     }
     return ((Comparable) inner).compareTo(other.inner);
   }
-  
+
   public AsPattern withName(hydra.ext.haskell.ast.Name name) {
     return new AsPattern(name, inner);
   }
-  
+
   public AsPattern withInner(hydra.ext.haskell.ast.Pattern inner) {
     return new AsPattern(name, inner);
   }

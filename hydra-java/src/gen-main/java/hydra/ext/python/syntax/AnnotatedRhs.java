@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class AnnotatedRhs implements Serializable, Comparable<AnnotatedRhs> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.AnnotatedRhs");
-  
+
   public static final hydra.core.Name YIELD = new hydra.core.Name("yield");
-  
+
   public static final hydra.core.Name STAR = new hydra.core.Name("star");
-  
+
   private AnnotatedRhs () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Yield instance) ;
-    
+
     R visit(Star instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(AnnotatedRhs instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Yield instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Star instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Yield extends hydra.ext.python.syntax.AnnotatedRhs implements Serializable {
     public final hydra.ext.python.syntax.YieldExpression value;
-    
+
     public Yield (hydra.ext.python.syntax.YieldExpression value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Yield)) {
@@ -54,12 +54,12 @@ public abstract class AnnotatedRhs implements Serializable, Comparable<Annotated
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AnnotatedRhs other) {
@@ -70,20 +70,20 @@ public abstract class AnnotatedRhs implements Serializable, Comparable<Annotated
       Yield o = (Yield) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Star extends hydra.ext.python.syntax.AnnotatedRhs implements Serializable {
     public final hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value;
-    
+
     public Star (hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Star)) {
@@ -94,12 +94,12 @@ public abstract class AnnotatedRhs implements Serializable, Comparable<Annotated
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AnnotatedRhs other) {
@@ -110,7 +110,7 @@ public abstract class AnnotatedRhs implements Serializable, Comparable<Annotated
       Star o = (Star) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

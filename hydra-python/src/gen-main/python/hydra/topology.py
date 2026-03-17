@@ -19,7 +19,7 @@ Graph: TypeAlias = "FrozenDict[Vertex, frozenlist[Vertex]]"
 class OrderingIsomorphism(Generic[A]):
     encode: Annotated[Callable[[frozenlist[A]], frozenlist[A]], "Mapping from source ordering to target ordering"]
     decode: Annotated[Callable[[frozenlist[A]], frozenlist[A]], "Mapping from target ordering to source ordering"]
-    
+
     TYPE_ = hydra.core.Name("hydra.topology.OrderingIsomorphism")
     ENCODE = hydra.core.Name("encode")
     DECODE = hydra.core.Name("decode")
@@ -32,7 +32,7 @@ class TarjanState:
     stack: Annotated[frozenlist[Vertex], "Current DFS stack, with vertices in reverse order"]
     on_stack: Annotated[frozenset[Vertex], "Set of vertices currently on the stack, for quick lookup"]
     sccs: Annotated[frozenlist[frozenlist[Vertex]], "Accumulated strongly connected components, each a list of vertices"]
-    
+
     TYPE_ = hydra.core.Name("hydra.topology.TarjanState")
     COUNTER = hydra.core.Name("counter")
     INDICES = hydra.core.Name("indices")

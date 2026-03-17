@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument implements Serializable, Comparable<GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument");
-  
+
   public static final hydra.core.Name LITERAL = new hydra.core.Name("literal");
-  
+
   public static final hydra.core.Name BI_FUNCTION = new hydra.core.Name("biFunction");
-  
+
   public final hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument literal;
-  
+
   public final hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalBiFunctionArgument> biFunction;
-  
+
   public GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument (hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument literal, hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalBiFunctionArgument> biFunction) {
     this.literal = literal;
     this.biFunction = biFunction;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument)) {
@@ -32,12 +32,12 @@ public class GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument implem
       this.biFunction,
       o.biFunction);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(literal) + 3 * java.util.Objects.hashCode(biFunction);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument other) {
@@ -48,11 +48,11 @@ public class GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument implem
     }
     return ((Comparable) biFunction).compareTo(other.biFunction);
   }
-  
+
   public GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument withLiteral(hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument literal) {
     return new GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument(literal, biFunction);
   }
-  
+
   public GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument withBiFunction(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalBiFunctionArgument> biFunction) {
     return new GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument(literal, biFunction);
   }

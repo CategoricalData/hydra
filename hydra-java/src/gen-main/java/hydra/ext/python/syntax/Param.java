@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class Param implements Serializable, Comparable<Param> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Param");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name ANNOTATION = new hydra.core.Name("annotation");
-  
+
   public final hydra.ext.python.syntax.Name name;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Annotation> annotation;
-  
+
   public Param (hydra.ext.python.syntax.Name name, hydra.util.Maybe<hydra.ext.python.syntax.Annotation> annotation) {
     this.name = name;
     this.annotation = annotation;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Param)) {
@@ -32,12 +32,12 @@ public class Param implements Serializable, Comparable<Param> {
       this.annotation,
       o.annotation);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(annotation);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Param other) {
@@ -48,11 +48,11 @@ public class Param implements Serializable, Comparable<Param> {
     }
     return ((Comparable) annotation).compareTo(other.annotation);
   }
-  
+
   public Param withName(hydra.ext.python.syntax.Name name) {
     return new Param(name, annotation);
   }
-  
+
   public Param withAnnotation(hydra.util.Maybe<hydra.ext.python.syntax.Annotation> annotation) {
     return new Param(name, annotation);
   }

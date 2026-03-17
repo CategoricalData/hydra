@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class ForInit implements Serializable, Comparable<ForInit> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ForInit");
-  
+
   public static final hydra.core.Name STATEMENTS = new hydra.core.Name("statements");
-  
+
   public static final hydra.core.Name LOCAL_VARIABLE = new hydra.core.Name("localVariable");
-  
+
   private ForInit () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Statements instance) ;
-    
+
     R visit(LocalVariable instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ForInit instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Statements instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(LocalVariable instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Statements extends hydra.ext.java.syntax.ForInit implements Serializable {
     public final hydra.util.ConsList<hydra.ext.java.syntax.StatementExpression> value;
-    
+
     public Statements (hydra.util.ConsList<hydra.ext.java.syntax.StatementExpression> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Statements)) {
@@ -54,12 +54,12 @@ public abstract class ForInit implements Serializable, Comparable<ForInit> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ForInit other) {
@@ -70,20 +70,20 @@ public abstract class ForInit implements Serializable, Comparable<ForInit> {
       Statements o = (Statements) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class LocalVariable extends hydra.ext.java.syntax.ForInit implements Serializable {
     public final hydra.ext.java.syntax.LocalVariableDeclaration value;
-    
+
     public LocalVariable (hydra.ext.java.syntax.LocalVariableDeclaration value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof LocalVariable)) {
@@ -94,12 +94,12 @@ public abstract class ForInit implements Serializable, Comparable<ForInit> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ForInit other) {
@@ -110,7 +110,7 @@ public abstract class ForInit implements Serializable, Comparable<ForInit> {
       LocalVariable o = (LocalVariable) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

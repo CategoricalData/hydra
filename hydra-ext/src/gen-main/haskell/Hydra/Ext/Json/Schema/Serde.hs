@@ -154,8 +154,8 @@ encodeKeyword k = Model.ValueString (Schema.unKeyword k)
 -- | Encode a keyword-schema-or-array pair as a key-value pair
 encodeKeywordSchemaOrArray :: (Schema.Keyword, Schema.SchemaOrArray) -> (String, Model.Value)
 encodeKeywordSchemaOrArray p =
-     
-      let k = Pairs.first p 
+
+      let k = Pairs.first p
           s = Pairs.second p
       in (Schema.unKeyword k, (encodeSchemaOrArray s))
 
@@ -173,16 +173,16 @@ encodeMultipleRestriction r =
 encodeNumericRestriction :: Schema.NumericRestriction -> [(String, Model.Value)]
 encodeNumericRestriction r =
     case r of
-      Schema.NumericRestrictionMinimum v0 ->  
-        let value = Schema.limitValue v0 
+      Schema.NumericRestrictionMinimum v0 ->
+        let value = Schema.limitValue v0
             excl = Schema.limitExclusive v0
         in (Lists.concat [
           [
             (key_minimum, (encodeInteger value))],
           (Logic.ifElse excl [
             (key_exclusiveMinimum, (Model.ValueBoolean True))] [])])
-      Schema.NumericRestrictionMaximum v0 ->  
-        let value = Schema.limitValue v0 
+      Schema.NumericRestrictionMaximum v0 ->
+        let value = Schema.limitValue v0
             excl = Schema.limitExclusive v0
         in (Lists.concat [
           [
@@ -195,16 +195,16 @@ encodeNumericRestriction r =
 -- | Encode a pattern property pair as a key-value pair
 encodePatternProperty :: (Schema.RegularExpression, Schema.Schema) -> (String, Model.Value)
 encodePatternProperty p =
-     
-      let pat = Pairs.first p 
+
+      let pat = Pairs.first p
           s = Pairs.second p
       in (Schema.unRegularExpression pat, (encodeSchema s))
 
 -- | Encode a property pair as a key-value pair
 encodeProperty :: (Schema.Keyword, Schema.Schema) -> (String, Model.Value)
 encodeProperty p =
-     
-      let k = Pairs.first p 
+
+      let k = Pairs.first p
           s = Pairs.second p
       in (Schema.unKeyword k, (encodeSchema s))
 
@@ -287,8 +287,8 @@ encodeTypeName t =
 -- | Convert a JSON Schema document to a JSON value
 jsonSchemaDocumentToJsonValue :: Schema.Document -> Model.Value
 jsonSchemaDocumentToJsonValue doc =
-     
-      let mid = Schema.documentId doc 
+
+      let mid = Schema.documentId doc
           mdefs = Schema.documentDefinitions doc
           root = Schema.documentRoot doc
           schemaMap = fromObject (encodeSchema root)
@@ -296,8 +296,8 @@ jsonSchemaDocumentToJsonValue doc =
                   fromObject (toObject [
                     (key_id, (Maybes.map (\i -> Model.ValueString i) mid)),
                     (key_schema, (Maybes.pure (Model.ValueString "http://json-schema.org/2020-12/schema"))),
-                    (key_definitions, (Maybes.map (\mp -> Model.ValueObject (Maps.fromList (Lists.map (\p ->  
-                      let k = Pairs.first p 
+                    (key_definitions, (Maybes.map (\mp -> Model.ValueObject (Maps.fromList (Lists.map (\p ->
+                      let k = Pairs.first p
                           schema = Pairs.second p
                       in (Schema.unKeyword k, (encodeSchema schema))) (Maps.toList mp)))) mdefs))])
       in (Model.ValueObject (Maps.union schemaMap restMap))
@@ -315,7 +315,7 @@ fromObject v =
 -- | Construct a JSON object from a list of optional key-value pairs, filtering out Nothing values
 toObject :: [(String, (Maybe Model.Value))] -> Model.Value
 toObject pairs =
-    Model.ValueObject (Maps.fromList (Maybes.cat (Lists.map (\p ->  
-      let k = Pairs.first p 
+    Model.ValueObject (Maps.fromList (Maybes.cat (Lists.map (\p ->
+      let k = Pairs.first p
           mv = Pairs.second p
       in (Maybes.map (\v -> (k, v)) mv)) pairs)))

@@ -18,5 +18,5 @@ import hydra.testing
 @lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""The group of all type checking tests."""
-    
+
     return hydra.testing.TestGroup("checking", Nothing(), (hydra.test.checking.advanced.all_tests(), hydra.test.checking.algebraic_types.all_tests(), hydra.test.checking.collections.all_tests(), hydra.test.checking.failures.all_tests(), hydra.test.checking.fundamentals.all_tests(), hydra.test.checking.nominal_types.all_tests()), ())

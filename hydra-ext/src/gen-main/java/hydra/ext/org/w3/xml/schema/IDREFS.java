@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class IDREFS implements Serializable, Comparable<IDREFS> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.xml.schema.IDREFS");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final String value;
-  
+
   public IDREFS (String value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof IDREFS)) {
@@ -25,12 +25,12 @@ public class IDREFS implements Serializable, Comparable<IDREFS> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(IDREFS other) {

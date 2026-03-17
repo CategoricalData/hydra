@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class PrefixApplicationExpression implements Serializable, Comparable<PrefixApplicationExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.PrefixApplicationExpression");
-  
+
   public static final hydra.core.Name OPERATOR = new hydra.core.Name("operator");
-  
+
   public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
-  
+
   /**
    * The prefix operator
    */
   public final hydra.ext.haskell.ast.Operator operator;
-  
+
   /**
    * The operand
    */
   public final hydra.ext.haskell.ast.Expression rhs;
-  
+
   public PrefixApplicationExpression (hydra.ext.haskell.ast.Operator operator, hydra.ext.haskell.ast.Expression rhs) {
     this.operator = operator;
     this.rhs = rhs;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof PrefixApplicationExpression)) {
@@ -41,12 +41,12 @@ public class PrefixApplicationExpression implements Serializable, Comparable<Pre
       this.rhs,
       o.rhs);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(operator) + 3 * java.util.Objects.hashCode(rhs);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PrefixApplicationExpression other) {
@@ -57,11 +57,11 @@ public class PrefixApplicationExpression implements Serializable, Comparable<Pre
     }
     return ((Comparable) rhs).compareTo(other.rhs);
   }
-  
+
   public PrefixApplicationExpression withOperator(hydra.ext.haskell.ast.Operator operator) {
     return new PrefixApplicationExpression(operator, rhs);
   }
-  
+
   public PrefixApplicationExpression withRhs(hydra.ext.haskell.ast.Expression rhs) {
     return new PrefixApplicationExpression(operator, rhs);
   }

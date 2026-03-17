@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class KeyValuePattern implements Serializable, Comparable<KeyValuePattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.KeyValuePattern");
-  
+
   public static final hydra.core.Name KEY = new hydra.core.Name("key");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.ext.python.syntax.LiteralExpressionOrAttribute key;
-  
+
   public final hydra.ext.python.syntax.Pattern value;
-  
+
   public KeyValuePattern (hydra.ext.python.syntax.LiteralExpressionOrAttribute key, hydra.ext.python.syntax.Pattern value) {
     this.key = key;
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof KeyValuePattern)) {
@@ -32,12 +32,12 @@ public class KeyValuePattern implements Serializable, Comparable<KeyValuePattern
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(key) + 3 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(KeyValuePattern other) {
@@ -48,11 +48,11 @@ public class KeyValuePattern implements Serializable, Comparable<KeyValuePattern
     }
     return ((Comparable) value).compareTo(other.value);
   }
-  
+
   public KeyValuePattern withKey(hydra.ext.python.syntax.LiteralExpressionOrAttribute key) {
     return new KeyValuePattern(key, value);
   }
-  
+
   public KeyValuePattern withValue(hydra.ext.python.syntax.Pattern value) {
     return new KeyValuePattern(key, value);
   }

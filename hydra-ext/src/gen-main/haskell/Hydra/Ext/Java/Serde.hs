@@ -27,8 +27,8 @@ hexDigit n = Logic.ifElse (Equality.lt n 10) (Math.add n 48) (Math.add (Math.sub
 
 padHex4 :: Int -> String
 padHex4 n =
-     
-      let d3 = Math.div n 4096 
+
+      let d3 = Math.div n 4096
           r3 = Math.mod n 4096
           d2 = Math.div r3 256
           r2 = Math.mod r3 256
@@ -42,8 +42,8 @@ padHex4 n =
 
 javaUnicodeEscape :: Int -> String
 javaUnicodeEscape n =
-    Logic.ifElse (Equality.gt n 65535) ( 
-      let n_ = Math.sub n 65536 
+    Logic.ifElse (Equality.gt n 65535) (
+      let n_ = Math.sub n 65536
           hi = Math.add 55296 (Math.div n_ 1024)
           lo = Math.add 56320 (Math.mod n_ 1024)
       in (Strings.cat2 (Strings.cat2 "\\u" (padHex4 hi)) (Strings.cat2 "\\u" (padHex4 lo)))) (Strings.cat2 "\\u" (padHex4 n))
@@ -94,8 +94,8 @@ writeArrayAccess _ = Serialization.cst "STUB:ArrayAccess"
 writeArrayCreationExpression :: Syntax.ArrayCreationExpression -> Ast.Expr
 writeArrayCreationExpression ace =
     case ace of
-      Syntax.ArrayCreationExpressionPrimitiveArray v0 ->  
-        let pt = Syntax.arrayCreationExpression_PrimitiveArrayType v0 
+      Syntax.ArrayCreationExpressionPrimitiveArray v0 ->
+        let pt = Syntax.arrayCreationExpression_PrimitiveArrayType v0
             ai = Syntax.arrayCreationExpression_PrimitiveArrayArray v0
         in (Serialization.spaceSep [
           Serialization.cst "new",
@@ -109,7 +109,7 @@ writeArrayCreationExpression ace =
 
 writeArrayInitializer :: Syntax.ArrayInitializer -> Ast.Expr
 writeArrayInitializer ai =
-     
+
       let groups = Syntax.unArrayInitializer ai
       in (Logic.ifElse (Equality.equal (Lists.length groups) 1) (Serialization.noSep [
         Serialization.cst "{",
@@ -118,8 +118,8 @@ writeArrayInitializer ai =
 
 writeArrayType :: Syntax.ArrayType -> Ast.Expr
 writeArrayType at =
-     
-      let dims = Syntax.arrayTypeDims at 
+
+      let dims = Syntax.arrayTypeDims at
           variant = Syntax.arrayTypeVariant at
           varExpr =
                   case variant of
@@ -135,8 +135,8 @@ writeAssertStatement _ = Serialization.cst "STUB:AssertStatement"
 
 writeAssignment :: Syntax.Assignment -> Ast.Expr
 writeAssignment a =
-     
-      let lhs = Syntax.assignmentLhs a 
+
+      let lhs = Syntax.assignmentLhs a
           op = Syntax.assignmentOp a
           rhs = Syntax.assignmentExpression a
           ctop =
@@ -174,7 +174,7 @@ writeBlockStatement s =
 
 writeBreakStatement :: Syntax.BreakStatement -> Ast.Expr
 writeBreakStatement bs =
-     
+
       let mlabel = Syntax.unBreakStatement bs
       in (Serialization.withSemi (Serialization.spaceSep (Maybes.cat [
         Just (Serialization.cst "break"),
@@ -192,8 +192,8 @@ writeCastExpression_Lambda _ = Serialization.cst "STUB:CastExpression_Lambda"
 
 writeCastExpression_NotPlusMinus :: Syntax.CastExpression_NotPlusMinus -> Ast.Expr
 writeCastExpression_NotPlusMinus npm =
-     
-      let rb = Syntax.castExpression_NotPlusMinusRefAndBounds npm 
+
+      let rb = Syntax.castExpression_NotPlusMinusRefAndBounds npm
           ex = Syntax.castExpression_NotPlusMinusExpression npm
       in (Serialization.spaceSep [
         writeCastExpression_RefAndBounds rb,
@@ -201,8 +201,8 @@ writeCastExpression_NotPlusMinus npm =
 
 writeCastExpression_RefAndBounds :: Syntax.CastExpression_RefAndBounds -> Ast.Expr
 writeCastExpression_RefAndBounds rab =
-     
-      let rt = Syntax.castExpression_RefAndBoundsType rab 
+
+      let rt = Syntax.castExpression_RefAndBoundsType rab
           adds = Syntax.castExpression_RefAndBoundsBounds rab
       in (Serialization.parenList False [
         Serialization.spaceSep (Maybes.cat [
@@ -211,8 +211,8 @@ writeCastExpression_RefAndBounds rab =
 
 writeCastExpression_Primitive :: Syntax.CastExpression_Primitive -> Ast.Expr
 writeCastExpression_Primitive cp =
-     
-      let pt = Syntax.castExpression_PrimitiveType cp 
+
+      let pt = Syntax.castExpression_PrimitiveType cp
           ex = Syntax.castExpression_PrimitiveExpression cp
       in (Serialization.spaceSep [
         Serialization.parenList False [
@@ -233,8 +233,8 @@ writeClassBodyDeclaration d =
 
 writeClassBodyDeclarationWithComments :: Syntax.ClassBodyDeclarationWithComments -> Ast.Expr
 writeClassBodyDeclarationWithComments cbdwc =
-     
-      let d = Syntax.classBodyDeclarationWithCommentsValue cbdwc 
+
+      let d = Syntax.classBodyDeclarationWithCommentsValue cbdwc
           mc = Syntax.classBodyDeclarationWithCommentsComments cbdwc
       in (withComments mc (writeClassBodyDeclaration d))
 
@@ -246,8 +246,8 @@ writeClassDeclaration d =
 
 writeClassInstanceCreationExpression :: Syntax.ClassInstanceCreationExpression -> Ast.Expr
 writeClassInstanceCreationExpression cice =
-     
-      let mqual = Syntax.classInstanceCreationExpressionQualifier cice 
+
+      let mqual = Syntax.classInstanceCreationExpressionQualifier cice
           e = Syntax.classInstanceCreationExpressionExpression cice
       in (Maybes.maybe (writeUnqualifiedClassInstanceCreationExpression e) (\q -> Serialization.dotSep [
         writeClassInstanceCreationExpression_Qualifier q,
@@ -291,8 +291,8 @@ writeClassOrInterfaceType cit =
 
 writeClassOrInterfaceTypeToInstantiate :: Syntax.ClassOrInterfaceTypeToInstantiate -> Ast.Expr
 writeClassOrInterfaceTypeToInstantiate coitti =
-     
-      let ids = Syntax.classOrInterfaceTypeToInstantiateIdentifiers coitti 
+
+      let ids = Syntax.classOrInterfaceTypeToInstantiateIdentifiers coitti
           margs = Syntax.classOrInterfaceTypeToInstantiateTypeArguments coitti
       in (Serialization.noSep (Maybes.cat [
         Just (Serialization.dotSep (Lists.map writeAnnotatedIdentifier ids)),
@@ -300,8 +300,8 @@ writeClassOrInterfaceTypeToInstantiate coitti =
 
 writeClassType :: Syntax.ClassType -> Ast.Expr
 writeClassType ct =
-     
-      let anns = Syntax.classTypeAnnotations ct 
+
+      let anns = Syntax.classTypeAnnotations ct
           qual = Syntax.classTypeQualifier ct
           id = Syntax.classTypeIdentifier ct
           args = Syntax.classTypeArguments ct
@@ -323,8 +323,8 @@ writeClassType ct =
 writeCompilationUnit :: Syntax.CompilationUnit -> Ast.Expr
 writeCompilationUnit u =
     case u of
-      Syntax.CompilationUnitOrdinary v0 ->  
-        let mpkg = Syntax.ordinaryCompilationUnitPackage v0 
+      Syntax.CompilationUnitOrdinary v0 ->
+        let mpkg = Syntax.ordinaryCompilationUnitPackage v0
             imports = Syntax.ordinaryCompilationUnitImports v0
             types = Syntax.ordinaryCompilationUnitTypes v0
             warning = Just (singleLineComment Constants.warningAutoGeneratedFile)
@@ -362,8 +362,8 @@ writeConditionalOrExpression coe =
 
 writeConstantDeclaration :: Syntax.ConstantDeclaration -> Ast.Expr
 writeConstantDeclaration cd =
-     
-      let mods = Syntax.constantDeclarationModifiers cd 
+
+      let mods = Syntax.constantDeclarationModifiers cd
           typ = Syntax.constantDeclarationType cd
           vars = Syntax.constantDeclarationVariables cd
       in (Serialization.withSemi (Serialization.spaceSep (Maybes.cat [
@@ -376,8 +376,8 @@ writeConstantModifier _ = Serialization.cst "STUB:ConstantModifier"
 
 writeConstructorBody :: Syntax.ConstructorBody -> Ast.Expr
 writeConstructorBody cb =
-     
-      let minvoc = Syntax.constructorBodyInvocation cb 
+
+      let minvoc = Syntax.constructorBodyInvocation cb
           stmts = Syntax.constructorBodyStatements cb
       in (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.doubleNewlineSep (Maybes.cat [
         Maybes.map writeExplicitConstructorInvocation minvoc,
@@ -385,8 +385,8 @@ writeConstructorBody cb =
 
 writeConstructorDeclaration :: Syntax.ConstructorDeclaration -> Ast.Expr
 writeConstructorDeclaration cd =
-     
-      let mods = Syntax.constructorDeclarationModifiers cd 
+
+      let mods = Syntax.constructorDeclarationModifiers cd
           cons = Syntax.constructorDeclarationConstructor cd
           mthrows = Syntax.constructorDeclarationThrows cd
           body = Syntax.constructorDeclarationBody cd
@@ -398,8 +398,8 @@ writeConstructorDeclaration cd =
 
 writeConstructorDeclarator :: Syntax.ConstructorDeclarator -> Ast.Expr
 writeConstructorDeclarator cd =
-     
-      let tparams = Syntax.constructorDeclaratorParameters cd 
+
+      let tparams = Syntax.constructorDeclaratorParameters cd
           name = Syntax.constructorDeclaratorName cd
           fparams = Syntax.constructorDeclaratorFormalParameters cd
       in (Serialization.spaceSep (Maybes.cat [
@@ -417,7 +417,7 @@ writeConstructorModifier m =
 
 writeContinueStatement :: Syntax.ContinueStatement -> Ast.Expr
 writeContinueStatement cs =
-     
+
       let mlabel = Syntax.unContinueStatement cs
       in (Serialization.withSemi (Serialization.spaceSep (Maybes.cat [
         Just (Serialization.cst "continue"),
@@ -438,8 +438,8 @@ writeElementValue ev =
 
 writeElementValuePair :: Syntax.ElementValuePair -> Ast.Expr
 writeElementValuePair evp =
-     
-      let k = Syntax.elementValuePairKey evp 
+
+      let k = Syntax.elementValuePairKey evp
           v = Syntax.elementValuePairValue evp
       in (Serialization.infixWs "=" (writeIdentifier k) (writeElementValue v))
 
@@ -468,8 +468,8 @@ writeExpression e =
 
 writeExpressionName :: Syntax.ExpressionName -> Ast.Expr
 writeExpressionName en =
-     
-      let mqual = Syntax.expressionNameQualifier en 
+
+      let mqual = Syntax.expressionNameQualifier en
           id = Syntax.expressionNameIdentifier en
       in (Serialization.dotSep (Maybes.cat [
         Maybes.map writeAmbiguousName mqual,
@@ -480,8 +480,8 @@ writeExpressionStatement es = Serialization.withSemi (writeStatementExpression (
 
 writeFieldAccess :: Syntax.FieldAccess -> Ast.Expr
 writeFieldAccess fa =
-     
-      let qual = Syntax.fieldAccessQualifier fa 
+
+      let qual = Syntax.fieldAccessQualifier fa
           id = Syntax.fieldAccessIdentifier fa
       in case qual of
         Syntax.FieldAccess_QualifierPrimary v0 -> Serialization.dotSep [
@@ -497,8 +497,8 @@ writeFieldAccess fa =
 
 writeFieldDeclaration :: Syntax.FieldDeclaration -> Ast.Expr
 writeFieldDeclaration fd =
-     
-      let mods = Syntax.fieldDeclarationModifiers fd 
+
+      let mods = Syntax.fieldDeclarationModifiers fd
           typ = Syntax.fieldDeclarationUnannType fd
           vars = Syntax.fieldDeclarationVariableDeclarators fd
       in (Serialization.withSemi (Serialization.spaceSep (Maybes.cat [
@@ -538,8 +538,8 @@ writeFormalParameter p =
 
 writeFormalParameter_Simple :: Syntax.FormalParameter_Simple -> Ast.Expr
 writeFormalParameter_Simple fps =
-     
-      let mods = Syntax.formalParameter_SimpleModifiers fps 
+
+      let mods = Syntax.formalParameter_SimpleModifiers fps
           typ = Syntax.formalParameter_SimpleType fps
           id = Syntax.formalParameter_SimpleId fps
       in (Serialization.spaceSep (Maybes.cat [
@@ -552,8 +552,8 @@ writeIdentifier id = Serialization.cst (Syntax.unIdentifier id)
 
 writeIfThenStatement :: Syntax.IfThenStatement -> Ast.Expr
 writeIfThenStatement its =
-     
-      let cond = Syntax.ifThenStatementExpression its 
+
+      let cond = Syntax.ifThenStatementExpression its
           thn = Syntax.ifThenStatementStatement its
       in (Serialization.spaceSep [
         Serialization.cst "if",
@@ -583,8 +583,8 @@ writeInstanceInitializer _ = Serialization.cst "STUB:InstanceInitializer"
 
 writeIntegerLiteral :: Syntax.IntegerLiteral -> Ast.Expr
 writeIntegerLiteral il =
-     
-      let i = Syntax.unIntegerLiteral il 
+
+      let i = Syntax.unIntegerLiteral il
           suffix = Logic.ifElse (Logic.or (Equality.gt i 2147483647) (Equality.lt i (-2147483648))) "L" ""
       in (Serialization.cst (Strings.cat2 (Literals.showBigint i) suffix))
 
@@ -617,8 +617,8 @@ writeInterfaceMemberDeclaration d =
 
 writeInterfaceMethodDeclaration :: Syntax.InterfaceMethodDeclaration -> Ast.Expr
 writeInterfaceMethodDeclaration imd =
-     
-      let mods = Syntax.interfaceMethodDeclarationModifiers imd 
+
+      let mods = Syntax.interfaceMethodDeclarationModifiers imd
           header = Syntax.interfaceMethodDeclarationHeader imd
           body = Syntax.interfaceMethodDeclarationBody imd
       in (Serialization.spaceSep (Maybes.cat [
@@ -662,8 +662,8 @@ writeLambdaBody b =
 
 writeLambdaExpression :: Syntax.LambdaExpression -> Ast.Expr
 writeLambdaExpression le =
-     
-      let params = Syntax.lambdaExpressionParameters le 
+
+      let params = Syntax.lambdaExpressionParameters le
           body = Syntax.lambdaExpressionBody le
       in (Serialization.infixWs "->" (writeLambdaParameters params) (writeLambdaBody body))
 
@@ -687,7 +687,7 @@ writeLiteral l =
       Syntax.LiteralInteger v0 -> writeIntegerLiteral v0
       Syntax.LiteralFloatingPoint v0 -> writeFloatingPointLiteral v0
       Syntax.LiteralBoolean v0 -> Serialization.cst (Logic.ifElse v0 "true" "false")
-      Syntax.LiteralCharacter v0 ->  
+      Syntax.LiteralCharacter v0 ->
         let ci = Literals.bigintToInt32 (Literals.uint16ToBigint v0)
         in (Serialization.cst (Strings.cat2 "'" (Strings.cat2 (Logic.ifElse (Equality.equal ci 39) "\\'" (Logic.ifElse (Equality.equal ci 92) "\\\\" (Logic.ifElse (Equality.equal ci 10) "\\n" (Logic.ifElse (Equality.equal ci 13) "\\r" (Logic.ifElse (Equality.equal ci 9) "\\t" (Logic.ifElse (Logic.and (Equality.gte ci 32) (Equality.lt ci 127)) (Strings.fromList [
           ci]) (javaUnicodeEscape ci))))))) "'")))
@@ -695,8 +695,8 @@ writeLiteral l =
 
 writeLocalVariableDeclaration :: Syntax.LocalVariableDeclaration -> Ast.Expr
 writeLocalVariableDeclaration lvd =
-     
-      let mods = Syntax.localVariableDeclarationModifiers lvd 
+
+      let mods = Syntax.localVariableDeclarationModifiers lvd
           t = Syntax.localVariableDeclarationType lvd
           decls = Syntax.localVariableDeclarationDeclarators lvd
       in (Serialization.spaceSep (Maybes.cat [
@@ -725,8 +725,8 @@ writeMethodBody b =
 
 writeMethodDeclaration :: Syntax.MethodDeclaration -> Ast.Expr
 writeMethodDeclaration md =
-     
-      let anns = Syntax.methodDeclarationAnnotations md 
+
+      let anns = Syntax.methodDeclarationAnnotations md
           mods = Syntax.methodDeclarationModifiers md
           header = Syntax.methodDeclarationHeader md
           body = Syntax.methodDeclarationBody md
@@ -741,8 +741,8 @@ writeMethodDeclaration md =
 
 writeMethodDeclarator :: Syntax.MethodDeclarator -> Ast.Expr
 writeMethodDeclarator md =
-     
-      let id = Syntax.methodDeclaratorIdentifier md 
+
+      let id = Syntax.methodDeclaratorIdentifier md
           params = Syntax.methodDeclaratorFormalParameters md
       in (Serialization.noSep [
         writeIdentifier id,
@@ -750,8 +750,8 @@ writeMethodDeclarator md =
 
 writeMethodHeader :: Syntax.MethodHeader -> Ast.Expr
 writeMethodHeader mh =
-     
-      let params = Syntax.methodHeaderParameters mh 
+
+      let params = Syntax.methodHeaderParameters mh
           result = Syntax.methodHeaderResult mh
           decl = Syntax.methodHeaderDeclarator mh
           mthrows = Syntax.methodHeaderThrows mh
@@ -763,15 +763,15 @@ writeMethodHeader mh =
 
 writeMethodInvocation :: Syntax.MethodInvocation -> Ast.Expr
 writeMethodInvocation mi =
-     
-      let header = Syntax.methodInvocationHeader mi 
+
+      let header = Syntax.methodInvocationHeader mi
           args = Syntax.methodInvocationArguments mi
           argSec = Serialization.parenList True (Lists.map writeExpression args)
           headerSec =
                   case header of
                     Syntax.MethodInvocation_HeaderSimple v0 -> writeMethodName v0
-                    Syntax.MethodInvocation_HeaderComplex v0 ->  
-                      let cvar = Syntax.methodInvocation_ComplexVariant v0 
+                    Syntax.MethodInvocation_HeaderComplex v0 ->
+                      let cvar = Syntax.methodInvocation_ComplexVariant v0
                           targs = Syntax.methodInvocation_ComplexTypeArguments v0
                           cid = Syntax.methodInvocation_ComplexIdentifier v0
                           idSec =
@@ -828,8 +828,8 @@ writeMultiplicativeExpression e =
 
 writeNormalAnnotation :: Syntax.NormalAnnotation -> Ast.Expr
 writeNormalAnnotation na =
-     
-      let tname = Syntax.normalAnnotationTypeName na 
+
+      let tname = Syntax.normalAnnotationTypeName na
           pairs = Syntax.normalAnnotationPairs na
       in (Serialization.prefix "@" (Serialization.noSep [
         writeTypeName tname,
@@ -837,8 +837,8 @@ writeNormalAnnotation na =
 
 writeNormalClassDeclaration :: Syntax.NormalClassDeclaration -> Ast.Expr
 writeNormalClassDeclaration ncd =
-     
-      let mods = Syntax.normalClassDeclarationModifiers ncd 
+
+      let mods = Syntax.normalClassDeclarationModifiers ncd
           id = Syntax.normalClassDeclarationIdentifier ncd
           tparams = Syntax.normalClassDeclarationParameters ncd
           msuperc = Syntax.normalClassDeclarationExtends ncd
@@ -860,8 +860,8 @@ writeNormalClassDeclaration ncd =
 
 writeNormalInterfaceDeclaration :: Syntax.NormalInterfaceDeclaration -> Ast.Expr
 writeNormalInterfaceDeclaration nid =
-     
-      let mods = Syntax.normalInterfaceDeclarationModifiers nid 
+
+      let mods = Syntax.normalInterfaceDeclarationModifiers nid
           id = Syntax.normalInterfaceDeclarationIdentifier nid
           tparams = Syntax.normalInterfaceDeclarationParameters nid
           extends = Syntax.normalInterfaceDeclarationExtends nid
@@ -885,8 +885,8 @@ writeNumericType nt =
 
 writePackageDeclaration :: Syntax.PackageDeclaration -> Ast.Expr
 writePackageDeclaration pd =
-     
-      let mods = Syntax.packageDeclarationModifiers pd 
+
+      let mods = Syntax.packageDeclarationModifiers pd
           ids = Syntax.packageDeclarationIdentifiers pd
       in (Serialization.withSemi (Serialization.spaceSep (Maybes.cat [
         Logic.ifElse (Lists.null mods) Nothing (Just (Serialization.spaceSep (Lists.map writePackageModifier mods))),
@@ -954,8 +954,8 @@ writePrimitiveType pt =
 
 writePrimitiveTypeWithAnnotations :: Syntax.PrimitiveTypeWithAnnotations -> Ast.Expr
 writePrimitiveTypeWithAnnotations ptwa =
-     
-      let pt = Syntax.primitiveTypeWithAnnotationsType ptwa 
+
+      let pt = Syntax.primitiveTypeWithAnnotationsType ptwa
           anns = Syntax.primitiveTypeWithAnnotationsAnnotations ptwa
       in (Serialization.spaceSep (Maybes.cat [
         Logic.ifElse (Lists.null anns) Nothing (Just (Serialization.spaceSep (Lists.map writeAnnotation anns))),
@@ -1009,7 +1009,7 @@ writeResult r =
 
 writeReturnStatement :: Syntax.ReturnStatement -> Ast.Expr
 writeReturnStatement rs =
-     
+
       let mex = Syntax.unReturnStatement rs
       in (Serialization.withSemi (Serialization.spaceSep (Maybes.cat [
         Just (Serialization.cst "return"),
@@ -1028,8 +1028,8 @@ writeSimpleTypeName stn = writeTypeIdentifier (Syntax.unSimpleTypeName stn)
 
 writeSingleElementAnnotation :: Syntax.SingleElementAnnotation -> Ast.Expr
 writeSingleElementAnnotation sea =
-     
-      let tname = Syntax.singleElementAnnotationName sea 
+
+      let tname = Syntax.singleElementAnnotationName sea
           mv = Syntax.singleElementAnnotationValue sea
       in (Maybes.maybe (writeMarkerAnnotation (Syntax.MarkerAnnotation tname)) (\v -> Serialization.prefix "@" (Serialization.noSep [
         writeTypeName tname,
@@ -1079,7 +1079,7 @@ writeStaticInitializer _ = Serialization.cst "STUB:StaticInitializer"
 -- | Serialize a Java string literal with proper Unicode escaping.
 writeStringLiteral :: Syntax.StringLiteral -> Ast.Expr
 writeStringLiteral sl =
-     
+
       let s = Syntax.unStringLiteral sl
       in (Serialization.cst (Strings.cat2 "\"" (Strings.cat2 (escapeJavaString s) "\"")))
 
@@ -1123,8 +1123,8 @@ writeTypeBound :: Syntax.TypeBound -> Ast.Expr
 writeTypeBound b =
     case b of
       Syntax.TypeBoundVariable v0 -> writeTypeVariable v0
-      Syntax.TypeBoundClassOrInterface v0 ->  
-        let cit = Syntax.typeBound_ClassOrInterfaceType v0 
+      Syntax.TypeBoundClassOrInterface v0 ->
+        let cit = Syntax.typeBound_ClassOrInterfaceType v0
             additional = Syntax.typeBound_ClassOrInterfaceAdditional v0
         in (Logic.ifElse (Lists.null additional) (writeClassOrInterfaceType cit) (Serialization.spaceSep (Lists.cons (writeClassOrInterfaceType cit) (Lists.map writeAdditionalBound additional))))
 
@@ -1137,8 +1137,8 @@ writeTypeDeclaration d =
 
 writeTypeDeclarationWithComments :: Syntax.TypeDeclarationWithComments -> Ast.Expr
 writeTypeDeclarationWithComments tdwc =
-     
-      let d = Syntax.typeDeclarationWithCommentsValue tdwc 
+
+      let d = Syntax.typeDeclarationWithCommentsValue tdwc
           mc = Syntax.typeDeclarationWithCommentsComments tdwc
       in (withComments mc (writeTypeDeclaration d))
 
@@ -1147,8 +1147,8 @@ writeTypeIdentifier tid = writeIdentifier (Syntax.unTypeIdentifier tid)
 
 writeTypeName :: Syntax.TypeName -> Ast.Expr
 writeTypeName tn =
-     
-      let id = Syntax.typeNameIdentifier tn 
+
+      let id = Syntax.typeNameIdentifier tn
           mqual = Syntax.typeNameQualifier tn
       in (Serialization.dotSep (Maybes.cat [
         Maybes.map writePackageOrTypeName mqual,
@@ -1156,8 +1156,8 @@ writeTypeName tn =
 
 writeTypeParameter :: Syntax.TypeParameter -> Ast.Expr
 writeTypeParameter tp =
-     
-      let mods = Syntax.typeParameterModifiers tp 
+
+      let mods = Syntax.typeParameterModifiers tp
           id = Syntax.typeParameterIdentifier tp
           bound = Syntax.typeParameterBound tp
       in (Serialization.spaceSep (Maybes.cat [
@@ -1172,8 +1172,8 @@ writeTypeParameterModifier tpm = writeAnnotation (Syntax.unTypeParameterModifier
 
 writeTypeVariable :: Syntax.TypeVariable -> Ast.Expr
 writeTypeVariable tv =
-     
-      let anns = Syntax.typeVariableAnnotations tv 
+
+      let anns = Syntax.typeVariableAnnotations tv
           id = Syntax.typeVariableIdentifier tv
       in (Serialization.spaceSep (Maybes.cat [
         Logic.ifElse (Lists.null anns) Nothing (Just (Serialization.spaceSep (Lists.map writeAnnotation anns))),
@@ -1209,8 +1209,8 @@ writeUnaryExpressionNotPlusMinus e =
 
 writeUnqualifiedClassInstanceCreationExpression :: Syntax.UnqualifiedClassInstanceCreationExpression -> Ast.Expr
 writeUnqualifiedClassInstanceCreationExpression ucice =
-     
-      let targs = Syntax.unqualifiedClassInstanceCreationExpressionTypeArguments ucice 
+
+      let targs = Syntax.unqualifiedClassInstanceCreationExpressionTypeArguments ucice
           cit = Syntax.unqualifiedClassInstanceCreationExpressionClassOrInterface ucice
           args = Syntax.unqualifiedClassInstanceCreationExpressionArguments ucice
           mbody = Syntax.unqualifiedClassInstanceCreationExpressionBody ucice
@@ -1227,16 +1227,16 @@ writeVariableArityParameter _ = Serialization.cst "STUB:VariableArityParameter"
 
 writeVariableDeclarator :: Syntax.VariableDeclarator -> Ast.Expr
 writeVariableDeclarator vd =
-     
-      let id = Syntax.variableDeclaratorId vd 
+
+      let id = Syntax.variableDeclaratorId vd
           minit = Syntax.variableDeclaratorInitializer vd
           idSec = writeVariableDeclaratorId id
       in (Maybes.maybe idSec (\init -> Serialization.infixWs "=" idSec (writeVariableInitializer init)) minit)
 
 writeVariableDeclaratorId :: Syntax.VariableDeclaratorId -> Ast.Expr
 writeVariableDeclaratorId vdi =
-     
-      let id = Syntax.variableDeclaratorIdIdentifier vdi 
+
+      let id = Syntax.variableDeclaratorIdIdentifier vdi
           mdims = Syntax.variableDeclaratorIdDims vdi
       in (Serialization.noSep (Maybes.cat [
         Just (writeIdentifier id),
@@ -1256,8 +1256,8 @@ writeVariableModifier m =
 
 writeWhileStatement :: Syntax.WhileStatement -> Ast.Expr
 writeWhileStatement ws =
-     
-      let mcond = Syntax.whileStatementCond ws 
+
+      let mcond = Syntax.whileStatementCond ws
           body = Syntax.whileStatementBody ws
           condSer = Maybes.maybe (Serialization.cst "true") (\c -> writeExpression c) mcond
       in (Serialization.spaceSep [
@@ -1268,8 +1268,8 @@ writeWhileStatement ws =
 
 writeWildcard :: Syntax.Wildcard -> Ast.Expr
 writeWildcard w =
-     
-      let anns = Syntax.wildcardAnnotations w 
+
+      let anns = Syntax.wildcardAnnotations w
           mbounds = Syntax.wildcardWildcard w
       in (Serialization.spaceSep (Maybes.cat [
         Logic.ifElse (Lists.null anns) Nothing (Just (Serialization.commaSep Serialization.inlineStyle (Lists.map writeAnnotation anns))),

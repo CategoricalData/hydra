@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class ApplicationExpression implements Serializable, Comparable<ApplicationExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.ApplicationExpression");
-  
+
   public static final hydra.core.Name FUNCTION = new hydra.core.Name("function");
-  
+
   public static final hydra.core.Name ARGUMENT = new hydra.core.Name("argument");
-  
+
   /**
    * The function being applied
    */
   public final hydra.ext.haskell.ast.Expression function;
-  
+
   /**
    * The argument
    */
   public final hydra.ext.haskell.ast.Expression argument;
-  
+
   public ApplicationExpression (hydra.ext.haskell.ast.Expression function, hydra.ext.haskell.ast.Expression argument) {
     this.function = function;
     this.argument = argument;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ApplicationExpression)) {
@@ -41,12 +41,12 @@ public class ApplicationExpression implements Serializable, Comparable<Applicati
       this.argument,
       o.argument);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(function) + 3 * java.util.Objects.hashCode(argument);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ApplicationExpression other) {
@@ -57,11 +57,11 @@ public class ApplicationExpression implements Serializable, Comparable<Applicati
     }
     return ((Comparable) argument).compareTo(other.argument);
   }
-  
+
   public ApplicationExpression withFunction(hydra.ext.haskell.ast.Expression function) {
     return new ApplicationExpression(function, argument);
   }
-  
+
   public ApplicationExpression withArgument(hydra.ext.haskell.ast.Expression argument) {
     return new ApplicationExpression(function, argument);
   }

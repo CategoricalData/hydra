@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class PropertyEquals implements Serializable, Comparable<PropertyEquals> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.PropertyEquals");
-  
+
   public static final hydra.core.Name LHS = new hydra.core.Name("lhs");
-  
+
   public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
-  
+
   public final hydra.ext.cypher.openCypher.PropertyExpression lhs;
-  
+
   public final hydra.ext.cypher.openCypher.Expression rhs;
-  
+
   public PropertyEquals (hydra.ext.cypher.openCypher.PropertyExpression lhs, hydra.ext.cypher.openCypher.Expression rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof PropertyEquals)) {
@@ -32,12 +32,12 @@ public class PropertyEquals implements Serializable, Comparable<PropertyEquals> 
       this.rhs,
       o.rhs);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(lhs) + 3 * java.util.Objects.hashCode(rhs);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PropertyEquals other) {
@@ -48,11 +48,11 @@ public class PropertyEquals implements Serializable, Comparable<PropertyEquals> 
     }
     return ((Comparable) rhs).compareTo(other.rhs);
   }
-  
+
   public PropertyEquals withLhs(hydra.ext.cypher.openCypher.PropertyExpression lhs) {
     return new PropertyEquals(lhs, rhs);
   }
-  
+
   public PropertyEquals withRhs(hydra.ext.cypher.openCypher.Expression rhs) {
     return new PropertyEquals(lhs, rhs);
   }

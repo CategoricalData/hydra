@@ -17,7 +17,7 @@ public interface Decode {
             public hydra.util.Either<String, String> otherwise(hydra.ext.org.yaml.model.Node instance) {
               return hydra.util.Either.<String, String>left("non-scalar YAML mapping key");
             }
-            
+
             @Override
             public hydra.util.Either<String, String> visit(hydra.ext.org.yaml.model.Node.Scalar s) {
               return (s).value.accept(new hydra.ext.org.yaml.model.Scalar.PartialVisitor<>() {
@@ -25,7 +25,7 @@ public interface Decode {
                 public hydra.util.Either<String, String> otherwise(hydra.ext.org.yaml.model.Scalar instance) {
                   return hydra.util.Either.<String, String>left("non-string YAML mapping key");
                 }
-                
+
                 @Override
                 public hydra.util.Either<String, String> visit(hydra.ext.org.yaml.model.Scalar.Str str) {
                   return hydra.util.Either.<String, String>right((str).value);
@@ -51,7 +51,7 @@ public interface Decode {
           (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<String, hydra.json.model.Value>>, hydra.json.model.Value>) (es -> new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(es))),
           entries.get());
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Node.Scalar s) {
         return (s).value.accept(new hydra.ext.org.yaml.model.Scalar.PartialVisitor<>() {
@@ -59,29 +59,29 @@ public interface Decode {
           public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Scalar.Bool b) {
             return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Boolean_((b).value));
           }
-          
+
           @Override
           public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Scalar.Float_ f) {
             return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Number_((f).value));
           }
-          
+
           @Override
           public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Scalar.Int i) {
             return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToBigfloat.apply((i).value)));
           }
-          
+
           @Override
           public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Scalar.Null ignored) {
             return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Null());
           }
-          
+
           @Override
           public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Scalar.Str str) {
             return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.String_((str).value));
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Node.Sequence nodes) {
         hydra.util.Lazy<hydra.util.Either<String, hydra.util.ConsList<hydra.json.model.Value>>> results = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
@@ -93,7 +93,7 @@ public interface Decode {
       }
     });
   }
-  
+
   static hydra.util.Either<String, hydra.core.Term> fromYaml(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> types, hydra.core.Name tname, hydra.core.Type typ, hydra.ext.org.yaml.model.Node node) {
     hydra.util.Either<String, hydra.json.model.Value> jsonResult = hydra.json.yaml.decode.Decode.yamlToJson(node);
     return hydra.lib.eithers.Either.apply(

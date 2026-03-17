@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class PackageName implements Serializable, Comparable<PackageName> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.PackageName");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.Identifier> value;
-  
+
   public PackageName (hydra.util.ConsList<hydra.ext.java.syntax.Identifier> value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof PackageName)) {
@@ -25,12 +25,12 @@ public class PackageName implements Serializable, Comparable<PackageName> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PackageName other) {

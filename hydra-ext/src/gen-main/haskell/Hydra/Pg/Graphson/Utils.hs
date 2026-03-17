@@ -29,11 +29,11 @@ import qualified Data.Set as S
 -- | Convert a list of property graph elements to a list of vertices with their adjacent edges
 elementsToVerticesWithAdjacentEdges :: Ord t0 => ([Model_.Element t0] -> [Model_.VertexWithAdjacentEdges t0])
 elementsToVerticesWithAdjacentEdges els =
-     
+
       let partitioned =
               Lists.foldl (\acc -> \el -> (\x -> case x of
                 Model_.ElementVertex v0 -> (Lists.cons v0 (Pairs.first acc), (Pairs.second acc))
-                Model_.ElementEdge v0 -> (Pairs.first acc, (Lists.cons v0 (Pairs.second acc)))) el) ([], []) els 
+                Model_.ElementEdge v0 -> (Pairs.first acc, (Lists.cons v0 (Pairs.second acc)))) el) ([], []) els
           vertices = Lists.reverse (Pairs.first partitioned)
           edges = Lists.reverse (Pairs.second partitioned)
           vertexMap0 =
@@ -42,8 +42,8 @@ elementsToVerticesWithAdjacentEdges els =
                     Model_.vertexWithAdjacentEdgesIns = [],
                     Model_.vertexWithAdjacentEdgesOuts = []})) vertices)
           vertexMap1 =
-                  Lists.foldl (\vmap -> \edge ->  
-                    let label = Model_.edgeLabel edge 
+                  Lists.foldl (\vmap -> \edge ->
+                    let label = Model_.edgeLabel edge
                         edgeId = Model_.edgeId edge
                         outV = Model_.edgeOut edge
                         inV = Model_.edgeIn edge

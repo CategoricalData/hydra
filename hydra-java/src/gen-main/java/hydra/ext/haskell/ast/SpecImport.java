@@ -9,47 +9,47 @@ import java.io.Serializable;
  */
 public abstract class SpecImport implements Serializable, Comparable<SpecImport> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.SpecImport");
-  
+
   public static final hydra.core.Name LIST = new hydra.core.Name("list");
-  
+
   public static final hydra.core.Name HIDING = new hydra.core.Name("hiding");
-  
+
   private SpecImport () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(List instance) ;
-    
+
     R visit(Hiding instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(SpecImport instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(List instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Hiding instance) {
       return otherwise(instance);
     }
   }
-  
+
   /**
    * A list of imports to include
    */
   public static final class List extends hydra.ext.haskell.ast.SpecImport implements Serializable {
     public final hydra.util.ConsList<hydra.ext.haskell.ast.ImportExportSpec> value;
-    
+
     public List (hydra.util.ConsList<hydra.ext.haskell.ast.ImportExportSpec> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof List)) {
@@ -60,12 +60,12 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SpecImport other) {
@@ -76,23 +76,23 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
       List o = (List) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A list of imports to exclude
    */
   public static final class Hiding extends hydra.ext.haskell.ast.SpecImport implements Serializable {
     public final hydra.util.ConsList<hydra.ext.haskell.ast.ImportExportSpec> value;
-    
+
     public Hiding (hydra.util.ConsList<hydra.ext.haskell.ast.ImportExportSpec> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Hiding)) {
@@ -103,12 +103,12 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SpecImport other) {
@@ -119,7 +119,7 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
       Hiding o = (Hiding) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

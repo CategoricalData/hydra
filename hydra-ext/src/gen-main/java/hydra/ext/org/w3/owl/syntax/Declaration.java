@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class Declaration implements Serializable, Comparable<Declaration> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.Declaration");
-  
+
   public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
-  
+
   public static final hydra.core.Name ENTITY = new hydra.core.Name("entity");
-  
+
   public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
-  
+
   public final hydra.ext.org.w3.owl.syntax.Entity entity;
-  
+
   public Declaration (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.Entity entity) {
     this.annotations = annotations;
     this.entity = entity;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Declaration)) {
@@ -32,12 +32,12 @@ public class Declaration implements Serializable, Comparable<Declaration> {
       this.entity,
       o.entity);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(entity);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Declaration other) {
@@ -48,11 +48,11 @@ public class Declaration implements Serializable, Comparable<Declaration> {
     }
     return ((Comparable) entity).compareTo(other.entity);
   }
-  
+
   public Declaration withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new Declaration(annotations, entity);
   }
-  
+
   public Declaration withEntity(hydra.ext.org.w3.owl.syntax.Entity entity) {
     return new Declaration(annotations, entity);
   }

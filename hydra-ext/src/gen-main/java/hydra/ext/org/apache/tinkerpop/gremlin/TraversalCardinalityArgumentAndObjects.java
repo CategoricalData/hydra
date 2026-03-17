@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class TraversalCardinalityArgumentAndObjects implements Serializable, Comparable<TraversalCardinalityArgumentAndObjects> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects");
-  
+
   public static final hydra.core.Name CARDINALITY = new hydra.core.Name("cardinality");
-  
+
   public static final hydra.core.Name OBJECTS = new hydra.core.Name("objects");
-  
+
   public final hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument cardinality;
-  
+
   public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects;
-  
+
   public TraversalCardinalityArgumentAndObjects (hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument cardinality, hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects) {
     this.cardinality = cardinality;
     this.objects = objects;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TraversalCardinalityArgumentAndObjects)) {
@@ -32,12 +32,12 @@ public class TraversalCardinalityArgumentAndObjects implements Serializable, Com
       this.objects,
       o.objects);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(cardinality) + 3 * java.util.Objects.hashCode(objects);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TraversalCardinalityArgumentAndObjects other) {
@@ -48,11 +48,11 @@ public class TraversalCardinalityArgumentAndObjects implements Serializable, Com
     }
     return ((Comparable) objects).compareTo(other.objects);
   }
-  
+
   public TraversalCardinalityArgumentAndObjects withCardinality(hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument cardinality) {
     return new TraversalCardinalityArgumentAndObjects(cardinality, objects);
   }
-  
+
   public TraversalCardinalityArgumentAndObjects withObjects(hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects) {
     return new TraversalCardinalityArgumentAndObjects(cardinality, objects);
   }

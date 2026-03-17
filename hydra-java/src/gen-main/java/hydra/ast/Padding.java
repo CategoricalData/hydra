@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class Padding implements Serializable, Comparable<Padding> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ast.Padding");
-  
+
   public static final hydra.core.Name LEFT = new hydra.core.Name("left");
-  
+
   public static final hydra.core.Name RIGHT = new hydra.core.Name("right");
-  
+
   /**
    * Padding to the left of the operator
    */
   public final hydra.ast.Ws left;
-  
+
   /**
    * Padding to the right of the operator
    */
   public final hydra.ast.Ws right;
-  
+
   public Padding (hydra.ast.Ws left, hydra.ast.Ws right) {
     this.left = left;
     this.right = right;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Padding)) {
@@ -41,12 +41,12 @@ public class Padding implements Serializable, Comparable<Padding> {
       this.right,
       o.right);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(left) + 3 * java.util.Objects.hashCode(right);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Padding other) {
@@ -57,11 +57,11 @@ public class Padding implements Serializable, Comparable<Padding> {
     }
     return ((Comparable) right).compareTo(other.right);
   }
-  
+
   public Padding withLeft(hydra.ast.Ws left) {
     return new Padding(left, right);
   }
-  
+
   public Padding withRight(hydra.ast.Ws right) {
     return new Padding(left, right);
   }

@@ -6,58 +6,58 @@ import java.io.Serializable;
 
 public abstract class TraversalDT implements Serializable, Comparable<TraversalDT> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalDT");
-  
+
   public static final hydra.core.Name SECOND = new hydra.core.Name("second");
-  
+
   public static final hydra.core.Name MINUTE = new hydra.core.Name("minute");
-  
+
   public static final hydra.core.Name HOUR = new hydra.core.Name("hour");
-  
+
   public static final hydra.core.Name DAY = new hydra.core.Name("day");
-  
+
   private TraversalDT () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Second instance) ;
-    
+
     R visit(Minute instance) ;
-    
+
     R visit(Hour instance) ;
-    
+
     R visit(Day instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(TraversalDT instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Second instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Minute instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Hour instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Day instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Second extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalDT implements Serializable {
     public Second () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Second)) {
@@ -66,12 +66,12 @@ public abstract class TraversalDT implements Serializable, Comparable<TraversalD
       Second o = (Second) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalDT other) {
@@ -81,18 +81,18 @@ public abstract class TraversalDT implements Serializable, Comparable<TraversalD
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Minute extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalDT implements Serializable {
     public Minute () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Minute)) {
@@ -101,12 +101,12 @@ public abstract class TraversalDT implements Serializable, Comparable<TraversalD
       Minute o = (Minute) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalDT other) {
@@ -116,18 +116,18 @@ public abstract class TraversalDT implements Serializable, Comparable<TraversalD
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Hour extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalDT implements Serializable {
     public Hour () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Hour)) {
@@ -136,12 +136,12 @@ public abstract class TraversalDT implements Serializable, Comparable<TraversalD
       Hour o = (Hour) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalDT other) {
@@ -151,18 +151,18 @@ public abstract class TraversalDT implements Serializable, Comparable<TraversalD
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Day extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalDT implements Serializable {
     public Day () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Day)) {
@@ -171,12 +171,12 @@ public abstract class TraversalDT implements Serializable, Comparable<TraversalD
       Day o = (Day) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalDT other) {
@@ -186,7 +186,7 @@ public abstract class TraversalDT implements Serializable, Comparable<TraversalD
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

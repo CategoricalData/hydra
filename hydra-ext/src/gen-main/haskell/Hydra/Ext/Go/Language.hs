@@ -29,8 +29,8 @@ goLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = typePredicate}} 
-  where 
+        Coders.languageConstraintsTypes = typePredicate}}
+  where
     eliminationVariants =
         Sets.fromList [
           Variants.EliminationVariantRecord,
@@ -109,8 +109,8 @@ goReservedWords =
     Sets.fromList (Lists.concat [
       goKeywords,
       goPredeclaredIdentifiers,
-      hydraGoKeywords]) 
-  where 
+      hydraGoKeywords])
+  where
     goKeywords =
         [
           "break",

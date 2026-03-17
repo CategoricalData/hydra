@@ -78,9 +78,9 @@ javaTestCodec =
 -- | Format a test name for Java (PascalCase method name with 'test' prefix)
 formatJavaTestName :: String -> String
 formatJavaTestName name =
-     
+
       let replaced =
-              Strings.intercalate " Neg" (Strings.splitOn "-" (Strings.intercalate "Dot" (Strings.splitOn "." (Strings.intercalate " Plus" (Strings.splitOn "+" (Strings.intercalate " Div" (Strings.splitOn "/" (Strings.intercalate " Mul" (Strings.splitOn "*" (Strings.intercalate " Num" (Strings.splitOn "#" name))))))))))) 
+              Strings.intercalate " Neg" (Strings.splitOn "-" (Strings.intercalate "Dot" (Strings.splitOn "." (Strings.intercalate " Plus" (Strings.splitOn "+" (Strings.intercalate " Div" (Strings.splitOn "/" (Strings.intercalate " Mul" (Strings.splitOn "*" (Strings.intercalate " Num" (Strings.splitOn "#" name)))))))))))
           sanitized = Formatting.nonAlnumToUnderscores replaced
           pascal_ = Formatting.convertCase Util.CaseConventionLowerSnake Util.CaseConventionPascal sanitized
       in (Strings.cat2 "test" pascal_)
@@ -132,14 +132,14 @@ findJavaImports =
 -- | Generate test hierarchy for Java with nested subgroups
 generateJavaTestGroupHierarchy :: Graph.Graph -> Testing.TestCodec -> [String] -> Testing.TestGroup -> Either String String
 generateJavaTestGroupHierarchy g codec groupPath testGroup =
-     
-      let cases_ = Testing.testGroupCases testGroup 
+
+      let cases_ = Testing.testGroupCases testGroup
           subgroups = Testing.testGroupSubgroups testGroup
       in (Eithers.bind (Eithers.map (\lines_ -> Strings.intercalate "\n\n" (Lists.concat lines_)) (Eithers.mapList (\tc -> generateJavaTestCase g codec groupPath tc) cases_)) (\testCasesStr -> Eithers.map (\subgroupsStr -> Strings.cat [
         testCasesStr,
         (Logic.ifElse (Logic.or (Equality.equal testCasesStr "") (Equality.equal subgroupsStr "")) "" "\n\n"),
-        subgroupsStr]) (Eithers.map (\blocks -> Strings.intercalate "\n\n" blocks) (Eithers.mapList (\subgroup ->  
-        let groupName = Testing.testGroupName subgroup 
+        subgroupsStr]) (Eithers.map (\blocks -> Strings.intercalate "\n\n" blocks) (Eithers.mapList (\subgroup ->
+        let groupName = Testing.testGroupName subgroup
             header = Strings.cat2 "    // " groupName
         in (Eithers.map (\content -> Strings.cat [
           header,
@@ -150,12 +150,12 @@ generateJavaTestGroupHierarchy g codec groupPath testGroup =
 -- | Generate a single JUnit test case from a test case with metadata
 generateJavaTestCase :: Graph.Graph -> Testing.TestCodec -> [String] -> Testing.TestCaseWithMetadata -> Either String [String]
 generateJavaTestCase g codec groupPath tcm =
-     
-      let name_ = Testing.testCaseWithMetadataName tcm 
+
+      let name_ = Testing.testCaseWithMetadataName tcm
           tcase = Testing.testCaseWithMetadataCase tcm
       in case tcase of
-        Testing.TestCaseDelegatedEvaluation v0 ->  
-          let input_ = Testing.delegatedEvaluationTestCaseInput v0 
+        Testing.TestCaseDelegatedEvaluation v0 ->
+          let input_ = Testing.delegatedEvaluationTestCaseInput v0
               output_ = Testing.delegatedEvaluationTestCaseOutput v0
               fullName = Logic.ifElse (Lists.null groupPath) name_ (Strings.intercalate "_" (Lists.concat2 groupPath [
                     name_]))
@@ -168,7 +168,7 @@ generateJavaTestCase g codec groupPath tcm =
                         "<",
                         (Strings.intercalate ", " (Lists.map (\n_ -> Formatting.capitalize (Core.unName n_)) typeVars)),
                         "> "])
-          in (Eithers.bind (Testing.testCodecEncodeTerm codec input_ g) (\inputCode -> Eithers.map (\outputCode ->  
+          in (Eithers.bind (Testing.testCodecEncodeTerm codec input_ g) (\inputCode -> Eithers.map (\outputCode ->
             let assertionLines = generateAssertion assertType outputCode inputCode
             in (Lists.concat2 [
               "    @Test",
@@ -235,16 +235,16 @@ generateAssertion assertType outputCode inputCode =
 -- | Check if a Name is an unresolved inference variable (matches pattern t followed by digits)
 isInferenceVar :: Core.Name -> Bool
 isInferenceVar n =
-     
-      let s = Core.unName n 
+
+      let s = Core.unName n
           chars = Strings.toList s
       in (Logic.and (Equality.equal (Strings.charAt 0 s) 116) (Logic.and (Logic.not (Equality.equal (Strings.length s) 1)) (Lists.null (Lists.filter (\c -> Logic.not (Logic.and (Equality.gte c 48) (Equality.lte c 57))) (Lists.drop 1 chars)))))
 
 -- | Generate a complete test file using the Java codec
 generateTestFileWithJavaCodec :: Testing.TestCodec -> Module.Module -> Testing.TestGroup -> Graph.Graph -> Either String (String, String)
 generateTestFileWithJavaCodec codec testModule testGroup g =
-    Eithers.map (\testBody ->  
-      let testModuleContent = buildJavaTestModule codec testModule testGroup testBody 
+    Eithers.map (\testBody ->
+      let testModuleContent = buildJavaTestModule codec testModule testGroup testBody
           ns_ = Module.moduleNamespace testModule
           parts = Strings.splitOn "." (Module.unNamespace ns_)
           dirParts = Lists.drop 1 (Lists.init parts)
@@ -260,8 +260,8 @@ generateTestFileWithJavaCodec codec testModule testGroup g =
 -- | Build the complete Java test module content
 buildJavaTestModule :: t0 -> Module.Module -> Testing.TestGroup -> String -> String
 buildJavaTestModule codec testModule testGroup testBody =
-     
-      let ns_ = Module.moduleNamespace testModule 
+
+      let ns_ = Module.moduleNamespace testModule
           parts = Strings.splitOn "." (Module.unNamespace ns_)
           packageName = Strings.intercalate "." (Lists.init parts)
           className_ = Strings.cat2 (Formatting.capitalize (Lists.last parts)) "Test"

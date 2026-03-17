@@ -6,50 +6,50 @@ import java.io.Serializable;
 
 public abstract class BinaryBooleanOperator implements Serializable, Comparable<BinaryBooleanOperator> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.query.BinaryBooleanOperator");
-  
+
   public static final hydra.core.Name AND = new hydra.core.Name("and");
-  
+
   public static final hydra.core.Name OR = new hydra.core.Name("or");
-  
+
   public static final hydra.core.Name XOR = new hydra.core.Name("xor");
-  
+
   private BinaryBooleanOperator () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(And instance) ;
-    
+
     R visit(Or instance) ;
-    
+
     R visit(Xor instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(BinaryBooleanOperator instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(And instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Or instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Xor instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class And extends hydra.pg.query.BinaryBooleanOperator implements Serializable {
     public And () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof And)) {
@@ -58,12 +58,12 @@ public abstract class BinaryBooleanOperator implements Serializable, Comparable<
       And o = (And) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(BinaryBooleanOperator other) {
@@ -73,18 +73,18 @@ public abstract class BinaryBooleanOperator implements Serializable, Comparable<
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Or extends hydra.pg.query.BinaryBooleanOperator implements Serializable {
     public Or () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Or)) {
@@ -93,12 +93,12 @@ public abstract class BinaryBooleanOperator implements Serializable, Comparable<
       Or o = (Or) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(BinaryBooleanOperator other) {
@@ -108,18 +108,18 @@ public abstract class BinaryBooleanOperator implements Serializable, Comparable<
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Xor extends hydra.pg.query.BinaryBooleanOperator implements Serializable {
     public Xor () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Xor)) {
@@ -128,12 +128,12 @@ public abstract class BinaryBooleanOperator implements Serializable, Comparable<
       Xor o = (Xor) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(BinaryBooleanOperator other) {
@@ -143,7 +143,7 @@ public abstract class BinaryBooleanOperator implements Serializable, Comparable<
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

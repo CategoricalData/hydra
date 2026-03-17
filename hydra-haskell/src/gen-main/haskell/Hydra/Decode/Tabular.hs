@@ -23,7 +23,7 @@ import qualified Data.Set as S
 columnType :: Graph.Graph -> Core.Term -> Either Error.DecodingError Tabular.ColumnType
 columnType cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "name" Relational.columnName fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Right (Tabular.ColumnType {
           Tabular.columnTypeName = field_name,
@@ -49,7 +49,7 @@ headerRow cx raw =
 table :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Tabular.Table t0)
 table v cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "header" (Helpers.decodeMaybe headerRow) fieldMap cx) (\field_header -> Eithers.bind (Helpers.requireField "data" (Helpers.decodeList (dataRow v)) fieldMap cx) (\field_data -> Right (Tabular.Table {
           Tabular.tableHeader = field_header,
@@ -59,7 +59,7 @@ table v cx raw =
 tableType :: Graph.Graph -> Core.Term -> Either Error.DecodingError Tabular.TableType
 tableType cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "name" Relational.relationName fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "columns" (Helpers.decodeList columnType) fieldMap cx) (\field_columns -> Right (Tabular.TableType {
           Tabular.tableTypeName = field_name,

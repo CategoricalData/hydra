@@ -9,55 +9,55 @@ import java.io.Serializable;
  */
 public abstract class DeclarationHead implements Serializable, Comparable<DeclarationHead> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.DeclarationHead");
-  
+
   public static final hydra.core.Name APPLICATION = new hydra.core.Name("application");
-  
+
   public static final hydra.core.Name PARENS = new hydra.core.Name("parens");
-  
+
   public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
-  
+
   private DeclarationHead () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Application instance) ;
-    
+
     R visit(Parens instance) ;
-    
+
     R visit(Simple instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(DeclarationHead instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Application instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Parens instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Simple instance) {
       return otherwise(instance);
     }
   }
-  
+
   /**
    * An application-style declaration head
    */
   public static final class Application extends hydra.ext.haskell.ast.DeclarationHead implements Serializable {
     public final hydra.ext.haskell.ast.ApplicationDeclarationHead value;
-    
+
     public Application (hydra.ext.haskell.ast.ApplicationDeclarationHead value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Application)) {
@@ -68,12 +68,12 @@ public abstract class DeclarationHead implements Serializable, Comparable<Declar
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(DeclarationHead other) {
@@ -84,23 +84,23 @@ public abstract class DeclarationHead implements Serializable, Comparable<Declar
       Application o = (Application) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A parenthesized declaration head
    */
   public static final class Parens extends hydra.ext.haskell.ast.DeclarationHead implements Serializable {
     public final hydra.ext.haskell.ast.DeclarationHead value;
-    
+
     public Parens (hydra.ext.haskell.ast.DeclarationHead value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Parens)) {
@@ -111,12 +111,12 @@ public abstract class DeclarationHead implements Serializable, Comparable<Declar
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(DeclarationHead other) {
@@ -127,23 +127,23 @@ public abstract class DeclarationHead implements Serializable, Comparable<Declar
       Parens o = (Parens) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A simple name
    */
   public static final class Simple extends hydra.ext.haskell.ast.DeclarationHead implements Serializable {
     public final hydra.ext.haskell.ast.Name value;
-    
+
     public Simple (hydra.ext.haskell.ast.Name value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Simple)) {
@@ -154,12 +154,12 @@ public abstract class DeclarationHead implements Serializable, Comparable<Declar
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(DeclarationHead other) {
@@ -170,7 +170,7 @@ public abstract class DeclarationHead implements Serializable, Comparable<Declar
       Simple o = (Simple) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

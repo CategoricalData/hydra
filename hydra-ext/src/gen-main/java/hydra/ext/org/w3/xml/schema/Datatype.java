@@ -6,378 +6,378 @@ import java.io.Serializable;
 
 public abstract class Datatype implements Serializable, Comparable<Datatype> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.xml.schema.Datatype");
-  
+
   public static final hydra.core.Name ANY_SIMPLE_TYPE = new hydra.core.Name("anySimpleType");
-  
+
   public static final hydra.core.Name ANY_TYPE = new hydra.core.Name("anyType");
-  
+
   public static final hydra.core.Name ANY_U_R_I = new hydra.core.Name("anyURI");
-  
+
   public static final hydra.core.Name BASE64_BINARY = new hydra.core.Name("base64Binary");
-  
+
   public static final hydra.core.Name BOOLEAN = new hydra.core.Name("boolean");
-  
+
   public static final hydra.core.Name BYTE = new hydra.core.Name("byte");
-  
+
   public static final hydra.core.Name DATE = new hydra.core.Name("date");
-  
+
   public static final hydra.core.Name DATE_TIME = new hydra.core.Name("dateTime");
-  
+
   public static final hydra.core.Name DECIMAL = new hydra.core.Name("decimal");
-  
+
   public static final hydra.core.Name DOUBLE = new hydra.core.Name("double");
-  
+
   public static final hydra.core.Name DURATION = new hydra.core.Name("duration");
-  
+
   public static final hydra.core.Name E_N_T_I_T_I_E_S = new hydra.core.Name("ENTITIES");
-  
+
   public static final hydra.core.Name E_N_T_I_T_Y = new hydra.core.Name("ENTITY");
-  
+
   public static final hydra.core.Name FLOAT = new hydra.core.Name("float");
-  
+
   public static final hydra.core.Name G_DAY = new hydra.core.Name("gDay");
-  
+
   public static final hydra.core.Name G_MONTH = new hydra.core.Name("gMonth");
-  
+
   public static final hydra.core.Name G_MONTH_DAY = new hydra.core.Name("gMonthDay");
-  
+
   public static final hydra.core.Name G_YEAR = new hydra.core.Name("gYear");
-  
+
   public static final hydra.core.Name G_YEAR_MONTH = new hydra.core.Name("gYearMonth");
-  
+
   public static final hydra.core.Name HEX_BINARY = new hydra.core.Name("hexBinary");
-  
+
   public static final hydra.core.Name I_D = new hydra.core.Name("ID");
-  
+
   public static final hydra.core.Name I_D_R_E_F = new hydra.core.Name("IDREF");
-  
+
   public static final hydra.core.Name I_D_R_E_F_S = new hydra.core.Name("IDREFS");
-  
+
   public static final hydra.core.Name INT = new hydra.core.Name("int");
-  
+
   public static final hydra.core.Name INTEGER = new hydra.core.Name("integer");
-  
+
   public static final hydra.core.Name LANGUAGE = new hydra.core.Name("language");
-  
+
   public static final hydra.core.Name LONG = new hydra.core.Name("long");
-  
+
   public static final hydra.core.Name N_M_T_O_K_E_N = new hydra.core.Name("NMTOKEN");
-  
+
   public static final hydra.core.Name N_O_T_A_T_I_O_N = new hydra.core.Name("NOTATION");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name NEGATIVE_INTEGER = new hydra.core.Name("negativeInteger");
-  
+
   public static final hydra.core.Name NON_NEGATIVE_INTEGER = new hydra.core.Name("nonNegativeInteger");
-  
+
   public static final hydra.core.Name NON_POSITIVE_INTEGER = new hydra.core.Name("nonPositiveInteger");
-  
+
   public static final hydra.core.Name NORMALIZED_STRING = new hydra.core.Name("normalizedString");
-  
+
   public static final hydra.core.Name POSITIVE_INTEGER = new hydra.core.Name("positiveInteger");
-  
+
   public static final hydra.core.Name Q_NAME = new hydra.core.Name("qName");
-  
+
   public static final hydra.core.Name SHORT = new hydra.core.Name("short");
-  
+
   public static final hydra.core.Name STRING = new hydra.core.Name("string");
-  
+
   public static final hydra.core.Name TIME = new hydra.core.Name("time");
-  
+
   public static final hydra.core.Name TOKEN = new hydra.core.Name("token");
-  
+
   public static final hydra.core.Name UNSIGNED_BYTE = new hydra.core.Name("unsignedByte");
-  
+
   public static final hydra.core.Name UNSIGNED_INT = new hydra.core.Name("unsignedInt");
-  
+
   public static final hydra.core.Name UNSIGNED_LONG = new hydra.core.Name("unsignedLong");
-  
+
   public static final hydra.core.Name UNSIGNED_SHORT = new hydra.core.Name("unsignedShort");
-  
+
   private Datatype () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(AnySimpleType instance) ;
-    
+
     R visit(AnyType instance) ;
-    
+
     R visit(AnyURI instance) ;
-    
+
     R visit(Base64Binary instance) ;
-    
+
     R visit(Boolean_ instance) ;
-    
+
     R visit(Byte_ instance) ;
-    
+
     R visit(Date instance) ;
-    
+
     R visit(DateTime instance) ;
-    
+
     R visit(Decimal instance) ;
-    
+
     R visit(Double_ instance) ;
-    
+
     R visit(Duration instance) ;
-    
+
     R visit(ENTITIES instance) ;
-    
+
     R visit(ENTITY instance) ;
-    
+
     R visit(Float_ instance) ;
-    
+
     R visit(GDay instance) ;
-    
+
     R visit(GMonth instance) ;
-    
+
     R visit(GMonthDay instance) ;
-    
+
     R visit(GYear instance) ;
-    
+
     R visit(GYearMonth instance) ;
-    
+
     R visit(HexBinary instance) ;
-    
+
     R visit(ID instance) ;
-    
+
     R visit(IDREF instance) ;
-    
+
     R visit(IDREFS instance) ;
-    
+
     R visit(Int instance) ;
-    
+
     R visit(Integer_ instance) ;
-    
+
     R visit(Language instance) ;
-    
+
     R visit(Long_ instance) ;
-    
+
     R visit(NMTOKEN instance) ;
-    
+
     R visit(NOTATION instance) ;
-    
+
     R visit(Name instance) ;
-    
+
     R visit(NegativeInteger instance) ;
-    
+
     R visit(NonNegativeInteger instance) ;
-    
+
     R visit(NonPositiveInteger instance) ;
-    
+
     R visit(NormalizedString instance) ;
-    
+
     R visit(PositiveInteger instance) ;
-    
+
     R visit(QName instance) ;
-    
+
     R visit(Short_ instance) ;
-    
+
     R visit(String_ instance) ;
-    
+
     R visit(Time instance) ;
-    
+
     R visit(Token instance) ;
-    
+
     R visit(UnsignedByte instance) ;
-    
+
     R visit(UnsignedInt instance) ;
-    
+
     R visit(UnsignedLong instance) ;
-    
+
     R visit(UnsignedShort instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Datatype instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(AnySimpleType instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(AnyType instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(AnyURI instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Base64Binary instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Boolean_ instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Byte_ instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Date instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(DateTime instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Decimal instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Double_ instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Duration instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ENTITIES instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ENTITY instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Float_ instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(GDay instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(GMonth instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(GMonthDay instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(GYear instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(GYearMonth instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(HexBinary instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ID instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(IDREF instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(IDREFS instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Int instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Integer_ instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Language instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Long_ instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(NMTOKEN instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(NOTATION instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Name instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(NegativeInteger instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(NonNegativeInteger instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(NonPositiveInteger instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(NormalizedString instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(PositiveInteger instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(QName instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Short_ instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(String_ instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Time instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Token instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(UnsignedByte instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(UnsignedInt instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(UnsignedLong instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(UnsignedShort instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class AnySimpleType extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public AnySimpleType () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof AnySimpleType)) {
@@ -386,12 +386,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       AnySimpleType o = (AnySimpleType) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -401,18 +401,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class AnyType extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public AnyType () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof AnyType)) {
@@ -421,12 +421,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       AnyType o = (AnyType) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -436,18 +436,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class AnyURI extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public AnyURI () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof AnyURI)) {
@@ -456,12 +456,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       AnyURI o = (AnyURI) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -471,18 +471,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Base64Binary extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Base64Binary () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Base64Binary)) {
@@ -491,12 +491,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Base64Binary o = (Base64Binary) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -506,18 +506,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Boolean_ extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Boolean_ () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Boolean_)) {
@@ -526,12 +526,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Boolean_ o = (Boolean_) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -541,18 +541,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Byte_ extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Byte_ () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Byte_)) {
@@ -561,12 +561,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Byte_ o = (Byte_) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -576,18 +576,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Date extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Date () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Date)) {
@@ -596,12 +596,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Date o = (Date) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -611,18 +611,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class DateTime extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public DateTime () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof DateTime)) {
@@ -631,12 +631,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       DateTime o = (DateTime) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -646,18 +646,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Decimal extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Decimal () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Decimal)) {
@@ -666,12 +666,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Decimal o = (Decimal) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -681,18 +681,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Double_ extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Double_ () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Double_)) {
@@ -701,12 +701,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Double_ o = (Double_) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -716,18 +716,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Duration extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Duration () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Duration)) {
@@ -736,12 +736,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Duration o = (Duration) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -751,18 +751,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ENTITIES extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public ENTITIES () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ENTITIES)) {
@@ -771,12 +771,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       ENTITIES o = (ENTITIES) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -786,18 +786,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ENTITY extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public ENTITY () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ENTITY)) {
@@ -806,12 +806,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       ENTITY o = (ENTITY) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -821,18 +821,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Float_ extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Float_ () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Float_)) {
@@ -841,12 +841,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Float_ o = (Float_) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -856,18 +856,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class GDay extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public GDay () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof GDay)) {
@@ -876,12 +876,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       GDay o = (GDay) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -891,18 +891,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class GMonth extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public GMonth () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof GMonth)) {
@@ -911,12 +911,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       GMonth o = (GMonth) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -926,18 +926,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class GMonthDay extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public GMonthDay () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof GMonthDay)) {
@@ -946,12 +946,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       GMonthDay o = (GMonthDay) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -961,18 +961,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class GYear extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public GYear () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof GYear)) {
@@ -981,12 +981,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       GYear o = (GYear) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -996,18 +996,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class GYearMonth extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public GYearMonth () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof GYearMonth)) {
@@ -1016,12 +1016,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       GYearMonth o = (GYearMonth) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1031,18 +1031,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class HexBinary extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public HexBinary () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof HexBinary)) {
@@ -1051,12 +1051,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       HexBinary o = (HexBinary) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1066,18 +1066,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ID extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public ID () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ID)) {
@@ -1086,12 +1086,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       ID o = (ID) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1101,18 +1101,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class IDREF extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public IDREF () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof IDREF)) {
@@ -1121,12 +1121,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       IDREF o = (IDREF) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1136,18 +1136,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class IDREFS extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public IDREFS () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof IDREFS)) {
@@ -1156,12 +1156,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       IDREFS o = (IDREFS) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1171,18 +1171,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Int extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Int () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Int)) {
@@ -1191,12 +1191,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Int o = (Int) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1206,18 +1206,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Integer_ extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Integer_ () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Integer_)) {
@@ -1226,12 +1226,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Integer_ o = (Integer_) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1241,18 +1241,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Language extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Language () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Language)) {
@@ -1261,12 +1261,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Language o = (Language) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1276,18 +1276,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Long_ extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Long_ () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Long_)) {
@@ -1296,12 +1296,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Long_ o = (Long_) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1311,18 +1311,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class NMTOKEN extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public NMTOKEN () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof NMTOKEN)) {
@@ -1331,12 +1331,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       NMTOKEN o = (NMTOKEN) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1346,18 +1346,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class NOTATION extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public NOTATION () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof NOTATION)) {
@@ -1366,12 +1366,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       NOTATION o = (NOTATION) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1381,18 +1381,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Name extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Name () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Name)) {
@@ -1401,12 +1401,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Name o = (Name) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1416,18 +1416,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class NegativeInteger extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public NegativeInteger () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof NegativeInteger)) {
@@ -1436,12 +1436,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       NegativeInteger o = (NegativeInteger) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1451,18 +1451,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class NonNegativeInteger extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public NonNegativeInteger () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof NonNegativeInteger)) {
@@ -1471,12 +1471,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       NonNegativeInteger o = (NonNegativeInteger) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1486,18 +1486,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class NonPositiveInteger extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public NonPositiveInteger () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof NonPositiveInteger)) {
@@ -1506,12 +1506,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       NonPositiveInteger o = (NonPositiveInteger) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1521,18 +1521,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class NormalizedString extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public NormalizedString () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof NormalizedString)) {
@@ -1541,12 +1541,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       NormalizedString o = (NormalizedString) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1556,18 +1556,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class PositiveInteger extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public PositiveInteger () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof PositiveInteger)) {
@@ -1576,12 +1576,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       PositiveInteger o = (PositiveInteger) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1591,18 +1591,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class QName extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public QName () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof QName)) {
@@ -1611,12 +1611,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       QName o = (QName) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1626,18 +1626,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Short_ extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Short_ () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Short_)) {
@@ -1646,12 +1646,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Short_ o = (Short_) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1661,18 +1661,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class String_ extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public String_ () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof String_)) {
@@ -1681,12 +1681,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       String_ o = (String_) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1696,18 +1696,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Time extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Time () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Time)) {
@@ -1716,12 +1716,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Time o = (Time) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1731,18 +1731,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Token extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public Token () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Token)) {
@@ -1751,12 +1751,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       Token o = (Token) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1766,18 +1766,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class UnsignedByte extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public UnsignedByte () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof UnsignedByte)) {
@@ -1786,12 +1786,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       UnsignedByte o = (UnsignedByte) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1801,18 +1801,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class UnsignedInt extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public UnsignedInt () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof UnsignedInt)) {
@@ -1821,12 +1821,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       UnsignedInt o = (UnsignedInt) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1836,18 +1836,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class UnsignedLong extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public UnsignedLong () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof UnsignedLong)) {
@@ -1856,12 +1856,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       UnsignedLong o = (UnsignedLong) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1871,18 +1871,18 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class UnsignedShort extends hydra.ext.org.w3.xml.schema.Datatype implements Serializable {
     public UnsignedShort () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof UnsignedShort)) {
@@ -1891,12 +1891,12 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       UnsignedShort o = (UnsignedShort) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Datatype other) {
@@ -1906,7 +1906,7 @@ public abstract class Datatype implements Serializable, Comparable<Datatype> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

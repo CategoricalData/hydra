@@ -42,11 +42,11 @@ allEqual els =
 -- | Apply type arguments to a type, substituting forall-bound variables
 applyTypeArgumentsToType :: Context.Context -> t0 -> [Core.Type] -> Core.Type -> Either (Context.InContext Error.Error) Core.Type
 applyTypeArgumentsToType cx tx typeArgs t =
-     
+
       let nonnull =
               case t of
-                Core.TypeForall v0 ->  
-                  let v = Core.forallTypeParameter v0 
+                Core.TypeForall v0 ->
+                  let v = Core.forallTypeParameter v0
                       tbody = Core.forallTypeBody v0
                   in (applyTypeArgumentsToType cx tx (Lists.tail typeArgs) (Substitution.substInType (Typing.TypeSubst (Maps.singleton v (Lists.head typeArgs))) tbody))
                 _ -> Left (Context.InContext {
@@ -59,15 +59,15 @@ applyTypeArgumentsToType cx tx typeArgs t =
 -- | Check that a term has no unbound type variables (Either version)
 checkForUnboundTypeVariables :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) ()
 checkForUnboundTypeVariables cx tx term0 =
-     
-      let svars = Sets.fromList (Maps.keys (Graph.graphSchemaTypes tx)) 
+
+      let svars = Sets.fromList (Maps.keys (Graph.graphSchemaTypes tx))
           checkRecursive =
-                  \vars -> \trace -> \lbinding -> \term ->  
-                    let recurse = checkRecursive vars trace lbinding 
+                  \vars -> \trace -> \lbinding -> \term ->
+                    let recurse = checkRecursive vars trace lbinding
                         dflt = Eithers.bind (Eithers.mapList recurse (Rewriting.subterms term)) (\_ -> Right ())
                         check =
-                                \typ ->  
-                                  let freevars = Rewriting.freeVariablesInType typ 
+                                \typ ->
+                                  let freevars = Rewriting.freeVariablesInType typ
                                       badvars = Sets.difference (Sets.difference freevars vars) svars
                                   in (Logic.ifElse (Sets.null badvars) (Right ()) (Left (Context.InContext {
                                     Context.inContextObject = (Error.ErrorChecking (Error.CheckingErrorUnboundTypeVariables (Error.UnboundTypeVariablesError {
@@ -80,10 +80,10 @@ checkForUnboundTypeVariables cx tx term0 =
                         Core.FunctionElimination _ -> dflt
                         Core.FunctionLambda v1 -> Eithers.bind (checkOptional (Core.lambdaDomain v1)) (\_ -> recurse (Core.lambdaBody v1))
                         _ -> dflt
-                      Core.TermLet v0 ->  
+                      Core.TermLet v0 ->
                         let forBinding =
-                                \b ->  
-                                  let bterm = Core.bindingTerm b 
+                                \b ->
+                                  let bterm = Core.bindingTerm b
                                       newVars = Maybes.maybe vars (\ts -> Sets.union vars (Sets.fromList (Core.typeSchemeVariables ts))) (Core.bindingType b)
                                       newTrace = Lists.cons (Core.unName (Core.bindingName b)) trace
                                   in (checkRecursive newVars newTrace (Just b) bterm)
@@ -97,8 +97,8 @@ checkForUnboundTypeVariables cx tx term0 =
 -- | Check that a nominal type is applied to the correct number of type arguments (Either version)
 checkNominalApplication :: Context.Context -> Graph.Graph -> Core.Name -> [Core.Type] -> Either (Context.InContext Error.Error) ((), Context.Context)
 checkNominalApplication cx tx tname typeArgs =
-    Eithers.bind (Schemas.requireSchemaType cx (Graph.graphSchemaTypes tx) tname) (\result ->  
-      let schemaType = Pairs.first result 
+    Eithers.bind (Schemas.requireSchemaType cx (Graph.graphSchemaTypes tx) tname) (\result ->
+      let schemaType = Pairs.first result
           cx2 = Pairs.second result
           vars = Core.typeSchemeVariables schemaType
           varslen = Lists.length vars
@@ -123,7 +123,7 @@ checkSameType cx tx desc types =
 -- | Check that a term has the expected type
 checkType :: Context.Context -> Graph.Graph -> Core.Term -> Core.Type -> Either (Context.InContext Error.Error) ()
 checkType cx tx term typ =
-     
+
       let vars = Graph.graphTypeVariables tx
       in (Logic.ifElse Constants.debugInference (Eithers.bind (Eithers.map (\_p -> Pairs.first _p) (typeOf cx tx [] term)) (\t0 -> Logic.ifElse (typesEffectivelyEqual tx t0 typ) (Right ()) (Left (Context.InContext {
         Context.inContextObject = (Error.ErrorChecking (Error.CheckingErrorTypeMismatch (Error.TypeMismatchError {
@@ -134,8 +134,8 @@ checkType cx tx term typ =
 -- | Sanity-check a type substitution arising from unification. Specifically, check that schema types have not been inappropriately unified with type variables inferred from terms.
 checkTypeSubst :: Context.Context -> Graph.Graph -> Typing.TypeSubst -> Either (Context.InContext Error.Error) Typing.TypeSubst
 checkTypeSubst cx tx subst =
-     
-      let s = Typing.unTypeSubst subst 
+
+      let s = Typing.unTypeSubst subst
           vars = Sets.fromList (Maps.keys s)
           suspectVars = Sets.intersection vars (Sets.fromList (Maps.keys (Graph.graphSchemaTypes tx)))
           isNominal =
@@ -160,19 +160,19 @@ checkTypeVariables _tx _typ = ()
 -- | Check if a type contains any type variable from the current scope
 containsInScopeTypeVars :: Graph.Graph -> Core.Type -> Bool
 containsInScopeTypeVars tx t =
-     
-      let vars = Graph.graphTypeVariables tx 
+
+      let vars = Graph.graphTypeVariables tx
           freeVars = Rewriting.freeVariablesInTypeSimple t
       in (Logic.not (Sets.null (Sets.intersection vars freeVars)))
 
 -- | Normalize free type variables in a type to canonical names based on order of first occurrence. This allows comparing types that differ only in the naming of free type variables.
 normalizeTypeFreeVars :: Core.Type -> Core.Type
 normalizeTypeFreeVars typ =
-     
+
       let collectVars =
               \acc -> \t -> case t of
                 Core.TypeVariable v0 -> Logic.ifElse (Maps.member v0 acc) acc (Maps.insert v0 (Core.Name (Strings.cat2 "_tv" (Literals.showInt32 (Maps.size acc)))) acc)
-                _ -> acc 
+                _ -> acc
           subst = Rewriting.foldOverType Coders.TraversalOrderPre collectVars Maps.empty typ
       in (Rewriting.substituteTypeVariables subst typ)
 
@@ -188,7 +188,7 @@ typeListsEffectivelyEqual tx tlist1 tlist2 =
 -- | Given a type context, reconstruct the type of a System F term
 typeOf :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Term -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOf cx tx typeArgs term =
-     
+
       let cx1 =
               Context.Context {
                 Context.contextTrace = (Lists.cons "typeOf" (Context.contextTrace cx)),
@@ -231,22 +231,22 @@ typeOfAnnotatedTerm cx tx typeArgs at = typeOf cx tx typeArgs (Core.annotatedTer
 -- | Reconstruct the type of an application term (Either/Context version)
 typeOfApplication :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Application -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfApplication cx tx typeArgs app =
-     
-      let fun = Core.applicationFunction app 
+
+      let fun = Core.applicationFunction app
           arg = Core.applicationArgument app
           tryType =
                   \cx0 -> \tfun -> \targ -> case tfun of
                     Core.TypeForall v0 -> tryType cx0 (Core.forallTypeBody v0) targ
-                    Core.TypeFunction v0 ->  
-                      let dom = Core.functionTypeDomain v0 
+                    Core.TypeFunction v0 ->
+                      let dom = Core.functionTypeDomain v0
                           cod = Core.functionTypeCodomain v0
                       in (Logic.ifElse (typesEffectivelyEqual tx dom targ) (Right (cod, cx0)) (Left (Context.InContext {
                         Context.inContextObject = (Error.ErrorChecking (Error.CheckingErrorTypeMismatch (Error.TypeMismatchError {
                           Error.typeMismatchErrorExpectedType = dom,
                           Error.typeMismatchErrorActualType = targ}))),
                         Context.inContextContext = cx0})))
-                    Core.TypeVariable _ ->  
-                      let nameResult = Schemas.freshName cx0 
+                    Core.TypeVariable _ ->
+                      let nameResult = Schemas.freshName cx0
                           freshN = Pairs.first nameResult
                           cx1 = Pairs.second nameResult
                       in (Right (Core.TypeVariable freshN, cx1))
@@ -254,45 +254,45 @@ typeOfApplication cx tx typeArgs app =
                       Context.inContextObject = (Error.ErrorChecking (Error.CheckingErrorNotAFunctionType (Error.NotAFunctionTypeError {
                         Error.notAFunctionTypeErrorType = tfun}))),
                       Context.inContextContext = cx0})
-      in (Eithers.bind (typeOf cx tx [] fun) (\result1 ->  
-        let tfun = Pairs.first result1 
+      in (Eithers.bind (typeOf cx tx [] fun) (\result1 ->
+        let tfun = Pairs.first result1
             cx2 = Pairs.second result1
-        in (Eithers.bind (typeOf cx2 tx [] arg) (\result2 ->  
-          let targ = Pairs.first result2 
+        in (Eithers.bind (typeOf cx2 tx [] arg) (\result2 ->
+          let targ = Pairs.first result2
               cx3 = Pairs.second result2
-          in (Eithers.bind (tryType cx3 tfun targ) (\result3 ->  
-            let t = Pairs.first result3 
+          in (Eithers.bind (tryType cx3 tfun targ) (\result3 ->
+            let t = Pairs.first result3
                 cx4 = Pairs.second result3
             in (Eithers.bind (applyTypeArgumentsToType cx4 tx typeArgs t) (\applied -> Right (applied, cx4)))))))))
 
 -- | Reconstruct the type of a case statement (Either/Context version)
 typeOfCaseStatement :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.CaseStatement -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfCaseStatement cx tx typeArgs cs =
-     
-      let tname = Core.caseStatementTypeName cs 
+
+      let tname = Core.caseStatementTypeName cs
           dflt = Core.caseStatementDefault cs
           cases = Core.caseStatementCases cs
           cterms = Lists.map Core.fieldTerm cases
-      in (Eithers.bind (Eithers.mapMaybe (\e -> typeOf cx tx [] e) dflt) (\dfltResult ->  
-        let tdflt = Maybes.map Pairs.first dfltResult 
+      in (Eithers.bind (Eithers.mapMaybe (\e -> typeOf cx tx [] e) dflt) (\dfltResult ->
+        let tdflt = Maybes.map Pairs.first dfltResult
             cx2 = Maybes.maybe cx Pairs.second dfltResult
             foldResult =
-                    Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->  
-                      let types = Pairs.first accR 
+                    Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->
+                      let types = Pairs.first accR
                           cxA = Pairs.second accR
-                      in (Eithers.bind (typeOf cxA tx [] term) (\tResult ->  
-                        let t = Pairs.first tResult 
+                      in (Eithers.bind (typeOf cxA tx [] term) (\tResult ->
+                        let t = Pairs.first tResult
                             cxB = Pairs.second tResult
                         in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx2)) cterms
-        in (Eithers.bind foldResult (\foldR ->  
-          let tcterms = Pairs.first foldR 
+        in (Eithers.bind foldResult (\foldR ->
+          let tcterms = Pairs.first foldR
               cx3 = Pairs.second foldR
               fcodsResult =
-                      Lists.foldl (\acc -> \t -> Eithers.bind acc (\accR ->  
+                      Lists.foldl (\acc -> \t -> Eithers.bind acc (\accR ->
                         let cods = Pairs.first accR
                         in (Eithers.bind (Core_.functionType cx3 t) (\ft -> Right (Lists.concat2 cods (Lists.pure (Core.functionTypeCodomain ft)), cx3))))) (Right ([], cx3)) tcterms
-          in (Eithers.bind fcodsResult (\fcodsR ->  
-            let fcods = Pairs.first fcodsR 
+          in (Eithers.bind fcodsResult (\fcodsR ->
+            let fcods = Pairs.first fcodsR
                 cods = Maybes.cat (Lists.cons tdflt (Lists.map Maybes.pure fcods))
             in (Eithers.bind (checkSameType cx3 tx "case branches" cods) (\cod -> Right (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Schemas.nominalApplication tname typeArgs),
@@ -301,15 +301,15 @@ typeOfCaseStatement cx tx typeArgs cs =
 -- | Reconstruct the type of an either value (Either/Context version)
 typeOfEither :: Context.Context -> Graph.Graph -> [Core.Type] -> Either Core.Term Core.Term -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfEither cx tx typeArgs et =
-     
+
       let n = Lists.length typeArgs
-      in (Logic.ifElse (Equality.equal n 2) (Eithers.either (\leftTerm -> Eithers.bind (typeOf cx tx [] leftTerm) (\result ->  
-        let leftType = Pairs.first result 
+      in (Logic.ifElse (Equality.equal n 2) (Eithers.either (\leftTerm -> Eithers.bind (typeOf cx tx [] leftTerm) (\result ->
+        let leftType = Pairs.first result
             cx2 = Pairs.second result
         in (Right (Core.TypeEither (Core.EitherType {
           Core.eitherTypeLeft = leftType,
-          Core.eitherTypeRight = (Lists.at 1 typeArgs)}), cx2)))) (\rightTerm -> Eithers.bind (typeOf cx tx [] rightTerm) (\result ->  
-        let rightType = Pairs.first result 
+          Core.eitherTypeRight = (Lists.at 1 typeArgs)}), cx2)))) (\rightTerm -> Eithers.bind (typeOf cx tx [] rightTerm) (\result ->
+        let rightType = Pairs.first result
             cx2 = Pairs.second result
         in (Right (Core.TypeEither (Core.EitherType {
           Core.eitherTypeLeft = (Lists.at 0 typeArgs),
@@ -326,13 +326,13 @@ typeOfEither cx tx typeArgs et =
 -- | Reconstruct the type of a union injection (Either/Context version)
 typeOfInjection :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Injection -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfInjection cx tx typeArgs injection =
-     
-      let tname = Core.injectionTypeName injection 
+
+      let tname = Core.injectionTypeName injection
           field = Core.injectionField injection
           fname = Core.fieldName field
           fterm = Core.fieldTerm field
-      in (Eithers.bind (Schemas.requireSchemaType cx (Graph.graphSchemaTypes tx) tname) (\schemaResult ->  
-        let schemaType = Pairs.first schemaResult 
+      in (Eithers.bind (Schemas.requireSchemaType cx (Graph.graphSchemaTypes tx) tname) (\schemaResult ->
+        let schemaType = Pairs.first schemaResult
             cx2 = Pairs.second schemaResult
             svars = Core.typeSchemeVariables schemaType
             sbody = Core.typeSchemeType schemaType
@@ -341,14 +341,14 @@ typeOfInjection cx tx typeArgs injection =
 -- | Reconstruct the type of a lambda function (Either/Context version)
 typeOfLambda :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Lambda -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfLambda cx tx typeArgs l =
-     
-      let v = Core.lambdaParameter l 
+
+      let v = Core.lambdaParameter l
           mdom = Core.lambdaDomain l
           body = Core.lambdaBody l
       in (Eithers.bind (Maybes.maybe (Left (Context.InContext {
         Context.inContextObject = (Error.ErrorChecking (Error.CheckingErrorUntypedLambda (Error.UntypedLambdaError {
         }))),
-        Context.inContextContext = cx})) (\dom ->  
+        Context.inContextContext = cx})) (\dom ->
         let types2 = Maps.insert v (Rewriting.fTypeToTypeScheme dom) (Graph.graphBoundTypes tx)
         in (Eithers.bind (typeOf cx (Graph.Graph {
           Graph.graphBoundTerms = (Graph.graphBoundTerms tx),
@@ -358,21 +358,21 @@ typeOfLambda cx tx typeArgs l =
           Graph.graphMetadata = (Graph.graphMetadata tx),
           Graph.graphPrimitives = (Graph.graphPrimitives tx),
           Graph.graphSchemaTypes = (Graph.graphSchemaTypes tx),
-          Graph.graphTypeVariables = (Graph.graphTypeVariables tx)}) [] body) (\codResult ->  
-          let cod = Pairs.first codResult 
+          Graph.graphTypeVariables = (Graph.graphTypeVariables tx)}) [] body) (\codResult ->
+          let cod = Pairs.first codResult
               cx2 = Pairs.second codResult
           in (Right (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = dom,
-            Core.functionTypeCodomain = cod}), cx2))))) mdom) (\tbodyResult ->  
-        let tbody = Pairs.first tbodyResult 
+            Core.functionTypeCodomain = cod}), cx2))))) mdom) (\tbodyResult ->
+        let tbody = Pairs.first tbodyResult
             cx3 = Pairs.second tbodyResult
         in (Eithers.bind (applyTypeArgumentsToType cx3 tx typeArgs tbody) (\applied -> Right (applied, cx3)))))
 
 -- | Reconstruct the type of a let binding (Either/Context version)
 typeOfLet :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Let -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfLet cx tx typeArgs letTerm =
-     
-      let bs = Core.letBindings letTerm 
+
+      let bs = Core.letBindings letTerm
           body = Core.letBody letTerm
           bnames = Lists.map Core.bindingName bs
           bindingType =
@@ -381,11 +381,11 @@ typeOfLet cx tx typeArgs letTerm =
                       Error.untypedLetBindingErrorBinding = b}))),
                     Context.inContextContext = cx})) (\ts -> Right (Rewriting.typeSchemeToFType ts)) (Core.bindingType b)
           btypesResult =
-                  Lists.foldl (\acc -> \b -> Eithers.bind acc (\accR ->  
+                  Lists.foldl (\acc -> \b -> Eithers.bind acc (\accR ->
                     let types = Pairs.first accR
                     in (Eithers.bind (bindingType b) (\btype -> Right (Lists.concat2 types (Lists.pure btype), ()))))) (Right ([], ())) bs
-      in (Eithers.bind btypesResult (\btypesR ->  
-        let btypes = Pairs.first btypesR 
+      in (Eithers.bind btypesResult (\btypesR ->
+        let btypes = Pairs.first btypesR
             tx2 =
                     Graph.Graph {
                       Graph.graphBoundTerms = (Graph.graphBoundTerms tx),
@@ -396,8 +396,8 @@ typeOfLet cx tx typeArgs letTerm =
                       Graph.graphPrimitives = (Graph.graphPrimitives tx),
                       Graph.graphSchemaTypes = (Graph.graphSchemaTypes tx),
                       Graph.graphTypeVariables = (Graph.graphTypeVariables tx)}
-        in (Eithers.bind (typeOf cx tx2 [] body) (\tResult ->  
-          let t = Pairs.first tResult 
+        in (Eithers.bind (typeOf cx tx2 [] body) (\tResult ->
+          let t = Pairs.first tResult
               cx2 = Pairs.second tResult
           in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2)))))))
 
@@ -410,24 +410,24 @@ typeOfList cx tx typeArgs els =
         Error.typeArityMismatchErrorExpectedArity = 1,
         Error.typeArityMismatchErrorActualArity = (Lists.length typeArgs),
         Error.typeArityMismatchErrorTypeArguments = typeArgs}))),
-      Context.inContextContext = cx}))) ( 
+      Context.inContextContext = cx}))) (
       let foldResult =
-              Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->  
-                let types = Pairs.first accR 
+              Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->
+                let types = Pairs.first accR
                     cxA = Pairs.second accR
-                in (Eithers.bind (typeOf cxA tx [] term) (\tResult ->  
-                  let t = Pairs.first tResult 
+                in (Eithers.bind (typeOf cxA tx [] term) (\tResult ->
+                  let t = Pairs.first tResult
                       cxB = Pairs.second tResult
                   in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx)) els
-      in (Eithers.bind foldResult (\foldR ->  
-        let eltypes = Pairs.first foldR 
+      in (Eithers.bind foldResult (\foldR ->
+        let eltypes = Pairs.first foldR
             cx2 = Pairs.second foldR
         in (Eithers.bind (checkSameType cx2 tx "list elements" eltypes) (\unifiedType -> Right (Core.TypeList unifiedType, cx2))))))
 
 -- | Reconstruct the type of a literal (Either/Context version)
 typeOfLiteral :: Context.Context -> t0 -> [Core.Type] -> Core.Literal -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfLiteral cx tx typeArgs lit =
-     
+
       let t = Core.TypeLiteral (Reflect.literalType lit)
       in (Eithers.bind (applyTypeArgumentsToType cx tx typeArgs t) (\applied -> Right (applied, cx)))
 
@@ -444,30 +444,30 @@ typeOfMap cx tx typeArgs m =
         Error.typeArityMismatchErrorExpectedArity = 2,
         Error.typeArityMismatchErrorActualArity = (Lists.length typeArgs),
         Error.typeArityMismatchErrorTypeArguments = typeArgs}))),
-      Context.inContextContext = cx}))) ( 
-      let pairs = Maps.toList m 
+      Context.inContextContext = cx}))) (
+      let pairs = Maps.toList m
           keyFoldResult =
-                  Lists.foldl (\acc -> \p -> Eithers.bind acc (\accR ->  
-                    let types = Pairs.first accR 
+                  Lists.foldl (\acc -> \p -> Eithers.bind acc (\accR ->
+                    let types = Pairs.first accR
                         cxA = Pairs.second accR
-                    in (Eithers.bind (typeOf cxA tx [] (Pairs.first p)) (\tResult ->  
-                      let t = Pairs.first tResult 
+                    in (Eithers.bind (typeOf cxA tx [] (Pairs.first p)) (\tResult ->
+                      let t = Pairs.first tResult
                           cxB = Pairs.second tResult
                       in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx)) pairs
-      in (Eithers.bind keyFoldResult (\keyFoldR ->  
-        let keyTypes = Pairs.first keyFoldR 
+      in (Eithers.bind keyFoldResult (\keyFoldR ->
+        let keyTypes = Pairs.first keyFoldR
             cx2 = Pairs.second keyFoldR
-        in (Eithers.bind (checkSameType cx2 tx "map keys" keyTypes) (\kt ->  
+        in (Eithers.bind (checkSameType cx2 tx "map keys" keyTypes) (\kt ->
           let valFoldResult =
-                  Lists.foldl (\acc -> \p -> Eithers.bind acc (\accR ->  
-                    let types = Pairs.first accR 
+                  Lists.foldl (\acc -> \p -> Eithers.bind acc (\accR ->
+                    let types = Pairs.first accR
                         cxA = Pairs.second accR
-                    in (Eithers.bind (typeOf cxA tx [] (Pairs.second p)) (\tResult ->  
-                      let t = Pairs.first tResult 
+                    in (Eithers.bind (typeOf cxA tx [] (Pairs.second p)) (\tResult ->
+                      let t = Pairs.first tResult
                           cxB = Pairs.second tResult
                       in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx2)) pairs
-          in (Eithers.bind valFoldResult (\valFoldR ->  
-            let valTypes = Pairs.first valFoldR 
+          in (Eithers.bind valFoldResult (\valFoldR ->
+            let valTypes = Pairs.first valFoldR
                 cx3 = Pairs.second valFoldR
             in (Eithers.bind (checkSameType cx3 tx "map values" valTypes) (\vt -> Eithers.bind (applyTypeArgumentsToType cx3 tx typeArgs (Core.TypeMap (Core.MapType {
               Core.mapTypeKeys = kt,
@@ -476,9 +476,9 @@ typeOfMap cx tx typeArgs m =
 -- | Reconstruct the type of an optional value (Either/Context version)
 typeOfMaybe :: Context.Context -> Graph.Graph -> [Core.Type] -> Maybe Core.Term -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfMaybe cx tx typeArgs mt =
-     
+
       let forNothing =
-               
+
                 let n = Lists.length typeArgs
                 in (Logic.ifElse (Equality.equal n 1) (Right (Core.TypeMaybe (Lists.head typeArgs), cx)) (Left (Context.InContext {
                   Context.inContextObject = (Error.ErrorChecking (Error.CheckingErrorTypeArityMismatch (Error.TypeArityMismatchError {
@@ -486,10 +486,10 @@ typeOfMaybe cx tx typeArgs mt =
                     Error.typeArityMismatchErrorExpectedArity = 1,
                     Error.typeArityMismatchErrorActualArity = n,
                     Error.typeArityMismatchErrorTypeArguments = typeArgs}))),
-                  Context.inContextContext = cx}))) 
+                  Context.inContextContext = cx})))
           forJust =
-                  \term -> Eithers.bind (typeOf cx tx [] term) (\tResult ->  
-                    let termType = Pairs.first tResult 
+                  \term -> Eithers.bind (typeOf cx tx [] term) (\tResult ->
+                    let termType = Pairs.first tResult
                         cx2 = Pairs.second tResult
                         t = Core.TypeMaybe termType
                     in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2))))
@@ -498,16 +498,16 @@ typeOfMaybe cx tx typeArgs mt =
 -- | Reconstruct the type of a pair (Either/Context version)
 typeOfPair :: Context.Context -> Graph.Graph -> [Core.Type] -> (Core.Term, Core.Term) -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfPair cx tx typeArgs p =
-     
+
       let n = Lists.length typeArgs
-      in (Logic.ifElse (Equality.equal n 2) ( 
-        let pairFst = Pairs.first p 
+      in (Logic.ifElse (Equality.equal n 2) (
+        let pairFst = Pairs.first p
             pairSnd = Pairs.second p
-        in (Eithers.bind (typeOf cx tx [] pairFst) (\result1 ->  
-          let firstType = Pairs.first result1 
+        in (Eithers.bind (typeOf cx tx [] pairFst) (\result1 ->
+          let firstType = Pairs.first result1
               cx2 = Pairs.second result1
-          in (Eithers.bind (typeOf cx2 tx [] pairSnd) (\result2 ->  
-            let secondType = Pairs.first result2 
+          in (Eithers.bind (typeOf cx2 tx [] pairSnd) (\result2 ->
+            let secondType = Pairs.first result2
                 cx3 = Pairs.second result2
             in (Right (Core.TypePair (Core.PairType {
               Core.pairTypeFirst = firstType,
@@ -524,14 +524,14 @@ typeOfPair cx tx typeArgs p =
 -- | Reconstruct the type of a primitive function (Either/Context version)
 typeOfPrimitive :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Name -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfPrimitive cx tx typeArgs name =
-     
+
       let rawTs =
               Maps.lookup name (Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx))))
       in (Maybes.maybe (Left (Context.InContext {
         Context.inContextObject = (Error.ErrorUndefinedTerm (Error.UndefinedTermError {
           Error.undefinedTermErrorName = name})),
-        Context.inContextContext = cx})) (\tsRaw ->  
-        let instResult = Schemas.instantiateTypeScheme cx tsRaw 
+        Context.inContextContext = cx})) (\tsRaw ->
+        let instResult = Schemas.instantiateTypeScheme cx tsRaw
             ts = Pairs.first instResult
             cx2 = Pairs.second instResult
             t = Rewriting.typeSchemeToFType ts
@@ -540,16 +540,16 @@ typeOfPrimitive cx tx typeArgs name =
 -- | Reconstruct the type of a record projection (Either/Context version)
 typeOfProjection :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Projection -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfProjection cx tx typeArgs p =
-     
-      let tname = Core.projectionTypeName p 
+
+      let tname = Core.projectionTypeName p
           fname = Core.projectionField p
-      in (Eithers.bind (Schemas.requireSchemaType cx (Graph.graphSchemaTypes tx) tname) (\schemaResult ->  
-        let schemaType = Pairs.first schemaResult 
+      in (Eithers.bind (Schemas.requireSchemaType cx (Graph.graphSchemaTypes tx) tname) (\schemaResult ->
+        let schemaType = Pairs.first schemaResult
             cx2 = Pairs.second schemaResult
             svars = Core.typeSchemeVariables schemaType
             sbody = Core.typeSchemeType schemaType
-        in (Eithers.bind (Core_.recordType cx2 tname sbody) (\sfields -> Eithers.bind (Schemas.findFieldType cx2 fname sfields) (\ftyp ->  
-          let subst = Typing.TypeSubst (Maps.fromList (Lists.zip svars typeArgs)) 
+        in (Eithers.bind (Core_.recordType cx2 tname sbody) (\sfields -> Eithers.bind (Schemas.findFieldType cx2 fname sfields) (\ftyp ->
+          let subst = Typing.TypeSubst (Maps.fromList (Lists.zip svars typeArgs))
               sftyp = Substitution.substInType subst ftyp
           in (Right (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = (Schemas.nominalApplication tname typeArgs),
@@ -558,18 +558,18 @@ typeOfProjection cx tx typeArgs p =
 -- | Reconstruct the type of a record (Either/Context version)
 typeOfRecord :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Record -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfRecord cx tx typeArgs record =
-     
-      let tname = Core.recordTypeName record 
+
+      let tname = Core.recordTypeName record
           fields = Core.recordFields record
           foldResult =
-                  Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->  
-                    let types = Pairs.first accR 
+                  Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->
+                    let types = Pairs.first accR
                         cxA = Pairs.second accR
-                    in (Eithers.bind (typeOf cxA tx [] term) (\tResult ->  
-                      let t = Pairs.first tResult 
+                    in (Eithers.bind (typeOf cxA tx [] term) (\tResult ->
+                      let t = Pairs.first tResult
                           cxB = Pairs.second tResult
                       in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx)) (Lists.map Core.fieldTerm fields)
-      in (Eithers.bind foldResult (\foldR ->  
+      in (Eithers.bind foldResult (\foldR ->
         let cx2 = Pairs.second foldR
         in (Right (Schemas.nominalApplication tname typeArgs, cx2))))
 
@@ -582,33 +582,33 @@ typeOfSet cx tx typeArgs els =
         Error.typeArityMismatchErrorExpectedArity = 1,
         Error.typeArityMismatchErrorActualArity = (Lists.length typeArgs),
         Error.typeArityMismatchErrorTypeArguments = typeArgs}))),
-      Context.inContextContext = cx}))) ( 
+      Context.inContextContext = cx}))) (
       let foldResult =
-              Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->  
-                let types = Pairs.first accR 
+              Lists.foldl (\acc -> \term -> Eithers.bind acc (\accR ->
+                let types = Pairs.first accR
                     cxA = Pairs.second accR
-                in (Eithers.bind (typeOf cxA tx [] term) (\tResult ->  
-                  let t = Pairs.first tResult 
+                in (Eithers.bind (typeOf cxA tx [] term) (\tResult ->
+                  let t = Pairs.first tResult
                       cxB = Pairs.second tResult
                   in (Right (Lists.concat2 types (Lists.pure t), cxB)))))) (Right ([], cx)) (Sets.toList els)
-      in (Eithers.bind foldResult (\foldR ->  
-        let eltypes = Pairs.first foldR 
+      in (Eithers.bind foldResult (\foldR ->
+        let eltypes = Pairs.first foldR
             cx2 = Pairs.second foldR
         in (Eithers.bind (checkSameType cx2 tx "set elements" eltypes) (\unifiedType -> Right (Core.TypeSet unifiedType, cx2))))))
 
 -- | Reconstruct the type of a type application term (Either/Context version)
 typeOfTypeApplication :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.TypeApplicationTerm -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfTypeApplication cx tx typeArgs tyapp =
-     
-      let body = Core.typeApplicationTermBody tyapp 
+
+      let body = Core.typeApplicationTermBody tyapp
           t = Core.typeApplicationTermType tyapp
       in (typeOf cx tx (Lists.cons t typeArgs) body)
 
 -- | Reconstruct the type of a type lambda (type abstraction) term (Either/Context version)
 typeOfTypeLambda :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.TypeLambda -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfTypeLambda cx tx typeArgs tl =
-     
-      let v = Core.typeLambdaParameter tl 
+
+      let v = Core.typeLambdaParameter tl
           body = Core.typeLambdaBody tl
           vars = Graph.graphTypeVariables tx
           tx2 =
@@ -621,8 +621,8 @@ typeOfTypeLambda cx tx typeArgs tl =
                     Graph.graphPrimitives = (Graph.graphPrimitives tx),
                     Graph.graphSchemaTypes = (Graph.graphSchemaTypes tx),
                     Graph.graphTypeVariables = (Sets.insert v vars)}
-      in (Eithers.bind (typeOf cx tx2 [] body) (\result1 ->  
-        let t1 = Pairs.first result1 
+      in (Eithers.bind (typeOf cx tx2 [] body) (\result1 ->
+        let t1 = Pairs.first result1
             cx2 = Pairs.second result1
         in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs (Core.TypeForall (Core.ForallType {
           Core.forallTypeParameter = v,
@@ -636,13 +636,13 @@ typeOfUnit cx tx typeArgs =
 -- | Reconstruct the type of an unwrap operation (Either/Context version)
 typeOfUnwrap :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Name -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfUnwrap cx tx typeArgs tname =
-    Eithers.bind (Schemas.requireSchemaType cx (Graph.graphSchemaTypes tx) tname) (\schemaResult ->  
-      let schemaType = Pairs.first schemaResult 
+    Eithers.bind (Schemas.requireSchemaType cx (Graph.graphSchemaTypes tx) tname) (\schemaResult ->
+      let schemaType = Pairs.first schemaResult
           cx2 = Pairs.second schemaResult
           svars = Core.typeSchemeVariables schemaType
           sbody = Core.typeSchemeType schemaType
-      in (Eithers.bind (Core_.wrappedType cx2 tname sbody) (\wrapped ->  
-        let subst = Typing.TypeSubst (Maps.fromList (Lists.zip svars typeArgs)) 
+      in (Eithers.bind (Core_.wrappedType cx2 tname sbody) (\wrapped ->
+        let subst = Typing.TypeSubst (Maps.fromList (Lists.zip svars typeArgs))
             swrapped = Substitution.substInType subst wrapped
         in (Right (Core.TypeFunction (Core.FunctionType {
           Core.functionTypeDomain = (Schemas.nominalApplication tname typeArgs),
@@ -651,14 +651,14 @@ typeOfUnwrap cx tx typeArgs tname =
 -- | Reconstruct the type of a variable (Either/Context version)
 typeOfVariable :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Name -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfVariable cx tx typeArgs name =
-     
+
       let rawTypeScheme = Maps.lookup name (Graph.graphBoundTypes tx)
       in (Maybes.maybe (Left (Context.InContext {
         Context.inContextObject = (Error.ErrorUndefinedType (Error.UndefinedTypeError {
           Error.undefinedTypeErrorName = name})),
-        Context.inContextContext = cx})) (\ts ->  
+        Context.inContextContext = cx})) (\ts ->
         let tResult =
-                Logic.ifElse (Lists.null typeArgs) (Schemas.instantiateType cx (Rewriting.typeSchemeToFType ts)) (Rewriting.typeSchemeToFType ts, cx) 
+                Logic.ifElse (Lists.null typeArgs) (Schemas.instantiateType cx (Rewriting.typeSchemeToFType ts)) (Rewriting.typeSchemeToFType ts, cx)
             t = Pairs.first tResult
             cx2 = Pairs.second tResult
         in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2)))) rawTypeScheme)
@@ -666,21 +666,21 @@ typeOfVariable cx tx typeArgs name =
 -- | Reconstruct the type of a wrapped term (Either/Context version)
 typeOfWrappedTerm :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.WrappedTerm -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfWrappedTerm cx tx typeArgs wt =
-     
-      let tname = Core.wrappedTermTypeName wt 
+
+      let tname = Core.wrappedTermTypeName wt
           body = Core.wrappedTermBody wt
-      in (Eithers.bind (typeOf cx tx [] body) (\result ->  
+      in (Eithers.bind (typeOf cx tx [] body) (\result ->
         let cx2 = Pairs.second result
         in (Right (Schemas.nominalApplication tname typeArgs, cx2))))
 
 -- | Check whether a list of types are effectively equal, disregarding type aliases and free type variable naming. Also treats free type variables (not in schema) as wildcards, since inference has already verified consistency.
 typesAllEffectivelyEqual :: Graph.Graph -> [Core.Type] -> Bool
 typesAllEffectivelyEqual tx tlist =
-     
-      let types = Graph.graphSchemaTypes tx 
+
+      let types = Graph.graphSchemaTypes tx
           containsFreeVar =
-                  \t ->  
-                    let allVars = Rewriting.freeVariablesInTypeSimple t 
+                  \t ->
+                    let allVars = Rewriting.freeVariablesInTypeSimple t
                         schemaNames = Sets.fromList (Maps.keys types)
                     in (Logic.not (Sets.null (Sets.difference allVars schemaNames)))
           anyContainsFreeVar = Lists.foldl (\acc -> \t -> Logic.or acc (containsFreeVar t)) False tlist

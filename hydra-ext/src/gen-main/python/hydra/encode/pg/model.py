@@ -26,16 +26,16 @@ def direction(v1: hydra.pg.model.Direction) -> hydra.core.Term:
     match v1:
         case hydra.pg.model.Direction.OUT:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.Direction"), hydra.core.Field(hydra.core.Name("out"), cast(hydra.core.Term, hydra.core.TermUnit())))))
-        
+
         case hydra.pg.model.Direction.IN:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.Direction"), hydra.core.Field(hydra.core.Name("in"), cast(hydra.core.Term, hydra.core.TermUnit())))))
-        
+
         case hydra.pg.model.Direction.BOTH:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.Direction"), hydra.core.Field(hydra.core.Name("both"), cast(hydra.core.Term, hydra.core.TermUnit())))))
-        
+
         case hydra.pg.model.Direction.UNDIRECTED:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.Direction"), hydra.core.Field(hydra.core.Name("undirected"), cast(hydra.core.Term, hydra.core.TermUnit())))))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -59,10 +59,10 @@ def element(v: Callable[[T0], hydra.core.Term]):
         match v1:
             case hydra.pg.model.ElementVertex(value=y):
                 return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.Element"), hydra.core.Field(hydra.core.Name("vertex"), vertex(v, y)))))
-            
+
             case hydra.pg.model.ElementEdge(value=y):
                 return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.Element"), hydra.core.Field(hydra.core.Name("edge"), edge(v, y)))))
-            
+
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     return _hoist_hydra_encode_pg_model_element_1(v)
@@ -71,10 +71,10 @@ def element_kind(v1: hydra.pg.model.ElementKind) -> hydra.core.Term:
     match v1:
         case hydra.pg.model.ElementKind.VERTEX:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.ElementKind"), hydra.core.Field(hydra.core.Name("vertex"), cast(hydra.core.Term, hydra.core.TermUnit())))))
-        
+
         case hydra.pg.model.ElementKind.EDGE:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.ElementKind"), hydra.core.Field(hydra.core.Name("edge"), cast(hydra.core.Term, hydra.core.TermUnit())))))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -89,10 +89,10 @@ def element_type(t: Callable[[T0], hydra.core.Term]):
         match v1:
             case hydra.pg.model.ElementTypeVertex(value=y):
                 return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.ElementType"), hydra.core.Field(hydra.core.Name("vertex"), vertex_type(t, y)))))
-            
+
             case hydra.pg.model.ElementTypeEdge(value=y):
                 return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.ElementType"), hydra.core.Field(hydra.core.Name("edge"), edge_type(t, y)))))
-            
+
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     return _hoist_hydra_encode_pg_model_element_type_1(t)
@@ -110,10 +110,10 @@ def label(v1: hydra.pg.model.Label) -> hydra.core.Term:
     match v1:
         case hydra.pg.model.LabelVertex(value=y):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.Label"), hydra.core.Field(hydra.core.Name("vertex"), vertex_label(y)))))
-        
+
         case hydra.pg.model.LabelEdge(value=y2):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.Label"), hydra.core.Field(hydra.core.Name("edge"), edge_label(y2)))))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 

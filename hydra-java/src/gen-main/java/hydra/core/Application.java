@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class Application implements Serializable, Comparable<Application> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Application");
-  
+
   public static final hydra.core.Name FUNCTION = new hydra.core.Name("function");
-  
+
   public static final hydra.core.Name ARGUMENT = new hydra.core.Name("argument");
-  
+
   /**
    * The left-hand side of the application
    */
   public final hydra.core.Term function;
-  
+
   /**
    * The right-hand side of the application
    */
   public final hydra.core.Term argument;
-  
+
   public Application (hydra.core.Term function, hydra.core.Term argument) {
     this.function = function;
     this.argument = argument;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Application)) {
@@ -41,12 +41,12 @@ public class Application implements Serializable, Comparable<Application> {
       this.argument,
       o.argument);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(function) + 3 * java.util.Objects.hashCode(argument);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Application other) {
@@ -57,11 +57,11 @@ public class Application implements Serializable, Comparable<Application> {
     }
     return ((Comparable) argument).compareTo(other.argument);
   }
-  
+
   public Application withFunction(hydra.core.Term function) {
     return new Application(function, argument);
   }
-  
+
   public Application withArgument(hydra.core.Term argument) {
     return new Application(function, argument);
   }

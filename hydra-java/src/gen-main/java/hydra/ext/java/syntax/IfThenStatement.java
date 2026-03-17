@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class IfThenStatement implements Serializable, Comparable<IfThenStatement> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.IfThenStatement");
-  
+
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
-  
+
   public static final hydra.core.Name STATEMENT = new hydra.core.Name("statement");
-  
+
   public final hydra.ext.java.syntax.Expression expression;
-  
+
   public final hydra.ext.java.syntax.Statement statement;
-  
+
   public IfThenStatement (hydra.ext.java.syntax.Expression expression, hydra.ext.java.syntax.Statement statement) {
     this.expression = expression;
     this.statement = statement;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof IfThenStatement)) {
@@ -32,12 +32,12 @@ public class IfThenStatement implements Serializable, Comparable<IfThenStatement
       this.statement,
       o.statement);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(expression) + 3 * java.util.Objects.hashCode(statement);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(IfThenStatement other) {
@@ -48,11 +48,11 @@ public class IfThenStatement implements Serializable, Comparable<IfThenStatement
     }
     return ((Comparable) statement).compareTo(other.statement);
   }
-  
+
   public IfThenStatement withExpression(hydra.ext.java.syntax.Expression expression) {
     return new IfThenStatement(expression, statement);
   }
-  
+
   public IfThenStatement withStatement(hydra.ext.java.syntax.Statement statement) {
     return new IfThenStatement(expression, statement);
   }

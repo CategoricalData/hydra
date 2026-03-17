@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class DeannotateTypeTestCase implements Serializable, Comparable<DeannotateTypeTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.DeannotateTypeTestCase");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
-  
+
   /**
    * The type to deannotate
    */
   public final hydra.core.Type input;
-  
+
   /**
    * The expected deannotated type
    */
   public final hydra.core.Type output;
-  
+
   public DeannotateTypeTestCase (hydra.core.Type input, hydra.core.Type output) {
     this.input = input;
     this.output = output;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof DeannotateTypeTestCase)) {
@@ -41,12 +41,12 @@ public class DeannotateTypeTestCase implements Serializable, Comparable<Deannota
       this.output,
       o.output);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(output);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DeannotateTypeTestCase other) {
@@ -57,11 +57,11 @@ public class DeannotateTypeTestCase implements Serializable, Comparable<Deannota
     }
     return ((Comparable) output).compareTo(other.output);
   }
-  
+
   public DeannotateTypeTestCase withInput(hydra.core.Type input) {
     return new DeannotateTypeTestCase(input, output);
   }
-  
+
   public DeannotateTypeTestCase withOutput(hydra.core.Type output) {
     return new DeannotateTypeTestCase(input, output);
   }

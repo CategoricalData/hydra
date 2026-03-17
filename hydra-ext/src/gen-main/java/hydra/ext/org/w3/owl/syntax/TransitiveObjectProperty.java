@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class TransitiveObjectProperty implements Serializable, Comparable<TransitiveObjectProperty> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.TransitiveObjectProperty");
-  
+
   public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
-  
+
   public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
-  
+
   public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
-  
+
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
-  
+
   public TransitiveObjectProperty (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
     this.annotations = annotations;
     this.property = property;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TransitiveObjectProperty)) {
@@ -32,12 +32,12 @@ public class TransitiveObjectProperty implements Serializable, Comparable<Transi
       this.property,
       o.property);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(property);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TransitiveObjectProperty other) {
@@ -48,11 +48,11 @@ public class TransitiveObjectProperty implements Serializable, Comparable<Transi
     }
     return ((Comparable) property).compareTo(other.property);
   }
-  
+
   public TransitiveObjectProperty withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new TransitiveObjectProperty(annotations, property);
   }
-  
+
   public TransitiveObjectProperty withProperty(hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
     return new TransitiveObjectProperty(annotations, property);
   }

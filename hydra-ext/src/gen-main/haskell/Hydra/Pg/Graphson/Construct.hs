@@ -26,8 +26,8 @@ import qualified Data.Set as S
 -- | Aggregate a list of key-value pairs into a map where each key maps to a list of values
 aggregateMap :: Ord t0 => ([(t0, t1)] -> M.Map t0 [t1])
 aggregateMap pairs =
-    Lists.foldl (\m -> \p ->  
-      let k = Pairs.first p 
+    Lists.foldl (\m -> \p ->
+      let k = Pairs.first p
           v = Pairs.second p
           existing = Maps.lookup k m
       in (Maps.insert k (Maybes.maybe (Lists.pure v) (\vs -> Lists.cons v vs) existing) m)) Maps.empty pairs
@@ -35,8 +35,8 @@ aggregateMap pairs =
 -- | Convert a property graph adjacent edge to a GraphSON adjacent edge
 adjacentEdgeToGraphson :: (t0 -> Either t1 Syntax.Value) -> Model_.AdjacentEdge t0 -> Either t1 (Syntax.EdgeLabel, Syntax.AdjacentEdge)
 adjacentEdgeToGraphson encodeValue edge =
-     
-      let label = Model_.adjacentEdgeLabel edge 
+
+      let label = Model_.adjacentEdgeLabel edge
           edgeId = Model_.adjacentEdgeId edge
           vertexId = Model_.adjacentEdgeVertex edge
           props = Model_.adjacentEdgeProperties edge
@@ -62,8 +62,8 @@ graphsonVertexToJsonCoder =
 -- | Convert a property graph vertex with adjacent edges to a GraphSON vertex
 pgVertexWithAdjacentEdgesToGraphsonVertex :: (t0 -> Either t1 Syntax.Value) -> Model_.VertexWithAdjacentEdges t0 -> Either t1 Syntax.Vertex
 pgVertexWithAdjacentEdgesToGraphsonVertex encodeValue vae =
-     
-      let vertex = Model_.vertexWithAdjacentEdgesVertex vae 
+
+      let vertex = Model_.vertexWithAdjacentEdgesVertex vae
           ins = Model_.vertexWithAdjacentEdgesIns vae
           outs = Model_.vertexWithAdjacentEdgesOuts vae
           label = Model_.vertexLabel vertex

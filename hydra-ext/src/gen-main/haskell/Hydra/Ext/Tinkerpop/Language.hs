@@ -22,9 +22,9 @@ import qualified Data.Set as S
 -- | Populate language constraints based on TinkerPop Graph.Features
 tinkerpopLanguage :: Coders.LanguageName -> Features.Features -> Features.ExtraFeatures t0 -> Coders.Language
 tinkerpopLanguage name features extras =
-     
+
       let vpFeatures =
-              Features.vertexPropertyFeaturesDataTypeFeatures (Features.vertexFeaturesProperties (Features.featuresVertex features)) 
+              Features.vertexPropertyFeaturesDataTypeFeatures (Features.vertexFeaturesProperties (Features.featuresVertex features))
           cond = \v -> \b -> Logic.ifElse b (Maybes.pure v) Nothing
           supportsLists =
                   Logic.or (Features.dataTypeFeaturesSupportsBooleanArrayValues vpFeatures) (Logic.or (Features.dataTypeFeaturesSupportsByteArrayValues vpFeatures) (Logic.or (Features.dataTypeFeaturesSupportsDoubleArrayValues vpFeatures) (Logic.or (Features.dataTypeFeaturesSupportsFloatArrayValues vpFeatures) (Logic.or (Features.dataTypeFeaturesSupportsIntegerArrayValues vpFeatures) (Logic.or (Features.dataTypeFeaturesSupportsLongArrayValues vpFeatures) (Features.dataTypeFeaturesSupportsStringArrayValues vpFeatures))))))
@@ -61,7 +61,7 @@ tinkerpopLanguage name features extras =
                     (Maybes.pure Variants.TypeVariantMaybe),
                     (Maybes.pure Variants.TypeVariantWrap)])
           typePredicate =
-                  \typ ->  
+                  \typ ->
                     let dt = Rewriting.deannotateType typ
                     in case dt of
                       Core.TypeList v0 -> case (Rewriting.deannotateType v0) of

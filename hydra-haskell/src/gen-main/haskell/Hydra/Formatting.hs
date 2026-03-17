@@ -28,16 +28,16 @@ capitalize = mapFirstLetter Strings.toUpper
 -- | Convert a string from one case convention to another
 convertCase :: Util.CaseConvention -> Util.CaseConvention -> String -> String
 convertCase from to original =
-     
+
       let parts =
-               
+
                 let byCaps =
-                         
+
                           let splitOnUppercase =
                                   \acc -> \c -> Lists.concat2 (Logic.ifElse (Chars.isUpper c) [
                                     []] []) (Lists.cons (Lists.cons c (Lists.head acc)) (Lists.tail acc))
                           in (Lists.map Strings.fromList (Lists.foldl splitOnUppercase [
-                            []] (Lists.reverse (Strings.toList (decapitalize original))))) 
+                            []] (Lists.reverse (Strings.toList (decapitalize original)))))
                     byUnderscores = Strings.splitOn "_" original
                 in case from of
                   Util.CaseConventionCamel -> byCaps
@@ -73,7 +73,7 @@ escapeWithUnderscore reserved s = Logic.ifElse (Sets.member s reserved) (Strings
 -- | Indent each line of a string with four spaces
 indentLines :: String -> String
 indentLines s =
-     
+
       let indent = \l -> Strings.cat2 "    " l
       in (Strings.unlines (Lists.map indent (Strings.lines s)))
 
@@ -84,20 +84,20 @@ javaStyleComment s = Strings.cat2 (Strings.cat2 (Strings.cat2 "/**\n" " * ") s) 
 -- | A helper which maps the first letter of a string to another string
 mapFirstLetter :: (String -> String) -> String -> String
 mapFirstLetter mapping s =
-     
-      let list = Strings.toList s 
+
+      let list = Strings.toList s
           firstLetter = mapping (Strings.fromList (Lists.pure (Lists.head list)))
       in (Logic.ifElse (Strings.null s) s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))))
 
 -- | Replace sequences of non-alphanumeric characters with single underscores
 nonAlnumToUnderscores :: String -> String
 nonAlnumToUnderscores input =
-     
+
       let isAlnum =
-              \c -> Logic.or (Logic.and (Equality.gte c 65) (Equality.lte c 90)) (Logic.or (Logic.and (Equality.gte c 97) (Equality.lte c 122)) (Logic.and (Equality.gte c 48) (Equality.lte c 57))) 
+              \c -> Logic.or (Logic.and (Equality.gte c 65) (Equality.lte c 90)) (Logic.or (Logic.and (Equality.gte c 97) (Equality.lte c 122)) (Logic.and (Equality.gte c 48) (Equality.lte c 57)))
           replace =
-                  \p -> \c ->  
-                    let s = Pairs.first p 
+                  \p -> \c ->
+                    let s = Pairs.first p
                         b = Pairs.second p
                     in (Logic.ifElse (isAlnum c) (Lists.cons c s, False) (Logic.ifElse b (s, True) (Lists.cons 95 s, True)))
           result = Lists.foldl replace ([], False) (Strings.toList input)
@@ -123,7 +123,7 @@ stripLeadingAndTrailingWhitespace s =
 -- | Replace special characters with their alphanumeric aliases
 withCharacterAliases :: String -> String
 withCharacterAliases original =
-     
+
       let aliases =
               Maps.fromList [
                 (32, "sp"),
@@ -158,17 +158,17 @@ withCharacterAliases original =
                 (123, "lcub"),
                 (124, "verbar"),
                 (125, "rcub"),
-                (126, "tilde")] 
+                (126, "tilde")]
           alias = \c -> Maybes.fromMaybe (Lists.pure c) (Maybes.map Strings.toList (Maps.lookup c aliases))
       in (Strings.fromList (Lists.filter Chars.isAlphaNum (Lists.concat (Lists.map alias (Strings.toList original)))))
 
 -- | A simple soft line wrap which is suitable for code comments
 wrapLine :: Int -> String -> String
 wrapLine maxlen input =
-     
+
       let helper =
-              \prev -> \rem ->  
-                let trunc = Lists.take maxlen rem 
+              \prev -> \rem ->
+                let trunc = Lists.take maxlen rem
                     spanResult =
                             Lists.span (\c -> Logic.and (Logic.not (Equality.equal c 32)) (Logic.not (Equality.equal c 9))) (Lists.reverse trunc)
                     prefix = Lists.reverse (Pairs.second spanResult)

@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class CastExpression_Primitive implements Serializable, Comparable<CastExpression_Primitive> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.CastExpression_Primitive");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
-  
+
   public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type;
-  
+
   public final hydra.ext.java.syntax.UnaryExpression expression;
-  
+
   public CastExpression_Primitive (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type, hydra.ext.java.syntax.UnaryExpression expression) {
     this.type = type;
     this.expression = expression;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof CastExpression_Primitive)) {
@@ -32,12 +32,12 @@ public class CastExpression_Primitive implements Serializable, Comparable<CastEx
       this.expression,
       o.expression);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(type) + 3 * java.util.Objects.hashCode(expression);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(CastExpression_Primitive other) {
@@ -48,11 +48,11 @@ public class CastExpression_Primitive implements Serializable, Comparable<CastEx
     }
     return ((Comparable) expression).compareTo(other.expression);
   }
-  
+
   public CastExpression_Primitive withType(hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type) {
     return new CastExpression_Primitive(type, expression);
   }
-  
+
   public CastExpression_Primitive withExpression(hydra.ext.java.syntax.UnaryExpression expression) {
     return new CastExpression_Primitive(type, expression);
   }

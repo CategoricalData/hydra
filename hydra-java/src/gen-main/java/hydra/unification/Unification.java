@@ -68,7 +68,7 @@ public interface Unification {
           sleft,
           sright);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Application l) {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -80,7 +80,7 @@ public interface Unification {
               sleft,
               sright);
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Application r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(
@@ -89,7 +89,7 @@ public interface Unification {
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Either l) {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -101,7 +101,7 @@ public interface Unification {
               sleft,
               sright);
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Either r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(
@@ -110,7 +110,7 @@ public interface Unification {
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Function l) {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -122,7 +122,7 @@ public interface Unification {
               sleft,
               sright);
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Function r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(
@@ -131,7 +131,7 @@ public interface Unification {
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.List l) {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -143,14 +143,14 @@ public interface Unification {
               sleft,
               sright);
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.List r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of((joinOne).apply((l).value).apply((r).value)));
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Literal ignored) {
         return hydra.unification.Unification.joinTypes_assertEqual(
@@ -159,7 +159,7 @@ public interface Unification {
           sleft,
           sright);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Map l) {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -171,7 +171,7 @@ public interface Unification {
               sleft,
               sright);
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Map r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(
@@ -180,7 +180,7 @@ public interface Unification {
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Maybe l) {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -192,14 +192,14 @@ public interface Unification {
               sleft,
               sright);
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Maybe r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of((joinOne).apply((l).value).apply((r).value)));
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Pair l) {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -211,7 +211,7 @@ public interface Unification {
               sleft,
               sright);
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Pair r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(
@@ -220,7 +220,7 @@ public interface Unification {
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Record l) {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -232,14 +232,14 @@ public interface Unification {
               sleft,
               sright);
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Record r) {
             return (joinRowTypes).apply((l).value).apply((r).value);
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Set l) {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -251,14 +251,14 @@ public interface Unification {
               sleft,
               sright);
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Set r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of((joinOne).apply((l).value).apply((r).value)));
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Union l) {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -270,14 +270,14 @@ public interface Unification {
               sleft,
               sright);
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Union r) {
             return (joinRowTypes).apply((l).value).apply((r).value);
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Unit ignored) {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -289,14 +289,14 @@ public interface Unification {
               sleft,
               sright);
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Unit _2) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right((hydra.util.ConsList<hydra.typing.TypeConstraint>) (hydra.util.ConsList.<hydra.typing.TypeConstraint>empty()));
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Wrap l) {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -308,7 +308,7 @@ public interface Unification {
               sleft,
               sright);
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Wrap r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of((joinOne).apply((l).value).apply((r).value)));
@@ -317,7 +317,7 @@ public interface Unification {
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, T0> joinTypes_cannotUnify(hydra.context.Context cx, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, hydra.core.Type sleft, hydra.core.Type sright) {
     return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, T0>left((hydra.context.InContext<hydra.error.UnificationError>) (new hydra.context.InContext<hydra.error.UnificationError>(new hydra.error.UnificationError(sleft, sright, hydra.lib.strings.Cat2.apply(
       hydra.lib.strings.Cat2.apply(
@@ -327,7 +327,7 @@ public interface Unification {
         " with "),
       (hydra_show_core_type2).apply(sright))), cx)));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<T0>> joinTypes_assertEqual(hydra.context.Context cx, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, hydra.core.Type sleft, hydra.core.Type sright) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
@@ -340,7 +340,7 @@ public interface Unification {
         sleft,
         sright));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> unifyTypeConstraints(hydra.context.Context cx, hydra.util.PersistentMap<hydra.core.Name, T0> schemaTypes, hydra.util.ConsList<hydra.typing.TypeConstraint> constraints) {
     java.util.function.Function<hydra.typing.TypeConstraint, java.util.function.Function<hydra.util.ConsList<hydra.typing.TypeConstraint>, hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst>>> withConstraint = (java.util.function.Function<hydra.typing.TypeConstraint, java.util.function.Function<hydra.util.ConsList<hydra.typing.TypeConstraint>, hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst>>>) (c -> (java.util.function.Function<hydra.util.ConsList<hydra.typing.TypeConstraint>, hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst>>) (rest -> {
       java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst>>> bind = (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst>>>) (v -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst>>) (t -> {
@@ -398,7 +398,7 @@ public interface Unification {
         public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> otherwise(hydra.core.Type instance) {
           return noVars.get();
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> visit(hydra.core.Type.Variable name) {
           return (tryBinding).apply((name).value).apply(sleft);
@@ -409,7 +409,7 @@ public interface Unification {
         public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> otherwise(hydra.core.Type instance) {
           return dflt;
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> visit(hydra.core.Type.Variable name) {
           return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -417,7 +417,7 @@ public interface Unification {
             public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> otherwise(hydra.core.Type instance) {
               return (tryBinding).apply((name).value).apply(sright);
             }
-            
+
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> visit(hydra.core.Type.Variable name2) {
               return hydra.lib.logic.IfElse.lazy(
@@ -461,7 +461,7 @@ public interface Unification {
       () -> hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst>right(hydra.substitution.Substitution.idTypeSubst()),
       () -> (withConstraint).apply(hydra.lib.lists.Head.apply(constraints)).apply(hydra.lib.lists.Tail.apply(constraints)));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> unifyTypeLists(hydra.context.Context cx, hydra.util.PersistentMap<hydra.core.Name, T0> schemaTypes, hydra.util.ConsList<hydra.core.Type> l, hydra.util.ConsList<hydra.core.Type> r, String comment) {
     java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, hydra.typing.TypeConstraint>> toConstraint = (java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, hydra.typing.TypeConstraint>>) (l2 -> (java.util.function.Function<hydra.core.Type, hydra.typing.TypeConstraint>) (r2 -> new hydra.typing.TypeConstraint(l2, r2, comment)));
     return hydra.unification.Unification.<T0>unifyTypeConstraints(
@@ -472,21 +472,21 @@ public interface Unification {
         l,
         r));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> unifyTypes(hydra.context.Context cx, hydra.util.PersistentMap<hydra.core.Name, T0> schemaTypes, hydra.core.Type l, hydra.core.Type r, String comment) {
     return hydra.unification.Unification.<T0>unifyTypeConstraints(
       cx,
       schemaTypes,
       hydra.util.ConsList.of(new hydra.typing.TypeConstraint(l, r, comment)));
   }
-  
+
   static Boolean variableOccursInType(hydra.core.Name var, hydra.core.Type typ0) {
     java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Type, Boolean>> tryType = (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Type, Boolean>>) (b -> (java.util.function.Function<hydra.core.Type, Boolean>) (typ -> (typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type instance) {
         return b;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Variable v) {
         return hydra.lib.logic.Or.apply(

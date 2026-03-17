@@ -6,60 +6,60 @@ import java.io.Serializable;
 
 public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_Alts> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal_Alts");
-  
+
   public static final hydra.core.Name PN_CHARS_U = new hydra.core.Name("PnCharsU");
-  
+
   public static final hydra.core.Name COLON = new hydra.core.Name("Colon");
-  
+
   public static final hydra.core.Name REGEX = new hydra.core.Name("regex");
-  
+
   public static final hydra.core.Name PLX = new hydra.core.Name("Plx");
-  
+
   private PnLocal_Alts () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(PnCharsU instance) ;
-    
+
     R visit(Colon instance) ;
-    
+
     R visit(Regex instance) ;
-    
+
     R visit(Plx instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(PnLocal_Alts instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(PnCharsU instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Colon instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Regex instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Plx instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class PnCharsU extends hydra.ext.io.shex.syntax.PnLocal_Alts implements Serializable {
     public final hydra.ext.io.shex.syntax.PnCharsU value;
-    
+
     public PnCharsU (hydra.ext.io.shex.syntax.PnCharsU value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof PnCharsU)) {
@@ -70,12 +70,12 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PnLocal_Alts other) {
@@ -86,18 +86,18 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
       PnCharsU o = (PnCharsU) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Colon extends hydra.ext.io.shex.syntax.PnLocal_Alts implements Serializable {
     public Colon () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Colon)) {
@@ -106,12 +106,12 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
       Colon o = (Colon) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PnLocal_Alts other) {
@@ -121,20 +121,20 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Regex extends hydra.ext.io.shex.syntax.PnLocal_Alts implements Serializable {
     public final String value;
-    
+
     public Regex (String value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Regex)) {
@@ -145,12 +145,12 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PnLocal_Alts other) {
@@ -161,20 +161,20 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
       Regex o = (Regex) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Plx extends hydra.ext.io.shex.syntax.PnLocal_Alts implements Serializable {
     public final hydra.ext.io.shex.syntax.Plx value;
-    
+
     public Plx (hydra.ext.io.shex.syntax.Plx value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Plx)) {
@@ -185,12 +185,12 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PnLocal_Alts other) {
@@ -201,7 +201,7 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
       Plx o = (Plx) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

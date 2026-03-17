@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class InterfaceMethodDeclaration implements Serializable, Comparable<InterfaceMethodDeclaration> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.InterfaceMethodDeclaration");
-  
+
   public static final hydra.core.Name MODIFIERS = new hydra.core.Name("modifiers");
-  
+
   public static final hydra.core.Name HEADER = new hydra.core.Name("header");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers;
-  
+
   public final hydra.ext.java.syntax.MethodHeader header;
-  
+
   public final hydra.ext.java.syntax.MethodBody body;
-  
+
   public InterfaceMethodDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers, hydra.ext.java.syntax.MethodHeader header, hydra.ext.java.syntax.MethodBody body) {
     this.modifiers = modifiers;
     this.header = header;
     this.body = body;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof InterfaceMethodDeclaration)) {
@@ -39,12 +39,12 @@ public class InterfaceMethodDeclaration implements Serializable, Comparable<Inte
       this.body,
       o.body);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(modifiers) + 3 * java.util.Objects.hashCode(header) + 5 * java.util.Objects.hashCode(body);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InterfaceMethodDeclaration other) {
@@ -59,15 +59,15 @@ public class InterfaceMethodDeclaration implements Serializable, Comparable<Inte
     }
     return ((Comparable) body).compareTo(other.body);
   }
-  
+
   public InterfaceMethodDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers) {
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }
-  
+
   public InterfaceMethodDeclaration withHeader(hydra.ext.java.syntax.MethodHeader header) {
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }
-  
+
   public InterfaceMethodDeclaration withBody(hydra.ext.java.syntax.MethodBody body) {
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }

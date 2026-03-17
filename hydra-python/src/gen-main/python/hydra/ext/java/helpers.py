@@ -14,7 +14,7 @@ import hydra.module
 
 class JavaSymbolClassConstant:
     r"""A constant value"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, JavaSymbolClassConstant)
@@ -23,7 +23,7 @@ class JavaSymbolClassConstant:
 
 class JavaSymbolClassNullaryFunction:
     r"""A nullary function (no arguments)"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, JavaSymbolClassNullaryFunction)
@@ -35,7 +35,7 @@ class JavaSymbolClassHoistedLambda(Node[int]):
 
 class JavaSymbolClassUnaryFunction:
     r"""A unary function (single argument)"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, JavaSymbolClassUnaryFunction)
@@ -44,7 +44,7 @@ class JavaSymbolClassUnaryFunction:
 
 class JavaSymbolClassLocalVariable:
     r"""A local variable"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, JavaSymbolClassLocalVariable)
@@ -58,7 +58,7 @@ class _JavaSymbolClassMeta(type):
 # Classification of a Java symbol for code generation.
 class JavaSymbolClass(metaclass=_JavaSymbolClassMeta):
     r"""JavaSymbolClassConstant | JavaSymbolClassNullaryFunction | JavaSymbolClassHoistedLambda | JavaSymbolClassUnaryFunction | JavaSymbolClassLocalVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.helpers.JavaSymbolClass")
     CONSTANT = hydra.core.Name("constant")
     NULLARY_FUNCTION = hydra.core.Name("nullaryFunction")
@@ -69,16 +69,16 @@ class JavaSymbolClass(metaclass=_JavaSymbolClassMeta):
 @dataclass(frozen=True)
 class JavaFeatures:
     r"""Feature flags for the target Java version."""
-    
+
     supports_diamond_operator: Annotated[bool, "Whether the diamond operator (<>) is supported (Java 7+)"]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.helpers.JavaFeatures")
     SUPPORTS_DIAMOND_OPERATOR = hydra.core.Name("supportsDiamondOperator")
 
 @dataclass(frozen=True)
 class Aliases:
     r"""Aliases and context for Java code generation."""
-    
+
     current_namespace: Annotated[hydra.module.Namespace, "Current module namespace context"]
     packages: Annotated[FrozenDict[hydra.module.Namespace, hydra.ext.java.syntax.PackageName], "Maps namespaces to Java package names"]
     branch_vars: Annotated[frozenset[hydra.core.Name], "Variables bound in pattern matching branches"]
@@ -92,7 +92,7 @@ class Aliases:
     trusted_type_vars: Annotated[frozenset[hydra.core.Name], "Type variables that actually appear in the method's formal parameter types"]
     method_codomain: Annotated[Maybe[hydra.core.Type], "The enclosing method's codomain (return type), used for casting pair expressions"]
     thunked_vars: Annotated[frozenset[hydra.core.Name], "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.helpers.Aliases")
     CURRENT_NAMESPACE = hydra.core.Name("currentNamespace")
     PACKAGES = hydra.core.Name("packages")
@@ -111,10 +111,10 @@ class Aliases:
 @dataclass(frozen=True)
 class JavaEnvironment:
     r"""Environment for Java code generation."""
-    
+
     aliases: Annotated[Aliases, "Aliases and context state"]
     graph: Annotated[hydra.graph.Graph, "Graph context for type inference"]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.helpers.JavaEnvironment")
     ALIASES = hydra.core.Name("aliases")
     GRAPH = hydra.core.Name("graph")

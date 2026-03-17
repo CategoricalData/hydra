@@ -9,55 +9,55 @@ import java.io.Serializable;
  */
 public abstract class Node implements Serializable, Comparable<Node> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.yaml.model.Node");
-  
+
   public static final hydra.core.Name MAPPING = new hydra.core.Name("mapping");
-  
+
   public static final hydra.core.Name SCALAR = new hydra.core.Name("scalar");
-  
+
   public static final hydra.core.Name SEQUENCE = new hydra.core.Name("sequence");
-  
+
   private Node () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Mapping instance) ;
-    
+
     R visit(Scalar instance) ;
-    
+
     R visit(Sequence instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Node instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Mapping instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Scalar instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Sequence instance) {
       return otherwise(instance);
     }
   }
-  
+
   /**
    * A mapping from nodes to nodes
    */
   public static final class Mapping extends hydra.ext.org.yaml.model.Node implements Serializable {
     public final hydra.util.PersistentMap<hydra.ext.org.yaml.model.Node, hydra.ext.org.yaml.model.Node> value;
-    
+
     public Mapping (hydra.util.PersistentMap<hydra.ext.org.yaml.model.Node, hydra.ext.org.yaml.model.Node> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Mapping)) {
@@ -68,12 +68,12 @@ public abstract class Node implements Serializable, Comparable<Node> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Node other) {
@@ -84,23 +84,23 @@ public abstract class Node implements Serializable, Comparable<Node> {
       Mapping o = (Mapping) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A scalar value
    */
   public static final class Scalar extends hydra.ext.org.yaml.model.Node implements Serializable {
     public final hydra.ext.org.yaml.model.Scalar value;
-    
+
     public Scalar (hydra.ext.org.yaml.model.Scalar value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Scalar)) {
@@ -111,12 +111,12 @@ public abstract class Node implements Serializable, Comparable<Node> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Node other) {
@@ -127,23 +127,23 @@ public abstract class Node implements Serializable, Comparable<Node> {
       Scalar o = (Scalar) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A sequence of nodes
    */
   public static final class Sequence extends hydra.ext.org.yaml.model.Node implements Serializable {
     public final hydra.util.ConsList<hydra.ext.org.yaml.model.Node> value;
-    
+
     public Sequence (hydra.util.ConsList<hydra.ext.org.yaml.model.Node> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Sequence)) {
@@ -154,12 +154,12 @@ public abstract class Node implements Serializable, Comparable<Node> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Node other) {
@@ -170,7 +170,7 @@ public abstract class Node implements Serializable, Comparable<Node> {
       Sequence o = (Sequence) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

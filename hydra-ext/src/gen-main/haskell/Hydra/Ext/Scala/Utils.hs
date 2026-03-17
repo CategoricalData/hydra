@@ -74,8 +74,8 @@ sname s = Meta.DataRef (Meta.Data_RefName (Meta.Data_Name {
 -- | Create a Scala primitive reference from a Hydra name
 sprim :: Core.Name -> Meta.Data
 sprim name =
-     
-      let qname = Names.qualifyName name 
+
+      let qname = Names.qualifyName name
           prefix = Lists.last (Strings.splitOn "." (Module.unNamespace (Maybes.fromJust (Module.qualifiedNameNamespace qname))))
           local = Module.qualifiedNameLocal qname
       in (sname (Strings.cat2 (Strings.cat2 prefix ".") local))
@@ -102,7 +102,7 @@ stapply2 t1 t2 t3 =
 -- | Create a Scala type parameter from a Hydra name
 stparam :: Core.Name -> Meta.Type_Param
 stparam name =
-     
+
       let v = Core.unName name
       in Meta.Type_Param {
         Meta.type_ParamMods = [],
@@ -120,7 +120,7 @@ stref s = Meta.TypeRef (Meta.Type_RefName (Meta.Type_Name {
 -- | Create a Scala pattern variable
 svar :: Core.Name -> Meta.Pat
 svar name =
-     
+
       let v = Core.unName name
       in (Meta.PatVar (Meta.Pat_Var {
         Meta.pat_VarName = Meta.Data_Name {

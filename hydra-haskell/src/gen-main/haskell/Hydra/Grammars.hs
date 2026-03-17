@@ -37,10 +37,10 @@ childName lname n =
 -- | Find unique names for patterns
 findNames :: [Grammar.Pattern] -> [String]
 findNames pats =
-     
+
       let nextName =
-              \acc -> \pat ->  
-                let names = Pairs.first acc 
+              \acc -> \pat ->
+                let names = Pairs.first acc
                     nameMap = Pairs.second acc
                     rn = rawName pat
                     nameAndIndex =
@@ -53,15 +53,15 @@ findNames pats =
 -- | Convert a BNF grammar to a Hydra module
 grammarToModule :: Module.Namespace -> Grammar.Grammar -> Maybe String -> Module.Module
 grammarToModule ns grammar desc =
-     
+
       let prodPairs =
-              Lists.map (\prod -> (Grammar.unSymbol (Grammar.productionSymbol prod), (Grammar.productionPattern prod))) (Grammar.unGrammar grammar) 
+              Lists.map (\prod -> (Grammar.unSymbol (Grammar.productionSymbol prod), (Grammar.productionPattern prod))) (Grammar.unGrammar grammar)
           capitalizedNames = Lists.map (\pair -> Formatting.capitalize (Pairs.first pair)) prodPairs
           patterns = Lists.map (\pair -> Pairs.second pair) prodPairs
           elementPairs = Lists.concat (Lists.zipWith (makeElements False ns) capitalizedNames patterns)
           elements =
-                  Lists.map (\pair ->  
-                    let lname = Pairs.first pair 
+                  Lists.map (\pair ->
+                    let lname = Pairs.first pair
                         elName = toName ns lname
                         typ = replacePlaceholders elName (wrapType (Pairs.second pair))
                     in (Annotations.typeElement elName typ)) elementPairs
@@ -84,8 +84,8 @@ isComplex pat =
 -- | Check if patterns are nontrivial
 isNontrivial :: Bool -> [Grammar.Pattern] -> Bool
 isNontrivial isRecord pats =
-     
-      let minPats = simplify isRecord pats 
+
+      let minPats = simplify isRecord pats
           isLabeled =
                   \p -> case p of
                     Grammar.PatternLabeled _ -> True
@@ -95,11 +95,11 @@ isNontrivial isRecord pats =
 -- | Create elements from pattern
 makeElements :: Bool -> Module.Namespace -> String -> Grammar.Pattern -> [(String, Core.Type)]
 makeElements omitTrivial ns lname pat =
-     
+
       let trivial = Logic.ifElse omitTrivial [] [
-            (lname, Core.TypeUnit)] 
+            (lname, Core.TypeUnit)]
           descend =
-                  \n -> \f -> \p ->  
+                  \n -> \f -> \p ->
                     let cpairs = makeElements False ns (childName lname n) p
                     in (f (Logic.ifElse (isComplex p) (Lists.cons (lname, (Core.TypeVariable (toName ns (Pairs.first (Lists.head cpairs))))) cpairs) (Logic.ifElse (Lists.null cpairs) [
                       (lname, Core.TypeUnit)] (Lists.cons (lname, (Pairs.second (Lists.head cpairs))) (Lists.tail cpairs)))))
@@ -121,8 +121,8 @@ makeElements omitTrivial ns lname pat =
                     Grammar.PatternSequence v0 -> forRecordOrUnion True (\fields -> Core.TypeRecord fields) v0
                     Grammar.PatternStar v0 -> mod "Elmt" (\x -> Core.TypeList x) v0
           forRecordOrUnion =
-                  \isRecord -> \construct -> \pats ->  
-                    let minPats = simplify isRecord pats 
+                  \isRecord -> \construct -> \pats ->
+                    let minPats = simplify isRecord pats
                         fieldNames = findNames minPats
                         toField =
                                 \n -> \p -> descend n (\pairs -> (Core.FieldType {
@@ -157,7 +157,7 @@ replacePlaceholders elName typ = typ
 -- | Remove trivial patterns from records
 simplify :: Bool -> [Grammar.Pattern] -> [Grammar.Pattern]
 simplify isRecord pats =
-     
+
       let isConstant =
               \p -> case p of
                 Grammar.PatternConstant _ -> True

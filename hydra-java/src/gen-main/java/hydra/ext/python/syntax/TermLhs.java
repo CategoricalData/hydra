@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class TermLhs implements Serializable, Comparable<TermLhs> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.TermLhs");
-  
+
   public static final hydra.core.Name OPERAND = new hydra.core.Name("operand");
-  
+
   public static final hydra.core.Name OPERATOR = new hydra.core.Name("operator");
-  
+
   public final hydra.ext.python.syntax.Term operand;
-  
+
   public final hydra.ext.python.syntax.TermOp operator;
-  
+
   public TermLhs (hydra.ext.python.syntax.Term operand, hydra.ext.python.syntax.TermOp operator) {
     this.operand = operand;
     this.operator = operator;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TermLhs)) {
@@ -32,12 +32,12 @@ public class TermLhs implements Serializable, Comparable<TermLhs> {
       this.operator,
       o.operator);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(operand) + 3 * java.util.Objects.hashCode(operator);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TermLhs other) {
@@ -48,11 +48,11 @@ public class TermLhs implements Serializable, Comparable<TermLhs> {
     }
     return ((Comparable) operator).compareTo(other.operator);
   }
-  
+
   public TermLhs withOperand(hydra.ext.python.syntax.Term operand) {
     return new TermLhs(operand, operator);
   }
-  
+
   public TermLhs withOperator(hydra.ext.python.syntax.TermOp operator) {
     return new TermLhs(operand, operator);
   }

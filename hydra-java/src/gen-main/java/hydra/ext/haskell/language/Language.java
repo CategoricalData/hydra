@@ -66,11 +66,11 @@ public interface Language {
       new hydra.variants.TypeVariant.Wrap())));
     return new hydra.coders.Language(new hydra.coders.LanguageName("hydra.ext.haskell"), new hydra.coders.LanguageConstraints(eliminationVariants.get(), literalVariants.get(), floatTypes.get(), functionVariants.get(), integerTypes.get(), termVariants.get(), typeVariants.get(), p0 -> hydra.ext.haskell.language.Language.<hydra.core.Type>haskellLanguage_typePredicate(p0)));
   }
-  
+
   static <T0> Boolean haskellLanguage_typePredicate(T0 ignored) {
     return true;
   }
-  
+
   static hydra.util.PersistentSet<String> reservedWords() {
     hydra.util.ConsList<String> keywordSymbols = hydra.util.ConsList.of(
       "case",

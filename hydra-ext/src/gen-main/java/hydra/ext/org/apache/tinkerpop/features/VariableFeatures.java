@@ -9,23 +9,23 @@ import java.io.Serializable;
  */
 public class VariableFeatures implements Serializable, Comparable<VariableFeatures> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.VariableFeatures");
-  
+
   public static final hydra.core.Name DATA_TYPE_FEATURES = new hydra.core.Name("dataTypeFeatures");
-  
+
   public static final hydra.core.Name SUPPORTS_VARIABLES = new hydra.core.Name("supportsVariables");
-  
+
   public final hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures dataTypeFeatures;
-  
+
   /**
    * If any of the features on Graph.Features.VariableFeatures is true then this value must be true.
    */
   public final Boolean supportsVariables;
-  
+
   public VariableFeatures (hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures dataTypeFeatures, Boolean supportsVariables) {
     this.dataTypeFeatures = dataTypeFeatures;
     this.supportsVariables = supportsVariables;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof VariableFeatures)) {
@@ -38,12 +38,12 @@ public class VariableFeatures implements Serializable, Comparable<VariableFeatur
       this.supportsVariables,
       o.supportsVariables);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(dataTypeFeatures) + 3 * java.util.Objects.hashCode(supportsVariables);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(VariableFeatures other) {
@@ -54,11 +54,11 @@ public class VariableFeatures implements Serializable, Comparable<VariableFeatur
     }
     return ((Comparable) supportsVariables).compareTo(other.supportsVariables);
   }
-  
+
   public VariableFeatures withDataTypeFeatures(hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures dataTypeFeatures) {
     return new VariableFeatures(dataTypeFeatures, supportsVariables);
   }
-  
+
   public VariableFeatures withSupportsVariables(Boolean supportsVariables) {
     return new VariableFeatures(dataTypeFeatures, supportsVariables);
   }

@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class Binding implements Serializable, Comparable<Binding> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Binding");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name TERM = new hydra.core.Name("term");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   /**
    * The name of the bound variable
    */
   public final hydra.core.Name name;
-  
+
   /**
    * The term to which the variable is bound
    */
   public final hydra.core.Term term;
-  
+
   /**
    * The optional type of the bound term
    */
   public final hydra.util.Maybe<hydra.core.TypeScheme> type;
-  
+
   public Binding (hydra.core.Name name, hydra.core.Term term, hydra.util.Maybe<hydra.core.TypeScheme> type) {
     this.name = name;
     this.term = term;
     this.type = type;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Binding)) {
@@ -51,12 +51,12 @@ public class Binding implements Serializable, Comparable<Binding> {
       this.type,
       o.type);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(term) + 5 * java.util.Objects.hashCode(type);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Binding other) {
@@ -71,15 +71,15 @@ public class Binding implements Serializable, Comparable<Binding> {
     }
     return ((Comparable) type).compareTo(other.type);
   }
-  
+
   public Binding withName(hydra.core.Name name) {
     return new Binding(name, term, type);
   }
-  
+
   public Binding withTerm(hydra.core.Term term) {
     return new Binding(name, term, type);
   }
-  
+
   public Binding withType(hydra.util.Maybe<hydra.core.TypeScheme> type) {
     return new Binding(name, term, type);
   }

@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class RecordConstructor implements Serializable, Comparable<RecordConstructor> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.RecordConstructor");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name FIELDS = new hydra.core.Name("fields");
-  
+
   /**
    * The name of the constructor
    */
   public final hydra.ext.haskell.ast.Name name;
-  
+
   /**
    * The named fields of the record
    */
   public final hydra.util.ConsList<hydra.ext.haskell.ast.FieldWithComments> fields;
-  
+
   public RecordConstructor (hydra.ext.haskell.ast.Name name, hydra.util.ConsList<hydra.ext.haskell.ast.FieldWithComments> fields) {
     this.name = name;
     this.fields = fields;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof RecordConstructor)) {
@@ -41,12 +41,12 @@ public class RecordConstructor implements Serializable, Comparable<RecordConstru
       this.fields,
       o.fields);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(fields);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(RecordConstructor other) {
@@ -57,11 +57,11 @@ public class RecordConstructor implements Serializable, Comparable<RecordConstru
     }
     return ((Comparable) fields).compareTo(other.fields);
   }
-  
+
   public RecordConstructor withName(hydra.ext.haskell.ast.Name name) {
     return new RecordConstructor(name, fields);
   }
-  
+
   public RecordConstructor withFields(hydra.util.ConsList<hydra.ext.haskell.ast.FieldWithComments> fields) {
     return new RecordConstructor(name, fields);
   }

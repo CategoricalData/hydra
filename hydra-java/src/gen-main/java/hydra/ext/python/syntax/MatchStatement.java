@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class MatchStatement implements Serializable, Comparable<MatchStatement> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.MatchStatement");
-  
+
   public static final hydra.core.Name SUBJECT = new hydra.core.Name("subject");
-  
+
   public static final hydra.core.Name CASES = new hydra.core.Name("cases");
-  
+
   public final hydra.ext.python.syntax.SubjectExpression subject;
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock> cases;
-  
+
   public MatchStatement (hydra.ext.python.syntax.SubjectExpression subject, hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock> cases) {
     this.subject = subject;
     this.cases = cases;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MatchStatement)) {
@@ -32,12 +32,12 @@ public class MatchStatement implements Serializable, Comparable<MatchStatement> 
       this.cases,
       o.cases);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(subject) + 3 * java.util.Objects.hashCode(cases);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MatchStatement other) {
@@ -48,11 +48,11 @@ public class MatchStatement implements Serializable, Comparable<MatchStatement> 
     }
     return ((Comparable) cases).compareTo(other.cases);
   }
-  
+
   public MatchStatement withSubject(hydra.ext.python.syntax.SubjectExpression subject) {
     return new MatchStatement(subject, cases);
   }
-  
+
   public MatchStatement withCases(hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock> cases) {
     return new MatchStatement(subject, cases);
   }

@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class AccessorNode implements Serializable, Comparable<AccessorNode> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.accessors.AccessorNode");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name LABEL = new hydra.core.Name("label");
-  
+
   public static final hydra.core.Name ID = new hydra.core.Name("id");
-  
+
   /**
    * The qualified name of the term
    */
   public final hydra.core.Name name;
-  
+
   /**
    * A human-readable label for the node
    */
   public final String label;
-  
+
   /**
    * A unique identifier for the node
    */
   public final String id;
-  
+
   public AccessorNode (hydra.core.Name name, String label, String id) {
     this.name = name;
     this.label = label;
     this.id = id;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof AccessorNode)) {
@@ -51,12 +51,12 @@ public class AccessorNode implements Serializable, Comparable<AccessorNode> {
       this.id,
       o.id);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(label) + 5 * java.util.Objects.hashCode(id);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AccessorNode other) {
@@ -71,15 +71,15 @@ public class AccessorNode implements Serializable, Comparable<AccessorNode> {
     }
     return ((Comparable) id).compareTo(other.id);
   }
-  
+
   public AccessorNode withName(hydra.core.Name name) {
     return new AccessorNode(name, label, id);
   }
-  
+
   public AccessorNode withLabel(String label) {
     return new AccessorNode(name, label, id);
   }
-  
+
   public AccessorNode withId(String id) {
     return new AccessorNode(name, label, id);
   }

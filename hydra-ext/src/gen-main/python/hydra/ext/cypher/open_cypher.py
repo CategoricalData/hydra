@@ -23,7 +23,7 @@ class _QueryMeta(type):
 
 class Query(metaclass=_QueryMeta):
     r"""QueryRegular | QueryStandalone"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Query")
     REGULAR = hydra.core.Name("regular")
     STANDALONE = hydra.core.Name("standalone")
@@ -32,7 +32,7 @@ class Query(metaclass=_QueryMeta):
 class RegularQuery:
     head: SingleQuery
     rest: frozenlist[Union]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.RegularQuery")
     HEAD = hydra.core.Name("head")
     REST = hydra.core.Name("rest")
@@ -41,7 +41,7 @@ class RegularQuery:
 class Union:
     all: bool
     query: SingleQuery
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Union")
     ALL = hydra.core.Name("all")
     QUERY = hydra.core.Name("query")
@@ -58,7 +58,7 @@ class _SingleQueryMeta(type):
 
 class SingleQuery(metaclass=_SingleQueryMeta):
     r"""SingleQuerySinglePart | SingleQueryMultiPart"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.SingleQuery")
     SINGLE_PART = hydra.core.Name("singlePart")
     MULTI_PART = hydra.core.Name("multiPart")
@@ -68,7 +68,7 @@ class SinglePartQuery:
     reading: frozenlist[ReadingClause]
     updating: frozenlist[UpdatingClause]
     return_: Maybe[Return]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.SinglePartQuery")
     READING = hydra.core.Name("reading")
     UPDATING = hydra.core.Name("updating")
@@ -79,7 +79,7 @@ class WithClause:
     reading: frozenlist[ReadingClause]
     updating: frozenlist[UpdatingClause]
     with_: With
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.WithClause")
     READING = hydra.core.Name("reading")
     UPDATING = hydra.core.Name("updating")
@@ -89,7 +89,7 @@ class WithClause:
 class MultiPartQuery:
     with_: frozenlist[WithClause]
     body: SinglePartQuery
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.MultiPartQuery")
     WITH = hydra.core.Name("with")
     BODY = hydra.core.Name("body")
@@ -115,7 +115,7 @@ class _UpdatingClauseMeta(type):
 
 class UpdatingClause(metaclass=_UpdatingClauseMeta):
     r"""UpdatingClauseCreate | UpdatingClauseMerge | UpdatingClauseDelete | UpdatingClauseSet | UpdatingClauseRemove"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.UpdatingClause")
     CREATE = hydra.core.Name("create")
     MERGE = hydra.core.Name("merge")
@@ -138,7 +138,7 @@ class _ReadingClauseMeta(type):
 
 class ReadingClause(metaclass=_ReadingClauseMeta):
     r"""ReadingClauseMatch | ReadingClauseUnwind | ReadingClauseInQueryCall"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.ReadingClause")
     MATCH = hydra.core.Name("match")
     UNWIND = hydra.core.Name("unwind")
@@ -149,7 +149,7 @@ class Match:
     optional: bool
     pattern: Pattern
     where: Maybe[Where]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Match")
     OPTIONAL = hydra.core.Name("optional")
     PATTERN = hydra.core.Name("pattern")
@@ -159,7 +159,7 @@ class Match:
 class Unwind:
     expression: Expression
     variable: Variable
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Unwind")
     EXPRESSION = hydra.core.Name("expression")
     VARIABLE = hydra.core.Name("variable")
@@ -168,14 +168,14 @@ class Unwind:
 class Merge:
     pattern_part: PatternPart
     actions: frozenlist[MergeAction]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Merge")
     PATTERN_PART = hydra.core.Name("patternPart")
     ACTIONS = hydra.core.Name("actions")
 
 class MatchOrCreate(Enum):
     MATCH = hydra.core.Name("match")
-    
+
     CREATE = hydra.core.Name("create")
 
 MatchOrCreate.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.MatchOrCreate")
@@ -184,7 +184,7 @@ MatchOrCreate.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.MatchOrCreate
 class MergeAction:
     action: MatchOrCreate
     set: Set
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.MergeAction")
     ACTION = hydra.core.Name("action")
     SET = hydra.core.Name("set")
@@ -217,7 +217,7 @@ class _SetItemMeta(type):
 
 class SetItem(metaclass=_SetItemMeta):
     r"""SetItemProperty | SetItemVariableEqual | SetItemVariablePlusEqual | SetItemVariableLabels"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.SetItem")
     PROPERTY = hydra.core.Name("property")
     VARIABLE_EQUAL = hydra.core.Name("variableEqual")
@@ -228,7 +228,7 @@ class SetItem(metaclass=_SetItemMeta):
 class PropertyEquals:
     lhs: PropertyExpression
     rhs: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.PropertyEquals")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -237,7 +237,7 @@ class PropertyEquals:
 class VariableEquals:
     lhs: Variable
     rhs: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.VariableEquals")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -246,7 +246,7 @@ class VariableEquals:
 class VariablePlusEquals:
     lhs: Variable
     rhs: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.VariablePlusEquals")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -255,7 +255,7 @@ class VariablePlusEquals:
 class VariableAndNodeLabels:
     variable: Variable
     labels: NodeLabels
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.VariableAndNodeLabels")
     VARIABLE = hydra.core.Name("variable")
     LABELS = hydra.core.Name("labels")
@@ -264,7 +264,7 @@ class VariableAndNodeLabels:
 class Delete:
     detach: bool
     expressions: frozenlist[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Delete")
     DETACH = hydra.core.Name("detach")
     EXPRESSIONS = hydra.core.Name("expressions")
@@ -286,7 +286,7 @@ class _RemoveItemMeta(type):
 
 class RemoveItem(metaclass=_RemoveItemMeta):
     r"""RemoveItemVariableLabels | RemoveItemProperty"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.RemoveItem")
     VARIABLE_LABELS = hydra.core.Name("variableLabels")
     PROPERTY = hydra.core.Name("property")
@@ -295,7 +295,7 @@ class RemoveItem(metaclass=_RemoveItemMeta):
 class InQueryCall:
     call: ExplicitProcedureInvocation
     yield_items: Maybe[YieldItems]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.InQueryCall")
     CALL = hydra.core.Name("call")
     YIELD_ITEMS = hydra.core.Name("yieldItems")
@@ -312,7 +312,7 @@ class _ProcedureInvocationMeta(type):
 
 class ProcedureInvocation(metaclass=_ProcedureInvocationMeta):
     r"""ProcedureInvocationExplicit | ProcedureInvocationImplicit"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.ProcedureInvocation")
     EXPLICIT = hydra.core.Name("explicit")
     IMPLICIT = hydra.core.Name("implicit")
@@ -333,7 +333,7 @@ class _StarOrYieldItemsMeta(type):
 
 class StarOrYieldItems(metaclass=_StarOrYieldItemsMeta):
     r"""StarOrYieldItemsStar | StarOrYieldItemsItems"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.StarOrYieldItems")
     STAR = hydra.core.Name("star")
     ITEMS = hydra.core.Name("items")
@@ -342,7 +342,7 @@ class StarOrYieldItems(metaclass=_StarOrYieldItemsMeta):
 class StandaloneCall:
     call: ProcedureInvocation
     yield_items: Maybe[StarOrYieldItems]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.StandaloneCall")
     CALL = hydra.core.Name("call")
     YIELD_ITEMS = hydra.core.Name("yieldItems")
@@ -351,7 +351,7 @@ class StandaloneCall:
 class YieldItems:
     items: frozenlist[YieldItem]
     where: Maybe[Where]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.YieldItems")
     ITEMS = hydra.core.Name("items")
     WHERE = hydra.core.Name("where")
@@ -360,7 +360,7 @@ class YieldItems:
 class YieldItem:
     field: Maybe[ProcedureResultField]
     variable: Variable
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.YieldItem")
     FIELD = hydra.core.Name("field")
     VARIABLE = hydra.core.Name("variable")
@@ -369,7 +369,7 @@ class YieldItem:
 class With:
     projection: ProjectionBody
     where: Maybe[Where]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.With")
     PROJECTION = hydra.core.Name("projection")
     WHERE = hydra.core.Name("where")
@@ -386,7 +386,7 @@ class ProjectionBody:
     order: Maybe[Order]
     skip: Maybe[Skip]
     limit: Maybe[Limit]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.ProjectionBody")
     DISTINCT = hydra.core.Name("distinct")
     PROJECTION_ITEMS = hydra.core.Name("projectionItems")
@@ -398,7 +398,7 @@ class ProjectionBody:
 class ProjectionItems:
     star: bool
     explicit: frozenlist[ProjectionItem]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.ProjectionItems")
     STAR = hydra.core.Name("star")
     EXPLICIT = hydra.core.Name("explicit")
@@ -407,7 +407,7 @@ class ProjectionItems:
 class ProjectionItem:
     expression: Expression
     variable: Maybe[Variable]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.ProjectionItem")
     EXPRESSION = hydra.core.Name("expression")
     VARIABLE = hydra.core.Name("variable")
@@ -429,7 +429,7 @@ Limit.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Limit")
 
 class SortOrder(Enum):
     ASCENDING = hydra.core.Name("ascending")
-    
+
     DESCENDING = hydra.core.Name("descending")
 
 SortOrder.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.SortOrder")
@@ -438,7 +438,7 @@ SortOrder.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.SortOrder")
 class SortItem:
     expression: Expression
     order: Maybe[SortOrder]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.SortItem")
     EXPRESSION = hydra.core.Name("expression")
     ORDER = hydra.core.Name("order")
@@ -457,7 +457,7 @@ Pattern.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Pattern")
 class PatternPart:
     variable: Maybe[Variable]
     pattern: AnonymousPatternPart
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.PatternPart")
     VARIABLE = hydra.core.Name("variable")
     PATTERN = hydra.core.Name("pattern")
@@ -471,7 +471,7 @@ AnonymousPatternPart.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Anonym
 class NodePatternChain:
     node_pattern: NodePattern
     chain: frozenlist[PatternElementChain]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.NodePatternChain")
     NODE_PATTERN = hydra.core.Name("nodePattern")
     CHAIN = hydra.core.Name("chain")
@@ -488,7 +488,7 @@ class _PatternElementMeta(type):
 
 class PatternElement(metaclass=_PatternElementMeta):
     r"""PatternElementChained | PatternElementParenthesized"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.PatternElement")
     CHAINED = hydra.core.Name("chained")
     PARENTHESIZED = hydra.core.Name("parenthesized")
@@ -497,7 +497,7 @@ class PatternElement(metaclass=_PatternElementMeta):
 class RelationshipsPattern:
     node_pattern: NodePattern
     chain: frozenlist[PatternElementChain]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.RelationshipsPattern")
     NODE_PATTERN = hydra.core.Name("nodePattern")
     CHAIN = hydra.core.Name("chain")
@@ -507,7 +507,7 @@ class NodePattern:
     variable: Maybe[Variable]
     labels: Maybe[NodeLabels]
     properties: Maybe[Properties]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.NodePattern")
     VARIABLE = hydra.core.Name("variable")
     LABELS = hydra.core.Name("labels")
@@ -517,7 +517,7 @@ class NodePattern:
 class PatternElementChain:
     relationship: RelationshipPattern
     node: NodePattern
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.PatternElementChain")
     RELATIONSHIP = hydra.core.Name("relationship")
     NODE = hydra.core.Name("node")
@@ -527,7 +527,7 @@ class RelationshipPattern:
     left_arrow: bool
     detail: Maybe[RelationshipDetail]
     right_arrow: bool
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.RelationshipPattern")
     LEFT_ARROW = hydra.core.Name("leftArrow")
     DETAIL = hydra.core.Name("detail")
@@ -539,7 +539,7 @@ class RelationshipDetail:
     types: Maybe[RelationshipTypes]
     range_: Maybe[RangeLiteral]
     properties: Maybe[Properties]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.RelationshipDetail")
     VARIABLE = hydra.core.Name("variable")
     TYPES = hydra.core.Name("types")
@@ -558,7 +558,7 @@ class _PropertiesMeta(type):
 
 class Properties(metaclass=_PropertiesMeta):
     r"""PropertiesMap | PropertiesParameter"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Properties")
     MAP = hydra.core.Name("map")
     PARAMETER = hydra.core.Name("parameter")
@@ -582,7 +582,7 @@ NodeLabel.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.NodeLabel")
 class RangeLiteral:
     start: Maybe[int]
     end: Maybe[int]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.RangeLiteral")
     START = hydra.core.Name("start")
     END = hydra.core.Name("end")
@@ -596,7 +596,7 @@ RelTypeName.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.RelTypeName")
 class PropertyExpression:
     atom: Atom
     lookups: frozenlist[PropertyLookup]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.PropertyExpression")
     ATOM = hydra.core.Name("atom")
     LOOKUPS = hydra.core.Name("lookups")
@@ -625,7 +625,7 @@ AndExpression.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.AndExpression
 class NotExpression:
     not_: bool
     expression: ComparisonExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.NotExpression")
     NOT = hydra.core.Name("not")
     EXPRESSION = hydra.core.Name("expression")
@@ -634,22 +634,22 @@ class NotExpression:
 class ComparisonExpression:
     left: StringListNullPredicateExpression
     right: frozenlist[PartialComparisonExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.ComparisonExpression")
     LEFT = hydra.core.Name("left")
     RIGHT = hydra.core.Name("right")
 
 class ComparisonOperator(Enum):
     EQ = hydra.core.Name("eq")
-    
+
     NEQ = hydra.core.Name("neq")
-    
+
     LT = hydra.core.Name("lt")
-    
+
     GT = hydra.core.Name("gt")
-    
+
     LTE = hydra.core.Name("lte")
-    
+
     GTE = hydra.core.Name("gte")
 
 ComparisonOperator.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.ComparisonOperator")
@@ -658,7 +658,7 @@ ComparisonOperator.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Comparis
 class PartialComparisonExpression:
     operator: ComparisonOperator
     right: StringListNullPredicateExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.PartialComparisonExpression")
     OPERATOR = hydra.core.Name("operator")
     RIGHT = hydra.core.Name("right")
@@ -667,7 +667,7 @@ class PartialComparisonExpression:
 class StringListNullPredicateExpression:
     left: AddOrSubtractExpression
     right: frozenlist[StringListNullPredicateRightHandSide]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.StringListNullPredicateExpression")
     LEFT = hydra.core.Name("left")
     RIGHT = hydra.core.Name("right")
@@ -687,7 +687,7 @@ class _StringListNullPredicateRightHandSideMeta(type):
 
 class StringListNullPredicateRightHandSide(metaclass=_StringListNullPredicateRightHandSideMeta):
     r"""StringListNullPredicateRightHandSideString | StringListNullPredicateRightHandSideList | StringListNullPredicateRightHandSideNull"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.StringListNullPredicateRightHandSide")
     STRING = hydra.core.Name("string")
     LIST = hydra.core.Name("list")
@@ -697,16 +697,16 @@ class StringListNullPredicateRightHandSide(metaclass=_StringListNullPredicateRig
 class StringPredicateExpression:
     operator: StringPredicateOperator
     expression: AddOrSubtractExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.StringPredicateExpression")
     OPERATOR = hydra.core.Name("operator")
     EXPRESSION = hydra.core.Name("expression")
 
 class StringPredicateOperator(Enum):
     STARTS_WITH = hydra.core.Name("startsWith")
-    
+
     ENDS_WITH = hydra.core.Name("endsWith")
-    
+
     CONTAINS = hydra.core.Name("contains")
 
 StringPredicateOperator.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.StringPredicateOperator")
@@ -725,7 +725,7 @@ NullPredicateExpression.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Nul
 class AddOrSubtractExpression:
     left: MultiplyDivideModuloExpression
     right: frozenlist[AddOrSubtractRightHandSide]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.AddOrSubtractExpression")
     LEFT = hydra.core.Name("left")
     RIGHT = hydra.core.Name("right")
@@ -734,14 +734,14 @@ class AddOrSubtractExpression:
 class AddOrSubtractRightHandSide:
     operator: AddOrSubtractOperator
     expression: MultiplyDivideModuloExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.AddOrSubtractRightHandSide")
     OPERATOR = hydra.core.Name("operator")
     EXPRESSION = hydra.core.Name("expression")
 
 class AddOrSubtractOperator(Enum):
     ADD = hydra.core.Name("add")
-    
+
     SUBTRACT = hydra.core.Name("subtract")
 
 AddOrSubtractOperator.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.AddOrSubtractOperator")
@@ -750,7 +750,7 @@ AddOrSubtractOperator.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.AddOr
 class MultiplyDivideModuloExpression:
     left: PowerOfExpression
     right: frozenlist[MultiplyDivideModuloRightHandSide]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.MultiplyDivideModuloExpression")
     LEFT = hydra.core.Name("left")
     RIGHT = hydra.core.Name("right")
@@ -759,16 +759,16 @@ class MultiplyDivideModuloExpression:
 class MultiplyDivideModuloRightHandSide:
     operator: MultiplyDivideModuloOperator
     expression: PowerOfExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.MultiplyDivideModuloRightHandSide")
     OPERATOR = hydra.core.Name("operator")
     EXPRESSION = hydra.core.Name("expression")
 
 class MultiplyDivideModuloOperator(Enum):
     MULTIPLY = hydra.core.Name("multiply")
-    
+
     DIVIDE = hydra.core.Name("divide")
-    
+
     MODULO = hydra.core.Name("modulo")
 
 MultiplyDivideModuloOperator.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.MultiplyDivideModuloOperator")
@@ -782,7 +782,7 @@ PowerOfExpression.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.PowerOfEx
 class UnaryAddOrSubtractExpression:
     operator: Maybe[AddOrSubtractOperator]
     expression: NonArithmeticOperatorExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.UnaryAddOrSubtractExpression")
     OPERATOR = hydra.core.Name("operator")
     EXPRESSION = hydra.core.Name("expression")
@@ -799,7 +799,7 @@ class _ListOperatorExpressionOrPropertyLookupMeta(type):
 
 class ListOperatorExpressionOrPropertyLookup(metaclass=_ListOperatorExpressionOrPropertyLookupMeta):
     r"""ListOperatorExpressionOrPropertyLookupList | ListOperatorExpressionOrPropertyLookupProperty"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup")
     LIST = hydra.core.Name("list")
     PROPERTY = hydra.core.Name("property")
@@ -809,7 +809,7 @@ class NonArithmeticOperatorExpression:
     atom: Atom
     lists_and_lookups: frozenlist[ListOperatorExpressionOrPropertyLookup]
     labels: Maybe[NodeLabels]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.NonArithmeticOperatorExpression")
     ATOM = hydra.core.Name("atom")
     LISTS_AND_LOOKUPS = hydra.core.Name("listsAndLookups")
@@ -819,7 +819,7 @@ class NonArithmeticOperatorExpression:
 class RangeExpression:
     start: Maybe[Expression]
     end: Maybe[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.RangeExpression")
     START = hydra.core.Name("start")
     END = hydra.core.Name("end")
@@ -836,7 +836,7 @@ class _ListOperatorExpressionMeta(type):
 
 class ListOperatorExpression(metaclass=_ListOperatorExpressionMeta):
     r"""ListOperatorExpressionSingle | ListOperatorExpressionRange"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.ListOperatorExpression")
     SINGLE = hydra.core.Name("single")
     RANGE = hydra.core.Name("range")
@@ -892,7 +892,7 @@ class _AtomMeta(type):
 
 class Atom(metaclass=_AtomMeta):
     r"""AtomLiteral | AtomParameter | AtomCase | AtomCountStar | AtomListComprehension | AtomPatternComprehension | AtomQuantifier | AtomPatternPredicate | AtomParenthesized | AtomFunctionInvocation | AtomExistentialSubquery | AtomVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Atom")
     LITERAL = hydra.core.Name("literal")
     PARAMETER = hydra.core.Name("parameter")
@@ -912,7 +912,7 @@ class CaseExpression:
     expression: Maybe[Expression]
     alternatives: frozenlist[CaseAlternative]
     else_: Maybe[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.CaseExpression")
     EXPRESSION = hydra.core.Name("expression")
     ALTERNATIVES = hydra.core.Name("alternatives")
@@ -922,7 +922,7 @@ class CaseExpression:
 class CaseAlternative:
     condition: Expression
     result: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.CaseAlternative")
     CONDITION = hydra.core.Name("condition")
     RESULT = hydra.core.Name("result")
@@ -931,7 +931,7 @@ class CaseAlternative:
 class ListComprehension:
     left: FilterExpression
     right: Maybe[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.ListComprehension")
     LEFT = hydra.core.Name("left")
     RIGHT = hydra.core.Name("right")
@@ -942,7 +942,7 @@ class PatternComprehension:
     pattern: RelationshipsPattern
     where: Maybe[Where]
     right: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.PatternComprehension")
     VARIABLE = hydra.core.Name("variable")
     PATTERN = hydra.core.Name("pattern")
@@ -953,18 +953,18 @@ class PatternComprehension:
 class Quantifier:
     operator: QuantifierOperator
     expression: FilterExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Quantifier")
     OPERATOR = hydra.core.Name("operator")
     EXPRESSION = hydra.core.Name("expression")
 
 class QuantifierOperator(Enum):
     ALL = hydra.core.Name("all")
-    
+
     ANY = hydra.core.Name("any")
-    
+
     NONE = hydra.core.Name("none")
-    
+
     SINGLE = hydra.core.Name("single")
 
 QuantifierOperator.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.QuantifierOperator")
@@ -973,7 +973,7 @@ QuantifierOperator.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Quantifi
 class FilterExpression:
     id_in_coll: IdInColl
     where: Maybe[Where]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.FilterExpression")
     ID_IN_COLL = hydra.core.Name("idInColl")
     WHERE = hydra.core.Name("where")
@@ -992,7 +992,7 @@ ParenthesizedExpression.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Par
 class IdInColl:
     variable: Variable
     expression: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.IdInColl")
     VARIABLE = hydra.core.Name("variable")
     EXPRESSION = hydra.core.Name("expression")
@@ -1002,7 +1002,7 @@ class FunctionInvocation:
     name: QualifiedName
     distinct: bool
     arguments: frozenlist[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.FunctionInvocation")
     NAME = hydra.core.Name("name")
     DISTINCT = hydra.core.Name("distinct")
@@ -1012,7 +1012,7 @@ class FunctionInvocation:
 class QualifiedName:
     namespace: str
     local: str
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.QualifiedName")
     NAMESPACE = hydra.core.Name("namespace")
     LOCAL = hydra.core.Name("local")
@@ -1021,7 +1021,7 @@ class QualifiedName:
 class PatternWhere:
     pattern: Pattern
     where: Maybe[Where]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.PatternWhere")
     PATTERN = hydra.core.Name("pattern")
     WHERE = hydra.core.Name("where")
@@ -1038,7 +1038,7 @@ class _ExistentialSubqueryMeta(type):
 
 class ExistentialSubquery(metaclass=_ExistentialSubqueryMeta):
     r"""ExistentialSubqueryRegular | ExistentialSubqueryPattern"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.ExistentialSubquery")
     REGULAR = hydra.core.Name("regular")
     PATTERN = hydra.core.Name("pattern")
@@ -1047,7 +1047,7 @@ class ExistentialSubquery(metaclass=_ExistentialSubqueryMeta):
 class ExplicitProcedureInvocation:
     name: QualifiedName
     arguments: frozenlist[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.ExplicitProcedureInvocation")
     NAME = hydra.core.Name("name")
     ARGUMENTS = hydra.core.Name("arguments")
@@ -1095,7 +1095,7 @@ class _LiteralMeta(type):
 
 class Literal(metaclass=_LiteralMeta):
     r"""LiteralBoolean | LiteralNull | LiteralNumber | LiteralString | LiteralList | LiteralMap"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Literal")
     BOOLEAN = hydra.core.Name("boolean")
     NULL = hydra.core.Name("null")
@@ -1116,7 +1116,7 @@ class _NumberLiteralMeta(type):
 
 class NumberLiteral(metaclass=_NumberLiteralMeta):
     r"""NumberLiteralDouble | NumberLiteralInteger"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.NumberLiteral")
     DOUBLE = hydra.core.Name("double")
     INTEGER = hydra.core.Name("integer")
@@ -1140,7 +1140,7 @@ MapLiteral.TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.MapLiteral")
 class KeyValuePair:
     key: PropertyKeyName
     value: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.KeyValuePair")
     KEY = hydra.core.Name("key")
     VALUE = hydra.core.Name("value")
@@ -1162,7 +1162,7 @@ class _ParameterMeta(type):
 
 class Parameter(metaclass=_ParameterMeta):
     r"""ParameterSymbolic | ParameterInteger"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.cypher.openCypher.Parameter")
     SYMBOLIC = hydra.core.Name("symbolic")
     INTEGER = hydra.core.Name("integer")

@@ -9,189 +9,189 @@ import java.io.Serializable;
  */
 public abstract class TermAccessor implements Serializable, Comparable<TermAccessor> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.accessors.TermAccessor");
-  
+
   public static final hydra.core.Name ANNOTATED_BODY = new hydra.core.Name("annotatedBody");
-  
+
   public static final hydra.core.Name APPLICATION_FUNCTION = new hydra.core.Name("applicationFunction");
-  
+
   public static final hydra.core.Name APPLICATION_ARGUMENT = new hydra.core.Name("applicationArgument");
-  
+
   public static final hydra.core.Name LAMBDA_BODY = new hydra.core.Name("lambdaBody");
-  
+
   public static final hydra.core.Name UNION_CASES_DEFAULT = new hydra.core.Name("unionCasesDefault");
-  
+
   public static final hydra.core.Name UNION_CASES_BRANCH = new hydra.core.Name("unionCasesBranch");
-  
+
   public static final hydra.core.Name LET_BODY = new hydra.core.Name("letBody");
-  
+
   public static final hydra.core.Name LET_BINDING = new hydra.core.Name("letBinding");
-  
+
   public static final hydra.core.Name LIST_ELEMENT = new hydra.core.Name("listElement");
-  
+
   public static final hydra.core.Name MAP_KEY = new hydra.core.Name("mapKey");
-  
+
   public static final hydra.core.Name MAP_VALUE = new hydra.core.Name("mapValue");
-  
+
   public static final hydra.core.Name MAYBE_TERM = new hydra.core.Name("maybeTerm");
-  
+
   public static final hydra.core.Name PRODUCT_TERM = new hydra.core.Name("productTerm");
-  
+
   public static final hydra.core.Name RECORD_FIELD = new hydra.core.Name("recordField");
-  
+
   public static final hydra.core.Name SET_ELEMENT = new hydra.core.Name("setElement");
-  
+
   public static final hydra.core.Name SUM_TERM = new hydra.core.Name("sumTerm");
-  
+
   public static final hydra.core.Name TYPE_LAMBDA_BODY = new hydra.core.Name("typeLambdaBody");
-  
+
   public static final hydra.core.Name TYPE_APPLICATION_TERM = new hydra.core.Name("typeApplicationTerm");
-  
+
   public static final hydra.core.Name INJECTION_TERM = new hydra.core.Name("injectionTerm");
-  
+
   public static final hydra.core.Name WRAPPED_TERM = new hydra.core.Name("wrappedTerm");
-  
+
   private TermAccessor () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(AnnotatedBody instance) ;
-    
+
     R visit(ApplicationFunction instance) ;
-    
+
     R visit(ApplicationArgument instance) ;
-    
+
     R visit(LambdaBody instance) ;
-    
+
     R visit(UnionCasesDefault instance) ;
-    
+
     R visit(UnionCasesBranch instance) ;
-    
+
     R visit(LetBody instance) ;
-    
+
     R visit(LetBinding instance) ;
-    
+
     R visit(ListElement instance) ;
-    
+
     R visit(MapKey instance) ;
-    
+
     R visit(MapValue instance) ;
-    
+
     R visit(MaybeTerm instance) ;
-    
+
     R visit(ProductTerm instance) ;
-    
+
     R visit(RecordField instance) ;
-    
+
     R visit(SetElement instance) ;
-    
+
     R visit(SumTerm instance) ;
-    
+
     R visit(TypeLambdaBody instance) ;
-    
+
     R visit(TypeApplicationTerm instance) ;
-    
+
     R visit(InjectionTerm instance) ;
-    
+
     R visit(WrappedTerm instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(TermAccessor instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(AnnotatedBody instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ApplicationFunction instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ApplicationArgument instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(LambdaBody instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(UnionCasesDefault instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(UnionCasesBranch instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(LetBody instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(LetBinding instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ListElement instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(MapKey instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(MapValue instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(MaybeTerm instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ProductTerm instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(RecordField instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(SetElement instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(SumTerm instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(TypeLambdaBody instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(TypeApplicationTerm instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(InjectionTerm instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(WrappedTerm instance) {
       return otherwise(instance);
     }
   }
-  
+
   /**
    * Access the body of an annotated term
    */
   public static final class AnnotatedBody extends hydra.accessors.TermAccessor implements Serializable {
     public AnnotatedBody () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof AnnotatedBody)) {
@@ -200,12 +200,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       AnnotatedBody o = (AnnotatedBody) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -215,21 +215,21 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access the function of an application term
    */
   public static final class ApplicationFunction extends hydra.accessors.TermAccessor implements Serializable {
     public ApplicationFunction () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ApplicationFunction)) {
@@ -238,12 +238,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       ApplicationFunction o = (ApplicationFunction) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -253,21 +253,21 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access the argument of an application term
    */
   public static final class ApplicationArgument extends hydra.accessors.TermAccessor implements Serializable {
     public ApplicationArgument () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ApplicationArgument)) {
@@ -276,12 +276,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       ApplicationArgument o = (ApplicationArgument) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -291,21 +291,21 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access the body of a lambda term
    */
   public static final class LambdaBody extends hydra.accessors.TermAccessor implements Serializable {
     public LambdaBody () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof LambdaBody)) {
@@ -314,12 +314,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       LambdaBody o = (LambdaBody) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -329,21 +329,21 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access the default case of a union elimination
    */
   public static final class UnionCasesDefault extends hydra.accessors.TermAccessor implements Serializable {
     public UnionCasesDefault () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof UnionCasesDefault)) {
@@ -352,12 +352,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       UnionCasesDefault o = (UnionCasesDefault) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -367,23 +367,23 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access a specific branch of a union elimination by field name
    */
   public static final class UnionCasesBranch extends hydra.accessors.TermAccessor implements Serializable {
     public final hydra.core.Name value;
-    
+
     public UnionCasesBranch (hydra.core.Name value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof UnionCasesBranch)) {
@@ -394,12 +394,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -410,21 +410,21 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       UnionCasesBranch o = (UnionCasesBranch) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access the body of a let term
    */
   public static final class LetBody extends hydra.accessors.TermAccessor implements Serializable {
     public LetBody () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof LetBody)) {
@@ -433,12 +433,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       LetBody o = (LetBody) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -448,23 +448,23 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access a specific binding in a let term by variable name
    */
   public static final class LetBinding extends hydra.accessors.TermAccessor implements Serializable {
     public final hydra.core.Name value;
-    
+
     public LetBinding (hydra.core.Name value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof LetBinding)) {
@@ -475,12 +475,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -491,23 +491,23 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       LetBinding o = (LetBinding) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access an element of a list by index
    */
   public static final class ListElement extends hydra.accessors.TermAccessor implements Serializable {
     public final Integer value;
-    
+
     public ListElement (Integer value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ListElement)) {
@@ -518,12 +518,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -534,23 +534,23 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       ListElement o = (ListElement) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access a key in a map by index
    */
   public static final class MapKey extends hydra.accessors.TermAccessor implements Serializable {
     public final Integer value;
-    
+
     public MapKey (Integer value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof MapKey)) {
@@ -561,12 +561,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -577,23 +577,23 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       MapKey o = (MapKey) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access a value in a map by index
    */
   public static final class MapValue extends hydra.accessors.TermAccessor implements Serializable {
     public final Integer value;
-    
+
     public MapValue (Integer value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof MapValue)) {
@@ -604,12 +604,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -620,21 +620,21 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       MapValue o = (MapValue) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access the term inside a Just value
    */
   public static final class MaybeTerm extends hydra.accessors.TermAccessor implements Serializable {
     public MaybeTerm () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof MaybeTerm)) {
@@ -643,12 +643,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       MaybeTerm o = (MaybeTerm) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -658,23 +658,23 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access an element of a product (tuple) by index
    */
   public static final class ProductTerm extends hydra.accessors.TermAccessor implements Serializable {
     public final Integer value;
-    
+
     public ProductTerm (Integer value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ProductTerm)) {
@@ -685,12 +685,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -701,23 +701,23 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       ProductTerm o = (ProductTerm) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access a field of a record by field name
    */
   public static final class RecordField extends hydra.accessors.TermAccessor implements Serializable {
     public final hydra.core.Name value;
-    
+
     public RecordField (hydra.core.Name value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof RecordField)) {
@@ -728,12 +728,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -744,23 +744,23 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       RecordField o = (RecordField) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access an element of a set by index
    */
   public static final class SetElement extends hydra.accessors.TermAccessor implements Serializable {
     public final Integer value;
-    
+
     public SetElement (Integer value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof SetElement)) {
@@ -771,12 +771,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -787,21 +787,21 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       SetElement o = (SetElement) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access the term inside a sum variant
    */
   public static final class SumTerm extends hydra.accessors.TermAccessor implements Serializable {
     public SumTerm () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof SumTerm)) {
@@ -810,12 +810,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       SumTerm o = (SumTerm) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -825,21 +825,21 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access the body of a type lambda term
    */
   public static final class TypeLambdaBody extends hydra.accessors.TermAccessor implements Serializable {
     public TypeLambdaBody () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof TypeLambdaBody)) {
@@ -848,12 +848,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       TypeLambdaBody o = (TypeLambdaBody) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -863,21 +863,21 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access the term being applied to a type
    */
   public static final class TypeApplicationTerm extends hydra.accessors.TermAccessor implements Serializable {
     public TypeApplicationTerm () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof TypeApplicationTerm)) {
@@ -886,12 +886,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       TypeApplicationTerm o = (TypeApplicationTerm) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -901,21 +901,21 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access the term inside a union injection
    */
   public static final class InjectionTerm extends hydra.accessors.TermAccessor implements Serializable {
     public InjectionTerm () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof InjectionTerm)) {
@@ -924,12 +924,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       InjectionTerm o = (InjectionTerm) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -939,21 +939,21 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Access the term inside a wrapped term
    */
   public static final class WrappedTerm extends hydra.accessors.TermAccessor implements Serializable {
     public WrappedTerm () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof WrappedTerm)) {
@@ -962,12 +962,12 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       WrappedTerm o = (WrappedTerm) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
@@ -977,7 +977,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

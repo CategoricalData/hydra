@@ -6,30 +6,30 @@ import java.io.Serializable;
 
 public class TryExceptStarStatement implements Serializable, Comparable<TryExceptStarStatement> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.TryExceptStarStatement");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public static final hydra.core.Name EXCEPTS = new hydra.core.Name("excepts");
-  
+
   public static final hydra.core.Name ELSE = new hydra.core.Name("else");
-  
+
   public static final hydra.core.Name FINALLY = new hydra.core.Name("finally");
-  
+
   public final hydra.ext.python.syntax.Block body;
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.ExceptStarBlock> excepts;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Block> else_;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_;
-  
+
   public TryExceptStarStatement (hydra.ext.python.syntax.Block body, hydra.util.ConsList<hydra.ext.python.syntax.ExceptStarBlock> excepts, hydra.util.Maybe<hydra.ext.python.syntax.Block> else_, hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_) {
     this.body = body;
     this.excepts = excepts;
     this.else_ = else_;
     this.finally_ = finally_;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TryExceptStarStatement)) {
@@ -46,12 +46,12 @@ public class TryExceptStarStatement implements Serializable, Comparable<TryExcep
       this.finally_,
       o.finally_);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(body) + 3 * java.util.Objects.hashCode(excepts) + 5 * java.util.Objects.hashCode(else_) + 7 * java.util.Objects.hashCode(finally_);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TryExceptStarStatement other) {
@@ -70,19 +70,19 @@ public class TryExceptStarStatement implements Serializable, Comparable<TryExcep
     }
     return ((Comparable) finally_).compareTo(other.finally_);
   }
-  
+
   public TryExceptStarStatement withBody(hydra.ext.python.syntax.Block body) {
     return new TryExceptStarStatement(body, excepts, else_, finally_);
   }
-  
+
   public TryExceptStarStatement withExcepts(hydra.util.ConsList<hydra.ext.python.syntax.ExceptStarBlock> excepts) {
     return new TryExceptStarStatement(body, excepts, else_, finally_);
   }
-  
+
   public TryExceptStarStatement withElse(hydra.util.Maybe<hydra.ext.python.syntax.Block> else_) {
     return new TryExceptStarStatement(body, excepts, else_, finally_);
   }
-  
+
   public TryExceptStarStatement withFinally(hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_) {
     return new TryExceptStarStatement(body, excepts, else_, finally_);
   }

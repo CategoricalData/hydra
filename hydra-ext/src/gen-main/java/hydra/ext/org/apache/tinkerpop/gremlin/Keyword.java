@@ -6,58 +6,58 @@ import java.io.Serializable;
 
 public abstract class Keyword implements Serializable, Comparable<Keyword> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.Keyword");
-  
+
   public static final hydra.core.Name EDGES = new hydra.core.Name("edges");
-  
+
   public static final hydra.core.Name KEYS = new hydra.core.Name("keys");
-  
+
   public static final hydra.core.Name NEW = new hydra.core.Name("new");
-  
+
   public static final hydra.core.Name VALUES = new hydra.core.Name("values");
-  
+
   private Keyword () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Edges instance) ;
-    
+
     R visit(Keys instance) ;
-    
+
     R visit(New instance) ;
-    
+
     R visit(Values instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Keyword instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Edges instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Keys instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(New instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Values instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Edges extends hydra.ext.org.apache.tinkerpop.gremlin.Keyword implements Serializable {
     public Edges () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Edges)) {
@@ -66,12 +66,12 @@ public abstract class Keyword implements Serializable, Comparable<Keyword> {
       Edges o = (Edges) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Keyword other) {
@@ -81,18 +81,18 @@ public abstract class Keyword implements Serializable, Comparable<Keyword> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Keys extends hydra.ext.org.apache.tinkerpop.gremlin.Keyword implements Serializable {
     public Keys () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Keys)) {
@@ -101,12 +101,12 @@ public abstract class Keyword implements Serializable, Comparable<Keyword> {
       Keys o = (Keys) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Keyword other) {
@@ -116,18 +116,18 @@ public abstract class Keyword implements Serializable, Comparable<Keyword> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class New extends hydra.ext.org.apache.tinkerpop.gremlin.Keyword implements Serializable {
     public New () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof New)) {
@@ -136,12 +136,12 @@ public abstract class Keyword implements Serializable, Comparable<Keyword> {
       New o = (New) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Keyword other) {
@@ -151,18 +151,18 @@ public abstract class Keyword implements Serializable, Comparable<Keyword> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Values extends hydra.ext.org.apache.tinkerpop.gremlin.Keyword implements Serializable {
     public Values () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Values)) {
@@ -171,12 +171,12 @@ public abstract class Keyword implements Serializable, Comparable<Keyword> {
       Values o = (Values) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Keyword other) {
@@ -186,7 +186,7 @@ public abstract class Keyword implements Serializable, Comparable<Keyword> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

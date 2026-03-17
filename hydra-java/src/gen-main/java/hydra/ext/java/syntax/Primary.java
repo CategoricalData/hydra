@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class Primary implements Serializable, Comparable<Primary> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.Primary");
-  
+
   public static final hydra.core.Name NO_NEW_ARRAY = new hydra.core.Name("noNewArray");
-  
+
   public static final hydra.core.Name ARRAY_CREATION = new hydra.core.Name("arrayCreation");
-  
+
   private Primary () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(NoNewArray instance) ;
-    
+
     R visit(ArrayCreation instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Primary instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(NoNewArray instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ArrayCreation instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class NoNewArray extends hydra.ext.java.syntax.Primary implements Serializable {
     public final hydra.ext.java.syntax.PrimaryNoNewArray value;
-    
+
     public NoNewArray (hydra.ext.java.syntax.PrimaryNoNewArray value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof NoNewArray)) {
@@ -54,12 +54,12 @@ public abstract class Primary implements Serializable, Comparable<Primary> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Primary other) {
@@ -70,20 +70,20 @@ public abstract class Primary implements Serializable, Comparable<Primary> {
       NoNewArray o = (NoNewArray) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ArrayCreation extends hydra.ext.java.syntax.Primary implements Serializable {
     public final hydra.ext.java.syntax.ArrayCreationExpression value;
-    
+
     public ArrayCreation (hydra.ext.java.syntax.ArrayCreationExpression value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ArrayCreation)) {
@@ -94,12 +94,12 @@ public abstract class Primary implements Serializable, Comparable<Primary> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Primary other) {
@@ -110,7 +110,7 @@ public abstract class Primary implements Serializable, Comparable<Primary> {
       ArrayCreation o = (ArrayCreation) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

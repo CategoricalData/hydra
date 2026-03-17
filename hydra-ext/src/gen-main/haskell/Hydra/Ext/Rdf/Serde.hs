@@ -73,8 +73,8 @@ writeLanguageTag lang =
 -- | Convert a literal to an expression
 writeLiteral :: Syntax.Literal -> Ast.Expr
 writeLiteral lit =
-     
-      let lex = Syntax.literalLexicalForm lit 
+
+      let lex = Syntax.literalLexicalForm lit
           dt = Syntax.literalDatatypeIri lit
           lang = Syntax.literalLanguageTag lit
           lexExpr =
@@ -108,8 +108,8 @@ writeResource r =
 -- | Convert a triple to an expression
 writeTriple :: Syntax.Triple -> Ast.Expr
 writeTriple t =
-     
-      let subj = Syntax.tripleSubject t 
+
+      let subj = Syntax.tripleSubject t
           pred = Syntax.triplePredicate t
           obj = Syntax.tripleObject t
       in (Serialization.spaceSep [

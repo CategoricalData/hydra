@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class UpdatingFeatures implements Serializable, Comparable<UpdatingFeatures> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.features.UpdatingFeatures");
-  
+
   public static final hydra.core.Name CREATE = new hydra.core.Name("create");
-  
+
   public static final hydra.core.Name SET = new hydra.core.Name("set");
-  
+
   public static final hydra.core.Name WITH = new hydra.core.Name("with");
-  
+
   /**
    * The CREATE clause
    */
   public final Boolean create;
-  
+
   /**
    * The SET clause
    */
   public final Boolean set;
-  
+
   /**
    * Multi-part queries using WITH
    */
   public final Boolean with;
-  
+
   public UpdatingFeatures (Boolean create, Boolean set, Boolean with) {
     this.create = create;
     this.set = set;
     this.with = with;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof UpdatingFeatures)) {
@@ -51,12 +51,12 @@ public class UpdatingFeatures implements Serializable, Comparable<UpdatingFeatur
       this.with,
       o.with);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(create) + 3 * java.util.Objects.hashCode(set) + 5 * java.util.Objects.hashCode(with);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(UpdatingFeatures other) {
@@ -71,15 +71,15 @@ public class UpdatingFeatures implements Serializable, Comparable<UpdatingFeatur
     }
     return ((Comparable) with).compareTo(other.with);
   }
-  
+
   public UpdatingFeatures withCreate(Boolean create) {
     return new UpdatingFeatures(create, set, with);
   }
-  
+
   public UpdatingFeatures withSet(Boolean set) {
     return new UpdatingFeatures(create, set, with);
   }
-  
+
   public UpdatingFeatures withWith(Boolean with) {
     return new UpdatingFeatures(create, set, with);
   }

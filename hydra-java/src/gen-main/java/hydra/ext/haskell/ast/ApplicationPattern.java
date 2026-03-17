@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class ApplicationPattern implements Serializable, Comparable<ApplicationPattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.ApplicationPattern");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name ARGS = new hydra.core.Name("args");
-  
+
   /**
    * The constructor name
    */
   public final hydra.ext.haskell.ast.Name name;
-  
+
   /**
    * The pattern arguments
    */
   public final hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> args;
-  
+
   public ApplicationPattern (hydra.ext.haskell.ast.Name name, hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> args) {
     this.name = name;
     this.args = args;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ApplicationPattern)) {
@@ -41,12 +41,12 @@ public class ApplicationPattern implements Serializable, Comparable<ApplicationP
       this.args,
       o.args);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(args);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ApplicationPattern other) {
@@ -57,11 +57,11 @@ public class ApplicationPattern implements Serializable, Comparable<ApplicationP
     }
     return ((Comparable) args).compareTo(other.args);
   }
-  
+
   public ApplicationPattern withName(hydra.ext.haskell.ast.Name name) {
     return new ApplicationPattern(name, args);
   }
-  
+
   public ApplicationPattern withArgs(hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> args) {
     return new ApplicationPattern(name, args);
   }

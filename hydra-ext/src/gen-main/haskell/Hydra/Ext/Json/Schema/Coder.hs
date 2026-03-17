@@ -29,8 +29,8 @@ constructModule cx g opts mod typeDefs = constructModule cx g opts mod typeDefs
 -- | Encode a field type as a JSON Schema keyword-schema pair
 encodeField :: t0 -> t1 -> Core.FieldType -> Either t2 (Schema.Keyword, Schema.Schema)
 encodeField cx g ft =
-     
-      let name = Core.fieldTypeName ft 
+
+      let name = Core.fieldTypeName ft
           typ = Core.fieldTypeType ft
       in (Eithers.map (\res -> (Schema.Keyword (Core.unName name), (Schema.Schema res))) (encodeType cx g False typ))
 
@@ -53,7 +53,7 @@ encodeType cx g optional typ = encodeType cx g optional typ
 -- | Determine whether a field is required (i.e., not optional/Maybe)
 isRequiredField :: Core.FieldType -> Bool
 isRequiredField ft =
-     
+
       let typ = Core.fieldTypeType ft
       in case (Rewriting.deannotateType typ) of
         Core.TypeMaybe _ -> False

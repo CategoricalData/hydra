@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class LocalVariableDeclaration implements Serializable, Comparable<LocalVariableDeclaration> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.LocalVariableDeclaration");
-  
+
   public static final hydra.core.Name MODIFIERS = new hydra.core.Name("modifiers");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   public static final hydra.core.Name DECLARATORS = new hydra.core.Name("declarators");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers;
-  
+
   public final hydra.ext.java.syntax.LocalVariableType type;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> declarators;
-  
+
   public LocalVariableDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> declarators) {
     this.modifiers = modifiers;
     this.type = type;
     this.declarators = declarators;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof LocalVariableDeclaration)) {
@@ -39,12 +39,12 @@ public class LocalVariableDeclaration implements Serializable, Comparable<LocalV
       this.declarators,
       o.declarators);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(modifiers) + 3 * java.util.Objects.hashCode(type) + 5 * java.util.Objects.hashCode(declarators);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LocalVariableDeclaration other) {
@@ -59,15 +59,15 @@ public class LocalVariableDeclaration implements Serializable, Comparable<LocalV
     }
     return ((Comparable) declarators).compareTo(other.declarators);
   }
-  
+
   public LocalVariableDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
-  
+
   public LocalVariableDeclaration withType(hydra.ext.java.syntax.LocalVariableType type) {
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
-  
+
   public LocalVariableDeclaration withDeclarators(hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> declarators) {
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }

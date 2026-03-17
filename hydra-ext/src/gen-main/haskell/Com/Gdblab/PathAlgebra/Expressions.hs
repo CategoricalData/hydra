@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Complete query with path algebra and result projection
-data QueryExpression = 
+data QueryExpression =
   QueryExpression {
     queryExpressionPathExpression :: PathExpression,
     queryExpressionResultProjection :: (Maybe ResultProjection)}
@@ -26,7 +26,7 @@ _QueryExpression_pathExpression = Core.Name "pathExpression"
 _QueryExpression_resultProjection = Core.Name "resultProjection"
 
 -- | A path algebra expression that evaluates to a set of paths
-data PathExpression = 
+data PathExpression =
   -- | Base case: extract paths from graph
   PathExpressionBase BaseExpression |
   -- | Selection operator (σ): filter paths by condition
@@ -64,7 +64,7 @@ _PathExpression_orderBy = Core.Name "orderBy"
 _PathExpression_projection = Core.Name "projection"
 
 -- | Base path expressions that extract paths from graph
-data BaseExpression = 
+data BaseExpression =
   -- | Paths0(G): all paths of length 0 (nodes)
   BaseExpressionPaths0 GraphReference |
   -- | Paths1(G): all paths of length 1 (edges)
@@ -82,7 +82,7 @@ _BaseExpression_paths1 = Core.Name "paths1"
 _BaseExpression_pathsStar = Core.Name "pathsStar"
 
 -- | Reference to a property graph
-newtype GraphReference = 
+newtype GraphReference =
   GraphReference {
     unGraphReference :: String}
   deriving (Eq, Ord, Read, Show)
@@ -90,7 +90,7 @@ newtype GraphReference =
 _GraphReference = Core.Name "com.gdblab.pathAlgebra.expressions.GraphReference"
 
 -- | Selection operator: σ_condition(expression)
-data SelectionExpression = 
+data SelectionExpression =
   SelectionExpression {
     selectionExpressionCondition :: SelectionCondition,
     selectionExpressionExpression :: PathExpression}
@@ -103,7 +103,7 @@ _SelectionExpression_condition = Core.Name "condition"
 _SelectionExpression_expression = Core.Name "expression"
 
 -- | Conditions for filtering paths
-data SelectionCondition = 
+data SelectionCondition =
   SelectionConditionSimple SimpleCondition |
   SelectionConditionAnd AndCondition |
   SelectionConditionOr OrCondition |
@@ -121,7 +121,7 @@ _SelectionCondition_or = Core.Name "or"
 _SelectionCondition_not = Core.Name "not"
 
 -- | Atomic selection conditions
-data SimpleCondition = 
+data SimpleCondition =
   SimpleConditionLabelEquals LabelCondition |
   SimpleConditionPropertyEquals PropertyCondition |
   SimpleConditionPropertyComparison PropertyComparisonCondition |
@@ -139,7 +139,7 @@ _SimpleCondition_propertyComparison = Core.Name "propertyComparison"
 _SimpleCondition_lengthEquals = Core.Name "lengthEquals"
 
 -- | Conditions on node/edge labels: label(node(i)) = v
-data LabelCondition = 
+data LabelCondition =
   LabelCondition {
     labelConditionTarget :: PathElement,
     labelConditionValue :: String}
@@ -152,7 +152,7 @@ _LabelCondition_target = Core.Name "target"
 _LabelCondition_value = Core.Name "value"
 
 -- | Property equality conditions: node(i).prop = v
-data PropertyCondition = 
+data PropertyCondition =
   PropertyCondition {
     propertyConditionTarget :: PathElement,
     propertyConditionProperty :: String,
@@ -168,7 +168,7 @@ _PropertyCondition_property = Core.Name "property"
 _PropertyCondition_value = Core.Name "value"
 
 -- | Property comparison conditions: node(i).prop > v, etc.
-data PropertyComparisonCondition = 
+data PropertyComparisonCondition =
   PropertyComparisonCondition {
     propertyComparisonConditionTarget :: PathElement,
     propertyComparisonConditionProperty :: String,
@@ -187,13 +187,13 @@ _PropertyComparisonCondition_operator = Core.Name "operator"
 _PropertyComparisonCondition_value = Core.Name "value"
 
 -- | Comparison operators for property conditions
-data ComparisonOperator = 
+data ComparisonOperator =
   ComparisonOperatorEqual  |
   ComparisonOperatorNotEqual  |
   ComparisonOperatorLessThan  |
   ComparisonOperatorLessThanOrEqual  |
   ComparisonOperatorGreaterThan  |
-  ComparisonOperatorGreaterThanOrEqual 
+  ComparisonOperatorGreaterThanOrEqual
   deriving (Eq, Ord, Read, Show)
 
 _ComparisonOperator = Core.Name "com.gdblab.pathAlgebra.expressions.ComparisonOperator"
@@ -211,7 +211,7 @@ _ComparisonOperator_greaterThan = Core.Name "greaterThan"
 _ComparisonOperator_greaterThanOrEqual = Core.Name "greaterThanOrEqual"
 
 -- | Literal values for comparisons
-data LiteralValue = 
+data LiteralValue =
   LiteralValueString String |
   LiteralValueInteger Int |
   LiteralValueFloat Double |
@@ -229,7 +229,7 @@ _LiteralValue_float = Core.Name "float"
 _LiteralValue_boolean = Core.Name "boolean"
 
 -- | Condition on path length: len() = i
-data LengthCondition = 
+data LengthCondition =
   LengthCondition {
     lengthConditionLength :: Int}
   deriving (Eq, Ord, Read, Show)
@@ -239,11 +239,11 @@ _LengthCondition = Core.Name "com.gdblab.pathAlgebra.expressions.LengthCondition
 _LengthCondition_length = Core.Name "length"
 
 -- | References to elements within a path
-data PathElement = 
+data PathElement =
   PathElementNode Int |
   PathElementEdge Int |
   PathElementFirst  |
-  PathElementLast 
+  PathElementLast
   deriving (Eq, Ord, Read, Show)
 
 _PathElement = Core.Name "com.gdblab.pathAlgebra.expressions.PathElement"
@@ -256,7 +256,7 @@ _PathElement_first = Core.Name "first"
 
 _PathElement_last = Core.Name "last"
 
-data AndCondition = 
+data AndCondition =
   AndCondition {
     andConditionLeft :: SelectionCondition,
     andConditionRight :: SelectionCondition}
@@ -268,7 +268,7 @@ _AndCondition_left = Core.Name "left"
 
 _AndCondition_right = Core.Name "right"
 
-data OrCondition = 
+data OrCondition =
   OrCondition {
     orConditionLeft :: SelectionCondition,
     orConditionRight :: SelectionCondition}
@@ -280,7 +280,7 @@ _OrCondition_left = Core.Name "left"
 
 _OrCondition_right = Core.Name "right"
 
-data NotCondition = 
+data NotCondition =
   NotCondition {
     notConditionCondition :: SelectionCondition}
   deriving (Eq, Ord, Read, Show)
@@ -290,7 +290,7 @@ _NotCondition = Core.Name "com.gdblab.pathAlgebra.expressions.NotCondition"
 _NotCondition_condition = Core.Name "condition"
 
 -- | Join operator: expr1 ⊲⊳ expr2
-data JoinExpression = 
+data JoinExpression =
   JoinExpression {
     joinExpressionLeft :: PathExpression,
     joinExpressionRight :: PathExpression}
@@ -303,7 +303,7 @@ _JoinExpression_left = Core.Name "left"
 _JoinExpression_right = Core.Name "right"
 
 -- | Union operator: expr1 ∪ expr2
-data UnionExpression = 
+data UnionExpression =
   UnionExpression {
     unionExpressionLeft :: PathExpression,
     unionExpressionRight :: PathExpression}
@@ -316,7 +316,7 @@ _UnionExpression_left = Core.Name "left"
 _UnionExpression_right = Core.Name "right"
 
 -- | Recursive operator with path semantics
-data RecursiveExpression = 
+data RecursiveExpression =
   RecursiveExpression {
     recursiveExpressionSemantics :: PathSemantics,
     recursiveExpressionExpression :: PathExpression}
@@ -329,12 +329,12 @@ _RecursiveExpression_semantics = Core.Name "semantics"
 _RecursiveExpression_expression = Core.Name "expression"
 
 -- | Path semantics for recursive operations
-data PathSemantics = 
+data PathSemantics =
   PathSemanticsWalk  |
   PathSemanticsTrail  |
   PathSemanticsAcyclic  |
   PathSemanticsSimple  |
-  PathSemanticsShortest 
+  PathSemanticsShortest
   deriving (Eq, Ord, Read, Show)
 
 _PathSemantics = Core.Name "com.gdblab.pathAlgebra.expressions.PathSemantics"
@@ -350,7 +350,7 @@ _PathSemantics_simple = Core.Name "simple"
 _PathSemantics_shortest = Core.Name "shortest"
 
 -- | Expressions that work with solution spaces
-data SolutionSpaceExpression = 
+data SolutionSpaceExpression =
   SolutionSpaceExpressionGroupBy GroupByExpression |
   SolutionSpaceExpressionOrderBy OrderByExpression
   deriving (Eq, Ord, Read, Show)
@@ -362,7 +362,7 @@ _SolutionSpaceExpression_groupBy = Core.Name "groupBy"
 _SolutionSpaceExpression_orderBy = Core.Name "orderBy"
 
 -- | Group-by operator: γ_criterion(expression)
-data GroupByExpression = 
+data GroupByExpression =
   GroupByExpression {
     groupByExpressionCriterion :: GroupByCriterion,
     groupByExpressionExpression :: PathExpression}
@@ -375,7 +375,7 @@ _GroupByExpression_criterion = Core.Name "criterion"
 _GroupByExpression_expression = Core.Name "expression"
 
 -- | Grouping criteria corresponding to paper's γ variants
-data GroupByCriterion = 
+data GroupByCriterion =
   GroupByCriterionNone  |
   GroupByCriterionSource  |
   GroupByCriterionTarget  |
@@ -383,7 +383,7 @@ data GroupByCriterion =
   GroupByCriterionSourceTarget  |
   GroupByCriterionSourceLength  |
   GroupByCriterionTargetLength  |
-  GroupByCriterionSourceTargetLength 
+  GroupByCriterionSourceTargetLength
   deriving (Eq, Ord, Read, Show)
 
 _GroupByCriterion = Core.Name "com.gdblab.pathAlgebra.expressions.GroupByCriterion"
@@ -405,7 +405,7 @@ _GroupByCriterion_targetLength = Core.Name "targetLength"
 _GroupByCriterion_sourceTargetLength = Core.Name "sourceTargetLength"
 
 -- | Order-by operator: τ_criterion(solutionSpace)
-data OrderByExpression = 
+data OrderByExpression =
   OrderByExpression {
     orderByExpressionCriterion :: OrderByCriterion,
     orderByExpressionExpression :: SolutionSpaceExpression}
@@ -418,14 +418,14 @@ _OrderByExpression_criterion = Core.Name "criterion"
 _OrderByExpression_expression = Core.Name "expression"
 
 -- | Ordering criteria corresponding to paper's τ variants
-data OrderByCriterion = 
+data OrderByCriterion =
   OrderByCriterionPartition  |
   OrderByCriterionGroup  |
   OrderByCriterionPath  |
   OrderByCriterionPartitionGroup  |
   OrderByCriterionPartitionPath  |
   OrderByCriterionGroupPath  |
-  OrderByCriterionPartitionGroupPath 
+  OrderByCriterionPartitionGroupPath
   deriving (Eq, Ord, Read, Show)
 
 _OrderByCriterion = Core.Name "com.gdblab.pathAlgebra.expressions.OrderByCriterion"
@@ -445,7 +445,7 @@ _OrderByCriterion_groupPath = Core.Name "groupPath"
 _OrderByCriterion_partitionGroupPath = Core.Name "partitionGroupPath"
 
 -- | Projection operator: π_(#P,#G,#A)(solutionSpace)
-data ProjectionExpression = 
+data ProjectionExpression =
   ProjectionExpression {
     projectionExpressionPartitions :: ProjectionSpec,
     projectionExpressionGroups :: ProjectionSpec,
@@ -464,7 +464,7 @@ _ProjectionExpression_paths = Core.Name "paths"
 _ProjectionExpression_expression = Core.Name "expression"
 
 -- | Projection specification: * or specific number
-data ProjectionSpec = 
+data ProjectionSpec =
   ProjectionSpecAll  |
   ProjectionSpecLimited Int
   deriving (Eq, Ord, Read, Show)
@@ -476,7 +476,7 @@ _ProjectionSpec_all = Core.Name "all"
 _ProjectionSpec_limited = Core.Name "limited"
 
 -- | Extract specific values from paths for RETURN clause
-data ResultProjection = 
+data ResultProjection =
   ResultProjection {
     resultProjectionProjections :: [PropertyExtraction]}
   deriving (Eq, Ord, Read, Show)
@@ -486,7 +486,7 @@ _ResultProjection = Core.Name "com.gdblab.pathAlgebra.expressions.ResultProjecti
 _ResultProjection_projections = Core.Name "projections"
 
 -- | Extract properties from path elements
-data PropertyExtraction = 
+data PropertyExtraction =
   PropertyExtraction {
     propertyExtractionAlias :: (Maybe String),
     propertyExtractionSource :: PropertySource}
@@ -499,7 +499,7 @@ _PropertyExtraction_alias = Core.Name "alias"
 _PropertyExtraction_source = Core.Name "source"
 
 -- | Source of a property value
-data PropertySource = 
+data PropertySource =
   PropertySourceNodeProperty NodePropertyRef |
   PropertySourceEdgeProperty EdgePropertyRef |
   PropertySourcePathProperty PathPropertyRef
@@ -514,7 +514,7 @@ _PropertySource_edgeProperty = Core.Name "edgeProperty"
 _PropertySource_pathProperty = Core.Name "pathProperty"
 
 -- | Reference to a node property: node.property
-data NodePropertyRef = 
+data NodePropertyRef =
   NodePropertyRef {
     nodePropertyRefElement :: PathElement,
     nodePropertyRefProperty :: String}
@@ -527,7 +527,7 @@ _NodePropertyRef_element = Core.Name "element"
 _NodePropertyRef_property = Core.Name "property"
 
 -- | Reference to an edge property: edge.property
-data EdgePropertyRef = 
+data EdgePropertyRef =
   EdgePropertyRef {
     edgePropertyRefElement :: PathElement,
     edgePropertyRefProperty :: String}
@@ -540,10 +540,10 @@ _EdgePropertyRef_element = Core.Name "element"
 _EdgePropertyRef_property = Core.Name "property"
 
 -- | Reference to path-level properties: length, etc.
-data PathPropertyRef = 
+data PathPropertyRef =
   PathPropertyRefLength  |
   PathPropertyRefStartNode  |
-  PathPropertyRefEndNode 
+  PathPropertyRefEndNode
   deriving (Eq, Ord, Read, Show)
 
 _PathPropertyRef = Core.Name "com.gdblab.pathAlgebra.expressions.PathPropertyRef"

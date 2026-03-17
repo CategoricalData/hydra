@@ -25,8 +25,8 @@ import qualified Data.Set as S
 -- | Given a mapping of namespaces to prefixes, convert a name to a compact string representation
 compactName :: M.Map Module.Namespace String -> Core.Name -> String
 compactName namespaces name =
-     
-      let qualName = qualifyName name 
+
+      let qualName = qualifyName name
           mns = Module.qualifiedNameNamespace qualName
           local = Module.qualifiedNameLocal qualName
       in (Maybes.maybe (Core.unName name) (\ns -> Maybes.maybe local (\pre -> Strings.cat [
@@ -45,7 +45,7 @@ namespaceOf arg_ = Module.qualifiedNameNamespace (qualifyName arg_)
 -- | Convert a namespace to a file path with the given case convention and file extension
 namespaceToFilePath :: Util.CaseConvention -> Module.FileExtension -> Module.Namespace -> String
 namespaceToFilePath caseConv ext ns =
-     
+
       let parts = Lists.map (Formatting.convertCase Util.CaseConventionCamel caseConv) (Strings.splitOn "." (Module.unNamespace ns))
       in (Strings.cat2 (Strings.cat2 (Strings.intercalate "/" parts) ".") (Module.unFileExtension ext))
 
@@ -60,7 +60,7 @@ qname ns name =
 -- | Split a dot-separated name into a namespace and local name
 qualifyName :: Core.Name -> Module.QualifiedName
 qualifyName name =
-     
+
       let parts = Lists.reverse (Strings.splitOn "." (Core.unName name))
       in (Logic.ifElse (Equality.equal 1 (Lists.length parts)) (Module.QualifiedName {
         Module.qualifiedNameNamespace = Nothing,
@@ -75,6 +75,6 @@ uniqueLabel visited l = Logic.ifElse (Sets.member l visited) (uniqueLabel visite
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: Module.QualifiedName -> Core.Name
 unqualifyName qname =
-     
+
       let prefix = Maybes.maybe "" (\n -> Strings.cat2 (Module.unNamespace n) ".") (Module.qualifiedNameNamespace qname)
       in (Core.Name (Strings.cat2 prefix (Module.qualifiedNameLocal qname)))

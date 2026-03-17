@@ -67,15 +67,15 @@ error e =
 -- | Show an incorrect unification error as a string
 incorrectUnificationError :: Error.IncorrectUnificationError -> String
 incorrectUnificationError e =
-     
+
       let subst = Error.incorrectUnificationErrorSubstitution e
       in (Strings.cat2 "incorrect unification: " (Typing.typeSubst subst))
 
 -- | Show a not-a-forall-type error as a string
 notAForallTypeError :: Error.NotAForallTypeError -> String
 notAForallTypeError e =
-     
-      let typ = Error.notAForallTypeErrorType e 
+
+      let typ = Error.notAForallTypeErrorType e
           args = Error.notAForallTypeErrorTypeArguments e
       in (Strings.cat [
         "not a forall type: ",
@@ -88,7 +88,7 @@ notAForallTypeError e =
 -- | Show a not-a-function-type error as a string
 notAFunctionTypeError :: Error.NotAFunctionTypeError -> String
 notAFunctionTypeError e =
-     
+
       let typ = Error.notAFunctionTypeErrorType e
       in (Strings.cat2 "not a function type: " (Core_.type_ typ))
 
@@ -99,8 +99,8 @@ otherError oe = Error.unOtherError oe
 -- | Show a type arity mismatch error as a string
 typeArityMismatchError :: Error.TypeArityMismatchError -> String
 typeArityMismatchError e =
-     
-      let typ = Error.typeArityMismatchErrorType e 
+
+      let typ = Error.typeArityMismatchErrorType e
           expected = Error.typeArityMismatchErrorExpectedArity e
           actual = Error.typeArityMismatchErrorActualArity e
           args = Error.typeArityMismatchErrorTypeArguments e
@@ -117,8 +117,8 @@ typeArityMismatchError e =
 -- | Show a type mismatch error as a string
 typeMismatchError :: Error.TypeMismatchError -> String
 typeMismatchError e =
-     
-      let expected = Error.typeMismatchErrorExpectedType e 
+
+      let expected = Error.typeMismatchErrorExpectedType e
           actual = Error.typeMismatchErrorActualType e
       in (Strings.cat [
         "type mismatch: expected ",
@@ -129,8 +129,8 @@ typeMismatchError e =
 -- | Show an unbound type variables error as a string
 unboundTypeVariablesError :: Error.UnboundTypeVariablesError -> String
 unboundTypeVariablesError e =
-     
-      let vars = Error.unboundTypeVariablesErrorVariables e 
+
+      let vars = Error.unboundTypeVariablesErrorVariables e
           typ = Error.unboundTypeVariablesErrorType e
       in (Strings.cat [
         "unbound type variables: {",
@@ -141,8 +141,8 @@ unboundTypeVariablesError e =
 -- | Show an undefined field error as a string
 undefinedFieldError :: Error.UndefinedFieldError -> String
 undefinedFieldError e =
-     
-      let fname = Error.undefinedFieldErrorFieldName e 
+
+      let fname = Error.undefinedFieldErrorFieldName e
           tname = Error.undefinedFieldErrorTypeName e
       in (Strings.cat [
         "no such field \"",
@@ -162,8 +162,8 @@ undefinedTypeError e = Strings.cat2 "undefined type: " (Core.unName (Error.undef
 -- | Show an unequal types error as a string
 unequalTypesError :: Error.UnequalTypesError -> String
 unequalTypesError e =
-     
-      let types = Error.unequalTypesErrorTypes e 
+
+      let types = Error.unequalTypesErrorTypes e
           desc = Error.unequalTypesErrorDescription e
       in (Strings.cat [
         "unequal types ",
@@ -174,8 +174,8 @@ unequalTypesError e =
 -- | Show an unexpected term variant error as a string
 unexpectedTermVariantError :: Error.UnexpectedTermVariantError -> String
 unexpectedTermVariantError e =
-     
-      let expected = Error.unexpectedTermVariantErrorExpectedVariant e 
+
+      let expected = Error.unexpectedTermVariantErrorExpectedVariant e
           actual = Error.unexpectedTermVariantErrorActualTerm e
       in (Strings.cat [
         "expected ",
@@ -186,8 +186,8 @@ unexpectedTermVariantError e =
 -- | Show an unexpected type variant error as a string
 unexpectedTypeVariantError :: Error.UnexpectedTypeVariantError -> String
 unexpectedTypeVariantError e =
-     
-      let expected = Error.unexpectedTypeVariantErrorExpectedVariant e 
+
+      let expected = Error.unexpectedTypeVariantErrorExpectedVariant e
           actual = Error.unexpectedTypeVariantErrorActualType e
       in (Strings.cat [
         "expected ",
@@ -198,8 +198,8 @@ unexpectedTypeVariantError e =
 -- | Show a unification error as a string
 unificationError :: Error.UnificationError -> String
 unificationError e =
-     
-      let lt = Error.unificationErrorLeftType e 
+
+      let lt = Error.unificationErrorLeftType e
           rt = Error.unificationErrorRightType e
           msg = Error.unificationErrorMessage e
       in (Strings.cat [
@@ -222,6 +222,6 @@ untypedLambdaError _ = "untyped lambda"
 -- | Show an untyped let binding error as a string
 untypedLetBindingError :: Error.UntypedLetBindingError -> String
 untypedLetBindingError e =
-     
+
       let b = Error.untypedLetBindingErrorBinding e
       in (Strings.cat2 "untyped let binding: " (Core_.binding b))

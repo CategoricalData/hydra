@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class InclusiveOrExpression implements Serializable, Comparable<InclusiveOrExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.InclusiveOrExpression");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.ExclusiveOrExpression> value;
-  
+
   public InclusiveOrExpression (hydra.util.ConsList<hydra.ext.java.syntax.ExclusiveOrExpression> value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof InclusiveOrExpression)) {
@@ -25,12 +25,12 @@ public class InclusiveOrExpression implements Serializable, Comparable<Inclusive
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InclusiveOrExpression other) {

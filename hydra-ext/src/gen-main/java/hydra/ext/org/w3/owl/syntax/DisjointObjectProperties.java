@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class DisjointObjectProperties implements Serializable, Comparable<DisjointObjectProperties> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DisjointObjectProperties");
-  
+
   public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
-  
+
   public static final hydra.core.Name PROPERTIES = new hydra.core.Name("properties");
-  
+
   public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
-  
+
   public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties;
-  
+
   public DisjointObjectProperties (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties) {
     this.annotations = annotations;
     this.properties = properties;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof DisjointObjectProperties)) {
@@ -32,12 +32,12 @@ public class DisjointObjectProperties implements Serializable, Comparable<Disjoi
       this.properties,
       o.properties);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(properties);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DisjointObjectProperties other) {
@@ -48,11 +48,11 @@ public class DisjointObjectProperties implements Serializable, Comparable<Disjoi
     }
     return ((Comparable) properties).compareTo(other.properties);
   }
-  
+
   public DisjointObjectProperties withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new DisjointObjectProperties(annotations, properties);
   }
-  
+
   public DisjointObjectProperties withProperties(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties) {
     return new DisjointObjectProperties(annotations, properties);
   }

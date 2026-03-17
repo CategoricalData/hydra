@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class Production implements Serializable, Comparable<Production> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.grammar.Production");
-  
+
   public static final hydra.core.Name SYMBOL = new hydra.core.Name("symbol");
-  
+
   public static final hydra.core.Name PATTERN = new hydra.core.Name("pattern");
-  
+
   /**
    * The nonterminal symbol being defined
    */
   public final hydra.grammar.Symbol symbol;
-  
+
   /**
    * The pattern which defines the symbol
    */
   public final hydra.grammar.Pattern pattern;
-  
+
   public Production (hydra.grammar.Symbol symbol, hydra.grammar.Pattern pattern) {
     this.symbol = symbol;
     this.pattern = pattern;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Production)) {
@@ -41,12 +41,12 @@ public class Production implements Serializable, Comparable<Production> {
       this.pattern,
       o.pattern);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(symbol) + 3 * java.util.Objects.hashCode(pattern);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Production other) {
@@ -57,11 +57,11 @@ public class Production implements Serializable, Comparable<Production> {
     }
     return ((Comparable) pattern).compareTo(other.pattern);
   }
-  
+
   public Production withSymbol(hydra.grammar.Symbol symbol) {
     return new Production(symbol, pattern);
   }
-  
+
   public Production withPattern(hydra.grammar.Pattern pattern) {
     return new Production(symbol, pattern);
   }

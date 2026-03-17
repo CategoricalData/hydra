@@ -9,15 +9,15 @@ import java.io.Serializable;
  */
 public class ColumnName implements Serializable, Comparable<ColumnName> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.relational.ColumnName");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final String value;
-  
+
   public ColumnName (String value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ColumnName)) {
@@ -28,12 +28,12 @@ public class ColumnName implements Serializable, Comparable<ColumnName> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ColumnName other) {

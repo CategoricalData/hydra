@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class AdapterContext implements Serializable, Comparable<AdapterContext> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.coders.AdapterContext");
-  
+
   public static final hydra.core.Name GRAPH = new hydra.core.Name("graph");
-  
+
   public static final hydra.core.Name LANGUAGE = new hydra.core.Name("language");
-  
+
   public static final hydra.core.Name ADAPTERS = new hydra.core.Name("adapters");
-  
+
   /**
    * The underlying graph of elements and primitives
    */
   public final hydra.graph.Graph graph;
-  
+
   /**
    * The language being encoded or decoded
    */
   public final hydra.coders.Language language;
-  
+
   /**
    * A map of type names to adapters for those types
    */
   public final hydra.util.PersistentMap<hydra.core.Name, hydra.util.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters;
-  
+
   public AdapterContext (hydra.graph.Graph graph, hydra.coders.Language language, hydra.util.PersistentMap<hydra.core.Name, hydra.util.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters) {
     this.graph = graph;
     this.language = language;
     this.adapters = adapters;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof AdapterContext)) {
@@ -51,12 +51,12 @@ public class AdapterContext implements Serializable, Comparable<AdapterContext> 
       this.adapters,
       o.adapters);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(graph) + 3 * java.util.Objects.hashCode(language) + 5 * java.util.Objects.hashCode(adapters);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AdapterContext other) {
@@ -71,15 +71,15 @@ public class AdapterContext implements Serializable, Comparable<AdapterContext> 
     }
     return ((Comparable) adapters).compareTo(other.adapters);
   }
-  
+
   public AdapterContext withGraph(hydra.graph.Graph graph) {
     return new AdapterContext(graph, language, adapters);
   }
-  
+
   public AdapterContext withLanguage(hydra.coders.Language language) {
     return new AdapterContext(graph, language, adapters);
   }
-  
+
   public AdapterContext withAdapters(hydra.util.PersistentMap<hydra.core.Name, hydra.util.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters) {
     return new AdapterContext(graph, language, adapters);
   }

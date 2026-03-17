@@ -14,7 +14,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-data Ontology = 
+data Ontology =
   Ontology {
     ontologyDirectImports :: [Ontology],
     ontologyAnnotations :: [Annotation],
@@ -29,7 +29,7 @@ _Ontology_annotations = Core.Name "annotations"
 
 _Ontology_axioms = Core.Name "axioms"
 
-data Declaration = 
+data Declaration =
   Declaration {
     declarationAnnotations :: [Annotation],
     declarationEntity :: Entity}
@@ -41,7 +41,7 @@ _Declaration_annotations = Core.Name "annotations"
 
 _Declaration_entity = Core.Name "entity"
 
-data Entity = 
+data Entity =
   EntityAnnotationProperty AnnotationProperty |
   EntityClass Class |
   EntityDataProperty DataProperty |
@@ -64,7 +64,7 @@ _Entity_namedIndividual = Core.Name "namedIndividual"
 
 _Entity_objectProperty = Core.Name "objectProperty"
 
-data AnnotationSubject = 
+data AnnotationSubject =
   AnnotationSubjectIri Syntax.Iri |
   AnnotationSubjectAnonymousIndividual AnonymousIndividual
   deriving (Eq, Ord, Read, Show)
@@ -75,7 +75,7 @@ _AnnotationSubject_iri = Core.Name "iri"
 
 _AnnotationSubject_anonymousIndividual = Core.Name "anonymousIndividual"
 
-data AnnotationValue = 
+data AnnotationValue =
   AnnotationValueAnonymousIndividual AnonymousIndividual |
   AnnotationValueIri Syntax.Iri |
   AnnotationValueLiteral Syntax.Literal
@@ -89,7 +89,7 @@ _AnnotationValue_iri = Core.Name "iri"
 
 _AnnotationValue_literal = Core.Name "literal"
 
-data Annotation = 
+data Annotation =
   Annotation {
     annotationAnnotations :: [Annotation],
     annotationProperty :: AnnotationProperty,
@@ -104,7 +104,7 @@ _Annotation_property = Core.Name "property"
 
 _Annotation_value = Core.Name "value"
 
-data AnnotationAxiom = 
+data AnnotationAxiom =
   AnnotationAxiomAnnotationAssertion AnnotationAssertion |
   AnnotationAxiomAnnotationPropertyDomain AnnotationPropertyDomain |
   AnnotationAxiomAnnotationPropertyRange AnnotationPropertyRange |
@@ -121,7 +121,7 @@ _AnnotationAxiom_annotationPropertyRange = Core.Name "annotationPropertyRange"
 
 _AnnotationAxiom_subAnnotationPropertyOf = Core.Name "subAnnotationPropertyOf"
 
-data AnnotationAssertion = 
+data AnnotationAssertion =
   AnnotationAssertion {
     annotationAssertionAnnotations :: [Annotation],
     annotationAssertionProperty :: AnnotationProperty,
@@ -139,7 +139,7 @@ _AnnotationAssertion_subject = Core.Name "subject"
 
 _AnnotationAssertion_value = Core.Name "value"
 
-data SubAnnotationPropertyOf = 
+data SubAnnotationPropertyOf =
   SubAnnotationPropertyOf {
     subAnnotationPropertyOfAnnotations :: [Annotation],
     subAnnotationPropertyOfSubProperty :: AnnotationProperty,
@@ -154,7 +154,7 @@ _SubAnnotationPropertyOf_subProperty = Core.Name "subProperty"
 
 _SubAnnotationPropertyOf_superProperty = Core.Name "superProperty"
 
-data AnnotationPropertyDomain = 
+data AnnotationPropertyDomain =
   AnnotationPropertyDomain {
     annotationPropertyDomainAnnotations :: [Annotation],
     annotationPropertyDomainProperty :: AnnotationProperty,
@@ -169,7 +169,7 @@ _AnnotationPropertyDomain_property = Core.Name "property"
 
 _AnnotationPropertyDomain_iri = Core.Name "iri"
 
-data AnnotationPropertyRange = 
+data AnnotationPropertyRange =
   AnnotationPropertyRange {
     annotationPropertyRangeAnnotations :: [Annotation],
     annotationPropertyRangeProperty :: AnnotationProperty,
@@ -185,7 +185,7 @@ _AnnotationPropertyRange_property = Core.Name "property"
 _AnnotationPropertyRange_iri = Core.Name "iri"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Classes
-newtype Class = 
+newtype Class =
   Class {
     unClass :: ()}
   deriving (Eq, Ord, Read, Show)
@@ -193,7 +193,7 @@ newtype Class =
 _Class = Core.Name "hydra.ext.org.w3.owl.syntax.Class"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Datatypes
-data Datatype = 
+data Datatype =
   -- | Note: XML Schema datatypes are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common
   DatatypeXmlSchema Schema.Datatype |
   DatatypeOther Syntax.Iri
@@ -206,28 +206,28 @@ _Datatype_xmlSchema = Core.Name "xmlSchema"
 _Datatype_other = Core.Name "other"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Object_Properties
-newtype ObjectProperty = 
+newtype ObjectProperty =
   ObjectProperty {
     unObjectProperty :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ObjectProperty = Core.Name "hydra.ext.org.w3.owl.syntax.ObjectProperty"
 
-newtype DataProperty = 
+newtype DataProperty =
   DataProperty {
     unDataProperty :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _DataProperty = Core.Name "hydra.ext.org.w3.owl.syntax.DataProperty"
 
-newtype AnnotationProperty = 
+newtype AnnotationProperty =
   AnnotationProperty {
     unAnnotationProperty :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotationProperty = Core.Name "hydra.ext.org.w3.owl.syntax.AnnotationProperty"
 
-data Individual = 
+data Individual =
   IndividualNamed NamedIndividual |
   IndividualAnonymous AnonymousIndividual
   deriving (Eq, Ord, Read, Show)
@@ -238,21 +238,21 @@ _Individual_named = Core.Name "named"
 
 _Individual_anonymous = Core.Name "anonymous"
 
-newtype NamedIndividual = 
+newtype NamedIndividual =
   NamedIndividual {
     unNamedIndividual :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _NamedIndividual = Core.Name "hydra.ext.org.w3.owl.syntax.NamedIndividual"
 
-newtype AnonymousIndividual = 
+newtype AnonymousIndividual =
   AnonymousIndividual {
     unAnonymousIndividual :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _AnonymousIndividual = Core.Name "hydra.ext.org.w3.owl.syntax.AnonymousIndividual"
 
-data ObjectPropertyExpression = 
+data ObjectPropertyExpression =
   ObjectPropertyExpressionObject ObjectProperty |
   ObjectPropertyExpressionInverseObject InverseObjectProperty
   deriving (Eq, Ord, Read, Show)
@@ -263,14 +263,14 @@ _ObjectPropertyExpression_object = Core.Name "object"
 
 _ObjectPropertyExpression_inverseObject = Core.Name "inverseObject"
 
-newtype InverseObjectProperty = 
+newtype InverseObjectProperty =
   InverseObjectProperty {
     unInverseObjectProperty :: ObjectProperty}
   deriving (Eq, Ord, Read, Show)
 
 _InverseObjectProperty = Core.Name "hydra.ext.org.w3.owl.syntax.InverseObjectProperty"
 
-newtype DataPropertyExpression = 
+newtype DataPropertyExpression =
   DataPropertyExpression {
     unDataPropertyExpression :: DataProperty}
   deriving (Eq, Ord, Read, Show)
@@ -278,7 +278,7 @@ newtype DataPropertyExpression =
 _DataPropertyExpression = Core.Name "hydra.ext.org.w3.owl.syntax.DataPropertyExpression"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Data_Ranges
-data DataRange = 
+data DataRange =
   DataRangeDataComplementOf DataComplementOf |
   DataRangeDataIntersectionOf DataIntersectionOf |
   DataRangeDataOneOf DataOneOf |
@@ -302,7 +302,7 @@ _DataRange_datatype = Core.Name "datatype"
 _DataRange_datatypeRestriction = Core.Name "datatypeRestriction"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges
-newtype DataIntersectionOf = 
+newtype DataIntersectionOf =
   DataIntersectionOf {
     unDataIntersectionOf :: [DataRange]}
   deriving (Eq, Ord, Read, Show)
@@ -310,7 +310,7 @@ newtype DataIntersectionOf =
 _DataIntersectionOf = Core.Name "hydra.ext.org.w3.owl.syntax.DataIntersectionOf"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges
-newtype DataUnionOf = 
+newtype DataUnionOf =
   DataUnionOf {
     unDataUnionOf :: [DataRange]}
   deriving (Eq, Ord, Read, Show)
@@ -318,7 +318,7 @@ newtype DataUnionOf =
 _DataUnionOf = Core.Name "hydra.ext.org.w3.owl.syntax.DataUnionOf"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges
-newtype DataComplementOf = 
+newtype DataComplementOf =
   DataComplementOf {
     unDataComplementOf :: DataRange}
   deriving (Eq, Ord, Read, Show)
@@ -326,7 +326,7 @@ newtype DataComplementOf =
 _DataComplementOf = Core.Name "hydra.ext.org.w3.owl.syntax.DataComplementOf"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals
-newtype DataOneOf = 
+newtype DataOneOf =
   DataOneOf {
     unDataOneOf :: [Syntax.Literal]}
   deriving (Eq, Ord, Read, Show)
@@ -334,7 +334,7 @@ newtype DataOneOf =
 _DataOneOf = Core.Name "hydra.ext.org.w3.owl.syntax.DataOneOf"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Datatype_Restrictions
-data DatatypeRestriction = 
+data DatatypeRestriction =
   DatatypeRestriction {
     datatypeRestrictionDatatype :: Datatype,
     datatypeRestrictionConstraints :: [DatatypeRestriction_Constraint]}
@@ -346,7 +346,7 @@ _DatatypeRestriction_datatype = Core.Name "datatype"
 
 _DatatypeRestriction_constraints = Core.Name "constraints"
 
-data DatatypeRestriction_Constraint = 
+data DatatypeRestriction_Constraint =
   DatatypeRestriction_Constraint {
     datatypeRestriction_ConstraintConstrainingFacet :: DatatypeRestriction_ConstrainingFacet,
     datatypeRestriction_ConstraintRestrictionValue :: Syntax.Literal}
@@ -358,7 +358,7 @@ _DatatypeRestriction_Constraint_constrainingFacet = Core.Name "constrainingFacet
 
 _DatatypeRestriction_Constraint_restrictionValue = Core.Name "restrictionValue"
 
-data DatatypeRestriction_ConstrainingFacet = 
+data DatatypeRestriction_ConstrainingFacet =
   -- | Note: XML Schema constraining facets are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common
   DatatypeRestriction_ConstrainingFacetXmlSchema Schema.ConstrainingFacet |
   DatatypeRestriction_ConstrainingFacetOther Syntax.Iri
@@ -370,7 +370,7 @@ _DatatypeRestriction_ConstrainingFacet_xmlSchema = Core.Name "xmlSchema"
 
 _DatatypeRestriction_ConstrainingFacet_other = Core.Name "other"
 
-data ClassExpression = 
+data ClassExpression =
   ClassExpressionClass Class |
   ClassExpressionDataSomeValuesFrom DataSomeValuesFrom |
   ClassExpressionDataAllValuesFrom DataAllValuesFrom |
@@ -426,35 +426,35 @@ _ClassExpression_objectSomeValuesFrom = Core.Name "objectSomeValuesFrom"
 
 _ClassExpression_objectUnionOf = Core.Name "objectUnionOf"
 
-newtype ObjectIntersectionOf = 
+newtype ObjectIntersectionOf =
   ObjectIntersectionOf {
     unObjectIntersectionOf :: [ClassExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _ObjectIntersectionOf = Core.Name "hydra.ext.org.w3.owl.syntax.ObjectIntersectionOf"
 
-newtype ObjectUnionOf = 
+newtype ObjectUnionOf =
   ObjectUnionOf {
     unObjectUnionOf :: [ClassExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _ObjectUnionOf = Core.Name "hydra.ext.org.w3.owl.syntax.ObjectUnionOf"
 
-newtype ObjectComplementOf = 
+newtype ObjectComplementOf =
   ObjectComplementOf {
     unObjectComplementOf :: ClassExpression}
   deriving (Eq, Ord, Read, Show)
 
 _ObjectComplementOf = Core.Name "hydra.ext.org.w3.owl.syntax.ObjectComplementOf"
 
-newtype ObjectOneOf = 
+newtype ObjectOneOf =
   ObjectOneOf {
     unObjectOneOf :: [Individual]}
   deriving (Eq, Ord, Read, Show)
 
 _ObjectOneOf = Core.Name "hydra.ext.org.w3.owl.syntax.ObjectOneOf"
 
-data ObjectSomeValuesFrom = 
+data ObjectSomeValuesFrom =
   ObjectSomeValuesFrom {
     objectSomeValuesFromProperty :: ObjectPropertyExpression,
     objectSomeValuesFromClass :: ClassExpression}
@@ -466,7 +466,7 @@ _ObjectSomeValuesFrom_property = Core.Name "property"
 
 _ObjectSomeValuesFrom_class = Core.Name "class"
 
-data ObjectAllValuesFrom = 
+data ObjectAllValuesFrom =
   ObjectAllValuesFrom {
     objectAllValuesFromProperty :: ObjectPropertyExpression,
     objectAllValuesFromClass :: ClassExpression}
@@ -478,7 +478,7 @@ _ObjectAllValuesFrom_property = Core.Name "property"
 
 _ObjectAllValuesFrom_class = Core.Name "class"
 
-data ObjectHasValue = 
+data ObjectHasValue =
   ObjectHasValue {
     objectHasValueProperty :: ObjectPropertyExpression,
     objectHasValueIndividual :: Individual}
@@ -490,7 +490,7 @@ _ObjectHasValue_property = Core.Name "property"
 
 _ObjectHasValue_individual = Core.Name "individual"
 
-newtype ObjectHasSelf = 
+newtype ObjectHasSelf =
   ObjectHasSelf {
     unObjectHasSelf :: ObjectPropertyExpression}
   deriving (Eq, Ord, Read, Show)
@@ -498,7 +498,7 @@ newtype ObjectHasSelf =
 _ObjectHasSelf = Core.Name "hydra.ext.org.w3.owl.syntax.ObjectHasSelf"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Minimum_Cardinality
-data ObjectMinCardinality = 
+data ObjectMinCardinality =
   ObjectMinCardinality {
     objectMinCardinalityBound :: Integer,
     objectMinCardinalityProperty :: ObjectPropertyExpression,
@@ -514,7 +514,7 @@ _ObjectMinCardinality_property = Core.Name "property"
 _ObjectMinCardinality_class = Core.Name "class"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Maximum_Cardinality
-data ObjectMaxCardinality = 
+data ObjectMaxCardinality =
   ObjectMaxCardinality {
     objectMaxCardinalityBound :: Integer,
     objectMaxCardinalityProperty :: ObjectPropertyExpression,
@@ -530,7 +530,7 @@ _ObjectMaxCardinality_property = Core.Name "property"
 _ObjectMaxCardinality_class = Core.Name "class"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Exact_Cardinality
-data ObjectExactCardinality = 
+data ObjectExactCardinality =
   ObjectExactCardinality {
     objectExactCardinalityBound :: Integer,
     objectExactCardinalityProperty :: ObjectPropertyExpression,
@@ -545,7 +545,7 @@ _ObjectExactCardinality_property = Core.Name "property"
 
 _ObjectExactCardinality_class = Core.Name "class"
 
-data DataSomeValuesFrom = 
+data DataSomeValuesFrom =
   DataSomeValuesFrom {
     dataSomeValuesFromProperty :: [DataPropertyExpression],
     dataSomeValuesFromRange :: DataRange}
@@ -557,7 +557,7 @@ _DataSomeValuesFrom_property = Core.Name "property"
 
 _DataSomeValuesFrom_range = Core.Name "range"
 
-data DataAllValuesFrom = 
+data DataAllValuesFrom =
   DataAllValuesFrom {
     dataAllValuesFromProperty :: [DataPropertyExpression],
     dataAllValuesFromRange :: DataRange}
@@ -569,7 +569,7 @@ _DataAllValuesFrom_property = Core.Name "property"
 
 _DataAllValuesFrom_range = Core.Name "range"
 
-data DataHasValue = 
+data DataHasValue =
   DataHasValue {
     dataHasValueProperty :: DataPropertyExpression,
     dataHasValueValue :: Syntax.Literal}
@@ -581,7 +581,7 @@ _DataHasValue_property = Core.Name "property"
 
 _DataHasValue_value = Core.Name "value"
 
-data DataMinCardinality = 
+data DataMinCardinality =
   DataMinCardinality {
     dataMinCardinalityBound :: Integer,
     dataMinCardinalityProperty :: DataPropertyExpression,
@@ -596,7 +596,7 @@ _DataMinCardinality_property = Core.Name "property"
 
 _DataMinCardinality_range = Core.Name "range"
 
-data DataMaxCardinality = 
+data DataMaxCardinality =
   DataMaxCardinality {
     dataMaxCardinalityBound :: Integer,
     dataMaxCardinalityProperty :: DataPropertyExpression,
@@ -611,7 +611,7 @@ _DataMaxCardinality_property = Core.Name "property"
 
 _DataMaxCardinality_range = Core.Name "range"
 
-data DataExactCardinality = 
+data DataExactCardinality =
   DataExactCardinality {
     dataExactCardinalityBound :: Integer,
     dataExactCardinalityProperty :: DataPropertyExpression,
@@ -627,7 +627,7 @@ _DataExactCardinality_property = Core.Name "property"
 _DataExactCardinality_range = Core.Name "range"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Axioms
-data Axiom = 
+data Axiom =
   AxiomAnnotationAxiom AnnotationAxiom |
   AxiomAssertion Assertion |
   AxiomClassAxiom ClassAxiom |
@@ -656,7 +656,7 @@ _Axiom_hasKey = Core.Name "hasKey"
 
 _Axiom_objectPropertyAxiom = Core.Name "objectPropertyAxiom"
 
-data ClassAxiom = 
+data ClassAxiom =
   ClassAxiomDisjointClasses DisjointClasses |
   ClassAxiomDisjointUnion DisjointUnion |
   ClassAxiomEquivalentClasses EquivalentClasses |
@@ -673,7 +673,7 @@ _ClassAxiom_equivalentClasses = Core.Name "equivalentClasses"
 
 _ClassAxiom_subClassOf = Core.Name "subClassOf"
 
-data SubClassOf = 
+data SubClassOf =
   SubClassOf {
     subClassOfAnnotations :: [Annotation],
     subClassOfSubClass :: ClassExpression,
@@ -688,7 +688,7 @@ _SubClassOf_subClass = Core.Name "subClass"
 
 _SubClassOf_superClass = Core.Name "superClass"
 
-data EquivalentClasses = 
+data EquivalentClasses =
   EquivalentClasses {
     equivalentClassesAnnotations :: [Annotation],
     equivalentClassesClasses :: [ClassExpression]}
@@ -700,7 +700,7 @@ _EquivalentClasses_annotations = Core.Name "annotations"
 
 _EquivalentClasses_classes = Core.Name "classes"
 
-data DisjointClasses = 
+data DisjointClasses =
   DisjointClasses {
     disjointClassesAnnotations :: [Annotation],
     disjointClassesClasses :: [ClassExpression]}
@@ -713,7 +713,7 @@ _DisjointClasses_annotations = Core.Name "annotations"
 _DisjointClasses_classes = Core.Name "classes"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Disjoint_Union_of_Class_Expressions
-data DisjointUnion = 
+data DisjointUnion =
   DisjointUnion {
     disjointUnionAnnotations :: [Annotation],
     disjointUnionClass :: Class,
@@ -728,7 +728,7 @@ _DisjointUnion_class = Core.Name "class"
 
 _DisjointUnion_classes = Core.Name "classes"
 
-data ObjectPropertyAxiom = 
+data ObjectPropertyAxiom =
   ObjectPropertyAxiomAsymmetricObjectProperty AsymmetricObjectProperty |
   ObjectPropertyAxiomDisjointObjectProperties DisjointObjectProperties |
   ObjectPropertyAxiomEquivalentObjectProperties EquivalentObjectProperties |
@@ -772,7 +772,7 @@ _ObjectPropertyAxiom_symmetricObjectProperty = Core.Name "symmetricObjectPropert
 
 _ObjectPropertyAxiom_transitiveObjectProperty = Core.Name "transitiveObjectProperty"
 
-data SubObjectPropertyOf = 
+data SubObjectPropertyOf =
   SubObjectPropertyOf {
     subObjectPropertyOfAnnotations :: [Annotation],
     subObjectPropertyOfSubProperty :: [ObjectPropertyExpression],
@@ -787,7 +787,7 @@ _SubObjectPropertyOf_subProperty = Core.Name "subProperty"
 
 _SubObjectPropertyOf_superProperty = Core.Name "superProperty"
 
-data EquivalentObjectProperties = 
+data EquivalentObjectProperties =
   EquivalentObjectProperties {
     equivalentObjectPropertiesAnnotations :: [Annotation],
     equivalentObjectPropertiesProperties :: [ObjectPropertyExpression]}
@@ -799,7 +799,7 @@ _EquivalentObjectProperties_annotations = Core.Name "annotations"
 
 _EquivalentObjectProperties_properties = Core.Name "properties"
 
-data DisjointObjectProperties = 
+data DisjointObjectProperties =
   DisjointObjectProperties {
     disjointObjectPropertiesAnnotations :: [Annotation],
     disjointObjectPropertiesProperties :: [ObjectPropertyExpression]}
@@ -812,7 +812,7 @@ _DisjointObjectProperties_annotations = Core.Name "annotations"
 _DisjointObjectProperties_properties = Core.Name "properties"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Object_Property_Domain
-data ObjectPropertyDomain = 
+data ObjectPropertyDomain =
   ObjectPropertyDomain {
     objectPropertyDomainAnnotations :: [Annotation],
     objectPropertyDomainProperty :: ObjectPropertyExpression,
@@ -828,7 +828,7 @@ _ObjectPropertyDomain_property = Core.Name "property"
 _ObjectPropertyDomain_domain = Core.Name "domain"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Object_Property_Range
-data ObjectPropertyRange = 
+data ObjectPropertyRange =
   ObjectPropertyRange {
     objectPropertyRangeAnnotations :: [Annotation],
     objectPropertyRangeProperty :: ObjectPropertyExpression,
@@ -843,7 +843,7 @@ _ObjectPropertyRange_property = Core.Name "property"
 
 _ObjectPropertyRange_range = Core.Name "range"
 
-data InverseObjectProperties = 
+data InverseObjectProperties =
   InverseObjectProperties {
     inverseObjectPropertiesAnnotations :: [Annotation],
     inverseObjectPropertiesProperty1 :: ObjectPropertyExpression,
@@ -858,7 +858,7 @@ _InverseObjectProperties_property1 = Core.Name "property1"
 
 _InverseObjectProperties_property2 = Core.Name "property2"
 
-data FunctionalObjectProperty = 
+data FunctionalObjectProperty =
   FunctionalObjectProperty {
     functionalObjectPropertyAnnotations :: [Annotation],
     functionalObjectPropertyProperty :: ObjectPropertyExpression}
@@ -870,7 +870,7 @@ _FunctionalObjectProperty_annotations = Core.Name "annotations"
 
 _FunctionalObjectProperty_property = Core.Name "property"
 
-data InverseFunctionalObjectProperty = 
+data InverseFunctionalObjectProperty =
   InverseFunctionalObjectProperty {
     inverseFunctionalObjectPropertyAnnotations :: [Annotation],
     inverseFunctionalObjectPropertyProperty :: ObjectPropertyExpression}
@@ -882,7 +882,7 @@ _InverseFunctionalObjectProperty_annotations = Core.Name "annotations"
 
 _InverseFunctionalObjectProperty_property = Core.Name "property"
 
-data ReflexiveObjectProperty = 
+data ReflexiveObjectProperty =
   ReflexiveObjectProperty {
     reflexiveObjectPropertyAnnotations :: [Annotation],
     reflexiveObjectPropertyProperty :: ObjectPropertyExpression}
@@ -894,7 +894,7 @@ _ReflexiveObjectProperty_annotations = Core.Name "annotations"
 
 _ReflexiveObjectProperty_property = Core.Name "property"
 
-data IrreflexiveObjectProperty = 
+data IrreflexiveObjectProperty =
   IrreflexiveObjectProperty {
     irreflexiveObjectPropertyAnnotations :: [Annotation],
     irreflexiveObjectPropertyProperty :: ObjectPropertyExpression}
@@ -906,7 +906,7 @@ _IrreflexiveObjectProperty_annotations = Core.Name "annotations"
 
 _IrreflexiveObjectProperty_property = Core.Name "property"
 
-data SymmetricObjectProperty = 
+data SymmetricObjectProperty =
   SymmetricObjectProperty {
     symmetricObjectPropertyAnnotations :: [Annotation],
     symmetricObjectPropertyProperty :: ObjectPropertyExpression}
@@ -918,7 +918,7 @@ _SymmetricObjectProperty_annotations = Core.Name "annotations"
 
 _SymmetricObjectProperty_property = Core.Name "property"
 
-data AsymmetricObjectProperty = 
+data AsymmetricObjectProperty =
   AsymmetricObjectProperty {
     asymmetricObjectPropertyAnnotations :: [Annotation],
     asymmetricObjectPropertyProperty :: ObjectPropertyExpression}
@@ -930,7 +930,7 @@ _AsymmetricObjectProperty_annotations = Core.Name "annotations"
 
 _AsymmetricObjectProperty_property = Core.Name "property"
 
-data TransitiveObjectProperty = 
+data TransitiveObjectProperty =
   TransitiveObjectProperty {
     transitiveObjectPropertyAnnotations :: [Annotation],
     transitiveObjectPropertyProperty :: ObjectPropertyExpression}
@@ -942,7 +942,7 @@ _TransitiveObjectProperty_annotations = Core.Name "annotations"
 
 _TransitiveObjectProperty_property = Core.Name "property"
 
-data DataPropertyAxiom = 
+data DataPropertyAxiom =
   DataPropertyAxiomDataPropertyAxiom DataPropertyAxiom |
   DataPropertyAxiomDataPropertyRange DataPropertyRange |
   DataPropertyAxiomDisjointDataProperties DisjointDataProperties |
@@ -965,7 +965,7 @@ _DataPropertyAxiom_functionalDataProperty = Core.Name "functionalDataProperty"
 
 _DataPropertyAxiom_subDataPropertyOf = Core.Name "subDataPropertyOf"
 
-data SubDataPropertyOf = 
+data SubDataPropertyOf =
   SubDataPropertyOf {
     subDataPropertyOfAnnotations :: [Annotation],
     subDataPropertyOfSubProperty :: DataPropertyExpression,
@@ -980,7 +980,7 @@ _SubDataPropertyOf_subProperty = Core.Name "subProperty"
 
 _SubDataPropertyOf_superProperty = Core.Name "superProperty"
 
-data EquivalentDataProperties = 
+data EquivalentDataProperties =
   EquivalentDataProperties {
     equivalentDataPropertiesAnnotations :: [Annotation],
     equivalentDataPropertiesProperties :: [DataPropertyExpression]}
@@ -992,7 +992,7 @@ _EquivalentDataProperties_annotations = Core.Name "annotations"
 
 _EquivalentDataProperties_properties = Core.Name "properties"
 
-data DisjointDataProperties = 
+data DisjointDataProperties =
   DisjointDataProperties {
     disjointDataPropertiesAnnotations :: [Annotation],
     disjointDataPropertiesProperties :: [DataPropertyExpression]}
@@ -1004,7 +1004,7 @@ _DisjointDataProperties_annotations = Core.Name "annotations"
 
 _DisjointDataProperties_properties = Core.Name "properties"
 
-data DataPropertyDomain = 
+data DataPropertyDomain =
   DataPropertyDomain {
     dataPropertyDomainAnnotations :: [Annotation],
     dataPropertyDomainProperty :: DataPropertyExpression,
@@ -1019,7 +1019,7 @@ _DataPropertyDomain_property = Core.Name "property"
 
 _DataPropertyDomain_domain = Core.Name "domain"
 
-data DataPropertyRange = 
+data DataPropertyRange =
   DataPropertyRange {
     dataPropertyRangeAnnotations :: [Annotation],
     dataPropertyRangeProperty :: DataPropertyExpression,
@@ -1034,7 +1034,7 @@ _DataPropertyRange_property = Core.Name "property"
 
 _DataPropertyRange_range = Core.Name "range"
 
-data FunctionalDataProperty = 
+data FunctionalDataProperty =
   FunctionalDataProperty {
     functionalDataPropertyAnnotations :: [Annotation],
     functionalDataPropertyProperty :: DataPropertyExpression}
@@ -1046,7 +1046,7 @@ _FunctionalDataProperty_annotations = Core.Name "annotations"
 
 _FunctionalDataProperty_property = Core.Name "property"
 
-data DatatypeDefinition = 
+data DatatypeDefinition =
   DatatypeDefinition {
     datatypeDefinitionAnnotations :: [Annotation],
     datatypeDefinitionDatatype :: Datatype,
@@ -1062,7 +1062,7 @@ _DatatypeDefinition_datatype = Core.Name "datatype"
 _DatatypeDefinition_range = Core.Name "range"
 
 -- | See https://www.w3.org/TR/owl2-syntax/#Keys
-data HasKey = 
+data HasKey =
   HasKey {
     hasKeyAnnotations :: [Annotation],
     hasKeyClass :: ClassExpression,
@@ -1080,7 +1080,7 @@ _HasKey_objectProperties = Core.Name "objectProperties"
 
 _HasKey_dataProperties = Core.Name "dataProperties"
 
-data Assertion = 
+data Assertion =
   AssertionClassAssertion ClassAssertion |
   AssertionDataPropertyAssertion DataPropertyAssertion |
   AssertionDifferentIndividuals DifferentIndividuals |
@@ -1106,7 +1106,7 @@ _Assertion_negativeObjectPropertyAssertion = Core.Name "negativeObjectPropertyAs
 
 _Assertion_sameIndividual = Core.Name "sameIndividual"
 
-data SameIndividual = 
+data SameIndividual =
   SameIndividual {
     sameIndividualAnnotations :: [Annotation],
     sameIndividualIndividuals :: [Individual]}
@@ -1118,7 +1118,7 @@ _SameIndividual_annotations = Core.Name "annotations"
 
 _SameIndividual_individuals = Core.Name "individuals"
 
-data DifferentIndividuals = 
+data DifferentIndividuals =
   DifferentIndividuals {
     differentIndividualsAnnotations :: [Annotation],
     differentIndividualsIndividuals :: [Individual]}
@@ -1130,7 +1130,7 @@ _DifferentIndividuals_annotations = Core.Name "annotations"
 
 _DifferentIndividuals_individuals = Core.Name "individuals"
 
-data ClassAssertion = 
+data ClassAssertion =
   ClassAssertion {
     classAssertionAnnotations :: [Annotation],
     classAssertionClass :: ClassExpression,
@@ -1145,7 +1145,7 @@ _ClassAssertion_class = Core.Name "class"
 
 _ClassAssertion_individual = Core.Name "individual"
 
-data ObjectPropertyAssertion = 
+data ObjectPropertyAssertion =
   ObjectPropertyAssertion {
     objectPropertyAssertionAnnotations :: [Annotation],
     objectPropertyAssertionProperty :: ObjectPropertyExpression,
@@ -1163,7 +1163,7 @@ _ObjectPropertyAssertion_source = Core.Name "source"
 
 _ObjectPropertyAssertion_target = Core.Name "target"
 
-data NegativeObjectPropertyAssertion = 
+data NegativeObjectPropertyAssertion =
   NegativeObjectPropertyAssertion {
     negativeObjectPropertyAssertionAnnotations :: [Annotation],
     negativeObjectPropertyAssertionProperty :: ObjectPropertyExpression,
@@ -1181,7 +1181,7 @@ _NegativeObjectPropertyAssertion_source = Core.Name "source"
 
 _NegativeObjectPropertyAssertion_target = Core.Name "target"
 
-data DataPropertyAssertion = 
+data DataPropertyAssertion =
   DataPropertyAssertion {
     dataPropertyAssertionAnnotations :: [Annotation],
     dataPropertyAssertionProperty :: DataPropertyExpression,
@@ -1199,7 +1199,7 @@ _DataPropertyAssertion_source = Core.Name "source"
 
 _DataPropertyAssertion_target = Core.Name "target"
 
-data NegativeDataPropertyAssertion = 
+data NegativeDataPropertyAssertion =
   NegativeDataPropertyAssertion {
     negativeDataPropertyAssertionAnnotations :: [Annotation],
     negativeDataPropertyAssertionProperty :: DataPropertyExpression,

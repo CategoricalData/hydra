@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class Directive implements Serializable, Comparable<Directive> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.Directive");
-  
+
   public static final hydra.core.Name BASE_DECL = new hydra.core.Name("BaseDecl");
-  
+
   public static final hydra.core.Name PREFIX_DECL = new hydra.core.Name("PrefixDecl");
-  
+
   private Directive () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(BaseDecl instance) ;
-    
+
     R visit(PrefixDecl instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Directive instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(BaseDecl instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(PrefixDecl instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class BaseDecl extends hydra.ext.io.shex.syntax.Directive implements Serializable {
     public final hydra.ext.io.shex.syntax.BaseDecl value;
-    
+
     public BaseDecl (hydra.ext.io.shex.syntax.BaseDecl value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof BaseDecl)) {
@@ -54,12 +54,12 @@ public abstract class Directive implements Serializable, Comparable<Directive> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Directive other) {
@@ -70,20 +70,20 @@ public abstract class Directive implements Serializable, Comparable<Directive> {
       BaseDecl o = (BaseDecl) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class PrefixDecl extends hydra.ext.io.shex.syntax.Directive implements Serializable {
     public final hydra.ext.io.shex.syntax.PrefixDecl value;
-    
+
     public PrefixDecl (hydra.ext.io.shex.syntax.PrefixDecl value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof PrefixDecl)) {
@@ -94,12 +94,12 @@ public abstract class Directive implements Serializable, Comparable<Directive> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Directive other) {
@@ -110,7 +110,7 @@ public abstract class Directive implements Serializable, Comparable<Directive> {
       PrefixDecl o = (PrefixDecl) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

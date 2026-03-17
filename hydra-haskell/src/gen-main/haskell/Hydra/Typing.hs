@@ -14,7 +14,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A structured representation of a function term's components, replacing ad-hoc tuples. This captures all the information extracted from peeling lambdas, type lambdas, lets, and type applications from a term.
-data FunctionStructure env = 
+data FunctionStructure env =
   FunctionStructure {
     -- | Type parameters (from type lambdas)
     functionStructureTypeParams :: [Core.Name],
@@ -49,7 +49,7 @@ _FunctionStructure_codomain = Core.Name "codomain"
 _FunctionStructure_environment = Core.Name "environment"
 
 -- | The result of applying inference rules to a term.
-data InferenceResult = 
+data InferenceResult =
   InferenceResult {
     -- | The term which was inferred
     inferenceResultTerm :: Core.Term,
@@ -76,7 +76,7 @@ _InferenceResult_classConstraints = Core.Name "classConstraints"
 _InferenceResult_context = Core.Name "context"
 
 -- | A substitution of term variables for terms
-newtype TermSubst = 
+newtype TermSubst =
   TermSubst {
     unTermSubst :: (M.Map Core.Name Core.Term)}
   deriving (Eq, Ord, Read, Show)
@@ -84,7 +84,7 @@ newtype TermSubst =
 _TermSubst = Core.Name "hydra.typing.TermSubst"
 
 -- | An assertion that two types can be unified into a single type
-data TypeConstraint = 
+data TypeConstraint =
   TypeConstraint {
     -- | The left-hand side of the constraint
     typeConstraintLeft :: Core.Type,
@@ -103,7 +103,7 @@ _TypeConstraint_right = Core.Name "right"
 _TypeConstraint_comment = Core.Name "comment"
 
 -- | A substitution of type variables for types
-newtype TypeSubst = 
+newtype TypeSubst =
   TypeSubst {
     unTypeSubst :: (M.Map Core.Name Core.Type)}
   deriving (Eq, Ord, Read, Show)

@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class Context implements Serializable, Comparable<Context> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.context.Context");
-  
+
   public static final hydra.core.Name TRACE = new hydra.core.Name("trace");
-  
+
   public static final hydra.core.Name MESSAGES = new hydra.core.Name("messages");
-  
+
   public static final hydra.core.Name OTHER = new hydra.core.Name("other");
-  
+
   /**
    * A stack of context labels describing the current execution path
    */
   public final hydra.util.ConsList<String> trace;
-  
+
   /**
    * A log of warnings and/or info messages
    */
   public final hydra.util.ConsList<String> messages;
-  
+
   /**
    * A map of string keys to arbitrary terms as values, for application-specific use
    */
   public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> other;
-  
+
   public Context (hydra.util.ConsList<String> trace, hydra.util.ConsList<String> messages, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> other) {
     this.trace = trace;
     this.messages = messages;
     this.other = other;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Context)) {
@@ -51,12 +51,12 @@ public class Context implements Serializable, Comparable<Context> {
       this.other,
       o.other);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(trace) + 3 * java.util.Objects.hashCode(messages) + 5 * java.util.Objects.hashCode(other);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Context other) {
@@ -71,15 +71,15 @@ public class Context implements Serializable, Comparable<Context> {
     }
     return ((Comparable) other).compareTo(other.other);
   }
-  
+
   public Context withTrace(hydra.util.ConsList<String> trace) {
     return new Context(trace, messages, other);
   }
-  
+
   public Context withMessages(hydra.util.ConsList<String> messages) {
     return new Context(trace, messages, other);
   }
-  
+
   public Context withOther(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> other) {
     return new Context(trace, messages, other);
   }

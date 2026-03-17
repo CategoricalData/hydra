@@ -13,9 +13,9 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Any of a small number of built-in type classes
-data TypeClass = 
+data TypeClass =
   TypeClassEquality  |
-  TypeClassOrdering 
+  TypeClassOrdering
   deriving (Eq, Ord, Read, Show)
 
 _TypeClass = Core.Name "hydra.classes.TypeClass"

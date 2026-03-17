@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class Set implements Serializable, Comparable<Set> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.Set");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.util.ConsList<hydra.ext.cypher.openCypher.SetItem> value;
-  
+
   public Set (hydra.util.ConsList<hydra.ext.cypher.openCypher.SetItem> value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Set)) {
@@ -25,12 +25,12 @@ public class Set implements Serializable, Comparable<Set> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Set other) {

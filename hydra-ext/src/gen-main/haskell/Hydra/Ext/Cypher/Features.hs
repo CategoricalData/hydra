@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A set of features which characterize an OpenCypher query or implementation. Any features which are omitted from the set are assumed to be unsupported or nonrequired.
-data CypherFeatures = 
+data CypherFeatures =
   CypherFeatures {
     -- | Arithmetic operations
     cypherFeaturesArithmetic :: ArithmeticFeatures,
@@ -116,7 +116,7 @@ _CypherFeatures_string = Core.Name "string"
 _CypherFeatures_updating = Core.Name "updating"
 
 -- | Arithmetic operations
-data ArithmeticFeatures = 
+data ArithmeticFeatures =
   ArithmeticFeatures {
     -- | The + operator
     arithmeticFeaturesPlus :: Bool,
@@ -147,7 +147,7 @@ _ArithmeticFeatures_modulus = Core.Name "modulus"
 _ArithmeticFeatures_powerOf = Core.Name "powerOf"
 
 -- | Various kinds of atomic expressions
-data AtomFeatures = 
+data AtomFeatures =
   AtomFeatures {
     -- | CASE expressions
     atomFeaturesCaseExpression :: Bool,
@@ -186,7 +186,7 @@ _AtomFeatures_patternPredicate = Core.Name "patternPredicate"
 _AtomFeatures_variable = Core.Name "variable"
 
 -- | Comparison operators and functions
-data ComparisonFeatures = 
+data ComparisonFeatures =
   ComparisonFeatures {
     -- | The = comparison operator
     comparisonFeaturesEqual :: Bool,
@@ -217,7 +217,7 @@ _ComparisonFeatures_lessThanOrEqual = Core.Name "lessThanOrEqual"
 _ComparisonFeatures_notEqual = Core.Name "notEqual"
 
 -- | Delete operations
-data DeleteFeatures = 
+data DeleteFeatures =
   DeleteFeatures {
     -- | The basic DELETE clause
     deleteFeaturesDelete :: Bool,
@@ -232,7 +232,7 @@ _DeleteFeatures_delete = Core.Name "delete"
 _DeleteFeatures_detachDelete = Core.Name "detachDelete"
 
 -- | Standard Cypher functions
-data FunctionFeatures = 
+data FunctionFeatures =
   FunctionFeatures {
     -- | Aggregate functions
     functionFeaturesAggregateFunction :: AggregateFunctionFeatures,
@@ -303,7 +303,7 @@ _FunctionFeatures_trigonometricFunction = Core.Name "trigonometricFunction"
 _FunctionFeatures_vectorFunction = Core.Name "vectorFunction"
 
 -- | Aggregate functions
-data AggregateFunctionFeatures = 
+data AggregateFunctionFeatures =
   AggregateFunctionFeatures {
     -- | The avg() function / AVG. Returns the average of a set of DURATION values.; Returns the average of a set of FLOAT values.; Returns the average of a set of INTEGER values.
     aggregateFunctionFeaturesAvg :: Bool,
@@ -350,7 +350,7 @@ _AggregateFunctionFeatures_stdevp = Core.Name "stdevp"
 _AggregateFunctionFeatures_sum = Core.Name "sum"
 
 -- | Database functions
-data DatabaseFunctionFeatures = 
+data DatabaseFunctionFeatures =
   DatabaseFunctionFeatures {
     -- | The db.nameFromElementId() function. Resolves the database name from the given element id. Introduced in 5.12.
     databaseFunctionFeaturesDb_nameFromElementId :: Bool}
@@ -361,7 +361,7 @@ _DatabaseFunctionFeatures = Core.Name "hydra.ext.cypher.features.DatabaseFunctio
 _DatabaseFunctionFeatures_db_nameFromElementId = Core.Name "db.nameFromElementId"
 
 -- | GenAI functions
-data GenAIFunctionFeatures = 
+data GenAIFunctionFeatures =
   GenAIFunctionFeatures {
     -- | The genai.vector.encode() function. Encode a given resource as a vector using the named provider. Introduced in 5.17.
     genAIFunctionFeaturesGenai_vector_encode :: Bool}
@@ -372,7 +372,7 @@ _GenAIFunctionFeatures = Core.Name "hydra.ext.cypher.features.GenAIFunctionFeatu
 _GenAIFunctionFeatures_genai_vector_encode = Core.Name "genai.vector.encode"
 
 -- | Graph functions
-data GraphFunctionFeatures = 
+data GraphFunctionFeatures =
   GraphFunctionFeatures {
     -- | The graph.byElementId() function. Resolves the constituent graph to which a given element id belongs. Introduced in 5.13.
     graphFunctionFeaturesGraph_byElementId :: Bool,
@@ -395,7 +395,7 @@ _GraphFunctionFeatures_graph_names = Core.Name "graph.names"
 _GraphFunctionFeatures_graph_propertiesByName = Core.Name "graph.propertiesByName"
 
 -- | List functions
-data ListFunctionFeatures = 
+data ListFunctionFeatures =
   ListFunctionFeatures {
     -- | The keys() function. Returns a LIST<STRING> containing the STRING representations for all the property names of a MAP.; Returns a LIST<STRING> containing the STRING representations for all the property names of a NODE.; Returns a LIST<STRING> containing the STRING representations for all the property names of a RELATIONSHIP.
     listFunctionFeaturesKeys :: Bool,
@@ -450,7 +450,7 @@ _ListFunctionFeatures_toIntegerList = Core.Name "toIntegerList"
 _ListFunctionFeatures_toStringList = Core.Name "toStringList"
 
 -- | Load CSV functions
-data LoadCSVFunctionFeatures = 
+data LoadCSVFunctionFeatures =
   LoadCSVFunctionFeatures {
     -- | The file() function. Returns the absolute path of the file that LOAD CSV is using.
     loadCSVFunctionFeaturesFile :: Bool,
@@ -465,7 +465,7 @@ _LoadCSVFunctionFeatures_file = Core.Name "file"
 _LoadCSVFunctionFeatures_linenumber = Core.Name "linenumber"
 
 -- | Logarithmic functions
-data LogarithmicFunctionFeatures = 
+data LogarithmicFunctionFeatures =
   LogarithmicFunctionFeatures {
     -- | The e() function. Returns the base of the natural logarithm, e.
     logarithmicFunctionFeaturesE :: Bool,
@@ -492,7 +492,7 @@ _LogarithmicFunctionFeatures_log10 = Core.Name "log10"
 _LogarithmicFunctionFeatures_sqrt = Core.Name "sqrt"
 
 -- | Numeric functions
-data NumericFunctionFeatures = 
+data NumericFunctionFeatures =
   NumericFunctionFeatures {
     -- | The abs() function. Returns the absolute value of a FLOAT.; Returns the absolute value of an INTEGER.
     numericFunctionFeaturesAbs :: Bool,
@@ -527,7 +527,7 @@ _NumericFunctionFeatures_round = Core.Name "round"
 _NumericFunctionFeatures_sign = Core.Name "sign"
 
 -- | Predicate functions
-data PredicateFunctionFeatures = 
+data PredicateFunctionFeatures =
   PredicateFunctionFeatures {
     -- | The all() function. Returns true if the predicate holds for all elements in the given LIST<ANY>.
     predicateFunctionFeaturesAll :: Bool,
@@ -558,7 +558,7 @@ _PredicateFunctionFeatures_none = Core.Name "none"
 _PredicateFunctionFeatures_single = Core.Name "single"
 
 -- | Scalar functions
-data ScalarFunctionFeatures = 
+data ScalarFunctionFeatures =
   ScalarFunctionFeatures {
     -- | The char_length() function. Returns the number of Unicode characters in a STRING.
     scalarFunctionFeaturesChar_length :: Bool,
@@ -653,7 +653,7 @@ _ScalarFunctionFeatures_type = Core.Name "type"
 _ScalarFunctionFeatures_valueType = Core.Name "valueType"
 
 -- | Spatial functions
-data SpatialFunctionFeatures = 
+data SpatialFunctionFeatures =
   SpatialFunctionFeatures {
     -- | The point.distance() function. Returns a FLOAT representing the geodesic distance between any two points in the same CRS.
     spatialFunctionFeaturesPoint_distance :: Bool,
@@ -672,7 +672,7 @@ _SpatialFunctionFeatures_point = Core.Name "point"
 _SpatialFunctionFeatures_point_withinBBox = Core.Name "point.withinBBox"
 
 -- | String functions
-data StringFunctionFeatures = 
+data StringFunctionFeatures =
   StringFunctionFeatures {
     -- | The btrim() function. Returns the given STRING with leading and trailing whitespace removed.; Returns the given STRING with leading and trailing trimCharacterString characters removed. Introduced in 5.20.
     stringFunctionFeaturesBtrim :: Bool,
@@ -747,7 +747,7 @@ _StringFunctionFeatures_trim = Core.Name "trim"
 _StringFunctionFeatures_upper = Core.Name "upper"
 
 -- | Temporal duration functions
-data TemporalDurationFunctionFeatures = 
+data TemporalDurationFunctionFeatures =
   TemporalDurationFunctionFeatures {
     -- | The duration() function. Constructs a DURATION value.
     temporalDurationFunctionFeaturesDuration :: Bool,
@@ -774,7 +774,7 @@ _TemporalDurationFunctionFeatures_duration_inMonths = Core.Name "duration.inMont
 _TemporalDurationFunctionFeatures_duration_inSeconds = Core.Name "duration.inSeconds"
 
 -- | Temporal instant functions
-data TemporalInstantFunctionFeatures = 
+data TemporalInstantFunctionFeatures =
   TemporalInstantFunctionFeatures {
     -- | The date() function. Creates a DATE instant.
     temporalInstantFunctionFeaturesDate :: Bool,
@@ -889,7 +889,7 @@ _TemporalInstantFunctionFeatures_time_transaction = Core.Name "time.transaction"
 _TemporalInstantFunctionFeatures_time_truncate = Core.Name "time.truncate"
 
 -- | Trigonometric functions
-data TrigonometricFunctionFeatures = 
+data TrigonometricFunctionFeatures =
   TrigonometricFunctionFeatures {
     -- | The acos() function. Returns the arccosine of a FLOAT in radians.
     trigonometricFunctionFeaturesAcos :: Bool,
@@ -944,7 +944,7 @@ _TrigonometricFunctionFeatures_sin = Core.Name "sin"
 _TrigonometricFunctionFeatures_tan = Core.Name "tan"
 
 -- | Vector functions
-data VectorFunctionFeatures = 
+data VectorFunctionFeatures =
   VectorFunctionFeatures {
     -- | The vector.similarity.cosine() function. Returns a FLOAT representing the similarity between the argument vectors based on their cosine.
     vectorFunctionFeaturesVector_similarity_cosine :: Bool,
@@ -959,7 +959,7 @@ _VectorFunctionFeatures_vector_similarity_cosine = Core.Name "vector.similarity.
 _VectorFunctionFeatures_vector_similarity_euclidean = Core.Name "vector.similarity.euclidean"
 
 -- | List functionality
-data ListFeatures = 
+data ListFeatures =
   ListFeatures {
     -- | Basic list comprehensions
     listFeaturesListComprehension :: Bool,
@@ -974,7 +974,7 @@ _ListFeatures_listComprehension = Core.Name "listComprehension"
 _ListFeatures_listRange = Core.Name "listRange"
 
 -- | Various types of literal values
-data LiteralFeatures = 
+data LiteralFeatures =
   LiteralFeatures {
     -- | Boolean literals (note: included by most if not all implementations).
     literalFeaturesBoolean :: Bool,
@@ -1009,7 +1009,7 @@ _LiteralFeatures_null = Core.Name "null"
 _LiteralFeatures_string = Core.Name "string"
 
 -- | Logical operations
-data LogicalFeatures = 
+data LogicalFeatures =
   LogicalFeatures {
     -- | The AND operator
     logicalFeaturesAnd :: Bool,
@@ -1032,7 +1032,7 @@ _LogicalFeatures_or = Core.Name "or"
 _LogicalFeatures_xor = Core.Name "xor"
 
 -- | Match queries
-data MatchFeatures = 
+data MatchFeatures =
   MatchFeatures {
     -- | The basic (non-optional) MATCH clause
     matchFeaturesMatch :: Bool,
@@ -1047,7 +1047,7 @@ _MatchFeatures_match = Core.Name "match"
 _MatchFeatures_optionalMatch = Core.Name "optionalMatch"
 
 -- | Merge operations
-data MergeFeatures = 
+data MergeFeatures =
   MergeFeatures {
     -- | The basic MERGE clause
     mergeFeaturesMerge :: Bool,
@@ -1066,7 +1066,7 @@ _MergeFeatures_mergeOnCreate = Core.Name "mergeOnCreate"
 _MergeFeatures_mergeOnMatch = Core.Name "mergeOnMatch"
 
 -- | Node patterns
-data NodePatternFeatures = 
+data NodePatternFeatures =
   NodePatternFeatures {
     -- | Specifying multiple labels in a node pattern
     nodePatternFeaturesMultipleLabels :: Bool,
@@ -1093,7 +1093,7 @@ _NodePatternFeatures_variableNode = Core.Name "variableNode"
 _NodePatternFeatures_wildcardLabel = Core.Name "wildcardLabel"
 
 -- | IS NULL / IS NOT NULL checks
-data NullFeatures = 
+data NullFeatures =
   NullFeatures {
     -- | The IS NULL operator
     nullFeaturesIsNull :: Bool,
@@ -1108,7 +1108,7 @@ _NullFeatures_isNull = Core.Name "isNull"
 _NullFeatures_isNotNull = Core.Name "isNotNull"
 
 -- | Path functions only found in OpenCypher
-data PathFeatures = 
+data PathFeatures =
   PathFeatures {
     -- | The shortestPath() function
     pathFeaturesShortestPath :: Bool}
@@ -1119,7 +1119,7 @@ _PathFeatures = Core.Name "hydra.ext.cypher.features.PathFeatures"
 _PathFeatures_shortestPath = Core.Name "shortestPath"
 
 -- | Procedure calls
-data ProcedureCallFeatures = 
+data ProcedureCallFeatures =
   ProcedureCallFeatures {
     -- | CALL within a query
     procedureCallFeaturesInQueryCall :: Bool,
@@ -1138,7 +1138,7 @@ _ProcedureCallFeatures_standaloneCall = Core.Name "standaloneCall"
 _ProcedureCallFeatures_yield = Core.Name "yield"
 
 -- | Projections
-data ProjectionFeatures = 
+data ProjectionFeatures =
   ProjectionFeatures {
     -- | The LIMIT clause
     projectionFeaturesLimit :: Bool,
@@ -1173,7 +1173,7 @@ _ProjectionFeatures_skip = Core.Name "skip"
 _ProjectionFeatures_sortOrder = Core.Name "sortOrder"
 
 -- | Quantifier expressions
-data QuantifierFeatures = 
+data QuantifierFeatures =
   QuantifierFeatures {
     -- | The ALL quantifier
     quantifierFeaturesAll :: Bool,
@@ -1196,7 +1196,7 @@ _QuantifierFeatures_none = Core.Name "none"
 _QuantifierFeatures_single = Core.Name "single"
 
 -- | Range literals within relationship patterns
-data RangeLiteralFeatures = 
+data RangeLiteralFeatures =
   RangeLiteralFeatures {
     -- | Range literals with both lower and upper bounds
     rangeLiteralFeaturesBounds :: Bool,
@@ -1223,7 +1223,7 @@ _RangeLiteralFeatures_starRange = Core.Name "starRange"
 _RangeLiteralFeatures_upperBound = Core.Name "upperBound"
 
 -- | Specific syntax related to reading data from the graph.
-data ReadingFeatures = 
+data ReadingFeatures =
   ReadingFeatures {
     -- | The UNION operator
     readingFeaturesUnion :: Bool,
@@ -1242,7 +1242,7 @@ _ReadingFeatures_unionAll = Core.Name "unionAll"
 _ReadingFeatures_unwind = Core.Name "unwind"
 
 -- | Relationship directions / arrow patterns
-data RelationshipDirectionFeatures = 
+data RelationshipDirectionFeatures =
   RelationshipDirectionFeatures {
     -- | The two-headed arrow (<-[]->) relationship direction
     relationshipDirectionFeaturesBoth :: Bool,
@@ -1265,7 +1265,7 @@ _RelationshipDirectionFeatures_neither = Core.Name "neither"
 _RelationshipDirectionFeatures_right = Core.Name "right"
 
 -- | Relationship patterns
-data RelationshipPatternFeatures = 
+data RelationshipPatternFeatures =
   RelationshipPatternFeatures {
     -- | Specifying a disjunction of multiple types in a relationship pattern
     relationshipPatternFeaturesMultipleTypes :: Bool,
@@ -1284,7 +1284,7 @@ _RelationshipPatternFeatures_variableRelationship = Core.Name "variableRelations
 _RelationshipPatternFeatures_wildcardType = Core.Name "wildcardType"
 
 -- | REMOVE operations
-data RemoveFeatures = 
+data RemoveFeatures =
   RemoveFeatures {
     -- | REMOVE Variable:NodeLabels
     removeFeaturesByLabel :: Bool,
@@ -1299,7 +1299,7 @@ _RemoveFeatures_byLabel = Core.Name "byLabel"
 _RemoveFeatures_byProperty = Core.Name "byProperty"
 
 -- | Set definitions
-data SetFeatures = 
+data SetFeatures =
   SetFeatures {
     -- | Defining a set using PropertyExpression = Expression
     setFeaturesPropertyEquals :: Bool,
@@ -1322,7 +1322,7 @@ _SetFeatures_variablePlusEquals = Core.Name "variablePlusEquals"
 _SetFeatures_variableWithNodeLabels = Core.Name "variableWithNodeLabels"
 
 -- | String functions/keywords only found in OpenCypher
-data StringFeatures = 
+data StringFeatures =
   StringFeatures {
     -- | The contains() function / CONTAINS
     stringFeaturesContains :: Bool,
@@ -1345,7 +1345,7 @@ _StringFeatures_in = Core.Name "in"
 _StringFeatures_startsWith = Core.Name "startsWith"
 
 -- | Specific syntax related to updating data in the graph
-data UpdatingFeatures = 
+data UpdatingFeatures =
   UpdatingFeatures {
     -- | The CREATE clause
     updatingFeaturesCreate :: Bool,

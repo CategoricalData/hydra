@@ -9,95 +9,95 @@ import java.io.Serializable;
  */
 public abstract class Type implements Serializable, Comparable<Type> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.Type");
-  
+
   public static final hydra.core.Name APPLICATION = new hydra.core.Name("application");
-  
+
   public static final hydra.core.Name CTX = new hydra.core.Name("ctx");
-  
+
   public static final hydra.core.Name FUNCTION = new hydra.core.Name("function");
-  
+
   public static final hydra.core.Name INFIX = new hydra.core.Name("infix");
-  
+
   public static final hydra.core.Name LIST = new hydra.core.Name("list");
-  
+
   public static final hydra.core.Name PARENS = new hydra.core.Name("parens");
-  
+
   public static final hydra.core.Name TUPLE = new hydra.core.Name("tuple");
-  
+
   public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
-  
+
   private Type () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Application instance) ;
-    
+
     R visit(Ctx instance) ;
-    
+
     R visit(Function instance) ;
-    
+
     R visit(Infix instance) ;
-    
+
     R visit(List instance) ;
-    
+
     R visit(Parens instance) ;
-    
+
     R visit(Tuple instance) ;
-    
+
     R visit(Variable instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Type instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Application instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Ctx instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Function instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Infix instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(List instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Parens instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Tuple instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Variable instance) {
       return otherwise(instance);
     }
   }
-  
+
   /**
    * An application type
    */
   public static final class Application extends hydra.ext.haskell.ast.Type implements Serializable {
     public final hydra.ext.haskell.ast.ApplicationType value;
-    
+
     public Application (hydra.ext.haskell.ast.ApplicationType value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Application)) {
@@ -108,12 +108,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
@@ -124,23 +124,23 @@ public abstract class Type implements Serializable, Comparable<Type> {
       Application o = (Application) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A context type
    */
   public static final class Ctx extends hydra.ext.haskell.ast.Type implements Serializable {
     public final hydra.ext.haskell.ast.ContextType value;
-    
+
     public Ctx (hydra.ext.haskell.ast.ContextType value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Ctx)) {
@@ -151,12 +151,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
@@ -167,23 +167,23 @@ public abstract class Type implements Serializable, Comparable<Type> {
       Ctx o = (Ctx) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A function type
    */
   public static final class Function extends hydra.ext.haskell.ast.Type implements Serializable {
     public final hydra.ext.haskell.ast.FunctionType value;
-    
+
     public Function (hydra.ext.haskell.ast.FunctionType value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Function)) {
@@ -194,12 +194,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
@@ -210,23 +210,23 @@ public abstract class Type implements Serializable, Comparable<Type> {
       Function o = (Function) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * An infix type
    */
   public static final class Infix extends hydra.ext.haskell.ast.Type implements Serializable {
     public final hydra.ext.haskell.ast.InfixType value;
-    
+
     public Infix (hydra.ext.haskell.ast.InfixType value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Infix)) {
@@ -237,12 +237,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
@@ -253,23 +253,23 @@ public abstract class Type implements Serializable, Comparable<Type> {
       Infix o = (Infix) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A list type
    */
   public static final class List extends hydra.ext.haskell.ast.Type implements Serializable {
     public final hydra.ext.haskell.ast.Type value;
-    
+
     public List (hydra.ext.haskell.ast.Type value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof List)) {
@@ -280,12 +280,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
@@ -296,23 +296,23 @@ public abstract class Type implements Serializable, Comparable<Type> {
       List o = (List) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A parenthesized type
    */
   public static final class Parens extends hydra.ext.haskell.ast.Type implements Serializable {
     public final hydra.ext.haskell.ast.Type value;
-    
+
     public Parens (hydra.ext.haskell.ast.Type value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Parens)) {
@@ -323,12 +323,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
@@ -339,23 +339,23 @@ public abstract class Type implements Serializable, Comparable<Type> {
       Parens o = (Parens) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A tuple type
    */
   public static final class Tuple extends hydra.ext.haskell.ast.Type implements Serializable {
     public final hydra.util.ConsList<hydra.ext.haskell.ast.Type> value;
-    
+
     public Tuple (hydra.util.ConsList<hydra.ext.haskell.ast.Type> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Tuple)) {
@@ -366,12 +366,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
@@ -382,23 +382,23 @@ public abstract class Type implements Serializable, Comparable<Type> {
       Tuple o = (Tuple) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A type variable or type name
    */
   public static final class Variable extends hydra.ext.haskell.ast.Type implements Serializable {
     public final hydra.ext.haskell.ast.Name value;
-    
+
     public Variable (hydra.ext.haskell.ast.Name value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Variable)) {
@@ -409,12 +409,12 @@ public abstract class Type implements Serializable, Comparable<Type> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Type other) {
@@ -425,7 +425,7 @@ public abstract class Type implements Serializable, Comparable<Type> {
       Variable o = (Variable) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

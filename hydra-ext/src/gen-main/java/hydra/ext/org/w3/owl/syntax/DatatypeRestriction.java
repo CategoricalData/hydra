@@ -9,20 +9,20 @@ import java.io.Serializable;
  */
 public class DatatypeRestriction implements Serializable, Comparable<DatatypeRestriction> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DatatypeRestriction");
-  
+
   public static final hydra.core.Name DATATYPE = new hydra.core.Name("datatype");
-  
+
   public static final hydra.core.Name CONSTRAINTS = new hydra.core.Name("constraints");
-  
+
   public final hydra.ext.org.w3.owl.syntax.Datatype datatype;
-  
+
   public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints;
-  
+
   public DatatypeRestriction (hydra.ext.org.w3.owl.syntax.Datatype datatype, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints) {
     this.datatype = datatype;
     this.constraints = constraints;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof DatatypeRestriction)) {
@@ -35,12 +35,12 @@ public class DatatypeRestriction implements Serializable, Comparable<DatatypeRes
       this.constraints,
       o.constraints);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(datatype) + 3 * java.util.Objects.hashCode(constraints);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DatatypeRestriction other) {
@@ -51,11 +51,11 @@ public class DatatypeRestriction implements Serializable, Comparable<DatatypeRes
     }
     return ((Comparable) constraints).compareTo(other.constraints);
   }
-  
+
   public DatatypeRestriction withDatatype(hydra.ext.org.w3.owl.syntax.Datatype datatype) {
     return new DatatypeRestriction(datatype, constraints);
   }
-  
+
   public DatatypeRestriction withConstraints(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints) {
     return new DatatypeRestriction(datatype, constraints);
   }

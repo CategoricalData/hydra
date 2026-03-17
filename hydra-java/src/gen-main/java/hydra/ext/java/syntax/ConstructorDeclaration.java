@@ -6,30 +6,30 @@ import java.io.Serializable;
 
 public class ConstructorDeclaration implements Serializable, Comparable<ConstructorDeclaration> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ConstructorDeclaration");
-  
+
   public static final hydra.core.Name MODIFIERS = new hydra.core.Name("modifiers");
-  
+
   public static final hydra.core.Name CONSTRUCTOR = new hydra.core.Name("constructor");
-  
+
   public static final hydra.core.Name THROWS = new hydra.core.Name("throws");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.ConstructorModifier> modifiers;
-  
+
   public final hydra.ext.java.syntax.ConstructorDeclarator constructor;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.Throws> throws_;
-  
+
   public final hydra.ext.java.syntax.ConstructorBody body;
-  
+
   public ConstructorDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.ConstructorModifier> modifiers, hydra.ext.java.syntax.ConstructorDeclarator constructor, hydra.util.Maybe<hydra.ext.java.syntax.Throws> throws_, hydra.ext.java.syntax.ConstructorBody body) {
     this.modifiers = modifiers;
     this.constructor = constructor;
     this.throws_ = throws_;
     this.body = body;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ConstructorDeclaration)) {
@@ -46,12 +46,12 @@ public class ConstructorDeclaration implements Serializable, Comparable<Construc
       this.body,
       o.body);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(modifiers) + 3 * java.util.Objects.hashCode(constructor) + 5 * java.util.Objects.hashCode(throws_) + 7 * java.util.Objects.hashCode(body);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ConstructorDeclaration other) {
@@ -70,19 +70,19 @@ public class ConstructorDeclaration implements Serializable, Comparable<Construc
     }
     return ((Comparable) body).compareTo(other.body);
   }
-  
+
   public ConstructorDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.ConstructorModifier> modifiers) {
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }
-  
+
   public ConstructorDeclaration withConstructor(hydra.ext.java.syntax.ConstructorDeclarator constructor) {
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }
-  
+
   public ConstructorDeclaration withThrows(hydra.util.Maybe<hydra.ext.java.syntax.Throws> throws_) {
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }
-  
+
   public ConstructorDeclaration withBody(hydra.ext.java.syntax.ConstructorBody body) {
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }

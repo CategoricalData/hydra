@@ -6,52 +6,52 @@ import java.io.Serializable;
 
 public abstract class ReadingClause implements Serializable, Comparable<ReadingClause> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.ReadingClause");
-  
+
   public static final hydra.core.Name MATCH = new hydra.core.Name("match");
-  
+
   public static final hydra.core.Name UNWIND = new hydra.core.Name("unwind");
-  
+
   public static final hydra.core.Name IN_QUERY_CALL = new hydra.core.Name("inQueryCall");
-  
+
   private ReadingClause () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Match instance) ;
-    
+
     R visit(Unwind instance) ;
-    
+
     R visit(InQueryCall instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ReadingClause instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Match instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Unwind instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(InQueryCall instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Match extends hydra.ext.cypher.openCypher.ReadingClause implements Serializable {
     public final hydra.ext.cypher.openCypher.Match value;
-    
+
     public Match (hydra.ext.cypher.openCypher.Match value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Match)) {
@@ -62,12 +62,12 @@ public abstract class ReadingClause implements Serializable, Comparable<ReadingC
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ReadingClause other) {
@@ -78,20 +78,20 @@ public abstract class ReadingClause implements Serializable, Comparable<ReadingC
       Match o = (Match) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Unwind extends hydra.ext.cypher.openCypher.ReadingClause implements Serializable {
     public final hydra.ext.cypher.openCypher.Unwind value;
-    
+
     public Unwind (hydra.ext.cypher.openCypher.Unwind value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Unwind)) {
@@ -102,12 +102,12 @@ public abstract class ReadingClause implements Serializable, Comparable<ReadingC
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ReadingClause other) {
@@ -118,20 +118,20 @@ public abstract class ReadingClause implements Serializable, Comparable<ReadingC
       Unwind o = (Unwind) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class InQueryCall extends hydra.ext.cypher.openCypher.ReadingClause implements Serializable {
     public final hydra.ext.cypher.openCypher.InQueryCall value;
-    
+
     public InQueryCall (hydra.ext.cypher.openCypher.InQueryCall value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof InQueryCall)) {
@@ -142,12 +142,12 @@ public abstract class ReadingClause implements Serializable, Comparable<ReadingC
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ReadingClause other) {
@@ -158,7 +158,7 @@ public abstract class ReadingClause implements Serializable, Comparable<ReadingC
       InQueryCall o = (InQueryCall) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

@@ -29,17 +29,17 @@ T1 = TypeVar("T1")
 
 def encode_constant_for_field_name(env: T0, tname: T1, fname: hydra.core.Name) -> hydra.ext.python.syntax.Name:
     r"""Generate a constant name for a field definition."""
-    
+
     return hydra.ext.python.syntax.Name(hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, hydra.util.CaseConvention.UPPER_SNAKE, fname.value))
 
 def encode_constant_for_type_name(env: T0, tname: T1) -> hydra.ext.python.syntax.Name:
     r"""Generate a constant name for a type definition."""
-    
+
     return hydra.ext.python.syntax.Name("TYPE_")
 
 def sanitize_python_name(v1: str) -> str:
     r"""Sanitize a string to be a valid Python name."""
-    
+
     return hydra.formatting.sanitize_with_underscores(hydra.ext.python.language.python_reserved_words(), v1)
 
 # Whether to use __future__ annotations for forward references.
@@ -47,7 +47,7 @@ use_future_annotations = True
 
 def encode_name(is_qualified: bool, conv: hydra.util.CaseConvention, env: hydra.ext.python.helpers.PythonEnvironment, name: hydra.core.Name) -> hydra.ext.python.syntax.Name:
     r"""Encode a Hydra name as a Python name."""
-    
+
     namespaces = env.namespaces
     @lru_cache(1)
     def focus_pair() -> tuple[hydra.module.Namespace, hydra.ext.python.syntax.DottedName]:
@@ -72,17 +72,17 @@ def encode_name(is_qualified: bool, conv: hydra.util.CaseConvention, env: hydra.
 
 def encode_enum_value(v1: hydra.ext.python.helpers.PythonEnvironment, v2: hydra.core.Name) -> hydra.ext.python.syntax.Name:
     r"""Encode a name as a Python enum value (UPPER_SNAKE case)."""
-    
+
     return encode_name(False, hydra.util.CaseConvention.UPPER_SNAKE, v1, v2)
 
 def encode_field_name(env: hydra.ext.python.helpers.PythonEnvironment, fname: hydra.core.Name) -> hydra.ext.python.syntax.Name:
     r"""Encode a name as a Python field name (lower_snake case)."""
-    
+
     return encode_name(False, hydra.util.CaseConvention.LOWER_SNAKE, env, fname)
 
 def encode_name_qualified(env: hydra.ext.python.helpers.PythonEnvironment, name: hydra.core.Name) -> hydra.ext.python.syntax.Name:
     r"""Encode a name as a fully qualified Python name."""
-    
+
     namespaces = env.namespaces
     @lru_cache(1)
     def focus_pair() -> tuple[hydra.module.Namespace, hydra.ext.python.syntax.DottedName]:
@@ -102,17 +102,17 @@ def encode_name_qualified(env: hydra.ext.python.helpers.PythonEnvironment, name:
 
 def encode_namespace(ns_val: hydra.module.Namespace) -> hydra.ext.python.syntax.DottedName:
     r"""Encode a namespace as a Python dotted name."""
-    
+
     return hydra.ext.python.syntax.DottedName(hydra.lib.lists.map((lambda part: hydra.ext.python.syntax.Name(hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, hydra.util.CaseConvention.LOWER_SNAKE, part))), hydra.lib.strings.split_on(".", ns_val.value)))
 
 def encode_type_variable(name: hydra.core.Name) -> hydra.ext.python.syntax.Name:
     r"""Encode a type variable name (capitalized)."""
-    
+
     return hydra.ext.python.syntax.Name(hydra.formatting.capitalize(name.value))
 
 def variable_reference(conv: hydra.util.CaseConvention, quoted: bool, env: hydra.ext.python.helpers.PythonEnvironment, name: hydra.core.Name) -> hydra.ext.python.syntax.Expression:
     r"""Reference a variable as a Python expression."""
-    
+
     @lru_cache(1)
     def py_name() -> hydra.ext.python.syntax.Name:
         return encode_name(True, conv, env, name)
@@ -136,15 +136,15 @@ def variable_reference(conv: hydra.util.CaseConvention, quoted: bool, env: hydra
 
 def term_variable_reference(v1: hydra.ext.python.helpers.PythonEnvironment, v2: hydra.core.Name) -> hydra.ext.python.syntax.Expression:
     r"""Reference a term variable as a Python expression."""
-    
+
     return variable_reference(hydra.util.CaseConvention.LOWER_SNAKE, False, v1, v2)
 
 def type_variable_reference(v1: hydra.ext.python.helpers.PythonEnvironment, v2: hydra.core.Name) -> hydra.ext.python.syntax.Expression:
     r"""Reference a type variable as a Python expression."""
-    
+
     return variable_reference(hydra.util.CaseConvention.PASCAL, False, v1, v2)
 
 def variant_name(is_qualified: bool, env: hydra.ext.python.helpers.PythonEnvironment, tname: hydra.core.Name, fname: hydra.core.Name) -> hydra.ext.python.syntax.Name:
     r"""Generate a variant name from type name and field name."""
-    
+
     return encode_name(is_qualified, hydra.util.CaseConvention.PASCAL, env, hydra.core.Name(hydra.lib.strings.cat2(tname.value, hydra.formatting.capitalize(fname.value))))

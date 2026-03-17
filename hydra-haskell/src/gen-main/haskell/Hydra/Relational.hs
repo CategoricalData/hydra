@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd
-newtype ColumnName = 
+newtype ColumnName =
   ColumnName {
     unColumnName :: String}
   deriving (Eq, Ord, Read, Show)
@@ -21,7 +21,7 @@ newtype ColumnName =
 _ColumnName = Core.Name "hydra.relational.ColumnName"
 
 -- | An abstract specification of the domain represented by a column in a relation; a role
-data ColumnSchema t = 
+data ColumnSchema t =
   ColumnSchema {
     -- | A unique name for the column
     columnSchemaName :: ColumnName,
@@ -36,7 +36,7 @@ _ColumnSchema_name = Core.Name "name"
 _ColumnSchema_domain = Core.Name "domain"
 
 -- | A mapping from certain columns of a source relation to primary key columns of a target relation
-data ForeignKey = 
+data ForeignKey =
   ForeignKey {
     -- | The name of the target relation
     foreignKeyForeignRelation :: RelationName,
@@ -51,7 +51,7 @@ _ForeignKey_foreignRelation = Core.Name "foreignRelation"
 _ForeignKey_keys = Core.Name "keys"
 
 -- | A primary key of a relation, specified either as a single column, or as a list of columns
-newtype PrimaryKey = 
+newtype PrimaryKey =
   PrimaryKey {
     unPrimaryKey :: [ColumnName]}
   deriving (Eq, Ord, Read, Show)
@@ -59,7 +59,7 @@ newtype PrimaryKey =
 _PrimaryKey = Core.Name "hydra.relational.PrimaryKey"
 
 -- | A set of distinct n-tuples; a table
-newtype Relation v = 
+newtype Relation v =
   Relation {
     unRelation :: [Row v]}
   deriving (Eq, Ord, Read, Show)
@@ -67,7 +67,7 @@ newtype Relation v =
 _Relation = Core.Name "hydra.relational.Relation"
 
 -- | A unique relation (table) name
-newtype RelationName = 
+newtype RelationName =
   RelationName {
     unRelationName :: String}
   deriving (Eq, Ord, Read, Show)
@@ -75,7 +75,7 @@ newtype RelationName =
 _RelationName = Core.Name "hydra.relational.RelationName"
 
 -- | An abstract relation; the name and columns of a relation without its actual data
-data RelationSchema t = 
+data RelationSchema t =
   RelationSchema {
     -- | A unique name for the relation
     relationSchemaName :: RelationName,
@@ -98,7 +98,7 @@ _RelationSchema_primaryKeys = Core.Name "primaryKeys"
 _RelationSchema_foreignKeys = Core.Name "foreignKeys"
 
 -- | A domain-unordered (string-indexed, rather than position-indexed) relation
-newtype Relationship v = 
+newtype Relationship v =
   Relationship {
     unRelationship :: (S.Set (M.Map ColumnName v))}
   deriving (Eq, Ord, Read, Show)
@@ -106,7 +106,7 @@ newtype Relationship v =
 _Relationship = Core.Name "hydra.relational.Relationship"
 
 -- | An n-tuple which is an element of a given relation
-newtype Row v = 
+newtype Row v =
   Row {
     unRow :: [v]}
   deriving (Eq, Ord, Read, Show)

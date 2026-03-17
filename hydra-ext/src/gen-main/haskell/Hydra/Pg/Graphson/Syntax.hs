@@ -12,14 +12,14 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-newtype BigDecimalValue = 
+newtype BigDecimalValue =
   BigDecimalValue {
     unBigDecimalValue :: String}
   deriving (Eq, Ord, Read, Show)
 
 _BigDecimalValue = Core.Name "hydra.pg.graphson.syntax.BigDecimalValue"
 
-data CompositeTypedValue = 
+data CompositeTypedValue =
   CompositeTypedValue {
     compositeTypedValueType :: TypeName,
     compositeTypedValueFields :: Map}
@@ -31,18 +31,18 @@ _CompositeTypedValue_type = Core.Name "type"
 
 _CompositeTypedValue_fields = Core.Name "fields"
 
-newtype DateTime = 
+newtype DateTime =
   DateTime {
     unDateTime :: String}
   deriving (Eq, Ord, Read, Show)
 
 _DateTime = Core.Name "hydra.pg.graphson.syntax.DateTime"
 
-data DoubleValue = 
+data DoubleValue =
   DoubleValueFinite Double |
   DoubleValueInfinity  |
   DoubleValueNegativeInfinity  |
-  DoubleValueNotANumber 
+  DoubleValueNotANumber
   deriving (Eq, Ord, Read, Show)
 
 _DoubleValue = Core.Name "hydra.pg.graphson.syntax.DoubleValue"
@@ -55,25 +55,25 @@ _DoubleValue_negativeInfinity = Core.Name "negativeInfinity"
 
 _DoubleValue_notANumber = Core.Name "notANumber"
 
-newtype Duration = 
+newtype Duration =
   Duration {
     unDuration :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Duration = Core.Name "hydra.pg.graphson.syntax.Duration"
 
-newtype EdgeLabel = 
+newtype EdgeLabel =
   EdgeLabel {
     unEdgeLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
 _EdgeLabel = Core.Name "hydra.pg.graphson.syntax.EdgeLabel"
 
-data FloatValue = 
+data FloatValue =
   FloatValueFinite Float |
   FloatValueInfinity  |
   FloatValueNegativeInfinity  |
-  FloatValueNotANumber 
+  FloatValueNotANumber
   deriving (Eq, Ord, Read, Show)
 
 _FloatValue = Core.Name "hydra.pg.graphson.syntax.FloatValue"
@@ -86,14 +86,14 @@ _FloatValue_negativeInfinity = Core.Name "negativeInfinity"
 
 _FloatValue_notANumber = Core.Name "notANumber"
 
-newtype Map = 
+newtype Map =
   Map {
     unMap :: [ValuePair]}
   deriving (Eq, Ord, Read, Show)
 
 _Map = Core.Name "hydra.pg.graphson.syntax.Map"
 
-data AdjacentEdge = 
+data AdjacentEdge =
   AdjacentEdge {
     adjacentEdgeId :: Value,
     adjacentEdgeVertexId :: Value,
@@ -108,7 +108,7 @@ _AdjacentEdge_vertexId = Core.Name "vertexId"
 
 _AdjacentEdge_properties = Core.Name "properties"
 
-data PrimitiveTypedValue = 
+data PrimitiveTypedValue =
   PrimitiveTypedValue {
     primitiveTypedValueType :: TypeName,
     primitiveTypedValueValue :: String}
@@ -120,28 +120,28 @@ _PrimitiveTypedValue_type = Core.Name "type"
 
 _PrimitiveTypedValue_value = Core.Name "value"
 
-newtype PropertyKey = 
+newtype PropertyKey =
   PropertyKey {
     unPropertyKey :: String}
   deriving (Eq, Ord, Read, Show)
 
 _PropertyKey = Core.Name "hydra.pg.graphson.syntax.PropertyKey"
 
-newtype TypeName = 
+newtype TypeName =
   TypeName {
     unTypeName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _TypeName = Core.Name "hydra.pg.graphson.syntax.TypeName"
 
-newtype Uuid = 
+newtype Uuid =
   Uuid {
     unUuid :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Uuid = Core.Name "hydra.pg.graphson.syntax.Uuid"
 
-data Value = 
+data Value =
   ValueBigDecimal BigDecimalValue |
   ValueBigInteger Integer |
   ValueBinary String |
@@ -209,7 +209,7 @@ _Value_string = Core.Name "string"
 
 _Value_uuid = Core.Name "uuid"
 
-data ValuePair = 
+data ValuePair =
   ValuePair {
     valuePairFirst :: Value,
     valuePairSecond :: Value}
@@ -221,7 +221,7 @@ _ValuePair_first = Core.Name "first"
 
 _ValuePair_second = Core.Name "second"
 
-data Vertex = 
+data Vertex =
   Vertex {
     vertexId :: Value,
     vertexLabel :: (Maybe VertexLabel),
@@ -242,14 +242,14 @@ _Vertex_outEdges = Core.Name "outEdges"
 
 _Vertex_properties = Core.Name "properties"
 
-newtype VertexLabel = 
+newtype VertexLabel =
   VertexLabel {
     unVertexLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
 _VertexLabel = Core.Name "hydra.pg.graphson.syntax.VertexLabel"
 
-data VertexPropertyValue = 
+data VertexPropertyValue =
   VertexPropertyValue {
     vertexPropertyValueId :: (Maybe Value),
     vertexPropertyValueValue :: Value}

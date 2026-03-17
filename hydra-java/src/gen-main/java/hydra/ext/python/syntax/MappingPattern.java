@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class MappingPattern implements Serializable, Comparable<MappingPattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.MappingPattern");
-  
+
   public static final hydra.core.Name ITEMS = new hydra.core.Name("items");
-  
+
   public static final hydra.core.Name DOUBLE_STAR = new hydra.core.Name("doubleStar");
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.ItemsPattern> items;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.DoubleStarPattern> doubleStar;
-  
+
   public MappingPattern (hydra.util.Maybe<hydra.ext.python.syntax.ItemsPattern> items, hydra.util.Maybe<hydra.ext.python.syntax.DoubleStarPattern> doubleStar) {
     this.items = items;
     this.doubleStar = doubleStar;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MappingPattern)) {
@@ -32,12 +32,12 @@ public class MappingPattern implements Serializable, Comparable<MappingPattern> 
       this.doubleStar,
       o.doubleStar);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(items) + 3 * java.util.Objects.hashCode(doubleStar);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MappingPattern other) {
@@ -48,11 +48,11 @@ public class MappingPattern implements Serializable, Comparable<MappingPattern> 
     }
     return ((Comparable) doubleStar).compareTo(other.doubleStar);
   }
-  
+
   public MappingPattern withItems(hydra.util.Maybe<hydra.ext.python.syntax.ItemsPattern> items) {
     return new MappingPattern(items, doubleStar);
   }
-  
+
   public MappingPattern withDoubleStar(hydra.util.Maybe<hydra.ext.python.syntax.DoubleStarPattern> doubleStar) {
     return new MappingPattern(items, doubleStar);
   }

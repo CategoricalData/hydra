@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class ResourceSpecification implements Serializable, Comparable<ResourceSpecification> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ResourceSpecification");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.Resource> value;
-  
+
   public ResourceSpecification (hydra.util.ConsList<hydra.ext.java.syntax.Resource> value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ResourceSpecification)) {
@@ -25,12 +25,12 @@ public class ResourceSpecification implements Serializable, Comparable<ResourceS
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ResourceSpecification other) {

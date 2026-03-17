@@ -24,7 +24,7 @@ import qualified Data.Set as S
 adjacentEdge :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.AdjacentEdge t0)
 adjacentEdge v cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "label" edgeLabel fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" v fieldMap cx) (\field_id -> Eithers.bind (Helpers.requireField "vertex" v fieldMap cx) (\field_vertex -> Eithers.bind (Helpers.requireField "properties" (Helpers.decodeMap propertyKey v) fieldMap cx) (\field_properties -> Right (Model.AdjacentEdge {
           Model.adjacentEdgeLabel = field_label,
@@ -36,8 +36,8 @@ adjacentEdge v cx raw =
 direction :: Graph.Graph -> Core.Term -> Either Error.DecodingError Model.Direction
 direction cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -55,7 +55,7 @@ direction cx raw =
 edge :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.Edge t0)
 edge v cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "label" edgeLabel fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" v fieldMap cx) (\field_id -> Eithers.bind (Helpers.requireField "out" v fieldMap cx) (\field_out -> Eithers.bind (Helpers.requireField "in" v fieldMap cx) (\field_in -> Eithers.bind (Helpers.requireField "properties" (Helpers.decodeMap propertyKey v) fieldMap cx) (\field_properties -> Right (Model.Edge {
           Model.edgeLabel = field_label,
@@ -78,7 +78,7 @@ edgeLabel cx raw =
 edgeType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.EdgeType t0)
 edgeType t cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "label" edgeLabel fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" t fieldMap cx) (\field_id -> Eithers.bind (Helpers.requireField "out" vertexLabel fieldMap cx) (\field_out -> Eithers.bind (Helpers.requireField "in" vertexLabel fieldMap cx) (\field_in -> Eithers.bind (Helpers.requireField "properties" (Helpers.decodeList (propertyType t)) fieldMap cx) (\field_properties -> Right (Model.EdgeType {
           Model.edgeTypeLabel = field_label,
@@ -91,8 +91,8 @@ edgeType t cx raw =
 element :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.Element t0)
 element v cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -108,8 +108,8 @@ element v cx raw =
 elementKind :: Graph.Graph -> Core.Term -> Either Error.DecodingError Model.ElementKind
 elementKind cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -125,7 +125,7 @@ elementKind cx raw =
 elementTree :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.ElementTree t0)
 elementTree v cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "self" (element v) fieldMap cx) (\field_self -> Eithers.bind (Helpers.requireField "dependencies" (Helpers.decodeList (elementTree v)) fieldMap cx) (\field_dependencies -> Right (Model.ElementTree {
           Model.elementTreeSelf = field_self,
@@ -135,8 +135,8 @@ elementTree v cx raw =
 elementType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.ElementType t0)
 elementType t cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -152,7 +152,7 @@ elementType t cx raw =
 elementTypeTree :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.ElementTypeTree t0)
 elementTypeTree t cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "self" (elementType t) fieldMap cx) (\field_self -> Eithers.bind (Helpers.requireField "dependencies" (Helpers.decodeList (elementTypeTree t)) fieldMap cx) (\field_dependencies -> Right (Model.ElementTypeTree {
           Model.elementTypeTreeSelf = field_self,
@@ -162,7 +162,7 @@ elementTypeTree t cx raw =
 graph :: Ord t0 => ((Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.Graph t0))
 graph v cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "vertices" (Helpers.decodeMap v (vertex v)) fieldMap cx) (\field_vertices -> Eithers.bind (Helpers.requireField "edges" (Helpers.decodeMap v (edge v)) fieldMap cx) (\field_edges -> Right (Model.Graph {
           Model.graphVertices = field_vertices,
@@ -172,7 +172,7 @@ graph v cx raw =
 graphSchema :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.GraphSchema t0)
 graphSchema t cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "vertices" (Helpers.decodeMap vertexLabel (vertexType t)) fieldMap cx) (\field_vertices -> Eithers.bind (Helpers.requireField "edges" (Helpers.decodeMap edgeLabel (edgeType t)) fieldMap cx) (\field_edges -> Right (Model.GraphSchema {
           Model.graphSchemaVertices = field_vertices,
@@ -182,8 +182,8 @@ graphSchema t cx raw =
 label :: Graph.Graph -> Core.Term -> Either Error.DecodingError Model.Label
 label cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -199,7 +199,7 @@ label cx raw =
 lazyGraph :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.LazyGraph t0)
 lazyGraph v cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "vertices" (Helpers.decodeList (vertex v)) fieldMap cx) (\field_vertices -> Eithers.bind (Helpers.requireField "edges" (Helpers.decodeList (edge v)) fieldMap cx) (\field_edges -> Right (Model.LazyGraph {
           Model.lazyGraphVertices = field_vertices,
@@ -209,7 +209,7 @@ lazyGraph v cx raw =
 property :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.Property t0)
 property v cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "key" propertyKey fieldMap cx) (\field_key -> Eithers.bind (Helpers.requireField "value" v fieldMap cx) (\field_value -> Right (Model.Property {
           Model.propertyKey = field_key,
@@ -229,7 +229,7 @@ propertyKey cx raw =
 propertyType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.PropertyType t0)
 propertyType t cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "key" propertyKey fieldMap cx) (\field_key -> Eithers.bind (Helpers.requireField "value" t fieldMap cx) (\field_value -> Eithers.bind (Helpers.requireField "required" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
@@ -244,7 +244,7 @@ propertyType t cx raw =
 vertex :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.Vertex t0)
 vertex v cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "label" vertexLabel fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" v fieldMap cx) (\field_id -> Eithers.bind (Helpers.requireField "properties" (Helpers.decodeMap propertyKey v) fieldMap cx) (\field_properties -> Right (Model.Vertex {
           Model.vertexLabel = field_label,
@@ -265,7 +265,7 @@ vertexLabel cx raw =
 vertexType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.VertexType t0)
 vertexType t cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "label" vertexLabel fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" t fieldMap cx) (\field_id -> Eithers.bind (Helpers.requireField "properties" (Helpers.decodeList (propertyType t)) fieldMap cx) (\field_properties -> Right (Model.VertexType {
           Model.vertexTypeLabel = field_label,
@@ -276,7 +276,7 @@ vertexType t cx raw =
 vertexWithAdjacentEdges :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Model.VertexWithAdjacentEdges t0)
 vertexWithAdjacentEdges v cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "vertex" (vertex v) fieldMap cx) (\field_vertex -> Eithers.bind (Helpers.requireField "ins" (Helpers.decodeList (adjacentEdge v)) fieldMap cx) (\field_ins -> Eithers.bind (Helpers.requireField "outs" (Helpers.decodeList (adjacentEdge v)) fieldMap cx) (\field_outs -> Right (Model.VertexWithAdjacentEdges {
           Model.vertexWithAdjacentEdgesVertex = field_vertex,

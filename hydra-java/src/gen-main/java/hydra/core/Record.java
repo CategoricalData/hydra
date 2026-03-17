@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class Record implements Serializable, Comparable<Record> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Record");
-  
+
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("typeName");
-  
+
   public static final hydra.core.Name FIELDS = new hydra.core.Name("fields");
-  
+
   /**
    * The name of the record type
    */
   public final hydra.core.Name typeName;
-  
+
   /**
    * The fields of the record, as a list of name/term pairs
    */
   public final hydra.util.ConsList<hydra.core.Field> fields;
-  
+
   public Record (hydra.core.Name typeName, hydra.util.ConsList<hydra.core.Field> fields) {
     this.typeName = typeName;
     this.fields = fields;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Record)) {
@@ -41,12 +41,12 @@ public class Record implements Serializable, Comparable<Record> {
       this.fields,
       o.fields);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(typeName) + 3 * java.util.Objects.hashCode(fields);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Record other) {
@@ -57,11 +57,11 @@ public class Record implements Serializable, Comparable<Record> {
     }
     return ((Comparable) fields).compareTo(other.fields);
   }
-  
+
   public Record withTypeName(hydra.core.Name typeName) {
     return new Record(typeName, fields);
   }
-  
+
   public Record withFields(hydra.util.ConsList<hydra.core.Field> fields) {
     return new Record(typeName, fields);
   }

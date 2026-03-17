@@ -63,11 +63,11 @@ public interface Language {
       new hydra.variants.TypeVariant.Wrap())));
     return new hydra.coders.Language(new hydra.coders.LanguageName("hydra.ext.python"), new hydra.coders.LanguageConstraints(eliminationVariants.get(), literalVariants.get(), floatTypes.get(), functionVariants.get(), integerTypes.get(), termVariants.get(), typeVariants.get(), p0 -> hydra.ext.python.language.Language.<hydra.core.Type>pythonLanguage_typePredicate(p0)));
   }
-  
+
   static <T0> Boolean pythonLanguage_typePredicate(T0 ignored) {
     return true;
   }
-  
+
   static hydra.util.PersistentSet<String> pythonReservedWords() {
     hydra.util.ConsList<String> hydraPythonKeywords = hydra.util.ConsList.of(
       "Node",

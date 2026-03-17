@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class WriterTestCase<A> implements Serializable, Comparable<WriterTestCase<A>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.WriterTestCase");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
-  
+
   /**
    * The input value to write
    */
   public final A input;
-  
+
   /**
    * The expected string
    */
   public final String output;
-  
+
   public WriterTestCase (A input, String output) {
     this.input = input;
     this.output = output;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof WriterTestCase)) {
@@ -41,12 +41,12 @@ public class WriterTestCase<A> implements Serializable, Comparable<WriterTestCas
       this.output,
       o.output);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(output);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(WriterTestCase other) {
@@ -57,11 +57,11 @@ public class WriterTestCase<A> implements Serializable, Comparable<WriterTestCas
     }
     return ((Comparable) output).compareTo(other.output);
   }
-  
+
   public WriterTestCase withInput(A input) {
     return new WriterTestCase(input, output);
   }
-  
+
   public WriterTestCase withOutput(String output) {
     return new WriterTestCase(input, output);
   }

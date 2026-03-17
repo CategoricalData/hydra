@@ -6,30 +6,30 @@ import java.io.Serializable;
 
 public class ConstructorDeclarator implements Serializable, Comparable<ConstructorDeclarator> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ConstructorDeclarator");
-  
+
   public static final hydra.core.Name PARAMETERS = new hydra.core.Name("parameters");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name RECEIVER_PARAMETER = new hydra.core.Name("receiverParameter");
-  
+
   public static final hydra.core.Name FORMAL_PARAMETERS = new hydra.core.Name("formalParameters");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters;
-  
+
   public final hydra.ext.java.syntax.SimpleTypeName name;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters;
-  
+
   public ConstructorDeclarator (hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters, hydra.ext.java.syntax.SimpleTypeName name, hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter, hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters) {
     this.parameters = parameters;
     this.name = name;
     this.receiverParameter = receiverParameter;
     this.formalParameters = formalParameters;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ConstructorDeclarator)) {
@@ -46,12 +46,12 @@ public class ConstructorDeclarator implements Serializable, Comparable<Construct
       this.formalParameters,
       o.formalParameters);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(parameters) + 3 * java.util.Objects.hashCode(name) + 5 * java.util.Objects.hashCode(receiverParameter) + 7 * java.util.Objects.hashCode(formalParameters);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ConstructorDeclarator other) {
@@ -70,19 +70,19 @@ public class ConstructorDeclarator implements Serializable, Comparable<Construct
     }
     return ((Comparable) formalParameters).compareTo(other.formalParameters);
   }
-  
+
   public ConstructorDeclarator withParameters(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters) {
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
-  
+
   public ConstructorDeclarator withName(hydra.ext.java.syntax.SimpleTypeName name) {
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
-  
+
   public ConstructorDeclarator withReceiverParameter(hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter) {
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
-  
+
   public ConstructorDeclarator withFormalParameters(hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters) {
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }

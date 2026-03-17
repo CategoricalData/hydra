@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class PredicateOrTraversal implements Serializable, Comparable<PredicateOrTraversal> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.PredicateOrTraversal");
-  
+
   public static final hydra.core.Name PREDICATE = new hydra.core.Name("predicate");
-  
+
   public static final hydra.core.Name TRAVERSAL = new hydra.core.Name("traversal");
-  
+
   private PredicateOrTraversal () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Predicate instance) ;
-    
+
     R visit(Traversal instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(PredicateOrTraversal instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Predicate instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Traversal instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Predicate extends hydra.ext.org.apache.tinkerpop.gremlin.PredicateOrTraversal implements Serializable {
     public final hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicate value;
-    
+
     public Predicate (hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicate value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Predicate)) {
@@ -54,12 +54,12 @@ public abstract class PredicateOrTraversal implements Serializable, Comparable<P
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PredicateOrTraversal other) {
@@ -70,20 +70,20 @@ public abstract class PredicateOrTraversal implements Serializable, Comparable<P
       Predicate o = (Predicate) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Traversal extends hydra.ext.org.apache.tinkerpop.gremlin.PredicateOrTraversal implements Serializable {
     public final hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal value;
-    
+
     public Traversal (hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Traversal)) {
@@ -94,12 +94,12 @@ public abstract class PredicateOrTraversal implements Serializable, Comparable<P
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PredicateOrTraversal other) {
@@ -110,7 +110,7 @@ public abstract class PredicateOrTraversal implements Serializable, Comparable<P
       Traversal o = (Traversal) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

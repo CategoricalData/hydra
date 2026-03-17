@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class CastExpression_RefAndBounds implements Serializable, Comparable<CastExpression_RefAndBounds> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.CastExpression_RefAndBounds");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   public static final hydra.core.Name BOUNDS = new hydra.core.Name("bounds");
-  
+
   public final hydra.ext.java.syntax.ReferenceType type;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> bounds;
-  
+
   public CastExpression_RefAndBounds (hydra.ext.java.syntax.ReferenceType type, hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> bounds) {
     this.type = type;
     this.bounds = bounds;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof CastExpression_RefAndBounds)) {
@@ -32,12 +32,12 @@ public class CastExpression_RefAndBounds implements Serializable, Comparable<Cas
       this.bounds,
       o.bounds);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(type) + 3 * java.util.Objects.hashCode(bounds);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(CastExpression_RefAndBounds other) {
@@ -48,11 +48,11 @@ public class CastExpression_RefAndBounds implements Serializable, Comparable<Cas
     }
     return ((Comparable) bounds).compareTo(other.bounds);
   }
-  
+
   public CastExpression_RefAndBounds withType(hydra.ext.java.syntax.ReferenceType type) {
     return new CastExpression_RefAndBounds(type, bounds);
   }
-  
+
   public CastExpression_RefAndBounds withBounds(hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> bounds) {
     return new CastExpression_RefAndBounds(type, bounds);
   }

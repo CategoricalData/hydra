@@ -77,20 +77,20 @@ javaLiteralToJavaPrimary lit = Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArr
 -- | Convert an Expression to a Primary, avoiding unnecessary parentheses when the expression is already a simple primary chain
 javaExpressionToJavaPrimary :: Syntax.Expression -> Syntax.Primary
 javaExpressionToJavaPrimary e =
-     
+
       let fallback = Syntax.PrimaryNoNewArray_ (Syntax.PrimaryNoNewArrayParens e)
       in case e of
         Syntax.ExpressionAssignment v0 -> case v0 of
           Syntax.AssignmentExpressionConditional v1 -> case v1 of
-            Syntax.ConditionalExpressionSimple v2 ->  
+            Syntax.ConditionalExpressionSimple v2 ->
               let cands = Syntax.unConditionalOrExpression v2
-              in (Logic.ifElse (Equality.equal (Lists.length cands) 1) ( 
+              in (Logic.ifElse (Equality.equal (Lists.length cands) 1) (
                 let iors = Syntax.unConditionalAndExpression (Lists.head cands)
-                in (Logic.ifElse (Equality.equal (Lists.length iors) 1) ( 
+                in (Logic.ifElse (Equality.equal (Lists.length iors) 1) (
                   let xors = Syntax.unInclusiveOrExpression (Lists.head iors)
-                  in (Logic.ifElse (Equality.equal (Lists.length xors) 1) ( 
+                  in (Logic.ifElse (Equality.equal (Lists.length xors) 1) (
                     let ands = Syntax.unExclusiveOrExpression (Lists.head xors)
-                    in (Logic.ifElse (Equality.equal (Lists.length ands) 1) ( 
+                    in (Logic.ifElse (Equality.equal (Lists.length ands) 1) (
                       let eqs = Syntax.unAndExpression (Lists.head ands)
                       in (Logic.ifElse (Equality.equal (Lists.length eqs) 1) (case (Lists.head eqs) of
                         Syntax.EqualityExpressionUnary v3 -> case v3 of
@@ -328,8 +328,8 @@ javaRefType args pkg id =
 
 javaClassType :: [Syntax.ReferenceType] -> Maybe Syntax.PackageName -> String -> Syntax.ClassType
 javaClassType args pkg id =
-     
-      let qual = Maybes.cases pkg Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p) 
+
+      let qual = Maybes.cases pkg Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p)
           targs = Lists.map (\rt -> Syntax.TypeArgumentReference rt) args
       in Syntax.ClassType {
         Syntax.classTypeAnnotations = [],
@@ -535,7 +535,7 @@ fieldExpression varId fieldId =
 
 variableToJavaIdentifier :: Core.Name -> Syntax.Identifier
 variableToJavaIdentifier name =
-     
+
       let v = Core.unName name
       in (Logic.ifElse (Equality.equal v "_") (Syntax.Identifier "ignored") (Syntax.Identifier (sanitizeJavaName v)))
 
@@ -568,7 +568,7 @@ overrideAnnotation = Syntax.AnnotationMarker (Syntax.MarkerAnnotation (javaTypeN
 
 methodInvocation :: Maybe (Either Syntax.ExpressionName Syntax.Primary) -> Syntax.Identifier -> [Syntax.Expression] -> Syntax.MethodInvocation
 methodInvocation lhs methodName args =
-     
+
       let header =
               Maybes.cases lhs (Syntax.MethodInvocation_HeaderSimple (Syntax.MethodName methodName)) (\either -> Syntax.MethodInvocation_HeaderComplex (Syntax.MethodInvocation_Complex {
                 Syntax.methodInvocation_ComplexVariant = (Eithers.either (\en -> Syntax.MethodInvocation_VariantExpression en) (\p -> Syntax.MethodInvocation_VariantPrimary p) either),
@@ -622,8 +622,8 @@ javaThrowIllegalStateException args =
 
 addExpressions :: [Syntax.MultiplicativeExpression] -> Syntax.AdditiveExpression
 addExpressions exprs =
-     
-      let first = Syntax.AdditiveExpressionUnary (Lists.head exprs) 
+
+      let first = Syntax.AdditiveExpressionUnary (Lists.head exprs)
           rest = Lists.tail exprs
       in (Lists.foldl (\ae -> \me -> Syntax.AdditiveExpressionPlus (Syntax.AdditiveExpression_Binary {
         Syntax.additiveExpression_BinaryLhs = ae,
@@ -634,8 +634,8 @@ javaRelationalExpressionToJavaEqualityExpression re = Syntax.EqualityExpressionU
 
 nameToQualifiedJavaName :: Helpers.Aliases -> Bool -> Core.Name -> Maybe String -> (Syntax.TypeIdentifier, Syntax.ClassTypeQualifier)
 nameToQualifiedJavaName aliases qualify name mlocal =
-     
-      let qn = Names_.qualifyName name 
+
+      let qn = Names_.qualifyName name
           ns_ = Module.qualifiedNameNamespace qn
           local = Module.qualifiedNameLocal qn
           alias =
@@ -648,8 +648,8 @@ nameToQualifiedJavaName aliases qualify name mlocal =
 
 nameToJavaClassType :: Helpers.Aliases -> Bool -> [Syntax.TypeArgument] -> Core.Name -> Maybe String -> Syntax.ClassType
 nameToJavaClassType aliases qualify args name mlocal =
-     
-      let result = nameToQualifiedJavaName aliases qualify name mlocal 
+
+      let result = nameToQualifiedJavaName aliases qualify name mlocal
           id = Pairs.first result
           pkg = Pairs.second result
       in Syntax.ClassType {
@@ -664,13 +664,13 @@ nameToJavaReferenceType aliases qualify args name mlocal =
 
 nameToJavaName :: Helpers.Aliases -> Core.Name -> Syntax.Identifier
 nameToJavaName aliases name =
-     
-      let qn = Names_.qualifyName name 
+
+      let qn = Names_.qualifyName name
           ns_ = Module.qualifiedNameNamespace qn
           local = Module.qualifiedNameLocal qn
-      in (Logic.ifElse (isEscaped (Core.unName name)) (Syntax.Identifier (sanitizeJavaName local)) (Maybes.cases ns_ (Syntax.Identifier local) (\gname ->  
+      in (Logic.ifElse (isEscaped (Core.unName name)) (Syntax.Identifier (sanitizeJavaName local)) (Maybes.cases ns_ (Syntax.Identifier local) (\gname ->
         let parts =
-                Maybes.cases (Maps.lookup gname (Helpers.aliasesPackages aliases)) (Strings.splitOn "." (Module.unNamespace gname)) (\pkgName -> Lists.map (\i -> Syntax.unIdentifier i) (Syntax.unPackageName pkgName)) 
+                Maybes.cases (Maps.lookup gname (Helpers.aliasesPackages aliases)) (Strings.splitOn "." (Module.unNamespace gname)) (\pkgName -> Lists.map (\i -> Syntax.unIdentifier i) (Syntax.unPackageName pkgName))
             allParts = Lists.concat2 parts [
                   sanitizeJavaName local]
         in (Syntax.Identifier (Strings.intercalate "." allParts)))))
@@ -686,7 +686,7 @@ javaTypeFromTypeName aliases elName =
 
 javaDoubleCastExpression :: Syntax.ReferenceType -> Syntax.ReferenceType -> Syntax.UnaryExpression -> Syntax.CastExpression
 javaDoubleCastExpression rawRt targetRt expr =
-     
+
       let firstCast = javaCastExpressionToJavaExpression (javaCastExpression rawRt expr)
       in (javaCastExpression targetRt (javaExpressionToJavaUnaryExpression firstCast))
 
@@ -709,8 +709,8 @@ lookupJavaVarName aliases name =
 
 variantClassName :: Bool -> Core.Name -> Core.Name -> Core.Name
 variantClassName qualify elName fname =
-     
-      let qn = Names_.qualifyName elName 
+
+      let qn = Names_.qualifyName elName
           ns_ = Module.qualifiedNameNamespace qn
           local = Module.qualifiedNameLocal qn
           flocal = Formatting.capitalize (Core.unName fname)
@@ -722,8 +722,8 @@ variantClassName qualify elName fname =
 
 variableDeclarationStatement :: t0 -> Syntax.Type -> Syntax.Identifier -> Syntax.Expression -> Syntax.BlockStatement
 variableDeclarationStatement aliases jtype id rhs =
-     
-      let init_ = Syntax.VariableInitializerExpression rhs 
+
+      let init_ = Syntax.VariableInitializerExpression rhs
           vdec = javaVariableDeclarator id (Just init_)
       in (Syntax.BlockStatementLocalVariableDeclaration (Syntax.LocalVariableDeclarationStatement (Syntax.LocalVariableDeclaration {
         Syntax.localVariableDeclarationModifiers = [],
@@ -753,7 +753,7 @@ suppressWarningsUncheckedAnnotation =
 
 methodInvocationStaticWithTypeArgs :: Syntax.Identifier -> Syntax.Identifier -> [Syntax.TypeArgument] -> [Syntax.Expression] -> Syntax.MethodInvocation
 methodInvocationStaticWithTypeArgs self methodName targs args =
-     
+
       let header =
               Syntax.MethodInvocation_HeaderComplex (Syntax.MethodInvocation_Complex {
                 Syntax.methodInvocation_ComplexVariant = (Syntax.MethodInvocation_VariantExpression (javaIdentifierToJavaExpressionName self)),
@@ -765,7 +765,7 @@ methodInvocationStaticWithTypeArgs self methodName targs args =
 
 javaArrayCreation :: Syntax.PrimitiveTypeWithAnnotations -> Maybe Syntax.ArrayInitializer -> Syntax.Expression
 javaArrayCreation primType minit =
-     
+
       let init_ = Maybes.cases minit (Syntax.ArrayInitializer []) (\i -> i)
       in (javaPrimaryToJavaExpression (Syntax.PrimaryArrayCreation (Syntax.ArrayCreationExpressionPrimitiveArray (Syntax.ArrayCreationExpression_PrimitiveArray {
         Syntax.arrayCreationExpression_PrimitiveArrayType = primType,
@@ -778,8 +778,8 @@ javaArrayInitializer exprs = Syntax.ArrayInitializer [
 
 toAssignStmt :: Core.Name -> Syntax.Statement
 toAssignStmt fname =
-     
-      let id = fieldNameToJavaIdentifier fname 
+
+      let id = fieldNameToJavaIdentifier fname
           lhs =
                   Syntax.LeftHandSideFieldAccess (Syntax.FieldAccess {
                     Syntax.fieldAccessQualifier = (Syntax.FieldAccess_QualifierPrimary (Syntax.PrimaryNoNewArray_ Syntax.PrimaryNoNewArrayThis)),
@@ -809,7 +809,7 @@ importAliasesForModule mod =
 
 javaClassDeclaration :: Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Syntax.ClassModifier] -> Maybe Core.Name -> [Syntax.InterfaceType] -> [Syntax.ClassBodyDeclarationWithComments] -> Syntax.ClassDeclaration
 javaClassDeclaration aliases tparams elName mods supname impls bodyDecls =
-     
+
       let extends_ = Maybes.map (\n -> nameToJavaClassType aliases True [] n Nothing) supname
       in (Syntax.ClassDeclarationNormal (Syntax.NormalClassDeclaration {
         Syntax.normalClassDeclarationModifiers = mods,
@@ -821,8 +821,8 @@ javaClassDeclaration aliases tparams elName mods supname impls bodyDecls =
 
 makeConstructor :: Helpers.Aliases -> Core.Name -> Bool -> [Syntax.FormalParameter] -> [Syntax.BlockStatement] -> Syntax.ClassBodyDeclaration
 makeConstructor aliases elName private params stmts =
-     
-      let nm = Syntax.SimpleTypeName (nameToJavaTypeIdentifier aliases False elName) 
+
+      let nm = Syntax.SimpleTypeName (nameToJavaTypeIdentifier aliases False elName)
           cons =
                   Syntax.ConstructorDeclarator {
                     Syntax.constructorDeclaratorParameters = [],
@@ -843,12 +843,12 @@ makeConstructor aliases elName private params stmts =
 
 toAcceptMethod :: Bool -> [Syntax.TypeParameter] -> Syntax.ClassBodyDeclaration
 toAcceptMethod abstract vtparams =
-     
+
       let mods =
               Logic.ifElse abstract [
                 Syntax.MethodModifierPublic,
                 Syntax.MethodModifierAbstract] [
-                Syntax.MethodModifierPublic] 
+                Syntax.MethodModifierPublic]
           tparams = [
                 javaTypeParameter Names.visitorReturnParameter]
           anns = Logic.ifElse abstract [] [
@@ -879,8 +879,8 @@ toJavaArrayType t cx =
           Syntax.arrayTypeDims = (Syntax.Dims [
             []]),
           Syntax.arrayTypeVariant = (Syntax.ArrayType_VariantClassOrInterface v1)})))
-        Syntax.ReferenceTypeArray v1 ->  
-          let oldDims = Syntax.unDims (Syntax.arrayTypeDims v1) 
+        Syntax.ReferenceTypeArray v1 ->
+          let oldDims = Syntax.unDims (Syntax.arrayTypeDims v1)
               newDims = Syntax.Dims (Lists.concat2 oldDims [
                     []])
               variant = Syntax.arrayTypeVariant v1
@@ -906,8 +906,8 @@ javaReferenceTypeToRawType :: Syntax.ReferenceType -> Syntax.ReferenceType
 javaReferenceTypeToRawType rt =
     case rt of
       Syntax.ReferenceTypeClassOrInterface v0 -> case v0 of
-        Syntax.ClassOrInterfaceTypeClass v1 ->  
-          let anns = Syntax.classTypeAnnotations v1 
+        Syntax.ClassOrInterfaceTypeClass v1 ->
+          let anns = Syntax.classTypeAnnotations v1
               qual = Syntax.classTypeQualifier v1
               id = Syntax.classTypeIdentifier v1
           in (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Syntax.ClassType {
@@ -915,8 +915,8 @@ javaReferenceTypeToRawType rt =
             Syntax.classTypeQualifier = qual,
             Syntax.classTypeIdentifier = id,
             Syntax.classTypeArguments = []})))
-        Syntax.ClassOrInterfaceTypeInterface v1 ->  
-          let ct = Syntax.unInterfaceType v1 
+        Syntax.ClassOrInterfaceTypeInterface v1 ->
+          let ct = Syntax.unInterfaceType v1
               anns = Syntax.classTypeAnnotations ct
               qual = Syntax.classTypeQualifier ct
               id = Syntax.classTypeIdentifier ct
@@ -932,8 +932,8 @@ addJavaTypeParameter rt t cx =
     case t of
       Syntax.TypeReference v0 -> case v0 of
         Syntax.ReferenceTypeClassOrInterface v1 -> case v1 of
-          Syntax.ClassOrInterfaceTypeClass v2 ->  
-            let anns = Syntax.classTypeAnnotations v2 
+          Syntax.ClassOrInterfaceTypeClass v2 ->
+            let anns = Syntax.classTypeAnnotations v2
                 qual = Syntax.classTypeQualifier v2
                 id = Syntax.classTypeIdentifier v2
                 args = Syntax.classTypeArguments v2
@@ -960,7 +960,7 @@ uniqueVarName aliases name =
 
 uniqueVarName_go :: Helpers.Aliases -> String -> Int -> Core.Name
 uniqueVarName_go aliases base n =
-     
+
       let candidate = Core.Name (Strings.cat2 base (Literals.showInt32 n))
       in (Logic.ifElse (Sets.member candidate (Helpers.aliasesInScopeJavaVars aliases)) (uniqueVarName_go aliases base (Math.add n 1)) candidate)
 

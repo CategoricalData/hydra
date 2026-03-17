@@ -14,22 +14,22 @@ public interface Model {
           hydra.encode.json.model.Model::value,
           (y).value)))));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.json.model.Value.Boolean_ y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.json.model.Value"), new hydra.core.Field(new hydra.core.Name("boolean"), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_((y).value)))));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.json.model.Value.Null y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.json.model.Value"), new hydra.core.Field(new hydra.core.Name("null"), new hydra.core.Term.Unit())));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.json.model.Value.Number_ y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.json.model.Value"), new hydra.core.Field(new hydra.core.Name("number"), new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Bigfloat((y).value))))));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.json.model.Value.Object_ y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.json.model.Value"), new hydra.core.Field(new hydra.core.Name("object"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
@@ -37,7 +37,7 @@ public interface Model {
           hydra.encode.json.model.Model::value,
           (y).value)))));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.json.model.Value.String_ y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.json.model.Value"), new hydra.core.Field(new hydra.core.Name("string"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((y).value)))));

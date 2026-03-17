@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class ClassBodyDeclarationWithComments implements Serializable, Comparable<ClassBodyDeclarationWithComments> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ClassBodyDeclarationWithComments");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public static final hydra.core.Name COMMENTS = new hydra.core.Name("comments");
-  
+
   public final hydra.ext.java.syntax.ClassBodyDeclaration value;
-  
+
   public final hydra.util.Maybe<String> comments;
-  
+
   public ClassBodyDeclarationWithComments (hydra.ext.java.syntax.ClassBodyDeclaration value, hydra.util.Maybe<String> comments) {
     this.value = value;
     this.comments = comments;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ClassBodyDeclarationWithComments)) {
@@ -32,12 +32,12 @@ public class ClassBodyDeclarationWithComments implements Serializable, Comparabl
       this.comments,
       o.comments);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value) + 3 * java.util.Objects.hashCode(comments);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ClassBodyDeclarationWithComments other) {
@@ -48,11 +48,11 @@ public class ClassBodyDeclarationWithComments implements Serializable, Comparabl
     }
     return ((Comparable) comments).compareTo(other.comments);
   }
-  
+
   public ClassBodyDeclarationWithComments withValue(hydra.ext.java.syntax.ClassBodyDeclaration value) {
     return new ClassBodyDeclarationWithComments(value, comments);
   }
-  
+
   public ClassBodyDeclarationWithComments withComments(hydra.util.Maybe<String> comments) {
     return new ClassBodyDeclarationWithComments(value, comments);
   }

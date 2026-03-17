@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class ReadingFeatures implements Serializable, Comparable<ReadingFeatures> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.features.ReadingFeatures");
-  
+
   public static final hydra.core.Name UNION = new hydra.core.Name("union");
-  
+
   public static final hydra.core.Name UNION_ALL = new hydra.core.Name("unionAll");
-  
+
   public static final hydra.core.Name UNWIND = new hydra.core.Name("unwind");
-  
+
   /**
    * The UNION operator
    */
   public final Boolean union;
-  
+
   /**
    * The UNION ALL operator
    */
   public final Boolean unionAll;
-  
+
   /**
    * The UNWIND clause
    */
   public final Boolean unwind;
-  
+
   public ReadingFeatures (Boolean union, Boolean unionAll, Boolean unwind) {
     this.union = union;
     this.unionAll = unionAll;
     this.unwind = unwind;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ReadingFeatures)) {
@@ -51,12 +51,12 @@ public class ReadingFeatures implements Serializable, Comparable<ReadingFeatures
       this.unwind,
       o.unwind);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(union) + 3 * java.util.Objects.hashCode(unionAll) + 5 * java.util.Objects.hashCode(unwind);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ReadingFeatures other) {
@@ -71,15 +71,15 @@ public class ReadingFeatures implements Serializable, Comparable<ReadingFeatures
     }
     return ((Comparable) unwind).compareTo(other.unwind);
   }
-  
+
   public ReadingFeatures withUnion(Boolean union) {
     return new ReadingFeatures(union, unionAll, unwind);
   }
-  
+
   public ReadingFeatures withUnionAll(Boolean unionAll) {
     return new ReadingFeatures(union, unionAll, unwind);
   }
-  
+
   public ReadingFeatures withUnwind(Boolean unwind) {
     return new ReadingFeatures(union, unionAll, unwind);
   }

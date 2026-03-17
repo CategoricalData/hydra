@@ -17,7 +17,7 @@ class ValueBoolean(Node[bool]):
 
 class ValueNull:
     r"""JSON's null value"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, ValueNull)
@@ -40,7 +40,7 @@ class _ValueMeta(type):
 # A JSON value.
 class Value(metaclass=_ValueMeta):
     r"""ValueArray | ValueBoolean | ValueNull | ValueNumber | ValueObject | ValueString"""
-    
+
     TYPE_ = hydra.core.Name("hydra.json.model.Value")
     ARRAY = hydra.core.Name("array")
     BOOLEAN = hydra.core.Name("boolean")

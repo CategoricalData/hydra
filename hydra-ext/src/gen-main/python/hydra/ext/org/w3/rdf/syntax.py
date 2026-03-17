@@ -27,10 +27,10 @@ Dataset.TYPE_ = hydra.core.Name("hydra.ext.org.w3.rdf.syntax.Dataset")
 @dataclass(frozen=True)
 class Description:
     r"""A graph of RDF statements together with a distinguished subject and/or object node."""
-    
+
     subject: Node_
     graph: Graph
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.rdf.syntax.Description")
     SUBJECT = hydra.core.Name("subject")
     GRAPH = hydra.core.Name("graph")
@@ -58,7 +58,7 @@ class _IriOrLiteralMeta(type):
 # An IRI or a literal; this type is a convenience for downstream models like SHACL which may exclude blank nodes.
 class IriOrLiteral(metaclass=_IriOrLiteralMeta):
     r"""IriOrLiteralIri | IriOrLiteralLiteral"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.rdf.syntax.IriOrLiteral")
     IRI = hydra.core.Name("iri")
     LITERAL = hydra.core.Name("literal")
@@ -76,11 +76,11 @@ LanguageTag.TYPE_ = hydra.core.Name("hydra.ext.org.w3.rdf.syntax.LanguageTag")
 @dataclass(frozen=True)
 class Literal:
     r"""A value such as a string, number, or date."""
-    
+
     lexical_form: Annotated[str, "a Unicode string, which should be in Normal Form C"]
     datatype_iri: Annotated[Iri, "an IRI identifying a datatype that determines how the lexical form maps to a literal value"]
     language_tag: Annotated[Maybe[LanguageTag], "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.rdf.syntax.Literal")
     LEXICAL_FORM = hydra.core.Name("lexicalForm")
     DATATYPE_IRI = hydra.core.Name("datatypeIri")
@@ -101,7 +101,7 @@ class _Node_Meta(type):
 
 class Node_(metaclass=_Node_Meta):
     r"""NodeIri | NodeBnode | NodeLiteral"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.rdf.syntax.Node")
     IRI = hydra.core.Name("iri")
     BNODE = hydra.core.Name("bnode")
@@ -110,11 +110,11 @@ class Node_(metaclass=_Node_Meta):
 @dataclass(frozen=True)
 class Property:
     r"""A type representing an RDF property, and encapsulating its domain, range, and subclass relationships."""
-    
+
     domain: Annotated[frozenset[RdfsClass], "State that any resource that has a given property is an instance of one or more classes"]
     range_: Annotated[frozenset[RdfsClass], "States that the values of a property are instances of one or more classes"]
     sub_property_of: frozenset[Property]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.rdf.syntax.Property")
     DOMAIN = hydra.core.Name("domain")
     RANGE = hydra.core.Name("range")
@@ -123,12 +123,12 @@ class Property:
 @dataclass(frozen=True)
 class Quad:
     r"""An RDF triple with an optional named graph component."""
-    
+
     subject: Resource
     predicate: Iri
     object: Node_
     graph: Maybe[Iri]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.rdf.syntax.Quad")
     SUBJECT = hydra.core.Name("subject")
     PREDICATE = hydra.core.Name("predicate")
@@ -147,7 +147,7 @@ class _ResourceMeta(type):
 
 class Resource(metaclass=_ResourceMeta):
     r"""ResourceIri | ResourceBnode"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.rdf.syntax.Resource")
     IRI = hydra.core.Name("iri")
     BNODE = hydra.core.Name("bnode")
@@ -155,11 +155,11 @@ class Resource(metaclass=_ResourceMeta):
 @dataclass(frozen=True)
 class Triple:
     r"""An RDF triple defined by a subject, predicate, and object."""
-    
+
     subject: Resource
     predicate: Iri
     object: Node_
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.rdf.syntax.Triple")
     SUBJECT = hydra.core.Name("subject")
     PREDICATE = hydra.core.Name("predicate")

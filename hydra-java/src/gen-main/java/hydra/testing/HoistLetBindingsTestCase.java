@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class HoistLetBindingsTestCase implements Serializable, Comparable<HoistLetBindingsTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.HoistLetBindingsTestCase");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
-  
+
   /**
    * The input let term
    */
   public final hydra.core.Let input;
-  
+
   /**
    * The expected output let term with all nested bindings hoisted to top
    */
   public final hydra.core.Let output;
-  
+
   public HoistLetBindingsTestCase (hydra.core.Let input, hydra.core.Let output) {
     this.input = input;
     this.output = output;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof HoistLetBindingsTestCase)) {
@@ -41,12 +41,12 @@ public class HoistLetBindingsTestCase implements Serializable, Comparable<HoistL
       this.output,
       o.output);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(output);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(HoistLetBindingsTestCase other) {
@@ -57,11 +57,11 @@ public class HoistLetBindingsTestCase implements Serializable, Comparable<HoistL
     }
     return ((Comparable) output).compareTo(other.output);
   }
-  
+
   public HoistLetBindingsTestCase withInput(hydra.core.Let input) {
     return new HoistLetBindingsTestCase(input, output);
   }
-  
+
   public HoistLetBindingsTestCase withOutput(hydra.core.Let output) {
     return new HoistLetBindingsTestCase(input, output);
   }

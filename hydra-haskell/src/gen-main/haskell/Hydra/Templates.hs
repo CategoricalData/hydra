@@ -26,9 +26,9 @@ import qualified Data.Set as S
 -- | Decode a list of type-encoding bindings into a map of named types
 graphToSchema :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.DecodingError) (M.Map Core.Name Core.Type)
 graphToSchema cx graph els =
-     
+
       let toPair =
-              \el ->  
+              \el ->
                 let name = Core.bindingName el
                 in (Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
                   Context.inContextObject = _wc_e,
@@ -38,8 +38,8 @@ graphToSchema cx graph els =
 -- | Given a graph schema and a nonrecursive type, instantiate it with default values. If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals. The name parameter provides the element name for nominal type construction.
 instantiateTemplate :: Context.Context -> Bool -> M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Either (Context.InContext Error.Error) Core.Term
 instantiateTemplate cx minimal schema tname t =
-     
-      let inst = \tn -> instantiateTemplate cx minimal schema tn 
+
+      let inst = \tn -> instantiateTemplate cx minimal schema tn
           noPoly =
                   Left (Context.InContext {
                     Context.inContextObject = (Error.ErrorOther (Error.OtherError "Polymorphic and function types are not currently supported")),
@@ -75,12 +75,12 @@ instantiateTemplate cx minimal schema tname t =
         Core.TypeList v0 -> Logic.ifElse minimal (Right (Core.TermList [])) (Eithers.bind (inst tname v0) (\e -> Right (Core.TermList [
           e])))
         Core.TypeLiteral v0 -> Right (Core.TermLiteral (forLiteral v0))
-        Core.TypeMap v0 ->  
-          let kt = Core.mapTypeKeys v0 
+        Core.TypeMap v0 ->
+          let kt = Core.mapTypeKeys v0
               vt = Core.mapTypeValues v0
           in (Logic.ifElse minimal (Right (Core.TermMap Maps.empty)) (Eithers.bind (inst tname kt) (\ke -> Eithers.bind (inst tname vt) (\ve -> Right (Core.TermMap (Maps.singleton ke ve))))))
         Core.TypeMaybe v0 -> Logic.ifElse minimal (Right (Core.TermMaybe Nothing)) (Eithers.bind (inst tname v0) (\e -> Right (Core.TermMaybe (Just e))))
-        Core.TypeRecord v0 ->  
+        Core.TypeRecord v0 ->
           let toField =
                   \ft -> Eithers.bind (inst tname (Core.fieldTypeType ft)) (\e -> Right (Core.Field {
                     Core.fieldName = (Core.fieldTypeName ft),

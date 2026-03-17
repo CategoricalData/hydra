@@ -29,8 +29,8 @@ import qualified Data.Set as S
 -- | Join two types, producing a list of type constraints.The comment is used to provide context for the constraints.
 joinTypes :: Context.Context -> Core.Type -> Core.Type -> String -> Either (Context.InContext Error.UnificationError) [Typing.TypeConstraint]
 joinTypes cx left right comment =
-     
-      let sleft = Rewriting.deannotateType left 
+
+      let sleft = Rewriting.deannotateType left
           sright = Rewriting.deannotateType right
           joinOne =
                   \l -> \r -> Typing.TypeConstraint {
@@ -111,15 +111,15 @@ joinTypes cx left right comment =
 -- |   * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))
 unifyTypeConstraints :: Context.Context -> M.Map Core.Name t0 -> [Typing.TypeConstraint] -> Either (Context.InContext Error.UnificationError) Typing.TypeSubst
 unifyTypeConstraints cx schemaTypes constraints =
-     
+
       let withConstraint =
-              \c -> \rest ->  
-                let sleft = Rewriting.deannotateType (Typing.typeConstraintLeft c) 
+              \c -> \rest ->
+                let sleft = Rewriting.deannotateType (Typing.typeConstraintLeft c)
                     sright = Rewriting.deannotateType (Typing.typeConstraintRight c)
                     comment = Typing.typeConstraintComment c
                     bind =
-                            \v -> \t ->  
-                              let subst = Substitution.singletonTypeSubst v t 
+                            \v -> \t ->
+                              let subst = Substitution.singletonTypeSubst v t
                                   withResult = \s -> Substitution.composeTypeSubst subst s
                               in (Eithers.map withResult (unifyTypeConstraints cx schemaTypes (Substitution.substituteInConstraints subst rest)))
                     tryBinding =
@@ -130,7 +130,7 @@ unifyTypeConstraints cx schemaTypes constraints =
                                 Error.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Variable " (Core.unName v)) " appears free in type ") (Core_.type_ t)) " (") comment) ")")},
                               Context.inContextContext = cx})) (bind v t)
                     noVars =
-                             
+
                               let withConstraints = \constraints2 -> unifyTypeConstraints cx schemaTypes (Lists.concat2 constraints2 rest)
                               in (Eithers.bind (joinTypes cx sleft sright comment) withConstraints)
                     dflt =
@@ -151,7 +151,7 @@ unifyTypeConstraints cx schemaTypes constraints =
 
 unifyTypeLists :: Context.Context -> M.Map Core.Name t0 -> [Core.Type] -> [Core.Type] -> String -> Either (Context.InContext Error.UnificationError) Typing.TypeSubst
 unifyTypeLists cx schemaTypes l r comment =
-     
+
       let toConstraint =
               \l -> \r -> Typing.TypeConstraint {
                 Typing.typeConstraintLeft = l,
@@ -170,7 +170,7 @@ unifyTypes cx schemaTypes l r comment =
 -- | Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables.
 variableOccursInType :: Core.Name -> Core.Type -> Bool
 variableOccursInType var typ0 =
-     
+
       let tryType =
               \b -> \typ -> case typ of
                 Core.TypeVariable v0 -> Logic.or b (Equality.equal (Core.unName v0) (Core.unName var))

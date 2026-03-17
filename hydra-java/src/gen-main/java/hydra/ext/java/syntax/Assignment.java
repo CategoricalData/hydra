@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class Assignment implements Serializable, Comparable<Assignment> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.Assignment");
-  
+
   public static final hydra.core.Name LHS = new hydra.core.Name("lhs");
-  
+
   public static final hydra.core.Name OP = new hydra.core.Name("op");
-  
+
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
-  
+
   public final hydra.ext.java.syntax.LeftHandSide lhs;
-  
+
   public final hydra.ext.java.syntax.AssignmentOperator op;
-  
+
   public final hydra.ext.java.syntax.Expression expression;
-  
+
   public Assignment (hydra.ext.java.syntax.LeftHandSide lhs, hydra.ext.java.syntax.AssignmentOperator op, hydra.ext.java.syntax.Expression expression) {
     this.lhs = lhs;
     this.op = op;
     this.expression = expression;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Assignment)) {
@@ -39,12 +39,12 @@ public class Assignment implements Serializable, Comparable<Assignment> {
       this.expression,
       o.expression);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(lhs) + 3 * java.util.Objects.hashCode(op) + 5 * java.util.Objects.hashCode(expression);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Assignment other) {
@@ -59,15 +59,15 @@ public class Assignment implements Serializable, Comparable<Assignment> {
     }
     return ((Comparable) expression).compareTo(other.expression);
   }
-  
+
   public Assignment withLhs(hydra.ext.java.syntax.LeftHandSide lhs) {
     return new Assignment(lhs, op, expression);
   }
-  
+
   public Assignment withOp(hydra.ext.java.syntax.AssignmentOperator op) {
     return new Assignment(lhs, op, expression);
   }
-  
+
   public Assignment withExpression(hydra.ext.java.syntax.Expression expression) {
     return new Assignment(lhs, op, expression);
   }

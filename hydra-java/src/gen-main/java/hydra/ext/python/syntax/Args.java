@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class Args implements Serializable, Comparable<Args> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Args");
-  
+
   public static final hydra.core.Name POSITIONAL = new hydra.core.Name("positional");
-  
+
   public static final hydra.core.Name KWARG_OR_STARRED = new hydra.core.Name("kwargOrStarred");
-  
+
   public static final hydra.core.Name KWARG_OR_DOUBLE_STARRED = new hydra.core.Name("kwargOrDoubleStarred");
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.PosArg> positional;
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.KwargOrStarred> kwargOrStarred;
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.KwargOrDoubleStarred> kwargOrDoubleStarred;
-  
+
   public Args (hydra.util.ConsList<hydra.ext.python.syntax.PosArg> positional, hydra.util.ConsList<hydra.ext.python.syntax.KwargOrStarred> kwargOrStarred, hydra.util.ConsList<hydra.ext.python.syntax.KwargOrDoubleStarred> kwargOrDoubleStarred) {
     this.positional = positional;
     this.kwargOrStarred = kwargOrStarred;
     this.kwargOrDoubleStarred = kwargOrDoubleStarred;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Args)) {
@@ -39,12 +39,12 @@ public class Args implements Serializable, Comparable<Args> {
       this.kwargOrDoubleStarred,
       o.kwargOrDoubleStarred);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(positional) + 3 * java.util.Objects.hashCode(kwargOrStarred) + 5 * java.util.Objects.hashCode(kwargOrDoubleStarred);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Args other) {
@@ -59,15 +59,15 @@ public class Args implements Serializable, Comparable<Args> {
     }
     return ((Comparable) kwargOrDoubleStarred).compareTo(other.kwargOrDoubleStarred);
   }
-  
+
   public Args withPositional(hydra.util.ConsList<hydra.ext.python.syntax.PosArg> positional) {
     return new Args(positional, kwargOrStarred, kwargOrDoubleStarred);
   }
-  
+
   public Args withKwargOrStarred(hydra.util.ConsList<hydra.ext.python.syntax.KwargOrStarred> kwargOrStarred) {
     return new Args(positional, kwargOrStarred, kwargOrDoubleStarred);
   }
-  
+
   public Args withKwargOrDoubleStarred(hydra.util.ConsList<hydra.ext.python.syntax.KwargOrDoubleStarred> kwargOrDoubleStarred) {
     return new Args(positional, kwargOrStarred, kwargOrDoubleStarred);
   }

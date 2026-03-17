@@ -31,8 +31,8 @@ import qualified Data.Set as S
 -- | Build a Graph from element bindings, environment, and primitives
 buildGraph :: [Core.Binding] -> M.Map Core.Name (Maybe Core.Term) -> M.Map Core.Name Graph.Primitive -> Graph.Graph
 buildGraph elements environment primitives =
-     
-      let elementTerms = Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) elements) 
+
+      let elementTerms = Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) elements)
           letTerms = Maps.map (\mt -> Maybes.fromJust mt) (Maps.filter (\mt -> Maybes.isJust mt) environment)
           elementTypes =
                   Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) elements))
@@ -48,9 +48,9 @@ buildGraph elements environment primitives =
 
 chooseUniqueName :: S.Set Core.Name -> Core.Name -> Core.Name
 chooseUniqueName reserved name =
-     
+
       let tryName =
-              \index ->  
+              \index ->
                 let candidate = Logic.ifElse (Equality.equal index 1) name (Core.Name (Strings.cat2 (Core.unName name) (Literals.showInt32 index)))
                 in (Logic.ifElse (Sets.member candidate reserved) (tryName (Math.add index 1)) candidate)
       in (tryName 1)
@@ -62,7 +62,7 @@ dereferenceElement graph name = lookupElement graph name
 -- | Resolve a schema type through a chain of zero or more typedefs
 dereferenceSchemaType :: Core.Name -> M.Map Core.Name Core.TypeScheme -> Maybe Core.TypeScheme
 dereferenceSchemaType name types =
-     
+
       let forType =
               \t -> case t of
                 Core.TypeAnnotated v0 -> forType (Core.annotatedTypeBody v0)
@@ -88,8 +88,8 @@ dereferenceVariable graph name =
 -- | Create a graph from a parent graph, schema types, and list of element bindings
 elementsToGraph :: Graph.Graph -> M.Map Core.Name Core.TypeScheme -> [Core.Binding] -> Graph.Graph
 elementsToGraph parent schemaTypes elements =
-     
-      let prims = Graph.graphPrimitives parent 
+
+      let prims = Graph.graphPrimitives parent
           g = buildGraph elements Maps.empty prims
       in Graph.Graph {
         Graph.graphBoundTerms = (Graph.graphBoundTerms g),
@@ -125,8 +125,8 @@ emptyGraph =
 -- | Add bindings to an existing graph
 extendGraphWithBindings :: [Core.Binding] -> Graph.Graph -> Graph.Graph
 extendGraphWithBindings bindings g =
-     
-      let newTerms = Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) bindings) 
+
+      let newTerms = Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) bindings)
           newTypes =
                   Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) bindings))
       in Graph.Graph {
@@ -142,8 +142,8 @@ extendGraphWithBindings bindings g =
 -- | Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes
 graphToBindings :: Graph.Graph -> [Core.Binding]
 graphToBindings g =
-    Lists.map (\p ->  
-      let name = Pairs.first p 
+    Lists.map (\p ->
+      let name = Pairs.first p
           term = Pairs.second p
       in Core.Binding {
         Core.bindingName = name,
@@ -153,7 +153,7 @@ graphToBindings g =
 -- | Extract the fields of a record or union type
 fieldsOf :: Core.Type -> [Core.FieldType]
 fieldsOf t =
-     
+
       let stripped = Rewriting.deannotateType t
       in case stripped of
         Core.TypeForall v0 -> fieldsOf (Core.forallTypeBody v0)
@@ -189,7 +189,7 @@ matchEnum cx graph tname pairs =
 
 matchRecord :: Context.Context -> t0 -> (M.Map Core.Name Core.Term -> Either (Context.InContext Error.Error) t1) -> Core.Term -> Either (Context.InContext Error.Error) t1
 matchRecord cx graph decode term =
-     
+
       let stripped = Rewriting.deannotateAndDetypeTerm term
       in case stripped of
         Core.TermRecord v0 -> decode (Maps.fromList (Lists.map (\field -> (Core.fieldName field, (Core.fieldTerm field))) (Core.recordFields v0)))
@@ -199,15 +199,15 @@ matchRecord cx graph decode term =
 
 matchUnion :: Context.Context -> Graph.Graph -> Core.Name -> [(Core.Name, (Core.Term -> Either (Context.InContext Error.Error) t0))] -> Core.Term -> Either (Context.InContext Error.Error) t0
 matchUnion cx graph tname pairs term =
-     
-      let stripped = Rewriting.deannotateAndDetypeTerm term 
+
+      let stripped = Rewriting.deannotateAndDetypeTerm term
           mapping = Maps.fromList pairs
       in case stripped of
         Core.TermVariable v0 -> Eithers.bind (requireElement cx graph v0) (\el -> matchUnion cx graph tname pairs (Core.bindingTerm el))
-        Core.TermUnion v0 ->  
+        Core.TermUnion v0 ->
           let exp =
-                   
-                    let fname = Core.fieldName (Core.injectionField v0) 
+
+                    let fname = Core.fieldName (Core.injectionField v0)
                         val = Core.fieldTerm (Core.injectionField v0)
                     in (Maybes.maybe (Left (Context.InContext {
                       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "no matching case for field \"" (Core.unName fname)) "\" in union type ") (Core.unName tname)))),
@@ -230,8 +230,8 @@ matchUnitField fname x = (fname, (\ignored -> Right x))
 
 requireElement :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) Core.Binding
 requireElement cx graph name =
-     
-      let showAll = False 
+
+      let showAll = False
           ellipsis =
                   \strings -> Logic.ifElse (Logic.and (Equality.gt (Lists.length strings) 3) (Logic.not showAll)) (Lists.concat2 (Lists.take 3 strings) [
                     "..."]) strings
@@ -249,7 +249,7 @@ requirePrimitive cx graph name =
 
 requirePrimitiveType :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) Core.TypeScheme
 requirePrimitiveType cx tx name =
-     
+
       let mts =
               Maps.lookup name (Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx))))
       in (Maybes.maybe (Left (Context.InContext {
@@ -265,9 +265,9 @@ requireTerm cx graph name =
 -- | TODO: distinguish between lambda-bound and let-bound variables
 resolveTerm :: Graph.Graph -> Core.Name -> Maybe Core.Term
 resolveTerm graph name =
-     
+
       let recurse =
-              \term ->  
+              \term ->
                 let stripped = Rewriting.deannotateTerm term
                 in case stripped of
                   Core.TermVariable v0 -> resolveTerm graph v0
@@ -276,7 +276,7 @@ resolveTerm graph name =
 
 stripAndDereferenceTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 stripAndDereferenceTerm cx graph term =
-     
+
       let stripped = Rewriting.deannotateAndDetypeTerm term
       in case stripped of
         Core.TermVariable v0 -> Eithers.bind (requireTerm cx graph v0) (\t -> stripAndDereferenceTerm cx graph t)
@@ -285,7 +285,7 @@ stripAndDereferenceTerm cx graph term =
 -- | Strip annotations and dereference variables, returning Either an error or the resolved term
 stripAndDereferenceTermEither :: Graph.Graph -> Core.Term -> Either String Core.Term
 stripAndDereferenceTermEither graph term =
-     
+
       let stripped = Rewriting.deannotateAndDetypeTerm term
       in case stripped of
         Core.TermVariable v0 -> Eithers.either (\left_ -> Left left_) (\binding -> stripAndDereferenceTermEither graph (Core.bindingTerm binding)) (dereferenceVariable graph v0)

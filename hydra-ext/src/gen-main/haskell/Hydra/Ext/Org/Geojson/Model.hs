@@ -14,14 +14,14 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A GeoJSON object MAY have a member named "bbox" to include information on the coordinate range for its Geometries, Features, or FeatureCollections.  The value of the bbox member MUST be an array of length 2*n where n is the number of dimensions represented in the contained geometries, with all axes of the most southwesterly point followed by all axes of the more northeasterly point.  The axes order of a bbox follows the axes order of geometries.
-newtype BoundingBox = 
+newtype BoundingBox =
   BoundingBox {
     unBoundingBox :: [CoordinateRange]}
   deriving (Eq, Ord, Read, Show)
 
 _BoundingBox = Core.Name "hydra.ext.org.geojson.model.BoundingBox"
 
-data CoordinateRange = 
+data CoordinateRange =
   CoordinateRange {
     coordinateRangeMin :: Double,
     coordinateRangeMax :: Double}
@@ -34,7 +34,7 @@ _CoordinateRange_min = Core.Name "min"
 _CoordinateRange_max = Core.Name "max"
 
 -- | A Feature object represents a spatially bounded thing.  Every Feature object is a GeoJSON object no matter where it occurs in a GeoJSON text.
-data Feature = 
+data Feature =
   Feature {
     -- | A Feature object has a member with the name "geometry".  The value of the geometry member SHALL be either a Geometry object as defined above or, in the case that the Feature is unlocated, a JSON null value.
     featureGeometry :: (Maybe Geometry),
@@ -56,7 +56,7 @@ _Feature_id = Core.Name "id"
 _Feature_bbox = Core.Name "bbox"
 
 -- | A GeoJSON object with the type "FeatureCollection" is a FeatureCollection object.  A FeatureCollection object has a member with the name "features".  The value of "features" is a JSON array. Each element of the array is a Feature object as defined above.  It is possible for this array to be empty.
-data FeatureCollection = 
+data FeatureCollection =
   FeatureCollection {
     featureCollectionFeatures :: [Feature],
     featureCollectionBbox :: (Maybe BoundingBox)}
@@ -69,7 +69,7 @@ _FeatureCollection_features = Core.Name "features"
 _FeatureCollection_bbox = Core.Name "bbox"
 
 -- | A GeoJSON object with type "GeometryCollection" is a Geometry object. A GeometryCollection has a member with the name "geometries".  The value of "geometries" is an array.  Each element of this array is a GeoJSON Geometry object.  It is possible for this array to be empty.
-data GeometryCollection = 
+data GeometryCollection =
   GeometryCollection {
     geometryCollectionGeometries :: [Geometry],
     geometryCollectionBbox :: (Maybe BoundingBox)}
@@ -82,7 +82,7 @@ _GeometryCollection_geometries = Core.Name "geometries"
 _GeometryCollection_bbox = Core.Name "bbox"
 
 -- | A Geometry object represents points, curves, and surfaces in coordinate space.  Every Geometry object is a GeoJSON object no matter where it occurs in a GeoJSON text.
-data Geometry = 
+data Geometry =
   GeometryPoint Point |
   GeometryMultiPoint MultiPoint |
   GeometryLineString LineString |
@@ -108,7 +108,7 @@ _Geometry_multiPolygon = Core.Name "multiPolygon"
 
 _Geometry_geometryCollection = Core.Name "geometryCollection"
 
-data Id = 
+data Id =
   IdNumber Double |
   IdString String
   deriving (Eq, Ord, Read, Show)
@@ -120,7 +120,7 @@ _Id_number = Core.Name "number"
 _Id_string = Core.Name "string"
 
 -- | For type "LineString", the "coordinates" member is an array of two or more positions.
-data LineString = 
+data LineString =
   LineString {
     lineStringCoordinates :: [Position],
     lineStringBbox :: (Maybe BoundingBox)}
@@ -133,7 +133,7 @@ _LineString_coordinates = Core.Name "coordinates"
 _LineString_bbox = Core.Name "bbox"
 
 -- | For type "MultiLineString", the "coordinates" member is an array of LineString coordinate arrays.
-data MultiLineString = 
+data MultiLineString =
   MultiLineString {
     multiLineStringCoordinates :: [LineString],
     multiLineStringBbox :: (Maybe BoundingBox)}
@@ -146,7 +146,7 @@ _MultiLineString_coordinates = Core.Name "coordinates"
 _MultiLineString_bbox = Core.Name "bbox"
 
 -- | For type "MultiPoint", the "coordinates" member is an array of positions.
-data MultiPoint = 
+data MultiPoint =
   MultiPoint {
     multiPointCoordinates :: [Point],
     multiPointBbox :: (Maybe BoundingBox)}
@@ -159,7 +159,7 @@ _MultiPoint_coordinates = Core.Name "coordinates"
 _MultiPoint_bbox = Core.Name "bbox"
 
 -- | For type "MultiPolygon", the "coordinates" member is an array of Polygon coordinate arrays.
-data MultiPolygon = 
+data MultiPolygon =
   MultiPolygon {
     multiPolygonCoordinates :: [Polygon],
     multiPolygonBbox :: (Maybe BoundingBox)}
@@ -172,7 +172,7 @@ _MultiPolygon_coordinates = Core.Name "coordinates"
 _MultiPolygon_bbox = Core.Name "bbox"
 
 -- | A GeoJSON object represents a Geometry, Feature, or collection of Features.
-data Object = 
+data Object =
   ObjectGeometry Geometry |
   ObjectFeature Feature |
   ObjectFeatureCollection FeatureCollection
@@ -187,7 +187,7 @@ _Object_feature = Core.Name "feature"
 _Object_featureCollection = Core.Name "featureCollection"
 
 -- | For type "Point", the "coordinates" member is a single position.
-data Point = 
+data Point =
   Point {
     pointCoordinates :: Position,
     pointBbox :: (Maybe BoundingBox)}
@@ -201,7 +201,7 @@ _Point_bbox = Core.Name "bbox"
 
 -- | For type "Polygon", the "coordinates" member MUST be an array of linear ring coordinate arrays.
 -- | For Polygons with more than one of these rings, the first MUST be the exterior ring, and any others MUST be interior rings.  The exterior ring bounds the surface, and the interior rings (if present) bound holes within the surface.
-data Polygon = 
+data Polygon =
   Polygon {
     polygonCoordinates :: [Position],
     polygonBbox :: (Maybe BoundingBox)}
@@ -214,7 +214,7 @@ _Polygon_coordinates = Core.Name "coordinates"
 _Polygon_bbox = Core.Name "bbox"
 
 -- | A position is an array of numbers.  There MUST be two or more elements.  The first two elements are longitude and latitude, or easting and northing, precisely in that order and using decimal numbers.  Altitude or elevation MAY be included as an optional third element.
-data Position = 
+data Position =
   Position {
     positionLatitude :: Double,
     positionLongitude :: Double,

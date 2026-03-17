@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class ArrayCreationExpression_PrimitiveArray implements Serializable, Comparable<ArrayCreationExpression_PrimitiveArray> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ArrayCreationExpression_PrimitiveArray");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   public static final hydra.core.Name DIMS = new hydra.core.Name("dims");
-  
+
   public static final hydra.core.Name ARRAY = new hydra.core.Name("array");
-  
+
   public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.Dims> dims;
-  
+
   public final hydra.ext.java.syntax.ArrayInitializer array;
-  
+
   public ArrayCreationExpression_PrimitiveArray (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type, hydra.util.ConsList<hydra.ext.java.syntax.Dims> dims, hydra.ext.java.syntax.ArrayInitializer array) {
     this.type = type;
     this.dims = dims;
     this.array = array;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ArrayCreationExpression_PrimitiveArray)) {
@@ -39,12 +39,12 @@ public class ArrayCreationExpression_PrimitiveArray implements Serializable, Com
       this.array,
       o.array);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(type) + 3 * java.util.Objects.hashCode(dims) + 5 * java.util.Objects.hashCode(array);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ArrayCreationExpression_PrimitiveArray other) {
@@ -59,15 +59,15 @@ public class ArrayCreationExpression_PrimitiveArray implements Serializable, Com
     }
     return ((Comparable) array).compareTo(other.array);
   }
-  
+
   public ArrayCreationExpression_PrimitiveArray withType(hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type) {
     return new ArrayCreationExpression_PrimitiveArray(type, dims, array);
   }
-  
+
   public ArrayCreationExpression_PrimitiveArray withDims(hydra.util.ConsList<hydra.ext.java.syntax.Dims> dims) {
     return new ArrayCreationExpression_PrimitiveArray(type, dims, array);
   }
-  
+
   public ArrayCreationExpression_PrimitiveArray withArray(hydra.ext.java.syntax.ArrayInitializer array) {
     return new ArrayCreationExpression_PrimitiveArray(type, dims, array);
   }

@@ -44,8 +44,8 @@ import qualified Data.Set as S
 -- | Add names to existing namespaces mapping
 addNamesToNamespaces :: (Module.Namespace -> t0) -> S.Set Core.Name -> Module.Namespaces t0 -> Module.Namespaces t0
 addNamesToNamespaces encodeNamespace names ns0 =
-     
-      let nss = Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList names))) 
+
+      let nss = Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList names)))
           toPair = \ns -> (ns, (encodeNamespace ns))
       in Module.Namespaces {
         Module.namespacesFocus = (Module.namespacesFocus ns0),
@@ -54,21 +54,21 @@ addNamesToNamespaces encodeNamespace names ns0 =
 -- | Get dependency namespaces from definitions
 definitionDependencyNamespaces :: [Module.Definition] -> S.Set Module.Namespace
 definitionDependencyNamespaces defs =
-     
+
       let defNames =
               \def -> case def of
                 Module.DefinitionType v0 -> Rewriting.typeDependencyNames True (Module.typeDefinitionType v0)
-                Module.DefinitionTerm v0 -> Rewriting.termDependencyNames True True True (Module.termDefinitionTerm v0) 
+                Module.DefinitionTerm v0 -> Rewriting.termDependencyNames True True True (Module.termDefinitionTerm v0)
           allNames = Sets.unions (Lists.map defNames defs)
       in (Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList allNames))))
 
 -- | Find dependency namespaces in all of a set of terms (Either version)
 dependencyNamespaces :: Context.Context -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Either (Context.InContext Error.Error) (S.Set Module.Namespace)
 dependencyNamespaces cx graph binds withPrims withNoms withSchema els =
-     
+
       let depNames =
-              \el ->  
-                let term = Core.bindingTerm el 
+              \el ->
+                let term = Core.bindingTerm el
                     deannotatedTerm = Rewriting.deannotateTerm term
                     dataNames = Rewriting.termDependencyNames binds withPrims withNoms term
                     schemaNames =
@@ -97,7 +97,7 @@ dependencyNamespaces cx graph binds withPrims withNoms withSchema els =
 -- | Dereference a type name to get the actual type (Either version)
 dereferenceType :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) (Maybe Core.Type)
 dereferenceType cx graph name =
-     
+
       let mel = Lexical.dereferenceElement graph name
       in (Maybes.maybe (Right Nothing) (\el -> Eithers.map Maybes.pure (Eithers.bimap (\_wc_e -> Context.InContext {
         Context.inContextObject = _wc_e,
@@ -115,15 +115,15 @@ elementAsTypeApplicationTerm cx el =
 -- | Get elements with their dependencies
 elementsWithDependencies :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.Error) [Core.Binding]
 elementsWithDependencies cx graph original =
-     
-      let depNames = \el -> Sets.toList (Rewriting.termDependencyNames True False False (Core.bindingTerm el)) 
+
+      let depNames = \el -> Sets.toList (Rewriting.termDependencyNames True False False (Core.bindingTerm el))
           allDepNames = Lists.nub (Lists.concat2 (Lists.map Core.bindingName original) (Lists.concat (Lists.map depNames original)))
       in (Eithers.mapList (\name -> Lexical.requireElement cx graph name) allDepNames)
 
 -- | Extend a graph by descending into a lambda body
 extendGraphForLambda :: Graph.Graph -> Core.Lambda -> Graph.Graph
 extendGraphForLambda g lam =
-     
+
       let var = Core.lambdaParameter lam
       in Graph.Graph {
         Graph.graphBoundTerms = (Graph.graphBoundTerms g),
@@ -138,16 +138,16 @@ extendGraphForLambda g lam =
 -- | Extend a graph by descending into a let body
 extendGraphForLet :: (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> Graph.Graph -> Core.Let -> Graph.Graph
 extendGraphForLet forBinding g letrec =
-     
-      let bindings = Core.letBindings letrec 
+
+      let bindings = Core.letBindings letrec
           g2 = Lexical.extendGraphWithBindings bindings g
       in Graph.Graph {
         Graph.graphBoundTerms = (Maps.union (Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) bindings)) (Graph.graphBoundTerms g)),
         Graph.graphBoundTypes = (Maps.union (Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) bindings))) (Graph.graphBoundTypes g)),
         Graph.graphClassConstraints = (Graph.graphClassConstraints g),
         Graph.graphLambdaVariables = (Lists.foldl (\s -> \b -> Sets.delete (Core.bindingName b) s) (Graph.graphLambdaVariables g) bindings),
-        Graph.graphMetadata = (Graph.graphMetadata (Lists.foldl (\gAcc -> \b ->  
-          let m = Graph.graphMetadata gAcc 
+        Graph.graphMetadata = (Graph.graphMetadata (Lists.foldl (\gAcc -> \b ->
+          let m = Graph.graphMetadata gAcc
               newMeta = Maybes.maybe (Maps.delete (Core.bindingName b) m) (\t -> Maps.insert (Core.bindingName b) t m) (forBinding gAcc b)
           in Graph.Graph {
             Graph.graphBoundTerms = (Graph.graphBoundTerms gAcc),
@@ -165,7 +165,7 @@ extendGraphForLet forBinding g letrec =
 -- | Extend a graph by descending into a type lambda body
 extendGraphForTypeLambda :: Graph.Graph -> Core.TypeLambda -> Graph.Graph
 extendGraphForTypeLambda g tlam =
-     
+
       let name = Core.typeLambdaParameter tlam
       in Graph.Graph {
         Graph.graphBoundTerms = (Graph.graphBoundTerms g),
@@ -179,20 +179,20 @@ extendGraphForTypeLambda g tlam =
 
 fieldMap :: [Core.Field] -> M.Map Core.Name Core.Term
 fieldMap fields =
-     
+
       let toPair = \f -> (Core.fieldName f, (Core.fieldTerm f))
       in (Maps.fromList (Lists.map toPair fields))
 
 fieldTypeMap :: [Core.FieldType] -> M.Map Core.Name Core.Type
 fieldTypeMap fields =
-     
+
       let toPair = \f -> (Core.fieldTypeName f, (Core.fieldTypeType f))
       in (Maps.fromList (Lists.map toPair fields))
 
 -- | Get field types from a record or union type (Either version)
 fieldTypes :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.Error) (M.Map Core.Name Core.Type)
 fieldTypes cx graph t =
-     
+
       let toMap = \fields -> Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) fields)
       in case (Rewriting.deannotateType t) of
         Core.TypeForall v0 -> fieldTypes cx graph (Core.forallTypeBody v0)
@@ -210,7 +210,7 @@ fieldTypes cx graph t =
 -- | Find a field type by name in a list of field types
 findFieldType :: Context.Context -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Error.Error) Core.Type
 findFieldType cx fname fields =
-     
+
       let matchingFields = Lists.filter (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) fields
       in (Logic.ifElse (Lists.null matchingFields) (Left (Context.InContext {
         Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "No such field: " (Core.unName fname)))),
@@ -221,17 +221,17 @@ findFieldType cx fname fields =
 -- | Generate a fresh type variable name, threading Context
 freshName :: Context.Context -> (Core.Name, Context.Context)
 freshName cx =
-     
+
       let count = Annotations.getCount Constants.key_freshTypeVariableCount cx
       in (normalTypeVariable count, (Annotations.putCount Constants.key_freshTypeVariableCount (Math.add count 1) cx))
 
 -- | Generate multiple fresh type variable names, threading Context
 freshNames :: Int -> Context.Context -> ([Core.Name], Context.Context)
 freshNames n cx =
-     
+
       let go =
-              \acc -> \_ ->  
-                let names = Pairs.first acc 
+              \acc -> \_ ->
+                let names = Pairs.first acc
                     cx0 = Pairs.second acc
                     result = freshName cx0
                     name = Pairs.first result
@@ -250,14 +250,14 @@ fTypeIsPolymorphic typ =
 -- | Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison
 fullyStripAndNormalizeType :: Core.Type -> Core.Type
 fullyStripAndNormalizeType typ =
-     
+
       let go =
               \depth -> \subst -> \t -> case (Rewriting.deannotateType t) of
-                Core.TypeForall v0 ->  
-                  let oldVar = Core.forallTypeParameter v0 
+                Core.TypeForall v0 ->
+                  let oldVar = Core.forallTypeParameter v0
                       newVar = Core.Name (Strings.cat2 "_" (Literals.showInt32 depth))
                   in (go (Math.add depth 1) (Maps.insert oldVar newVar subst) (Core.forallTypeBody v0))
-                _ -> (subst, t) 
+                _ -> (subst, t)
           result = go 0 Maps.empty typ
           subst = Pairs.first result
           body = Pairs.second result
@@ -284,7 +284,7 @@ graphAsTerm bindings body = Core.TermLet (graphAsLet bindings body)
 -- | Decode a list of type-encoding bindings into a map of named types
 graphAsTypes :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.DecodingError) (M.Map Core.Name Core.Type)
 graphAsTypes cx graph els =
-     
+
       let toPair =
               \el -> Eithers.map (\typ -> (Core.bindingName el, typ)) (Eithers.bimap (\_wc_e -> Context.InContext {
                 Context.inContextObject = _wc_e,
@@ -294,15 +294,15 @@ graphAsTypes cx graph els =
 -- | Instantiate a type by replacing all forall-bound type variables with fresh variables, threading Context
 instantiateType :: Context.Context -> Core.Type -> (Core.Type, Context.Context)
 instantiateType cx typ =
-     
+
       let result = instantiateTypeScheme cx (typeToTypeScheme typ)
       in (Rewriting.typeSchemeToFType (Pairs.first result), (Pairs.second result))
 
 -- | Instantiate a type scheme with fresh variables, threading Context
 instantiateTypeScheme :: Context.Context -> Core.TypeScheme -> (Core.TypeScheme, Context.Context)
 instantiateTypeScheme cx scheme =
-     
-      let oldVars = Core.typeSchemeVariables scheme 
+
+      let oldVars = Core.typeSchemeVariables scheme
           result = freshNames (Lists.length oldVars) cx
           newVars = Pairs.first result
           cx2 = Pairs.second result
@@ -346,17 +346,17 @@ isEnumType typ =
 -- | Check if an element is serializable (no function types in dependencies) (Either version)
 isSerializable :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.Error) Bool
 isSerializable cx graph el =
-     
+
       let variants =
               \typ -> Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ)
-      in (Eithers.map (\deps ->  
+      in (Eithers.map (\deps ->
         let allVariants = Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps)))
         in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies cx graph False Equality.identity (Core.bindingName el)))
 
 -- | Check if a type is serializable (no function types in the type itself)
 isSerializableType :: Core.Type -> Bool
 isSerializableType typ =
-     
+
       let allVariants =
               Sets.fromList (Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ))
       in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))
@@ -364,10 +364,10 @@ isSerializableType typ =
 -- | Check if a type (by name) is serializable, resolving all type dependencies (Either version)
 isSerializableByName :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) Bool
 isSerializableByName cx graph name =
-     
+
       let variants =
               \typ -> Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ)
-      in (Eithers.map (\deps ->  
+      in (Eithers.map (\deps ->
         let allVariants = Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps)))
         in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies cx graph False Equality.identity name))
 
@@ -398,13 +398,13 @@ isUnitType x =
 -- | Check whether a module contains any binary literal values
 moduleContainsBinaryLiterals :: Module.Module -> Bool
 moduleContainsBinaryLiterals mod =
-     
+
       let checkTerm =
               \found -> \term -> Logic.or found (case term of
                 Core.TermLiteral v0 -> case v0 of
                   Core.LiteralBinary _ -> True
                   _ -> False
-                _ -> False) 
+                _ -> False)
           termContainsBinary = \term -> Rewriting.foldOverTerm Coders.TraversalOrderPre checkTerm False term
       in (Lists.foldl (\acc -> \el -> Logic.or acc (termContainsBinary (Core.bindingTerm el))) False (Module.moduleElements mod))
 
@@ -416,8 +416,8 @@ moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
 -- | Create namespaces mapping for definitions
 namespacesForDefinitions :: (Module.Namespace -> t0) -> Module.Namespace -> [Module.Definition] -> Module.Namespaces t0
 namespacesForDefinitions encodeNamespace focusNs defs =
-     
-      let nss = Sets.delete focusNs (definitionDependencyNamespaces defs) 
+
+      let nss = Sets.delete focusNs (definitionDependencyNamespaces defs)
           toPair = \ns -> (ns, (encodeNamespace ns))
       in Module.Namespaces {
         Module.namespacesFocus = (toPair focusNs),
@@ -437,11 +437,11 @@ normalTypeVariable i = Core.Name (Strings.cat2 "t" (Literals.showInt32 i))
 -- | Partition a list of definitions into type definitions and term definitions
 partitionDefinitions :: [Module.Definition] -> ([Module.TypeDefinition], [Module.TermDefinition])
 partitionDefinitions defs =
-     
+
       let getType =
               \def -> case def of
                 Module.DefinitionType v0 -> Just v0
-                Module.DefinitionTerm _ -> Nothing 
+                Module.DefinitionTerm _ -> Nothing
           getTerm =
                   \def -> case def of
                     Module.DefinitionType _ -> Nothing
@@ -451,7 +451,7 @@ partitionDefinitions defs =
 -- | Require a name to resolve to a record type
 requireRecordType :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) [Core.FieldType]
 requireRecordType cx graph name =
-     
+
       let toRecord =
               \t -> case t of
                 Core.TypeRecord v0 -> Just v0
@@ -461,7 +461,7 @@ requireRecordType cx graph name =
 -- | Require a name to resolve to a row type
 requireRowType :: Context.Context -> String -> (Core.Type -> Maybe t0) -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) t0
 requireRowType cx label getter graph name =
-     
+
       let rawType =
               \t -> case t of
                 Core.TypeAnnotated v0 -> rawType (Core.annotatedTypeBody v0)
@@ -497,9 +497,9 @@ requireType cx graph name =
 -- | Require a field type from a union type
 requireUnionField :: Context.Context -> Graph.Graph -> Core.Name -> Core.Name -> Either (Context.InContext Error.Error) Core.Type
 requireUnionField cx graph tname fname =
-     
+
       let withRowType =
-              \rt ->  
+              \rt ->
                 let matches = Lists.filter (\ft -> Equality.equal (Core.fieldTypeName ft) fname) rt
                 in (Logic.ifElse (Lists.null matches) (Left (Context.InContext {
                   Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
@@ -513,7 +513,7 @@ requireUnionField cx graph tname fname =
 -- | Require a name to resolve to a union type
 requireUnionType :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) [Core.FieldType]
 requireUnionType cx graph name =
-     
+
       let toUnion =
               \t -> case t of
                 Core.TypeUnion v0 -> Just v0
@@ -530,14 +530,14 @@ resolveType graph typ =
 -- | Convert a schema graph to a typing environment (Either version)
 schemaGraphToTypingEnvironment :: Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (M.Map Core.Name Core.TypeScheme)
 schemaGraphToTypingEnvironment cx g =
-     
+
       let toTypeScheme =
               \vars -> \typ -> case (Rewriting.deannotateType typ) of
                 Core.TypeForall v0 -> toTypeScheme (Lists.cons (Core.forallTypeParameter v0) vars) (Core.forallTypeBody v0)
                 _ -> Core.TypeScheme {
                   Core.typeSchemeVariables = (Lists.reverse vars),
                   Core.typeSchemeType = typ,
-                  Core.typeSchemeConstraints = Nothing} 
+                  Core.typeSchemeConstraints = Nothing}
           decodeType =
                   \term -> Eithers.bimap (\_wc_e -> Context.InContext {
                     Context.inContextObject = _wc_e,
@@ -547,7 +547,7 @@ schemaGraphToTypingEnvironment cx g =
                     Context.inContextObject = _wc_e,
                     Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Error.ErrorOther (Error.OtherError (Error.unDecodingError _e))) (\_a -> _a) (Core_.typeScheme g term))
           toPair =
-                  \el ->  
+                  \el ->
                     let forTerm =
                             \term -> case term of
                               Core.TermRecord v0 -> Logic.ifElse (Equality.equal (Core.recordTypeName v0) (Core.Name "hydra.core.TypeScheme")) (Eithers.map Maybes.pure (decodeTypeScheme (Core.bindingTerm el))) (Right Nothing)
@@ -572,9 +572,9 @@ termAsBindings term =
 -- | Topologically sort type definitions by dependencies
 topologicalSortTypeDefinitions :: [Module.TypeDefinition] -> [[Module.TypeDefinition]]
 topologicalSortTypeDefinitions defs =
-     
+
       let toPair =
-              \def -> (Module.typeDefinitionName def, (Sets.toList (Rewriting.typeDependencyNames False (Module.typeDefinitionType def)))) 
+              \def -> (Module.typeDefinitionName def, (Sets.toList (Rewriting.typeDependencyNames False (Module.typeDefinitionType def))))
           nameToDef = Maps.fromList (Lists.map (\d -> (Module.typeDefinitionName d, d)) defs)
           sorted = Sorting.topologicalSortComponents (Lists.map toPair defs)
       in (Lists.map (\names -> Maybes.cat (Lists.map (\n -> Maps.lookup n nameToDef) names)) sorted)
@@ -582,9 +582,9 @@ topologicalSortTypeDefinitions defs =
 -- | Get all type dependencies for a given type name (Either version)
 typeDependencies :: Context.Context -> Graph.Graph -> Bool -> (Core.Type -> Core.Type) -> Core.Name -> Either (Context.InContext Error.Error) (M.Map Core.Name Core.Type)
 typeDependencies cx graph withSchema transform name =
-     
+
       let requireType =
-              \name ->  
+              \name ->
                 let cx1 =
                         Context.Context {
                           Context.contextTrace = (Lists.cons (Strings.cat2 "type dependencies of " (Core.unName name)) (Context.contextTrace cx)),
@@ -592,11 +592,11 @@ typeDependencies cx graph withSchema transform name =
                           Context.contextOther = (Context.contextOther cx)}
                 in (Eithers.bind (Lexical.requireElement cx1 graph name) (\el -> Eithers.bimap (\_wc_e -> Context.InContext {
                   Context.inContextObject = _wc_e,
-                  Context.inContextContext = cx1}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Error.ErrorOther (Error.OtherError (Error.unDecodingError _e))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el))))) 
+                  Context.inContextContext = cx1}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Error.ErrorOther (Error.OtherError (Error.unDecodingError _e))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el)))))
           toPair = \name -> Eithers.map (\typ -> (name, (transform typ))) (requireType name)
           deps =
-                  \seeds -> \names -> Logic.ifElse (Sets.null seeds) (Right names) (Eithers.bind (Eithers.mapList toPair (Sets.toList seeds)) (\pairs ->  
-                    let newNames = Maps.union names (Maps.fromList pairs) 
+                  \seeds -> \names -> Logic.ifElse (Sets.null seeds) (Right names) (Eithers.bind (Eithers.mapList toPair (Sets.toList seeds)) (\pairs ->
+                    let newNames = Maps.union names (Maps.fromList pairs)
                         refs =
                                 Lists.foldl Sets.union Sets.empty (Lists.map (\pair -> Rewriting.typeDependencyNames withSchema (Pairs.second pair)) pairs)
                         visited = Sets.fromList (Maps.keys names)
@@ -607,7 +607,7 @@ typeDependencies cx graph withSchema transform name =
 -- | Convert a (System F -style) type to a type scheme
 typeToTypeScheme :: Core.Type -> Core.TypeScheme
 typeToTypeScheme t0 =
-     
+
       let helper =
               \vars -> \t -> case (Rewriting.deannotateType t) of
                 Core.TypeForall v0 -> helper (Lists.cons (Core.forallTypeParameter v0) vars) (Core.forallTypeBody v0)
@@ -620,9 +620,9 @@ typeToTypeScheme t0 =
 -- | Encode a map of named types to a list of elements
 typesToElements :: M.Map Core.Name Core.Type -> [Core.Binding]
 typesToElements typeMap =
-     
+
       let toElement =
-              \pair ->  
+              \pair ->
                 let name = Pairs.first pair
                 in Core.Binding {
                   Core.bindingName = name,
@@ -633,20 +633,20 @@ typesToElements typeMap =
 -- | Execute a computation in the context of a lambda body, extending the type context with the lambda parameter
 withLambdaContext :: (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t1) -> t0 -> Core.Lambda -> (t1 -> t2) -> t2
 withLambdaContext getContext setContext env lam body =
-     
+
       let newContext = extendGraphForLambda (getContext env) lam
       in (body (setContext newContext env))
 
 -- | Execute a computation in the context of a let body, extending the type context with the let bindings
 withLetContext :: (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t1) -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> t0 -> Core.Let -> (t1 -> t2) -> t2
 withLetContext getContext setContext forBinding env letrec body =
-     
+
       let newContext = extendGraphForLet forBinding (getContext env) letrec
       in (body (setContext newContext env))
 
 -- | Execute a computation in the context of a type lambda body, extending the type context with the type parameter
 withTypeLambdaContext :: (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t1) -> t0 -> Core.TypeLambda -> (t1 -> t2) -> t2
 withTypeLambdaContext getContext setContext env tlam body =
-     
+
       let newContext = extendGraphForTypeLambda (getContext env) tlam
       in (body (setContext newContext env))

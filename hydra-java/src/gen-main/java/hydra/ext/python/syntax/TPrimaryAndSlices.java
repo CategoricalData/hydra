@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class TPrimaryAndSlices implements Serializable, Comparable<TPrimaryAndSlices> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.TPrimaryAndSlices");
-  
+
   public static final hydra.core.Name PRIMARY = new hydra.core.Name("primary");
-  
+
   public static final hydra.core.Name SLICES = new hydra.core.Name("slices");
-  
+
   public final hydra.ext.python.syntax.TPrimary primary;
-  
+
   public final hydra.ext.python.syntax.Slices slices;
-  
+
   public TPrimaryAndSlices (hydra.ext.python.syntax.TPrimary primary, hydra.ext.python.syntax.Slices slices) {
     this.primary = primary;
     this.slices = slices;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TPrimaryAndSlices)) {
@@ -32,12 +32,12 @@ public class TPrimaryAndSlices implements Serializable, Comparable<TPrimaryAndSl
       this.slices,
       o.slices);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(primary) + 3 * java.util.Objects.hashCode(slices);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TPrimaryAndSlices other) {
@@ -48,11 +48,11 @@ public class TPrimaryAndSlices implements Serializable, Comparable<TPrimaryAndSl
     }
     return ((Comparable) slices).compareTo(other.slices);
   }
-  
+
   public TPrimaryAndSlices withPrimary(hydra.ext.python.syntax.TPrimary primary) {
     return new TPrimaryAndSlices(primary, slices);
   }
-  
+
   public TPrimaryAndSlices withSlices(hydra.ext.python.syntax.Slices slices) {
     return new TPrimaryAndSlices(primary, slices);
   }

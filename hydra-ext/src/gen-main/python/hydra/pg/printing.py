@@ -17,12 +17,12 @@ T0 = TypeVar("T0")
 
 def print_property(print_value: Callable[[T0], str], key: hydra.pg.model.PropertyKey, value: T0) -> str:
     r"""Print a property using the provided value printer."""
-    
+
     return hydra.lib.strings.cat((key.value, ": ", print_value(value)))
 
 def print_edge(print_value: Callable[[T0], str], edge: hydra.pg.model.Edge[T0]) -> str:
     r"""Print an edge using the provided value printer."""
-    
+
     @lru_cache(1)
     def label() -> str:
         return edge.label.value
@@ -42,7 +42,7 @@ def print_edge(print_value: Callable[[T0], str], edge: hydra.pg.model.Edge[T0]) 
 
 def print_vertex(print_value: Callable[[T0], str], vertex: hydra.pg.model.Vertex[T0]) -> str:
     r"""Print a vertex using the provided value printer."""
-    
+
     @lru_cache(1)
     def label() -> str:
         return vertex.label.value
@@ -56,7 +56,7 @@ def print_vertex(print_value: Callable[[T0], str], vertex: hydra.pg.model.Vertex
 
 def print_lazy_graph(print_value: Callable[[T0], str], lg: hydra.pg.model.LazyGraph[T0]) -> str:
     r"""Print a lazy graph using the provided value printer."""
-    
+
     @lru_cache(1)
     def vertices() -> frozenlist[hydra.pg.model.Vertex[T0]]:
         return lg.vertices
@@ -67,5 +67,5 @@ def print_lazy_graph(print_value: Callable[[T0], str], lg: hydra.pg.model.LazyGr
 
 def print_graph(print_value: Callable[[T0], str], graph: hydra.pg.model.Graph[T0]) -> str:
     r"""Print a graph using the provided value printer."""
-    
+
     return print_lazy_graph(print_value, hydra.pg.model.LazyGraph(hydra.lib.maps.elems(graph.vertices), hydra.lib.maps.elems(graph.edges)))

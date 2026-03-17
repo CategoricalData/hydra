@@ -9,15 +9,15 @@ import java.io.Serializable;
  */
 public class NodeShape implements Serializable, Comparable<NodeShape> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.shacl.model.NodeShape");
-  
+
   public static final hydra.core.Name COMMON = new hydra.core.Name("common");
-  
+
   public final hydra.ext.org.w3.shacl.model.CommonProperties common;
-  
+
   public NodeShape (hydra.ext.org.w3.shacl.model.CommonProperties common) {
     this.common = common;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof NodeShape)) {
@@ -28,12 +28,12 @@ public class NodeShape implements Serializable, Comparable<NodeShape> {
       this.common,
       o.common);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(common);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NodeShape other) {

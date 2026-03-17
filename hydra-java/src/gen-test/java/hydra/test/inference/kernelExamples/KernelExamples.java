@@ -9,7 +9,7 @@ public interface KernelExamples {
   static hydra.testing.TestGroup allTests() {
     return new hydra.testing.TestGroup("Examples from the Hydra kernel", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), hydra.util.ConsList.of(hydra.test.inference.kernelExamples.KernelExamples.testGroupForNestedLet()), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>empty()));
   }
-  
+
   static hydra.testing.TestGroup testGroupForNestedLet() {
     return new hydra.testing.TestGroup("Nested let", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), hydra.util.ConsList.of(
       new hydra.testing.TestGroup("hydra.formatting.mapFirstLetter", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>empty()), hydra.util.ConsList.of(new hydra.testing.TestCaseWithMetadata("#1", new hydra.testing.TestCase.Inference(new hydra.testing.InferenceTestCase(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("mapping"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("s"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Let(new hydra.core.Let(hydra.util.ConsList.of(

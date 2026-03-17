@@ -9,20 +9,20 @@ import java.io.Serializable;
  */
 public class Description implements Serializable, Comparable<Description> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.rdf.syntax.Description");
-  
+
   public static final hydra.core.Name SUBJECT = new hydra.core.Name("subject");
-  
+
   public static final hydra.core.Name GRAPH = new hydra.core.Name("graph");
-  
+
   public final hydra.ext.org.w3.rdf.syntax.Node subject;
-  
+
   public final hydra.ext.org.w3.rdf.syntax.Graph graph;
-  
+
   public Description (hydra.ext.org.w3.rdf.syntax.Node subject, hydra.ext.org.w3.rdf.syntax.Graph graph) {
     this.subject = subject;
     this.graph = graph;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Description)) {
@@ -35,12 +35,12 @@ public class Description implements Serializable, Comparable<Description> {
       this.graph,
       o.graph);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(subject) + 3 * java.util.Objects.hashCode(graph);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Description other) {
@@ -51,11 +51,11 @@ public class Description implements Serializable, Comparable<Description> {
     }
     return ((Comparable) graph).compareTo(other.graph);
   }
-  
+
   public Description withSubject(hydra.ext.org.w3.rdf.syntax.Node subject) {
     return new Description(subject, graph);
   }
-  
+
   public Description withGraph(hydra.ext.org.w3.rdf.syntax.Graph graph) {
     return new Description(subject, graph);
   }

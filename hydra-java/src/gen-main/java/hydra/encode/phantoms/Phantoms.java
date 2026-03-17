@@ -13,7 +13,7 @@ public interface Phantoms {
         a,
         ((java.util.function.Function<hydra.phantoms.TBinding<T1>, hydra.phantoms.TTerm<T1>>) (projected -> projected.term)).apply(x))))));
   }
-  
+
   static <T0, T1> hydra.core.Term tTerm(T0 a, hydra.phantoms.TTerm<T1> x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.phantoms.TTerm"), hydra.encode.core.Core.term(((java.util.function.Function<hydra.phantoms.TTerm<T1>, hydra.core.Term>) (wrapped -> (wrapped).value)).apply(x))));
   }

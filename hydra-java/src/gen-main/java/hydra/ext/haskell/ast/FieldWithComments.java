@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class FieldWithComments implements Serializable, Comparable<FieldWithComments> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.FieldWithComments");
-  
+
   public static final hydra.core.Name FIELD = new hydra.core.Name("field");
-  
+
   public static final hydra.core.Name COMMENTS = new hydra.core.Name("comments");
-  
+
   /**
    * The field
    */
   public final hydra.ext.haskell.ast.Field field;
-  
+
   /**
    * Optional comments
    */
   public final hydra.util.Maybe<String> comments;
-  
+
   public FieldWithComments (hydra.ext.haskell.ast.Field field, hydra.util.Maybe<String> comments) {
     this.field = field;
     this.comments = comments;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof FieldWithComments)) {
@@ -41,12 +41,12 @@ public class FieldWithComments implements Serializable, Comparable<FieldWithComm
       this.comments,
       o.comments);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(field) + 3 * java.util.Objects.hashCode(comments);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(FieldWithComments other) {
@@ -57,11 +57,11 @@ public class FieldWithComments implements Serializable, Comparable<FieldWithComm
     }
     return ((Comparable) comments).compareTo(other.comments);
   }
-  
+
   public FieldWithComments withField(hydra.ext.haskell.ast.Field field) {
     return new FieldWithComments(field, comments);
   }
-  
+
   public FieldWithComments withComments(hydra.util.Maybe<String> comments) {
     return new FieldWithComments(field, comments);
   }

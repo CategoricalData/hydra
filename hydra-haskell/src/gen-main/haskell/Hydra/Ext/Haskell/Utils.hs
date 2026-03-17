@@ -41,8 +41,8 @@ applicationPattern name args =
 -- | Generate a Haskell name reference for a Hydra element
 elementReference :: Module.Namespaces Ast.ModuleName -> Core.Name -> Ast.Name
 elementReference namespaces name =
-     
-      let namespacePair = Module.namespacesFocus namespaces 
+
+      let namespacePair = Module.namespacesFocus namespaces
           gname = Pairs.first namespacePair
           gmod = Ast.unModuleName (Pairs.second namespacePair)
           namespacesMap = Module.namespacesMapping namespaces
@@ -50,7 +50,7 @@ elementReference namespaces name =
           local = Module.qualifiedNameLocal qname
           escLocal = sanitizeHaskellName local
           mns = Module.qualifiedNameNamespace qname
-      in (Maybes.cases (Module.qualifiedNameNamespace qname) (simpleName local) (\ns -> Maybes.cases (Maps.lookup ns namespacesMap) (simpleName local) (\mn ->  
+      in (Maybes.cases (Module.qualifiedNameNamespace qname) (simpleName local) (\ns -> Maybes.cases (Maps.lookup ns namespacesMap) (simpleName local) (\mn ->
         let aliasStr = Ast.unModuleName mn
         in (Logic.ifElse (Equality.equal ns gname) (simpleName escLocal) (rawName (Strings.cat [
           aliasStr,
@@ -83,19 +83,19 @@ hsvar s = Ast.ExpressionVariable (rawName s)
 -- | Compute the Haskell module namespaces for a Hydra module
 namespacesForModule :: Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Module.Namespaces Ast.ModuleName)
 namespacesForModule mod cx g =
-    Eithers.bind (Schemas.moduleDependencyNamespaces cx g True True True True mod) (\nss ->  
-      let ns = Module.moduleNamespace mod 
+    Eithers.bind (Schemas.moduleDependencyNamespaces cx g True True True True mod) (\nss ->
+      let ns = Module.moduleNamespace mod
           toModuleName =
-                  \namespace ->  
-                    let namespaceStr = Module.unNamespace namespace 
+                  \namespace ->
+                    let namespaceStr = Module.unNamespace namespace
                         parts = Strings.splitOn "." namespaceStr
                         lastPart = Lists.last parts
                         capitalized = Formatting.capitalize lastPart
                     in (Ast.ModuleName capitalized)
           toPair = \name -> (name, (toModuleName name))
           addPair =
-                  \state -> \namePair ->  
-                    let currentMap = Pairs.first state 
+                  \state -> \namePair ->
+                    let currentMap = Pairs.first state
                         currentSet = Pairs.second state
                         name = Pairs.first namePair
                         alias = Pairs.second namePair
@@ -125,8 +125,8 @@ rawName n =
 -- | Generate a Haskell name for a record field accessor
 recordFieldReference :: Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Name -> Ast.Name
 recordFieldReference namespaces sname fname =
-     
-      let fnameStr = Core.unName fname 
+
+      let fnameStr = Core.unName fname
           qname = Names.qualifyName sname
           ns = Module.qualifiedNameNamespace qname
           typeNameStr = typeNameForRecord sname
@@ -151,11 +151,11 @@ simpleName arg_ = rawName (sanitizeHaskellName arg_)
 -- | Create a simple value binding (e.g., 'foo = expr' or 'foo = expr where ...')
 simpleValueBinding :: Ast.Name -> Ast.Expression -> Maybe Ast.LocalBindings -> Ast.ValueBinding
 simpleValueBinding hname rhs bindings =
-     
+
       let pat =
               Ast.PatternApplication (Ast.ApplicationPattern {
                 Ast.applicationPatternName = hname,
-                Ast.applicationPatternArgs = []}) 
+                Ast.applicationPatternArgs = []})
           rightHandSide = Ast.RightHandSide rhs
       in (Ast.ValueBindingSimple (Ast.SimpleValueBinding {
         Ast.simpleValueBindingPattern = pat,
@@ -165,7 +165,7 @@ simpleValueBinding hname rhs bindings =
 -- | Convert a list of types into a nested type application
 toTypeApplication :: [Ast.Type] -> Ast.Type
 toTypeApplication types =
-     
+
       let app =
               \l -> Logic.ifElse (Equality.gt (Lists.length l) 1) (Ast.TypeApplication (Ast.ApplicationType {
                 Ast.applicationTypeContext = (app (Lists.tail l)),
@@ -175,23 +175,23 @@ toTypeApplication types =
 -- | Extract the local type name from a fully qualified record type name
 typeNameForRecord :: Core.Name -> String
 typeNameForRecord sname =
-     
-      let snameStr = Core.unName sname 
+
+      let snameStr = Core.unName sname
           parts = Strings.splitOn "." snameStr
       in (Lists.last parts)
 
 -- | Generate a Haskell name for a union variant constructor, with disambiguation
 unionFieldReference :: S.Set Core.Name -> Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Name -> Ast.Name
 unionFieldReference boundNames namespaces sname fname =
-     
-      let fnameStr = Core.unName fname 
+
+      let fnameStr = Core.unName fname
           qname = Names.qualifyName sname
           ns = Module.qualifiedNameNamespace qname
           typeNameStr = typeNameForRecord sname
           capitalizedTypeName = Formatting.capitalize typeNameStr
           capitalizedFieldName = Formatting.capitalize fnameStr
           deconflict =
-                  \name ->  
+                  \name ->
                     let tname =
                             Names.unqualifyName (Module.QualifiedName {
                               Module.qualifiedNameNamespace = ns,
@@ -209,8 +209,8 @@ unionFieldReference boundNames namespaces sname fname =
 unpackForallType :: Core.Type -> ([Core.Name], Core.Type)
 unpackForallType t =
     case (Rewriting.deannotateType t) of
-      Core.TypeForall v0 ->  
-        let v = Core.forallTypeParameter v0 
+      Core.TypeForall v0 ->
+        let v = Core.forallTypeParameter v0
             tbody = Core.forallTypeBody v0
             recursiveResult = unpackForallType tbody
             vars = Pairs.first recursiveResult

@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class InlineShapeAnd implements Serializable, Comparable<InlineShapeAnd> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAnd");
-  
+
   public static final hydra.core.Name INLINE_SHAPE_NOT = new hydra.core.Name("InlineShapeNot");
-  
+
   public static final hydra.core.Name LIST_OF_SEQUENCE = new hydra.core.Name("listOfSequence");
-  
+
   public final hydra.ext.io.shex.syntax.InlineShapeNot InlineShapeNot;
-  
+
   public final hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeNot> listOfSequence;
-  
+
   public InlineShapeAnd (hydra.ext.io.shex.syntax.InlineShapeNot InlineShapeNot, hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeNot> listOfSequence) {
     this.InlineShapeNot = InlineShapeNot;
     this.listOfSequence = listOfSequence;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof InlineShapeAnd)) {
@@ -32,12 +32,12 @@ public class InlineShapeAnd implements Serializable, Comparable<InlineShapeAnd> 
       this.listOfSequence,
       o.listOfSequence);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(InlineShapeNot) + 3 * java.util.Objects.hashCode(listOfSequence);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InlineShapeAnd other) {
@@ -48,11 +48,11 @@ public class InlineShapeAnd implements Serializable, Comparable<InlineShapeAnd> 
     }
     return ((Comparable) listOfSequence).compareTo(other.listOfSequence);
   }
-  
+
   public InlineShapeAnd withInlineShapeNot(hydra.ext.io.shex.syntax.InlineShapeNot InlineShapeNot) {
     return new InlineShapeAnd(InlineShapeNot, listOfSequence);
   }
-  
+
   public InlineShapeAnd withListOfSequence(hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeNot> listOfSequence) {
     return new InlineShapeAnd(InlineShapeNot, listOfSequence);
   }

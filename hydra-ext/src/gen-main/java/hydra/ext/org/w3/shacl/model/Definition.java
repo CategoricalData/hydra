@@ -9,20 +9,20 @@ import java.io.Serializable;
  */
 public class Definition<A> implements Serializable, Comparable<Definition<A>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.shacl.model.Definition");
-  
+
   public static final hydra.core.Name IRI = new hydra.core.Name("iri");
-  
+
   public static final hydra.core.Name TARGET = new hydra.core.Name("target");
-  
+
   public final hydra.ext.org.w3.rdf.syntax.Iri iri;
-  
+
   public final A target;
-  
+
   public Definition (hydra.ext.org.w3.rdf.syntax.Iri iri, A target) {
     this.iri = iri;
     this.target = target;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Definition)) {
@@ -35,12 +35,12 @@ public class Definition<A> implements Serializable, Comparable<Definition<A>> {
       this.target,
       o.target);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(iri) + 3 * java.util.Objects.hashCode(target);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Definition other) {
@@ -51,11 +51,11 @@ public class Definition<A> implements Serializable, Comparable<Definition<A>> {
     }
     return ((Comparable) target).compareTo(other.target);
   }
-  
+
   public Definition withIri(hydra.ext.org.w3.rdf.syntax.Iri iri) {
     return new Definition(iri, target);
   }
-  
+
   public Definition withTarget(A target) {
     return new Definition(iri, target);
   }

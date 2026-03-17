@@ -9,13 +9,13 @@ public interface Relational {
   static hydra.core.Term columnName(hydra.relational.ColumnName x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.relational.ColumnName"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).value))));
   }
-  
+
   static <T0> hydra.core.Term columnSchema(java.util.function.Function<T0, hydra.core.Term> t, hydra.relational.ColumnSchema<T0> x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.relational.ColumnSchema"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.relational.Relational.columnName(((java.util.function.Function<hydra.relational.ColumnSchema<T0>, hydra.relational.ColumnName>) (projected -> projected.name)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("domain"), (t).apply(((java.util.function.Function<hydra.relational.ColumnSchema<T0>, T0>) (projected -> projected.domain)).apply(x))))));
   }
-  
+
   static hydra.core.Term foreignKey(hydra.relational.ForeignKey x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.relational.ForeignKey"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("foreignRelation"), hydra.encode.relational.Relational.relationName((x).foreignRelation)),
@@ -24,13 +24,13 @@ public interface Relational {
         hydra.encode.relational.Relational::columnName,
         (x).keys))))));
   }
-  
+
   static hydra.core.Term primaryKey(hydra.relational.PrimaryKey x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.relational.PrimaryKey"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
       hydra.encode.relational.Relational::columnName,
       (x).value))));
   }
-  
+
   static <T0> hydra.core.Term relation(java.util.function.Function<T0, hydra.core.Term> v, hydra.relational.Relation<T0> x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.relational.Relation"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.relational.Row<T0>, hydra.core.Term>) (v1 -> hydra.encode.relational.Relational.<T0>row(
@@ -38,11 +38,11 @@ public interface Relational {
         v1)),
       ((java.util.function.Function<hydra.relational.Relation<T0>, hydra.util.ConsList<hydra.relational.Row<T0>>>) (wrapped -> (wrapped).value)).apply(x)))));
   }
-  
+
   static hydra.core.Term relationName(hydra.relational.RelationName x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.relational.RelationName"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).value))));
   }
-  
+
   static <T0> hydra.core.Term relationSchema(java.util.function.Function<T0, hydra.core.Term> t, hydra.relational.RelationSchema<T0> x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.relational.RelationSchema"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.relational.Relational.relationName(((java.util.function.Function<hydra.relational.RelationSchema<T0>, hydra.relational.RelationName>) (projected -> projected.name)).apply(x))),
@@ -58,7 +58,7 @@ public interface Relational {
         hydra.encode.relational.Relational::foreignKey,
         ((java.util.function.Function<hydra.relational.RelationSchema<T0>, hydra.util.ConsList<hydra.relational.ForeignKey>>) (projected -> projected.foreignKeys)).apply(x)))))));
   }
-  
+
   static <T0> hydra.core.Term relationship(java.util.function.Function<T0, hydra.core.Term> v, hydra.relational.Relationship<T0> x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.relational.Relationship"), new hydra.core.Term.Set(hydra.lib.sets.Map.apply(
       (java.util.function.Function<hydra.util.PersistentMap<hydra.relational.ColumnName, T0>, hydra.core.Term>) (m -> new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
@@ -67,7 +67,7 @@ public interface Relational {
         m))),
       ((java.util.function.Function<hydra.relational.Relationship<T0>, hydra.util.PersistentSet<hydra.util.PersistentMap<hydra.relational.ColumnName, T0>>>) (wrapped -> (wrapped).value)).apply(x)))));
   }
-  
+
   static <T0> hydra.core.Term row(java.util.function.Function<T0, hydra.core.Term> v, hydra.relational.Row<T0> x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.relational.Row"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
       v,

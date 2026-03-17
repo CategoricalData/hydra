@@ -50,7 +50,7 @@ label cx raw =
 labeledPattern :: Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.LabeledPattern
 labeledPattern cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "label" label fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "pattern" pattern fieldMap cx) (\field_pattern -> Right (Grammar.LabeledPattern {
           Grammar.labeledPatternLabel = field_label,
@@ -60,8 +60,8 @@ labeledPattern cx raw =
 pattern :: Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Pattern
 pattern cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -86,7 +86,7 @@ pattern cx raw =
 production :: Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Production
 production cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "symbol" symbol fieldMap cx) (\field_symbol -> Eithers.bind (Helpers.requireField "pattern" pattern fieldMap cx) (\field_pattern -> Right (Grammar.Production {
           Grammar.productionSymbol = field_symbol,

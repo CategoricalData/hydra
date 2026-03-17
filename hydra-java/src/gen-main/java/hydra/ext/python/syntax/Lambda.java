@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class Lambda implements Serializable, Comparable<Lambda> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Lambda");
-  
+
   public static final hydra.core.Name PARAMS = new hydra.core.Name("params");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public final hydra.ext.python.syntax.LambdaParameters params;
-  
+
   public final hydra.ext.python.syntax.Expression body;
-  
+
   public Lambda (hydra.ext.python.syntax.LambdaParameters params, hydra.ext.python.syntax.Expression body) {
     this.params = params;
     this.body = body;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Lambda)) {
@@ -32,12 +32,12 @@ public class Lambda implements Serializable, Comparable<Lambda> {
       this.body,
       o.body);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(params) + 3 * java.util.Objects.hashCode(body);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Lambda other) {
@@ -48,11 +48,11 @@ public class Lambda implements Serializable, Comparable<Lambda> {
     }
     return ((Comparable) body).compareTo(other.body);
   }
-  
+
   public Lambda withParams(hydra.ext.python.syntax.LambdaParameters params) {
     return new Lambda(params, body);
   }
-  
+
   public Lambda withBody(hydra.ext.python.syntax.Expression body) {
     return new Lambda(params, body);
   }

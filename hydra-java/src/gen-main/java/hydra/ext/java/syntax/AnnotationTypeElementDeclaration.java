@@ -6,27 +6,27 @@ import java.io.Serializable;
 
 public class AnnotationTypeElementDeclaration implements Serializable, Comparable<AnnotationTypeElementDeclaration> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.AnnotationTypeElementDeclaration");
-  
+
   public static final hydra.core.Name MODIFIERS = new hydra.core.Name("modifiers");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public static final hydra.core.Name DIMS = new hydra.core.Name("dims");
-  
+
   public static final hydra.core.Name DEFAULT = new hydra.core.Name("default");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers;
-  
+
   public final hydra.ext.java.syntax.UnannType type;
-  
+
   public final hydra.ext.java.syntax.Identifier identifier;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.DefaultValue> default_;
-  
+
   public AnnotationTypeElementDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers, hydra.ext.java.syntax.UnannType type, hydra.ext.java.syntax.Identifier identifier, hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims, hydra.util.Maybe<hydra.ext.java.syntax.DefaultValue> default_) {
     this.modifiers = modifiers;
     this.type = type;
@@ -34,7 +34,7 @@ public class AnnotationTypeElementDeclaration implements Serializable, Comparabl
     this.dims = dims;
     this.default_ = default_;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof AnnotationTypeElementDeclaration)) {
@@ -53,12 +53,12 @@ public class AnnotationTypeElementDeclaration implements Serializable, Comparabl
       this.default_,
       o.default_);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(modifiers) + 3 * java.util.Objects.hashCode(type) + 5 * java.util.Objects.hashCode(identifier) + 7 * java.util.Objects.hashCode(dims) + 11 * java.util.Objects.hashCode(default_);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotationTypeElementDeclaration other) {
@@ -81,23 +81,23 @@ public class AnnotationTypeElementDeclaration implements Serializable, Comparabl
     }
     return ((Comparable) default_).compareTo(other.default_);
   }
-  
+
   public AnnotationTypeElementDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers) {
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
-  
+
   public AnnotationTypeElementDeclaration withType(hydra.ext.java.syntax.UnannType type) {
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
-  
+
   public AnnotationTypeElementDeclaration withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
-  
+
   public AnnotationTypeElementDeclaration withDims(hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims) {
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
-  
+
   public AnnotationTypeElementDeclaration withDefault(hydra.util.Maybe<hydra.ext.java.syntax.DefaultValue> default_) {
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }

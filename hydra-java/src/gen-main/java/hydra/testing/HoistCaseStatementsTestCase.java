@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class HoistCaseStatementsTestCase implements Serializable, Comparable<HoistCaseStatementsTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.HoistCaseStatementsTestCase");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
-  
+
   /**
    * The input term
    */
   public final hydra.core.Term input;
-  
+
   /**
    * The expected output term with hoisted case statements
    */
   public final hydra.core.Term output;
-  
+
   public HoistCaseStatementsTestCase (hydra.core.Term input, hydra.core.Term output) {
     this.input = input;
     this.output = output;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof HoistCaseStatementsTestCase)) {
@@ -41,12 +41,12 @@ public class HoistCaseStatementsTestCase implements Serializable, Comparable<Hoi
       this.output,
       o.output);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(output);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(HoistCaseStatementsTestCase other) {
@@ -57,11 +57,11 @@ public class HoistCaseStatementsTestCase implements Serializable, Comparable<Hoi
     }
     return ((Comparable) output).compareTo(other.output);
   }
-  
+
   public HoistCaseStatementsTestCase withInput(hydra.core.Term input) {
     return new HoistCaseStatementsTestCase(input, output);
   }
-  
+
   public HoistCaseStatementsTestCase withOutput(hydra.core.Term output) {
     return new HoistCaseStatementsTestCase(input, output);
   }

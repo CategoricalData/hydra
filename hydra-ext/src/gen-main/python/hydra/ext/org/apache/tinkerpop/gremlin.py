@@ -42,7 +42,7 @@ class _QueryMeta(type):
 
 class Query(metaclass=_QueryMeta):
     r"""QueryTraversalSource | QueryRootTraversal | QueryToString | QueryEmpty"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.Query")
     TRAVERSAL_SOURCE = hydra.core.Name("traversalSource")
     ROOT_TRAVERSAL = hydra.core.Name("rootTraversal")
@@ -53,7 +53,7 @@ class Query(metaclass=_QueryMeta):
 class TraversalSourceQuery:
     source: TraversalSource
     transaction_part: Maybe[TransactionPart]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceQuery")
     SOURCE = hydra.core.Name("source")
     TRANSACTION_PART = hydra.core.Name("transactionPart")
@@ -62,7 +62,7 @@ class TraversalSourceQuery:
 class RootTraversalQuery:
     root: RootTraversal
     terminal_method: Maybe[TraversalTerminalMethod]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.RootTraversalQuery")
     ROOT = hydra.core.Name("root")
     TERMINAL_METHOD = hydra.core.Name("terminalMethod")
@@ -74,9 +74,9 @@ TraversalSource.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.
 
 class TransactionPart(Enum):
     BEGIN = hydra.core.Name("begin")
-    
+
     COMMIT = hydra.core.Name("commit")
-    
+
     ROLLBACK = hydra.core.Name("rollback")
 
 TransactionPart.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TransactionPart")
@@ -86,7 +86,7 @@ class RootTraversal:
     source: TraversalSource
     spawn_method: TraversalSourceSpawnMethod
     chained: frozenlist[ChainedTraversalElement]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.RootTraversal")
     SOURCE = hydra.core.Name("source")
     SPAWN_METHOD = hydra.core.Name("spawnMethod")
@@ -123,7 +123,7 @@ class _TraversalSourceSelfMethodMeta(type):
 
 class TraversalSourceSelfMethod(metaclass=_TraversalSourceSelfMethodMeta):
     r"""TraversalSourceSelfMethodWithBulk | TraversalSourceSelfMethodWithPath | TraversalSourceSelfMethodWithSack | TraversalSourceSelfMethodWithSideEffect | TraversalSourceSelfMethodWithStrategies | TraversalSourceSelfMethodWithoutStrategies | TraversalSourceSelfMethodWith"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSelfMethod")
     WITH_BULK = hydra.core.Name("withBulk")
     WITH_PATH = hydra.core.Name("withPath")
@@ -137,7 +137,7 @@ class TraversalSourceSelfMethod(metaclass=_TraversalSourceSelfMethodMeta):
 class GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument:
     literal: GenericLiteralArgument
     bi_function: Maybe[TraversalBiFunctionArgument]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument")
     LITERAL = hydra.core.Name("literal")
     BI_FUNCTION = hydra.core.Name("biFunction")
@@ -146,7 +146,7 @@ class GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument:
 class StringArgumentAndGenericLiteralArgument:
     string: StringArgument
     literal: GenericLiteralArgument
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StringArgumentAndGenericLiteralArgument")
     STRING = hydra.core.Name("string")
     LITERAL = hydra.core.Name("literal")
@@ -155,7 +155,7 @@ class StringArgumentAndGenericLiteralArgument:
 class StringArgumentAndOptionalGenericLiteralArgument:
     string: StringArgument
     literal: Maybe[GenericLiteralArgument]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StringArgumentAndOptionalGenericLiteralArgument")
     STRING = hydra.core.Name("string")
     LITERAL = hydra.core.Name("literal")
@@ -196,7 +196,7 @@ class _TraversalSourceSpawnMethodMeta(type):
 
 class TraversalSourceSpawnMethod(metaclass=_TraversalSourceSpawnMethodMeta):
     r"""TraversalSourceSpawnMethodAddE | TraversalSourceSpawnMethodAddV | TraversalSourceSpawnMethodE | TraversalSourceSpawnMethodV | TraversalSourceSpawnMethodMergeV | TraversalSourceSpawnMethodMergeE | TraversalSourceSpawnMethodInject | TraversalSourceSpawnMethodIo | TraversalSourceSpawnMethodCall | TraversalSourceSpawnMethodUnion"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod")
     ADD_E = hydra.core.Name("addE")
     ADD_V = hydra.core.Name("addV")
@@ -221,7 +221,7 @@ class _GenericLiteralMapNullableArgumentOrNestedTraversalMeta(type):
 
 class GenericLiteralMapNullableArgumentOrNestedTraversal(metaclass=_GenericLiteralMapNullableArgumentOrNestedTraversalMeta):
     r"""GenericLiteralMapNullableArgumentOrNestedTraversalMap | GenericLiteralMapNullableArgumentOrNestedTraversalTraversal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapNullableArgumentOrNestedTraversal")
     MAP = hydra.core.Name("map")
     TRAVERSAL = hydra.core.Name("traversal")
@@ -230,7 +230,7 @@ class GenericLiteralMapNullableArgumentOrNestedTraversal(metaclass=_GenericLiter
 class ServiceCall:
     service: StringArgument
     arguments: ServiceArguments
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ServiceCall")
     SERVICE = hydra.core.Name("service")
     ARGUMENTS = hydra.core.Name("arguments")
@@ -247,7 +247,7 @@ class _ServiceArgumentsMeta(type):
 
 class ServiceArguments(metaclass=_ServiceArgumentsMeta):
     r"""ServiceArgumentsMap | ServiceArgumentsTraversal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ServiceArguments")
     MAP = hydra.core.Name("map")
     TRAVERSAL = hydra.core.Name("traversal")
@@ -256,7 +256,7 @@ class ServiceArguments(metaclass=_ServiceArgumentsMeta):
 class ChainedTraversal:
     first: TraversalMethod
     rest: ChainedTraversalElement
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ChainedTraversal")
     FIRST = hydra.core.Name("first")
     REST = hydra.core.Name("rest")
@@ -273,7 +273,7 @@ class _ChainedTraversalElementMeta(type):
 
 class ChainedTraversalElement(metaclass=_ChainedTraversalElementMeta):
     r"""ChainedTraversalElementMethod | ChainedTraversalElementSelf"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ChainedTraversalElement")
     METHOD = hydra.core.Name("method")
     SELF = hydra.core.Name("self")
@@ -293,7 +293,7 @@ class _NestedTraversalMeta(type):
 
 class NestedTraversal(metaclass=_NestedTraversalMeta):
     r"""NestedTraversalRoot | NestedTraversalChained | NestedTraversalAnonymous"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal")
     ROOT = hydra.core.Name("root")
     CHAINED = hydra.core.Name("chained")
@@ -303,7 +303,7 @@ class NestedTraversal(metaclass=_NestedTraversalMeta):
 class TerminatedTraversal:
     root: RootTraversal
     terminal: TraversalTerminalMethod
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TerminatedTraversal")
     ROOT = hydra.core.Name("root")
     TERMINAL = hydra.core.Name("terminal")
@@ -798,7 +798,7 @@ class _TraversalMethodMeta(type):
 
 class TraversalMethod(metaclass=_TraversalMethodMeta):
     r"""TraversalMethodV | TraversalMethodE | TraversalMethodAddE | TraversalMethodAddV | TraversalMethodMergeE | TraversalMethodMergeV | TraversalMethodAggregate | TraversalMethodAll | TraversalMethodAnd | TraversalMethodAny | TraversalMethodAs | TraversalMethodBarrier | TraversalMethodBoth | TraversalMethodBothE | TraversalMethodBothV | TraversalMethodBranch | TraversalMethodBy | TraversalMethodCap | TraversalMethodChoose | TraversalMethodCoalesce | TraversalMethodCoin | TraversalMethodConjoin | TraversalMethodConnectedComponent | TraversalMethodConstant | TraversalMethodCount | TraversalMethodCyclicPath | TraversalMethodDedup | TraversalMethodDifference | TraversalMethodDisjunct | TraversalMethodDrop | TraversalMethodElementMap | TraversalMethodEmit | TraversalMethodFilter | TraversalMethodFlatMap | TraversalMethodFold | TraversalMethodFrom | TraversalMethodGroup | TraversalMethodGroupCount | TraversalMethodHas | TraversalMethodHasId | TraversalMethodHasKey | TraversalMethodHasLabel | TraversalMethodHasNot | TraversalMethodHasValue | TraversalMethodId | TraversalMethodIdentity | TraversalMethodIn | TraversalMethodInE | TraversalMethodIntersect | TraversalMethodInV | TraversalMethodIndex | TraversalMethodInject | TraversalMethodIs | TraversalMethodKey | TraversalMethodLabel | TraversalMethodLimit | TraversalMethodLocal | TraversalMethodLoops | TraversalMethodMap | TraversalMethodMatch | TraversalMethodMath | TraversalMethodMax | TraversalMethodMean | TraversalMethodMin | TraversalMethodNone | TraversalMethodNot | TraversalMethodOption | TraversalMethodOptional | TraversalMethodOr | TraversalMethodOrder | TraversalMethodOtherV | TraversalMethodOut | TraversalMethodOutE | TraversalMethodOutV | TraversalMethodPageRank | TraversalMethodPath | TraversalMethodPeerPressure | TraversalMethodProfile | TraversalMethodProject | TraversalMethodProperties | TraversalMethodProperty | TraversalMethodPropertyMap | TraversalMethodRange | TraversalMethodRead | TraversalMethodRepeat | TraversalMethodSack | TraversalMethodSample | TraversalMethodSelect | TraversalMethodCombine | TraversalMethodProduct | TraversalMethodMerge | TraversalMethodShortestPath | TraversalMethodSideEffect | TraversalMethodSimplePath | TraversalMethodSkip | TraversalMethodStore | TraversalMethodSubgraph | TraversalMethodSum | TraversalMethodTail | TraversalMethodFail | TraversalMethodTimes | TraversalMethodTo | TraversalMethodToE | TraversalMethodToV | TraversalMethodTree | TraversalMethodUnfold | TraversalMethodUnion | TraversalMethodUntil | TraversalMethodValue | TraversalMethodValueMap | TraversalMethodValues | TraversalMethodWhere | TraversalMethodWith | TraversalMethodWrite | TraversalMethodElement | TraversalMethodCall | TraversalMethodConcat | TraversalMethodAsString | TraversalMethodFormat | TraversalMethodToUpper | TraversalMethodToLower | TraversalMethodLength | TraversalMethodTrim | TraversalMethodLTrim | TraversalMethodRTrim | TraversalMethodReverse | TraversalMethodReplace | TraversalMethodSplit | TraversalMethodSubstring | TraversalMethodAsDate | TraversalMethodDateAdd | TraversalMethodDateDiff"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod")
     V = hydra.core.Name("v")
     E = hydra.core.Name("e")
@@ -945,7 +945,7 @@ class _StringArgumentOrNestedTraversalMeta(type):
 
 class StringArgumentOrNestedTraversal(metaclass=_StringArgumentOrNestedTraversalMeta):
     r"""StringArgumentOrNestedTraversalString | StringArgumentOrNestedTraversalTraversal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StringArgumentOrNestedTraversal")
     STRING = hydra.core.Name("string")
     TRAVERSAL = hydra.core.Name("traversal")
@@ -954,7 +954,7 @@ class StringArgumentOrNestedTraversal(metaclass=_StringArgumentOrNestedTraversal
 class OptionalTraversalScopeArgumentAndStringArgument:
     scope: Maybe[TraversalScopeArgument]
     string: StringArgument
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndStringArgument")
     SCOPE = hydra.core.Name("scope")
     STRING = hydra.core.Name("string")
@@ -963,7 +963,7 @@ class OptionalTraversalScopeArgumentAndStringArgument:
 class StringArgumentAndOptionalStringLiteralVarargs:
     first: StringArgument
     rest: frozenlist[StringNullableArgument]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StringArgumentAndOptionalStringLiteralVarargs")
     FIRST = hydra.core.Name("first")
     REST = hydra.core.Name("rest")
@@ -980,7 +980,7 @@ class _TraversalSackMethodArgumentOrIntegerArgumentMeta(type):
 
 class TraversalSackMethodArgumentOrIntegerArgument(metaclass=_TraversalSackMethodArgumentOrIntegerArgumentMeta):
     r"""TraversalSackMethodArgumentOrIntegerArgumentConsumer | TraversalSackMethodArgumentOrIntegerArgumentInt"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalSackMethodArgumentOrIntegerArgument")
     CONSUMER = hydra.core.Name("consumer")
     INT = hydra.core.Name("int")
@@ -1000,7 +1000,7 @@ class _ByArgsMeta(type):
 
 class ByArgs(metaclass=_ByArgsMeta):
     r"""ByArgsOrder | ByArgsToken | ByArgsOther"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ByArgs")
     ORDER = hydra.core.Name("order")
     TOKEN = hydra.core.Name("token")
@@ -1018,7 +1018,7 @@ class _ByOtherArgsMeta(type):
 
 class ByOtherArgs(metaclass=_ByOtherArgsMeta):
     r"""ByOtherArgsComparator | ByOtherArgsOther"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ByOtherArgs")
     COMPARATOR = hydra.core.Name("comparator")
     OTHER = hydra.core.Name("other")
@@ -1038,7 +1038,7 @@ class _TraversalFunctionArgumentOrStringArgumentOrNestedTraversalMeta(type):
 
 class TraversalFunctionArgumentOrStringArgumentOrNestedTraversal(metaclass=_TraversalFunctionArgumentOrStringArgumentOrNestedTraversalMeta):
     r"""TraversalFunctionArgumentOrStringArgumentOrNestedTraversalFunction | TraversalFunctionArgumentOrStringArgumentOrNestedTraversalString | TraversalFunctionArgumentOrStringArgumentOrNestedTraversalTraversal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalFunctionArgumentOrStringArgumentOrNestedTraversal")
     FUNCTION = hydra.core.Name("function")
     STRING = hydra.core.Name("string")
@@ -1059,7 +1059,7 @@ class _ChooseArgsMeta(type):
 
 class ChooseArgs(metaclass=_ChooseArgsMeta):
     r"""ChooseArgsFunction | ChooseArgsPredicateTraversal | ChooseArgsTraversal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ChooseArgs")
     FUNCTION = hydra.core.Name("function")
     PREDICATE_TRAVERSAL = hydra.core.Name("predicateTraversal")
@@ -1070,7 +1070,7 @@ class PredicateTraversalArgument:
     predicate: TraversalPredicate
     traversal1: NestedTraversal
     traversal2: Maybe[NestedTraversal]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.PredicateTraversalArgument")
     PREDICATE = hydra.core.Name("predicate")
     TRAVERSAL1 = hydra.core.Name("traversal1")
@@ -1081,7 +1081,7 @@ class NestedTraversalArgument:
     traversal1: NestedTraversal
     traversal2: Maybe[NestedTraversal]
     traversal3: Maybe[NestedTraversal]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversalArgument")
     TRAVERSAL1 = hydra.core.Name("traversal1")
     TRAVERSAL2 = hydra.core.Name("traversal2")
@@ -1099,7 +1099,7 @@ class _DedupArgsMeta(type):
 
 class DedupArgs(metaclass=_DedupArgsMeta):
     r"""DedupArgsScopeString | DedupArgsString"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.DedupArgs")
     SCOPE_STRING = hydra.core.Name("scopeString")
     STRING = hydra.core.Name("string")
@@ -1108,7 +1108,7 @@ class DedupArgs(metaclass=_DedupArgsMeta):
 class ScopeStringArgument:
     scope: TraversalScopeArgument
     strings: frozenlist[StringNullableArgument]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ScopeStringArgument")
     SCOPE = hydra.core.Name("scope")
     STRINGS = hydra.core.Name("strings")
@@ -1125,7 +1125,7 @@ class _PredicateOrTraversalMeta(type):
 
 class PredicateOrTraversal(metaclass=_PredicateOrTraversalMeta):
     r"""PredicateOrTraversalPredicate | PredicateOrTraversalTraversal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.PredicateOrTraversal")
     PREDICATE = hydra.core.Name("predicate")
     TRAVERSAL = hydra.core.Name("traversal")
@@ -1134,7 +1134,7 @@ class PredicateOrTraversal(metaclass=_PredicateOrTraversalMeta):
 class GenericLiteralArgumentAndTraversalBiFunctionArgument:
     literal: GenericLiteralArgument
     bi_function: TraversalBiFunctionArgument
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalBiFunctionArgument")
     LITERAL = hydra.core.Name("literal")
     BI_FUNCTION = hydra.core.Name("biFunction")
@@ -1154,7 +1154,7 @@ class _FromArgsMeta(type):
 
 class FromArgs(metaclass=_FromArgsMeta):
     r"""FromArgsString | FromArgsVertex | FromArgsTraversal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.FromArgs")
     STRING = hydra.core.Name("string")
     VERTEX = hydra.core.Name("vertex")
@@ -1172,7 +1172,7 @@ class _HasArgsMeta(type):
 
 class HasArgs(metaclass=_HasArgsMeta):
     r"""HasArgsString | HasArgsTraversalToken"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.HasArgs")
     STRING = hydra.core.Name("string")
     TRAVERSAL_TOKEN = hydra.core.Name("traversalToken")
@@ -1181,7 +1181,7 @@ class HasArgs(metaclass=_HasArgsMeta):
 class HasStringArgumentAndOptionalStringLiteralVarargs:
     string: StringNullableArgument
     rest: Maybe[HasStringArgumentAndOptionalStringLiteralVarargsRest]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs")
     STRING = hydra.core.Name("string")
     REST = hydra.core.Name("rest")
@@ -1207,7 +1207,7 @@ class _HasStringArgumentAndOptionalStringLiteralVarargsRestMeta(type):
 
 class HasStringArgumentAndOptionalStringLiteralVarargsRest(metaclass=_HasStringArgumentAndOptionalStringLiteralVarargsRestMeta):
     r"""HasStringArgumentAndOptionalStringLiteralVarargsRestObject | HasStringArgumentAndOptionalStringLiteralVarargsRestPredicate | HasStringArgumentAndOptionalStringLiteralVarargsRestStringObject | HasStringArgumentAndOptionalStringLiteralVarargsRestStringPredicate | HasStringArgumentAndOptionalStringLiteralVarargsRestTraversal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargsRest")
     OBJECT = hydra.core.Name("object")
     PREDICATE = hydra.core.Name("predicate")
@@ -1219,7 +1219,7 @@ class HasStringArgumentAndOptionalStringLiteralVarargsRest(metaclass=_HasStringA
 class StringNullableArgumentAndGenericLiteralArgument:
     string: StringNullableArgument
     literal: GenericLiteralArgument
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument")
     STRING = hydra.core.Name("string")
     LITERAL = hydra.core.Name("literal")
@@ -1228,7 +1228,7 @@ class StringNullableArgumentAndGenericLiteralArgument:
 class StringNullableArgumentAndTraversalPredicate:
     string: StringNullableArgument
     predicate: TraversalPredicate
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgumentAndTraversalPredicate")
     STRING = hydra.core.Name("string")
     PREDICATE = hydra.core.Name("predicate")
@@ -1237,7 +1237,7 @@ class StringNullableArgumentAndTraversalPredicate:
 class HasTraversalTokenArgs:
     traversal_token: TraversalTokenArgument
     rest: HasTraversalTokenArgsRest
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.HasTraversalTokenArgs")
     TRAVERSAL_TOKEN = hydra.core.Name("traversalToken")
     REST = hydra.core.Name("rest")
@@ -1257,7 +1257,7 @@ class _HasTraversalTokenArgsRestMeta(type):
 
 class HasTraversalTokenArgsRest(metaclass=_HasTraversalTokenArgsRestMeta):
     r"""HasTraversalTokenArgsRestLiteral | HasTraversalTokenArgsRestPredicate | HasTraversalTokenArgsRestTraversal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.HasTraversalTokenArgsRest")
     LITERAL = hydra.core.Name("literal")
     PREDICATE = hydra.core.Name("predicate")
@@ -1275,7 +1275,7 @@ class _GenericLiteralArgumentAndTraversalPredicateMeta(type):
 
 class GenericLiteralArgumentAndTraversalPredicate(metaclass=_GenericLiteralArgumentAndTraversalPredicateMeta):
     r"""GenericLiteralArgumentAndTraversalPredicateLiteral | GenericLiteralArgumentAndTraversalPredicatePredicate"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgumentAndTraversalPredicate")
     LITERAL = hydra.core.Name("literal")
     PREDICATE = hydra.core.Name("predicate")
@@ -1292,7 +1292,7 @@ class _TraversalPredicateOrStringLiteralVarargsMeta(type):
 
 class TraversalPredicateOrStringLiteralVarargs(metaclass=_TraversalPredicateOrStringLiteralVarargsMeta):
     r"""TraversalPredicateOrStringLiteralVarargsPredicate | TraversalPredicateOrStringLiteralVarargsString"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicateOrStringLiteralVarargs")
     PREDICATE = hydra.core.Name("predicate")
     STRING = hydra.core.Name("string")
@@ -1309,7 +1309,7 @@ class _TraversalPredicateOrGenericLiteralArgumentMeta(type):
 
 class TraversalPredicateOrGenericLiteralArgument(metaclass=_TraversalPredicateOrGenericLiteralArgumentMeta):
     r"""TraversalPredicateOrGenericLiteralArgumentPredicate | TraversalPredicateOrGenericLiteralArgumentLiteral"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicateOrGenericLiteralArgument")
     PREDICATE = hydra.core.Name("predicate")
     LITERAL = hydra.core.Name("literal")
@@ -1335,7 +1335,7 @@ class _OptionArgsMeta(type):
 
 class OptionArgs(metaclass=_OptionArgsMeta):
     r"""OptionArgsPredicateTraversal | OptionArgsMergeMap | OptionArgsMergeTraversal | OptionArgsObjectTraversal | OptionArgsTraversal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.OptionArgs")
     PREDICATE_TRAVERSAL = hydra.core.Name("predicateTraversal")
     MERGE_MAP = hydra.core.Name("mergeMap")
@@ -1347,7 +1347,7 @@ class OptionArgs(metaclass=_OptionArgsMeta):
 class TraversalPredicateAndNestedTraversal:
     predicate: TraversalPredicate
     traversal: NestedTraversal
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicateAndNestedTraversal")
     PREDICATE = hydra.core.Name("predicate")
     TRAVERSAL = hydra.core.Name("traversal")
@@ -1357,7 +1357,7 @@ class TraversalMergeArgumentAndGenericLiteralMapNullableArgument:
     merge: TraversalMergeArgument
     map: GenericLiteralMapNullableArgument
     cardinality: Maybe[TraversalCardinality]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalMergeArgumentAndGenericLiteralMapNullableArgument")
     MERGE = hydra.core.Name("merge")
     MAP = hydra.core.Name("map")
@@ -1367,7 +1367,7 @@ class TraversalMergeArgumentAndGenericLiteralMapNullableArgument:
 class TraversalMergeArgumentAndNestedTraversal:
     merge: TraversalMergeArgument
     traversal: NestedTraversal
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalMergeArgumentAndNestedTraversal")
     MERGE = hydra.core.Name("merge")
     TRAVERSAL = hydra.core.Name("traversal")
@@ -1376,7 +1376,7 @@ class TraversalMergeArgumentAndNestedTraversal:
 class GenericLiteralArgumentAndNestedTraversal:
     object: GenericLiteralArgument
     traversal: NestedTraversal
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgumentAndNestedTraversal")
     OBJECT = hydra.core.Name("object")
     TRAVERSAL = hydra.core.Name("traversal")
@@ -1399,7 +1399,7 @@ class _PropertyArgsMeta(type):
 
 class PropertyArgs(metaclass=_PropertyArgsMeta):
     r"""PropertyArgsCardinalityObjects | PropertyArgsObjects | PropertyArgsObject | PropertyArgsCardinalityObject"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.PropertyArgs")
     CARDINALITY_OBJECTS = hydra.core.Name("cardinalityObjects")
     OBJECTS = hydra.core.Name("objects")
@@ -1410,7 +1410,7 @@ class PropertyArgs(metaclass=_PropertyArgsMeta):
 class TraversalCardinalityArgumentAndObjects:
     cardinality: TraversalCardinalityArgument
     objects: frozenlist[GenericLiteralArgument]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgumentAndObjects")
     CARDINALITY = hydra.core.Name("cardinality")
     OBJECTS = hydra.core.Name("objects")
@@ -1419,7 +1419,7 @@ class TraversalCardinalityArgumentAndObjects:
 class GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument:
     cardinality: TraversalCardinalityArgument
     object: GenericLiteralMapNullableArgument
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument")
     CARDINALITY = hydra.core.Name("cardinality")
     OBJECT = hydra.core.Name("object")
@@ -1429,7 +1429,7 @@ class RangeArgs:
     scope: Maybe[TraversalScopeArgument]
     min: IntegerArgument
     max: IntegerArgument
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.RangeArgs")
     SCOPE = hydra.core.Name("scope")
     MIN = hydra.core.Name("min")
@@ -1439,7 +1439,7 @@ class RangeArgs:
 class OptionalStringArgumentAndNestedTraversal:
     string: Maybe[StringArgument]
     traversal: NestedTraversal
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.OptionalStringArgumentAndNestedTraversal")
     STRING = hydra.core.Name("string")
     TRAVERSAL = hydra.core.Name("traversal")
@@ -1448,7 +1448,7 @@ class OptionalStringArgumentAndNestedTraversal:
 class OptionalTraversalScopeArgumentAndIntegerArgument:
     scope: Maybe[TraversalScopeArgument]
     long: IntegerArgument
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.OptionalTraversalScopeArgumentAndIntegerArgument")
     SCOPE = hydra.core.Name("scope")
     LONG = hydra.core.Name("long")
@@ -1474,7 +1474,7 @@ class _SelectArgsMeta(type):
 
 class SelectArgs(metaclass=_SelectArgsMeta):
     r"""SelectArgsColumn | SelectArgsPopStrings | SelectArgsPopTraversal | SelectArgsStrings | SelectArgsTraversal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.SelectArgs")
     COLUMN = hydra.core.Name("column")
     POP_STRINGS = hydra.core.Name("popStrings")
@@ -1486,7 +1486,7 @@ class SelectArgs(metaclass=_SelectArgsMeta):
 class PopStringsArgument:
     pop: TraversalPopArgument
     string: frozenlist[StringArgument]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.PopStringsArgument")
     POP = hydra.core.Name("pop")
     STRING = hydra.core.Name("string")
@@ -1495,7 +1495,7 @@ class PopStringsArgument:
 class TraversalPopArgumentAndNestedTraversal:
     pop: TraversalPopArgument
     traversal: NestedTraversal
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal")
     POP = hydra.core.Name("pop")
     TRAVERSAL = hydra.core.Name("traversal")
@@ -1504,7 +1504,7 @@ class TraversalPopArgumentAndNestedTraversal:
 class TailArgs:
     scope: Maybe[TraversalScopeArgument]
     integer: Maybe[IntegerArgument]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TailArgs")
     SCOPE = hydra.core.Name("scope")
     INTEGER = hydra.core.Name("integer")
@@ -1527,7 +1527,7 @@ class _ToArgsMeta(type):
 
 class ToArgs(metaclass=_ToArgsMeta):
     r"""ToArgsDirection | ToArgsString | ToArgsVertex | ToArgsTraversal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ToArgs")
     DIRECTION = hydra.core.Name("direction")
     STRING = hydra.core.Name("string")
@@ -1538,7 +1538,7 @@ class ToArgs(metaclass=_ToArgsMeta):
 class DirectionAndVarargs:
     direction: TraversalDirectionArgument
     varargs: frozenlist[StringNullableArgument]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.DirectionAndVarargs")
     DIRECTION = hydra.core.Name("direction")
     VARARGS = hydra.core.Name("varargs")
@@ -1555,7 +1555,7 @@ class _ValueMapArgsMeta(type):
 
 class ValueMapArgs(metaclass=_ValueMapArgsMeta):
     r"""ValueMapArgsString | ValueMapArgsBoolean"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ValueMapArgs")
     STRING = hydra.core.Name("string")
     BOOLEAN = hydra.core.Name("boolean")
@@ -1564,7 +1564,7 @@ class ValueMapArgs(metaclass=_ValueMapArgsMeta):
 class ValueMapBooleanArgs:
     value: BooleanArgument
     keys: Maybe[frozenlist[StringNullableArgument]]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ValueMapBooleanArgs")
     VALUE = hydra.core.Name("value")
     KEYS = hydra.core.Name("keys")
@@ -1584,7 +1584,7 @@ class _WhereArgsMeta(type):
 
 class WhereArgs(metaclass=_WhereArgsMeta):
     r"""WhereArgsPredicate | WhereArgsString | WhereArgsTraversal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.WhereArgs")
     PREDICATE = hydra.core.Name("predicate")
     STRING = hydra.core.Name("string")
@@ -1594,7 +1594,7 @@ class WhereArgs(metaclass=_WhereArgsMeta):
 class WhereWithPredicateArgs:
     left_arg: Maybe[StringArgument]
     predicate: TraversalPredicate
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.WhereWithPredicateArgs")
     LEFT_ARG = hydra.core.Name("leftArg")
     PREDICATE = hydra.core.Name("predicate")
@@ -1603,7 +1603,7 @@ class WhereWithPredicateArgs:
 class WithArgs:
     keys: WithArgsKeys
     values: Maybe[WithArgsValues]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.WithArgs")
     KEYS = hydra.core.Name("keys")
     VALUES = hydra.core.Name("values")
@@ -1620,7 +1620,7 @@ class _WithArgsKeysMeta(type):
 
 class WithArgsKeys(metaclass=_WithArgsKeysMeta):
     r"""WithArgsKeysWithOption | WithArgsKeysString"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.WithArgsKeys")
     WITH_OPTION = hydra.core.Name("withOption")
     STRING = hydra.core.Name("string")
@@ -1640,7 +1640,7 @@ class _WithArgsValuesMeta(type):
 
 class WithArgsValues(metaclass=_WithArgsValuesMeta):
     r"""WithArgsValuesWithOptions | WithArgsValuesIo | WithArgsValuesObject"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.WithArgsValues")
     WITH_OPTIONS = hydra.core.Name("withOptions")
     IO = hydra.core.Name("io")
@@ -1658,7 +1658,7 @@ class _ConcatArgsMeta(type):
 
 class ConcatArgs(metaclass=_ConcatArgsMeta):
     r"""ConcatArgsTraversal | ConcatArgsString"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ConcatArgs")
     TRAVERSAL = hydra.core.Name("traversal")
     STRING = hydra.core.Name("string")
@@ -1668,7 +1668,7 @@ class ReplaceArgs:
     scope: Maybe[TraversalScopeArgument]
     from_: StringNullableArgument
     to: StringNullableArgument
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ReplaceArgs")
     SCOPE = hydra.core.Name("scope")
     FROM = hydra.core.Name("from")
@@ -1678,7 +1678,7 @@ class ReplaceArgs:
 class SplitArgs:
     scope: Maybe[TraversalScopeArgument]
     delimiter: StringNullableArgument
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.SplitArgs")
     SCOPE = hydra.core.Name("scope")
     DELIMITER = hydra.core.Name("delimiter")
@@ -1688,7 +1688,7 @@ class SubstringArgs:
     scope: Maybe[TraversalScopeArgument]
     start: IntegerArgument
     end: Maybe[IntegerArgument]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.SubstringArgs")
     SCOPE = hydra.core.Name("scope")
     START = hydra.core.Name("start")
@@ -1698,7 +1698,7 @@ class SubstringArgs:
 class DateAddArgs:
     unit: TraversalDTArgument
     duration: IntegerArgument
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.DateAddArgs")
     UNIT = hydra.core.Name("unit")
     DURATION = hydra.core.Name("duration")
@@ -1715,7 +1715,7 @@ class _DateDiffArgsMeta(type):
 
 class DateDiffArgs(metaclass=_DateDiffArgsMeta):
     r"""DateDiffArgsTraversal | DateDiffArgsDate"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.DateDiffArgs")
     TRAVERSAL = hydra.core.Name("traversal")
     DATE = hydra.core.Name("date")
@@ -1725,7 +1725,7 @@ class StructureVertex:
     new: bool
     id: GenericLiteralArgument
     label: StringArgument
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StructureVertex")
     NEW = hydra.core.Name("new")
     ID = hydra.core.Name("id")
@@ -1736,7 +1736,7 @@ class TraversalStrategy:
     new: bool
     class_: Identifier
     configurations: frozenlist[Configuration]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalStrategy")
     NEW = hydra.core.Name("new")
     CLASS = hydra.core.Name("class")
@@ -1746,7 +1746,7 @@ class TraversalStrategy:
 class Configuration:
     key: KeywordOrIdentifier
     value: GenericLiteralArgument
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.Configuration")
     KEY = hydra.core.Name("key")
     VALUE = hydra.core.Name("value")
@@ -1763,58 +1763,58 @@ class _KeywordOrIdentifierMeta(type):
 
 class KeywordOrIdentifier(metaclass=_KeywordOrIdentifierMeta):
     r"""KeywordOrIdentifierKeyword | KeywordOrIdentifierIdentifier"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.KeywordOrIdentifier")
     KEYWORD = hydra.core.Name("keyword")
     IDENTIFIER = hydra.core.Name("identifier")
 
 class TraversalScope(Enum):
     LOCAL = hydra.core.Name("local")
-    
+
     GLOBAL = hydra.core.Name("global")
 
 TraversalScope.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalScope")
 
 class TraversalToken(Enum):
     ID = hydra.core.Name("id")
-    
+
     LABEL = hydra.core.Name("label")
-    
+
     KEY = hydra.core.Name("key")
-    
+
     VALUE = hydra.core.Name("value")
 
 TraversalToken.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalToken")
 
 class TraversalMerge(Enum):
     ON_CREATE = hydra.core.Name("onCreate")
-    
+
     ON_MATCH = hydra.core.Name("onMatch")
-    
+
     OUT_V = hydra.core.Name("outV")
-    
+
     IN_V = hydra.core.Name("inV")
 
 TraversalMerge.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalMerge")
 
 class TraversalOrder(Enum):
     INCR = hydra.core.Name("incr")
-    
+
     DECR = hydra.core.Name("decr")
-    
+
     ASC = hydra.core.Name("asc")
-    
+
     DESC = hydra.core.Name("desc")
-    
+
     SHUFFLE = hydra.core.Name("shuffle")
 
 TraversalOrder.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalOrder")
 
 class TraversalDirection(Enum):
     IN = hydra.core.Name("in")
-    
+
     OUT = hydra.core.Name("out")
-    
+
     BOTH = hydra.core.Name("both")
 
 TraversalDirection.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalDirection")
@@ -1834,7 +1834,7 @@ class _TraversalCardinalityMeta(type):
 
 class TraversalCardinality(metaclass=_TraversalCardinalityMeta):
     r"""TraversalCardinalitySingle | TraversalCardinalitySet | TraversalCardinalityList"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinality")
     SINGLE = hydra.core.Name("single")
     SET = hydra.core.Name("set")
@@ -1842,61 +1842,61 @@ class TraversalCardinality(metaclass=_TraversalCardinalityMeta):
 
 class TraversalColumn(Enum):
     KEYS = hydra.core.Name("keys")
-    
+
     VALUES = hydra.core.Name("values")
 
 TraversalColumn.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalColumn")
 
 class TraversalPop(Enum):
     FIRST = hydra.core.Name("first")
-    
+
     LAST = hydra.core.Name("last")
-    
+
     ALL = hydra.core.Name("all")
-    
+
     MIXED = hydra.core.Name("mixed")
 
 TraversalPop.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalPop")
 
 class TraversalOperator(Enum):
     ADD_ALL = hydra.core.Name("addAll")
-    
+
     AND = hydra.core.Name("and")
-    
+
     ASSIGN = hydra.core.Name("assign")
-    
+
     DIV = hydra.core.Name("div")
-    
+
     MAX = hydra.core.Name("max")
-    
+
     MIN = hydra.core.Name("min")
-    
+
     MINUS = hydra.core.Name("minus")
-    
+
     MULT = hydra.core.Name("mult")
-    
+
     OR = hydra.core.Name("or")
-    
+
     SUM = hydra.core.Name("sum")
-    
+
     SUM_LONG = hydra.core.Name("sumLong")
 
 TraversalOperator.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalOperator")
 
 class TraversalPick(Enum):
     ANY = hydra.core.Name("any")
-    
+
     NONE = hydra.core.Name("none")
 
 TraversalPick.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalPick")
 
 class TraversalDT(Enum):
     SECOND = hydra.core.Name("second")
-    
+
     MINUTE = hydra.core.Name("minute")
-    
+
     HOUR = hydra.core.Name("hour")
-    
+
     DAY = hydra.core.Name("day")
 
 TraversalDT.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalDT")
@@ -1976,7 +1976,7 @@ class _TraversalPredicateMeta(type):
 
 class TraversalPredicate(metaclass=_TraversalPredicateMeta):
     r"""TraversalPredicateEq | TraversalPredicateNeq | TraversalPredicateLt | TraversalPredicateLte | TraversalPredicateGt | TraversalPredicateGte | TraversalPredicateInside | TraversalPredicateOutside | TraversalPredicateBetween | TraversalPredicateWithin | TraversalPredicateWithout | TraversalPredicateNot | TraversalPredicateStartingWith | TraversalPredicateNotStartingWith | TraversalPredicateEndingWith | TraversalPredicateNotEndingWith | TraversalPredicateContaining | TraversalPredicateNotContaining | TraversalPredicateRegex | TraversalPredicateNotRegex | TraversalPredicateAnd | TraversalPredicateOr | TraversalPredicateNegate"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicate")
     EQ = hydra.core.Name("eq")
     NEQ = hydra.core.Name("neq")
@@ -2006,7 +2006,7 @@ class TraversalPredicate(metaclass=_TraversalPredicateMeta):
 class TwoTraversalPredicates:
     left: TraversalPredicate
     right: TraversalPredicate
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TwoTraversalPredicates")
     LEFT = hydra.core.Name("left")
     RIGHT = hydra.core.Name("right")
@@ -2069,7 +2069,7 @@ class _TraversalTerminalMethodMeta(type):
 
 class TraversalTerminalMethod(metaclass=_TraversalTerminalMethodMeta):
     r"""TraversalTerminalMethodExplain | TraversalTerminalMethodIterate | TraversalTerminalMethodHasNext | TraversalTerminalMethodTryNext | TraversalTerminalMethodNext | TraversalTerminalMethodToList | TraversalTerminalMethodToSet | TraversalTerminalMethodToBulkSet"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalTerminalMethod")
     EXPLAIN = hydra.core.Name("explain")
     ITERATE = hydra.core.Name("iterate")
@@ -2097,7 +2097,7 @@ class _TraversalFunctionMeta(type):
 
 class TraversalFunction(metaclass=_TraversalFunctionMeta):
     r"""TraversalFunctionToken | TraversalFunctionColumn"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalFunction")
     TOKEN = hydra.core.Name("token")
     COLUMN = hydra.core.Name("column")
@@ -2106,7 +2106,7 @@ class TraversalFunction(metaclass=_TraversalFunctionMeta):
 class RangeArgument:
     min: GenericLiteralArgument
     max: GenericLiteralArgument
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.RangeArgument")
     MIN = hydra.core.Name("min")
     MAX = hydra.core.Name("max")
@@ -2146,7 +2146,7 @@ class _WithOptionKeysMeta(type):
 
 class WithOptionKeys(metaclass=_WithOptionKeysMeta):
     r"""WithOptionKeysShortestPath | WithOptionKeysConnectedComponent | WithOptionKeysPageRank | WithOptionKeysPeerPressure | WithOptionKeysIo | WithOptionKeysWithOptionsTokens | WithOptionKeysWithOptionsIndexer"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.WithOptionKeys")
     SHORTEST_PATH = hydra.core.Name("shortestPath")
     CONNECTED_COMPONENT = hydra.core.Name("connectedComponent")
@@ -2158,77 +2158,77 @@ class WithOptionKeys(metaclass=_WithOptionKeysMeta):
 
 class ConnectedComponentConstants(Enum):
     COMPONENT = hydra.core.Name("component")
-    
+
     EDGES = hydra.core.Name("edges")
-    
+
     PROPERTY_NAME = hydra.core.Name("propertyName")
 
 ConnectedComponentConstants.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ConnectedComponentConstants")
 
 class PageRankConstants(Enum):
     EDGES = hydra.core.Name("edges")
-    
+
     TIMES = hydra.core.Name("times")
-    
+
     PROPERTY_NAME = hydra.core.Name("propertyName")
 
 PageRankConstants.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.PageRankConstants")
 
 class PeerPressureConstants(Enum):
     EDGES = hydra.core.Name("edges")
-    
+
     TIMES = hydra.core.Name("times")
-    
+
     PROPERTY_NAME = hydra.core.Name("propertyName")
 
 PeerPressureConstants.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.PeerPressureConstants")
 
 class ShortestPathConstants(Enum):
     TARGET = hydra.core.Name("target")
-    
+
     EDGES = hydra.core.Name("edges")
-    
+
     DISTANCE = hydra.core.Name("distance")
-    
+
     MAX_DISTANCE = hydra.core.Name("maxDistance")
-    
+
     INCLUDE_EDGES = hydra.core.Name("includeEdges")
 
 ShortestPathConstants.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.ShortestPathConstants")
 
 class WithOptionsValues(Enum):
     TOKENS = hydra.core.Name("tokens")
-    
+
     NONE = hydra.core.Name("none")
-    
+
     IDS = hydra.core.Name("ids")
-    
+
     LABELS = hydra.core.Name("labels")
-    
+
     KEYS = hydra.core.Name("keys")
-    
+
     VALUES = hydra.core.Name("values")
-    
+
     ALL = hydra.core.Name("all")
-    
+
     LIST = hydra.core.Name("list")
-    
+
     MAP = hydra.core.Name("map")
 
 WithOptionsValues.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.WithOptionsValues")
 
 class IoOptionsKeys(Enum):
     READER = hydra.core.Name("reader")
-    
+
     WRITER = hydra.core.Name("writer")
 
 IoOptionsKeys.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.IoOptionsKeys")
 
 class IoOptionsValues(Enum):
     GRYO = hydra.core.Name("gryo")
-    
+
     GRAPHSON = hydra.core.Name("graphson")
-    
+
     GRAPHML = hydra.core.Name("graphml")
 
 IoOptionsValues.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.IoOptionsValues")
@@ -2245,7 +2245,7 @@ class _BooleanArgumentMeta(type):
 
 class BooleanArgument(metaclass=_BooleanArgumentMeta):
     r"""BooleanArgumentValue | BooleanArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.BooleanArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2262,7 +2262,7 @@ class _IntegerArgumentMeta(type):
 
 class IntegerArgument(metaclass=_IntegerArgumentMeta):
     r"""IntegerArgumentValue | IntegerArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.IntegerArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2279,7 +2279,7 @@ class _FloatArgumentMeta(type):
 
 class FloatArgument(metaclass=_FloatArgumentMeta):
     r"""FloatArgumentValue | FloatArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.FloatArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2296,7 +2296,7 @@ class _StringArgumentMeta(type):
 
 class StringArgument(metaclass=_StringArgumentMeta):
     r"""StringArgumentValue | StringArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StringArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2313,7 +2313,7 @@ class _StringNullableArgumentMeta(type):
 
 class StringNullableArgument(metaclass=_StringNullableArgumentMeta):
     r"""StringNullableArgumentValue | StringNullableArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2330,7 +2330,7 @@ class _DateArgumentMeta(type):
 
 class DateArgument(metaclass=_DateArgumentMeta):
     r"""DateArgumentValue | DateArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.DateArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2347,7 +2347,7 @@ class _GenericLiteralArgumentMeta(type):
 
 class GenericLiteralArgument(metaclass=_GenericLiteralArgumentMeta):
     r"""GenericLiteralArgumentValue | GenericLiteralArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2364,7 +2364,7 @@ class _GenericLiteralListArgumentMeta(type):
 
 class GenericLiteralListArgument(metaclass=_GenericLiteralListArgumentMeta):
     r"""GenericLiteralListArgumentValue | GenericLiteralListArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralListArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2381,7 +2381,7 @@ class _GenericLiteralMapArgumentMeta(type):
 
 class GenericLiteralMapArgument(metaclass=_GenericLiteralMapArgumentMeta):
     r"""GenericLiteralMapArgumentValue | GenericLiteralMapArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2398,7 +2398,7 @@ class _GenericLiteralMapNullableArgumentMeta(type):
 
 class GenericLiteralMapNullableArgument(metaclass=_GenericLiteralMapNullableArgumentMeta):
     r"""GenericLiteralMapNullableArgumentValue | GenericLiteralMapNullableArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMapNullableArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2415,7 +2415,7 @@ class _StructureVertexArgumentMeta(type):
 
 class StructureVertexArgument(metaclass=_StructureVertexArgumentMeta):
     r"""StructureVertexArgumentValue | StructureVertexArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StructureVertexArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2432,7 +2432,7 @@ class _TraversalCardinalityArgumentMeta(type):
 
 class TraversalCardinalityArgument(metaclass=_TraversalCardinalityArgumentMeta):
     r"""TraversalCardinalityArgumentValue | TraversalCardinalityArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2449,7 +2449,7 @@ class _TraversalColumnArgumentMeta(type):
 
 class TraversalColumnArgument(metaclass=_TraversalColumnArgumentMeta):
     r"""TraversalColumnArgumentValue | TraversalColumnArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalColumnArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2466,7 +2466,7 @@ class _TraversalDirectionArgumentMeta(type):
 
 class TraversalDirectionArgument(metaclass=_TraversalDirectionArgumentMeta):
     r"""TraversalDirectionArgumentValue | TraversalDirectionArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalDirectionArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2483,7 +2483,7 @@ class _TraversalMergeArgumentMeta(type):
 
 class TraversalMergeArgument(metaclass=_TraversalMergeArgumentMeta):
     r"""TraversalMergeArgumentValue | TraversalMergeArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalMergeArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2500,7 +2500,7 @@ class _TraversalOrderArgumentMeta(type):
 
 class TraversalOrderArgument(metaclass=_TraversalOrderArgumentMeta):
     r"""TraversalOrderArgumentValue | TraversalOrderArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalOrderArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2517,7 +2517,7 @@ class _TraversalPopArgumentMeta(type):
 
 class TraversalPopArgument(metaclass=_TraversalPopArgumentMeta):
     r"""TraversalPopArgumentValue | TraversalPopArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2538,7 +2538,7 @@ class _TraversalSackMethodArgumentMeta(type):
 
 class TraversalSackMethodArgument(metaclass=_TraversalSackMethodArgumentMeta):
     r"""TraversalSackMethodArgumentValue | TraversalSackMethodArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalSackMethodArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2555,7 +2555,7 @@ class _TraversalScopeArgumentMeta(type):
 
 class TraversalScopeArgument(metaclass=_TraversalScopeArgumentMeta):
     r"""TraversalScopeArgumentValue | TraversalScopeArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2572,7 +2572,7 @@ class _TraversalTokenArgumentMeta(type):
 
 class TraversalTokenArgument(metaclass=_TraversalTokenArgumentMeta):
     r"""TraversalTokenArgumentValue | TraversalTokenArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalTokenArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2589,7 +2589,7 @@ class _TraversalComparatorArgumentMeta(type):
 
 class TraversalComparatorArgument(metaclass=_TraversalComparatorArgumentMeta):
     r"""TraversalComparatorArgumentValue | TraversalComparatorArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalComparatorArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2606,7 +2606,7 @@ class _TraversalFunctionArgumentMeta(type):
 
 class TraversalFunctionArgument(metaclass=_TraversalFunctionArgumentMeta):
     r"""TraversalFunctionArgumentValue | TraversalFunctionArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalFunctionArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2623,7 +2623,7 @@ class _TraversalBiFunctionArgumentMeta(type):
 
 class TraversalBiFunctionArgument(metaclass=_TraversalBiFunctionArgumentMeta):
     r"""TraversalBiFunctionArgumentValue | TraversalBiFunctionArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalBiFunctionArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2640,7 +2640,7 @@ class _TraversalDTArgumentMeta(type):
 
 class TraversalDTArgument(metaclass=_TraversalDTArgumentMeta):
     r"""TraversalDTArgumentValue | TraversalDTArgumentVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalDTArgument")
     VALUE = hydra.core.Name("value")
     VARIABLE = hydra.core.Name("variable")
@@ -2662,7 +2662,7 @@ class _GenericLiteralRangeMeta(type):
 
 class GenericLiteralRange(metaclass=_GenericLiteralRangeMeta):
     r"""GenericLiteralRangeInteger | GenericLiteralRangeString"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralRange")
     INTEGER = hydra.core.Name("integer")
     STRING = hydra.core.Name("string")
@@ -2671,7 +2671,7 @@ class GenericLiteralRange(metaclass=_GenericLiteralRangeMeta):
 class IntegerRange:
     left: IntegerLiteral
     right: IntegerLiteral
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.IntegerRange")
     LEFT = hydra.core.Name("left")
     RIGHT = hydra.core.Name("right")
@@ -2680,7 +2680,7 @@ class IntegerRange:
 class StringRange:
     left: str
     right: str
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StringRange")
     LEFT = hydra.core.Name("left")
     RIGHT = hydra.core.Name("right")
@@ -2773,7 +2773,7 @@ class _GenericLiteralMeta(type):
 
 class GenericLiteral(metaclass=_GenericLiteralMeta):
     r"""GenericLiteralNumeric | GenericLiteralBoolean | GenericLiteralString | GenericLiteralDate | GenericLiteralNull | GenericLiteralNan | GenericLiteralInf | GenericLiteralTraversalToken | GenericLiteralTraversalCardinality | GenericLiteralTraversalDirection | GenericLiteralTraversalMerge | GenericLiteralTraversalPick | GenericLiteralTraversalDT | GenericLiteralStructureVertex | GenericLiteralGenericLiteralSet | GenericLiteralGenericLiteralCollection | GenericLiteralGenericLiteralRange | GenericLiteralNestedTraversal | GenericLiteralTerminatedTraversal | GenericLiteralGenericLiteralMap"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral")
     NUMERIC = hydra.core.Name("numeric")
     BOOLEAN = hydra.core.Name("boolean")
@@ -2813,7 +2813,7 @@ class _MapEntryMeta(type):
 
 class MapEntry(metaclass=_MapEntryMeta):
     r"""MapEntryKey | MapEntryValue"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.MapEntry")
     KEY = hydra.core.Name("key")
     VALUE = hydra.core.Name("value")
@@ -2851,7 +2851,7 @@ class _MapKeyMeta(type):
 
 class MapKey(metaclass=_MapKeyMeta):
     r"""MapKeyString | MapKeyNumeric | MapKeyTraversalToken | MapKeyTraversalDirection | MapKeySet | MapKeyCollection | MapKeyMap | MapKeyKeyword | MapKeyIdentifier"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.MapKey")
     STRING = hydra.core.Name("string")
     NUMERIC = hydra.core.Name("numeric")
@@ -2885,7 +2885,7 @@ class _NumericLiteralMeta(type):
 
 class NumericLiteral(metaclass=_NumericLiteralMeta):
     r"""NumericLiteralInteger | NumericLiteralFloat"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.NumericLiteral")
     INTEGER = hydra.core.Name("integer")
     FLOAT = hydra.core.Name("float")
@@ -2897,11 +2897,11 @@ DateLiteral.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.Date
 
 class Keyword(Enum):
     EDGES = hydra.core.Name("edges")
-    
+
     KEYS = hydra.core.Name("keys")
-    
+
     NEW = hydra.core.Name("new")
-    
+
     VALUES = hydra.core.Name("values")
 
 Keyword.TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.Keyword")

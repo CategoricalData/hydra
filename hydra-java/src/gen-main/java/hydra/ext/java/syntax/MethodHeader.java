@@ -6,30 +6,30 @@ import java.io.Serializable;
 
 public class MethodHeader implements Serializable, Comparable<MethodHeader> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodHeader");
-  
+
   public static final hydra.core.Name PARAMETERS = new hydra.core.Name("parameters");
-  
+
   public static final hydra.core.Name RESULT = new hydra.core.Name("result");
-  
+
   public static final hydra.core.Name DECLARATOR = new hydra.core.Name("declarator");
-  
+
   public static final hydra.core.Name THROWS = new hydra.core.Name("throws");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters;
-  
+
   public final hydra.ext.java.syntax.Result result;
-  
+
   public final hydra.ext.java.syntax.MethodDeclarator declarator;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.Throws> throws_;
-  
+
   public MethodHeader (hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters, hydra.ext.java.syntax.Result result, hydra.ext.java.syntax.MethodDeclarator declarator, hydra.util.Maybe<hydra.ext.java.syntax.Throws> throws_) {
     this.parameters = parameters;
     this.result = result;
     this.declarator = declarator;
     this.throws_ = throws_;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MethodHeader)) {
@@ -46,12 +46,12 @@ public class MethodHeader implements Serializable, Comparable<MethodHeader> {
       this.throws_,
       o.throws_);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(parameters) + 3 * java.util.Objects.hashCode(result) + 5 * java.util.Objects.hashCode(declarator) + 7 * java.util.Objects.hashCode(throws_);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MethodHeader other) {
@@ -70,19 +70,19 @@ public class MethodHeader implements Serializable, Comparable<MethodHeader> {
     }
     return ((Comparable) throws_).compareTo(other.throws_);
   }
-  
+
   public MethodHeader withParameters(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters) {
     return new MethodHeader(parameters, result, declarator, throws_);
   }
-  
+
   public MethodHeader withResult(hydra.ext.java.syntax.Result result) {
     return new MethodHeader(parameters, result, declarator, throws_);
   }
-  
+
   public MethodHeader withDeclarator(hydra.ext.java.syntax.MethodDeclarator declarator) {
     return new MethodHeader(parameters, result, declarator, throws_);
   }
-  
+
   public MethodHeader withThrows(hydra.util.Maybe<hydra.ext.java.syntax.Throws> throws_) {
     return new MethodHeader(parameters, result, declarator, throws_);
   }

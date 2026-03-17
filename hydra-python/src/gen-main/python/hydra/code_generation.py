@@ -45,12 +45,12 @@ T3 = TypeVar("T3")
 
 def build_schema_map(g: hydra.graph.Graph) -> FrozenDict[hydra.core.Name, hydra.core.Type]:
     r"""Build a schema map (Name -> Type) from a graph's schema types."""
-    
+
     return hydra.lib.maps.map((lambda ts: hydra.rewriting.deannotate_type(ts.type)), g.schema_types)
 
 def transitive_deps(get_deps: Callable[[hydra.module.Module], frozenlist[hydra.module.Namespace]], ns_map: FrozenDict[hydra.module.Namespace, hydra.module.Module], start_mods: frozenlist[hydra.module.Module]) -> frozenset[hydra.module.Namespace]:
     r"""Compute transitive closure of module dependencies."""
-    
+
     @lru_cache(1)
     def initial_deps() -> frozenset[hydra.module.Namespace]:
         return hydra.lib.sets.from_list(hydra.lib.lists.concat(hydra.lib.lists.map((lambda m: hydra.lib.lists.filter((lambda dep: hydra.lib.logic.not_(hydra.lib.equality.equal(dep, m.namespace))), get_deps(m))), start_mods)))
@@ -60,7 +60,7 @@ def transitive_deps(get_deps: Callable[[hydra.module.Module], frozenlist[hydra.m
 
 def module_term_deps_transitive(ns_map: FrozenDict[hydra.module.Namespace, hydra.module.Module], modules: frozenlist[hydra.module.Module]) -> frozenlist[hydra.module.Module]:
     r"""Compute transitive closure of term dependencies for a set of modules."""
-    
+
     @lru_cache(1)
     def closure() -> frozenset[hydra.module.Namespace]:
         return hydra.lib.sets.union(transitive_deps((lambda m: m.term_dependencies), ns_map, modules), hydra.lib.sets.from_list(hydra.lib.lists.map((lambda m: m.namespace), modules)))
@@ -68,7 +68,7 @@ def module_term_deps_transitive(ns_map: FrozenDict[hydra.module.Namespace, hydra
 
 def module_type_deps_transitive(ns_map: FrozenDict[hydra.module.Namespace, hydra.module.Module], modules: frozenlist[hydra.module.Module]) -> frozenlist[hydra.module.Module]:
     r"""Compute transitive closure of type dependencies for a set of modules."""
-    
+
     @lru_cache(1)
     def term_mods() -> frozenlist[hydra.module.Module]:
         return module_term_deps_transitive(ns_map, modules)
@@ -79,7 +79,7 @@ def module_type_deps_transitive(ns_map: FrozenDict[hydra.module.Namespace, hydra
 
 def modules_to_graph(bs_graph: hydra.graph.Graph, universe_modules: frozenlist[hydra.module.Module], modules: frozenlist[hydra.module.Module]) -> hydra.graph.Graph:
     r"""Build a graph from universe modules and working modules, using an explicit bootstrap graph."""
-    
+
     @lru_cache(1)
     def universe() -> FrozenDict[hydra.module.Namespace, hydra.module.Module]:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda m: (m.namespace, m)), hydra.lib.lists.concat2(universe_modules, modules)))
@@ -105,14 +105,14 @@ def modules_to_graph(bs_graph: hydra.graph.Graph, universe_modules: frozenlist[h
 
 def strip_module_type_schemes(m: hydra.module.Module) -> hydra.module.Module:
     r"""Strip TypeSchemes from term bindings in a module, preserving type binding TypeSchemes. JSON-loaded modules carry inferred TypeSchemes from the original compilation. After adaptation (e.g., bigfloat -> float64), these TypeSchemes become stale and can cause inference errors. Stripping them allows the inference engine to reconstruct correct TypeSchemes from scratch."""
-    
+
     def strip_if_term(b: hydra.core.Binding) -> hydra.core.Binding:
         return hydra.lib.logic.if_else(hydra.annotations.is_native_type(b), (lambda : b), (lambda : hydra.core.Binding(b.name, b.term, Nothing())))
     return hydra.module.Module(m.namespace, hydra.lib.lists.map((lambda x1: strip_if_term(x1)), m.elements), m.term_dependencies, m.type_dependencies, m.description)
 
 def decode_module_from_json(bs_graph: hydra.graph.Graph, universe_modules: frozenlist[hydra.module.Module], do_strip_type_schemes: bool, json_val: hydra.json.model.Value) -> Either[str, hydra.module.Module]:
     r"""Decode a single module from a JSON value."""
-    
+
     @lru_cache(1)
     def graph() -> hydra.graph.Graph:
         return modules_to_graph(bs_graph, universe_modules, universe_modules)
@@ -124,7 +124,7 @@ def decode_module_from_json(bs_graph: hydra.graph.Graph, universe_modules: froze
 
 def escape_control_chars_in_json(input: frozenlist[int]) -> frozenlist[int]:
     r"""Escape unescaped control characters inside JSON string literals."""
-    
+
     def hex_digit(n: int) -> int:
         return hydra.lib.logic.if_else(hydra.lib.equality.lt(n, 10), (lambda : hydra.lib.math.add(48, n)), (lambda : hydra.lib.math.add(97, hydra.lib.math.sub(n, 10))))
     def escape_to_unicode(b: int) -> frozenlist[int]:
@@ -135,7 +135,7 @@ def escape_control_chars_in_json(input: frozenlist[int]) -> frozenlist[int]:
 
 def format_primitive(prim: hydra.graph.Primitive) -> str:
     r"""Format a primitive for the lexicon."""
-    
+
     name = prim.name.value
     @lru_cache(1)
     def type_str() -> str:
@@ -144,7 +144,7 @@ def format_primitive(prim: hydra.graph.Primitive) -> str:
 
 def format_term_binding(binding: hydra.core.Binding) -> str:
     r"""Format a term binding for the lexicon."""
-    
+
     name = binding.name.value
     @lru_cache(1)
     def type_str() -> str:
@@ -153,12 +153,12 @@ def format_term_binding(binding: hydra.core.Binding) -> str:
 
 def format_type_binding(graph: hydra.graph.Graph, binding: hydra.core.Binding) -> Either[hydra.error.DecodingError, str]:
     r"""Format a type binding for the lexicon."""
-    
+
     return hydra.lib.eithers.bind(hydra.decode.core.type(graph, binding.term), (lambda typ: Right(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("  ", binding.name.value), " = "), hydra.show.core.type(typ)))))
 
 def generate_coder_modules(codec: Callable[[T0, hydra.graph.Graph, T1], Either[T2, Maybe[T3]]], bs_graph: hydra.graph.Graph, universe_modules: frozenlist[hydra.module.Module], type_modules: frozenlist[T1], cx: T0) -> Either[T2, frozenlist[T3]]:
     r"""Generate encoder or decoder modules for a list of type modules."""
-    
+
     @lru_cache(1)
     def universe() -> FrozenDict[hydra.module.Namespace, hydra.module.Module]:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda m: (m.namespace, m)), hydra.lib.lists.concat2(universe_modules, universe_modules)))
@@ -190,7 +190,7 @@ def generate_coder_modules(codec: Callable[[T0, hydra.graph.Graph, T1], Either[T
 
 def generate_lexicon(graph: hydra.graph.Graph) -> Either[hydra.error.DecodingError, str]:
     r"""Generate the lexicon content from a graph."""
-    
+
     @lru_cache(1)
     def bindings() -> frozenlist[hydra.core.Binding]:
         return hydra.lexical.graph_to_bindings(graph)
@@ -223,7 +223,7 @@ def generate_source_files(print_definitions: Callable[[
   hydra.context.Context,
   hydra.graph.Graph], Either[hydra.context.InContext[hydra.error.Error], FrozenDict[T0, T1]]], lang: hydra.coders.Language, do_infer: bool, do_expand: bool, do_hoist_case_statements: bool, do_hoist_polymorphic_let_bindings: bool, bs_graph: hydra.graph.Graph, universe_modules: frozenlist[hydra.module.Module], mods_to_generate: frozenlist[hydra.module.Module], cx: hydra.context.Context) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[tuple[T0, T1]]]:
     r"""Pure core of code generation: given a coder, language, flags, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs."""
-    
+
     @lru_cache(1)
     def namespace_map() -> FrozenDict[hydra.module.Namespace, hydra.module.Module]:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda m: (m.namespace, m)), hydra.lib.lists.concat2(universe_modules, mods_to_generate)))
@@ -264,7 +264,7 @@ def generate_source_files(print_definitions: Callable[[
 
 def infer_and_generate_lexicon(cx: hydra.context.Context, bs_graph: hydra.graph.Graph, kernel_modules: frozenlist[hydra.module.Module]) -> Either[str, str]:
     r"""Perform type inference and generate the lexicon for a set of modules."""
-    
+
     @lru_cache(1)
     def g0() -> hydra.graph.Graph:
         return modules_to_graph(bs_graph, kernel_modules, kernel_modules)
@@ -275,7 +275,7 @@ def infer_and_generate_lexicon(cx: hydra.context.Context, bs_graph: hydra.graph.
 
 def infer_modules(cx: hydra.context.Context, bs_graph: hydra.graph.Graph, universe_mods: frozenlist[hydra.module.Module], target_mods: frozenlist[hydra.module.Module]) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[hydra.module.Module]]:
     r"""Perform type inference on modules and reconstruct with inferred types."""
-    
+
     @lru_cache(1)
     def g0() -> hydra.graph.Graph:
         return modules_to_graph(bs_graph, universe_mods, universe_mods)
@@ -286,7 +286,7 @@ def infer_modules(cx: hydra.context.Context, bs_graph: hydra.graph.Graph, univer
 
 def module_to_json(m: hydra.module.Module) -> Either[str, str]:
     r"""Convert a Module to a JSON string."""
-    
+
     @lru_cache(1)
     def term() -> hydra.core.Term:
         return hydra.encode.module.module(m)
@@ -294,7 +294,7 @@ def module_to_json(m: hydra.module.Module) -> Either[str, str]:
 
 def module_to_source_module(m: hydra.module.Module) -> hydra.module.Module:
     r"""Convert a generated Module into a Source module."""
-    
+
     @lru_cache(1)
     def source_ns() -> hydra.module.Namespace:
         return hydra.module.Namespace(hydra.lib.strings.cat2("hydra.sources.", hydra.lib.strings.intercalate(".", hydra.lib.lists.drop(1, hydra.lib.strings.split_on(".", m.namespace.value)))))
@@ -306,5 +306,5 @@ def module_to_source_module(m: hydra.module.Module) -> hydra.module.Module:
 
 def namespace_to_path(ns: hydra.module.Namespace) -> str:
     r"""Convert a namespace to a file path (e.g., hydra.core -> hydra/core)."""
-    
+
     return hydra.lib.strings.intercalate("/", hydra.lib.strings.split_on(".", ns.value))

@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class SimpleValueBinding implements Serializable, Comparable<SimpleValueBinding> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.SimpleValueBinding");
-  
+
   public static final hydra.core.Name PATTERN = new hydra.core.Name("pattern");
-  
+
   public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
-  
+
   public static final hydra.core.Name LOCAL_BINDINGS = new hydra.core.Name("localBindings");
-  
+
   /**
    * The pattern being bound
    */
   public final hydra.ext.haskell.ast.Pattern pattern;
-  
+
   /**
    * The right-hand side
    */
   public final hydra.ext.haskell.ast.RightHandSide rhs;
-  
+
   /**
    * Optional local bindings (where clause)
    */
   public final hydra.util.Maybe<hydra.ext.haskell.ast.LocalBindings> localBindings;
-  
+
   public SimpleValueBinding (hydra.ext.haskell.ast.Pattern pattern, hydra.ext.haskell.ast.RightHandSide rhs, hydra.util.Maybe<hydra.ext.haskell.ast.LocalBindings> localBindings) {
     this.pattern = pattern;
     this.rhs = rhs;
     this.localBindings = localBindings;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof SimpleValueBinding)) {
@@ -51,12 +51,12 @@ public class SimpleValueBinding implements Serializable, Comparable<SimpleValueB
       this.localBindings,
       o.localBindings);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(pattern) + 3 * java.util.Objects.hashCode(rhs) + 5 * java.util.Objects.hashCode(localBindings);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SimpleValueBinding other) {
@@ -71,15 +71,15 @@ public class SimpleValueBinding implements Serializable, Comparable<SimpleValueB
     }
     return ((Comparable) localBindings).compareTo(other.localBindings);
   }
-  
+
   public SimpleValueBinding withPattern(hydra.ext.haskell.ast.Pattern pattern) {
     return new SimpleValueBinding(pattern, rhs, localBindings);
   }
-  
+
   public SimpleValueBinding withRhs(hydra.ext.haskell.ast.RightHandSide rhs) {
     return new SimpleValueBinding(pattern, rhs, localBindings);
   }
-  
+
   public SimpleValueBinding withLocalBindings(hydra.util.Maybe<hydra.ext.haskell.ast.LocalBindings> localBindings) {
     return new SimpleValueBinding(pattern, rhs, localBindings);
   }

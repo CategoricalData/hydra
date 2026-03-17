@@ -6,52 +6,52 @@ import java.io.Serializable;
 
 public abstract class DelTarget implements Serializable, Comparable<DelTarget> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.DelTarget");
-  
+
   public static final hydra.core.Name PRIMARY_AND_NAME = new hydra.core.Name("primaryAndName");
-  
+
   public static final hydra.core.Name PRIMARY_AND_SLICES = new hydra.core.Name("primaryAndSlices");
-  
+
   public static final hydra.core.Name DEL_T_ATOM = new hydra.core.Name("delTAtom");
-  
+
   private DelTarget () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(PrimaryAndName instance) ;
-    
+
     R visit(PrimaryAndSlices instance) ;
-    
+
     R visit(DelTAtom instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(DelTarget instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(PrimaryAndName instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(PrimaryAndSlices instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(DelTAtom instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class PrimaryAndName extends hydra.ext.python.syntax.DelTarget implements Serializable {
     public final hydra.ext.python.syntax.TPrimaryAndName value;
-    
+
     public PrimaryAndName (hydra.ext.python.syntax.TPrimaryAndName value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof PrimaryAndName)) {
@@ -62,12 +62,12 @@ public abstract class DelTarget implements Serializable, Comparable<DelTarget> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(DelTarget other) {
@@ -78,20 +78,20 @@ public abstract class DelTarget implements Serializable, Comparable<DelTarget> {
       PrimaryAndName o = (PrimaryAndName) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class PrimaryAndSlices extends hydra.ext.python.syntax.DelTarget implements Serializable {
     public final hydra.ext.python.syntax.TPrimaryAndSlices value;
-    
+
     public PrimaryAndSlices (hydra.ext.python.syntax.TPrimaryAndSlices value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof PrimaryAndSlices)) {
@@ -102,12 +102,12 @@ public abstract class DelTarget implements Serializable, Comparable<DelTarget> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(DelTarget other) {
@@ -118,20 +118,20 @@ public abstract class DelTarget implements Serializable, Comparable<DelTarget> {
       PrimaryAndSlices o = (PrimaryAndSlices) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class DelTAtom extends hydra.ext.python.syntax.DelTarget implements Serializable {
     public final hydra.ext.python.syntax.DelTAtom value;
-    
+
     public DelTAtom (hydra.ext.python.syntax.DelTAtom value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof DelTAtom)) {
@@ -142,12 +142,12 @@ public abstract class DelTarget implements Serializable, Comparable<DelTarget> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(DelTarget other) {
@@ -158,7 +158,7 @@ public abstract class DelTarget implements Serializable, Comparable<DelTarget> {
       DelTAtom o = (DelTAtom) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

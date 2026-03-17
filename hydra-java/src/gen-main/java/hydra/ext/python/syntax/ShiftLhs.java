@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class ShiftLhs implements Serializable, Comparable<ShiftLhs> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ShiftLhs");
-  
+
   public static final hydra.core.Name OPERAND = new hydra.core.Name("operand");
-  
+
   public static final hydra.core.Name OPERATOR = new hydra.core.Name("operator");
-  
+
   public final hydra.ext.python.syntax.ShiftExpression operand;
-  
+
   public final hydra.ext.python.syntax.ShiftOp operator;
-  
+
   public ShiftLhs (hydra.ext.python.syntax.ShiftExpression operand, hydra.ext.python.syntax.ShiftOp operator) {
     this.operand = operand;
     this.operator = operator;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ShiftLhs)) {
@@ -32,12 +32,12 @@ public class ShiftLhs implements Serializable, Comparable<ShiftLhs> {
       this.operator,
       o.operator);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(operand) + 3 * java.util.Objects.hashCode(operator);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ShiftLhs other) {
@@ -48,11 +48,11 @@ public class ShiftLhs implements Serializable, Comparable<ShiftLhs> {
     }
     return ((Comparable) operator).compareTo(other.operator);
   }
-  
+
   public ShiftLhs withOperand(hydra.ext.python.syntax.ShiftExpression operand) {
     return new ShiftLhs(operand, operator);
   }
-  
+
   public ShiftLhs withOperator(hydra.ext.python.syntax.ShiftOp operator) {
     return new ShiftLhs(operand, operator);
   }

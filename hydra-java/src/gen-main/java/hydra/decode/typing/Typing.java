@@ -14,7 +14,7 @@ public interface Typing {
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.FunctionStructure<T0>> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.FunctionStructure<T0>>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.FunctionStructure<T0>> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -94,7 +94,7 @@ public interface Typing {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.typing.InferenceResult> inferenceResult(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.typing.InferenceResult>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.typing.InferenceResult>left(new hydra.error.DecodingError(err))),
@@ -103,7 +103,7 @@ public interface Typing {
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.InferenceResult> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.InferenceResult>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.InferenceResult> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -160,7 +160,7 @@ public interface Typing {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.typing.TermSubst> termSubst(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.typing.TermSubst>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.typing.TermSubst>left(new hydra.error.DecodingError(err))),
@@ -169,7 +169,7 @@ public interface Typing {
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.TermSubst> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.TermSubst>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.TermSubst> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
@@ -189,7 +189,7 @@ public interface Typing {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.typing.TypeConstraint> typeConstraint(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.typing.TypeConstraint>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.typing.TypeConstraint>left(new hydra.error.DecodingError(err))),
@@ -198,7 +198,7 @@ public interface Typing {
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.TypeConstraint> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.TypeConstraint>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.TypeConstraint> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -228,7 +228,7 @@ public interface Typing {
                       public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Term instance) {
                         return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"));
                       }
-                      
+
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
                         return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -236,7 +236,7 @@ public interface Typing {
                           public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                             return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
                           }
-                          
+
                           @Override
                           public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Literal.String_ s) {
                             return hydra.util.Either.<hydra.error.DecodingError, String>right((s).value);
@@ -256,7 +256,7 @@ public interface Typing {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.typing.TypeSubst> typeSubst(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.typing.TypeSubst>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.typing.TypeSubst>left(new hydra.error.DecodingError(err))),
@@ -265,7 +265,7 @@ public interface Typing {
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.TypeSubst> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.TypeSubst>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.TypeSubst> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(

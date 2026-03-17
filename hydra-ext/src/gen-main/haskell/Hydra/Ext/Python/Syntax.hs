@@ -12,7 +12,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-data AnnotatedStatement = 
+data AnnotatedStatement =
   AnnotatedStatement {
     annotatedStatementComment :: String,
     annotatedStatementStatement :: Statement}
@@ -24,17 +24,17 @@ _AnnotatedStatement_comment = Core.Name "comment"
 
 _AnnotatedStatement_statement = Core.Name "statement"
 
-newtype Module = 
+newtype Module =
   Module {
     unModule :: [[Statement]]}
   deriving (Eq, Ord, Read, Show)
 
 _Module = Core.Name "hydra.ext.python.syntax.Module"
 
-data QuoteStyle = 
+data QuoteStyle =
   QuoteStyleSingle  |
   QuoteStyleDouble  |
-  QuoteStyleTriple 
+  QuoteStyleTriple
   deriving (Eq, Ord, Read, Show)
 
 _QuoteStyle = Core.Name "hydra.ext.python.syntax.QuoteStyle"
@@ -45,14 +45,14 @@ _QuoteStyle_double = Core.Name "double"
 
 _QuoteStyle_triple = Core.Name "triple"
 
-newtype Name = 
+newtype Name =
   Name {
     unName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Name = Core.Name "hydra.ext.python.syntax.Name"
 
-data Number = 
+data Number =
   NumberInteger Integer |
   NumberFloat Double
   deriving (Eq, Ord, Read, Show)
@@ -63,7 +63,7 @@ _Number_integer = Core.Name "integer"
 
 _Number_float = Core.Name "float"
 
-data String_ = 
+data String_ =
   String_ {
     stringValue :: String,
     stringQuoteStyle :: QuoteStyle}
@@ -75,35 +75,35 @@ _String_value = Core.Name "value"
 
 _String_quoteStyle = Core.Name "quoteStyle"
 
-newtype TypeComment = 
+newtype TypeComment =
   TypeComment {
     unTypeComment :: String}
   deriving (Eq, Ord, Read, Show)
 
 _TypeComment = Core.Name "hydra.ext.python.syntax.TypeComment"
 
-newtype File = 
+newtype File =
   File {
     unFile :: [Statement]}
   deriving (Eq, Ord, Read, Show)
 
 _File = Core.Name "hydra.ext.python.syntax.File"
 
-newtype Interactive = 
+newtype Interactive =
   Interactive {
     unInteractive :: Statement}
   deriving (Eq, Ord, Read, Show)
 
 _Interactive = Core.Name "hydra.ext.python.syntax.Interactive"
 
-newtype Eval = 
+newtype Eval =
   Eval {
     unEval :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 
 _Eval = Core.Name "hydra.ext.python.syntax.Eval"
 
-data FuncType = 
+data FuncType =
   FuncType {
     funcTypeType :: [TypeExpression],
     funcTypeBody :: Expression}
@@ -115,7 +115,7 @@ _FuncType_type = Core.Name "type"
 
 _FuncType_body = Core.Name "body"
 
-data Statement = 
+data Statement =
   StatementCompound CompoundStatement |
   StatementSimple [SimpleStatement] |
   StatementAnnotated AnnotatedStatement
@@ -129,7 +129,7 @@ _Statement_simple = Core.Name "simple"
 
 _Statement_annotated = Core.Name "annotated"
 
-data SimpleStatement = 
+data SimpleStatement =
   SimpleStatementAssignment Assignment |
   SimpleStatementTypeAlias TypeAlias |
   SimpleStatementStarExpressions [StarExpression] |
@@ -176,7 +176,7 @@ _SimpleStatement_global = Core.Name "global"
 
 _SimpleStatement_nonlocal = Core.Name "nonlocal"
 
-data CompoundStatement = 
+data CompoundStatement =
   CompoundStatementFunction FunctionDefinition |
   CompoundStatementIf IfStatement |
   CompoundStatementClassDef ClassDefinition |
@@ -205,7 +205,7 @@ _CompoundStatement_while = Core.Name "while"
 
 _CompoundStatement_match = Core.Name "match"
 
-data Assignment = 
+data Assignment =
   AssignmentTyped TypedAssignment |
   AssignmentUntyped UntypedAssignment |
   AssignmentAug AugAssignment
@@ -219,7 +219,7 @@ _Assignment_untyped = Core.Name "untyped"
 
 _Assignment_aug = Core.Name "aug"
 
-data TypedAssignment = 
+data TypedAssignment =
   TypedAssignment {
     typedAssignmentLhs :: SingleTarget,
     typedAssignmentType :: Expression,
@@ -234,7 +234,7 @@ _TypedAssignment_type = Core.Name "type"
 
 _TypedAssignment_rhs = Core.Name "rhs"
 
-data UntypedAssignment = 
+data UntypedAssignment =
   UntypedAssignment {
     untypedAssignmentTargets :: [StarTarget],
     untypedAssignmentRhs :: AnnotatedRhs,
@@ -249,7 +249,7 @@ _UntypedAssignment_rhs = Core.Name "rhs"
 
 _UntypedAssignment_typeComment = Core.Name "typeComment"
 
-data AugAssignment = 
+data AugAssignment =
   AugAssignment {
     augAssignmentLhs :: SingleTarget,
     augAssignmentAugassign :: AugAssign,
@@ -264,7 +264,7 @@ _AugAssignment_augassign = Core.Name "augassign"
 
 _AugAssignment_rhs = Core.Name "rhs"
 
-data AnnotatedRhs = 
+data AnnotatedRhs =
   AnnotatedRhsYield YieldExpression |
   AnnotatedRhsStar [StarExpression]
   deriving (Eq, Ord, Read, Show)
@@ -275,7 +275,7 @@ _AnnotatedRhs_yield = Core.Name "yield"
 
 _AnnotatedRhs_star = Core.Name "star"
 
-data AugAssign = 
+data AugAssign =
   AugAssignPlusEqual  |
   AugAssignMinusEqual  |
   AugAssignTimesEqual  |
@@ -288,7 +288,7 @@ data AugAssign =
   AugAssignLeftShiftEqual  |
   AugAssignRightShiftEqual  |
   AugAssignStarStarEqual  |
-  AugAssignDoubleSlashEqual 
+  AugAssignDoubleSlashEqual
   deriving (Eq, Ord, Read, Show)
 
 _AugAssign = Core.Name "hydra.ext.python.syntax.AugAssign"
@@ -319,21 +319,21 @@ _AugAssign_starStarEqual = Core.Name "starStarEqual"
 
 _AugAssign_doubleSlashEqual = Core.Name "doubleSlashEqual"
 
-newtype ReturnStatement = 
+newtype ReturnStatement =
   ReturnStatement {
     unReturnStatement :: [StarExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _ReturnStatement = Core.Name "hydra.ext.python.syntax.ReturnStatement"
 
-newtype RaiseStatement = 
+newtype RaiseStatement =
   RaiseStatement {
     unRaiseStatement :: (Maybe RaiseExpression)}
   deriving (Eq, Ord, Read, Show)
 
 _RaiseStatement = Core.Name "hydra.ext.python.syntax.RaiseStatement"
 
-data RaiseExpression = 
+data RaiseExpression =
   RaiseExpression {
     raiseExpressionExpression :: Expression,
     raiseExpressionFrom :: (Maybe Expression)}
@@ -345,21 +345,21 @@ _RaiseExpression_expression = Core.Name "expression"
 
 _RaiseExpression_from = Core.Name "from"
 
-newtype DelStatement = 
+newtype DelStatement =
   DelStatement {
     unDelStatement :: DelTargets}
   deriving (Eq, Ord, Read, Show)
 
 _DelStatement = Core.Name "hydra.ext.python.syntax.DelStatement"
 
-newtype YieldStatement = 
+newtype YieldStatement =
   YieldStatement {
     unYieldStatement :: YieldExpression}
   deriving (Eq, Ord, Read, Show)
 
 _YieldStatement = Core.Name "hydra.ext.python.syntax.YieldStatement"
 
-data AssertStatement = 
+data AssertStatement =
   AssertStatement {
     assertStatementExpression1 :: Expression,
     assertStatementExpression2 :: (Maybe Expression)}
@@ -371,7 +371,7 @@ _AssertStatement_expression1 = Core.Name "expression1"
 
 _AssertStatement_expression2 = Core.Name "expression2"
 
-data ImportStatement = 
+data ImportStatement =
   ImportStatementName ImportName |
   ImportStatementFrom ImportFrom
   deriving (Eq, Ord, Read, Show)
@@ -382,14 +382,14 @@ _ImportStatement_name = Core.Name "name"
 
 _ImportStatement_from = Core.Name "from"
 
-newtype ImportName = 
+newtype ImportName =
   ImportName {
     unImportName :: [DottedAsName]}
   deriving (Eq, Ord, Read, Show)
 
 _ImportName = Core.Name "hydra.ext.python.syntax.ImportName"
 
-data ImportFrom = 
+data ImportFrom =
   ImportFrom {
     importFromPrefixes :: [RelativeImportPrefix],
     importFromDottedName :: (Maybe DottedName),
@@ -404,9 +404,9 @@ _ImportFrom_dottedName = Core.Name "dottedName"
 
 _ImportFrom_targets = Core.Name "targets"
 
-data RelativeImportPrefix = 
+data RelativeImportPrefix =
   RelativeImportPrefixDot  |
-  RelativeImportPrefixEllipsis 
+  RelativeImportPrefixEllipsis
   deriving (Eq, Ord, Read, Show)
 
 _RelativeImportPrefix = Core.Name "hydra.ext.python.syntax.RelativeImportPrefix"
@@ -415,10 +415,10 @@ _RelativeImportPrefix_dot = Core.Name "dot"
 
 _RelativeImportPrefix_ellipsis = Core.Name "ellipsis"
 
-data ImportFromTargets = 
+data ImportFromTargets =
   ImportFromTargetsSimple [ImportFromAsName] |
   ImportFromTargetsParens [ImportFromAsName] |
-  ImportFromTargetsStar 
+  ImportFromTargetsStar
   deriving (Eq, Ord, Read, Show)
 
 _ImportFromTargets = Core.Name "hydra.ext.python.syntax.ImportFromTargets"
@@ -429,7 +429,7 @@ _ImportFromTargets_parens = Core.Name "parens"
 
 _ImportFromTargets_star = Core.Name "star"
 
-data ImportFromAsName = 
+data ImportFromAsName =
   ImportFromAsName {
     importFromAsNameName :: Name,
     importFromAsNameAs :: (Maybe Name)}
@@ -441,7 +441,7 @@ _ImportFromAsName_name = Core.Name "name"
 
 _ImportFromAsName_as = Core.Name "as"
 
-data DottedAsName = 
+data DottedAsName =
   DottedAsName {
     dottedAsNameName :: DottedName,
     dottedAsNameAs :: (Maybe Name)}
@@ -453,14 +453,14 @@ _DottedAsName_name = Core.Name "name"
 
 _DottedAsName_as = Core.Name "as"
 
-newtype DottedName = 
+newtype DottedName =
   DottedName {
     unDottedName :: [Name]}
   deriving (Eq, Ord, Read, Show)
 
 _DottedName = Core.Name "hydra.ext.python.syntax.DottedName"
 
-data Block = 
+data Block =
   BlockIndented [[Statement]] |
   BlockSimple [SimpleStatement]
   deriving (Eq, Ord, Read, Show)
@@ -471,14 +471,14 @@ _Block_indented = Core.Name "indented"
 
 _Block_simple = Core.Name "simple"
 
-newtype Decorators = 
+newtype Decorators =
   Decorators {
     unDecorators :: [NamedExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _Decorators = Core.Name "hydra.ext.python.syntax.Decorators"
 
-data ClassDefinition = 
+data ClassDefinition =
   ClassDefinition {
     classDefinitionDecorators :: (Maybe Decorators),
     classDefinitionName :: Name,
@@ -499,7 +499,7 @@ _ClassDefinition_arguments = Core.Name "arguments"
 
 _ClassDefinition_body = Core.Name "body"
 
-data FunctionDefinition = 
+data FunctionDefinition =
   FunctionDefinition {
     functionDefinitionDecorators :: (Maybe Decorators),
     functionDefinitionRaw :: FunctionDefRaw}
@@ -511,7 +511,7 @@ _FunctionDefinition_decorators = Core.Name "decorators"
 
 _FunctionDefinition_raw = Core.Name "raw"
 
-data FunctionDefRaw = 
+data FunctionDefRaw =
   FunctionDefRaw {
     functionDefRawAsync :: Bool,
     functionDefRawName :: Name,
@@ -538,7 +538,7 @@ _FunctionDefRaw_funcTypeComment = Core.Name "funcTypeComment"
 
 _FunctionDefRaw_block = Core.Name "block"
 
-data Parameters = 
+data Parameters =
   ParametersSlashNoDefault SlashNoDefaultParameters |
   ParametersSlashWithDefault SlashWithDefaultParameters |
   ParametersParamNoDefault ParamNoDefaultParameters |
@@ -558,7 +558,7 @@ _Parameters_paramWithDefault = Core.Name "paramWithDefault"
 
 _Parameters_starEtc = Core.Name "starEtc"
 
-data SlashNoDefaultParameters = 
+data SlashNoDefaultParameters =
   SlashNoDefaultParameters {
     slashNoDefaultParametersSlash :: SlashNoDefault,
     slashNoDefaultParametersParamNoDefault :: [ParamNoDefault],
@@ -576,7 +576,7 @@ _SlashNoDefaultParameters_paramWithDefault = Core.Name "paramWithDefault"
 
 _SlashNoDefaultParameters_starEtc = Core.Name "starEtc"
 
-data SlashWithDefaultParameters = 
+data SlashWithDefaultParameters =
   SlashWithDefaultParameters {
     slashWithDefaultParametersParamNoDefault :: [ParamNoDefault],
     slashWithDefaultParametersParamWithDefault :: [ParamWithDefault],
@@ -591,7 +591,7 @@ _SlashWithDefaultParameters_paramWithDefault = Core.Name "paramWithDefault"
 
 _SlashWithDefaultParameters_starEtc = Core.Name "starEtc"
 
-data ParamNoDefaultParameters = 
+data ParamNoDefaultParameters =
   ParamNoDefaultParameters {
     paramNoDefaultParametersParamNoDefault :: [ParamNoDefault],
     paramNoDefaultParametersParamWithDefault :: [ParamWithDefault],
@@ -606,7 +606,7 @@ _ParamNoDefaultParameters_paramWithDefault = Core.Name "paramWithDefault"
 
 _ParamNoDefaultParameters_starEtc = Core.Name "starEtc"
 
-data ParamWithDefaultParameters = 
+data ParamWithDefaultParameters =
   ParamWithDefaultParameters {
     paramWithDefaultParametersParamWithDefault :: [ParamWithDefault],
     paramWithDefaultParametersStarEtc :: (Maybe StarEtc)}
@@ -618,14 +618,14 @@ _ParamWithDefaultParameters_paramWithDefault = Core.Name "paramWithDefault"
 
 _ParamWithDefaultParameters_starEtc = Core.Name "starEtc"
 
-newtype SlashNoDefault = 
+newtype SlashNoDefault =
   SlashNoDefault {
     unSlashNoDefault :: [ParamNoDefault]}
   deriving (Eq, Ord, Read, Show)
 
 _SlashNoDefault = Core.Name "hydra.ext.python.syntax.SlashNoDefault"
 
-data SlashWithDefault = 
+data SlashWithDefault =
   SlashWithDefault {
     slashWithDefaultParamNoDefault :: [ParamNoDefault],
     slashWithDefaultParamWithDefault :: [ParamWithDefault]}
@@ -637,7 +637,7 @@ _SlashWithDefault_paramNoDefault = Core.Name "paramNoDefault"
 
 _SlashWithDefault_paramWithDefault = Core.Name "paramWithDefault"
 
-data StarEtc = 
+data StarEtc =
   StarEtcStarNoDefault NoDefaultStarEtc |
   StarEtcStarNoDefaultStarAnnotation NoDefaultStarAnnotationStarEtc |
   StarEtcStarComma CommaStarEtc |
@@ -654,7 +654,7 @@ _StarEtc_starComma = Core.Name "starComma"
 
 _StarEtc_keywords = Core.Name "keywords"
 
-data NoDefaultStarEtc = 
+data NoDefaultStarEtc =
   NoDefaultStarEtc {
     noDefaultStarEtcParamNoDefault :: ParamNoDefault,
     noDefaultStarEtcParamMaybeDefault :: [ParamMaybeDefault],
@@ -669,7 +669,7 @@ _NoDefaultStarEtc_paramMaybeDefault = Core.Name "paramMaybeDefault"
 
 _NoDefaultStarEtc_keywords = Core.Name "keywords"
 
-data NoDefaultStarAnnotationStarEtc = 
+data NoDefaultStarAnnotationStarEtc =
   NoDefaultStarAnnotationStarEtc {
     noDefaultStarAnnotationStarEtcParamNoDefaultStarAnnotation :: ParamNoDefaultStarAnnotation,
     noDefaultStarAnnotationStarEtcParamMaybeDefault :: [ParamMaybeDefault],
@@ -684,7 +684,7 @@ _NoDefaultStarAnnotationStarEtc_paramMaybeDefault = Core.Name "paramMaybeDefault
 
 _NoDefaultStarAnnotationStarEtc_keywords = Core.Name "keywords"
 
-data CommaStarEtc = 
+data CommaStarEtc =
   CommaStarEtc {
     commaStarEtcParamMaybeDefault :: [ParamMaybeDefault],
     commaStarEtcKeywords :: (Maybe Keywords)}
@@ -696,14 +696,14 @@ _CommaStarEtc_paramMaybeDefault = Core.Name "paramMaybeDefault"
 
 _CommaStarEtc_keywords = Core.Name "keywords"
 
-newtype Keywords = 
+newtype Keywords =
   Keywords {
     unKeywords :: ParamNoDefault}
   deriving (Eq, Ord, Read, Show)
 
 _Keywords = Core.Name "hydra.ext.python.syntax.Keywords"
 
-data ParamNoDefault = 
+data ParamNoDefault =
   ParamNoDefault {
     paramNoDefaultParam :: Param,
     paramNoDefaultTypeComment :: (Maybe TypeComment)}
@@ -715,7 +715,7 @@ _ParamNoDefault_param = Core.Name "param"
 
 _ParamNoDefault_typeComment = Core.Name "typeComment"
 
-data ParamNoDefaultStarAnnotation = 
+data ParamNoDefaultStarAnnotation =
   ParamNoDefaultStarAnnotation {
     paramNoDefaultStarAnnotationParamStarAnnotation :: ParamStarAnnotation,
     paramNoDefaultStarAnnotationTypeComment :: (Maybe TypeComment)}
@@ -727,7 +727,7 @@ _ParamNoDefaultStarAnnotation_paramStarAnnotation = Core.Name "paramStarAnnotati
 
 _ParamNoDefaultStarAnnotation_typeComment = Core.Name "typeComment"
 
-data ParamWithDefault = 
+data ParamWithDefault =
   ParamWithDefault {
     paramWithDefaultParam :: Param,
     paramWithDefaultDefault :: Default,
@@ -742,7 +742,7 @@ _ParamWithDefault_default = Core.Name "default"
 
 _ParamWithDefault_typeComment = Core.Name "typeComment"
 
-data ParamMaybeDefault = 
+data ParamMaybeDefault =
   ParamMaybeDefault {
     paramMaybeDefaultParam :: Param,
     paramMaybeDefaultDefault :: (Maybe Default),
@@ -757,7 +757,7 @@ _ParamMaybeDefault_default = Core.Name "default"
 
 _ParamMaybeDefault_typeComment = Core.Name "typeComment"
 
-data Param = 
+data Param =
   Param {
     paramName :: Name,
     paramAnnotation :: (Maybe Annotation)}
@@ -769,7 +769,7 @@ _Param_name = Core.Name "name"
 
 _Param_annotation = Core.Name "annotation"
 
-data ParamStarAnnotation = 
+data ParamStarAnnotation =
   ParamStarAnnotation {
     paramStarAnnotationName :: Name,
     paramStarAnnotationAnnotation :: StarAnnotation}
@@ -781,28 +781,28 @@ _ParamStarAnnotation_name = Core.Name "name"
 
 _ParamStarAnnotation_annotation = Core.Name "annotation"
 
-newtype Annotation = 
+newtype Annotation =
   Annotation {
     unAnnotation :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _Annotation = Core.Name "hydra.ext.python.syntax.Annotation"
 
-newtype StarAnnotation = 
+newtype StarAnnotation =
   StarAnnotation {
     unStarAnnotation :: StarExpression}
   deriving (Eq, Ord, Read, Show)
 
 _StarAnnotation = Core.Name "hydra.ext.python.syntax.StarAnnotation"
 
-newtype Default = 
+newtype Default =
   Default {
     unDefault :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _Default = Core.Name "hydra.ext.python.syntax.Default"
 
-data IfStatement = 
+data IfStatement =
   IfStatement {
     ifStatementCondition :: NamedExpression,
     ifStatementBody :: Block,
@@ -817,7 +817,7 @@ _IfStatement_body = Core.Name "body"
 
 _IfStatement_continuation = Core.Name "continuation"
 
-data IfTail = 
+data IfTail =
   IfTailElif IfStatement |
   IfTailElse Block
   deriving (Eq, Ord, Read, Show)
@@ -828,7 +828,7 @@ _IfTail_elif = Core.Name "elif"
 
 _IfTail_else = Core.Name "else"
 
-data WhileStatement = 
+data WhileStatement =
   WhileStatement {
     whileStatementCondition :: NamedExpression,
     whileStatementBody :: Block,
@@ -843,7 +843,7 @@ _WhileStatement_body = Core.Name "body"
 
 _WhileStatement_else = Core.Name "else"
 
-data ForStatement = 
+data ForStatement =
   ForStatement {
     forStatementAsync :: Bool,
     forStatementTargets :: [StarTarget],
@@ -867,7 +867,7 @@ _ForStatement_body = Core.Name "body"
 
 _ForStatement_else = Core.Name "else"
 
-data WithStatement = 
+data WithStatement =
   WithStatement {
     withStatementAsync :: Bool,
     withStatementItems :: [WithItem],
@@ -885,7 +885,7 @@ _WithStatement_typeComment = Core.Name "typeComment"
 
 _WithStatement_body = Core.Name "body"
 
-data WithItem = 
+data WithItem =
   WithItem {
     withItemExpression :: Expression,
     withItemAs :: (Maybe StarTarget)}
@@ -897,7 +897,7 @@ _WithItem_expression = Core.Name "expression"
 
 _WithItem_as = Core.Name "as"
 
-data TryStatement = 
+data TryStatement =
   TryStatementFinally TryFinallyStatement |
   TryStatementExcept TryExceptStatement |
   TryStatementExceptStar TryExceptStarStatement
@@ -911,7 +911,7 @@ _TryStatement_except = Core.Name "except"
 
 _TryStatement_exceptStar = Core.Name "exceptStar"
 
-data TryFinallyStatement = 
+data TryFinallyStatement =
   TryFinallyStatement {
     tryFinallyStatementBody :: Block,
     tryFinallyStatementFinally :: Block}
@@ -923,7 +923,7 @@ _TryFinallyStatement_body = Core.Name "body"
 
 _TryFinallyStatement_finally = Core.Name "finally"
 
-data TryExceptStatement = 
+data TryExceptStatement =
   TryExceptStatement {
     tryExceptStatementBody :: Block,
     tryExceptStatementExcepts :: [ExceptBlock],
@@ -941,7 +941,7 @@ _TryExceptStatement_else = Core.Name "else"
 
 _TryExceptStatement_finally = Core.Name "finally"
 
-data TryExceptStarStatement = 
+data TryExceptStarStatement =
   TryExceptStarStatement {
     tryExceptStarStatementBody :: Block,
     tryExceptStarStatementExcepts :: [ExceptStarBlock],
@@ -959,7 +959,7 @@ _TryExceptStarStatement_else = Core.Name "else"
 
 _TryExceptStarStatement_finally = Core.Name "finally"
 
-data ExceptBlock = 
+data ExceptBlock =
   ExceptBlock {
     exceptBlockExpression :: (Maybe ExceptExpression),
     exceptBlockBody :: Block}
@@ -971,7 +971,7 @@ _ExceptBlock_expression = Core.Name "expression"
 
 _ExceptBlock_body = Core.Name "body"
 
-data ExceptExpression = 
+data ExceptExpression =
   ExceptExpression {
     exceptExpressionExpression :: Expression,
     exceptExpressionAs :: (Maybe Name)}
@@ -983,7 +983,7 @@ _ExceptExpression_expression = Core.Name "expression"
 
 _ExceptExpression_as = Core.Name "as"
 
-data ExceptStarBlock = 
+data ExceptStarBlock =
   ExceptStarBlock {
     exceptStarBlockExpression :: Expression,
     exceptStarBlockAs :: (Maybe Name),
@@ -998,7 +998,7 @@ _ExceptStarBlock_as = Core.Name "as"
 
 _ExceptStarBlock_body = Core.Name "body"
 
-data MatchStatement = 
+data MatchStatement =
   MatchStatement {
     matchStatementSubject :: SubjectExpression,
     matchStatementCases :: [CaseBlock]}
@@ -1010,7 +1010,7 @@ _MatchStatement_subject = Core.Name "subject"
 
 _MatchStatement_cases = Core.Name "cases"
 
-data SubjectExpression = 
+data SubjectExpression =
   SubjectExpressionTuple [StarNamedExpression] |
   SubjectExpressionSimple NamedExpression
   deriving (Eq, Ord, Read, Show)
@@ -1021,7 +1021,7 @@ _SubjectExpression_tuple = Core.Name "tuple"
 
 _SubjectExpression_simple = Core.Name "simple"
 
-data CaseBlock = 
+data CaseBlock =
   CaseBlock {
     caseBlockPatterns :: Patterns,
     caseBlockGuard :: (Maybe Guard),
@@ -1036,14 +1036,14 @@ _CaseBlock_guard = Core.Name "guard"
 
 _CaseBlock_body = Core.Name "body"
 
-newtype Guard = 
+newtype Guard =
   Guard {
     unGuard :: NamedExpression}
   deriving (Eq, Ord, Read, Show)
 
 _Guard = Core.Name "hydra.ext.python.syntax.Guard"
 
-data Patterns = 
+data Patterns =
   PatternsSequence OpenSequencePattern |
   PatternsPattern Pattern
   deriving (Eq, Ord, Read, Show)
@@ -1054,7 +1054,7 @@ _Patterns_sequence = Core.Name "sequence"
 
 _Patterns_pattern = Core.Name "pattern"
 
-data Pattern = 
+data Pattern =
   PatternAs AsPattern |
   PatternOr OrPattern
   deriving (Eq, Ord, Read, Show)
@@ -1065,7 +1065,7 @@ _Pattern_as = Core.Name "as"
 
 _Pattern_or = Core.Name "or"
 
-data AsPattern = 
+data AsPattern =
   AsPattern {
     asPatternPattern :: OrPattern,
     asPatternAs :: PatternCaptureTarget}
@@ -1077,14 +1077,14 @@ _AsPattern_pattern = Core.Name "pattern"
 
 _AsPattern_as = Core.Name "as"
 
-newtype OrPattern = 
+newtype OrPattern =
   OrPattern {
     unOrPattern :: [ClosedPattern]}
   deriving (Eq, Ord, Read, Show)
 
 _OrPattern = Core.Name "hydra.ext.python.syntax.OrPattern"
 
-data ClosedPattern = 
+data ClosedPattern =
   ClosedPatternLiteral LiteralExpression |
   ClosedPatternCapture CapturePattern |
   ClosedPatternWildcard  |
@@ -1113,13 +1113,13 @@ _ClosedPattern_mapping = Core.Name "mapping"
 
 _ClosedPattern_class = Core.Name "class"
 
-data LiteralExpression = 
+data LiteralExpression =
   LiteralExpressionNumber SignedNumber |
   LiteralExpressionComplex ComplexNumber |
   LiteralExpressionString String |
   LiteralExpressionNone  |
   LiteralExpressionTrue  |
-  LiteralExpressionFalse 
+  LiteralExpressionFalse
   deriving (Eq, Ord, Read, Show)
 
 _LiteralExpression = Core.Name "hydra.ext.python.syntax.LiteralExpression"
@@ -1136,7 +1136,7 @@ _LiteralExpression_true = Core.Name "true"
 
 _LiteralExpression_false = Core.Name "false"
 
-data ComplexNumber = 
+data ComplexNumber =
   ComplexNumber {
     complexNumberReal :: SignedRealNumber,
     complexNumberPlusOrMinus :: PlusOrMinus,
@@ -1151,9 +1151,9 @@ _ComplexNumber_plusOrMinus = Core.Name "plusOrMinus"
 
 _ComplexNumber_imaginary = Core.Name "imaginary"
 
-data PlusOrMinus = 
+data PlusOrMinus =
   PlusOrMinusPlus  |
-  PlusOrMinusMinus 
+  PlusOrMinusMinus
   deriving (Eq, Ord, Read, Show)
 
 _PlusOrMinus = Core.Name "hydra.ext.python.syntax.PlusOrMinus"
@@ -1162,7 +1162,7 @@ _PlusOrMinus_plus = Core.Name "plus"
 
 _PlusOrMinus_minus = Core.Name "minus"
 
-data SignedNumber = 
+data SignedNumber =
   SignedNumberSign PlusOrMinus |
   SignedNumberNumber Number
   deriving (Eq, Ord, Read, Show)
@@ -1173,7 +1173,7 @@ _SignedNumber_sign = Core.Name "sign"
 
 _SignedNumber_number = Core.Name "number"
 
-data SignedRealNumber = 
+data SignedRealNumber =
   SignedRealNumberSign PlusOrMinus |
   SignedRealNumberNumber RealNumber
   deriving (Eq, Ord, Read, Show)
@@ -1184,63 +1184,63 @@ _SignedRealNumber_sign = Core.Name "sign"
 
 _SignedRealNumber_number = Core.Name "number"
 
-newtype RealNumber = 
+newtype RealNumber =
   RealNumber {
     unRealNumber :: Number}
   deriving (Eq, Ord, Read, Show)
 
 _RealNumber = Core.Name "hydra.ext.python.syntax.RealNumber"
 
-newtype ImaginaryNumber = 
+newtype ImaginaryNumber =
   ImaginaryNumber {
     unImaginaryNumber :: Number}
   deriving (Eq, Ord, Read, Show)
 
 _ImaginaryNumber = Core.Name "hydra.ext.python.syntax.ImaginaryNumber"
 
-newtype CapturePattern = 
+newtype CapturePattern =
   CapturePattern {
     unCapturePattern :: PatternCaptureTarget}
   deriving (Eq, Ord, Read, Show)
 
 _CapturePattern = Core.Name "hydra.ext.python.syntax.CapturePattern"
 
-newtype PatternCaptureTarget = 
+newtype PatternCaptureTarget =
   PatternCaptureTarget {
     unPatternCaptureTarget :: Name}
   deriving (Eq, Ord, Read, Show)
 
 _PatternCaptureTarget = Core.Name "hydra.ext.python.syntax.PatternCaptureTarget"
 
-newtype ValuePattern = 
+newtype ValuePattern =
   ValuePattern {
     unValuePattern :: Attribute}
   deriving (Eq, Ord, Read, Show)
 
 _ValuePattern = Core.Name "hydra.ext.python.syntax.ValuePattern"
 
-newtype Attribute = 
+newtype Attribute =
   Attribute {
     unAttribute :: [Name]}
   deriving (Eq, Ord, Read, Show)
 
 _Attribute = Core.Name "hydra.ext.python.syntax.Attribute"
 
-newtype NameOrAttribute = 
+newtype NameOrAttribute =
   NameOrAttribute {
     unNameOrAttribute :: [Name]}
   deriving (Eq, Ord, Read, Show)
 
 _NameOrAttribute = Core.Name "hydra.ext.python.syntax.NameOrAttribute"
 
-newtype GroupPattern = 
+newtype GroupPattern =
   GroupPattern {
     unGroupPattern :: Pattern}
   deriving (Eq, Ord, Read, Show)
 
 _GroupPattern = Core.Name "hydra.ext.python.syntax.GroupPattern"
 
-data SequencePattern = 
+data SequencePattern =
   SequencePatternList (Maybe MaybeSequencePattern) |
   SequencePatternTuple (Maybe OpenSequencePattern)
   deriving (Eq, Ord, Read, Show)
@@ -1251,7 +1251,7 @@ _SequencePattern_list = Core.Name "list"
 
 _SequencePattern_tuple = Core.Name "tuple"
 
-data OpenSequencePattern = 
+data OpenSequencePattern =
   OpenSequencePattern {
     openSequencePatternHead :: MaybeStarPattern,
     openSequencePatternTail :: (Maybe MaybeSequencePattern)}
@@ -1263,14 +1263,14 @@ _OpenSequencePattern_head = Core.Name "head"
 
 _OpenSequencePattern_tail = Core.Name "tail"
 
-newtype MaybeSequencePattern = 
+newtype MaybeSequencePattern =
   MaybeSequencePattern {
     unMaybeSequencePattern :: [MaybeStarPattern]}
   deriving (Eq, Ord, Read, Show)
 
 _MaybeSequencePattern = Core.Name "hydra.ext.python.syntax.MaybeSequencePattern"
 
-data MaybeStarPattern = 
+data MaybeStarPattern =
   MaybeStarPatternStar StarPattern |
   MaybeStarPatternPattern Pattern
   deriving (Eq, Ord, Read, Show)
@@ -1281,9 +1281,9 @@ _MaybeStarPattern_star = Core.Name "star"
 
 _MaybeStarPattern_pattern = Core.Name "pattern"
 
-data StarPattern = 
+data StarPattern =
   StarPatternCapture PatternCaptureTarget |
-  StarPatternWildcard 
+  StarPatternWildcard
   deriving (Eq, Ord, Read, Show)
 
 _StarPattern = Core.Name "hydra.ext.python.syntax.StarPattern"
@@ -1292,7 +1292,7 @@ _StarPattern_capture = Core.Name "capture"
 
 _StarPattern_wildcard = Core.Name "wildcard"
 
-data MappingPattern = 
+data MappingPattern =
   MappingPattern {
     mappingPatternItems :: (Maybe ItemsPattern),
     mappingPatternDoubleStar :: (Maybe DoubleStarPattern)}
@@ -1304,14 +1304,14 @@ _MappingPattern_items = Core.Name "items"
 
 _MappingPattern_doubleStar = Core.Name "doubleStar"
 
-newtype ItemsPattern = 
+newtype ItemsPattern =
   ItemsPattern {
     unItemsPattern :: [KeyValuePattern]}
   deriving (Eq, Ord, Read, Show)
 
 _ItemsPattern = Core.Name "hydra.ext.python.syntax.ItemsPattern"
 
-data KeyValuePattern = 
+data KeyValuePattern =
   KeyValuePattern {
     keyValuePatternKey :: LiteralExpressionOrAttribute,
     keyValuePatternValue :: Pattern}
@@ -1323,7 +1323,7 @@ _KeyValuePattern_key = Core.Name "key"
 
 _KeyValuePattern_value = Core.Name "value"
 
-data LiteralExpressionOrAttribute = 
+data LiteralExpressionOrAttribute =
   LiteralExpressionOrAttributeLiteral LiteralExpression |
   LiteralExpressionOrAttributeAttribute Attribute
   deriving (Eq, Ord, Read, Show)
@@ -1334,14 +1334,14 @@ _LiteralExpressionOrAttribute_literal = Core.Name "literal"
 
 _LiteralExpressionOrAttribute_attribute = Core.Name "attribute"
 
-newtype DoubleStarPattern = 
+newtype DoubleStarPattern =
   DoubleStarPattern {
     unDoubleStarPattern :: PatternCaptureTarget}
   deriving (Eq, Ord, Read, Show)
 
 _DoubleStarPattern = Core.Name "hydra.ext.python.syntax.DoubleStarPattern"
 
-data ClassPattern = 
+data ClassPattern =
   ClassPattern {
     classPatternNameOrAttribute :: NameOrAttribute,
     classPatternPositionalPatterns :: (Maybe PositionalPatterns),
@@ -1356,21 +1356,21 @@ _ClassPattern_positionalPatterns = Core.Name "positionalPatterns"
 
 _ClassPattern_keywordPatterns = Core.Name "keywordPatterns"
 
-newtype PositionalPatterns = 
+newtype PositionalPatterns =
   PositionalPatterns {
     unPositionalPatterns :: [Pattern]}
   deriving (Eq, Ord, Read, Show)
 
 _PositionalPatterns = Core.Name "hydra.ext.python.syntax.PositionalPatterns"
 
-newtype KeywordPatterns = 
+newtype KeywordPatterns =
   KeywordPatterns {
     unKeywordPatterns :: [KeywordPattern]}
   deriving (Eq, Ord, Read, Show)
 
 _KeywordPatterns = Core.Name "hydra.ext.python.syntax.KeywordPatterns"
 
-data KeywordPattern = 
+data KeywordPattern =
   KeywordPattern {
     keywordPatternName :: Name,
     keywordPatternPattern :: Pattern}
@@ -1382,7 +1382,7 @@ _KeywordPattern_name = Core.Name "name"
 
 _KeywordPattern_pattern = Core.Name "pattern"
 
-data TypeAlias = 
+data TypeAlias =
   TypeAlias {
     typeAliasName :: Name,
     typeAliasTypeParams :: [TypeParameter],
@@ -1397,7 +1397,7 @@ _TypeAlias_typeParams = Core.Name "typeParams"
 
 _TypeAlias_expression = Core.Name "expression"
 
-data TypeParameter = 
+data TypeParameter =
   TypeParameterSimple SimpleTypeParameter |
   TypeParameterStar StarTypeParameter |
   TypeParameterDoubleStar DoubleStarTypeParameter
@@ -1411,7 +1411,7 @@ _TypeParameter_star = Core.Name "star"
 
 _TypeParameter_doubleStar = Core.Name "doubleStar"
 
-data SimpleTypeParameter = 
+data SimpleTypeParameter =
   SimpleTypeParameter {
     simpleTypeParameterName :: Name,
     simpleTypeParameterBound :: (Maybe Expression),
@@ -1426,7 +1426,7 @@ _SimpleTypeParameter_bound = Core.Name "bound"
 
 _SimpleTypeParameter_default = Core.Name "default"
 
-data StarTypeParameter = 
+data StarTypeParameter =
   StarTypeParameter {
     starTypeParameterName :: Name,
     starTypeParameterDefault :: (Maybe StarExpression)}
@@ -1438,7 +1438,7 @@ _StarTypeParameter_name = Core.Name "name"
 
 _StarTypeParameter_default = Core.Name "default"
 
-data DoubleStarTypeParameter = 
+data DoubleStarTypeParameter =
   DoubleStarTypeParameter {
     doubleStarTypeParameterName :: Name,
     doubleStarTypeParameterDefault :: (Maybe Expression)}
@@ -1450,7 +1450,7 @@ _DoubleStarTypeParameter_name = Core.Name "name"
 
 _DoubleStarTypeParameter_default = Core.Name "default"
 
-data Expression = 
+data Expression =
   ExpressionConditional Conditional |
   ExpressionSimple Disjunction |
   ExpressionLambda Lambda
@@ -1464,7 +1464,7 @@ _Expression_simple = Core.Name "simple"
 
 _Expression_lambda = Core.Name "lambda"
 
-data Conditional = 
+data Conditional =
   Conditional {
     conditionalBody :: Disjunction,
     conditionalIf :: Disjunction,
@@ -1479,7 +1479,7 @@ _Conditional_if = Core.Name "if"
 
 _Conditional_else = Core.Name "else"
 
-data YieldExpression = 
+data YieldExpression =
   YieldExpressionFrom Expression |
   YieldExpressionSimple [StarExpression]
   deriving (Eq, Ord, Read, Show)
@@ -1490,7 +1490,7 @@ _YieldExpression_from = Core.Name "from"
 
 _YieldExpression_simple = Core.Name "simple"
 
-data StarExpression = 
+data StarExpression =
   StarExpressionStar BitwiseOr |
   StarExpressionSimple Expression
   deriving (Eq, Ord, Read, Show)
@@ -1501,14 +1501,14 @@ _StarExpression_star = Core.Name "star"
 
 _StarExpression_simple = Core.Name "simple"
 
-newtype StarNamedExpressions = 
+newtype StarNamedExpressions =
   StarNamedExpressions {
     unStarNamedExpressions :: [StarNamedExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _StarNamedExpressions = Core.Name "hydra.ext.python.syntax.StarNamedExpressions"
 
-data StarNamedExpression = 
+data StarNamedExpression =
   StarNamedExpressionStar BitwiseOr |
   StarNamedExpressionSimple NamedExpression
   deriving (Eq, Ord, Read, Show)
@@ -1519,7 +1519,7 @@ _StarNamedExpression_star = Core.Name "star"
 
 _StarNamedExpression_simple = Core.Name "simple"
 
-data AssignmentExpression = 
+data AssignmentExpression =
   AssignmentExpression {
     assignmentExpressionName :: Name,
     assignmentExpressionExpression :: Expression}
@@ -1531,7 +1531,7 @@ _AssignmentExpression_name = Core.Name "name"
 
 _AssignmentExpression_expression = Core.Name "expression"
 
-data NamedExpression = 
+data NamedExpression =
   NamedExpressionAssignment AssignmentExpression |
   NamedExpressionSimple Expression
   deriving (Eq, Ord, Read, Show)
@@ -1542,21 +1542,21 @@ _NamedExpression_assignment = Core.Name "assignment"
 
 _NamedExpression_simple = Core.Name "simple"
 
-newtype Disjunction = 
+newtype Disjunction =
   Disjunction {
     unDisjunction :: [Conjunction]}
   deriving (Eq, Ord, Read, Show)
 
 _Disjunction = Core.Name "hydra.ext.python.syntax.Disjunction"
 
-newtype Conjunction = 
+newtype Conjunction =
   Conjunction {
     unConjunction :: [Inversion]}
   deriving (Eq, Ord, Read, Show)
 
 _Conjunction = Core.Name "hydra.ext.python.syntax.Conjunction"
 
-data Inversion = 
+data Inversion =
   InversionNot Inversion |
   InversionSimple Comparison
   deriving (Eq, Ord, Read, Show)
@@ -1567,7 +1567,7 @@ _Inversion_not = Core.Name "not"
 
 _Inversion_simple = Core.Name "simple"
 
-data Comparison = 
+data Comparison =
   Comparison {
     comparisonLhs :: BitwiseOr,
     comparisonRhs :: [CompareOpBitwiseOrPair]}
@@ -1579,7 +1579,7 @@ _Comparison_lhs = Core.Name "lhs"
 
 _Comparison_rhs = Core.Name "rhs"
 
-data CompareOpBitwiseOrPair = 
+data CompareOpBitwiseOrPair =
   CompareOpBitwiseOrPair {
     compareOpBitwiseOrPairOperator :: CompareOp,
     compareOpBitwiseOrPairRhs :: BitwiseOr}
@@ -1591,7 +1591,7 @@ _CompareOpBitwiseOrPair_operator = Core.Name "operator"
 
 _CompareOpBitwiseOrPair_rhs = Core.Name "rhs"
 
-data CompareOp = 
+data CompareOp =
   CompareOpEq  |
   CompareOpNoteq  |
   CompareOpLte  |
@@ -1601,7 +1601,7 @@ data CompareOp =
   CompareOpNotin  |
   CompareOpIn  |
   CompareOpIsnot  |
-  CompareOpIs 
+  CompareOpIs
   deriving (Eq, Ord, Read, Show)
 
 _CompareOp = Core.Name "hydra.ext.python.syntax.CompareOp"
@@ -1626,7 +1626,7 @@ _CompareOp_isnot = Core.Name "isnot"
 
 _CompareOp_is = Core.Name "is"
 
-data BitwiseOr = 
+data BitwiseOr =
   BitwiseOr {
     bitwiseOrLhs :: (Maybe BitwiseOr),
     bitwiseOrRhs :: BitwiseXor}
@@ -1638,7 +1638,7 @@ _BitwiseOr_lhs = Core.Name "lhs"
 
 _BitwiseOr_rhs = Core.Name "rhs"
 
-data BitwiseXor = 
+data BitwiseXor =
   BitwiseXor {
     bitwiseXorLhs :: (Maybe BitwiseXor),
     bitwiseXorRhs :: BitwiseAnd}
@@ -1650,7 +1650,7 @@ _BitwiseXor_lhs = Core.Name "lhs"
 
 _BitwiseXor_rhs = Core.Name "rhs"
 
-data BitwiseAnd = 
+data BitwiseAnd =
   BitwiseAnd {
     bitwiseAndLhs :: (Maybe BitwiseAnd),
     bitwiseAndRhs :: ShiftExpression}
@@ -1662,7 +1662,7 @@ _BitwiseAnd_lhs = Core.Name "lhs"
 
 _BitwiseAnd_rhs = Core.Name "rhs"
 
-data ShiftExpression = 
+data ShiftExpression =
   ShiftExpression {
     shiftExpressionLhs :: (Maybe ShiftLhs),
     shiftExpressionRhs :: Sum}
@@ -1674,7 +1674,7 @@ _ShiftExpression_lhs = Core.Name "lhs"
 
 _ShiftExpression_rhs = Core.Name "rhs"
 
-data ShiftLhs = 
+data ShiftLhs =
   ShiftLhs {
     shiftLhsOperand :: ShiftExpression,
     shiftLhsOperator :: ShiftOp}
@@ -1686,9 +1686,9 @@ _ShiftLhs_operand = Core.Name "operand"
 
 _ShiftLhs_operator = Core.Name "operator"
 
-data ShiftOp = 
+data ShiftOp =
   ShiftOpLeft  |
-  ShiftOpRight 
+  ShiftOpRight
   deriving (Eq, Ord, Read, Show)
 
 _ShiftOp = Core.Name "hydra.ext.python.syntax.ShiftOp"
@@ -1697,7 +1697,7 @@ _ShiftOp_left = Core.Name "left"
 
 _ShiftOp_right = Core.Name "right"
 
-data Sum = 
+data Sum =
   Sum {
     sumLhs :: (Maybe SumLhs),
     sumRhs :: Term}
@@ -1709,7 +1709,7 @@ _Sum_lhs = Core.Name "lhs"
 
 _Sum_rhs = Core.Name "rhs"
 
-data SumLhs = 
+data SumLhs =
   SumLhs {
     sumLhsOperand :: Sum,
     sumLhsOperator :: SumOp}
@@ -1721,9 +1721,9 @@ _SumLhs_operand = Core.Name "operand"
 
 _SumLhs_operator = Core.Name "operator"
 
-data SumOp = 
+data SumOp =
   SumOpAdd  |
-  SumOpSub 
+  SumOpSub
   deriving (Eq, Ord, Read, Show)
 
 _SumOp = Core.Name "hydra.ext.python.syntax.SumOp"
@@ -1732,7 +1732,7 @@ _SumOp_add = Core.Name "add"
 
 _SumOp_sub = Core.Name "sub"
 
-data Term = 
+data Term =
   Term {
     termLhs :: (Maybe TermLhs),
     termRhs :: Factor}
@@ -1744,7 +1744,7 @@ _Term_lhs = Core.Name "lhs"
 
 _Term_rhs = Core.Name "rhs"
 
-data TermLhs = 
+data TermLhs =
   TermLhs {
     termLhsOperand :: Term,
     termLhsOperator :: TermOp}
@@ -1756,12 +1756,12 @@ _TermLhs_operand = Core.Name "operand"
 
 _TermLhs_operator = Core.Name "operator"
 
-data TermOp = 
+data TermOp =
   TermOpMul  |
   TermOpDiv  |
   TermOpFloordiv  |
   TermOpMod  |
-  TermOpMatmul 
+  TermOpMatmul
   deriving (Eq, Ord, Read, Show)
 
 _TermOp = Core.Name "hydra.ext.python.syntax.TermOp"
@@ -1776,7 +1776,7 @@ _TermOp_mod = Core.Name "mod"
 
 _TermOp_matmul = Core.Name "matmul"
 
-data Factor = 
+data Factor =
   FactorPositive Factor |
   FactorNegative Factor |
   FactorComplement Factor |
@@ -1793,7 +1793,7 @@ _Factor_complement = Core.Name "complement"
 
 _Factor_simple = Core.Name "simple"
 
-data Power = 
+data Power =
   Power {
     powerLhs :: AwaitPrimary,
     powerRhs :: (Maybe Factor)}
@@ -1805,7 +1805,7 @@ _Power_lhs = Core.Name "lhs"
 
 _Power_rhs = Core.Name "rhs"
 
-data AwaitPrimary = 
+data AwaitPrimary =
   AwaitPrimary {
     awaitPrimaryAwait :: Bool,
     awaitPrimaryPrimary :: Primary}
@@ -1817,7 +1817,7 @@ _AwaitPrimary_await = Core.Name "await"
 
 _AwaitPrimary_primary = Core.Name "primary"
 
-data Primary = 
+data Primary =
   PrimarySimple Atom |
   PrimaryCompound PrimaryWithRhs
   deriving (Eq, Ord, Read, Show)
@@ -1828,7 +1828,7 @@ _Primary_simple = Core.Name "simple"
 
 _Primary_compound = Core.Name "compound"
 
-data PrimaryWithRhs = 
+data PrimaryWithRhs =
   PrimaryWithRhs {
     primaryWithRhsPrimary :: Primary,
     primaryWithRhsRhs :: PrimaryRhs}
@@ -1840,7 +1840,7 @@ _PrimaryWithRhs_primary = Core.Name "primary"
 
 _PrimaryWithRhs_rhs = Core.Name "rhs"
 
-data PrimaryRhs = 
+data PrimaryRhs =
   PrimaryRhsProject Name |
   PrimaryRhsGenexp Genexp |
   PrimaryRhsCall Args |
@@ -1857,7 +1857,7 @@ _PrimaryRhs_call = Core.Name "call"
 
 _PrimaryRhs_slices = Core.Name "slices"
 
-data Slices = 
+data Slices =
   Slices {
     slicesHead :: Slice,
     slicesTail :: [SliceOrStarredExpression]}
@@ -1869,7 +1869,7 @@ _Slices_head = Core.Name "head"
 
 _Slices_tail = Core.Name "tail"
 
-data SliceOrStarredExpression = 
+data SliceOrStarredExpression =
   SliceOrStarredExpressionSlice Slice |
   SliceOrStarredExpressionStarred StarredExpression
   deriving (Eq, Ord, Read, Show)
@@ -1880,7 +1880,7 @@ _SliceOrStarredExpression_slice = Core.Name "slice"
 
 _SliceOrStarredExpression_starred = Core.Name "starred"
 
-data Slice = 
+data Slice =
   SliceNamed NamedExpression |
   SliceSlice_ SliceExpression
   deriving (Eq, Ord, Read, Show)
@@ -1891,7 +1891,7 @@ _Slice_named = Core.Name "named"
 
 _Slice_slice_ = Core.Name "slice_"
 
-data SliceExpression = 
+data SliceExpression =
   SliceExpression {
     sliceExpressionStart :: (Maybe Expression),
     sliceExpressionStop :: (Maybe Expression),
@@ -1906,7 +1906,7 @@ _SliceExpression_stop = Core.Name "stop"
 
 _SliceExpression_step = Core.Name "step"
 
-data Atom = 
+data Atom =
   AtomName Name |
   AtomTrue  |
   AtomFalse  |
@@ -1922,7 +1922,7 @@ data Atom =
   AtomSet Set |
   AtomDictcomp Dictcomp |
   AtomSetcomp Setcomp |
-  AtomEllipsis 
+  AtomEllipsis
   deriving (Eq, Ord, Read, Show)
 
 _Atom = Core.Name "hydra.ext.python.syntax.Atom"
@@ -1959,7 +1959,7 @@ _Atom_setcomp = Core.Name "setcomp"
 
 _Atom_ellipsis = Core.Name "ellipsis"
 
-data Group = 
+data Group =
   GroupYield YieldExpression |
   GroupExpression NamedExpression
   deriving (Eq, Ord, Read, Show)
@@ -1970,7 +1970,7 @@ _Group_yield = Core.Name "yield"
 
 _Group_expression = Core.Name "expression"
 
-data Lambda = 
+data Lambda =
   Lambda {
     lambdaParams :: LambdaParameters,
     lambdaBody :: Expression}
@@ -1982,7 +1982,7 @@ _Lambda_params = Core.Name "params"
 
 _Lambda_body = Core.Name "body"
 
-data LambdaParameters = 
+data LambdaParameters =
   LambdaParameters {
     lambdaParametersSlashNoDefault :: (Maybe LambdaSlashNoDefault),
     lambdaParametersParamNoDefault :: [LambdaParamNoDefault],
@@ -2000,7 +2000,7 @@ _LambdaParameters_paramWithDefault = Core.Name "paramWithDefault"
 
 _LambdaParameters_starEtc = Core.Name "starEtc"
 
-data LambdaSlashNoDefault = 
+data LambdaSlashNoDefault =
   LambdaSlashNoDefault {
     lambdaSlashNoDefaultParameters :: [LambdaParamNoDefault]}
   deriving (Eq, Ord, Read, Show)
@@ -2009,7 +2009,7 @@ _LambdaSlashNoDefault = Core.Name "hydra.ext.python.syntax.LambdaSlashNoDefault"
 
 _LambdaSlashNoDefault_parameters = Core.Name "parameters"
 
-data LambdaSlashWithDefault = 
+data LambdaSlashWithDefault =
   LambdaSlashWithDefault {
     lambdaSlashWithDefaultParamNoDefault :: [LambdaParamNoDefault],
     lambdaSlashWithDefaultParamWithDefault :: [LambdaParamWithDefault]}
@@ -2021,7 +2021,7 @@ _LambdaSlashWithDefault_paramNoDefault = Core.Name "paramNoDefault"
 
 _LambdaSlashWithDefault_paramWithDefault = Core.Name "paramWithDefault"
 
-data LambdaStarEtc = 
+data LambdaStarEtc =
   LambdaStarEtcStar Bool |
   LambdaStarEtcParamNoDefault LambdaParamNoDefault |
   LambdaStarEtcParamMaybeDefault [LambdaParamMaybeDefault] |
@@ -2038,21 +2038,21 @@ _LambdaStarEtc_paramMaybeDefault = Core.Name "paramMaybeDefault"
 
 _LambdaStarEtc_kwds = Core.Name "kwds"
 
-newtype LambdaKwds = 
+newtype LambdaKwds =
   LambdaKwds {
     unLambdaKwds :: LambdaParamNoDefault}
   deriving (Eq, Ord, Read, Show)
 
 _LambdaKwds = Core.Name "hydra.ext.python.syntax.LambdaKwds"
 
-newtype LambdaParamNoDefault = 
+newtype LambdaParamNoDefault =
   LambdaParamNoDefault {
     unLambdaParamNoDefault :: Name}
   deriving (Eq, Ord, Read, Show)
 
 _LambdaParamNoDefault = Core.Name "hydra.ext.python.syntax.LambdaParamNoDefault"
 
-data LambdaParamWithDefault = 
+data LambdaParamWithDefault =
   LambdaParamWithDefault {
     lambdaParamWithDefaultParam :: Name,
     lambdaParamWithDefaultDefault :: (Maybe Default)}
@@ -2064,7 +2064,7 @@ _LambdaParamWithDefault_param = Core.Name "param"
 
 _LambdaParamWithDefault_default = Core.Name "default"
 
-data LambdaParamMaybeDefault = 
+data LambdaParamMaybeDefault =
   LambdaParamMaybeDefault {
     lambdaParamMaybeDefaultParam :: Name,
     lambdaParamMaybeDefaultDefault :: (Maybe Default)}
@@ -2076,35 +2076,35 @@ _LambdaParamMaybeDefault_param = Core.Name "param"
 
 _LambdaParamMaybeDefault_default = Core.Name "default"
 
-newtype List = 
+newtype List =
   List {
     unList :: [StarNamedExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _List = Core.Name "hydra.ext.python.syntax.List"
 
-newtype Tuple = 
+newtype Tuple =
   Tuple {
     unTuple :: [StarNamedExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _Tuple = Core.Name "hydra.ext.python.syntax.Tuple"
 
-newtype Set = 
+newtype Set =
   Set {
     unSet :: [StarNamedExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _Set = Core.Name "hydra.ext.python.syntax.Set"
 
-newtype Dict = 
+newtype Dict =
   Dict {
     unDict :: [DoubleStarredKvpair]}
   deriving (Eq, Ord, Read, Show)
 
 _Dict = Core.Name "hydra.ext.python.syntax.Dict"
 
-data DoubleStarredKvpair = 
+data DoubleStarredKvpair =
   DoubleStarredKvpairStarred BitwiseOr |
   DoubleStarredKvpairPair Kvpair
   deriving (Eq, Ord, Read, Show)
@@ -2115,7 +2115,7 @@ _DoubleStarredKvpair_starred = Core.Name "starred"
 
 _DoubleStarredKvpair_pair = Core.Name "pair"
 
-data Kvpair = 
+data Kvpair =
   Kvpair {
     kvpairKey :: Expression,
     kvpairValue :: Expression}
@@ -2127,14 +2127,14 @@ _Kvpair_key = Core.Name "key"
 
 _Kvpair_value = Core.Name "value"
 
-newtype ForIfClauses = 
+newtype ForIfClauses =
   ForIfClauses {
     unForIfClauses :: [ForIfClause]}
   deriving (Eq, Ord, Read, Show)
 
 _ForIfClauses = Core.Name "hydra.ext.python.syntax.ForIfClauses"
 
-data ForIfClause = 
+data ForIfClause =
   ForIfClause {
     forIfClauseAsync :: Bool,
     forIfClauseTargets :: [StarTarget],
@@ -2152,7 +2152,7 @@ _ForIfClause_in = Core.Name "in"
 
 _ForIfClause_ifs = Core.Name "ifs"
 
-data Listcomp = 
+data Listcomp =
   Listcomp {
     listcompExpression :: NamedExpression,
     listcompForIfClauses :: ForIfClauses}
@@ -2164,7 +2164,7 @@ _Listcomp_expression = Core.Name "expression"
 
 _Listcomp_forIfClauses = Core.Name "forIfClauses"
 
-data Setcomp = 
+data Setcomp =
   Setcomp {
     setcompExpression :: NamedExpression,
     setcompForIfClauses :: ForIfClauses}
@@ -2176,7 +2176,7 @@ _Setcomp_expression = Core.Name "expression"
 
 _Setcomp_forIfClauses = Core.Name "forIfClauses"
 
-data Genexp = 
+data Genexp =
   Genexp {
     genexpHead :: GenexpHead,
     genexpTail :: ForIfClauses}
@@ -2188,7 +2188,7 @@ _Genexp_head = Core.Name "head"
 
 _Genexp_tail = Core.Name "tail"
 
-data GenexpHead = 
+data GenexpHead =
   GenexpHeadAssignment AssignmentExpression |
   GenexpHeadExpression Expression
   deriving (Eq, Ord, Read, Show)
@@ -2199,7 +2199,7 @@ _GenexpHead_assignment = Core.Name "assignment"
 
 _GenexpHead_expression = Core.Name "expression"
 
-data Dictcomp = 
+data Dictcomp =
   Dictcomp {
     dictcompKvpair :: Kvpair,
     dictcompForIfClauses :: ForIfClauses}
@@ -2211,7 +2211,7 @@ _Dictcomp_kvpair = Core.Name "kvpair"
 
 _Dictcomp_forIfClauses = Core.Name "forIfClauses"
 
-data Args = 
+data Args =
   Args {
     argsPositional :: [PosArg],
     argsKwargOrStarred :: [KwargOrStarred],
@@ -2226,7 +2226,7 @@ _Args_kwargOrStarred = Core.Name "kwargOrStarred"
 
 _Args_kwargOrDoubleStarred = Core.Name "kwargOrDoubleStarred"
 
-data PosArg = 
+data PosArg =
   PosArgStarred StarredExpression |
   PosArgAssignment AssignmentExpression |
   PosArgExpression Expression
@@ -2240,14 +2240,14 @@ _PosArg_assignment = Core.Name "assignment"
 
 _PosArg_expression = Core.Name "expression"
 
-newtype StarredExpression = 
+newtype StarredExpression =
   StarredExpression {
     unStarredExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _StarredExpression = Core.Name "hydra.ext.python.syntax.StarredExpression"
 
-data KwargOrStarred = 
+data KwargOrStarred =
   KwargOrStarredKwarg Kwarg |
   KwargOrStarredStarred StarredExpression
   deriving (Eq, Ord, Read, Show)
@@ -2258,7 +2258,7 @@ _KwargOrStarred_kwarg = Core.Name "kwarg"
 
 _KwargOrStarred_starred = Core.Name "starred"
 
-data Kwarg = 
+data Kwarg =
   Kwarg {
     kwargName :: Name,
     kwargValue :: Expression}
@@ -2270,7 +2270,7 @@ _Kwarg_name = Core.Name "name"
 
 _Kwarg_value = Core.Name "value"
 
-data KwargOrDoubleStarred = 
+data KwargOrDoubleStarred =
   KwargOrDoubleStarredKwarg Kwarg |
   KwargOrDoubleStarredDoubleStarred Expression
   deriving (Eq, Ord, Read, Show)
@@ -2281,21 +2281,21 @@ _KwargOrDoubleStarred_kwarg = Core.Name "kwarg"
 
 _KwargOrDoubleStarred_doubleStarred = Core.Name "doubleStarred"
 
-newtype StarTargetsListSeq = 
+newtype StarTargetsListSeq =
   StarTargetsListSeq {
     unStarTargetsListSeq :: [StarTarget]}
   deriving (Eq, Ord, Read, Show)
 
 _StarTargetsListSeq = Core.Name "hydra.ext.python.syntax.StarTargetsListSeq"
 
-newtype StarTargetsTupleSeq = 
+newtype StarTargetsTupleSeq =
   StarTargetsTupleSeq {
     unStarTargetsTupleSeq :: [StarTarget]}
   deriving (Eq, Ord, Read, Show)
 
 _StarTargetsTupleSeq = Core.Name "hydra.ext.python.syntax.StarTargetsTupleSeq"
 
-data StarTarget = 
+data StarTarget =
   StarTargetStarred StarTarget |
   StarTargetUnstarred TargetWithStarAtom
   deriving (Eq, Ord, Read, Show)
@@ -2306,7 +2306,7 @@ _StarTarget_starred = Core.Name "starred"
 
 _StarTarget_unstarred = Core.Name "unstarred"
 
-data TargetWithStarAtom = 
+data TargetWithStarAtom =
   TargetWithStarAtomProject TPrimaryAndName |
   TargetWithStarAtomSlices TPrimaryAndSlices |
   TargetWithStarAtomAtom StarAtom
@@ -2320,7 +2320,7 @@ _TargetWithStarAtom_slices = Core.Name "slices"
 
 _TargetWithStarAtom_atom = Core.Name "atom"
 
-data TPrimaryAndName = 
+data TPrimaryAndName =
   TPrimaryAndName {
     tPrimaryAndNamePrimary :: TPrimary,
     tPrimaryAndNameName :: Name}
@@ -2332,7 +2332,7 @@ _TPrimaryAndName_primary = Core.Name "primary"
 
 _TPrimaryAndName_name = Core.Name "name"
 
-data TPrimaryAndSlices = 
+data TPrimaryAndSlices =
   TPrimaryAndSlices {
     tPrimaryAndSlicesPrimary :: TPrimary,
     tPrimaryAndSlicesSlices :: Slices}
@@ -2344,7 +2344,7 @@ _TPrimaryAndSlices_primary = Core.Name "primary"
 
 _TPrimaryAndSlices_slices = Core.Name "slices"
 
-data StarAtom = 
+data StarAtom =
   StarAtomName Name |
   StarAtomTargetWithStarAtom TargetWithStarAtom |
   StarAtomStarTargetsTupleSeq (Maybe StarTargetsTupleSeq) |
@@ -2361,7 +2361,7 @@ _StarAtom_starTargetsTupleSeq = Core.Name "starTargetsTupleSeq"
 
 _StarAtom_starTargetsListSeq = Core.Name "starTargetsListSeq"
 
-data SingleTarget = 
+data SingleTarget =
   SingleTargetSubscriptAttributeTarget SingleSubscriptAttributeTarget |
   SingleTargetName Name |
   SingleTargetParens SingleTarget
@@ -2375,7 +2375,7 @@ _SingleTarget_name = Core.Name "name"
 
 _SingleTarget_parens = Core.Name "parens"
 
-data SingleSubscriptAttributeTarget = 
+data SingleSubscriptAttributeTarget =
   SingleSubscriptAttributeTargetPrimaryAndName TPrimaryAndName |
   SingleSubscriptAttributeTargetPrimaryAndSlices TPrimaryAndSlices
   deriving (Eq, Ord, Read, Show)
@@ -2386,7 +2386,7 @@ _SingleSubscriptAttributeTarget_primaryAndName = Core.Name "primaryAndName"
 
 _SingleSubscriptAttributeTarget_primaryAndSlices = Core.Name "primaryAndSlices"
 
-data TPrimary = 
+data TPrimary =
   TPrimaryPrimaryAndName TPrimaryAndName |
   TPrimaryPrimaryAndSlices TPrimaryAndSlices |
   TPrimaryPrimaryAndGenexp TPrimaryAndGenexp |
@@ -2406,7 +2406,7 @@ _TPrimary_primaryAndArguments = Core.Name "primaryAndArguments"
 
 _TPrimary_atom = Core.Name "atom"
 
-data TPrimaryAndGenexp = 
+data TPrimaryAndGenexp =
   TPrimaryAndGenexp {
     tPrimaryAndGenexpPrimary :: TPrimary,
     tPrimaryAndGenexpGenexp :: Genexp}
@@ -2418,7 +2418,7 @@ _TPrimaryAndGenexp_primary = Core.Name "primary"
 
 _TPrimaryAndGenexp_genexp = Core.Name "genexp"
 
-data TPrimaryAndArguments = 
+data TPrimaryAndArguments =
   TPrimaryAndArguments {
     tPrimaryAndArgumentsPrimary :: TPrimary,
     tPrimaryAndArgumentsArguments :: (Maybe Args)}
@@ -2430,14 +2430,14 @@ _TPrimaryAndArguments_primary = Core.Name "primary"
 
 _TPrimaryAndArguments_arguments = Core.Name "arguments"
 
-newtype DelTargets = 
+newtype DelTargets =
   DelTargets {
     unDelTargets :: [DelTarget]}
   deriving (Eq, Ord, Read, Show)
 
 _DelTargets = Core.Name "hydra.ext.python.syntax.DelTargets"
 
-data DelTarget = 
+data DelTarget =
   DelTargetPrimaryAndName TPrimaryAndName |
   DelTargetPrimaryAndSlices TPrimaryAndSlices |
   DelTargetDelTAtom DelTAtom
@@ -2451,7 +2451,7 @@ _DelTarget_primaryAndSlices = Core.Name "primaryAndSlices"
 
 _DelTarget_delTAtom = Core.Name "delTAtom"
 
-data DelTAtom = 
+data DelTAtom =
   DelTAtomName Name |
   DelTAtomTarget DelTarget |
   DelTAtomTargets DelTargets
@@ -2465,7 +2465,7 @@ _DelTAtom_target = Core.Name "target"
 
 _DelTAtom_targets = Core.Name "targets"
 
-data TypeExpression = 
+data TypeExpression =
   TypeExpressionExpression Expression |
   TypeExpressionStarredExpression Expression |
   TypeExpressionDoubleStarredExpression Expression
@@ -2479,7 +2479,7 @@ _TypeExpression_starredExpression = Core.Name "starredExpression"
 
 _TypeExpression_doubleStarredExpression = Core.Name "doubleStarredExpression"
 
-newtype FuncTypeComment = 
+newtype FuncTypeComment =
   FuncTypeComment {
     unFuncTypeComment :: TypeComment}
   deriving (Eq, Ord, Read, Show)

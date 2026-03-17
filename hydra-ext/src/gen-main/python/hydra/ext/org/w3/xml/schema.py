@@ -240,91 +240,91 @@ ConstrainingFacet.TYPE_ = hydra.core.Name("hydra.ext.org.w3.xml.schema.Constrain
 
 class Datatype(Enum):
     ANY_SIMPLE_TYPE = hydra.core.Name("anySimpleType")
-    
+
     ANY_TYPE = hydra.core.Name("anyType")
-    
+
     ANY_U_R_I = hydra.core.Name("anyURI")
-    
+
     BASE64_BINARY = hydra.core.Name("base64Binary")
-    
+
     BOOLEAN = hydra.core.Name("boolean")
-    
+
     BYTE = hydra.core.Name("byte")
-    
+
     DATE = hydra.core.Name("date")
-    
+
     DATE_TIME = hydra.core.Name("dateTime")
-    
+
     DECIMAL = hydra.core.Name("decimal")
-    
+
     DOUBLE = hydra.core.Name("double")
-    
+
     DURATION = hydra.core.Name("duration")
-    
+
     E_N_T_I_T_I_E_S = hydra.core.Name("ENTITIES")
-    
+
     E_N_T_I_T_Y = hydra.core.Name("ENTITY")
-    
+
     FLOAT = hydra.core.Name("float")
-    
+
     G_DAY = hydra.core.Name("gDay")
-    
+
     G_MONTH = hydra.core.Name("gMonth")
-    
+
     G_MONTH_DAY = hydra.core.Name("gMonthDay")
-    
+
     G_YEAR = hydra.core.Name("gYear")
-    
+
     G_YEAR_MONTH = hydra.core.Name("gYearMonth")
-    
+
     HEX_BINARY = hydra.core.Name("hexBinary")
-    
+
     I_D = hydra.core.Name("ID")
-    
+
     I_D_R_E_F = hydra.core.Name("IDREF")
-    
+
     I_D_R_E_F_S = hydra.core.Name("IDREFS")
-    
+
     INT = hydra.core.Name("int")
-    
+
     INTEGER = hydra.core.Name("integer")
-    
+
     LANGUAGE = hydra.core.Name("language")
-    
+
     LONG = hydra.core.Name("long")
-    
+
     N_M_T_O_K_E_N = hydra.core.Name("NMTOKEN")
-    
+
     N_O_T_A_T_I_O_N = hydra.core.Name("NOTATION")
-    
+
     NAME = hydra.core.Name("name")
-    
+
     NEGATIVE_INTEGER = hydra.core.Name("negativeInteger")
-    
+
     NON_NEGATIVE_INTEGER = hydra.core.Name("nonNegativeInteger")
-    
+
     NON_POSITIVE_INTEGER = hydra.core.Name("nonPositiveInteger")
-    
+
     NORMALIZED_STRING = hydra.core.Name("normalizedString")
-    
+
     POSITIVE_INTEGER = hydra.core.Name("positiveInteger")
-    
+
     Q_NAME = hydra.core.Name("qName")
-    
+
     SHORT = hydra.core.Name("short")
-    
+
     STRING = hydra.core.Name("string")
-    
+
     TIME = hydra.core.Name("time")
-    
+
     TOKEN = hydra.core.Name("token")
-    
+
     UNSIGNED_BYTE = hydra.core.Name("unsignedByte")
-    
+
     UNSIGNED_INT = hydra.core.Name("unsignedInt")
-    
+
     UNSIGNED_LONG = hydra.core.Name("unsignedLong")
-    
+
     UNSIGNED_SHORT = hydra.core.Name("unsignedShort")
 
 Datatype.TYPE_ = hydra.core.Name("hydra.ext.org.w3.xml.schema.Datatype")

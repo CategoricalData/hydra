@@ -15,7 +15,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Configurable annotation keys for property graph mapping specifications
-data AnnotationSchema = 
+data AnnotationSchema =
   AnnotationSchema {
     annotationSchemaVertexLabel :: String,
     annotationSchemaEdgeLabel :: String,
@@ -67,7 +67,7 @@ _AnnotationSchema_inEdgeLabel = Core.Name "inEdgeLabel"
 _AnnotationSchema_ignore = Core.Name "ignore"
 
 -- | A mapping specification producing edges of a specified label.
-data EdgeSpec = 
+data EdgeSpec =
   EdgeSpec {
     -- | The label of the target edges, which must conform to the edge type associated with that label.
     edgeSpecLabel :: Model.EdgeLabel,
@@ -94,7 +94,7 @@ _EdgeSpec_in = Core.Name "in"
 _EdgeSpec_properties = Core.Name "properties"
 
 -- | Either a vertex specification or an edge specification
-data ElementSpec = 
+data ElementSpec =
   ElementSpecVertex VertexSpec |
   ElementSpecEdge EdgeSpec
   deriving (Eq, Ord, Read, Show)
@@ -106,7 +106,7 @@ _ElementSpec_vertex = Core.Name "vertex"
 _ElementSpec_edge = Core.Name "edge"
 
 -- | A mapping specification producing properties of a specified key, and values of the appropriate type.
-data PropertySpec = 
+data PropertySpec =
   PropertySpec {
     -- | The key of the target properties
     propertySpecKey :: Model.PropertyKey,
@@ -121,7 +121,7 @@ _PropertySpec_key = Core.Name "key"
 _PropertySpec_value = Core.Name "value"
 
 -- | A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types
-data Schema s t v = 
+data Schema s t v =
   Schema {
     schemaVertexIdTypes :: (Util.Coder Core.Type t),
     schemaVertexIds :: (Util.Coder Core.Term v),
@@ -154,7 +154,7 @@ _Schema_defaultVertexId = Core.Name "defaultVertexId"
 _Schema_defaultEdgeId = Core.Name "defaultEdgeId"
 
 -- | A mapping specification producing values (usually literal values) whose type is understood in context
-data ValueSpec = 
+data ValueSpec =
   -- | A trivial no-op specification which passes the entire value
   ValueSpecValue  |
   -- | A compact path representing the function, e.g. engine-${engineInfo/model/name}
@@ -168,7 +168,7 @@ _ValueSpec_value = Core.Name "value"
 _ValueSpec_pattern = Core.Name "pattern"
 
 -- | A mapping specification producing vertices of a specified label
-data VertexSpec = 
+data VertexSpec =
   VertexSpec {
     -- | The label of the target vertices, which must conform to the vertex type associated with that label.
     vertexSpecLabel :: Model.VertexLabel,

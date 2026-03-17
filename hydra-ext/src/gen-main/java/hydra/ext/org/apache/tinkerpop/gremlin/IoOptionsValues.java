@@ -6,50 +6,50 @@ import java.io.Serializable;
 
 public abstract class IoOptionsValues implements Serializable, Comparable<IoOptionsValues> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.IoOptionsValues");
-  
+
   public static final hydra.core.Name GRYO = new hydra.core.Name("gryo");
-  
+
   public static final hydra.core.Name GRAPHSON = new hydra.core.Name("graphson");
-  
+
   public static final hydra.core.Name GRAPHML = new hydra.core.Name("graphml");
-  
+
   private IoOptionsValues () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Gryo instance) ;
-    
+
     R visit(Graphson instance) ;
-    
+
     R visit(Graphml instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(IoOptionsValues instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Gryo instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Graphson instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Graphml instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Gryo extends hydra.ext.org.apache.tinkerpop.gremlin.IoOptionsValues implements Serializable {
     public Gryo () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Gryo)) {
@@ -58,12 +58,12 @@ public abstract class IoOptionsValues implements Serializable, Comparable<IoOpti
       Gryo o = (Gryo) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IoOptionsValues other) {
@@ -73,18 +73,18 @@ public abstract class IoOptionsValues implements Serializable, Comparable<IoOpti
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Graphson extends hydra.ext.org.apache.tinkerpop.gremlin.IoOptionsValues implements Serializable {
     public Graphson () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Graphson)) {
@@ -93,12 +93,12 @@ public abstract class IoOptionsValues implements Serializable, Comparable<IoOpti
       Graphson o = (Graphson) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IoOptionsValues other) {
@@ -108,18 +108,18 @@ public abstract class IoOptionsValues implements Serializable, Comparable<IoOpti
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Graphml extends hydra.ext.org.apache.tinkerpop.gremlin.IoOptionsValues implements Serializable {
     public Graphml () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Graphml)) {
@@ -128,12 +128,12 @@ public abstract class IoOptionsValues implements Serializable, Comparable<IoOpti
       Graphml o = (Graphml) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IoOptionsValues other) {
@@ -143,7 +143,7 @@ public abstract class IoOptionsValues implements Serializable, Comparable<IoOpti
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

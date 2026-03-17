@@ -12,7 +12,7 @@ public interface Decoding {
       public hydra.util.Either<String, hydra.util.ConsList<T0>> otherwise(hydra.json.model.Value instance) {
         return hydra.util.Either.<String, hydra.util.ConsList<T0>>left("expected an array");
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<T0>> visit(hydra.json.model.Value.Array a) {
         return hydra.lib.eithers.MapList.apply(
@@ -21,21 +21,21 @@ public interface Decoding {
       }
     });
   }
-  
+
   static hydra.util.Either<String, Boolean> decodeBoolean(hydra.json.model.Value v1) {
     return (v1).accept(new hydra.json.model.Value.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, Boolean> otherwise(hydra.json.model.Value instance) {
         return hydra.util.Either.<String, Boolean>left("expected a boolean");
       }
-      
+
       @Override
       public hydra.util.Either<String, Boolean> visit(hydra.json.model.Value.Boolean_ b) {
         return hydra.util.Either.<String, Boolean>right((b).value);
       }
     });
   }
-  
+
   static <T0, T1> hydra.util.Either<String, T1> decodeField(java.util.function.Function<T0, hydra.util.Either<String, T1>> decodeValue, String name, hydra.util.PersistentMap<String, T0> m) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.org.json.decoding.Decoding.<T0, String, T1, String>decodeOptionalField(
@@ -49,21 +49,21 @@ public interface Decoding {
         (java.util.function.Function<T1, hydra.util.Either<String, T1>>) (f -> hydra.util.Either.<String, T1>right(f)),
         v1)));
   }
-  
+
   static hydra.util.Either<String, hydra.util.PersistentMap<String, hydra.json.model.Value>> decodeObject(hydra.json.model.Value v1) {
     return (v1).accept(new hydra.json.model.Value.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.util.PersistentMap<String, hydra.json.model.Value>> otherwise(hydra.json.model.Value instance) {
         return hydra.util.Either.<String, hydra.util.PersistentMap<String, hydra.json.model.Value>>left("expected an object");
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.util.PersistentMap<String, hydra.json.model.Value>> visit(hydra.json.model.Value.Object_ o) {
         return hydra.util.Either.<String, hydra.util.PersistentMap<String, hydra.json.model.Value>>right((o).value);
       }
     });
   }
-  
+
   static <T0, T1, T2, T3> hydra.util.Either<T1, hydra.util.Maybe<T2>> decodeOptionalField(java.util.function.Function<T0, hydra.util.Either<T1, T2>> decodeValue, T3 name, hydra.util.PersistentMap<T3, T0> m) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<T1, hydra.util.Maybe<T2>>right((hydra.util.Maybe<T2>) (hydra.util.Maybe.<T2>nothing())),
@@ -74,14 +74,14 @@ public interface Decoding {
         name,
         m));
   }
-  
+
   static hydra.util.Either<String, String> decodeString(hydra.json.model.Value v1) {
     return (v1).accept(new hydra.json.model.Value.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, String> otherwise(hydra.json.model.Value instance) {
         return hydra.util.Either.<String, String>left("expected a string");
       }
-      
+
       @Override
       public hydra.util.Either<String, String> visit(hydra.json.model.Value.String_ s) {
         return hydra.util.Either.<String, String>right((s).value);

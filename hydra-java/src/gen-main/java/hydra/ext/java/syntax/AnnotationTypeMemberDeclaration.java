@@ -6,60 +6,60 @@ import java.io.Serializable;
 
 public abstract class AnnotationTypeMemberDeclaration implements Serializable, Comparable<AnnotationTypeMemberDeclaration> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.AnnotationTypeMemberDeclaration");
-  
+
   public static final hydra.core.Name ANNOTATION_TYPE = new hydra.core.Name("annotationType");
-  
+
   public static final hydra.core.Name CONSTANT = new hydra.core.Name("constant");
-  
+
   public static final hydra.core.Name CLASS = new hydra.core.Name("class");
-  
+
   public static final hydra.core.Name INTERFACE = new hydra.core.Name("interface");
-  
+
   private AnnotationTypeMemberDeclaration () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(AnnotationType instance) ;
-    
+
     R visit(Constant instance) ;
-    
+
     R visit(Class_ instance) ;
-    
+
     R visit(Interface instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(AnnotationTypeMemberDeclaration instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(AnnotationType instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Constant instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Class_ instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Interface instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class AnnotationType extends hydra.ext.java.syntax.AnnotationTypeMemberDeclaration implements Serializable {
     public final hydra.ext.java.syntax.AnnotationTypeElementDeclaration value;
-    
+
     public AnnotationType (hydra.ext.java.syntax.AnnotationTypeElementDeclaration value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof AnnotationType)) {
@@ -70,12 +70,12 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable, C
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AnnotationTypeMemberDeclaration other) {
@@ -86,20 +86,20 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable, C
       AnnotationType o = (AnnotationType) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Constant extends hydra.ext.java.syntax.AnnotationTypeMemberDeclaration implements Serializable {
     public final hydra.ext.java.syntax.ConstantDeclaration value;
-    
+
     public Constant (hydra.ext.java.syntax.ConstantDeclaration value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Constant)) {
@@ -110,12 +110,12 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable, C
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AnnotationTypeMemberDeclaration other) {
@@ -126,20 +126,20 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable, C
       Constant o = (Constant) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Class_ extends hydra.ext.java.syntax.AnnotationTypeMemberDeclaration implements Serializable {
     public final hydra.ext.java.syntax.ClassDeclaration value;
-    
+
     public Class_ (hydra.ext.java.syntax.ClassDeclaration value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Class_)) {
@@ -150,12 +150,12 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable, C
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AnnotationTypeMemberDeclaration other) {
@@ -166,20 +166,20 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable, C
       Class_ o = (Class_) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Interface extends hydra.ext.java.syntax.AnnotationTypeMemberDeclaration implements Serializable {
     public final hydra.ext.java.syntax.InterfaceDeclaration value;
-    
+
     public Interface (hydra.ext.java.syntax.InterfaceDeclaration value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Interface)) {
@@ -190,12 +190,12 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable, C
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AnnotationTypeMemberDeclaration other) {
@@ -206,7 +206,7 @@ public abstract class AnnotationTypeMemberDeclaration implements Serializable, C
       Interface o = (Interface) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

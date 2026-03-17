@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class Field implements Serializable, Comparable<Field> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Field");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name TERM = new hydra.core.Name("term");
-  
+
   /**
    * The name of the field
    */
   public final hydra.core.Name name;
-  
+
   /**
    * The term value of the field
    */
   public final hydra.core.Term term;
-  
+
   public Field (hydra.core.Name name, hydra.core.Term term) {
     this.name = name;
     this.term = term;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Field)) {
@@ -41,12 +41,12 @@ public class Field implements Serializable, Comparable<Field> {
       this.term,
       o.term);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(term);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Field other) {
@@ -57,11 +57,11 @@ public class Field implements Serializable, Comparable<Field> {
     }
     return ((Comparable) term).compareTo(other.term);
   }
-  
+
   public Field withName(hydra.core.Name name) {
     return new Field(name, term);
   }
-  
+
   public Field withTerm(hydra.core.Term term) {
     return new Field(name, term);
   }

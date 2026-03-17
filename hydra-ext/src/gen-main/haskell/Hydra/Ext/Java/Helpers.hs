@@ -16,7 +16,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Classification of a Java symbol for code generation
-data JavaSymbolClass = 
+data JavaSymbolClass =
   -- | A constant value
   JavaSymbolClassConstant  |
   -- | A nullary function (no arguments)
@@ -26,7 +26,7 @@ data JavaSymbolClass =
   -- | A unary function (single argument)
   JavaSymbolClassUnaryFunction  |
   -- | A local variable
-  JavaSymbolClassLocalVariable 
+  JavaSymbolClassLocalVariable
   deriving (Eq, Ord, Read, Show)
 
 _JavaSymbolClass = Core.Name "hydra.ext.java.helpers.JavaSymbolClass"
@@ -42,7 +42,7 @@ _JavaSymbolClass_unaryFunction = Core.Name "unaryFunction"
 _JavaSymbolClass_localVariable = Core.Name "localVariable"
 
 -- | Feature flags for the target Java version
-data JavaFeatures = 
+data JavaFeatures =
   JavaFeatures {
     -- | Whether the diamond operator (<>) is supported (Java 7+)
     javaFeaturesSupportsDiamondOperator :: Bool}
@@ -53,7 +53,7 @@ _JavaFeatures = Core.Name "hydra.ext.java.helpers.JavaFeatures"
 _JavaFeatures_supportsDiamondOperator = Core.Name "supportsDiamondOperator"
 
 -- | Aliases and context for Java code generation
-data Aliases = 
+data Aliases =
   Aliases {
     -- | Current module namespace context
     aliasesCurrentNamespace :: Module.Namespace,
@@ -112,7 +112,7 @@ _Aliases_methodCodomain = Core.Name "methodCodomain"
 _Aliases_thunkedVars = Core.Name "thunkedVars"
 
 -- | Environment for Java code generation
-data JavaEnvironment = 
+data JavaEnvironment =
   JavaEnvironment {
     -- | Aliases and context state
     javaEnvironmentAliases :: Aliases,

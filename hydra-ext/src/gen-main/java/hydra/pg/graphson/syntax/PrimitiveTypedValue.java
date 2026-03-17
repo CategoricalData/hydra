@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class PrimitiveTypedValue implements Serializable, Comparable<PrimitiveTypedValue> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.graphson.syntax.PrimitiveTypedValue");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.pg.graphson.syntax.TypeName type;
-  
+
   public final String value;
-  
+
   public PrimitiveTypedValue (hydra.pg.graphson.syntax.TypeName type, String value) {
     this.type = type;
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof PrimitiveTypedValue)) {
@@ -32,12 +32,12 @@ public class PrimitiveTypedValue implements Serializable, Comparable<PrimitiveTy
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(type) + 3 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PrimitiveTypedValue other) {
@@ -48,11 +48,11 @@ public class PrimitiveTypedValue implements Serializable, Comparable<PrimitiveTy
     }
     return ((Comparable) value).compareTo(other.value);
   }
-  
+
   public PrimitiveTypedValue withType(hydra.pg.graphson.syntax.TypeName type) {
     return new PrimitiveTypedValue(type, value);
   }
-  
+
   public PrimitiveTypedValue withValue(String value) {
     return new PrimitiveTypedValue(type, value);
   }

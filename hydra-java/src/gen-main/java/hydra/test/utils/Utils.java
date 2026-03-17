@@ -25,7 +25,7 @@ public interface Utils {
             tc)),
           cases_))));
   }
-  
+
   static hydra.util.Either<String, hydra.testing.TestCaseWithMetadata> inferTestCase(hydra.graph.Graph g, hydra.testing.TestCaseWithMetadata tcm) {
     hydra.util.Maybe<String> desc = (tcm).description;
     String name_ = (tcm).name;
@@ -38,7 +38,7 @@ public interface Utils {
         public hydra.util.Either<String, hydra.testing.TestCase> otherwise(hydra.testing.TestCase instance) {
           return hydra.util.Either.<String, hydra.testing.TestCase>right(tcase);
         }
-        
+
         @Override
         public hydra.util.Either<String, hydra.testing.TestCase> visit(hydra.testing.TestCase.DelegatedEvaluation delCase) {
           hydra.core.Term input_ = (delCase).value.input;
@@ -55,7 +55,7 @@ public interface Utils {
         }
       }));
   }
-  
+
   static hydra.util.Either<String, hydra.core.Term> inferTerm(hydra.graph.Graph g, hydra.core.Term term) {
     return hydra.lib.eithers.Bimap.apply(
       (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),

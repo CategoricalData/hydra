@@ -16,7 +16,7 @@ class Ontology:
     direct_imports: frozenlist[Ontology]
     annotations: frozenlist[Annotation]
     axioms: frozenlist[Axiom]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.Ontology")
     DIRECT_IMPORTS = hydra.core.Name("directImports")
     ANNOTATIONS = hydra.core.Name("annotations")
@@ -26,7 +26,7 @@ class Ontology:
 class Declaration:
     annotations: frozenlist[Annotation]
     entity: Entity
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.Declaration")
     ANNOTATIONS = hydra.core.Name("annotations")
     ENTITY = hydra.core.Name("entity")
@@ -55,7 +55,7 @@ class _EntityMeta(type):
 
 class Entity(metaclass=_EntityMeta):
     r"""EntityAnnotationProperty | EntityClass | EntityDataProperty | EntityDatatype | EntityNamedIndividual | EntityObjectProperty"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.Entity")
     ANNOTATION_PROPERTY = hydra.core.Name("annotationProperty")
     CLASS = hydra.core.Name("class")
@@ -76,7 +76,7 @@ class _AnnotationSubjectMeta(type):
 
 class AnnotationSubject(metaclass=_AnnotationSubjectMeta):
     r"""AnnotationSubjectIri | AnnotationSubjectAnonymousIndividual"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.AnnotationSubject")
     IRI = hydra.core.Name("iri")
     ANONYMOUS_INDIVIDUAL = hydra.core.Name("anonymousIndividual")
@@ -96,7 +96,7 @@ class _AnnotationValueMeta(type):
 
 class AnnotationValue(metaclass=_AnnotationValueMeta):
     r"""AnnotationValueAnonymousIndividual | AnnotationValueIri | AnnotationValueLiteral"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.AnnotationValue")
     ANONYMOUS_INDIVIDUAL = hydra.core.Name("anonymousIndividual")
     IRI = hydra.core.Name("iri")
@@ -107,7 +107,7 @@ class Annotation:
     annotations: frozenlist[Annotation]
     property: AnnotationProperty
     value: AnnotationValue
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.Annotation")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -131,7 +131,7 @@ class _AnnotationAxiomMeta(type):
 
 class AnnotationAxiom(metaclass=_AnnotationAxiomMeta):
     r"""AnnotationAxiomAnnotationAssertion | AnnotationAxiomAnnotationPropertyDomain | AnnotationAxiomAnnotationPropertyRange | AnnotationAxiomSubAnnotationPropertyOf"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.AnnotationAxiom")
     ANNOTATION_ASSERTION = hydra.core.Name("annotationAssertion")
     ANNOTATION_PROPERTY_DOMAIN = hydra.core.Name("annotationPropertyDomain")
@@ -144,7 +144,7 @@ class AnnotationAssertion:
     property: AnnotationProperty
     subject: AnnotationSubject
     value: AnnotationValue
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.AnnotationAssertion")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -156,7 +156,7 @@ class SubAnnotationPropertyOf:
     annotations: frozenlist[Annotation]
     sub_property: AnnotationProperty
     super_property: AnnotationProperty
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.SubAnnotationPropertyOf")
     ANNOTATIONS = hydra.core.Name("annotations")
     SUB_PROPERTY = hydra.core.Name("subProperty")
@@ -167,7 +167,7 @@ class AnnotationPropertyDomain:
     annotations: frozenlist[Annotation]
     property: AnnotationProperty
     iri: hydra.ext.org.w3.rdf.syntax.Iri
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.AnnotationPropertyDomain")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -178,7 +178,7 @@ class AnnotationPropertyRange:
     annotations: frozenlist[Annotation]
     property: AnnotationProperty
     iri: hydra.ext.org.w3.rdf.syntax.Iri
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.AnnotationPropertyRange")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -202,7 +202,7 @@ class _DatatypeMeta(type):
 # See https://www.w3.org/TR/owl2-syntax/#Datatypes.
 class Datatype(metaclass=_DatatypeMeta):
     r"""DatatypeXmlSchema | DatatypeOther"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.Datatype")
     XML_SCHEMA = hydra.core.Name("xmlSchema")
     OTHER = hydra.core.Name("other")
@@ -234,7 +234,7 @@ class _IndividualMeta(type):
 
 class Individual(metaclass=_IndividualMeta):
     r"""IndividualNamed | IndividualAnonymous"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.Individual")
     NAMED = hydra.core.Name("named")
     ANONYMOUS = hydra.core.Name("anonymous")
@@ -261,7 +261,7 @@ class _ObjectPropertyExpressionMeta(type):
 
 class ObjectPropertyExpression(metaclass=_ObjectPropertyExpressionMeta):
     r"""ObjectPropertyExpressionObject | ObjectPropertyExpressionInverseObject"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression")
     OBJECT = hydra.core.Name("object")
     INVERSE_OBJECT = hydra.core.Name("inverseObject")
@@ -301,7 +301,7 @@ class _DataRangeMeta(type):
 # See https://www.w3.org/TR/owl2-syntax/#Data_Ranges.
 class DataRange(metaclass=_DataRangeMeta):
     r"""DataRangeDataComplementOf | DataRangeDataIntersectionOf | DataRangeDataOneOf | DataRangeDataUnionOf | DataRangeDatatype | DataRangeDatatypeRestriction"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataRange")
     DATA_COMPLEMENT_OF = hydra.core.Name("dataComplementOf")
     DATA_INTERSECTION_OF = hydra.core.Name("dataIntersectionOf")
@@ -333,10 +333,10 @@ DataOneOf.TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataOneOf")
 @dataclass(frozen=True)
 class DatatypeRestriction:
     r"""See https://www.w3.org/TR/owl2-syntax/#Datatype_Restrictions."""
-    
+
     datatype: Datatype
     constraints: frozenlist[DatatypeRestriction_Constraint]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DatatypeRestriction")
     DATATYPE = hydra.core.Name("datatype")
     CONSTRAINTS = hydra.core.Name("constraints")
@@ -345,7 +345,7 @@ class DatatypeRestriction:
 class DatatypeRestriction_Constraint:
     constraining_facet: DatatypeRestriction_ConstrainingFacet
     restriction_value: hydra.ext.org.w3.rdf.syntax.Literal
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint")
     CONSTRAINING_FACET = hydra.core.Name("constrainingFacet")
     RESTRICTION_VALUE = hydra.core.Name("restrictionValue")
@@ -362,7 +362,7 @@ class _DatatypeRestriction_ConstrainingFacetMeta(type):
 
 class DatatypeRestriction_ConstrainingFacet(metaclass=_DatatypeRestriction_ConstrainingFacetMeta):
     r"""DatatypeRestriction_ConstrainingFacetXmlSchema | DatatypeRestriction_ConstrainingFacetOther"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DatatypeRestriction_ConstrainingFacet")
     XML_SCHEMA = hydra.core.Name("xmlSchema")
     OTHER = hydra.core.Name("other")
@@ -424,7 +424,7 @@ class _ClassExpressionMeta(type):
 
 class ClassExpression(metaclass=_ClassExpressionMeta):
     r"""ClassExpressionClass | ClassExpressionDataSomeValuesFrom | ClassExpressionDataAllValuesFrom | ClassExpressionDataHasValue | ClassExpressionDataMinCardinality | ClassExpressionDataMaxCardinality | ClassExpressionDataExactCardinality | ClassExpressionObjectAllValuesFrom | ClassExpressionObjectExactCardinality | ClassExpressionObjectHasSelf | ClassExpressionObjectHasValue | ClassExpressionObjectIntersectionOf | ClassExpressionObjectMaxCardinality | ClassExpressionObjectMinCardinality | ClassExpressionObjectOneOf | ClassExpressionObjectSomeValuesFrom | ClassExpressionObjectUnionOf"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ClassExpression")
     CLASS = hydra.core.Name("class")
     DATA_SOME_VALUES_FROM = hydra.core.Name("dataSomeValuesFrom")
@@ -468,7 +468,7 @@ ObjectOneOf.TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectOneOf")
 class ObjectSomeValuesFrom:
     property: ObjectPropertyExpression
     class_: ClassExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectSomeValuesFrom")
     PROPERTY = hydra.core.Name("property")
     CLASS = hydra.core.Name("class")
@@ -477,7 +477,7 @@ class ObjectSomeValuesFrom:
 class ObjectAllValuesFrom:
     property: ObjectPropertyExpression
     class_: ClassExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectAllValuesFrom")
     PROPERTY = hydra.core.Name("property")
     CLASS = hydra.core.Name("class")
@@ -486,7 +486,7 @@ class ObjectAllValuesFrom:
 class ObjectHasValue:
     property: ObjectPropertyExpression
     individual: Individual
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectHasValue")
     PROPERTY = hydra.core.Name("property")
     INDIVIDUAL = hydra.core.Name("individual")
@@ -499,11 +499,11 @@ ObjectHasSelf.TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectHasSelf
 @dataclass(frozen=True)
 class ObjectMinCardinality:
     r"""See https://www.w3.org/TR/owl2-syntax/#Minimum_Cardinality."""
-    
+
     bound: int
     property: ObjectPropertyExpression
     class_: frozenlist[ClassExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectMinCardinality")
     BOUND = hydra.core.Name("bound")
     PROPERTY = hydra.core.Name("property")
@@ -512,11 +512,11 @@ class ObjectMinCardinality:
 @dataclass(frozen=True)
 class ObjectMaxCardinality:
     r"""See https://www.w3.org/TR/owl2-syntax/#Maximum_Cardinality."""
-    
+
     bound: int
     property: ObjectPropertyExpression
     class_: frozenlist[ClassExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectMaxCardinality")
     BOUND = hydra.core.Name("bound")
     PROPERTY = hydra.core.Name("property")
@@ -525,11 +525,11 @@ class ObjectMaxCardinality:
 @dataclass(frozen=True)
 class ObjectExactCardinality:
     r"""See https://www.w3.org/TR/owl2-syntax/#Exact_Cardinality."""
-    
+
     bound: int
     property: ObjectPropertyExpression
     class_: frozenlist[ClassExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectExactCardinality")
     BOUND = hydra.core.Name("bound")
     PROPERTY = hydra.core.Name("property")
@@ -539,7 +539,7 @@ class ObjectExactCardinality:
 class DataSomeValuesFrom:
     property: frozenlist[DataPropertyExpression]
     range_: DataRange
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataSomeValuesFrom")
     PROPERTY = hydra.core.Name("property")
     RANGE = hydra.core.Name("range")
@@ -548,7 +548,7 @@ class DataSomeValuesFrom:
 class DataAllValuesFrom:
     property: frozenlist[DataPropertyExpression]
     range_: DataRange
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataAllValuesFrom")
     PROPERTY = hydra.core.Name("property")
     RANGE = hydra.core.Name("range")
@@ -557,7 +557,7 @@ class DataAllValuesFrom:
 class DataHasValue:
     property: DataPropertyExpression
     value: hydra.ext.org.w3.rdf.syntax.Literal
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataHasValue")
     PROPERTY = hydra.core.Name("property")
     VALUE = hydra.core.Name("value")
@@ -567,7 +567,7 @@ class DataMinCardinality:
     bound: int
     property: DataPropertyExpression
     range_: frozenlist[DataRange]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataMinCardinality")
     BOUND = hydra.core.Name("bound")
     PROPERTY = hydra.core.Name("property")
@@ -578,7 +578,7 @@ class DataMaxCardinality:
     bound: int
     property: DataPropertyExpression
     range_: frozenlist[DataRange]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataMaxCardinality")
     BOUND = hydra.core.Name("bound")
     PROPERTY = hydra.core.Name("property")
@@ -589,7 +589,7 @@ class DataExactCardinality:
     bound: int
     property: DataPropertyExpression
     range_: frozenlist[DataRange]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataExactCardinality")
     BOUND = hydra.core.Name("bound")
     PROPERTY = hydra.core.Name("property")
@@ -626,7 +626,7 @@ class _AxiomMeta(type):
 # See https://www.w3.org/TR/owl2-syntax/#Axioms.
 class Axiom(metaclass=_AxiomMeta):
     r"""AxiomAnnotationAxiom | AxiomAssertion | AxiomClassAxiom | AxiomDataPropertyAxiom | AxiomDatatypeDefinition | AxiomDeclaration | AxiomHasKey | AxiomObjectPropertyAxiom"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.Axiom")
     ANNOTATION_AXIOM = hydra.core.Name("annotationAxiom")
     ASSERTION = hydra.core.Name("assertion")
@@ -655,7 +655,7 @@ class _ClassAxiomMeta(type):
 
 class ClassAxiom(metaclass=_ClassAxiomMeta):
     r"""ClassAxiomDisjointClasses | ClassAxiomDisjointUnion | ClassAxiomEquivalentClasses | ClassAxiomSubClassOf"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ClassAxiom")
     DISJOINT_CLASSES = hydra.core.Name("disjointClasses")
     DISJOINT_UNION = hydra.core.Name("disjointUnion")
@@ -667,7 +667,7 @@ class SubClassOf:
     annotations: frozenlist[Annotation]
     sub_class: ClassExpression
     super_class: ClassExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.SubClassOf")
     ANNOTATIONS = hydra.core.Name("annotations")
     SUB_CLASS = hydra.core.Name("subClass")
@@ -677,7 +677,7 @@ class SubClassOf:
 class EquivalentClasses:
     annotations: frozenlist[Annotation]
     classes: frozenlist[ClassExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.EquivalentClasses")
     ANNOTATIONS = hydra.core.Name("annotations")
     CLASSES = hydra.core.Name("classes")
@@ -686,7 +686,7 @@ class EquivalentClasses:
 class DisjointClasses:
     annotations: frozenlist[Annotation]
     classes: frozenlist[ClassExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DisjointClasses")
     ANNOTATIONS = hydra.core.Name("annotations")
     CLASSES = hydra.core.Name("classes")
@@ -694,11 +694,11 @@ class DisjointClasses:
 @dataclass(frozen=True)
 class DisjointUnion:
     r"""See https://www.w3.org/TR/owl2-syntax/#Disjoint_Union_of_Class_Expressions."""
-    
+
     annotations: frozenlist[Annotation]
     class_: Class
     classes: frozenlist[ClassExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DisjointUnion")
     ANNOTATIONS = hydra.core.Name("annotations")
     CLASS = hydra.core.Name("class")
@@ -749,7 +749,7 @@ class _ObjectPropertyAxiomMeta(type):
 
 class ObjectPropertyAxiom(metaclass=_ObjectPropertyAxiomMeta):
     r"""ObjectPropertyAxiomAsymmetricObjectProperty | ObjectPropertyAxiomDisjointObjectProperties | ObjectPropertyAxiomEquivalentObjectProperties | ObjectPropertyAxiomFunctionalObjectProperty | ObjectPropertyAxiomInverseFunctionalObjectProperty | ObjectPropertyAxiomInverseObjectProperties | ObjectPropertyAxiomIrreflexiveObjectProperty | ObjectPropertyAxiomObjectPropertyDomain | ObjectPropertyAxiomObjectPropertyRange | ObjectPropertyAxiomReflexiveObjectProperty | ObjectPropertyAxiomSubObjectPropertyOf | ObjectPropertyAxiomSymmetricObjectProperty | ObjectPropertyAxiomTransitiveObjectProperty"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectPropertyAxiom")
     ASYMMETRIC_OBJECT_PROPERTY = hydra.core.Name("asymmetricObjectProperty")
     DISJOINT_OBJECT_PROPERTIES = hydra.core.Name("disjointObjectProperties")
@@ -770,7 +770,7 @@ class SubObjectPropertyOf:
     annotations: frozenlist[Annotation]
     sub_property: frozenlist[ObjectPropertyExpression]
     super_property: ObjectPropertyExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.SubObjectPropertyOf")
     ANNOTATIONS = hydra.core.Name("annotations")
     SUB_PROPERTY = hydra.core.Name("subProperty")
@@ -780,7 +780,7 @@ class SubObjectPropertyOf:
 class EquivalentObjectProperties:
     annotations: frozenlist[Annotation]
     properties: frozenlist[ObjectPropertyExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.EquivalentObjectProperties")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTIES = hydra.core.Name("properties")
@@ -789,7 +789,7 @@ class EquivalentObjectProperties:
 class DisjointObjectProperties:
     annotations: frozenlist[Annotation]
     properties: frozenlist[ObjectPropertyExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DisjointObjectProperties")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTIES = hydra.core.Name("properties")
@@ -797,11 +797,11 @@ class DisjointObjectProperties:
 @dataclass(frozen=True)
 class ObjectPropertyDomain:
     r"""See https://www.w3.org/TR/owl2-syntax/#Object_Property_Domain."""
-    
+
     annotations: frozenlist[Annotation]
     property: ObjectPropertyExpression
     domain: ClassExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectPropertyDomain")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -810,11 +810,11 @@ class ObjectPropertyDomain:
 @dataclass(frozen=True)
 class ObjectPropertyRange:
     r"""See https://www.w3.org/TR/owl2-syntax/#Object_Property_Range."""
-    
+
     annotations: frozenlist[Annotation]
     property: ObjectPropertyExpression
     range_: ClassExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectPropertyRange")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -825,7 +825,7 @@ class InverseObjectProperties:
     annotations: frozenlist[Annotation]
     property1: ObjectPropertyExpression
     property2: ObjectPropertyExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.InverseObjectProperties")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY1 = hydra.core.Name("property1")
@@ -835,7 +835,7 @@ class InverseObjectProperties:
 class FunctionalObjectProperty:
     annotations: frozenlist[Annotation]
     property: ObjectPropertyExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.FunctionalObjectProperty")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -844,7 +844,7 @@ class FunctionalObjectProperty:
 class InverseFunctionalObjectProperty:
     annotations: frozenlist[Annotation]
     property: ObjectPropertyExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.InverseFunctionalObjectProperty")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -853,7 +853,7 @@ class InverseFunctionalObjectProperty:
 class ReflexiveObjectProperty:
     annotations: frozenlist[Annotation]
     property: ObjectPropertyExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ReflexiveObjectProperty")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -862,7 +862,7 @@ class ReflexiveObjectProperty:
 class IrreflexiveObjectProperty:
     annotations: frozenlist[Annotation]
     property: ObjectPropertyExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.IrreflexiveObjectProperty")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -871,7 +871,7 @@ class IrreflexiveObjectProperty:
 class SymmetricObjectProperty:
     annotations: frozenlist[Annotation]
     property: ObjectPropertyExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.SymmetricObjectProperty")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -880,7 +880,7 @@ class SymmetricObjectProperty:
 class AsymmetricObjectProperty:
     annotations: frozenlist[Annotation]
     property: ObjectPropertyExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.AsymmetricObjectProperty")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -889,7 +889,7 @@ class AsymmetricObjectProperty:
 class TransitiveObjectProperty:
     annotations: frozenlist[Annotation]
     property: ObjectPropertyExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.TransitiveObjectProperty")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -918,7 +918,7 @@ class _DataPropertyAxiomMeta(type):
 
 class DataPropertyAxiom(metaclass=_DataPropertyAxiomMeta):
     r"""DataPropertyAxiomDataPropertyAxiom | DataPropertyAxiomDataPropertyRange | DataPropertyAxiomDisjointDataProperties | DataPropertyAxiomEquivalentDataProperties | DataPropertyAxiomFunctionalDataProperty | DataPropertyAxiomSubDataPropertyOf"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataPropertyAxiom")
     DATA_PROPERTY_AXIOM = hydra.core.Name("dataPropertyAxiom")
     DATA_PROPERTY_RANGE = hydra.core.Name("dataPropertyRange")
@@ -932,7 +932,7 @@ class SubDataPropertyOf:
     annotations: frozenlist[Annotation]
     sub_property: DataPropertyExpression
     super_property: DataPropertyExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.SubDataPropertyOf")
     ANNOTATIONS = hydra.core.Name("annotations")
     SUB_PROPERTY = hydra.core.Name("subProperty")
@@ -942,7 +942,7 @@ class SubDataPropertyOf:
 class EquivalentDataProperties:
     annotations: frozenlist[Annotation]
     properties: frozenlist[DataPropertyExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.EquivalentDataProperties")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTIES = hydra.core.Name("properties")
@@ -951,7 +951,7 @@ class EquivalentDataProperties:
 class DisjointDataProperties:
     annotations: frozenlist[Annotation]
     properties: frozenlist[DataPropertyExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DisjointDataProperties")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTIES = hydra.core.Name("properties")
@@ -961,7 +961,7 @@ class DataPropertyDomain:
     annotations: frozenlist[Annotation]
     property: DataPropertyExpression
     domain: ClassExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataPropertyDomain")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -972,7 +972,7 @@ class DataPropertyRange:
     annotations: frozenlist[Annotation]
     property: DataPropertyExpression
     range_: ClassExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataPropertyRange")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -982,7 +982,7 @@ class DataPropertyRange:
 class FunctionalDataProperty:
     annotations: frozenlist[Annotation]
     property: DataPropertyExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.FunctionalDataProperty")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -992,7 +992,7 @@ class DatatypeDefinition:
     annotations: frozenlist[Annotation]
     datatype: Datatype
     range_: DataRange
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DatatypeDefinition")
     ANNOTATIONS = hydra.core.Name("annotations")
     DATATYPE = hydra.core.Name("datatype")
@@ -1001,12 +1001,12 @@ class DatatypeDefinition:
 @dataclass(frozen=True)
 class HasKey:
     r"""See https://www.w3.org/TR/owl2-syntax/#Keys."""
-    
+
     annotations: frozenlist[Annotation]
     class_: ClassExpression
     object_properties: frozenlist[ObjectPropertyExpression]
     data_properties: frozenlist[DataPropertyExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.HasKey")
     ANNOTATIONS = hydra.core.Name("annotations")
     CLASS = hydra.core.Name("class")
@@ -1040,7 +1040,7 @@ class _AssertionMeta(type):
 
 class Assertion(metaclass=_AssertionMeta):
     r"""AssertionClassAssertion | AssertionDataPropertyAssertion | AssertionDifferentIndividuals | AssertionObjectPropertyAssertion | AssertionNegativeDataPropertyAssertion | AssertionNegativeObjectPropertyAssertion | AssertionSameIndividual"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.Assertion")
     CLASS_ASSERTION = hydra.core.Name("classAssertion")
     DATA_PROPERTY_ASSERTION = hydra.core.Name("dataPropertyAssertion")
@@ -1054,7 +1054,7 @@ class Assertion(metaclass=_AssertionMeta):
 class SameIndividual:
     annotations: frozenlist[Annotation]
     individuals: frozenlist[Individual]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.SameIndividual")
     ANNOTATIONS = hydra.core.Name("annotations")
     INDIVIDUALS = hydra.core.Name("individuals")
@@ -1063,7 +1063,7 @@ class SameIndividual:
 class DifferentIndividuals:
     annotations: frozenlist[Annotation]
     individuals: frozenlist[Individual]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DifferentIndividuals")
     ANNOTATIONS = hydra.core.Name("annotations")
     INDIVIDUALS = hydra.core.Name("individuals")
@@ -1073,7 +1073,7 @@ class ClassAssertion:
     annotations: frozenlist[Annotation]
     class_: ClassExpression
     individual: Individual
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ClassAssertion")
     ANNOTATIONS = hydra.core.Name("annotations")
     CLASS = hydra.core.Name("class")
@@ -1085,7 +1085,7 @@ class ObjectPropertyAssertion:
     property: ObjectPropertyExpression
     source: Individual
     target: Individual
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectPropertyAssertion")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -1098,7 +1098,7 @@ class NegativeObjectPropertyAssertion:
     property: ObjectPropertyExpression
     source: Individual
     target: Individual
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.NegativeObjectPropertyAssertion")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -1111,7 +1111,7 @@ class DataPropertyAssertion:
     property: DataPropertyExpression
     source: Individual
     target: Individual
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataPropertyAssertion")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")
@@ -1124,7 +1124,7 @@ class NegativeDataPropertyAssertion:
     property: DataPropertyExpression
     source: Individual
     target: Individual
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.owl.syntax.NegativeDataPropertyAssertion")
     ANNOTATIONS = hydra.core.Name("annotations")
     PROPERTY = hydra.core.Name("property")

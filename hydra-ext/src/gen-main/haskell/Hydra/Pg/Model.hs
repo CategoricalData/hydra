@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | An edge which is adjacent to a given vertex. Only the other endpoint of the edge is provided.
-data AdjacentEdge v = 
+data AdjacentEdge v =
   AdjacentEdge {
     -- | The label of the edge
     adjacentEdgeLabel :: EdgeLabel,
@@ -36,11 +36,11 @@ _AdjacentEdge_vertex = Core.Name "vertex"
 _AdjacentEdge_properties = Core.Name "properties"
 
 -- | The direction of an edge or edge pattern
-data Direction = 
+data Direction =
   DirectionOut  |
   DirectionIn  |
   DirectionBoth  |
-  DirectionUndirected 
+  DirectionUndirected
   deriving (Eq, Ord, Read, Show)
 
 _Direction = Core.Name "hydra.pg.model.Direction"
@@ -54,7 +54,7 @@ _Direction_both = Core.Name "both"
 _Direction_undirected = Core.Name "undirected"
 
 -- | An edge
-data Edge v = 
+data Edge v =
   Edge {
     -- | The label of the edge
     edgeLabel :: EdgeLabel,
@@ -81,7 +81,7 @@ _Edge_in = Core.Name "in"
 _Edge_properties = Core.Name "properties"
 
 -- | The label of an edge
-newtype EdgeLabel = 
+newtype EdgeLabel =
   EdgeLabel {
     unEdgeLabel :: String}
   deriving (Eq, Ord, Read, Show)
@@ -89,7 +89,7 @@ newtype EdgeLabel =
 _EdgeLabel = Core.Name "hydra.pg.model.EdgeLabel"
 
 -- | The type of an edge
-data EdgeType t = 
+data EdgeType t =
   EdgeType {
     -- | The label of any edge of this edge type
     edgeTypeLabel :: EdgeLabel,
@@ -116,7 +116,7 @@ _EdgeType_in = Core.Name "in"
 _EdgeType_properties = Core.Name "properties"
 
 -- | Either a vertex or an edge
-data Element v = 
+data Element v =
   ElementVertex (Vertex v) |
   ElementEdge (Edge v)
   deriving (Eq, Ord, Read, Show)
@@ -128,9 +128,9 @@ _Element_vertex = Core.Name "vertex"
 _Element_edge = Core.Name "edge"
 
 -- | The kind of an element: vertex or edge
-data ElementKind = 
+data ElementKind =
   ElementKindVertex  |
-  ElementKindEdge 
+  ElementKindEdge
   deriving (Eq, Ord, Read, Show)
 
 _ElementKind = Core.Name "hydra.pg.model.ElementKind"
@@ -140,7 +140,7 @@ _ElementKind_vertex = Core.Name "vertex"
 _ElementKind_edge = Core.Name "edge"
 
 -- | An element together with its dependencies in some context
-data ElementTree v = 
+data ElementTree v =
   ElementTree {
     elementTreeSelf :: (Element v),
     elementTreeDependencies :: [ElementTree v]}
@@ -153,7 +153,7 @@ _ElementTree_self = Core.Name "self"
 _ElementTree_dependencies = Core.Name "dependencies"
 
 -- | The type of a vertex or edge
-data ElementType t = 
+data ElementType t =
   ElementTypeVertex (VertexType t) |
   ElementTypeEdge (EdgeType t)
   deriving (Eq, Ord, Read, Show)
@@ -165,7 +165,7 @@ _ElementType_vertex = Core.Name "vertex"
 _ElementType_edge = Core.Name "edge"
 
 -- | An element type together with its dependencies in some context
-data ElementTypeTree t = 
+data ElementTypeTree t =
   ElementTypeTree {
     elementTypeTreeSelf :: (ElementType t),
     elementTypeTreeDependencies :: [ElementTypeTree t]}
@@ -178,7 +178,7 @@ _ElementTypeTree_self = Core.Name "self"
 _ElementTypeTree_dependencies = Core.Name "dependencies"
 
 -- | A graph; a self-contained collection of vertices and edges
-data Graph v = 
+data Graph v =
   Graph {
     graphVertices :: (M.Map v (Vertex v)),
     graphEdges :: (M.Map v (Edge v))}
@@ -191,7 +191,7 @@ _Graph_vertices = Core.Name "vertices"
 _Graph_edges = Core.Name "edges"
 
 -- | A graph schema; a vertex and edge types for the vertices and edges of a graph conforming to the schema
-data GraphSchema t = 
+data GraphSchema t =
   GraphSchema {
     -- | A unique vertex type for each vertex label which may occur in a graph
     graphSchemaVertices :: (M.Map VertexLabel (VertexType t)),
@@ -206,7 +206,7 @@ _GraphSchema_vertices = Core.Name "vertices"
 _GraphSchema_edges = Core.Name "edges"
 
 -- | Either a vertex or edge label
-data Label = 
+data Label =
   LabelVertex VertexLabel |
   LabelEdge EdgeLabel
   deriving (Eq, Ord, Read, Show)
@@ -218,7 +218,7 @@ _Label_vertex = Core.Name "vertex"
 _Label_edge = Core.Name "edge"
 
 -- | A graph which does not assume that vertex or edge ids are unique. This is useful in mappings because the id specifications for vertices and/or edges may be non-unique.
-data LazyGraph v = 
+data LazyGraph v =
   LazyGraph {
     lazyGraphVertices :: [Vertex v],
     lazyGraphEdges :: [Edge v]}
@@ -231,7 +231,7 @@ _LazyGraph_vertices = Core.Name "vertices"
 _LazyGraph_edges = Core.Name "edges"
 
 -- | A key/value property
-data Property v = 
+data Property v =
   Property {
     -- | They key of the property
     propertyKey :: PropertyKey,
@@ -246,7 +246,7 @@ _Property_key = Core.Name "key"
 _Property_value = Core.Name "value"
 
 -- | A property key
-newtype PropertyKey = 
+newtype PropertyKey =
   PropertyKey {
     unPropertyKey :: String}
   deriving (Eq, Ord, Read, Show)
@@ -254,7 +254,7 @@ newtype PropertyKey =
 _PropertyKey = Core.Name "hydra.pg.model.PropertyKey"
 
 -- | The type of a property
-data PropertyType t = 
+data PropertyType t =
   PropertyType {
     -- | A property's key
     propertyTypeKey :: PropertyKey,
@@ -273,7 +273,7 @@ _PropertyType_value = Core.Name "value"
 _PropertyType_required = Core.Name "required"
 
 -- | A vertex
-data Vertex v = 
+data Vertex v =
   Vertex {
     -- | The label of the vertex
     vertexLabel :: VertexLabel,
@@ -292,7 +292,7 @@ _Vertex_id = Core.Name "id"
 _Vertex_properties = Core.Name "properties"
 
 -- | The label of a vertex. The default (null) vertex is represented by the empty string
-newtype VertexLabel = 
+newtype VertexLabel =
   VertexLabel {
     unVertexLabel :: String}
   deriving (Eq, Ord, Read, Show)
@@ -300,7 +300,7 @@ newtype VertexLabel =
 _VertexLabel = Core.Name "hydra.pg.model.VertexLabel"
 
 -- | The type of a vertex
-data VertexType t = 
+data VertexType t =
   VertexType {
     -- | The label of any vertex of this vertex type
     vertexTypeLabel :: VertexLabel,
@@ -319,7 +319,7 @@ _VertexType_id = Core.Name "id"
 _VertexType_properties = Core.Name "properties"
 
 -- | A vertex together with any outgoing and/or incoming edges; a vertex object
-data VertexWithAdjacentEdges v = 
+data VertexWithAdjacentEdges v =
   VertexWithAdjacentEdges {
     -- | The focus vertex
     vertexWithAdjacentEdgesVertex :: (Vertex v),

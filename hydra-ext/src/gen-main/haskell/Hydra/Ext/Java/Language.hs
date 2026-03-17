@@ -33,8 +33,8 @@ javaLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = typePredicate}} 
-  where 
+        Coders.languageConstraintsTypes = typePredicate}}
+  where
     eliminationVariants =
         Sets.fromList [
           Variants.EliminationVariantRecord,
@@ -109,8 +109,8 @@ reservedWords =
       specialNames,
       classNames,
       keywords,
-      literals]) 
-  where 
+      literals])
+  where
     specialNames = [
       "Elements"]
     classNames =

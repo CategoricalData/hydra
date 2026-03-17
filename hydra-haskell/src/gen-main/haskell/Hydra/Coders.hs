@@ -16,7 +16,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | An evaluation context together with a source language and a target language
-data AdapterContext = 
+data AdapterContext =
   AdapterContext {
     -- | The underlying graph of elements and primitives
     adapterContextGraph :: Graph.Graph,
@@ -34,9 +34,9 @@ _AdapterContext_language = Core.Name "language"
 _AdapterContext_adapters = Core.Name "adapters"
 
 -- | Indicates either the 'out' or the 'in' direction of a coder
-data CoderDirection = 
+data CoderDirection =
   CoderDirectionEncode  |
-  CoderDirectionDecode 
+  CoderDirectionDecode
   deriving (Eq, Ord, Read, Show)
 
 _CoderDirection = Core.Name "hydra.coders.CoderDirection"
@@ -46,7 +46,7 @@ _CoderDirection_encode = Core.Name "encode"
 _CoderDirection_decode = Core.Name "decode"
 
 -- | A named language together with language-specific constraints
-data Language = 
+data Language =
   Language {
     -- | The unique name of the language
     languageName :: LanguageName,
@@ -60,7 +60,7 @@ _Language_name = Core.Name "name"
 _Language_constraints = Core.Name "constraints"
 
 -- | A set of constraints on valid type and term expressions, characterizing a language
-data LanguageConstraints = 
+data LanguageConstraints =
   LanguageConstraints {
     -- | All supported elimination variants
     languageConstraintsEliminationVariants :: (S.Set Variants.EliminationVariant),
@@ -98,7 +98,7 @@ _LanguageConstraints_typeVariants = Core.Name "typeVariants"
 _LanguageConstraints_types = Core.Name "types"
 
 -- | The unique name of a language
-newtype LanguageName = 
+newtype LanguageName =
   LanguageName {
     unLanguageName :: String}
   deriving (Eq, Ord, Read, Show)
@@ -111,11 +111,11 @@ type SymmetricAdapter t v = (Util.Adapter t t v v)
 _SymmetricAdapter = Core.Name "hydra.coders.SymmetricAdapter"
 
 -- | Specifies either a pre-order or post-order traversal
-data TraversalOrder = 
+data TraversalOrder =
   -- | Pre-order traversal
   TraversalOrderPre  |
   -- | Post-order traversal
-  TraversalOrderPost 
+  TraversalOrderPost
   deriving (Eq, Ord, Read, Show)
 
 _TraversalOrder = Core.Name "hydra.coders.TraversalOrder"

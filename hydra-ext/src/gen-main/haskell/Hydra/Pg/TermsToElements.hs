@@ -36,8 +36,8 @@ import qualified Data.Set as S
 applyPattern :: Context.Context -> String -> [([String], String)] -> Core.Term -> Either (Context.InContext Error.Error) [Core.Term]
 applyPattern cx firstLit pairs term =
     Logic.ifElse (Lists.null pairs) (Right [
-      Core.TermLiteral (Core.LiteralString firstLit)]) (Eithers.bind (Eithers.mapList (\pp -> Eithers.map (\terms -> (Lists.map (\t -> termToString t) terms, (Pairs.second pp))) (evalPath cx (Pairs.first pp) term)) pairs) (\evaluated -> Right (Lists.map (\s -> Core.TermLiteral (Core.LiteralString s)) (Lists.foldl (\accum -> \ep ->  
-      let pStrs = Pairs.first ep 
+      Core.TermLiteral (Core.LiteralString firstLit)]) (Eithers.bind (Eithers.mapList (\pp -> Eithers.map (\terms -> (Lists.map (\t -> termToString t) terms, (Pairs.second pp))) (evalPath cx (Pairs.first pp) term)) pairs) (\evaluated -> Right (Lists.map (\s -> Core.TermLiteral (Core.LiteralString s)) (Lists.foldl (\accum -> \ep ->
+      let pStrs = Pairs.first ep
           litP = Pairs.second ep
       in (Lists.concat (Lists.map (\pStr -> Lists.map (\a -> Strings.cat2 (Strings.cat2 a pStr) litP) accum) pStrs))) [
       firstLit] evaluated))))
@@ -134,8 +134,8 @@ parseEdgeIdPattern cx g schema spec =
 -- | Parse an edge specification into a label and encoder function
 parseEdgeSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.EdgeSpec -> Either t5 (Model.Label, (Context.Context -> Core.Term -> Either (Context.InContext Error.Error) [Model.Element t4]))
 parseEdgeSpec cx g schema spec =
-     
-      let label = Mapping.edgeSpecLabel spec 
+
+      let label = Mapping.edgeSpecLabel spec
           id = Mapping.edgeSpecId spec
           outV = Mapping.edgeSpecOut spec
           inV = Mapping.edgeSpecIn spec
@@ -158,13 +158,13 @@ parseElementSpec cx g schema spec =
 -- | Parse a string pattern into a function that traverses terms
 parsePattern :: t0 -> t1 -> String -> Either t2 (Context.Context -> Core.Term -> Either (Context.InContext Error.Error) [Core.Term])
 parsePattern cx _g pat =
-     
-      let segments = Strings.splitOn "${" pat 
+
+      let segments = Strings.splitOn "${" pat
           firstLit = Lists.head segments
           rest = Lists.tail segments
           parsed =
-                  Lists.map (\seg ->  
-                    let parts = Strings.splitOn "}" seg 
+                  Lists.map (\seg ->
+                    let parts = Strings.splitOn "}" seg
                         pathStr = Lists.head parts
                         litPart = Strings.intercalate "}" (Lists.tail parts)
                         pathSteps = Strings.splitOn "/" pathStr
@@ -174,8 +174,8 @@ parsePattern cx _g pat =
 -- | Parse a property specification into an encoder function
 parsePropertySpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.PropertySpec -> Either t5 (Context.Context -> Core.Term -> Either (Context.InContext Error.Error) [(Model.PropertyKey, t4)])
 parsePropertySpec cx g schema spec =
-     
-      let key = Mapping.propertySpecKey spec 
+
+      let key = Mapping.propertySpecKey spec
           value = Mapping.propertySpecValue spec
       in (Eithers.bind (parseValueSpec cx g value) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\results -> Eithers.bind (Eithers.mapList (Util.coderEncode (Mapping.schemaPropertyValues schema) cx_) results) (\values -> Right (Lists.map (\v -> (key, v)) values))))))
 
@@ -195,8 +195,8 @@ parseVertexIdPattern cx g schema spec =
 -- | Parse a vertex specification into a label and encoder function
 parseVertexSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.VertexSpec -> Either t5 (Model.Label, (Context.Context -> Core.Term -> Either (Context.InContext Error.Error) [Model.Element t4]))
 parseVertexSpec cx g schema spec =
-     
-      let label = Mapping.vertexSpecLabel spec 
+
+      let label = Mapping.vertexSpecLabel spec
           id = Mapping.vertexSpecId spec
           props = Mapping.vertexSpecProperties spec
       in (Eithers.bind (parseVertexIdPattern cx g schema id) (\getId -> Eithers.bind (Eithers.mapList (parsePropertySpec cx g schema) props) (\getProps -> Right (Model.LabelVertex label, (\cx_ -> \term -> Eithers.bind (requireUnique cx_ "vertex id" (getId cx_) term) (\tid -> Eithers.bind (Eithers.map (\_xs -> Maps.fromList _xs) (Eithers.mapList (\gf -> requireUnique cx_ "property key" (gf cx_) term) getProps)) (\tprops -> Right [
@@ -215,12 +215,12 @@ readField cx fields fname fun =
 -- | Read an injection (union value) from a term
 readInjection :: Context.Context -> Graph.Graph -> [(Core.Name, (Core.Term -> Either (Context.InContext Error.Error) t0))] -> Core.Term -> Either (Context.InContext Error.Error) t0
 readInjection cx g cases encoded =
-    Eithers.bind (Core_.map cx (\k -> Eithers.map (\_n -> Core.Name _n) (Core_.string cx g k)) (\_v -> Right _v) g encoded) (\mp ->  
+    Eithers.bind (Core_.map cx (\k -> Eithers.map (\_n -> Core.Name _n) (Core_.string cx g k)) (\_v -> Right _v) g encoded) (\mp ->
       let entries = Maps.toList mp
       in (Logic.ifElse (Lists.null entries) (Left (Context.InContext {
         Context.inContextObject = (Error.ErrorOther (Error.OtherError "empty injection")),
-        Context.inContextContext = cx})) ( 
-        let f = Lists.head entries 
+        Context.inContextContext = cx})) (
+        let f = Lists.head entries
             key = Pairs.first f
             val = Pairs.second f
             matching = Lists.filter (\c -> Equality.equal (Pairs.first c) key) cases
@@ -245,7 +245,7 @@ requireUnique cx context fun term =
 -- | Create an adapter that maps terms to property graph elements using a mapping specification
 termToElementsAdapter :: Context.Context -> Graph.Graph -> Mapping.Schema t0 t1 t2 -> Core.Type -> Either (Context.InContext Error.Error) (Util.Adapter Core.Type [Model.Label] Core.Term [Model.Element t2])
 termToElementsAdapter cx g schema typ =
-     
+
       let key_elements = Core.Name "elements"
       in (Maybes.maybe (Right (Util.Adapter {
         Util.adapterIsLossy = False,
@@ -255,8 +255,8 @@ termToElementsAdapter cx g schema typ =
           Util.coderEncode = (\_cx -> \_t -> Right []),
           Util.coderDecode = (\cx_ -> \_els -> Left (Context.InContext {
             Context.inContextObject = (Error.ErrorOther (Error.OtherError "no corresponding element type")),
-            Context.inContextContext = cx_}))}})) (\term -> Eithers.bind (expectList cx g decodeElementSpec term) (\specTerms -> Eithers.bind (Eithers.mapList (parseElementSpec cx g schema) specTerms) (\specs ->  
-        let labels = Lists.nub (Lists.map (\_p -> Pairs.first _p) specs) 
+            Context.inContextContext = cx_}))}})) (\term -> Eithers.bind (expectList cx g decodeElementSpec term) (\specTerms -> Eithers.bind (Eithers.mapList (parseElementSpec cx g schema) specTerms) (\specs ->
+        let labels = Lists.nub (Lists.map (\_p -> Pairs.first _p) specs)
             encoders = Lists.map (\_p -> Pairs.second _p) specs
         in (Right (Util.Adapter {
           Util.adapterIsLossy = False,

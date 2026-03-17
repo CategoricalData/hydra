@@ -36,10 +36,10 @@ excludeInternalOptions opts =
 -- | Prepend an optional description comment to an expression
 optDesc :: Bool -> [Proto3.Option] -> Ast.Expr -> Ast.Expr
 optDesc doubleNewline opts expr =
-     
+
       let descs = Lists.filter (\opt -> Equality.equal (Proto3.optionName opt) "_description") opts
-      in (Logic.ifElse (Lists.null descs) expr ( 
-        let descValue = Proto3.optionValue (Lists.head descs) 
+      in (Logic.ifElse (Lists.null descs) expr (
+        let descValue = Proto3.optionValue (Lists.head descs)
             descStr =
                     case descValue of
                       Proto3.ValueBoolean v0 -> Logic.ifElse v0 "true" "false"
@@ -76,8 +76,8 @@ writeDefinition def =
 -- | Convert an enum definition to an expression
 writeEnumDefinition :: Proto3.EnumDefinition -> Ast.Expr
 writeEnumDefinition ed =
-     
-      let name = Proto3.enumDefinitionName ed 
+
+      let name = Proto3.enumDefinitionName ed
           values = Proto3.enumDefinitionValues ed
           options = Proto3.enumDefinitionOptions ed
       in (optDesc False options (Serialization.spaceSep [
@@ -88,8 +88,8 @@ writeEnumDefinition ed =
 -- | Convert an enum value to an expression
 writeEnumValue :: Proto3.EnumValue -> Ast.Expr
 writeEnumValue ev =
-     
-      let name = Proto3.enumValueName ev 
+
+      let name = Proto3.enumValueName ev
           number = Proto3.enumValueNumber ev
           options = Proto3.enumValueOptions ev
       in (optDesc False options (semi (Serialization.spaceSep [
@@ -100,8 +100,8 @@ writeEnumValue ev =
 -- | Convert a field to an expression
 writeField :: Proto3.Field -> Ast.Expr
 writeField f =
-     
-      let name = Proto3.fieldName f 
+
+      let name = Proto3.fieldName f
           typ = Proto3.fieldType f
           num = Proto3.fieldNumber f
           options = Proto3.fieldOptions f
@@ -110,8 +110,8 @@ writeField f =
           Serialization.cst "oneof",
           (Serialization.cst (Proto3.unFieldName name)),
           (protoBlock (Lists.map writeField v0))]
-        Proto3.FieldTypeMap v0 ->  
-          let kt = Proto3.mapTypeKeys v0 
+        Proto3.FieldTypeMap v0 ->
+          let kt = Proto3.mapTypeKeys v0
               vt = Proto3.mapTypeValues v0
           in (semi (Serialization.spaceSep (Maybes.cat [
             Maybes.pure (writeFieldType typ),
@@ -135,8 +135,8 @@ writeField f =
 -- | Convert a field option to an expression
 writeFieldOption :: Proto3.Option -> Ast.Expr
 writeFieldOption opt =
-     
-      let name = Proto3.optionName opt 
+
+      let name = Proto3.optionName opt
           value = Proto3.optionValue opt
       in (Serialization.spaceSep [
         Serialization.cst name,
@@ -146,7 +146,7 @@ writeFieldOption opt =
 -- | Convert field options to an optional bracket-enclosed expression
 writeFieldOptions :: [Proto3.Option] -> Maybe Ast.Expr
 writeFieldOptions opts0 =
-     
+
       let opts = excludeInternalOptions opts0
       in (Logic.ifElse (Lists.null opts) Nothing (Maybes.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map writeFieldOption opts))))
 
@@ -154,8 +154,8 @@ writeFieldOptions opts0 =
 writeFieldType :: Proto3.FieldType -> Ast.Expr
 writeFieldType ftyp =
     case ftyp of
-      Proto3.FieldTypeMap v0 ->  
-        let kt = Proto3.mapTypeKeys v0 
+      Proto3.FieldTypeMap v0 ->
+        let kt = Proto3.mapTypeKeys v0
             vt = Proto3.mapTypeValues v0
         in (Serialization.noSep [
           Serialization.cst "map",
@@ -171,8 +171,8 @@ writeFieldType ftyp =
 -- | Convert a file-level option to an expression
 writeFileOption :: Proto3.Option -> Ast.Expr
 writeFileOption opt =
-     
-      let name = Proto3.optionName opt 
+
+      let name = Proto3.optionName opt
           value = Proto3.optionValue opt
       in (semi (Serialization.spaceSep [
         Serialization.cst "option",
@@ -183,7 +183,7 @@ writeFileOption opt =
 -- | Convert file-level options to an optional newline-separated expression
 writeFileOptions :: [Proto3.Option] -> Maybe Ast.Expr
 writeFileOptions opts0 =
-     
+
       let opts = excludeInternalOptions opts0
       in (Logic.ifElse (Lists.null opts) Nothing (Maybes.pure (Serialization.newlineSep (Lists.map writeFileOption opts))))
 
@@ -197,8 +197,8 @@ writeImport ref =
 -- | Convert a message definition to an expression
 writeMessageDefinition :: Proto3.MessageDefinition -> Ast.Expr
 writeMessageDefinition md =
-     
-      let name = Proto3.messageDefinitionName md 
+
+      let name = Proto3.messageDefinitionName md
           fields = Proto3.messageDefinitionFields md
           options = Proto3.messageDefinitionOptions md
       in (optDesc False options (Serialization.spaceSep [
@@ -209,8 +209,8 @@ writeMessageDefinition md =
 -- | Convert a proto file to an expression
 writeProtoFile :: Proto3.ProtoFile -> Ast.Expr
 writeProtoFile pf =
-     
-      let pkg = Proto3.protoFilePackage pf 
+
+      let pkg = Proto3.protoFilePackage pf
           imports = Proto3.protoFileImports pf
           defs = Proto3.protoFileTypes pf
           options = Proto3.protoFileOptions pf

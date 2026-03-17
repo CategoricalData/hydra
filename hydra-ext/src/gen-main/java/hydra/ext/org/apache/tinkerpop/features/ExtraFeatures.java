@@ -9,15 +9,15 @@ import java.io.Serializable;
  */
 public class ExtraFeatures<A> implements Serializable, Comparable<ExtraFeatures<A>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.ExtraFeatures");
-  
+
   public static final hydra.core.Name SUPPORTS_MAP_KEY = new hydra.core.Name("supportsMapKey");
-  
+
   public final java.util.function.Function<hydra.core.Type, Boolean> supportsMapKey;
-  
+
   public ExtraFeatures (java.util.function.Function<hydra.core.Type, Boolean> supportsMapKey) {
     this.supportsMapKey = supportsMapKey;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ExtraFeatures)) {
@@ -28,12 +28,12 @@ public class ExtraFeatures<A> implements Serializable, Comparable<ExtraFeatures<
       this.supportsMapKey,
       o.supportsMapKey);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(supportsMapKey);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ExtraFeatures other) {

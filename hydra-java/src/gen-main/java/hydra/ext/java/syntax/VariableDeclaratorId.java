@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class VariableDeclaratorId implements Serializable, Comparable<VariableDeclaratorId> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.VariableDeclaratorId");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public static final hydra.core.Name DIMS = new hydra.core.Name("dims");
-  
+
   public final hydra.ext.java.syntax.Identifier identifier;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims;
-  
+
   public VariableDeclaratorId (hydra.ext.java.syntax.Identifier identifier, hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims) {
     this.identifier = identifier;
     this.dims = dims;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof VariableDeclaratorId)) {
@@ -32,12 +32,12 @@ public class VariableDeclaratorId implements Serializable, Comparable<VariableDe
       this.dims,
       o.dims);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(identifier) + 3 * java.util.Objects.hashCode(dims);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(VariableDeclaratorId other) {
@@ -48,11 +48,11 @@ public class VariableDeclaratorId implements Serializable, Comparable<VariableDe
     }
     return ((Comparable) dims).compareTo(other.dims);
   }
-  
+
   public VariableDeclaratorId withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new VariableDeclaratorId(identifier, dims);
   }
-  
+
   public VariableDeclaratorId withDims(hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims) {
     return new VariableDeclaratorId(identifier, dims);
   }

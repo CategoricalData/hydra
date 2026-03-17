@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class NotExpression implements Serializable, Comparable<NotExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.NotExpression");
-  
+
   public static final hydra.core.Name NOT = new hydra.core.Name("not");
-  
+
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
-  
+
   public final Boolean not;
-  
+
   public final hydra.ext.cypher.openCypher.ComparisonExpression expression;
-  
+
   public NotExpression (Boolean not, hydra.ext.cypher.openCypher.ComparisonExpression expression) {
     this.not = not;
     this.expression = expression;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof NotExpression)) {
@@ -32,12 +32,12 @@ public class NotExpression implements Serializable, Comparable<NotExpression> {
       this.expression,
       o.expression);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(not) + 3 * java.util.Objects.hashCode(expression);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NotExpression other) {
@@ -48,11 +48,11 @@ public class NotExpression implements Serializable, Comparable<NotExpression> {
     }
     return ((Comparable) expression).compareTo(other.expression);
   }
-  
+
   public NotExpression withNot(Boolean not) {
     return new NotExpression(not, expression);
   }
-  
+
   public NotExpression withExpression(hydra.ext.cypher.openCypher.ComparisonExpression expression) {
     return new NotExpression(not, expression);
   }

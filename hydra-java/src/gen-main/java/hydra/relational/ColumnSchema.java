@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class ColumnSchema<T> implements Serializable, Comparable<ColumnSchema<T>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.relational.ColumnSchema");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name DOMAIN = new hydra.core.Name("domain");
-  
+
   /**
    * A unique name for the column
    */
   public final hydra.relational.ColumnName name;
-  
+
   /**
    * The domain (type) of the column
    */
   public final T domain;
-  
+
   public ColumnSchema (hydra.relational.ColumnName name, T domain) {
     this.name = name;
     this.domain = domain;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ColumnSchema)) {
@@ -41,12 +41,12 @@ public class ColumnSchema<T> implements Serializable, Comparable<ColumnSchema<T>
       this.domain,
       o.domain);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(domain);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ColumnSchema other) {
@@ -57,11 +57,11 @@ public class ColumnSchema<T> implements Serializable, Comparable<ColumnSchema<T>
     }
     return ((Comparable) domain).compareTo(other.domain);
   }
-  
+
   public ColumnSchema withName(hydra.relational.ColumnName name) {
     return new ColumnSchema(name, domain);
   }
-  
+
   public ColumnSchema withDomain(T domain) {
     return new ColumnSchema(name, domain);
   }

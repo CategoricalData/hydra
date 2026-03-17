@@ -9,15 +9,15 @@ import java.io.Serializable;
  */
 public class DecodingError implements Serializable, Comparable<DecodingError> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.error.DecodingError");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final String value;
-  
+
   public DecodingError (String value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof DecodingError)) {
@@ -28,12 +28,12 @@ public class DecodingError implements Serializable, Comparable<DecodingError> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DecodingError other) {

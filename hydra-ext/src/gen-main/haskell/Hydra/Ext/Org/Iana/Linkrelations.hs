@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | An IANA link relation type
-data LinkRelationType = 
+data LinkRelationType =
   -- | Refers to a resource that is the subject of the link's context. [RFC6903], section 2
   LinkRelationTypeAbout  |
   -- | Asserts that the link target provides an access control resource for the link context. [https://solidproject.org/TR/wac#acl-link-relation]
@@ -255,7 +255,7 @@ data LinkRelationType =
   -- | Points to a working copy for this resource. [RFC5829]
   LinkRelationTypeWorking_copy  |
   -- | Points to the versioned resource from which this working copy was obtained. [RFC5829]
-  LinkRelationTypeWorking_copy_of 
+  LinkRelationTypeWorking_copy_of
   deriving (Eq, Ord, Read, Show)
 
 _LinkRelationType = Core.Name "hydra.ext.org.iana.linkrelations.LinkRelationType"

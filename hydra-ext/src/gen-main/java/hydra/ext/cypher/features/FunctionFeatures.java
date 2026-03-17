@@ -9,119 +9,119 @@ import java.io.Serializable;
  */
 public class FunctionFeatures implements Serializable, Comparable<FunctionFeatures> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.features.FunctionFeatures");
-  
+
   public static final hydra.core.Name AGGREGATE_FUNCTION = new hydra.core.Name("aggregateFunction");
-  
+
   public static final hydra.core.Name DATABASE_FUNCTION = new hydra.core.Name("databaseFunction");
-  
+
   public static final hydra.core.Name GEN_A_I_FUNCTION = new hydra.core.Name("genAIFunction");
-  
+
   public static final hydra.core.Name GRAPH_FUNCTION = new hydra.core.Name("graphFunction");
-  
+
   public static final hydra.core.Name LIST_FUNCTION = new hydra.core.Name("listFunction");
-  
+
   public static final hydra.core.Name LOAD_C_S_V_FUNCTION = new hydra.core.Name("loadCSVFunction");
-  
+
   public static final hydra.core.Name LOGARITHMIC_FUNCTION = new hydra.core.Name("logarithmicFunction");
-  
+
   public static final hydra.core.Name NUMERIC_FUNCTION = new hydra.core.Name("numericFunction");
-  
+
   public static final hydra.core.Name PREDICATE_FUNCTION = new hydra.core.Name("predicateFunction");
-  
+
   public static final hydra.core.Name SCALAR_FUNCTION = new hydra.core.Name("scalarFunction");
-  
+
   public static final hydra.core.Name SPATIAL_FUNCTION = new hydra.core.Name("spatialFunction");
-  
+
   public static final hydra.core.Name STRING_FUNCTION = new hydra.core.Name("stringFunction");
-  
+
   public static final hydra.core.Name TEMPORAL_DURATION_FUNCTION = new hydra.core.Name("temporalDurationFunction");
-  
+
   public static final hydra.core.Name TEMPORAL_INSTANT_FUNCTION = new hydra.core.Name("temporalInstantFunction");
-  
+
   public static final hydra.core.Name TRIGONOMETRIC_FUNCTION = new hydra.core.Name("trigonometricFunction");
-  
+
   public static final hydra.core.Name VECTOR_FUNCTION = new hydra.core.Name("vectorFunction");
-  
+
   /**
    * Aggregate functions
    */
   public final hydra.ext.cypher.features.AggregateFunctionFeatures aggregateFunction;
-  
+
   /**
    * Database functions
    */
   public final hydra.ext.cypher.features.DatabaseFunctionFeatures databaseFunction;
-  
+
   /**
    * GenAI functions
    */
   public final hydra.ext.cypher.features.GenAIFunctionFeatures genAIFunction;
-  
+
   /**
    * Graph functions
    */
   public final hydra.ext.cypher.features.GraphFunctionFeatures graphFunction;
-  
+
   /**
    * List functions
    */
   public final hydra.ext.cypher.features.ListFunctionFeatures listFunction;
-  
+
   /**
    * Load CSV functions
    */
   public final hydra.ext.cypher.features.LoadCSVFunctionFeatures loadCSVFunction;
-  
+
   /**
    * Logarithmic functions
    */
   public final hydra.ext.cypher.features.LogarithmicFunctionFeatures logarithmicFunction;
-  
+
   /**
    * Numeric functions
    */
   public final hydra.ext.cypher.features.NumericFunctionFeatures numericFunction;
-  
+
   /**
    * Predicate functions
    */
   public final hydra.ext.cypher.features.PredicateFunctionFeatures predicateFunction;
-  
+
   /**
    * Scalar functions
    */
   public final hydra.ext.cypher.features.ScalarFunctionFeatures scalarFunction;
-  
+
   /**
    * Spatial functions
    */
   public final hydra.ext.cypher.features.SpatialFunctionFeatures spatialFunction;
-  
+
   /**
    * String functions
    */
   public final hydra.ext.cypher.features.StringFunctionFeatures stringFunction;
-  
+
   /**
    * Temporal duration functions
    */
   public final hydra.ext.cypher.features.TemporalDurationFunctionFeatures temporalDurationFunction;
-  
+
   /**
    * Temporal instant functions
    */
   public final hydra.ext.cypher.features.TemporalInstantFunctionFeatures temporalInstantFunction;
-  
+
   /**
    * Trigonometric functions
    */
   public final hydra.ext.cypher.features.TrigonometricFunctionFeatures trigonometricFunction;
-  
+
   /**
    * Vector functions
    */
   public final hydra.ext.cypher.features.VectorFunctionFeatures vectorFunction;
-  
+
   public FunctionFeatures (hydra.ext.cypher.features.AggregateFunctionFeatures aggregateFunction, hydra.ext.cypher.features.DatabaseFunctionFeatures databaseFunction, hydra.ext.cypher.features.GenAIFunctionFeatures genAIFunction, hydra.ext.cypher.features.GraphFunctionFeatures graphFunction, hydra.ext.cypher.features.ListFunctionFeatures listFunction, hydra.ext.cypher.features.LoadCSVFunctionFeatures loadCSVFunction, hydra.ext.cypher.features.LogarithmicFunctionFeatures logarithmicFunction, hydra.ext.cypher.features.NumericFunctionFeatures numericFunction, hydra.ext.cypher.features.PredicateFunctionFeatures predicateFunction, hydra.ext.cypher.features.ScalarFunctionFeatures scalarFunction, hydra.ext.cypher.features.SpatialFunctionFeatures spatialFunction, hydra.ext.cypher.features.StringFunctionFeatures stringFunction, hydra.ext.cypher.features.TemporalDurationFunctionFeatures temporalDurationFunction, hydra.ext.cypher.features.TemporalInstantFunctionFeatures temporalInstantFunction, hydra.ext.cypher.features.TrigonometricFunctionFeatures trigonometricFunction, hydra.ext.cypher.features.VectorFunctionFeatures vectorFunction) {
     this.aggregateFunction = aggregateFunction;
     this.databaseFunction = databaseFunction;
@@ -140,7 +140,7 @@ public class FunctionFeatures implements Serializable, Comparable<FunctionFeatur
     this.trigonometricFunction = trigonometricFunction;
     this.vectorFunction = vectorFunction;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof FunctionFeatures)) {
@@ -181,12 +181,12 @@ public class FunctionFeatures implements Serializable, Comparable<FunctionFeatur
       this.vectorFunction,
       o.vectorFunction);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(aggregateFunction) + 3 * java.util.Objects.hashCode(databaseFunction) + 5 * java.util.Objects.hashCode(genAIFunction) + 7 * java.util.Objects.hashCode(graphFunction) + 11 * java.util.Objects.hashCode(listFunction) + 13 * java.util.Objects.hashCode(loadCSVFunction) + 17 * java.util.Objects.hashCode(logarithmicFunction) + 19 * java.util.Objects.hashCode(numericFunction) + 23 * java.util.Objects.hashCode(predicateFunction) + 29 * java.util.Objects.hashCode(scalarFunction) + 31 * java.util.Objects.hashCode(spatialFunction) + 37 * java.util.Objects.hashCode(stringFunction) + 41 * java.util.Objects.hashCode(temporalDurationFunction) + 43 * java.util.Objects.hashCode(temporalInstantFunction) + 47 * java.util.Objects.hashCode(trigonometricFunction) + 53 * java.util.Objects.hashCode(vectorFunction);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(FunctionFeatures other) {
@@ -253,67 +253,67 @@ public class FunctionFeatures implements Serializable, Comparable<FunctionFeatur
     }
     return ((Comparable) vectorFunction).compareTo(other.vectorFunction);
   }
-  
+
   public FunctionFeatures withAggregateFunction(hydra.ext.cypher.features.AggregateFunctionFeatures aggregateFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withDatabaseFunction(hydra.ext.cypher.features.DatabaseFunctionFeatures databaseFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withGenAIFunction(hydra.ext.cypher.features.GenAIFunctionFeatures genAIFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withGraphFunction(hydra.ext.cypher.features.GraphFunctionFeatures graphFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withListFunction(hydra.ext.cypher.features.ListFunctionFeatures listFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withLoadCSVFunction(hydra.ext.cypher.features.LoadCSVFunctionFeatures loadCSVFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withLogarithmicFunction(hydra.ext.cypher.features.LogarithmicFunctionFeatures logarithmicFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withNumericFunction(hydra.ext.cypher.features.NumericFunctionFeatures numericFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withPredicateFunction(hydra.ext.cypher.features.PredicateFunctionFeatures predicateFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withScalarFunction(hydra.ext.cypher.features.ScalarFunctionFeatures scalarFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withSpatialFunction(hydra.ext.cypher.features.SpatialFunctionFeatures spatialFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withStringFunction(hydra.ext.cypher.features.StringFunctionFeatures stringFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withTemporalDurationFunction(hydra.ext.cypher.features.TemporalDurationFunctionFeatures temporalDurationFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withTemporalInstantFunction(hydra.ext.cypher.features.TemporalInstantFunctionFeatures temporalInstantFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withTrigonometricFunction(hydra.ext.cypher.features.TrigonometricFunctionFeatures trigonometricFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }
-  
+
   public FunctionFeatures withVectorFunction(hydra.ext.cypher.features.VectorFunctionFeatures vectorFunction) {
     return new FunctionFeatures(aggregateFunction, databaseFunction, genAIFunction, graphFunction, listFunction, loadCSVFunction, logarithmicFunction, numericFunction, predicateFunction, scalarFunction, spatialFunction, stringFunction, temporalDurationFunction, temporalInstantFunction, trigonometricFunction, vectorFunction);
   }

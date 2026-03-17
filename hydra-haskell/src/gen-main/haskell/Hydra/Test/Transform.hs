@@ -24,8 +24,8 @@ import qualified Data.Set as S
 -- | Transform test group hierarchy to only include delegated evaluation tests
 transformToCompiledTests :: Testing.TestGroup -> Maybe Testing.TestGroup
 transformToCompiledTests tg =
-     
-      let name_ = Testing.testGroupName tg 
+
+      let name_ = Testing.testGroupName tg
           desc = Testing.testGroupDescription tg
           subgroups = Testing.testGroupSubgroups tg
           cases_ = Testing.testGroupCases tg
@@ -40,14 +40,14 @@ transformToCompiledTests tg =
 -- | Transform a test case to DelegatedEvaluationTestCase if applicable
 transformTestCase :: Testing.TestCaseWithMetadata -> Maybe Testing.TestCaseWithMetadata
 transformTestCase tcm =
-     
-      let name_ = Testing.testCaseWithMetadataName tcm 
+
+      let name_ = Testing.testCaseWithMetadataName tcm
           tc = Testing.testCaseWithMetadataCase tcm
           desc = Testing.testCaseWithMetadataDescription tcm
           tags_ = Testing.testCaseWithMetadataTags tcm
       in case tc of
-        Testing.TestCaseCaseConversion v0 ->  
-          let fromConv = Testing.caseConversionTestCaseFromConvention v0 
+        Testing.TestCaseCaseConversion v0 ->
+          let fromConv = Testing.caseConversionTestCaseFromConvention v0
               toConv = Testing.caseConversionTestCaseToConvention v0
               fromStr = Testing.caseConversionTestCaseFromString v0
               toStr = Testing.caseConversionTestCaseToString v0
@@ -58,8 +58,8 @@ transformTestCase tcm =
               Testing.delegatedEvaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString toStr))})),
             Testing.testCaseWithMetadataDescription = desc,
             Testing.testCaseWithMetadataTags = tags_}))
-        Testing.TestCaseEvaluation v0 ->  
-          let input_ = Testing.evaluationTestCaseInput v0 
+        Testing.TestCaseEvaluation v0 ->
+          let input_ = Testing.evaluationTestCaseInput v0
               output_ = Testing.evaluationTestCaseOutput v0
           in (Just (Testing.TestCaseWithMetadata {
             Testing.testCaseWithMetadataName = name_,
@@ -69,8 +69,8 @@ transformTestCase tcm =
             Testing.testCaseWithMetadataDescription = desc,
             Testing.testCaseWithMetadataTags = tags_}))
         Testing.TestCaseDelegatedEvaluation _ -> Just tcm
-        Testing.TestCaseTopologicalSort v0 ->  
-          let adjList = Testing.topologicalSortTestCaseAdjacencyList v0 
+        Testing.TestCaseTopologicalSort v0 ->
+          let adjList = Testing.topologicalSortTestCaseAdjacencyList v0
               expected = Testing.topologicalSortTestCaseExpected v0
           in (Just (Testing.TestCaseWithMetadata {
             Testing.testCaseWithMetadataName = name_,
@@ -79,8 +79,8 @@ transformTestCase tcm =
               Testing.delegatedEvaluationTestCaseOutput = (encodeEitherListList expected)})),
             Testing.testCaseWithMetadataDescription = desc,
             Testing.testCaseWithMetadataTags = tags_}))
-        Testing.TestCaseTopologicalSortSCC v0 ->  
-          let adjList = Testing.topologicalSortSCCTestCaseAdjacencyList v0 
+        Testing.TestCaseTopologicalSortSCC v0 ->
+          let adjList = Testing.topologicalSortSCCTestCaseAdjacencyList v0
               expected = Testing.topologicalSortSCCTestCaseExpected v0
           in (Just (Testing.TestCaseWithMetadata {
             Testing.testCaseWithMetadataName = name_,

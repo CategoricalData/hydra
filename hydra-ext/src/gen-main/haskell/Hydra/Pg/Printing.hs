@@ -19,8 +19,8 @@ import qualified Data.Set as S
 -- | Print an edge using the provided value printer
 printEdge :: (t0 -> String) -> Model.Edge t0 -> String
 printEdge printValue edge =
-     
-      let label = Model.unEdgeLabel (Model.edgeLabel edge) 
+
+      let label = Model.unEdgeLabel (Model.edgeLabel edge)
           id = printValue (Model.edgeId edge)
           outId = printValue (Model.edgeOut edge)
           inId = printValue (Model.edgeIn edge)
@@ -49,8 +49,8 @@ printGraph printValue graph =
 -- | Print a lazy graph using the provided value printer
 printLazyGraph :: (t0 -> String) -> Model.LazyGraph t0 -> String
 printLazyGraph printValue lg =
-     
-      let vertices = Model.lazyGraphVertices lg 
+
+      let vertices = Model.lazyGraphVertices lg
           edges = Model.lazyGraphEdges lg
       in (Strings.cat [
         "vertices:",
@@ -73,8 +73,8 @@ printProperty printValue key value =
 -- | Print a vertex using the provided value printer
 printVertex :: (t0 -> String) -> Model.Vertex t0 -> String
 printVertex printValue vertex =
-     
-      let label = Model.unVertexLabel (Model.vertexLabel vertex) 
+
+      let label = Model.unVertexLabel (Model.vertexLabel vertex)
           id = printValue (Model.vertexId vertex)
           props =
                   Strings.intercalate ", " (Lists.map (\p -> printProperty printValue (Pairs.first p) (Pairs.second p)) (Maps.toList (Model.vertexProperties vertex)))

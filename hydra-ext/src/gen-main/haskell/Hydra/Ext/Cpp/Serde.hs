@@ -32,8 +32,8 @@ encodeAccessSpecifier a =
 -- | Convert an add operation to an expression
 encodeAddOperation :: Syntax.AddOperation -> Ast.Expr
 encodeAddOperation op =
-     
-      let left = Syntax.addOperationLeft op 
+
+      let left = Syntax.addOperationLeft op
           right = Syntax.addOperationRight op
       in (Serialization.spaceSep [
         encodeAdditiveExpression left,
@@ -81,8 +81,8 @@ encodeAssignmentOperator op =
 -- | Convert a base specifier to an expression
 encodeBaseSpecifier :: Syntax.BaseSpecifier -> Ast.Expr
 encodeBaseSpecifier bs =
-     
-      let access = Syntax.baseSpecifierAccess bs 
+
+      let access = Syntax.baseSpecifierAccess bs
           name = Syntax.baseSpecifierName bs
       in (Serialization.spaceSep [
         encodeAccessSpecifier access,
@@ -105,8 +105,8 @@ encodeBasicType t =
 -- | Convert a bitwise and operation to an expression
 encodeBitwiseAndOperation :: Syntax.BitwiseAndOperation -> Ast.Expr
 encodeBitwiseAndOperation op =
-     
-      let left = Syntax.bitwiseAndOperationLeft op 
+
+      let left = Syntax.bitwiseAndOperationLeft op
           right = Syntax.bitwiseAndOperationRight op
       in (Serialization.spaceSep [
         encodeAndExpression left,
@@ -116,8 +116,8 @@ encodeBitwiseAndOperation op =
 -- | Convert a bitwise or operation to an expression
 encodeBitwiseOrOperation :: Syntax.BitwiseOrOperation -> Ast.Expr
 encodeBitwiseOrOperation op =
-     
-      let left = Syntax.bitwiseOrOperationLeft op 
+
+      let left = Syntax.bitwiseOrOperationLeft op
           right = Syntax.bitwiseOrOperationRight op
       in (Serialization.spaceSep [
         encodeInclusiveOrExpression left,
@@ -127,8 +127,8 @@ encodeBitwiseOrOperation op =
 -- | Convert a bitwise xor operation to an expression
 encodeBitwiseXorOperation :: Syntax.BitwiseXorOperation -> Ast.Expr
 encodeBitwiseXorOperation op =
-     
-      let left = Syntax.bitwiseXorOperationLeft op 
+
+      let left = Syntax.bitwiseXorOperationLeft op
           right = Syntax.bitwiseXorOperationRight op
       in (Serialization.spaceSep [
         encodeExclusiveOrExpression left,
@@ -142,8 +142,8 @@ encodeBooleanLiteral bl = Logic.ifElse (Syntax.unBooleanLiteral bl) (Serializati
 -- | Convert a capture to an expression
 encodeCapture :: Syntax.Capture -> Ast.Expr
 encodeCapture cap =
-     
-      let name = Syntax.captureName cap 
+
+      let name = Syntax.captureName cap
           byRef = Syntax.captureByReference cap
       in (Logic.ifElse byRef (Serialization.cst (Strings.cat2 "&" name)) (Serialization.cst name))
 
@@ -166,8 +166,8 @@ encodeCaseStatement stmt =
 -- | Convert a case value to an expression
 encodeCaseValue :: Syntax.CaseValue -> Ast.Expr
 encodeCaseValue cv =
-     
-      let value = Syntax.caseValueValue cv 
+
+      let value = Syntax.caseValueValue cv
           statement = Syntax.caseValueStatement cv
       in (Serialization.spaceSep [
         Serialization.cst "case",
@@ -184,8 +184,8 @@ encodeClassBody commas cb =
 -- | Convert a class declaration to an expression
 encodeClassDeclaration :: Syntax.ClassDeclaration -> Ast.Expr
 encodeClassDeclaration cd =
-     
-      let spec = Syntax.classDeclarationSpecifier cd 
+
+      let spec = Syntax.classDeclarationSpecifier cd
           mbody = Syntax.classDeclarationBody cd
           key = Syntax.classSpecifierKey spec
           isEnum = Logic.or (Equality.equal key Syntax.ClassKeyEnum) (Equality.equal key Syntax.ClassKeyEnumClass)
@@ -205,8 +205,8 @@ encodeClassKey k =
 -- | Convert a class specifier to an expression
 encodeClassSpecifier :: Syntax.ClassSpecifier -> Ast.Expr
 encodeClassSpecifier cs =
-     
-      let key = Syntax.classSpecifierKey cs 
+
+      let key = Syntax.classSpecifierKey cs
           name = Syntax.classSpecifierName cs
           inheritance = Syntax.classSpecifierInheritance cs
       in (Serialization.spaceSep (Lists.concat [
@@ -220,8 +220,8 @@ encodeClassSpecifier cs =
 -- | Convert a comma expression to an expression
 encodeCommaExpression :: Syntax.CommaExpression -> Ast.Expr
 encodeCommaExpression ce =
-     
-      let left = Syntax.commaExpressionLeft ce 
+
+      let left = Syntax.commaExpressionLeft ce
           right = Syntax.commaExpressionRight ce
       in (Serialization.spaceSep [
         encodeExpression left,
@@ -231,8 +231,8 @@ encodeCommaExpression ce =
 -- | Convert a comment to an expression
 encodeComment :: Syntax.Comment -> Ast.Expr
 encodeComment c =
-     
-      let text = Syntax.commentText c 
+
+      let text = Syntax.commentText c
           isMultiline = Syntax.commentIsMultiline c
       in (Serialization.cst (toCppComments text isMultiline))
 
@@ -251,8 +251,8 @@ encodeConditionalExpression c =
 -- | Convert a constructor declaration to an expression
 encodeConstructorDeclaration :: Syntax.ConstructorDeclaration -> Ast.Expr
 encodeConstructorDeclaration cd =
-     
-      let name = Syntax.constructorDeclarationName cd 
+
+      let name = Syntax.constructorDeclarationName cd
           params = Syntax.constructorDeclarationParameters cd
           inits = Syntax.constructorDeclarationInitializers cd
           body = Syntax.constructorDeclarationBody cd
@@ -280,8 +280,8 @@ encodeDeclaration d =
 -- | Convert a define directive to an expression
 encodeDefineDirective :: Syntax.DefineDirective -> Ast.Expr
 encodeDefineDirective dd =
-     
-      let name = Syntax.defineDirectiveName dd 
+
+      let name = Syntax.defineDirectiveName dd
           params = Syntax.defineDirectiveParameters dd
           replacement = Syntax.defineDirectiveReplacement dd
       in (Serialization.spaceSep (Lists.concat [
@@ -296,8 +296,8 @@ encodeDefineDirective dd =
 -- | Convert a destructor declaration to an expression
 encodeDestructorDeclaration :: Syntax.DestructorDeclaration -> Ast.Expr
 encodeDestructorDeclaration dd =
-     
-      let prefixSpecs = Syntax.destructorDeclarationPrefixSpecifiers dd 
+
+      let prefixSpecs = Syntax.destructorDeclarationPrefixSpecifiers dd
           name = Syntax.destructorDeclarationName dd
           suffixSpecs = Syntax.destructorDeclarationSuffixSpecifiers dd
           body = Syntax.destructorDeclarationBody dd
@@ -314,8 +314,8 @@ encodeDestructorDeclaration dd =
 -- | Convert a divide operation to an expression
 encodeDivideOperation :: Syntax.DivideOperation -> Ast.Expr
 encodeDivideOperation op =
-     
-      let left = Syntax.divideOperationLeft op 
+
+      let left = Syntax.divideOperationLeft op
           right = Syntax.divideOperationRight op
       in (Serialization.spaceSep [
         encodeMultiplicativeExpression left,
@@ -325,8 +325,8 @@ encodeDivideOperation op =
 -- | Convert a do statement to an expression
 encodeDoStatement :: Syntax.DoStatement -> Ast.Expr
 encodeDoStatement ds =
-     
-      let body = Syntax.doStatementBody ds 
+
+      let body = Syntax.doStatementBody ds
           cond = Syntax.doStatementCondition ds
       in (Serialization.newlineSep [
         Serialization.cst "do",
@@ -353,8 +353,8 @@ encodeEndifDirective ed = Serialization.cst "#endif"
 -- | Convert an equal operation to an expression
 encodeEqualOperation :: Syntax.EqualOperation -> Ast.Expr
 encodeEqualOperation op =
-     
-      let left = Syntax.equalOperationLeft op 
+
+      let left = Syntax.equalOperationLeft op
           right = Syntax.equalOperationRight op
       in (Serialization.spaceSep [
         encodeEqualityExpression left,
@@ -386,8 +386,8 @@ encodeExclusiveOrExpression e =
 -- | Convert an explicit assignment to an expression
 encodeExplicitAssignment :: Syntax.ExplicitAssignment -> Ast.Expr
 encodeExplicitAssignment ea =
-     
-      let left = Syntax.explicitAssignmentLeft ea 
+
+      let left = Syntax.explicitAssignmentLeft ea
           op = Syntax.explicitAssignmentOp ea
           right = Syntax.explicitAssignmentRight ea
       in (Serialization.spaceSep [
@@ -413,8 +413,8 @@ encodeForInit i =
 -- | Convert a for statement to an expression
 encodeForStatement :: Syntax.ForStatement -> Ast.Expr
 encodeForStatement fs =
-     
-      let init = Syntax.forStatementInit fs 
+
+      let init = Syntax.forStatementInit fs
           cond = Syntax.forStatementCondition fs
           inc = Syntax.forStatementIncrement fs
           body = Syntax.forStatementBody fs
@@ -432,8 +432,8 @@ encodeForStatement fs =
 -- | Convert a function application to an expression
 encodeFunctionApplication :: Syntax.FunctionApplication -> Ast.Expr
 encodeFunctionApplication fa =
-     
-      let func = Syntax.functionApplicationFunction fa 
+
+      let func = Syntax.functionApplicationFunction fa
           args = Syntax.functionApplicationArguments fa
       in (Serialization.spaceSep [
         encodeFunctionIdentifier func,
@@ -451,8 +451,8 @@ encodeFunctionBody b =
 -- | Convert a function call operation to an expression
 encodeFunctionCallOperation :: Syntax.FunctionCallOperation -> Ast.Expr
 encodeFunctionCallOperation fco =
-     
-      let func = Syntax.functionCallOperationFunction fco 
+
+      let func = Syntax.functionCallOperationFunction fco
           args = Syntax.functionCallOperationArguments fco
       in (Serialization.noSep [
         encodePostfixExpression func,
@@ -461,8 +461,8 @@ encodeFunctionCallOperation fco =
 -- | Convert a function declaration to an expression
 encodeFunctionDeclaration :: Syntax.FunctionDeclaration -> Ast.Expr
 encodeFunctionDeclaration fd =
-     
-      let prefixSpecs = Syntax.functionDeclarationPrefixSpecifiers fd 
+
+      let prefixSpecs = Syntax.functionDeclarationPrefixSpecifiers fd
           retType = Syntax.functionDeclarationReturnType fd
           name = Syntax.functionDeclarationName fd
           params = Syntax.functionDeclarationParameters fd
@@ -507,8 +507,8 @@ encodeFunctionSpecifierSuffix s =
 -- | Convert a function type to an expression
 encodeFunctionType :: Syntax.FunctionType -> Ast.Expr
 encodeFunctionType ft =
-     
-      let retType = Syntax.functionTypeReturnType ft 
+
+      let retType = Syntax.functionTypeReturnType ft
           params = Syntax.functionTypeParameters ft
       in (Serialization.spaceSep [
         encodeTypeExpression retType,
@@ -517,8 +517,8 @@ encodeFunctionType ft =
 -- | Convert a greater-than-or-equal operation to an expression
 encodeGreaterEqualOperation :: Syntax.GreaterEqualOperation -> Ast.Expr
 encodeGreaterEqualOperation op =
-     
-      let left = Syntax.greaterEqualOperationLeft op 
+
+      let left = Syntax.greaterEqualOperationLeft op
           right = Syntax.greaterEqualOperationRight op
       in (Serialization.spaceSep [
         encodeRelationalExpression left,
@@ -528,8 +528,8 @@ encodeGreaterEqualOperation op =
 -- | Convert a greater-than operation to an expression
 encodeGreaterOperation :: Syntax.GreaterOperation -> Ast.Expr
 encodeGreaterOperation op =
-     
-      let left = Syntax.greaterOperationLeft op 
+
+      let left = Syntax.greaterOperationLeft op
           right = Syntax.greaterOperationRight op
       in (Serialization.spaceSep [
         encodeRelationalExpression left,
@@ -560,8 +560,8 @@ encodeIfndefDirective ind =
 -- | Convert an include directive to an expression
 encodeIncludeDirective :: Syntax.IncludeDirective -> Ast.Expr
 encodeIncludeDirective incl =
-     
-      let name = Syntax.includeDirectiveName incl 
+
+      let name = Syntax.includeDirectiveName incl
           isSystem = Syntax.includeDirectiveIsSystem incl
       in (Logic.ifElse isSystem (Serialization.cst (Strings.cat [
         "#include <",
@@ -613,8 +613,8 @@ encodeJumpStatement j =
 -- | Convert a labeled statement to an expression
 encodeLabeledStatement :: Syntax.LabeledStatement -> Ast.Expr
 encodeLabeledStatement ls =
-     
-      let label = Syntax.labeledStatementLabel ls 
+
+      let label = Syntax.labeledStatementLabel ls
           stmt = Syntax.labeledStatementStatement ls
       in (Serialization.newlineSep [
         Serialization.cst (Strings.cat2 label ":"),
@@ -623,8 +623,8 @@ encodeLabeledStatement ls =
 -- | Convert a lambda expression to an expression
 encodeLambdaExpression :: Syntax.LambdaExpression -> Ast.Expr
 encodeLambdaExpression le =
-     
-      let captures = Syntax.lambdaExpressionCaptures le 
+
+      let captures = Syntax.lambdaExpressionCaptures le
           params = Syntax.lambdaExpressionParameters le
           retType = Syntax.lambdaExpressionReturnType le
           body = Syntax.lambdaExpressionBody le
@@ -639,8 +639,8 @@ encodeLambdaExpression le =
 -- | Convert a left shift operation to an expression
 encodeLeftShiftOperation :: Syntax.LeftShiftOperation -> Ast.Expr
 encodeLeftShiftOperation op =
-     
-      let left = Syntax.leftShiftOperationLeft op 
+
+      let left = Syntax.leftShiftOperationLeft op
           right = Syntax.leftShiftOperationRight op
       in (Serialization.spaceSep [
         encodeShiftExpression left,
@@ -650,8 +650,8 @@ encodeLeftShiftOperation op =
 -- | Convert a less-than-or-equal operation to an expression
 encodeLessEqualOperation :: Syntax.LessEqualOperation -> Ast.Expr
 encodeLessEqualOperation op =
-     
-      let left = Syntax.lessEqualOperationLeft op 
+
+      let left = Syntax.lessEqualOperationLeft op
           right = Syntax.lessEqualOperationRight op
       in (Serialization.spaceSep [
         encodeRelationalExpression left,
@@ -661,8 +661,8 @@ encodeLessEqualOperation op =
 -- | Convert a less-than operation to an expression
 encodeLessOperation :: Syntax.LessOperation -> Ast.Expr
 encodeLessOperation op =
-     
-      let left = Syntax.lessOperationLeft op 
+
+      let left = Syntax.lessOperationLeft op
           right = Syntax.lessOperationRight op
       in (Serialization.spaceSep [
         encodeRelationalExpression left,
@@ -672,8 +672,8 @@ encodeLessOperation op =
 -- | Convert a line directive to an expression
 encodeLineDirective :: Syntax.LineDirective -> Ast.Expr
 encodeLineDirective ld =
-     
-      let lineNumber = Syntax.lineDirectiveLineNumber ld 
+
+      let lineNumber = Syntax.lineDirectiveLineNumber ld
           filename = Syntax.lineDirectiveFilename ld
       in (Serialization.spaceSep (Lists.concat [
         [
@@ -712,8 +712,8 @@ encodeLogicalAndExpression e =
 -- | Convert a logical and operation to an expression
 encodeLogicalAndOperation :: Syntax.LogicalAndOperation -> Ast.Expr
 encodeLogicalAndOperation op =
-     
-      let left = Syntax.logicalAndOperationLeft op 
+
+      let left = Syntax.logicalAndOperationLeft op
           right = Syntax.logicalAndOperationRight op
       in (Serialization.spaceSep [
         encodeLogicalAndExpression left,
@@ -730,8 +730,8 @@ encodeLogicalOrExpression e =
 -- | Convert a logical or operation to an expression
 encodeLogicalOrOperation :: Syntax.LogicalOrOperation -> Ast.Expr
 encodeLogicalOrOperation op =
-     
-      let left = Syntax.logicalOrOperationLeft op 
+
+      let left = Syntax.logicalOrOperationLeft op
           right = Syntax.logicalOrOperationRight op
       in (Serialization.spaceSep [
         encodeLogicalOrExpression left,
@@ -741,8 +741,8 @@ encodeLogicalOrOperation op =
 -- | Convert a map to an expression
 encodeMap :: Syntax.Map -> Ast.Expr
 encodeMap m =
-     
-      let keyType = Syntax.mapKeyType m 
+
+      let keyType = Syntax.mapKeyType m
           valType = Syntax.mapValueType m
           entries = Syntax.mapEntries m
       in (Serialization.spaceSep [
@@ -756,8 +756,8 @@ encodeMap m =
 -- | Convert a map entry to an expression
 encodeMapEntry :: Syntax.MapEntry -> Ast.Expr
 encodeMapEntry me =
-     
-      let key = Syntax.mapEntryKey me 
+
+      let key = Syntax.mapEntryKey me
           val = Syntax.mapEntryValue me
       in (Serialization.spaceSep [
         Serialization.curlyBracesList Nothing Serialization.inlineStyle [
@@ -768,8 +768,8 @@ encodeMapEntry me =
 -- | Convert a member access operation to an expression
 encodeMemberAccessOperation :: Syntax.MemberAccessOperation -> Ast.Expr
 encodeMemberAccessOperation mao =
-     
-      let obj = Syntax.memberAccessOperationObject mao 
+
+      let obj = Syntax.memberAccessOperationObject mao
           member = Syntax.memberAccessOperationMember mao
       in (Serialization.noSep [
         encodePostfixExpression obj,
@@ -799,8 +799,8 @@ encodeMemberSpecification commas m =
 -- | Convert a member initializer to an expression
 encodeMemInitializer :: Syntax.MemInitializer -> Ast.Expr
 encodeMemInitializer mi =
-     
-      let name = Syntax.memInitializerName mi 
+
+      let name = Syntax.memInitializerName mi
           args = Syntax.memInitializerArguments mi
       in (Serialization.noSep [
         Serialization.cst name,
@@ -809,8 +809,8 @@ encodeMemInitializer mi =
 -- | Convert a modulo operation to an expression
 encodeModuloOperation :: Syntax.ModuloOperation -> Ast.Expr
 encodeModuloOperation op =
-     
-      let left = Syntax.moduloOperationLeft op 
+
+      let left = Syntax.moduloOperationLeft op
           right = Syntax.moduloOperationRight op
       in (Serialization.spaceSep [
         encodeMultiplicativeExpression left,
@@ -829,8 +829,8 @@ encodeMultiplicativeExpression e =
 -- | Convert a multiply operation to an expression
 encodeMultiplyOperation :: Syntax.MultiplyOperation -> Ast.Expr
 encodeMultiplyOperation op =
-     
-      let left = Syntax.multiplyOperationLeft op 
+
+      let left = Syntax.multiplyOperationLeft op
           right = Syntax.multiplyOperationRight op
       in (Serialization.spaceSep [
         encodeMultiplicativeExpression left,
@@ -840,8 +840,8 @@ encodeMultiplyOperation op =
 -- | Convert a namespace declaration to an expression
 encodeNamespaceDeclaration :: Syntax.NamespaceDeclaration -> Ast.Expr
 encodeNamespaceDeclaration nd =
-     
-      let name = Syntax.namespaceDeclarationName nd 
+
+      let name = Syntax.namespaceDeclarationName nd
           decls = Syntax.namespaceDeclarationDeclarations nd
       in (Serialization.spaceSep [
         Serialization.cst (Strings.cat2 "namespace " name),
@@ -850,8 +850,8 @@ encodeNamespaceDeclaration nd =
 -- | Convert a not-equal operation to an expression
 encodeNotEqualOperation :: Syntax.NotEqualOperation -> Ast.Expr
 encodeNotEqualOperation op =
-     
-      let left = Syntax.notEqualOperationLeft op 
+
+      let left = Syntax.notEqualOperationLeft op
           right = Syntax.notEqualOperationRight op
       in (Serialization.spaceSep [
         encodeEqualityExpression left,
@@ -861,8 +861,8 @@ encodeNotEqualOperation op =
 -- | Convert an optional to an expression
 encodeOptional :: Syntax.Optional -> Ast.Expr
 encodeOptional opt =
-     
-      let valType = Syntax.optionalValueType opt 
+
+      let valType = Syntax.optionalValueType opt
           val = Syntax.optionalValue opt
       in (Serialization.spaceSep [
         Serialization.cst "std::optional<",
@@ -881,8 +881,8 @@ encodeOverloadedLambdas ol =
 -- | Convert a parameter to an expression
 encodeParameter :: Syntax.Parameter -> Ast.Expr
 encodeParameter p =
-     
-      let typ = Syntax.parameterType p 
+
+      let typ = Syntax.parameterType p
           name = Syntax.parameterName p
           unnamed = Syntax.parameterUnnamed p
           defaultVal = Syntax.parameterDefaultValue p
@@ -902,8 +902,8 @@ encodeParameter p =
 -- | Convert a pattern match to an expression
 encodePatternMatch :: Syntax.PatternMatch -> Ast.Expr
 encodePatternMatch pm =
-     
-      let visitor = Syntax.patternMatchVisitor pm 
+
+      let visitor = Syntax.patternMatchVisitor pm
           variant = Syntax.patternMatchVariant pm
       in (Serialization.spaceSep [
         Serialization.cst "std::visit",
@@ -914,8 +914,8 @@ encodePatternMatch pm =
 -- | Convert a pointer member access operation to an expression
 encodePointerMemberAccessOperation :: Syntax.PointerMemberAccessOperation -> Ast.Expr
 encodePointerMemberAccessOperation pmao =
-     
-      let ptr = Syntax.pointerMemberAccessOperationPointer pmao 
+
+      let ptr = Syntax.pointerMemberAccessOperationPointer pmao
           member = Syntax.pointerMemberAccessOperationMember pmao
       in (Serialization.noSep [
         encodePostfixExpression ptr,
@@ -973,8 +973,8 @@ encodePrimaryExpression e =
 -- | Convert a program to an expression
 encodeProgram :: Syntax.Program -> Ast.Expr
 encodeProgram prog =
-     
-      let preps = Syntax.programPreprocessorDirectives prog 
+
+      let preps = Syntax.programPreprocessorDirectives prog
           includes = Syntax.programIncludes prog
           decls = Syntax.programDeclarations prog
           separate = \sep -> \defs -> Logic.ifElse (Lists.null defs) Nothing (Just (sep defs))
@@ -986,8 +986,8 @@ encodeProgram prog =
 -- | Convert a qualified identifier to an expression
 encodeQualifiedIdentifier :: Syntax.QualifiedIdentifier -> Ast.Expr
 encodeQualifiedIdentifier qi =
-     
-      let ns = Syntax.qualifiedIdentifierNamespace qi 
+
+      let ns = Syntax.qualifiedIdentifierNamespace qi
           name = Syntax.qualifiedIdentifierName qi
       in (Serialization.cst (Strings.cat [
         ns,
@@ -997,8 +997,8 @@ encodeQualifiedIdentifier qi =
 -- | Convert a qualified type to an expression
 encodeQualifiedType :: Syntax.QualifiedType -> Ast.Expr
 encodeQualifiedType qt =
-     
-      let baseType = Syntax.qualifiedTypeBaseType qt 
+
+      let baseType = Syntax.qualifiedTypeBaseType qt
           qualifier = Syntax.qualifiedTypeQualifier qt
       in case qualifier of
         Syntax.TypeQualifierConst -> Serialization.spaceSep [
@@ -1017,8 +1017,8 @@ encodeQualifiedType qt =
 -- | Convert a range-for statement to an expression
 encodeRangeForStatement :: Syntax.RangeForStatement -> Ast.Expr
 encodeRangeForStatement rfs =
-     
-      let typ = Syntax.rangeForStatementType rfs 
+
+      let typ = Syntax.rangeForStatementType rfs
           var = Syntax.rangeForStatementVariable rfs
           range = Syntax.rangeForStatementRange rfs
           body = Syntax.rangeForStatementBody rfs
@@ -1045,8 +1045,8 @@ encodeRelationalExpression e =
 -- | Convert a right shift operation to an expression
 encodeRightShiftOperation :: Syntax.RightShiftOperation -> Ast.Expr
 encodeRightShiftOperation op =
-     
-      let left = Syntax.rightShiftOperationLeft op 
+
+      let left = Syntax.rightShiftOperationLeft op
           right = Syntax.rightShiftOperationRight op
       in (Serialization.spaceSep [
         encodeShiftExpression left,
@@ -1056,8 +1056,8 @@ encodeRightShiftOperation op =
 -- | Convert a selection statement to an expression
 encodeSelectionStatement :: Syntax.SelectionStatement -> Ast.Expr
 encodeSelectionStatement ss =
-     
-      let cond = Syntax.selectionStatementCondition ss 
+
+      let cond = Syntax.selectionStatementCondition ss
           thenBranch = Syntax.selectionStatementThenBranch ss
           elseBranch = Syntax.selectionStatementElseBranch ss
       in (Serialization.newlineSep [
@@ -1072,8 +1072,8 @@ encodeSelectionStatement ss =
 -- | Convert a set to an expression
 encodeSet :: Syntax.Set -> Ast.Expr
 encodeSet s =
-     
-      let elemType = Syntax.setElementType s 
+
+      let elemType = Syntax.setElementType s
           elems = Syntax.setElements s
       in (Serialization.spaceSep [
         Serialization.cst "std::set<",
@@ -1112,8 +1112,8 @@ encodeStatement s =
 -- | Convert a subscript operation to an expression
 encodeSubscriptOperation :: Syntax.SubscriptOperation -> Ast.Expr
 encodeSubscriptOperation so =
-     
-      let array = Syntax.subscriptOperationArray so 
+
+      let array = Syntax.subscriptOperationArray so
           index = Syntax.subscriptOperationIndex so
       in (Serialization.noSep [
         encodePostfixExpression array,
@@ -1124,8 +1124,8 @@ encodeSubscriptOperation so =
 -- | Convert a subtract operation to an expression
 encodeSubtractOperation :: Syntax.SubtractOperation -> Ast.Expr
 encodeSubtractOperation op =
-     
-      let left = Syntax.subtractOperationLeft op 
+
+      let left = Syntax.subtractOperationLeft op
           right = Syntax.subtractOperationRight op
       in (Serialization.spaceSep [
         encodeAdditiveExpression left,
@@ -1135,8 +1135,8 @@ encodeSubtractOperation op =
 -- | Convert a switch statement to an expression
 encodeSwitchStatement :: Syntax.SwitchStatement -> Ast.Expr
 encodeSwitchStatement ss =
-     
-      let value = Syntax.switchStatementValue ss 
+
+      let value = Syntax.switchStatementValue ss
           cases = Syntax.switchStatementCases ss
       in (Serialization.spaceSep [
         Serialization.cst "switch",
@@ -1153,8 +1153,8 @@ encodeTemplateArgument a =
 -- | Convert a template declaration to an expression
 encodeTemplateDeclaration :: Syntax.TemplateDeclaration -> Ast.Expr
 encodeTemplateDeclaration td =
-     
-      let inline = Syntax.templateDeclarationInline td 
+
+      let inline = Syntax.templateDeclarationInline td
           params = Syntax.templateDeclarationParameters td
           declaration = Syntax.templateDeclarationDeclaration td
           sep = Logic.ifElse inline Serialization.spaceSep Serialization.newlineSep
@@ -1167,8 +1167,8 @@ encodeTemplateDeclaration td =
 -- | Convert a template function call operation to an expression
 encodeTemplateFunctionCallOperation :: Syntax.TemplateFunctionCallOperation -> Ast.Expr
 encodeTemplateFunctionCallOperation tfco =
-     
-      let func = Syntax.templateFunctionCallOperationFunction tfco 
+
+      let func = Syntax.templateFunctionCallOperationFunction tfco
           templateArgs = Syntax.templateFunctionCallOperationTemplateArguments tfco
           args = Syntax.templateFunctionCallOperationArguments tfco
       in (Serialization.noSep [
@@ -1179,8 +1179,8 @@ encodeTemplateFunctionCallOperation tfco =
 -- | Convert a template type to an expression
 encodeTemplateType :: Syntax.TemplateType -> Ast.Expr
 encodeTemplateType tt =
-     
-      let name = Syntax.templateTypeName tt 
+
+      let name = Syntax.templateTypeName tt
           args = Syntax.templateTypeArguments tt
       in (Serialization.noSep [
         Serialization.cst name,
@@ -1189,8 +1189,8 @@ encodeTemplateType tt =
 -- | Convert a ternary expression to an expression
 encodeTernaryExpression :: Syntax.TernaryExpression -> Ast.Expr
 encodeTernaryExpression te =
-     
-      let cond = Syntax.ternaryExpressionCondition te 
+
+      let cond = Syntax.ternaryExpressionCondition te
           trueExpr = Syntax.ternaryExpressionTrueExpr te
           falseExpr = Syntax.ternaryExpressionFalseExpr te
       in (Serialization.spaceSep [
@@ -1221,8 +1221,8 @@ encodeTypeExpression t =
 -- | Convert a typedef declaration to an expression
 encodeTypedefDeclaration :: Syntax.TypedefDeclaration -> Ast.Expr
 encodeTypedefDeclaration td =
-     
-      let name = Syntax.typedefDeclarationName td 
+
+      let name = Syntax.typedefDeclarationName td
           typ = Syntax.typedefDeclarationType td
           isUsing = Syntax.typedefDeclarationIsUsing td
       in (Logic.ifElse isUsing (Serialization.withSemi (Serialization.spaceSep [
@@ -1244,8 +1244,8 @@ encodeUnaryExpression e =
 -- | Convert a unary operation to an expression
 encodeUnaryOperation :: Syntax.UnaryOperation -> Ast.Expr
 encodeUnaryOperation uo =
-     
-      let op = Syntax.unaryOperationOperator uo 
+
+      let op = Syntax.unaryOperationOperator uo
           operand = Syntax.unaryOperationOperand uo
       in (Serialization.spaceSep [
         encodeUnaryOperator op,
@@ -1274,8 +1274,8 @@ encodeUndefDirective ud =
 -- | Convert a variable declaration to an expression
 encodeVariableDeclaration :: Bool -> Syntax.VariableDeclaration -> Ast.Expr
 encodeVariableDeclaration commas vd =
-     
-      let typ = Syntax.variableDeclarationType vd 
+
+      let typ = Syntax.variableDeclarationType vd
           name = Syntax.variableDeclarationName vd
           init = Syntax.variableDeclarationInitializer vd
           isAuto = Syntax.variableDeclarationIsAuto vd
@@ -1293,8 +1293,8 @@ encodeVariableDeclaration commas vd =
 -- | Convert a vector to an expression
 encodeVector :: Syntax.Vector -> Ast.Expr
 encodeVector v =
-     
-      let elemType = Syntax.vectorElementType v 
+
+      let elemType = Syntax.vectorElementType v
           elems = Syntax.vectorElements v
       in (Serialization.spaceSep [
         Serialization.cst "std::vector<",
@@ -1319,8 +1319,8 @@ encodeWarningDirective wd =
 -- | Convert a while statement to an expression
 encodeWhileStatement :: Syntax.WhileStatement -> Ast.Expr
 encodeWhileStatement ws =
-     
-      let cond = Syntax.whileStatementCondition ws 
+
+      let cond = Syntax.whileStatementCondition ws
           body = Syntax.whileStatementBody ws
       in (Serialization.newlineSep [
         Serialization.spaceSep [

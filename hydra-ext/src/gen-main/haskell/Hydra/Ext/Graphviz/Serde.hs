@@ -26,8 +26,8 @@ writeAttrList al =
 -- | Convert an attribute statement to an expression
 writeAttrStmt :: Dot.AttrStmt -> Ast.Expr
 writeAttrStmt as =
-     
-      let t = Dot.attrStmtType as 
+
+      let t = Dot.attrStmtType as
           attr = Dot.attrStmtAttributes as
       in (Serialization.spaceSep [
         writeAttrType t,
@@ -59,8 +59,8 @@ writeCompassPt p =
 -- | Convert an edge statement to an expression
 writeEdgeStmt :: Bool -> Dot.EdgeStmt -> Ast.Expr
 writeEdgeStmt directed es =
-     
-      let l = Dot.edgeStmtLeft es 
+
+      let l = Dot.edgeStmtLeft es
           r = Dot.edgeStmtRight es
           attr = Dot.edgeStmtAttributes es
           arrow = Logic.ifElse directed "->" "--"
@@ -79,8 +79,8 @@ writeEdgeStmt directed es =
 -- | Convert an equality pair to an expression
 writeEqualityPair :: Dot.EqualityPair -> Ast.Expr
 writeEqualityPair eq =
-     
-      let l = Dot.equalityPairLeft eq 
+
+      let l = Dot.equalityPairLeft eq
           r = Dot.equalityPairRight eq
       in (Serialization.spaceSep [
         writeId l,
@@ -90,8 +90,8 @@ writeEqualityPair eq =
 -- | Convert a graph to an expression
 writeGraph :: Dot.Graph -> Ast.Expr
 writeGraph g =
-     
-      let strict = Dot.graphStrict g 
+
+      let strict = Dot.graphStrict g
           directed = Dot.graphDirected g
           stmts = Dot.graphStatements g
           graphKeyword = Logic.ifElse directed "digraph" "graph"
@@ -116,8 +116,8 @@ writeId i =
 -- | Convert a node identifier to an expression
 writeNodeId :: Dot.NodeId -> Ast.Expr
 writeNodeId nid =
-     
-      let i = Dot.nodeIdId nid 
+
+      let i = Dot.nodeIdId nid
           mp = Dot.nodeIdPort nid
       in (Serialization.noSep (Maybes.cat [
         Maybes.pure (writeId i),
@@ -133,8 +133,8 @@ writeNodeOrSubgraph directed ns =
 -- | Convert a node statement to an expression
 writeNodeStmt :: Dot.NodeStmt -> Ast.Expr
 writeNodeStmt ns =
-     
-      let i = Dot.nodeStmtId ns 
+
+      let i = Dot.nodeStmtId ns
           attr = Dot.nodeStmtAttributes ns
       in (Serialization.spaceSep (Maybes.cat [
         Maybes.pure (writeNodeId i),
@@ -143,8 +143,8 @@ writeNodeStmt ns =
 -- | Convert a port to an expression
 writePort :: Dot.Port -> Ast.Expr
 writePort p =
-     
-      let mi = Dot.portId p 
+
+      let mi = Dot.portId p
           mp = Dot.portPosition p
           pre =
                   Maybes.maybe [] (\i -> [
@@ -171,8 +171,8 @@ writeStmt directed s =
 -- | Convert a subgraph to an expression
 writeSubgraph :: Bool -> Dot.Subgraph -> Ast.Expr
 writeSubgraph directed sg =
-     
-      let mid = Dot.subgraphSubgraphId sg 
+
+      let mid = Dot.subgraphSubgraphId sg
           stmts = Dot.subgraphStatements sg
           body =
                   Serialization.brackets Serialization.curlyBraces Serialization.inlineStyle (Serialization.spaceSep (Lists.map (writeStmt directed) stmts))

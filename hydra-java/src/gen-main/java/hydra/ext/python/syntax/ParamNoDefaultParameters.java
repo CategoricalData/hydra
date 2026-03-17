@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class ParamNoDefaultParameters implements Serializable, Comparable<ParamNoDefaultParameters> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ParamNoDefaultParameters");
-  
+
   public static final hydra.core.Name PARAM_NO_DEFAULT = new hydra.core.Name("paramNoDefault");
-  
+
   public static final hydra.core.Name PARAM_WITH_DEFAULT = new hydra.core.Name("paramWithDefault");
-  
+
   public static final hydra.core.Name STAR_ETC = new hydra.core.Name("starEtc");
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault;
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc;
-  
+
   public ParamNoDefaultParameters (hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault, hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault, hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc) {
     this.paramNoDefault = paramNoDefault;
     this.paramWithDefault = paramWithDefault;
     this.starEtc = starEtc;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ParamNoDefaultParameters)) {
@@ -39,12 +39,12 @@ public class ParamNoDefaultParameters implements Serializable, Comparable<ParamN
       this.starEtc,
       o.starEtc);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(paramNoDefault) + 3 * java.util.Objects.hashCode(paramWithDefault) + 5 * java.util.Objects.hashCode(starEtc);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ParamNoDefaultParameters other) {
@@ -59,15 +59,15 @@ public class ParamNoDefaultParameters implements Serializable, Comparable<ParamN
     }
     return ((Comparable) starEtc).compareTo(other.starEtc);
   }
-  
+
   public ParamNoDefaultParameters withParamNoDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault) {
     return new ParamNoDefaultParameters(paramNoDefault, paramWithDefault, starEtc);
   }
-  
+
   public ParamNoDefaultParameters withParamWithDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
     return new ParamNoDefaultParameters(paramNoDefault, paramWithDefault, starEtc);
   }
-  
+
   public ParamNoDefaultParameters withStarEtc(hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc) {
     return new ParamNoDefaultParameters(paramNoDefault, paramWithDefault, starEtc);
   }

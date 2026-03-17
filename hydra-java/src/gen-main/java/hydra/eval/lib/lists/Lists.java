@@ -26,7 +26,7 @@ public interface Lists {
             funs))));
         }))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> bind(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term listTerm, hydra.core.Term funTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.list(
@@ -37,11 +37,11 @@ public interface Lists {
         (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (el -> new hydra.core.Term.Application(new hydra.core.Application(funTerm, el))),
         elements)))))));
   }
-  
+
   static <T0, T1, T2> hydra.util.Either<T2, hydra.core.Term> dropWhile(T0 cx, T1 g, hydra.core.Term predTerm, hydra.core.Term listTerm) {
     return hydra.util.Either.<T2, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.pairs.second"))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.lists.span"))), predTerm)), listTerm)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> filter(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term predTerm, hydra.core.Term listTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.list(
@@ -52,11 +52,11 @@ public interface Lists {
         (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (el -> new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.logic.ifElse"))), new hydra.core.Term.Application(new hydra.core.Application(predTerm, el)))), new hydra.core.Term.List(hydra.lib.lists.Pure.apply(el)))), new hydra.core.Term.List((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))))),
         elements)))))));
   }
-  
+
   static <T0, T1, T2> hydra.util.Either<T2, hydra.core.Term> find(T0 cx, T1 g, hydra.core.Term predTerm, hydra.core.Term listTerm) {
     return hydra.util.Either.<T2, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.lists.safeHead"))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.lists.filter"))), predTerm)), listTerm)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> foldl(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term funTerm, hydra.core.Term initTerm, hydra.core.Term listTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.list(
@@ -68,7 +68,7 @@ public interface Lists {
         initTerm,
         elements))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> foldr(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term funTerm, hydra.core.Term initTerm, hydra.core.Term listTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.list(
@@ -80,7 +80,7 @@ public interface Lists {
         initTerm,
         elements))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> map(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term funTerm, hydra.core.Term listTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.list(
@@ -94,7 +94,7 @@ public interface Lists {
         (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()),
         elements))))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> partition(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term predTerm, hydra.core.Term listTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.list(
@@ -114,7 +114,7 @@ public interface Lists {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(finalState.get());
       }));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> sortOn(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term projTerm, hydra.core.Term listTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.list(
@@ -131,7 +131,7 @@ public interface Lists {
         new hydra.core.Term.List((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())),
         elements))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> span(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term predTerm, hydra.core.Term listTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.list(
@@ -153,7 +153,7 @@ public interface Lists {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.pairs.second"))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.pairs.first"))), finalState.get())))), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Primitive(new hydra.core.Name("hydra.lib.pairs.second"))), finalState.get())))))));
       }));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> zipWith(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term funTerm, hydra.core.Term listTerm1, hydra.core.Term listTerm2) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.list(

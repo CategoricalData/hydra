@@ -6,156 +6,156 @@ import java.io.Serializable;
 
 public abstract class Atom implements Serializable, Comparable<Atom> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Atom");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name TRUE = new hydra.core.Name("true");
-  
+
   public static final hydra.core.Name FALSE = new hydra.core.Name("false");
-  
+
   public static final hydra.core.Name NONE = new hydra.core.Name("none");
-  
+
   public static final hydra.core.Name STRING = new hydra.core.Name("string");
-  
+
   public static final hydra.core.Name NUMBER = new hydra.core.Name("number");
-  
+
   public static final hydra.core.Name TUPLE = new hydra.core.Name("tuple");
-  
+
   public static final hydra.core.Name GROUP = new hydra.core.Name("group");
-  
+
   public static final hydra.core.Name GENEXP = new hydra.core.Name("genexp");
-  
+
   public static final hydra.core.Name LIST = new hydra.core.Name("list");
-  
+
   public static final hydra.core.Name LISTCOMP = new hydra.core.Name("listcomp");
-  
+
   public static final hydra.core.Name DICT = new hydra.core.Name("dict");
-  
+
   public static final hydra.core.Name SET = new hydra.core.Name("set");
-  
+
   public static final hydra.core.Name DICTCOMP = new hydra.core.Name("dictcomp");
-  
+
   public static final hydra.core.Name SETCOMP = new hydra.core.Name("setcomp");
-  
+
   public static final hydra.core.Name ELLIPSIS = new hydra.core.Name("ellipsis");
-  
+
   private Atom () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Name instance) ;
-    
+
     R visit(True instance) ;
-    
+
     R visit(False instance) ;
-    
+
     R visit(None instance) ;
-    
+
     R visit(String_ instance) ;
-    
+
     R visit(Number_ instance) ;
-    
+
     R visit(Tuple instance) ;
-    
+
     R visit(Group instance) ;
-    
+
     R visit(Genexp instance) ;
-    
+
     R visit(List instance) ;
-    
+
     R visit(Listcomp instance) ;
-    
+
     R visit(Dict instance) ;
-    
+
     R visit(Set instance) ;
-    
+
     R visit(Dictcomp instance) ;
-    
+
     R visit(Setcomp instance) ;
-    
+
     R visit(Ellipsis instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Atom instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Name instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(True instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(False instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(None instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(String_ instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Number_ instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Tuple instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Group instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Genexp instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(List instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Listcomp instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Dict instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Set instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Dictcomp instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Setcomp instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Ellipsis instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Name extends hydra.ext.python.syntax.Atom implements Serializable {
     public final hydra.ext.python.syntax.Name value;
-    
+
     public Name (hydra.ext.python.syntax.Name value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Name)) {
@@ -166,12 +166,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -182,18 +182,18 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       Name o = (Name) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class True extends hydra.ext.python.syntax.Atom implements Serializable {
     public True () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof True)) {
@@ -202,12 +202,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       True o = (True) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -217,18 +217,18 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class False extends hydra.ext.python.syntax.Atom implements Serializable {
     public False () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof False)) {
@@ -237,12 +237,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       False o = (False) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -252,18 +252,18 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class None extends hydra.ext.python.syntax.Atom implements Serializable {
     public None () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof None)) {
@@ -272,12 +272,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       None o = (None) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -287,20 +287,20 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class String_ extends hydra.ext.python.syntax.Atom implements Serializable {
     public final hydra.ext.python.syntax.String_ value;
-    
+
     public String_ (hydra.ext.python.syntax.String_ value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof String_)) {
@@ -311,12 +311,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -327,20 +327,20 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       String_ o = (String_) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Number_ extends hydra.ext.python.syntax.Atom implements Serializable {
     public final hydra.ext.python.syntax.Number_ value;
-    
+
     public Number_ (hydra.ext.python.syntax.Number_ value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Number_)) {
@@ -351,12 +351,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -367,20 +367,20 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       Number_ o = (Number_) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Tuple extends hydra.ext.python.syntax.Atom implements Serializable {
     public final hydra.ext.python.syntax.Tuple value;
-    
+
     public Tuple (hydra.ext.python.syntax.Tuple value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Tuple)) {
@@ -391,12 +391,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -407,20 +407,20 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       Tuple o = (Tuple) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Group extends hydra.ext.python.syntax.Atom implements Serializable {
     public final hydra.ext.python.syntax.Group value;
-    
+
     public Group (hydra.ext.python.syntax.Group value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Group)) {
@@ -431,12 +431,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -447,20 +447,20 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       Group o = (Group) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Genexp extends hydra.ext.python.syntax.Atom implements Serializable {
     public final hydra.ext.python.syntax.Genexp value;
-    
+
     public Genexp (hydra.ext.python.syntax.Genexp value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Genexp)) {
@@ -471,12 +471,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -487,20 +487,20 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       Genexp o = (Genexp) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class List extends hydra.ext.python.syntax.Atom implements Serializable {
     public final hydra.ext.python.syntax.List value;
-    
+
     public List (hydra.ext.python.syntax.List value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof List)) {
@@ -511,12 +511,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -527,20 +527,20 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       List o = (List) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Listcomp extends hydra.ext.python.syntax.Atom implements Serializable {
     public final hydra.ext.python.syntax.Listcomp value;
-    
+
     public Listcomp (hydra.ext.python.syntax.Listcomp value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Listcomp)) {
@@ -551,12 +551,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -567,20 +567,20 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       Listcomp o = (Listcomp) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Dict extends hydra.ext.python.syntax.Atom implements Serializable {
     public final hydra.ext.python.syntax.Dict value;
-    
+
     public Dict (hydra.ext.python.syntax.Dict value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Dict)) {
@@ -591,12 +591,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -607,20 +607,20 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       Dict o = (Dict) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Set extends hydra.ext.python.syntax.Atom implements Serializable {
     public final hydra.ext.python.syntax.Set value;
-    
+
     public Set (hydra.ext.python.syntax.Set value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Set)) {
@@ -631,12 +631,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -647,20 +647,20 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       Set o = (Set) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Dictcomp extends hydra.ext.python.syntax.Atom implements Serializable {
     public final hydra.ext.python.syntax.Dictcomp value;
-    
+
     public Dictcomp (hydra.ext.python.syntax.Dictcomp value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Dictcomp)) {
@@ -671,12 +671,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -687,20 +687,20 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       Dictcomp o = (Dictcomp) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Setcomp extends hydra.ext.python.syntax.Atom implements Serializable {
     public final hydra.ext.python.syntax.Setcomp value;
-    
+
     public Setcomp (hydra.ext.python.syntax.Setcomp value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Setcomp)) {
@@ -711,12 +711,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -727,18 +727,18 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       Setcomp o = (Setcomp) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Ellipsis extends hydra.ext.python.syntax.Atom implements Serializable {
     public Ellipsis () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Ellipsis)) {
@@ -747,12 +747,12 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       Ellipsis o = (Ellipsis) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Atom other) {
@@ -762,7 +762,7 @@ public abstract class Atom implements Serializable, Comparable<Atom> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

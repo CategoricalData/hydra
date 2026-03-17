@@ -24,19 +24,19 @@ hash_code_method_name = "hashCode"
 
 def java_package_name(parts: frozenlist[str]) -> hydra.ext.java.syntax.PackageName:
     r"""Construct a Java package name from a list of string parts."""
-    
+
     return hydra.ext.java.syntax.PackageName(hydra.lib.lists.map((lambda p: hydra.ext.java.syntax.Identifier(p)), parts))
 
 @lru_cache(1)
 def hydra_core_package_name() -> Maybe[hydra.ext.java.syntax.PackageName]:
     r"""The hydra.core package name."""
-    
+
     return Just(java_package_name(("hydra", "core")))
 
 @lru_cache(1)
 def hydra_util_package_name() -> Maybe[hydra.ext.java.syntax.PackageName]:
     r"""The hydra.util package name."""
-    
+
     return Just(java_package_name(("hydra", "util")))
 
 instance_name = "instance"
@@ -44,19 +44,19 @@ instance_name = "instance"
 @lru_cache(1)
 def java_lang_package_name() -> Maybe[hydra.ext.java.syntax.PackageName]:
     r"""The java.lang package name."""
-    
+
     return Just(java_package_name(("java", "lang")))
 
 @lru_cache(1)
 def java_util_function_package_name() -> Maybe[hydra.ext.java.syntax.PackageName]:
     r"""The java.util.function package name."""
-    
+
     return Just(java_package_name(("java", "util", "function")))
 
 @lru_cache(1)
 def java_util_package_name() -> Maybe[hydra.ext.java.syntax.PackageName]:
     r"""The java.util package name."""
-    
+
     return Just(java_package_name(("java", "util")))
 
 other_instance_name = "other"

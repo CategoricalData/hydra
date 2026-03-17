@@ -6,106 +6,106 @@ import java.io.Serializable;
 
 public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.CompareOp");
-  
+
   public static final hydra.core.Name EQ = new hydra.core.Name("eq");
-  
+
   public static final hydra.core.Name NOTEQ = new hydra.core.Name("noteq");
-  
+
   public static final hydra.core.Name LTE = new hydra.core.Name("lte");
-  
+
   public static final hydra.core.Name LT = new hydra.core.Name("lt");
-  
+
   public static final hydra.core.Name GTE = new hydra.core.Name("gte");
-  
+
   public static final hydra.core.Name GT = new hydra.core.Name("gt");
-  
+
   public static final hydra.core.Name NOTIN = new hydra.core.Name("notin");
-  
+
   public static final hydra.core.Name IN = new hydra.core.Name("in");
-  
+
   public static final hydra.core.Name ISNOT = new hydra.core.Name("isnot");
-  
+
   public static final hydra.core.Name IS = new hydra.core.Name("is");
-  
+
   private CompareOp () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Eq instance) ;
-    
+
     R visit(Noteq instance) ;
-    
+
     R visit(Lte instance) ;
-    
+
     R visit(Lt instance) ;
-    
+
     R visit(Gte instance) ;
-    
+
     R visit(Gt instance) ;
-    
+
     R visit(Notin instance) ;
-    
+
     R visit(In instance) ;
-    
+
     R visit(Isnot instance) ;
-    
+
     R visit(Is instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(CompareOp instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Eq instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Noteq instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Lte instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Lt instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Gte instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Gt instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Notin instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(In instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Isnot instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Is instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Eq extends hydra.ext.python.syntax.CompareOp implements Serializable {
     public Eq () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Eq)) {
@@ -114,12 +114,12 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       Eq o = (Eq) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompareOp other) {
@@ -129,18 +129,18 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Noteq extends hydra.ext.python.syntax.CompareOp implements Serializable {
     public Noteq () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Noteq)) {
@@ -149,12 +149,12 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       Noteq o = (Noteq) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompareOp other) {
@@ -164,18 +164,18 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Lte extends hydra.ext.python.syntax.CompareOp implements Serializable {
     public Lte () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Lte)) {
@@ -184,12 +184,12 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       Lte o = (Lte) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompareOp other) {
@@ -199,18 +199,18 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Lt extends hydra.ext.python.syntax.CompareOp implements Serializable {
     public Lt () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Lt)) {
@@ -219,12 +219,12 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       Lt o = (Lt) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompareOp other) {
@@ -234,18 +234,18 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Gte extends hydra.ext.python.syntax.CompareOp implements Serializable {
     public Gte () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Gte)) {
@@ -254,12 +254,12 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       Gte o = (Gte) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompareOp other) {
@@ -269,18 +269,18 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Gt extends hydra.ext.python.syntax.CompareOp implements Serializable {
     public Gt () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Gt)) {
@@ -289,12 +289,12 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       Gt o = (Gt) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompareOp other) {
@@ -304,18 +304,18 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Notin extends hydra.ext.python.syntax.CompareOp implements Serializable {
     public Notin () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Notin)) {
@@ -324,12 +324,12 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       Notin o = (Notin) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompareOp other) {
@@ -339,18 +339,18 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class In extends hydra.ext.python.syntax.CompareOp implements Serializable {
     public In () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof In)) {
@@ -359,12 +359,12 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       In o = (In) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompareOp other) {
@@ -374,18 +374,18 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Isnot extends hydra.ext.python.syntax.CompareOp implements Serializable {
     public Isnot () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Isnot)) {
@@ -394,12 +394,12 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       Isnot o = (Isnot) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompareOp other) {
@@ -409,18 +409,18 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Is extends hydra.ext.python.syntax.CompareOp implements Serializable {
     public Is () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Is)) {
@@ -429,12 +429,12 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       Is o = (Is) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompareOp other) {
@@ -444,7 +444,7 @@ public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

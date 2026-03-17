@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class TryStatement_Simple implements Serializable, Comparable<TryStatement_Simple> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.TryStatement_Simple");
-  
+
   public static final hydra.core.Name BLOCK = new hydra.core.Name("block");
-  
+
   public static final hydra.core.Name CATCHES = new hydra.core.Name("catches");
-  
+
   public final hydra.ext.java.syntax.Block block;
-  
+
   public final hydra.ext.java.syntax.Catches catches;
-  
+
   public TryStatement_Simple (hydra.ext.java.syntax.Block block, hydra.ext.java.syntax.Catches catches) {
     this.block = block;
     this.catches = catches;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TryStatement_Simple)) {
@@ -32,12 +32,12 @@ public class TryStatement_Simple implements Serializable, Comparable<TryStatemen
       this.catches,
       o.catches);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(block) + 3 * java.util.Objects.hashCode(catches);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TryStatement_Simple other) {
@@ -48,11 +48,11 @@ public class TryStatement_Simple implements Serializable, Comparable<TryStatemen
     }
     return ((Comparable) catches).compareTo(other.catches);
   }
-  
+
   public TryStatement_Simple withBlock(hydra.ext.java.syntax.Block block) {
     return new TryStatement_Simple(block, catches);
   }
-  
+
   public TryStatement_Simple withCatches(hydra.ext.java.syntax.Catches catches) {
     return new TryStatement_Simple(block, catches);
   }

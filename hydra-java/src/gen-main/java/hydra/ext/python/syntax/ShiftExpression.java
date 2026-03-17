@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class ShiftExpression implements Serializable, Comparable<ShiftExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ShiftExpression");
-  
+
   public static final hydra.core.Name LHS = new hydra.core.Name("lhs");
-  
+
   public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs> lhs;
-  
+
   public final hydra.ext.python.syntax.Sum rhs;
-  
+
   public ShiftExpression (hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs> lhs, hydra.ext.python.syntax.Sum rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ShiftExpression)) {
@@ -32,12 +32,12 @@ public class ShiftExpression implements Serializable, Comparable<ShiftExpression
       this.rhs,
       o.rhs);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(lhs) + 3 * java.util.Objects.hashCode(rhs);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ShiftExpression other) {
@@ -48,11 +48,11 @@ public class ShiftExpression implements Serializable, Comparable<ShiftExpression
     }
     return ((Comparable) rhs).compareTo(other.rhs);
   }
-  
+
   public ShiftExpression withLhs(hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs> lhs) {
     return new ShiftExpression(lhs, rhs);
   }
-  
+
   public ShiftExpression withRhs(hydra.ext.python.syntax.Sum rhs) {
     return new ShiftExpression(lhs, rhs);
   }

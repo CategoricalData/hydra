@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class ApplicationDeclarationHead implements Serializable, Comparable<ApplicationDeclarationHead> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.ApplicationDeclarationHead");
-  
+
   public static final hydra.core.Name FUNCTION = new hydra.core.Name("function");
-  
+
   public static final hydra.core.Name OPERAND = new hydra.core.Name("operand");
-  
+
   /**
    * The function being applied
    */
   public final hydra.ext.haskell.ast.DeclarationHead function;
-  
+
   /**
    * The type variable operand
    */
   public final hydra.ext.haskell.ast.Variable operand;
-  
+
   public ApplicationDeclarationHead (hydra.ext.haskell.ast.DeclarationHead function, hydra.ext.haskell.ast.Variable operand) {
     this.function = function;
     this.operand = operand;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ApplicationDeclarationHead)) {
@@ -41,12 +41,12 @@ public class ApplicationDeclarationHead implements Serializable, Comparable<Appl
       this.operand,
       o.operand);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(function) + 3 * java.util.Objects.hashCode(operand);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ApplicationDeclarationHead other) {
@@ -57,11 +57,11 @@ public class ApplicationDeclarationHead implements Serializable, Comparable<Appl
     }
     return ((Comparable) operand).compareTo(other.operand);
   }
-  
+
   public ApplicationDeclarationHead withFunction(hydra.ext.haskell.ast.DeclarationHead function) {
     return new ApplicationDeclarationHead(function, operand);
   }
-  
+
   public ApplicationDeclarationHead withOperand(hydra.ext.haskell.ast.Variable operand) {
     return new ApplicationDeclarationHead(function, operand);
   }

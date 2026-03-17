@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class StarTargetsListSeq implements Serializable, Comparable<StarTargetsListSeq> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.StarTargetsListSeq");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> value;
-  
+
   public StarTargetsListSeq (hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof StarTargetsListSeq)) {
@@ -25,12 +25,12 @@ public class StarTargetsListSeq implements Serializable, Comparable<StarTargetsL
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StarTargetsListSeq other) {

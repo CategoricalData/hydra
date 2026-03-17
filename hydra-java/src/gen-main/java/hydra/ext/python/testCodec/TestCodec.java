@@ -9,7 +9,7 @@ public interface TestCodec {
   static hydra.ext.python.helpers.PythonModuleMetadata emptyPythonModuleMetadata(hydra.module.Namespace ns_) {
     return new hydra.ext.python.helpers.PythonModuleMetadata((hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>) (new hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>((hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>) ((hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>) (new hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>(ns_, hydra.ext.python.names.Names.encodeNamespace(ns_)))), (hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>) ((hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>) (hydra.lib.maps.Empty.<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>apply())))), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false);
   }
-  
+
   static <T0> hydra.util.Either<String, String> termToPythonWithContext(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces_, hydra.graph.Graph graph0, Boolean skipCasts, hydra.core.Term term, T0 _g) {
     return hydra.lib.eithers.Bimap.apply(
       (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
@@ -20,7 +20,7 @@ public interface TestCodec {
         skipCasts,
         term));
   }
-  
+
   static hydra.util.Either<String, String> termToPython(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces_, hydra.core.Term term, hydra.graph.Graph g) {
     return hydra.ext.python.testCodec.TestCodec.termToPythonWithContext(
       namespaces_,
@@ -29,7 +29,7 @@ public interface TestCodec {
       term,
       g);
   }
-  
+
   static hydra.util.Either<String, String> typeToPython(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces_, hydra.core.Type typ, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bimap.apply(
       (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
@@ -38,7 +38,7 @@ public interface TestCodec {
         new hydra.ext.python.helpers.PythonEnvironment(namespaces_, (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), (hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.ext.python.syntax.Name>apply()))))), g, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), hydra.ext.python.utils.Utils.targetPythonVersion(), false, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
         typ));
   }
-  
+
   static hydra.testing.TestCodec pythonTestCodec(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces_) {
     return new hydra.testing.TestCodec(new hydra.coders.LanguageName("python"), new hydra.module.FileExtension("py"), (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>>) (v1 -> (java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>) (v2 -> hydra.ext.python.testCodec.TestCodec.termToPython(
       namespaces_,
@@ -50,7 +50,7 @@ public interface TestCodec {
       namespaces_,
       v1)));
   }
-  
+
   static hydra.testing.TestCodec pythonTestCodecWithContext(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces_, hydra.graph.Graph tcontext) {
     return new hydra.testing.TestCodec(new hydra.coders.LanguageName("python"), new hydra.module.FileExtension("py"), (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>>) (v1 -> (java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>) (v2 -> hydra.ext.python.testCodec.TestCodec.termToPythonWithContext(
       namespaces_,
@@ -64,7 +64,7 @@ public interface TestCodec {
       namespaces_,
       v1)));
   }
-  
+
   static String formatPythonTestName(String name) {
     return hydra.lib.strings.Cat2.apply(
       "test_",
@@ -75,11 +75,11 @@ public interface TestCodec {
           () -> 95)),
         hydra.lib.strings.ToList.apply(name))));
   }
-  
+
   static String namespaceToPythonModuleName(hydra.module.Namespace ns_) {
     return (ns_).value;
   }
-  
+
   static String pythonTestCaseTemplate() {
     return hydra.lib.strings.Intercalate.apply(
       "\n",
@@ -87,11 +87,11 @@ public interface TestCodec {
         "def {name}():",
         "    assert ({input}) == ({output})"));
   }
-  
+
   static String pythonTestGroupTemplate() {
     return "# {groupName}";
   }
-  
+
   static String pythonModuleTemplate() {
     return hydra.lib.strings.Intercalate.apply(
       "\n",
@@ -106,11 +106,11 @@ public interface TestCodec {
         "",
         "{testCases}"));
   }
-  
+
   static String pythonImportTemplate() {
     return "import {namespace}";
   }
-  
+
   static <T0, T1> hydra.util.ConsList<String> findPythonImports(hydra.module.Namespaces<T0> namespaces_, T1 names_) {
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.Pair<hydra.module.Namespace, T0>, String>) (entry -> hydra.lib.strings.Cat2.apply(
@@ -118,11 +118,11 @@ public interface TestCodec {
         hydra.lib.pairs.First.apply(entry).value)),
       hydra.lib.maps.ToList.apply(hydra.ext.python.testCodec.TestCodec.<T0>findPythonImports_filtered(namespaces_)));
   }
-  
+
   static <T0> hydra.util.PersistentMap<hydra.module.Namespace, T0> findPythonImports_mapping_(hydra.module.Namespaces<T0> namespaces_) {
     return ((java.util.function.Function<hydra.module.Namespaces<T0>, hydra.util.PersistentMap<hydra.module.Namespace, T0>>) (projected -> projected.mapping)).apply(namespaces_);
   }
-  
+
   static <T0> hydra.util.PersistentMap<hydra.module.Namespace, T0> findPythonImports_filtered(hydra.module.Namespaces<T0> namespaces_) {
     return hydra.lib.maps.FilterWithKey.apply(
       (java.util.function.Function<hydra.module.Namespace, java.util.function.Function<T0, Boolean>>) (ns_ -> (java.util.function.Function<T0, Boolean>) (_v -> hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
@@ -132,7 +132,7 @@ public interface TestCodec {
         "")))),
       hydra.ext.python.testCodec.TestCodec.<T0>findPythonImports_mapping_(namespaces_));
   }
-  
+
   static <T0> hydra.util.Either<T0, hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>> namespacesForPythonModule(hydra.module.Module mod, hydra.graph.Graph graph_) {
     hydra.util.ConsList<hydra.core.Binding> bindings = hydra.lexical.Lexical.graphToBindings(graph_);
     hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> defs = new hydra.util.Lazy<>(() -> hydra.lib.maybes.MapMaybe.apply(
@@ -144,7 +144,7 @@ public interface TestCodec {
       (mod).namespace,
       defs.get()));
   }
-  
+
   static <T0> hydra.util.Either<String, String> generatePythonTestGroupHierarchy(hydra.graph.Graph g, T0 namespaces_, hydra.testing.TestCodec codec, hydra.util.ConsList<String> groupPath, hydra.testing.TestGroup testGroup) {
     hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases_ = (testGroup).cases;
     hydra.util.ConsList<hydra.testing.TestGroup> subgroups = (testGroup).subgroups;
@@ -201,7 +201,7 @@ public interface TestCodec {
             subgroupsStr)));
         }))));
   }
-  
+
   static <T0> hydra.util.Either<String, hydra.util.ConsList<String>> generatePythonTestCase(hydra.graph.Graph g, T0 namespaces_, hydra.testing.TestCodec codec, hydra.util.ConsList<String> groupPath, hydra.testing.TestCaseWithMetadata tcm) {
     String name_ = (tcm).name;
     hydra.testing.TestCase tcase = (tcm).case_;
@@ -210,7 +210,7 @@ public interface TestCodec {
       public hydra.util.Either<String, hydra.util.ConsList<String>> otherwise(hydra.testing.TestCase instance) {
         return hydra.util.Either.<String, hydra.util.ConsList<String>>right((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()));
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<String>> visit(hydra.testing.TestCase.DelegatedEvaluation delCase) {
         hydra.util.Lazy<String> fullName = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
@@ -242,7 +242,7 @@ public interface TestCodec {
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<String, hydra.util.Pair<String, String>> generateTestFileWithPythonCodec(hydra.testing.TestCodec codec, hydra.module.Module testModule, hydra.testing.TestGroup testGroup, T0 namespaces_, hydra.graph.Graph g) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<String, hydra.util.Pair<String, String>>) (testBody -> {
@@ -276,7 +276,7 @@ public interface TestCodec {
         (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()),
         testGroup));
   }
-  
+
   static <T0, T1> String buildPythonTestModule(hydra.testing.TestCodec codec, T0 testModule, hydra.testing.TestGroup testGroup, String testBody, T1 namespaces_) {
     hydra.util.Lazy<hydra.util.ConsList<String>> domainImports = new hydra.util.Lazy<>(() -> (codec).findImports.apply((hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())));
     hydra.util.ConsList<String> standardImports = hydra.util.ConsList.of(
@@ -306,7 +306,7 @@ public interface TestCodec {
       testBody,
       "\n"));
   }
-  
+
   static hydra.util.Either<String, hydra.util.Pair<String, String>> generatePythonTestFile(hydra.module.Module testModule, hydra.testing.TestGroup testGroup, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.test.utils.Utils.inferTestGroupTerms(

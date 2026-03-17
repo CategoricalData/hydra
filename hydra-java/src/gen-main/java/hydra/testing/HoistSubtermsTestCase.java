@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class HoistSubtermsTestCase implements Serializable, Comparable<HoistSubtermsTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.HoistSubtermsTestCase");
-  
+
   public static final hydra.core.Name PREDICATE = new hydra.core.Name("predicate");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
-  
+
   /**
    * The predicate that determines which subterms to hoist
    */
   public final hydra.testing.HoistPredicate predicate;
-  
+
   /**
    * The input term (must contain a let expression for hoisting to occur)
    */
   public final hydra.core.Term input;
-  
+
   /**
    * The expected output term with hoisted subterms as new bindings
    */
   public final hydra.core.Term output;
-  
+
   public HoistSubtermsTestCase (hydra.testing.HoistPredicate predicate, hydra.core.Term input, hydra.core.Term output) {
     this.predicate = predicate;
     this.input = input;
     this.output = output;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof HoistSubtermsTestCase)) {
@@ -51,12 +51,12 @@ public class HoistSubtermsTestCase implements Serializable, Comparable<HoistSubt
       this.output,
       o.output);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(predicate) + 3 * java.util.Objects.hashCode(input) + 5 * java.util.Objects.hashCode(output);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(HoistSubtermsTestCase other) {
@@ -71,15 +71,15 @@ public class HoistSubtermsTestCase implements Serializable, Comparable<HoistSubt
     }
     return ((Comparable) output).compareTo(other.output);
   }
-  
+
   public HoistSubtermsTestCase withPredicate(hydra.testing.HoistPredicate predicate) {
     return new HoistSubtermsTestCase(predicate, input, output);
   }
-  
+
   public HoistSubtermsTestCase withInput(hydra.core.Term input) {
     return new HoistSubtermsTestCase(predicate, input, output);
   }
-  
+
   public HoistSubtermsTestCase withOutput(hydra.core.Term output) {
     return new HoistSubtermsTestCase(predicate, input, output);
   }

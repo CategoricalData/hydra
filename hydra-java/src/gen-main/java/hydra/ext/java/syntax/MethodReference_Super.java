@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class MethodReference_Super implements Serializable, Comparable<MethodReference_Super> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodReference_Super");
-  
+
   public static final hydra.core.Name TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public static final hydra.core.Name SUPER = new hydra.core.Name("super");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
-  
+
   public final hydra.ext.java.syntax.Identifier identifier;
-  
+
   public final Boolean super_;
-  
+
   public MethodReference_Super (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier, Boolean super_) {
     this.typeArguments = typeArguments;
     this.identifier = identifier;
     this.super_ = super_;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MethodReference_Super)) {
@@ -39,12 +39,12 @@ public class MethodReference_Super implements Serializable, Comparable<MethodRef
       this.super_,
       o.super_);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(typeArguments) + 3 * java.util.Objects.hashCode(identifier) + 5 * java.util.Objects.hashCode(super_);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MethodReference_Super other) {
@@ -59,15 +59,15 @@ public class MethodReference_Super implements Serializable, Comparable<MethodRef
     }
     return ((Comparable) super_).compareTo(other.super_);
   }
-  
+
   public MethodReference_Super withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_Super(typeArguments, identifier, super_);
   }
-  
+
   public MethodReference_Super withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new MethodReference_Super(typeArguments, identifier, super_);
   }
-  
+
   public MethodReference_Super withSuper(Boolean super_) {
     return new MethodReference_Super(typeArguments, identifier, super_);
   }

@@ -51,8 +51,8 @@ encodeFieldName env fname = encodeName False Util.CaseConventionLowerSnake env f
 -- | Encode a Hydra name as a Python name
 encodeName :: Bool -> Util.CaseConvention -> Helpers.PythonEnvironment -> Core.Name -> Syntax.Name
 encodeName isQualified conv env name =
-     
-      let namespaces = Helpers.pythonEnvironmentNamespaces env 
+
+      let namespaces = Helpers.pythonEnvironmentNamespaces env
           focusPair = Module.namespacesFocus namespaces
           focusNs = Pairs.first focusPair
           boundVars = Pairs.second (Helpers.pythonEnvironmentBoundTypeVariables env)
@@ -67,8 +67,8 @@ encodeName isQualified conv env name =
 -- | Encode a name as a fully qualified Python name
 encodeNameQualified :: Helpers.PythonEnvironment -> Core.Name -> Syntax.Name
 encodeNameQualified env name =
-     
-      let namespaces = Helpers.pythonEnvironmentNamespaces env 
+
+      let namespaces = Helpers.pythonEnvironmentNamespaces env
           focusPair = Module.namespacesFocus namespaces
           focusNs = Pairs.first focusPair
           boundVars = Pairs.second (Helpers.pythonEnvironmentBoundTypeVariables env)
@@ -106,8 +106,8 @@ variantName isQualified env tname fname =
 -- | Reference a variable as a Python expression
 variableReference :: Util.CaseConvention -> Bool -> Helpers.PythonEnvironment -> Core.Name -> Syntax.Expression
 variableReference conv quoted env name =
-     
-      let pyName = encodeName True conv env name 
+
+      let pyName = encodeName True conv env name
           unquoted =
                   Syntax.ExpressionSimple (Syntax.Disjunction [
                     Syntax.Conjunction [

@@ -20,7 +20,7 @@ public interface Core {
           cx,
           f)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigDecimal> bigfloatValue(hydra.context.Context cx, hydra.core.FloatValue v) {
     return (v).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
@@ -33,14 +33,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.float_(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigDecimal> visit(hydra.core.FloatValue.Bigfloat f) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigDecimal>right((f).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger> bigint(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -55,7 +55,7 @@ public interface Core {
           cx,
           i)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger> bigintValue(hydra.context.Context cx, hydra.core.IntegerValue v) {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
@@ -68,14 +68,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.integer(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger> visit(hydra.core.IntegerValue.Bigint i) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>right((i).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, byte[]> binary(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -86,7 +86,7 @@ public interface Core {
         cx,
         l)));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, byte[]> binaryLiteral(hydra.context.Context cx, hydra.core.Literal v) {
     return (v).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
@@ -99,14 +99,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.literal(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, byte[]> visit(hydra.core.Literal.Binary b) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, byte[]>right((b).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Boolean> boolean_(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -117,7 +117,7 @@ public interface Core {
         cx,
         l)));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Boolean> booleanLiteral(hydra.context.Context cx, hydra.core.Literal v) {
     return (v).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
@@ -130,14 +130,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.literal(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Boolean> visit(hydra.core.Literal.Boolean_ b) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Boolean>right((b).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field> caseField(hydra.context.Context cx, hydra.core.Name name, String n, hydra.graph.Graph graph, hydra.core.Term term) {
     hydra.core.Name fieldName = new hydra.core.Name(n);
     return hydra.lib.eithers.Bind.apply(
@@ -158,7 +158,7 @@ public interface Core {
           () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>right(hydra.lib.lists.Head.apply(matching.get())));
       }));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement> cases(hydra.context.Context cx, hydra.core.Name name, hydra.graph.Graph graph, hydra.core.Term term0) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(
@@ -176,7 +176,7 @@ public interface Core {
               " but found "),
             hydra.show.core.Core.term(term)))), cx)));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement> visit(hydra.core.Term.Function function) {
           return (function).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -190,7 +190,7 @@ public interface Core {
                   " but found "),
                 hydra.show.core.Core.term(term)))), cx)));
             }
-            
+
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement> visit(hydra.core.Function.Elimination elimination) {
               return (elimination).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
@@ -204,7 +204,7 @@ public interface Core {
                       " but found "),
                     hydra.show.core.Core.term(term)))), cx)));
                 }
-                
+
                 @Override
                 public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement> visit(hydra.core.Elimination.Union cs) {
                   return hydra.lib.logic.IfElse.lazy(
@@ -228,7 +228,7 @@ public interface Core {
         }
       })));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0> field(hydra.context.Context cx, hydra.core.Name fname, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>> mapping, hydra.graph.Graph graph, hydra.util.ConsList<hydra.core.Field> fields) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Field>> matchingFields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.equality.Equal.apply(
@@ -266,7 +266,7 @@ public interface Core {
             "multiple fields named ",
             (fname).value)))), cx)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Float> float32(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -281,7 +281,7 @@ public interface Core {
           cx,
           f)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Float> float32Value(hydra.context.Context cx, hydra.core.FloatValue v) {
     return (v).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
@@ -294,14 +294,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.float_(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Float> visit(hydra.core.FloatValue.Float32 f) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Float>right((f).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Double> float64(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -316,7 +316,7 @@ public interface Core {
           cx,
           f)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Double> float64Value(hydra.context.Context cx, hydra.core.FloatValue v) {
     return (v).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
@@ -329,14 +329,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.float_(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Double> visit(hydra.core.FloatValue.Float64 f) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Double>right((f).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue> floatLiteral(hydra.context.Context cx, hydra.core.Literal lit) {
     return (lit).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
@@ -349,14 +349,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.literal(lit)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue> visit(hydra.core.Literal.Float_ v) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue>right((v).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue> floatValue(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -367,7 +367,7 @@ public interface Core {
         cx,
         l)));
   }
-  
+
   static <T0, T1> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Either<T0, T1>> eitherTerm(hydra.context.Context cx, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>> leftFun, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T1>> rightFun, hydra.graph.Graph graph, hydra.core.Term term0) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(
@@ -385,7 +385,7 @@ public interface Core {
               " but found "),
             hydra.show.core.Core.term(term)))), cx)));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Either<T0, T1>> visit(hydra.core.Term.Either et) {
           return hydra.lib.eithers.Either.apply(
@@ -399,7 +399,7 @@ public interface Core {
         }
       })));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.EitherType> eitherType(hydra.context.Context cx, hydra.core.Type typ) {
     hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -413,14 +413,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.type(typ)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.EitherType> visit(hydra.core.Type.Either et) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.EitherType>right((et).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType> functionType(hydra.context.Context cx, hydra.core.Type typ) {
     hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -434,14 +434,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.type(typ)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType> visit(hydra.core.Type.Function ft) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType>right((ft).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field> injection(hydra.context.Context cx, hydra.core.Name expected, hydra.graph.Graph graph, hydra.core.Term term0) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(
@@ -459,7 +459,7 @@ public interface Core {
               " but found "),
             hydra.show.core.Core.term(term)))), cx)));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field> visit(hydra.core.Term.Union injection) {
           return hydra.lib.logic.IfElse.lazy(
@@ -479,7 +479,7 @@ public interface Core {
         }
       })));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short> int16(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -494,7 +494,7 @@ public interface Core {
           cx,
           i)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short> int16Value(hydra.context.Context cx, hydra.core.IntegerValue v) {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
@@ -507,14 +507,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.integer(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short> visit(hydra.core.IntegerValue.Int16 i) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Short>right((i).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Integer> int32(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -529,7 +529,7 @@ public interface Core {
           cx,
           i)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Integer> int32Value(hydra.context.Context cx, hydra.core.IntegerValue v) {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
@@ -542,14 +542,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.integer(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Integer> visit(hydra.core.IntegerValue.Int32 i) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Integer>right((i).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long> int64(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -564,7 +564,7 @@ public interface Core {
           cx,
           i)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long> int64Value(hydra.context.Context cx, hydra.core.IntegerValue v) {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
@@ -577,14 +577,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.integer(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long> visit(hydra.core.IntegerValue.Int64 i) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Long>right((i).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Byte> int8(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -599,7 +599,7 @@ public interface Core {
           cx,
           i)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Byte> int8Value(hydra.context.Context cx, hydra.core.IntegerValue v) {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
@@ -612,14 +612,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.integer(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Byte> visit(hydra.core.IntegerValue.Int8 i) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Byte>right((i).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue> integerLiteral(hydra.context.Context cx, hydra.core.Literal lit) {
     return (lit).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
@@ -632,14 +632,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.literal(lit)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue> visit(hydra.core.Literal.Integer_ v) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue>right((v).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue> integerValue(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -650,7 +650,7 @@ public interface Core {
         cx,
         l)));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> lambdaBody(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term) {
     return hydra.lib.eithers.Map.apply(
       projected -> projected.body,
@@ -659,7 +659,7 @@ public interface Core {
         graph,
         term));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda> lambda(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term0) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(
@@ -677,7 +677,7 @@ public interface Core {
               " but found "),
             hydra.show.core.Core.term(term)))), cx)));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda> visit(hydra.core.Term.Function function) {
           return (function).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -691,7 +691,7 @@ public interface Core {
                   " but found "),
                 hydra.show.core.Core.term(term)))), cx)));
             }
-            
+
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda> visit(hydra.core.Function.Lambda l) {
               return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>right((l).value);
@@ -700,7 +700,7 @@ public interface Core {
         }
       })));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> letBinding(hydra.context.Context cx, String n, hydra.graph.Graph graph, hydra.core.Term term) {
     hydra.core.Name name = new hydra.core.Name(n);
     return hydra.lib.eithers.Bind.apply(
@@ -729,7 +729,7 @@ public interface Core {
               n))), cx)))));
       }));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let> let(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term0) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(
@@ -747,14 +747,14 @@ public interface Core {
               " but found "),
             hydra.show.core.Core.term(term)))), cx)));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let> visit(hydra.core.Term.Let lt) {
           return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let>right((lt).value);
         }
       })));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Term>> list(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(
@@ -772,14 +772,14 @@ public interface Core {
               " but found "),
             hydra.show.core.Core.term(stripped)))), cx)));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.List l) {
           return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Term>>right((l).value);
         }
       })));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> listHead(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.list(
@@ -791,7 +791,7 @@ public interface Core {
         () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("empty list")), cx))),
         () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(hydra.lib.lists.Head.apply(l)))));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T0>> listOf(hydra.context.Context cx, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>> f, hydra.graph.Graph graph, hydra.core.Term term) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.list(
@@ -802,7 +802,7 @@ public interface Core {
         f,
         els)));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> listType(hydra.context.Context cx, hydra.core.Type typ) {
     hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -816,14 +816,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.type(typ)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> visit(hydra.core.Type.List t) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right((t).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal> literal(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term0) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(
@@ -841,14 +841,14 @@ public interface Core {
               " but found "),
             hydra.show.core.Core.term(term)))), cx)));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal> visit(hydra.core.Term.Literal lit) {
           return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal>right((lit).value);
         }
       })));
   }
-  
+
   static <T0, T1> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<T0, T1>> map(hydra.context.Context cx, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>> fk, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T1>> fv, hydra.graph.Graph graph, hydra.core.Term term0) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(
@@ -866,7 +866,7 @@ public interface Core {
               " but found "),
             hydra.show.core.Core.term(term)))), cx)));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<T0, T1>> visit(hydra.core.Term.Map m) {
           return hydra.lib.eithers.Map.apply(
@@ -880,7 +880,7 @@ public interface Core {
         }
       })));
   }
-  
+
   static <T0, T1> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>> map_pair(java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>> fk, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T1>> fv, hydra.util.Pair<hydra.core.Term, hydra.core.Term> kvPair) {
     hydra.util.Lazy<hydra.core.Term> kterm = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(kvPair));
     hydra.util.Lazy<hydra.core.Term> vterm = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(kvPair));
@@ -890,7 +890,7 @@ public interface Core {
         (fv).apply(vterm.get()),
         (java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>>) (vval -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>right((hydra.util.Pair<T0, T1>) ((hydra.util.Pair<T0, T1>) (new hydra.util.Pair<T0, T1>(kval, vval))))))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType> mapType(hydra.context.Context cx, hydra.core.Type typ) {
     hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -904,14 +904,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.type(typ)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType> visit(hydra.core.Type.Map mt) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType>right((mt).value);
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void> nArgs(hydra.context.Context cx, hydra.core.Name name, Integer n, hydra.util.ConsList<T0> args) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
@@ -929,7 +929,7 @@ public interface Core {
           " but found "),
         hydra.lib.literals.ShowInt32.apply(hydra.lib.lists.Length.apply(args))))), cx))));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>> maybeTerm(hydra.context.Context cx, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>> f, hydra.graph.Graph graph, hydra.core.Term term0) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(
@@ -947,7 +947,7 @@ public interface Core {
               " but found "),
             hydra.show.core.Core.term(term)))), cx)));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>> visit(hydra.core.Term.Maybe mt) {
           return hydra.lib.maybes.Maybe.applyLazy(
@@ -959,7 +959,7 @@ public interface Core {
         }
       })));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> maybeType(hydra.context.Context cx, hydra.core.Type typ) {
     hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -973,14 +973,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.type(typ)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> visit(hydra.core.Type.Maybe t) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right((t).value);
       }
     });
   }
-  
+
   static <T0, T1> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>> pair(hydra.context.Context cx, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>> kf, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T1>> vf, hydra.graph.Graph graph, hydra.core.Term term0) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(
@@ -998,7 +998,7 @@ public interface Core {
               " but found "),
             hydra.show.core.Core.term(term)))), cx)));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>> visit(hydra.core.Term.Pair p) {
           return hydra.lib.eithers.Bind.apply(
@@ -1009,7 +1009,7 @@ public interface Core {
         }
       })));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Field>> record(hydra.context.Context cx, hydra.core.Name expected, hydra.graph.Graph graph, hydra.core.Term term0) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.termRecord(
@@ -1031,7 +1031,7 @@ public interface Core {
             " but found "),
           (record).typeName.value))), cx))))));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> recordType(hydra.context.Context cx, T0 ename, hydra.core.Type typ) {
     hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -1045,14 +1045,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.type(typ)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> visit(hydra.core.Type.Record fields) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>>right((fields).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentSet<hydra.core.Term>> set(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(
@@ -1070,14 +1070,14 @@ public interface Core {
               " but found "),
             hydra.show.core.Core.term(stripped)))), cx)));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentSet<hydra.core.Term>> visit(hydra.core.Term.Set s) {
           return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentSet<hydra.core.Term>>right((s).value);
         }
       })));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentSet<T0>> setOf(hydra.context.Context cx, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>> f, hydra.graph.Graph graph, hydra.core.Term term) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.set(
@@ -1088,7 +1088,7 @@ public interface Core {
         f,
         els)));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> setType(hydra.context.Context cx, hydra.core.Type typ) {
     hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -1102,14 +1102,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.type(typ)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> visit(hydra.core.Type.Set t) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right((t).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, String> string(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -1120,7 +1120,7 @@ public interface Core {
         cx,
         l)));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, String> stringLiteral(hydra.context.Context cx, hydra.core.Literal v) {
     return (v).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
@@ -1133,14 +1133,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.literal(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, String> visit(hydra.core.Literal.String_ s) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, String>right((s).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record> termRecord(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term0) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(
@@ -1158,14 +1158,14 @@ public interface Core {
               " but found "),
             hydra.show.core.Core.term(term)))), cx)));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record> visit(hydra.core.Term.Record record) {
           return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record>right((record).value);
         }
       })));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Character> uint16(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -1180,7 +1180,7 @@ public interface Core {
           cx,
           i)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Character> uint16Value(hydra.context.Context cx, hydra.core.IntegerValue v) {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
@@ -1193,14 +1193,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.integer(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Character> visit(hydra.core.IntegerValue.Uint16 i) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Character>right((i).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long> uint32(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -1215,7 +1215,7 @@ public interface Core {
           cx,
           i)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long> uint32Value(hydra.context.Context cx, hydra.core.IntegerValue v) {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
@@ -1228,14 +1228,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.integer(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long> visit(hydra.core.IntegerValue.Uint32 i) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Long>right((i).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger> uint64(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -1250,7 +1250,7 @@ public interface Core {
           cx,
           i)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger> uint64Value(hydra.context.Context cx, hydra.core.IntegerValue v) {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
@@ -1263,14 +1263,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.integer(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger> visit(hydra.core.IntegerValue.Uint64 i) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>right((i).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short> uint8(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.literal(
@@ -1285,7 +1285,7 @@ public interface Core {
           cx,
           i)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short> uint8Value(hydra.context.Context cx, hydra.core.IntegerValue v) {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
@@ -1298,14 +1298,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.integer(v)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short> visit(hydra.core.IntegerValue.Uint8 i) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Short>right((i).value);
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> unionType(hydra.context.Context cx, T0 ename, hydra.core.Type typ) {
     hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -1319,14 +1319,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.type(typ)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> visit(hydra.core.Type.Union fields) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>>right((fields).value);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void> unit(hydra.context.Context cx, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -1339,14 +1339,14 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.term(term)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void> visit(hydra.core.Term.Unit ignored) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>right(null);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Name> unitVariant(hydra.context.Context cx, hydra.core.Name tname, hydra.graph.Graph graph, hydra.core.Term term) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.injection(
@@ -1360,7 +1360,7 @@ public interface Core {
           (field).term),
         (java.util.function.Function<java.lang.Void, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Name>>) (ignored -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Name>right((field).name)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> wrap(hydra.context.Context cx, hydra.core.Name expected, hydra.graph.Graph graph, hydra.core.Term term0) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(
@@ -1382,7 +1382,7 @@ public interface Core {
               " but found "),
             hydra.show.core.Core.term(term)))), cx)));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.logic.IfElse.lazy(
@@ -1402,7 +1402,7 @@ public interface Core {
         }
       })));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> wrappedType(hydra.context.Context cx, T0 ename, hydra.core.Type typ) {
     hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -1416,7 +1416,7 @@ public interface Core {
             " but found "),
           hydra.show.core.Core.type(typ)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> visit(hydra.core.Type.Wrap innerType) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right((innerType).value);

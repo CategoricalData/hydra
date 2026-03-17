@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class BasicForStatementNoShortIf implements Serializable, Comparable<BasicForStatementNoShortIf> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.BasicForStatementNoShortIf");
-  
+
   public static final hydra.core.Name COND = new hydra.core.Name("cond");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public final hydra.ext.java.syntax.ForCond cond;
-  
+
   public final hydra.ext.java.syntax.StatementNoShortIf body;
-  
+
   public BasicForStatementNoShortIf (hydra.ext.java.syntax.ForCond cond, hydra.ext.java.syntax.StatementNoShortIf body) {
     this.cond = cond;
     this.body = body;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof BasicForStatementNoShortIf)) {
@@ -32,12 +32,12 @@ public class BasicForStatementNoShortIf implements Serializable, Comparable<Basi
       this.body,
       o.body);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(cond) + 3 * java.util.Objects.hashCode(body);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(BasicForStatementNoShortIf other) {
@@ -48,11 +48,11 @@ public class BasicForStatementNoShortIf implements Serializable, Comparable<Basi
     }
     return ((Comparable) body).compareTo(other.body);
   }
-  
+
   public BasicForStatementNoShortIf withCond(hydra.ext.java.syntax.ForCond cond) {
     return new BasicForStatementNoShortIf(cond, body);
   }
-  
+
   public BasicForStatementNoShortIf withBody(hydra.ext.java.syntax.StatementNoShortIf body) {
     return new BasicForStatementNoShortIf(cond, body);
   }

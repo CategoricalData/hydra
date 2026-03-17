@@ -200,7 +200,7 @@ encodeLiteral lit =
 
 encodeType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Error.Error) Syntax.Type
 encodeType cx g t =
-     
+
       let typ = Rewriting.deannotateType t
       in case typ of
         Core.TypeAnnotated v0 -> encodeType cx g (Core.annotatedTypeBody v0)
@@ -247,10 +247,10 @@ encodeTerm cx g term =
         sl]))) (\r -> Eithers.bind (encodeTerm cx g r) (\sr -> Right (rustCall (rustExprPath "Right") [
         sr]))) v0
       Core.TermFunction v0 -> encodeFunction cx g v0
-      Core.TermLet v0 ->  
-        let bindings = Core.letBindings v0 
+      Core.TermLet v0 ->
+        let bindings = Core.letBindings v0
             body = Core.letBody v0
-        in (Eithers.bind (Eithers.mapList (\b ->  
+        in (Eithers.bind (Eithers.mapList (\b ->
           let bname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.bindingName b))
           in (Eithers.bind (encodeTerm cx g (Core.bindingTerm b)) (\bval -> Right (rustLetStmt bname bval)))) bindings) (\stmts -> Eithers.bind (encodeTerm cx g body) (\bodyExpr -> Right (rustBlock stmts bodyExpr))))
       Core.TermList v0 -> Eithers.bind (Eithers.mapList (encodeTerm cx g) v0) (\sels -> Right (rustCall (rustExprPath "Vec::from") [
@@ -265,10 +265,10 @@ encodeTerm cx g term =
       Core.TermPair v0 -> Eithers.bind (encodeTerm cx g (Pairs.first v0)) (\f -> Eithers.bind (encodeTerm cx g (Pairs.second v0)) (\s -> Right (Syntax.ExpressionTuple [
         f,
         s])))
-      Core.TermRecord v0 ->  
-        let rname = Core.recordTypeName v0 
+      Core.TermRecord v0 ->
+        let rname = Core.recordTypeName v0
             fields = Core.recordFields v0
-        in (Eithers.bind (Eithers.mapList (\f ->  
+        in (Eithers.bind (Eithers.mapList (\f ->
           let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.fieldName f))
           in (Eithers.bind (encodeTerm cx g (Core.fieldTerm f)) (\fval -> Right (Syntax.FieldValue {
             Syntax.fieldValueName = fname,
@@ -283,8 +283,8 @@ encodeTerm cx g term =
           Syntax.structExprRest = Nothing}))))
       Core.TermSet v0 -> Eithers.bind (Eithers.mapList (encodeTerm cx g) (Sets.toList v0)) (\sels -> Right (rustCall (rustExprPath "BTreeSet::from") [
         Syntax.ExpressionArray (Syntax.ArrayExprElements sels)]))
-      Core.TermUnion v0 ->  
-        let tname = Formatting.capitalize (Names.localNameOf (Core.injectionTypeName v0)) 
+      Core.TermUnion v0 ->
+        let tname = Formatting.capitalize (Names.localNameOf (Core.injectionTypeName v0))
             field = Core.injectionField v0
             fname = Formatting.capitalize (Core.unName (Core.fieldName field))
             fterm = Core.fieldTerm field
@@ -298,7 +298,7 @@ encodeTerm cx g term =
           sval]))))
       Core.TermUnit -> Right (Syntax.ExpressionTuple [])
       Core.TermVariable v0 -> Right (rustExprPath (Formatting.convertCaseCamelToLowerSnake (Formatting.sanitizeWithUnderscores Language.rustReservedWords (Core.unName v0))))
-      Core.TermWrap v0 ->  
+      Core.TermWrap v0 ->
         let tname = Formatting.capitalize (Names.localNameOf (Core.wrappedTermTypeName v0))
         in (Eithers.bind (encodeTerm cx g (Core.wrappedTermBody v0)) (\inner -> Right (rustCall (rustExprPath tname) [
           inner])))
@@ -309,7 +309,7 @@ encodeTerm cx g term =
 encodeFunction :: Context.Context -> t0 -> Core.Function -> Either (Context.InContext Error.Error) Syntax.Expression
 encodeFunction cx g fun =
     case fun of
-      Core.FunctionLambda v0 ->  
+      Core.FunctionLambda v0 ->
         let param = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.lambdaParameter v0))
         in (Eithers.bind (encodeTerm cx g (Core.lambdaBody v0)) (\body -> Right (rustClosure [
           param] body)))
@@ -319,7 +319,7 @@ encodeFunction cx g fun =
 encodeElimination :: Context.Context -> t0 -> Core.Elimination -> Maybe Core.Term -> Either (Context.InContext Error.Error) Syntax.Expression
 encodeElimination cx g elim marg =
     case elim of
-      Core.EliminationRecord v0 ->  
+      Core.EliminationRecord v0 ->
         let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionField v0))
         in (Maybes.cases marg (Right (rustClosure [
           "v"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
@@ -327,12 +327,12 @@ encodeElimination cx g elim marg =
           Syntax.fieldAccessExprField = fname})))) (\arg -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
           Syntax.fieldAccessExprObject = sarg,
           Syntax.fieldAccessExprField = fname})))))
-      Core.EliminationUnion v0 ->  
-        let tname = Formatting.capitalize (Names.localNameOf (Core.caseStatementTypeName v0)) 
+      Core.EliminationUnion v0 ->
+        let tname = Formatting.capitalize (Names.localNameOf (Core.caseStatementTypeName v0))
             caseFields = Core.caseStatementCases v0
             defCase = Core.caseStatementDefault v0
-        in (Eithers.bind (Eithers.mapList (\cf ->  
-          let cfname = Formatting.capitalize (Core.unName (Core.fieldName cf)) 
+        in (Eithers.bind (Eithers.mapList (\cf ->
+          let cfname = Formatting.capitalize (Core.unName (Core.fieldName cf))
               cfterm = Core.fieldTerm cf
           in (Eithers.bind (encodeTerm cx g (Core.TermApplication (Core.Application {
             Core.applicationFunction = cfterm,
@@ -371,8 +371,8 @@ encodeElimination cx g elim marg =
 
 encodeStructField :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Error.Error) Syntax.StructField
 encodeStructField cx g ft =
-     
-      let fname = Core.unName (Core.fieldTypeName ft) 
+
+      let fname = Core.unName (Core.fieldTypeName ft)
           ftyp = Core.fieldTypeType ft
       in (Eithers.bind (encodeType cx g ftyp) (\sftyp -> Right (Syntax.StructField {
         Syntax.structFieldName = (Formatting.convertCaseCamelToLowerSnake (Formatting.sanitizeWithUnderscores Language.rustReservedWords fname)),
@@ -382,8 +382,8 @@ encodeStructField cx g ft =
 
 encodeEnumVariant :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Error.Error) Syntax.EnumVariant
 encodeEnumVariant cx g ft =
-     
-      let fname = Core.unName (Core.fieldTypeName ft) 
+
+      let fname = Core.unName (Core.fieldTypeName ft)
           ftyp = Core.fieldTypeType ft
           dtyp = Rewriting.deannotateType ftyp
           isUnit =
@@ -407,8 +407,8 @@ encodeEnumVariant cx g ft =
 
 encodeTypeDefinition :: Context.Context -> t0 -> Module.TypeDefinition -> Either (Context.InContext Error.Error) Syntax.ItemWithComments
 encodeTypeDefinition cx g tdef =
-     
-      let name = Module.typeDefinitionName tdef 
+
+      let name = Module.typeDefinitionName tdef
           typ = Module.typeDefinitionType tdef
           lname = Formatting.capitalize (Names.localNameOf name)
           freeVars =
@@ -458,8 +458,8 @@ encodeTypeDefinition cx g tdef =
 
 encodeTermDefinition :: Context.Context -> t0 -> Module.TermDefinition -> Either (Context.InContext Error.Error) Syntax.ItemWithComments
 encodeTermDefinition cx g tdef =
-     
-      let name = Module.termDefinitionName tdef 
+
+      let name = Module.termDefinitionName tdef
           term = Module.termDefinitionTerm tdef
           tscheme = Module.termDefinitionType tdef
           lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
@@ -484,12 +484,12 @@ encodeTermDefinition cx g tdef =
 
 moduleToRust :: Module.Module -> [Module.Definition] -> Context.Context -> t0 -> Either (Context.InContext Error.Error) (M.Map String String)
 moduleToRust mod defs cx g =
-     
-      let partitioned = Schemas.partitionDefinitions defs 
+
+      let partitioned = Schemas.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
           termDefs = Pairs.second partitioned
-      in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\typeItems -> Eithers.bind (Eithers.mapList (encodeTermDefinition cx g) termDefs) (\termItems ->  
-        let allItems = Lists.concat2 typeItems termItems 
+      in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\typeItems -> Eithers.bind (Eithers.mapList (encodeTermDefinition cx g) termDefs) (\termItems ->
+        let allItems = Lists.concat2 typeItems termItems
             crate = Syntax.Crate {
                   Syntax.crateItems = allItems}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.crateToExpr crate))

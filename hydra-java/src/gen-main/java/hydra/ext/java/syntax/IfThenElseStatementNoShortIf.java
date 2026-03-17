@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class IfThenElseStatementNoShortIf implements Serializable, Comparable<IfThenElseStatementNoShortIf> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.IfThenElseStatementNoShortIf");
-  
+
   public static final hydra.core.Name COND = new hydra.core.Name("cond");
-  
+
   public static final hydra.core.Name THEN = new hydra.core.Name("then");
-  
+
   public static final hydra.core.Name ELSE = new hydra.core.Name("else");
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.Expression> cond;
-  
+
   public final hydra.ext.java.syntax.StatementNoShortIf then;
-  
+
   public final hydra.ext.java.syntax.StatementNoShortIf else_;
-  
+
   public IfThenElseStatementNoShortIf (hydra.util.Maybe<hydra.ext.java.syntax.Expression> cond, hydra.ext.java.syntax.StatementNoShortIf then, hydra.ext.java.syntax.StatementNoShortIf else_) {
     this.cond = cond;
     this.then = then;
     this.else_ = else_;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof IfThenElseStatementNoShortIf)) {
@@ -39,12 +39,12 @@ public class IfThenElseStatementNoShortIf implements Serializable, Comparable<If
       this.else_,
       o.else_);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(cond) + 3 * java.util.Objects.hashCode(then) + 5 * java.util.Objects.hashCode(else_);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(IfThenElseStatementNoShortIf other) {
@@ -59,15 +59,15 @@ public class IfThenElseStatementNoShortIf implements Serializable, Comparable<If
     }
     return ((Comparable) else_).compareTo(other.else_);
   }
-  
+
   public IfThenElseStatementNoShortIf withCond(hydra.util.Maybe<hydra.ext.java.syntax.Expression> cond) {
     return new IfThenElseStatementNoShortIf(cond, then, else_);
   }
-  
+
   public IfThenElseStatementNoShortIf withThen(hydra.ext.java.syntax.StatementNoShortIf then) {
     return new IfThenElseStatementNoShortIf(cond, then, else_);
   }
-  
+
   public IfThenElseStatementNoShortIf withElse(hydra.ext.java.syntax.StatementNoShortIf else_) {
     return new IfThenElseStatementNoShortIf(cond, then, else_);
   }

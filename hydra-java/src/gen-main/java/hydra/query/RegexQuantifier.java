@@ -9,85 +9,85 @@ import java.io.Serializable;
  */
 public abstract class RegexQuantifier implements Serializable, Comparable<RegexQuantifier> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.RegexQuantifier");
-  
+
   public static final hydra.core.Name ONE = new hydra.core.Name("one");
-  
+
   public static final hydra.core.Name ZERO_OR_ONE = new hydra.core.Name("zeroOrOne");
-  
+
   public static final hydra.core.Name ZERO_OR_MORE = new hydra.core.Name("zeroOrMore");
-  
+
   public static final hydra.core.Name ONE_OR_MORE = new hydra.core.Name("oneOrMore");
-  
+
   public static final hydra.core.Name EXACTLY = new hydra.core.Name("exactly");
-  
+
   public static final hydra.core.Name AT_LEAST = new hydra.core.Name("atLeast");
-  
+
   public static final hydra.core.Name RANGE = new hydra.core.Name("range");
-  
+
   private RegexQuantifier () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(One instance) ;
-    
+
     R visit(ZeroOrOne instance) ;
-    
+
     R visit(ZeroOrMore instance) ;
-    
+
     R visit(OneOrMore instance) ;
-    
+
     R visit(Exactly instance) ;
-    
+
     R visit(AtLeast instance) ;
-    
+
     R visit(Range instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(RegexQuantifier instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(One instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ZeroOrOne instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ZeroOrMore instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(OneOrMore instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Exactly instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(AtLeast instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Range instance) {
       return otherwise(instance);
     }
   }
-  
+
   /**
    * No quantifier; matches a single occurrence
    */
   public static final class One extends hydra.query.RegexQuantifier implements Serializable {
     public One () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof One)) {
@@ -96,12 +96,12 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       One o = (One) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
@@ -111,21 +111,21 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * The ? quanifier; matches zero or one occurrence
    */
   public static final class ZeroOrOne extends hydra.query.RegexQuantifier implements Serializable {
     public ZeroOrOne () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ZeroOrOne)) {
@@ -134,12 +134,12 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       ZeroOrOne o = (ZeroOrOne) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
@@ -149,21 +149,21 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * The * quantifier; matches any number of occurrences
    */
   public static final class ZeroOrMore extends hydra.query.RegexQuantifier implements Serializable {
     public ZeroOrMore () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ZeroOrMore)) {
@@ -172,12 +172,12 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       ZeroOrMore o = (ZeroOrMore) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
@@ -187,21 +187,21 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * The + quantifier; matches one or more occurrences
    */
   public static final class OneOrMore extends hydra.query.RegexQuantifier implements Serializable {
     public OneOrMore () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof OneOrMore)) {
@@ -210,12 +210,12 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       OneOrMore o = (OneOrMore) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
@@ -225,23 +225,23 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * The {n} quantifier; matches exactly n occurrences
    */
   public static final class Exactly extends hydra.query.RegexQuantifier implements Serializable {
     public final Integer value;
-    
+
     public Exactly (Integer value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Exactly)) {
@@ -252,12 +252,12 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
@@ -268,23 +268,23 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       Exactly o = (Exactly) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * The {n,} quantifier; matches at least n occurrences
    */
   public static final class AtLeast extends hydra.query.RegexQuantifier implements Serializable {
     public final Integer value;
-    
+
     public AtLeast (Integer value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof AtLeast)) {
@@ -295,12 +295,12 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
@@ -311,23 +311,23 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       AtLeast o = (AtLeast) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * The {n, m} quantifier; matches between n and m (inclusive) occurrences
    */
   public static final class Range extends hydra.query.RegexQuantifier implements Serializable {
     public final hydra.query.Range value;
-    
+
     public Range (hydra.query.Range value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Range)) {
@@ -338,12 +338,12 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RegexQuantifier other) {
@@ -354,7 +354,7 @@ public abstract class RegexQuantifier implements Serializable, Comparable<RegexQ
       Range o = (Range) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

@@ -12,11 +12,11 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-data AccessSpecifier = 
+data AccessSpecifier =
   AccessSpecifierPublic  |
   AccessSpecifierProtected  |
   AccessSpecifierPrivate  |
-  AccessSpecifierNone 
+  AccessSpecifierNone
   deriving (Eq, Ord, Read, Show)
 
 _AccessSpecifier = Core.Name "hydra.ext.cpp.syntax.AccessSpecifier"
@@ -29,7 +29,7 @@ _AccessSpecifier_private = Core.Name "private"
 
 _AccessSpecifier_none = Core.Name "none"
 
-data Program = 
+data Program =
   Program {
     programPreprocessorDirectives :: [PreprocessorDirective],
     programIncludes :: [IncludeDirective],
@@ -44,7 +44,7 @@ _Program_includes = Core.Name "includes"
 
 _Program_declarations = Core.Name "declarations"
 
-data IncludeDirective = 
+data IncludeDirective =
   IncludeDirective {
     includeDirectiveName :: String,
     includeDirectiveIsSystem :: Bool}
@@ -56,7 +56,7 @@ _IncludeDirective_name = Core.Name "name"
 
 _IncludeDirective_isSystem = Core.Name "isSystem"
 
-data Declaration = 
+data Declaration =
   DeclarationPreprocessor PreprocessorDirective |
   DeclarationClass ClassDeclaration |
   DeclarationFunction FunctionDeclaration |
@@ -82,7 +82,7 @@ _Declaration_namespace = Core.Name "namespace"
 
 _Declaration_template = Core.Name "template"
 
-data NamespaceDeclaration = 
+data NamespaceDeclaration =
   NamespaceDeclaration {
     namespaceDeclarationName :: String,
     namespaceDeclarationDeclarations :: [Declaration]}
@@ -94,7 +94,7 @@ _NamespaceDeclaration_name = Core.Name "name"
 
 _NamespaceDeclaration_declarations = Core.Name "declarations"
 
-data TypedefDeclaration = 
+data TypedefDeclaration =
   TypedefDeclaration {
     typedefDeclarationName :: String,
     typedefDeclarationType :: TypeExpression,
@@ -109,7 +109,7 @@ _TypedefDeclaration_type = Core.Name "type"
 
 _TypedefDeclaration_isUsing = Core.Name "isUsing"
 
-data ClassDeclaration = 
+data ClassDeclaration =
   ClassDeclaration {
     classDeclarationSpecifier :: ClassSpecifier,
     classDeclarationBody :: (Maybe ClassBody)}
@@ -121,7 +121,7 @@ _ClassDeclaration_specifier = Core.Name "specifier"
 
 _ClassDeclaration_body = Core.Name "body"
 
-data TemplateDeclaration = 
+data TemplateDeclaration =
   TemplateDeclaration {
     templateDeclarationInline :: Bool,
     templateDeclarationParameters :: [String],
@@ -136,7 +136,7 @@ _TemplateDeclaration_parameters = Core.Name "parameters"
 
 _TemplateDeclaration_declaration = Core.Name "declaration"
 
-data PreprocessorDirective = 
+data PreprocessorDirective =
   PreprocessorDirectiveInclude IncludeDirective |
   PreprocessorDirectivePragma PragmaDirective |
   PreprocessorDirectiveDefine DefineDirective |
@@ -180,7 +180,7 @@ _PreprocessorDirective_error = Core.Name "error"
 
 _PreprocessorDirective_warning = Core.Name "warning"
 
-data PragmaDirective = 
+data PragmaDirective =
   PragmaDirective {
     pragmaDirectiveContent :: String}
   deriving (Eq, Ord, Read, Show)
@@ -189,7 +189,7 @@ _PragmaDirective = Core.Name "hydra.ext.cpp.syntax.PragmaDirective"
 
 _PragmaDirective_content = Core.Name "content"
 
-data DefineDirective = 
+data DefineDirective =
   DefineDirective {
     defineDirectiveName :: String,
     defineDirectiveParameters :: (Maybe [String]),
@@ -204,7 +204,7 @@ _DefineDirective_parameters = Core.Name "parameters"
 
 _DefineDirective_replacement = Core.Name "replacement"
 
-data UndefDirective = 
+data UndefDirective =
   UndefDirective {
     undefDirectiveName :: String}
   deriving (Eq, Ord, Read, Show)
@@ -213,7 +213,7 @@ _UndefDirective = Core.Name "hydra.ext.cpp.syntax.UndefDirective"
 
 _UndefDirective_name = Core.Name "name"
 
-data IfdefDirective = 
+data IfdefDirective =
   IfdefDirective {
     ifdefDirectiveIdentifier :: String}
   deriving (Eq, Ord, Read, Show)
@@ -222,7 +222,7 @@ _IfdefDirective = Core.Name "hydra.ext.cpp.syntax.IfdefDirective"
 
 _IfdefDirective_identifier = Core.Name "identifier"
 
-data IfndefDirective = 
+data IfndefDirective =
   IfndefDirective {
     ifndefDirectiveIdentifier :: String}
   deriving (Eq, Ord, Read, Show)
@@ -231,7 +231,7 @@ _IfndefDirective = Core.Name "hydra.ext.cpp.syntax.IfndefDirective"
 
 _IfndefDirective_identifier = Core.Name "identifier"
 
-data IfDirective = 
+data IfDirective =
   IfDirective {
     ifDirectiveCondition :: String}
   deriving (Eq, Ord, Read, Show)
@@ -240,7 +240,7 @@ _IfDirective = Core.Name "hydra.ext.cpp.syntax.IfDirective"
 
 _IfDirective_condition = Core.Name "condition"
 
-data ElifDirective = 
+data ElifDirective =
   ElifDirective {
     elifDirectiveCondition :: String}
   deriving (Eq, Ord, Read, Show)
@@ -257,7 +257,7 @@ type EndifDirective = ()
 
 _EndifDirective = Core.Name "hydra.ext.cpp.syntax.EndifDirective"
 
-data LineDirective = 
+data LineDirective =
   LineDirective {
     lineDirectiveLineNumber :: Int,
     lineDirectiveFilename :: (Maybe String)}
@@ -269,7 +269,7 @@ _LineDirective_lineNumber = Core.Name "lineNumber"
 
 _LineDirective_filename = Core.Name "filename"
 
-data ErrorDirective = 
+data ErrorDirective =
   ErrorDirective {
     errorDirectiveMessage :: String}
   deriving (Eq, Ord, Read, Show)
@@ -278,7 +278,7 @@ _ErrorDirective = Core.Name "hydra.ext.cpp.syntax.ErrorDirective"
 
 _ErrorDirective_message = Core.Name "message"
 
-data WarningDirective = 
+data WarningDirective =
   WarningDirective {
     warningDirectiveMessage :: String}
   deriving (Eq, Ord, Read, Show)
@@ -287,7 +287,7 @@ _WarningDirective = Core.Name "hydra.ext.cpp.syntax.WarningDirective"
 
 _WarningDirective_message = Core.Name "message"
 
-data ClassSpecifier = 
+data ClassSpecifier =
   ClassSpecifier {
     classSpecifierKey :: ClassKey,
     classSpecifierName :: String,
@@ -302,11 +302,11 @@ _ClassSpecifier_name = Core.Name "name"
 
 _ClassSpecifier_inheritance = Core.Name "inheritance"
 
-data ClassKey = 
+data ClassKey =
   ClassKeyClass  |
   ClassKeyEnum  |
   ClassKeyEnumClass  |
-  ClassKeyStruct 
+  ClassKeyStruct
   deriving (Eq, Ord, Read, Show)
 
 _ClassKey = Core.Name "hydra.ext.cpp.syntax.ClassKey"
@@ -319,7 +319,7 @@ _ClassKey_enumClass = Core.Name "enumClass"
 
 _ClassKey_struct = Core.Name "struct"
 
-data BaseSpecifier = 
+data BaseSpecifier =
   BaseSpecifier {
     baseSpecifierAccess :: AccessSpecifier,
     baseSpecifierName :: String}
@@ -331,14 +331,14 @@ _BaseSpecifier_access = Core.Name "access"
 
 _BaseSpecifier_name = Core.Name "name"
 
-newtype ClassBody = 
+newtype ClassBody =
   ClassBody {
     unClassBody :: [MemberSpecification]}
   deriving (Eq, Ord, Read, Show)
 
 _ClassBody = Core.Name "hydra.ext.cpp.syntax.ClassBody"
 
-data MemberSpecification = 
+data MemberSpecification =
   MemberSpecificationAccessLabel AccessSpecifier |
   MemberSpecificationMember MemberDeclaration
   deriving (Eq, Ord, Read, Show)
@@ -349,7 +349,7 @@ _MemberSpecification_accessLabel = Core.Name "accessLabel"
 
 _MemberSpecification_member = Core.Name "member"
 
-data MemberDeclaration = 
+data MemberDeclaration =
   MemberDeclarationFunction FunctionDeclaration |
   MemberDeclarationVariable VariableDeclaration |
   MemberDeclarationConstructor ConstructorDeclaration |
@@ -372,7 +372,7 @@ _MemberDeclaration_nestedClass = Core.Name "nestedClass"
 
 _MemberDeclaration_template = Core.Name "template"
 
-data ConstructorDeclaration = 
+data ConstructorDeclaration =
   ConstructorDeclaration {
     constructorDeclarationName :: String,
     constructorDeclarationParameters :: [Parameter],
@@ -390,7 +390,7 @@ _ConstructorDeclaration_initializers = Core.Name "initializers"
 
 _ConstructorDeclaration_body = Core.Name "body"
 
-data MemInitializer = 
+data MemInitializer =
   MemInitializer {
     memInitializerName :: String,
     memInitializerArguments :: [Expression]}
@@ -402,7 +402,7 @@ _MemInitializer_name = Core.Name "name"
 
 _MemInitializer_arguments = Core.Name "arguments"
 
-data DestructorDeclaration = 
+data DestructorDeclaration =
   DestructorDeclaration {
     destructorDeclarationPrefixSpecifiers :: [FunctionSpecifierPrefix],
     destructorDeclarationName :: String,
@@ -420,7 +420,7 @@ _DestructorDeclaration_suffixSpecifiers = Core.Name "suffixSpecifiers"
 
 _DestructorDeclaration_body = Core.Name "body"
 
-data FunctionDeclaration = 
+data FunctionDeclaration =
   FunctionDeclaration {
     functionDeclarationPrefixSpecifiers :: [FunctionSpecifierPrefix],
     functionDeclarationReturnType :: TypeExpression,
@@ -444,11 +444,11 @@ _FunctionDeclaration_suffixSpecifiers = Core.Name "suffixSpecifiers"
 
 _FunctionDeclaration_body = Core.Name "body"
 
-data FunctionSpecifierPrefix = 
+data FunctionSpecifierPrefix =
   FunctionSpecifierPrefixInline  |
   FunctionSpecifierPrefixVirtual  |
   FunctionSpecifierPrefixStatic  |
-  FunctionSpecifierPrefixExplicit 
+  FunctionSpecifierPrefixExplicit
   deriving (Eq, Ord, Read, Show)
 
 _FunctionSpecifierPrefix = Core.Name "hydra.ext.cpp.syntax.FunctionSpecifierPrefix"
@@ -461,11 +461,11 @@ _FunctionSpecifierPrefix_static = Core.Name "static"
 
 _FunctionSpecifierPrefix_explicit = Core.Name "explicit"
 
-data FunctionSpecifierSuffix = 
+data FunctionSpecifierSuffix =
   FunctionSpecifierSuffixConst  |
   FunctionSpecifierSuffixNoexcept  |
   FunctionSpecifierSuffixOverride  |
-  FunctionSpecifierSuffixFinal 
+  FunctionSpecifierSuffixFinal
   deriving (Eq, Ord, Read, Show)
 
 _FunctionSpecifierSuffix = Core.Name "hydra.ext.cpp.syntax.FunctionSpecifierSuffix"
@@ -478,7 +478,7 @@ _FunctionSpecifierSuffix_override = Core.Name "override"
 
 _FunctionSpecifierSuffix_final = Core.Name "final"
 
-data Parameter = 
+data Parameter =
   Parameter {
     parameterType :: TypeExpression,
     parameterName :: String,
@@ -496,11 +496,11 @@ _Parameter_unnamed = Core.Name "unnamed"
 
 _Parameter_defaultValue = Core.Name "defaultValue"
 
-data FunctionBody = 
+data FunctionBody =
   FunctionBodyCompound CompoundStatement |
   FunctionBodyDeclaration  |
   FunctionBodyPure  |
-  FunctionBodyDefault 
+  FunctionBodyDefault
   deriving (Eq, Ord, Read, Show)
 
 _FunctionBody = Core.Name "hydra.ext.cpp.syntax.FunctionBody"
@@ -513,7 +513,7 @@ _FunctionBody_pure = Core.Name "pure"
 
 _FunctionBody_default = Core.Name "default"
 
-data VariableDeclaration = 
+data VariableDeclaration =
   VariableDeclaration {
     variableDeclarationType :: (Maybe TypeExpression),
     variableDeclarationName :: String,
@@ -531,7 +531,7 @@ _VariableDeclaration_initializer = Core.Name "initializer"
 
 _VariableDeclaration_isAuto = Core.Name "isAuto"
 
-data VariantDeclaration = 
+data VariantDeclaration =
   VariantDeclaration {
     variantDeclarationTypes :: [TypeExpression],
     variantDeclarationName :: String}
@@ -543,7 +543,7 @@ _VariantDeclaration_types = Core.Name "types"
 
 _VariantDeclaration_name = Core.Name "name"
 
-data ProductDeclaration = 
+data ProductDeclaration =
   ProductDeclaration {
     productDeclarationName :: String,
     productDeclarationFields :: [VariableDeclaration]}
@@ -555,7 +555,7 @@ _ProductDeclaration_name = Core.Name "name"
 
 _ProductDeclaration_fields = Core.Name "fields"
 
-data ContainerDeclaration = 
+data ContainerDeclaration =
   ContainerDeclarationList ListDeclaration |
   ContainerDeclarationMap MapDeclaration |
   ContainerDeclarationSet SetDeclaration |
@@ -572,7 +572,7 @@ _ContainerDeclaration_set = Core.Name "set"
 
 _ContainerDeclaration_optional = Core.Name "optional"
 
-data ListDeclaration = 
+data ListDeclaration =
   ListDeclaration {
     listDeclarationElementType :: TypeExpression,
     listDeclarationName :: String}
@@ -584,7 +584,7 @@ _ListDeclaration_elementType = Core.Name "elementType"
 
 _ListDeclaration_name = Core.Name "name"
 
-data MapDeclaration = 
+data MapDeclaration =
   MapDeclaration {
     mapDeclarationKeyType :: TypeExpression,
     mapDeclarationValueType :: TypeExpression,
@@ -599,7 +599,7 @@ _MapDeclaration_valueType = Core.Name "valueType"
 
 _MapDeclaration_name = Core.Name "name"
 
-data SetDeclaration = 
+data SetDeclaration =
   SetDeclaration {
     setDeclarationElementType :: TypeExpression,
     setDeclarationName :: String}
@@ -611,7 +611,7 @@ _SetDeclaration_elementType = Core.Name "elementType"
 
 _SetDeclaration_name = Core.Name "name"
 
-data OptionalDeclaration = 
+data OptionalDeclaration =
   OptionalDeclaration {
     optionalDeclarationValueType :: TypeExpression,
     optionalDeclarationName :: String}
@@ -623,7 +623,7 @@ _OptionalDeclaration_valueType = Core.Name "valueType"
 
 _OptionalDeclaration_name = Core.Name "name"
 
-data Expression = 
+data Expression =
   ExpressionAssignment AssignmentExpression |
   ExpressionComma CommaExpression
   deriving (Eq, Ord, Read, Show)
@@ -634,7 +634,7 @@ _Expression_assignment = Core.Name "assignment"
 
 _Expression_comma = Core.Name "comma"
 
-data CommaExpression = 
+data CommaExpression =
   CommaExpression {
     commaExpressionLeft :: Expression,
     commaExpressionRight :: AssignmentExpression}
@@ -646,7 +646,7 @@ _CommaExpression_left = Core.Name "left"
 
 _CommaExpression_right = Core.Name "right"
 
-data AssignmentExpression = 
+data AssignmentExpression =
   AssignmentExpressionConditional ConditionalExpression |
   AssignmentExpressionAssignment ExplicitAssignment
   deriving (Eq, Ord, Read, Show)
@@ -657,7 +657,7 @@ _AssignmentExpression_conditional = Core.Name "conditional"
 
 _AssignmentExpression_assignment = Core.Name "assignment"
 
-data ExplicitAssignment = 
+data ExplicitAssignment =
   ExplicitAssignment {
     explicitAssignmentLeft :: LogicalOrExpression,
     explicitAssignmentOp :: AssignmentOperator,
@@ -672,7 +672,7 @@ _ExplicitAssignment_op = Core.Name "op"
 
 _ExplicitAssignment_right = Core.Name "right"
 
-data AssignmentOperator = 
+data AssignmentOperator =
   AssignmentOperatorAssign  |
   AssignmentOperatorPlusAssign  |
   AssignmentOperatorMinusAssign  |
@@ -683,7 +683,7 @@ data AssignmentOperator =
   AssignmentOperatorRightShiftAssign  |
   AssignmentOperatorBitwiseAndAssign  |
   AssignmentOperatorBitwiseXorAssign  |
-  AssignmentOperatorBitwiseOrAssign 
+  AssignmentOperatorBitwiseOrAssign
   deriving (Eq, Ord, Read, Show)
 
 _AssignmentOperator = Core.Name "hydra.ext.cpp.syntax.AssignmentOperator"
@@ -710,7 +710,7 @@ _AssignmentOperator_bitwiseXorAssign = Core.Name "bitwiseXorAssign"
 
 _AssignmentOperator_bitwiseOrAssign = Core.Name "bitwiseOrAssign"
 
-data ConditionalExpression = 
+data ConditionalExpression =
   ConditionalExpressionLogicalOr LogicalOrExpression |
   ConditionalExpressionTernary TernaryExpression
   deriving (Eq, Ord, Read, Show)
@@ -721,7 +721,7 @@ _ConditionalExpression_logicalOr = Core.Name "logicalOr"
 
 _ConditionalExpression_ternary = Core.Name "ternary"
 
-data TernaryExpression = 
+data TernaryExpression =
   TernaryExpression {
     ternaryExpressionCondition :: LogicalOrExpression,
     ternaryExpressionTrueExpr :: Expression,
@@ -736,7 +736,7 @@ _TernaryExpression_trueExpr = Core.Name "trueExpr"
 
 _TernaryExpression_falseExpr = Core.Name "falseExpr"
 
-data LogicalOrExpression = 
+data LogicalOrExpression =
   LogicalOrExpressionLogicalAnd LogicalAndExpression |
   LogicalOrExpressionLogicalOr LogicalOrOperation
   deriving (Eq, Ord, Read, Show)
@@ -747,7 +747,7 @@ _LogicalOrExpression_logicalAnd = Core.Name "logicalAnd"
 
 _LogicalOrExpression_logicalOr = Core.Name "logicalOr"
 
-data LogicalOrOperation = 
+data LogicalOrOperation =
   LogicalOrOperation {
     logicalOrOperationLeft :: LogicalOrExpression,
     logicalOrOperationRight :: LogicalAndExpression}
@@ -759,7 +759,7 @@ _LogicalOrOperation_left = Core.Name "left"
 
 _LogicalOrOperation_right = Core.Name "right"
 
-data LogicalAndExpression = 
+data LogicalAndExpression =
   LogicalAndExpressionInclusiveOr InclusiveOrExpression |
   LogicalAndExpressionLogicalAnd LogicalAndOperation
   deriving (Eq, Ord, Read, Show)
@@ -770,7 +770,7 @@ _LogicalAndExpression_inclusiveOr = Core.Name "inclusiveOr"
 
 _LogicalAndExpression_logicalAnd = Core.Name "logicalAnd"
 
-data LogicalAndOperation = 
+data LogicalAndOperation =
   LogicalAndOperation {
     logicalAndOperationLeft :: LogicalAndExpression,
     logicalAndOperationRight :: InclusiveOrExpression}
@@ -782,7 +782,7 @@ _LogicalAndOperation_left = Core.Name "left"
 
 _LogicalAndOperation_right = Core.Name "right"
 
-data InclusiveOrExpression = 
+data InclusiveOrExpression =
   InclusiveOrExpressionExclusiveOr ExclusiveOrExpression |
   InclusiveOrExpressionBitwiseOr BitwiseOrOperation
   deriving (Eq, Ord, Read, Show)
@@ -793,7 +793,7 @@ _InclusiveOrExpression_exclusiveOr = Core.Name "exclusiveOr"
 
 _InclusiveOrExpression_bitwiseOr = Core.Name "bitwiseOr"
 
-data BitwiseOrOperation = 
+data BitwiseOrOperation =
   BitwiseOrOperation {
     bitwiseOrOperationLeft :: InclusiveOrExpression,
     bitwiseOrOperationRight :: ExclusiveOrExpression}
@@ -805,7 +805,7 @@ _BitwiseOrOperation_left = Core.Name "left"
 
 _BitwiseOrOperation_right = Core.Name "right"
 
-data ExclusiveOrExpression = 
+data ExclusiveOrExpression =
   ExclusiveOrExpressionAnd AndExpression |
   ExclusiveOrExpressionBitwiseXor BitwiseXorOperation
   deriving (Eq, Ord, Read, Show)
@@ -816,7 +816,7 @@ _ExclusiveOrExpression_and = Core.Name "and"
 
 _ExclusiveOrExpression_bitwiseXor = Core.Name "bitwiseXor"
 
-data BitwiseXorOperation = 
+data BitwiseXorOperation =
   BitwiseXorOperation {
     bitwiseXorOperationLeft :: ExclusiveOrExpression,
     bitwiseXorOperationRight :: AndExpression}
@@ -828,7 +828,7 @@ _BitwiseXorOperation_left = Core.Name "left"
 
 _BitwiseXorOperation_right = Core.Name "right"
 
-data AndExpression = 
+data AndExpression =
   AndExpressionEquality EqualityExpression |
   AndExpressionBitwiseAnd BitwiseAndOperation
   deriving (Eq, Ord, Read, Show)
@@ -839,7 +839,7 @@ _AndExpression_equality = Core.Name "equality"
 
 _AndExpression_bitwiseAnd = Core.Name "bitwiseAnd"
 
-data BitwiseAndOperation = 
+data BitwiseAndOperation =
   BitwiseAndOperation {
     bitwiseAndOperationLeft :: AndExpression,
     bitwiseAndOperationRight :: EqualityExpression}
@@ -851,7 +851,7 @@ _BitwiseAndOperation_left = Core.Name "left"
 
 _BitwiseAndOperation_right = Core.Name "right"
 
-data EqualityExpression = 
+data EqualityExpression =
   EqualityExpressionRelational RelationalExpression |
   EqualityExpressionEqual EqualOperation |
   EqualityExpressionNotEqual NotEqualOperation
@@ -865,7 +865,7 @@ _EqualityExpression_equal = Core.Name "equal"
 
 _EqualityExpression_notEqual = Core.Name "notEqual"
 
-data EqualOperation = 
+data EqualOperation =
   EqualOperation {
     equalOperationLeft :: EqualityExpression,
     equalOperationRight :: RelationalExpression}
@@ -877,7 +877,7 @@ _EqualOperation_left = Core.Name "left"
 
 _EqualOperation_right = Core.Name "right"
 
-data NotEqualOperation = 
+data NotEqualOperation =
   NotEqualOperation {
     notEqualOperationLeft :: EqualityExpression,
     notEqualOperationRight :: RelationalExpression}
@@ -889,7 +889,7 @@ _NotEqualOperation_left = Core.Name "left"
 
 _NotEqualOperation_right = Core.Name "right"
 
-data RelationalExpression = 
+data RelationalExpression =
   RelationalExpressionShift ShiftExpression |
   RelationalExpressionLess LessOperation |
   RelationalExpressionGreater GreaterOperation |
@@ -909,7 +909,7 @@ _RelationalExpression_lessEqual = Core.Name "lessEqual"
 
 _RelationalExpression_greaterEqual = Core.Name "greaterEqual"
 
-data LessOperation = 
+data LessOperation =
   LessOperation {
     lessOperationLeft :: RelationalExpression,
     lessOperationRight :: ShiftExpression}
@@ -921,7 +921,7 @@ _LessOperation_left = Core.Name "left"
 
 _LessOperation_right = Core.Name "right"
 
-data GreaterOperation = 
+data GreaterOperation =
   GreaterOperation {
     greaterOperationLeft :: RelationalExpression,
     greaterOperationRight :: ShiftExpression}
@@ -933,7 +933,7 @@ _GreaterOperation_left = Core.Name "left"
 
 _GreaterOperation_right = Core.Name "right"
 
-data LessEqualOperation = 
+data LessEqualOperation =
   LessEqualOperation {
     lessEqualOperationLeft :: RelationalExpression,
     lessEqualOperationRight :: ShiftExpression}
@@ -945,7 +945,7 @@ _LessEqualOperation_left = Core.Name "left"
 
 _LessEqualOperation_right = Core.Name "right"
 
-data GreaterEqualOperation = 
+data GreaterEqualOperation =
   GreaterEqualOperation {
     greaterEqualOperationLeft :: RelationalExpression,
     greaterEqualOperationRight :: ShiftExpression}
@@ -957,7 +957,7 @@ _GreaterEqualOperation_left = Core.Name "left"
 
 _GreaterEqualOperation_right = Core.Name "right"
 
-data ShiftExpression = 
+data ShiftExpression =
   ShiftExpressionAdditive AdditiveExpression |
   ShiftExpressionLeftShift LeftShiftOperation |
   ShiftExpressionRightShift RightShiftOperation
@@ -971,7 +971,7 @@ _ShiftExpression_leftShift = Core.Name "leftShift"
 
 _ShiftExpression_rightShift = Core.Name "rightShift"
 
-data LeftShiftOperation = 
+data LeftShiftOperation =
   LeftShiftOperation {
     leftShiftOperationLeft :: ShiftExpression,
     leftShiftOperationRight :: AdditiveExpression}
@@ -983,7 +983,7 @@ _LeftShiftOperation_left = Core.Name "left"
 
 _LeftShiftOperation_right = Core.Name "right"
 
-data RightShiftOperation = 
+data RightShiftOperation =
   RightShiftOperation {
     rightShiftOperationLeft :: ShiftExpression,
     rightShiftOperationRight :: AdditiveExpression}
@@ -995,7 +995,7 @@ _RightShiftOperation_left = Core.Name "left"
 
 _RightShiftOperation_right = Core.Name "right"
 
-data AdditiveExpression = 
+data AdditiveExpression =
   AdditiveExpressionMultiplicative MultiplicativeExpression |
   AdditiveExpressionAdd AddOperation |
   AdditiveExpressionSubtract SubtractOperation
@@ -1009,7 +1009,7 @@ _AdditiveExpression_add = Core.Name "add"
 
 _AdditiveExpression_subtract = Core.Name "subtract"
 
-data AddOperation = 
+data AddOperation =
   AddOperation {
     addOperationLeft :: AdditiveExpression,
     addOperationRight :: MultiplicativeExpression}
@@ -1021,7 +1021,7 @@ _AddOperation_left = Core.Name "left"
 
 _AddOperation_right = Core.Name "right"
 
-data SubtractOperation = 
+data SubtractOperation =
   SubtractOperation {
     subtractOperationLeft :: AdditiveExpression,
     subtractOperationRight :: MultiplicativeExpression}
@@ -1033,7 +1033,7 @@ _SubtractOperation_left = Core.Name "left"
 
 _SubtractOperation_right = Core.Name "right"
 
-data MultiplicativeExpression = 
+data MultiplicativeExpression =
   MultiplicativeExpressionUnary UnaryExpression |
   MultiplicativeExpressionMultiply MultiplyOperation |
   MultiplicativeExpressionDivide DivideOperation |
@@ -1050,7 +1050,7 @@ _MultiplicativeExpression_divide = Core.Name "divide"
 
 _MultiplicativeExpression_modulo = Core.Name "modulo"
 
-data MultiplyOperation = 
+data MultiplyOperation =
   MultiplyOperation {
     multiplyOperationLeft :: MultiplicativeExpression,
     multiplyOperationRight :: UnaryExpression}
@@ -1062,7 +1062,7 @@ _MultiplyOperation_left = Core.Name "left"
 
 _MultiplyOperation_right = Core.Name "right"
 
-data DivideOperation = 
+data DivideOperation =
   DivideOperation {
     divideOperationLeft :: MultiplicativeExpression,
     divideOperationRight :: UnaryExpression}
@@ -1074,7 +1074,7 @@ _DivideOperation_left = Core.Name "left"
 
 _DivideOperation_right = Core.Name "right"
 
-data ModuloOperation = 
+data ModuloOperation =
   ModuloOperation {
     moduloOperationLeft :: MultiplicativeExpression,
     moduloOperationRight :: UnaryExpression}
@@ -1086,7 +1086,7 @@ _ModuloOperation_left = Core.Name "left"
 
 _ModuloOperation_right = Core.Name "right"
 
-data UnaryExpression = 
+data UnaryExpression =
   UnaryExpressionPostfix PostfixExpression |
   UnaryExpressionUnaryOp UnaryOperation |
   UnaryExpressionSizeof SizeofExpression
@@ -1100,7 +1100,7 @@ _UnaryExpression_unaryOp = Core.Name "unaryOp"
 
 _UnaryExpression_sizeof = Core.Name "sizeof"
 
-data UnaryOperation = 
+data UnaryOperation =
   UnaryOperation {
     unaryOperationOperator :: UnaryOperator,
     unaryOperationOperand :: UnaryExpression}
@@ -1112,7 +1112,7 @@ _UnaryOperation_operator = Core.Name "operator"
 
 _UnaryOperation_operand = Core.Name "operand"
 
-data UnaryOperator = 
+data UnaryOperator =
   UnaryOperatorPlus  |
   UnaryOperatorMinus  |
   UnaryOperatorLogicalNot  |
@@ -1120,7 +1120,7 @@ data UnaryOperator =
   UnaryOperatorDereference  |
   UnaryOperatorAddressOf  |
   UnaryOperatorPreIncrement  |
-  UnaryOperatorPreDecrement 
+  UnaryOperatorPreDecrement
   deriving (Eq, Ord, Read, Show)
 
 _UnaryOperator = Core.Name "hydra.ext.cpp.syntax.UnaryOperator"
@@ -1141,14 +1141,14 @@ _UnaryOperator_preIncrement = Core.Name "preIncrement"
 
 _UnaryOperator_preDecrement = Core.Name "preDecrement"
 
-newtype SizeofExpression = 
+newtype SizeofExpression =
   SizeofExpression {
     unSizeofExpression :: TypeExpression}
   deriving (Eq, Ord, Read, Show)
 
 _SizeofExpression = Core.Name "hydra.ext.cpp.syntax.SizeofExpression"
 
-data PostfixExpression = 
+data PostfixExpression =
   PostfixExpressionPrimary PrimaryExpression |
   PostfixExpressionSubscript SubscriptOperation |
   PostfixExpressionFunctionCall FunctionCallOperation |
@@ -1177,7 +1177,7 @@ _PostfixExpression_postIncrement = Core.Name "postIncrement"
 
 _PostfixExpression_postDecrement = Core.Name "postDecrement"
 
-data SubscriptOperation = 
+data SubscriptOperation =
   SubscriptOperation {
     subscriptOperationArray :: PostfixExpression,
     subscriptOperationIndex :: Expression}
@@ -1189,7 +1189,7 @@ _SubscriptOperation_array = Core.Name "array"
 
 _SubscriptOperation_index = Core.Name "index"
 
-data FunctionCallOperation = 
+data FunctionCallOperation =
   FunctionCallOperation {
     functionCallOperationFunction :: PostfixExpression,
     functionCallOperationArguments :: [Expression]}
@@ -1201,7 +1201,7 @@ _FunctionCallOperation_function = Core.Name "function"
 
 _FunctionCallOperation_arguments = Core.Name "arguments"
 
-data MemberAccessOperation = 
+data MemberAccessOperation =
   MemberAccessOperation {
     memberAccessOperationObject :: PostfixExpression,
     memberAccessOperationMember :: String}
@@ -1213,7 +1213,7 @@ _MemberAccessOperation_object = Core.Name "object"
 
 _MemberAccessOperation_member = Core.Name "member"
 
-data PointerMemberAccessOperation = 
+data PointerMemberAccessOperation =
   PointerMemberAccessOperation {
     pointerMemberAccessOperationPointer :: PostfixExpression,
     pointerMemberAccessOperationMember :: String}
@@ -1225,7 +1225,7 @@ _PointerMemberAccessOperation_pointer = Core.Name "pointer"
 
 _PointerMemberAccessOperation_member = Core.Name "member"
 
-data TemplateFunctionCallOperation = 
+data TemplateFunctionCallOperation =
   TemplateFunctionCallOperation {
     templateFunctionCallOperationFunction :: PostfixExpression,
     templateFunctionCallOperationTemplateArguments :: [TemplateArgument],
@@ -1240,7 +1240,7 @@ _TemplateFunctionCallOperation_templateArguments = Core.Name "templateArguments"
 
 _TemplateFunctionCallOperation_arguments = Core.Name "arguments"
 
-data PrimaryExpression = 
+data PrimaryExpression =
   PrimaryExpressionIdentifier String |
   PrimaryExpressionLiteral Literal |
   PrimaryExpressionParenthesized Expression |
@@ -1257,7 +1257,7 @@ _PrimaryExpression_parenthesized = Core.Name "parenthesized"
 
 _PrimaryExpression_lambda = Core.Name "lambda"
 
-data LambdaExpression = 
+data LambdaExpression =
   LambdaExpression {
     lambdaExpressionCaptures :: CaptureList,
     lambdaExpressionParameters :: [Parameter],
@@ -1275,7 +1275,7 @@ _LambdaExpression_returnType = Core.Name "returnType"
 
 _LambdaExpression_body = Core.Name "body"
 
-data CaptureList = 
+data CaptureList =
   CaptureListCaptureByValue  |
   CaptureListCaptures [Capture]
   deriving (Eq, Ord, Read, Show)
@@ -1286,7 +1286,7 @@ _CaptureList_captureByValue = Core.Name "captureByValue"
 
 _CaptureList_captures = Core.Name "captures"
 
-data Capture = 
+data Capture =
   Capture {
     captureName :: String,
     captureByReference :: Bool}
@@ -1298,7 +1298,7 @@ _Capture_name = Core.Name "name"
 
 _Capture_byReference = Core.Name "byReference"
 
-data PatternMatch = 
+data PatternMatch =
   PatternMatch {
     patternMatchVisitor :: Visitor,
     patternMatchVariant :: Expression}
@@ -1310,7 +1310,7 @@ _PatternMatch_visitor = Core.Name "visitor"
 
 _PatternMatch_variant = Core.Name "variant"
 
-data Visitor = 
+data Visitor =
   VisitorLambda LambdaExpression |
   VisitorOverloaded OverloadedLambdas
   deriving (Eq, Ord, Read, Show)
@@ -1321,14 +1321,14 @@ _Visitor_lambda = Core.Name "lambda"
 
 _Visitor_overloaded = Core.Name "overloaded"
 
-newtype OverloadedLambdas = 
+newtype OverloadedLambdas =
   OverloadedLambdas {
     unOverloadedLambdas :: [LambdaExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _OverloadedLambdas = Core.Name "hydra.ext.cpp.syntax.OverloadedLambdas"
 
-data FunctionApplication = 
+data FunctionApplication =
   FunctionApplication {
     functionApplicationFunction :: FunctionIdentifier,
     functionApplicationArguments :: [Expression]}
@@ -1340,7 +1340,7 @@ _FunctionApplication_function = Core.Name "function"
 
 _FunctionApplication_arguments = Core.Name "arguments"
 
-data FunctionIdentifier = 
+data FunctionIdentifier =
   FunctionIdentifierSimple String |
   FunctionIdentifierQualified QualifiedIdentifier
   deriving (Eq, Ord, Read, Show)
@@ -1351,7 +1351,7 @@ _FunctionIdentifier_simple = Core.Name "simple"
 
 _FunctionIdentifier_qualified = Core.Name "qualified"
 
-data QualifiedIdentifier = 
+data QualifiedIdentifier =
   QualifiedIdentifier {
     qualifiedIdentifierNamespace :: String,
     qualifiedIdentifierName :: String}
@@ -1363,7 +1363,7 @@ _QualifiedIdentifier_namespace = Core.Name "namespace"
 
 _QualifiedIdentifier_name = Core.Name "name"
 
-data Statement = 
+data Statement =
   StatementLabeled LabeledStatement |
   StatementCompound CompoundStatement |
   StatementSelection SelectionStatement |
@@ -1392,7 +1392,7 @@ _Statement_declaration = Core.Name "declaration"
 
 _Statement_expression = Core.Name "expression"
 
-data LabeledStatement = 
+data LabeledStatement =
   LabeledStatement {
     labeledStatementLabel :: String,
     labeledStatementStatement :: Statement}
@@ -1404,14 +1404,14 @@ _LabeledStatement_label = Core.Name "label"
 
 _LabeledStatement_statement = Core.Name "statement"
 
-newtype CompoundStatement = 
+newtype CompoundStatement =
   CompoundStatement {
     unCompoundStatement :: [Statement]}
   deriving (Eq, Ord, Read, Show)
 
 _CompoundStatement = Core.Name "hydra.ext.cpp.syntax.CompoundStatement"
 
-data SelectionStatement = 
+data SelectionStatement =
   SelectionStatement {
     selectionStatementCondition :: Expression,
     selectionStatementThenBranch :: Statement,
@@ -1426,7 +1426,7 @@ _SelectionStatement_thenBranch = Core.Name "thenBranch"
 
 _SelectionStatement_elseBranch = Core.Name "elseBranch"
 
-data SwitchStatement = 
+data SwitchStatement =
   SwitchStatement {
     switchStatementValue :: Expression,
     switchStatementCases :: [CaseStatement]}
@@ -1438,7 +1438,7 @@ _SwitchStatement_value = Core.Name "value"
 
 _SwitchStatement_cases = Core.Name "cases"
 
-data CaseStatement = 
+data CaseStatement =
   CaseStatementCase CaseValue |
   CaseStatementDefault Statement
   deriving (Eq, Ord, Read, Show)
@@ -1449,7 +1449,7 @@ _CaseStatement_case = Core.Name "case"
 
 _CaseStatement_default = Core.Name "default"
 
-data CaseValue = 
+data CaseValue =
   CaseValue {
     caseValueValue :: Expression,
     caseValueStatement :: Statement}
@@ -1461,7 +1461,7 @@ _CaseValue_value = Core.Name "value"
 
 _CaseValue_statement = Core.Name "statement"
 
-data IterationStatement = 
+data IterationStatement =
   IterationStatementWhile WhileStatement |
   IterationStatementDo DoStatement |
   IterationStatementFor ForStatement |
@@ -1478,7 +1478,7 @@ _IterationStatement_for = Core.Name "for"
 
 _IterationStatement_rangeFor = Core.Name "rangeFor"
 
-data WhileStatement = 
+data WhileStatement =
   WhileStatement {
     whileStatementCondition :: Expression,
     whileStatementBody :: Statement}
@@ -1490,7 +1490,7 @@ _WhileStatement_condition = Core.Name "condition"
 
 _WhileStatement_body = Core.Name "body"
 
-data DoStatement = 
+data DoStatement =
   DoStatement {
     doStatementBody :: Statement,
     doStatementCondition :: Expression}
@@ -1502,7 +1502,7 @@ _DoStatement_body = Core.Name "body"
 
 _DoStatement_condition = Core.Name "condition"
 
-data ForStatement = 
+data ForStatement =
   ForStatement {
     forStatementInit :: ForInit,
     forStatementCondition :: Expression,
@@ -1520,10 +1520,10 @@ _ForStatement_increment = Core.Name "increment"
 
 _ForStatement_body = Core.Name "body"
 
-data ForInit = 
+data ForInit =
   ForInitExpression Expression |
   ForInitDeclaration VariableDeclaration |
-  ForInitEmpty 
+  ForInitEmpty
   deriving (Eq, Ord, Read, Show)
 
 _ForInit = Core.Name "hydra.ext.cpp.syntax.ForInit"
@@ -1534,7 +1534,7 @@ _ForInit_declaration = Core.Name "declaration"
 
 _ForInit_empty = Core.Name "empty"
 
-data RangeForStatement = 
+data RangeForStatement =
   RangeForStatement {
     rangeForStatementType :: TypeExpression,
     rangeForStatementVariable :: String,
@@ -1552,7 +1552,7 @@ _RangeForStatement_range = Core.Name "range"
 
 _RangeForStatement_body = Core.Name "body"
 
-data JumpStatement = 
+data JumpStatement =
   JumpStatementBreak  |
   JumpStatementContinue  |
   JumpStatementReturnValue Expression |
@@ -1572,19 +1572,19 @@ _JumpStatement_returnVoid = Core.Name "returnVoid"
 
 _JumpStatement_throw = Core.Name "throw"
 
-newtype ExpressionStatement = 
+newtype ExpressionStatement =
   ExpressionStatement {
     unExpressionStatement :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _ExpressionStatement = Core.Name "hydra.ext.cpp.syntax.ExpressionStatement"
 
-data TypeExpression = 
+data TypeExpression =
   TypeExpressionBasic BasicType |
   TypeExpressionQualified QualifiedType |
   TypeExpressionTemplate TemplateType |
   TypeExpressionFunction FunctionType |
-  TypeExpressionAuto 
+  TypeExpressionAuto
   deriving (Eq, Ord, Read, Show)
 
 _TypeExpression = Core.Name "hydra.ext.cpp.syntax.TypeExpression"
@@ -1599,7 +1599,7 @@ _TypeExpression_function = Core.Name "function"
 
 _TypeExpression_auto = Core.Name "auto"
 
-data BasicType = 
+data BasicType =
   BasicTypeVoid  |
   BasicTypeBool  |
   BasicTypeChar  |
@@ -1631,7 +1631,7 @@ _BasicType_auto = Core.Name "auto"
 
 _BasicType_named = Core.Name "named"
 
-data QualifiedType = 
+data QualifiedType =
   QualifiedType {
     qualifiedTypeBaseType :: TypeExpression,
     qualifiedTypeQualifier :: TypeQualifier}
@@ -1643,11 +1643,11 @@ _QualifiedType_baseType = Core.Name "baseType"
 
 _QualifiedType_qualifier = Core.Name "qualifier"
 
-data TypeQualifier = 
+data TypeQualifier =
   TypeQualifierConst  |
   TypeQualifierLvalueRef  |
   TypeQualifierRvalueRef  |
-  TypeQualifierPointer 
+  TypeQualifierPointer
   deriving (Eq, Ord, Read, Show)
 
 _TypeQualifier = Core.Name "hydra.ext.cpp.syntax.TypeQualifier"
@@ -1660,7 +1660,7 @@ _TypeQualifier_rvalueRef = Core.Name "rvalueRef"
 
 _TypeQualifier_pointer = Core.Name "pointer"
 
-data TemplateType = 
+data TemplateType =
   TemplateType {
     templateTypeName :: String,
     templateTypeArguments :: [TemplateArgument]}
@@ -1672,7 +1672,7 @@ _TemplateType_name = Core.Name "name"
 
 _TemplateType_arguments = Core.Name "arguments"
 
-data TemplateArgument = 
+data TemplateArgument =
   TemplateArgumentType TypeExpression |
   TemplateArgumentValue Expression
   deriving (Eq, Ord, Read, Show)
@@ -1683,7 +1683,7 @@ _TemplateArgument_type = Core.Name "type"
 
 _TemplateArgument_value = Core.Name "value"
 
-data FunctionType = 
+data FunctionType =
   FunctionType {
     functionTypeReturnType :: TypeExpression,
     functionTypeParameters :: [Parameter]}
@@ -1695,13 +1695,13 @@ _FunctionType_returnType = Core.Name "returnType"
 
 _FunctionType_parameters = Core.Name "parameters"
 
-data Literal = 
+data Literal =
   LiteralInteger IntegerLiteral |
   LiteralFloating FloatingLiteral |
   LiteralCharacter CharacterLiteral |
   LiteralString StringLiteral |
   LiteralBoolean BooleanLiteral |
-  LiteralNull 
+  LiteralNull
   deriving (Eq, Ord, Read, Show)
 
 _Literal = Core.Name "hydra.ext.cpp.syntax.Literal"
@@ -1718,7 +1718,7 @@ _Literal_boolean = Core.Name "boolean"
 
 _Literal_null = Core.Name "null"
 
-data IntegerLiteral = 
+data IntegerLiteral =
   IntegerLiteralDecimal Integer |
   IntegerLiteralHexadecimal String |
   IntegerLiteralOctal String |
@@ -1735,35 +1735,35 @@ _IntegerLiteral_octal = Core.Name "octal"
 
 _IntegerLiteral_binary = Core.Name "binary"
 
-newtype FloatingLiteral = 
+newtype FloatingLiteral =
   FloatingLiteral {
     unFloatingLiteral :: Double}
   deriving (Eq, Ord, Read, Show)
 
 _FloatingLiteral = Core.Name "hydra.ext.cpp.syntax.FloatingLiteral"
 
-newtype CharacterLiteral = 
+newtype CharacterLiteral =
   CharacterLiteral {
     unCharacterLiteral :: String}
   deriving (Eq, Ord, Read, Show)
 
 _CharacterLiteral = Core.Name "hydra.ext.cpp.syntax.CharacterLiteral"
 
-newtype StringLiteral = 
+newtype StringLiteral =
   StringLiteral {
     unStringLiteral :: String}
   deriving (Eq, Ord, Read, Show)
 
 _StringLiteral = Core.Name "hydra.ext.cpp.syntax.StringLiteral"
 
-newtype BooleanLiteral = 
+newtype BooleanLiteral =
   BooleanLiteral {
     unBooleanLiteral :: Bool}
   deriving (Eq, Ord, Read, Show)
 
 _BooleanLiteral = Core.Name "hydra.ext.cpp.syntax.BooleanLiteral"
 
-data Vector = 
+data Vector =
   Vector {
     vectorElementType :: TypeExpression,
     vectorElements :: [Expression]}
@@ -1775,7 +1775,7 @@ _Vector_elementType = Core.Name "elementType"
 
 _Vector_elements = Core.Name "elements"
 
-data Map = 
+data Map =
   Map {
     mapKeyType :: TypeExpression,
     mapValueType :: TypeExpression,
@@ -1790,7 +1790,7 @@ _Map_valueType = Core.Name "valueType"
 
 _Map_entries = Core.Name "entries"
 
-data MapEntry = 
+data MapEntry =
   MapEntry {
     mapEntryKey :: Expression,
     mapEntryValue :: Expression}
@@ -1802,7 +1802,7 @@ _MapEntry_key = Core.Name "key"
 
 _MapEntry_value = Core.Name "value"
 
-data Set = 
+data Set =
   Set {
     setElementType :: TypeExpression,
     setElements :: [Expression]}
@@ -1814,7 +1814,7 @@ _Set_elementType = Core.Name "elementType"
 
 _Set_elements = Core.Name "elements"
 
-data Optional = 
+data Optional =
   Optional {
     optionalValueType :: TypeExpression,
     optionalValue :: (Maybe Expression)}
@@ -1830,7 +1830,7 @@ type Identifier = String
 
 _Identifier = Core.Name "hydra.ext.cpp.syntax.Identifier"
 
-data Comment = 
+data Comment =
   Comment {
     commentText :: String,
     commentIsMultiline :: Bool}
@@ -1842,7 +1842,7 @@ _Comment_text = Core.Name "text"
 
 _Comment_isMultiline = Core.Name "isMultiline"
 
-data BinaryOperator = 
+data BinaryOperator =
   BinaryOperatorPlus  |
   BinaryOperatorMinus  |
   BinaryOperatorMultiply  |
@@ -1860,7 +1860,7 @@ data BinaryOperator =
   BinaryOperatorLessEqual  |
   BinaryOperatorGreaterEqual  |
   BinaryOperatorLeftShift  |
-  BinaryOperatorRightShift 
+  BinaryOperatorRightShift
   deriving (Eq, Ord, Read, Show)
 
 _BinaryOperator = Core.Name "hydra.ext.cpp.syntax.BinaryOperator"

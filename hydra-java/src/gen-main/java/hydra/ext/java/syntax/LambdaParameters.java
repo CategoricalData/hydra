@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class LambdaParameters implements Serializable, Comparable<LambdaParameters> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.LambdaParameters");
-  
+
   public static final hydra.core.Name TUPLE = new hydra.core.Name("tuple");
-  
+
   public static final hydra.core.Name SINGLE = new hydra.core.Name("single");
-  
+
   private LambdaParameters () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Tuple instance) ;
-    
+
     R visit(Single instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(LambdaParameters instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Tuple instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Single instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Tuple extends hydra.ext.java.syntax.LambdaParameters implements Serializable {
     public final hydra.util.ConsList<hydra.ext.java.syntax.LambdaParameters> value;
-    
+
     public Tuple (hydra.util.ConsList<hydra.ext.java.syntax.LambdaParameters> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Tuple)) {
@@ -54,12 +54,12 @@ public abstract class LambdaParameters implements Serializable, Comparable<Lambd
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LambdaParameters other) {
@@ -70,20 +70,20 @@ public abstract class LambdaParameters implements Serializable, Comparable<Lambd
       Tuple o = (Tuple) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Single extends hydra.ext.java.syntax.LambdaParameters implements Serializable {
     public final hydra.ext.java.syntax.Identifier value;
-    
+
     public Single (hydra.ext.java.syntax.Identifier value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Single)) {
@@ -94,12 +94,12 @@ public abstract class LambdaParameters implements Serializable, Comparable<Lambd
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LambdaParameters other) {
@@ -110,7 +110,7 @@ public abstract class LambdaParameters implements Serializable, Comparable<Lambd
       Single o = (Single) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

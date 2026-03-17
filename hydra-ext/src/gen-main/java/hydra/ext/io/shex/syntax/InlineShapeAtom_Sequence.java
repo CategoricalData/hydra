@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class InlineShapeAtom_Sequence implements Serializable, Comparable<InlineShapeAtom_Sequence> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAtom_Sequence");
-  
+
   public static final hydra.core.Name NODE_CONSTRAINT = new hydra.core.Name("NodeConstraint");
-  
+
   public static final hydra.core.Name INLINE_SHAPE_OR_REF = new hydra.core.Name("InlineShapeOrRef");
-  
+
   public final hydra.ext.io.shex.syntax.NodeConstraint NodeConstraint;
-  
+
   public final hydra.util.Maybe<hydra.ext.io.shex.syntax.InlineShapeOrRef> InlineShapeOrRef;
-  
+
   public InlineShapeAtom_Sequence (hydra.ext.io.shex.syntax.NodeConstraint NodeConstraint, hydra.util.Maybe<hydra.ext.io.shex.syntax.InlineShapeOrRef> InlineShapeOrRef) {
     this.NodeConstraint = NodeConstraint;
     this.InlineShapeOrRef = InlineShapeOrRef;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof InlineShapeAtom_Sequence)) {
@@ -32,12 +32,12 @@ public class InlineShapeAtom_Sequence implements Serializable, Comparable<Inline
       this.InlineShapeOrRef,
       o.InlineShapeOrRef);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(NodeConstraint) + 3 * java.util.Objects.hashCode(InlineShapeOrRef);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InlineShapeAtom_Sequence other) {
@@ -48,11 +48,11 @@ public class InlineShapeAtom_Sequence implements Serializable, Comparable<Inline
     }
     return ((Comparable) InlineShapeOrRef).compareTo(other.InlineShapeOrRef);
   }
-  
+
   public InlineShapeAtom_Sequence withNodeConstraint(hydra.ext.io.shex.syntax.NodeConstraint NodeConstraint) {
     return new InlineShapeAtom_Sequence(NodeConstraint, InlineShapeOrRef);
   }
-  
+
   public InlineShapeAtom_Sequence withInlineShapeOrRef(hydra.util.Maybe<hydra.ext.io.shex.syntax.InlineShapeOrRef> InlineShapeOrRef) {
     return new InlineShapeAtom_Sequence(NodeConstraint, InlineShapeOrRef);
   }

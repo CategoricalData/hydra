@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class ImportFromAsName implements Serializable, Comparable<ImportFromAsName> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ImportFromAsName");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name AS = new hydra.core.Name("as");
-  
+
   public final hydra.ext.python.syntax.Name name;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Name> as;
-  
+
   public ImportFromAsName (hydra.ext.python.syntax.Name name, hydra.util.Maybe<hydra.ext.python.syntax.Name> as) {
     this.name = name;
     this.as = as;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ImportFromAsName)) {
@@ -32,12 +32,12 @@ public class ImportFromAsName implements Serializable, Comparable<ImportFromAsNa
       this.as,
       o.as);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(as);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ImportFromAsName other) {
@@ -48,11 +48,11 @@ public class ImportFromAsName implements Serializable, Comparable<ImportFromAsNa
     }
     return ((Comparable) as).compareTo(other.as);
   }
-  
+
   public ImportFromAsName withName(hydra.ext.python.syntax.Name name) {
     return new ImportFromAsName(name, as);
   }
-  
+
   public ImportFromAsName withAs(hydra.util.Maybe<hydra.ext.python.syntax.Name> as) {
     return new ImportFromAsName(name, as);
   }

@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class StringNullableArgumentAndGenericLiteralArgument implements Serializable, Comparable<StringNullableArgumentAndGenericLiteralArgument> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgumentAndGenericLiteralArgument");
-  
+
   public static final hydra.core.Name STRING = new hydra.core.Name("string");
-  
+
   public static final hydra.core.Name LITERAL = new hydra.core.Name("literal");
-  
+
   public final hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument string;
-  
+
   public final hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument literal;
-  
+
   public StringNullableArgumentAndGenericLiteralArgument (hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument string, hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument literal) {
     this.string = string;
     this.literal = literal;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof StringNullableArgumentAndGenericLiteralArgument)) {
@@ -32,12 +32,12 @@ public class StringNullableArgumentAndGenericLiteralArgument implements Serializ
       this.literal,
       o.literal);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(string) + 3 * java.util.Objects.hashCode(literal);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StringNullableArgumentAndGenericLiteralArgument other) {
@@ -48,11 +48,11 @@ public class StringNullableArgumentAndGenericLiteralArgument implements Serializ
     }
     return ((Comparable) literal).compareTo(other.literal);
   }
-  
+
   public StringNullableArgumentAndGenericLiteralArgument withString(hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument string) {
     return new StringNullableArgumentAndGenericLiteralArgument(string, literal);
   }
-  
+
   public StringNullableArgumentAndGenericLiteralArgument withLiteral(hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument literal) {
     return new StringNullableArgumentAndGenericLiteralArgument(string, literal);
   }

@@ -6,52 +6,52 @@ import java.io.Serializable;
 
 public abstract class CastExpression implements Serializable, Comparable<CastExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.CastExpression");
-  
+
   public static final hydra.core.Name PRIMITIVE = new hydra.core.Name("primitive");
-  
+
   public static final hydra.core.Name NOT_PLUS_MINUS = new hydra.core.Name("notPlusMinus");
-  
+
   public static final hydra.core.Name LAMBDA = new hydra.core.Name("lambda");
-  
+
   private CastExpression () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Primitive instance) ;
-    
+
     R visit(NotPlusMinus instance) ;
-    
+
     R visit(Lambda instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(CastExpression instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Primitive instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(NotPlusMinus instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Lambda instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Primitive extends hydra.ext.java.syntax.CastExpression implements Serializable {
     public final hydra.ext.java.syntax.CastExpression_Primitive value;
-    
+
     public Primitive (hydra.ext.java.syntax.CastExpression_Primitive value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Primitive)) {
@@ -62,12 +62,12 @@ public abstract class CastExpression implements Serializable, Comparable<CastExp
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CastExpression other) {
@@ -78,20 +78,20 @@ public abstract class CastExpression implements Serializable, Comparable<CastExp
       Primitive o = (Primitive) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class NotPlusMinus extends hydra.ext.java.syntax.CastExpression implements Serializable {
     public final hydra.ext.java.syntax.CastExpression_NotPlusMinus value;
-    
+
     public NotPlusMinus (hydra.ext.java.syntax.CastExpression_NotPlusMinus value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof NotPlusMinus)) {
@@ -102,12 +102,12 @@ public abstract class CastExpression implements Serializable, Comparable<CastExp
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CastExpression other) {
@@ -118,20 +118,20 @@ public abstract class CastExpression implements Serializable, Comparable<CastExp
       NotPlusMinus o = (NotPlusMinus) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Lambda extends hydra.ext.java.syntax.CastExpression implements Serializable {
     public final hydra.ext.java.syntax.CastExpression_Lambda value;
-    
+
     public Lambda (hydra.ext.java.syntax.CastExpression_Lambda value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Lambda)) {
@@ -142,12 +142,12 @@ public abstract class CastExpression implements Serializable, Comparable<CastExp
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CastExpression other) {
@@ -158,7 +158,7 @@ public abstract class CastExpression implements Serializable, Comparable<CastExp
       Lambda o = (Lambda) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

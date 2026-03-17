@@ -24,8 +24,8 @@ import qualified Data.Set as S
 value :: Graph.Graph -> Core.Term -> Either Error.DecodingError Model.Value
 value cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =

@@ -23,7 +23,7 @@ T0 = TypeVar("T0")
 
 def adjacency_lists_to_graph(edges0: frozenlist[tuple[T0, frozenlist[T0]]]) -> tuple[FrozenDict[int, frozenlist[int]], Callable[[int], T0]]:
     r"""Given a list of adjacency lists represented as (key, [key]) pairs, construct a graph along with a function mapping each vertex (an Int) back to its original key."""
-    
+
     @lru_cache(1)
     def sorted_edges() -> frozenlist[tuple[T0, frozenlist[T0]]]:
         return hydra.lib.lists.sort_on((lambda x1: hydra.lib.pairs.first(x1)), edges0)
@@ -46,12 +46,12 @@ def adjacency_lists_to_graph(edges0: frozenlist[tuple[T0, frozenlist[T0]]]) -> t
 @lru_cache(1)
 def initial_state() -> hydra.topology.TarjanState:
     r"""Initial state for Tarjan's algorithm."""
-    
+
     return hydra.topology.TarjanState(0, hydra.lib.maps.empty(), hydra.lib.maps.empty(), (), hydra.lib.sets.empty(), ())
 
 def pop_stack_until(v: int, st0: hydra.topology.TarjanState) -> tuple[frozenlist[int], hydra.topology.TarjanState]:
     r"""Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component."""
-    
+
     def go(acc: frozenlist[int], st: hydra.topology.TarjanState) -> tuple[frozenlist[int], hydra.topology.TarjanState]:
         @lru_cache(1)
         def x() -> int:
@@ -71,7 +71,7 @@ def pop_stack_until(v: int, st0: hydra.topology.TarjanState) -> tuple[frozenlist
 
 def strong_connect(graph: FrozenDict[int, frozenlist[int]], v: int, st: hydra.topology.TarjanState) -> hydra.topology.TarjanState:
     r"""Visit a vertex and recursively explore its successors."""
-    
+
     i = st.counter
     @lru_cache(1)
     def new_st() -> hydra.topology.TarjanState:
@@ -102,7 +102,7 @@ def strong_connect(graph: FrozenDict[int, frozenlist[int]], v: int, st: hydra.to
 
 def strongly_connected_components(graph: FrozenDict[int, frozenlist[int]]) -> frozenlist[frozenlist[int]]:
     r"""Compute the strongly connected components of the given graph. The components are returned in reverse topological order."""
-    
+
     @lru_cache(1)
     def verts() -> frozenlist[int]:
         return hydra.lib.maps.keys(graph)

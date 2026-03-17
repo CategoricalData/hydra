@@ -25,7 +25,7 @@ ApplicationQuery.TYPE_ = hydra.core.Name("hydra.pg.query.ApplicationQuery")
 class AssociativeExpression:
     operator: BinaryOperator
     operands: frozenlist[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.AssociativeExpression")
     OPERATOR = hydra.core.Name("operator")
     OPERANDS = hydra.core.Name("operands")
@@ -35,7 +35,7 @@ class BinaryExpression:
     left: Expression
     operator: BinaryOperator
     right: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.BinaryExpression")
     LEFT = hydra.core.Name("left")
     OPERATOR = hydra.core.Name("operator")
@@ -43,9 +43,9 @@ class BinaryExpression:
 
 class BinaryBooleanOperator(Enum):
     AND = hydra.core.Name("and")
-    
+
     OR = hydra.core.Name("or")
-    
+
     XOR = hydra.core.Name("xor")
 
 BinaryBooleanOperator.TYPE_ = hydra.core.Name("hydra.pg.query.BinaryBooleanOperator")
@@ -69,7 +69,7 @@ class _BinaryOperatorMeta(type):
 
 class BinaryOperator(metaclass=_BinaryOperatorMeta):
     r"""BinaryOperatorBoolean | BinaryOperatorComparison | BinaryOperatorPower"""
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.BinaryOperator")
     BOOLEAN = hydra.core.Name("boolean")
     COMPARISON = hydra.core.Name("comparison")
@@ -79,22 +79,22 @@ class BinaryOperator(metaclass=_BinaryOperatorMeta):
 class Binding:
     key: Variable
     value: Query
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.Binding")
     KEY = hydra.core.Name("key")
     VALUE = hydra.core.Name("value")
 
 class ComparisonOperator(Enum):
     EQ = hydra.core.Name("eq")
-    
+
     NEQ = hydra.core.Name("neq")
-    
+
     LT = hydra.core.Name("lt")
-    
+
     LTE = hydra.core.Name("lte")
-    
+
     GT = hydra.core.Name("gt")
-    
+
     GTE = hydra.core.Name("gte")
 
 ComparisonOperator.TYPE_ = hydra.core.Name("hydra.pg.query.ComparisonOperator")
@@ -105,7 +105,7 @@ class EdgeProjectionPattern:
     label: Maybe[hydra.pg.model.EdgeLabel]
     properties: frozenlist[PropertyPattern]
     vertex: Maybe[VertexPattern]
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.EdgeProjectionPattern")
     DIRECTION = hydra.core.Name("direction")
     LABEL = hydra.core.Name("label")
@@ -136,7 +136,7 @@ class _ExpressionMeta(type):
 
 class Expression(metaclass=_ExpressionMeta):
     r"""ExpressionAssociative | ExpressionBinary | ExpressionProperty | ExpressionUnary | ExpressionVariable | ExpressionVertex"""
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.Expression")
     ASSOCIATIVE = hydra.core.Name("associative")
     BINARY = hydra.core.Name("binary")
@@ -149,7 +149,7 @@ class Expression(metaclass=_ExpressionMeta):
 class LetQuery:
     bindings: frozenlist[Binding]
     environment: Query
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.LetQuery")
     BINDINGS = hydra.core.Name("bindings")
     ENVIRONMENT = hydra.core.Name("environment")
@@ -159,7 +159,7 @@ class MatchQuery:
     optional: bool
     pattern: frozenlist[Projection]
     where: Maybe[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.MatchQuery")
     OPTIONAL = hydra.core.Name("optional")
     PATTERN = hydra.core.Name("pattern")
@@ -169,7 +169,7 @@ class MatchQuery:
 class Projection:
     value: Expression
     as_: Maybe[Variable]
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.Projection")
     VALUE = hydra.core.Name("value")
     AS = hydra.core.Name("as")
@@ -178,7 +178,7 @@ class Projection:
 class Projections:
     all: bool
     explicit: frozenlist[Projection]
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.Projections")
     ALL = hydra.core.Name("all")
     EXPLICIT = hydra.core.Name("explicit")
@@ -187,7 +187,7 @@ class Projections:
 class PropertyPattern:
     key: hydra.pg.model.PropertyKey
     value: PropertyValuePattern
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.PropertyPattern")
     KEY = hydra.core.Name("key")
     VALUE = hydra.core.Name("value")
@@ -196,7 +196,7 @@ class PropertyPattern:
 class PropertyProjection:
     base: Expression
     key: hydra.pg.model.PropertyKey
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.PropertyProjection")
     BASE = hydra.core.Name("base")
     KEY = hydra.core.Name("key")
@@ -218,7 +218,7 @@ class _PropertyValuePatternMeta(type):
 
 class PropertyValuePattern(metaclass=_PropertyValuePatternMeta):
     r"""PropertyValuePatternVariable | PropertyValuePatternValue"""
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.PropertyValuePattern")
     VARIABLE = hydra.core.Name("variable")
     VALUE = hydra.core.Name("value")
@@ -247,7 +247,7 @@ class _QueryMeta(type):
 
 class Query(metaclass=_QueryMeta):
     r"""QueryApplication | QueryAggregate | QueryLetQuery | QueryMatch | QuerySelect | QueryValue"""
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.Query")
     APPLICATION = hydra.core.Name("application")
     AGGREGATE = hydra.core.Name("aggregate")
@@ -260,7 +260,7 @@ class Query(metaclass=_QueryMeta):
 class SelectQuery:
     distinct: bool
     projection: Projections
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.SelectQuery")
     DISTINCT = hydra.core.Name("distinct")
     PROJECTION = hydra.core.Name("projection")
@@ -269,7 +269,7 @@ class SelectQuery:
 class UnaryExpression:
     operator: UnaryOperator
     operand: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.UnaryExpression")
     OPERATOR = hydra.core.Name("operator")
     OPERAND = hydra.core.Name("operand")
@@ -290,7 +290,7 @@ class VertexPattern:
     label: Maybe[hydra.pg.model.VertexLabel]
     properties: frozenlist[PropertyPattern]
     edges: frozenlist[EdgeProjectionPattern]
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.query.VertexPattern")
     VARIABLE = hydra.core.Name("variable")
     LABEL = hydra.core.Name("label")

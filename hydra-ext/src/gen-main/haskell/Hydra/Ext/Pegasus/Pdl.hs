@@ -15,7 +15,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas
-data Annotations = 
+data Annotations =
   Annotations {
     annotationsDoc :: (Maybe String),
     annotationsDeprecated :: Bool}
@@ -27,7 +27,7 @@ _Annotations_doc = Core.Name "doc"
 
 _Annotations_deprecated = Core.Name "deprecated"
 
-data EnumField = 
+data EnumField =
   EnumField {
     enumFieldName :: EnumFieldName,
     enumFieldAnnotations :: Annotations}
@@ -39,14 +39,14 @@ _EnumField_name = Core.Name "name"
 
 _EnumField_annotations = Core.Name "annotations"
 
-newtype EnumFieldName = 
+newtype EnumFieldName =
   EnumFieldName {
     unEnumFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _EnumFieldName = Core.Name "hydra.ext.pegasus.pdl.EnumFieldName"
 
-data EnumSchema = 
+data EnumSchema =
   EnumSchema {
     enumSchemaFields :: [EnumField]}
   deriving (Eq, Ord, Read, Show)
@@ -55,14 +55,14 @@ _EnumSchema = Core.Name "hydra.ext.pegasus.pdl.EnumSchema"
 
 _EnumSchema_fields = Core.Name "fields"
 
-newtype FieldName = 
+newtype FieldName =
   FieldName {
     unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _FieldName = Core.Name "hydra.ext.pegasus.pdl.FieldName"
 
-data NamedSchema = 
+data NamedSchema =
   NamedSchema {
     namedSchemaQualifiedName :: QualifiedName,
     namedSchemaType :: NamedSchemaType,
@@ -77,7 +77,7 @@ _NamedSchema_type = Core.Name "type"
 
 _NamedSchema_annotations = Core.Name "annotations"
 
-data NamedSchemaType = 
+data NamedSchemaType =
   NamedSchemaTypeRecord RecordSchema |
   NamedSchemaTypeEnum EnumSchema |
   NamedSchemaTypeTyperef Schema
@@ -91,35 +91,35 @@ _NamedSchemaType_enum = Core.Name "enum"
 
 _NamedSchemaType_typeref = Core.Name "typeref"
 
-newtype Name = 
+newtype Name =
   Name {
     unName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Name = Core.Name "hydra.ext.pegasus.pdl.Name"
 
-newtype Namespace = 
+newtype Namespace =
   Namespace {
     unNamespace :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Namespace = Core.Name "hydra.ext.pegasus.pdl.Namespace"
 
-newtype Package = 
+newtype Package =
   Package {
     unPackage :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Package = Core.Name "hydra.ext.pegasus.pdl.Package"
 
-data PrimitiveType = 
+data PrimitiveType =
   PrimitiveTypeBoolean  |
   PrimitiveTypeBytes  |
   PrimitiveTypeDouble  |
   PrimitiveTypeFloat  |
   PrimitiveTypeInt  |
   PrimitiveTypeLong  |
-  PrimitiveTypeString 
+  PrimitiveTypeString
   deriving (Eq, Ord, Read, Show)
 
 _PrimitiveType = Core.Name "hydra.ext.pegasus.pdl.PrimitiveType"
@@ -138,14 +138,14 @@ _PrimitiveType_long = Core.Name "long"
 
 _PrimitiveType_string = Core.Name "string"
 
-newtype PropertyKey = 
+newtype PropertyKey =
   PropertyKey {
     unPropertyKey :: String}
   deriving (Eq, Ord, Read, Show)
 
 _PropertyKey = Core.Name "hydra.ext.pegasus.pdl.PropertyKey"
 
-data Property = 
+data Property =
   Property {
     propertyKey :: PropertyKey,
     propertyValue :: (Maybe Model.Value)}
@@ -157,7 +157,7 @@ _Property_key = Core.Name "key"
 
 _Property_value = Core.Name "value"
 
-data QualifiedName = 
+data QualifiedName =
   QualifiedName {
     qualifiedNameName :: Name,
     qualifiedNameNamespace :: (Maybe Namespace)}
@@ -170,7 +170,7 @@ _QualifiedName_name = Core.Name "name"
 _QualifiedName_namespace = Core.Name "namespace"
 
 -- | Note: the default value for an enum-valued must be one of the enumerated string symbols
-data RecordField = 
+data RecordField =
   RecordField {
     recordFieldName :: FieldName,
     recordFieldValue :: Schema,
@@ -192,7 +192,7 @@ _RecordField_default = Core.Name "default"
 _RecordField_annotations = Core.Name "annotations"
 
 -- | Note: all included schemas must be record schemas
-data RecordSchema = 
+data RecordSchema =
   RecordSchema {
     recordSchemaFields :: [RecordField],
     recordSchemaIncludes :: [NamedSchema]}
@@ -204,7 +204,7 @@ _RecordSchema_fields = Core.Name "fields"
 
 _RecordSchema_includes = Core.Name "includes"
 
-data Schema = 
+data Schema =
   SchemaArray Schema |
   SchemaFixed Int |
   SchemaInline NamedSchema |
@@ -233,7 +233,7 @@ _Schema_primitive = Core.Name "primitive"
 
 _Schema_union = Core.Name "union"
 
-data SchemaFile = 
+data SchemaFile =
   SchemaFile {
     schemaFileNamespace :: Namespace,
     schemaFilePackage :: (Maybe Package),
@@ -252,7 +252,7 @@ _SchemaFile_imports = Core.Name "imports"
 _SchemaFile_schemas = Core.Name "schemas"
 
 -- | Note: annotations are only available for aliased members
-data UnionMember = 
+data UnionMember =
   UnionMember {
     unionMemberAlias :: (Maybe FieldName),
     unionMemberValue :: Schema,
@@ -268,7 +268,7 @@ _UnionMember_value = Core.Name "value"
 _UnionMember_annotations = Core.Name "annotations"
 
 -- | Note: unions are not allowed as member types of other unions
-newtype UnionSchema = 
+newtype UnionSchema =
   UnionSchema {
     unUnionSchema :: [UnionMember]}
   deriving (Eq, Ord, Read, Show)

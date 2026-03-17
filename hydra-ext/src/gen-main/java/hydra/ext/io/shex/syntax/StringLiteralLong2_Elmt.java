@@ -6,52 +6,52 @@ import java.io.Serializable;
 
 public abstract class StringLiteralLong2_Elmt implements Serializable, Comparable<StringLiteralLong2_Elmt> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt");
-  
+
   public static final hydra.core.Name SEQUENCE = new hydra.core.Name("sequence");
-  
+
   public static final hydra.core.Name ECHAR = new hydra.core.Name("Echar");
-  
+
   public static final hydra.core.Name UCHAR = new hydra.core.Name("Uchar");
-  
+
   private StringLiteralLong2_Elmt () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Sequence instance) ;
-    
+
     R visit(Echar instance) ;
-    
+
     R visit(Uchar instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(StringLiteralLong2_Elmt instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Sequence instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Echar instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Uchar instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Sequence extends hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt implements Serializable {
     public final hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt_Sequence value;
-    
+
     public Sequence (hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt_Sequence value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Sequence)) {
@@ -62,12 +62,12 @@ public abstract class StringLiteralLong2_Elmt implements Serializable, Comparabl
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StringLiteralLong2_Elmt other) {
@@ -78,20 +78,20 @@ public abstract class StringLiteralLong2_Elmt implements Serializable, Comparabl
       Sequence o = (Sequence) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Echar extends hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt implements Serializable {
     public final hydra.ext.io.shex.syntax.Echar value;
-    
+
     public Echar (hydra.ext.io.shex.syntax.Echar value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Echar)) {
@@ -102,12 +102,12 @@ public abstract class StringLiteralLong2_Elmt implements Serializable, Comparabl
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StringLiteralLong2_Elmt other) {
@@ -118,20 +118,20 @@ public abstract class StringLiteralLong2_Elmt implements Serializable, Comparabl
       Echar o = (Echar) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Uchar extends hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt implements Serializable {
     public final hydra.ext.io.shex.syntax.Uchar value;
-    
+
     public Uchar (hydra.ext.io.shex.syntax.Uchar value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Uchar)) {
@@ -142,12 +142,12 @@ public abstract class StringLiteralLong2_Elmt implements Serializable, Comparabl
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StringLiteralLong2_Elmt other) {
@@ -158,7 +158,7 @@ public abstract class StringLiteralLong2_Elmt implements Serializable, Comparabl
       Uchar o = (Uchar) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class OptionalStringArgumentAndNestedTraversal implements Serializable, Comparable<OptionalStringArgumentAndNestedTraversal> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.OptionalStringArgumentAndNestedTraversal");
-  
+
   public static final hydra.core.Name STRING = new hydra.core.Name("string");
-  
+
   public static final hydra.core.Name TRAVERSAL = new hydra.core.Name("traversal");
-  
+
   public final hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> string;
-  
+
   public final hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal traversal;
-  
+
   public OptionalStringArgumentAndNestedTraversal (hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> string, hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal traversal) {
     this.string = string;
     this.traversal = traversal;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof OptionalStringArgumentAndNestedTraversal)) {
@@ -32,12 +32,12 @@ public class OptionalStringArgumentAndNestedTraversal implements Serializable, C
       this.traversal,
       o.traversal);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(string) + 3 * java.util.Objects.hashCode(traversal);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(OptionalStringArgumentAndNestedTraversal other) {
@@ -48,11 +48,11 @@ public class OptionalStringArgumentAndNestedTraversal implements Serializable, C
     }
     return ((Comparable) traversal).compareTo(other.traversal);
   }
-  
+
   public OptionalStringArgumentAndNestedTraversal withString(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> string) {
     return new OptionalStringArgumentAndNestedTraversal(string, traversal);
   }
-  
+
   public OptionalStringArgumentAndNestedTraversal withTraversal(hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal traversal) {
     return new OptionalStringArgumentAndNestedTraversal(string, traversal);
   }

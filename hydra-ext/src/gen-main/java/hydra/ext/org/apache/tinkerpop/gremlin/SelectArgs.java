@@ -6,68 +6,68 @@ import java.io.Serializable;
 
 public abstract class SelectArgs implements Serializable, Comparable<SelectArgs> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.SelectArgs");
-  
+
   public static final hydra.core.Name COLUMN = new hydra.core.Name("column");
-  
+
   public static final hydra.core.Name POP_STRINGS = new hydra.core.Name("popStrings");
-  
+
   public static final hydra.core.Name POP_TRAVERSAL = new hydra.core.Name("popTraversal");
-  
+
   public static final hydra.core.Name STRINGS = new hydra.core.Name("strings");
-  
+
   public static final hydra.core.Name TRAVERSAL = new hydra.core.Name("traversal");
-  
+
   private SelectArgs () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Column instance) ;
-    
+
     R visit(PopStrings instance) ;
-    
+
     R visit(PopTraversal instance) ;
-    
+
     R visit(Strings instance) ;
-    
+
     R visit(Traversal instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(SelectArgs instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Column instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(PopStrings instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(PopTraversal instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Strings instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Traversal instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Column extends hydra.ext.org.apache.tinkerpop.gremlin.SelectArgs implements Serializable {
     public final hydra.ext.org.apache.tinkerpop.gremlin.TraversalColumnArgument value;
-    
+
     public Column (hydra.ext.org.apache.tinkerpop.gremlin.TraversalColumnArgument value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Column)) {
@@ -78,12 +78,12 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SelectArgs other) {
@@ -94,20 +94,20 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
       Column o = (Column) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class PopStrings extends hydra.ext.org.apache.tinkerpop.gremlin.SelectArgs implements Serializable {
     public final hydra.ext.org.apache.tinkerpop.gremlin.PopStringsArgument value;
-    
+
     public PopStrings (hydra.ext.org.apache.tinkerpop.gremlin.PopStringsArgument value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof PopStrings)) {
@@ -118,12 +118,12 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SelectArgs other) {
@@ -134,20 +134,20 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
       PopStrings o = (PopStrings) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class PopTraversal extends hydra.ext.org.apache.tinkerpop.gremlin.SelectArgs implements Serializable {
     public final hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal value;
-    
+
     public PopTraversal (hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgumentAndNestedTraversal value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof PopTraversal)) {
@@ -158,12 +158,12 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SelectArgs other) {
@@ -174,20 +174,20 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
       PopTraversal o = (PopTraversal) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Strings extends hydra.ext.org.apache.tinkerpop.gremlin.SelectArgs implements Serializable {
     public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> value;
-    
+
     public Strings (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Strings)) {
@@ -198,12 +198,12 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SelectArgs other) {
@@ -214,20 +214,20 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
       Strings o = (Strings) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Traversal extends hydra.ext.org.apache.tinkerpop.gremlin.SelectArgs implements Serializable {
     public final hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal value;
-    
+
     public Traversal (hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Traversal)) {
@@ -238,12 +238,12 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SelectArgs other) {
@@ -254,7 +254,7 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
       Traversal o = (Traversal) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

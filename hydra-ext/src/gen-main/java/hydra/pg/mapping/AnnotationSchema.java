@@ -9,67 +9,67 @@ import java.io.Serializable;
  */
 public class AnnotationSchema implements Serializable, Comparable<AnnotationSchema> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.mapping.AnnotationSchema");
-  
+
   public static final hydra.core.Name VERTEX_LABEL = new hydra.core.Name("vertexLabel");
-  
+
   public static final hydra.core.Name EDGE_LABEL = new hydra.core.Name("edgeLabel");
-  
+
   public static final hydra.core.Name VERTEX_ID = new hydra.core.Name("vertexId");
-  
+
   public static final hydra.core.Name EDGE_ID = new hydra.core.Name("edgeId");
-  
+
   public static final hydra.core.Name PROPERTY_KEY = new hydra.core.Name("propertyKey");
-  
+
   public static final hydra.core.Name PROPERTY_VALUE = new hydra.core.Name("propertyValue");
-  
+
   public static final hydra.core.Name OUT_VERTEX = new hydra.core.Name("outVertex");
-  
+
   public static final hydra.core.Name OUT_VERTEX_LABEL = new hydra.core.Name("outVertexLabel");
-  
+
   public static final hydra.core.Name IN_VERTEX = new hydra.core.Name("inVertex");
-  
+
   public static final hydra.core.Name IN_VERTEX_LABEL = new hydra.core.Name("inVertexLabel");
-  
+
   public static final hydra.core.Name OUT_EDGE = new hydra.core.Name("outEdge");
-  
+
   public static final hydra.core.Name OUT_EDGE_LABEL = new hydra.core.Name("outEdgeLabel");
-  
+
   public static final hydra.core.Name IN_EDGE = new hydra.core.Name("inEdge");
-  
+
   public static final hydra.core.Name IN_EDGE_LABEL = new hydra.core.Name("inEdgeLabel");
-  
+
   public static final hydra.core.Name IGNORE = new hydra.core.Name("ignore");
-  
+
   public final String vertexLabel;
-  
+
   public final String edgeLabel;
-  
+
   public final String vertexId;
-  
+
   public final String edgeId;
-  
+
   public final String propertyKey;
-  
+
   public final String propertyValue;
-  
+
   public final String outVertex;
-  
+
   public final String outVertexLabel;
-  
+
   public final String inVertex;
-  
+
   public final String inVertexLabel;
-  
+
   public final String outEdge;
-  
+
   public final String outEdgeLabel;
-  
+
   public final String inEdge;
-  
+
   public final String inEdgeLabel;
-  
+
   public final String ignore;
-  
+
   public AnnotationSchema (String vertexLabel, String edgeLabel, String vertexId, String edgeId, String propertyKey, String propertyValue, String outVertex, String outVertexLabel, String inVertex, String inVertexLabel, String outEdge, String outEdgeLabel, String inEdge, String inEdgeLabel, String ignore) {
     this.vertexLabel = vertexLabel;
     this.edgeLabel = edgeLabel;
@@ -87,7 +87,7 @@ public class AnnotationSchema implements Serializable, Comparable<AnnotationSche
     this.inEdgeLabel = inEdgeLabel;
     this.ignore = ignore;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof AnnotationSchema)) {
@@ -126,12 +126,12 @@ public class AnnotationSchema implements Serializable, Comparable<AnnotationSche
       this.ignore,
       o.ignore);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(vertexLabel) + 3 * java.util.Objects.hashCode(edgeLabel) + 5 * java.util.Objects.hashCode(vertexId) + 7 * java.util.Objects.hashCode(edgeId) + 11 * java.util.Objects.hashCode(propertyKey) + 13 * java.util.Objects.hashCode(propertyValue) + 17 * java.util.Objects.hashCode(outVertex) + 19 * java.util.Objects.hashCode(outVertexLabel) + 23 * java.util.Objects.hashCode(inVertex) + 29 * java.util.Objects.hashCode(inVertexLabel) + 31 * java.util.Objects.hashCode(outEdge) + 37 * java.util.Objects.hashCode(outEdgeLabel) + 41 * java.util.Objects.hashCode(inEdge) + 43 * java.util.Objects.hashCode(inEdgeLabel) + 47 * java.util.Objects.hashCode(ignore);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotationSchema other) {
@@ -194,63 +194,63 @@ public class AnnotationSchema implements Serializable, Comparable<AnnotationSche
     }
     return ((Comparable) ignore).compareTo(other.ignore);
   }
-  
+
   public AnnotationSchema withVertexLabel(String vertexLabel) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withEdgeLabel(String edgeLabel) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withVertexId(String vertexId) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withEdgeId(String edgeId) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withPropertyKey(String propertyKey) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withPropertyValue(String propertyValue) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withOutVertex(String outVertex) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withOutVertexLabel(String outVertexLabel) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withInVertex(String inVertex) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withInVertexLabel(String inVertexLabel) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withOutEdge(String outEdge) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withOutEdgeLabel(String outEdgeLabel) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withInEdge(String inEdge) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withInEdgeLabel(String inEdgeLabel) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }
-  
+
   public AnnotationSchema withIgnore(String ignore) {
     return new AnnotationSchema(vertexLabel, edgeLabel, vertexId, edgeId, propertyKey, propertyValue, outVertex, outVertexLabel, inVertex, inVertexLabel, outEdge, outEdgeLabel, inEdge, inEdgeLabel, ignore);
   }

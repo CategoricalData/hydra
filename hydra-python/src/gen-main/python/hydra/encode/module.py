@@ -26,10 +26,10 @@ def definition(v1: hydra.module.Definition) -> hydra.core.Term:
     match v1:
         case hydra.module.DefinitionTerm(value=y):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.module.Definition"), hydra.core.Field(hydra.core.Name("term"), term_definition(y)))))
-        
+
         case hydra.module.DefinitionType(value=y2):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.module.Definition"), hydra.core.Field(hydra.core.Name("type"), type_definition(y2)))))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 

@@ -12,18 +12,18 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-newtype QueryList = 
+newtype QueryList =
   QueryList {
     unQueryList :: [Query]}
   deriving (Eq, Ord, Read, Show)
 
 _QueryList = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.QueryList"
 
-data Query = 
+data Query =
   QueryTraversalSource TraversalSourceQuery |
   QueryRootTraversal RootTraversalQuery |
   QueryToString  |
-  QueryEmpty 
+  QueryEmpty
   deriving (Eq, Ord, Read, Show)
 
 _Query = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.Query"
@@ -36,7 +36,7 @@ _Query_toString = Core.Name "toString"
 
 _Query_empty = Core.Name "empty"
 
-data TraversalSourceQuery = 
+data TraversalSourceQuery =
   TraversalSourceQuery {
     traversalSourceQuerySource :: TraversalSource,
     traversalSourceQueryTransactionPart :: (Maybe TransactionPart)}
@@ -48,7 +48,7 @@ _TraversalSourceQuery_source = Core.Name "source"
 
 _TraversalSourceQuery_transactionPart = Core.Name "transactionPart"
 
-data RootTraversalQuery = 
+data RootTraversalQuery =
   RootTraversalQuery {
     rootTraversalQueryRoot :: RootTraversal,
     rootTraversalQueryTerminalMethod :: (Maybe TraversalTerminalMethod)}
@@ -60,17 +60,17 @@ _RootTraversalQuery_root = Core.Name "root"
 
 _RootTraversalQuery_terminalMethod = Core.Name "terminalMethod"
 
-newtype TraversalSource = 
+newtype TraversalSource =
   TraversalSource {
     unTraversalSource :: [TraversalSourceSelfMethod]}
   deriving (Eq, Ord, Read, Show)
 
 _TraversalSource = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSource"
 
-data TransactionPart = 
+data TransactionPart =
   TransactionPartBegin  |
   TransactionPartCommit  |
-  TransactionPartRollback 
+  TransactionPartRollback
   deriving (Eq, Ord, Read, Show)
 
 _TransactionPart = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TransactionPart"
@@ -81,7 +81,7 @@ _TransactionPart_commit = Core.Name "commit"
 
 _TransactionPart_rollback = Core.Name "rollback"
 
-data RootTraversal = 
+data RootTraversal =
   RootTraversal {
     rootTraversalSource :: TraversalSource,
     rootTraversalSpawnMethod :: TraversalSourceSpawnMethod,
@@ -96,7 +96,7 @@ _RootTraversal_spawnMethod = Core.Name "spawnMethod"
 
 _RootTraversal_chained = Core.Name "chained"
 
-data TraversalSourceSelfMethod = 
+data TraversalSourceSelfMethod =
   TraversalSourceSelfMethodWithBulk Bool |
   TraversalSourceSelfMethodWithPath  |
   TraversalSourceSelfMethodWithSack GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument |
@@ -122,7 +122,7 @@ _TraversalSourceSelfMethod_withoutStrategies = Core.Name "withoutStrategies"
 
 _TraversalSourceSelfMethod_with = Core.Name "with"
 
-data GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument = 
+data GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument =
   GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument {
     genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentLiteral :: GenericLiteralArgument,
     genericLiteralArgumentAndOptionalTraversalBiFunctionArgumentBiFunction :: (Maybe TraversalBiFunctionArgument)}
@@ -135,7 +135,7 @@ _GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument_literal = Core.Nam
 
 _GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument_biFunction = Core.Name "biFunction"
 
-data StringArgumentAndGenericLiteralArgument = 
+data StringArgumentAndGenericLiteralArgument =
   StringArgumentAndGenericLiteralArgument {
     stringArgumentAndGenericLiteralArgumentString :: StringArgument,
     stringArgumentAndGenericLiteralArgumentLiteral :: GenericLiteralArgument}
@@ -148,7 +148,7 @@ _StringArgumentAndGenericLiteralArgument_string = Core.Name "string"
 
 _StringArgumentAndGenericLiteralArgument_literal = Core.Name "literal"
 
-data StringArgumentAndOptionalGenericLiteralArgument = 
+data StringArgumentAndOptionalGenericLiteralArgument =
   StringArgumentAndOptionalGenericLiteralArgument {
     stringArgumentAndOptionalGenericLiteralArgumentString :: StringArgument,
     stringArgumentAndOptionalGenericLiteralArgumentLiteral :: (Maybe GenericLiteralArgument)}
@@ -161,7 +161,7 @@ _StringArgumentAndOptionalGenericLiteralArgument_string = Core.Name "string"
 
 _StringArgumentAndOptionalGenericLiteralArgument_literal = Core.Name "literal"
 
-data TraversalSourceSpawnMethod = 
+data TraversalSourceSpawnMethod =
   TraversalSourceSpawnMethodAddE StringArgumentOrNestedTraversal |
   TraversalSourceSpawnMethodAddV (Maybe StringArgumentOrNestedTraversal) |
   TraversalSourceSpawnMethodE [GenericLiteralArgument] |
@@ -196,7 +196,7 @@ _TraversalSourceSpawnMethod_call = Core.Name "call"
 
 _TraversalSourceSpawnMethod_union = Core.Name "union"
 
-data GenericLiteralMapNullableArgumentOrNestedTraversal = 
+data GenericLiteralMapNullableArgumentOrNestedTraversal =
   GenericLiteralMapNullableArgumentOrNestedTraversalMap GenericLiteralMapNullableArgument |
   GenericLiteralMapNullableArgumentOrNestedTraversalTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
@@ -208,7 +208,7 @@ _GenericLiteralMapNullableArgumentOrNestedTraversal_map = Core.Name "map"
 
 _GenericLiteralMapNullableArgumentOrNestedTraversal_traversal = Core.Name "traversal"
 
-data ServiceCall = 
+data ServiceCall =
   ServiceCall {
     serviceCallService :: StringArgument,
     serviceCallArguments :: ServiceArguments}
@@ -220,7 +220,7 @@ _ServiceCall_service = Core.Name "service"
 
 _ServiceCall_arguments = Core.Name "arguments"
 
-data ServiceArguments = 
+data ServiceArguments =
   ServiceArgumentsMap (Maybe GenericLiteralMapArgument) |
   ServiceArgumentsTraversal (Maybe NestedTraversal)
   deriving (Eq, Ord, Read, Show)
@@ -231,7 +231,7 @@ _ServiceArguments_map = Core.Name "map"
 
 _ServiceArguments_traversal = Core.Name "traversal"
 
-data ChainedTraversal = 
+data ChainedTraversal =
   ChainedTraversal {
     chainedTraversalFirst :: TraversalMethod,
     chainedTraversalRest :: ChainedTraversalElement}
@@ -243,7 +243,7 @@ _ChainedTraversal_first = Core.Name "first"
 
 _ChainedTraversal_rest = Core.Name "rest"
 
-data ChainedTraversalElement = 
+data ChainedTraversalElement =
   ChainedTraversalElementMethod TraversalMethod |
   ChainedTraversalElementSelf TraversalSelfMethod
   deriving (Eq, Ord, Read, Show)
@@ -254,7 +254,7 @@ _ChainedTraversalElement_method = Core.Name "method"
 
 _ChainedTraversalElement_self = Core.Name "self"
 
-data NestedTraversal = 
+data NestedTraversal =
   NestedTraversalRoot RootTraversal |
   NestedTraversalChained ChainedTraversal |
   NestedTraversalAnonymous ChainedTraversal
@@ -268,7 +268,7 @@ _NestedTraversal_chained = Core.Name "chained"
 
 _NestedTraversal_anonymous = Core.Name "anonymous"
 
-data TerminatedTraversal = 
+data TerminatedTraversal =
   TerminatedTraversal {
     terminatedTraversalRoot :: RootTraversal,
     terminatedTraversalTerminal :: TraversalTerminalMethod}
@@ -280,7 +280,7 @@ _TerminatedTraversal_root = Core.Name "root"
 
 _TerminatedTraversal_terminal = Core.Name "terminal"
 
-data TraversalMethod = 
+data TraversalMethod =
   TraversalMethodV [GenericLiteralArgument] |
   TraversalMethodE [GenericLiteralArgument] |
   TraversalMethodAddE StringArgumentOrNestedTraversal |
@@ -681,7 +681,7 @@ _TraversalMethod_dateAdd = Core.Name "dateAdd"
 
 _TraversalMethod_dateDiff = Core.Name "dateDiff"
 
-data StringArgumentOrNestedTraversal = 
+data StringArgumentOrNestedTraversal =
   StringArgumentOrNestedTraversalString StringArgument |
   StringArgumentOrNestedTraversalTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
@@ -692,7 +692,7 @@ _StringArgumentOrNestedTraversal_string = Core.Name "string"
 
 _StringArgumentOrNestedTraversal_traversal = Core.Name "traversal"
 
-data OptionalTraversalScopeArgumentAndStringArgument = 
+data OptionalTraversalScopeArgumentAndStringArgument =
   OptionalTraversalScopeArgumentAndStringArgument {
     optionalTraversalScopeArgumentAndStringArgumentScope :: (Maybe TraversalScopeArgument),
     optionalTraversalScopeArgumentAndStringArgumentString :: StringArgument}
@@ -705,7 +705,7 @@ _OptionalTraversalScopeArgumentAndStringArgument_scope = Core.Name "scope"
 
 _OptionalTraversalScopeArgumentAndStringArgument_string = Core.Name "string"
 
-data StringArgumentAndOptionalStringLiteralVarargs = 
+data StringArgumentAndOptionalStringLiteralVarargs =
   StringArgumentAndOptionalStringLiteralVarargs {
     stringArgumentAndOptionalStringLiteralVarargsFirst :: StringArgument,
     stringArgumentAndOptionalStringLiteralVarargsRest :: [StringNullableArgument]}
@@ -718,7 +718,7 @@ _StringArgumentAndOptionalStringLiteralVarargs_first = Core.Name "first"
 
 _StringArgumentAndOptionalStringLiteralVarargs_rest = Core.Name "rest"
 
-data TraversalSackMethodArgumentOrIntegerArgument = 
+data TraversalSackMethodArgumentOrIntegerArgument =
   TraversalSackMethodArgumentOrIntegerArgumentConsumer TraversalSackMethodArgument |
   TraversalSackMethodArgumentOrIntegerArgumentInt IntegerArgument
   deriving (Eq, Ord, Read, Show)
@@ -730,7 +730,7 @@ _TraversalSackMethodArgumentOrIntegerArgument_consumer = Core.Name "consumer"
 
 _TraversalSackMethodArgumentOrIntegerArgument_int = Core.Name "int"
 
-data ByArgs = 
+data ByArgs =
   ByArgsOrder TraversalOrderArgument |
   ByArgsToken TraversalTokenArgument |
   ByArgsOther ByOtherArgs
@@ -744,7 +744,7 @@ _ByArgs_token = Core.Name "token"
 
 _ByArgs_other = Core.Name "other"
 
-data ByOtherArgs = 
+data ByOtherArgs =
   ByOtherArgsComparator (Maybe TraversalComparatorArgument) |
   ByOtherArgsOther (Maybe TraversalFunctionArgumentOrStringArgumentOrNestedTraversal)
   deriving (Eq, Ord, Read, Show)
@@ -755,7 +755,7 @@ _ByOtherArgs_comparator = Core.Name "comparator"
 
 _ByOtherArgs_other = Core.Name "other"
 
-data TraversalFunctionArgumentOrStringArgumentOrNestedTraversal = 
+data TraversalFunctionArgumentOrStringArgumentOrNestedTraversal =
   TraversalFunctionArgumentOrStringArgumentOrNestedTraversalFunction TraversalFunctionArgument |
   TraversalFunctionArgumentOrStringArgumentOrNestedTraversalString StringArgument |
   TraversalFunctionArgumentOrStringArgumentOrNestedTraversalTraversal NestedTraversal
@@ -770,7 +770,7 @@ _TraversalFunctionArgumentOrStringArgumentOrNestedTraversal_string = Core.Name "
 
 _TraversalFunctionArgumentOrStringArgumentOrNestedTraversal_traversal = Core.Name "traversal"
 
-data ChooseArgs = 
+data ChooseArgs =
   ChooseArgsFunction TraversalFunctionArgument |
   ChooseArgsPredicateTraversal PredicateTraversalArgument |
   ChooseArgsTraversal NestedTraversalArgument
@@ -784,7 +784,7 @@ _ChooseArgs_predicateTraversal = Core.Name "predicateTraversal"
 
 _ChooseArgs_traversal = Core.Name "traversal"
 
-data PredicateTraversalArgument = 
+data PredicateTraversalArgument =
   PredicateTraversalArgument {
     predicateTraversalArgumentPredicate :: TraversalPredicate,
     predicateTraversalArgumentTraversal1 :: NestedTraversal,
@@ -799,7 +799,7 @@ _PredicateTraversalArgument_traversal1 = Core.Name "traversal1"
 
 _PredicateTraversalArgument_traversal2 = Core.Name "traversal2"
 
-data NestedTraversalArgument = 
+data NestedTraversalArgument =
   NestedTraversalArgument {
     nestedTraversalArgumentTraversal1 :: NestedTraversal,
     nestedTraversalArgumentTraversal2 :: (Maybe NestedTraversal),
@@ -814,7 +814,7 @@ _NestedTraversalArgument_traversal2 = Core.Name "traversal2"
 
 _NestedTraversalArgument_traversal3 = Core.Name "traversal3"
 
-data DedupArgs = 
+data DedupArgs =
   DedupArgsScopeString ScopeStringArgument |
   DedupArgsString [StringNullableArgument]
   deriving (Eq, Ord, Read, Show)
@@ -825,7 +825,7 @@ _DedupArgs_scopeString = Core.Name "scopeString"
 
 _DedupArgs_string = Core.Name "string"
 
-data ScopeStringArgument = 
+data ScopeStringArgument =
   ScopeStringArgument {
     scopeStringArgumentScope :: TraversalScopeArgument,
     scopeStringArgumentStrings :: [StringNullableArgument]}
@@ -837,7 +837,7 @@ _ScopeStringArgument_scope = Core.Name "scope"
 
 _ScopeStringArgument_strings = Core.Name "strings"
 
-data PredicateOrTraversal = 
+data PredicateOrTraversal =
   PredicateOrTraversalPredicate TraversalPredicate |
   PredicateOrTraversalTraversal NestedTraversal
   deriving (Eq, Ord, Read, Show)
@@ -848,7 +848,7 @@ _PredicateOrTraversal_predicate = Core.Name "predicate"
 
 _PredicateOrTraversal_traversal = Core.Name "traversal"
 
-data GenericLiteralArgumentAndTraversalBiFunctionArgument = 
+data GenericLiteralArgumentAndTraversalBiFunctionArgument =
   GenericLiteralArgumentAndTraversalBiFunctionArgument {
     genericLiteralArgumentAndTraversalBiFunctionArgumentLiteral :: GenericLiteralArgument,
     genericLiteralArgumentAndTraversalBiFunctionArgumentBiFunction :: TraversalBiFunctionArgument}
@@ -861,7 +861,7 @@ _GenericLiteralArgumentAndTraversalBiFunctionArgument_literal = Core.Name "liter
 
 _GenericLiteralArgumentAndTraversalBiFunctionArgument_biFunction = Core.Name "biFunction"
 
-data FromArgs = 
+data FromArgs =
   FromArgsString StringArgument |
   FromArgsVertex StructureVertexArgument |
   FromArgsTraversal NestedTraversal
@@ -875,7 +875,7 @@ _FromArgs_vertex = Core.Name "vertex"
 
 _FromArgs_traversal = Core.Name "traversal"
 
-data HasArgs = 
+data HasArgs =
   HasArgsString HasStringArgumentAndOptionalStringLiteralVarargs |
   HasArgsTraversalToken HasTraversalTokenArgs
   deriving (Eq, Ord, Read, Show)
@@ -886,7 +886,7 @@ _HasArgs_string = Core.Name "string"
 
 _HasArgs_traversalToken = Core.Name "traversalToken"
 
-data HasStringArgumentAndOptionalStringLiteralVarargs = 
+data HasStringArgumentAndOptionalStringLiteralVarargs =
   HasStringArgumentAndOptionalStringLiteralVarargs {
     hasStringArgumentAndOptionalStringLiteralVarargsString :: StringNullableArgument,
     hasStringArgumentAndOptionalStringLiteralVarargsRest :: (Maybe HasStringArgumentAndOptionalStringLiteralVarargsRest)}
@@ -899,7 +899,7 @@ _HasStringArgumentAndOptionalStringLiteralVarargs_string = Core.Name "string"
 
 _HasStringArgumentAndOptionalStringLiteralVarargs_rest = Core.Name "rest"
 
-data HasStringArgumentAndOptionalStringLiteralVarargsRest = 
+data HasStringArgumentAndOptionalStringLiteralVarargsRest =
   HasStringArgumentAndOptionalStringLiteralVarargsRestObject GenericLiteralArgument |
   HasStringArgumentAndOptionalStringLiteralVarargsRestPredicate TraversalPredicate |
   HasStringArgumentAndOptionalStringLiteralVarargsRestStringObject StringNullableArgumentAndGenericLiteralArgument |
@@ -920,7 +920,7 @@ _HasStringArgumentAndOptionalStringLiteralVarargsRest_stringPredicate = Core.Nam
 
 _HasStringArgumentAndOptionalStringLiteralVarargsRest_traversal = Core.Name "traversal"
 
-data StringNullableArgumentAndGenericLiteralArgument = 
+data StringNullableArgumentAndGenericLiteralArgument =
   StringNullableArgumentAndGenericLiteralArgument {
     stringNullableArgumentAndGenericLiteralArgumentString :: StringNullableArgument,
     stringNullableArgumentAndGenericLiteralArgumentLiteral :: GenericLiteralArgument}
@@ -933,7 +933,7 @@ _StringNullableArgumentAndGenericLiteralArgument_string = Core.Name "string"
 
 _StringNullableArgumentAndGenericLiteralArgument_literal = Core.Name "literal"
 
-data StringNullableArgumentAndTraversalPredicate = 
+data StringNullableArgumentAndTraversalPredicate =
   StringNullableArgumentAndTraversalPredicate {
     stringNullableArgumentAndTraversalPredicateString :: StringNullableArgument,
     stringNullableArgumentAndTraversalPredicatePredicate :: TraversalPredicate}
@@ -946,7 +946,7 @@ _StringNullableArgumentAndTraversalPredicate_string = Core.Name "string"
 
 _StringNullableArgumentAndTraversalPredicate_predicate = Core.Name "predicate"
 
-data HasTraversalTokenArgs = 
+data HasTraversalTokenArgs =
   HasTraversalTokenArgs {
     hasTraversalTokenArgsTraversalToken :: TraversalTokenArgument,
     hasTraversalTokenArgsRest :: HasTraversalTokenArgsRest}
@@ -958,7 +958,7 @@ _HasTraversalTokenArgs_traversalToken = Core.Name "traversalToken"
 
 _HasTraversalTokenArgs_rest = Core.Name "rest"
 
-data HasTraversalTokenArgsRest = 
+data HasTraversalTokenArgsRest =
   HasTraversalTokenArgsRestLiteral GenericLiteralArgument |
   HasTraversalTokenArgsRestPredicate TraversalPredicate |
   HasTraversalTokenArgsRestTraversal NestedTraversal
@@ -972,7 +972,7 @@ _HasTraversalTokenArgsRest_predicate = Core.Name "predicate"
 
 _HasTraversalTokenArgsRest_traversal = Core.Name "traversal"
 
-data GenericLiteralArgumentAndTraversalPredicate = 
+data GenericLiteralArgumentAndTraversalPredicate =
   GenericLiteralArgumentAndTraversalPredicateLiteral GenericLiteralArgument |
   GenericLiteralArgumentAndTraversalPredicatePredicate TraversalPredicate
   deriving (Eq, Ord, Read, Show)
@@ -984,7 +984,7 @@ _GenericLiteralArgumentAndTraversalPredicate_literal = Core.Name "literal"
 
 _GenericLiteralArgumentAndTraversalPredicate_predicate = Core.Name "predicate"
 
-data TraversalPredicateOrStringLiteralVarargs = 
+data TraversalPredicateOrStringLiteralVarargs =
   TraversalPredicateOrStringLiteralVarargsPredicate TraversalPredicate |
   TraversalPredicateOrStringLiteralVarargsString [StringNullableArgument]
   deriving (Eq, Ord, Read, Show)
@@ -996,7 +996,7 @@ _TraversalPredicateOrStringLiteralVarargs_predicate = Core.Name "predicate"
 
 _TraversalPredicateOrStringLiteralVarargs_string = Core.Name "string"
 
-data TraversalPredicateOrGenericLiteralArgument = 
+data TraversalPredicateOrGenericLiteralArgument =
   TraversalPredicateOrGenericLiteralArgumentPredicate TraversalPredicate |
   TraversalPredicateOrGenericLiteralArgumentLiteral [GenericLiteralArgument]
   deriving (Eq, Ord, Read, Show)
@@ -1008,7 +1008,7 @@ _TraversalPredicateOrGenericLiteralArgument_predicate = Core.Name "predicate"
 
 _TraversalPredicateOrGenericLiteralArgument_literal = Core.Name "literal"
 
-data OptionArgs = 
+data OptionArgs =
   OptionArgsPredicateTraversal TraversalPredicateAndNestedTraversal |
   OptionArgsMergeMap TraversalMergeArgumentAndGenericLiteralMapNullableArgument |
   OptionArgsMergeTraversal TraversalMergeArgumentAndNestedTraversal |
@@ -1028,7 +1028,7 @@ _OptionArgs_objectTraversal = Core.Name "objectTraversal"
 
 _OptionArgs_traversal = Core.Name "traversal"
 
-data TraversalPredicateAndNestedTraversal = 
+data TraversalPredicateAndNestedTraversal =
   TraversalPredicateAndNestedTraversal {
     traversalPredicateAndNestedTraversalPredicate :: TraversalPredicate,
     traversalPredicateAndNestedTraversalTraversal :: NestedTraversal}
@@ -1041,7 +1041,7 @@ _TraversalPredicateAndNestedTraversal_predicate = Core.Name "predicate"
 
 _TraversalPredicateAndNestedTraversal_traversal = Core.Name "traversal"
 
-data TraversalMergeArgumentAndGenericLiteralMapNullableArgument = 
+data TraversalMergeArgumentAndGenericLiteralMapNullableArgument =
   TraversalMergeArgumentAndGenericLiteralMapNullableArgument {
     traversalMergeArgumentAndGenericLiteralMapNullableArgumentMerge :: TraversalMergeArgument,
     traversalMergeArgumentAndGenericLiteralMapNullableArgumentMap :: GenericLiteralMapNullableArgument,
@@ -1057,7 +1057,7 @@ _TraversalMergeArgumentAndGenericLiteralMapNullableArgument_map = Core.Name "map
 
 _TraversalMergeArgumentAndGenericLiteralMapNullableArgument_cardinality = Core.Name "cardinality"
 
-data TraversalMergeArgumentAndNestedTraversal = 
+data TraversalMergeArgumentAndNestedTraversal =
   TraversalMergeArgumentAndNestedTraversal {
     traversalMergeArgumentAndNestedTraversalMerge :: TraversalMergeArgument,
     traversalMergeArgumentAndNestedTraversalTraversal :: NestedTraversal}
@@ -1070,7 +1070,7 @@ _TraversalMergeArgumentAndNestedTraversal_merge = Core.Name "merge"
 
 _TraversalMergeArgumentAndNestedTraversal_traversal = Core.Name "traversal"
 
-data GenericLiteralArgumentAndNestedTraversal = 
+data GenericLiteralArgumentAndNestedTraversal =
   GenericLiteralArgumentAndNestedTraversal {
     genericLiteralArgumentAndNestedTraversalObject :: GenericLiteralArgument,
     genericLiteralArgumentAndNestedTraversalTraversal :: NestedTraversal}
@@ -1083,7 +1083,7 @@ _GenericLiteralArgumentAndNestedTraversal_object = Core.Name "object"
 
 _GenericLiteralArgumentAndNestedTraversal_traversal = Core.Name "traversal"
 
-data PropertyArgs = 
+data PropertyArgs =
   PropertyArgsCardinalityObjects TraversalCardinalityArgumentAndObjects |
   PropertyArgsObjects [GenericLiteralArgument] |
   PropertyArgsObject GenericLiteralMapNullableArgument |
@@ -1100,7 +1100,7 @@ _PropertyArgs_object = Core.Name "object"
 
 _PropertyArgs_cardinalityObject = Core.Name "cardinalityObject"
 
-data TraversalCardinalityArgumentAndObjects = 
+data TraversalCardinalityArgumentAndObjects =
   TraversalCardinalityArgumentAndObjects {
     traversalCardinalityArgumentAndObjectsCardinality :: TraversalCardinalityArgument,
     traversalCardinalityArgumentAndObjectsObjects :: [GenericLiteralArgument]}
@@ -1113,7 +1113,7 @@ _TraversalCardinalityArgumentAndObjects_cardinality = Core.Name "cardinality"
 
 _TraversalCardinalityArgumentAndObjects_objects = Core.Name "objects"
 
-data GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument = 
+data GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument =
   GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument {
     genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentCardinality :: TraversalCardinalityArgument,
     genericLiteralMapNullableArgumentAndTraversalCardinalityArgumentObject :: GenericLiteralMapNullableArgument}
@@ -1126,7 +1126,7 @@ _GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument_cardinality = 
 
 _GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument_object = Core.Name "object"
 
-data RangeArgs = 
+data RangeArgs =
   RangeArgs {
     rangeArgsScope :: (Maybe TraversalScopeArgument),
     rangeArgsMin :: IntegerArgument,
@@ -1141,7 +1141,7 @@ _RangeArgs_min = Core.Name "min"
 
 _RangeArgs_max = Core.Name "max"
 
-data OptionalStringArgumentAndNestedTraversal = 
+data OptionalStringArgumentAndNestedTraversal =
   OptionalStringArgumentAndNestedTraversal {
     optionalStringArgumentAndNestedTraversalString :: (Maybe StringArgument),
     optionalStringArgumentAndNestedTraversalTraversal :: NestedTraversal}
@@ -1154,7 +1154,7 @@ _OptionalStringArgumentAndNestedTraversal_string = Core.Name "string"
 
 _OptionalStringArgumentAndNestedTraversal_traversal = Core.Name "traversal"
 
-data OptionalTraversalScopeArgumentAndIntegerArgument = 
+data OptionalTraversalScopeArgumentAndIntegerArgument =
   OptionalTraversalScopeArgumentAndIntegerArgument {
     optionalTraversalScopeArgumentAndIntegerArgumentScope :: (Maybe TraversalScopeArgument),
     optionalTraversalScopeArgumentAndIntegerArgumentLong :: IntegerArgument}
@@ -1167,7 +1167,7 @@ _OptionalTraversalScopeArgumentAndIntegerArgument_scope = Core.Name "scope"
 
 _OptionalTraversalScopeArgumentAndIntegerArgument_long = Core.Name "long"
 
-data SelectArgs = 
+data SelectArgs =
   SelectArgsColumn TraversalColumnArgument |
   SelectArgsPopStrings PopStringsArgument |
   SelectArgsPopTraversal TraversalPopArgumentAndNestedTraversal |
@@ -1187,7 +1187,7 @@ _SelectArgs_strings = Core.Name "strings"
 
 _SelectArgs_traversal = Core.Name "traversal"
 
-data PopStringsArgument = 
+data PopStringsArgument =
   PopStringsArgument {
     popStringsArgumentPop :: TraversalPopArgument,
     popStringsArgumentString :: [StringArgument]}
@@ -1199,7 +1199,7 @@ _PopStringsArgument_pop = Core.Name "pop"
 
 _PopStringsArgument_string = Core.Name "string"
 
-data TraversalPopArgumentAndNestedTraversal = 
+data TraversalPopArgumentAndNestedTraversal =
   TraversalPopArgumentAndNestedTraversal {
     traversalPopArgumentAndNestedTraversalPop :: TraversalPopArgument,
     traversalPopArgumentAndNestedTraversalTraversal :: NestedTraversal}
@@ -1212,7 +1212,7 @@ _TraversalPopArgumentAndNestedTraversal_pop = Core.Name "pop"
 
 _TraversalPopArgumentAndNestedTraversal_traversal = Core.Name "traversal"
 
-data TailArgs = 
+data TailArgs =
   TailArgs {
     tailArgsScope :: (Maybe TraversalScopeArgument),
     tailArgsInteger :: (Maybe IntegerArgument)}
@@ -1224,7 +1224,7 @@ _TailArgs_scope = Core.Name "scope"
 
 _TailArgs_integer = Core.Name "integer"
 
-data ToArgs = 
+data ToArgs =
   ToArgsDirection DirectionAndVarargs |
   ToArgsString StringArgument |
   ToArgsVertex StructureVertexArgument |
@@ -1241,7 +1241,7 @@ _ToArgs_vertex = Core.Name "vertex"
 
 _ToArgs_traversal = Core.Name "traversal"
 
-data DirectionAndVarargs = 
+data DirectionAndVarargs =
   DirectionAndVarargs {
     directionAndVarargsDirection :: TraversalDirectionArgument,
     directionAndVarargsVarargs :: [StringNullableArgument]}
@@ -1253,7 +1253,7 @@ _DirectionAndVarargs_direction = Core.Name "direction"
 
 _DirectionAndVarargs_varargs = Core.Name "varargs"
 
-data ValueMapArgs = 
+data ValueMapArgs =
   ValueMapArgsString [StringNullableArgument] |
   ValueMapArgsBoolean ValueMapBooleanArgs
   deriving (Eq, Ord, Read, Show)
@@ -1264,7 +1264,7 @@ _ValueMapArgs_string = Core.Name "string"
 
 _ValueMapArgs_boolean = Core.Name "boolean"
 
-data ValueMapBooleanArgs = 
+data ValueMapBooleanArgs =
   ValueMapBooleanArgs {
     valueMapBooleanArgsValue :: BooleanArgument,
     valueMapBooleanArgsKeys :: (Maybe [StringNullableArgument])}
@@ -1276,7 +1276,7 @@ _ValueMapBooleanArgs_value = Core.Name "value"
 
 _ValueMapBooleanArgs_keys = Core.Name "keys"
 
-data WhereArgs = 
+data WhereArgs =
   WhereArgsPredicate WhereWithPredicateArgs |
   WhereArgsString StringArgument |
   WhereArgsTraversal NestedTraversal
@@ -1290,7 +1290,7 @@ _WhereArgs_string = Core.Name "string"
 
 _WhereArgs_traversal = Core.Name "traversal"
 
-data WhereWithPredicateArgs = 
+data WhereWithPredicateArgs =
   WhereWithPredicateArgs {
     whereWithPredicateArgsLeftArg :: (Maybe StringArgument),
     whereWithPredicateArgsPredicate :: TraversalPredicate}
@@ -1302,7 +1302,7 @@ _WhereWithPredicateArgs_leftArg = Core.Name "leftArg"
 
 _WhereWithPredicateArgs_predicate = Core.Name "predicate"
 
-data WithArgs = 
+data WithArgs =
   WithArgs {
     withArgsKeys :: WithArgsKeys,
     withArgsValues :: (Maybe WithArgsValues)}
@@ -1314,7 +1314,7 @@ _WithArgs_keys = Core.Name "keys"
 
 _WithArgs_values = Core.Name "values"
 
-data WithArgsKeys = 
+data WithArgsKeys =
   WithArgsKeysWithOption WithOptionKeys |
   WithArgsKeysString StringArgument
   deriving (Eq, Ord, Read, Show)
@@ -1325,7 +1325,7 @@ _WithArgsKeys_withOption = Core.Name "withOption"
 
 _WithArgsKeys_string = Core.Name "string"
 
-data WithArgsValues = 
+data WithArgsValues =
   WithArgsValuesWithOptions WithOptionsValues |
   WithArgsValuesIo IoOptionsValues |
   WithArgsValuesObject GenericLiteralArgument
@@ -1339,7 +1339,7 @@ _WithArgsValues_io = Core.Name "io"
 
 _WithArgsValues_object = Core.Name "object"
 
-data ConcatArgs = 
+data ConcatArgs =
   ConcatArgsTraversal [NestedTraversal] |
   ConcatArgsString [StringNullableArgument]
   deriving (Eq, Ord, Read, Show)
@@ -1350,7 +1350,7 @@ _ConcatArgs_traversal = Core.Name "traversal"
 
 _ConcatArgs_string = Core.Name "string"
 
-data ReplaceArgs = 
+data ReplaceArgs =
   ReplaceArgs {
     replaceArgsScope :: (Maybe TraversalScopeArgument),
     replaceArgsFrom :: StringNullableArgument,
@@ -1365,7 +1365,7 @@ _ReplaceArgs_from = Core.Name "from"
 
 _ReplaceArgs_to = Core.Name "to"
 
-data SplitArgs = 
+data SplitArgs =
   SplitArgs {
     splitArgsScope :: (Maybe TraversalScopeArgument),
     splitArgsDelimiter :: StringNullableArgument}
@@ -1377,7 +1377,7 @@ _SplitArgs_scope = Core.Name "scope"
 
 _SplitArgs_delimiter = Core.Name "delimiter"
 
-data SubstringArgs = 
+data SubstringArgs =
   SubstringArgs {
     substringArgsScope :: (Maybe TraversalScopeArgument),
     substringArgsStart :: IntegerArgument,
@@ -1392,7 +1392,7 @@ _SubstringArgs_start = Core.Name "start"
 
 _SubstringArgs_end = Core.Name "end"
 
-data DateAddArgs = 
+data DateAddArgs =
   DateAddArgs {
     dateAddArgsUnit :: TraversalDTArgument,
     dateAddArgsDuration :: IntegerArgument}
@@ -1404,7 +1404,7 @@ _DateAddArgs_unit = Core.Name "unit"
 
 _DateAddArgs_duration = Core.Name "duration"
 
-data DateDiffArgs = 
+data DateDiffArgs =
   DateDiffArgsTraversal NestedTraversal |
   DateDiffArgsDate DateArgument
   deriving (Eq, Ord, Read, Show)
@@ -1415,7 +1415,7 @@ _DateDiffArgs_traversal = Core.Name "traversal"
 
 _DateDiffArgs_date = Core.Name "date"
 
-data StructureVertex = 
+data StructureVertex =
   StructureVertex {
     structureVertexNew :: Bool,
     structureVertexId :: GenericLiteralArgument,
@@ -1430,7 +1430,7 @@ _StructureVertex_id = Core.Name "id"
 
 _StructureVertex_label = Core.Name "label"
 
-data TraversalStrategy = 
+data TraversalStrategy =
   TraversalStrategy {
     traversalStrategyNew :: Bool,
     traversalStrategyClass :: Identifier,
@@ -1445,7 +1445,7 @@ _TraversalStrategy_class = Core.Name "class"
 
 _TraversalStrategy_configurations = Core.Name "configurations"
 
-data Configuration = 
+data Configuration =
   Configuration {
     configurationKey :: KeywordOrIdentifier,
     configurationValue :: GenericLiteralArgument}
@@ -1457,7 +1457,7 @@ _Configuration_key = Core.Name "key"
 
 _Configuration_value = Core.Name "value"
 
-data KeywordOrIdentifier = 
+data KeywordOrIdentifier =
   KeywordOrIdentifierKeyword Keyword |
   KeywordOrIdentifierIdentifier Identifier
   deriving (Eq, Ord, Read, Show)
@@ -1468,9 +1468,9 @@ _KeywordOrIdentifier_keyword = Core.Name "keyword"
 
 _KeywordOrIdentifier_identifier = Core.Name "identifier"
 
-data TraversalScope = 
+data TraversalScope =
   TraversalScopeLocal  |
-  TraversalScopeGlobal 
+  TraversalScopeGlobal
   deriving (Eq, Ord, Read, Show)
 
 _TraversalScope = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalScope"
@@ -1479,11 +1479,11 @@ _TraversalScope_local = Core.Name "local"
 
 _TraversalScope_global = Core.Name "global"
 
-data TraversalToken = 
+data TraversalToken =
   TraversalTokenId  |
   TraversalTokenLabel  |
   TraversalTokenKey  |
-  TraversalTokenValue 
+  TraversalTokenValue
   deriving (Eq, Ord, Read, Show)
 
 _TraversalToken = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalToken"
@@ -1496,11 +1496,11 @@ _TraversalToken_key = Core.Name "key"
 
 _TraversalToken_value = Core.Name "value"
 
-data TraversalMerge = 
+data TraversalMerge =
   TraversalMergeOnCreate  |
   TraversalMergeOnMatch  |
   TraversalMergeOutV  |
-  TraversalMergeInV 
+  TraversalMergeInV
   deriving (Eq, Ord, Read, Show)
 
 _TraversalMerge = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalMerge"
@@ -1513,12 +1513,12 @@ _TraversalMerge_outV = Core.Name "outV"
 
 _TraversalMerge_inV = Core.Name "inV"
 
-data TraversalOrder = 
+data TraversalOrder =
   TraversalOrderIncr  |
   TraversalOrderDecr  |
   TraversalOrderAsc  |
   TraversalOrderDesc  |
-  TraversalOrderShuffle 
+  TraversalOrderShuffle
   deriving (Eq, Ord, Read, Show)
 
 _TraversalOrder = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalOrder"
@@ -1533,10 +1533,10 @@ _TraversalOrder_desc = Core.Name "desc"
 
 _TraversalOrder_shuffle = Core.Name "shuffle"
 
-data TraversalDirection = 
+data TraversalDirection =
   TraversalDirectionIn  |
   TraversalDirectionOut  |
-  TraversalDirectionBoth 
+  TraversalDirectionBoth
   deriving (Eq, Ord, Read, Show)
 
 _TraversalDirection = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalDirection"
@@ -1547,7 +1547,7 @@ _TraversalDirection_out = Core.Name "out"
 
 _TraversalDirection_both = Core.Name "both"
 
-data TraversalCardinality = 
+data TraversalCardinality =
   TraversalCardinalitySingle GenericLiteral |
   TraversalCardinalitySet GenericLiteral |
   TraversalCardinalityList GenericLiteral
@@ -1561,9 +1561,9 @@ _TraversalCardinality_set = Core.Name "set"
 
 _TraversalCardinality_list = Core.Name "list"
 
-data TraversalColumn = 
+data TraversalColumn =
   TraversalColumnKeys  |
-  TraversalColumnValues 
+  TraversalColumnValues
   deriving (Eq, Ord, Read, Show)
 
 _TraversalColumn = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalColumn"
@@ -1572,11 +1572,11 @@ _TraversalColumn_keys = Core.Name "keys"
 
 _TraversalColumn_values = Core.Name "values"
 
-data TraversalPop = 
+data TraversalPop =
   TraversalPopFirst  |
   TraversalPopLast  |
   TraversalPopAll  |
-  TraversalPopMixed 
+  TraversalPopMixed
   deriving (Eq, Ord, Read, Show)
 
 _TraversalPop = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPop"
@@ -1589,7 +1589,7 @@ _TraversalPop_all = Core.Name "all"
 
 _TraversalPop_mixed = Core.Name "mixed"
 
-data TraversalOperator = 
+data TraversalOperator =
   TraversalOperatorAddAll  |
   TraversalOperatorAnd  |
   TraversalOperatorAssign  |
@@ -1600,7 +1600,7 @@ data TraversalOperator =
   TraversalOperatorMult  |
   TraversalOperatorOr  |
   TraversalOperatorSum  |
-  TraversalOperatorSumLong 
+  TraversalOperatorSumLong
   deriving (Eq, Ord, Read, Show)
 
 _TraversalOperator = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalOperator"
@@ -1627,9 +1627,9 @@ _TraversalOperator_sum = Core.Name "sum"
 
 _TraversalOperator_sumLong = Core.Name "sumLong"
 
-data TraversalPick = 
+data TraversalPick =
   TraversalPickAny  |
-  TraversalPickNone 
+  TraversalPickNone
   deriving (Eq, Ord, Read, Show)
 
 _TraversalPick = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalPick"
@@ -1638,11 +1638,11 @@ _TraversalPick_any = Core.Name "any"
 
 _TraversalPick_none = Core.Name "none"
 
-data TraversalDT = 
+data TraversalDT =
   TraversalDTSecond  |
   TraversalDTMinute  |
   TraversalDTHour  |
-  TraversalDTDay 
+  TraversalDTDay
   deriving (Eq, Ord, Read, Show)
 
 _TraversalDT = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalDT"
@@ -1655,7 +1655,7 @@ _TraversalDT_hour = Core.Name "hour"
 
 _TraversalDT_day = Core.Name "day"
 
-data TraversalPredicate = 
+data TraversalPredicate =
   TraversalPredicateEq GenericLiteralArgument |
   TraversalPredicateNeq GenericLiteralArgument |
   TraversalPredicateLt GenericLiteralArgument |
@@ -1729,7 +1729,7 @@ _TraversalPredicate_or = Core.Name "or"
 
 _TraversalPredicate_negate = Core.Name "negate"
 
-data TwoTraversalPredicates = 
+data TwoTraversalPredicates =
   TwoTraversalPredicates {
     twoTraversalPredicatesLeft :: TraversalPredicate,
     twoTraversalPredicatesRight :: TraversalPredicate}
@@ -1741,7 +1741,7 @@ _TwoTraversalPredicates_left = Core.Name "left"
 
 _TwoTraversalPredicates_right = Core.Name "right"
 
-data TraversalTerminalMethod = 
+data TraversalTerminalMethod =
   TraversalTerminalMethodExplain  |
   TraversalTerminalMethodIterate  |
   TraversalTerminalMethodHasNext  |
@@ -1749,7 +1749,7 @@ data TraversalTerminalMethod =
   TraversalTerminalMethodNext (Maybe IntegerLiteral) |
   TraversalTerminalMethodToList  |
   TraversalTerminalMethodToSet  |
-  TraversalTerminalMethodToBulkSet 
+  TraversalTerminalMethodToBulkSet
   deriving (Eq, Ord, Read, Show)
 
 _TraversalTerminalMethod = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalTerminalMethod"
@@ -1770,15 +1770,15 @@ _TraversalTerminalMethod_toSet = Core.Name "toSet"
 
 _TraversalTerminalMethod_toBulkSet = Core.Name "toBulkSet"
 
-data TraversalSelfMethod = 
-  TraversalSelfMethodDiscard 
+data TraversalSelfMethod =
+  TraversalSelfMethodDiscard
   deriving (Eq, Ord, Read, Show)
 
 _TraversalSelfMethod = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.TraversalSelfMethod"
 
 _TraversalSelfMethod_discard = Core.Name "discard"
 
-data TraversalFunction = 
+data TraversalFunction =
   TraversalFunctionToken TraversalToken |
   TraversalFunctionColumn TraversalColumn
   deriving (Eq, Ord, Read, Show)
@@ -1789,7 +1789,7 @@ _TraversalFunction_token = Core.Name "token"
 
 _TraversalFunction_column = Core.Name "column"
 
-data RangeArgument = 
+data RangeArgument =
   RangeArgument {
     rangeArgumentMin :: GenericLiteralArgument,
     rangeArgumentMax :: GenericLiteralArgument}
@@ -1801,14 +1801,14 @@ _RangeArgument_min = Core.Name "min"
 
 _RangeArgument_max = Core.Name "max"
 
-data WithOptionKeys = 
+data WithOptionKeys =
   WithOptionKeysShortestPath ShortestPathConstants |
   WithOptionKeysConnectedComponent ConnectedComponentConstants |
   WithOptionKeysPageRank PageRankConstants |
   WithOptionKeysPeerPressure PeerPressureConstants |
   WithOptionKeysIo IoOptionsKeys |
   WithOptionKeysWithOptionsTokens  |
-  WithOptionKeysWithOptionsIndexer 
+  WithOptionKeysWithOptionsIndexer
   deriving (Eq, Ord, Read, Show)
 
 _WithOptionKeys = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.WithOptionKeys"
@@ -1827,10 +1827,10 @@ _WithOptionKeys_withOptionsTokens = Core.Name "withOptionsTokens"
 
 _WithOptionKeys_withOptionsIndexer = Core.Name "withOptionsIndexer"
 
-data ConnectedComponentConstants = 
+data ConnectedComponentConstants =
   ConnectedComponentConstantsComponent  |
   ConnectedComponentConstantsEdges  |
-  ConnectedComponentConstantsPropertyName 
+  ConnectedComponentConstantsPropertyName
   deriving (Eq, Ord, Read, Show)
 
 _ConnectedComponentConstants = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ConnectedComponentConstants"
@@ -1841,10 +1841,10 @@ _ConnectedComponentConstants_edges = Core.Name "edges"
 
 _ConnectedComponentConstants_propertyName = Core.Name "propertyName"
 
-data PageRankConstants = 
+data PageRankConstants =
   PageRankConstantsEdges  |
   PageRankConstantsTimes  |
-  PageRankConstantsPropertyName 
+  PageRankConstantsPropertyName
   deriving (Eq, Ord, Read, Show)
 
 _PageRankConstants = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.PageRankConstants"
@@ -1855,10 +1855,10 @@ _PageRankConstants_times = Core.Name "times"
 
 _PageRankConstants_propertyName = Core.Name "propertyName"
 
-data PeerPressureConstants = 
+data PeerPressureConstants =
   PeerPressureConstantsEdges  |
   PeerPressureConstantsTimes  |
-  PeerPressureConstantsPropertyName 
+  PeerPressureConstantsPropertyName
   deriving (Eq, Ord, Read, Show)
 
 _PeerPressureConstants = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.PeerPressureConstants"
@@ -1869,12 +1869,12 @@ _PeerPressureConstants_times = Core.Name "times"
 
 _PeerPressureConstants_propertyName = Core.Name "propertyName"
 
-data ShortestPathConstants = 
+data ShortestPathConstants =
   ShortestPathConstantsTarget  |
   ShortestPathConstantsEdges  |
   ShortestPathConstantsDistance  |
   ShortestPathConstantsMaxDistance  |
-  ShortestPathConstantsIncludeEdges 
+  ShortestPathConstantsIncludeEdges
   deriving (Eq, Ord, Read, Show)
 
 _ShortestPathConstants = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.ShortestPathConstants"
@@ -1889,7 +1889,7 @@ _ShortestPathConstants_maxDistance = Core.Name "maxDistance"
 
 _ShortestPathConstants_includeEdges = Core.Name "includeEdges"
 
-data WithOptionsValues = 
+data WithOptionsValues =
   WithOptionsValuesTokens  |
   WithOptionsValuesNone  |
   WithOptionsValuesIds  |
@@ -1898,7 +1898,7 @@ data WithOptionsValues =
   WithOptionsValuesValues  |
   WithOptionsValuesAll  |
   WithOptionsValuesList  |
-  WithOptionsValuesMap 
+  WithOptionsValuesMap
   deriving (Eq, Ord, Read, Show)
 
 _WithOptionsValues = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.WithOptionsValues"
@@ -1921,9 +1921,9 @@ _WithOptionsValues_list = Core.Name "list"
 
 _WithOptionsValues_map = Core.Name "map"
 
-data IoOptionsKeys = 
+data IoOptionsKeys =
   IoOptionsKeysReader  |
-  IoOptionsKeysWriter 
+  IoOptionsKeysWriter
   deriving (Eq, Ord, Read, Show)
 
 _IoOptionsKeys = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.IoOptionsKeys"
@@ -1932,10 +1932,10 @@ _IoOptionsKeys_reader = Core.Name "reader"
 
 _IoOptionsKeys_writer = Core.Name "writer"
 
-data IoOptionsValues = 
+data IoOptionsValues =
   IoOptionsValuesGryo  |
   IoOptionsValuesGraphson  |
-  IoOptionsValuesGraphml 
+  IoOptionsValuesGraphml
   deriving (Eq, Ord, Read, Show)
 
 _IoOptionsValues = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.IoOptionsValues"
@@ -1946,7 +1946,7 @@ _IoOptionsValues_graphson = Core.Name "graphson"
 
 _IoOptionsValues_graphml = Core.Name "graphml"
 
-data BooleanArgument = 
+data BooleanArgument =
   BooleanArgumentValue Bool |
   BooleanArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -1957,7 +1957,7 @@ _BooleanArgument_value = Core.Name "value"
 
 _BooleanArgument_variable = Core.Name "variable"
 
-data IntegerArgument = 
+data IntegerArgument =
   IntegerArgumentValue IntegerLiteral |
   IntegerArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -1968,7 +1968,7 @@ _IntegerArgument_value = Core.Name "value"
 
 _IntegerArgument_variable = Core.Name "variable"
 
-data FloatArgument = 
+data FloatArgument =
   FloatArgumentValue FloatLiteral |
   FloatArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -1979,7 +1979,7 @@ _FloatArgument_value = Core.Name "value"
 
 _FloatArgument_variable = Core.Name "variable"
 
-data StringArgument = 
+data StringArgument =
   StringArgumentValue String |
   StringArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -1990,7 +1990,7 @@ _StringArgument_value = Core.Name "value"
 
 _StringArgument_variable = Core.Name "variable"
 
-data StringNullableArgument = 
+data StringNullableArgument =
   StringNullableArgumentValue (Maybe String) |
   StringNullableArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2001,7 +2001,7 @@ _StringNullableArgument_value = Core.Name "value"
 
 _StringNullableArgument_variable = Core.Name "variable"
 
-data DateArgument = 
+data DateArgument =
   DateArgumentValue DateLiteral |
   DateArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2012,7 +2012,7 @@ _DateArgument_value = Core.Name "value"
 
 _DateArgument_variable = Core.Name "variable"
 
-data GenericLiteralArgument = 
+data GenericLiteralArgument =
   GenericLiteralArgumentValue GenericLiteral |
   GenericLiteralArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2023,7 +2023,7 @@ _GenericLiteralArgument_value = Core.Name "value"
 
 _GenericLiteralArgument_variable = Core.Name "variable"
 
-data GenericLiteralListArgument = 
+data GenericLiteralListArgument =
   GenericLiteralListArgumentValue GenericLiteralList |
   GenericLiteralListArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2034,7 +2034,7 @@ _GenericLiteralListArgument_value = Core.Name "value"
 
 _GenericLiteralListArgument_variable = Core.Name "variable"
 
-data GenericLiteralMapArgument = 
+data GenericLiteralMapArgument =
   GenericLiteralMapArgumentValue GenericLiteralMap |
   GenericLiteralMapArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2045,7 +2045,7 @@ _GenericLiteralMapArgument_value = Core.Name "value"
 
 _GenericLiteralMapArgument_variable = Core.Name "variable"
 
-data GenericLiteralMapNullableArgument = 
+data GenericLiteralMapNullableArgument =
   GenericLiteralMapNullableArgumentValue (Maybe GenericLiteralMap) |
   GenericLiteralMapNullableArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2057,7 +2057,7 @@ _GenericLiteralMapNullableArgument_value = Core.Name "value"
 
 _GenericLiteralMapNullableArgument_variable = Core.Name "variable"
 
-data StructureVertexArgument = 
+data StructureVertexArgument =
   StructureVertexArgumentValue StructureVertex |
   StructureVertexArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2068,7 +2068,7 @@ _StructureVertexArgument_value = Core.Name "value"
 
 _StructureVertexArgument_variable = Core.Name "variable"
 
-data TraversalCardinalityArgument = 
+data TraversalCardinalityArgument =
   TraversalCardinalityArgumentValue TraversalCardinality |
   TraversalCardinalityArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2079,7 +2079,7 @@ _TraversalCardinalityArgument_value = Core.Name "value"
 
 _TraversalCardinalityArgument_variable = Core.Name "variable"
 
-data TraversalColumnArgument = 
+data TraversalColumnArgument =
   TraversalColumnArgumentValue TraversalColumn |
   TraversalColumnArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2090,7 +2090,7 @@ _TraversalColumnArgument_value = Core.Name "value"
 
 _TraversalColumnArgument_variable = Core.Name "variable"
 
-data TraversalDirectionArgument = 
+data TraversalDirectionArgument =
   TraversalDirectionArgumentValue TraversalDirection |
   TraversalDirectionArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2101,7 +2101,7 @@ _TraversalDirectionArgument_value = Core.Name "value"
 
 _TraversalDirectionArgument_variable = Core.Name "variable"
 
-data TraversalMergeArgument = 
+data TraversalMergeArgument =
   TraversalMergeArgumentValue TraversalMerge |
   TraversalMergeArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2112,7 +2112,7 @@ _TraversalMergeArgument_value = Core.Name "value"
 
 _TraversalMergeArgument_variable = Core.Name "variable"
 
-data TraversalOrderArgument = 
+data TraversalOrderArgument =
   TraversalOrderArgumentValue TraversalOrder |
   TraversalOrderArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2123,7 +2123,7 @@ _TraversalOrderArgument_value = Core.Name "value"
 
 _TraversalOrderArgument_variable = Core.Name "variable"
 
-data TraversalPopArgument = 
+data TraversalPopArgument =
   TraversalPopArgumentValue TraversalPop |
   TraversalPopArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2134,7 +2134,7 @@ _TraversalPopArgument_value = Core.Name "value"
 
 _TraversalPopArgument_variable = Core.Name "variable"
 
-data TraversalSackMethodArgument = 
+data TraversalSackMethodArgument =
   TraversalSackMethodArgumentValue  |
   TraversalSackMethodArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2145,7 +2145,7 @@ _TraversalSackMethodArgument_value = Core.Name "value"
 
 _TraversalSackMethodArgument_variable = Core.Name "variable"
 
-data TraversalScopeArgument = 
+data TraversalScopeArgument =
   TraversalScopeArgumentValue TraversalScope |
   TraversalScopeArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2156,7 +2156,7 @@ _TraversalScopeArgument_value = Core.Name "value"
 
 _TraversalScopeArgument_variable = Core.Name "variable"
 
-data TraversalTokenArgument = 
+data TraversalTokenArgument =
   TraversalTokenArgumentValue TraversalToken |
   TraversalTokenArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2167,7 +2167,7 @@ _TraversalTokenArgument_value = Core.Name "value"
 
 _TraversalTokenArgument_variable = Core.Name "variable"
 
-data TraversalComparatorArgument = 
+data TraversalComparatorArgument =
   TraversalComparatorArgumentValue TraversalOrder |
   TraversalComparatorArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2178,7 +2178,7 @@ _TraversalComparatorArgument_value = Core.Name "value"
 
 _TraversalComparatorArgument_variable = Core.Name "variable"
 
-data TraversalFunctionArgument = 
+data TraversalFunctionArgument =
   TraversalFunctionArgumentValue TraversalFunction |
   TraversalFunctionArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2189,7 +2189,7 @@ _TraversalFunctionArgument_value = Core.Name "value"
 
 _TraversalFunctionArgument_variable = Core.Name "variable"
 
-data TraversalBiFunctionArgument = 
+data TraversalBiFunctionArgument =
   TraversalBiFunctionArgumentValue TraversalOperator |
   TraversalBiFunctionArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2200,7 +2200,7 @@ _TraversalBiFunctionArgument_value = Core.Name "value"
 
 _TraversalBiFunctionArgument_variable = Core.Name "variable"
 
-data TraversalDTArgument = 
+data TraversalDTArgument =
   TraversalDTArgumentValue TraversalDT |
   TraversalDTArgumentVariable Identifier
   deriving (Eq, Ord, Read, Show)
@@ -2211,14 +2211,14 @@ _TraversalDTArgument_value = Core.Name "value"
 
 _TraversalDTArgument_variable = Core.Name "variable"
 
-newtype GenericLiteralList = 
+newtype GenericLiteralList =
   GenericLiteralList {
     unGenericLiteralList :: [GenericLiteral]}
   deriving (Eq, Ord, Read, Show)
 
 _GenericLiteralList = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralList"
 
-data GenericLiteralRange = 
+data GenericLiteralRange =
   GenericLiteralRangeInteger IntegerRange |
   GenericLiteralRangeString StringRange
   deriving (Eq, Ord, Read, Show)
@@ -2229,7 +2229,7 @@ _GenericLiteralRange_integer = Core.Name "integer"
 
 _GenericLiteralRange_string = Core.Name "string"
 
-data IntegerRange = 
+data IntegerRange =
   IntegerRange {
     integerRangeLeft :: IntegerLiteral,
     integerRangeRight :: IntegerLiteral}
@@ -2241,7 +2241,7 @@ _IntegerRange_left = Core.Name "left"
 
 _IntegerRange_right = Core.Name "right"
 
-data StringRange = 
+data StringRange =
   StringRange {
     stringRangeLeft :: String,
     stringRangeRight :: String}
@@ -2253,21 +2253,21 @@ _StringRange_left = Core.Name "left"
 
 _StringRange_right = Core.Name "right"
 
-newtype GenericLiteralSet = 
+newtype GenericLiteralSet =
   GenericLiteralSet {
     unGenericLiteralSet :: [GenericLiteral]}
   deriving (Eq, Ord, Read, Show)
 
 _GenericLiteralSet = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralSet"
 
-newtype GenericLiteralCollection = 
+newtype GenericLiteralCollection =
   GenericLiteralCollection {
     unGenericLiteralCollection :: [GenericLiteral]}
   deriving (Eq, Ord, Read, Show)
 
 _GenericLiteralCollection = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralCollection"
 
-data GenericLiteral = 
+data GenericLiteral =
   GenericLiteralNumeric NumericLiteral |
   GenericLiteralBoolean Bool |
   GenericLiteralString String |
@@ -2332,14 +2332,14 @@ _GenericLiteral_terminatedTraversal = Core.Name "terminatedTraversal"
 
 _GenericLiteral_genericLiteralMap = Core.Name "genericLiteralMap"
 
-newtype GenericLiteralMap = 
+newtype GenericLiteralMap =
   GenericLiteralMap {
     unGenericLiteralMap :: [MapEntry]}
   deriving (Eq, Ord, Read, Show)
 
 _GenericLiteralMap = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralMap"
 
-data MapEntry = 
+data MapEntry =
   MapEntryKey MapKey |
   MapEntryValue GenericLiteral
   deriving (Eq, Ord, Read, Show)
@@ -2350,7 +2350,7 @@ _MapEntry_key = Core.Name "key"
 
 _MapEntry_value = Core.Name "value"
 
-data MapKey = 
+data MapKey =
   MapKeyString String |
   MapKeyNumeric NumericLiteral |
   MapKeyTraversalToken TraversalToken |
@@ -2382,21 +2382,21 @@ _MapKey_keyword = Core.Name "keyword"
 
 _MapKey_identifier = Core.Name "identifier"
 
-newtype IntegerLiteral = 
+newtype IntegerLiteral =
   IntegerLiteral {
     unIntegerLiteral :: Integer}
   deriving (Eq, Ord, Read, Show)
 
 _IntegerLiteral = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.IntegerLiteral"
 
-newtype FloatLiteral = 
+newtype FloatLiteral =
   FloatLiteral {
     unFloatLiteral :: Double}
   deriving (Eq, Ord, Read, Show)
 
 _FloatLiteral = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.FloatLiteral"
 
-data NumericLiteral = 
+data NumericLiteral =
   NumericLiteralInteger IntegerLiteral |
   NumericLiteralFloat FloatLiteral
   deriving (Eq, Ord, Read, Show)
@@ -2407,18 +2407,18 @@ _NumericLiteral_integer = Core.Name "integer"
 
 _NumericLiteral_float = Core.Name "float"
 
-newtype DateLiteral = 
+newtype DateLiteral =
   DateLiteral {
     unDateLiteral :: (Maybe StringArgument)}
   deriving (Eq, Ord, Read, Show)
 
 _DateLiteral = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.DateLiteral"
 
-data Keyword = 
+data Keyword =
   KeywordEdges  |
   KeywordKeys  |
   KeywordNew  |
-  KeywordValues 
+  KeywordValues
   deriving (Eq, Ord, Read, Show)
 
 _Keyword = Core.Name "hydra.ext.org.apache.tinkerpop.gremlin.Keyword"
@@ -2431,7 +2431,7 @@ _Keyword_new = Core.Name "new"
 
 _Keyword_values = Core.Name "values"
 
-newtype Identifier = 
+newtype Identifier =
   Identifier {
     unIdentifier :: String}
   deriving (Eq, Ord, Read, Show)

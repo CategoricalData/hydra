@@ -29,8 +29,8 @@ cppLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = typePredicate}} 
-  where 
+        Coders.languageConstraintsTypes = typePredicate}}
+  where
     eliminationVariants =
         Sets.fromList [
           Variants.EliminationVariantRecord,
@@ -100,8 +100,8 @@ cppReservedWords =
       cppKeywords,
       cppPreprocessor,
       cppStlTypes,
-      hydraCppKeywords]) 
-  where 
+      hydraCppKeywords])
+  where
     cppKeywords =
         [
           "alignas",

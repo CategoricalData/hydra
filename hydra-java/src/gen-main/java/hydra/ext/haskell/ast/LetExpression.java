@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class LetExpression implements Serializable, Comparable<LetExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.LetExpression");
-  
+
   public static final hydra.core.Name BINDINGS = new hydra.core.Name("bindings");
-  
+
   public static final hydra.core.Name INNER = new hydra.core.Name("inner");
-  
+
   /**
    * The local bindings
    */
   public final hydra.util.ConsList<hydra.ext.haskell.ast.LocalBinding> bindings;
-  
+
   /**
    * The body of the let expression
    */
   public final hydra.ext.haskell.ast.Expression inner;
-  
+
   public LetExpression (hydra.util.ConsList<hydra.ext.haskell.ast.LocalBinding> bindings, hydra.ext.haskell.ast.Expression inner) {
     this.bindings = bindings;
     this.inner = inner;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof LetExpression)) {
@@ -41,12 +41,12 @@ public class LetExpression implements Serializable, Comparable<LetExpression> {
       this.inner,
       o.inner);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(bindings) + 3 * java.util.Objects.hashCode(inner);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LetExpression other) {
@@ -57,11 +57,11 @@ public class LetExpression implements Serializable, Comparable<LetExpression> {
     }
     return ((Comparable) inner).compareTo(other.inner);
   }
-  
+
   public LetExpression withBindings(hydra.util.ConsList<hydra.ext.haskell.ast.LocalBinding> bindings) {
     return new LetExpression(bindings, inner);
   }
-  
+
   public LetExpression withInner(hydra.ext.haskell.ast.Expression inner) {
     return new LetExpression(bindings, inner);
   }

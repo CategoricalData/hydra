@@ -6,74 +6,74 @@ import java.io.Serializable;
 
 public abstract class ComparisonOperator implements Serializable, Comparable<ComparisonOperator> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.query.ComparisonOperator");
-  
+
   public static final hydra.core.Name EQ = new hydra.core.Name("eq");
-  
+
   public static final hydra.core.Name NEQ = new hydra.core.Name("neq");
-  
+
   public static final hydra.core.Name LT = new hydra.core.Name("lt");
-  
+
   public static final hydra.core.Name LTE = new hydra.core.Name("lte");
-  
+
   public static final hydra.core.Name GT = new hydra.core.Name("gt");
-  
+
   public static final hydra.core.Name GTE = new hydra.core.Name("gte");
-  
+
   private ComparisonOperator () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Eq instance) ;
-    
+
     R visit(Neq instance) ;
-    
+
     R visit(Lt instance) ;
-    
+
     R visit(Lte instance) ;
-    
+
     R visit(Gt instance) ;
-    
+
     R visit(Gte instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ComparisonOperator instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Eq instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Neq instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Lt instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Lte instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Gt instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Gte instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Eq extends hydra.pg.query.ComparisonOperator implements Serializable {
     public Eq () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Eq)) {
@@ -82,12 +82,12 @@ public abstract class ComparisonOperator implements Serializable, Comparable<Com
       Eq o = (Eq) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ComparisonOperator other) {
@@ -97,18 +97,18 @@ public abstract class ComparisonOperator implements Serializable, Comparable<Com
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Neq extends hydra.pg.query.ComparisonOperator implements Serializable {
     public Neq () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Neq)) {
@@ -117,12 +117,12 @@ public abstract class ComparisonOperator implements Serializable, Comparable<Com
       Neq o = (Neq) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ComparisonOperator other) {
@@ -132,18 +132,18 @@ public abstract class ComparisonOperator implements Serializable, Comparable<Com
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Lt extends hydra.pg.query.ComparisonOperator implements Serializable {
     public Lt () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Lt)) {
@@ -152,12 +152,12 @@ public abstract class ComparisonOperator implements Serializable, Comparable<Com
       Lt o = (Lt) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ComparisonOperator other) {
@@ -167,18 +167,18 @@ public abstract class ComparisonOperator implements Serializable, Comparable<Com
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Lte extends hydra.pg.query.ComparisonOperator implements Serializable {
     public Lte () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Lte)) {
@@ -187,12 +187,12 @@ public abstract class ComparisonOperator implements Serializable, Comparable<Com
       Lte o = (Lte) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ComparisonOperator other) {
@@ -202,18 +202,18 @@ public abstract class ComparisonOperator implements Serializable, Comparable<Com
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Gt extends hydra.pg.query.ComparisonOperator implements Serializable {
     public Gt () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Gt)) {
@@ -222,12 +222,12 @@ public abstract class ComparisonOperator implements Serializable, Comparable<Com
       Gt o = (Gt) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ComparisonOperator other) {
@@ -237,18 +237,18 @@ public abstract class ComparisonOperator implements Serializable, Comparable<Com
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Gte extends hydra.pg.query.ComparisonOperator implements Serializable {
     public Gte () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Gte)) {
@@ -257,12 +257,12 @@ public abstract class ComparisonOperator implements Serializable, Comparable<Com
       Gte o = (Gte) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ComparisonOperator other) {
@@ -272,7 +272,7 @@ public abstract class ComparisonOperator implements Serializable, Comparable<Com
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

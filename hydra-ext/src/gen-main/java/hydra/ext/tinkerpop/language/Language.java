@@ -75,7 +75,7 @@ public interface Language {
         public Boolean otherwise(hydra.core.Type instance) {
           return true;
         }
-        
+
         @Override
         public Boolean visit(hydra.core.Type.List t) {
           return hydra.rewriting.Rewriting.deannotateType((t).value).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -83,7 +83,7 @@ public interface Language {
             public Boolean otherwise(hydra.core.Type instance) {
               return false;
             }
-            
+
             @Override
             public Boolean visit(hydra.core.Type.Literal lt) {
               return (lt).value.accept(new hydra.core.LiteralType.PartialVisitor<>() {
@@ -91,12 +91,12 @@ public interface Language {
                 public Boolean otherwise(hydra.core.LiteralType instance) {
                   return false;
                 }
-                
+
                 @Override
                 public Boolean visit(hydra.core.LiteralType.Boolean_ ignored) {
                   return (vpFeatures).supportsBooleanArrayValues;
                 }
-                
+
                 @Override
                 public Boolean visit(hydra.core.LiteralType.Float_ ft) {
                   return (ft).value.accept(new hydra.core.FloatType.PartialVisitor<>() {
@@ -104,19 +104,19 @@ public interface Language {
                     public Boolean otherwise(hydra.core.FloatType instance) {
                       return false;
                     }
-                    
+
                     @Override
                     public Boolean visit(hydra.core.FloatType.Float64 ignored) {
                       return (vpFeatures).supportsDoubleArrayValues;
                     }
-                    
+
                     @Override
                     public Boolean visit(hydra.core.FloatType.Float32 ignored) {
                       return (vpFeatures).supportsFloatArrayValues;
                     }
                   });
                 }
-                
+
                 @Override
                 public Boolean visit(hydra.core.LiteralType.Integer_ it) {
                   return (it).value.accept(new hydra.core.IntegerType.PartialVisitor<>() {
@@ -124,24 +124,24 @@ public interface Language {
                     public Boolean otherwise(hydra.core.IntegerType instance) {
                       return false;
                     }
-                    
+
                     @Override
                     public Boolean visit(hydra.core.IntegerType.Uint8 ignored) {
                       return (vpFeatures).supportsByteArrayValues;
                     }
-                    
+
                     @Override
                     public Boolean visit(hydra.core.IntegerType.Int32 ignored) {
                       return (vpFeatures).supportsIntegerArrayValues;
                     }
-                    
+
                     @Override
                     public Boolean visit(hydra.core.IntegerType.Int64 ignored) {
                       return (vpFeatures).supportsLongArrayValues;
                     }
                   });
                 }
-                
+
                 @Override
                 public Boolean visit(hydra.core.LiteralType.String_ ignored) {
                   return (vpFeatures).supportsStringArrayValues;
@@ -150,22 +150,22 @@ public interface Language {
             }
           });
         }
-        
+
         @Override
         public Boolean visit(hydra.core.Type.Literal ignored) {
           return true;
         }
-        
+
         @Override
         public Boolean visit(hydra.core.Type.Map mt) {
           return ((java.util.function.Function<hydra.ext.org.apache.tinkerpop.features.ExtraFeatures<T0>, java.util.function.Function<hydra.core.Type, Boolean>>) (projected -> projected.supportsMapKey)).apply(extras).apply((mt).value.keys);
         }
-        
+
         @Override
         public Boolean visit(hydra.core.Type.Wrap ignored) {
           return true;
         }
-        
+
         @Override
         public Boolean visit(hydra.core.Type.Maybe ot) {
           return hydra.rewriting.Rewriting.deannotateType((ot).value).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -173,7 +173,7 @@ public interface Language {
             public Boolean otherwise(hydra.core.Type instance) {
               return false;
             }
-            
+
             @Override
             public Boolean visit(hydra.core.Type.Literal ignored) {
               return true;
@@ -196,18 +196,18 @@ public interface Language {
       hydra.lib.maybes.Pure.apply(new hydra.variants.TypeVariant.Wrap())))));
     return new hydra.coders.Language(name, new hydra.coders.LanguageConstraints(hydra.ext.tinkerpop.language.Language.<hydra.variants.EliminationVariant>tinkerpopLanguage_eliminationVariants(), literalVariants.get(), floatTypes.get(), hydra.ext.tinkerpop.language.Language.<hydra.variants.FunctionVariant>tinkerpopLanguage_functionVariants(), integerTypes.get(), termVariants.get(), typeVariants.get(), typePredicate));
   }
-  
+
   static <T1> hydra.util.Maybe<T1> tinkerpopLanguage_cond(T1 v, Boolean b) {
     return hydra.lib.logic.IfElse.lazy(
       b,
       () -> hydra.lib.maybes.Pure.apply(v),
       () -> (hydra.util.Maybe<T1>) (hydra.util.Maybe.<T1>nothing()));
   }
-  
+
   static <T1> hydra.util.PersistentSet<T1> tinkerpopLanguage_eliminationVariants() {
     return (hydra.util.PersistentSet<T1>) (hydra.lib.sets.Empty.<T1>apply());
   }
-  
+
   static <T1> hydra.util.PersistentSet<T1> tinkerpopLanguage_functionVariants() {
     return (hydra.util.PersistentSet<T1>) (hydra.lib.sets.Empty.<T1>apply());
   }

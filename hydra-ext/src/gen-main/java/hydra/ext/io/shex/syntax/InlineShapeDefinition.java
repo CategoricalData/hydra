@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class InlineShapeDefinition implements Serializable, Comparable<InlineShapeDefinition> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeDefinition");
-  
+
   public static final hydra.core.Name LIST_OF_ALTS = new hydra.core.Name("listOfAlts");
-  
+
   public static final hydra.core.Name TRIPLE_EXPRESSION = new hydra.core.Name("TripleExpression");
-  
+
   public final hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts;
-  
+
   public final hydra.util.Maybe<hydra.ext.io.shex.syntax.TripleExpression> TripleExpression;
-  
+
   public InlineShapeDefinition (hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts, hydra.util.Maybe<hydra.ext.io.shex.syntax.TripleExpression> TripleExpression) {
     this.listOfAlts = listOfAlts;
     this.TripleExpression = TripleExpression;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof InlineShapeDefinition)) {
@@ -32,12 +32,12 @@ public class InlineShapeDefinition implements Serializable, Comparable<InlineSha
       this.TripleExpression,
       o.TripleExpression);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(listOfAlts) + 3 * java.util.Objects.hashCode(TripleExpression);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InlineShapeDefinition other) {
@@ -48,11 +48,11 @@ public class InlineShapeDefinition implements Serializable, Comparable<InlineSha
     }
     return ((Comparable) TripleExpression).compareTo(other.TripleExpression);
   }
-  
+
   public InlineShapeDefinition withListOfAlts(hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts) {
     return new InlineShapeDefinition(listOfAlts, TripleExpression);
   }
-  
+
   public InlineShapeDefinition withTripleExpression(hydra.util.Maybe<hydra.ext.io.shex.syntax.TripleExpression> TripleExpression) {
     return new InlineShapeDefinition(listOfAlts, TripleExpression);
   }

@@ -41,10 +41,10 @@ alphaConvert vold vnew term = Rewriting.replaceFreeTermVariable vold (Core.TermV
 -- | Eagerly beta-reduce a type by substituting type arguments into type lambdas
 betaReduceType :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.Error) Core.Type
 betaReduceType cx graph typ =
-     
+
       let reduceApp =
-              \app ->  
-                let lhs = Core.applicationTypeFunction app 
+              \app ->
+                let lhs = Core.applicationTypeFunction app
                     rhs = Core.applicationTypeArgument app
                 in case lhs of
                   Core.TypeAnnotated v0 -> Eithers.bind (reduceApp (Core.ApplicationType {
@@ -55,9 +55,9 @@ betaReduceType cx graph typ =
                   Core.TypeForall v0 -> betaReduceType cx graph (Rewriting.replaceFreeTypeVariable (Core.forallTypeParameter v0) rhs (Core.forallTypeBody v0))
                   Core.TypeVariable v0 -> Eithers.bind (Schemas.requireType cx graph v0) (\t_ -> betaReduceType cx graph (Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = t_,
-                    Core.applicationTypeArgument = rhs}))) 
+                    Core.applicationTypeArgument = rhs})))
           mapExpr =
-                  \recurse -> \t ->  
+                  \recurse -> \t ->
                     let findApp =
                             \r -> case r of
                               Core.TypeApplication v0 -> reduceApp v0
@@ -72,18 +72,18 @@ betaReduceType cx graph typ =
 -- | These are both limited forms of beta reduction which help to "clean up" a term without fully evaluating it.
 contractTerm :: Core.Term -> Core.Term
 contractTerm term =
-     
+
       let rewrite =
-              \recurse -> \t ->  
+              \recurse -> \t ->
                 let rec = recurse t
                 in case rec of
-                  Core.TermApplication v0 ->  
-                    let lhs = Core.applicationFunction v0 
+                  Core.TermApplication v0 ->
+                    let lhs = Core.applicationFunction v0
                         rhs = Core.applicationArgument v0
                     in case (Rewriting.deannotateTerm lhs) of
                       Core.TermFunction v1 -> case v1 of
-                        Core.FunctionLambda v2 ->  
-                          let v = Core.lambdaParameter v2 
+                        Core.FunctionLambda v2 ->
+                          let v = Core.lambdaParameter v2
                               body = Core.lambdaBody v2
                           in (Logic.ifElse (Rewriting.isFreeVariableInTerm v body) body (Rewriting.replaceFreeTermVariable v rhs body))
                         _ -> rec
@@ -97,11 +97,11 @@ countPrimitiveInvocations = True
 -- | Eta-reduce a term by removing redundant lambda abstractions
 etaReduceTerm :: Core.Term -> Core.Term
 etaReduceTerm term =
-     
-      let noChange = term 
+
+      let noChange = term
           reduceLambda =
-                  \l ->  
-                    let v = Core.lambdaParameter l 
+                  \l ->
+                    let v = Core.lambdaParameter l
                         d = Core.lambdaDomain l
                         body = Core.lambdaBody l
                     in case (etaReduceTerm body) of
@@ -109,8 +109,8 @@ etaReduceTerm term =
                         Core.lambdaParameter = v,
                         Core.lambdaDomain = d,
                         Core.lambdaBody = (Core.annotatedTermBody v0)})
-                      Core.TermApplication v0 ->  
-                        let lhs = Core.applicationFunction v0 
+                      Core.TermApplication v0 ->
+                        let lhs = Core.applicationFunction v0
                             rhs = Core.applicationArgument v0
                         in case (etaReduceTerm rhs) of
                           Core.TermAnnotated v1 -> reduceLambda (Core.Lambda {
@@ -134,13 +134,13 @@ etaReduceTerm term =
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', in which the implicit parameters of primitive functions and eliminations are made into explicit lambda parameters. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
 etaExpandTerm :: Graph.Graph -> Core.Term -> Core.Term
 etaExpandTerm graph term =
-     
+
       let expand =
-              \args -> \arity -> \t ->  
+              \args -> \arity -> \t ->
                 let apps =
                         Lists.foldl (\lhs -> \arg -> Core.TermApplication (Core.Application {
                           Core.applicationFunction = lhs,
-                          Core.applicationArgument = arg})) t args 
+                          Core.applicationArgument = arg})) t args
                     is = Logic.ifElse (Equality.lte arity (Lists.length args)) [] (Math.range 1 (Math.sub arity (Lists.length args)))
                     pad =
                             \indices -> \t -> Logic.ifElse (Lists.null indices) t (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -149,14 +149,14 @@ etaExpandTerm graph term =
                               Core.lambdaBody = (pad (Lists.tail indices) (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = t,
                                 Core.applicationArgument = (Core.TermVariable (Core.Name (Strings.cat2 "v" (Literals.showInt32 (Lists.head indices)))))})))})))
-                in (pad is apps) 
+                in (pad is apps)
           rewrite =
-                  \args -> \recurse -> \t ->  
-                    let afterRecursion = \term -> expand args (etaExpansionArity graph term) term 
+                  \args -> \recurse -> \t ->
+                    let afterRecursion = \term -> expand args (etaExpansionArity graph term) term
                         t2 = Rewriting.detypeTerm t
                     in case t2 of
-                      Core.TermApplication v0 ->  
-                        let lhs = Core.applicationFunction v0 
+                      Core.TermApplication v0 ->
+                        let lhs = Core.applicationFunction v0
                             rhs = Core.applicationArgument v0
                             erhs = rewrite [] recurse rhs
                         in (rewrite (Lists.cons erhs args) recurse lhs)
@@ -166,7 +166,7 @@ etaExpandTerm graph term =
 -- | Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the Graph to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the Graph through nested scopes.
 etaExpandTermNew :: Graph.Graph -> Core.Term -> Core.Term
 etaExpandTermNew tx0 term0 =
-     
+
       let termArityWithContext =
               \tx -> \term -> case term of
                 Core.TermAnnotated v0 -> termArityWithContext tx (Core.annotatedTermBody v0)
@@ -179,7 +179,7 @@ etaExpandTermNew tx0 term0 =
                 Core.TermTypeLambda v0 -> termArityWithContext (Schemas.extendGraphForTypeLambda tx v0) (Core.typeLambdaBody v0)
                 Core.TermTypeApplication v0 -> termArityWithContext tx (Core.typeApplicationTermBody v0)
                 Core.TermVariable v0 -> Maybes.maybe 0 Arity.typeArity (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx)))
-                _ -> 0 
+                _ -> 0
           domainTypes =
                   \n -> \mt -> Logic.ifElse (Equality.lte n 0) [] (Maybes.maybe (Lists.map (\_ -> Nothing) (Math.range 1 n)) (\typ -> case typ of
                     Core.TypeFunction v0 -> Lists.cons (Just (Core.functionTypeDomain v0)) (domainTypes (Math.sub n 1) (Just (Core.functionTypeCodomain v0)))
@@ -195,20 +195,20 @@ etaExpandTermNew tx0 term0 =
                     Core.TypeForall v0 -> peelFunctionDomains (Just (Core.forallTypeBody v0)) n
                     _ -> Nothing) mtyp)
           expand =
-                  \alwaysPad -> \args -> \arity -> \headTyp -> \head ->  
+                  \alwaysPad -> \args -> \arity -> \headTyp -> \head ->
                     let applied =
                             Lists.foldl (\lhs -> \arg -> Core.TermApplication (Core.Application {
                               Core.applicationFunction = lhs,
-                              Core.applicationArgument = arg})) head args 
+                              Core.applicationArgument = arg})) head args
                         numArgs = Lists.length args
                         needed = Math.sub arity numArgs
-                    in (Logic.ifElse (Logic.and (Equality.gt needed 0) (Logic.or alwaysPad (Equality.gt numArgs 0))) ( 
-                      let indices = Math.range 1 needed 
+                    in (Logic.ifElse (Logic.and (Equality.gt needed 0) (Logic.or alwaysPad (Equality.gt numArgs 0))) (
+                      let indices = Math.range 1 needed
                           remainingType = peelFunctionDomains headTyp numArgs
                           domains = domainTypes needed remainingType
                           codomainType = peelFunctionDomains remainingType needed
                           fullyAppliedRaw =
-                                  Lists.foldl (\body -> \i ->  
+                                  Lists.foldl (\body -> \i ->
                                     let vn = Core.Name (Strings.cat2 "v" (Literals.showInt32 i))
                                     in (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = body,
@@ -218,8 +218,8 @@ etaExpandTermNew tx0 term0 =
                                     Core.annotatedTermBody = fullyAppliedRaw,
                                     Core.annotatedTermAnnotation = (Maps.singleton (Core.Name "type") (Core_.type_ ct))})) codomainType
                           indexedDomains = Lists.zip indices domains
-                      in (Lists.foldl (\body -> \idPair ->  
-                        let i = Pairs.first idPair 
+                      in (Lists.foldl (\body -> \idPair ->
+                        let i = Pairs.first idPair
                             dom = Pairs.second idPair
                             vn = Core.Name (Strings.cat2 "v" (Literals.showInt32 i))
                         in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -227,8 +227,8 @@ etaExpandTermNew tx0 term0 =
                           Core.lambdaDomain = dom,
                           Core.lambdaBody = body})))) fullyApplied (Lists.reverse indexedDomains))) applied)
           rewriteWithArgs =
-                  \args -> \tx -> \term ->  
-                    let recurse = \tx1 -> \term1 -> rewriteWithArgs [] tx1 term1 
+                  \args -> \tx -> \term ->
+                    let recurse = \tx1 -> \term1 -> rewriteWithArgs [] tx1 term1
                         termHeadType =
                                 \tx2 -> \trm2 -> case trm2 of
                                   Core.TermAnnotated v0 -> termHeadType tx2 (Core.annotatedTermBody v0)
@@ -243,8 +243,8 @@ etaExpandTermNew tx0 term0 =
                                   Core.TermVariable v0 -> Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx2))
                                   _ -> Nothing
                         afterRecursion =
-                                \trm ->  
-                                  let arity = termArityWithContext tx trm 
+                                \trm ->
+                                  let arity = termArityWithContext tx trm
                                       hType = termHeadType tx trm
                                   in (expand False args arity hType trm)
                         forField =
@@ -252,8 +252,8 @@ etaExpandTermNew tx0 term0 =
                                   Core.fieldName = (Core.fieldName f),
                                   Core.fieldTerm = (recurse tx (Core.fieldTerm f))}
                         forCaseBranch =
-                                \f ->  
-                                  let branchBody = recurse tx (Core.fieldTerm f) 
+                                \f ->
+                                  let branchBody = recurse tx (Core.fieldTerm f)
                                       arty = termArityWithContext tx branchBody
                                       branchHType = termHeadType tx branchBody
                                   in Core.Field {
@@ -268,24 +268,24 @@ etaExpandTermNew tx0 term0 =
                                     Core.caseStatementCases = (Lists.map forCaseBranch (Core.caseStatementCases v0))})
                                   Core.EliminationWrap v0 -> Core.EliminationWrap v0
                         forMap =
-                                \mp ->  
+                                \mp ->
                                   let forPair = \pr -> (recurse tx (Pairs.first pr), (recurse tx (Pairs.second pr)))
                                   in (Maps.fromList (Lists.map forPair (Maps.toList mp)))
                     in case term of
                       Core.TermAnnotated v0 -> afterRecursion (Core.TermAnnotated (Core.AnnotatedTerm {
                         Core.annotatedTermBody = (recurse tx (Core.annotatedTermBody v0)),
                         Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)}))
-                      Core.TermApplication v0 ->  
+                      Core.TermApplication v0 ->
                         let rhs = rewriteWithArgs [] tx (Core.applicationArgument v0)
                         in (rewriteWithArgs (Lists.cons rhs args) tx (Core.applicationFunction v0))
                       Core.TermEither v0 -> afterRecursion (Core.TermEither (Eithers.either (\l -> Left (recurse tx l)) (\r -> Right (recurse tx r)) v0))
                       Core.TermFunction v0 -> case v0 of
-                        Core.FunctionElimination v1 ->  
+                        Core.FunctionElimination v1 ->
                           let padElim =
                                   case v1 of
                                     Core.EliminationRecord _ -> False
                                     Core.EliminationUnion _ -> True
-                                    Core.EliminationWrap _ -> False 
+                                    Core.EliminationWrap _ -> False
                               elimTerm = Core.TermFunction (Core.FunctionElimination (forElimination v1))
                               elimHeadType =
                                       case v1 of
@@ -294,8 +294,8 @@ etaExpandTermNew tx0 term0 =
                                           Core.functionTypeCodomain = Core.TypeUnit}))
                                         _ -> Nothing
                           in (expand padElim args 1 elimHeadType elimTerm)
-                        Core.FunctionLambda v1 ->  
-                          let tx1 = Schemas.extendGraphForLambda tx v1 
+                        Core.FunctionLambda v1 ->
+                          let tx1 = Schemas.extendGraphForLambda tx v1
                               body = rewriteWithArgs [] tx1 (Core.lambdaBody v1)
                               result =
                                       Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -304,13 +304,13 @@ etaExpandTermNew tx0 term0 =
                                         Core.lambdaBody = body}))
                               arty = termArityWithContext tx result
                           in (expand False args arty Nothing result)
-                        Core.FunctionPrimitive v1 ->  
-                          let arty = termArityWithContext tx term 
+                        Core.FunctionPrimitive v1 ->
+                          let arty = termArityWithContext tx term
                               primType =
                                       Maybes.map (\ts -> Core.typeSchemeType ts) (Maps.lookup v1 (Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx)))))
                           in (expand False args arty primType term)
-                      Core.TermLet v0 ->  
-                        let tx1 = Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v0 
+                      Core.TermLet v0 ->
+                        let tx1 = Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v0
                             mapBinding =
                                     \b -> Core.Binding {
                                       Core.bindingName = (Core.bindingName b),
@@ -333,8 +333,8 @@ etaExpandTermNew tx0 term0 =
                       Core.TermTypeApplication v0 -> afterRecursion (Core.TermTypeApplication (Core.TypeApplicationTerm {
                         Core.typeApplicationTermBody = (recurse tx (Core.typeApplicationTermBody v0)),
                         Core.typeApplicationTermType = (Core.typeApplicationTermType v0)}))
-                      Core.TermTypeLambda v0 ->  
-                        let tx1 = Schemas.extendGraphForTypeLambda tx v0 
+                      Core.TermTypeLambda v0 ->
+                        let tx1 = Schemas.extendGraphForTypeLambda tx v0
                             result =
                                     Core.TermTypeLambda (Core.TypeLambda {
                                       Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
@@ -344,8 +344,8 @@ etaExpandTermNew tx0 term0 =
                         Core.injectionTypeName = (Core.injectionTypeName v0),
                         Core.injectionField = (forField (Core.injectionField v0))}))
                       Core.TermUnit -> Core.TermUnit
-                      Core.TermVariable v0 ->  
-                        let arty = termArityWithContext tx term 
+                      Core.TermVariable v0 ->
+                        let arty = termArityWithContext tx term
                             varType = Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx))
                         in (expand False args arty varType term)
                       Core.TermWrap v0 -> afterRecursion (Core.TermWrap (Core.WrappedTerm {
@@ -371,46 +371,46 @@ etaExpansionArity graph term =
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added.
 etaExpandTypedTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 etaExpandTypedTerm cx tx0 term0 =
-     
+
       let rewrite =
-              \topLevel -> \forced -> \typeArgs -> \recurse -> \tx -> \term ->  
+              \topLevel -> \forced -> \typeArgs -> \recurse -> \tx -> \term ->
                 let rewriteSpine =
                         \term -> case term of
-                          Core.TermAnnotated v0 -> Eithers.bind (rewriteSpine (Core.annotatedTermBody v0)) (\body ->  
+                          Core.TermAnnotated v0 -> Eithers.bind (rewriteSpine (Core.annotatedTermBody v0)) (\body ->
                             let ann = Core.annotatedTermAnnotation v0
                             in (Right (Core.TermAnnotated (Core.AnnotatedTerm {
                               Core.annotatedTermBody = body,
                               Core.annotatedTermAnnotation = ann}))))
-                          Core.TermApplication v0 ->  
+                          Core.TermApplication v0 ->
                             let l = Logic.ifElse False [
                                   Core.TypeLiteral Core.LiteralTypeString] []
                             in (Eithers.bind (rewriteSpine (Core.applicationFunction v0)) (\lhs -> Eithers.bind (rewrite True False l recurse tx (Core.applicationArgument v0)) (\rhs -> Right (Core.TermApplication (Core.Application {
                               Core.applicationFunction = lhs,
                               Core.applicationArgument = rhs})))))
-                          Core.TermTypeApplication v0 -> Eithers.bind (rewriteSpine (Core.typeApplicationTermBody v0)) (\body ->  
+                          Core.TermTypeApplication v0 -> Eithers.bind (rewriteSpine (Core.typeApplicationTermBody v0)) (\body ->
                             let typ = Core.typeApplicationTermType v0
                             in (Right (Core.TermTypeApplication (Core.TypeApplicationTerm {
                               Core.typeApplicationTermBody = body,
                               Core.typeApplicationTermType = typ}))))
-                          _ -> rewrite False False [] recurse tx term 
+                          _ -> rewrite False False [] recurse tx term
                     arityOf =
-                            \tx -> \term ->  
-                              let dflt = Eithers.map (\_tc -> Arity.typeArity (Pairs.first _tc)) (Checking.typeOf cx tx [] term) 
+                            \tx -> \term ->
+                              let dflt = Eithers.map (\_tc -> Arity.typeArity (Pairs.first _tc)) (Checking.typeOf cx tx [] term)
                                   forFunction =
                                           \tx -> \f -> case f of
                                             Core.FunctionElimination _ -> Right 1
-                                            Core.FunctionLambda v0 ->  
+                                            Core.FunctionLambda v0 ->
                                               let txl = Schemas.extendGraphForLambda tx v0
                                               in (arityOf txl (Core.lambdaBody v0))
                                             Core.FunctionPrimitive v0 -> Eithers.map (\_ts -> Arity.typeSchemeArity _ts) (Lexical.requirePrimitiveType cx tx v0)
                               in case term of
                                 Core.TermAnnotated v0 -> arityOf tx (Core.annotatedTermBody v0)
                                 Core.TermFunction v0 -> forFunction tx v0
-                                Core.TermLet v0 ->  
+                                Core.TermLet v0 ->
                                   let txl = Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v0
                                   in (arityOf txl (Core.letBody v0))
                                 Core.TermTypeApplication v0 -> arityOf tx (Core.typeApplicationTermBody v0)
-                                Core.TermTypeLambda v0 ->  
+                                Core.TermTypeLambda v0 ->
                                   let txt = Schemas.extendGraphForTypeLambda tx v0
                                   in (arityOf txt (Core.typeLambdaBody v0))
                                 Core.TermVariable v0 -> Maybes.maybe (Eithers.map (\_tc -> Arity.typeArity (Pairs.first _tc)) (Checking.typeOf cx tx [] (Core.TermVariable v0))) (\t -> Right (Arity.typeArity t)) (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx)))
@@ -429,7 +429,7 @@ etaExpandTypedTerm cx tx0 term0 =
                               Core.typeApplicationTermBody = e,
                               Core.typeApplicationTermType = t})) term typeArgs
                     forceExpansion =
-                            \t -> Eithers.bind (Checking.typeOf cx tx [] t) (\typCx ->  
+                            \t -> Eithers.bind (Checking.typeOf cx tx [] t) (\typCx ->
                               let arity = Arity.typeArity (Pairs.first typCx)
                               in (Right (padn arity (unwind t))))
                     recurseOrForce = \term -> Logic.ifElse forced (forceExpansion term) (recurse tx (unwind term))
@@ -438,8 +438,8 @@ etaExpandTypedTerm cx tx0 term0 =
                               Core.fieldName = (Core.fieldName f),
                               Core.fieldTerm = r}))
                     forCaseStatement =
-                            \cs ->  
-                              let tname = Core.caseStatementTypeName cs 
+                            \cs ->
+                              let tname = Core.caseStatementTypeName cs
                                   dflt = Core.caseStatementDefault cs
                                   cases = Core.caseStatementCases cs
                               in (Eithers.bind (Eithers.mapMaybe (rewrite False False [] recurse tx) dflt) (\rdflt -> Eithers.bind (Eithers.mapList forCase cases) (\rcases -> Right (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
@@ -447,17 +447,17 @@ etaExpandTypedTerm cx tx0 term0 =
                                 Core.caseStatementDefault = rdflt,
                                 Core.caseStatementCases = rcases})))))))
                     forElimination =
-                            \elm ->  
+                            \elm ->
                               let checkBase =
                                       \elm -> case elm of
                                         Core.EliminationUnion v0 -> forCaseStatement v0
                                         _ -> recurse tx term
                               in (Eithers.bind (Eithers.map unwind (checkBase elm)) (\base -> Right (Logic.ifElse (Logic.or topLevel forced) (padn 1 base) base)))
                 in case term of
-                  Core.TermApplication v0 ->  
-                    let lhs = Core.applicationFunction v0 
+                  Core.TermApplication v0 ->
+                    let lhs = Core.applicationFunction v0
                         rhs = Core.applicationArgument v0
-                    in (Eithers.bind (rewrite True False [] recurse tx rhs) (\rhs2 -> Eithers.bind (arityOf tx lhs) (\lhsarity -> Eithers.bind (rewriteSpine lhs) (\lhs2 ->  
+                    in (Eithers.bind (rewrite True False [] recurse tx rhs) (\rhs2 -> Eithers.bind (arityOf tx lhs) (\lhsarity -> Eithers.bind (rewriteSpine lhs) (\lhs2 ->
                       let a2 =
                               Core.TermApplication (Core.Application {
                                 Core.applicationFunction = lhs2,
@@ -465,15 +465,15 @@ etaExpandTypedTerm cx tx0 term0 =
                       in (Right (Logic.ifElse (Equality.gt lhsarity 1) (padn (Math.sub lhsarity 1) a2) a2))))))
                   Core.TermFunction v0 -> case v0 of
                     Core.FunctionElimination v1 -> forElimination v1
-                    Core.FunctionLambda v1 ->  
+                    Core.FunctionLambda v1 ->
                       let txl = Schemas.extendGraphForLambda tx v1
                       in (Eithers.map unwind (recurse txl term))
                     _ -> recurseOrForce term
-                  Core.TermLet v0 ->  
+                  Core.TermLet v0 ->
                     let txlt = Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v0
                     in (recurse txlt term)
                   Core.TermTypeApplication v0 -> rewrite topLevel forced (Lists.cons (Core.typeApplicationTermType v0) typeArgs) recurse tx (Core.typeApplicationTermBody v0)
-                  Core.TermTypeLambda v0 ->  
+                  Core.TermTypeLambda v0 ->
                     let txt = Schemas.extendGraphForTypeLambda tx v0
                     in (recurse txt term)
                   _ -> recurseOrForce term
@@ -482,14 +482,14 @@ etaExpandTypedTerm cx tx0 term0 =
 -- | A term evaluation function which is alternatively lazy or eager
 reduceTerm :: Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 reduceTerm cx graph eager term =
-     
-      let reduce = \eager -> reduceTerm cx graph eager 
+
+      let reduce = \eager -> reduceTerm cx graph eager
           doRecurse =
-                  \eager -> \term ->  
+                  \eager -> \term ->
                     let isNonLambda =
                             \f -> case f of
                               Core.FunctionLambda _ -> False
-                              _ -> True 
+                              _ -> True
                         isNonLambdaTerm =
                                 case term of
                                   Core.TermFunction v0 -> isNonLambda v0
@@ -507,7 +507,7 @@ reduceTerm cx graph eager term =
                     Context.inContextContext = (Context.inContextContext ic)}
           applyElimination =
                   \elm -> \reducedArg -> case elm of
-                    Core.EliminationRecord v0 -> Eithers.bind (Core__.record cx (Core.projectionTypeName v0) graph (Rewriting.deannotateTerm reducedArg)) (\fields ->  
+                    Core.EliminationRecord v0 -> Eithers.bind (Core__.record cx (Core.projectionTypeName v0) graph (Rewriting.deannotateTerm reducedArg)) (\fields ->
                       let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField v0)) fields
                       in (Logic.ifElse (Lists.null matchingFields) (Left (Context.InContext {
                         Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
@@ -517,7 +517,7 @@ reduceTerm cx graph eager term =
                           (Core.unName (Core.projectionTypeName v0)),
                           " record"]))),
                         Context.inContextContext = cx})) (Right (Core.fieldTerm (Lists.head matchingFields)))))
-                    Core.EliminationUnion v0 -> Eithers.bind (Core__.injection cx (Core.caseStatementTypeName v0) graph reducedArg) (\field ->  
+                    Core.EliminationUnion v0 -> Eithers.bind (Core__.injection cx (Core.caseStatementTypeName v0) graph reducedArg) (\field ->
                       let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases v0)
                       in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Left (Context.InContext {
                         Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
@@ -531,25 +531,25 @@ reduceTerm cx graph eager term =
                         Core.applicationArgument = (Core.fieldTerm field)})))))
                     Core.EliminationWrap v0 -> Core__.wrap cx v0 graph reducedArg
           applyIfNullary =
-                  \eager -> \original -> \args ->  
-                    let stripped = Rewriting.deannotateTerm original 
+                  \eager -> \original -> \args ->
+                    let stripped = Rewriting.deannotateTerm original
                         forElimination =
-                                \elm -> \args ->  
-                                  let arg = Lists.head args 
+                                \elm -> \args ->
+                                  let arg = Lists.head args
                                       remainingArgs = Lists.tail args
                                   in (Eithers.bind (reduceArg eager (Rewriting.deannotateTerm arg)) (\reducedArg -> Eithers.bind (Eithers.bind (applyElimination elm reducedArg) (reduce eager)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))
                         forLambda =
-                                \l -> \args ->  
-                                  let param = Core.lambdaParameter l 
+                                \l -> \args ->
+                                  let param = Core.lambdaParameter l
                                       body = Core.lambdaBody l
                                       arg = Lists.head args
                                       remainingArgs = Lists.tail args
                                   in (Eithers.bind (reduce eager (Rewriting.deannotateTerm arg)) (\reducedArg -> Eithers.bind (reduce eager (Rewriting.replaceFreeTermVariable param reducedArg body)) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))
                         forPrimitive =
-                                \prim -> \arity -> \args ->  
-                                  let argList = Lists.take arity args 
+                                \prim -> \arity -> \args ->
+                                  let argList = Lists.take arity args
                                       remainingArgs = Lists.drop arity args
-                                  in (Eithers.bind (Eithers.mapList (reduceArg eager) argList) (\reducedArgs ->  
+                                  in (Eithers.bind (Eithers.mapList (reduceArg eager) argList) (\reducedArgs ->
                                     let strippedArgs = Lists.map Rewriting.deannotateTerm reducedArgs
                                     in (Eithers.bind (Eithers.bimap mapErrorToString (\x -> x) (Graph.primitiveImplementation prim cx graph strippedArgs)) (\primResult -> Eithers.bind (reduce eager primResult) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs)))))
                     in case stripped of
@@ -557,14 +557,14 @@ reduceTerm cx graph eager term =
                       Core.TermFunction v0 -> case v0 of
                         Core.FunctionElimination v1 -> Logic.ifElse (Lists.null args) (Right original) (forElimination v1 args)
                         Core.FunctionLambda v1 -> Logic.ifElse (Lists.null args) (Right original) (forLambda v1 args)
-                        Core.FunctionPrimitive v1 -> Eithers.bind (Lexical.requirePrimitive cx graph v1) (\prim ->  
+                        Core.FunctionPrimitive v1 -> Eithers.bind (Lexical.requirePrimitive cx graph v1) (\prim ->
                           let arity = Arity.primitiveArity prim
                           in (Logic.ifElse (Equality.gt arity (Lists.length args)) (Right (applyToArguments original args)) (forPrimitive prim arity args)))
-                      Core.TermVariable v0 ->  
+                      Core.TermVariable v0 ->
                         let mBinding = Lexical.dereferenceElement graph v0
                         in (Maybes.maybe (Right (applyToArguments original args)) (\binding -> applyIfNullary eager (Core.bindingTerm binding) args) mBinding)
-                      Core.TermLet v0 ->  
-                        let bindings = Core.letBindings v0 
+                      Core.TermLet v0 ->
+                        let bindings = Core.letBindings v0
                             body = Core.letBody v0
                             letExpr =
                                     \b -> Core.TermLet (Core.Let {
@@ -593,8 +593,8 @@ termIsClosed term = Sets.null (Rewriting.freeVariablesInTerm term)
 -- | Whether a term has been fully reduced to a value
 termIsValue :: Core.Term -> Bool
 termIsValue term =
-     
-      let forList = \els -> Lists.foldl (\b -> \t -> Logic.and b (termIsValue t)) True els 
+
+      let forList = \els -> Lists.foldl (\b -> \t -> Logic.and b (termIsValue t)) True els
           checkField = \f -> termIsValue (Core.fieldTerm f)
           checkFields = \fields -> Lists.foldl (\b -> \f -> Logic.and b (checkField f)) True fields
           functionIsValue =

@@ -9,42 +9,42 @@ import java.io.Serializable;
  */
 public class QuantifierFeatures implements Serializable, Comparable<QuantifierFeatures> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.features.QuantifierFeatures");
-  
+
   public static final hydra.core.Name ALL = new hydra.core.Name("all");
-  
+
   public static final hydra.core.Name ANY = new hydra.core.Name("any");
-  
+
   public static final hydra.core.Name NONE = new hydra.core.Name("none");
-  
+
   public static final hydra.core.Name SINGLE = new hydra.core.Name("single");
-  
+
   /**
    * The ALL quantifier
    */
   public final Boolean all;
-  
+
   /**
    * The ANY quantifier
    */
   public final Boolean any;
-  
+
   /**
    * The NONE quantifier
    */
   public final Boolean none;
-  
+
   /**
    * The SINGLE quantifier
    */
   public final Boolean single;
-  
+
   public QuantifierFeatures (Boolean all, Boolean any, Boolean none, Boolean single) {
     this.all = all;
     this.any = any;
     this.none = none;
     this.single = single;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof QuantifierFeatures)) {
@@ -61,12 +61,12 @@ public class QuantifierFeatures implements Serializable, Comparable<QuantifierFe
       this.single,
       o.single);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(all) + 3 * java.util.Objects.hashCode(any) + 5 * java.util.Objects.hashCode(none) + 7 * java.util.Objects.hashCode(single);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(QuantifierFeatures other) {
@@ -85,19 +85,19 @@ public class QuantifierFeatures implements Serializable, Comparable<QuantifierFe
     }
     return ((Comparable) single).compareTo(other.single);
   }
-  
+
   public QuantifierFeatures withAll(Boolean all) {
     return new QuantifierFeatures(all, any, none, single);
   }
-  
+
   public QuantifierFeatures withAny(Boolean any) {
     return new QuantifierFeatures(all, any, none, single);
   }
-  
+
   public QuantifierFeatures withNone(Boolean none) {
     return new QuantifierFeatures(all, any, none, single);
   }
-  
+
   public QuantifierFeatures withSingle(Boolean single) {
     return new QuantifierFeatures(all, any, none, single);
   }

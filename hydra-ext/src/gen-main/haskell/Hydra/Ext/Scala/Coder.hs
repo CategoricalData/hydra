@@ -40,15 +40,15 @@ import qualified Data.Set as S
 -- | Convert a Hydra module to Scala source code
 moduleToScala :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (M.Map String String)
 moduleToScala mod defs cx g =
-    Eithers.bind (constructModule cx g mod defs) (\pkg ->  
+    Eithers.bind (constructModule cx g mod defs) (\pkg ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.writePkg pkg))
       in (Right (Maps.singleton (Names.namespaceToFilePath Util.CaseConventionCamel (Module.FileExtension "scala") (Module.moduleNamespace mod)) s)))
 
 -- | Construct a Scala package from a Hydra module and its definitions
 constructModule :: Context.Context -> Graph.Graph -> Module.Module -> [Module.Definition] -> Either (Context.InContext Error.Error) Meta.Pkg
 constructModule cx g mod defs =
-     
-      let partitioned = Schemas.partitionDefinitions defs 
+
+      let partitioned = Schemas.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
           termDefs = Pairs.second partitioned
           nsName = Module.unNamespace (Module.moduleNamespace mod)
@@ -94,8 +94,8 @@ toPrimImport ns =
 -- | Encode a type definition as a Scala statement
 encodeTypeDefinition :: Context.Context -> t0 -> Module.TypeDefinition -> Either (Context.InContext Error.Error) Meta.Stat
 encodeTypeDefinition cx g td =
-     
-      let name = Module.typeDefinitionName td 
+
+      let name = Module.typeDefinitionName td
           typ = Module.typeDefinitionType td
           lname = Names.localNameOf name
           tname = Meta.Type_Name {
@@ -105,7 +105,7 @@ encodeTypeDefinition cx g td =
           freeVars =
                   Lists.filter (\v -> Logic.not (Lists.elem 46 (Strings.toList (Core.unName v)))) (Sets.toList (Rewriting.freeVariablesInType typ))
           tparams =
-                  Lists.map (\_v ->  
+                  Lists.map (\_v ->
                     let vn = Core.unName _v
                     in Meta.Type_Param {
                       Meta.type_ParamMods = [],
@@ -159,8 +159,8 @@ encodeTypeDefinition cx g td =
 encodeFunction :: Context.Context -> Graph.Graph -> M.Map Core.Name Core.Term -> Core.Function -> Maybe Core.Term -> Either (Context.InContext Error.Error) Meta.Data
 encodeFunction cx g meta fun arg =
     case fun of
-      Core.FunctionLambda v0 ->  
-        let v = Core.unName (Core.lambdaParameter v0) 
+      Core.FunctionLambda v0 ->
+        let v = Core.unName (Core.lambdaParameter v0)
             body = Core.lambdaBody v0
         in (Eithers.bind (encodeTerm cx g body) (\sbody -> Eithers.bind (findSdom cx g meta) (\sdom -> Right (Utils.slambda v sbody sdom))))
       Core.FunctionPrimitive v0 -> Right (Utils.sprim v0)
@@ -169,10 +169,10 @@ encodeFunction cx g meta fun arg =
         Core.EliminationRecord _ -> Left (Context.InContext {
           Context.inContextObject = (Error.ErrorOther (Error.OtherError "unapplied projection not yet supported")),
           Context.inContextContext = cx})
-        Core.EliminationUnion v1 ->  
+        Core.EliminationUnion v1 ->
           let v = "v"
-          in (Eithers.bind (findDomain cx g meta) (\dom -> Eithers.bind (Schemas.fieldTypes cx g dom) (\ftypes ->  
-            let sn = Utils.nameOfType g dom 
+          in (Eithers.bind (findDomain cx g meta) (\dom -> Eithers.bind (Schemas.fieldTypes cx g dom) (\ftypes ->
+            let sn = Utils.nameOfType g dom
                 cases = Core.caseStatementCases v1
             in (Eithers.bind (Eithers.mapList (\f -> encodeCase cx g ftypes sn f) cases) (\scases -> Maybes.maybe (Eithers.bind (findSdom cx g meta) (\sdom -> Right (Utils.slambda v (Meta.DataMatch (Meta.Data_Match {
               Meta.data_MatchExpr = (Utils.sname v),
@@ -214,13 +214,13 @@ encodeLiteral cx g av =
 encodeTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Meta.Data
 encodeTerm cx g term =
     case (Rewriting.deannotateTerm term) of
-      Core.TermApplication v0 ->  
-        let fun = Core.applicationFunction v0 
+      Core.TermApplication v0 ->
+        let fun = Core.applicationFunction v0
             arg = Core.applicationArgument v0
         in case (Rewriting.deannotateTerm fun) of
           Core.TermFunction v1 -> case v1 of
             Core.FunctionElimination v2 -> case v2 of
-              Core.EliminationRecord v3 ->  
+              Core.EliminationRecord v3 ->
                 let fname = Core.unName (Core.projectionField v3)
                 in (Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Meta.DataRef (Meta.Data_RefSelect (Meta.Data_Select {
                   Meta.data_SelectQual = sarg,
@@ -240,14 +240,14 @@ encodeTerm cx g term =
       Core.TermWrap v0 -> encodeTerm cx g (Core.wrappedTermBody v0)
       Core.TermMaybe v0 -> Maybes.maybe (Right (Utils.sname "None")) (\t -> Eithers.bind (encodeTerm cx g t) (\s -> Right (Utils.sapply (Utils.sname "Some") [
         s]))) v0
-      Core.TermRecord v0 ->  
-        let rname = Core.recordTypeName v0 
+      Core.TermRecord v0 ->
+        let rname = Core.recordTypeName v0
             fields = Core.recordFields v0
             n = Utils.scalaTypeName False rname
         in (Eithers.bind (Eithers.mapList (\f -> encodeTerm cx g (Core.fieldTerm f)) fields) (\args -> Right (Utils.sapply (Utils.sname n) args)))
       Core.TermSet v0 -> Eithers.bind (Eithers.mapList (\e -> encodeTerm cx g e) (Sets.toList v0)) (\sels -> Right (Utils.sapply (Utils.sname "Set") sels))
-      Core.TermUnion v0 ->  
-        let sn = Core.injectionTypeName v0 
+      Core.TermUnion v0 ->
+        let sn = Core.injectionTypeName v0
             fn = Core.fieldName (Core.injectionField v0)
             ft = Core.fieldTerm (Core.injectionField v0)
             lhs = Utils.sname (Utils.qualifyUnionFieldName "UNION." (Just sn) fn)
@@ -267,13 +267,13 @@ encodeType cx g t =
     case (Rewriting.deannotateType t) of
       Core.TypeUnit -> Right (Meta.TypeRef (Meta.Type_RefName (Meta.Type_Name {
         Meta.type_NameValue = "Unit"})))
-      Core.TypeEither v0 ->  
-        let lt = Core.eitherTypeLeft v0 
+      Core.TypeEither v0 ->
+        let lt = Core.eitherTypeLeft v0
             rt = Core.eitherTypeRight v0
         in (Eithers.bind (encodeType cx g lt) (\slt -> Eithers.bind (encodeType cx g rt) (\srt -> Right (Utils.stapply2 (Meta.TypeRef (Meta.Type_RefName (Meta.Type_Name {
           Meta.type_NameValue = "Either"}))) slt srt))))
-      Core.TypeFunction v0 ->  
-        let dom = Core.functionTypeDomain v0 
+      Core.TypeFunction v0 ->
+        let dom = Core.functionTypeDomain v0
             cod = Core.functionTypeCodomain v0
         in (Eithers.bind (encodeType cx g dom) (\sdom -> Eithers.bind (encodeType cx g cod) (\scod -> Right (Meta.TypeFunctionType (Meta.Type_FunctionTypeFunction (Meta.Type_Function {
           Meta.type_FunctionParams = [
@@ -325,15 +325,15 @@ encodeType cx g t =
         _ -> Left (Context.InContext {
           Context.inContextObject = (Error.ErrorOther (Error.OtherError "unsupported literal type")),
           Context.inContextContext = cx})
-      Core.TypeMap v0 ->  
-        let kt = Core.mapTypeKeys v0 
+      Core.TypeMap v0 ->
+        let kt = Core.mapTypeKeys v0
             vt = Core.mapTypeValues v0
         in (Eithers.bind (encodeType cx g kt) (\skt -> Eithers.bind (encodeType cx g vt) (\svt -> Right (Utils.stapply2 (Meta.TypeRef (Meta.Type_RefName (Meta.Type_Name {
           Meta.type_NameValue = "Map"}))) skt svt))))
       Core.TypeMaybe v0 -> Eithers.bind (encodeType cx g v0) (\sot -> Right (Utils.stapply1 (Meta.TypeRef (Meta.Type_RefName (Meta.Type_Name {
         Meta.type_NameValue = "Option"}))) sot))
-      Core.TypePair v0 ->  
-        let ft = Core.pairTypeFirst v0 
+      Core.TypePair v0 ->
+        let ft = Core.pairTypeFirst v0
             st = Core.pairTypeSecond v0
         in (Eithers.bind (encodeType cx g ft) (\sft -> Eithers.bind (encodeType cx g st) (\sst -> Right (Utils.stapply2 (Meta.TypeRef (Meta.Type_RefName (Meta.Type_Name {
           Meta.type_NameValue = "Tuple2"}))) sft sst))))
@@ -348,8 +348,8 @@ encodeType cx g t =
       Core.TypeWrap _ -> Left (Context.InContext {
         Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous wrap type")),
         Context.inContextContext = cx})
-      Core.TypeForall v0 ->  
-        let v = Core.forallTypeParameter v0 
+      Core.TypeForall v0 ->
+        let v = Core.forallTypeParameter v0
             body = Core.forallTypeBody v0
         in (Eithers.bind (encodeType cx g body) (\sbody -> Right (Meta.TypeLambda (Meta.Type_Lambda {
           Meta.type_LambdaTparams = [
@@ -370,8 +370,8 @@ encodeUntypeApplicationTerm cx g term =
 -- | Convert a field type to a Scala parameter
 fieldToParam :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Error.Error) Meta.Data_Param
 fieldToParam cx g ft =
-     
-      let fname = Core.unName (Core.fieldTypeName ft) 
+
+      let fname = Core.unName (Core.fieldTypeName ft)
           ftyp = Core.fieldTypeType ft
       in (Eithers.bind (encodeType cx g ftyp) (\sftyp -> Right (Meta.Data_Param {
         Meta.data_ParamMods = [],
@@ -382,8 +382,8 @@ fieldToParam cx g ft =
 -- | Convert a field type to a Scala enum case
 fieldToEnumCase :: Context.Context -> t0 -> String -> [Meta.Type_Param] -> Core.FieldType -> Either (Context.InContext Error.Error) Meta.Stat
 fieldToEnumCase cx g parentName tparams ft =
-     
-      let fname = Core.unName (Core.fieldTypeName ft) 
+
+      let fname = Core.unName (Core.fieldTypeName ft)
           ftyp = Core.fieldTypeType ft
           caseName = Meta.Data_Name {
                 Meta.data_NameValue = (Meta.PredefString fname)}
@@ -421,8 +421,8 @@ fieldToEnumCase cx g parentName tparams ft =
 -- | Convert a type parameter to a type variable reference
 typeParamToTypeVar :: Meta.Type_Param -> Meta.Type
 typeParamToTypeVar tp =
-     
-      let n = Meta.type_ParamName tp 
+
+      let n = Meta.type_ParamName tp
           s =
                   case n of
                     Meta.NameValue v0 -> v0
@@ -434,8 +434,8 @@ typeParamToTypeVar tp =
 -- | Encode a term definition as a Scala statement
 encodeTermDefinition :: Context.Context -> Graph.Graph -> Module.TermDefinition -> Either (Context.InContext Error.Error) Meta.Stat
 encodeTermDefinition cx g td =
-     
-      let name = Module.termDefinitionName td 
+
+      let name = Module.termDefinitionName td
           term = Module.termDefinitionTerm td
           typ = Module.termDefinitionType td
           lname = Names.localNameOf name
@@ -451,13 +451,13 @@ encodeTermDefinition cx g td =
                     Meta.defn_ValRhs = r})
       in (Eithers.bind (encodeTerm cx g term) (\rhs -> case rhs of
         Meta.DataFunctionData v0 -> case (Rewriting.deannotateType typ_) of
-          Core.TypeFunction v1 ->  
-            let cod = Core.functionTypeCodomain v1 
+          Core.TypeFunction v1 ->
+            let cod = Core.functionTypeCodomain v1
                 freeTypeVars = Sets.toList (Rewriting.freeVariablesInType typ_)
                 tparams = Lists.map (\tv -> Utils.stparam tv) freeTypeVars
             in (Eithers.bind (encodeType cx g cod) (\scod -> case v0 of
-              Meta.Data_FunctionDataFunction v2 ->  
-                let params = Meta.data_FunctionParams v2 
+              Meta.Data_FunctionDataFunction v2 ->
+                let params = Meta.data_FunctionParams v2
                     body = Meta.data_FunctionBody v2
                 in (Right (Meta.StatDefn (Meta.DefnDef (Meta.Defn_Def {
                   Meta.defn_DefMods = [],
@@ -493,8 +493,8 @@ findDomain cx g meta =
 -- | Encode a case branch
 encodeCase :: Context.Context -> Graph.Graph -> M.Map Core.Name Core.Type -> Maybe Core.Name -> Core.Field -> Either (Context.InContext Error.Error) Meta.Case
 encodeCase cx g ftypes sn f =
-     
-      let fname = Core.fieldName f 
+
+      let fname = Core.fieldName f
           fterm = Core.fieldTerm f
           dom = Maybes.fromJust (Maps.lookup fname ftypes)
           v = Core.Name "y"
@@ -513,12 +513,12 @@ encodeCase cx g ftypes sn f =
 -- | Apply a variable to a term, performing substitution for lambdas
 applyVar :: Core.Term -> Core.Name -> Core.Term
 applyVar fterm avar =
-     
+
       let v = Core.unName avar
       in case (Rewriting.deannotateTerm fterm) of
         Core.TermFunction v0 -> case v0 of
-          Core.FunctionLambda v1 ->  
-            let lamParam = Core.lambdaParameter v1 
+          Core.FunctionLambda v1 ->
+            let lamParam = Core.lambdaParameter v1
                 lamBody = Core.lambdaBody v1
             in (Logic.ifElse (Rewriting.isFreeVariableInTerm lamParam lamBody) lamBody (Rewriting.substituteVariable lamParam avar lamBody))
           _ -> Core.TermApplication (Core.Application {

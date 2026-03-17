@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class TypeArgumentsOrDiamond implements Serializable, Comparable<TypeArgumentsOrDiamond> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.TypeArgumentsOrDiamond");
-  
+
   public static final hydra.core.Name ARGUMENTS = new hydra.core.Name("arguments");
-  
+
   public static final hydra.core.Name DIAMOND = new hydra.core.Name("diamond");
-  
+
   private TypeArgumentsOrDiamond () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Arguments instance) ;
-    
+
     R visit(Diamond instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(TypeArgumentsOrDiamond instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Arguments instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Diamond instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Arguments extends hydra.ext.java.syntax.TypeArgumentsOrDiamond implements Serializable {
     public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> value;
-    
+
     public Arguments (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Arguments)) {
@@ -54,12 +54,12 @@ public abstract class TypeArgumentsOrDiamond implements Serializable, Comparable
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TypeArgumentsOrDiamond other) {
@@ -70,18 +70,18 @@ public abstract class TypeArgumentsOrDiamond implements Serializable, Comparable
       Arguments o = (Arguments) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Diamond extends hydra.ext.java.syntax.TypeArgumentsOrDiamond implements Serializable {
     public Diamond () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Diamond)) {
@@ -90,12 +90,12 @@ public abstract class TypeArgumentsOrDiamond implements Serializable, Comparable
       Diamond o = (Diamond) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TypeArgumentsOrDiamond other) {
@@ -105,7 +105,7 @@ public abstract class TypeArgumentsOrDiamond implements Serializable, Comparable
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

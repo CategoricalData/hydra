@@ -16,7 +16,7 @@ T0 = TypeVar("T0")
 @lru_cache(1)
 def java_language() -> hydra.coders.Language:
     r"""Language constraints for Java."""
-    
+
     @lru_cache(1)
     def elimination_variants() -> frozenset[hydra.variants.EliminationVariant]:
         return hydra.lib.sets.from_list((hydra.variants.EliminationVariant.RECORD, hydra.variants.EliminationVariant.UNION, hydra.variants.EliminationVariant.WRAP))
@@ -48,7 +48,7 @@ java_max_tuple_length = 9
 @lru_cache(1)
 def reserved_words() -> frozenset[str]:
     r"""A set of reserved words in Java."""
-    
+
     # Special names reserved for use by Hydra.
     special_names = ("Elements",)
     # java.lang classes as of JDK 7

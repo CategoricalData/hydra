@@ -19,7 +19,7 @@ public interface Context {
         hydra.encode.core.Core::term,
         (x).other))))));
   }
-  
+
   static <T0> hydra.core.Term inContext(java.util.function.Function<T0, hydra.core.Term> e, hydra.context.InContext<T0> x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.context.InContext"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("object"), (e).apply(((java.util.function.Function<hydra.context.InContext<T0>, T0>) (projected -> projected.object)).apply(x))),

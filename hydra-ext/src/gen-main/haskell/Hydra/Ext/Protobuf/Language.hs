@@ -30,8 +30,8 @@ protobufLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = typePredicate}} 
-  where 
+        Coders.languageConstraintsTypes = typePredicate}}
+  where
     eliminationVariants = Sets.empty
     literalVariants =
         Sets.fromList [
@@ -81,8 +81,8 @@ protobufLanguage =
           Variants.TypeVariantWrap]
     typePredicate =
         \typ -> case typ of
-          Core.TypeMap v0 ->  
-            let valuesType = Core.mapTypeValues v0 
+          Core.TypeMap v0 ->
+            let valuesType = Core.mapTypeValues v0
                 stripped = Rewriting.deannotateType valuesType
             in case stripped of
               Core.TypeMaybe _ -> False
@@ -92,8 +92,8 @@ protobufLanguage =
 -- | A set of reserved words in Protobuf
 protobufReservedWords :: S.Set String
 protobufReservedWords = Sets.fromList (Lists.concat [
-  fieldNames]) 
-  where 
+  fieldNames])
+  where
     fieldNames =
         [
           "case",

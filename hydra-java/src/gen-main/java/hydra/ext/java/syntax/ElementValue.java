@@ -6,52 +6,52 @@ import java.io.Serializable;
 
 public abstract class ElementValue implements Serializable, Comparable<ElementValue> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ElementValue");
-  
+
   public static final hydra.core.Name CONDITIONAL_EXPRESSION = new hydra.core.Name("conditionalExpression");
-  
+
   public static final hydra.core.Name ELEMENT_VALUE_ARRAY_INITIALIZER = new hydra.core.Name("elementValueArrayInitializer");
-  
+
   public static final hydra.core.Name ANNOTATION = new hydra.core.Name("annotation");
-  
+
   private ElementValue () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(ConditionalExpression instance) ;
-    
+
     R visit(ElementValueArrayInitializer instance) ;
-    
+
     R visit(Annotation instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ElementValue instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(ConditionalExpression instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ElementValueArrayInitializer instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Annotation instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class ConditionalExpression extends hydra.ext.java.syntax.ElementValue implements Serializable {
     public final hydra.ext.java.syntax.ConditionalExpression value;
-    
+
     public ConditionalExpression (hydra.ext.java.syntax.ConditionalExpression value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ConditionalExpression)) {
@@ -62,12 +62,12 @@ public abstract class ElementValue implements Serializable, Comparable<ElementVa
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ElementValue other) {
@@ -78,20 +78,20 @@ public abstract class ElementValue implements Serializable, Comparable<ElementVa
       ConditionalExpression o = (ConditionalExpression) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ElementValueArrayInitializer extends hydra.ext.java.syntax.ElementValue implements Serializable {
     public final hydra.ext.java.syntax.ElementValueArrayInitializer value;
-    
+
     public ElementValueArrayInitializer (hydra.ext.java.syntax.ElementValueArrayInitializer value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ElementValueArrayInitializer)) {
@@ -102,12 +102,12 @@ public abstract class ElementValue implements Serializable, Comparable<ElementVa
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ElementValue other) {
@@ -118,20 +118,20 @@ public abstract class ElementValue implements Serializable, Comparable<ElementVa
       ElementValueArrayInitializer o = (ElementValueArrayInitializer) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Annotation extends hydra.ext.java.syntax.ElementValue implements Serializable {
     public final hydra.ext.java.syntax.Annotation value;
-    
+
     public Annotation (hydra.ext.java.syntax.Annotation value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Annotation)) {
@@ -142,12 +142,12 @@ public abstract class ElementValue implements Serializable, Comparable<ElementVa
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ElementValue other) {
@@ -158,7 +158,7 @@ public abstract class ElementValue implements Serializable, Comparable<ElementVa
       Annotation o = (Annotation) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

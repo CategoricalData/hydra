@@ -21,8 +21,8 @@ import qualified Data.Set as S
 bimap :: Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 bimap cx g firstFun secondFun pairTerm =
     case pairTerm of
-      Core.TermPair v0 ->  
-        let fst = Pairs.first v0 
+      Core.TermPair v0 ->
+        let fst = Pairs.first v0
             snd = Pairs.second v0
         in (Right (Core.TermPair (Core.TermApplication (Core.Application {
           Core.applicationFunction = firstFun,

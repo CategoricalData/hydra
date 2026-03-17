@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class RegexSequence implements Serializable, Comparable<RegexSequence> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.RegexSequence");
-  
+
   public static final hydra.core.Name PATH = new hydra.core.Name("path");
-  
+
   public static final hydra.core.Name QUANTIFIER = new hydra.core.Name("quantifier");
-  
+
   /**
    * The path to which the quantifier applies
    */
   public final hydra.query.Path path;
-  
+
   /**
    * The quantifier
    */
   public final hydra.query.RegexQuantifier quantifier;
-  
+
   public RegexSequence (hydra.query.Path path, hydra.query.RegexQuantifier quantifier) {
     this.path = path;
     this.quantifier = quantifier;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof RegexSequence)) {
@@ -41,12 +41,12 @@ public class RegexSequence implements Serializable, Comparable<RegexSequence> {
       this.quantifier,
       o.quantifier);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(path) + 3 * java.util.Objects.hashCode(quantifier);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(RegexSequence other) {
@@ -57,11 +57,11 @@ public class RegexSequence implements Serializable, Comparable<RegexSequence> {
     }
     return ((Comparable) quantifier).compareTo(other.quantifier);
   }
-  
+
   public RegexSequence withPath(hydra.query.Path path) {
     return new RegexSequence(path, quantifier);
   }
-  
+
   public RegexSequence withQuantifier(hydra.query.RegexQuantifier quantifier) {
     return new RegexSequence(path, quantifier);
   }

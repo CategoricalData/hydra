@@ -6,30 +6,30 @@ import java.io.Serializable;
 
 public class TryExceptStatement implements Serializable, Comparable<TryExceptStatement> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.TryExceptStatement");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public static final hydra.core.Name EXCEPTS = new hydra.core.Name("excepts");
-  
+
   public static final hydra.core.Name ELSE = new hydra.core.Name("else");
-  
+
   public static final hydra.core.Name FINALLY = new hydra.core.Name("finally");
-  
+
   public final hydra.ext.python.syntax.Block body;
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.ExceptBlock> excepts;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Block> else_;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_;
-  
+
   public TryExceptStatement (hydra.ext.python.syntax.Block body, hydra.util.ConsList<hydra.ext.python.syntax.ExceptBlock> excepts, hydra.util.Maybe<hydra.ext.python.syntax.Block> else_, hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_) {
     this.body = body;
     this.excepts = excepts;
     this.else_ = else_;
     this.finally_ = finally_;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TryExceptStatement)) {
@@ -46,12 +46,12 @@ public class TryExceptStatement implements Serializable, Comparable<TryExceptSta
       this.finally_,
       o.finally_);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(body) + 3 * java.util.Objects.hashCode(excepts) + 5 * java.util.Objects.hashCode(else_) + 7 * java.util.Objects.hashCode(finally_);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TryExceptStatement other) {
@@ -70,19 +70,19 @@ public class TryExceptStatement implements Serializable, Comparable<TryExceptSta
     }
     return ((Comparable) finally_).compareTo(other.finally_);
   }
-  
+
   public TryExceptStatement withBody(hydra.ext.python.syntax.Block body) {
     return new TryExceptStatement(body, excepts, else_, finally_);
   }
-  
+
   public TryExceptStatement withExcepts(hydra.util.ConsList<hydra.ext.python.syntax.ExceptBlock> excepts) {
     return new TryExceptStatement(body, excepts, else_, finally_);
   }
-  
+
   public TryExceptStatement withElse(hydra.util.Maybe<hydra.ext.python.syntax.Block> else_) {
     return new TryExceptStatement(body, excepts, else_, finally_);
   }
-  
+
   public TryExceptStatement withFinally(hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_) {
     return new TryExceptStatement(body, excepts, else_, finally_);
   }

@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class Term implements Serializable, Comparable<Term> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Term");
-  
+
   public static final hydra.core.Name LHS = new hydra.core.Name("lhs");
-  
+
   public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.TermLhs> lhs;
-  
+
   public final hydra.ext.python.syntax.Factor rhs;
-  
+
   public Term (hydra.util.Maybe<hydra.ext.python.syntax.TermLhs> lhs, hydra.ext.python.syntax.Factor rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Term)) {
@@ -32,12 +32,12 @@ public class Term implements Serializable, Comparable<Term> {
       this.rhs,
       o.rhs);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(lhs) + 3 * java.util.Objects.hashCode(rhs);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Term other) {
@@ -48,11 +48,11 @@ public class Term implements Serializable, Comparable<Term> {
     }
     return ((Comparable) rhs).compareTo(other.rhs);
   }
-  
+
   public Term withLhs(hydra.util.Maybe<hydra.ext.python.syntax.TermLhs> lhs) {
     return new Term(lhs, rhs);
   }
-  
+
   public Term withRhs(hydra.ext.python.syntax.Factor rhs) {
     return new Term(lhs, rhs);
   }

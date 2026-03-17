@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class Comparison implements Serializable, Comparable<Comparison> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Comparison");
-  
+
   public static final hydra.core.Name LHS = new hydra.core.Name("lhs");
-  
+
   public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
-  
+
   public final hydra.ext.python.syntax.BitwiseOr lhs;
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair> rhs;
-  
+
   public Comparison (hydra.ext.python.syntax.BitwiseOr lhs, hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair> rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Comparison)) {
@@ -32,12 +32,12 @@ public class Comparison implements Serializable, Comparable<Comparison> {
       this.rhs,
       o.rhs);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(lhs) + 3 * java.util.Objects.hashCode(rhs);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Comparison other) {
@@ -48,11 +48,11 @@ public class Comparison implements Serializable, Comparable<Comparison> {
     }
     return ((Comparable) rhs).compareTo(other.rhs);
   }
-  
+
   public Comparison withLhs(hydra.ext.python.syntax.BitwiseOr lhs) {
     return new Comparison(lhs, rhs);
   }
-  
+
   public Comparison withRhs(hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair> rhs) {
     return new Comparison(lhs, rhs);
   }

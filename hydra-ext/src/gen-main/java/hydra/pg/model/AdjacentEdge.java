@@ -9,42 +9,42 @@ import java.io.Serializable;
  */
 public class AdjacentEdge<V> implements Serializable, Comparable<AdjacentEdge<V>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.AdjacentEdge");
-  
+
   public static final hydra.core.Name LABEL = new hydra.core.Name("label");
-  
+
   public static final hydra.core.Name ID = new hydra.core.Name("id");
-  
+
   public static final hydra.core.Name VERTEX = new hydra.core.Name("vertex");
-  
+
   public static final hydra.core.Name PROPERTIES = new hydra.core.Name("properties");
-  
+
   /**
    * The label of the edge
    */
   public final hydra.pg.model.EdgeLabel label;
-  
+
   /**
    * The unique identifier of the edge
    */
   public final V id;
-  
+
   /**
    * The id of the other vertex adjacent to the edge
    */
   public final V vertex;
-  
+
   /**
    * A key/value map of edge properties
    */
   public final hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties;
-  
+
   public AdjacentEdge (hydra.pg.model.EdgeLabel label, V id, V vertex, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties) {
     this.label = label;
     this.id = id;
     this.vertex = vertex;
     this.properties = properties;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof AdjacentEdge)) {
@@ -61,12 +61,12 @@ public class AdjacentEdge<V> implements Serializable, Comparable<AdjacentEdge<V>
       this.properties,
       o.properties);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(label) + 3 * java.util.Objects.hashCode(id) + 5 * java.util.Objects.hashCode(vertex) + 7 * java.util.Objects.hashCode(properties);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AdjacentEdge other) {
@@ -85,19 +85,19 @@ public class AdjacentEdge<V> implements Serializable, Comparable<AdjacentEdge<V>
     }
     return ((Comparable) properties).compareTo(other.properties);
   }
-  
+
   public AdjacentEdge withLabel(hydra.pg.model.EdgeLabel label) {
     return new AdjacentEdge(label, id, vertex, properties);
   }
-  
+
   public AdjacentEdge withId(V id) {
     return new AdjacentEdge(label, id, vertex, properties);
   }
-  
+
   public AdjacentEdge withVertex(V vertex) {
     return new AdjacentEdge(label, id, vertex, properties);
   }
-  
+
   public AdjacentEdge withProperties(hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties) {
     return new AdjacentEdge(label, id, vertex, properties);
   }

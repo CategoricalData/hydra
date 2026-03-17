@@ -12,68 +12,68 @@ public interface Arity {
       public Integer visit(hydra.core.Function.Elimination ignored) {
         return 1;
       }
-      
+
       @Override
       public Integer visit(hydra.core.Function.Lambda arg_) {
         return hydra.lib.math.Add.apply(
           1,
           hydra.arity.Arity.termArity((arg_).value.body));
       }
-      
+
       @Override
       public Integer visit(hydra.core.Function.Primitive ignored) {
         return 42;
       }
     });
   }
-  
+
   static Integer primitiveArity(hydra.graph.Primitive arg_) {
     return hydra.arity.Arity.typeArity((arg_).type.type);
   }
-  
+
   static Integer termArity(hydra.core.Term v1) {
     return (v1).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public Integer otherwise(hydra.core.Term instance) {
         return 0;
       }
-      
+
       @Override
       public Integer visit(hydra.core.Term.Application arg_) {
         return hydra.lib.math.Sub.apply(
           hydra.arity.Arity.termArity((arg_).value.function),
           1);
       }
-      
+
       @Override
       public Integer visit(hydra.core.Term.Function v12) {
         return hydra.arity.Arity.functionArity((v12).value);
       }
     });
   }
-  
+
   static Integer typeArity(hydra.core.Type v1) {
     return (v1).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Integer otherwise(hydra.core.Type instance) {
         return 0;
       }
-      
+
       @Override
       public Integer visit(hydra.core.Type.Annotated arg_) {
         return hydra.arity.Arity.typeArity((arg_).value.body);
       }
-      
+
       @Override
       public Integer visit(hydra.core.Type.Application arg_) {
         return hydra.arity.Arity.typeArity((arg_).value.function);
       }
-      
+
       @Override
       public Integer visit(hydra.core.Type.Forall arg_) {
         return hydra.arity.Arity.typeArity((arg_).value.body);
       }
-      
+
       @Override
       public Integer visit(hydra.core.Type.Function f) {
         return hydra.lib.math.Add.apply(
@@ -82,33 +82,33 @@ public interface Arity {
       }
     });
   }
-  
+
   static Integer typeSchemeArity(hydra.core.TypeScheme arg_) {
     return hydra.arity.Arity.typeArity((arg_).type);
   }
-  
+
   static hydra.util.ConsList<hydra.core.Type> uncurryType(hydra.core.Type t) {
     return (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Type> otherwise(hydra.core.Type instance) {
         return hydra.util.ConsList.of(t);
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Annotated arg_) {
         return hydra.arity.Arity.uncurryType((arg_).value.body);
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Application arg_) {
         return hydra.arity.Arity.uncurryType((arg_).value.function);
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Forall arg_) {
         return hydra.arity.Arity.uncurryType((arg_).value.body);
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Function ft) {
         return hydra.lib.lists.Cons.apply(

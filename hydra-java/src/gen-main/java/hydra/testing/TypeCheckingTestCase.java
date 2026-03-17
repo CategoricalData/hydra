@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class TypeCheckingTestCase implements Serializable, Comparable<TypeCheckingTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TypeCheckingTestCase");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   public static final hydra.core.Name OUTPUT_TERM = new hydra.core.Name("outputTerm");
-  
+
   public static final hydra.core.Name OUTPUT_TYPE = new hydra.core.Name("outputType");
-  
+
   /**
    * An untyped term on which to perform inference, then type check
    */
   public final hydra.core.Term input;
-  
+
   /**
    * The expected fully annotated System F term after type inference
    */
   public final hydra.core.Term outputTerm;
-  
+
   /**
    * The expected inferred type
    */
   public final hydra.core.Type outputType;
-  
+
   public TypeCheckingTestCase (hydra.core.Term input, hydra.core.Term outputTerm, hydra.core.Type outputType) {
     this.input = input;
     this.outputTerm = outputTerm;
     this.outputType = outputType;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TypeCheckingTestCase)) {
@@ -51,12 +51,12 @@ public class TypeCheckingTestCase implements Serializable, Comparable<TypeChecki
       this.outputType,
       o.outputType);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(outputTerm) + 5 * java.util.Objects.hashCode(outputType);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TypeCheckingTestCase other) {
@@ -71,15 +71,15 @@ public class TypeCheckingTestCase implements Serializable, Comparable<TypeChecki
     }
     return ((Comparable) outputType).compareTo(other.outputType);
   }
-  
+
   public TypeCheckingTestCase withInput(hydra.core.Term input) {
     return new TypeCheckingTestCase(input, outputTerm, outputType);
   }
-  
+
   public TypeCheckingTestCase withOutputTerm(hydra.core.Term outputTerm) {
     return new TypeCheckingTestCase(input, outputTerm, outputType);
   }
-  
+
   public TypeCheckingTestCase withOutputType(hydra.core.Type outputType) {
     return new TypeCheckingTestCase(input, outputTerm, outputType);
   }

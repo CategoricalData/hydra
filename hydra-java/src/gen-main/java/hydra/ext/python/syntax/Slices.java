@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class Slices implements Serializable, Comparable<Slices> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Slices");
-  
+
   public static final hydra.core.Name HEAD = new hydra.core.Name("head");
-  
+
   public static final hydra.core.Name TAIL = new hydra.core.Name("tail");
-  
+
   public final hydra.ext.python.syntax.Slice head;
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.SliceOrStarredExpression> tail;
-  
+
   public Slices (hydra.ext.python.syntax.Slice head, hydra.util.ConsList<hydra.ext.python.syntax.SliceOrStarredExpression> tail) {
     this.head = head;
     this.tail = tail;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Slices)) {
@@ -32,12 +32,12 @@ public class Slices implements Serializable, Comparable<Slices> {
       this.tail,
       o.tail);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(head) + 3 * java.util.Objects.hashCode(tail);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Slices other) {
@@ -48,11 +48,11 @@ public class Slices implements Serializable, Comparable<Slices> {
     }
     return ((Comparable) tail).compareTo(other.tail);
   }
-  
+
   public Slices withHead(hydra.ext.python.syntax.Slice head) {
     return new Slices(head, tail);
   }
-  
+
   public Slices withTail(hydra.util.ConsList<hydra.ext.python.syntax.SliceOrStarredExpression> tail) {
     return new Slices(head, tail);
   }

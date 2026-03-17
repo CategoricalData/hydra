@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class StringLiteralLong1_Elmt_Sequence implements Serializable, Comparable<StringLiteralLong1_Elmt_Sequence> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence");
-  
+
   public static final hydra.core.Name ALTS = new hydra.core.Name("Alts");
-  
+
   public static final hydra.core.Name REGEX = new hydra.core.Name("regex");
-  
+
   public final hydra.util.Maybe<hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> Alts;
-  
+
   public final String regex;
-  
+
   public StringLiteralLong1_Elmt_Sequence (hydra.util.Maybe<hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> Alts, String regex) {
     this.Alts = Alts;
     this.regex = regex;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof StringLiteralLong1_Elmt_Sequence)) {
@@ -32,12 +32,12 @@ public class StringLiteralLong1_Elmt_Sequence implements Serializable, Comparabl
       this.regex,
       o.regex);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(Alts) + 3 * java.util.Objects.hashCode(regex);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StringLiteralLong1_Elmt_Sequence other) {
@@ -48,11 +48,11 @@ public class StringLiteralLong1_Elmt_Sequence implements Serializable, Comparabl
     }
     return ((Comparable) regex).compareTo(other.regex);
   }
-  
+
   public StringLiteralLong1_Elmt_Sequence withAlts(hydra.util.Maybe<hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option> Alts) {
     return new StringLiteralLong1_Elmt_Sequence(Alts, regex);
   }
-  
+
   public StringLiteralLong1_Elmt_Sequence withRegex(String regex) {
     return new StringLiteralLong1_Elmt_Sequence(Alts, regex);
   }

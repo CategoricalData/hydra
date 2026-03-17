@@ -11,7 +11,7 @@ public interface Formatting {
       hydra.lib.strings.ToUpper::apply,
       v1);
   }
-  
+
   static String convertCase(hydra.util.CaseConvention from, hydra.util.CaseConvention to, String original) {
     java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, java.util.function.Function<Integer, hydra.util.ConsList<hydra.util.ConsList<Integer>>>> splitOnUppercase = (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, java.util.function.Function<Integer, hydra.util.ConsList<hydra.util.ConsList<Integer>>>>) (acc -> (java.util.function.Function<Integer, hydra.util.ConsList<hydra.util.ConsList<Integer>>>) (c -> hydra.lib.lists.Concat2.apply(
       hydra.lib.logic.IfElse.lazy(
@@ -37,17 +37,17 @@ public interface Formatting {
       public hydra.util.ConsList<String> visit(hydra.util.CaseConvention.Camel ignored) {
         return byCaps.get();
       }
-      
+
       @Override
       public hydra.util.ConsList<String> visit(hydra.util.CaseConvention.Pascal ignored) {
         return byCaps.get();
       }
-      
+
       @Override
       public hydra.util.ConsList<String> visit(hydra.util.CaseConvention.LowerSnake ignored) {
         return byUnderscores;
       }
-      
+
       @Override
       public hydra.util.ConsList<String> visit(hydra.util.CaseConvention.UpperSnake ignored) {
         return byUnderscores;
@@ -60,14 +60,14 @@ public interface Formatting {
           (java.util.function.Function<String, String>) (arg_ -> hydra.formatting.Formatting.capitalize(hydra.lib.strings.ToLower.apply(arg_))),
           parts)));
       }
-      
+
       @Override
       public String visit(hydra.util.CaseConvention.Pascal ignored) {
         return hydra.lib.strings.Cat.apply(hydra.lib.lists.Map.apply(
           (java.util.function.Function<String, String>) (arg_ -> hydra.formatting.Formatting.capitalize(hydra.lib.strings.ToLower.apply(arg_))),
           parts));
       }
-      
+
       @Override
       public String visit(hydra.util.CaseConvention.LowerSnake ignored) {
         return hydra.lib.strings.Intercalate.apply(
@@ -76,7 +76,7 @@ public interface Formatting {
             hydra.lib.strings.ToLower::apply,
             parts));
       }
-      
+
       @Override
       public String visit(hydra.util.CaseConvention.UpperSnake ignored) {
         return hydra.lib.strings.Intercalate.apply(
@@ -87,34 +87,34 @@ public interface Formatting {
       }
     });
   }
-  
+
   static String convertCaseCamelToLowerSnake(String v1) {
     return hydra.formatting.Formatting.convertCase(
       new hydra.util.CaseConvention.Camel(),
       new hydra.util.CaseConvention.LowerSnake(),
       v1);
   }
-  
+
   static String convertCaseCamelToUpperSnake(String v1) {
     return hydra.formatting.Formatting.convertCase(
       new hydra.util.CaseConvention.Camel(),
       new hydra.util.CaseConvention.UpperSnake(),
       v1);
   }
-  
+
   static String convertCasePascalToUpperSnake(String v1) {
     return hydra.formatting.Formatting.convertCase(
       new hydra.util.CaseConvention.Pascal(),
       new hydra.util.CaseConvention.UpperSnake(),
       v1);
   }
-  
+
   static String decapitalize(String v1) {
     return hydra.formatting.Formatting.mapFirstLetter(
       hydra.lib.strings.ToLower::apply,
       v1);
   }
-  
+
   static String escapeWithUnderscore(hydra.util.PersistentSet<String> reserved, String s) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.sets.Member.apply(
@@ -125,7 +125,7 @@ public interface Formatting {
         "_"),
       () -> s);
   }
-  
+
   static String indentLines(String s) {
     java.util.function.Function<String, String> indent = (java.util.function.Function<String, String>) (l -> hydra.lib.strings.Cat2.apply(
       "    ",
@@ -134,7 +134,7 @@ public interface Formatting {
       indent,
       hydra.lib.strings.Lines.apply(s)));
   }
-  
+
   static String javaStyleComment(String s) {
     return hydra.lib.strings.Cat2.apply(
       hydra.lib.strings.Cat2.apply(
@@ -144,7 +144,7 @@ public interface Formatting {
         s),
       "\n */");
   }
-  
+
   static String mapFirstLetter(java.util.function.Function<String, String> mapping, String s) {
     hydra.util.ConsList<Integer> list = hydra.lib.strings.ToList.apply(s);
     hydra.util.Lazy<String> firstLetter = new hydra.util.Lazy<>(() -> (mapping).apply(hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.lists.Head.apply(list)))));
@@ -155,7 +155,7 @@ public interface Formatting {
         firstLetter.get(),
         hydra.lib.strings.FromList.apply(hydra.lib.lists.Tail.apply(list))));
   }
-  
+
   static String nonAlnumToUnderscores(String input) {
     java.util.function.Function<Integer, Boolean> isAlnum = (java.util.function.Function<Integer, Boolean>) (c -> hydra.lib.logic.Or.apply(
       hydra.lib.logic.And.apply(
@@ -201,13 +201,13 @@ public interface Formatting {
       hydra.lib.strings.ToList.apply(input)));
     return hydra.lib.strings.FromList.apply(hydra.lib.lists.Reverse.apply(hydra.lib.pairs.First.apply(result.get())));
   }
-  
+
   static String sanitizeWithUnderscores(hydra.util.PersistentSet<String> reserved, String s) {
     return hydra.formatting.Formatting.escapeWithUnderscore(
       reserved,
       hydra.formatting.Formatting.nonAlnumToUnderscores(s));
   }
-  
+
   static <T0> String showList(java.util.function.Function<T0, String> f, hydra.util.ConsList<T0> els) {
     return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "[",
@@ -218,7 +218,7 @@ public interface Formatting {
           els)),
       "]"));
   }
-  
+
   static String stripLeadingAndTrailingWhitespace(String s) {
     return hydra.lib.strings.FromList.apply(hydra.lib.lists.DropWhile.apply(
       hydra.lib.chars.IsSpace::apply,
@@ -226,7 +226,7 @@ public interface Formatting {
         hydra.lib.chars.IsSpace::apply,
         hydra.lib.lists.Reverse.apply(hydra.lib.strings.ToList.apply(s))))));
   }
-  
+
   static String withCharacterAliases(String original) {
     hydra.util.Lazy<hydra.util.PersistentMap<Integer, String>> aliases = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
       (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(32, "sp"))),
@@ -275,7 +275,7 @@ public interface Formatting {
         alias,
         hydra.lib.strings.ToList.apply(original)))));
   }
-  
+
   static String wrapLine(Integer maxlen, String input) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.ConsList<hydra.util.ConsList<Integer>>>>> helper = new java.util.concurrent.atomic.AtomicReference<>();
     helper.set((java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.ConsList<hydra.util.ConsList<Integer>>>>) (prev -> (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.ConsList<hydra.util.ConsList<Integer>>>) (rem -> {

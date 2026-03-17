@@ -24,24 +24,24 @@ import qualified Data.Set as S
 -- | Given a list of adjacency lists represented as (key, [key]) pairs, construct a graph along with a function mapping each vertex (an Int) back to its original key.
 adjacencyListsToGraph :: Ord t0 => ([(t0, [t0])] -> (M.Map Int [Int], (Int -> t0)))
 adjacencyListsToGraph edges0 =
-     
-      let sortedEdges = Lists.sortOn Pairs.first edges0 
+
+      let sortedEdges = Lists.sortOn Pairs.first edges0
           indexedEdges = Lists.zip (Math.range 0 (Lists.length sortedEdges)) sortedEdges
           keyToVertex =
-                  Maps.fromList (Lists.map (\vkNeighbors ->  
-                    let v = Pairs.first vkNeighbors 
+                  Maps.fromList (Lists.map (\vkNeighbors ->
+                    let v = Pairs.first vkNeighbors
                         kNeighbors = Pairs.second vkNeighbors
                         k = Pairs.first kNeighbors
                     in (k, v)) indexedEdges)
           vertexMap =
-                  Maps.fromList (Lists.map (\vkNeighbors ->  
-                    let v = Pairs.first vkNeighbors 
+                  Maps.fromList (Lists.map (\vkNeighbors ->
+                    let v = Pairs.first vkNeighbors
                         kNeighbors = Pairs.second vkNeighbors
                         k = Pairs.first kNeighbors
                     in (v, k)) indexedEdges)
           graph =
-                  Maps.fromList (Lists.map (\vkNeighbors ->  
-                    let v = Pairs.first vkNeighbors 
+                  Maps.fromList (Lists.map (\vkNeighbors ->
+                    let v = Pairs.first vkNeighbors
                         kNeighbors = Pairs.second vkNeighbors
                         neighbors = Pairs.second kNeighbors
                     in (v, (Maybes.mapMaybe (\k -> Maps.lookup k keyToVertex) neighbors))) indexedEdges)
@@ -51,8 +51,8 @@ adjacencyListsToGraph edges0 =
 -- | Compute the strongly connected components of the given graph. The components are returned in reverse topological order
 stronglyConnectedComponents :: M.Map Int [Int] -> [[Int]]
 stronglyConnectedComponents graph =
-     
-      let verts = Maps.keys graph 
+
+      let verts = Maps.keys graph
           finalState =
                   Lists.foldl (\st -> \v -> Logic.ifElse (Maps.member v (Topology.tarjanStateIndices st)) st (strongConnect graph v st)) initialState verts
       in (Lists.reverse (Lists.map Lists.sort (Topology.tarjanStateSccs finalState)))
@@ -71,10 +71,10 @@ initialState =
 -- | Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component
 popStackUntil :: Int -> Topology.TarjanState -> ([Int], Topology.TarjanState)
 popStackUntil v st0 =
-     
+
       let go =
-              \acc -> \st ->  
-                let x = Lists.head (Topology.tarjanStateStack st) 
+              \acc -> \st ->
+                let x = Lists.head (Topology.tarjanStateStack st)
                     xs = Lists.tail (Topology.tarjanStateStack st)
                     newSt =
                             Topology.TarjanState {
@@ -99,8 +99,8 @@ popStackUntil v st0 =
 -- | Visit a vertex and recursively explore its successors
 strongConnect :: M.Map Int [Int] -> Int -> Topology.TarjanState -> Topology.TarjanState
 strongConnect graph v st =
-     
-      let i = Topology.tarjanStateCounter st 
+
+      let i = Topology.tarjanStateCounter st
           newSt =
                   Topology.TarjanState {
                     Topology.tarjanStateCounter = (Math.add i 1),
@@ -111,10 +111,10 @@ strongConnect graph v st =
                     Topology.tarjanStateSccs = (Topology.tarjanStateSccs st)}
           neighbors = Maps.findWithDefault [] v graph
           processNeighbor =
-                  \st_ -> \w ->  
+                  \st_ -> \w ->
                     let lowLink =
-                            \s ->  
-                              let lowV1 = Maps.findWithDefault Constants.maxInt32 v (Topology.tarjanStateLowLinks s) 
+                            \s ->
+                              let lowV1 = Maps.findWithDefault Constants.maxInt32 v (Topology.tarjanStateLowLinks s)
                                   idx_w = Maps.findWithDefault Constants.maxInt32 w (Topology.tarjanStateIndices s)
                               in Topology.TarjanState {
                                 Topology.tarjanStateCounter = (Topology.tarjanStateCounter s),
@@ -123,8 +123,8 @@ strongConnect graph v st =
                                 Topology.tarjanStateStack = (Topology.tarjanStateStack s),
                                 Topology.tarjanStateOnStack = (Topology.tarjanStateOnStack s),
                                 Topology.tarjanStateSccs = (Topology.tarjanStateSccs s)}
-                    in (Logic.ifElse (Logic.not (Maps.member w (Topology.tarjanStateIndices st_))) ( 
-                      let stAfter = strongConnect graph w st_ 
+                    in (Logic.ifElse (Logic.not (Maps.member w (Topology.tarjanStateIndices st_))) (
+                      let stAfter = strongConnect graph w st_
                           lowV2 = Maps.findWithDefault Constants.maxInt32 v (Topology.tarjanStateLowLinks stAfter)
                           low_w = Maps.findWithDefault Constants.maxInt32 w (Topology.tarjanStateLowLinks stAfter)
                       in Topology.TarjanState {
@@ -137,8 +137,8 @@ strongConnect graph v st =
           stAfterNeighbors = Lists.foldl processNeighbor newSt neighbors
           low_v = Maps.findWithDefault Constants.maxInt32 v (Topology.tarjanStateLowLinks stAfterNeighbors)
           idx_v = Maps.findWithDefault Constants.maxInt32 v (Topology.tarjanStateIndices stAfterNeighbors)
-      in (Logic.ifElse (Equality.equal low_v idx_v) ( 
-        let compResult = popStackUntil v stAfterNeighbors 
+      in (Logic.ifElse (Equality.equal low_v idx_v) (
+        let compResult = popStackUntil v stAfterNeighbors
             comp = Pairs.first compResult
             stPopped = Pairs.second compResult
         in Topology.TarjanState {

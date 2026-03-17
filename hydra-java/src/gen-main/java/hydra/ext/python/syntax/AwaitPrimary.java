@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class AwaitPrimary implements Serializable, Comparable<AwaitPrimary> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.AwaitPrimary");
-  
+
   public static final hydra.core.Name AWAIT = new hydra.core.Name("await");
-  
+
   public static final hydra.core.Name PRIMARY = new hydra.core.Name("primary");
-  
+
   public final Boolean await;
-  
+
   public final hydra.ext.python.syntax.Primary primary;
-  
+
   public AwaitPrimary (Boolean await, hydra.ext.python.syntax.Primary primary) {
     this.await = await;
     this.primary = primary;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof AwaitPrimary)) {
@@ -32,12 +32,12 @@ public class AwaitPrimary implements Serializable, Comparable<AwaitPrimary> {
       this.primary,
       o.primary);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(await) + 3 * java.util.Objects.hashCode(primary);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AwaitPrimary other) {
@@ -48,11 +48,11 @@ public class AwaitPrimary implements Serializable, Comparable<AwaitPrimary> {
     }
     return ((Comparable) primary).compareTo(other.primary);
   }
-  
+
   public AwaitPrimary withAwait(Boolean await) {
     return new AwaitPrimary(await, primary);
   }
-  
+
   public AwaitPrimary withPrimary(hydra.ext.python.syntax.Primary primary) {
     return new AwaitPrimary(await, primary);
   }

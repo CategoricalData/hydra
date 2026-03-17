@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class IndentedExpression implements Serializable, Comparable<IndentedExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ast.IndentedExpression");
-  
+
   public static final hydra.core.Name STYLE = new hydra.core.Name("style");
-  
+
   public static final hydra.core.Name EXPR = new hydra.core.Name("expr");
-  
+
   /**
    * The indentation style
    */
   public final hydra.ast.IndentStyle style;
-  
+
   /**
    * The expression to be indented
    */
   public final hydra.ast.Expr expr;
-  
+
   public IndentedExpression (hydra.ast.IndentStyle style, hydra.ast.Expr expr) {
     this.style = style;
     this.expr = expr;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof IndentedExpression)) {
@@ -41,12 +41,12 @@ public class IndentedExpression implements Serializable, Comparable<IndentedExpr
       this.expr,
       o.expr);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(style) + 3 * java.util.Objects.hashCode(expr);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(IndentedExpression other) {
@@ -57,11 +57,11 @@ public class IndentedExpression implements Serializable, Comparable<IndentedExpr
     }
     return ((Comparable) expr).compareTo(other.expr);
   }
-  
+
   public IndentedExpression withStyle(hydra.ast.IndentStyle style) {
     return new IndentedExpression(style, expr);
   }
-  
+
   public IndentedExpression withExpr(hydra.ast.Expr expr) {
     return new IndentedExpression(style, expr);
   }

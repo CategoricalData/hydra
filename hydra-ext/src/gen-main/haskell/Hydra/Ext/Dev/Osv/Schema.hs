@@ -12,7 +12,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-data Credited = 
+data Credited =
   Credited {
     creditedName :: String,
     creditedContact :: (Maybe [Url])}
@@ -25,14 +25,14 @@ _Credited_name = Core.Name "name"
 _Credited_contact = Core.Name "contact"
 
 -- | One of a limited set of defined ecosystems, currently Go, npm, OSS-Fuzz, PyPI, RubyGems, crates.io, Packagist, Maven, NuGet, Linux, Debian, Hex, Android, GitHub Actions, or Pub
-newtype Ecosystem = 
+newtype Ecosystem =
   Ecosystem {
     unEcosystem :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Ecosystem = Core.Name "hydra.ext.dev.osv.schema.Ecosystem"
 
-data Entry = 
+data Entry =
   Entry {
     -- | The default value is '1.0.0', matching version 1.0 of the OSV Schema
     entrySchemaVersion :: (Maybe OsvVersion),
@@ -78,7 +78,7 @@ _Entry_references = Core.Name "references"
 
 _Entry_credits = Core.Name "credits"
 
-data Event = 
+data Event =
   EventIntroduced VersionOrZero |
   EventFixed Version |
   EventLastAffected Version |
@@ -96,7 +96,7 @@ _Event_lastAffected = Core.Name "lastAffected"
 _Event_limit = Core.Name "limit"
 
 -- | A string of the format <DB>-<ENTRYID>, where DB names the database and ENTRYID is in the format used by the database. For example: OSV-2020-111, CVE-2021-3114, or GHSA-vp9c-fpxx-744v
-newtype Id = 
+newtype Id =
   Id {
     unId :: String}
   deriving (Eq, Ord, Read, Show)
@@ -104,7 +104,7 @@ newtype Id =
 _Id = Core.Name "hydra.ext.dev.osv.schema.Id"
 
 -- | CommonMark markdown text
-newtype Markdown = 
+newtype Markdown =
   Markdown {
     unMarkdown :: String}
   deriving (Eq, Ord, Read, Show)
@@ -112,14 +112,14 @@ newtype Markdown =
 _Markdown = Core.Name "hydra.ext.dev.osv.schema.Markdown"
 
 -- | A string which follows the SemVer 2.0.0 format, with no leading 'v' prefix
-newtype OsvVersion = 
+newtype OsvVersion =
   OsvVersion {
     unOsvVersion :: String}
   deriving (Eq, Ord, Read, Show)
 
 _OsvVersion = Core.Name "hydra.ext.dev.osv.schema.OsvVersion"
 
-data Package = 
+data Package =
   Package {
     packageEcosystem :: Ecosystem,
     packageName :: String,
@@ -134,7 +134,7 @@ _Package_name = Core.Name "name"
 
 _Package_purl = Core.Name "purl"
 
-data PackageVersions = 
+data PackageVersions =
   PackageVersions {
     packageVersionsPackage :: Package,
     packageVersionsRanges :: (Maybe [VersionRange]),
@@ -149,7 +149,7 @@ _PackageVersions_ranges = Core.Name "ranges"
 
 _PackageVersions_versions = Core.Name "versions"
 
-data Reference = 
+data Reference =
   Reference {
     referenceType :: ReferenceType,
     referenceUrl :: Url}
@@ -162,14 +162,14 @@ _Reference_type = Core.Name "type"
 _Reference_url = Core.Name "url"
 
 -- | One of ADVISORY, ARTICLE, REPORT, FIX, GIT, PACKAGE, EVIDENCE, or WEB
-newtype ReferenceType = 
+newtype ReferenceType =
   ReferenceType {
     unReferenceType :: String}
   deriving (Eq, Ord, Read, Show)
 
 _ReferenceType = Core.Name "hydra.ext.dev.osv.schema.ReferenceType"
 
-data Severity = 
+data Severity =
   Severity {
     severityType :: SeverityType,
     severityScore :: SeverityScore}
@@ -181,7 +181,7 @@ _Severity_type = Core.Name "type"
 
 _Severity_score = Core.Name "score"
 
-newtype SeverityScore = 
+newtype SeverityScore =
   SeverityScore {
     unSeverityScore :: String}
   deriving (Eq, Ord, Read, Show)
@@ -189,7 +189,7 @@ newtype SeverityScore =
 _SeverityScore = Core.Name "hydra.ext.dev.osv.schema.SeverityScore"
 
 -- | The value CVSS_V3, or future supported types
-newtype SeverityType = 
+newtype SeverityType =
   SeverityType {
     unSeverityType :: String}
   deriving (Eq, Ord, Read, Show)
@@ -197,14 +197,14 @@ newtype SeverityType =
 _SeverityType = Core.Name "hydra.ext.dev.osv.schema.SeverityType"
 
 -- | An RFC3339-formatted timestamp in UTC (ending in 'Z')
-newtype Timestamp = 
+newtype Timestamp =
   Timestamp {
     unTimestamp :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Timestamp = Core.Name "hydra.ext.dev.osv.schema.Timestamp"
 
-newtype Url = 
+newtype Url =
   Url {
     unUrl :: String}
   deriving (Eq, Ord, Read, Show)
@@ -212,7 +212,7 @@ newtype Url =
 _Url = Core.Name "hydra.ext.dev.osv.schema.Url"
 
 -- | A version number in an ecosystem-specific format
-newtype Version = 
+newtype Version =
   Version {
     unVersion :: String}
   deriving (Eq, Ord, Read, Show)
@@ -220,7 +220,7 @@ newtype Version =
 _Version = Core.Name "hydra.ext.dev.osv.schema.Version"
 
 -- | An ecosystem-specific version number, or the string '*' representing infinity
-newtype VersionOrStar = 
+newtype VersionOrStar =
   VersionOrStar {
     unVersionOrStar :: String}
   deriving (Eq, Ord, Read, Show)
@@ -228,14 +228,14 @@ newtype VersionOrStar =
 _VersionOrStar = Core.Name "hydra.ext.dev.osv.schema.VersionOrStar"
 
 -- | An ecosystem-specific version number, or the string '0' representing a version that sorts before any other version
-newtype VersionOrZero = 
+newtype VersionOrZero =
   VersionOrZero {
     unVersionOrZero :: String}
   deriving (Eq, Ord, Read, Show)
 
 _VersionOrZero = Core.Name "hydra.ext.dev.osv.schema.VersionOrZero"
 
-data VersionRange = 
+data VersionRange =
   VersionRange {
     versionRangeType :: VersionType,
     versionRangeRepo :: (Maybe Url),
@@ -251,7 +251,7 @@ _VersionRange_repo = Core.Name "repo"
 _VersionRange_events = Core.Name "events"
 
 -- | One of the values 'SEMVER', 'ECOSYSTEM', or 'GIT
-newtype VersionType = 
+newtype VersionType =
   VersionType {
     unVersionType :: String}
   deriving (Eq, Ord, Read, Show)

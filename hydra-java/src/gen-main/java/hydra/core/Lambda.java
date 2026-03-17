@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class Lambda implements Serializable, Comparable<Lambda> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Lambda");
-  
+
   public static final hydra.core.Name PARAMETER = new hydra.core.Name("parameter");
-  
+
   public static final hydra.core.Name DOMAIN = new hydra.core.Name("domain");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   /**
    * The parameter of the lambda
    */
   public final hydra.core.Name parameter;
-  
+
   /**
    * An optional domain type for the lambda
    */
   public final hydra.util.Maybe<hydra.core.Type> domain;
-  
+
   /**
    * The body of the lambda
    */
   public final hydra.core.Term body;
-  
+
   public Lambda (hydra.core.Name parameter, hydra.util.Maybe<hydra.core.Type> domain, hydra.core.Term body) {
     this.parameter = parameter;
     this.domain = domain;
     this.body = body;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Lambda)) {
@@ -51,12 +51,12 @@ public class Lambda implements Serializable, Comparable<Lambda> {
       this.body,
       o.body);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(parameter) + 3 * java.util.Objects.hashCode(domain) + 5 * java.util.Objects.hashCode(body);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Lambda other) {
@@ -71,15 +71,15 @@ public class Lambda implements Serializable, Comparable<Lambda> {
     }
     return ((Comparable) body).compareTo(other.body);
   }
-  
+
   public Lambda withParameter(hydra.core.Name parameter) {
     return new Lambda(parameter, domain, body);
   }
-  
+
   public Lambda withDomain(hydra.util.Maybe<hydra.core.Type> domain) {
     return new Lambda(parameter, domain, body);
   }
-  
+
   public Lambda withBody(hydra.core.Term body) {
     return new Lambda(parameter, domain, body);
   }

@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A JavaScript identifier (variable, function, class name, etc.)
-newtype Identifier = 
+newtype Identifier =
   Identifier {
     unIdentifier :: String}
   deriving (Eq, Ord, Read, Show)
@@ -26,7 +26,7 @@ type QualifiedName = [Identifier]
 _QualifiedName = Core.Name "hydra.ext.javaScript.syntax.QualifiedName"
 
 -- | A literal value
-data Literal = 
+data Literal =
   -- | A string literal
   LiteralString StringLiteral |
   -- | A numeric literal
@@ -60,7 +60,7 @@ _Literal_bigInt = Core.Name "bigInt"
 _Literal_template = Core.Name "template"
 
 -- | A string literal with quote style
-data StringLiteral = 
+data StringLiteral =
   StringLiteral {
     -- | The string value
     stringLiteralValue :: String,
@@ -75,7 +75,7 @@ _StringLiteral_value = Core.Name "value"
 _StringLiteral_singleQuote = Core.Name "singleQuote"
 
 -- | A template literal (backtick string with interpolations)
-data TemplateLiteral = 
+data TemplateLiteral =
   TemplateLiteral {
     -- | The static string parts
     templateLiteralQuasis :: [TemplateElement],
@@ -90,7 +90,7 @@ _TemplateLiteral_quasis = Core.Name "quasis"
 _TemplateLiteral_expressions = Core.Name "expressions"
 
 -- | A static part of a template literal
-data TemplateElement = 
+data TemplateElement =
   TemplateElement {
     -- | The raw string value
     templateElementValue :: String,
@@ -105,7 +105,7 @@ _TemplateElement_value = Core.Name "value"
 _TemplateElement_tail = Core.Name "tail"
 
 -- | A numeric literal (integer or floating-point)
-data NumericLiteral = 
+data NumericLiteral =
   -- | An integer literal
   NumericLiteralInteger I.Int64 |
   -- | A floating-point literal
@@ -119,7 +119,7 @@ _NumericLiteral_integer = Core.Name "integer"
 _NumericLiteral_float = Core.Name "float"
 
 -- | A type annotation (for JSDoc comments or TypeScript)
-newtype TypeAnnotation = 
+newtype TypeAnnotation =
   TypeAnnotation {
     unTypeAnnotation :: TypeExpression}
   deriving (Eq, Ord, Read, Show)
@@ -127,7 +127,7 @@ newtype TypeAnnotation =
 _TypeAnnotation = Core.Name "hydra.ext.javaScript.syntax.TypeAnnotation"
 
 -- | A type expression
-data TypeExpression = 
+data TypeExpression =
   -- | A named type (e.g., 'string', 'number', 'MyClass')
   TypeExpressionIdentifier Identifier |
   -- | A literal type (e.g., 'hello', 42)
@@ -149,7 +149,7 @@ data TypeExpression =
   -- | The 'void' type
   TypeExpressionVoid  |
   -- | The 'never' type
-  TypeExpressionNever 
+  TypeExpressionNever
   deriving (Eq, Ord, Read, Show)
 
 _TypeExpression = Core.Name "hydra.ext.javaScript.syntax.TypeExpression"
@@ -177,7 +177,7 @@ _TypeExpression_void = Core.Name "void"
 _TypeExpression_never = Core.Name "never"
 
 -- | A function type expression
-data FunctionTypeExpression = 
+data FunctionTypeExpression =
   FunctionTypeExpression {
     -- | Type parameters (generics)
     functionTypeExpressionTypeParameters :: [TypeParameter],
@@ -196,7 +196,7 @@ _FunctionTypeExpression_parameters = Core.Name "parameters"
 _FunctionTypeExpression_returnType = Core.Name "returnType"
 
 -- | An array type (T[])
-newtype ArrayTypeExpression = 
+newtype ArrayTypeExpression =
   ArrayTypeExpression {
     unArrayTypeExpression :: TypeExpression}
   deriving (Eq, Ord, Read, Show)
@@ -209,7 +209,7 @@ type UnionTypeExpression = [TypeExpression]
 _UnionTypeExpression = Core.Name "hydra.ext.javaScript.syntax.UnionTypeExpression"
 
 -- | A parameterized type (e.g., Array<T>, Map<K, V>)
-data ParameterizedTypeExpression = 
+data ParameterizedTypeExpression =
   ParameterizedTypeExpression {
     parameterizedTypeExpressionBase :: TypeExpression,
     parameterizedTypeExpressionArguments :: [TypeExpression]}
@@ -227,7 +227,7 @@ type ObjectTypeExpression = [PropertySignature]
 _ObjectTypeExpression = Core.Name "hydra.ext.javaScript.syntax.ObjectTypeExpression"
 
 -- | A property signature in an object type
-data PropertySignature = 
+data PropertySignature =
   PropertySignature {
     -- | Property name
     propertySignatureName :: Identifier,
@@ -250,7 +250,7 @@ _PropertySignature_optional = Core.Name "optional"
 _PropertySignature_readonly = Core.Name "readonly"
 
 -- | A type parameter (generic)
-data TypeParameter = 
+data TypeParameter =
   TypeParameter {
     -- | Parameter name
     typeParameterName :: Identifier,
@@ -269,7 +269,7 @@ _TypeParameter_constraint = Core.Name "constraint"
 _TypeParameter_default = Core.Name "default"
 
 -- | A JavaScript expression
-data Expression = 
+data Expression =
   -- | A simple identifier
   ExpressionIdentifier Identifier |
   -- | A literal value
@@ -361,7 +361,7 @@ type ObjectExpression = [Property]
 _ObjectExpression = Core.Name "hydra.ext.javaScript.syntax.ObjectExpression"
 
 -- | A function expression
-data FunctionExpression = 
+data FunctionExpression =
   FunctionExpression {
     -- | Optional function name
     functionExpressionId :: (Maybe Identifier),
@@ -388,7 +388,7 @@ _FunctionExpression_async = Core.Name "async"
 _FunctionExpression_generator = Core.Name "generator"
 
 -- | An arrow function expression
-data ArrowFunctionExpression = 
+data ArrowFunctionExpression =
   ArrowFunctionExpression {
     -- | Function parameters
     arrowFunctionExpressionParams :: [Pattern],
@@ -407,7 +407,7 @@ _ArrowFunctionExpression_body = Core.Name "body"
 _ArrowFunctionExpression_async = Core.Name "async"
 
 -- | The body of an arrow function (expression or block)
-data ArrowFunctionBody = 
+data ArrowFunctionBody =
   ArrowFunctionBodyExpression Expression |
   ArrowFunctionBodyBlock BlockStatement
   deriving (Eq, Ord, Read, Show)
@@ -419,7 +419,7 @@ _ArrowFunctionBody_expression = Core.Name "expression"
 _ArrowFunctionBody_block = Core.Name "block"
 
 -- | A function call expression
-data CallExpression = 
+data CallExpression =
   CallExpression {
     -- | The function being called
     callExpressionCallee :: Expression,
@@ -438,7 +438,7 @@ _CallExpression_arguments = Core.Name "arguments"
 _CallExpression_optional = Core.Name "optional"
 
 -- | A member access expression
-data MemberExpression = 
+data MemberExpression =
   MemberExpression {
     -- | The object
     memberExpressionObject :: Expression,
@@ -461,7 +461,7 @@ _MemberExpression_computed = Core.Name "computed"
 _MemberExpression_optional = Core.Name "optional"
 
 -- | A conditional (ternary) expression: test ? consequent : alternate
-data ConditionalExpression = 
+data ConditionalExpression =
   ConditionalExpression {
     conditionalExpressionTest :: Expression,
     conditionalExpressionConsequent :: Expression,
@@ -477,7 +477,7 @@ _ConditionalExpression_consequent = Core.Name "consequent"
 _ConditionalExpression_alternate = Core.Name "alternate"
 
 -- | A binary operation expression
-data BinaryExpression = 
+data BinaryExpression =
   BinaryExpression {
     binaryExpressionOperator :: BinaryOperator,
     binaryExpressionLeft :: Expression,
@@ -493,7 +493,7 @@ _BinaryExpression_left = Core.Name "left"
 _BinaryExpression_right = Core.Name "right"
 
 -- | A unary operation expression
-data UnaryExpression = 
+data UnaryExpression =
   UnaryExpression {
     unaryExpressionOperator :: UnaryOperator,
     unaryExpressionArgument :: Expression,
@@ -510,7 +510,7 @@ _UnaryExpression_argument = Core.Name "argument"
 _UnaryExpression_prefix = Core.Name "prefix"
 
 -- | An assignment expression
-data AssignmentExpression = 
+data AssignmentExpression =
   AssignmentExpression {
     assignmentExpressionOperator :: AssignmentOperator,
     assignmentExpressionLeft :: Pattern,
@@ -526,7 +526,7 @@ _AssignmentExpression_left = Core.Name "left"
 _AssignmentExpression_right = Core.Name "right"
 
 -- | A spread element (...x)
-newtype SpreadElement = 
+newtype SpreadElement =
   SpreadElement {
     unSpreadElement :: Expression}
   deriving (Eq, Ord, Read, Show)
@@ -534,7 +534,7 @@ newtype SpreadElement =
 _SpreadElement = Core.Name "hydra.ext.javaScript.syntax.SpreadElement"
 
 -- | A property in an object expression
-data Property = 
+data Property =
   Property {
     -- | Property key (identifier, literal, or computed)
     propertyKey :: Expression,
@@ -561,13 +561,13 @@ _Property_computed = Core.Name "computed"
 _Property_shorthand = Core.Name "shorthand"
 
 -- | The kind of an object property
-data PropertyKind = 
+data PropertyKind =
   -- | A normal property initialization
   PropertyKindInit  |
   -- | A getter
   PropertyKindGet  |
   -- | A setter
-  PropertyKindSet 
+  PropertyKindSet
   deriving (Eq, Ord, Read, Show)
 
 _PropertyKind = Core.Name "hydra.ext.javaScript.syntax.PropertyKind"
@@ -579,13 +579,13 @@ _PropertyKind_get = Core.Name "get"
 _PropertyKind_set = Core.Name "set"
 
 -- | An element in an array expression
-data ArrayElement = 
+data ArrayElement =
   -- | A regular expression element
   ArrayElementExpression Expression |
   -- | A spread element ...x
   ArrayElementSpread SpreadElement |
   -- | An empty slot (elision)
-  ArrayElementHole 
+  ArrayElementHole
   deriving (Eq, Ord, Read, Show)
 
 _ArrayElement = Core.Name "hydra.ext.javaScript.syntax.ArrayElement"
@@ -597,7 +597,7 @@ _ArrayElement_spread = Core.Name "spread"
 _ArrayElement_hole = Core.Name "hole"
 
 -- | A binding pattern (for destructuring)
-data Pattern = 
+data Pattern =
   -- | A simple identifier binding
   PatternIdentifier Identifier |
   -- | An object destructuring pattern
@@ -623,7 +623,7 @@ _Pattern_assignment = Core.Name "assignment"
 _Pattern_rest = Core.Name "rest"
 
 -- | An object destructuring pattern {a, b: c}
-data ObjectPattern = 
+data ObjectPattern =
   ObjectPattern {
     -- | The property patterns
     objectPatternProperties :: [ObjectPatternProperty]}
@@ -634,7 +634,7 @@ _ObjectPattern = Core.Name "hydra.ext.javaScript.syntax.ObjectPattern"
 _ObjectPattern_properties = Core.Name "properties"
 
 -- | A property in an object pattern
-data ObjectPatternProperty = 
+data ObjectPatternProperty =
   ObjectPatternPropertyProperty Property |
   ObjectPatternPropertyRest RestElement
   deriving (Eq, Ord, Read, Show)
@@ -651,7 +651,7 @@ type ArrayPattern = [Maybe Pattern]
 _ArrayPattern = Core.Name "hydra.ext.javaScript.syntax.ArrayPattern"
 
 -- | A pattern with default value (param = default)
-data AssignmentPattern = 
+data AssignmentPattern =
   AssignmentPattern {
     assignmentPatternLeft :: Pattern,
     assignmentPatternRight :: Expression}
@@ -664,7 +664,7 @@ _AssignmentPattern_left = Core.Name "left"
 _AssignmentPattern_right = Core.Name "right"
 
 -- | A rest element pattern (...x)
-newtype RestElement = 
+newtype RestElement =
   RestElement {
     unRestElement :: Pattern}
   deriving (Eq, Ord, Read, Show)
@@ -672,7 +672,7 @@ newtype RestElement =
 _RestElement = Core.Name "hydra.ext.javaScript.syntax.RestElement"
 
 -- | A JavaScript statement
-data Statement = 
+data Statement =
   -- | An expression statement
   StatementExpression Expression |
   -- | A block statement
@@ -758,7 +758,7 @@ _Statement_classDeclaration = Core.Name "classDeclaration"
 _Statement_labeled = Core.Name "labeled"
 
 -- | A labeled statement
-data LabeledStatement = 
+data LabeledStatement =
   LabeledStatement {
     labeledStatementLabel :: Identifier,
     labeledStatementBody :: Statement}
@@ -776,7 +776,7 @@ type BlockStatement = [Statement]
 _BlockStatement = Core.Name "hydra.ext.javaScript.syntax.BlockStatement"
 
 -- | A variable declaration (var, let, const)
-data VariableDeclaration = 
+data VariableDeclaration =
   VariableDeclaration {
     variableDeclarationKind :: VariableKind,
     variableDeclarationDeclarations :: [VariableDeclarator]}
@@ -789,7 +789,7 @@ _VariableDeclaration_kind = Core.Name "kind"
 _VariableDeclaration_declarations = Core.Name "declarations"
 
 -- | A variable declarator (id = init)
-data VariableDeclarator = 
+data VariableDeclarator =
   VariableDeclarator {
     variableDeclaratorId :: Pattern,
     variableDeclaratorInit :: (Maybe Expression)}
@@ -802,10 +802,10 @@ _VariableDeclarator_id = Core.Name "id"
 _VariableDeclarator_init = Core.Name "init"
 
 -- | The kind of variable declaration
-data VariableKind = 
+data VariableKind =
   VariableKindVar  |
   VariableKindLet  |
-  VariableKindConst 
+  VariableKindConst
   deriving (Eq, Ord, Read, Show)
 
 _VariableKind = Core.Name "hydra.ext.javaScript.syntax.VariableKind"
@@ -817,7 +817,7 @@ _VariableKind_let = Core.Name "let"
 _VariableKind_const = Core.Name "const"
 
 -- | An if statement
-data IfStatement = 
+data IfStatement =
   IfStatement {
     ifStatementTest :: Expression,
     ifStatementConsequent :: Statement,
@@ -833,7 +833,7 @@ _IfStatement_consequent = Core.Name "consequent"
 _IfStatement_alternate = Core.Name "alternate"
 
 -- | A switch statement
-data SwitchStatement = 
+data SwitchStatement =
   SwitchStatement {
     switchStatementDiscriminant :: Expression,
     switchStatementCases :: [SwitchCase]}
@@ -846,7 +846,7 @@ _SwitchStatement_discriminant = Core.Name "discriminant"
 _SwitchStatement_cases = Core.Name "cases"
 
 -- | A case clause in a switch statement
-data SwitchCase = 
+data SwitchCase =
   SwitchCase {
     -- | The test expression (Nothing for default)
     switchCaseTest :: (Maybe Expression),
@@ -861,7 +861,7 @@ _SwitchCase_test = Core.Name "test"
 _SwitchCase_consequent = Core.Name "consequent"
 
 -- | A for statement
-data ForStatement = 
+data ForStatement =
   ForStatement {
     -- | Initialization
     forStatementInit :: (Maybe ForInit),
@@ -883,7 +883,7 @@ _ForStatement_update = Core.Name "update"
 _ForStatement_body = Core.Name "body"
 
 -- | Initialization clause of a for statement
-data ForInit = 
+data ForInit =
   ForInitVariable VariableDeclaration |
   ForInitExpression Expression
   deriving (Eq, Ord, Read, Show)
@@ -895,7 +895,7 @@ _ForInit_variable = Core.Name "variable"
 _ForInit_expression = Core.Name "expression"
 
 -- | A for-in statement
-data ForInStatement = 
+data ForInStatement =
   ForInStatement {
     forInStatementLeft :: ForInLeft,
     forInStatementRight :: Expression,
@@ -911,7 +911,7 @@ _ForInStatement_right = Core.Name "right"
 _ForInStatement_body = Core.Name "body"
 
 -- | Left-hand side of a for-in or for-of statement
-data ForInLeft = 
+data ForInLeft =
   ForInLeftVariable VariableDeclaration |
   ForInLeftPattern Pattern
   deriving (Eq, Ord, Read, Show)
@@ -923,7 +923,7 @@ _ForInLeft_variable = Core.Name "variable"
 _ForInLeft_pattern = Core.Name "pattern"
 
 -- | A for-of statement
-data ForOfStatement = 
+data ForOfStatement =
   ForOfStatement {
     -- | Whether this is a for-await-of
     forOfStatementAwait :: Bool,
@@ -943,7 +943,7 @@ _ForOfStatement_right = Core.Name "right"
 _ForOfStatement_body = Core.Name "body"
 
 -- | A while statement
-data WhileStatement = 
+data WhileStatement =
   WhileStatement {
     whileStatementTest :: Expression,
     whileStatementBody :: Statement}
@@ -956,7 +956,7 @@ _WhileStatement_test = Core.Name "test"
 _WhileStatement_body = Core.Name "body"
 
 -- | A do-while statement
-data DoWhileStatement = 
+data DoWhileStatement =
   DoWhileStatement {
     doWhileStatementBody :: Statement,
     doWhileStatementTest :: Expression}
@@ -969,7 +969,7 @@ _DoWhileStatement_body = Core.Name "body"
 _DoWhileStatement_test = Core.Name "test"
 
 -- | A try statement
-data TryStatement = 
+data TryStatement =
   TryStatement {
     tryStatementBlock :: BlockStatement,
     tryStatementHandler :: (Maybe CatchClause),
@@ -985,7 +985,7 @@ _TryStatement_handler = Core.Name "handler"
 _TryStatement_finalizer = Core.Name "finalizer"
 
 -- | A catch clause
-data CatchClause = 
+data CatchClause =
   CatchClause {
     -- | The catch parameter (can be omitted in ES2019+)
     catchClauseParam :: (Maybe Pattern),
@@ -999,7 +999,7 @@ _CatchClause_param = Core.Name "param"
 _CatchClause_body = Core.Name "body"
 
 -- | A throw statement
-newtype ThrowStatement = 
+newtype ThrowStatement =
   ThrowStatement {
     unThrowStatement :: Expression}
   deriving (Eq, Ord, Read, Show)
@@ -1022,7 +1022,7 @@ type ContinueStatement = (Maybe Identifier)
 _ContinueStatement = Core.Name "hydra.ext.javaScript.syntax.ContinueStatement"
 
 -- | A function declaration
-data FunctionDeclaration = 
+data FunctionDeclaration =
   FunctionDeclaration {
     -- | Function name
     functionDeclarationId :: Identifier,
@@ -1049,7 +1049,7 @@ _FunctionDeclaration_async = Core.Name "async"
 _FunctionDeclaration_generator = Core.Name "generator"
 
 -- | A class declaration
-data ClassDeclaration = 
+data ClassDeclaration =
   ClassDeclaration {
     -- | Class name
     classDeclarationId :: Identifier,
@@ -1073,7 +1073,7 @@ type ClassBody = [MethodDefinition]
 _ClassBody = Core.Name "hydra.ext.javaScript.syntax.ClassBody"
 
 -- | A method definition in a class
-data MethodDefinition = 
+data MethodDefinition =
   MethodDefinition {
     -- | Method name
     methodDefinitionKey :: Expression,
@@ -1100,11 +1100,11 @@ _MethodDefinition_computed = Core.Name "computed"
 _MethodDefinition_static = Core.Name "static"
 
 -- | The kind of a class method
-data MethodKind = 
+data MethodKind =
   MethodKindConstructor  |
   MethodKindMethod  |
   MethodKindGet  |
-  MethodKindSet 
+  MethodKindSet
   deriving (Eq, Ord, Read, Show)
 
 _MethodKind = Core.Name "hydra.ext.javaScript.syntax.MethodKind"
@@ -1118,7 +1118,7 @@ _MethodKind_get = Core.Name "get"
 _MethodKind_set = Core.Name "set"
 
 -- | A JavaScript program (module)
-data Program = 
+data Program =
   Program {
     -- | The module items
     programBody :: [ModuleItem],
@@ -1133,9 +1133,9 @@ _Program_body = Core.Name "body"
 _Program_sourceType = Core.Name "sourceType"
 
 -- | Whether the program is a module or script
-data SourceType = 
+data SourceType =
   SourceTypeModule  |
-  SourceTypeScript 
+  SourceTypeScript
   deriving (Eq, Ord, Read, Show)
 
 _SourceType = Core.Name "hydra.ext.javaScript.syntax.SourceType"
@@ -1145,7 +1145,7 @@ _SourceType_module = Core.Name "module"
 _SourceType_script = Core.Name "script"
 
 -- | A top-level item in a module
-data ModuleItem = 
+data ModuleItem =
   ModuleItemStatement Statement |
   ModuleItemImport ImportDeclaration |
   ModuleItemExport ExportDeclaration
@@ -1160,7 +1160,7 @@ _ModuleItem_import = Core.Name "import"
 _ModuleItem_export = Core.Name "export"
 
 -- | An import declaration
-data ImportDeclaration = 
+data ImportDeclaration =
   ImportDeclaration {
     -- | What to import
     importDeclarationSpecifiers :: [ImportClause],
@@ -1175,7 +1175,7 @@ _ImportDeclaration_specifiers = Core.Name "specifiers"
 _ImportDeclaration_source = Core.Name "source"
 
 -- | An import clause (named, default, or namespace import)
-data ImportClause = 
+data ImportClause =
   ImportClauseNamed ImportSpecifier |
   ImportClauseDefault ImportDefaultSpecifier |
   ImportClauseNamespace ImportNamespaceSpecifier
@@ -1190,7 +1190,7 @@ _ImportClause_default = Core.Name "default"
 _ImportClause_namespace = Core.Name "namespace"
 
 -- | A named import specifier (import {x as y} from ...)
-data ImportSpecifier = 
+data ImportSpecifier =
   ImportSpecifier {
     importSpecifierImported :: Identifier,
     importSpecifierLocal :: Identifier}
@@ -1203,7 +1203,7 @@ _ImportSpecifier_imported = Core.Name "imported"
 _ImportSpecifier_local = Core.Name "local"
 
 -- | A default import specifier (import x from ...)
-newtype ImportDefaultSpecifier = 
+newtype ImportDefaultSpecifier =
   ImportDefaultSpecifier {
     unImportDefaultSpecifier :: Identifier}
   deriving (Eq, Ord, Read, Show)
@@ -1211,7 +1211,7 @@ newtype ImportDefaultSpecifier =
 _ImportDefaultSpecifier = Core.Name "hydra.ext.javaScript.syntax.ImportDefaultSpecifier"
 
 -- | A namespace import specifier (import * as x from ...)
-newtype ImportNamespaceSpecifier = 
+newtype ImportNamespaceSpecifier =
   ImportNamespaceSpecifier {
     unImportNamespaceSpecifier :: Identifier}
   deriving (Eq, Ord, Read, Show)
@@ -1219,7 +1219,7 @@ newtype ImportNamespaceSpecifier =
 _ImportNamespaceSpecifier = Core.Name "hydra.ext.javaScript.syntax.ImportNamespaceSpecifier"
 
 -- | An export declaration
-data ExportDeclaration = 
+data ExportDeclaration =
   -- | Named exports (export {x, y as z})
   ExportDeclarationNamed NamedExport |
   -- | Default export (export default ...)
@@ -1241,7 +1241,7 @@ _ExportDeclaration_declaration = Core.Name "declaration"
 _ExportDeclaration_all = Core.Name "all"
 
 -- | Named exports (export {x, y as z})
-data NamedExport = 
+data NamedExport =
   NamedExport {
     namedExportSpecifiers :: [ExportSpecifier],
     namedExportSource :: (Maybe StringLiteral)}
@@ -1254,7 +1254,7 @@ _NamedExport_specifiers = Core.Name "specifiers"
 _NamedExport_source = Core.Name "source"
 
 -- | Export all declaration (export * from ...)
-data ExportAllDeclaration = 
+data ExportAllDeclaration =
   ExportAllDeclaration {
     exportAllDeclarationExported :: (Maybe Identifier),
     exportAllDeclarationSource :: StringLiteral}
@@ -1267,7 +1267,7 @@ _ExportAllDeclaration_exported = Core.Name "exported"
 _ExportAllDeclaration_source = Core.Name "source"
 
 -- | An export specifier (x as y)
-data ExportSpecifier = 
+data ExportSpecifier =
   ExportSpecifier {
     exportSpecifierLocal :: Identifier,
     exportSpecifierExported :: Identifier}
@@ -1280,7 +1280,7 @@ _ExportSpecifier_local = Core.Name "local"
 _ExportSpecifier_exported = Core.Name "exported"
 
 -- | A binary operator
-data BinaryOperator = 
+data BinaryOperator =
   -- | +
   BinaryOperatorAdd  |
   -- | -
@@ -1330,7 +1330,7 @@ data BinaryOperator =
   -- | in
   BinaryOperatorIn  |
   -- | instanceof
-  BinaryOperatorInstanceof 
+  BinaryOperatorInstanceof
   deriving (Eq, Ord, Read, Show)
 
 _BinaryOperator = Core.Name "hydra.ext.javaScript.syntax.BinaryOperator"
@@ -1386,7 +1386,7 @@ _BinaryOperator_in = Core.Name "in"
 _BinaryOperator_instanceof = Core.Name "instanceof"
 
 -- | A unary operator
-data UnaryOperator = 
+data UnaryOperator =
   -- | -
   UnaryOperatorNegate  |
   -- | +
@@ -1404,7 +1404,7 @@ data UnaryOperator =
   -- | ++
   UnaryOperatorIncrement  |
   -- | --
-  UnaryOperatorDecrement 
+  UnaryOperatorDecrement
   deriving (Eq, Ord, Read, Show)
 
 _UnaryOperator = Core.Name "hydra.ext.javaScript.syntax.UnaryOperator"
@@ -1428,7 +1428,7 @@ _UnaryOperator_increment = Core.Name "increment"
 _UnaryOperator_decrement = Core.Name "decrement"
 
 -- | An assignment operator
-data AssignmentOperator = 
+data AssignmentOperator =
   -- | =
   AssignmentOperatorAssign  |
   -- | +=
@@ -1460,7 +1460,7 @@ data AssignmentOperator =
   -- | ||=
   AssignmentOperatorOrAssign  |
   -- | ??=
-  AssignmentOperatorNullishAssign 
+  AssignmentOperatorNullishAssign
   deriving (Eq, Ord, Read, Show)
 
 _AssignmentOperator = Core.Name "hydra.ext.javaScript.syntax.AssignmentOperator"
@@ -1498,7 +1498,7 @@ _AssignmentOperator_orAssign = Core.Name "orAssign"
 _AssignmentOperator_nullishAssign = Core.Name "nullishAssign"
 
 -- | A JavaScript comment
-data Comment = 
+data Comment =
   -- | A single-line comment (// ...)
   CommentLine String |
   -- | A block comment (/* ... */)
@@ -1516,7 +1516,7 @@ _Comment_block = Core.Name "block"
 _Comment_documentation = Core.Name "documentation"
 
 -- | A documentation comment (JSDoc) with structured tags
-data DocumentationComment = 
+data DocumentationComment =
   DocumentationComment {
     -- | The main description
     documentationCommentDescription :: String,
@@ -1531,7 +1531,7 @@ _DocumentationComment_description = Core.Name "description"
 _DocumentationComment_tags = Core.Name "tags"
 
 -- | A documentation tag (@param, @returns, @type, etc.)
-data DocumentationTag = 
+data DocumentationTag =
   DocumentationTag {
     -- | Tag name (param, returns, type, etc.)
     documentationTagName :: String,
@@ -1554,7 +1554,7 @@ _DocumentationTag_paramName = Core.Name "paramName"
 _DocumentationTag_description = Core.Name "description"
 
 -- | A module item with optional documentation
-data ModuleItemWithComments = 
+data ModuleItemWithComments =
   ModuleItemWithComments {
     -- | The module item
     moduleItemWithCommentsBody :: ModuleItem,
@@ -1569,7 +1569,7 @@ _ModuleItemWithComments_body = Core.Name "body"
 _ModuleItemWithComments_comments = Core.Name "comments"
 
 -- | A statement with optional documentation
-data StatementWithComments = 
+data StatementWithComments =
   StatementWithComments {
     -- | The statement
     statementWithCommentsBody :: Statement,
@@ -1584,7 +1584,7 @@ _StatementWithComments_body = Core.Name "body"
 _StatementWithComments_comments = Core.Name "comments"
 
 -- | A function declaration with optional JSDoc
-data FunctionDeclarationWithComments = 
+data FunctionDeclarationWithComments =
   FunctionDeclarationWithComments {
     -- | The function declaration
     functionDeclarationWithCommentsBody :: FunctionDeclaration,
@@ -1599,7 +1599,7 @@ _FunctionDeclarationWithComments_body = Core.Name "body"
 _FunctionDeclarationWithComments_comments = Core.Name "comments"
 
 -- | A class declaration with optional JSDoc
-data ClassDeclarationWithComments = 
+data ClassDeclarationWithComments =
   ClassDeclarationWithComments {
     -- | The class declaration
     classDeclarationWithCommentsBody :: ClassDeclaration,

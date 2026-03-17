@@ -52,8 +52,8 @@ unexpectedE cx expected found =
 -- | Encode a module's type elements as a SHACL ShapesGraph
 shaclCoder :: Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Model.ShapesGraph, Context.Context)
 shaclCoder mod cx g =
-     
-      let typeEls = Lists.filter Annotations.isNativeType (Module.moduleElements mod) 
+
+      let typeEls = Lists.filter Annotations.isNativeType (Module.moduleElements mod)
           toShape =
                   \el -> Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
                     Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
@@ -87,20 +87,20 @@ elementIri el = Utils.nameToIri (Core.bindingName el)
 -- | Encode a record field as RDF triples with a given subject
 encodeField :: Core.Name -> Syntax.Resource -> Core.Field -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) ([Syntax.Triple], Context.Context)
 encodeField rname subject field cx g =
-     
-      let pair1 = Utils.nextBlankNode cx 
+
+      let pair1 = Utils.nextBlankNode cx
           node = Pairs.first pair1
           cx1 = Pairs.second pair1
-      in (Eithers.bind (encodeTerm node (Core.fieldTerm field) cx1 g) (\_r1 ->  
-        let descs = Pairs.first _r1 
+      in (Eithers.bind (encodeTerm node (Core.fieldTerm field) cx1 g) (\_r1 ->
+        let descs = Pairs.first _r1
             cx2 = Pairs.second _r1
         in (Right (Lists.concat2 (Utils.triplesOf descs) (Utils.forObjects subject (Utils.propertyIri rname (Core.fieldName field)) (Utils.subjectsOf descs)), cx2))))
 
 -- | Encode a FieldType as a SHACL property shape Definition
 encodeFieldType :: Core.Name -> Maybe Integer -> Core.FieldType -> Context.Context -> Either (Context.InContext Error.Error) (Model.Definition Model.PropertyShape)
 encodeFieldType rname order ft cx =
-     
-      let fname = Core.fieldTypeName ft 
+
+      let fname = Core.fieldTypeName ft
           ftype = Core.fieldTypeType ft
           iri = Utils.propertyIri rname fname
           forType =
@@ -109,8 +109,8 @@ encodeFieldType rname order ft cx =
                     Core.TypeSet v0 -> forType mn Nothing v0
                     _ -> forTypeDefault mn mx t
           forTypeDefault =
-                  \mn -> \mx -> \t -> Eithers.map (\_cp ->  
-                    let baseProp = property iri 
+                  \mn -> \mx -> \t -> Eithers.map (\_cp ->
+                    let baseProp = property iri
                         minC = Maybes.map (\_n -> Model.PropertyShapeConstraintMinCount _n) mn
                         maxC = Maybes.map (\_n -> Model.PropertyShapeConstraintMaxCount _n) mx
                     in Model.Definition {
@@ -130,7 +130,7 @@ encodeFieldType rname order ft cx =
 -- | Encode a LiteralType as SHACL CommonProperties with an XSD datatype constraint
 encodeLiteralType :: Core.LiteralType -> Model.CommonProperties
 encodeLiteralType lt =
-     
+
       let xsd = \local -> common [
             Model.CommonConstraintDatatype (Utils.xmlSchemaDatatypeIri local)]
       in case lt of
@@ -165,30 +165,30 @@ encodeTerm subject term cx g =
       Core.TermMap v0 -> Eithers.map (\_r -> ([
         Syntax.Description {
           Syntax.descriptionSubject = (Utils.resourceToNode subject),
-          Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))}], (Pairs.second _r))) (foldAccumResult (\_cx0 -> \kv -> Eithers.bind (Core__.string _cx0 g (Rewriting.deannotateTerm (Pairs.first kv))) (\_ks ->  
-        let pair2 = Utils.nextBlankNode _cx0 
+          Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))}], (Pairs.second _r))) (foldAccumResult (\_cx0 -> \kv -> Eithers.bind (Core__.string _cx0 g (Rewriting.deannotateTerm (Pairs.first kv))) (\_ks ->
+        let pair2 = Utils.nextBlankNode _cx0
             node2 = Pairs.first pair2
             cx2 = Pairs.second pair2
         in (Eithers.map (\_dr -> (Lists.concat2 (Utils.forObjects subject (Utils.keyIri _ks) (Utils.subjectsOf (Pairs.first _dr))) (Utils.triplesOf (Pairs.first _dr)), (Pairs.second _dr))) (encodeTerm node2 (Pairs.second kv) cx2 g)))) cx (Maps.toList v0))
-      Core.TermWrap v0 -> Eithers.map (\_dr ->  
-        let descs = Pairs.first _dr 
+      Core.TermWrap v0 -> Eithers.map (\_dr ->
+        let descs = Pairs.first _dr
             cx1 = Pairs.second _dr
         in (Lists.cons (withType (Core.wrappedTermTypeName v0) (Lists.head descs)) (Lists.tail descs), cx1)) (encodeTerm subject (Core.wrappedTermBody v0) cx g)
       Core.TermMaybe v0 -> Maybes.maybe (Right ([], cx)) (\_inner -> encodeTerm subject _inner cx g) v0
-      Core.TermRecord v0 ->  
-        let rname = Core.recordTypeName v0 
+      Core.TermRecord v0 ->
+        let rname = Core.recordTypeName v0
             fields = Core.recordFields v0
         in (Eithers.map (\_r -> ([
           withType rname (Syntax.Description {
             Syntax.descriptionSubject = (Utils.resourceToNode subject),
             Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))})], (Pairs.second _r))) (foldAccumResult (\_cx0 -> \field -> encodeField rname subject field _cx0 g) cx fields))
-      Core.TermSet v0 -> Eithers.map (\_r -> (Lists.concat (Pairs.first _r), (Pairs.second _r))) (foldAccumResult (\_cx0 -> \t ->  
-        let pair3 = Utils.nextBlankNode _cx0 
+      Core.TermSet v0 -> Eithers.map (\_r -> (Lists.concat (Pairs.first _r), (Pairs.second _r))) (foldAccumResult (\_cx0 -> \t ->
+        let pair3 = Utils.nextBlankNode _cx0
             node3 = Pairs.first pair3
             cx3 = Pairs.second pair3
         in (encodeTerm node3 t cx3 g)) cx (Sets.toList v0))
-      Core.TermUnion v0 ->  
-        let rname = Core.injectionTypeName v0 
+      Core.TermUnion v0 ->
+        let rname = Core.injectionTypeName v0
             field = Core.injectionField v0
         in (Eithers.map (\_r -> ([
           withType rname (Syntax.Description {
@@ -202,19 +202,19 @@ encodeList subj terms cx0 g =
     Logic.ifElse (Lists.null terms) (Right ([
       Syntax.Description {
         Syntax.descriptionSubject = (Syntax.NodeIri (Syntax.Iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
-        Syntax.descriptionGraph = (Syntax.Graph Sets.empty)}], cx0)) ( 
-      let pair1 = Utils.nextBlankNode cx0 
+        Syntax.descriptionGraph = (Syntax.Graph Sets.empty)}], cx0)) (
+      let pair1 = Utils.nextBlankNode cx0
           node1 = Pairs.first pair1
           cx1 = Pairs.second pair1
-      in (Eithers.bind (encodeTerm node1 (Lists.head terms) cx1 g) (\_r1 ->  
-        let fdescs = Pairs.first _r1 
+      in (Eithers.bind (encodeTerm node1 (Lists.head terms) cx1 g) (\_r1 ->
+        let fdescs = Pairs.first _r1
             cx2 = Pairs.second _r1
             firstTriples = Lists.concat2 (Utils.triplesOf fdescs) (Utils.forObjects subj (Utils.rdfIri "first") (Utils.subjectsOf fdescs))
             pair2 = Utils.nextBlankNode cx2
             next = Pairs.first pair2
             cx3 = Pairs.second pair2
-        in (Eithers.map (\_r2 ->  
-          let rdescs = Pairs.first _r2 
+        in (Eithers.map (\_r2 ->
+          let rdescs = Pairs.first _r2
               cx4 = Pairs.second _r2
               restTriples = Lists.concat2 (Utils.triplesOf rdescs) (Utils.forObjects subj (Utils.rdfIri "rest") (Utils.subjectsOf rdescs))
           in ([
@@ -230,7 +230,7 @@ foldAccumResult f cx xs =
 -- | Encode a Hydra type as SHACL CommonProperties
 encodeType :: Core.Name -> Core.Type -> Context.Context -> Either (Context.InContext Error.Error) Model.CommonProperties
 encodeType tname typ cx =
-     
+
       let any = Right (common [])
       in case (Rewriting.deannotateType typ) of
         Core.TypeList _ -> any
@@ -266,8 +266,8 @@ property iri =
 -- | Add an rdf:type triple to an RDF Description
 withType :: Core.Name -> Syntax.Description -> Syntax.Description
 withType name desc =
-     
-      let subj = Syntax.descriptionSubject desc 
+
+      let subj = Syntax.descriptionSubject desc
           triples = Syntax.unGraph (Syntax.descriptionGraph desc)
           subjRes =
                   case subj of

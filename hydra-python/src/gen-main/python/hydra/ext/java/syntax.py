@@ -51,7 +51,7 @@ class _LiteralMeta(type):
 
 class Literal(metaclass=_LiteralMeta):
     r"""LiteralNull | LiteralInteger | LiteralFloatingPoint | LiteralBoolean | LiteralCharacter | LiteralString"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.Literal")
     NULL = hydra.core.Name("null")
     INTEGER = hydra.core.Name("integer")
@@ -87,7 +87,7 @@ class _TypeMeta(type):
 
 class Type(metaclass=_TypeMeta):
     r"""TypePrimitive | TypeReference"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.Type")
     PRIMITIVE = hydra.core.Name("primitive")
     REFERENCE = hydra.core.Name("reference")
@@ -96,7 +96,7 @@ class Type(metaclass=_TypeMeta):
 class PrimitiveTypeWithAnnotations:
     type: PrimitiveType
     annotations: frozenlist[Annotation]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.PrimitiveTypeWithAnnotations")
     TYPE = hydra.core.Name("type")
     ANNOTATIONS = hydra.core.Name("annotations")
@@ -117,7 +117,7 @@ class _PrimitiveTypeMeta(type):
 
 class PrimitiveType(metaclass=_PrimitiveTypeMeta):
     r"""PrimitiveTypeNumeric | PrimitiveTypeBoolean"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.PrimitiveType")
     NUMERIC = hydra.core.Name("numeric")
     BOOLEAN = hydra.core.Name("boolean")
@@ -134,27 +134,27 @@ class _NumericTypeMeta(type):
 
 class NumericType(metaclass=_NumericTypeMeta):
     r"""NumericTypeIntegral | NumericTypeFloatingPoint"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.NumericType")
     INTEGRAL = hydra.core.Name("integral")
     FLOATING_POINT = hydra.core.Name("floatingPoint")
 
 class IntegralType(Enum):
     BYTE = hydra.core.Name("byte")
-    
+
     SHORT = hydra.core.Name("short")
-    
+
     INT = hydra.core.Name("int")
-    
+
     LONG = hydra.core.Name("long")
-    
+
     CHAR = hydra.core.Name("char")
 
 IntegralType.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.IntegralType")
 
 class FloatingPointType(Enum):
     FLOAT = hydra.core.Name("float")
-    
+
     DOUBLE = hydra.core.Name("double")
 
 FloatingPointType.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.FloatingPointType")
@@ -174,7 +174,7 @@ class _ReferenceTypeMeta(type):
 
 class ReferenceType(metaclass=_ReferenceTypeMeta):
     r"""ReferenceTypeClassOrInterface | ReferenceTypeVariable | ReferenceTypeArray"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ReferenceType")
     CLASS_OR_INTERFACE = hydra.core.Name("classOrInterface")
     VARIABLE = hydra.core.Name("variable")
@@ -192,7 +192,7 @@ class _ClassOrInterfaceTypeMeta(type):
 
 class ClassOrInterfaceType(metaclass=_ClassOrInterfaceTypeMeta):
     r"""ClassOrInterfaceTypeClass | ClassOrInterfaceTypeInterface"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ClassOrInterfaceType")
     CLASS = hydra.core.Name("class")
     INTERFACE = hydra.core.Name("interface")
@@ -203,7 +203,7 @@ class ClassType:
     qualifier: ClassTypeQualifier
     identifier: TypeIdentifier
     arguments: frozenlist[TypeArgument]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ClassType")
     ANNOTATIONS = hydra.core.Name("annotations")
     QUALIFIER = hydra.core.Name("qualifier")
@@ -229,7 +229,7 @@ class _ClassTypeQualifierMeta(type):
 
 class ClassTypeQualifier(metaclass=_ClassTypeQualifierMeta):
     r"""ClassTypeQualifierNone | ClassTypeQualifierPackage | ClassTypeQualifierParent"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ClassTypeQualifier")
     NONE = hydra.core.Name("none")
     PACKAGE = hydra.core.Name("package")
@@ -244,7 +244,7 @@ InterfaceType.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.InterfaceType")
 class TypeVariable:
     annotations: frozenlist[Annotation]
     identifier: TypeIdentifier
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TypeVariable")
     ANNOTATIONS = hydra.core.Name("annotations")
     IDENTIFIER = hydra.core.Name("identifier")
@@ -253,7 +253,7 @@ class TypeVariable:
 class ArrayType:
     dims: Dims
     variant: ArrayType_Variant
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ArrayType")
     DIMS = hydra.core.Name("dims")
     VARIANT = hydra.core.Name("variant")
@@ -273,7 +273,7 @@ class _ArrayType_VariantMeta(type):
 
 class ArrayType_Variant(metaclass=_ArrayType_VariantMeta):
     r"""ArrayType_VariantPrimitive | ArrayType_VariantClassOrInterface | ArrayType_VariantVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ArrayType_Variant")
     PRIMITIVE = hydra.core.Name("primitive")
     CLASS_OR_INTERFACE = hydra.core.Name("classOrInterface")
@@ -289,7 +289,7 @@ class TypeParameter:
     modifiers: frozenlist[TypeParameterModifier]
     identifier: TypeIdentifier
     bound: Maybe[TypeBound]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TypeParameter")
     MODIFIERS = hydra.core.Name("modifiers")
     IDENTIFIER = hydra.core.Name("identifier")
@@ -312,7 +312,7 @@ class _TypeBoundMeta(type):
 
 class TypeBound(metaclass=_TypeBoundMeta):
     r"""TypeBoundVariable | TypeBoundClassOrInterface"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TypeBound")
     VARIABLE = hydra.core.Name("variable")
     CLASS_OR_INTERFACE = hydra.core.Name("classOrInterface")
@@ -321,7 +321,7 @@ class TypeBound(metaclass=_TypeBoundMeta):
 class TypeBound_ClassOrInterface:
     type: ClassOrInterfaceType
     additional: frozenlist[AdditionalBound]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TypeBound_ClassOrInterface")
     TYPE = hydra.core.Name("type")
     ADDITIONAL = hydra.core.Name("additional")
@@ -343,7 +343,7 @@ class _TypeArgumentMeta(type):
 
 class TypeArgument(metaclass=_TypeArgumentMeta):
     r"""TypeArgumentReference | TypeArgumentWildcard"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TypeArgument")
     REFERENCE = hydra.core.Name("reference")
     WILDCARD = hydra.core.Name("wildcard")
@@ -352,7 +352,7 @@ class TypeArgument(metaclass=_TypeArgumentMeta):
 class Wildcard:
     annotations: frozenlist[Annotation]
     wildcard: Maybe[WildcardBounds]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.Wildcard")
     ANNOTATIONS = hydra.core.Name("annotations")
     WILDCARD = hydra.core.Name("wildcard")
@@ -369,7 +369,7 @@ class _WildcardBoundsMeta(type):
 
 class WildcardBounds(metaclass=_WildcardBoundsMeta):
     r"""WildcardBoundsExtends | WildcardBoundsSuper"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.WildcardBounds")
     EXTENDS = hydra.core.Name("extends")
     SUPER = hydra.core.Name("super")
@@ -378,7 +378,7 @@ class WildcardBounds(metaclass=_WildcardBoundsMeta):
 class ModuleName:
     identifier: Identifier
     name: Maybe[ModuleName]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ModuleName")
     IDENTIFIER = hydra.core.Name("identifier")
     NAME = hydra.core.Name("name")
@@ -392,7 +392,7 @@ PackageName.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.PackageName")
 class TypeName:
     identifier: TypeIdentifier
     qualifier: Maybe[PackageOrTypeName]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TypeName")
     IDENTIFIER = hydra.core.Name("identifier")
     QUALIFIER = hydra.core.Name("qualifier")
@@ -401,7 +401,7 @@ class TypeName:
 class ExpressionName:
     qualifier: Maybe[AmbiguousName]
     identifier: Identifier
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ExpressionName")
     QUALIFIER = hydra.core.Name("qualifier")
     IDENTIFIER = hydra.core.Name("identifier")
@@ -433,7 +433,7 @@ class _CompilationUnitMeta(type):
 
 class CompilationUnit(metaclass=_CompilationUnitMeta):
     r"""CompilationUnitOrdinary | CompilationUnitModular"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.CompilationUnit")
     ORDINARY = hydra.core.Name("ordinary")
     MODULAR = hydra.core.Name("modular")
@@ -443,7 +443,7 @@ class OrdinaryCompilationUnit:
     package: Maybe[PackageDeclaration]
     imports: frozenlist[ImportDeclaration]
     types: frozenlist[TypeDeclarationWithComments]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.OrdinaryCompilationUnit")
     PACKAGE = hydra.core.Name("package")
     IMPORTS = hydra.core.Name("imports")
@@ -453,7 +453,7 @@ class OrdinaryCompilationUnit:
 class ModularCompilationUnit:
     imports: frozenlist[ImportDeclaration]
     module: ModuleDeclaration
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ModularCompilationUnit")
     IMPORTS = hydra.core.Name("imports")
     MODULE = hydra.core.Name("module")
@@ -462,7 +462,7 @@ class ModularCompilationUnit:
 class PackageDeclaration:
     modifiers: frozenlist[PackageModifier]
     identifiers: frozenlist[Identifier]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.PackageDeclaration")
     MODIFIERS = hydra.core.Name("modifiers")
     IDENTIFIERS = hydra.core.Name("identifiers")
@@ -490,7 +490,7 @@ class _ImportDeclarationMeta(type):
 
 class ImportDeclaration(metaclass=_ImportDeclarationMeta):
     r"""ImportDeclarationSingleType | ImportDeclarationTypeImportOnDemand | ImportDeclarationSingleStaticImport | ImportDeclarationStaticImportOnDemand"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ImportDeclaration")
     SINGLE_TYPE = hydra.core.Name("singleType")
     TYPE_IMPORT_ON_DEMAND = hydra.core.Name("typeImportOnDemand")
@@ -511,7 +511,7 @@ TypeImportOnDemandDeclaration.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.Typ
 class SingleStaticImportDeclaration:
     type_name: TypeName
     identifier: Identifier
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.SingleStaticImportDeclaration")
     TYPE_NAME = hydra.core.Name("typeName")
     IDENTIFIER = hydra.core.Name("identifier")
@@ -540,7 +540,7 @@ class _TypeDeclarationMeta(type):
 
 class TypeDeclaration(metaclass=_TypeDeclarationMeta):
     r"""TypeDeclarationClass | TypeDeclarationInterface | TypeDeclarationNone"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TypeDeclaration")
     CLASS = hydra.core.Name("class")
     INTERFACE = hydra.core.Name("interface")
@@ -550,7 +550,7 @@ class TypeDeclaration(metaclass=_TypeDeclarationMeta):
 class TypeDeclarationWithComments:
     value: TypeDeclaration
     comments: Maybe[str]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TypeDeclarationWithComments")
     VALUE = hydra.core.Name("value")
     COMMENTS = hydra.core.Name("comments")
@@ -561,7 +561,7 @@ class ModuleDeclaration:
     open: bool
     identifiers: frozenlist[Identifier]
     directives: frozenlist[frozenlist[ModuleDirective]]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ModuleDeclaration")
     ANNOTATIONS = hydra.core.Name("annotations")
     OPEN = hydra.core.Name("open")
@@ -589,7 +589,7 @@ class _ModuleDirectiveMeta(type):
 
 class ModuleDirective(metaclass=_ModuleDirectiveMeta):
     r"""ModuleDirectiveRequires | ModuleDirectiveExports | ModuleDirectiveOpens | ModuleDirectiveUses | ModuleDirectiveProvides"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ModuleDirective")
     REQUIRES = hydra.core.Name("requires")
     EXPORTS = hydra.core.Name("exports")
@@ -601,7 +601,7 @@ class ModuleDirective(metaclass=_ModuleDirectiveMeta):
 class ModuleDirective_Requires:
     modifiers: frozenlist[RequiresModifier]
     module: ModuleName
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ModuleDirective_Requires")
     MODIFIERS = hydra.core.Name("modifiers")
     MODULE = hydra.core.Name("module")
@@ -610,7 +610,7 @@ class ModuleDirective_Requires:
 class ModuleDirective_ExportsOrOpens:
     package: PackageName
     modules: Annotated[frozenlist[ModuleName], "At least one module"]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ModuleDirective_ExportsOrOpens")
     PACKAGE = hydra.core.Name("package")
     MODULES = hydra.core.Name("modules")
@@ -619,14 +619,14 @@ class ModuleDirective_ExportsOrOpens:
 class ModuleDirective_Provides:
     to: TypeName
     with_: Annotated[frozenlist[TypeName], "At least one type"]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ModuleDirective_Provides")
     TO = hydra.core.Name("to")
     WITH = hydra.core.Name("with")
 
 class RequiresModifier(Enum):
     TRANSITIVE = hydra.core.Name("transitive")
-    
+
     STATIC = hydra.core.Name("static")
 
 RequiresModifier.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.RequiresModifier")
@@ -643,7 +643,7 @@ class _ClassDeclarationMeta(type):
 
 class ClassDeclaration(metaclass=_ClassDeclarationMeta):
     r"""ClassDeclarationNormal | ClassDeclarationEnum"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ClassDeclaration")
     NORMAL = hydra.core.Name("normal")
     ENUM = hydra.core.Name("enum")
@@ -656,7 +656,7 @@ class NormalClassDeclaration:
     extends: Maybe[ClassType]
     implements: frozenlist[InterfaceType]
     body: ClassBody
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.NormalClassDeclaration")
     MODIFIERS = hydra.core.Name("modifiers")
     IDENTIFIER = hydra.core.Name("identifier")
@@ -723,7 +723,7 @@ class _ClassModifierMeta(type):
 
 class ClassModifier(metaclass=_ClassModifierMeta):
     r"""ClassModifierAnnotation | ClassModifierPublic | ClassModifierProtected | ClassModifierPrivate | ClassModifierAbstract | ClassModifierStatic | ClassModifierFinal | ClassModifierStrictfp"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ClassModifier")
     ANNOTATION = hydra.core.Name("annotation")
     PUBLIC = hydra.core.Name("public")
@@ -757,7 +757,7 @@ class _ClassBodyDeclarationMeta(type):
 
 class ClassBodyDeclaration(metaclass=_ClassBodyDeclarationMeta):
     r"""ClassBodyDeclarationClassMember | ClassBodyDeclarationInstanceInitializer | ClassBodyDeclarationStaticInitializer | ClassBodyDeclarationConstructorDeclaration"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ClassBodyDeclaration")
     CLASS_MEMBER = hydra.core.Name("classMember")
     INSTANCE_INITIALIZER = hydra.core.Name("instanceInitializer")
@@ -768,7 +768,7 @@ class ClassBodyDeclaration(metaclass=_ClassBodyDeclarationMeta):
 class ClassBodyDeclarationWithComments:
     value: ClassBodyDeclaration
     comments: Maybe[str]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ClassBodyDeclarationWithComments")
     VALUE = hydra.core.Name("value")
     COMMENTS = hydra.core.Name("comments")
@@ -798,7 +798,7 @@ class _ClassMemberDeclarationMeta(type):
 
 class ClassMemberDeclaration(metaclass=_ClassMemberDeclarationMeta):
     r"""ClassMemberDeclarationField | ClassMemberDeclarationMethod | ClassMemberDeclarationClass | ClassMemberDeclarationInterface | ClassMemberDeclarationNone"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ClassMemberDeclaration")
     FIELD = hydra.core.Name("field")
     METHOD = hydra.core.Name("method")
@@ -811,7 +811,7 @@ class FieldDeclaration:
     modifiers: frozenlist[FieldModifier]
     unann_type: UnannType
     variable_declarators: frozenlist[VariableDeclarator]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.FieldDeclaration")
     MODIFIERS = hydra.core.Name("modifiers")
     UNANN_TYPE = hydra.core.Name("unannType")
@@ -875,7 +875,7 @@ class _FieldModifierMeta(type):
 
 class FieldModifier(metaclass=_FieldModifierMeta):
     r"""FieldModifierAnnotation | FieldModifierPublic | FieldModifierProtected | FieldModifierPrivate | FieldModifierStatic | FieldModifierFinal | FieldModifierTransient | FieldModifierVolatile"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.FieldModifier")
     ANNOTATION = hydra.core.Name("annotation")
     PUBLIC = hydra.core.Name("public")
@@ -890,7 +890,7 @@ class FieldModifier(metaclass=_FieldModifierMeta):
 class VariableDeclarator:
     id: VariableDeclaratorId
     initializer: Maybe[VariableInitializer]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.VariableDeclarator")
     ID = hydra.core.Name("id")
     INITIALIZER = hydra.core.Name("initializer")
@@ -899,7 +899,7 @@ class VariableDeclarator:
 class VariableDeclaratorId:
     identifier: Identifier
     dims: Maybe[Dims]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.VariableDeclaratorId")
     IDENTIFIER = hydra.core.Name("identifier")
     DIMS = hydra.core.Name("dims")
@@ -916,7 +916,7 @@ class _VariableInitializerMeta(type):
 
 class VariableInitializer(metaclass=_VariableInitializerMeta):
     r"""VariableInitializerExpression | VariableInitializerArrayInitializer"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.VariableInitializer")
     EXPRESSION = hydra.core.Name("expression")
     ARRAY_INITIALIZER = hydra.core.Name("arrayInitializer")
@@ -937,7 +937,7 @@ class MethodDeclaration:
     modifiers: frozenlist[MethodModifier]
     header: MethodHeader
     body: MethodBody
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodDeclaration")
     ANNOTATIONS = hydra.core.Name("annotations")
     MODIFIERS = hydra.core.Name("modifiers")
@@ -1016,7 +1016,7 @@ class _MethodModifierMeta(type):
 
 class MethodModifier(metaclass=_MethodModifierMeta):
     r"""MethodModifierAnnotation | MethodModifierPublic | MethodModifierProtected | MethodModifierPrivate | MethodModifierAbstract | MethodModifierStatic | MethodModifierFinal | MethodModifierSynchronized | MethodModifierNative | MethodModifierStrictfb"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodModifier")
     ANNOTATION = hydra.core.Name("annotation")
     PUBLIC = hydra.core.Name("public")
@@ -1035,7 +1035,7 @@ class MethodHeader:
     result: Result
     declarator: MethodDeclarator
     throws: Maybe[Throws]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodHeader")
     PARAMETERS = hydra.core.Name("parameters")
     RESULT = hydra.core.Name("result")
@@ -1058,7 +1058,7 @@ class _ResultMeta(type):
 
 class Result(metaclass=_ResultMeta):
     r"""ResultType | ResultVoid"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.Result")
     TYPE = hydra.core.Name("type")
     VOID = hydra.core.Name("void")
@@ -1068,7 +1068,7 @@ class MethodDeclarator:
     identifier: Identifier
     receiver_parameter: Maybe[ReceiverParameter]
     formal_parameters: frozenlist[FormalParameter]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodDeclarator")
     IDENTIFIER = hydra.core.Name("identifier")
     RECEIVER_PARAMETER = hydra.core.Name("receiverParameter")
@@ -1079,7 +1079,7 @@ class ReceiverParameter:
     annotations: frozenlist[Annotation]
     unann_type: UnannType
     identifier: Maybe[Identifier]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ReceiverParameter")
     ANNOTATIONS = hydra.core.Name("annotations")
     UNANN_TYPE = hydra.core.Name("unannType")
@@ -1097,7 +1097,7 @@ class _FormalParameterMeta(type):
 
 class FormalParameter(metaclass=_FormalParameterMeta):
     r"""FormalParameterSimple | FormalParameterVariableArity"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.FormalParameter")
     SIMPLE = hydra.core.Name("simple")
     VARIABLE_ARITY = hydra.core.Name("variableArity")
@@ -1107,7 +1107,7 @@ class FormalParameter_Simple:
     modifiers: frozenlist[VariableModifier]
     type: UnannType
     id: VariableDeclaratorId
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.FormalParameter_Simple")
     MODIFIERS = hydra.core.Name("modifiers")
     TYPE = hydra.core.Name("type")
@@ -1119,7 +1119,7 @@ class VariableArityParameter:
     type: UnannType
     annotations: frozenlist[Annotation]
     identifier: Identifier
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.VariableArityParameter")
     MODIFIERS = hydra.core.Name("modifiers")
     TYPE = hydra.core.Name("type")
@@ -1142,7 +1142,7 @@ class _VariableModifierMeta(type):
 
 class VariableModifier(metaclass=_VariableModifierMeta):
     r"""VariableModifierAnnotation | VariableModifierFinal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.VariableModifier")
     ANNOTATION = hydra.core.Name("annotation")
     FINAL = hydra.core.Name("final")
@@ -1164,7 +1164,7 @@ class _ExceptionTypeMeta(type):
 
 class ExceptionType(metaclass=_ExceptionTypeMeta):
     r"""ExceptionTypeClass | ExceptionTypeVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ExceptionType")
     CLASS = hydra.core.Name("class")
     VARIABLE = hydra.core.Name("variable")
@@ -1185,7 +1185,7 @@ class _MethodBodyMeta(type):
 
 class MethodBody(metaclass=_MethodBodyMeta):
     r"""MethodBodyBlock | MethodBodyNone"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodBody")
     BLOCK = hydra.core.Name("block")
     NONE = hydra.core.Name("none")
@@ -1206,7 +1206,7 @@ class ConstructorDeclaration:
     constructor: ConstructorDeclarator
     throws: Maybe[Throws]
     body: ConstructorBody
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ConstructorDeclaration")
     MODIFIERS = hydra.core.Name("modifiers")
     CONSTRUCTOR = hydra.core.Name("constructor")
@@ -1243,7 +1243,7 @@ class _ConstructorModifierMeta(type):
 
 class ConstructorModifier(metaclass=_ConstructorModifierMeta):
     r"""ConstructorModifierAnnotation | ConstructorModifierPublic | ConstructorModifierProtected | ConstructorModifierPrivate"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ConstructorModifier")
     ANNOTATION = hydra.core.Name("annotation")
     PUBLIC = hydra.core.Name("public")
@@ -1256,7 +1256,7 @@ class ConstructorDeclarator:
     name: SimpleTypeName
     receiver_parameter: Maybe[ReceiverParameter]
     formal_parameters: frozenlist[FormalParameter]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ConstructorDeclarator")
     PARAMETERS = hydra.core.Name("parameters")
     NAME = hydra.core.Name("name")
@@ -1272,7 +1272,7 @@ SimpleTypeName.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.SimpleTypeName")
 class ConstructorBody:
     invocation: Maybe[ExplicitConstructorInvocation]
     statements: frozenlist[BlockStatement]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ConstructorBody")
     INVOCATION = hydra.core.Name("invocation")
     STATEMENTS = hydra.core.Name("statements")
@@ -1282,7 +1282,7 @@ class ExplicitConstructorInvocation:
     type_arguments: frozenlist[TypeArgument]
     arguments: frozenlist[Expression]
     variant: ExplicitConstructorInvocation_Variant
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ExplicitConstructorInvocation")
     TYPE_ARGUMENTS = hydra.core.Name("typeArguments")
     ARGUMENTS = hydra.core.Name("arguments")
@@ -1307,7 +1307,7 @@ class _ExplicitConstructorInvocation_VariantMeta(type):
 
 class ExplicitConstructorInvocation_Variant(metaclass=_ExplicitConstructorInvocation_VariantMeta):
     r"""ExplicitConstructorInvocation_VariantThis | ExplicitConstructorInvocation_VariantSuper | ExplicitConstructorInvocation_VariantPrimary"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ExplicitConstructorInvocation_Variant")
     THIS = hydra.core.Name("this")
     SUPER = hydra.core.Name("super")
@@ -1319,7 +1319,7 @@ class EnumDeclaration:
     identifier: TypeIdentifier
     implements: frozenlist[InterfaceType]
     body: EnumBody
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.EnumDeclaration")
     MODIFIERS = hydra.core.Name("modifiers")
     IDENTIFIER = hydra.core.Name("identifier")
@@ -1335,7 +1335,7 @@ EnumBody.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.EnumBody")
 class EnumBody_Element:
     constants: frozenlist[EnumConstant]
     body_declarations: frozenlist[ClassBodyDeclaration]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.EnumBody_Element")
     CONSTANTS = hydra.core.Name("constants")
     BODY_DECLARATIONS = hydra.core.Name("bodyDeclarations")
@@ -1346,7 +1346,7 @@ class EnumConstant:
     identifier: Identifier
     arguments: frozenlist[frozenlist[Expression]]
     body: Maybe[ClassBody]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.EnumConstant")
     MODIFIERS = hydra.core.Name("modifiers")
     IDENTIFIER = hydra.core.Name("identifier")
@@ -1370,7 +1370,7 @@ class _InterfaceDeclarationMeta(type):
 
 class InterfaceDeclaration(metaclass=_InterfaceDeclarationMeta):
     r"""InterfaceDeclarationNormalInterface | InterfaceDeclarationAnnotationType"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.InterfaceDeclaration")
     NORMAL_INTERFACE = hydra.core.Name("normalInterface")
     ANNOTATION_TYPE = hydra.core.Name("annotationType")
@@ -1382,7 +1382,7 @@ class NormalInterfaceDeclaration:
     parameters: frozenlist[TypeParameter]
     extends: frozenlist[InterfaceType]
     body: InterfaceBody
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.NormalInterfaceDeclaration")
     MODIFIERS = hydra.core.Name("modifiers")
     IDENTIFIER = hydra.core.Name("identifier")
@@ -1441,7 +1441,7 @@ class _InterfaceModifierMeta(type):
 
 class InterfaceModifier(metaclass=_InterfaceModifierMeta):
     r"""InterfaceModifierAnnotation | InterfaceModifierPublic | InterfaceModifierProtected | InterfaceModifierPrivate | InterfaceModifierAbstract | InterfaceModifierStatic | InterfaceModifierStrictfb"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.InterfaceModifier")
     ANNOTATION = hydra.core.Name("annotation")
     PUBLIC = hydra.core.Name("public")
@@ -1474,7 +1474,7 @@ class _InterfaceMemberDeclarationMeta(type):
 
 class InterfaceMemberDeclaration(metaclass=_InterfaceMemberDeclarationMeta):
     r"""InterfaceMemberDeclarationConstant | InterfaceMemberDeclarationInterfaceMethod | InterfaceMemberDeclarationClass | InterfaceMemberDeclarationInterface"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.InterfaceMemberDeclaration")
     CONSTANT = hydra.core.Name("constant")
     INTERFACE_METHOD = hydra.core.Name("interfaceMethod")
@@ -1486,7 +1486,7 @@ class ConstantDeclaration:
     modifiers: frozenlist[ConstantModifier]
     type: UnannType
     variables: frozenlist[VariableDeclarator]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ConstantDeclaration")
     MODIFIERS = hydra.core.Name("modifiers")
     TYPE = hydra.core.Name("type")
@@ -1522,7 +1522,7 @@ class _ConstantModifierMeta(type):
 
 class ConstantModifier(metaclass=_ConstantModifierMeta):
     r"""ConstantModifierAnnotation | ConstantModifierPublic | ConstantModifierStatic | ConstantModifierFinal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ConstantModifier")
     ANNOTATION = hydra.core.Name("annotation")
     PUBLIC = hydra.core.Name("public")
@@ -1534,7 +1534,7 @@ class InterfaceMethodDeclaration:
     modifiers: frozenlist[InterfaceMethodModifier]
     header: MethodHeader
     body: MethodBody
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.InterfaceMethodDeclaration")
     MODIFIERS = hydra.core.Name("modifiers")
     HEADER = hydra.core.Name("header")
@@ -1591,7 +1591,7 @@ class _InterfaceMethodModifierMeta(type):
 
 class InterfaceMethodModifier(metaclass=_InterfaceMethodModifierMeta):
     r"""InterfaceMethodModifierAnnotation | InterfaceMethodModifierPublic | InterfaceMethodModifierPrivate | InterfaceMethodModifierAbstract | InterfaceMethodModifierDefault | InterfaceMethodModifierStatic | InterfaceMethodModifierStrictfp"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.InterfaceMethodModifier")
     ANNOTATION = hydra.core.Name("annotation")
     PUBLIC = hydra.core.Name("public")
@@ -1606,7 +1606,7 @@ class AnnotationTypeDeclaration:
     modifiers: frozenlist[InterfaceModifier]
     identifier: TypeIdentifier
     body: AnnotationTypeBody
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.AnnotationTypeDeclaration")
     MODIFIERS = hydra.core.Name("modifiers")
     IDENTIFIER = hydra.core.Name("identifier")
@@ -1635,7 +1635,7 @@ class _AnnotationTypeMemberDeclarationMeta(type):
 
 class AnnotationTypeMemberDeclaration(metaclass=_AnnotationTypeMemberDeclarationMeta):
     r"""AnnotationTypeMemberDeclarationAnnotationType | AnnotationTypeMemberDeclarationConstant | AnnotationTypeMemberDeclarationClass | AnnotationTypeMemberDeclarationInterface"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.AnnotationTypeMemberDeclaration")
     ANNOTATION_TYPE = hydra.core.Name("annotationType")
     CONSTANT = hydra.core.Name("constant")
@@ -1649,7 +1649,7 @@ class AnnotationTypeElementDeclaration:
     identifier: Identifier
     dims: Maybe[Dims]
     default: Maybe[DefaultValue]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.AnnotationTypeElementDeclaration")
     MODIFIERS = hydra.core.Name("modifiers")
     TYPE = hydra.core.Name("type")
@@ -1673,7 +1673,7 @@ class _AnnotationTypeElementModifierMeta(type):
 
 class AnnotationTypeElementModifier(metaclass=_AnnotationTypeElementModifierMeta):
     r"""AnnotationTypeElementModifierPublic | AnnotationTypeElementModifierAbstract"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.AnnotationTypeElementModifier")
     PUBLIC = hydra.core.Name("public")
     ABSTRACT = hydra.core.Name("abstract")
@@ -1698,7 +1698,7 @@ class _AnnotationMeta(type):
 
 class Annotation(metaclass=_AnnotationMeta):
     r"""AnnotationNormal | AnnotationMarker | AnnotationSingleElement"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.Annotation")
     NORMAL = hydra.core.Name("normal")
     MARKER = hydra.core.Name("marker")
@@ -1708,7 +1708,7 @@ class Annotation(metaclass=_AnnotationMeta):
 class NormalAnnotation:
     type_name: TypeName
     pairs: frozenlist[ElementValuePair]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.NormalAnnotation")
     TYPE_NAME = hydra.core.Name("typeName")
     PAIRS = hydra.core.Name("pairs")
@@ -1717,7 +1717,7 @@ class NormalAnnotation:
 class ElementValuePair:
     key: Identifier
     value: ElementValue
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ElementValuePair")
     KEY = hydra.core.Name("key")
     VALUE = hydra.core.Name("value")
@@ -1737,7 +1737,7 @@ class _ElementValueMeta(type):
 
 class ElementValue(metaclass=_ElementValueMeta):
     r"""ElementValueConditionalExpression | ElementValueElementValueArrayInitializer | ElementValueAnnotation"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ElementValue")
     CONDITIONAL_EXPRESSION = hydra.core.Name("conditionalExpression")
     ELEMENT_VALUE_ARRAY_INITIALIZER = hydra.core.Name("elementValueArrayInitializer")
@@ -1757,7 +1757,7 @@ MarkerAnnotation.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MarkerAnnotation
 class SingleElementAnnotation:
     name: TypeName
     value: Maybe[ElementValue]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.SingleElementAnnotation")
     NAME = hydra.core.Name("name")
     VALUE = hydra.core.Name("value")
@@ -1787,7 +1787,7 @@ class _BlockStatementMeta(type):
 
 class BlockStatement(metaclass=_BlockStatementMeta):
     r"""BlockStatementLocalVariableDeclaration | BlockStatementClass | BlockStatementStatement"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.BlockStatement")
     LOCAL_VARIABLE_DECLARATION = hydra.core.Name("localVariableDeclaration")
     CLASS = hydra.core.Name("class")
@@ -1803,7 +1803,7 @@ class LocalVariableDeclaration:
     modifiers: frozenlist[VariableModifier]
     type: LocalVariableType
     declarators: frozenlist[VariableDeclarator]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.LocalVariableDeclaration")
     MODIFIERS = hydra.core.Name("modifiers")
     TYPE = hydra.core.Name("type")
@@ -1825,7 +1825,7 @@ class _LocalVariableTypeMeta(type):
 
 class LocalVariableType(metaclass=_LocalVariableTypeMeta):
     r"""LocalVariableTypeType | LocalVariableTypeVar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.LocalVariableType")
     TYPE = hydra.core.Name("type")
     VAR = hydra.core.Name("var")
@@ -1854,7 +1854,7 @@ class _StatementMeta(type):
 
 class Statement(metaclass=_StatementMeta):
     r"""StatementWithoutTrailing | StatementLabeled | StatementIfThen | StatementIfThenElse | StatementWhile | StatementFor"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.Statement")
     WITHOUT_TRAILING = hydra.core.Name("withoutTrailing")
     LABELED = hydra.core.Name("labeled")
@@ -1884,7 +1884,7 @@ class _StatementNoShortIfMeta(type):
 
 class StatementNoShortIf(metaclass=_StatementNoShortIfMeta):
     r"""StatementNoShortIfWithoutTrailing | StatementNoShortIfLabeled | StatementNoShortIfIfThenElse | StatementNoShortIfWhile | StatementNoShortIfFor"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.StatementNoShortIf")
     WITHOUT_TRAILING = hydra.core.Name("withoutTrailing")
     LABELED = hydra.core.Name("labeled")
@@ -1938,7 +1938,7 @@ class _StatementWithoutTrailingSubstatementMeta(type):
 
 class StatementWithoutTrailingSubstatement(metaclass=_StatementWithoutTrailingSubstatementMeta):
     r"""StatementWithoutTrailingSubstatementBlock | StatementWithoutTrailingSubstatementEmpty | StatementWithoutTrailingSubstatementExpression | StatementWithoutTrailingSubstatementAssert | StatementWithoutTrailingSubstatementSwitch | StatementWithoutTrailingSubstatementDo | StatementWithoutTrailingSubstatementBreak | StatementWithoutTrailingSubstatementContinue | StatementWithoutTrailingSubstatementReturn | StatementWithoutTrailingSubstatementSynchronized | StatementWithoutTrailingSubstatementThrow | StatementWithoutTrailingSubstatementTry"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.StatementWithoutTrailingSubstatement")
     BLOCK = hydra.core.Name("block")
     EMPTY = hydra.core.Name("empty")
@@ -1957,7 +1957,7 @@ class StatementWithoutTrailingSubstatement(metaclass=_StatementWithoutTrailingSu
 class LabeledStatement:
     identifier: Identifier
     statement: Statement
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.LabeledStatement")
     IDENTIFIER = hydra.core.Name("identifier")
     STATEMENT = hydra.core.Name("statement")
@@ -1966,7 +1966,7 @@ class LabeledStatement:
 class LabeledStatementNoShortIf:
     identifier: Identifier
     statement: StatementNoShortIf
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.LabeledStatementNoShortIf")
     IDENTIFIER = hydra.core.Name("identifier")
     STATEMENT = hydra.core.Name("statement")
@@ -2003,7 +2003,7 @@ class _StatementExpressionMeta(type):
 
 class StatementExpression(metaclass=_StatementExpressionMeta):
     r"""StatementExpressionAssignment | StatementExpressionPreIncrement | StatementExpressionPreDecrement | StatementExpressionPostIncrement | StatementExpressionPostDecrement | StatementExpressionMethodInvocation | StatementExpressionClassInstanceCreation"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.StatementExpression")
     ASSIGNMENT = hydra.core.Name("assignment")
     PRE_INCREMENT = hydra.core.Name("preIncrement")
@@ -2017,7 +2017,7 @@ class StatementExpression(metaclass=_StatementExpressionMeta):
 class IfThenStatement:
     expression: Expression
     statement: Statement
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.IfThenStatement")
     EXPRESSION = hydra.core.Name("expression")
     STATEMENT = hydra.core.Name("statement")
@@ -2027,7 +2027,7 @@ class IfThenElseStatement:
     cond: Maybe[Expression]
     then: StatementNoShortIf
     else_: Statement
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.IfThenElseStatement")
     COND = hydra.core.Name("cond")
     THEN = hydra.core.Name("then")
@@ -2038,7 +2038,7 @@ class IfThenElseStatementNoShortIf:
     cond: Maybe[Expression]
     then: StatementNoShortIf
     else_: StatementNoShortIf
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.IfThenElseStatementNoShortIf")
     COND = hydra.core.Name("cond")
     THEN = hydra.core.Name("then")
@@ -2056,7 +2056,7 @@ class _AssertStatementMeta(type):
 
 class AssertStatement(metaclass=_AssertStatementMeta):
     r"""AssertStatementSingle | AssertStatementPair"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.AssertStatement")
     SINGLE = hydra.core.Name("single")
     PAIR = hydra.core.Name("pair")
@@ -2065,7 +2065,7 @@ class AssertStatement(metaclass=_AssertStatementMeta):
 class AssertStatement_Pair:
     first: Expression
     second: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.AssertStatement_Pair")
     FIRST = hydra.core.Name("first")
     SECOND = hydra.core.Name("second")
@@ -2074,7 +2074,7 @@ class AssertStatement_Pair:
 class SwitchStatement:
     cond: Expression
     block: SwitchBlock
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.SwitchStatement")
     COND = hydra.core.Name("cond")
     BLOCK = hydra.core.Name("block")
@@ -2088,7 +2088,7 @@ SwitchBlock.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.SwitchBlock")
 class SwitchBlock_Pair:
     statements: frozenlist[SwitchBlockStatementGroup]
     labels: frozenlist[SwitchLabel]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.SwitchBlock_Pair")
     STATEMENTS = hydra.core.Name("statements")
     LABELS = hydra.core.Name("labels")
@@ -2097,7 +2097,7 @@ class SwitchBlock_Pair:
 class SwitchBlockStatementGroup:
     labels: frozenlist[SwitchLabel]
     statements: frozenlist[BlockStatement]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.SwitchBlockStatementGroup")
     LABELS = hydra.core.Name("labels")
     STATEMENTS = hydra.core.Name("statements")
@@ -2121,7 +2121,7 @@ class _SwitchLabelMeta(type):
 
 class SwitchLabel(metaclass=_SwitchLabelMeta):
     r"""SwitchLabelConstant | SwitchLabelEnumConstant | SwitchLabelDefault"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.SwitchLabel")
     CONSTANT = hydra.core.Name("constant")
     ENUM_CONSTANT = hydra.core.Name("enumConstant")
@@ -2136,7 +2136,7 @@ EnumConstantName.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.EnumConstantName
 class WhileStatement:
     cond: Maybe[Expression]
     body: Statement
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.WhileStatement")
     COND = hydra.core.Name("cond")
     BODY = hydra.core.Name("body")
@@ -2145,7 +2145,7 @@ class WhileStatement:
 class WhileStatementNoShortIf:
     cond: Maybe[Expression]
     body: StatementNoShortIf
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.WhileStatementNoShortIf")
     COND = hydra.core.Name("cond")
     BODY = hydra.core.Name("body")
@@ -2154,7 +2154,7 @@ class WhileStatementNoShortIf:
 class DoStatement:
     body: Statement
     conde: Maybe[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.DoStatement")
     BODY = hydra.core.Name("body")
     CONDE = hydra.core.Name("conde")
@@ -2171,7 +2171,7 @@ class _ForStatementMeta(type):
 
 class ForStatement(metaclass=_ForStatementMeta):
     r"""ForStatementBasic | ForStatementEnhanced"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ForStatement")
     BASIC = hydra.core.Name("basic")
     ENHANCED = hydra.core.Name("enhanced")
@@ -2188,7 +2188,7 @@ class _ForStatementNoShortIfMeta(type):
 
 class ForStatementNoShortIf(metaclass=_ForStatementNoShortIfMeta):
     r"""ForStatementNoShortIfBasic | ForStatementNoShortIfEnhanced"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ForStatementNoShortIf")
     BASIC = hydra.core.Name("basic")
     ENHANCED = hydra.core.Name("enhanced")
@@ -2197,7 +2197,7 @@ class ForStatementNoShortIf(metaclass=_ForStatementNoShortIfMeta):
 class BasicForStatement:
     cond: ForCond
     body: Statement
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.BasicForStatement")
     COND = hydra.core.Name("cond")
     BODY = hydra.core.Name("body")
@@ -2207,7 +2207,7 @@ class ForCond:
     init: Maybe[ForInit]
     cond: Maybe[Expression]
     update: Maybe[ForUpdate]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ForCond")
     INIT = hydra.core.Name("init")
     COND = hydra.core.Name("cond")
@@ -2217,7 +2217,7 @@ class ForCond:
 class BasicForStatementNoShortIf:
     cond: ForCond
     body: StatementNoShortIf
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.BasicForStatementNoShortIf")
     COND = hydra.core.Name("cond")
     BODY = hydra.core.Name("body")
@@ -2234,7 +2234,7 @@ class _ForInitMeta(type):
 
 class ForInit(metaclass=_ForInitMeta):
     r"""ForInitStatements | ForInitLocalVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ForInit")
     STATEMENTS = hydra.core.Name("statements")
     LOCAL_VARIABLE = hydra.core.Name("localVariable")
@@ -2248,7 +2248,7 @@ ForUpdate.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ForUpdate")
 class EnhancedForStatement:
     cond: EnhancedForCond
     body: Statement
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.EnhancedForStatement")
     COND = hydra.core.Name("cond")
     BODY = hydra.core.Name("body")
@@ -2259,7 +2259,7 @@ class EnhancedForCond:
     type: LocalVariableType
     id: VariableDeclaratorId
     expression: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.EnhancedForCond")
     MODIFIERS = hydra.core.Name("modifiers")
     TYPE = hydra.core.Name("type")
@@ -2270,7 +2270,7 @@ class EnhancedForCond:
 class EnhancedForStatementNoShortIf:
     cond: EnhancedForCond
     body: StatementNoShortIf
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.EnhancedForStatementNoShortIf")
     COND = hydra.core.Name("cond")
     BODY = hydra.core.Name("body")
@@ -2299,7 +2299,7 @@ ThrowStatement.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ThrowStatement")
 class SynchronizedStatement:
     expression: Expression
     block: Block
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.SynchronizedStatement")
     EXPRESSION = hydra.core.Name("expression")
     BLOCK = hydra.core.Name("block")
@@ -2319,7 +2319,7 @@ class _TryStatementMeta(type):
 
 class TryStatement(metaclass=_TryStatementMeta):
     r"""TryStatementSimple | TryStatementWithFinally | TryStatementWithResources"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TryStatement")
     SIMPLE = hydra.core.Name("simple")
     WITH_FINALLY = hydra.core.Name("withFinally")
@@ -2329,7 +2329,7 @@ class TryStatement(metaclass=_TryStatementMeta):
 class TryStatement_Simple:
     block: Block
     catches: Catches
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TryStatement_Simple")
     BLOCK = hydra.core.Name("block")
     CATCHES = hydra.core.Name("catches")
@@ -2339,7 +2339,7 @@ class TryStatement_WithFinally:
     block: Block
     catches: Maybe[Catches]
     finally_: Finally
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TryStatement_WithFinally")
     BLOCK = hydra.core.Name("block")
     CATCHES = hydra.core.Name("catches")
@@ -2354,7 +2354,7 @@ Catches.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.Catches")
 class CatchClause:
     parameter: Maybe[CatchFormalParameter]
     block: Block
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.CatchClause")
     PARAMETER = hydra.core.Name("parameter")
     BLOCK = hydra.core.Name("block")
@@ -2364,7 +2364,7 @@ class CatchFormalParameter:
     modifiers: frozenlist[VariableModifier]
     type: CatchType
     id: VariableDeclaratorId
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.CatchFormalParameter")
     MODIFIERS = hydra.core.Name("modifiers")
     TYPE = hydra.core.Name("type")
@@ -2374,7 +2374,7 @@ class CatchFormalParameter:
 class CatchType:
     type: UnannClassType
     types: frozenlist[ClassType]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.CatchType")
     TYPE = hydra.core.Name("type")
     TYPES = hydra.core.Name("types")
@@ -2390,7 +2390,7 @@ class TryWithResourcesStatement:
     block: Block
     catches: Maybe[Catches]
     finally_: Maybe[Finally]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TryWithResourcesStatement")
     RESOURCE_SPECIFICATION = hydra.core.Name("resourceSpecification")
     BLOCK = hydra.core.Name("block")
@@ -2414,7 +2414,7 @@ class _ResourceMeta(type):
 
 class Resource(metaclass=_ResourceMeta):
     r"""ResourceLocal | ResourceVariable"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.Resource")
     LOCAL = hydra.core.Name("local")
     VARIABLE = hydra.core.Name("variable")
@@ -2425,7 +2425,7 @@ class Resource_Local:
     type: LocalVariableType
     identifier: Identifier
     expression: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.Resource_Local")
     MODIFIERS = hydra.core.Name("modifiers")
     TYPE = hydra.core.Name("type")
@@ -2444,7 +2444,7 @@ class _VariableAccessMeta(type):
 
 class VariableAccess(metaclass=_VariableAccessMeta):
     r"""VariableAccessExpressionName | VariableAccessFieldAccess"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.VariableAccess")
     EXPRESSION_NAME = hydra.core.Name("expressionName")
     FIELD_ACCESS = hydra.core.Name("fieldAccess")
@@ -2461,7 +2461,7 @@ class _PrimaryMeta(type):
 
 class Primary(metaclass=_PrimaryMeta):
     r"""PrimaryNoNewArray | PrimaryArrayCreation"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.Primary")
     NO_NEW_ARRAY = hydra.core.Name("noNewArray")
     ARRAY_CREATION = hydra.core.Name("arrayCreation")
@@ -2506,7 +2506,7 @@ class _PrimaryNoNewArrayMeta(type):
 
 class PrimaryNoNewArray(metaclass=_PrimaryNoNewArrayMeta):
     r"""PrimaryNoNewArrayLiteral | PrimaryNoNewArrayClassLiteral | PrimaryNoNewArrayThis | PrimaryNoNewArrayDotThis | PrimaryNoNewArrayParens | PrimaryNoNewArrayClassInstance | PrimaryNoNewArrayFieldAccess | PrimaryNoNewArrayArrayAccess | PrimaryNoNewArrayMethodInvocation | PrimaryNoNewArrayMethodReference"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.PrimaryNoNewArray")
     LITERAL = hydra.core.Name("literal")
     CLASS_LITERAL = hydra.core.Name("classLiteral")
@@ -2541,7 +2541,7 @@ class _ClassLiteralMeta(type):
 
 class ClassLiteral(metaclass=_ClassLiteralMeta):
     r"""ClassLiteralType | ClassLiteralNumericType | ClassLiteralBoolean | ClassLiteralVoid"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ClassLiteral")
     TYPE = hydra.core.Name("type")
     NUMERIC_TYPE = hydra.core.Name("numericType")
@@ -2560,7 +2560,7 @@ class _TypeNameArrayMeta(type):
 
 class TypeNameArray(metaclass=_TypeNameArrayMeta):
     r"""TypeNameArraySimple | TypeNameArrayArray"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TypeNameArray")
     SIMPLE = hydra.core.Name("simple")
     ARRAY = hydra.core.Name("array")
@@ -2577,7 +2577,7 @@ class _NumericTypeArrayMeta(type):
 
 class NumericTypeArray(metaclass=_NumericTypeArrayMeta):
     r"""NumericTypeArraySimple | NumericTypeArrayArray"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.NumericTypeArray")
     SIMPLE = hydra.core.Name("simple")
     ARRAY = hydra.core.Name("array")
@@ -2598,7 +2598,7 @@ class _BooleanArrayMeta(type):
 
 class BooleanArray(metaclass=_BooleanArrayMeta):
     r"""BooleanArraySimple | BooleanArrayArray"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.BooleanArray")
     SIMPLE = hydra.core.Name("simple")
     ARRAY = hydra.core.Name("array")
@@ -2607,7 +2607,7 @@ class BooleanArray(metaclass=_BooleanArrayMeta):
 class ClassInstanceCreationExpression:
     qualifier: Maybe[ClassInstanceCreationExpression_Qualifier]
     expression: UnqualifiedClassInstanceCreationExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ClassInstanceCreationExpression")
     QUALIFIER = hydra.core.Name("qualifier")
     EXPRESSION = hydra.core.Name("expression")
@@ -2624,7 +2624,7 @@ class _ClassInstanceCreationExpression_QualifierMeta(type):
 
 class ClassInstanceCreationExpression_Qualifier(metaclass=_ClassInstanceCreationExpression_QualifierMeta):
     r"""ClassInstanceCreationExpression_QualifierExpression | ClassInstanceCreationExpression_QualifierPrimary"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier")
     EXPRESSION = hydra.core.Name("expression")
     PRIMARY = hydra.core.Name("primary")
@@ -2635,7 +2635,7 @@ class UnqualifiedClassInstanceCreationExpression:
     class_or_interface: ClassOrInterfaceTypeToInstantiate
     arguments: frozenlist[Expression]
     body: Maybe[ClassBody]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.UnqualifiedClassInstanceCreationExpression")
     TYPE_ARGUMENTS = hydra.core.Name("typeArguments")
     CLASS_OR_INTERFACE = hydra.core.Name("classOrInterface")
@@ -2646,7 +2646,7 @@ class UnqualifiedClassInstanceCreationExpression:
 class ClassOrInterfaceTypeToInstantiate:
     identifiers: frozenlist[AnnotatedIdentifier]
     type_arguments: Maybe[TypeArgumentsOrDiamond]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate")
     IDENTIFIERS = hydra.core.Name("identifiers")
     TYPE_ARGUMENTS = hydra.core.Name("typeArguments")
@@ -2655,7 +2655,7 @@ class ClassOrInterfaceTypeToInstantiate:
 class AnnotatedIdentifier:
     annotations: frozenlist[Annotation]
     identifier: Identifier
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.AnnotatedIdentifier")
     ANNOTATIONS = hydra.core.Name("annotations")
     IDENTIFIER = hydra.core.Name("identifier")
@@ -2676,7 +2676,7 @@ class _TypeArgumentsOrDiamondMeta(type):
 
 class TypeArgumentsOrDiamond(metaclass=_TypeArgumentsOrDiamondMeta):
     r"""TypeArgumentsOrDiamondArguments | TypeArgumentsOrDiamondDiamond"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.TypeArgumentsOrDiamond")
     ARGUMENTS = hydra.core.Name("arguments")
     DIAMOND = hydra.core.Name("diamond")
@@ -2685,7 +2685,7 @@ class TypeArgumentsOrDiamond(metaclass=_TypeArgumentsOrDiamondMeta):
 class FieldAccess:
     qualifier: FieldAccess_Qualifier
     identifier: Identifier
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.FieldAccess")
     QUALIFIER = hydra.core.Name("qualifier")
     IDENTIFIER = hydra.core.Name("identifier")
@@ -2709,7 +2709,7 @@ class _FieldAccess_QualifierMeta(type):
 
 class FieldAccess_Qualifier(metaclass=_FieldAccess_QualifierMeta):
     r"""FieldAccess_QualifierPrimary | FieldAccess_QualifierSuper | FieldAccess_QualifierTyped"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.FieldAccess_Qualifier")
     PRIMARY = hydra.core.Name("primary")
     SUPER = hydra.core.Name("super")
@@ -2719,7 +2719,7 @@ class FieldAccess_Qualifier(metaclass=_FieldAccess_QualifierMeta):
 class ArrayAccess:
     expression: Maybe[Expression]
     variant: ArrayAccess_Variant
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ArrayAccess")
     EXPRESSION = hydra.core.Name("expression")
     VARIANT = hydra.core.Name("variant")
@@ -2736,7 +2736,7 @@ class _ArrayAccess_VariantMeta(type):
 
 class ArrayAccess_Variant(metaclass=_ArrayAccess_VariantMeta):
     r"""ArrayAccess_VariantName | ArrayAccess_VariantPrimary"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ArrayAccess_Variant")
     NAME = hydra.core.Name("name")
     PRIMARY = hydra.core.Name("primary")
@@ -2745,7 +2745,7 @@ class ArrayAccess_Variant(metaclass=_ArrayAccess_VariantMeta):
 class MethodInvocation:
     header: MethodInvocation_Header
     arguments: frozenlist[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodInvocation")
     HEADER = hydra.core.Name("header")
     ARGUMENTS = hydra.core.Name("arguments")
@@ -2762,7 +2762,7 @@ class _MethodInvocation_HeaderMeta(type):
 
 class MethodInvocation_Header(metaclass=_MethodInvocation_HeaderMeta):
     r"""MethodInvocation_HeaderSimple | MethodInvocation_HeaderComplex"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodInvocation_Header")
     SIMPLE = hydra.core.Name("simple")
     COMPLEX = hydra.core.Name("complex")
@@ -2772,7 +2772,7 @@ class MethodInvocation_Complex:
     variant: MethodInvocation_Variant
     type_arguments: frozenlist[TypeArgument]
     identifier: Identifier
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodInvocation_Complex")
     VARIANT = hydra.core.Name("variant")
     TYPE_ARGUMENTS = hydra.core.Name("typeArguments")
@@ -2803,7 +2803,7 @@ class _MethodInvocation_VariantMeta(type):
 
 class MethodInvocation_Variant(metaclass=_MethodInvocation_VariantMeta):
     r"""MethodInvocation_VariantType | MethodInvocation_VariantExpression | MethodInvocation_VariantPrimary | MethodInvocation_VariantSuper | MethodInvocation_VariantTypeSuper"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodInvocation_Variant")
     TYPE = hydra.core.Name("type")
     EXPRESSION = hydra.core.Name("expression")
@@ -2835,7 +2835,7 @@ class _MethodReferenceMeta(type):
 
 class MethodReference(metaclass=_MethodReferenceMeta):
     r"""MethodReferenceExpression | MethodReferencePrimary | MethodReferenceReferenceType | MethodReferenceSuper | MethodReferenceNew | MethodReferenceArray"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodReference")
     EXPRESSION = hydra.core.Name("expression")
     PRIMARY = hydra.core.Name("primary")
@@ -2849,7 +2849,7 @@ class MethodReference_Expression:
     name: ExpressionName
     type_arguments: frozenlist[TypeArgument]
     identifier: Identifier
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodReference_Expression")
     NAME = hydra.core.Name("name")
     TYPE_ARGUMENTS = hydra.core.Name("typeArguments")
@@ -2860,7 +2860,7 @@ class MethodReference_Primary:
     primary: Primary
     type_arguments: frozenlist[TypeArgument]
     identifier: Identifier
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodReference_Primary")
     PRIMARY = hydra.core.Name("primary")
     TYPE_ARGUMENTS = hydra.core.Name("typeArguments")
@@ -2871,7 +2871,7 @@ class MethodReference_ReferenceType:
     reference_type: ReferenceType
     type_arguments: frozenlist[TypeArgument]
     identifier: Identifier
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodReference_ReferenceType")
     REFERENCE_TYPE = hydra.core.Name("referenceType")
     TYPE_ARGUMENTS = hydra.core.Name("typeArguments")
@@ -2882,7 +2882,7 @@ class MethodReference_Super:
     type_arguments: frozenlist[TypeArgument]
     identifier: Identifier
     super: bool
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodReference_Super")
     TYPE_ARGUMENTS = hydra.core.Name("typeArguments")
     IDENTIFIER = hydra.core.Name("identifier")
@@ -2892,7 +2892,7 @@ class MethodReference_Super:
 class MethodReference_New:
     class_type: ClassType
     type_arguments: frozenlist[TypeArgument]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MethodReference_New")
     CLASS_TYPE = hydra.core.Name("classType")
     TYPE_ARGUMENTS = hydra.core.Name("typeArguments")
@@ -2920,7 +2920,7 @@ class _ArrayCreationExpressionMeta(type):
 
 class ArrayCreationExpression(metaclass=_ArrayCreationExpressionMeta):
     r"""ArrayCreationExpressionPrimitive | ArrayCreationExpressionClassOrInterface | ArrayCreationExpressionPrimitiveArray | ArrayCreationExpressionClassOrInterfaceArray"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ArrayCreationExpression")
     PRIMITIVE = hydra.core.Name("primitive")
     CLASS_OR_INTERFACE = hydra.core.Name("classOrInterface")
@@ -2932,7 +2932,7 @@ class ArrayCreationExpression_Primitive:
     type: PrimitiveTypeWithAnnotations
     dim_exprs: frozenlist[DimExpr]
     dims: Maybe[Dims]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ArrayCreationExpression_Primitive")
     TYPE = hydra.core.Name("type")
     DIM_EXPRS = hydra.core.Name("dimExprs")
@@ -2943,7 +2943,7 @@ class ArrayCreationExpression_ClassOrInterface:
     type: ClassOrInterfaceType
     dim_exprs: frozenlist[DimExpr]
     dims: Maybe[Dims]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ArrayCreationExpression_ClassOrInterface")
     TYPE = hydra.core.Name("type")
     DIM_EXPRS = hydra.core.Name("dimExprs")
@@ -2954,7 +2954,7 @@ class ArrayCreationExpression_PrimitiveArray:
     type: PrimitiveTypeWithAnnotations
     dims: frozenlist[Dims]
     array: ArrayInitializer
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ArrayCreationExpression_PrimitiveArray")
     TYPE = hydra.core.Name("type")
     DIMS = hydra.core.Name("dims")
@@ -2965,7 +2965,7 @@ class ArrayCreationExpression_ClassOrInterfaceArray:
     type: ClassOrInterfaceType
     dims: frozenlist[Dims]
     array: ArrayInitializer
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray")
     TYPE = hydra.core.Name("type")
     DIMS = hydra.core.Name("dims")
@@ -2975,7 +2975,7 @@ class ArrayCreationExpression_ClassOrInterfaceArray:
 class DimExpr:
     annotations: frozenlist[Annotation]
     expression: Maybe[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.DimExpr")
     ANNOTATIONS = hydra.core.Name("annotations")
     EXPRESSION = hydra.core.Name("expression")
@@ -2992,7 +2992,7 @@ class _ExpressionMeta(type):
 
 class Expression(metaclass=_ExpressionMeta):
     r"""ExpressionLambda | ExpressionAssignment"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.Expression")
     LAMBDA = hydra.core.Name("lambda")
     ASSIGNMENT = hydra.core.Name("assignment")
@@ -3001,7 +3001,7 @@ class Expression(metaclass=_ExpressionMeta):
 class LambdaExpression:
     parameters: LambdaParameters
     body: LambdaBody
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.LambdaExpression")
     PARAMETERS = hydra.core.Name("parameters")
     BODY = hydra.core.Name("body")
@@ -3018,7 +3018,7 @@ class _LambdaParametersMeta(type):
 
 class LambdaParameters(metaclass=_LambdaParametersMeta):
     r"""LambdaParametersTuple | LambdaParametersSingle"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.LambdaParameters")
     TUPLE = hydra.core.Name("tuple")
     SINGLE = hydra.core.Name("single")
@@ -3035,7 +3035,7 @@ class _LambdaParameterMeta(type):
 
 class LambdaParameter(metaclass=_LambdaParameterMeta):
     r"""LambdaParameterNormal | LambdaParameterVariableArity"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.LambdaParameter")
     NORMAL = hydra.core.Name("normal")
     VARIABLE_ARITY = hydra.core.Name("variableArity")
@@ -3045,7 +3045,7 @@ class LambdaParameter_Normal:
     modifiers: frozenlist[VariableModifier]
     type: LambdaParameterType
     id: VariableDeclaratorId
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.LambdaParameter_Normal")
     MODIFIERS = hydra.core.Name("modifiers")
     TYPE = hydra.core.Name("type")
@@ -3067,7 +3067,7 @@ class _LambdaParameterTypeMeta(type):
 
 class LambdaParameterType(metaclass=_LambdaParameterTypeMeta):
     r"""LambdaParameterTypeType | LambdaParameterTypeVar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.LambdaParameterType")
     TYPE = hydra.core.Name("type")
     VAR = hydra.core.Name("var")
@@ -3084,7 +3084,7 @@ class _LambdaBodyMeta(type):
 
 class LambdaBody(metaclass=_LambdaBodyMeta):
     r"""LambdaBodyExpression | LambdaBodyBlock"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.LambdaBody")
     EXPRESSION = hydra.core.Name("expression")
     BLOCK = hydra.core.Name("block")
@@ -3101,7 +3101,7 @@ class _AssignmentExpressionMeta(type):
 
 class AssignmentExpression(metaclass=_AssignmentExpressionMeta):
     r"""AssignmentExpressionConditional | AssignmentExpressionAssignment"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.AssignmentExpression")
     CONDITIONAL = hydra.core.Name("conditional")
     ASSIGNMENT = hydra.core.Name("assignment")
@@ -3111,7 +3111,7 @@ class Assignment:
     lhs: LeftHandSide
     op: AssignmentOperator
     expression: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.Assignment")
     LHS = hydra.core.Name("lhs")
     OP = hydra.core.Name("op")
@@ -3132,7 +3132,7 @@ class _LeftHandSideMeta(type):
 
 class LeftHandSide(metaclass=_LeftHandSideMeta):
     r"""LeftHandSideExpressionName | LeftHandSideFieldAccess | LeftHandSideArrayAccess"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.LeftHandSide")
     EXPRESSION_NAME = hydra.core.Name("expressionName")
     FIELD_ACCESS = hydra.core.Name("fieldAccess")
@@ -3140,27 +3140,27 @@ class LeftHandSide(metaclass=_LeftHandSideMeta):
 
 class AssignmentOperator(Enum):
     SIMPLE = hydra.core.Name("simple")
-    
+
     TIMES = hydra.core.Name("times")
-    
+
     DIV = hydra.core.Name("div")
-    
+
     MOD = hydra.core.Name("mod")
-    
+
     PLUS = hydra.core.Name("plus")
-    
+
     MINUS = hydra.core.Name("minus")
-    
+
     SHIFT_LEFT = hydra.core.Name("shiftLeft")
-    
+
     SHIFT_RIGHT = hydra.core.Name("shiftRight")
-    
+
     SHIFT_RIGHT_ZERO_FILL = hydra.core.Name("shiftRightZeroFill")
-    
+
     AND = hydra.core.Name("and")
-    
+
     XOR = hydra.core.Name("xor")
-    
+
     OR = hydra.core.Name("or")
 
 AssignmentOperator.TYPE_ = hydra.core.Name("hydra.ext.java.syntax.AssignmentOperator")
@@ -3180,7 +3180,7 @@ class _ConditionalExpressionMeta(type):
 
 class ConditionalExpression(metaclass=_ConditionalExpressionMeta):
     r"""ConditionalExpressionSimple | ConditionalExpressionTernaryCond | ConditionalExpressionTernaryLambda"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ConditionalExpression")
     SIMPLE = hydra.core.Name("simple")
     TERNARY_COND = hydra.core.Name("ternaryCond")
@@ -3191,7 +3191,7 @@ class ConditionalExpression_TernaryCond:
     cond: ConditionalOrExpression
     if_true: Expression
     if_false: ConditionalExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ConditionalExpression_TernaryCond")
     COND = hydra.core.Name("cond")
     IF_TRUE = hydra.core.Name("ifTrue")
@@ -3202,7 +3202,7 @@ class ConditionalExpression_TernaryLambda:
     cond: ConditionalOrExpression
     if_true: Expression
     if_false: LambdaExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ConditionalExpression_TernaryLambda")
     COND = hydra.core.Name("cond")
     IF_TRUE = hydra.core.Name("ifTrue")
@@ -3248,7 +3248,7 @@ class _EqualityExpressionMeta(type):
 
 class EqualityExpression(metaclass=_EqualityExpressionMeta):
     r"""EqualityExpressionUnary | EqualityExpressionEqual | EqualityExpressionNotEqual"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.EqualityExpression")
     UNARY = hydra.core.Name("unary")
     EQUAL = hydra.core.Name("equal")
@@ -3258,7 +3258,7 @@ class EqualityExpression(metaclass=_EqualityExpressionMeta):
 class EqualityExpression_Binary:
     lhs: EqualityExpression
     rhs: RelationalExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.EqualityExpression_Binary")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -3287,7 +3287,7 @@ class _RelationalExpressionMeta(type):
 
 class RelationalExpression(metaclass=_RelationalExpressionMeta):
     r"""RelationalExpressionSimple | RelationalExpressionLessThan | RelationalExpressionGreaterThan | RelationalExpressionLessThanEqual | RelationalExpressionGreaterThanEqual | RelationalExpressionInstanceof"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.RelationalExpression")
     SIMPLE = hydra.core.Name("simple")
     LESS_THAN = hydra.core.Name("lessThan")
@@ -3300,7 +3300,7 @@ class RelationalExpression(metaclass=_RelationalExpressionMeta):
 class RelationalExpression_LessThan:
     lhs: RelationalExpression
     rhs: ShiftExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.RelationalExpression_LessThan")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -3309,7 +3309,7 @@ class RelationalExpression_LessThan:
 class RelationalExpression_GreaterThan:
     lhs: RelationalExpression
     rhs: ShiftExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.RelationalExpression_GreaterThan")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -3318,7 +3318,7 @@ class RelationalExpression_GreaterThan:
 class RelationalExpression_LessThanEqual:
     lhs: RelationalExpression
     rhs: ShiftExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.RelationalExpression_LessThanEqual")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -3327,7 +3327,7 @@ class RelationalExpression_LessThanEqual:
 class RelationalExpression_GreaterThanEqual:
     lhs: RelationalExpression
     rhs: ShiftExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.RelationalExpression_GreaterThanEqual")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -3336,7 +3336,7 @@ class RelationalExpression_GreaterThanEqual:
 class RelationalExpression_InstanceOf:
     lhs: RelationalExpression
     rhs: ReferenceType
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.RelationalExpression_InstanceOf")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -3359,7 +3359,7 @@ class _ShiftExpressionMeta(type):
 
 class ShiftExpression(metaclass=_ShiftExpressionMeta):
     r"""ShiftExpressionUnary | ShiftExpressionShiftLeft | ShiftExpressionShiftRight | ShiftExpressionShiftRightZeroFill"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ShiftExpression")
     UNARY = hydra.core.Name("unary")
     SHIFT_LEFT = hydra.core.Name("shiftLeft")
@@ -3370,7 +3370,7 @@ class ShiftExpression(metaclass=_ShiftExpressionMeta):
 class ShiftExpression_Binary:
     lhs: ShiftExpression
     rhs: AdditiveExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.ShiftExpression_Binary")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -3390,7 +3390,7 @@ class _AdditiveExpressionMeta(type):
 
 class AdditiveExpression(metaclass=_AdditiveExpressionMeta):
     r"""AdditiveExpressionUnary | AdditiveExpressionPlus | AdditiveExpressionMinus"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.AdditiveExpression")
     UNARY = hydra.core.Name("unary")
     PLUS = hydra.core.Name("plus")
@@ -3400,7 +3400,7 @@ class AdditiveExpression(metaclass=_AdditiveExpressionMeta):
 class AdditiveExpression_Binary:
     lhs: AdditiveExpression
     rhs: MultiplicativeExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.AdditiveExpression_Binary")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -3423,7 +3423,7 @@ class _MultiplicativeExpressionMeta(type):
 
 class MultiplicativeExpression(metaclass=_MultiplicativeExpressionMeta):
     r"""MultiplicativeExpressionUnary | MultiplicativeExpressionTimes | MultiplicativeExpressionDivide | MultiplicativeExpressionMod"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MultiplicativeExpression")
     UNARY = hydra.core.Name("unary")
     TIMES = hydra.core.Name("times")
@@ -3434,7 +3434,7 @@ class MultiplicativeExpression(metaclass=_MultiplicativeExpressionMeta):
 class MultiplicativeExpression_Binary:
     lhs: MultiplicativeExpression
     rhs: UnaryExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.MultiplicativeExpression_Binary")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -3460,7 +3460,7 @@ class _UnaryExpressionMeta(type):
 
 class UnaryExpression(metaclass=_UnaryExpressionMeta):
     r"""UnaryExpressionPreIncrement | UnaryExpressionPreDecrement | UnaryExpressionPlus | UnaryExpressionMinus | UnaryExpressionOther"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.UnaryExpression")
     PRE_INCREMENT = hydra.core.Name("preIncrement")
     PRE_DECREMENT = hydra.core.Name("preDecrement")
@@ -3496,7 +3496,7 @@ class _UnaryExpressionNotPlusMinusMeta(type):
 
 class UnaryExpressionNotPlusMinus(metaclass=_UnaryExpressionNotPlusMinusMeta):
     r"""UnaryExpressionNotPlusMinusPostfix | UnaryExpressionNotPlusMinusTilde | UnaryExpressionNotPlusMinusNot | UnaryExpressionNotPlusMinusCast"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.UnaryExpressionNotPlusMinus")
     POSTFIX = hydra.core.Name("postfix")
     TILDE = hydra.core.Name("tilde")
@@ -3521,7 +3521,7 @@ class _PostfixExpressionMeta(type):
 
 class PostfixExpression(metaclass=_PostfixExpressionMeta):
     r"""PostfixExpressionPrimary | PostfixExpressionName | PostfixExpressionPostIncrement | PostfixExpressionPostDecrement"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.PostfixExpression")
     PRIMARY = hydra.core.Name("primary")
     NAME = hydra.core.Name("name")
@@ -3553,7 +3553,7 @@ class _CastExpressionMeta(type):
 
 class CastExpression(metaclass=_CastExpressionMeta):
     r"""CastExpressionPrimitive | CastExpressionNotPlusMinus | CastExpressionLambda"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.CastExpression")
     PRIMITIVE = hydra.core.Name("primitive")
     NOT_PLUS_MINUS = hydra.core.Name("notPlusMinus")
@@ -3563,7 +3563,7 @@ class CastExpression(metaclass=_CastExpressionMeta):
 class CastExpression_Primitive:
     type: PrimitiveTypeWithAnnotations
     expression: UnaryExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.CastExpression_Primitive")
     TYPE = hydra.core.Name("type")
     EXPRESSION = hydra.core.Name("expression")
@@ -3572,7 +3572,7 @@ class CastExpression_Primitive:
 class CastExpression_NotPlusMinus:
     ref_and_bounds: CastExpression_RefAndBounds
     expression: UnaryExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.CastExpression_NotPlusMinus")
     REF_AND_BOUNDS = hydra.core.Name("refAndBounds")
     EXPRESSION = hydra.core.Name("expression")
@@ -3581,7 +3581,7 @@ class CastExpression_NotPlusMinus:
 class CastExpression_Lambda:
     ref_and_bounds: CastExpression_RefAndBounds
     expression: LambdaExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.CastExpression_Lambda")
     REF_AND_BOUNDS = hydra.core.Name("refAndBounds")
     EXPRESSION = hydra.core.Name("expression")
@@ -3590,7 +3590,7 @@ class CastExpression_Lambda:
 class CastExpression_RefAndBounds:
     type: ReferenceType
     bounds: frozenlist[AdditionalBound]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.CastExpression_RefAndBounds")
     TYPE = hydra.core.Name("type")
     BOUNDS = hydra.core.Name("bounds")

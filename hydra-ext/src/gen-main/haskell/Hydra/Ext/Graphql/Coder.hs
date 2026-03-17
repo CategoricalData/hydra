@@ -38,11 +38,11 @@ import qualified Data.Set as S
 
 moduleToGraphql :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (M.Map String String)
 moduleToGraphql mod defs cx g =
-     
-      let partitioned = Schemas.partitionDefinitions defs 
+
+      let partitioned = Schemas.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
           prefixes =
-                  (\modNs -> \tdefs ->  
+                  (\modNs -> \tdefs ->
                     let namespaces = Lists.nub (Maybes.cat (Lists.map (\td -> Names.namespaceOf (Module.typeDefinitionName td)) tdefs))
                     in (Maps.fromList (Lists.map (\ns_ -> (ns_, (Logic.ifElse (Equality.equal ns_ modNs) "" (Strings.cat2 (Formatting.sanitizeWithUnderscores Sets.empty (Module.unNamespace ns_)) "_")))) namespaces))) (Module.moduleNamespace mod) typeDefs
           filePath = Names.namespaceToFilePath Util.CaseConventionCamel (Module.FileExtension "graphql") (Module.moduleNamespace mod)
@@ -194,8 +194,8 @@ encodeType cx g prefixes typ =
 
 encodeTypeName :: M.Map Module.Namespace String -> Core.Name -> Syntax.Name
 encodeTypeName prefixes name =
-     
-      let qualName = Names.qualifyName name 
+
+      let qualName = Names.qualifyName name
           local = Module.qualifiedNameLocal qualName
           mns = Module.qualifiedNameNamespace qualName
           prefix = Maybes.maybe "" (\ns_ -> Maybes.maybe "" (\p -> p) (Maps.lookup ns_ prefixes)) mns

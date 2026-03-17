@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class MethodReference_Expression implements Serializable, Comparable<MethodReference_Expression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodReference_Expression");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public final hydra.ext.java.syntax.ExpressionName name;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
-  
+
   public final hydra.ext.java.syntax.Identifier identifier;
-  
+
   public MethodReference_Expression (hydra.ext.java.syntax.ExpressionName name, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
     this.name = name;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MethodReference_Expression)) {
@@ -39,12 +39,12 @@ public class MethodReference_Expression implements Serializable, Comparable<Meth
       this.identifier,
       o.identifier);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(typeArguments) + 5 * java.util.Objects.hashCode(identifier);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MethodReference_Expression other) {
@@ -59,15 +59,15 @@ public class MethodReference_Expression implements Serializable, Comparable<Meth
     }
     return ((Comparable) identifier).compareTo(other.identifier);
   }
-  
+
   public MethodReference_Expression withName(hydra.ext.java.syntax.ExpressionName name) {
     return new MethodReference_Expression(name, typeArguments, identifier);
   }
-  
+
   public MethodReference_Expression withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_Expression(name, typeArguments, identifier);
   }
-  
+
   public MethodReference_Expression withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new MethodReference_Expression(name, typeArguments, identifier);
   }

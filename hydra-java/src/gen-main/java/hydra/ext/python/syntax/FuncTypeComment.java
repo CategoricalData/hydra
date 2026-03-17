@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class FuncTypeComment implements Serializable, Comparable<FuncTypeComment> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.FuncTypeComment");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.ext.python.syntax.TypeComment value;
-  
+
   public FuncTypeComment (hydra.ext.python.syntax.TypeComment value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof FuncTypeComment)) {
@@ -25,12 +25,12 @@ public class FuncTypeComment implements Serializable, Comparable<FuncTypeComment
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(FuncTypeComment other) {

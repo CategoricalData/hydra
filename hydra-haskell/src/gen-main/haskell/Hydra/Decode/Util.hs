@@ -24,8 +24,8 @@ import qualified Data.Set as S
 caseConvention :: Graph.Graph -> Core.Term -> Either Error.DecodingError Util.CaseConvention
 caseConvention cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -43,8 +43,8 @@ caseConvention cx raw =
 comparison :: Graph.Graph -> Core.Term -> Either Error.DecodingError Util.Comparison
 comparison cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -61,8 +61,8 @@ comparison cx raw =
 precision :: Graph.Graph -> Core.Term -> Either Error.DecodingError Util.Precision
 precision cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =

@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class StringNullableArgument implements Serializable, Comparable<StringNullableArgument> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
-  
+
   private StringNullableArgument () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Value instance) ;
-    
+
     R visit(Variable instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(StringNullableArgument instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Value instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Variable instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Value extends hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument implements Serializable {
     public final hydra.util.Maybe<String> value;
-    
+
     public Value (hydra.util.Maybe<String> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Value)) {
@@ -54,12 +54,12 @@ public abstract class StringNullableArgument implements Serializable, Comparable
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StringNullableArgument other) {
@@ -70,20 +70,20 @@ public abstract class StringNullableArgument implements Serializable, Comparable
       Value o = (Value) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Variable extends hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument implements Serializable {
     public final hydra.ext.org.apache.tinkerpop.gremlin.Identifier value;
-    
+
     public Variable (hydra.ext.org.apache.tinkerpop.gremlin.Identifier value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Variable)) {
@@ -94,12 +94,12 @@ public abstract class StringNullableArgument implements Serializable, Comparable
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StringNullableArgument other) {
@@ -110,7 +110,7 @@ public abstract class StringNullableArgument implements Serializable, Comparable
       Variable o = (Variable) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

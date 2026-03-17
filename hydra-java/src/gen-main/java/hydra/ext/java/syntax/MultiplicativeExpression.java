@@ -6,60 +6,60 @@ import java.io.Serializable;
 
 public abstract class MultiplicativeExpression implements Serializable, Comparable<MultiplicativeExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MultiplicativeExpression");
-  
+
   public static final hydra.core.Name UNARY = new hydra.core.Name("unary");
-  
+
   public static final hydra.core.Name TIMES = new hydra.core.Name("times");
-  
+
   public static final hydra.core.Name DIVIDE = new hydra.core.Name("divide");
-  
+
   public static final hydra.core.Name MOD = new hydra.core.Name("mod");
-  
+
   private MultiplicativeExpression () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Unary instance) ;
-    
+
     R visit(Times instance) ;
-    
+
     R visit(Divide instance) ;
-    
+
     R visit(Mod instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(MultiplicativeExpression instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Unary instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Times instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Divide instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Mod instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Unary extends hydra.ext.java.syntax.MultiplicativeExpression implements Serializable {
     public final hydra.ext.java.syntax.UnaryExpression value;
-    
+
     public Unary (hydra.ext.java.syntax.UnaryExpression value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Unary)) {
@@ -70,12 +70,12 @@ public abstract class MultiplicativeExpression implements Serializable, Comparab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MultiplicativeExpression other) {
@@ -86,20 +86,20 @@ public abstract class MultiplicativeExpression implements Serializable, Comparab
       Unary o = (Unary) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Times extends hydra.ext.java.syntax.MultiplicativeExpression implements Serializable {
     public final hydra.ext.java.syntax.MultiplicativeExpression_Binary value;
-    
+
     public Times (hydra.ext.java.syntax.MultiplicativeExpression_Binary value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Times)) {
@@ -110,12 +110,12 @@ public abstract class MultiplicativeExpression implements Serializable, Comparab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MultiplicativeExpression other) {
@@ -126,20 +126,20 @@ public abstract class MultiplicativeExpression implements Serializable, Comparab
       Times o = (Times) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Divide extends hydra.ext.java.syntax.MultiplicativeExpression implements Serializable {
     public final hydra.ext.java.syntax.MultiplicativeExpression_Binary value;
-    
+
     public Divide (hydra.ext.java.syntax.MultiplicativeExpression_Binary value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Divide)) {
@@ -150,12 +150,12 @@ public abstract class MultiplicativeExpression implements Serializable, Comparab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MultiplicativeExpression other) {
@@ -166,20 +166,20 @@ public abstract class MultiplicativeExpression implements Serializable, Comparab
       Divide o = (Divide) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Mod extends hydra.ext.java.syntax.MultiplicativeExpression implements Serializable {
     public final hydra.ext.java.syntax.MultiplicativeExpression_Binary value;
-    
+
     public Mod (hydra.ext.java.syntax.MultiplicativeExpression_Binary value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Mod)) {
@@ -190,12 +190,12 @@ public abstract class MultiplicativeExpression implements Serializable, Comparab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MultiplicativeExpression other) {
@@ -206,7 +206,7 @@ public abstract class MultiplicativeExpression implements Serializable, Comparab
       Mod o = (Mod) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

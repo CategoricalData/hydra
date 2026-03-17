@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A constant pattern
-newtype Constant = 
+newtype Constant =
   Constant {
     unConstant :: String}
   deriving (Eq, Ord, Read, Show)
@@ -21,7 +21,7 @@ newtype Constant =
 _Constant = Core.Name "hydra.grammar.Constant"
 
 -- | An enhanced Backus-Naur form (BNF) grammar
-newtype Grammar = 
+newtype Grammar =
   Grammar {
     unGrammar :: [Production]}
   deriving (Eq, Ord, Read, Show)
@@ -29,7 +29,7 @@ newtype Grammar =
 _Grammar = Core.Name "hydra.grammar.Grammar"
 
 -- | A name for a pattern
-newtype Label = 
+newtype Label =
   Label {
     unLabel :: String}
   deriving (Eq, Ord, Read, Show)
@@ -37,7 +37,7 @@ newtype Label =
 _Label = Core.Name "hydra.grammar.Label"
 
 -- | A pattern together with a name (label)
-data LabeledPattern = 
+data LabeledPattern =
   LabeledPattern {
     -- | The label for the pattern
     labeledPatternLabel :: Label,
@@ -52,7 +52,7 @@ _LabeledPattern_label = Core.Name "label"
 _LabeledPattern_pattern = Core.Name "pattern"
 
 -- | A pattern which matches valid expressions in the language
-data Pattern = 
+data Pattern =
   -- | A choice between alternative patterns
   PatternAlternatives [Pattern] |
   -- | A constant (terminal) pattern
@@ -102,7 +102,7 @@ _Pattern_sequence = Core.Name "sequence"
 _Pattern_star = Core.Name "star"
 
 -- | A BNF production
-data Production = 
+data Production =
   Production {
     -- | The nonterminal symbol being defined
     productionSymbol :: Symbol,
@@ -117,7 +117,7 @@ _Production_symbol = Core.Name "symbol"
 _Production_pattern = Core.Name "pattern"
 
 -- | A regular expression
-newtype Regex = 
+newtype Regex =
   Regex {
     unRegex :: String}
   deriving (Eq, Ord, Read, Show)
@@ -125,7 +125,7 @@ newtype Regex =
 _Regex = Core.Name "hydra.grammar.Regex"
 
 -- | A nonterminal symbol
-newtype Symbol = 
+newtype Symbol =
   Symbol {
     unSymbol :: String}
   deriving (Eq, Ord, Read, Show)

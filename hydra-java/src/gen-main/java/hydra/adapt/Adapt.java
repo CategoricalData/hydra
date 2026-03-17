@@ -15,12 +15,12 @@ public interface Adapt {
       public hydra.util.Maybe<hydra.core.FloatType> visit(hydra.core.FloatType.Bigfloat ignored) {
         return (alt).apply(new hydra.core.FloatType.Float64());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.FloatType> visit(hydra.core.FloatType.Float32 ignored) {
         return (alt).apply(new hydra.core.FloatType.Float64());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.FloatType> visit(hydra.core.FloatType.Float64 ignored) {
         return (alt).apply(new hydra.core.FloatType.Bigfloat());
@@ -34,7 +34,7 @@ public interface Adapt {
       () -> hydra.util.Maybe.just(ft),
       () -> (forUnsupported).apply(ft));
   }
-  
+
   static hydra.util.Either<String, hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>> adaptDataGraph(hydra.coders.LanguageConstraints constraints, Boolean doExpand, hydra.util.ConsList<hydra.core.Binding> els0, hydra.context.Context cx, hydra.graph.Graph graph0) {
     hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap = hydra.adapt.Adapt.adaptLiteralTypesMap(constraints);
     hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive> prims0 = (graph0).primitives;
@@ -158,7 +158,7 @@ public interface Adapt {
             }))));
       }));
   }
-  
+
   static <T0> hydra.util.Either<String, hydra.util.PersistentMap<T0, hydra.core.Type>> adaptGraphSchema(hydra.coders.LanguageConstraints constraints, hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap, hydra.util.PersistentMap<T0, hydra.core.Type> types0) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
@@ -173,18 +173,18 @@ public interface Adapt {
         hydra.lib.maps.ToList.apply(types0)),
       (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<T0, hydra.core.Type>>, hydra.util.Either<String, hydra.util.PersistentMap<T0, hydra.core.Type>>>) (pairs -> hydra.util.Either.<String, hydra.util.PersistentMap<T0, hydra.core.Type>>right(hydra.lib.maps.FromList.apply(pairs))));
   }
-  
+
   static <T1> hydra.util.Either<String, hydra.util.Pair<T1, hydra.core.Type>> adaptGraphSchema_mapPair(hydra.coders.LanguageConstraints constraints, java.util.function.Function<hydra.coders.LanguageConstraints, java.util.function.Function<hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType>, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>>> hydra_adapt_adaptType2, hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap, hydra.util.Pair<T1, hydra.core.Type> pair) {
     hydra.util.Lazy<hydra.core.Type> typ = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
     return hydra.lib.eithers.Bind.apply(
       (hydra_adapt_adaptType2).apply(constraints).apply(litmap).apply(typ.get()),
       (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.util.Pair<T1, hydra.core.Type>>>) (typ1 -> hydra.util.Either.<String, hydra.util.Pair<T1, hydra.core.Type>>right((hydra.util.Pair<T1, hydra.core.Type>) ((hydra.util.Pair<T1, hydra.core.Type>) (new hydra.util.Pair<T1, hydra.core.Type>(hydra.adapt.Adapt.<T1>adaptGraphSchema_name(pair), typ1))))));
   }
-  
+
   static <T1> T1 adaptGraphSchema_name(hydra.util.Pair<T1, hydra.core.Type> pair) {
     return hydra.lib.pairs.First.apply(pair);
   }
-  
+
   static hydra.util.Maybe<hydra.core.IntegerType> adaptIntegerType(hydra.coders.LanguageConstraints constraints, hydra.core.IntegerType it) {
     java.util.function.Function<hydra.core.IntegerType, hydra.util.Maybe<hydra.core.IntegerType>> alt = (java.util.function.Function<hydra.core.IntegerType, hydra.util.Maybe<hydra.core.IntegerType>>) (v1 -> hydra.adapt.Adapt.adaptIntegerType(
       constraints,
@@ -194,42 +194,42 @@ public interface Adapt {
       public hydra.util.Maybe<hydra.core.IntegerType> visit(hydra.core.IntegerType.Bigint ignored) {
         return (hydra.util.Maybe<hydra.core.IntegerType>) (hydra.util.Maybe.<hydra.core.IntegerType>nothing());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.IntegerType> visit(hydra.core.IntegerType.Int8 ignored) {
         return (alt).apply(new hydra.core.IntegerType.Uint16());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.IntegerType> visit(hydra.core.IntegerType.Int16 ignored) {
         return (alt).apply(new hydra.core.IntegerType.Uint32());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.IntegerType> visit(hydra.core.IntegerType.Int32 ignored) {
         return (alt).apply(new hydra.core.IntegerType.Uint64());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.IntegerType> visit(hydra.core.IntegerType.Int64 ignored) {
         return (alt).apply(new hydra.core.IntegerType.Bigint());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.IntegerType> visit(hydra.core.IntegerType.Uint8 ignored) {
         return (alt).apply(new hydra.core.IntegerType.Int16());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.IntegerType> visit(hydra.core.IntegerType.Uint16 ignored) {
         return (alt).apply(new hydra.core.IntegerType.Int32());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.IntegerType> visit(hydra.core.IntegerType.Uint32 ignored) {
         return (alt).apply(new hydra.core.IntegerType.Int64());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.IntegerType> visit(hydra.core.IntegerType.Uint64 ignored) {
         return (alt).apply(new hydra.core.IntegerType.Bigint());
@@ -243,7 +243,7 @@ public interface Adapt {
       () -> hydra.util.Maybe.just(it),
       () -> (forUnsupported).apply(it));
   }
-  
+
   static <T0> hydra.util.Either<String, hydra.core.Term> adaptLambdaDomains(hydra.coders.LanguageConstraints constraints, hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap, java.util.function.Function<T0, hydra.util.Either<String, hydra.core.Term>> recurse, T0 term) {
     return hydra.lib.eithers.Bind.apply(
       (recurse).apply(term),
@@ -252,7 +252,7 @@ public interface Adapt {
         public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<String, hydra.core.Term>right(rewritten);
         }
-        
+
         @Override
         public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Term.Function f) {
           return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -260,7 +260,7 @@ public interface Adapt {
             public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.core.Function instance) {
               return hydra.util.Either.<String, hydra.core.Term>right(new hydra.core.Term.Function((f).value));
             }
-            
+
             @Override
             public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Function.Lambda l) {
               return hydra.lib.eithers.Bind.apply(
@@ -279,7 +279,7 @@ public interface Adapt {
         }
       })));
   }
-  
+
   static hydra.core.Literal adaptLiteral(hydra.core.LiteralType lt, hydra.core.Literal l) {
     return (l).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
@@ -291,7 +291,7 @@ public interface Adapt {
           }
         });
       }
-      
+
       @Override
       public hydra.core.Literal visit(hydra.core.Literal.Boolean_ b) {
         return (lt).accept(new hydra.core.LiteralType.PartialVisitor<>() {
@@ -306,7 +306,7 @@ public interface Adapt {
           }
         });
       }
-      
+
       @Override
       public hydra.core.Literal visit(hydra.core.Literal.Float_ f) {
         return (lt).accept(new hydra.core.LiteralType.PartialVisitor<>() {
@@ -318,7 +318,7 @@ public interface Adapt {
           }
         });
       }
-      
+
       @Override
       public hydra.core.Literal visit(hydra.core.Literal.Integer_ i) {
         return (lt).accept(new hydra.core.LiteralType.PartialVisitor<>() {
@@ -332,19 +332,19 @@ public interface Adapt {
       }
     });
   }
-  
+
   static hydra.util.Maybe<hydra.core.LiteralType> adaptLiteralType(hydra.coders.LanguageConstraints constraints, hydra.core.LiteralType lt) {
     java.util.function.Function<hydra.core.LiteralType, hydra.util.Maybe<hydra.core.LiteralType>> forUnsupported = (java.util.function.Function<hydra.core.LiteralType, hydra.util.Maybe<hydra.core.LiteralType>>) (lt2 -> (lt2).accept(new hydra.core.LiteralType.PartialVisitor<>() {
       @Override
       public hydra.util.Maybe<hydra.core.LiteralType> otherwise(hydra.core.LiteralType instance) {
         return (hydra.util.Maybe<hydra.core.LiteralType>) (hydra.util.Maybe.<hydra.core.LiteralType>nothing());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.LiteralType> visit(hydra.core.LiteralType.Binary ignored) {
         return hydra.util.Maybe.just(new hydra.core.LiteralType.String_());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.LiteralType> visit(hydra.core.LiteralType.Boolean_ ignored) {
         return hydra.lib.maybes.Map.apply(
@@ -353,7 +353,7 @@ public interface Adapt {
             constraints,
             new hydra.core.IntegerType.Int8()));
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.LiteralType> visit(hydra.core.LiteralType.Float_ ft) {
         return hydra.lib.maybes.Map.apply(
@@ -362,7 +362,7 @@ public interface Adapt {
             constraints,
             (ft).value));
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.LiteralType> visit(hydra.core.LiteralType.Integer_ it) {
         return hydra.lib.maybes.Map.apply(
@@ -379,7 +379,7 @@ public interface Adapt {
       () -> (hydra.util.Maybe<hydra.core.LiteralType>) (hydra.util.Maybe.<hydra.core.LiteralType>nothing()),
       () -> (forUnsupported).apply(lt));
   }
-  
+
   static hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> adaptLiteralTypesMap(hydra.coders.LanguageConstraints constraints) {
     java.util.function.Function<hydra.core.LiteralType, hydra.util.Maybe<hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>>> tryType = (java.util.function.Function<hydra.core.LiteralType, hydra.util.Maybe<hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>>>) (lt -> hydra.lib.maybes.Maybe.applyLazy(
       () -> (hydra.util.Maybe<hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>>nothing()),
@@ -391,7 +391,7 @@ public interface Adapt {
       tryType,
       hydra.reflect.Reflect.literalTypes())));
   }
-  
+
   static <T0> hydra.core.Literal adaptLiteralValue(hydra.util.PersistentMap<T0, hydra.core.LiteralType> litmap, T0 lt, hydra.core.Literal l) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> new hydra.core.Literal.String_(hydra.show.core.Core.literal(l)),
@@ -402,7 +402,7 @@ public interface Adapt {
         lt,
         litmap));
   }
-  
+
   static <T0> hydra.util.Either<String, hydra.core.Term> adaptNestedTypes(hydra.coders.LanguageConstraints constraints, hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap, java.util.function.Function<T0, hydra.util.Either<String, hydra.core.Term>> recurse, T0 term) {
     return hydra.lib.eithers.Bind.apply(
       (recurse).apply(term),
@@ -411,7 +411,7 @@ public interface Adapt {
         public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<String, hydra.core.Term>right(rewritten);
         }
-        
+
         @Override
         public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Term.Let lt) {
           java.util.function.Function<hydra.core.Binding, hydra.util.Either<String, hydra.core.Binding>> adaptB = (java.util.function.Function<hydra.core.Binding, hydra.util.Either<String, hydra.core.Binding>>) (b -> hydra.lib.eithers.Bind.apply(
@@ -433,7 +433,7 @@ public interface Adapt {
         }
       })));
   }
-  
+
   static hydra.util.Either<String, hydra.graph.Primitive> adaptPrimitive(hydra.coders.LanguageConstraints constraints, hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap, hydra.graph.Primitive prim0) {
     hydra.core.TypeScheme ts0 = (prim0).type;
     return hydra.lib.eithers.Bind.apply(
@@ -443,7 +443,7 @@ public interface Adapt {
         ts0),
       (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<String, hydra.graph.Primitive>>) (ts1 -> hydra.util.Either.<String, hydra.graph.Primitive>right(new hydra.graph.Primitive((prim0).name, ts1, (prim0).implementation))));
   }
-  
+
   static hydra.util.Either<String, hydra.core.Term> adaptTerm(hydra.coders.LanguageConstraints constraints, hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap, hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term0) {
     return hydra.rewriting.Rewriting.rewriteTermM(
       (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.core.Term>>, java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.core.Term>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.core.Term>>) (v2 -> hydra.adapt.Adapt.adaptTerm_rewrite(
@@ -469,7 +469,7 @@ public interface Adapt {
         v2))),
       term0);
   }
-  
+
   static <T0> hydra.util.Either<String, hydra.core.Term> adaptTerm_rewrite(hydra.coders.LanguageConstraints constraints, hydra.context.Context cx, hydra.graph.Graph graph, java.util.function.Function<hydra.coders.LanguageConstraints, java.util.function.Function<hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType>, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>>> hydra_adapt_adaptType2, java.util.function.Function<hydra.coders.LanguageConstraints, java.util.function.Function<hydra.core.LiteralType, Boolean>> hydra_adapt_literalTypeSupported2, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>>>>> hydra_adapt_termAlternatives2, java.util.function.Function<hydra.core.Literal, hydra.core.LiteralType> hydra_reflect_literalType2, java.util.function.Function<hydra.core.Term, hydra.variants.TermVariant> hydra_reflect_termVariant2, java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap, java.util.function.Function<T0, hydra.util.Either<String, hydra.core.Term>> recurse, T0 term0) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>> forUnsupported = new java.util.concurrent.atomic.AtomicReference<>();
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>> tryTerm = new java.util.concurrent.atomic.AtomicReference<>();
@@ -518,28 +518,28 @@ public interface Adapt {
               (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.core.Term>>) (term2 -> hydra.util.Either.<String, hydra.core.Term>right(term2)),
               mterm)));
         }
-        
+
         @Override
         public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Term.TypeApplication ta) {
           return hydra.lib.eithers.Bind.apply(
             (hydra_adapt_adaptType2).apply(constraints).apply(litmap).apply((ta).value.type),
             (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Term>>) (atyp -> hydra.util.Either.<String, hydra.core.Term>right(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm((ta).value.body, atyp)))));
         }
-        
+
         @Override
         public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Term.TypeLambda ignored) {
           return hydra.util.Either.<String, hydra.core.Term>right(term1);
         }
       })));
   }
-  
+
   static <T1> hydra.util.Either<T1, hydra.util.Maybe<hydra.core.Term>> adaptTerm_forSupported(hydra.coders.LanguageConstraints constraints, java.util.function.Function<hydra.coders.LanguageConstraints, java.util.function.Function<hydra.core.LiteralType, Boolean>> hydra_adapt_literalTypeSupported2, java.util.function.Function<hydra.core.Literal, hydra.core.LiteralType> hydra_reflect_literalType2, hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T1, hydra.util.Maybe<hydra.core.Term>> otherwise(hydra.core.Term instance) {
         return hydra.util.Either.<T1, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(term));
       }
-      
+
       @Override
       public hydra.util.Either<T1, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.Term.Literal l) {
         hydra.core.LiteralType lt = (hydra_reflect_literalType2).apply((l).value);
@@ -553,7 +553,7 @@ public interface Adapt {
       }
     });
   }
-  
+
   static hydra.util.Either<String, hydra.core.Term> adaptTermForLanguage(hydra.coders.Language lang, hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term term) {
     hydra.coders.LanguageConstraints constraints = (lang).constraints;
     hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap = hydra.adapt.Adapt.adaptLiteralTypesMap(constraints);
@@ -564,14 +564,14 @@ public interface Adapt {
       g,
       term);
   }
-  
+
   static hydra.util.Either<String, hydra.core.Type> adaptType(hydra.coders.LanguageConstraints constraints, hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap, hydra.core.Type type0) {
     java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>> forSupported = (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (typ -> (typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Type instance) {
         return hydra.util.Maybe.just(typ);
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Type.Literal lt) {
         return hydra.lib.logic.IfElse.lazy(
@@ -622,7 +622,7 @@ public interface Adapt {
       rewrite,
       type0);
   }
-  
+
   static hydra.util.Either<String, hydra.core.Type> adaptTypeForLanguage(hydra.coders.Language lang, hydra.core.Type typ) {
     hydra.coders.LanguageConstraints constraints = (lang).constraints;
     hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap = hydra.adapt.Adapt.adaptLiteralTypesMap(constraints);
@@ -631,7 +631,7 @@ public interface Adapt {
       litmap,
       typ);
   }
-  
+
   static hydra.util.Either<String, hydra.core.TypeScheme> adaptTypeScheme(hydra.coders.LanguageConstraints constraints, hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap, hydra.core.TypeScheme ts0) {
     hydra.core.Type t0 = (ts0).type;
     hydra.util.ConsList<hydra.core.Name> vars0 = (ts0).variables;
@@ -642,7 +642,7 @@ public interface Adapt {
         t0),
       (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.TypeScheme>>) (t1 -> hydra.util.Either.<String, hydra.core.TypeScheme>right(new hydra.core.TypeScheme(vars0, t1, (ts0).constraints))));
   }
-  
+
   static <T0, T1, T2> hydra.util.Coder<T0, T2> composeCoders(hydra.util.Coder<T0, T1> c1, hydra.util.Coder<T1, T2> c2) {
     return (hydra.util.Coder<T0, T2>) ((hydra.util.Coder<T0, T2>) (new hydra.util.Coder<T0, T2>((java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T2>>>) (cx -> (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T2>>) (a -> hydra.lib.eithers.Bind.apply(
       ((java.util.function.Function<hydra.util.Coder<T0, T1>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T1>>>>) ((java.util.function.Function<hydra.util.Coder<T0, T1>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T1>>>>) (projected -> projected.encode))).apply(c1).apply(cx).apply(a),
@@ -650,7 +650,7 @@ public interface Adapt {
       ((java.util.function.Function<hydra.util.Coder<T1, T2>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T2, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T1>>>>) ((java.util.function.Function<hydra.util.Coder<T1, T2>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T2, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T1>>>>) (projected -> projected.decode))).apply(c2).apply(cx).apply(c),
       (java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>) (b2 -> ((java.util.function.Function<hydra.util.Coder<T0, T1>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>>>) ((java.util.function.Function<hydra.util.Coder<T0, T1>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>>>) (projected -> projected.decode))).apply(c1).apply(cx).apply(b2))))))));
   }
-  
+
   static hydra.util.Either<String, hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>>> dataGraphToDefinitions(hydra.coders.LanguageConstraints constraints, Boolean doInfer, Boolean doExpand, Boolean doHoistCaseStatements, Boolean doHoistPolymorphicLetBindings, hydra.util.ConsList<hydra.core.Binding> originalBindings, hydra.graph.Graph graph0, hydra.util.ConsList<hydra.module.Namespace> namespaces, hydra.context.Context cx) {
     hydra.util.ConsList<hydra.core.Binding> bins0 = originalBindings;
     java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.ConsList<hydra.core.Binding>> hoistCases = (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.ConsList<hydra.core.Binding>>) (bindings -> {
@@ -792,21 +792,21 @@ public interface Adapt {
               }));
           }))))));
   }
-  
+
   static Boolean literalTypeSupported(hydra.coders.LanguageConstraints constraints, hydra.core.LiteralType lt) {
     java.util.function.Function<hydra.core.LiteralType, Boolean> forType = (java.util.function.Function<hydra.core.LiteralType, Boolean>) (lt2 -> (lt2).accept(new hydra.core.LiteralType.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.LiteralType instance) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.LiteralType.Float_ ft) {
         return hydra.lib.sets.Member.apply(
           (ft).value,
           (constraints).floatTypes);
       }
-      
+
       @Override
       public Boolean visit(hydra.core.LiteralType.Integer_ it) {
         return hydra.lib.sets.Member.apply(
@@ -821,7 +821,7 @@ public interface Adapt {
       () -> (forType).apply(lt),
       () -> false);
   }
-  
+
   static hydra.core.Term pushTypeAppsInward(hydra.core.Term term) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.core.Term>> go = new java.util.concurrent.atomic.AtomicReference<>();
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Type, hydra.core.Term>>> push = new java.util.concurrent.atomic.AtomicReference<>();
@@ -832,7 +832,7 @@ public interface Adapt {
         public hydra.core.Elimination visit(hydra.core.Elimination.Record p) {
           return new hydra.core.Elimination.Record((p).value);
         }
-        
+
         @Override
         public hydra.core.Elimination visit(hydra.core.Elimination.Union cs) {
           return new hydra.core.Elimination.Union(new hydra.core.CaseStatement((cs).value.typeName, hydra.lib.maybes.Map.apply(
@@ -841,7 +841,7 @@ public interface Adapt {
             forField,
             (cs).value.cases)));
         }
-        
+
         @Override
         public hydra.core.Elimination visit(hydra.core.Elimination.Wrap name) {
           return new hydra.core.Elimination.Wrap((name).value);
@@ -852,12 +852,12 @@ public interface Adapt {
         public hydra.core.Function visit(hydra.core.Function.Elimination elm) {
           return new hydra.core.Function.Elimination((forElimination).apply((elm).value));
         }
-        
+
         @Override
         public hydra.core.Function visit(hydra.core.Function.Lambda l) {
           return new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, go.get().apply((l).value.body)));
         }
-        
+
         @Override
         public hydra.core.Function visit(hydra.core.Function.Primitive name) {
           return new hydra.core.Function.Primitive((name).value);
@@ -880,12 +880,12 @@ public interface Adapt {
         public hydra.core.Term visit(hydra.core.Term.Annotated at) {
           return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(go.get().apply((at).value.body), (at).value.annotation));
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Application a) {
           return new hydra.core.Term.Application(new hydra.core.Application(go.get().apply((a).value.function), go.get().apply((a).value.argument)));
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Either e) {
           return new hydra.core.Term.Either(hydra.lib.eithers.Either.apply(
@@ -893,86 +893,86 @@ public interface Adapt {
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (r -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(go.get().apply(r))),
             (e).value));
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Function fun) {
           return new hydra.core.Term.Function((forFunction).apply((fun).value));
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Let lt) {
           return new hydra.core.Term.Let((forLet).apply((lt).value));
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.List els) {
           return new hydra.core.Term.List(hydra.lib.lists.Map.apply(
             go.get(),
             (els).value));
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Literal v) {
           return new hydra.core.Term.Literal((v).value);
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Map m) {
           return new hydra.core.Term.Map((forMap).apply((m).value));
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Maybe m) {
           return new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
             go.get(),
             (m).value));
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Pair p) {
           return new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(go.get().apply(hydra.lib.pairs.First.apply((p).value)), go.get().apply(hydra.lib.pairs.Second.apply((p).value))))));
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Record r) {
           return new hydra.core.Term.Record(new hydra.core.Record((r).value.typeName, hydra.lib.lists.Map.apply(
             forField,
             (r).value.fields)));
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Set s) {
           return new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
             go.get(),
             hydra.lib.sets.ToList.apply((s).value))));
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.TypeApplication tt) {
           hydra.core.Term body1 = go.get().apply((tt).value.body);
           return push.get().apply(body1).apply((tt).value.type);
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.TypeLambda ta) {
           return new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda((ta).value.parameter, go.get().apply((ta).value.body)));
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Union i) {
           return new hydra.core.Term.Union(new hydra.core.Injection((i).value.typeName, (forField).apply((i).value.field)));
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Unit ignored) {
           return new hydra.core.Term.Unit();
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Variable v) {
           return new hydra.core.Term.Variable((v).value);
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Wrap wt) {
           return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm((wt).value.typeName, go.get().apply((wt).value.body)));
@@ -984,12 +984,12 @@ public interface Adapt {
       public hydra.core.Term otherwise(hydra.core.Term instance) {
         return new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(body, typ));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Application a) {
         return go.get().apply(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm((a).value.function, typ)), (a).value.argument)));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Function f) {
         return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -997,14 +997,14 @@ public interface Adapt {
           public hydra.core.Term otherwise(hydra.core.Function instance) {
             return new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(new hydra.core.Term.Function((f).value), typ));
           }
-          
+
           @Override
           public hydra.core.Term visit(hydra.core.Function.Lambda l) {
             return go.get().apply(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm((l).value.body, typ))))));
           }
         });
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Let lt) {
         return go.get().apply(new hydra.core.Term.Let(new hydra.core.Let((lt).value.bindings, new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm((lt).value.body, typ)))));
@@ -1012,7 +1012,7 @@ public interface Adapt {
     }))));
     return go.get().apply(term);
   }
-  
+
   static hydra.util.Either<String, hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>, hydra.util.ConsList<hydra.util.ConsList<hydra.module.TypeDefinition>>>> schemaGraphToDefinitions(hydra.coders.LanguageConstraints constraints, hydra.graph.Graph graph, hydra.util.ConsList<hydra.util.ConsList<hydra.core.Name>> nameLists, hydra.context.Context cx) {
     hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap = hydra.adapt.Adapt.adaptLiteralTypesMap(constraints);
     return hydra.lib.eithers.Bind.apply(
@@ -1041,7 +1041,7 @@ public interface Adapt {
             nameLists)))));
         }))));
   }
-  
+
   static <T0> hydra.util.Either<String, hydra.util.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> simpleLanguageAdapter(hydra.coders.Language lang, T0 cx, hydra.graph.Graph g, hydra.core.Type typ) {
     hydra.coders.LanguageConstraints constraints = (lang).constraints;
     hydra.util.PersistentMap<hydra.core.LiteralType, hydra.core.LiteralType> litmap = hydra.adapt.Adapt.adaptLiteralTypesMap(constraints);
@@ -1060,20 +1060,20 @@ public interface Adapt {
           g,
           term)))), (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (term -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(term))))))))))))));
   }
-  
+
   static hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>> termAlternatives(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>> otherwise(hydra.core.Term instance) {
         return hydra.util.Either.<String, hydra.util.ConsList<hydra.core.Term>>right((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()));
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.Annotated at) {
         hydra.core.Term term2 = (at).value.body;
         return hydra.util.Either.<String, hydra.util.ConsList<hydra.core.Term>>right(hydra.util.ConsList.of(term2));
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.Maybe ot) {
         return hydra.util.Either.<String, hydra.util.ConsList<hydra.core.Term>>right(hydra.util.ConsList.of(new hydra.core.Term.List(hydra.lib.maybes.Maybe.applyLazy(
@@ -1081,19 +1081,19 @@ public interface Adapt {
           (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (term2 -> hydra.util.ConsList.of(term2)),
           (ot).value))));
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.TypeLambda abs) {
         hydra.core.Term term2 = (abs).value.body;
         return hydra.util.Either.<String, hydra.util.ConsList<hydra.core.Term>>right(hydra.util.ConsList.of(term2));
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.TypeApplication ta) {
         hydra.core.Term term2 = (ta).value.body;
         return hydra.util.Either.<String, hydra.util.ConsList<hydra.core.Term>>right(hydra.util.ConsList.of(term2));
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.Union inj) {
         hydra.core.Field field = (inj).value.field;
@@ -1121,12 +1121,12 @@ public interface Adapt {
             forFieldType,
             rt)))))));
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.Unit ignored) {
         return hydra.util.Either.<String, hydra.util.ConsList<hydra.core.Term>>right(hydra.util.ConsList.of(new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(true))));
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.Wrap wt) {
         hydra.core.Term term2 = (wt).value.body;
@@ -1134,25 +1134,25 @@ public interface Adapt {
       }
     });
   }
-  
+
   static hydra.util.ConsList<hydra.core.Type> typeAlternatives(hydra.core.Type type) {
     return (type).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Type> otherwise(hydra.core.Type instance) {
         return (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty());
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Annotated at) {
         hydra.core.Type type2 = (at).value.body;
         return hydra.util.ConsList.of(type2);
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Maybe ot) {
         return hydra.util.ConsList.of(new hydra.core.Type.List((ot).value));
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Union rt) {
         java.util.function.Function<hydra.core.FieldType, hydra.core.FieldType> toOptField = (java.util.function.Function<hydra.core.FieldType, hydra.core.FieldType>) (f -> new hydra.core.FieldType((f).name, new hydra.core.Type.Maybe((f).type)));
@@ -1161,7 +1161,7 @@ public interface Adapt {
           (rt).value));
         return hydra.util.ConsList.of(new hydra.core.Type.Record(optFields.get()));
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Unit ignored) {
         return hydra.util.ConsList.of(new hydra.core.Type.Literal(new hydra.core.LiteralType.Boolean_()));

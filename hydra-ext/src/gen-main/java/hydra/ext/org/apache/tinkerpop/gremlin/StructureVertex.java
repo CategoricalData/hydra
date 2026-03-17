@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class StructureVertex implements Serializable, Comparable<StructureVertex> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StructureVertex");
-  
+
   public static final hydra.core.Name NEW = new hydra.core.Name("new");
-  
+
   public static final hydra.core.Name ID = new hydra.core.Name("id");
-  
+
   public static final hydra.core.Name LABEL = new hydra.core.Name("label");
-  
+
   public final Boolean new_;
-  
+
   public final hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument id;
-  
+
   public final hydra.ext.org.apache.tinkerpop.gremlin.StringArgument label;
-  
+
   public StructureVertex (Boolean new_, hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument id, hydra.ext.org.apache.tinkerpop.gremlin.StringArgument label) {
     this.new_ = new_;
     this.id = id;
     this.label = label;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof StructureVertex)) {
@@ -39,12 +39,12 @@ public class StructureVertex implements Serializable, Comparable<StructureVertex
       this.label,
       o.label);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(new_) + 3 * java.util.Objects.hashCode(id) + 5 * java.util.Objects.hashCode(label);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StructureVertex other) {
@@ -59,15 +59,15 @@ public class StructureVertex implements Serializable, Comparable<StructureVertex
     }
     return ((Comparable) label).compareTo(other.label);
   }
-  
+
   public StructureVertex withNew(Boolean new_) {
     return new StructureVertex(new_, id, label);
   }
-  
+
   public StructureVertex withId(hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument id) {
     return new StructureVertex(new_, id, label);
   }
-  
+
   public StructureVertex withLabel(hydra.ext.org.apache.tinkerpop.gremlin.StringArgument label) {
     return new StructureVertex(new_, id, label);
   }

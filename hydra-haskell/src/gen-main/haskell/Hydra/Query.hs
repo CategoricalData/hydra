@@ -13,13 +13,13 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | One of several comparison operators
-data ComparisonConstraint = 
+data ComparisonConstraint =
   ComparisonConstraintEqual  |
   ComparisonConstraintNotEqual  |
   ComparisonConstraintLessThan  |
   ComparisonConstraintGreaterThan  |
   ComparisonConstraintLessThanOrEqual  |
-  ComparisonConstraintGreaterThanOrEqual 
+  ComparisonConstraintGreaterThanOrEqual
   deriving (Eq, Ord, Read, Show)
 
 _ComparisonConstraint = Core.Name "hydra.query.ComparisonConstraint"
@@ -37,7 +37,7 @@ _ComparisonConstraint_lessThanOrEqual = Core.Name "lessThanOrEqual"
 _ComparisonConstraint_greaterThanOrEqual = Core.Name "greaterThanOrEqual"
 
 -- | An abstract edge based on a record type
-data Edge = 
+data Edge =
   Edge {
     -- | The name of a record type, for which the edge also specifies an out- and an in- projection
     edgeType :: Core.Name,
@@ -56,7 +56,7 @@ _Edge_out = Core.Name "out"
 _Edge_in = Core.Name "in"
 
 -- | A query pattern which matches within a designated component subgraph
-data GraphPattern = 
+data GraphPattern =
   GraphPattern {
     -- | The name of the component graph
     graphPatternGraph :: Core.Name,
@@ -71,13 +71,13 @@ _GraphPattern_graph = Core.Name "graph"
 _GraphPattern_patterns = Core.Name "patterns"
 
 -- | A node in a query expression; it may be a term, a variable, or a wildcard
-data Node = 
+data Node =
   -- | A graph term; an expression which is valid in the graph being matched
   NodeTerm Core.Term |
   -- | A query variable, not to be confused with a variable term
   NodeVariable Variable |
   -- | An anonymous variable which we do not care to join across patterns
-  NodeWildcard 
+  NodeWildcard
   deriving (Eq, Ord, Read, Show)
 
 _Node = Core.Name "hydra.query.Node"
@@ -89,7 +89,7 @@ _Node_variable = Core.Name "variable"
 _Node_wildcard = Core.Name "wildcard"
 
 -- | A query path
-data Path = 
+data Path =
   -- | A path given by a single step
   PathStep Step |
   -- | A path given by a regular expression quantifier applied to another path
@@ -107,7 +107,7 @@ _Path_regex = Core.Name "regex"
 _Path_inverse = Core.Name "inverse"
 
 -- | A declared equivalence between two abstract paths in a graph
-data PathEquation = 
+data PathEquation =
   PathEquation {
     -- | The left-hand side of the equation
     pathEquationLeft :: Path,
@@ -122,7 +122,7 @@ _PathEquation_left = Core.Name "left"
 _PathEquation_right = Core.Name "right"
 
 -- | A query pattern
-data Pattern = 
+data Pattern =
   -- | A subject/predicate/object pattern
   PatternTriple TriplePattern |
   -- | The negation of another pattern
@@ -148,7 +148,7 @@ _Pattern_disjunction = Core.Name "disjunction"
 _Pattern_graph = Core.Name "graph"
 
 -- | A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns.
-data PatternImplication = 
+data PatternImplication =
   PatternImplication {
     -- | The pattern which, if it matches, triggers the constraint
     patternImplicationAntecedent :: Pattern,
@@ -163,7 +163,7 @@ _PatternImplication_antecedent = Core.Name "antecedent"
 _PatternImplication_consequent = Core.Name "consequent"
 
 -- | A SELECT-style graph pattern matching query
-data Query = 
+data Query =
   Query {
     -- | The variables selected by the query
     queryVariables :: [Variable],
@@ -178,7 +178,7 @@ _Query_variables = Core.Name "variables"
 _Query_patterns = Core.Name "patterns"
 
 -- | A range from min to max, inclusive
-data Range = 
+data Range =
   Range {
     -- | The minimum value (inclusive)
     rangeMin :: Int,
@@ -193,7 +193,7 @@ _Range_min = Core.Name "min"
 _Range_max = Core.Name "max"
 
 -- | A regular expression quantifier
-data RegexQuantifier = 
+data RegexQuantifier =
   -- | No quantifier; matches a single occurrence
   RegexQuantifierOne  |
   -- | The ? quanifier; matches zero or one occurrence
@@ -227,7 +227,7 @@ _RegexQuantifier_atLeast = Core.Name "atLeast"
 _RegexQuantifier_range = Core.Name "range"
 
 -- | A path with a regex quantifier
-data RegexSequence = 
+data RegexSequence =
   RegexSequence {
     -- | The path to which the quantifier applies
     regexSequencePath :: Path,
@@ -242,7 +242,7 @@ _RegexSequence_path = Core.Name "path"
 _RegexSequence_quantifier = Core.Name "quantifier"
 
 -- | An atomic function as part of a query. When applied to a graph, steps are typed by function types.
-data Step = 
+data Step =
   -- | An out-to-in traversal of an abstract edge
   StepEdge Edge |
   -- | A projection from a record through one of its fields
@@ -260,7 +260,7 @@ _Step_project = Core.Name "project"
 _Step_compare = Core.Name "compare"
 
 -- | A subject/predicate/object pattern
-data TriplePattern = 
+data TriplePattern =
   TriplePattern {
     -- | The subject of the pattern
     triplePatternSubject :: Node,
@@ -279,7 +279,7 @@ _TriplePattern_predicate = Core.Name "predicate"
 _TriplePattern_object = Core.Name "object"
 
 -- | A query variable
-newtype Variable = 
+newtype Variable =
   Variable {
     unVariable :: String}
   deriving (Eq, Ord, Read, Show)

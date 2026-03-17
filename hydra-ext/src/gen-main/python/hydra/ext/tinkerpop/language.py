@@ -21,7 +21,7 @@ T1 = TypeVar("T1")
 
 def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.apache.tinkerpop.features.Features, extras: hydra.ext.org.apache.tinkerpop.features.ExtraFeatures[T0]) -> hydra.coders.Language:
     r"""Populate language constraints based on TinkerPop Graph.Features."""
-    
+
     vp_features = features.vertex.properties.data_type_features
     def cond(v: T1, b: bool) -> Maybe[T1]:
         return hydra.lib.logic.if_else(b, (lambda : hydra.lib.maybes.pure(v)), (lambda : Nothing()))
@@ -57,71 +57,71 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
             match v1:
                 case hydra.core.FloatType.FLOAT64:
                     return vp_features.supports_double_array_values
-                
+
                 case hydra.core.FloatType.FLOAT32:
                     return vp_features.supports_float_array_values
-                
+
                 case _:
                     return False
         def _hoist_body_2(v1):
             match v1:
                 case hydra.core.IntegerType.UINT8:
                     return vp_features.supports_byte_array_values
-                
+
                 case hydra.core.IntegerType.INT32:
                     return vp_features.supports_integer_array_values
-                
+
                 case hydra.core.IntegerType.INT64:
                     return vp_features.supports_long_array_values
-                
+
                 case _:
                     return False
         def _hoist_body_3(v1):
             match v1:
                 case hydra.core.LiteralTypeBoolean():
                     return vp_features.supports_boolean_array_values
-                
+
                 case hydra.core.LiteralTypeFloat(value=ft):
                     return _hoist_body_1(ft)
-                
+
                 case hydra.core.LiteralTypeInteger(value=it):
                     return _hoist_body_2(it)
-                
+
                 case hydra.core.LiteralTypeString():
                     return vp_features.supports_string_array_values
-                
+
                 case _:
                     return False
         def _hoist_body_4(v1):
             match v1:
                 case hydra.core.TypeLiteral(value=lt):
                     return _hoist_body_3(lt)
-                
+
                 case _:
                     return False
         def _hoist_body_5(v1):
             match v1:
                 case hydra.core.TypeLiteral():
                     return True
-                
+
                 case _:
                     return False
         match dt():
             case hydra.core.TypeList(value=t):
                 return _hoist_body_4(hydra.rewriting.deannotate_type(t))
-            
+
             case hydra.core.TypeLiteral():
                 return True
-            
+
             case hydra.core.TypeMap(value=mt):
                 return extras.supports_map_key(mt.keys)
-            
+
             case hydra.core.TypeWrap():
                 return True
-            
+
             case hydra.core.TypeMaybe(value=ot):
                 return _hoist_body_5(hydra.rewriting.deannotate_type(ot))
-            
+
             case _:
                 return True
     return hydra.coders.Language(name, hydra.coders.LanguageConstraints(elimination_variants(), literal_variants(), float_types(), function_variants(), integer_types(), term_variants(), type_variants(), (lambda x1: type_predicate(x1))))

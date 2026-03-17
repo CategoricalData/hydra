@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class UpdateRecordExpression implements Serializable, Comparable<UpdateRecordExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.UpdateRecordExpression");
-  
+
   public static final hydra.core.Name INNER = new hydra.core.Name("inner");
-  
+
   public static final hydra.core.Name FIELDS = new hydra.core.Name("fields");
-  
+
   /**
    * The record being updated
    */
   public final hydra.ext.haskell.ast.Expression inner;
-  
+
   /**
    * The field updates
    */
   public final hydra.util.ConsList<hydra.ext.haskell.ast.FieldUpdate> fields;
-  
+
   public UpdateRecordExpression (hydra.ext.haskell.ast.Expression inner, hydra.util.ConsList<hydra.ext.haskell.ast.FieldUpdate> fields) {
     this.inner = inner;
     this.fields = fields;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof UpdateRecordExpression)) {
@@ -41,12 +41,12 @@ public class UpdateRecordExpression implements Serializable, Comparable<UpdateRe
       this.fields,
       o.fields);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(inner) + 3 * java.util.Objects.hashCode(fields);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(UpdateRecordExpression other) {
@@ -57,11 +57,11 @@ public class UpdateRecordExpression implements Serializable, Comparable<UpdateRe
     }
     return ((Comparable) fields).compareTo(other.fields);
   }
-  
+
   public UpdateRecordExpression withInner(hydra.ext.haskell.ast.Expression inner) {
     return new UpdateRecordExpression(inner, fields);
   }
-  
+
   public UpdateRecordExpression withFields(hydra.util.ConsList<hydra.ext.haskell.ast.FieldUpdate> fields) {
     return new UpdateRecordExpression(inner, fields);
   }

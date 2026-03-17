@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class ForUpdate implements Serializable, Comparable<ForUpdate> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ForUpdate");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.StatementExpression> value;
-  
+
   public ForUpdate (hydra.util.ConsList<hydra.ext.java.syntax.StatementExpression> value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ForUpdate)) {
@@ -25,12 +25,12 @@ public class ForUpdate implements Serializable, Comparable<ForUpdate> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ForUpdate other) {

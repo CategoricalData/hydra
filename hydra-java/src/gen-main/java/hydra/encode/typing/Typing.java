@@ -26,7 +26,7 @@ public interface Typing {
         ((java.util.function.Function<hydra.typing.FunctionStructure<T0>, hydra.util.Maybe<hydra.core.Type>>) (projected -> projected.codomain)).apply(x)))),
       new hydra.core.Field(new hydra.core.Name("environment"), (env).apply(((java.util.function.Function<hydra.typing.FunctionStructure<T0>, T0>) (projected -> projected.environment)).apply(x))))));
   }
-  
+
   static hydra.core.Term inferenceResult(hydra.typing.InferenceResult x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.typing.InferenceResult"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("term"), hydra.encode.core.Core.term((x).term)),
@@ -38,21 +38,21 @@ public interface Typing {
         (x).classConstraints))),
       new hydra.core.Field(new hydra.core.Name("context"), hydra.encode.context.Context.context((x).context)))));
   }
-  
+
   static hydra.core.Term termSubst(hydra.typing.TermSubst x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.typing.TermSubst"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
       hydra.encode.core.Core::name,
       hydra.encode.core.Core::term,
       (x).value))));
   }
-  
+
   static hydra.core.Term typeConstraint(hydra.typing.TypeConstraint x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.typing.TypeConstraint"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("left"), hydra.encode.core.Core.type((x).left)),
       new hydra.core.Field(new hydra.core.Name("right"), hydra.encode.core.Core.type((x).right)),
       new hydra.core.Field(new hydra.core.Name("comment"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).comment))))));
   }
-  
+
   static hydra.core.Term typeSubst(hydra.typing.TypeSubst x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.typing.TypeSubst"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
       hydra.encode.core.Core::name,

@@ -9,18 +9,18 @@ import java.io.Serializable;
  */
 public class TypeCheckingFailureTestCase implements Serializable, Comparable<TypeCheckingFailureTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TypeCheckingFailureTestCase");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   /**
    * The term for which type checking should fail
    */
   public final hydra.core.Term input;
-  
+
   public TypeCheckingFailureTestCase (hydra.core.Term input) {
     this.input = input;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TypeCheckingFailureTestCase)) {
@@ -31,12 +31,12 @@ public class TypeCheckingFailureTestCase implements Serializable, Comparable<Typ
       this.input,
       o.input);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(input);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TypeCheckingFailureTestCase other) {

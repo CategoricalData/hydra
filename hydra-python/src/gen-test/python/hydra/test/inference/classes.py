@@ -91,5 +91,5 @@ def test_group_for_primitive_references() -> hydra.testing.TestGroup:
 @lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""Type class constraint inference tests."""
-    
+
     return hydra.testing.TestGroup("Type classes", Nothing(), (test_group_for_monomorphic_constraints(), test_group_for_primitive_references(), test_group_for_partial_application(), test_group_for_let_bindings(), test_group_for_composition(), test_group_for_nested_containers(), test_group_for_collection_terms()), ())

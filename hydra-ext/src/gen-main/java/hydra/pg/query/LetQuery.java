@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class LetQuery implements Serializable, Comparable<LetQuery> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.query.LetQuery");
-  
+
   public static final hydra.core.Name BINDINGS = new hydra.core.Name("bindings");
-  
+
   public static final hydra.core.Name ENVIRONMENT = new hydra.core.Name("environment");
-  
+
   public final hydra.util.ConsList<hydra.pg.query.Binding> bindings;
-  
+
   public final hydra.pg.query.Query environment;
-  
+
   public LetQuery (hydra.util.ConsList<hydra.pg.query.Binding> bindings, hydra.pg.query.Query environment) {
     this.bindings = bindings;
     this.environment = environment;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof LetQuery)) {
@@ -32,12 +32,12 @@ public class LetQuery implements Serializable, Comparable<LetQuery> {
       this.environment,
       o.environment);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(bindings) + 3 * java.util.Objects.hashCode(environment);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LetQuery other) {
@@ -48,11 +48,11 @@ public class LetQuery implements Serializable, Comparable<LetQuery> {
     }
     return ((Comparable) environment).compareTo(other.environment);
   }
-  
+
   public LetQuery withBindings(hydra.util.ConsList<hydra.pg.query.Binding> bindings) {
     return new LetQuery(bindings, environment);
   }
-  
+
   public LetQuery withEnvironment(hydra.pg.query.Query environment) {
     return new LetQuery(bindings, environment);
   }

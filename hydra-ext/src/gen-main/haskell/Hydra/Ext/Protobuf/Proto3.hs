@@ -12,7 +12,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-data Definition = 
+data Definition =
   DefinitionEnum EnumDefinition |
   DefinitionMessage MessageDefinition
   deriving (Eq, Ord, Read, Show)
@@ -24,7 +24,7 @@ _Definition_enum = Core.Name "enum"
 _Definition_message = Core.Name "message"
 
 -- | Enum type definition
-data EnumDefinition = 
+data EnumDefinition =
   EnumDefinition {
     -- | Enum type name
     enumDefinitionName :: TypeName,
@@ -43,7 +43,7 @@ _EnumDefinition_values = Core.Name "values"
 _EnumDefinition_options = Core.Name "options"
 
 -- | Enum value definition
-data EnumValue = 
+data EnumValue =
   EnumValue {
     -- | Enum value name
     enumValueName :: EnumValueName,
@@ -61,7 +61,7 @@ _EnumValue_number = Core.Name "number"
 
 _EnumValue_options = Core.Name "options"
 
-newtype EnumValueName = 
+newtype EnumValueName =
   EnumValueName {
     unEnumValueName :: String}
   deriving (Eq, Ord, Read, Show)
@@ -69,7 +69,7 @@ newtype EnumValueName =
 _EnumValueName = Core.Name "hydra.ext.protobuf.proto3.EnumValueName"
 
 -- | A single field of a message type
-data Field = 
+data Field =
   Field {
     -- | The field name
     fieldName :: FieldName,
@@ -96,14 +96,14 @@ _Field_number = Core.Name "number"
 _Field_options = Core.Name "options"
 
 -- | The name of a field
-newtype FieldName = 
+newtype FieldName =
   FieldName {
     unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _FieldName = Core.Name "hydra.ext.protobuf.proto3.FieldName"
 
-data FieldType = 
+data FieldType =
   FieldTypeMap MapType |
   FieldTypeOneof [Field] |
   FieldTypeRepeated SimpleType |
@@ -120,14 +120,14 @@ _FieldType_repeated = Core.Name "repeated"
 
 _FieldType_simple = Core.Name "simple"
 
-newtype FileReference = 
+newtype FileReference =
   FileReference {
     unFileReference :: String}
   deriving (Eq, Ord, Read, Show)
 
 _FileReference = Core.Name "hydra.ext.protobuf.proto3.FileReference"
 
-data MapType = 
+data MapType =
   MapType {
     mapTypeKeys :: SimpleType,
     mapTypeValues :: SimpleType}
@@ -140,7 +140,7 @@ _MapType_keys = Core.Name "keys"
 _MapType_values = Core.Name "values"
 
 -- | A protocol buffer message type
-data MessageDefinition = 
+data MessageDefinition =
   MessageDefinition {
     -- | The fully qualified message name
     messageDefinitionName :: TypeName,
@@ -159,7 +159,7 @@ _MessageDefinition_fields = Core.Name "fields"
 _MessageDefinition_options = Core.Name "options"
 
 -- | A protocol buffer option, which can be attached to a message, field, enumeration, etc
-data Option = 
+data Option =
   Option {
     -- | The option's name. For protobuf built-in options (options defined in descriptor.proto), this is the short name. For example, `"map_entry"`. For custom options, it should be the fully-qualified name. For example, `"google.api.http"`.
     optionName :: String,
@@ -173,7 +173,7 @@ _Option_name = Core.Name "name"
 
 _Option_value = Core.Name "value"
 
-newtype PackageName = 
+newtype PackageName =
   PackageName {
     unPackageName :: String}
   deriving (Eq, Ord, Read, Show)
@@ -181,7 +181,7 @@ newtype PackageName =
 _PackageName = Core.Name "hydra.ext.protobuf.proto3.PackageName"
 
 -- | A .proto file, usually containing one or more enum or message type definitions
-data ProtoFile = 
+data ProtoFile =
   ProtoFile {
     protoFilePackage :: PackageName,
     protoFileImports :: [FileReference],
@@ -200,7 +200,7 @@ _ProtoFile_types = Core.Name "types"
 _ProtoFile_options = Core.Name "options"
 
 -- | One of several Proto3 scalar types
-data ScalarType = 
+data ScalarType =
   ScalarTypeBool  |
   ScalarTypeBytes  |
   ScalarTypeDouble  |
@@ -215,7 +215,7 @@ data ScalarType =
   ScalarTypeSint64  |
   ScalarTypeString  |
   ScalarTypeUint32  |
-  ScalarTypeUint64 
+  ScalarTypeUint64
   deriving (Eq, Ord, Read, Show)
 
 _ScalarType = Core.Name "hydra.ext.protobuf.proto3.ScalarType"
@@ -251,7 +251,7 @@ _ScalarType_uint32 = Core.Name "uint32"
 _ScalarType_uint64 = Core.Name "uint64"
 
 -- | A scalar type or a reference to an enum type or message type
-data SimpleType = 
+data SimpleType =
   SimpleTypeReference TypeName |
   SimpleTypeScalar ScalarType
   deriving (Eq, Ord, Read, Show)
@@ -263,7 +263,7 @@ _SimpleType_reference = Core.Name "reference"
 _SimpleType_scalar = Core.Name "scalar"
 
 -- | The local name of an enum type or message type
-newtype TypeName = 
+newtype TypeName =
   TypeName {
     unTypeName :: String}
   deriving (Eq, Ord, Read, Show)
@@ -271,7 +271,7 @@ newtype TypeName =
 _TypeName = Core.Name "hydra.ext.protobuf.proto3.TypeName"
 
 -- | A reference to an enum type or message type
-newtype TypeReference = 
+newtype TypeReference =
   TypeReference {
     unTypeReference :: String}
   deriving (Eq, Ord, Read, Show)
@@ -279,7 +279,7 @@ newtype TypeReference =
 _TypeReference = Core.Name "hydra.ext.protobuf.proto3.TypeReference"
 
 -- | A scalar value
-data Value = 
+data Value =
   ValueBoolean Bool |
   ValueString String
   deriving (Eq, Ord, Read, Show)

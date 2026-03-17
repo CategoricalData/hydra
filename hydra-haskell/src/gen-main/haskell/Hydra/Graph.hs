@@ -15,7 +15,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A graph, or lexical environment which binds names to terms, types, primitives, and metadata
-data Graph = 
+data Graph =
   Graph {
     -- | The terms bound by all term variables in scope
     graphBoundTerms :: (M.Map Core.Name Core.Term),
@@ -53,7 +53,7 @@ _Graph_schemaTypes = Core.Name "schemaTypes"
 _Graph_typeVariables = Core.Name "typeVariables"
 
 -- | A built-in function or constant
-data Primitive = 
+data Primitive =
   Primitive {
     -- | The unique name of the primitive function
     primitiveName :: Core.Name,
@@ -71,7 +71,7 @@ _Primitive_type = Core.Name "type"
 _Primitive_implementation = Core.Name "implementation"
 
 -- | A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms.
-data TermCoder a = 
+data TermCoder a =
   TermCoder {
     -- | The Hydra type of encoded terms
     termCoderType :: Core.Type,

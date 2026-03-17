@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class MethodReference_New implements Serializable, Comparable<MethodReference_New> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodReference_New");
-  
+
   public static final hydra.core.Name CLASS_TYPE = new hydra.core.Name("classType");
-  
+
   public static final hydra.core.Name TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
-  
+
   public final hydra.ext.java.syntax.ClassType classType;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
-  
+
   public MethodReference_New (hydra.ext.java.syntax.ClassType classType, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     this.classType = classType;
     this.typeArguments = typeArguments;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MethodReference_New)) {
@@ -32,12 +32,12 @@ public class MethodReference_New implements Serializable, Comparable<MethodRefer
       this.typeArguments,
       o.typeArguments);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(classType) + 3 * java.util.Objects.hashCode(typeArguments);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MethodReference_New other) {
@@ -48,11 +48,11 @@ public class MethodReference_New implements Serializable, Comparable<MethodRefer
     }
     return ((Comparable) typeArguments).compareTo(other.typeArguments);
   }
-  
+
   public MethodReference_New withClassType(hydra.ext.java.syntax.ClassType classType) {
     return new MethodReference_New(classType, typeArguments);
   }
-  
+
   public MethodReference_New withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_New(classType, typeArguments);
   }

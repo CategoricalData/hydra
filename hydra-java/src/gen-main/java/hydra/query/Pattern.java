@@ -9,71 +9,71 @@ import java.io.Serializable;
  */
 public abstract class Pattern implements Serializable, Comparable<Pattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.Pattern");
-  
+
   public static final hydra.core.Name TRIPLE = new hydra.core.Name("triple");
-  
+
   public static final hydra.core.Name NEGATION = new hydra.core.Name("negation");
-  
+
   public static final hydra.core.Name CONJUNCTION = new hydra.core.Name("conjunction");
-  
+
   public static final hydra.core.Name DISJUNCTION = new hydra.core.Name("disjunction");
-  
+
   public static final hydra.core.Name GRAPH = new hydra.core.Name("graph");
-  
+
   private Pattern () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Triple instance) ;
-    
+
     R visit(Negation instance) ;
-    
+
     R visit(Conjunction instance) ;
-    
+
     R visit(Disjunction instance) ;
-    
+
     R visit(Graph instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Pattern instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Triple instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Negation instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Conjunction instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Disjunction instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Graph instance) {
       return otherwise(instance);
     }
   }
-  
+
   /**
    * A subject/predicate/object pattern
    */
   public static final class Triple extends hydra.query.Pattern implements Serializable {
     public final hydra.query.TriplePattern value;
-    
+
     public Triple (hydra.query.TriplePattern value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Triple)) {
@@ -84,12 +84,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -100,23 +100,23 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Triple o = (Triple) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * The negation of another pattern
    */
   public static final class Negation extends hydra.query.Pattern implements Serializable {
     public final hydra.query.Pattern value;
-    
+
     public Negation (hydra.query.Pattern value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Negation)) {
@@ -127,12 +127,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -143,23 +143,23 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Negation o = (Negation) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * The conjunction ('and') of several other patterns
    */
   public static final class Conjunction extends hydra.query.Pattern implements Serializable {
     public final hydra.util.ConsList<hydra.query.Pattern> value;
-    
+
     public Conjunction (hydra.util.ConsList<hydra.query.Pattern> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Conjunction)) {
@@ -170,12 +170,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -186,23 +186,23 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Conjunction o = (Conjunction) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * The disjunction (inclusive 'or') of several other patterns
    */
   public static final class Disjunction extends hydra.query.Pattern implements Serializable {
     public final hydra.util.ConsList<hydra.query.Pattern> value;
-    
+
     public Disjunction (hydra.util.ConsList<hydra.query.Pattern> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Disjunction)) {
@@ -213,12 +213,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -229,23 +229,23 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Disjunction o = (Disjunction) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A pattern which matches within a named subgraph
    */
   public static final class Graph extends hydra.query.Pattern implements Serializable {
     public final hydra.query.GraphPattern value;
-    
+
     public Graph (hydra.query.GraphPattern value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Graph)) {
@@ -256,12 +256,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
@@ -272,7 +272,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       Graph o = (Graph) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

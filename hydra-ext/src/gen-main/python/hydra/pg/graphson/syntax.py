@@ -18,7 +18,7 @@ BigDecimalValue.TYPE_ = hydra.core.Name("hydra.pg.graphson.syntax.BigDecimalValu
 class CompositeTypedValue:
     type: TypeName
     fields: Map
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.graphson.syntax.CompositeTypedValue")
     TYPE = hydra.core.Name("type")
     FIELDS = hydra.core.Name("fields")
@@ -58,7 +58,7 @@ class _DoubleValueMeta(type):
 
 class DoubleValue(metaclass=_DoubleValueMeta):
     r"""DoubleValueFinite | DoubleValueInfinity | DoubleValueNegativeInfinity | DoubleValueNotANumber"""
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.graphson.syntax.DoubleValue")
     FINITE = hydra.core.Name("finite")
     INFINITY = hydra.core.Name("infinity")
@@ -105,7 +105,7 @@ class _FloatValueMeta(type):
 
 class FloatValue(metaclass=_FloatValueMeta):
     r"""FloatValueFinite | FloatValueInfinity | FloatValueNegativeInfinity | FloatValueNotANumber"""
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.graphson.syntax.FloatValue")
     FINITE = hydra.core.Name("finite")
     INFINITY = hydra.core.Name("infinity")
@@ -122,7 +122,7 @@ class AdjacentEdge:
     id: Value
     vertex_id: Value
     properties: FrozenDict[PropertyKey, Value]
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.graphson.syntax.AdjacentEdge")
     ID = hydra.core.Name("id")
     VERTEX_ID = hydra.core.Name("vertexId")
@@ -132,7 +132,7 @@ class AdjacentEdge:
 class PrimitiveTypedValue:
     type: TypeName
     value: str
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.graphson.syntax.PrimitiveTypedValue")
     TYPE = hydra.core.Name("type")
     VALUE = hydra.core.Name("value")
@@ -225,7 +225,7 @@ class _ValueMeta(type):
 
 class Value(metaclass=_ValueMeta):
     r"""ValueBigDecimal | ValueBigInteger | ValueBinary | ValueBoolean | ValueByte | ValueChar | ValueComposite | ValueDateTime | ValueDouble | ValueDuration | ValueFloat | ValueInteger | ValueList | ValueLong | ValueMap | ValueNull | ValuePrimitive | ValueSet | ValueShort | ValueString | ValueUuid"""
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.graphson.syntax.Value")
     BIG_DECIMAL = hydra.core.Name("bigDecimal")
     BIG_INTEGER = hydra.core.Name("bigInteger")
@@ -253,7 +253,7 @@ class Value(metaclass=_ValueMeta):
 class ValuePair:
     first: Value
     second: Value
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.graphson.syntax.ValuePair")
     FIRST = hydra.core.Name("first")
     SECOND = hydra.core.Name("second")
@@ -265,7 +265,7 @@ class Vertex:
     in_edges: FrozenDict[EdgeLabel, frozenlist[AdjacentEdge]]
     out_edges: FrozenDict[EdgeLabel, frozenlist[AdjacentEdge]]
     properties: FrozenDict[PropertyKey, frozenlist[VertexPropertyValue]]
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.graphson.syntax.Vertex")
     ID = hydra.core.Name("id")
     LABEL = hydra.core.Name("label")
@@ -282,7 +282,7 @@ VertexLabel.TYPE_ = hydra.core.Name("hydra.pg.graphson.syntax.VertexLabel")
 class VertexPropertyValue:
     id: Maybe[Value]
     value: Value
-    
+
     TYPE_ = hydra.core.Name("hydra.pg.graphson.syntax.VertexPropertyValue")
     ID = hydra.core.Name("id")
     VALUE = hydra.core.Name("value")

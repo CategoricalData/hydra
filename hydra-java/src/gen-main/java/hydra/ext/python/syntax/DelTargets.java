@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class DelTargets implements Serializable, Comparable<DelTargets> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.DelTargets");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.DelTarget> value;
-  
+
   public DelTargets (hydra.util.ConsList<hydra.ext.python.syntax.DelTarget> value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof DelTargets)) {
@@ -25,12 +25,12 @@ public class DelTargets implements Serializable, Comparable<DelTargets> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DelTargets other) {

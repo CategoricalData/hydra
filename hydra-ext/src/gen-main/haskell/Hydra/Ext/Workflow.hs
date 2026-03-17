@@ -14,7 +14,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | The specification of a Hydra schema, provided as a set of modules and a distinguished type
-data HydraSchemaSpec = 
+data HydraSchemaSpec =
   HydraSchemaSpec {
     -- | The modules to include in the schema graph
     hydraSchemaSpecModules :: [Module.Module],
@@ -29,13 +29,13 @@ _HydraSchemaSpec_modules = Core.Name "modules"
 _HydraSchemaSpec_typeName = Core.Name "typeName"
 
 -- | The specification of a schema at the source end of a workflow
-data SchemaSpec = 
+data SchemaSpec =
   -- | A native Hydra schema
   SchemaSpecHydra HydraSchemaSpec |
   -- | A schema provided as a file, available at the given file path
   SchemaSpecFile String |
   -- | A schema which will be provided within the workflow
-  SchemaSpecProvided 
+  SchemaSpecProvided
   deriving (Eq, Ord, Read, Show)
 
 _SchemaSpec = Core.Name "hydra.ext.workflow.SchemaSpec"
@@ -47,7 +47,7 @@ _SchemaSpec_file = Core.Name "file"
 _SchemaSpec_provided = Core.Name "provided"
 
 -- | The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory
-data TransformWorkflow = 
+data TransformWorkflow =
   TransformWorkflow {
     -- | A descriptive name for the workflow
     transformWorkflowName :: String,

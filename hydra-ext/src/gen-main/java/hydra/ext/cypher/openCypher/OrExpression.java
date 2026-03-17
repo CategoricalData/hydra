@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class OrExpression implements Serializable, Comparable<OrExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.OrExpression");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.util.ConsList<hydra.ext.cypher.openCypher.XorExpression> value;
-  
+
   public OrExpression (hydra.util.ConsList<hydra.ext.cypher.openCypher.XorExpression> value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof OrExpression)) {
@@ -25,12 +25,12 @@ public class OrExpression implements Serializable, Comparable<OrExpression> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(OrExpression other) {

@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class InQueryCall implements Serializable, Comparable<InQueryCall> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.InQueryCall");
-  
+
   public static final hydra.core.Name CALL = new hydra.core.Name("call");
-  
+
   public static final hydra.core.Name YIELD_ITEMS = new hydra.core.Name("yieldItems");
-  
+
   public final hydra.ext.cypher.openCypher.ExplicitProcedureInvocation call;
-  
+
   public final hydra.util.Maybe<hydra.ext.cypher.openCypher.YieldItems> yieldItems;
-  
+
   public InQueryCall (hydra.ext.cypher.openCypher.ExplicitProcedureInvocation call, hydra.util.Maybe<hydra.ext.cypher.openCypher.YieldItems> yieldItems) {
     this.call = call;
     this.yieldItems = yieldItems;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof InQueryCall)) {
@@ -32,12 +32,12 @@ public class InQueryCall implements Serializable, Comparable<InQueryCall> {
       this.yieldItems,
       o.yieldItems);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(call) + 3 * java.util.Objects.hashCode(yieldItems);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InQueryCall other) {
@@ -48,11 +48,11 @@ public class InQueryCall implements Serializable, Comparable<InQueryCall> {
     }
     return ((Comparable) yieldItems).compareTo(other.yieldItems);
   }
-  
+
   public InQueryCall withCall(hydra.ext.cypher.openCypher.ExplicitProcedureInvocation call) {
     return new InQueryCall(call, yieldItems);
   }
-  
+
   public InQueryCall withYieldItems(hydra.util.Maybe<hydra.ext.cypher.openCypher.YieldItems> yieldItems) {
     return new InQueryCall(call, yieldItems);
   }

@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class QualifiedName implements Serializable, Comparable<QualifiedName> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.QualifiedName");
-  
+
   public static final hydra.core.Name QUALIFIERS = new hydra.core.Name("qualifiers");
-  
+
   public static final hydra.core.Name UNQUALIFIED = new hydra.core.Name("unqualified");
-  
+
   /**
    * The qualifier parts
    */
   public final hydra.util.ConsList<hydra.ext.haskell.ast.NamePart> qualifiers;
-  
+
   /**
    * The unqualified name part
    */
   public final hydra.ext.haskell.ast.NamePart unqualified;
-  
+
   public QualifiedName (hydra.util.ConsList<hydra.ext.haskell.ast.NamePart> qualifiers, hydra.ext.haskell.ast.NamePart unqualified) {
     this.qualifiers = qualifiers;
     this.unqualified = unqualified;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof QualifiedName)) {
@@ -41,12 +41,12 @@ public class QualifiedName implements Serializable, Comparable<QualifiedName> {
       this.unqualified,
       o.unqualified);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(qualifiers) + 3 * java.util.Objects.hashCode(unqualified);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(QualifiedName other) {
@@ -57,11 +57,11 @@ public class QualifiedName implements Serializable, Comparable<QualifiedName> {
     }
     return ((Comparable) unqualified).compareTo(other.unqualified);
   }
-  
+
   public QualifiedName withQualifiers(hydra.util.ConsList<hydra.ext.haskell.ast.NamePart> qualifiers) {
     return new QualifiedName(qualifiers, unqualified);
   }
-  
+
   public QualifiedName withUnqualified(hydra.ext.haskell.ast.NamePart unqualified) {
     return new QualifiedName(qualifiers, unqualified);
   }

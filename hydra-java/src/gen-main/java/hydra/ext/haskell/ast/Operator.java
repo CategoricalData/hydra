@@ -9,47 +9,47 @@ import java.io.Serializable;
  */
 public abstract class Operator implements Serializable, Comparable<Operator> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.Operator");
-  
+
   public static final hydra.core.Name BACKTICK = new hydra.core.Name("backtick");
-  
+
   public static final hydra.core.Name NORMAL = new hydra.core.Name("normal");
-  
+
   private Operator () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Backtick instance) ;
-    
+
     R visit(Normal instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Operator instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Backtick instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Normal instance) {
       return otherwise(instance);
     }
   }
-  
+
   /**
    * A function used as an infix operator
    */
   public static final class Backtick extends hydra.ext.haskell.ast.Operator implements Serializable {
     public final hydra.ext.haskell.ast.QualifiedName value;
-    
+
     public Backtick (hydra.ext.haskell.ast.QualifiedName value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Backtick)) {
@@ -60,12 +60,12 @@ public abstract class Operator implements Serializable, Comparable<Operator> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Operator other) {
@@ -76,23 +76,23 @@ public abstract class Operator implements Serializable, Comparable<Operator> {
       Backtick o = (Backtick) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * A normal infix operator
    */
   public static final class Normal extends hydra.ext.haskell.ast.Operator implements Serializable {
     public final hydra.ext.haskell.ast.QualifiedName value;
-    
+
     public Normal (hydra.ext.haskell.ast.QualifiedName value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Normal)) {
@@ -103,12 +103,12 @@ public abstract class Operator implements Serializable, Comparable<Operator> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Operator other) {
@@ -119,7 +119,7 @@ public abstract class Operator implements Serializable, Comparable<Operator> {
       Normal o = (Normal) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

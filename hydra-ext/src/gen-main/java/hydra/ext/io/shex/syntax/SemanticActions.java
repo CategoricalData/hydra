@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class SemanticActions implements Serializable, Comparable<SemanticActions> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.SemanticActions");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.util.ConsList<hydra.ext.io.shex.syntax.CodeDecl> value;
-  
+
   public SemanticActions (hydra.util.ConsList<hydra.ext.io.shex.syntax.CodeDecl> value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof SemanticActions)) {
@@ -25,12 +25,12 @@ public class SemanticActions implements Serializable, Comparable<SemanticActions
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SemanticActions other) {

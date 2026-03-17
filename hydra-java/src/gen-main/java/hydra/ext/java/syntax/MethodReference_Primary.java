@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class MethodReference_Primary implements Serializable, Comparable<MethodReference_Primary> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodReference_Primary");
-  
+
   public static final hydra.core.Name PRIMARY = new hydra.core.Name("primary");
-  
+
   public static final hydra.core.Name TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public final hydra.ext.java.syntax.Primary primary;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
-  
+
   public final hydra.ext.java.syntax.Identifier identifier;
-  
+
   public MethodReference_Primary (hydra.ext.java.syntax.Primary primary, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
     this.primary = primary;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MethodReference_Primary)) {
@@ -39,12 +39,12 @@ public class MethodReference_Primary implements Serializable, Comparable<MethodR
       this.identifier,
       o.identifier);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(primary) + 3 * java.util.Objects.hashCode(typeArguments) + 5 * java.util.Objects.hashCode(identifier);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MethodReference_Primary other) {
@@ -59,15 +59,15 @@ public class MethodReference_Primary implements Serializable, Comparable<MethodR
     }
     return ((Comparable) identifier).compareTo(other.identifier);
   }
-  
+
   public MethodReference_Primary withPrimary(hydra.ext.java.syntax.Primary primary) {
     return new MethodReference_Primary(primary, typeArguments, identifier);
   }
-  
+
   public MethodReference_Primary withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_Primary(primary, typeArguments, identifier);
   }
-  
+
   public MethodReference_Primary withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new MethodReference_Primary(primary, typeArguments, identifier);
   }

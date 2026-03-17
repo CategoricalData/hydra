@@ -23,8 +23,8 @@ import qualified Data.Set as S
 -- | Run type inference on all terms in a TestGroup to ensure lambdas have domain types
 inferTestGroupTerms :: Graph.Graph -> Testing.TestGroup -> Either String Testing.TestGroup
 inferTestGroupTerms g tg =
-     
-      let name_ = Testing.testGroupName tg 
+
+      let name_ = Testing.testGroupName tg
           desc = Testing.testGroupDescription tg
           subgroups = Testing.testGroupSubgroups tg
           cases_ = Testing.testGroupCases tg
@@ -37,8 +37,8 @@ inferTestGroupTerms g tg =
 -- | Run type inference on the terms in a test case
 inferTestCase :: Graph.Graph -> Testing.TestCaseWithMetadata -> Either String Testing.TestCaseWithMetadata
 inferTestCase g tcm =
-     
-      let name_ = Testing.testCaseWithMetadataName tcm 
+
+      let name_ = Testing.testCaseWithMetadataName tcm
           tcase = Testing.testCaseWithMetadataCase tcm
           desc = Testing.testCaseWithMetadataDescription tcm
           tags_ = Testing.testCaseWithMetadataTags tcm
@@ -47,8 +47,8 @@ inferTestCase g tcm =
         Testing.testCaseWithMetadataCase = inferredCase,
         Testing.testCaseWithMetadataDescription = desc,
         Testing.testCaseWithMetadataTags = tags_}) (case tcase of
-        Testing.TestCaseDelegatedEvaluation v0 ->  
-          let input_ = Testing.delegatedEvaluationTestCaseInput v0 
+        Testing.TestCaseDelegatedEvaluation v0 ->
+          let input_ = Testing.delegatedEvaluationTestCaseInput v0
               output_ = Testing.delegatedEvaluationTestCaseOutput v0
           in (Eithers.bind (inferTerm g input_) (\inferredInput -> Eithers.map (\inferredOutput -> Testing.TestCaseDelegatedEvaluation (Testing.DelegatedEvaluationTestCase {
             Testing.delegatedEvaluationTestCaseInput = inferredInput,

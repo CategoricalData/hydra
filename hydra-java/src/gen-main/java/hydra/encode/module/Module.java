@@ -12,18 +12,18 @@ public interface Module {
       public hydra.core.Term visit(hydra.module.Definition.Term y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.module.Definition"), new hydra.core.Field(new hydra.core.Name("term"), hydra.encode.module.Module.termDefinition((y).value))));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.module.Definition.Type y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.module.Definition"), new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.module.Module.typeDefinition((y).value))));
       }
     });
   }
-  
+
   static hydra.core.Term fileExtension(hydra.module.FileExtension x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.module.FileExtension"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).value))));
   }
-  
+
   static hydra.core.Term module(hydra.module.Module x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.Module"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("namespace"), hydra.encode.module.Module.namespace((x).namespace)),
@@ -40,11 +40,11 @@ public interface Module {
         (java.util.function.Function<String, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.String_(x2))),
         (x).description))))));
   }
-  
+
   static hydra.core.Term namespace(hydra.module.Namespace x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.module.Namespace"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).value))));
   }
-  
+
   static <T0> hydra.core.Term namespaces(java.util.function.Function<T0, hydra.core.Term> n, hydra.module.Namespaces<T0> x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.Namespaces"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("focus"), new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
@@ -56,7 +56,7 @@ public interface Module {
         n,
         ((java.util.function.Function<hydra.module.Namespaces<T0>, hydra.util.PersistentMap<hydra.module.Namespace, T0>>) (projected -> projected.mapping)).apply(x)))))));
   }
-  
+
   static hydra.core.Term qualifiedName(hydra.module.QualifiedName x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.QualifiedName"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("namespace"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
@@ -64,14 +64,14 @@ public interface Module {
         (x).namespace))),
       new hydra.core.Field(new hydra.core.Name("local"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).local))))));
   }
-  
+
   static hydra.core.Term termDefinition(hydra.module.TermDefinition x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.TermDefinition"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.core.Core.name((x).name)),
       new hydra.core.Field(new hydra.core.Name("term"), hydra.encode.core.Core.term((x).term)),
       new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.core.Core.typeScheme((x).type)))));
   }
-  
+
   static hydra.core.Term typeDefinition(hydra.module.TypeDefinition x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.TypeDefinition"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.core.Core.name((x).name)),

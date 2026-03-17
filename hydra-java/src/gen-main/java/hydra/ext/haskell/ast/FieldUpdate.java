@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class FieldUpdate implements Serializable, Comparable<FieldUpdate> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.FieldUpdate");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   /**
    * The field name
    */
   public final hydra.ext.haskell.ast.Name name;
-  
+
   /**
    * The field value
    */
   public final hydra.ext.haskell.ast.Expression value;
-  
+
   public FieldUpdate (hydra.ext.haskell.ast.Name name, hydra.ext.haskell.ast.Expression value) {
     this.name = name;
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof FieldUpdate)) {
@@ -41,12 +41,12 @@ public class FieldUpdate implements Serializable, Comparable<FieldUpdate> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(FieldUpdate other) {
@@ -57,11 +57,11 @@ public class FieldUpdate implements Serializable, Comparable<FieldUpdate> {
     }
     return ((Comparable) value).compareTo(other.value);
   }
-  
+
   public FieldUpdate withName(hydra.ext.haskell.ast.Name name) {
     return new FieldUpdate(name, value);
   }
-  
+
   public FieldUpdate withValue(hydra.ext.haskell.ast.Expression value) {
     return new FieldUpdate(name, value);
   }

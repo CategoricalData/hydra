@@ -59,8 +59,8 @@ writeSequenceItem node =
         (writeScalar v0),
         "\n"]
       Model.NodeSequence v0 -> Logic.ifElse (Lists.null v0) "- []\n" (Strings.cat2 "-\n" (indentString (writeNode node)))
-      Model.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) "- {}\n" ( 
-        let entries = Maps.toList v0 
+      Model.NodeMapping v0 -> Logic.ifElse (Equality.equal (Maps.size v0) 0) "- {}\n" (
+        let entries = Maps.toList v0
             firstEntry = Lists.head entries
             restEntries = Lists.tail entries
             firstStr = writeMappingEntryInline firstEntry
@@ -73,8 +73,8 @@ writeSequenceItem node =
 -- | Write a mapping entry in block style
 writeMappingEntry :: (Model.Node, Model.Node) -> String
 writeMappingEntry entry =
-     
-      let key = Pairs.first entry 
+
+      let key = Pairs.first entry
           value = Pairs.second entry
       in case value of
         Model.NodeScalar v0 -> Strings.cat [
@@ -98,8 +98,8 @@ writeMappingEntry entry =
 -- | Write a mapping entry for the first item of a sequence element
 writeMappingEntryInline :: (Model.Node, Model.Node) -> String
 writeMappingEntryInline entry =
-     
-      let key = Pairs.first entry 
+
+      let key = Pairs.first entry
           value = Pairs.second entry
       in case value of
         Model.NodeScalar v0 -> Strings.cat [
@@ -129,7 +129,7 @@ writeNodeInline node =
         "[",
         (Strings.intercalate ", " (Lists.map (\item -> writeNodeInline item) v0)),
         "]"]
-      Model.NodeMapping v0 ->  
+      Model.NodeMapping v0 ->
         let writeFlowEntry =
                 \e -> Strings.cat [
                   writeNodeInline (Pairs.first e),
@@ -151,8 +151,8 @@ indentString s =
 -- | Check if a string needs quoting in YAML
 needsQuoting :: String -> Bool
 needsQuoting s =
-    Logic.ifElse (Strings.null s) True (Logic.ifElse (Lists.elem s yamlReservedWords) True (Logic.ifElse (looksLikeNumber s) True ( 
-      let chars = Strings.toList s 
+    Logic.ifElse (Strings.null s) True (Logic.ifElse (Lists.elem s yamlReservedWords) True (Logic.ifElse (looksLikeNumber s) True (
+      let chars = Strings.toList s
           specials = Strings.toList yamlSpecialChars
           hasSpecial = Logic.not (Lists.null (Lists.filter (\c -> Lists.elem c specials) chars))
       in (Logic.ifElse hasSpecial True (hasLeadingTrailingSpace s)))))
@@ -160,40 +160,40 @@ needsQuoting s =
 -- | Check if a string looks like a number
 looksLikeNumber :: String -> Bool
 looksLikeNumber s =
-     
+
       let chars = Strings.toList s
-      in (Logic.ifElse (Lists.null chars) False ( 
+      in (Logic.ifElse (Lists.null chars) False (
         let rest = Logic.ifElse (Equality.equal (Lists.head chars) 45) (Lists.tail chars) chars
-        in (Logic.ifElse (Lists.null rest) False ( 
-          let isDigitFn = \c -> Logic.and (Equality.gte c 48) (Equality.lte c 57) 
+        in (Logic.ifElse (Lists.null rest) False (
+          let isDigitFn = \c -> Logic.and (Equality.gte c 48) (Equality.lte c 57)
               allDigits = Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) rest)
           in (Logic.ifElse allDigits True (isDecimalString rest))))))
 
 -- | Check if character codes represent a decimal number
 isDecimalString :: [Int] -> Bool
 isDecimalString chars =
-     
-      let dotCode = 46 
+
+      let dotCode = 46
           parts = Lists.span (\c -> Logic.not (Equality.equal c dotCode)) chars
           before = Pairs.first parts
           afterWithDot = Pairs.second parts
-      in (Logic.ifElse (Lists.null before) False (Logic.ifElse (Lists.null afterWithDot) False ( 
+      in (Logic.ifElse (Lists.null before) False (Logic.ifElse (Lists.null afterWithDot) False (
         let after = Lists.tail afterWithDot
-        in (Logic.ifElse (Lists.null after) False ( 
+        in (Logic.ifElse (Lists.null after) False (
           let isDigitFn = \c -> Logic.and (Equality.gte c 48) (Equality.lte c 57)
           in (Logic.and (Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) before)) (Lists.null (Lists.filter (\c -> Logic.not (isDigitFn c)) after))))))))
 
 -- | Check if a string has leading or trailing whitespace
 hasLeadingTrailingSpace :: String -> Bool
 hasLeadingTrailingSpace s =
-     
+
       let chars = Strings.toList s
       in (Logic.ifElse (Lists.null chars) False (Logic.or (Chars.isSpace (Lists.head chars)) (Chars.isSpace (Lists.last chars))))
 
 -- | Escape single quotes by doubling them
 escapeSingleQuotes :: String -> String
 escapeSingleQuotes s =
-     
+
       let squote = 39
       in (Strings.fromList (Lists.bind (Strings.toList s) (\c -> Logic.ifElse (Equality.equal c squote) [
         squote,

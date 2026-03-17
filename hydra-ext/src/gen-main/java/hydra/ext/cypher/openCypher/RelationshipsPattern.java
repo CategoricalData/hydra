@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class RelationshipsPattern implements Serializable, Comparable<RelationshipsPattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.RelationshipsPattern");
-  
+
   public static final hydra.core.Name NODE_PATTERN = new hydra.core.Name("nodePattern");
-  
+
   public static final hydra.core.Name CHAIN = new hydra.core.Name("chain");
-  
+
   public final hydra.ext.cypher.openCypher.NodePattern nodePattern;
-  
+
   public final hydra.util.ConsList<hydra.ext.cypher.openCypher.PatternElementChain> chain;
-  
+
   public RelationshipsPattern (hydra.ext.cypher.openCypher.NodePattern nodePattern, hydra.util.ConsList<hydra.ext.cypher.openCypher.PatternElementChain> chain) {
     this.nodePattern = nodePattern;
     this.chain = chain;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof RelationshipsPattern)) {
@@ -32,12 +32,12 @@ public class RelationshipsPattern implements Serializable, Comparable<Relationsh
       this.chain,
       o.chain);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(nodePattern) + 3 * java.util.Objects.hashCode(chain);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(RelationshipsPattern other) {
@@ -48,11 +48,11 @@ public class RelationshipsPattern implements Serializable, Comparable<Relationsh
     }
     return ((Comparable) chain).compareTo(other.chain);
   }
-  
+
   public RelationshipsPattern withNodePattern(hydra.ext.cypher.openCypher.NodePattern nodePattern) {
     return new RelationshipsPattern(nodePattern, chain);
   }
-  
+
   public RelationshipsPattern withChain(hydra.util.ConsList<hydra.ext.cypher.openCypher.PatternElementChain> chain) {
     return new RelationshipsPattern(nodePattern, chain);
   }

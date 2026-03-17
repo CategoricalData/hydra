@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class HasArgs implements Serializable, Comparable<HasArgs> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.HasArgs");
-  
+
   public static final hydra.core.Name STRING = new hydra.core.Name("string");
-  
+
   public static final hydra.core.Name TRAVERSAL_TOKEN = new hydra.core.Name("traversalToken");
-  
+
   private HasArgs () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(String_ instance) ;
-    
+
     R visit(TraversalToken instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(HasArgs instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(String_ instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(TraversalToken instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class String_ extends hydra.ext.org.apache.tinkerpop.gremlin.HasArgs implements Serializable {
     public final hydra.ext.org.apache.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs value;
-    
+
     public String_ (hydra.ext.org.apache.tinkerpop.gremlin.HasStringArgumentAndOptionalStringLiteralVarargs value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof String_)) {
@@ -54,12 +54,12 @@ public abstract class HasArgs implements Serializable, Comparable<HasArgs> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(HasArgs other) {
@@ -70,20 +70,20 @@ public abstract class HasArgs implements Serializable, Comparable<HasArgs> {
       String_ o = (String_) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class TraversalToken extends hydra.ext.org.apache.tinkerpop.gremlin.HasArgs implements Serializable {
     public final hydra.ext.org.apache.tinkerpop.gremlin.HasTraversalTokenArgs value;
-    
+
     public TraversalToken (hydra.ext.org.apache.tinkerpop.gremlin.HasTraversalTokenArgs value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof TraversalToken)) {
@@ -94,12 +94,12 @@ public abstract class HasArgs implements Serializable, Comparable<HasArgs> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(HasArgs other) {
@@ -110,7 +110,7 @@ public abstract class HasArgs implements Serializable, Comparable<HasArgs> {
       TraversalToken o = (TraversalToken) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

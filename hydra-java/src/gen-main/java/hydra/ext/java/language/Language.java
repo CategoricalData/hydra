@@ -9,7 +9,7 @@ public interface Language {
   static Integer javaMaxTupleLength() {
     return 9;
   }
-  
+
   static hydra.coders.Language javaLanguage() {
     hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.EliminationVariant>> eliminationVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
       new hydra.variants.EliminationVariant.Record(),
@@ -71,11 +71,11 @@ public interface Language {
       new hydra.variants.TypeVariant.Wrap())));
     return new hydra.coders.Language(new hydra.coders.LanguageName("hydra.ext.java"), new hydra.coders.LanguageConstraints(eliminationVariants.get(), literalVariants.get(), floatTypes.get(), functionVariants.get(), integerTypes.get(), termVariants.get(), typeVariants.get(), p0 -> hydra.ext.java.language.Language.<hydra.core.Type>javaLanguage_typePredicate(p0)));
   }
-  
+
   static <T0> Boolean javaLanguage_typePredicate(T0 ignored) {
     return true;
   }
-  
+
   static hydra.util.PersistentSet<String> reservedWords() {
     hydra.util.ConsList<String> classNames = hydra.util.ConsList.of(
       "AbstractMethodError",

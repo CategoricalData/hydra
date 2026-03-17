@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class TypedAssignment implements Serializable, Comparable<TypedAssignment> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.TypedAssignment");
-  
+
   public static final hydra.core.Name LHS = new hydra.core.Name("lhs");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
-  
+
   public final hydra.ext.python.syntax.SingleTarget lhs;
-  
+
   public final hydra.ext.python.syntax.Expression type;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.AnnotatedRhs> rhs;
-  
+
   public TypedAssignment (hydra.ext.python.syntax.SingleTarget lhs, hydra.ext.python.syntax.Expression type, hydra.util.Maybe<hydra.ext.python.syntax.AnnotatedRhs> rhs) {
     this.lhs = lhs;
     this.type = type;
     this.rhs = rhs;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TypedAssignment)) {
@@ -39,12 +39,12 @@ public class TypedAssignment implements Serializable, Comparable<TypedAssignment
       this.rhs,
       o.rhs);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(lhs) + 3 * java.util.Objects.hashCode(type) + 5 * java.util.Objects.hashCode(rhs);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TypedAssignment other) {
@@ -59,15 +59,15 @@ public class TypedAssignment implements Serializable, Comparable<TypedAssignment
     }
     return ((Comparable) rhs).compareTo(other.rhs);
   }
-  
+
   public TypedAssignment withLhs(hydra.ext.python.syntax.SingleTarget lhs) {
     return new TypedAssignment(lhs, type, rhs);
   }
-  
+
   public TypedAssignment withType(hydra.ext.python.syntax.Expression type) {
     return new TypedAssignment(lhs, type, rhs);
   }
-  
+
   public TypedAssignment withRhs(hydra.util.Maybe<hydra.ext.python.syntax.AnnotatedRhs> rhs) {
     return new TypedAssignment(lhs, type, rhs);
   }

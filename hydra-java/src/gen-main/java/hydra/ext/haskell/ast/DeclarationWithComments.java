@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class DeclarationWithComments implements Serializable, Comparable<DeclarationWithComments> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.DeclarationWithComments");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public static final hydra.core.Name COMMENTS = new hydra.core.Name("comments");
-  
+
   /**
    * The declaration
    */
   public final hydra.ext.haskell.ast.Declaration body;
-  
+
   /**
    * Optional comments
    */
   public final hydra.util.Maybe<String> comments;
-  
+
   public DeclarationWithComments (hydra.ext.haskell.ast.Declaration body, hydra.util.Maybe<String> comments) {
     this.body = body;
     this.comments = comments;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof DeclarationWithComments)) {
@@ -41,12 +41,12 @@ public class DeclarationWithComments implements Serializable, Comparable<Declara
       this.comments,
       o.comments);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(body) + 3 * java.util.Objects.hashCode(comments);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DeclarationWithComments other) {
@@ -57,11 +57,11 @@ public class DeclarationWithComments implements Serializable, Comparable<Declara
     }
     return ((Comparable) comments).compareTo(other.comments);
   }
-  
+
   public DeclarationWithComments withBody(hydra.ext.haskell.ast.Declaration body) {
     return new DeclarationWithComments(body, comments);
   }
-  
+
   public DeclarationWithComments withComments(hydra.util.Maybe<String> comments) {
     return new DeclarationWithComments(body, comments);
   }

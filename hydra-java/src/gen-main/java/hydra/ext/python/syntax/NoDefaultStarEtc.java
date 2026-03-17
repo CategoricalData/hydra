@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class NoDefaultStarEtc implements Serializable, Comparable<NoDefaultStarEtc> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.NoDefaultStarEtc");
-  
+
   public static final hydra.core.Name PARAM_NO_DEFAULT = new hydra.core.Name("paramNoDefault");
-  
+
   public static final hydra.core.Name PARAM_MAYBE_DEFAULT = new hydra.core.Name("paramMaybeDefault");
-  
+
   public static final hydra.core.Name KEYWORDS = new hydra.core.Name("keywords");
-  
+
   public final hydra.ext.python.syntax.ParamNoDefault paramNoDefault;
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.ParamMaybeDefault> paramMaybeDefault;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Keywords> keywords;
-  
+
   public NoDefaultStarEtc (hydra.ext.python.syntax.ParamNoDefault paramNoDefault, hydra.util.ConsList<hydra.ext.python.syntax.ParamMaybeDefault> paramMaybeDefault, hydra.util.Maybe<hydra.ext.python.syntax.Keywords> keywords) {
     this.paramNoDefault = paramNoDefault;
     this.paramMaybeDefault = paramMaybeDefault;
     this.keywords = keywords;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof NoDefaultStarEtc)) {
@@ -39,12 +39,12 @@ public class NoDefaultStarEtc implements Serializable, Comparable<NoDefaultStarE
       this.keywords,
       o.keywords);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(paramNoDefault) + 3 * java.util.Objects.hashCode(paramMaybeDefault) + 5 * java.util.Objects.hashCode(keywords);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NoDefaultStarEtc other) {
@@ -59,15 +59,15 @@ public class NoDefaultStarEtc implements Serializable, Comparable<NoDefaultStarE
     }
     return ((Comparable) keywords).compareTo(other.keywords);
   }
-  
+
   public NoDefaultStarEtc withParamNoDefault(hydra.ext.python.syntax.ParamNoDefault paramNoDefault) {
     return new NoDefaultStarEtc(paramNoDefault, paramMaybeDefault, keywords);
   }
-  
+
   public NoDefaultStarEtc withParamMaybeDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamMaybeDefault> paramMaybeDefault) {
     return new NoDefaultStarEtc(paramNoDefault, paramMaybeDefault, keywords);
   }
-  
+
   public NoDefaultStarEtc withKeywords(hydra.util.Maybe<hydra.ext.python.syntax.Keywords> keywords) {
     return new NoDefaultStarEtc(paramNoDefault, paramMaybeDefault, keywords);
   }

@@ -15,7 +15,7 @@ T0 = TypeVar("T0")
 @lru_cache(1)
 def shacl_language() -> hydra.coders.Language:
     r"""Language constraints for W3C SHACL."""
-    
+
     @lru_cache(1)
     def elimination_variants() -> frozenset[T0]:
         return hydra.lib.sets.empty()

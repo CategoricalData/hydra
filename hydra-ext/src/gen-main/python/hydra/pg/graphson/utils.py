@@ -28,17 +28,17 @@ T1 = TypeVar("T1")
 
 def elements_to_vertices_with_adjacent_edges(els: frozenlist[hydra.pg.model.Element[T0]]) -> frozenlist[hydra.pg.model.VertexWithAdjacentEdges[T0]]:
     r"""Convert a list of property graph elements to a list of vertices with their adjacent edges."""
-    
+
     @lru_cache(1)
     def partitioned():
         def _hoist_partitioned_1(acc, v1):
             match v1:
                 case hydra.pg.model.ElementVertex(value=v):
                     return (hydra.lib.lists.cons(v, hydra.lib.pairs.first(acc)), hydra.lib.pairs.second(acc))
-                
+
                 case hydra.pg.model.ElementEdge(value=e):
                     return (hydra.lib.pairs.first(acc), hydra.lib.lists.cons(e, hydra.lib.pairs.second(acc)))
-                
+
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
         return hydra.lib.lists.foldl((lambda acc, el: _hoist_partitioned_1(acc, el)), ((), ()), els)
@@ -58,7 +58,7 @@ def elements_to_vertices_with_adjacent_edges(els: frozenlist[hydra.pg.model.Elem
 
 def encode_string_value(s: str) -> Either[T0, hydra.pg.graphson.syntax.Value]:
     r"""Encode a String value as a GraphSON Value."""
-    
+
     return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueString(s)))
 
 def encode_term_value(term: hydra.core.Term):
@@ -66,58 +66,58 @@ def encode_term_value(term: hydra.core.Term):
         match v1:
             case hydra.core.FloatValueBigfloat(value=f):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueBigDecimal(hydra.pg.graphson.syntax.BigDecimalValue(hydra.lib.literals.show_bigfloat(f)))))
-            
+
             case hydra.core.FloatValueFloat32(value=f):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueFloat(cast(hydra.pg.graphson.syntax.FloatValue, hydra.pg.graphson.syntax.FloatValueFinite(f)))))
-            
+
             case hydra.core.FloatValueFloat64(value=f):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueDouble(cast(hydra.pg.graphson.syntax.DoubleValue, hydra.pg.graphson.syntax.DoubleValueFinite(f)))))
-            
+
             case _:
                 return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("unsupported float type"))), hydra.lexical.empty_context()))
     def _hoist_hydra_pg_graphson_utils_encode_term_value_2(v1):
         match v1:
             case hydra.core.IntegerValueBigint(value=i):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueBigInteger(i)))
-            
+
             case hydra.core.IntegerValueInt32(value=i):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueInteger(i)))
-            
+
             case hydra.core.IntegerValueInt64(value=i):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueLong(i)))
-            
+
             case _:
                 return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("unsupported integer type"))), hydra.lexical.empty_context()))
     def _hoist_hydra_pg_graphson_utils_encode_term_value_3(v1):
         match v1:
             case hydra.core.LiteralBinary(value=b):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueBinary(hydra.lib.literals.binary_to_string(b))))
-            
+
             case hydra.core.LiteralBoolean(value=b):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueBoolean(b)))
-            
+
             case hydra.core.LiteralFloat(value=fv):
                 return _hoist_hydra_pg_graphson_utils_encode_term_value_1(fv)
-            
+
             case hydra.core.LiteralInteger(value=iv):
                 return _hoist_hydra_pg_graphson_utils_encode_term_value_2(iv)
-            
+
             case hydra.core.LiteralString(value=s):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueString(s)))
-            
+
             case _:
                 return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("unsupported literal type for GraphSON encoding"))), hydra.lexical.empty_context()))
     match hydra.rewriting.deannotate_term(term):
         case hydra.core.TermLiteral(value=lit):
             return _hoist_hydra_pg_graphson_utils_encode_term_value_3(lit)
-        
+
         case hydra.core.TermUnit():
             return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueNull()))
-        
+
         case _:
             return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("unsupported term variant for GraphSON encoding"))), hydra.lexical.empty_context()))
 
 def pg_elements_to_graphson(encode_value: Callable[[T0], Either[T1, hydra.pg.graphson.syntax.Value]], els: frozenlist[hydra.pg.model.Element[T0]]) -> Either[T1, frozenlist[hydra.json.model.Value]]:
     r"""Convert property graph elements to a list of GraphSON JSON values."""
-    
+
     return hydra.lib.eithers.map_list((lambda v1: hydra.pg.graphson.construct.pg_vertex_with_adjacent_edges_to_json(encode_value, v1)), elements_to_vertices_with_adjacent_edges(els))
