@@ -78,6 +78,14 @@ while [ $# -gt 0 ]; do
     shift
 done
 
+# Expand "all" for hosts and targets
+case "$HOSTS" in
+    all) HOSTS="haskell,java,python" ;;
+esac
+case "$TARGETS" in
+    all) TARGETS="haskell,java,python" ;;
+esac
+
 IFS=',' read -ra HOST_LIST <<< "$HOSTS"
 IFS=',' read -ra TARGET_LIST <<< "$TARGETS"
 

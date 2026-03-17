@@ -333,10 +333,10 @@ is set. The `run-benchmark-tests.sh` script automates this:
 
 ```bash
 # Run Java benchmarks (5 repetitions, tagged for comparison)
-bin/run-benchmark-tests.sh java --repeat 5 --tag baseline
+bin/run-benchmark-tests.sh --hosts java --repeat 5 --tag baseline
 
-# Run all implementations
-bin/run-benchmark-tests.sh --repeat 3
+# Run all 7 implementations
+bin/run-benchmark-tests.sh --hosts all --repeat 3
 
 # Just show the dashboard for existing runs
 bin/run-benchmark-tests.sh dashboard
