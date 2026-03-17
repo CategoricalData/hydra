@@ -1,0 +1,7 @@
+(define-library (hydra encode coders)
+(export hydra_encode_coders_coder_direction hydra_encode_coders_language_name hydra_encode_coders_traversal_order)
+(import (scheme base) (hydra coders) (hydra core))
+(begin
+(define hydra_encode_coders_coder_direction (lambda (match_target) ((lambda (match_value) (cond ((equal? (car match_target) 'encode) ((lambda (y) (list 'union (make-hydra_core_injection "hydra.coders.CoderDirection" (make-hydra_core_field "encode" ((lambda (_) (list 'unit '())) y))))) match_value)) ((equal? (car match_target) 'decode) ((lambda (y) (list 'union (make-hydra_core_injection "hydra.coders.CoderDirection" (make-hydra_core_field "decode" ((lambda (_) (list 'unit '())) y))))) match_value)))) (cadr match_target))))
+(define hydra_encode_coders_language_name (lambda (x) (list 'wrap (make-hydra_core_wrapped_term "hydra.coders.LanguageName" ((lambda (x) (list 'literal (list 'string x))) ((lambda (v) v) x))))))
+(define hydra_encode_coders_traversal_order (lambda (match_target) ((lambda (match_value) (cond ((equal? (car match_target) 'pre) ((lambda (y) (list 'union (make-hydra_core_injection "hydra.coders.TraversalOrder" (make-hydra_core_field "pre" ((lambda (_) (list 'unit '())) y))))) match_value)) ((equal? (car match_target) 'post) ((lambda (y) (list 'union (make-hydra_core_injection "hydra.coders.TraversalOrder" (make-hydra_core_field "post" ((lambda (_) (list 'unit '())) y))))) match_value)))) (cadr match_target))))))

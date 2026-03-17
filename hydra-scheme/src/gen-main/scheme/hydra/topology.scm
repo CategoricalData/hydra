@@ -1,0 +1,6 @@
+(define-library (hydra topology)
+(export make-hydra_topology_ordering_isomorphism hydra_topology_ordering_isomorphism? hydra_topology_ordering_isomorphism-encode hydra_topology_ordering_isomorphism-decode make-hydra_topology_tarjan_state hydra_topology_tarjan_state? hydra_topology_tarjan_state-counter hydra_topology_tarjan_state-indices hydra_topology_tarjan_state-low_links hydra_topology_tarjan_state-stack hydra_topology_tarjan_state-on_stack hydra_topology_tarjan_state-sccs)
+(import (scheme base))
+(begin
+(define-record-type hydra_topology_ordering_isomorphism (make-hydra_topology_ordering_isomorphism encode decode) hydra_topology_ordering_isomorphism? (encode hydra_topology_ordering_isomorphism-encode) (decode hydra_topology_ordering_isomorphism-decode))
+(define-record-type hydra_topology_tarjan_state (make-hydra_topology_tarjan_state counter indices low_links stack on_stack sccs) hydra_topology_tarjan_state? (counter hydra_topology_tarjan_state-counter) (indices hydra_topology_tarjan_state-indices) (low_links hydra_topology_tarjan_state-low_links) (stack hydra_topology_tarjan_state-stack) (on_stack hydra_topology_tarjan_state-on_stack) (sccs hydra_topology_tarjan_state-sccs))))
