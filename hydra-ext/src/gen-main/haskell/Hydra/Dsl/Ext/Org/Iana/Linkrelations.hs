@@ -518,15 +518,15 @@ linkRelationTypeOpener = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
     Core.fieldName = (Core.Name "opener"),
     Core.fieldTerm = Core.TermUnit}})))
 
-linkRelationTypeLocal_id :: (Phantoms.TTerm Linkrelations.LinkRelationType)
-linkRelationTypeLocal_id = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+linkRelationTypeOpenid2Local_id :: (Phantoms.TTerm Linkrelations.LinkRelationType)
+linkRelationTypeOpenid2Local_id = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
   Core.injectionTypeName = (Core.Name "hydra.ext.org.iana.linkrelations.LinkRelationType"),
   Core.injectionField = Core.Field {
     Core.fieldName = (Core.Name "openid2.local_id"),
     Core.fieldTerm = Core.TermUnit}})))
 
-linkRelationTypeProvider :: (Phantoms.TTerm Linkrelations.LinkRelationType)
-linkRelationTypeProvider = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+linkRelationTypeOpenid2Provider :: (Phantoms.TTerm Linkrelations.LinkRelationType)
+linkRelationTypeOpenid2Provider = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
   Core.injectionTypeName = (Core.Name "hydra.ext.org.iana.linkrelations.LinkRelationType"),
   Core.injectionField = Core.Field {
     Core.fieldName = (Core.Name "openid2.provider"),

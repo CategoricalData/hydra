@@ -108,7 +108,7 @@ generateRecordAccessor origType typeName ft =
   in  
     let accessorLocalName = (Strings.cat [
             Formatting.decapitalize (Names.localNameOf typeName),
-            (Formatting.capitalize (Names.localNameOf fieldName))])
+            (Strings.intercalate "" (Lists.map (\s -> Formatting.capitalize s) (Strings.splitOn "." (Core.unName fieldName))))])
     in  
       let accessorName = (dslElementName typeName accessorLocalName)
       in  
@@ -233,7 +233,7 @@ generateRecordWithUpdater origType typeName allFields targetField =
     let updaterLocalName = (Strings.cat [
             Formatting.decapitalize (Names.localNameOf typeName),
             "With",
-            (Formatting.capitalize (Names.localNameOf targetFieldName))])
+            (Strings.intercalate "" (Lists.map (\s -> Formatting.capitalize s) (Strings.splitOn "." (Core.unName targetFieldName))))])
     in  
       let updaterName = (dslElementName typeName updaterLocalName)
       in  
@@ -340,7 +340,7 @@ generateUnionInjector origType typeName ft =
     in  
       let injectorLocalName = (Strings.cat [
               Formatting.decapitalize (Names.localNameOf typeName),
-              (Formatting.capitalize (Names.localNameOf fieldName))])
+              (Strings.intercalate "" (Lists.map (\s -> Formatting.capitalize s) (Strings.splitOn "." (Core.unName fieldName))))])
       in  
         let injectorName = (dslElementName typeName injectorLocalName)
         in  
@@ -500,20 +500,25 @@ generateWrappedTypeAccessors origType typeName wt =
                             Core.bindingTerm = unwrapBody,
                             Core.bindingType = (Just unwrapTs)}]
 
--- | Deduplicate bindings by appending underscore to duplicate names
+-- | Deduplicate bindings by appending underscore suffixes to duplicate names
 deduplicateBindings :: ([Core.Binding] -> [Core.Binding])
 deduplicateBindings bindings = (Lists.foldl (\acc -> \b ->  
   let n = (Core.unName (Core.bindingName b))
   in  
-    let alreadySeen = (Logic.not (Lists.null (Lists.filter (\a -> Equality.equal (Core.unName (Core.bindingName a)) n) acc)))
-    in (Logic.ifElse alreadySeen (Lists.concat2 acc [
-      Core.Binding {
-        Core.bindingName = (Core.Name (Strings.cat [
-          n,
-          "_"])),
-        Core.bindingTerm = (Core.bindingTerm b),
-        Core.bindingType = (Core.bindingType b)}]) (Lists.concat2 acc [
-      b]))) [] bindings)
+    let usedNames = (Lists.map (\a -> Core.unName (Core.bindingName a)) acc)
+    in  
+      let uniqueName = (findUniqueName n usedNames)
+      in (Lists.concat2 acc [
+        Core.Binding {
+          Core.bindingName = (Core.Name uniqueName),
+          Core.bindingTerm = (Core.bindingTerm b),
+          Core.bindingType = (Core.bindingType b)}])) [] bindings)
+
+-- | Find a unique name by appending underscores
+findUniqueName :: (String -> [String] -> String)
+findUniqueName candidate usedNames = (Logic.ifElse (Lists.null (Lists.filter (Equality.equal candidate) usedNames)) candidate (findUniqueName (Strings.cat [
+  candidate,
+  "_"]) usedNames))
 
 -- | Check if a binding is eligible for DSL generation
 isDslEligibleBinding :: (t0 -> t1 -> Core.Binding -> Either t2 (Maybe Core.Binding))

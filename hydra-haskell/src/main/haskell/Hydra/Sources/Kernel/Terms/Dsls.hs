@@ -60,6 +60,7 @@ module_ = Module ns elements
       toBinding generateUnionInjector,
       toBinding generateWrappedTypeAccessors,
       toBinding deduplicateBindings,
+      toBinding findUniqueName,
       toBinding isDslEligibleBinding,
       toBinding dslTypeScheme,
       toBinding collectForallVars,
@@ -325,7 +326,7 @@ generateRecordAccessor = define "generateRecordAccessor" $
   "fieldName" <~ (Core.fieldTypeName (var "ft")) $
   "accessorLocalName" <~ (Strings.cat $ list [
     Formatting.decapitalize @@ (Names.localNameOf @@ var "typeName"),
-    Formatting.capitalize @@ (Names.localNameOf @@ var "fieldName")]) $
+    Strings.intercalate (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "fieldName"))))]) $
   "accessorName" <~ (dslElementName @@ var "typeName" @@ var "accessorLocalName") $
   -- Body: projection as a simple elimination
   "paramDomain" <~ (wrapInTTerm (nominalResultType @@ var "typeName" @@ var "origType")) $
@@ -356,7 +357,7 @@ generateRecordWithUpdater = define "generateRecordWithUpdater" $
   "updaterLocalName" <~ (Strings.cat $ list [
     Formatting.decapitalize @@ (Names.localNameOf @@ var "typeName"),
     string "With",
-    Formatting.capitalize @@ (Names.localNameOf @@ var "targetFieldName")]) $
+    Strings.intercalate (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "targetFieldName"))))]) $
   "updaterName" <~ (dslElementName @@ var "typeName" @@ var "updaterLocalName") $
   -- Build deep fields: project from unwrapped original, except target uses unwrapped newVal
   "dFields" <~ (Lists.map
@@ -400,7 +401,7 @@ generateUnionInjector = define "generateUnionInjector" $
   -- Build the injector name: e.g., "functionLambda" or "comparisonLessThan"
   "injectorLocalName" <~ (Strings.cat $ list [
     Formatting.decapitalize @@ (Names.localNameOf @@ var "typeName"),
-    Formatting.capitalize @@ (Names.localNameOf @@ var "fieldName")]) $
+    Strings.intercalate (string "") (Lists.map ("s" ~> Formatting.capitalize @@ var "s") (Strings.splitOn (string ".") (Core.unName (var "fieldName"))))]) $
   "injectorName" <~ (dslElementName @@ var "typeName" @@ var "injectorLocalName") $
   -- Check if field type is unit (for unit variants like enum members)
   "isUnit" <~ (isUnitType_ @@ var "fieldType") $
@@ -494,29 +495,34 @@ generateBindingsForType = define "generateBindingsForType" $
       _Type_wrap>>: "wt" ~>
         generateWrappedTypeAccessors @@ var "rawType" @@ var "typeName" @@ var "wt"]))
 
--- | Deduplicate bindings by appending "_" to duplicate names.
--- Later bindings (e.g., record accessors) get the suffix; earlier ones (e.g., wrapped type constructors) keep their name.
+-- | Deduplicate bindings by appending "_" suffixes to duplicate names.
+-- Later bindings get suffixes; earlier ones keep their name.
+-- Multiple duplicates get increasing suffixes: name_, name__, name___, etc.
 deduplicateBindings :: TBinding ([Binding] -> [Binding])
 deduplicateBindings = define "deduplicateBindings" $
-  doc "Deduplicate bindings by appending underscore to duplicate names" $
+  doc "Deduplicate bindings by appending underscore suffixes to duplicate names" $
   "bindings" ~>
   Lists.foldl
     ("acc" ~> "b" ~>
       "n" <~ (Core.unName (Core.bindingName (var "b"))) $
-      "alreadySeen" <~ (Logic.not (Lists.null (Lists.filter
-        ("a" ~> Equality.equal (Core.unName (Core.bindingName (var "a"))) (var "n"))
-        (var "acc")))) $
-      Logic.ifElse (var "alreadySeen")
-        -- Duplicate: rename with "_" suffix
-        (Lists.concat2 (var "acc") (list [
-          Core.binding
-            (Core.name (Strings.cat $ list [var "n", string "_"]))
-            (Core.bindingTerm (var "b"))
-            (Core.bindingType (var "b"))]))
-        -- First occurrence: keep as-is
-        (Lists.concat2 (var "acc") (list [var "b"])))
+      "usedNames" <~ (Lists.map ("a" ~> Core.unName (Core.bindingName (var "a"))) (var "acc")) $
+      "uniqueName" <~ (findUniqueName @@ var "n" @@ var "usedNames") $
+      Lists.concat2 (var "acc") (list [
+        Core.binding
+          (Core.name (var "uniqueName"))
+          (Core.bindingTerm (var "b"))
+          (Core.bindingType (var "b"))]))
     (list ([] :: [TTerm Binding]))
     (var "bindings")
+
+-- | Find a unique name by appending "_" suffixes until not in the used list
+findUniqueName :: TBinding (String -> [String] -> String)
+findUniqueName = define "findUniqueName" $
+  doc "Find a unique name by appending underscores" $
+  "candidate" ~> "usedNames" ~>
+  Logic.ifElse (Lists.null (Lists.filter (unaryFunction (Equality.equal (var "candidate"))) (var "usedNames")))
+    (var "candidate")
+    (findUniqueName @@ (Strings.cat $ list [var "candidate", string "_"]) @@ var "usedNames")
 
 -- | Filter bindings to only DSL-eligible type definitions
 filterTypeBindings :: TBinding (Context -> Graph -> [Binding] -> Either (InContext Error) [Binding])

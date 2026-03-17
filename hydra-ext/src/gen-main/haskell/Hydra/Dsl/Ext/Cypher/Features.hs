@@ -8353,15 +8353,15 @@ databaseFunctionFeatures nameFromElementId = (Phantoms.TTerm (Core.TermRecord (C
       Core.fieldName = (Core.Name "db.nameFromElementId"),
       Core.fieldTerm = (Phantoms.unTTerm nameFromElementId)}]})))
 
-databaseFunctionFeaturesNameFromElementId :: (Phantoms.TTerm Features.DatabaseFunctionFeatures -> Phantoms.TTerm Bool)
-databaseFunctionFeaturesNameFromElementId x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+databaseFunctionFeaturesDbNameFromElementId :: (Phantoms.TTerm Features.DatabaseFunctionFeatures -> Phantoms.TTerm Bool)
+databaseFunctionFeaturesDbNameFromElementId x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures"),
     Core.projectionField = (Core.Name "db.nameFromElementId")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-databaseFunctionFeaturesWithNameFromElementId :: (Phantoms.TTerm Features.DatabaseFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DatabaseFunctionFeatures)
-databaseFunctionFeaturesWithNameFromElementId original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+databaseFunctionFeaturesWithDbNameFromElementId :: (Phantoms.TTerm Features.DatabaseFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DatabaseFunctionFeatures)
+databaseFunctionFeaturesWithDbNameFromElementId original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -8376,15 +8376,15 @@ genAIFunctionFeatures encode = (Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "genai.vector.encode"),
       Core.fieldTerm = (Phantoms.unTTerm encode)}]})))
 
-genAIFunctionFeaturesEncode :: (Phantoms.TTerm Features.GenAIFunctionFeatures -> Phantoms.TTerm Bool)
-genAIFunctionFeaturesEncode x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+genAIFunctionFeaturesGenaiVectorEncode :: (Phantoms.TTerm Features.GenAIFunctionFeatures -> Phantoms.TTerm Bool)
+genAIFunctionFeaturesGenaiVectorEncode x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GenAIFunctionFeatures"),
     Core.projectionField = (Core.Name "genai.vector.encode")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-genAIFunctionFeaturesWithEncode :: (Phantoms.TTerm Features.GenAIFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GenAIFunctionFeatures)
-genAIFunctionFeaturesWithEncode original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+genAIFunctionFeaturesWithGenaiVectorEncode :: (Phantoms.TTerm Features.GenAIFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GenAIFunctionFeatures)
+genAIFunctionFeaturesWithGenaiVectorEncode original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.GenAIFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -8408,36 +8408,36 @@ graphFunctionFeatures byElementId byName names propertiesByName = (Phantoms.TTer
       Core.fieldName = (Core.Name "graph.propertiesByName"),
       Core.fieldTerm = (Phantoms.unTTerm propertiesByName)}]})))
 
-graphFunctionFeaturesByElementId :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool)
-graphFunctionFeaturesByElementId x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+graphFunctionFeaturesGraphByElementId :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool)
+graphFunctionFeaturesGraphByElementId x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
     Core.projectionField = (Core.Name "graph.byElementId")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-graphFunctionFeaturesByName :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool)
-graphFunctionFeaturesByName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+graphFunctionFeaturesGraphByName :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool)
+graphFunctionFeaturesGraphByName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
     Core.projectionField = (Core.Name "graph.byName")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-graphFunctionFeaturesNames :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool)
-graphFunctionFeaturesNames x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+graphFunctionFeaturesGraphNames :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool)
+graphFunctionFeaturesGraphNames x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
     Core.projectionField = (Core.Name "graph.names")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-graphFunctionFeaturesPropertiesByName :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool)
-graphFunctionFeaturesPropertiesByName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+graphFunctionFeaturesGraphPropertiesByName :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool)
+graphFunctionFeaturesGraphPropertiesByName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
     Core.projectionField = (Core.Name "graph.propertiesByName")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-graphFunctionFeaturesWithByElementId :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFunctionFeatures)
-graphFunctionFeaturesWithByElementId original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+graphFunctionFeaturesWithGraphByElementId :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFunctionFeatures)
+graphFunctionFeaturesWithGraphByElementId original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -8465,8 +8465,8 @@ graphFunctionFeaturesWithByElementId original newVal = (Phantoms.TTerm (Core.Ter
           Core.projectionField = (Core.Name "graph.propertiesByName")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-graphFunctionFeaturesWithByName :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFunctionFeatures)
-graphFunctionFeaturesWithByName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+graphFunctionFeaturesWithGraphByName :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFunctionFeatures)
+graphFunctionFeaturesWithGraphByName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -8494,8 +8494,8 @@ graphFunctionFeaturesWithByName original newVal = (Phantoms.TTerm (Core.TermReco
           Core.projectionField = (Core.Name "graph.propertiesByName")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-graphFunctionFeaturesWithNames :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFunctionFeatures)
-graphFunctionFeaturesWithNames original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+graphFunctionFeaturesWithGraphNames :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFunctionFeatures)
+graphFunctionFeaturesWithGraphNames original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -8523,8 +8523,8 @@ graphFunctionFeaturesWithNames original newVal = (Phantoms.TTerm (Core.TermRecor
           Core.projectionField = (Core.Name "graph.propertiesByName")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-graphFunctionFeaturesWithPropertiesByName :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFunctionFeatures)
-graphFunctionFeaturesWithPropertiesByName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+graphFunctionFeaturesWithGraphPropertiesByName :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFunctionFeatures)
+graphFunctionFeaturesWithGraphPropertiesByName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -14384,8 +14384,8 @@ spatialFunctionFeatures distance point withinBBox = (Phantoms.TTerm (Core.TermRe
       Core.fieldName = (Core.Name "point.withinBBox"),
       Core.fieldTerm = (Phantoms.unTTerm withinBBox)}]})))
 
-spatialFunctionFeaturesDistance :: (Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool)
-spatialFunctionFeaturesDistance x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+spatialFunctionFeaturesPointDistance :: (Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool)
+spatialFunctionFeaturesPointDistance x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
     Core.projectionField = (Core.Name "point.distance")})))),
@@ -14398,15 +14398,15 @@ spatialFunctionFeaturesPoint x = (Phantoms.TTerm (Core.TermApplication (Core.App
     Core.projectionField = (Core.Name "point")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-spatialFunctionFeaturesWithinBBox :: (Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool)
-spatialFunctionFeaturesWithinBBox x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+spatialFunctionFeaturesPointWithinBBox :: (Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool)
+spatialFunctionFeaturesPointWithinBBox x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
     Core.projectionField = (Core.Name "point.withinBBox")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-spatialFunctionFeaturesWithDistance :: (Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SpatialFunctionFeatures)
-spatialFunctionFeaturesWithDistance original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+spatialFunctionFeaturesWithPointDistance :: (Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SpatialFunctionFeatures)
+spatialFunctionFeaturesWithPointDistance original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -14449,8 +14449,8 @@ spatialFunctionFeaturesWithPoint original newVal = (Phantoms.TTerm (Core.TermRec
           Core.projectionField = (Core.Name "point.withinBBox")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-spatialFunctionFeaturesWithWithinBBox :: (Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SpatialFunctionFeatures)
-spatialFunctionFeaturesWithWithinBBox original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+spatialFunctionFeaturesWithPointWithinBBox :: (Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SpatialFunctionFeatures)
+spatialFunctionFeaturesWithPointWithinBBox original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -16713,29 +16713,29 @@ temporalDurationFunctionFeaturesDuration x = (Phantoms.TTerm (Core.TermApplicati
     Core.projectionField = (Core.Name "duration")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalDurationFunctionFeaturesBetween :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool)
-temporalDurationFunctionFeaturesBetween x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalDurationFunctionFeaturesDurationBetween :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool)
+temporalDurationFunctionFeaturesDurationBetween x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
     Core.projectionField = (Core.Name "duration.between")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalDurationFunctionFeaturesInDays :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool)
-temporalDurationFunctionFeaturesInDays x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalDurationFunctionFeaturesDurationInDays :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool)
+temporalDurationFunctionFeaturesDurationInDays x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
     Core.projectionField = (Core.Name "duration.inDays")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalDurationFunctionFeaturesInMonths :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool)
-temporalDurationFunctionFeaturesInMonths x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalDurationFunctionFeaturesDurationInMonths :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool)
+temporalDurationFunctionFeaturesDurationInMonths x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
     Core.projectionField = (Core.Name "duration.inMonths")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalDurationFunctionFeaturesInSeconds :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool)
-temporalDurationFunctionFeaturesInSeconds x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalDurationFunctionFeaturesDurationInSeconds :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool)
+temporalDurationFunctionFeaturesDurationInSeconds x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
     Core.projectionField = (Core.Name "duration.inSeconds")})))),
@@ -16777,8 +16777,8 @@ temporalDurationFunctionFeaturesWithDuration original newVal = (Phantoms.TTerm (
           Core.projectionField = (Core.Name "duration.inSeconds")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalDurationFunctionFeaturesWithBetween :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
-temporalDurationFunctionFeaturesWithBetween original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalDurationFunctionFeaturesWithDurationBetween :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
+temporalDurationFunctionFeaturesWithDurationBetween original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -16813,8 +16813,8 @@ temporalDurationFunctionFeaturesWithBetween original newVal = (Phantoms.TTerm (C
           Core.projectionField = (Core.Name "duration.inSeconds")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalDurationFunctionFeaturesWithInDays :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
-temporalDurationFunctionFeaturesWithInDays original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalDurationFunctionFeaturesWithDurationInDays :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
+temporalDurationFunctionFeaturesWithDurationInDays original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -16849,8 +16849,8 @@ temporalDurationFunctionFeaturesWithInDays original newVal = (Phantoms.TTerm (Co
           Core.projectionField = (Core.Name "duration.inSeconds")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalDurationFunctionFeaturesWithInMonths :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
-temporalDurationFunctionFeaturesWithInMonths original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalDurationFunctionFeaturesWithDurationInMonths :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
+temporalDurationFunctionFeaturesWithDurationInMonths original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -16885,8 +16885,8 @@ temporalDurationFunctionFeaturesWithInMonths original newVal = (Phantoms.TTerm (
           Core.projectionField = (Core.Name "duration.inSeconds")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalDurationFunctionFeaturesWithInSeconds :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
-temporalDurationFunctionFeaturesWithInSeconds original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalDurationFunctionFeaturesWithDurationInSeconds :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
+temporalDurationFunctionFeaturesWithDurationInSeconds original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -17014,29 +17014,29 @@ temporalInstantFunctionFeaturesDate x = (Phantoms.TTerm (Core.TermApplication (C
     Core.projectionField = (Core.Name "date")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesRealtime x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesDateRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesDateRealtime x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "date.realtime")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesStatement x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesDateStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesDateStatement x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "date.statement")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesTransaction x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesDateTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesDateTransaction x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "date.transaction")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesTruncate x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesDateTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesDateTruncate x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "date.truncate")})))),
@@ -17049,43 +17049,43 @@ temporalInstantFunctionFeaturesDatetime x = (Phantoms.TTerm (Core.TermApplicatio
     Core.projectionField = (Core.Name "datetime")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesFromepoch :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesFromepoch x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesDatetimeFromepoch :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesDatetimeFromepoch x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "datetime.fromepoch")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesFromepochmillis :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesFromepochmillis x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesDatetimeFromepochmillis :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesDatetimeFromepochmillis x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesRealtime_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesRealtime_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesDatetimeRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesDatetimeRealtime x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "datetime.realtime")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesStatement_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesStatement_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesDatetimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesDatetimeStatement x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "datetime.statement")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesTransaction_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesTransaction_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesDatetimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesDatetimeTransaction x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "datetime.transaction")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesTruncate_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesTruncate_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesDatetimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesDatetimeTruncate x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "datetime.truncate")})))),
@@ -17098,29 +17098,29 @@ temporalInstantFunctionFeaturesLocaldatetime x = (Phantoms.TTerm (Core.TermAppli
     Core.projectionField = (Core.Name "localdatetime")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesRealtime_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesRealtime_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesLocaldatetimeRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesLocaldatetimeRealtime x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "localdatetime.realtime")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesStatement_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesStatement_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesLocaldatetimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesLocaldatetimeStatement x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "localdatetime.statement")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesTransaction_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesTransaction_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesLocaldatetimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesLocaldatetimeTransaction x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "localdatetime.transaction")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesTruncate_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesTruncate_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesLocaldatetimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesLocaldatetimeTruncate x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "localdatetime.truncate")})))),
@@ -17133,29 +17133,29 @@ temporalInstantFunctionFeaturesLocaltime x = (Phantoms.TTerm (Core.TermApplicati
     Core.projectionField = (Core.Name "localtime")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesRealtime_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesRealtime_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesLocaltimeRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesLocaltimeRealtime x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "localtime.realtime")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesStatement_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesStatement_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesLocaltimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesLocaltimeStatement x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "localtime.statement")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesTransaction_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesTransaction_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesLocaltimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesLocaltimeTransaction x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "localtime.transaction")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesTruncate_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesTruncate_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesLocaltimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesLocaltimeTruncate x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "localtime.truncate")})))),
@@ -17168,29 +17168,29 @@ temporalInstantFunctionFeaturesTime x = (Phantoms.TTerm (Core.TermApplication (C
     Core.projectionField = (Core.Name "time")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesRealtime_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesRealtime_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesTimeRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesTimeRealtime x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "time.realtime")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesStatement_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesStatement_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesTimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesTimeStatement x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "time.statement")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesTransaction_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesTransaction_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesTimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesTimeTransaction x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "time.transaction")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-temporalInstantFunctionFeaturesTruncate_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
-temporalInstantFunctionFeaturesTruncate_ x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+temporalInstantFunctionFeaturesTimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
+temporalInstantFunctionFeaturesTimeTruncate x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
     Core.projectionField = (Core.Name "time.truncate")})))),
@@ -17386,8 +17386,8 @@ temporalInstantFunctionFeaturesWithDate original newVal = (Phantoms.TTerm (Core.
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithRealtime original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithDateRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithDateRealtime original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -17576,8 +17576,8 @@ temporalInstantFunctionFeaturesWithRealtime original newVal = (Phantoms.TTerm (C
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithStatement original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithDateStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithDateStatement original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -17766,8 +17766,8 @@ temporalInstantFunctionFeaturesWithStatement original newVal = (Phantoms.TTerm (
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithTransaction original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithDateTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithDateTransaction original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -17956,8 +17956,8 @@ temporalInstantFunctionFeaturesWithTransaction original newVal = (Phantoms.TTerm
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithTruncate original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithDateTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithDateTruncate original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -18336,8 +18336,8 @@ temporalInstantFunctionFeaturesWithDatetime original newVal = (Phantoms.TTerm (C
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithFromepoch :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithFromepoch original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithDatetimeFromepoch :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithDatetimeFromepoch original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -18526,8 +18526,8 @@ temporalInstantFunctionFeaturesWithFromepoch original newVal = (Phantoms.TTerm (
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithFromepochmillis :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithFromepochmillis original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithDatetimeFromepochmillis :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithDatetimeFromepochmillis original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -18716,8 +18716,8 @@ temporalInstantFunctionFeaturesWithFromepochmillis original newVal = (Phantoms.T
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithRealtime_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithRealtime_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithDatetimeRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithDatetimeRealtime original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -18906,8 +18906,8 @@ temporalInstantFunctionFeaturesWithRealtime_ original newVal = (Phantoms.TTerm (
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithStatement_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithStatement_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithDatetimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithDatetimeStatement original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -19096,8 +19096,8 @@ temporalInstantFunctionFeaturesWithStatement_ original newVal = (Phantoms.TTerm 
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithTransaction_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithTransaction_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithDatetimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithDatetimeTransaction original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -19286,8 +19286,8 @@ temporalInstantFunctionFeaturesWithTransaction_ original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithTruncate_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithTruncate_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithDatetimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithDatetimeTruncate original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -19666,8 +19666,8 @@ temporalInstantFunctionFeaturesWithLocaldatetime original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithRealtime_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithRealtime_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithLocaldatetimeRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithLocaldatetimeRealtime original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -19856,8 +19856,8 @@ temporalInstantFunctionFeaturesWithRealtime_ original newVal = (Phantoms.TTerm (
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithStatement_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithStatement_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithLocaldatetimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithLocaldatetimeStatement original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -20046,8 +20046,8 @@ temporalInstantFunctionFeaturesWithStatement_ original newVal = (Phantoms.TTerm 
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithTransaction_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithTransaction_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithLocaldatetimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithLocaldatetimeTransaction original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -20236,8 +20236,8 @@ temporalInstantFunctionFeaturesWithTransaction_ original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithTruncate_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithTruncate_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithLocaldatetimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithLocaldatetimeTruncate original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -20616,8 +20616,8 @@ temporalInstantFunctionFeaturesWithLocaltime original newVal = (Phantoms.TTerm (
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithRealtime_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithRealtime_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithLocaltimeRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithLocaltimeRealtime original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -20806,8 +20806,8 @@ temporalInstantFunctionFeaturesWithRealtime_ original newVal = (Phantoms.TTerm (
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithStatement_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithStatement_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithLocaltimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithLocaltimeStatement original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -20996,8 +20996,8 @@ temporalInstantFunctionFeaturesWithStatement_ original newVal = (Phantoms.TTerm 
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithTransaction_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithTransaction_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithLocaltimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithLocaltimeTransaction original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -21186,8 +21186,8 @@ temporalInstantFunctionFeaturesWithTransaction_ original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithTruncate_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithTruncate_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithLocaltimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithLocaltimeTruncate original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -21566,8 +21566,8 @@ temporalInstantFunctionFeaturesWithTime original newVal = (Phantoms.TTerm (Core.
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithRealtime_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithRealtime_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithTimeRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithTimeRealtime original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -21756,8 +21756,8 @@ temporalInstantFunctionFeaturesWithRealtime_ original newVal = (Phantoms.TTerm (
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithStatement_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithStatement_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithTimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithTimeStatement original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -21946,8 +21946,8 @@ temporalInstantFunctionFeaturesWithStatement_ original newVal = (Phantoms.TTerm 
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithTransaction_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithTransaction_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithTimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithTimeTransaction original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -22136,8 +22136,8 @@ temporalInstantFunctionFeaturesWithTransaction_ original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "time.truncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-temporalInstantFunctionFeaturesWithTruncate_ :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeaturesWithTruncate_ original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeaturesWithTimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
+temporalInstantFunctionFeaturesWithTimeTruncate original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -23482,22 +23482,22 @@ vectorFunctionFeatures cosine euclidean = (Phantoms.TTerm (Core.TermRecord (Core
       Core.fieldName = (Core.Name "vector.similarity.euclidean"),
       Core.fieldTerm = (Phantoms.unTTerm euclidean)}]})))
 
-vectorFunctionFeaturesCosine :: (Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool)
-vectorFunctionFeaturesCosine x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+vectorFunctionFeaturesVectorSimilarityCosine :: (Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool)
+vectorFunctionFeaturesVectorSimilarityCosine x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
     Core.projectionField = (Core.Name "vector.similarity.cosine")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-vectorFunctionFeaturesEuclidean :: (Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool)
-vectorFunctionFeaturesEuclidean x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+vectorFunctionFeaturesVectorSimilarityEuclidean :: (Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool)
+vectorFunctionFeaturesVectorSimilarityEuclidean x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
     Core.projectionField = (Core.Name "vector.similarity.euclidean")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-vectorFunctionFeaturesWithCosine :: (Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VectorFunctionFeatures)
-vectorFunctionFeaturesWithCosine original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+vectorFunctionFeaturesWithVectorSimilarityCosine :: (Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VectorFunctionFeatures)
+vectorFunctionFeaturesWithVectorSimilarityCosine original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
@@ -23511,8 +23511,8 @@ vectorFunctionFeaturesWithCosine original newVal = (Phantoms.TTerm (Core.TermRec
           Core.projectionField = (Core.Name "vector.similarity.euclidean")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-vectorFunctionFeaturesWithEuclidean :: (Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VectorFunctionFeatures)
-vectorFunctionFeaturesWithEuclidean original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+vectorFunctionFeaturesWithVectorSimilarityEuclidean :: (Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VectorFunctionFeatures)
+vectorFunctionFeaturesWithVectorSimilarityEuclidean original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
