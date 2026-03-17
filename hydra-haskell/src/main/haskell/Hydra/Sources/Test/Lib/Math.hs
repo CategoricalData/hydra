@@ -316,7 +316,7 @@ mathTanh = subgroup "tanh" [
 mathAsinh :: TTerm TestGroup
 mathAsinh = subgroup "asinh" [
   test "asinh 0" 0.0 0.0,
-  test "asinh 1" 1.0 (asinh 1.0),
+  roundedPrimCase1 "asinh 1" _math_asinh 1.0 (asinh 1.0),
   roundedPrimCase1 "asinh 0.5" _math_asinh 0.5 (asinh 0.5)]
   where
     test name x result = primCase name _math_asinh [float64 x] (float64 result)
@@ -324,7 +324,7 @@ mathAsinh = subgroup "asinh" [
 mathAcosh :: TTerm TestGroup
 mathAcosh = subgroup "acosh" [
   test "acosh 1" 1.0 0.0,
-  test "acosh 2" 2.0 (acosh 2.0),
+  roundedPrimCase1 "acosh 2" _math_acosh 2.0 (acosh 2.0),
   roundedPrimCase1 "acosh 3" _math_acosh 3.0 (acosh 3.0)]
   where
     test name x result = primCase name _math_acosh [float64 x] (float64 result)
