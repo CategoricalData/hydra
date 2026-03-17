@@ -3,6 +3,8 @@
 r"""Encoding functions for converting GraphSON syntax to JSON."""
 
 from __future__ import annotations
+from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
 from typing import cast
 import hydra.core
@@ -110,7 +112,7 @@ def value_to_json(v1: hydra.pg.graphson.syntax.Value) -> hydra.json.model.Value:
             return typed_value_to_json("g:Int32", cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int32_to_bigint(i2)))))
         
         case hydra.pg.graphson.syntax.ValueList(value=vals):
-            return typed_value_to_json("g:List", cast(hydra.json.model.Value, hydra.json.model.ValueArray(hydra.lib.lists.map(value_to_json, vals))))
+            return typed_value_to_json("g:List", cast(hydra.json.model.Value, hydra.json.model.ValueArray(hydra.lib.lists.map((lambda x1: value_to_json(x1)), vals))))
         
         case hydra.pg.graphson.syntax.ValueLong(value=l):
             return typed_value_to_json("g:Long", cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int64_to_bigint(l)))))
@@ -125,7 +127,7 @@ def value_to_json(v1: hydra.pg.graphson.syntax.Value) -> hydra.json.model.Value:
             return typed_value_to_json("g:PrimitivePdt", cast(hydra.json.model.Value, hydra.json.model.ValueString(ptv.value)))
         
         case hydra.pg.graphson.syntax.ValueSet(value=vals2):
-            return typed_value_to_json("g:Set", cast(hydra.json.model.Value, hydra.json.model.ValueArray(hydra.lib.lists.map(value_to_json, vals2))))
+            return typed_value_to_json("g:Set", cast(hydra.json.model.Value, hydra.json.model.ValueArray(hydra.lib.lists.map((lambda x1: value_to_json(x1)), vals2))))
         
         case hydra.pg.graphson.syntax.ValueShort(value=i3):
             return typed_value_to_json("g:Int16", cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.literals.bigint_to_bigfloat(hydra.lib.literals.int16_to_bigint(i3)))))
@@ -157,12 +159,12 @@ def edge_map_to_json(out: bool, m: FrozenDict[hydra.pg.graphson.syntax.EdgeLabel
 def vertex_property_value_to_json(vpv: hydra.pg.graphson.syntax.VertexPropertyValue) -> hydra.json.model.Value:
     r"""Convert a GraphSON VertexPropertyValue to a JSON Value."""
     
-    return to_json_object((("id", hydra.lib.maybes.map(value_to_json, vpv.id)), ("value", Just(value_to_json(vpv.value)))))
+    return to_json_object((("id", hydra.lib.maybes.map((lambda x1: value_to_json(x1)), vpv.id)), ("value", Just(value_to_json(vpv.value)))))
 
 def vertex_property_map_to_json(m: FrozenDict[hydra.pg.graphson.syntax.PropertyKey, frozenlist[hydra.pg.graphson.syntax.VertexPropertyValue]]) -> Maybe[hydra.json.model.Value]:
     r"""Convert a map of vertex properties to an optional JSON Value."""
     
-    return hydra.lib.logic.if_else(hydra.lib.maps.null(m), (lambda : Nothing()), (lambda : Just(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (hydra.lib.pairs.first(p).value, cast(hydra.json.model.Value, hydra.json.model.ValueArray(hydra.lib.lists.map(vertex_property_value_to_json, hydra.lib.pairs.second(p)))))), hydra.lib.maps.to_list(m))))))))
+    return hydra.lib.logic.if_else(hydra.lib.maps.null(m), (lambda : Nothing()), (lambda : Just(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (hydra.lib.pairs.first(p).value, cast(hydra.json.model.Value, hydra.json.model.ValueArray(hydra.lib.lists.map((lambda x1: vertex_property_value_to_json(x1)), hydra.lib.pairs.second(p)))))), hydra.lib.maps.to_list(m))))))))
 
 def vertex_to_json(v: hydra.pg.graphson.syntax.Vertex) -> hydra.json.model.Value:
     r"""Convert a GraphSON Vertex to a JSON Value."""

@@ -83,9 +83,9 @@ echo ""
 stack exec bootstrap-from-json -- --target java --include-coders --include-tests --include-gentests $RTS_FLAGS
 
 echo ""
-echo "Step 3/5: Generating ext Java modules from JSON..."
+echo "Step 3/5: Generating ext Java demo modules from JSON..."
 echo ""
-stack exec bootstrap-from-json -- --target java --output . --include-coders --ext-java-only $RTS_FLAGS
+stack exec bootstrap-from-json -- --target java --output . --include-coders --ext-only $RTS_FLAGS
 
 if [ "$QUICK_MODE" = false ]; then
     echo ""

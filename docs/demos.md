@@ -42,11 +42,24 @@ The pipeline works in four steps:
 4. **Copy static resources.** Primitive library implementations, build files, and test runners
    are copied from the source tree.
 
-The `bootstrap-all.sh` script runs all paths and diffs the output against the canonical baselines
+The `bin/bootstrap-all.sh` script runs all paths and diffs the output against the canonical baselines
 in the repository, reporting pass/diff/fail per path.
 
 See the [Bootstrapping README](../../hydra-ext/demos/bootstrapping/README.md) for prerequisites,
 usage, architecture details, and known limitations.
+
+## ValidatePG (property graph validation)
+
+ValidatePG validates property graphs against a schema, exercising every validation condition
+in `hydra.pg.validation` (missing required properties, type mismatches, unknown labels,
+wrong edge endpoints, etc.).
+
+The demo is **translingual**: a single set of example data (a schema and twelve graphs encoded
+as JSON via `hydra.encode.pg.model`) is consumed by drivers in Haskell, Java, and Python.
+Each driver decodes the JSON, runs `hydra.pg.validation.validateGraph`, and prints the results.
+An orchestrator script runs all three, compares their output, and displays a timing summary.
+
+See the [ValidatePG README](../../hydra-ext/demos/validatepg/README.md) for setup and usage.
 
 ## Avro to property graphs
 

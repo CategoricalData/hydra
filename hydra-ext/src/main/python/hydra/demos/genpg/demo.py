@@ -8,8 +8,8 @@ a property graph in GraphSON format.
 
 Usage:
     cd hydra-ext
-    .venv/bin/python src/main/python/hydra/demos/genpg/demo.py sales   # processes sales data
-    .venv/bin/python src/main/python/hydra/demos/genpg/demo.py health  # processes health data
+    python3 src/main/python/hydra/demos/genpg/demo.py sales   # processes sales data
+    python3 src/main/python/hydra/demos/genpg/demo.py health  # processes health data
 
 The 'sales' argument is the default, so it can be omitted.
 """
@@ -38,9 +38,10 @@ from hydra.tabular import TableType, Table
 from hydra.relational import RelationName
 from hydra.pg.graphson.utils import pg_elements_to_graphson, encode_term_value
 from hydra.graph import Graph as HydraGraph
+from hydra.context import Context
+from hydra.generation import bootstrap_graph
 import hydra.core
 import hydra.json.writer as json_writer
-import hydra.sources.libraries
 import hydra.demos.genpg.transform as Transform
 from hydra.demos.genpg.sales import (
     sales_database_schema,
@@ -52,13 +53,6 @@ from hydra.demos.genpg.health import (
     health_graph_schema,
     health_mapping,
 )
-
-
-def run_flow(flow: Flow, state, trace: Trace = None) -> FlowState:
-    """Run a flow with the given state and optional trace."""
-    if trace is None:
-        trace = Trace(stack=(), messages=(), other=FrozenDict({}))
-    return flow.value(state, trace)
 
 
 def lazy_graph_to_elements(graph: LazyGraph) -> list[Element]:
@@ -96,19 +90,18 @@ def decode_table_io(table_type: TableType, path: str) -> Table:
 def transform_table(
     table_type: TableType,
     path: str,
-    vspecs: frozenlist[Vertex],
-    especs: frozenlist[Edge],
-    cx: HydraGraph
-) -> tuple[frozenlist[Vertex], frozenlist[Edge]]:
+    vspecs,
+    especs,
+    cx: Context,
+    g: HydraGraph,
+) -> tuple:
     """Transform a table by reading from a file and applying vertex/edge specifications."""
     table = decode_table_io(table_type, path)
-    flow = Transform.transform_table_rows(vspecs, especs, table_type, table.data)
-    flow_state = run_flow(flow, cx)
-    match flow_state.value:
-        case Nothing():
-            msgs = "; ".join(flow_state.trace.messages)
-            raise ValueError(f"Transform error: {msgs}")
-        case Just(value=pair):
+    result = Transform.transform_table_rows(cx, g, vspecs, especs, table_type, table.data)
+    match result:
+        case Left(value=err):
+            raise ValueError(f"Transform error: {err}")
+        case Right(value=pair):
             return pair
 
 
@@ -116,7 +109,8 @@ def transform_tables(
     file_root: str,
     table_types: list[TableType],
     spec: LazyGraph,
-    cx: HydraGraph
+    cx: Context,
+    g: HydraGraph,
 ) -> LazyGraph:
     """Transform multiple tables according to a graph mapping specification."""
     # Group specs by table
@@ -139,7 +133,7 @@ def transform_tables(
             raise ValueError(f"Table specified in mapping does not exist: {tname}")
 
         path = os.path.join(file_root, tname)
-        vertices, edges = transform_table(table_type, path, vspecs, especs, cx)
+        vertices, edges = transform_table(table_type, path, vspecs, especs, cx, g)
         all_vertices.extend(vertices)
         all_edges.extend(edges)
 
@@ -151,15 +145,21 @@ def generate_graphson(
     table_schemas: list[TableType],
     graph_mapping: LazyGraph,
     output_path: str,
-    cx: HydraGraph
 ) -> None:
     """Generate GraphSON output from CSV sources."""
+    g = bootstrap_graph()
+    cx = Context(trace=(), messages=(), other=FrozenDict({}))
+
     print(f"Reading CSV files from {source_root}/")
     table_names = [t.name.value for t in table_schemas]
     print(f"  Tables: {', '.join(table_names)}")
 
-    g = transform_tables(source_root, table_schemas, graph_mapping, cx)
-    els = lazy_graph_to_elements(g)
+    # Hydra computation (timed)
+    import time as _time
+    start_ns = _time.perf_counter_ns()
+
+    graph = transform_tables(source_root, table_schemas, graph_mapping, cx, g)
+    els = lazy_graph_to_elements(graph)
 
     vertices = [e for e in els if Transform.element_is_vertex(e)]
     edges = [e for e in els if Transform.element_is_edge(e)]
@@ -168,43 +168,30 @@ def generate_graphson(
     print(f"  Vertices: {len(vertices)}")
     print(f"  Edges: {len(edges)}")
 
-    print(f"Writing GraphSON to {output_path}")
-    flow = pg_elements_to_graphson(encode_term_value, tuple(els))
-    flow_state = run_flow(flow, cx)
-    match flow_state.value:
-        case Nothing():
-            msgs = "; ".join(flow_state.trace.messages)
-            raise ValueError(f"GraphSON encoding error: {msgs}")
-        case Just(value=json_values):
+    graphson_result = pg_elements_to_graphson(encode_term_value, tuple(els))
+    match graphson_result:
+        case Left(value=err):
+            raise ValueError(f"GraphSON encoding error: {err}")
+        case Right(value=json_values):
             pass
 
     json_strings = [json_writer.print_json(jv) for jv in json_values]
+
+    elapsed_ns = _time.perf_counter_ns() - start_ns
+
+    # Write output (I/O, not timed)
+    print(f"Writing GraphSON to {output_path}")
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
     with open(output_path, 'w') as f:
         f.write("\n".join(json_strings))
         f.write("\n")
 
     print(f"Done. Output written to {output_path}")
-
-
-def _make_graph_context() -> HydraGraph:
-    """Create a Hydra graph context for evaluation with primitives."""
-    primitives = hydra.sources.libraries.standard_library()
-    return HydraGraph(
-        elements=FrozenDict({}),
-        environment=FrozenDict({}),
-        types=FrozenDict({}),
-        body=hydra.core.TermUnit(),
-        primitives=FrozenDict(primitives),
-        schema=Nothing()
-    )
+    print(f"HYDRA_TIME_MS={elapsed_ns / 1_000_000.0}", file=sys.stderr)
 
 
 def generate_sales_graphson() -> None:
     """Generate GraphSON for the sales dataset."""
-    cx = _make_graph_context()
-
-    # Load schemas and mapping from generated Python module
     table_schemas = sales_database_schema
     graph = sales_mapping()
 
@@ -216,15 +203,11 @@ def generate_sales_graphson() -> None:
         table_schemas=list(table_schemas),
         graph_mapping=graph,
         output_path=output_path,
-        cx=cx
     )
 
 
 def generate_health_graphson() -> None:
     """Generate GraphSON for the health dataset."""
-    cx = _make_graph_context()
-
-    # Load schemas and mapping from generated Python module
     table_schemas = health_database_schema
     graph = health_mapping()
 
@@ -236,7 +219,6 @@ def generate_health_graphson() -> None:
         table_schemas=list(table_schemas),
         graph_mapping=graph,
         output_path=output_path,
-        cx=cx
     )
 
 

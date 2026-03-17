@@ -18,8 +18,8 @@ The GenPG demo:
 hydra-ext/
 ├── demos/genpg/
 │   ├── README.md                 # This file
-│   ├── generate-python.ghci      # Script to generate Python modules
-│   ├── generate-java.ghci        # Script to generate Java modules
+│   ├── bin/generate-python.ghci      # Script to generate Python modules
+│   ├── bin/generate-java.ghci        # Script to generate Java modules
 │   ├── data/
 │   │   ├── sources/sales/        # CSV input files (sales example)
 │   │   └── sources/health/       # CSV input files (health example)
@@ -214,7 +214,7 @@ Generate all Python modules for the GenPG demo:
 
 ```bash
 cd hydra-ext
-stack ghci < demos/genpg/generate-python.ghci
+stack ghci < demos/genpg/bin/generate-python.ghci
 ```
 
 Or interactively in GHCI:
@@ -238,7 +238,7 @@ Generate all Java modules for the GenPG demo:
 
 ```bash
 cd hydra-ext
-stack ghci --ghci-options='+RTS -K256M -A32M -RTS' < demos/genpg/generate-java.ghci
+stack ghci --ghci-options='+RTS -K256M -A32M -RTS' < demos/genpg/bin/generate-java.ghci
 ```
 
 Or interactively in GHCI:
