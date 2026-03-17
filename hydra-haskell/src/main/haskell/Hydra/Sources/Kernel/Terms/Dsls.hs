@@ -217,12 +217,17 @@ wrapTermInTTerm t = Core.termWrap $ Core.wrappedTerm (Core.nameLift _TTerm) t
 dslNamespace :: TBinding (Namespace -> Namespace)
 dslNamespace = define "dslNamespace" $
   doc "Generate a DSL module namespace from a source module namespace" $
-  "ns" ~> (
-    Module.namespace (
-      Strings.cat $ list [
-        string "hydra.dsl.",
-        Strings.intercalate (string ".")
-          (Lists.tail (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))]))
+  "ns" ~>
+  "parts" <~ (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))) $
+  -- For hydra.* namespaces: hydra.foo -> hydra.dsl.foo
+  -- For other namespaces: foo.bar -> hydra.dsl.foo.bar (preserve full path)
+  Logic.ifElse (Equality.equal (Lists.head (var "parts")) (string "hydra"))
+    (Module.namespace (Strings.cat $ list [
+      string "hydra.dsl.",
+      Strings.intercalate (string ".") (Lists.tail (var "parts"))]))
+    (Module.namespace (Strings.cat $ list [
+      string "hydra.dsl.",
+      Module.unNamespace (var "ns")]))
 
 -- | Generate a fully qualified binding name for a DSL function from a type name
 -- For example, "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
@@ -231,19 +236,25 @@ dslBindingName :: TBinding (Name -> Name)
 dslBindingName = define "dslBindingName" $
   doc "Generate a binding name for a DSL function from a type name" $
   "n" ~>
-    -- Check if name has a namespace (contains ".")
-    Logic.ifElse (Logic.not (Lists.null
-      (Lists.tail (Strings.splitOn (string ".") (Core.unName (var "n"))))))
-      -- Qualified type: e.g., "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
-      (Core.name (
-        Strings.intercalate (string ".") (
-          Lists.concat2
-            (list [string "hydra", string "dsl"])
-            (Lists.concat2
-              (Lists.tail (Lists.init (Strings.splitOn (string ".") (Core.unName (var "n")))))
-              (list [Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))])))))
-      -- Local type: just decapitalize
-      (Core.name (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))))
+  "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
+  -- Check if name has a namespace (contains ".")
+  Logic.ifElse (Logic.not (Lists.null (Lists.tail (var "parts"))))
+    -- Qualified type: check if namespace starts with "hydra"
+    (Logic.ifElse (Equality.equal (Lists.head (var "parts")) (string "hydra"))
+      -- hydra.core.Foo -> hydra.dsl.core.foo
+      (Core.name (Strings.intercalate (string ".") (Lists.concat2
+        (list [string "hydra", string "dsl"])
+        (Lists.concat2
+          (Lists.tail (Lists.init (var "parts")))
+          (list [Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))])))))
+      -- openGql.grammar.Foo -> hydra.dsl.openGql.grammar.foo
+      (Core.name (Strings.intercalate (string ".") (Lists.concat2
+        (list [string "hydra", string "dsl"])
+        (Lists.concat2
+          (Lists.init (var "parts"))
+          (list [Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))]))))))
+    -- Local type: just decapitalize
+    (Core.name (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))))
 
 -- | Generate a DSL element name from a type name and a local element name.
 -- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
@@ -256,7 +267,11 @@ dslElementName = define "dslElementName" $
   "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "typeName"))) $
   -- Extract namespace parts (all but last), transform to DSL namespace
   "nsParts" <~ (Lists.init (var "parts")) $
-  "dslNsParts" <~ (Lists.concat2 (list [string "hydra", string "dsl"]) (Lists.tail (var "nsParts"))) $
+  "dslNsParts" <~ (Logic.ifElse (Equality.equal (Lists.head (var "nsParts")) (string "hydra"))
+    -- hydra.core -> hydra.dsl.core
+    (Lists.concat2 (list [string "hydra", string "dsl"]) (Lists.tail (var "nsParts")))
+    -- openGql.grammar -> hydra.dsl.openGql.grammar
+    (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts"))) $
   Core.name (Strings.intercalate (string ".") (Lists.concat2 (var "dslNsParts") (list [var "localName"])))
 
 -- | Generate a record constructor function.
