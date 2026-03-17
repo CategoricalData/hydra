@@ -29,8 +29,14 @@ import Hydra.Ext.Protobuf.Coder (moduleToProtobuf)
 import Hydra.Ext.Python.Coder (moduleToPython)
 import Hydra.Ext.Rust.Coder (moduleToRust)
 import Hydra.Ext.Rust.Language (rustLanguage)
+import Hydra.Ext.Lisp.Coder (moduleToLisp)
+import Hydra.Ext.Lisp.Language (lispLanguage)
+import Hydra.Ext.Lisp.Serde (programToExpr)
+import qualified Hydra.Ext.Lisp.Syntax as LispSyntax
+import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Names as Names
+import qualified Hydra.Util as Util
 import Hydra.Ext.Scala.Coder (moduleToScala)
-
 
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
@@ -118,6 +124,41 @@ writePython = generateSources moduleToPython pythonLanguage True True True False
 -- Third argument: modules to transform and generate
 writeRust :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeRust = generateSources moduleToRust rustLanguage True False False False
+
+-- | Wrap moduleToLisp for a specific dialect, producing Map FilePath String as expected by generateSources.
+moduleToLispDialect
+  :: LispSyntax.Dialect
+  -> String  -- ^ file extension (e.g. "clj", "scm")
+  -> Module -> [Definition] -> Context.Context -> Graph
+  -> Either (Context.InContext Error.OtherError) (M.Map FilePath String)
+moduleToLispDialect dialect ext mod defs cx g =
+  case moduleToLisp dialect mod defs cx g of
+    Left err -> Left err
+    Right program ->
+      let code = Serialization.printExpr (Serialization.parenthesize (programToExpr program))
+          -- Clojure uses camelCase filenames (matching namespace names);
+          -- other Lisp dialects use snake_case filenames
+          caseConvention = case dialect of
+            LispSyntax.DialectClojure -> Util.CaseConventionCamel
+            _ -> Util.CaseConventionLowerSnake
+          filePath = Names.namespaceToFilePath caseConvention (FileExtension ext) (moduleNamespace mod)
+      in Right (M.singleton filePath code)
+
+-- | Generate Clojure source files from modules.
+writeClojure :: FP.FilePath -> [Module] -> [Module] -> IO Int
+writeClojure = generateSources (moduleToLispDialect LispSyntax.DialectClojure "clj") lispLanguage True False False False
+
+-- | Generate Scheme source files from modules.
+writeScheme :: FP.FilePath -> [Module] -> [Module] -> IO Int
+writeScheme = generateSources (moduleToLispDialect LispSyntax.DialectScheme "scm") lispLanguage True False False False
+
+-- | Generate Common Lisp source files from modules.
+writeCommonLisp :: FP.FilePath -> [Module] -> [Module] -> IO Int
+writeCommonLisp = generateSources (moduleToLispDialect LispSyntax.DialectCommonLisp "lisp") lispLanguage True False False False
+
+-- | Generate Emacs Lisp source files from modules.
+writeEmacsLisp :: FP.FilePath -> [Module] -> [Module] -> IO Int
+writeEmacsLisp = generateSources (moduleToLispDialect LispSyntax.DialectEmacsLisp "el") lispLanguage True False False False
 
 -- | Generate Scala source files from modules.
 -- First argument: output directory
