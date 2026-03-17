@@ -5524,6 +5524,74 @@
               "domain": {"variable": "hydra.context.Context"}}},
           "variables": []}]},
     {
+      "name": "hydra.schemas.isNominalType",
+      "term": {
+        "function": {
+          "lambda": {
+            "body": {
+              "application": {
+                "argument": {
+                  "application": {
+                    "argument": {"variable": "typ"},
+                    "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                "function": {
+                  "function": {
+                    "elimination": {
+                      "union": {
+                        "cases": [
+                          {
+                            "name": "record",
+                            "term": {
+                              "function": {
+                                "lambda": {
+                                  "body": {"literal": {"boolean": true}},
+                                  "domain": [{"variable": "hydra.core.RowType"}],
+                                  "parameter": "rt"}}}},
+                          {
+                            "name": "union",
+                            "term": {
+                              "function": {
+                                "lambda": {
+                                  "body": {"literal": {"boolean": true}},
+                                  "domain": [{"variable": "hydra.core.RowType"}],
+                                  "parameter": "rt"}}}},
+                          {
+                            "name": "wrap",
+                            "term": {
+                              "function": {
+                                "lambda": {
+                                  "body": {"literal": {"boolean": true}},
+                                  "domain": [{"variable": "hydra.core.WrappedType"}],
+                                  "parameter": "wt"}}}},
+                          {
+                            "name": "forall",
+                            "term": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {"variable": "fa"},
+                                          "function": {
+                                            "function": {
+                                              "elimination": {"record": {"field": "body", "typeName": "hydra.core.ForallType"}}}}}},
+                                      "function": {"variable": "hydra.schemas.isNominalType"}}},
+                                  "domain": [{"variable": "hydra.core.ForallType"}],
+                                  "parameter": "fa"}}}}],
+                        "default": [{"literal": {"boolean": false}}],
+                        "typeName": "hydra.core.Type"}}}}}},
+            "domain": [{"variable": "hydra.core.Type"}],
+            "parameter": "typ"}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"boolean": {}}},
+              "domain": {"variable": "hydra.core.Type"}}},
+          "variables": []}]},
+    {
       "name": "hydra.schemas.isType",
       "term": {
         "annotated": {

@@ -4849,16 +4849,10 @@ peelDomainsAndCod = def "peelDomainsAndCod" $
 
 -- | Check whether a type is "serializable" (record, union, wrap, or forall wrapping a serializable type).
 -- These are the types that get promoted to Java class declarations.
+-- Delegates to the shared isNominalType in Schemas.
 isSerializableJavaType :: TBinding (Type -> Bool)
 isSerializableJavaType = def "isSerializableJavaType" $
-  lambda "typ" $
-    cases _Type (Rewriting.deannotateType @@ var "typ")
-      (Just false) [
-      _Type_record>>: lambda "rt" $ true,
-      _Type_union>>: lambda "rt" $ true,
-      _Type_wrap>>: lambda "wt" $ true,
-      _Type_forall>>: lambda "fa" $
-        isSerializableJavaType @@ Core.forallTypeBody (var "fa")]
+  lambda "typ" $ Schemas.isNominalType @@ var "typ"
 
 -- | Correct the cast type for pair terms. When we have a TermTypeApplication wrapping
 -- a TermPair with exactly 2 type args, reconstruct the pair type from the type args

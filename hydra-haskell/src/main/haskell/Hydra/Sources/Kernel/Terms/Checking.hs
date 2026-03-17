@@ -178,24 +178,31 @@ applyTypeArgumentsToType :: TBinding (Context -> Graph -> [Type] -> Type -> Prel
 applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
   doc "Apply type arguments to a type, substituting forall-bound variables" $
   "cx" ~> "tx" ~> "typeArgs" ~> "t" ~>
-  "nonnull" <~ (cases _Type (var "t")
-    (Just $ Ctx.failInContext (Error.errorChecking $ Error.checkingNotAForallType $ Error.notAForallTypeError (var "t") (var "typeArgs")) (var "cx")) [
-    _Type_forall>>: "ft" ~>
-      "v" <~ Core.forallTypeParameter (var "ft") $
-      "tbody" <~ Core.forallTypeBody (var "ft") $
-      applyTypeArgumentsToType
-        @@ var "cx"
-        @@ var "tx"
-        @@ (Lists.tail $ var "typeArgs")
-        @@ (Substitution.substInType
-          @@ (Typing.typeSubst $ Maps.singleton (var "v") (Lists.head $ var "typeArgs"))
-          @@ (var "tbody"))]) $
-  -- Only check type variables when there are no more type arguments to apply.
-  -- When there ARE type arguments, the type may contain forall-bound variables that will
-  -- be substituted by the type arguments. Those variables aren't in scope yet but will be resolved.
+  -- Check null typeArgs FIRST to avoid eager evaluation of head/tail on empty list
   Logic.ifElse (Lists.null $ var "typeArgs")
     (right $ var "t")
-    (var "nonnull")
+    ("nonnull" <~ (cases _Type (var "t")
+      (Just $ Ctx.failInContext (Error.otherError $ Strings.cat $ list [
+        string "not a forall type: ",
+        ShowCore.type_ @@ var "t",
+        string ". Trying to apply ",
+        Literals.showInt32 (Lists.length $ var "typeArgs"),
+        string " type args: ",
+        Formatting.showList @@ ShowCore.type_ @@ var "typeArgs",
+        string ". Context has vars: {",
+        Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Graph.graphBoundTypes $ var "tx"),
+        string "}"]) (var "cx")) [
+      _Type_forall>>: "ft" ~>
+        "v" <~ Core.forallTypeParameter (var "ft") $
+        "tbody" <~ Core.forallTypeBody (var "ft") $
+        applyTypeArgumentsToType
+          @@ var "cx"
+          @@ var "tx"
+          @@ (Lists.tail $ var "typeArgs")
+          @@ (Substitution.substInType
+            @@ (Typing.typeSubst $ Maps.singleton (var "v") (Lists.head $ var "typeArgs"))
+            @@ (var "tbody"))]) $
+    var "nonnull")
 
 checkForUnboundTypeVariables :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) ())
 checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
