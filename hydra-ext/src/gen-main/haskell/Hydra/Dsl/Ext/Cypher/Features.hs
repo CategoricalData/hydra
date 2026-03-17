@@ -8346,18 +8346,18 @@ aggregateFunctionFeaturesWithSum original newVal = (Phantoms.TTerm (Core.TermRec
       Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
 databaseFunctionFeatures :: (Phantoms.TTerm Bool -> Phantoms.TTerm Features.DatabaseFunctionFeatures)
-databaseFunctionFeatures nameFromElementId = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+databaseFunctionFeatures dbNameFromElementId = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "db.nameFromElementId"),
-      Core.fieldTerm = (Phantoms.unTTerm nameFromElementId)}]})))
+      Core.fieldName = (Core.Name "dbNameFromElementId"),
+      Core.fieldTerm = (Phantoms.unTTerm dbNameFromElementId)}]})))
 
 databaseFunctionFeaturesDbNameFromElementId :: (Phantoms.TTerm Features.DatabaseFunctionFeatures -> Phantoms.TTerm Bool)
 databaseFunctionFeaturesDbNameFromElementId x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures"),
-    Core.projectionField = (Core.Name "db.nameFromElementId")})))),
+    Core.projectionField = (Core.Name "dbNameFromElementId")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 databaseFunctionFeaturesWithDbNameFromElementId :: (Phantoms.TTerm Features.DatabaseFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.DatabaseFunctionFeatures)
@@ -8365,22 +8365,22 @@ databaseFunctionFeaturesWithDbNameFromElementId original newVal = (Phantoms.TTer
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "db.nameFromElementId"),
+      Core.fieldName = (Core.Name "dbNameFromElementId"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
 genAIFunctionFeatures :: (Phantoms.TTerm Bool -> Phantoms.TTerm Features.GenAIFunctionFeatures)
-genAIFunctionFeatures encode = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+genAIFunctionFeatures genaiVectorEncode = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.GenAIFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "genai.vector.encode"),
-      Core.fieldTerm = (Phantoms.unTTerm encode)}]})))
+      Core.fieldName = (Core.Name "genaiVectorEncode"),
+      Core.fieldTerm = (Phantoms.unTTerm genaiVectorEncode)}]})))
 
 genAIFunctionFeaturesGenaiVectorEncode :: (Phantoms.TTerm Features.GenAIFunctionFeatures -> Phantoms.TTerm Bool)
 genAIFunctionFeaturesGenaiVectorEncode x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GenAIFunctionFeatures"),
-    Core.projectionField = (Core.Name "genai.vector.encode")})))),
+    Core.projectionField = (Core.Name "genaiVectorEncode")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 genAIFunctionFeaturesWithGenaiVectorEncode :: (Phantoms.TTerm Features.GenAIFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GenAIFunctionFeatures)
@@ -8388,52 +8388,52 @@ genAIFunctionFeaturesWithGenaiVectorEncode original newVal = (Phantoms.TTerm (Co
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.GenAIFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "genai.vector.encode"),
+      Core.fieldName = (Core.Name "genaiVectorEncode"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
 graphFunctionFeatures :: (Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFunctionFeatures)
-graphFunctionFeatures byElementId byName names propertiesByName = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+graphFunctionFeatures graphByElementId graphByName graphNames graphPropertiesByName = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "graph.byElementId"),
-      Core.fieldTerm = (Phantoms.unTTerm byElementId)},
+      Core.fieldName = (Core.Name "graphByElementId"),
+      Core.fieldTerm = (Phantoms.unTTerm graphByElementId)},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.byName"),
-      Core.fieldTerm = (Phantoms.unTTerm byName)},
+      Core.fieldName = (Core.Name "graphByName"),
+      Core.fieldTerm = (Phantoms.unTTerm graphByName)},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.names"),
-      Core.fieldTerm = (Phantoms.unTTerm names)},
+      Core.fieldName = (Core.Name "graphNames"),
+      Core.fieldTerm = (Phantoms.unTTerm graphNames)},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.propertiesByName"),
-      Core.fieldTerm = (Phantoms.unTTerm propertiesByName)}]})))
+      Core.fieldName = (Core.Name "graphPropertiesByName"),
+      Core.fieldTerm = (Phantoms.unTTerm graphPropertiesByName)}]})))
 
 graphFunctionFeaturesGraphByElementId :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool)
 graphFunctionFeaturesGraphByElementId x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-    Core.projectionField = (Core.Name "graph.byElementId")})))),
+    Core.projectionField = (Core.Name "graphByElementId")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 graphFunctionFeaturesGraphByName :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool)
 graphFunctionFeaturesGraphByName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-    Core.projectionField = (Core.Name "graph.byName")})))),
+    Core.projectionField = (Core.Name "graphByName")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 graphFunctionFeaturesGraphNames :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool)
 graphFunctionFeaturesGraphNames x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-    Core.projectionField = (Core.Name "graph.names")})))),
+    Core.projectionField = (Core.Name "graphNames")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 graphFunctionFeaturesGraphPropertiesByName :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool)
 graphFunctionFeaturesGraphPropertiesByName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-    Core.projectionField = (Core.Name "graph.propertiesByName")})))),
+    Core.projectionField = (Core.Name "graphPropertiesByName")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 graphFunctionFeaturesWithGraphByElementId :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFunctionFeatures)
@@ -8441,28 +8441,28 @@ graphFunctionFeaturesWithGraphByElementId original newVal = (Phantoms.TTerm (Cor
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "graph.byElementId"),
+      Core.fieldName = (Core.Name "graphByElementId"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.byName"),
+      Core.fieldName = (Core.Name "graphByName"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-          Core.projectionField = (Core.Name "graph.byName")})))),
+          Core.projectionField = (Core.Name "graphByName")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.names"),
+      Core.fieldName = (Core.Name "graphNames"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-          Core.projectionField = (Core.Name "graph.names")})))),
+          Core.projectionField = (Core.Name "graphNames")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.propertiesByName"),
+      Core.fieldName = (Core.Name "graphPropertiesByName"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-          Core.projectionField = (Core.Name "graph.propertiesByName")})))),
+          Core.projectionField = (Core.Name "graphPropertiesByName")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 graphFunctionFeaturesWithGraphByName :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFunctionFeatures)
@@ -8470,28 +8470,28 @@ graphFunctionFeaturesWithGraphByName original newVal = (Phantoms.TTerm (Core.Ter
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "graph.byElementId"),
+      Core.fieldName = (Core.Name "graphByElementId"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-          Core.projectionField = (Core.Name "graph.byElementId")})))),
+          Core.projectionField = (Core.Name "graphByElementId")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.byName"),
+      Core.fieldName = (Core.Name "graphByName"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.names"),
+      Core.fieldName = (Core.Name "graphNames"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-          Core.projectionField = (Core.Name "graph.names")})))),
+          Core.projectionField = (Core.Name "graphNames")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.propertiesByName"),
+      Core.fieldName = (Core.Name "graphPropertiesByName"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-          Core.projectionField = (Core.Name "graph.propertiesByName")})))),
+          Core.projectionField = (Core.Name "graphPropertiesByName")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 graphFunctionFeaturesWithGraphNames :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFunctionFeatures)
@@ -8499,28 +8499,28 @@ graphFunctionFeaturesWithGraphNames original newVal = (Phantoms.TTerm (Core.Term
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "graph.byElementId"),
+      Core.fieldName = (Core.Name "graphByElementId"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-          Core.projectionField = (Core.Name "graph.byElementId")})))),
+          Core.projectionField = (Core.Name "graphByElementId")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.byName"),
+      Core.fieldName = (Core.Name "graphByName"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-          Core.projectionField = (Core.Name "graph.byName")})))),
+          Core.projectionField = (Core.Name "graphByName")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.names"),
+      Core.fieldName = (Core.Name "graphNames"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.propertiesByName"),
+      Core.fieldName = (Core.Name "graphPropertiesByName"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-          Core.projectionField = (Core.Name "graph.propertiesByName")})))),
+          Core.projectionField = (Core.Name "graphPropertiesByName")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 graphFunctionFeaturesWithGraphPropertiesByName :: (Phantoms.TTerm Features.GraphFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.GraphFunctionFeatures)
@@ -8528,28 +8528,28 @@ graphFunctionFeaturesWithGraphPropertiesByName original newVal = (Phantoms.TTerm
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "graph.byElementId"),
+      Core.fieldName = (Core.Name "graphByElementId"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-          Core.projectionField = (Core.Name "graph.byElementId")})))),
+          Core.projectionField = (Core.Name "graphByElementId")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.byName"),
+      Core.fieldName = (Core.Name "graphByName"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-          Core.projectionField = (Core.Name "graph.byName")})))),
+          Core.projectionField = (Core.Name "graphByName")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.names"),
+      Core.fieldName = (Core.Name "graphNames"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"),
-          Core.projectionField = (Core.Name "graph.names")})))),
+          Core.projectionField = (Core.Name "graphNames")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "graph.propertiesByName"),
+      Core.fieldName = (Core.Name "graphPropertiesByName"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
 listFunctionFeatures :: (Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ListFunctionFeatures)
@@ -14371,24 +14371,24 @@ scalarFunctionFeaturesWithValueType original newVal = (Phantoms.TTerm (Core.Term
       Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
 spatialFunctionFeatures :: (Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SpatialFunctionFeatures)
-spatialFunctionFeatures distance point withinBBox = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+spatialFunctionFeatures pointDistance point pointWithinBBox = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "point.distance"),
-      Core.fieldTerm = (Phantoms.unTTerm distance)},
+      Core.fieldName = (Core.Name "pointDistance"),
+      Core.fieldTerm = (Phantoms.unTTerm pointDistance)},
     Core.Field {
       Core.fieldName = (Core.Name "point"),
       Core.fieldTerm = (Phantoms.unTTerm point)},
     Core.Field {
-      Core.fieldName = (Core.Name "point.withinBBox"),
-      Core.fieldTerm = (Phantoms.unTTerm withinBBox)}]})))
+      Core.fieldName = (Core.Name "pointWithinBBox"),
+      Core.fieldTerm = (Phantoms.unTTerm pointWithinBBox)}]})))
 
 spatialFunctionFeaturesPointDistance :: (Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool)
 spatialFunctionFeaturesPointDistance x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
-    Core.projectionField = (Core.Name "point.distance")})))),
+    Core.projectionField = (Core.Name "pointDistance")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 spatialFunctionFeaturesPoint :: (Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool)
@@ -14402,7 +14402,7 @@ spatialFunctionFeaturesPointWithinBBox :: (Phantoms.TTerm Features.SpatialFuncti
 spatialFunctionFeaturesPointWithinBBox x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
-    Core.projectionField = (Core.Name "point.withinBBox")})))),
+    Core.projectionField = (Core.Name "pointWithinBBox")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 spatialFunctionFeaturesWithPointDistance :: (Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SpatialFunctionFeatures)
@@ -14410,7 +14410,7 @@ spatialFunctionFeaturesWithPointDistance original newVal = (Phantoms.TTerm (Core
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "point.distance"),
+      Core.fieldName = (Core.Name "pointDistance"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
       Core.fieldName = (Core.Name "point"),
@@ -14420,11 +14420,11 @@ spatialFunctionFeaturesWithPointDistance original newVal = (Phantoms.TTerm (Core
           Core.projectionField = (Core.Name "point")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "point.withinBBox"),
+      Core.fieldName = (Core.Name "pointWithinBBox"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
-          Core.projectionField = (Core.Name "point.withinBBox")})))),
+          Core.projectionField = (Core.Name "pointWithinBBox")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 spatialFunctionFeaturesWithPoint :: (Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SpatialFunctionFeatures)
@@ -14432,21 +14432,21 @@ spatialFunctionFeaturesWithPoint original newVal = (Phantoms.TTerm (Core.TermRec
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "point.distance"),
+      Core.fieldName = (Core.Name "pointDistance"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
-          Core.projectionField = (Core.Name "point.distance")})))),
+          Core.projectionField = (Core.Name "pointDistance")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "point"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "point.withinBBox"),
+      Core.fieldName = (Core.Name "pointWithinBBox"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
-          Core.projectionField = (Core.Name "point.withinBBox")})))),
+          Core.projectionField = (Core.Name "pointWithinBBox")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 spatialFunctionFeaturesWithPointWithinBBox :: (Phantoms.TTerm Features.SpatialFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.SpatialFunctionFeatures)
@@ -14454,11 +14454,11 @@ spatialFunctionFeaturesWithPointWithinBBox original newVal = (Phantoms.TTerm (Co
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "point.distance"),
+      Core.fieldName = (Core.Name "pointDistance"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"),
-          Core.projectionField = (Core.Name "point.distance")})))),
+          Core.projectionField = (Core.Name "pointDistance")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "point"),
@@ -14468,7 +14468,7 @@ spatialFunctionFeaturesWithPointWithinBBox original newVal = (Phantoms.TTerm (Co
           Core.projectionField = (Core.Name "point")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "point.withinBBox"),
+      Core.fieldName = (Core.Name "pointWithinBBox"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
 stringFunctionFeatures :: (Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.StringFunctionFeatures)
@@ -16687,24 +16687,24 @@ stringFunctionFeaturesWithUpper original newVal = (Phantoms.TTerm (Core.TermReco
       Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
 temporalDurationFunctionFeatures :: (Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
-temporalDurationFunctionFeatures duration between inDays inMonths inSeconds = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalDurationFunctionFeatures duration durationBetween durationInDays durationInMonths durationInSeconds = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
       Core.fieldName = (Core.Name "duration"),
       Core.fieldTerm = (Phantoms.unTTerm duration)},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.between"),
-      Core.fieldTerm = (Phantoms.unTTerm between)},
+      Core.fieldName = (Core.Name "durationBetween"),
+      Core.fieldTerm = (Phantoms.unTTerm durationBetween)},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inDays"),
-      Core.fieldTerm = (Phantoms.unTTerm inDays)},
+      Core.fieldName = (Core.Name "durationInDays"),
+      Core.fieldTerm = (Phantoms.unTTerm durationInDays)},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inMonths"),
-      Core.fieldTerm = (Phantoms.unTTerm inMonths)},
+      Core.fieldName = (Core.Name "durationInMonths"),
+      Core.fieldTerm = (Phantoms.unTTerm durationInMonths)},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inSeconds"),
-      Core.fieldTerm = (Phantoms.unTTerm inSeconds)}]})))
+      Core.fieldName = (Core.Name "durationInSeconds"),
+      Core.fieldTerm = (Phantoms.unTTerm durationInSeconds)}]})))
 
 temporalDurationFunctionFeaturesDuration :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool)
 temporalDurationFunctionFeaturesDuration x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -16717,28 +16717,28 @@ temporalDurationFunctionFeaturesDurationBetween :: (Phantoms.TTerm Features.Temp
 temporalDurationFunctionFeaturesDurationBetween x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-    Core.projectionField = (Core.Name "duration.between")})))),
+    Core.projectionField = (Core.Name "durationBetween")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalDurationFunctionFeaturesDurationInDays :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool)
 temporalDurationFunctionFeaturesDurationInDays x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-    Core.projectionField = (Core.Name "duration.inDays")})))),
+    Core.projectionField = (Core.Name "durationInDays")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalDurationFunctionFeaturesDurationInMonths :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool)
 temporalDurationFunctionFeaturesDurationInMonths x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-    Core.projectionField = (Core.Name "duration.inMonths")})))),
+    Core.projectionField = (Core.Name "durationInMonths")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalDurationFunctionFeaturesDurationInSeconds :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool)
 temporalDurationFunctionFeaturesDurationInSeconds x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-    Core.projectionField = (Core.Name "duration.inSeconds")})))),
+    Core.projectionField = (Core.Name "durationInSeconds")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalDurationFunctionFeaturesWithDuration :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
@@ -16749,32 +16749,32 @@ temporalDurationFunctionFeaturesWithDuration original newVal = (Phantoms.TTerm (
       Core.fieldName = (Core.Name "duration"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.between"),
+      Core.fieldName = (Core.Name "durationBetween"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.between")})))),
+          Core.projectionField = (Core.Name "durationBetween")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inDays"),
+      Core.fieldName = (Core.Name "durationInDays"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.inDays")})))),
+          Core.projectionField = (Core.Name "durationInDays")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inMonths"),
+      Core.fieldName = (Core.Name "durationInMonths"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.inMonths")})))),
+          Core.projectionField = (Core.Name "durationInMonths")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inSeconds"),
+      Core.fieldName = (Core.Name "durationInSeconds"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.inSeconds")})))),
+          Core.projectionField = (Core.Name "durationInSeconds")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalDurationFunctionFeaturesWithDurationBetween :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
@@ -16789,28 +16789,28 @@ temporalDurationFunctionFeaturesWithDurationBetween original newVal = (Phantoms.
           Core.projectionField = (Core.Name "duration")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.between"),
+      Core.fieldName = (Core.Name "durationBetween"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inDays"),
+      Core.fieldName = (Core.Name "durationInDays"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.inDays")})))),
+          Core.projectionField = (Core.Name "durationInDays")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inMonths"),
+      Core.fieldName = (Core.Name "durationInMonths"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.inMonths")})))),
+          Core.projectionField = (Core.Name "durationInMonths")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inSeconds"),
+      Core.fieldName = (Core.Name "durationInSeconds"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.inSeconds")})))),
+          Core.projectionField = (Core.Name "durationInSeconds")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalDurationFunctionFeaturesWithDurationInDays :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
@@ -16825,28 +16825,28 @@ temporalDurationFunctionFeaturesWithDurationInDays original newVal = (Phantoms.T
           Core.projectionField = (Core.Name "duration")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.between"),
+      Core.fieldName = (Core.Name "durationBetween"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.between")})))),
+          Core.projectionField = (Core.Name "durationBetween")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inDays"),
+      Core.fieldName = (Core.Name "durationInDays"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inMonths"),
+      Core.fieldName = (Core.Name "durationInMonths"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.inMonths")})))),
+          Core.projectionField = (Core.Name "durationInMonths")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inSeconds"),
+      Core.fieldName = (Core.Name "durationInSeconds"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.inSeconds")})))),
+          Core.projectionField = (Core.Name "durationInSeconds")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalDurationFunctionFeaturesWithDurationInMonths :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
@@ -16861,28 +16861,28 @@ temporalDurationFunctionFeaturesWithDurationInMonths original newVal = (Phantoms
           Core.projectionField = (Core.Name "duration")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.between"),
+      Core.fieldName = (Core.Name "durationBetween"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.between")})))),
+          Core.projectionField = (Core.Name "durationBetween")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inDays"),
+      Core.fieldName = (Core.Name "durationInDays"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.inDays")})))),
+          Core.projectionField = (Core.Name "durationInDays")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inMonths"),
+      Core.fieldName = (Core.Name "durationInMonths"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inSeconds"),
+      Core.fieldName = (Core.Name "durationInSeconds"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.inSeconds")})))),
+          Core.projectionField = (Core.Name "durationInSeconds")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalDurationFunctionFeaturesWithDurationInSeconds :: (Phantoms.TTerm Features.TemporalDurationFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalDurationFunctionFeatures)
@@ -16897,115 +16897,115 @@ temporalDurationFunctionFeaturesWithDurationInSeconds original newVal = (Phantom
           Core.projectionField = (Core.Name "duration")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.between"),
+      Core.fieldName = (Core.Name "durationBetween"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.between")})))),
+          Core.projectionField = (Core.Name "durationBetween")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inDays"),
+      Core.fieldName = (Core.Name "durationInDays"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.inDays")})))),
+          Core.projectionField = (Core.Name "durationInDays")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inMonths"),
+      Core.fieldName = (Core.Name "durationInMonths"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"),
-          Core.projectionField = (Core.Name "duration.inMonths")})))),
+          Core.projectionField = (Core.Name "durationInMonths")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "duration.inSeconds"),
+      Core.fieldName = (Core.Name "durationInSeconds"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
 temporalInstantFunctionFeatures :: (Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
-temporalInstantFunctionFeatures date realtime statement transaction truncate datetime fromepoch fromepochmillis realtime statement transaction truncate localdatetime realtime statement transaction truncate localtime realtime statement transaction truncate time realtime statement transaction truncate = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+temporalInstantFunctionFeatures date dateRealtime dateStatement dateTransaction dateTruncate datetime datetimeFromepoch datetimeFromepochmillis datetimeRealtime datetimeStatement datetimeTransaction datetimeTruncate localdatetime localdatetimeRealtime localdatetimeStatement localdatetimeTransaction localdatetimeTruncate localtime localtimeRealtime localtimeStatement localtimeTransaction localtimeTruncate time timeRealtime timeStatement timeTransaction timeTruncate = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
       Core.fieldName = (Core.Name "date"),
       Core.fieldTerm = (Phantoms.unTTerm date)},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
-      Core.fieldTerm = (Phantoms.unTTerm realtime)},
+      Core.fieldName = (Core.Name "dateRealtime"),
+      Core.fieldTerm = (Phantoms.unTTerm dateRealtime)},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
-      Core.fieldTerm = (Phantoms.unTTerm statement)},
+      Core.fieldName = (Core.Name "dateStatement"),
+      Core.fieldTerm = (Phantoms.unTTerm dateStatement)},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
-      Core.fieldTerm = (Phantoms.unTTerm transaction)},
+      Core.fieldName = (Core.Name "dateTransaction"),
+      Core.fieldTerm = (Phantoms.unTTerm dateTransaction)},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
-      Core.fieldTerm = (Phantoms.unTTerm truncate)},
+      Core.fieldName = (Core.Name "dateTruncate"),
+      Core.fieldTerm = (Phantoms.unTTerm dateTruncate)},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
       Core.fieldTerm = (Phantoms.unTTerm datetime)},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
-      Core.fieldTerm = (Phantoms.unTTerm fromepoch)},
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
+      Core.fieldTerm = (Phantoms.unTTerm datetimeFromepoch)},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
-      Core.fieldTerm = (Phantoms.unTTerm fromepochmillis)},
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
+      Core.fieldTerm = (Phantoms.unTTerm datetimeFromepochmillis)},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
-      Core.fieldTerm = (Phantoms.unTTerm realtime)},
+      Core.fieldName = (Core.Name "datetimeRealtime"),
+      Core.fieldTerm = (Phantoms.unTTerm datetimeRealtime)},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
-      Core.fieldTerm = (Phantoms.unTTerm statement)},
+      Core.fieldName = (Core.Name "datetimeStatement"),
+      Core.fieldTerm = (Phantoms.unTTerm datetimeStatement)},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
-      Core.fieldTerm = (Phantoms.unTTerm transaction)},
+      Core.fieldName = (Core.Name "datetimeTransaction"),
+      Core.fieldTerm = (Phantoms.unTTerm datetimeTransaction)},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
-      Core.fieldTerm = (Phantoms.unTTerm truncate)},
+      Core.fieldName = (Core.Name "datetimeTruncate"),
+      Core.fieldTerm = (Phantoms.unTTerm datetimeTruncate)},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
       Core.fieldTerm = (Phantoms.unTTerm localdatetime)},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
-      Core.fieldTerm = (Phantoms.unTTerm realtime)},
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
+      Core.fieldTerm = (Phantoms.unTTerm localdatetimeRealtime)},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
-      Core.fieldTerm = (Phantoms.unTTerm statement)},
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
+      Core.fieldTerm = (Phantoms.unTTerm localdatetimeStatement)},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
-      Core.fieldTerm = (Phantoms.unTTerm transaction)},
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
+      Core.fieldTerm = (Phantoms.unTTerm localdatetimeTransaction)},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
-      Core.fieldTerm = (Phantoms.unTTerm truncate)},
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
+      Core.fieldTerm = (Phantoms.unTTerm localdatetimeTruncate)},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
       Core.fieldTerm = (Phantoms.unTTerm localtime)},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
-      Core.fieldTerm = (Phantoms.unTTerm realtime)},
+      Core.fieldName = (Core.Name "localtimeRealtime"),
+      Core.fieldTerm = (Phantoms.unTTerm localtimeRealtime)},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
-      Core.fieldTerm = (Phantoms.unTTerm statement)},
+      Core.fieldName = (Core.Name "localtimeStatement"),
+      Core.fieldTerm = (Phantoms.unTTerm localtimeStatement)},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
-      Core.fieldTerm = (Phantoms.unTTerm transaction)},
+      Core.fieldName = (Core.Name "localtimeTransaction"),
+      Core.fieldTerm = (Phantoms.unTTerm localtimeTransaction)},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
-      Core.fieldTerm = (Phantoms.unTTerm truncate)},
+      Core.fieldName = (Core.Name "localtimeTruncate"),
+      Core.fieldTerm = (Phantoms.unTTerm localtimeTruncate)},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
       Core.fieldTerm = (Phantoms.unTTerm time)},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
-      Core.fieldTerm = (Phantoms.unTTerm realtime)},
+      Core.fieldName = (Core.Name "timeRealtime"),
+      Core.fieldTerm = (Phantoms.unTTerm timeRealtime)},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
-      Core.fieldTerm = (Phantoms.unTTerm statement)},
+      Core.fieldName = (Core.Name "timeStatement"),
+      Core.fieldTerm = (Phantoms.unTTerm timeStatement)},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
-      Core.fieldTerm = (Phantoms.unTTerm transaction)},
+      Core.fieldName = (Core.Name "timeTransaction"),
+      Core.fieldTerm = (Phantoms.unTTerm timeTransaction)},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
-      Core.fieldTerm = (Phantoms.unTTerm truncate)}]})))
+      Core.fieldName = (Core.Name "timeTruncate"),
+      Core.fieldTerm = (Phantoms.unTTerm timeTruncate)}]})))
 
 temporalInstantFunctionFeaturesDate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesDate x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -17018,28 +17018,28 @@ temporalInstantFunctionFeaturesDateRealtime :: (Phantoms.TTerm Features.Temporal
 temporalInstantFunctionFeaturesDateRealtime x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "date.realtime")})))),
+    Core.projectionField = (Core.Name "dateRealtime")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesDateStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesDateStatement x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "date.statement")})))),
+    Core.projectionField = (Core.Name "dateStatement")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesDateTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesDateTransaction x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "date.transaction")})))),
+    Core.projectionField = (Core.Name "dateTransaction")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesDateTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesDateTruncate x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "date.truncate")})))),
+    Core.projectionField = (Core.Name "dateTruncate")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesDatetime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
@@ -17053,42 +17053,42 @@ temporalInstantFunctionFeaturesDatetimeFromepoch :: (Phantoms.TTerm Features.Tem
 temporalInstantFunctionFeaturesDatetimeFromepoch x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+    Core.projectionField = (Core.Name "datetimeFromepoch")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesDatetimeFromepochmillis :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesDatetimeFromepochmillis x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+    Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesDatetimeRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesDatetimeRealtime x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "datetime.realtime")})))),
+    Core.projectionField = (Core.Name "datetimeRealtime")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesDatetimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesDatetimeStatement x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "datetime.statement")})))),
+    Core.projectionField = (Core.Name "datetimeStatement")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesDatetimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesDatetimeTransaction x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "datetime.transaction")})))),
+    Core.projectionField = (Core.Name "datetimeTransaction")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesDatetimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesDatetimeTruncate x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "datetime.truncate")})))),
+    Core.projectionField = (Core.Name "datetimeTruncate")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesLocaldatetime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
@@ -17102,28 +17102,28 @@ temporalInstantFunctionFeaturesLocaldatetimeRealtime :: (Phantoms.TTerm Features
 temporalInstantFunctionFeaturesLocaldatetimeRealtime x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+    Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesLocaldatetimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesLocaldatetimeStatement x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "localdatetime.statement")})))),
+    Core.projectionField = (Core.Name "localdatetimeStatement")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesLocaldatetimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesLocaldatetimeTransaction x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+    Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesLocaldatetimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesLocaldatetimeTruncate x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+    Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesLocaltime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
@@ -17137,28 +17137,28 @@ temporalInstantFunctionFeaturesLocaltimeRealtime :: (Phantoms.TTerm Features.Tem
 temporalInstantFunctionFeaturesLocaltimeRealtime x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "localtime.realtime")})))),
+    Core.projectionField = (Core.Name "localtimeRealtime")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesLocaltimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesLocaltimeStatement x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "localtime.statement")})))),
+    Core.projectionField = (Core.Name "localtimeStatement")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesLocaltimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesLocaltimeTransaction x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "localtime.transaction")})))),
+    Core.projectionField = (Core.Name "localtimeTransaction")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesLocaltimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesLocaltimeTruncate x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "localtime.truncate")})))),
+    Core.projectionField = (Core.Name "localtimeTruncate")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesTime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
@@ -17172,28 +17172,28 @@ temporalInstantFunctionFeaturesTimeRealtime :: (Phantoms.TTerm Features.Temporal
 temporalInstantFunctionFeaturesTimeRealtime x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "time.realtime")})))),
+    Core.projectionField = (Core.Name "timeRealtime")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesTimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesTimeStatement x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "time.statement")})))),
+    Core.projectionField = (Core.Name "timeStatement")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesTimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesTimeTransaction x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "time.transaction")})))),
+    Core.projectionField = (Core.Name "timeTransaction")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesTimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool)
 temporalInstantFunctionFeaturesTimeTruncate x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-    Core.projectionField = (Core.Name "time.truncate")})))),
+    Core.projectionField = (Core.Name "timeTruncate")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 temporalInstantFunctionFeaturesWithDate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -17204,32 +17204,32 @@ temporalInstantFunctionFeaturesWithDate original newVal = (Phantoms.TTerm (Core.
       Core.fieldName = (Core.Name "date"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -17239,46 +17239,46 @@ temporalInstantFunctionFeaturesWithDate original newVal = (Phantoms.TTerm (Core.
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -17288,32 +17288,32 @@ temporalInstantFunctionFeaturesWithDate original newVal = (Phantoms.TTerm (Core.
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -17323,32 +17323,32 @@ temporalInstantFunctionFeaturesWithDate original newVal = (Phantoms.TTerm (Core.
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -17358,32 +17358,32 @@ temporalInstantFunctionFeaturesWithDate original newVal = (Phantoms.TTerm (Core.
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithDateRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -17398,28 +17398,28 @@ temporalInstantFunctionFeaturesWithDateRealtime original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -17429,46 +17429,46 @@ temporalInstantFunctionFeaturesWithDateRealtime original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -17478,32 +17478,32 @@ temporalInstantFunctionFeaturesWithDateRealtime original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -17513,32 +17513,32 @@ temporalInstantFunctionFeaturesWithDateRealtime original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -17548,32 +17548,32 @@ temporalInstantFunctionFeaturesWithDateRealtime original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithDateStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -17588,28 +17588,28 @@ temporalInstantFunctionFeaturesWithDateStatement original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -17619,46 +17619,46 @@ temporalInstantFunctionFeaturesWithDateStatement original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -17668,32 +17668,32 @@ temporalInstantFunctionFeaturesWithDateStatement original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -17703,32 +17703,32 @@ temporalInstantFunctionFeaturesWithDateStatement original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -17738,32 +17738,32 @@ temporalInstantFunctionFeaturesWithDateStatement original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithDateTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -17778,28 +17778,28 @@ temporalInstantFunctionFeaturesWithDateTransaction original newVal = (Phantoms.T
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -17809,46 +17809,46 @@ temporalInstantFunctionFeaturesWithDateTransaction original newVal = (Phantoms.T
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -17858,32 +17858,32 @@ temporalInstantFunctionFeaturesWithDateTransaction original newVal = (Phantoms.T
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -17893,32 +17893,32 @@ temporalInstantFunctionFeaturesWithDateTransaction original newVal = (Phantoms.T
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -17928,32 +17928,32 @@ temporalInstantFunctionFeaturesWithDateTransaction original newVal = (Phantoms.T
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithDateTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -17968,28 +17968,28 @@ temporalInstantFunctionFeaturesWithDateTruncate original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -17999,46 +17999,46 @@ temporalInstantFunctionFeaturesWithDateTruncate original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -18048,32 +18048,32 @@ temporalInstantFunctionFeaturesWithDateTruncate original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -18083,32 +18083,32 @@ temporalInstantFunctionFeaturesWithDateTruncate original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -18118,32 +18118,32 @@ temporalInstantFunctionFeaturesWithDateTruncate original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithDatetime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -18158,77 +18158,77 @@ temporalInstantFunctionFeaturesWithDatetime original newVal = (Phantoms.TTerm (C
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -18238,32 +18238,32 @@ temporalInstantFunctionFeaturesWithDatetime original newVal = (Phantoms.TTerm (C
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -18273,32 +18273,32 @@ temporalInstantFunctionFeaturesWithDatetime original newVal = (Phantoms.TTerm (C
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -18308,32 +18308,32 @@ temporalInstantFunctionFeaturesWithDatetime original newVal = (Phantoms.TTerm (C
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithDatetimeFromepoch :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -18348,32 +18348,32 @@ temporalInstantFunctionFeaturesWithDatetimeFromepoch original newVal = (Phantoms
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -18383,42 +18383,42 @@ temporalInstantFunctionFeaturesWithDatetimeFromepoch original newVal = (Phantoms
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -18428,32 +18428,32 @@ temporalInstantFunctionFeaturesWithDatetimeFromepoch original newVal = (Phantoms
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -18463,32 +18463,32 @@ temporalInstantFunctionFeaturesWithDatetimeFromepoch original newVal = (Phantoms
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -18498,32 +18498,32 @@ temporalInstantFunctionFeaturesWithDatetimeFromepoch original newVal = (Phantoms
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithDatetimeFromepochmillis :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -18538,32 +18538,32 @@ temporalInstantFunctionFeaturesWithDatetimeFromepochmillis original newVal = (Ph
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -18573,42 +18573,42 @@ temporalInstantFunctionFeaturesWithDatetimeFromepochmillis original newVal = (Ph
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -18618,32 +18618,32 @@ temporalInstantFunctionFeaturesWithDatetimeFromepochmillis original newVal = (Ph
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -18653,32 +18653,32 @@ temporalInstantFunctionFeaturesWithDatetimeFromepochmillis original newVal = (Ph
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -18688,32 +18688,32 @@ temporalInstantFunctionFeaturesWithDatetimeFromepochmillis original newVal = (Ph
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithDatetimeRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -18728,32 +18728,32 @@ temporalInstantFunctionFeaturesWithDatetimeRealtime original newVal = (Phantoms.
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -18763,42 +18763,42 @@ temporalInstantFunctionFeaturesWithDatetimeRealtime original newVal = (Phantoms.
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -18808,32 +18808,32 @@ temporalInstantFunctionFeaturesWithDatetimeRealtime original newVal = (Phantoms.
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -18843,32 +18843,32 @@ temporalInstantFunctionFeaturesWithDatetimeRealtime original newVal = (Phantoms.
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -18878,32 +18878,32 @@ temporalInstantFunctionFeaturesWithDatetimeRealtime original newVal = (Phantoms.
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithDatetimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -18918,32 +18918,32 @@ temporalInstantFunctionFeaturesWithDatetimeStatement original newVal = (Phantoms
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -18953,42 +18953,42 @@ temporalInstantFunctionFeaturesWithDatetimeStatement original newVal = (Phantoms
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -18998,32 +18998,32 @@ temporalInstantFunctionFeaturesWithDatetimeStatement original newVal = (Phantoms
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -19033,32 +19033,32 @@ temporalInstantFunctionFeaturesWithDatetimeStatement original newVal = (Phantoms
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -19068,32 +19068,32 @@ temporalInstantFunctionFeaturesWithDatetimeStatement original newVal = (Phantoms
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithDatetimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -19108,32 +19108,32 @@ temporalInstantFunctionFeaturesWithDatetimeTransaction original newVal = (Phanto
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -19143,42 +19143,42 @@ temporalInstantFunctionFeaturesWithDatetimeTransaction original newVal = (Phanto
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -19188,32 +19188,32 @@ temporalInstantFunctionFeaturesWithDatetimeTransaction original newVal = (Phanto
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -19223,32 +19223,32 @@ temporalInstantFunctionFeaturesWithDatetimeTransaction original newVal = (Phanto
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -19258,32 +19258,32 @@ temporalInstantFunctionFeaturesWithDatetimeTransaction original newVal = (Phanto
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithDatetimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -19298,32 +19298,32 @@ temporalInstantFunctionFeaturesWithDatetimeTruncate original newVal = (Phantoms.
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -19333,42 +19333,42 @@ temporalInstantFunctionFeaturesWithDatetimeTruncate original newVal = (Phantoms.
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -19378,32 +19378,32 @@ temporalInstantFunctionFeaturesWithDatetimeTruncate original newVal = (Phantoms.
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -19413,32 +19413,32 @@ temporalInstantFunctionFeaturesWithDatetimeTruncate original newVal = (Phantoms.
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -19448,32 +19448,32 @@ temporalInstantFunctionFeaturesWithDatetimeTruncate original newVal = (Phantoms.
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithLocaldatetime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -19488,32 +19488,32 @@ temporalInstantFunctionFeaturesWithLocaldatetime original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -19523,77 +19523,77 @@ temporalInstantFunctionFeaturesWithLocaldatetime original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -19603,32 +19603,32 @@ temporalInstantFunctionFeaturesWithLocaldatetime original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -19638,32 +19638,32 @@ temporalInstantFunctionFeaturesWithLocaldatetime original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithLocaldatetimeRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -19678,32 +19678,32 @@ temporalInstantFunctionFeaturesWithLocaldatetimeRealtime original newVal = (Phan
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -19713,46 +19713,46 @@ temporalInstantFunctionFeaturesWithLocaldatetimeRealtime original newVal = (Phan
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -19762,28 +19762,28 @@ temporalInstantFunctionFeaturesWithLocaldatetimeRealtime original newVal = (Phan
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -19793,32 +19793,32 @@ temporalInstantFunctionFeaturesWithLocaldatetimeRealtime original newVal = (Phan
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -19828,32 +19828,32 @@ temporalInstantFunctionFeaturesWithLocaldatetimeRealtime original newVal = (Phan
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithLocaldatetimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -19868,32 +19868,32 @@ temporalInstantFunctionFeaturesWithLocaldatetimeStatement original newVal = (Pha
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -19903,46 +19903,46 @@ temporalInstantFunctionFeaturesWithLocaldatetimeStatement original newVal = (Pha
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -19952,28 +19952,28 @@ temporalInstantFunctionFeaturesWithLocaldatetimeStatement original newVal = (Pha
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -19983,32 +19983,32 @@ temporalInstantFunctionFeaturesWithLocaldatetimeStatement original newVal = (Pha
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -20018,32 +20018,32 @@ temporalInstantFunctionFeaturesWithLocaldatetimeStatement original newVal = (Pha
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithLocaldatetimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -20058,32 +20058,32 @@ temporalInstantFunctionFeaturesWithLocaldatetimeTransaction original newVal = (P
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -20093,46 +20093,46 @@ temporalInstantFunctionFeaturesWithLocaldatetimeTransaction original newVal = (P
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -20142,28 +20142,28 @@ temporalInstantFunctionFeaturesWithLocaldatetimeTransaction original newVal = (P
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -20173,32 +20173,32 @@ temporalInstantFunctionFeaturesWithLocaldatetimeTransaction original newVal = (P
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -20208,32 +20208,32 @@ temporalInstantFunctionFeaturesWithLocaldatetimeTransaction original newVal = (P
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithLocaldatetimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -20248,32 +20248,32 @@ temporalInstantFunctionFeaturesWithLocaldatetimeTruncate original newVal = (Phan
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -20283,46 +20283,46 @@ temporalInstantFunctionFeaturesWithLocaldatetimeTruncate original newVal = (Phan
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -20332,28 +20332,28 @@ temporalInstantFunctionFeaturesWithLocaldatetimeTruncate original newVal = (Phan
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -20363,32 +20363,32 @@ temporalInstantFunctionFeaturesWithLocaldatetimeTruncate original newVal = (Phan
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -20398,32 +20398,32 @@ temporalInstantFunctionFeaturesWithLocaldatetimeTruncate original newVal = (Phan
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithLocaltime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -20438,32 +20438,32 @@ temporalInstantFunctionFeaturesWithLocaltime original newVal = (Phantoms.TTerm (
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -20473,46 +20473,46 @@ temporalInstantFunctionFeaturesWithLocaltime original newVal = (Phantoms.TTerm (
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -20522,63 +20522,63 @@ temporalInstantFunctionFeaturesWithLocaltime original newVal = (Phantoms.TTerm (
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -20588,32 +20588,32 @@ temporalInstantFunctionFeaturesWithLocaltime original newVal = (Phantoms.TTerm (
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithLocaltimeRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -20628,32 +20628,32 @@ temporalInstantFunctionFeaturesWithLocaltimeRealtime original newVal = (Phantoms
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -20663,46 +20663,46 @@ temporalInstantFunctionFeaturesWithLocaltimeRealtime original newVal = (Phantoms
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -20712,32 +20712,32 @@ temporalInstantFunctionFeaturesWithLocaltimeRealtime original newVal = (Phantoms
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -20747,28 +20747,28 @@ temporalInstantFunctionFeaturesWithLocaltimeRealtime original newVal = (Phantoms
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -20778,32 +20778,32 @@ temporalInstantFunctionFeaturesWithLocaltimeRealtime original newVal = (Phantoms
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithLocaltimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -20818,32 +20818,32 @@ temporalInstantFunctionFeaturesWithLocaltimeStatement original newVal = (Phantom
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -20853,46 +20853,46 @@ temporalInstantFunctionFeaturesWithLocaltimeStatement original newVal = (Phantom
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -20902,32 +20902,32 @@ temporalInstantFunctionFeaturesWithLocaltimeStatement original newVal = (Phantom
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -20937,28 +20937,28 @@ temporalInstantFunctionFeaturesWithLocaltimeStatement original newVal = (Phantom
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -20968,32 +20968,32 @@ temporalInstantFunctionFeaturesWithLocaltimeStatement original newVal = (Phantom
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithLocaltimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -21008,32 +21008,32 @@ temporalInstantFunctionFeaturesWithLocaltimeTransaction original newVal = (Phant
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -21043,46 +21043,46 @@ temporalInstantFunctionFeaturesWithLocaltimeTransaction original newVal = (Phant
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -21092,32 +21092,32 @@ temporalInstantFunctionFeaturesWithLocaltimeTransaction original newVal = (Phant
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -21127,28 +21127,28 @@ temporalInstantFunctionFeaturesWithLocaltimeTransaction original newVal = (Phant
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -21158,32 +21158,32 @@ temporalInstantFunctionFeaturesWithLocaltimeTransaction original newVal = (Phant
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithLocaltimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -21198,32 +21198,32 @@ temporalInstantFunctionFeaturesWithLocaltimeTruncate original newVal = (Phantoms
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -21233,46 +21233,46 @@ temporalInstantFunctionFeaturesWithLocaltimeTruncate original newVal = (Phantoms
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -21282,32 +21282,32 @@ temporalInstantFunctionFeaturesWithLocaltimeTruncate original newVal = (Phantoms
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -21317,28 +21317,28 @@ temporalInstantFunctionFeaturesWithLocaltimeTruncate original newVal = (Phantoms
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -21348,32 +21348,32 @@ temporalInstantFunctionFeaturesWithLocaltimeTruncate original newVal = (Phantoms
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithTime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -21388,32 +21388,32 @@ temporalInstantFunctionFeaturesWithTime original newVal = (Phantoms.TTerm (Core.
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -21423,46 +21423,46 @@ temporalInstantFunctionFeaturesWithTime original newVal = (Phantoms.TTerm (Core.
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -21472,32 +21472,32 @@ temporalInstantFunctionFeaturesWithTime original newVal = (Phantoms.TTerm (Core.
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -21507,63 +21507,63 @@ temporalInstantFunctionFeaturesWithTime original newVal = (Phantoms.TTerm (Core.
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithTimeRealtime :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -21578,32 +21578,32 @@ temporalInstantFunctionFeaturesWithTimeRealtime original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -21613,46 +21613,46 @@ temporalInstantFunctionFeaturesWithTimeRealtime original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -21662,32 +21662,32 @@ temporalInstantFunctionFeaturesWithTimeRealtime original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -21697,32 +21697,32 @@ temporalInstantFunctionFeaturesWithTimeRealtime original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -21732,28 +21732,28 @@ temporalInstantFunctionFeaturesWithTimeRealtime original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithTimeStatement :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -21768,32 +21768,32 @@ temporalInstantFunctionFeaturesWithTimeStatement original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -21803,46 +21803,46 @@ temporalInstantFunctionFeaturesWithTimeStatement original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -21852,32 +21852,32 @@ temporalInstantFunctionFeaturesWithTimeStatement original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -21887,32 +21887,32 @@ temporalInstantFunctionFeaturesWithTimeStatement original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -21922,28 +21922,28 @@ temporalInstantFunctionFeaturesWithTimeStatement original newVal = (Phantoms.TTe
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithTimeTransaction :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -21958,32 +21958,32 @@ temporalInstantFunctionFeaturesWithTimeTransaction original newVal = (Phantoms.T
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -21993,46 +21993,46 @@ temporalInstantFunctionFeaturesWithTimeTransaction original newVal = (Phantoms.T
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -22042,32 +22042,32 @@ temporalInstantFunctionFeaturesWithTimeTransaction original newVal = (Phantoms.T
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -22077,32 +22077,32 @@ temporalInstantFunctionFeaturesWithTimeTransaction original newVal = (Phantoms.T
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -22112,28 +22112,28 @@ temporalInstantFunctionFeaturesWithTimeTransaction original newVal = (Phantoms.T
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.truncate")})))),
+          Core.projectionField = (Core.Name "timeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 temporalInstantFunctionFeaturesWithTimeTruncate :: (Phantoms.TTerm Features.TemporalInstantFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TemporalInstantFunctionFeatures)
@@ -22148,32 +22148,32 @@ temporalInstantFunctionFeaturesWithTimeTruncate original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "date")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.realtime"),
+      Core.fieldName = (Core.Name "dateRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.realtime")})))),
+          Core.projectionField = (Core.Name "dateRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.statement"),
+      Core.fieldName = (Core.Name "dateStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.statement")})))),
+          Core.projectionField = (Core.Name "dateStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.transaction"),
+      Core.fieldName = (Core.Name "dateTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.transaction")})))),
+          Core.projectionField = (Core.Name "dateTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "date.truncate"),
+      Core.fieldName = (Core.Name "dateTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "date.truncate")})))),
+          Core.projectionField = (Core.Name "dateTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "datetime"),
@@ -22183,46 +22183,46 @@ temporalInstantFunctionFeaturesWithTimeTruncate original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "datetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepoch"),
+      Core.fieldName = (Core.Name "datetimeFromepoch"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepoch")})))),
+          Core.projectionField = (Core.Name "datetimeFromepoch")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.fromepochmillis"),
+      Core.fieldName = (Core.Name "datetimeFromepochmillis"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.fromepochmillis")})))),
+          Core.projectionField = (Core.Name "datetimeFromepochmillis")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.realtime"),
+      Core.fieldName = (Core.Name "datetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.realtime")})))),
+          Core.projectionField = (Core.Name "datetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.statement"),
+      Core.fieldName = (Core.Name "datetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.statement")})))),
+          Core.projectionField = (Core.Name "datetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.transaction"),
+      Core.fieldName = (Core.Name "datetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.transaction")})))),
+          Core.projectionField = (Core.Name "datetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "datetime.truncate"),
+      Core.fieldName = (Core.Name "datetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "datetime.truncate")})))),
+          Core.projectionField = (Core.Name "datetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localdatetime"),
@@ -22232,32 +22232,32 @@ temporalInstantFunctionFeaturesWithTimeTruncate original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "localdatetime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.realtime"),
+      Core.fieldName = (Core.Name "localdatetimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.realtime")})))),
+          Core.projectionField = (Core.Name "localdatetimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.statement"),
+      Core.fieldName = (Core.Name "localdatetimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.statement")})))),
+          Core.projectionField = (Core.Name "localdatetimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.transaction"),
+      Core.fieldName = (Core.Name "localdatetimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.transaction")})))),
+          Core.projectionField = (Core.Name "localdatetimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localdatetime.truncate"),
+      Core.fieldName = (Core.Name "localdatetimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localdatetime.truncate")})))),
+          Core.projectionField = (Core.Name "localdatetimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "localtime"),
@@ -22267,32 +22267,32 @@ temporalInstantFunctionFeaturesWithTimeTruncate original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "localtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.realtime"),
+      Core.fieldName = (Core.Name "localtimeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.realtime")})))),
+          Core.projectionField = (Core.Name "localtimeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.statement"),
+      Core.fieldName = (Core.Name "localtimeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.statement")})))),
+          Core.projectionField = (Core.Name "localtimeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.transaction"),
+      Core.fieldName = (Core.Name "localtimeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.transaction")})))),
+          Core.projectionField = (Core.Name "localtimeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "localtime.truncate"),
+      Core.fieldName = (Core.Name "localtimeTruncate"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "localtime.truncate")})))),
+          Core.projectionField = (Core.Name "localtimeTruncate")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
       Core.fieldName = (Core.Name "time"),
@@ -22302,28 +22302,28 @@ temporalInstantFunctionFeaturesWithTimeTruncate original newVal = (Phantoms.TTer
           Core.projectionField = (Core.Name "time")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.realtime"),
+      Core.fieldName = (Core.Name "timeRealtime"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.realtime")})))),
+          Core.projectionField = (Core.Name "timeRealtime")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.statement"),
+      Core.fieldName = (Core.Name "timeStatement"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.statement")})))),
+          Core.projectionField = (Core.Name "timeStatement")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.transaction"),
+      Core.fieldName = (Core.Name "timeTransaction"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"),
-          Core.projectionField = (Core.Name "time.transaction")})))),
+          Core.projectionField = (Core.Name "timeTransaction")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "time.truncate"),
+      Core.fieldName = (Core.Name "timeTruncate"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
 trigonometricFunctionFeatures :: (Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.TrigonometricFunctionFeatures)
@@ -23472,28 +23472,28 @@ trigonometricFunctionFeaturesWithTan original newVal = (Phantoms.TTerm (Core.Ter
       Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
 vectorFunctionFeatures :: (Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VectorFunctionFeatures)
-vectorFunctionFeatures cosine euclidean = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+vectorFunctionFeatures vectorSimilarityCosine vectorSimilarityEuclidean = (Phantoms.TTerm (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "vector.similarity.cosine"),
-      Core.fieldTerm = (Phantoms.unTTerm cosine)},
+      Core.fieldName = (Core.Name "vectorSimilarityCosine"),
+      Core.fieldTerm = (Phantoms.unTTerm vectorSimilarityCosine)},
     Core.Field {
-      Core.fieldName = (Core.Name "vector.similarity.euclidean"),
-      Core.fieldTerm = (Phantoms.unTTerm euclidean)}]})))
+      Core.fieldName = (Core.Name "vectorSimilarityEuclidean"),
+      Core.fieldTerm = (Phantoms.unTTerm vectorSimilarityEuclidean)}]})))
 
 vectorFunctionFeaturesVectorSimilarityCosine :: (Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool)
 vectorFunctionFeaturesVectorSimilarityCosine x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
-    Core.projectionField = (Core.Name "vector.similarity.cosine")})))),
+    Core.projectionField = (Core.Name "vectorSimilarityCosine")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 vectorFunctionFeaturesVectorSimilarityEuclidean :: (Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool)
 vectorFunctionFeaturesVectorSimilarityEuclidean x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
     Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
-    Core.projectionField = (Core.Name "vector.similarity.euclidean")})))),
+    Core.projectionField = (Core.Name "vectorSimilarityEuclidean")})))),
   Core.applicationArgument = (Phantoms.unTTerm x)})))
 
 vectorFunctionFeaturesWithVectorSimilarityCosine :: (Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VectorFunctionFeatures)
@@ -23501,14 +23501,14 @@ vectorFunctionFeaturesWithVectorSimilarityCosine original newVal = (Phantoms.TTe
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "vector.similarity.cosine"),
+      Core.fieldName = (Core.Name "vectorSimilarityCosine"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)},
     Core.Field {
-      Core.fieldName = (Core.Name "vector.similarity.euclidean"),
+      Core.fieldName = (Core.Name "vectorSimilarityEuclidean"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
-          Core.projectionField = (Core.Name "vector.similarity.euclidean")})))),
+          Core.projectionField = (Core.Name "vectorSimilarityEuclidean")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
 vectorFunctionFeaturesWithVectorSimilarityEuclidean :: (Phantoms.TTerm Features.VectorFunctionFeatures -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.VectorFunctionFeatures)
@@ -23516,14 +23516,14 @@ vectorFunctionFeaturesWithVectorSimilarityEuclidean original newVal = (Phantoms.
   Core.recordTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
   Core.recordFields = [
     Core.Field {
-      Core.fieldName = (Core.Name "vector.similarity.cosine"),
+      Core.fieldName = (Core.Name "vectorSimilarityCosine"),
       Core.fieldTerm = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
           Core.projectionTypeName = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"),
-          Core.projectionField = (Core.Name "vector.similarity.cosine")})))),
+          Core.projectionField = (Core.Name "vectorSimilarityCosine")})))),
         Core.applicationArgument = (Phantoms.unTTerm original)}))},
     Core.Field {
-      Core.fieldName = (Core.Name "vector.similarity.euclidean"),
+      Core.fieldName = (Core.Name "vectorSimilarityEuclidean"),
       Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
 listFeatures :: (Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Features.ListFeatures)

@@ -42,11 +42,15 @@ module_ = Module ns elements [Core.ns] [Core.ns] $
     featureSetToType (FeatureSet name desc children) = datatype ns (featureSetNameToTypeName name) $
         doc (featureSetDesc desc) $ T.record (toField <$> children)
       where
-        toField (FeatureSet name1 desc1 children1) = (decapitalize name1)>: if L.null children1
+        toField (FeatureSet name1 desc1 children1) = (dotsToCamel name1)>: if L.null children1
           then doc (featureSetDesc desc1) T.boolean
           else doc (featureSetDesc desc1) $ cypherFeatures $ featureSetNameToTypeName name1
           where
             fieldDesc = "Whether to expect " ++ desc1
+    -- Convert dotted names like "date.realtime" to camelCase "dateRealtime"
+    dotsToCamel name = case break (== '.') name of
+      (first, []) -> decapitalize first
+      (first, _:rest) -> decapitalize first ++ capitalize (dotsToCamel rest)
     featureSetNameToTypeName name = capitalize name ++ "Features"
     featureSetDesc desc = capitalize desc
 
