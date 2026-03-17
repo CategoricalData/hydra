@@ -100,6 +100,10 @@ import qualified Hydra.Ext.Sources.Python.Names                as PythonNames
 import qualified Hydra.Ext.Sources.Python.Serde                as PythonSerde
 import qualified Hydra.Ext.Sources.Python.Syntax               as PythonSyntax
 import qualified Hydra.Ext.Sources.Python.Utils                as PythonUtils
+import qualified Hydra.Ext.Sources.Lisp.Coder                  as LispCoder
+import qualified Hydra.Ext.Sources.Lisp.Language               as LispLanguage
+import qualified Hydra.Ext.Sources.Lisp.Serde                  as LispSerde
+import qualified Hydra.Ext.Sources.Lisp.Syntax                 as LispSyntax
 import qualified Hydra.Ext.Sources.Rdf.Serde                   as RdfSerde
 import qualified Hydra.Ext.Sources.Rdf.Syntax                  as RdfSyntax
 import qualified Hydra.Ext.Sources.Rdf.Utils                   as RdfUtils
@@ -155,6 +159,7 @@ hydraExtModules = otherExtModules
   ++ javaModules
   ++ javaScriptModules
   ++ jsonSchemaModules
+  ++ lispModules
   ++ pgModules
   ++ protobufModules
   ++ pythonModules
@@ -271,6 +276,13 @@ jsonSchemaModules = [
   JsonSchemaCoder.module_,
   JsonSchemaLanguage.module_,
   JsonSchemaSerde.module_]
+
+lispModules :: [Module]
+lispModules = [
+  LispCoder.module_,
+  LispLanguage.module_,
+  LispSerde.module_,
+  LispSyntax.module_]
 
 pgModules :: [Module]
 pgModules = [
