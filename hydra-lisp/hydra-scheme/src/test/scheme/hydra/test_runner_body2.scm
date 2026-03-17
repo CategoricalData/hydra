@@ -545,154 +545,117 @@
         (hydra_testing_writer_test_case-input tc)))))
 
 (define (run-json-coder-test path tc)
-  (let ((cx (empty-context))
-        (graph (get-test-graph)))
-    (guard (exn (#t
-                 (display (string-append "FAIL: " path "\n"))
-                 (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
-                 (list 0 1 0)))
-      (let ((coder-result (((hydra_ext_org_json_coder_json_coder
-                              (hydra_testing_json_coder_test_case-type tc)) cx) graph)))
-        (if (eq? (car coder-result) 'left)
-            (begin
-              (display (string-append "FAIL: " path "\n"))
-              (display (string-append "  Failed to create JSON coder: " (obj->string (cadr coder-result)) "\n"))
-              (list 0 1 0))
-            (let* ((coder (cadr coder-result))
-                   ;; Encode
-                   (encode-fn (hydra_graph_term_coder-encode coder))
-                   (encode-result ((encode-fn cx) (hydra_testing_json_coder_test_case-term tc))))
-              (if (eq? (car encode-result) 'left)
-                  (begin
-                    (display (string-append "FAIL: " path "\n"))
-                    (display (string-append "  JSON encode failed: " (obj->string (cadr encode-result)) "\n"))
-                    (list 0 1 0))
-                  (let ((encoded (cadr encode-result)))
-                    (if (not (terms-match? (hydra_testing_json_coder_test_case-json tc) encoded))
-                        (begin
-                          (display (string-append "FAIL: " path "\n"))
-                          (display "  JSON encode mismatch\n")
-                          (display "  Expected (raw): ") (write (hydra_testing_json_coder_test_case-json tc)) (newline)
-                          (display "  Actual (raw):   ") (write encoded) (newline)
-                          (list 0 1 0))
-                        ;; Roundtrip: decode back
-                        (let* ((decode-fn (hydra_graph_term_coder-decode coder))
-                               (decode-result ((decode-fn cx) encoded)))
-                          (if (eq? (car decode-result) 'left)
-                              (begin
-                                (display (string-append "FAIL: " path "\n"))
-                                (display (string-append "  JSON decode failed: " (obj->string (cadr decode-result)) "\n"))
-                                (list 0 1 0))
-                              (let ((decoded (cadr decode-result)))
-                                (if (terms-match? (hydra_testing_json_coder_test_case-term tc) decoded)
-                                    (list 1 0 0)
-                                    (begin
-                                      (display (string-append "FAIL: " path "\n"))
-                                      (display "  JSON roundtrip term mismatch\n")
-                                      (guard (exn (#t
-                                                   (display "  Expected (raw): ") (write (hydra_testing_json_coder_test_case-term tc)) (newline)
-                                                   (display "  Actual (raw):   ") (write decoded) (newline)))
-                                        (display (string-append "  Expected: " (show-term (hydra_testing_json_coder_test_case-term tc)) "\n"))
-                                        (display (string-append "  Actual:   " (show-term decoded) "\n")))
-                                      (list 0 1 0))))))))))))))
+  (guard (exn (#t
+               (display (string-append "FAIL: " path "\n"))
+               (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
+               (list 0 1 0)))
+    (let* ((empty-types hydra_lib_maps_empty)
+           (tc-type (hydra_testing_json_coder_test_case-type tc))
+           (tc-term (hydra_testing_json_coder_test_case-term tc))
+           (tc-json (hydra_testing_json_coder_test_case-json tc))
+           (encode-result (hydra_json_encode_to_json tc-term)))
+      (if (eq? (car encode-result) 'left)
+          (begin
+            (display (string-append "FAIL: " path "\n"))
+            (display (string-append "  JSON encode failed: " (obj->string (cadr encode-result)) "\n"))
+            (list 0 1 0))
+          (let ((encoded (cadr encode-result)))
+            (if (not (terms-match? tc-json encoded))
+                (begin
+                  (display (string-append "FAIL: " path "\n"))
+                  (display "  JSON encode mismatch\n")
+                  (display "  Expected (raw): ") (write tc-json) (newline)
+                  (display "  Actual (raw):   ") (write encoded) (newline)
+                  (list 0 1 0))
+                (let ((decode-result ((((hydra_json_decode_from_json empty-types)
+                                        (make-hydra_core_name "test"))
+                                       tc-type)
+                                      encoded)))
+                  (if (eq? (car decode-result) 'left)
+                      (begin
+                        (display (string-append "FAIL: " path "\n"))
+                        (display (string-append "  JSON decode failed: " (obj->string (cadr decode-result)) "\n"))
+                        (list 0 1 0))
+                      (let ((decoded (cadr decode-result)))
+                        (if (terms-match? tc-term decoded)
+                            (list 1 0 0)
+                            (begin
+                              (display (string-append "FAIL: " path "\n"))
+                              (display "  JSON roundtrip term mismatch\n")
+                              (display (string-append "  Expected: " (or (show-term tc-term) "(?)") "\n"))
+                              (display (string-append "  Actual:   " (or (show-term decoded) "(?)") "\n"))
+                              (list 0 1 0)))))))))))))
 
 (define (run-json-roundtrip-test path tc)
-  (let ((cx (empty-context))
-        (graph (get-test-graph)))
-    (guard (exn (#t
-                 (display (string-append "FAIL: " path "\n"))
-                 (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
-                 (list 0 1 0)))
-      (let ((coder-result (((hydra_ext_org_json_coder_json_coder
-                              (hydra_testing_json_roundtrip_test_case-type tc)) cx) graph)))
-        (if (eq? (car coder-result) 'left)
-            (begin
-              (display (string-append "FAIL: " path "\n"))
-              (display (string-append "  Failed to create JSON coder: " (obj->string (cadr coder-result)) "\n"))
-              (list 0 1 0))
-            (let* ((coder (cadr coder-result))
-                   ;; Encode
-                   (encode-fn (hydra_graph_term_coder-encode coder))
-                   (encode-result ((encode-fn cx) (hydra_testing_json_roundtrip_test_case-term tc))))
-              (if (eq? (car encode-result) 'left)
-                  (begin
-                    (display (string-append "FAIL: " path "\n"))
-                    (display (string-append "  JSON encode failed: " (obj->string (cadr encode-result)) "\n"))
-                    (list 0 1 0))
-                  (let* ((encoded (cadr encode-result))
-                         ;; Decode back
-                         (decode-fn (hydra_graph_term_coder-decode coder))
-                         (decode-result ((decode-fn cx) encoded)))
-                    (if (eq? (car decode-result) 'left)
-                        (begin
-                          (display (string-append "FAIL: " path "\n"))
-                          (display (string-append "  JSON decode failed: " (obj->string (cadr decode-result)) "\n"))
-                          (list 0 1 0))
-                        (let ((decoded (cadr decode-result)))
-                          (if (terms-match? (hydra_testing_json_roundtrip_test_case-term tc) decoded)
-                              (list 1 0 0)
-                              (begin
-                                (display (string-append "FAIL: " path "\n"))
-                                (display "  JSON roundtrip mismatch\n")
-                                (guard (exn (#t
-                                             (display "  Expected (raw): ") (write (hydra_testing_json_roundtrip_test_case-term tc)) (newline)
-                                             (display "  Actual (raw):   ") (write decoded) (newline)))
-                                  (display (string-append "  Expected: " (show-term (hydra_testing_json_roundtrip_test_case-term tc)) "\n"))
-                                  (display (string-append "  Actual:   " (show-term decoded) "\n")))
-                                (list 0 1 0)))))))))))))
+  (guard (exn (#t
+               (display (string-append "FAIL: " path "\n"))
+               (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
+               (list 0 1 0)))
+    (let* ((empty-types hydra_lib_maps_empty)
+           (tc-type (hydra_testing_json_roundtrip_test_case-type tc))
+           (tc-term (hydra_testing_json_roundtrip_test_case-term tc))
+           (encode-result (hydra_json_encode_to_json tc-term)))
+      (if (eq? (car encode-result) 'left)
+          (begin
+            (display (string-append "FAIL: " path "\n"))
+            (display (string-append "  JSON encode failed: " (obj->string (cadr encode-result)) "\n"))
+            (list 0 1 0))
+          (let* ((encoded (cadr encode-result))
+                 (decode-result ((((hydra_json_decode_from_json empty-types)
+                                   (make-hydra_core_name "test"))
+                                  tc-type)
+                                 encoded)))
+            (if (eq? (car decode-result) 'left)
+                (begin
+                  (display (string-append "FAIL: " path "\n"))
+                  (display (string-append "  JSON decode failed: " (obj->string (cadr decode-result)) "\n"))
+                  (list 0 1 0))
+                (let ((decoded (cadr decode-result)))
+                  (if (terms-match? tc-term decoded)
+                      (list 1 0 0)
+                      (begin
+                        (display (string-append "FAIL: " path "\n"))
+                        (display "  JSON roundtrip mismatch\n")
+                        (display (string-append "  Expected: " (or (show-term tc-term) "(?)") "\n"))
+                        (display (string-append "  Actual:   " (or (show-term decoded) "(?)") "\n"))
+                        (list 0 1 0))))))))))
 
 (define (run-json-decode-test path tc)
-  (let ((cx (empty-context))
-        (graph (get-test-graph)))
-    (guard (exn (#t
-                 (display (string-append "FAIL: " path "\n"))
-                 (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
-                 (list 0 1 0)))
-      (let ((coder-result (((hydra_ext_org_json_coder_json_coder
-                              (hydra_testing_json_decode_test_case-type tc)) cx) graph)))
-        (if (eq? (car coder-result) 'left)
-            (begin
-              (display (string-append "FAIL: " path "\n"))
-              (display (string-append "  Failed to create JSON coder: " (obj->string (cadr coder-result)) "\n"))
-              (list 0 1 0))
-            (let* ((coder (cadr coder-result))
-                   (decode-fn (hydra_graph_term_coder-decode coder))
-                   (decode-result ((decode-fn cx) (hydra_testing_json_decode_test_case-json tc)))
-                   (expected (hydra_testing_json_decode_test_case-expected tc)))
-              (cond
-                ((eq? (car expected) 'left)
-                 ;; Expected failure
-                 (if (eq? (car decode-result) 'left)
-                     (list 1 0 0)
-                     (begin
-                       (display (string-append "FAIL: " path "\n"))
-                       (display "  Expected decode failure but got success\n")
-                       (list 0 1 0))))
-
-                ((eq? (car expected) 'right)
-                 ;; Expected success
-                 (if (eq? (car decode-result) 'left)
-                     (begin
-                       (display (string-append "FAIL: " path "\n"))
-                       (display (string-append "  JSON decode failed: " (obj->string (cadr decode-result)) "\n"))
-                       (list 0 1 0))
-                     (let ((actual (cadr decode-result))
-                           (expected-term (cadr expected)))
-                       (if (terms-match? expected-term actual)
-                           (list 1 0 0)
-                           (begin
-                             (display (string-append "FAIL: " path "\n"))
-                             (display "  JSON decode mismatch\n")
-                             (guard (exn (#t
-                                          (display "  Expected (raw): ") (write expected-term) (newline)
-                                          (display "  Actual (raw):   ") (write actual) (newline)))
-                               (display (string-append "  Expected: " (show-term expected-term) "\n"))
-                               (display (string-append "  Actual:   " (show-term actual) "\n")))
-                             (list 0 1 0))))))
-
-                (else
-                 (display (string-append "FAIL: " path " - unexpected expected format\n"))
-                 (list 0 1 0)))))))))
+  (guard (exn (#t
+               (display (string-append "FAIL: " path "\n"))
+               (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
+               (list 0 1 0)))
+    (let* ((empty-types hydra_lib_maps_empty)
+           (tc-type (hydra_testing_json_decode_test_case-type tc))
+           (tc-json (hydra_testing_json_decode_test_case-json tc))
+           (expected (hydra_testing_json_decode_test_case-expected tc))
+           (decode-result ((((hydra_json_decode_from_json empty-types)
+                              (make-hydra_core_name "test"))
+                             tc-type)
+                            tc-json)))
+      (cond
+        ((eq? (car expected) 'left)
+         (if (eq? (car decode-result) 'left) (list 1 0 0)
+             (begin
+               (display (string-append "FAIL: " path "\n"))
+               (display "  Expected decode failure but got success\n")
+               (list 0 1 0))))
+        ((eq? (car expected) 'right)
+         (if (eq? (car decode-result) 'left)
+             (begin
+               (display (string-append "FAIL: " path "\n"))
+               (display (string-append "  JSON decode failed: " (obj->string (cadr decode-result)) "\n"))
+               (list 0 1 0))
+             (let ((actual (cadr decode-result))
+                   (expected-term (cadr expected)))
+               (if (terms-match? expected-term actual) (list 1 0 0)
+                   (begin
+                     (display (string-append "FAIL: " path "\n"))
+                     (display "  JSON decode mismatch\n")
+                     (display (string-append "  Expected: " (or (show-term expected-term) "(?)") "\n"))
+                     (display (string-append "  Actual:   " (or (show-term actual) "(?)") "\n"))
+                     (list 0 1 0))))))
+        (else (list 0 1 0))))))
 
 (define (run-json-encode-test path tc)
   ;; JsonEncodeTestCase has :term and :expected but no :type, so we cannot create a coder.

@@ -89,6 +89,15 @@
           (dolist (x xs acc)
             (setf acc (funcall (funcall f acc) x))))))))
 
+;; foldr :: (a -> b -> b) -> b -> [a] -> b
+(defvar hydra_lib_lists_foldr
+  (lambda (f)
+    (lambda (init)
+      (lambda (xs)
+        (let ((acc init))
+          (dolist (x (reverse xs) acc)
+            (setf acc (funcall (funcall f x) acc))))))))
+
 ;; head :: [a] -> a
 (defvar hydra_lib_lists_head
   (lambda (xs)

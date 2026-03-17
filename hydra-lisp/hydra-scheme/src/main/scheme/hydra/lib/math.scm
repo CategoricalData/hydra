@@ -33,6 +33,9 @@
           hydra_lib_math_range
           hydra_lib_math_rem
           hydra_lib_math_round
+          hydra_lib_math_round_bigfloat
+          hydra_lib_math_round_float32
+          hydra_lib_math_round_float64
           hydra_lib_math_signum
           hydra_lib_math_sin
           hydra_lib_math_sinh
@@ -201,6 +204,21 @@
     ;; round :: Double -> BigInt
     (define hydra_lib_math_round
       (lambda (x) (exact (round x))))
+
+    ;; roundFloat64 :: Int -> Double -> Double
+    (define hydra_lib_math_round_float64
+      (lambda (n)
+        (lambda (x)
+          (if (= x 0.0)
+              0.0
+              (let ((factor (expt 10.0 (- n 1 (exact (floor (/ (log (abs x)) (log 10))))))))
+                (/ (inexact (round (* x factor))) factor))))))
+
+    ;; roundFloat32 :: Int -> Float -> Float
+    (define hydra_lib_math_round_float32 hydra_lib_math_round_float64)
+
+    ;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
+    (define hydra_lib_math_round_bigfloat hydra_lib_math_round_float64)
 
     ;; signum :: Int -> Int
     (define hydra_lib_math_signum

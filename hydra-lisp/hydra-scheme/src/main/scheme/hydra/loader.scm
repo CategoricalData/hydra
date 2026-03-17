@@ -923,7 +923,6 @@
            ;; Core types
            "core.scm"
            "error.scm"
-           "compute.scm"
            "context.scm"
            "graph.scm"
            "module.scm"
@@ -940,7 +939,6 @@
            "typing.scm"
            "util.scm"
            "variants.scm"
-           "workflow.scm"
            "json/model.scm"
            "classes.scm"
            "constants.scm"
@@ -953,7 +951,6 @@
            "schemas.scm"
            "arity.scm"
            "lexical.scm"
-           "monads.scm"
            "hoisting.scm"
            "show/core.scm"
            ;; Encoding/decoding

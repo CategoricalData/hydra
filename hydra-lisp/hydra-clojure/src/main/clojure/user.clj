@@ -68,11 +68,6 @@
 (register-make 'hydra.graph "Primitive" 'make-primitive)
 (register-make 'hydra.graph "TermCoder" 'make-termCoder)
 
-;; ---- hydra.compute ----
-(register-make 'hydra.compute "Adapter" 'make-adapter)
-(register-make 'hydra.compute "Bicoder" 'make-bicoder)
-(register-make 'hydra.compute "Coder" 'make-coder)
-
 ;; ---- hydra.coders ----
 (register-make 'hydra.coders "AdapterContext" 'make-adapterContext)
 (register-make 'hydra.coders "Language" 'make-language)
@@ -119,10 +114,6 @@
 (register-make 'hydra.parsing "ParseError" 'make-parseError)
 (register-make 'hydra.parsing "ParseSuccess" 'make-parseSuccess)
 (register-make 'hydra.parsing "Parser" 'make-parser)
-
-;; ---- hydra.workflow ----
-(register-make 'hydra.workflow "HydraSchemaSpec" 'make-hydraSchemaSpec)
-(register-make 'hydra.workflow "TransformWorkflow" 'make-transformWorkflow)
 
 ;; ---- hydra.query ----
 (register-make 'hydra.query "Edge" 'make-edge)

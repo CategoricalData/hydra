@@ -185,3 +185,24 @@
 ;; truncate :: Double -> BigInt
 (defvar hydra_lib_math_truncate
   (lambda (x) (truncate x)))
+
+;; roundFloat64 :: Int -> Double -> Double
+(defvar hydra_lib_math_round_float64
+  (lambda (n)
+    (lambda (x)
+      (if (= x 0.0d0) 0.0d0
+          (let* ((fx (float x 1.0d0))
+                 (factor (expt 10.0d0 (- n 1 (floor (log (abs fx) 10))))))
+            (/ (round (* fx factor)) factor))))))
+
+;; roundFloat32 :: Int -> Float -> Float
+(defvar hydra_lib_math_round_float32
+  (lambda (n)
+    (lambda (x)
+      (if (= x 0.0) (float 0.0)
+          (let* ((fx (float x 1.0d0))
+                 (factor (expt 10.0d0 (- n 1 (floor (log (abs fx) 10))))))
+            (float (/ (round (* fx factor)) factor)))))))
+
+;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
+(defvar hydra_lib_math_round_bigfloat hydra_lib_math_round_float64)

@@ -58,7 +58,9 @@
                                 (let ((in-type (or (hydra_graph_term_coder-type input-tc) (list :unit))))
                                   (list :function (make-hydra_core_function_type in-type result-type))))
                               (reverse inputs) :initial-value out-type))
-         (detected-vars (collect-type-vars-ordered fun-type))
+         (all-vars (collect-type-vars-ordered fun-type))
+         ;; Exclude qualified names (containing dots) — those are nominal type references
+         (detected-vars (cl-remove-if (lambda (v) (string-match-p "\\." v)) all-vars))
          (vars (if variables variables detected-vars))
          (constraint-map
           (when constraints
