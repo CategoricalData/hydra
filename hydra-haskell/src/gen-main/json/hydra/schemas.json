@@ -5545,7 +5545,7 @@
                               "function": {
                                 "lambda": {
                                   "body": {"literal": {"boolean": true}},
-                                  "domain": [{"variable": "hydra.core.RowType"}],
+                                  "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                   "parameter": "rt"}}}},
                           {
                             "name": "union",
@@ -5553,7 +5553,7 @@
                               "function": {
                                 "lambda": {
                                   "body": {"literal": {"boolean": true}},
-                                  "domain": [{"variable": "hydra.core.RowType"}],
+                                  "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                   "parameter": "rt"}}}},
                           {
                             "name": "wrap",
@@ -5561,7 +5561,7 @@
                               "function": {
                                 "lambda": {
                                   "body": {"literal": {"boolean": true}},
-                                  "domain": [{"variable": "hydra.core.WrappedType"}],
+                                  "domain": [{"variable": "hydra.core.Type"}],
                                   "parameter": "wt"}}}},
                           {
                             "name": "forall",

@@ -1,7 +1,10 @@
 (define-library (hydra util)
-(export hydra_util_case_convention-variants hydra_util_comparison-variants hydra_util_precision-variants)
-(import (scheme base))
+(export make-hydra_util_adapter hydra_util_adapter? hydra_util_adapter-is_lossy hydra_util_adapter-source hydra_util_adapter-target hydra_util_adapter-coder make-hydra_util_bicoder hydra_util_bicoder? hydra_util_bicoder-encode hydra_util_bicoder-decode hydra_util_case_convention-variants make-hydra_util_coder hydra_util_coder? hydra_util_coder-encode hydra_util_coder-decode hydra_util_comparison-variants hydra_util_precision-variants)
+(import (scheme base) (hydra context) (hydra error))
 (begin
+(define-record-type hydra_util_adapter (make-hydra_util_adapter is_lossy source target coder) hydra_util_adapter? (is_lossy hydra_util_adapter-is_lossy) (source hydra_util_adapter-source) (target hydra_util_adapter-target) (coder hydra_util_adapter-coder))
+(define-record-type hydra_util_bicoder (make-hydra_util_bicoder encode decode) hydra_util_bicoder? (encode hydra_util_bicoder-encode) (decode hydra_util_bicoder-decode))
 (define hydra_util_case_convention-variants (list 'camel 'pascal 'lower_snake 'upper_snake))
+(define-record-type hydra_util_coder (make-hydra_util_coder encode decode) hydra_util_coder? (encode hydra_util_coder-encode) (decode hydra_util_coder-decode))
 (define hydra_util_comparison-variants (list 'less_than 'equal_to 'greater_than))
 (define hydra_util_precision-variants (list 'arbitrary 'bits))))

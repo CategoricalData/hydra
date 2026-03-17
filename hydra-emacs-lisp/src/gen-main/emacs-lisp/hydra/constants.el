@@ -32,8 +32,6 @@
 
 (defvar hydra_constants_max_trace_depth 5000)
 
-(defvar hydra_constants_placeholder_name "Placeholder")
-
 (defvar hydra_constants_warning_auto_generated_file "Note: this is an automatically generated file. Do not edit.")
 
 (provide 'hydra.constants)

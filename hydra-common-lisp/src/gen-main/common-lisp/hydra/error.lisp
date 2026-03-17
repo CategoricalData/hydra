@@ -1,13 +1,49 @@
 (defpackage :hydra.error
-(:use :cl :hydra.core)
-(:export :make-hydra_error_decoding_error :hydra_error_decoding_error? :hydra_error_decoding_error-value :hydra_error_error-variants :make-hydra_error_other_error :hydra_error_other_error? :hydra_error_other_error-value :make-hydra_error_unification_error :hydra_error_unification_error? :hydra_error_unification_error-left_type :hydra_error_unification_error-right_type :hydra_error_unification_error-message))
+(:use :cl :hydra.core :hydra.typing :hydra.variants)
+(:export :hydra_error_checking_error-variants :make-hydra_error_decoding_error :hydra_error_decoding_error? :hydra_error_decoding_error-value :make-hydra_error_duplicate_binding_error :hydra_error_duplicate_binding_error? :hydra_error_duplicate_binding_error-name :make-hydra_error_duplicate_field_error :hydra_error_duplicate_field_error? :hydra_error_duplicate_field_error-name :hydra_error_error-variants :make-hydra_error_incorrect_unification_error :hydra_error_incorrect_unification_error? :hydra_error_incorrect_unification_error-substitution :make-hydra_error_not_a_forall_type_error :hydra_error_not_a_forall_type_error? :hydra_error_not_a_forall_type_error-type :hydra_error_not_a_forall_type_error-type_arguments :make-hydra_error_not_a_function_type_error :hydra_error_not_a_function_type_error? :hydra_error_not_a_function_type_error-type :make-hydra_error_other_error :hydra_error_other_error? :hydra_error_other_error-value :make-hydra_error_type_arity_mismatch_error :hydra_error_type_arity_mismatch_error? :hydra_error_type_arity_mismatch_error-type :hydra_error_type_arity_mismatch_error-expected_arity :hydra_error_type_arity_mismatch_error-actual_arity :hydra_error_type_arity_mismatch_error-type_arguments :make-hydra_error_type_mismatch_error :hydra_error_type_mismatch_error? :hydra_error_type_mismatch_error-expected_type :hydra_error_type_mismatch_error-actual_type :make-hydra_error_unbound_type_variables_error :hydra_error_unbound_type_variables_error? :hydra_error_unbound_type_variables_error-variables :hydra_error_unbound_type_variables_error-type :make-hydra_error_undefined_field_error :hydra_error_undefined_field_error? :hydra_error_undefined_field_error-field_name :hydra_error_undefined_field_error-type_name :make-hydra_error_undefined_term_error :hydra_error_undefined_term_error? :hydra_error_undefined_term_error-name :make-hydra_error_undefined_type_error :hydra_error_undefined_type_error? :hydra_error_undefined_type_error-name :make-hydra_error_unequal_types_error :hydra_error_unequal_types_error? :hydra_error_unequal_types_error-types :hydra_error_unequal_types_error-description :make-hydra_error_unexpected_term_variant_error :hydra_error_unexpected_term_variant_error? :hydra_error_unexpected_term_variant_error-expected_variant :hydra_error_unexpected_term_variant_error-actual_term :make-hydra_error_unexpected_type_variant_error :hydra_error_unexpected_type_variant_error? :hydra_error_unexpected_type_variant_error-expected_variant :hydra_error_unexpected_type_variant_error-actual_type :make-hydra_error_unification_error :hydra_error_unification_error? :hydra_error_unification_error-left_type :hydra_error_unification_error-right_type :hydra_error_unification_error-message :make-hydra_error_unsupported_term_variant_error :hydra_error_unsupported_term_variant_error? :hydra_error_unsupported_term_variant_error-term_variant :make-hydra_error_untyped_lambda_error :hydra_error_untyped_lambda_error? :make-hydra_error_untyped_let_binding_error :hydra_error_untyped_let_binding_error? :hydra_error_untyped_let_binding_error-binding))
 
 (in-package :hydra.error)
 
+(cl:defvar hydra_error_checking_error-variants (cl:list :incorrect_unification :not_a_forall_type :not_a_function_type :type_arity_mismatch :type_mismatch :unbound_type_variables :unequal_types :unsupported_term_variant :untyped_lambda :untyped_let_binding))
+
 (cl:defstruct hydra_error_decoding_error value)
 
-(cl:defvar hydra_error_error-variants (cl:list :decoding :other :unification))
+(cl:defstruct hydra_error_duplicate_binding_error name)
+
+(cl:defstruct hydra_error_duplicate_field_error name)
+
+(cl:defvar hydra_error_error-variants (cl:list :checking :decoding :duplicate_binding :duplicate_field :other :undefined_field :undefined_term :undefined_type :unexpected_term_variant :unexpected_type_variant :unification))
+
+(cl:defstruct hydra_error_incorrect_unification_error substitution)
+
+(cl:defstruct hydra_error_not_a_forall_type_error type type_arguments)
+
+(cl:defstruct hydra_error_not_a_function_type_error type)
 
 (cl:defstruct hydra_error_other_error value)
 
+(cl:defstruct hydra_error_type_arity_mismatch_error type expected_arity actual_arity type_arguments)
+
+(cl:defstruct hydra_error_type_mismatch_error expected_type actual_type)
+
+(cl:defstruct hydra_error_unbound_type_variables_error variables type)
+
+(cl:defstruct hydra_error_undefined_field_error field_name type_name)
+
+(cl:defstruct hydra_error_undefined_term_error name)
+
+(cl:defstruct hydra_error_undefined_type_error name)
+
+(cl:defstruct hydra_error_unequal_types_error types description)
+
+(cl:defstruct hydra_error_unexpected_term_variant_error expected_variant actual_term)
+
+(cl:defstruct hydra_error_unexpected_type_variant_error expected_variant actual_type)
+
 (cl:defstruct hydra_error_unification_error left_type right_type message)
+
+(cl:defstruct hydra_error_unsupported_term_variant_error term_variant)
+
+(cl:defstruct hydra_error_untyped_lambda_error)
+
+(cl:defstruct hydra_error_untyped_let_binding_error binding)

@@ -182,7 +182,7 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
   Logic.ifElse (Lists.null $ var "typeArgs")
     (right $ var "t")
     ("nonnull" <~ (cases _Type (var "t")
-      (Just $ Ctx.failInContext (Error.otherError $ Strings.cat $ list [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat $ list [
         string "not a forall type: ",
         ShowCore.type_ @@ var "t",
         string ". Trying to apply ",

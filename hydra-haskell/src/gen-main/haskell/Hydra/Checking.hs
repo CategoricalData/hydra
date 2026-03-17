@@ -10,6 +10,7 @@ import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Error as Error
 import qualified Hydra.Extract.Core as Core_
+import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -40,9 +41,9 @@ allEqual els =
     Logic.ifElse (Lists.null els) True (Lists.foldl (\b -> \t -> Logic.and b (Equality.equal t (Lists.head els))) True (Lists.tail els))
 
 -- | Apply type arguments to a type, substituting forall-bound variables
-applyTypeArgumentsToType :: Context.Context -> t0 -> [Core.Type] -> Core.Type -> Either (Context.InContext Error.Error) Core.Type
+applyTypeArgumentsToType :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Type -> Either (Context.InContext Error.Error) Core.Type
 applyTypeArgumentsToType cx tx typeArgs t =
-
+    Logic.ifElse (Lists.null typeArgs) (Right t) (
       let nonnull =
               case t of
                 Core.TypeForall v0 ->
@@ -50,11 +51,18 @@ applyTypeArgumentsToType cx tx typeArgs t =
                       tbody = Core.forallTypeBody v0
                   in (applyTypeArgumentsToType cx tx (Lists.tail typeArgs) (Substitution.substInType (Typing.TypeSubst (Maps.singleton v (Lists.head typeArgs))) tbody))
                 _ -> Left (Context.InContext {
-                  Context.inContextObject = (Error.ErrorChecking (Error.CheckingErrorNotAForallType (Error.NotAForallTypeError {
-                    Error.notAForallTypeErrorType = t,
-                    Error.notAForallTypeErrorTypeArguments = typeArgs}))),
+                  Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
+                    "not a forall type: ",
+                    (Core__.type_ t),
+                    ". Trying to apply ",
+                    (Literals.showInt32 (Lists.length typeArgs)),
+                    " type args: ",
+                    (Formatting.showList Core__.type_ typeArgs),
+                    ". Context has vars: {",
+                    (Strings.intercalate ", " (Lists.map Core.unName (Maps.keys (Graph.graphBoundTypes tx)))),
+                    "}"]))),
                   Context.inContextContext = cx})
-      in (Logic.ifElse (Lists.null typeArgs) (Right t) nonnull)
+      in nonnull)
 
 -- | Check that a term has no unbound type variables (Either version)
 checkForUnboundTypeVariables :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) ()
@@ -425,7 +433,7 @@ typeOfList cx tx typeArgs els =
         in (Eithers.bind (checkSameType cx2 tx "list elements" eltypes) (\unifiedType -> Right (Core.TypeList unifiedType, cx2))))))
 
 -- | Reconstruct the type of a literal (Either/Context version)
-typeOfLiteral :: Context.Context -> t0 -> [Core.Type] -> Core.Literal -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
+typeOfLiteral :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Literal -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfLiteral cx tx typeArgs lit =
 
       let t = Core.TypeLiteral (Reflect.literalType lit)
@@ -629,7 +637,7 @@ typeOfTypeLambda cx tx typeArgs tl =
           Core.forallTypeBody = t1}))) (\applied -> Right (applied, cx2)))))
 
 -- | Reconstruct the type of the unit term (Either/Context version)
-typeOfUnit :: Context.Context -> t0 -> [Core.Type] -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
+typeOfUnit :: Context.Context -> Graph.Graph -> [Core.Type] -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfUnit cx tx typeArgs =
     Eithers.bind (applyTypeArgumentsToType cx tx typeArgs Core.TypeUnit) (\applied -> Right (applied, cx))
 

@@ -8,7 +8,7 @@
 
 (cl-defstruct hydra_ast_brackets open close)
 
-(defvar hydra_ast_expr-variants (list :const :indent :op :brackets))
+(defvar hydra_ast_expr-variants (list :const :indent :op :brackets :seq))
 
 (cl-defstruct hydra_ast_indented_expression style expr)
 
@@ -21,6 +21,8 @@
 (cl-defstruct hydra_ast_padding left right)
 
 (cl-defstruct hydra_ast_precedence value)
+
+(cl-defstruct hydra_ast_seq_expr op elements)
 
 (cl-defstruct hydra_ast_symbol value)
 

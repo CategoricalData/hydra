@@ -75,9 +75,6 @@
 (defrecord hydra_core_record [type_name fields])
 (defn make-hydra_core_record [type_name fields] (->hydra_core_record type_name fields))
 
-(defrecord hydra_core_row_type [type_name fields])
-(defn make-hydra_core_row_type [type_name fields] (->hydra_core_row_type type_name fields))
-
 (def hydra_core_term-variants (list :annotated :application :either :function :let :list :literal :map :maybe :pair :record :set :type_application :type_lambda :union :unit :variable :wrap))
 
 (def hydra_core_type-variants (list :annotated :application :either :forall :function :list :literal :map :maybe :pair :record :set :union :unit :variable :wrap))
@@ -96,6 +93,3 @@
 
 (defrecord hydra_core_wrapped_term [type_name body])
 (defn make-hydra_core_wrapped_term [type_name body] (->hydra_core_wrapped_term type_name body))
-
-(defrecord hydra_core_wrapped_type [type_name body])
-(defn make-hydra_core_wrapped_type [type_name body] (->hydra_core_wrapped_type type_name body))

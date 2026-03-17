@@ -357,7 +357,7 @@ encodeLiteral = def "encodeLiteral" $
 -- =============================================================================
 
 -- | Encode a Hydra type as a Lisp type specifier (used for type annotations)
-encodeType :: TBinding (Context -> Graph -> Type -> Either (InContext OtherError) L.TypeSpecifier)
+encodeType :: TBinding (Context -> Graph -> Type -> Either (InContext Error) L.TypeSpecifier)
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Rewriting.deannotateType @@ var "t") $
@@ -407,15 +407,15 @@ encodeType = def "encodeType" $
      _Type_function>>: lambda "ft" $
        right (inject L._TypeSpecifier L._TypeSpecifier_named $
          wrap L._Symbol (string "Function")),
-     _Type_record>>: lambda "rt" $
+     _Type_record>>: lambda "_" $
        right (inject L._TypeSpecifier L._TypeSpecifier_named $
-         wrap L._Symbol (Formatting.capitalize @@ (Names.localNameOf @@ Core.rowTypeTypeName (var "rt")))),
-     _Type_union>>: lambda "rt" $
+         wrap L._Symbol (string "Record")),
+     _Type_union>>: lambda "_" $
        right (inject L._TypeSpecifier L._TypeSpecifier_named $
-         wrap L._Symbol (Formatting.capitalize @@ (Names.localNameOf @@ Core.rowTypeTypeName (var "rt")))),
-     _Type_wrap>>: lambda "wt" $
+         wrap L._Symbol (string "Union")),
+     _Type_wrap>>: lambda "_" $
        right (inject L._TypeSpecifier L._TypeSpecifier_named $
-         wrap L._Symbol (Formatting.capitalize @@ (Names.localNameOf @@ Core.wrappedTypeTypeName (var "wt")))),
+         wrap L._Symbol (string "Wrapper")),
      _Type_variable>>: lambda "name" $
        right (inject L._TypeSpecifier L._TypeSpecifier_named $
          wrap L._Symbol (Core.unName (var "name"))),
@@ -427,11 +427,10 @@ encodeType = def "encodeType" $
 -- =============================================================================
 
 -- | Encode a Hydra term as a Lisp expression
-encodeTerm :: TBinding (L.Dialect -> Context -> Graph -> Term -> Either (InContext OtherError) L.Expression)
+encodeTerm :: TBinding (L.Dialect -> Context -> Graph -> Term -> Either (InContext Error) L.Expression)
 encodeTerm = def "encodeTerm" $
   "dialect" ~> "cx" ~> "g" ~> lambda "term" $
-    cases _Term (var "term") (Just $
-      Ctx.failInContext (Error.otherError $ string "unexpected term variant") (var "cx"))
+    cases _Term (var "term") Nothing
     [_Term_annotated>>: lambda "at" $
        encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.annotatedTermBody (var "at"),
 
@@ -553,7 +552,7 @@ encodeTerm = def "encodeTerm" $
 -- =============================================================================
 
 -- | Encode a Hydra function as a Lisp expression
-encodeFunction :: TBinding (L.Dialect -> Context -> Graph -> Function -> Either (InContext OtherError) L.Expression)
+encodeFunction :: TBinding (L.Dialect -> Context -> Graph -> Function -> Either (InContext Error) L.Expression)
 encodeFunction = def "encodeFunction" $
   "dialect" ~> "cx" ~> "g" ~> lambda "fun" $
     cases _Function (var "fun") Nothing [
@@ -572,7 +571,7 @@ encodeFunction = def "encodeFunction" $
 
 -- | Encode a Hydra elimination as a Lisp expression.
 -- Takes an optional argument for applied eliminations.
-encodeElimination :: TBinding (L.Dialect -> Context -> Graph -> Elimination -> Maybe Term -> Either (InContext OtherError) L.Expression)
+encodeElimination :: TBinding (L.Dialect -> Context -> Graph -> Elimination -> Maybe Term -> Either (InContext Error) L.Expression)
 encodeElimination = def "encodeElimination" $
   "dialect" ~> "cx" ~> "g" ~> lambda "elim" $ lambda "marg" $
     cases _Elimination (var "elim") Nothing [
@@ -657,7 +656,7 @@ encodeElimination = def "encodeElimination" $
 -- | Encode let bindings as nested ((lambda (x) body) init) applications.
 -- Used for self-referential non-lambda bindings (Y-combinator fixpoint pattern)
 -- so that the loader's fix-letrec can transform them into proper letrec with thunking.
-encodeLetAsLambdaApp :: TBinding (L.Dialect -> Context -> Graph -> [Binding] -> Term -> Either (InContext OtherError) L.Expression)
+encodeLetAsLambdaApp :: TBinding (L.Dialect -> Context -> Graph -> [Binding] -> Term -> Either (InContext Error) L.Expression)
 encodeLetAsLambdaApp = def "encodeLetAsLambdaApp" $
   "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
     "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
@@ -673,7 +672,7 @@ encodeLetAsLambdaApp = def "encodeLetAsLambdaApp" $
 -- Self-referential bindings -> letrec (with eta-expansion for non-lambda self-refs)
 -- Single non-self-ref binding -> let
 -- Multiple non-self-ref bindings -> let* (sequential)
-encodeLetAsNative :: TBinding (L.Dialect -> Context -> Graph -> [Binding] -> Term -> Either (InContext OtherError) L.Expression)
+encodeLetAsNative :: TBinding (L.Dialect -> Context -> Graph -> [Binding] -> Term -> Either (InContext Error) L.Expression)
 encodeLetAsNative = def "encodeLetAsNative" $
   "dialect" ~> "cx" ~> "g" ~> lambda "bindings" $ lambda "body" $
     "isClojureTop" <~ (cases L._Dialect (var "dialect") (Just $ boolean False)
@@ -808,7 +807,7 @@ isPrimitiveRef = def "isPrimitiveRef" $
 
 -- | Encode a function application, detecting the ifElse pattern.
 -- Transforms (((hydra.lib.logic.ifElse C) T) E) into native (if C T E).
-encodeApplication :: TBinding (L.Dialect -> Context -> Graph -> Term -> Term -> Either (InContext OtherError) L.Expression)
+encodeApplication :: TBinding (L.Dialect -> Context -> Graph -> Term -> Term -> Either (InContext Error) L.Expression)
 encodeApplication = def "encodeApplication" $
   "dialect" ~> "cx" ~> "g" ~> lambda "rawFun" $ lambda "rawArg" $
     "dFun" <~ (Rewriting.deannotateTerm @@ var "rawFun") $
@@ -868,7 +867,7 @@ encodeFieldDef = def "encodeFieldDef" $
 
 -- | Encode a type body (after stripping annotations and foralls) as a Lisp top-level form.
 --   Recurses through forall to reach the underlying record/union/wrap.
-encodeTypeBody :: TBinding (String -> Type -> Type -> Either (InContext OtherError) L.TopLevelFormWithComments)
+encodeTypeBody :: TBinding (String -> Type -> Type -> Either (InContext Error) L.TopLevelFormWithComments)
 encodeTypeBody = def "encodeTypeBody" $
   lambda "lname" $ lambda "origTyp" $ lambda "typ" $
     cases _Type (var "typ") (Just $
@@ -885,7 +884,7 @@ encodeTypeBody = def "encodeTypeBody" $
        -- Strip forall and recurse on the body
        encodeTypeBody @@ var "lname" @@ var "origTyp" @@ Core.forallTypeBody (var "ft"),
      _Type_record>>: lambda "rt" $
-       "fields" <~ (Lists.map encodeFieldDef (Core.rowTypeFields (var "rt"))) $
+       "fields" <~ (Lists.map encodeFieldDef (var "rt")) $
          right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_recordType $
            record L._RecordTypeDefinition [
              L._RecordTypeDefinition_name>>: wrap L._Symbol (var "lname"),
@@ -901,7 +900,7 @@ encodeTypeBody = def "encodeTypeBody" $
                record L._Keyword [
                  L._Keyword_name>>: Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.fieldTypeName (var "f")),
                  L._Keyword_namespace>>: nothing])
-         (Core.rowTypeFields (var "rt"))) $
+         (var "rt")) $
          right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_variable $
            record L._VariableDefinition [
              L._VariableDefinition_name>>: wrap L._Symbol (Strings.cat2 (var "lname") (string "-variants")),
@@ -919,7 +918,7 @@ encodeTypeBody = def "encodeTypeBody" $
            L._RecordTypeDefinition_doc>>: nothing]))]
 
 -- | Encode a Hydra type definition as a Lisp top-level form
-encodeTypeDefinition :: TBinding (Context -> Graph -> TypeDefinition -> Either (InContext OtherError) L.TopLevelFormWithComments)
+encodeTypeDefinition :: TBinding (Context -> Graph -> TypeDefinition -> Either (InContext Error) L.TopLevelFormWithComments)
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Module.typeDefinitionName (var "tdef") $
@@ -933,7 +932,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 -- =============================================================================
 
 -- | Encode a Hydra term definition as a Lisp top-level form
-encodeTermDefinition :: TBinding (L.Dialect -> Context -> Graph -> TermDefinition -> Either (InContext OtherError) L.TopLevelFormWithComments)
+encodeTermDefinition :: TBinding (L.Dialect -> Context -> Graph -> TermDefinition -> Either (InContext Error) L.TopLevelFormWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   "dialect" ~> "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Module.termDefinitionName (var "tdef") $
@@ -1043,7 +1042,7 @@ moduleExports = def "moduleExports" $
 -- =============================================================================
 
 -- | Convert a Hydra module to a Lisp program.
-moduleToLisp :: TBinding (L.Dialect -> Module -> [Definition] -> Context -> Graph -> Either (InContext OtherError) L.Program)
+moduleToLisp :: TBinding (L.Dialect -> Module -> [Definition] -> Context -> Graph -> Either (InContext Error) L.Program)
 moduleToLisp = def "moduleToLisp" $
   "dialect" ~> "mod" ~> "defs0" ~> "cx" ~> "g" ~>
     -- Reorder definitions: types first, then topologically sorted terms

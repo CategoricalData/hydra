@@ -908,53 +908,7 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
                     bindings0 = lt.bindings
                     body0 = lt.body
                     def step(acc: frozenlist[hydra.core.Binding], bs: frozenlist[hydra.core.Binding]) -> frozenlist[hydra.core.Binding]:
-                        @lru_cache(1)
-                        def b() -> hydra.core.Binding:
-                            return hydra.lib.lists.head(bs)
-                        @lru_cache(1)
-                        def tl() -> frozenlist[hydra.core.Binding]:
-                            return hydra.lib.lists.tail(bs)
-                        @lru_cache(1)
-                        def no_type() -> frozenlist[hydra.core.Binding]:
-                            @lru_cache(1)
-                            def new_val() -> hydra.core.Term:
-                                return rewrite_with_subst(((subst(), bound_vars()), next()), b().term)
-                            b1 = hydra.core.Binding(b().name, new_val(), Nothing())
-                            return step(hydra.lib.lists.cons(b1, acc), tl())
-                        def with_type(ts: hydra.core.TypeScheme) -> frozenlist[hydra.core.Binding]:
-                            vars = ts.variables
-                            typ = ts.type
-                            @lru_cache(1)
-                            def k() -> int:
-                                return hydra.lib.lists.length(vars)
-                            def gen(i: int, rem: int, acc2: frozenlist[hydra.core.Name]) -> frozenlist[hydra.core.Name]:
-                                @lru_cache(1)
-                                def ti() -> hydra.core.Name:
-                                    return hydra.core.Name(hydra.lib.strings.cat2("t", hydra.lib.literals.show_int32(hydra.lib.math.add(next(), i))))
-                                return hydra.lib.logic.if_else(hydra.lib.equality.equal(rem, 0), (lambda : hydra.lib.lists.reverse(acc2)), (lambda : gen(hydra.lib.math.add(i, 1), hydra.lib.math.sub(rem, 1), hydra.lib.lists.cons(ti(), acc2))))
-                            @lru_cache(1)
-                            def new_vars() -> frozenlist[hydra.core.Name]:
-                                return gen(0, k(), ())
-                            @lru_cache(1)
-                            def new_subst() -> FrozenDict[hydra.core.Name, hydra.core.Name]:
-                                return hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.lists.zip(vars, new_vars())), subst())
-                            @lru_cache(1)
-                            def new_bound() -> frozenset[hydra.core.Name]:
-                                return hydra.lib.sets.union(bound_vars(), hydra.lib.sets.from_list(new_vars()))
-                            @lru_cache(1)
-                            def new_val() -> hydra.core.Term:
-                                return rewrite_with_subst(((new_subst(), new_bound()), hydra.lib.math.add(next(), k())), b().term)
-                            def rename_constraint_keys(constraint_map: FrozenDict[hydra.core.Name, T0]) -> FrozenDict[hydra.core.Name, T0]:
-                                return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (old_name := hydra.lib.pairs.first(p), meta := hydra.lib.pairs.second(p), new_name := hydra.lib.maybes.from_maybe((lambda : old_name), hydra.lib.maps.lookup(old_name, new_subst())), (new_name, meta))[3]), hydra.lib.maps.to_list(constraint_map)))
-                            old_constraints = ts.constraints
-                            @lru_cache(1)
-                            def new_constraints() -> Maybe[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]]:
-                                return hydra.lib.maybes.map((lambda x1: rename_constraint_keys(x1)), old_constraints)
-                            @lru_cache(1)
-                            def b1() -> hydra.core.Binding:
-                                return hydra.core.Binding(b().name, new_val(), Just(hydra.core.TypeScheme(new_vars(), subst_type(new_subst(), typ), new_constraints())))
-                            return step(hydra.lib.lists.cons(b1(), acc), tl())
-                        return hydra.lib.logic.if_else(hydra.lib.lists.null(bs), (lambda : hydra.lib.lists.reverse(acc)), (lambda : hydra.lib.maybes.maybe((lambda : no_type()), (lambda ts: with_type(ts)), b().type)))
+                        return hydra.lib.logic.if_else(hydra.lib.lists.null(bs), (lambda : hydra.lib.lists.reverse(acc)), (lambda : (b := hydra.lib.lists.head(bs), (tl := hydra.lib.lists.tail(bs), (no_type := (new_val := rewrite_with_subst(((subst(), bound_vars()), next()), b.term), (b1 := hydra.core.Binding(b.name, new_val, Nothing()), step(hydra.lib.lists.cons(b1, acc), tl))[1])[1], (with_type := (lambda ts: (vars := ts.variables, typ := ts.type, k := hydra.lib.lists.length(vars), gen := (lambda i, rem, acc2: (ti := hydra.core.Name(hydra.lib.strings.cat2("t", hydra.lib.literals.show_int32(hydra.lib.math.add(next(), i)))), hydra.lib.logic.if_else(hydra.lib.equality.equal(rem, 0), (lambda : hydra.lib.lists.reverse(acc2)), (lambda : gen(hydra.lib.math.add(i, 1), hydra.lib.math.sub(rem, 1), hydra.lib.lists.cons(ti, acc2)))))[1]), new_vars := gen(0, k, ()), new_subst := hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.lists.zip(vars, new_vars)), subst()), new_bound := hydra.lib.sets.union(bound_vars(), hydra.lib.sets.from_list(new_vars)), new_val := rewrite_with_subst(((new_subst, new_bound), hydra.lib.math.add(next(), k)), b.term), rename_constraint_keys := (lambda constraint_map: hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (old_name := hydra.lib.pairs.first(p), meta := hydra.lib.pairs.second(p), new_name := hydra.lib.maybes.from_maybe((lambda : old_name), hydra.lib.maps.lookup(old_name, new_subst)), (new_name, meta))[3]), hydra.lib.maps.to_list(constraint_map)))), old_constraints := ts.constraints, new_constraints := hydra.lib.maybes.map((lambda x1: rename_constraint_keys(x1)), old_constraints), b1 := hydra.core.Binding(b.name, new_val, Just(hydra.core.TypeScheme(new_vars, subst_type(new_subst, typ), new_constraints))), step(hydra.lib.lists.cons(b1, acc), tl))[12]), hydra.lib.maybes.maybe((lambda : no_type), (lambda ts: with_type(ts)), b.type))[1])[1])[1])[1]))
                     @lru_cache(1)
                     def bindings1() -> frozenlist[hydra.core.Binding]:
                         return step((), bindings0)

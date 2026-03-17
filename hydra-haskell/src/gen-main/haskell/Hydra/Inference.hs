@@ -195,7 +195,7 @@ inferInGraphContext fcx cx term = inferTypeOfTerm fcx cx term "single term"
 -- | Infer types for multiple terms, propagating class constraints from sub-expressions
 inferMany :: Context.Context -> Graph.Graph -> [(Core.Term, String)] -> Either (Context.InContext Error.Error) (([Core.Term], ([Core.Type], (Typing_.TypeSubst, (M.Map Core.Name Core.TypeVariableMetadata)))), Context.Context)
 inferMany fcx cx pairs =
-
+    Logic.ifElse (Lists.null pairs) (Right (([], ([], (Substitution.idTypeSubst, Maps.empty))), fcx)) (
       let dflt =
 
                 let e = Pairs.first (Lists.head pairs)
@@ -217,7 +217,7 @@ inferMany fcx cx pairs =
                         c1Subst = Substitution.substInClassConstraints s2 c1
                         mergedConstraints = mergeClassConstraints c1Subst c2
                     in (Right ((Lists.cons (Substitution.substTypesInTerm s2 e1) e2, (Lists.cons (Substitution.substInType s2 t1) t2, (Substitution.composeTypeSubst s1 s2, mergedConstraints))), fcx3))))))
-      in (Logic.ifElse (Lists.null pairs) (Right (([], ([], (Substitution.idTypeSubst, Maps.empty))), fcx)) dflt)
+      in dflt)
 
 -- | Map a possibly untyped term to a fully typed term and its type
 inferTypeOf :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) ((Core.Term, Core.TypeScheme), Context.Context)
@@ -981,7 +981,7 @@ inferTypeOfWrappedTerm fcx cx wt =
 -- | Infer types for temporary let bindings (Either version)
 inferTypesOfTemporaryBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.Error) (([Core.Term], ([Core.Type], (Typing_.TypeSubst, (M.Map Core.Name Core.TypeVariableMetadata)))), Context.Context)
 inferTypesOfTemporaryBindings fcx cx bins =
-
+    Logic.ifElse (Lists.null bins) (Right (([], ([], (Substitution.idTypeSubst, Maps.empty))), fcx)) (
       let dflt =
 
                 let binding = Lists.head bins
@@ -1016,7 +1016,7 @@ inferTypesOfTemporaryBindings fcx cx bins =
                           c1Subst = Substitution.substInClassConstraints r c1
                           mergedConstraints = mergeClassConstraints c1Subst c2
                       in (Right ((Lists.cons (Substitution.substTypesInTerm r j) h, (Lists.cons (Substitution.substInType r u_prime) r_prime, (Substitution.composeTypeSubst u r, mergedConstraints))), fcx3))))))))
-      in (Logic.ifElse (Lists.null bins) (Right (([], ([], (Substitution.idTypeSubst, Maps.empty))), fcx)) dflt)
+      in dflt)
 
 -- | Check if a variable is unbound in context
 isUnbound :: Graph.Graph -> Core.Name -> Bool

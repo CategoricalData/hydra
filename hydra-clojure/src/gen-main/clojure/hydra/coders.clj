@@ -1,5 +1,5 @@
 (ns hydra.coders
-  (:require [hydra.compute :refer :all] [hydra.core :refer :all] [hydra.graph :refer :all] [hydra.variants :refer :all]
+  (:require [hydra.core :refer :all] [hydra.graph :refer :all] [hydra.util :refer :all] [hydra.variants :refer :all]
 ))
 
 (declare hydra_coders_coder_direction-variants hydra_coders_traversal_order-variants)
