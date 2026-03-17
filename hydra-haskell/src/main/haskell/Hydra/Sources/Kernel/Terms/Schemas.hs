@@ -35,6 +35,7 @@ import Hydra.Kernel hiding (
   isSerializableType,
   isUnitTerm,
   isUnitType,
+  isNominalType,
   isType,
   moduleContainsBinaryLiterals,
   moduleDependencyNamespaces,
@@ -171,6 +172,7 @@ module_ = Module ns elements
       toBinding isSerializable,
       toBinding isSerializableType,
       toBinding isSerializableByName,
+      toBinding isNominalType,
       toBinding isType,
       toBinding isUnitTerm,
       toBinding isUnitType,
@@ -601,6 +603,19 @@ isType = define "isType" $
       isType @@ (Core.forallTypeBody (var "l")),
     _Type_union>>: "rt" ~> false,
     _Type_variable>>: "v" ~> Equality.equal (var "v") (Core.nameLift _Type)]
+
+-- | Check whether a type is a nominal type definition (record, union, wrap, or forall wrapping one).
+--   Type aliases (applications, functions, literal types, etc.) return false.
+isNominalType :: TBinding (Type -> Bool)
+isNominalType = define "isNominalType" $
+  lambda "typ" $
+    cases _Type (Rewriting.deannotateType @@ var "typ")
+      (Just false) [
+      _Type_record>>: lambda "rt" $ true,
+      _Type_union>>: lambda "rt" $ true,
+      _Type_wrap>>: lambda "wt" $ true,
+      _Type_forall>>: lambda "fa" $
+        isNominalType @@ Core.forallTypeBody (var "fa")]
 
 isUnitTerm :: TBinding (Term -> Bool)
 isUnitTerm = define "isUnitTerm" $

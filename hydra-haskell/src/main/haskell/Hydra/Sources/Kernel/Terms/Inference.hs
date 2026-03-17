@@ -1238,7 +1238,9 @@ inferTypesOfTemporaryBindings :: TBinding (Context -> Graph -> [Binding] -> Prel
 inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
   doc "Infer types for temporary let bindings (Either version)" $
   "fcx" ~> "cx" ~> "bins" ~>
-  "dflt" <~ (
+  Logic.ifElse (Lists.null $ var "bins")
+    (right $ pair (pair (list ([] :: [TTerm Term])) (pair (list ([] :: [TTerm Type])) (pair (Substitution.idTypeSubst) Maps.empty))) (var "fcx"))
+    ("dflt" <~ (
     "binding" <~ Lists.head (var "bins") $
     "k" <~ Core.bindingName (var "binding") $
     "v" <~ Core.bindingTerm (var "binding") $
@@ -1293,15 +1295,15 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
       (pair
         (Lists.cons (Substitution.substInType @@ var "r" @@ var "u_prime") (var "r_prime"))
         (pair (Substitution.composeTypeSubst @@ var "u" @@ var "r") (var "mergedConstraints")))) (var "fcx3")) $
-  Logic.ifElse (Lists.null $ var "bins")
-    (right $ pair (pair (list ([] :: [TTerm Term])) (pair (list ([] :: [TTerm Type])) (pair (Substitution.idTypeSubst) Maps.empty))) (var "fcx"))
-    (var "dflt")
+  var "dflt")
 
 inferMany :: TBinding (Context -> Graph -> [(Term, String)] -> Prelude.Either (InContext Error) (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableMetadata))), Context))
 inferMany = define "inferMany" $
   doc "Infer types for multiple terms, propagating class constraints from sub-expressions" $
   "fcx" ~> "cx" ~> "pairs" ~>
-  "dflt" <~ (
+  Logic.ifElse (Lists.null $ var "pairs")
+    (right $ pair (pair (list ([] :: [TTerm Term])) $ pair (list ([] :: [TTerm Type])) (pair Substitution.idTypeSubst Maps.empty)) (var "fcx"))
+    ("dflt" <~ (
     "e" <~ Pairs.first (Lists.head $ var "pairs") $
     "desc" <~ Pairs.second (Lists.head $ var "pairs") $
     "tl" <~ Lists.tail (var "pairs") $
@@ -1325,9 +1327,7 @@ inferMany = define "inferMany" $
       (pair
         (Lists.cons (Substitution.substInType @@ var "s2" @@ var "t1") (var "t2"))
         (pair (Substitution.composeTypeSubst @@ var "s1" @@ var "s2") (var "mergedConstraints")))) (var "fcx3")) $
-  Logic.ifElse (Lists.null $ var "pairs")
-    (right $ pair (pair (list ([] :: [TTerm Term])) $ pair (list ([] :: [TTerm Type])) (pair Substitution.idTypeSubst Maps.empty)) (var "fcx"))
-    (var "dflt")
+  var "dflt")
 
 yieldDebug :: TBinding (Context -> Graph -> String -> Term -> Type -> TypeSubst -> Prelude.Either (InContext Error) InferenceResult)
 yieldDebug = define "yieldDebug" $
