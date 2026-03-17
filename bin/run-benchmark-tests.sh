@@ -1,26 +1,45 @@
 #!/usr/bin/env bash
-# Run benchmark tests for all implementations and display the dashboard.
+# Run benchmark tests for Hydra implementations and display the dashboard.
 #
 # Usage:
-#   bin/run-benchmark-tests.sh              # Run all (Haskell + Java + Python)
-#   bin/run-benchmark-tests.sh haskell      # Run Haskell only
-#   bin/run-benchmark-tests.sh python       # Run Python only
-#   bin/run-benchmark-tests.sh java         # Run Java only
-#   bin/run-benchmark-tests.sh dashboard    # Just show the dashboard
+#   bin/run-benchmark-tests.sh                                          # Run default (Haskell + Java + Python)
+#   bin/run-benchmark-tests.sh --hosts haskell,java                   # Run specific hosts
+#   bin/run-benchmark-tests.sh --hosts all                            # Run all 7 implementations
+#   bin/run-benchmark-tests.sh --hosts lisp                           # Run all four Lisp dialects
+#   bin/run-benchmark-tests.sh dashboard                                # Just show the dashboard
+#
+# Hosts:
+#   haskell, java, python, clojure, common-lisp, emacs-lisp, scheme
+#   lisp  = clojure,common-lisp,emacs-lisp,scheme
+#   all   = haskell,java,python,clojure,common-lisp,emacs-lisp,scheme
 #
 # Options:
-#   --repeat N    Run each language N times (default: 1)
-#   --tag TAG     Append a human-readable tag to the run directory name
+#   --hosts H,...   Comma-separated list of hosts (default: haskell,java,python)
+#   --repeat N        Run each language N times (default: 1)
+#   --tag TAG         Append a human-readable tag to the run directory name
 
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 RUNS_DIR="$REPO_ROOT/benchmark/runs"
 
+ALL_HOSTS="haskell,java,python,clojure,common-lisp,emacs-lisp,scheme"
+LISP_HOSTS="clojure,common-lisp,emacs-lisp,scheme"
+
+# Check for dashboard subcommand first
+if [ "${1:-}" = "dashboard" ]; then
+    shift
+    echo "=== Benchmark Dashboard ==="
+    python3 "$REPO_ROOT/bin/benchmark-dashboard.py" --dir "$RUNS_DIR" "$@"
+    exit 0
+fi
+
 # Parse flags
 REPEAT=1
 TAG=""
-ARGS=()
+HOSTS="haskell,java,python"
+EXTRA_ARGS=()
+
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --repeat)
@@ -31,13 +50,58 @@ while [[ $# -gt 0 ]]; do
             TAG="$2"
             shift 2
             ;;
+        --hosts)
+            HOSTS="$2"
+            shift 2
+            ;;
+        --help|-h)
+            echo "Usage: $0 [OPTIONS]"
+            echo "       $0 dashboard [dashboard options...]"
+            echo ""
+            echo "Run benchmark tests for Hydra implementations."
+            echo ""
+            echo "Options:"
+            echo "  --hosts H,...   Comma-separated list of hosts (default: haskell,java,python)"
+            echo "  --repeat N        Run each language N times (default: 1)"
+            echo "  --tag TAG         Append a human-readable tag to the run directory name"
+            echo "  --help            Show this help message"
+            echo ""
+            echo "Hosts:"
+            echo "  haskell, java, python, clojure, common-lisp, emacs-lisp, scheme"
+            echo "  lisp        All four Lisp dialects"
+            echo "  all         All 7 implementations"
+            exit 0
+            ;;
         *)
-            ARGS+=("$1")
+            EXTRA_ARGS+=("$1")
             shift
             ;;
     esac
 done
-set -- "${ARGS[@]+"${ARGS[@]}"}"
+
+# Expand special host names
+case "$HOSTS" in
+    all)  HOSTS="$ALL_HOSTS" ;;
+    lisp) HOSTS="$LISP_HOSTS" ;;
+esac
+
+# Parse and expand hosts (handle 'lisp' appearing within a comma list)
+expanded=""
+IFS=',' read -ra RAW_LIST <<< "$HOSTS"
+for t in "${RAW_LIST[@]}"; do
+    case "$t" in
+        all)  expanded="${expanded:+$expanded,}$ALL_HOSTS" ;;
+        lisp) expanded="${expanded:+$expanded,}$LISP_HOSTS" ;;
+        haskell|java|python|clojure|common-lisp|emacs-lisp|scheme)
+            expanded="${expanded:+$expanded,}$t" ;;
+        *)
+            echo "Error: Unknown host '$t'"
+            echo "Valid hosts: haskell, java, python, clojure, common-lisp, emacs-lisp, scheme, lisp, all"
+            exit 1
+            ;;
+    esac
+done
+IFS=',' read -ra HOST_LIST <<< "$expanded"
 
 RUN_DIR="$RUNS_DIR/run_$(python3 -c 'from datetime import datetime,timezone; t=datetime.now(timezone.utc); print(t.strftime("%Y-%m-%d_%H%M%S") + "_" + f"{t.microsecond//1000:03d}")')"
 if [ -n "$TAG" ]; then
@@ -91,6 +155,30 @@ run_lang() {
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
                 ./gradlew :hydra-java:test --rerun
             ;;
+        clojure)
+            echo "=== Running Clojure benchmark tests (run $i/$REPEAT) ==="
+            cd "$REPO_ROOT/hydra-lisp/hydra-clojure"
+            HYDRA_BENCHMARK_OUTPUT="$outfile" \
+                bash run-tests.sh
+            ;;
+        common-lisp)
+            echo "=== Running Common Lisp benchmark tests (run $i/$REPEAT) ==="
+            cd "$REPO_ROOT/hydra-lisp/hydra-common-lisp"
+            HYDRA_BENCHMARK_OUTPUT="$outfile" \
+                bash run-tests.sh
+            ;;
+        emacs-lisp)
+            echo "=== Running Emacs Lisp benchmark tests (run $i/$REPEAT) ==="
+            cd "$REPO_ROOT/hydra-lisp/hydra-emacs-lisp"
+            HYDRA_BENCHMARK_OUTPUT="$outfile" \
+                bash run-tests.sh
+            ;;
+        scheme)
+            echo "=== Running Scheme benchmark tests (run $i/$REPEAT) ==="
+            cd "$REPO_ROOT/hydra-lisp/hydra-scheme"
+            HYDRA_BENCHMARK_OUTPUT="$outfile" \
+                bash run-tests.sh
+            ;;
     esac
     echo "  -> $outfile"
     echo
@@ -103,38 +191,12 @@ run_all_repeats() {
     done
 }
 
-run_dashboard() {
-    echo "=== Benchmark Dashboard ==="
-    python3 "$REPO_ROOT/bin/benchmark-dashboard.py" --dir "$RUNS_DIR" "$@"
-}
+echo "=== Benchmark Tests (hosts: ${HOST_LIST[*]}) ==="
+echo ""
 
-target="${1:-all}"
-shift || true
+for host in "${HOST_LIST[@]}"; do
+    run_all_repeats "$host"
+done
 
-case "$target" in
-    haskell)
-        run_all_repeats haskell
-        run_dashboard "$@"
-        ;;
-    python)
-        run_all_repeats python
-        run_dashboard "$@"
-        ;;
-    java)
-        run_all_repeats java
-        run_dashboard "$@"
-        ;;
-    dashboard)
-        run_dashboard "$@"
-        ;;
-    all)
-        run_all_repeats haskell
-        run_all_repeats java
-        run_all_repeats python
-        run_dashboard "$@"
-        ;;
-    *)
-        echo "Usage: $0 [all|haskell|python|java|dashboard] [--repeat N] [--tag TAG] [dashboard options...]"
-        exit 1
-        ;;
-esac
+echo "=== Benchmark Dashboard ==="
+python3 "$REPO_ROOT/bin/benchmark-dashboard.py" --dir "$RUNS_DIR" "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}"

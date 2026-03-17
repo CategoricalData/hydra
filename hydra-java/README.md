@@ -53,10 +53,10 @@ test runner with `--tag` to label each run and `--repeat` for statistical reliab
 
 ```bash
 export JAVA_HOME=$(/usr/libexec/java_home -v 11)
-bin/run-benchmark-tests.sh java --tag java11 --repeat 5
+bin/run-benchmark-tests.sh --hosts java --tag java11 --repeat 5
 
 export JAVA_HOME=$(/usr/libexec/java_home -v 17)
-bin/run-benchmark-tests.sh java --tag java17 --repeat 5
+bin/run-benchmark-tests.sh --hosts java --tag java17 --repeat 5
 
 # Compare results
 bin/run-benchmark-tests.sh dashboard diff --old java11 --new java17
