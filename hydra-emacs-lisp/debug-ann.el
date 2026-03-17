@@ -1,0 +1,42 @@
+;;; debug-ann.el --- Debug annotation test failures -*- lexical-binding: t -*-
+(setq max-lisp-eval-depth 10000 max-specpdl-size 10000)
+(load (expand-file-name "src/main/emacs-lisp/hydra/loader.el"
+                         (file-name-directory load-file-name)) nil t)
+(hydra-load-gen-main)
+(hydra-set-function-bindings)
+(hydra-load-prims-and-libraries)
+(hydra-load-gen-test)
+(hydra-set-function-bindings)
+(load (expand-file-name "src/test/emacs-lisp/hydra/test_runner.el"
+                         (file-name-directory load-file-name)) nil t)
+(hydra-ensure-test-graph)
+
+;; Test: reduce setTermAnnotation, then show the result
+(let* ((cx (hydra-empty-context))
+       (graph hydra--test-graph)
+       (set-fn (list :function (list :primitive "hydra.annotations.setTermAnnotation")))
+       (key (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+                          (list :literal (list :string "k1")))))
+       (val (list :maybe (list :literal (list :integer (list :int32 42)))))
+       (term (list :literal (list :string "foo")))
+       (app1 (list :application (make-hydra_core_application set-fn key)))
+       (app2 (list :application (make-hydra_core_application app1 val)))
+       (app3 (list :application (make-hydra_core_application app2 term)))
+       (result (funcall (funcall (funcall (funcall hydra_reduction_reduce_term cx) graph) t) app3)))
+  (if (eq (car result) :left)
+      (message "ERROR: %S" (cadr result))
+    (let ((actual (cadr result)))
+      (message "result tag: %S" (car actual))
+      (message "show-term: %s" (funcall hydra_show_core_term actual))
+      ;; Also check what the expected looks like
+      (let* ((suite hydra_test_test_suite_all_tests)
+             (ann-group (nth 12 (cdr (assq :subgroups suite))))
+             (sub1 (car (cdr (assq :subgroups ann-group))))
+             (tc (car (cdr (assq :cases sub1))))
+             (case-data (cdr (assq :case tc)))
+             (expected (cdr (assq :output (cadr case-data)))))
+        (message "expected tag: %S" (car expected))
+        (message "show-expected: %s" (funcall hydra_show_core_term expected))
+        (message "equal? %s" (equal actual expected))
+        (message "show-equal? %s" (equal (funcall hydra_show_core_term actual)
+                                          (funcall hydra_show_core_term expected)))))))
