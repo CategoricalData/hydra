@@ -486,7 +486,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
           (Core.letBody $ var "lt")
           (var "typ")))]),
   "go">: ("t" ~>
-    "forField" <~ ("fld" ~> Core.fieldWithTerm (var "go" @@ (Core.fieldTerm $ var "fld")) (var "fld")) $
+    "forField" <~ ("fld" ~> Core.fieldWithTerm (var "fld") (var "go" @@ (Core.fieldTerm $ var "fld"))) $
     "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
       _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
       _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
