@@ -1,0 +1,7 @@
+(ns hydra.ext.org.json.language
+  (:require [hydra.coders :refer :all] [hydra.core :refer :all] [hydra.lib.sets :refer :all] [hydra.rewriting :refer :all] [hydra.variants :refer :all]
+))
+
+(declare hydra_ext_org_json_language_json_language)
+
+(def hydra_ext_org_json_language_json_language (let [elimination_variants hydra_lib_sets_empty float_types (hydra_lib_sets_from_list (list (list :bigfloat nil))) function_variants hydra_lib_sets_empty integer_types (hydra_lib_sets_from_list (list (list :bigint nil))) literal_variants (hydra_lib_sets_from_list (list (list :boolean nil) (list :float nil) (list :integer nil) (list :string nil))) term_variants (hydra_lib_sets_from_list (list (list :list nil) (list :literal nil) (list :map nil) (list :maybe nil) (list :record nil))) type_predicate (fn [typ] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :maybe) ((fn [inner_type] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :maybe) ((fn [_] false) match_value) :else true)) (second match_target))) inner_type)) match_value) :else true)) (second match_target))) (hydra_rewriting_deannotate_type typ))) type_variants (hydra_lib_sets_from_list (list (list :list nil) (list :literal nil) (list :map nil) (list :maybe nil) (list :record nil)))] (->hydra_coders_language "hydra.ext.org.json" (->hydra_coders_language_constraints elimination_variants literal_variants float_types function_variants integer_types term_variants type_variants type_predicate))))
