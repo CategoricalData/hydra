@@ -1298,7 +1298,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
 rewriteTerm :: TBinding (((Term -> Term) -> Term -> Term) -> Term -> Term)
 rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
   "fsub" <~ ("recurse" ~> "term" ~>
-    "forField" <~ ("f" ~> Core.fieldWithTerm (var "recurse" @@ (Core.fieldTerm $ var "f")) (var "f")) $
+    "forField" <~ ("f" ~> Core.fieldWithTerm (var "f") (var "recurse" @@ (Core.fieldTerm $ var "f"))) $
     "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
       _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
       _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
@@ -1373,7 +1373,7 @@ rewriteTermM = define "rewriteTermM" $
   "fsub" <~ ("recurse" ~> "term" ~>
     "forField" <~ ("field" ~>
       "t" <<~ var "recurse" @@ Core.fieldTerm (var "field") $
-      right $ Core.fieldWithTerm (var "t") (var "field")) $
+      right $ Core.fieldWithTerm (var "field") (var "t")) $
     "forPair" <~ ("kv" ~>
       "k" <<~ var "recurse" @@ (Pairs.first $ var "kv") $
       "v" <<~ var "recurse" @@ (Pairs.second $ var "kv") $
@@ -1481,7 +1481,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
   "f" ~> "cx0" ~> "term0" ~>
   "forSubterms" <~ ("recurse0" ~> "cx" ~> "term" ~>
     "recurse" <~ var "recurse0" @@ var "cx" $
-    "forField" <~ ("field" ~> Core.fieldWithTerm (var "recurse" @@ (Core.fieldTerm $ var "field")) (var "field")) $
+    "forField" <~ ("field" ~> Core.fieldWithTerm (var "field") (var "recurse" @@ (Core.fieldTerm $ var "field"))) $
     "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
       _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
       _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
@@ -1557,7 +1557,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
     "recurse" <~ var "recurse0" @@ var "cx" $
     "forField" <~ ("field" ~>
       "t" <<~ var "recurse" @@ Core.fieldTerm (var "field") $
-      right $ Core.fieldWithTerm (var "t") (var "field")) $
+      right $ Core.fieldWithTerm (var "field") (var "t")) $
     "forPair" <~ ("kv" ~>
       "k" <<~ var "recurse" @@ (Pairs.first $ var "kv") $
       "v" <<~ var "recurse" @@ (Pairs.second $ var "kv") $

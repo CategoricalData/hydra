@@ -381,7 +381,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
       var "expand" @@ false @@ var "args" @@ var "arity" @@ var "hType" @@ var "trm") $
 
     -- Helper for processing fields (used in records, unions, but NOT case statement branches)
-    "forField" <~ ("f" ~> Core.fieldWithTerm (var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f")) (var "f")) $
+    "forField" <~ ("f" ~> Core.fieldWithTerm (var "f") (var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f"))) $
 
     -- Helper for case statement branches - forces expansion of the branch body
     -- This is needed because case branches represent partial function values that need full expansion
@@ -389,7 +389,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
       "branchBody" <~ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
       "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "branchBody" $
       "branchHType" <~ var "termHeadType" @@ var "tx" @@ var "branchBody" $
-      Core.fieldWithTerm (var "expand" @@ true @@ list ([] :: [TTerm Term]) @@ var "arty" @@ var "branchHType" @@ var "branchBody") (var "f")) $
+      Core.fieldWithTerm (var "f") (var "expand" @@ true @@ list ([] :: [TTerm Term]) @@ var "arty" @@ var "branchHType" @@ var "branchBody")) $
 
     -- Helper for eliminations
     "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
@@ -654,7 +654,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
 
     "forCase" <~ ("f" ~>
       "r" <<~ var "rewrite" @@ false @@ true @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
-      right $ Core.fieldWithTerm (var "r") (var "f")) $
+      right $ Core.fieldWithTerm (var "f") (var "r")) $
 
     -- Forcing case statement branches is intended for Python, where we cannot accept a branch which is simply
     -- a variable or a primitive reference; we need to expand these to lambdas.
