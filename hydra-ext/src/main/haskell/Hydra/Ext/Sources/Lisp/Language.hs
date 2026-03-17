@@ -45,11 +45,7 @@ import qualified Hydra.Dsl.Tests                           as Tests
 import qualified Hydra.Dsl.Types                           as Types
 import qualified Hydra.Sources.Decode.Core                 as DecodeCore
 import qualified Hydra.Sources.Encode.Core                 as EncodeCore
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Literals as AdaptLiterals
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Modules  as AdaptModules
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Simple   as AdaptSimple
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Terms    as AdaptTerms
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils    as AdaptUtils
+import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.All            as KernelTerms
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity          as Arity
@@ -63,7 +59,6 @@ import qualified Hydra.Sources.Kernel.Terms.Inference      as Inference
 import qualified Hydra.Sources.Kernel.Terms.Languages      as Languages
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
-import qualified Hydra.Sources.Kernel.Terms.Monads         as Monads
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect

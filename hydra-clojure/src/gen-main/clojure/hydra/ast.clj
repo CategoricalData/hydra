@@ -13,7 +13,7 @@
 (defrecord hydra_ast_brackets [open close])
 (defn make-hydra_ast_brackets [open close] (->hydra_ast_brackets open close))
 
-(def hydra_ast_expr-variants (list :const :indent :op :brackets))
+(def hydra_ast_expr-variants (list :const :indent :op :brackets :seq))
 
 (defrecord hydra_ast_indented_expression [style expr])
 (defn make-hydra_ast_indented_expression [style expr] (->hydra_ast_indented_expression style expr))
@@ -31,6 +31,9 @@
 
 (defrecord hydra_ast_precedence [value])
 (defn make-hydra_ast_precedence [value] (->hydra_ast_precedence value))
+
+(defrecord hydra_ast_seq_expr [op elements])
+(defn make-hydra_ast_seq_expr [op elements] (->hydra_ast_seq_expr op elements))
 
 (defrecord hydra_ast_symbol [value])
 (defn make-hydra_ast_symbol [value] (->hydra_ast_symbol value))

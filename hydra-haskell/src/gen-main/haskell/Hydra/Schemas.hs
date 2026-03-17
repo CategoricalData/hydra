@@ -371,13 +371,14 @@ isSerializableByName cx graph name =
         let allVariants = Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps)))
         in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies cx graph False Equality.identity name))
 
-isNominalType :: (Core.Type -> Bool)
-isNominalType typ = ((\x -> case x of
-  Core.TypeRecord _ -> True
-  Core.TypeUnion _ -> True
-  Core.TypeWrap _ -> True
-  Core.TypeForall v0 -> (isNominalType (Core.forallTypeBody v0))
-  _ -> False) (Rewriting.deannotateType typ))
+isNominalType :: Core.Type -> Bool
+isNominalType typ =
+    case (Rewriting.deannotateType typ) of
+      Core.TypeRecord _ -> True
+      Core.TypeUnion _ -> True
+      Core.TypeWrap _ -> True
+      Core.TypeForall v0 -> isNominalType (Core.forallTypeBody v0)
+      _ -> False
 
 -- | Check whether a type is a type (always true for non-encoded types)
 isType :: Core.Type -> Bool

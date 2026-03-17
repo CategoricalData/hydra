@@ -64,8 +64,6 @@
 
 (cl-defstruct hydra_testing_inference_test_case input output)
 
-(cl-defstruct hydra_testing_json_coder_test_case type term json)
-
 (cl-defstruct hydra_testing_json_decode_test_case type json expected)
 
 (cl-defstruct hydra_testing_json_encode_test_case term expected)
@@ -80,7 +78,9 @@
 
 (cl-defstruct hydra_testing_test_codec language file_extension encode_term encode_type format_test_name format_module_name test_case_template test_group_template module_template import_template find_imports)
 
-(defvar hydra_testing_test_case-variants (list :alpha_conversion :case_conversion :deannotate_term :deannotate_type :delegated_evaluation :eta_expansion :flatten_let_terms :free_variables :evaluation :inference :inference_failure :json_coder :json_decode :json_encode :json_parser :json_roundtrip :json_writer :lift_lambda_above_let :serialization :simplify_term :topological_sort :topological_sort_bindings :topological_sort_s_c_c :type_checking :type_checking_failure :type_reduction :normalize_type_variables :fold_over_term :rewrite_term :rewrite_type :hoist_subterms :hoist_case_statements :hoist_let_bindings :hoist_polymorphic_let_bindings :subst_in_type :variable_occurs_in_type :unify_types :join_types :unshadow_variables))
+(cl-defstruct hydra_testing_test_generator namespaces_for_module create_codec generate_test_file aggregator_file)
+
+(defvar hydra_testing_test_case-variants (list :alpha_conversion :case_conversion :deannotate_term :deannotate_type :delegated_evaluation :eta_expansion :flatten_let_terms :free_variables :evaluation :inference :inference_failure :json_decode :json_encode :json_parser :json_roundtrip :json_writer :lift_lambda_above_let :serialization :simplify_term :topological_sort :topological_sort_bindings :topological_sort_s_c_c :type_checking :type_checking_failure :type_reduction :normalize_type_variables :fold_over_term :rewrite_term :rewrite_type :hoist_subterms :hoist_case_statements :hoist_let_bindings :hoist_polymorphic_let_bindings :subst_in_type :variable_occurs_in_type :unify_types :join_types :unshadow_variables))
 
 (cl-defstruct hydra_testing_test_case_with_metadata name case description tags)
 

@@ -677,7 +677,6 @@
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",
-    "hydra.compute",
     "hydra.context",
     "hydra.core",
     "hydra.error",
@@ -694,5 +693,4 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants",
-    "hydra.workflow"]}
+    "hydra.variants"]}

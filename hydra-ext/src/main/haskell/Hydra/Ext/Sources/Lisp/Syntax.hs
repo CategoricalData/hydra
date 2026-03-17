@@ -692,14 +692,8 @@ destructuringPattern = define "DestructuringPattern" $
       doc "Associative/map destructuring: {:keys [a b]} in Clojure" $
       T.list (lisp "Symbol"),
     "rest">:
-      doc "Destructuring with a rest element: [a b & rest]" $
-      T.record [
-        "elements">:
-          doc "The leading elements" $
-          T.list (lisp "Symbol"),
-        "rest">:
-          doc "The rest variable" $
-          lisp "Symbol"]]
+      doc "Destructuring with a rest element: [a b & rest] (leading symbols + rest symbol)" $
+      T.list (lisp "Symbol")]
 
 
 -- ================================================================================================
@@ -968,47 +962,23 @@ typeSpecifier = define "TypeSpecifier" $
       doc "A list type" $
       lisp "TypeSpecifier",
     "function">:
-      doc "A function type" $
-      T.record [
-        "params">:
-          doc "Parameter types" $
-          T.list (lisp "TypeSpecifier"),
-        "return">:
-          doc "Return type" $
-          lisp "TypeSpecifier"],
+      doc "A function type (params and return)" $
+      T.list (lisp "TypeSpecifier"),
     "maybe">:
       doc "An optional type" $
       lisp "TypeSpecifier",
     "map">:
-      doc "A map type" $
-      T.record [
-        "key">:
-          doc "Key type" $
-          lisp "TypeSpecifier",
-        "value">:
-          doc "Value type" $
-          lisp "TypeSpecifier"],
+      doc "A map type (key and value type specifiers)" $
+      T.list (lisp "TypeSpecifier"),
     "set">:
       doc "A set type" $
       lisp "TypeSpecifier",
     "pair">:
-      doc "A pair/tuple type" $
-      T.record [
-        "first">:
-          doc "First element type" $
-          lisp "TypeSpecifier",
-        "second">:
-          doc "Second element type" $
-          lisp "TypeSpecifier"],
+      doc "A pair/tuple type (two type specifiers)" $
+      T.list (lisp "TypeSpecifier"),
     "either">:
-      doc "An either/union type" $
-      T.record [
-        "left">:
-          doc "Left type" $
-          lisp "TypeSpecifier",
-        "right">:
-          doc "Right type" $
-          lisp "TypeSpecifier"],
+      doc "An either/union type (two type specifiers)" $
+      T.list (lisp "TypeSpecifier"),
     "unit">:
       doc "The unit type" $
       T.unit]
@@ -1062,10 +1032,8 @@ importSpec = define "ImportSpec" $
       doc "Import specific symbols: (:require [name :refer [sym1 sym2]]) in Clojure" $
       T.list (lisp "Symbol"),
     "rename">:
-      doc "Import with renaming: (import (rename (name) (old new))) in Scheme" $
-      T.list (T.record [
-        "from">: lisp "Symbol",
-        "to">: lisp "Symbol"])]
+      doc "Import with renaming: list of (from, to) symbol pairs" $
+      T.list (T.list (lisp "Symbol"))]
 
 exportDeclaration :: Binding
 exportDeclaration = define "ExportDeclaration" $

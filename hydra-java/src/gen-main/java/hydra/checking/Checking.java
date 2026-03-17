@@ -20,32 +20,49 @@ public interface Checking {
         hydra.lib.lists.Tail.apply(els)));
   }
 
-  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> applyTypeArgumentsToType(hydra.context.Context cx, T0 tx, hydra.util.ConsList<hydra.core.Type> typeArgs, hydra.core.Type t) {
-    hydra.util.Lazy<hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>> nonnull = new hydra.util.Lazy<>(() -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
-      @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Checking(new hydra.error.CheckingError.NotAForallType(new hydra.error.NotAForallTypeError(t, typeArgs))), cx)));
-      }
-
-      @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> visit(hydra.core.Type.Forall ft) {
-        hydra.core.Type tbody = (ft).value.body;
-        hydra.core.Name v = (ft).value.parameter;
-        return hydra.checking.Checking.<T0>applyTypeArgumentsToType(
-          cx,
-          tx,
-          hydra.lib.lists.Tail.apply(typeArgs),
-          hydra.substitution.Substitution.substInType(
-            new hydra.typing.TypeSubst(hydra.lib.maps.Singleton.apply(
-              v,
-              hydra.lib.lists.Head.apply(typeArgs))),
-            tbody));
-      }
-    }));
+  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> applyTypeArgumentsToType(hydra.context.Context cx, hydra.graph.Graph tx, hydra.util.ConsList<hydra.core.Type> typeArgs, hydra.core.Type t) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(typeArgs),
       () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right(t),
-      () -> nonnull.get());
+      () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>>) (() -> {
+        hydra.util.Lazy<hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>> nonnull = new hydra.util.Lazy<>(() -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> otherwise(hydra.core.Type instance) {
+            return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+              "not a forall type: ",
+              hydra.show.core.Core.type(t),
+              ". Trying to apply ",
+              hydra.lib.literals.ShowInt32.apply(hydra.lib.lists.Length.apply(typeArgs)),
+              " type args: ",
+              hydra.formatting.Formatting.showList(
+                hydra.show.core.Core::type,
+                typeArgs),
+              ". Context has vars: {",
+              hydra.lib.strings.Intercalate.apply(
+                ", ",
+                hydra.lib.lists.Map.apply(
+                  wrapped -> (wrapped).value,
+                  hydra.lib.maps.Keys.apply((tx).boundTypes))),
+              "}")))), cx)));
+          }
+
+          @Override
+          public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> visit(hydra.core.Type.Forall ft) {
+            hydra.core.Type tbody = (ft).value.body;
+            hydra.core.Name v = (ft).value.parameter;
+            return hydra.checking.Checking.applyTypeArgumentsToType(
+              cx,
+              tx,
+              hydra.lib.lists.Tail.apply(typeArgs),
+              hydra.substitution.Substitution.substInType(
+                new hydra.typing.TypeSubst(hydra.lib.maps.Singleton.apply(
+                  v,
+                  hydra.lib.lists.Head.apply(typeArgs))),
+                tbody));
+          }
+        }));
+        return nonnull.get();
+      })).get());
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void> checkForUnboundTypeVariables(hydra.context.Context cx, hydra.graph.Graph tx, hydra.core.Term term0) {
@@ -910,10 +927,10 @@ public interface Checking {
       })).get());
   }
 
-  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> typeOfLiteral(hydra.context.Context cx, T0 tx, hydra.util.ConsList<hydra.core.Type> typeArgs, hydra.core.Literal lit) {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> typeOfLiteral(hydra.context.Context cx, hydra.graph.Graph tx, hydra.util.ConsList<hydra.core.Type> typeArgs, hydra.core.Literal lit) {
     hydra.core.Type t = new hydra.core.Type.Literal(hydra.reflect.Reflect.literalType(lit));
     return hydra.lib.eithers.Bind.apply(
-      hydra.checking.Checking.<T0>applyTypeArgumentsToType(
+      hydra.checking.Checking.applyTypeArgumentsToType(
         cx,
         tx,
         typeArgs,
@@ -1272,9 +1289,9 @@ public interface Checking {
       }));
   }
 
-  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> typeOfUnit(hydra.context.Context cx, T0 tx, hydra.util.ConsList<hydra.core.Type> typeArgs) {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> typeOfUnit(hydra.context.Context cx, hydra.graph.Graph tx, hydra.util.ConsList<hydra.core.Type> typeArgs) {
     return hydra.lib.eithers.Bind.apply(
-      hydra.checking.Checking.<T0>applyTypeArgumentsToType(
+      hydra.checking.Checking.applyTypeArgumentsToType(
         cx,
         tx,
         typeArgs,

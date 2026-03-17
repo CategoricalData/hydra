@@ -125,38 +125,31 @@ writePython = generateSources moduleToPython pythonLanguage True True True False
 writeRust :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeRust = generateSources moduleToRust rustLanguage True False False False
 
--- | Wrap moduleToLisp for a specific dialect, producing Map FilePath String as expected by generateSources.
+-- | Wrap moduleToLisp for a specific dialect
 moduleToLispDialect
-  :: LispSyntax.Dialect
-  -> String  -- ^ file extension (e.g. "clj", "scm")
-  -> Module -> [Definition] -> Context.Context -> Graph
-  -> Either (Context.InContext Error.OtherError) (M.Map FilePath String)
+  :: LispSyntax.Dialect -> String
+  -> Module -> [Definition] -> Context -> Graph
+  -> Either (InContext Error) (M.Map FilePath String)
 moduleToLispDialect dialect ext mod defs cx g =
   case moduleToLisp dialect mod defs cx g of
     Left err -> Left err
     Right program ->
       let code = Serialization.printExpr (Serialization.parenthesize (programToExpr program))
-          -- Clojure uses camelCase filenames (matching namespace names);
-          -- other Lisp dialects use snake_case filenames
           caseConvention = case dialect of
             LispSyntax.DialectClojure -> Util.CaseConventionCamel
             _ -> Util.CaseConventionLowerSnake
           filePath = Names.namespaceToFilePath caseConvention (FileExtension ext) (moduleNamespace mod)
       in Right (M.singleton filePath code)
 
--- | Generate Clojure source files from modules.
 writeClojure :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeClojure = generateSources (moduleToLispDialect LispSyntax.DialectClojure "clj") lispLanguage True False False False
 
--- | Generate Scheme source files from modules.
 writeScheme :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeScheme = generateSources (moduleToLispDialect LispSyntax.DialectScheme "scm") lispLanguage True False False False
 
--- | Generate Common Lisp source files from modules.
 writeCommonLisp :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeCommonLisp = generateSources (moduleToLispDialect LispSyntax.DialectCommonLisp "lisp") lispLanguage True False False False
 
--- | Generate Emacs Lisp source files from modules.
 writeEmacsLisp :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeEmacsLisp = generateSources (moduleToLispDialect LispSyntax.DialectEmacsLisp "el") lispLanguage True False False False
 

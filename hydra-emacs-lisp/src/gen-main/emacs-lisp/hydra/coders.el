@@ -1,10 +1,10 @@
 (require 'cl-lib)
 
-(require 'hydra.compute)
-
 (require 'hydra.core)
 
 (require 'hydra.graph)
+
+(require 'hydra.util)
 
 (require 'hydra.variants)
 

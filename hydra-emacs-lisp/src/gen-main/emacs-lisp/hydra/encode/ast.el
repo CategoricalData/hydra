@@ -4,6 +4,8 @@
 
 (require 'hydra.core)
 
+(require 'hydra.lib.lists)
+
 (require 'hydra.lib.maybes)
 
 (defvar hydra_encode_ast_associativity (lambda (match_target) ((lambda (match_value) (cond ((equal (car match_target) :none) ((lambda (y) (list :union (make-hydra_core_injection "hydra.ast.Associativity" (make-hydra_core_field "none" ((lambda (_) (list :unit nil)) y))))) match_value)) ((equal (car match_target) :left) ((lambda (y) (list :union (make-hydra_core_injection "hydra.ast.Associativity" (make-hydra_core_field "left" ((lambda (_) (list :unit nil)) y))))) match_value)) ((equal (car match_target) :right) ((lambda (y) (list :union (make-hydra_core_injection "hydra.ast.Associativity" (make-hydra_core_field "right" ((lambda (_) (list :unit nil)) y))))) match_value)) ((equal (car match_target) :both) ((lambda (y) (list :union (make-hydra_core_injection "hydra.ast.Associativity" (make-hydra_core_field "both" ((lambda (_) (list :unit nil)) y))))) match_value)))) (cadr match_target))))
@@ -26,10 +28,12 @@
 
 (defvar hydra_encode_ast_bracket_expr (lambda (x) (list :record (make-hydra_core_record "hydra.ast.BracketExpr" (list (make-hydra_core_field "brackets" (hydra_encode_ast_brackets ((lambda (v) (hydra_ast_bracket_expr-brackets v)) x))) (make-hydra_core_field "enclosed" (hydra_encode_ast_expr ((lambda (v) (hydra_ast_bracket_expr-enclosed v)) x))) (make-hydra_core_field "style" (hydra_encode_ast_block_style ((lambda (v) (hydra_ast_bracket_expr-style v)) x))))))))
 
-(defvar hydra_encode_ast_expr (lambda (match_target) ((lambda (match_value) (cond ((equal (car match_target) :const) ((lambda (y) (list :union (make-hydra_core_injection "hydra.ast.Expr" (make-hydra_core_field "const" (hydra_encode_ast_symbol y))))) match_value)) ((equal (car match_target) :indent) ((lambda (y) (list :union (make-hydra_core_injection "hydra.ast.Expr" (make-hydra_core_field "indent" (hydra_encode_ast_indented_expression y))))) match_value)) ((equal (car match_target) :op) ((lambda (y) (list :union (make-hydra_core_injection "hydra.ast.Expr" (make-hydra_core_field "op" (hydra_encode_ast_op_expr y))))) match_value)) ((equal (car match_target) :brackets) ((lambda (y) (list :union (make-hydra_core_injection "hydra.ast.Expr" (make-hydra_core_field "brackets" (hydra_encode_ast_bracket_expr y))))) match_value)))) (cadr match_target))))
+(defvar hydra_encode_ast_expr (lambda (match_target) ((lambda (match_value) (cond ((equal (car match_target) :const) ((lambda (y) (list :union (make-hydra_core_injection "hydra.ast.Expr" (make-hydra_core_field "const" (hydra_encode_ast_symbol y))))) match_value)) ((equal (car match_target) :indent) ((lambda (y) (list :union (make-hydra_core_injection "hydra.ast.Expr" (make-hydra_core_field "indent" (hydra_encode_ast_indented_expression y))))) match_value)) ((equal (car match_target) :op) ((lambda (y) (list :union (make-hydra_core_injection "hydra.ast.Expr" (make-hydra_core_field "op" (hydra_encode_ast_op_expr y))))) match_value)) ((equal (car match_target) :brackets) ((lambda (y) (list :union (make-hydra_core_injection "hydra.ast.Expr" (make-hydra_core_field "brackets" (hydra_encode_ast_bracket_expr y))))) match_value)) ((equal (car match_target) :seq) ((lambda (y) (list :union (make-hydra_core_injection "hydra.ast.Expr" (make-hydra_core_field "seq" (hydra_encode_ast_seq_expr y))))) match_value)))) (cadr match_target))))
 
 (defvar hydra_encode_ast_indented_expression (lambda (x) (list :record (make-hydra_core_record "hydra.ast.IndentedExpression" (list (make-hydra_core_field "style" (hydra_encode_ast_indent_style ((lambda (v) (hydra_ast_indented_expression-style v)) x))) (make-hydra_core_field "expr" (hydra_encode_ast_expr ((lambda (v) (hydra_ast_indented_expression-expr v)) x))))))))
 
 (defvar hydra_encode_ast_op_expr (lambda (x) (list :record (make-hydra_core_record "hydra.ast.OpExpr" (list (make-hydra_core_field "op" (hydra_encode_ast_op ((lambda (v) (hydra_ast_op_expr-op v)) x))) (make-hydra_core_field "lhs" (hydra_encode_ast_expr ((lambda (v) (hydra_ast_op_expr-lhs v)) x))) (make-hydra_core_field "rhs" (hydra_encode_ast_expr ((lambda (v) (hydra_ast_op_expr-rhs v)) x))))))))
+
+(defvar hydra_encode_ast_seq_expr (lambda (x) (list :record (make-hydra_core_record "hydra.ast.SeqExpr" (list (make-hydra_core_field "op" (hydra_encode_ast_op ((lambda (v) (hydra_ast_seq_expr-op v)) x))) (make-hydra_core_field "elements" ((lambda (xs) (list :list ((hydra_lib_lists_map hydra_encode_ast_expr) xs))) ((lambda (v) (hydra_ast_seq_expr-elements v)) x))))))))
 
 (provide 'hydra.encode.ast)
