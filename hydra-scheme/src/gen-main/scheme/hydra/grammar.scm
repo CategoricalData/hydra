@@ -1,0 +1,12 @@
+(define-library (hydra grammar)
+(export make-hydra_grammar_constant hydra_grammar_constant? hydra_grammar_constant-value make-hydra_grammar_grammar hydra_grammar_grammar? hydra_grammar_grammar-value make-hydra_grammar_label hydra_grammar_label? hydra_grammar_label-value make-hydra_grammar_labeled_pattern hydra_grammar_labeled_pattern? hydra_grammar_labeled_pattern-label hydra_grammar_labeled_pattern-pattern hydra_grammar_pattern-variants make-hydra_grammar_production hydra_grammar_production? hydra_grammar_production-symbol hydra_grammar_production-pattern make-hydra_grammar_regex hydra_grammar_regex? hydra_grammar_regex-value make-hydra_grammar_symbol hydra_grammar_symbol? hydra_grammar_symbol-value)
+(import (scheme base))
+(begin
+(define-record-type hydra_grammar_constant (make-hydra_grammar_constant value) hydra_grammar_constant? (value hydra_grammar_constant-value))
+(define-record-type hydra_grammar_grammar (make-hydra_grammar_grammar value) hydra_grammar_grammar? (value hydra_grammar_grammar-value))
+(define-record-type hydra_grammar_label (make-hydra_grammar_label value) hydra_grammar_label? (value hydra_grammar_label-value))
+(define-record-type hydra_grammar_labeled_pattern (make-hydra_grammar_labeled_pattern label pattern) hydra_grammar_labeled_pattern? (label hydra_grammar_labeled_pattern-label) (pattern hydra_grammar_labeled_pattern-pattern))
+(define hydra_grammar_pattern-variants (list 'alternatives 'constant 'ignored 'labeled 'nil 'nonterminal 'option 'plus 'regex 'sequence 'star))
+(define-record-type hydra_grammar_production (make-hydra_grammar_production symbol pattern) hydra_grammar_production? (symbol hydra_grammar_production-symbol) (pattern hydra_grammar_production-pattern))
+(define-record-type hydra_grammar_regex (make-hydra_grammar_regex value) hydra_grammar_regex? (value hydra_grammar_regex-value))
+(define-record-type hydra_grammar_symbol (make-hydra_grammar_symbol value) hydra_grammar_symbol? (value hydra_grammar_symbol-value))))
