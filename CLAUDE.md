@@ -383,10 +383,16 @@ import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
 
 ### Application styles
 
-- **Primitive functions / DSL helpers**: Applied by concatenation.
+- **DSL helpers** (from `Hydra.Dsl.Meta.Lib.*` and `Hydra.Dsl.Meta.Phantoms`): These are
+  Haskell functions on `TTerm` values, so they take arguments directly via Haskell function
+  application -- no `@@` needed. This includes all primitive function wrappers (`Lists.concat`,
+  `Strings.cat`, `Maybes.maybe`, `Logic.ifElse`, etc.) and DSL combinators (`list`, `lambda`,
+  `cases`, `project`, `lets`, etc.).
   `Strings.cat2 (string "foo") (string "bar")`
-- **Element definitions**: Applied using `ref` and `@@`.
-  `ref myAddDef @@ int32 1 @@ int32 2`
+  `Lists.concat (list [var "xs", var "ys"])`
+- **Element definitions** (`TBinding`s created with `define`): Applied using `@@`.
+  `myAddDef @@ int32 1 @@ int32 2`
+  `Serialization.cst @@ string "hello"` (Serialization helpers are `TBinding`s, not DSL helpers)
 - **Passing primitives as arguments**: Use `unaryFunction` / `binaryFunction`.
   `Lists.foldl (binaryFunction Math.add) (int32 0) (var "numbers")`
 
