@@ -30,10 +30,15 @@ import qualified Data.Set as S
 
 -- | Generate a binding name for a DSL function from a type name
 dslBindingName :: (Core.Name -> Core.Name)
-dslBindingName n = (Logic.ifElse (Logic.not (Lists.null (Lists.tail (Strings.splitOn "." (Core.unName n))))) (Core.Name (Strings.intercalate "." (Lists.concat2 [
-  "hydra",
-  "dsl"] (Lists.concat2 (Lists.tail (Lists.init (Strings.splitOn "." (Core.unName n)))) [
-  Formatting.decapitalize (Names.localNameOf n)])))) (Core.Name (Formatting.decapitalize (Names.localNameOf n))))
+dslBindingName n =  
+  let parts = (Strings.splitOn "." (Core.unName n))
+  in (Logic.ifElse (Logic.not (Lists.null (Lists.tail parts))) (Logic.ifElse (Equality.equal (Lists.head parts) "hydra") (Core.Name (Strings.intercalate "." (Lists.concat2 [
+    "hydra",
+    "dsl"] (Lists.concat2 (Lists.tail (Lists.init parts)) [
+    Formatting.decapitalize (Names.localNameOf n)])))) (Core.Name (Strings.intercalate "." (Lists.concat2 [
+    "hydra",
+    "dsl"] (Lists.concat2 (Lists.init parts) [
+    Formatting.decapitalize (Names.localNameOf n)]))))) (Core.Name (Formatting.decapitalize (Names.localNameOf n))))
 
 -- | Generate a qualified DSL element name from a type name and local element name
 dslElementName :: (Core.Name -> String -> Core.Name)
@@ -42,9 +47,11 @@ dslElementName typeName localName =
   in  
     let nsParts = (Lists.init parts)
     in  
-      let dslNsParts = (Lists.concat2 [
+      let dslNsParts = (Logic.ifElse (Equality.equal (Lists.head nsParts) "hydra") (Lists.concat2 [
               "hydra",
-              "dsl"] (Lists.tail nsParts))
+              "dsl"] (Lists.tail nsParts)) (Lists.concat2 [
+              "hydra",
+              "dsl"] nsParts))
       in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
         localName])))
 
@@ -65,9 +72,13 @@ dslModule cx graph mod = (Eithers.bind (filterTypeBindings cx graph (Module.modu
 
 -- | Generate a DSL module namespace from a source module namespace
 dslNamespace :: (Module.Namespace -> Module.Namespace)
-dslNamespace ns = (Module.Namespace (Strings.cat [
-  "hydra.dsl.",
-  (Strings.intercalate "." (Lists.tail (Strings.splitOn "." (Module.unNamespace ns))))]))
+dslNamespace ns =  
+  let parts = (Strings.splitOn "." (Module.unNamespace ns))
+  in (Logic.ifElse (Equality.equal (Lists.head parts) "hydra") (Module.Namespace (Strings.cat [
+    "hydra.dsl.",
+    (Strings.intercalate "." (Lists.tail parts))])) (Module.Namespace (Strings.cat [
+    "hydra.dsl.",
+    (Module.unNamespace ns)])))
 
 -- | Filter bindings to only DSL-eligible type definitions
 filterTypeBindings :: (t0 -> t1 -> [Core.Binding] -> Either t2 [Core.Binding])
