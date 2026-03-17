@@ -68,7 +68,7 @@
          ;; Auto-detect type variables in order of first appearance.
          ;; Exclude qualified names (containing dots) — those are nominal type references.
          (all-vars (collect-type-vars-ordered fun-type))
-         (detected-vars (remove (lambda (v) (find #\. v)) all-vars))
+         (detected-vars (remove-if (lambda (v) (find #\. v)) all-vars))
          (vars (if variables variables detected-vars))
          ;; Build constraints map
          (constraint-map
