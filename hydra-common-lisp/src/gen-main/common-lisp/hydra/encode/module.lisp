@@ -1,0 +1,21 @@
+(defpackage :hydra.encode.module
+(:use :cl :hydra.core :hydra.encode.core :hydra.lib.lists :hydra.lib.maps :hydra.lib.maybes :hydra.lib.pairs :hydra.module)
+(:export :hydra_encode_module_term_definition :hydra_encode_module_type_definition :hydra_encode_module_definition :hydra_encode_module_file_extension :hydra_encode_module_namespace :hydra_encode_module_module :hydra_encode_module_namespaces :hydra_encode_module_qualified_name))
+
+(in-package :hydra.encode.module)
+
+(cl:defvar hydra_encode_module_term_definition (cl:lambda (x) (list :record (make-hydra_core_record "hydra.module.TermDefinition" (cl:list (make-hydra_core_field "name" (hydra_encode_core_name ((cl:lambda (v) (hydra_module_term_definition-name v)) x))) (make-hydra_core_field "term" (hydra_encode_core_term ((cl:lambda (v) (hydra_module_term_definition-term v)) x))) (make-hydra_core_field "type" (hydra_encode_core_type_scheme ((cl:lambda (v) (hydra_module_term_definition-type v)) x))))))))
+
+(cl:defvar hydra_encode_module_type_definition (cl:lambda (x) (list :record (make-hydra_core_record "hydra.module.TypeDefinition" (cl:list (make-hydra_core_field "name" (hydra_encode_core_name ((cl:lambda (v) (hydra_module_type_definition-name v)) x))) (make-hydra_core_field "type" (hydra_encode_core_type ((cl:lambda (v) (hydra_module_type_definition-type v)) x))))))))
+
+(cl:defvar hydra_encode_module_definition (cl:lambda (match_target) ((cl:lambda (match_value) (cond ((equal (car match_target) :term) ((cl:lambda (y) (list :union (make-hydra_core_injection "hydra.module.Definition" (make-hydra_core_field "term" (hydra_encode_module_term_definition y))))) match_value)) ((equal (car match_target) :type) ((cl:lambda (y) (list :union (make-hydra_core_injection "hydra.module.Definition" (make-hydra_core_field "type" (hydra_encode_module_type_definition y))))) match_value)))) (cadr match_target))))
+
+(cl:defvar hydra_encode_module_file_extension (cl:lambda (x) (list :wrap (make-hydra_core_wrapped_term "hydra.module.FileExtension" ((cl:lambda (x) (list :literal (list :string x))) ((cl:lambda (v) v) x))))))
+
+(cl:defvar hydra_encode_module_namespace (cl:lambda (x) (list :wrap (make-hydra_core_wrapped_term "hydra.module.Namespace" ((cl:lambda (x) (list :literal (list :string x))) ((cl:lambda (v) v) x))))))
+
+(cl:defvar hydra_encode_module_module (cl:lambda (x) (list :record (make-hydra_core_record "hydra.module.Module" (cl:list (make-hydra_core_field "namespace" (hydra_encode_module_namespace ((cl:lambda (v) (hydra_module_module-namespace v)) x))) (make-hydra_core_field "elements" ((cl:lambda (xs) (list :list ((hydra_lib_lists_map hydra_encode_core_binding) xs))) ((cl:lambda (v) (hydra_module_module-elements v)) x))) (make-hydra_core_field "termDependencies" ((cl:lambda (xs) (list :list ((hydra_lib_lists_map hydra_encode_module_namespace) xs))) ((cl:lambda (v) (hydra_module_module-term_dependencies v)) x))) (make-hydra_core_field "typeDependencies" ((cl:lambda (xs) (list :list ((hydra_lib_lists_map hydra_encode_module_namespace) xs))) ((cl:lambda (v) (hydra_module_module-type_dependencies v)) x))) (make-hydra_core_field "description" ((cl:lambda (opt) (list :maybe ((hydra_lib_maybes_map (cl:lambda (x) (list :literal (list :string x)))) opt))) ((cl:lambda (v) (hydra_module_module-description v)) x))))))))
+
+(cl:defvar hydra_encode_module_namespaces (cl:lambda (n) (cl:lambda (x) (list :record (make-hydra_core_record "hydra.module.Namespaces" (cl:list (make-hydra_core_field "focus" ((cl:lambda (p) (list :pair (((hydra_lib_pairs_bimap hydra_encode_module_namespace) n) p))) ((cl:lambda (v) (hydra_module_namespaces-focus v)) x))) (make-hydra_core_field "mapping" ((cl:lambda (m) (list :map (((hydra_lib_maps_bimap hydra_encode_module_namespace) n) m))) ((cl:lambda (v) (hydra_module_namespaces-mapping v)) x)))))))))
+
+(cl:defvar hydra_encode_module_qualified_name (cl:lambda (x) (list :record (make-hydra_core_record "hydra.module.QualifiedName" (cl:list (make-hydra_core_field "namespace" ((cl:lambda (opt) (list :maybe ((hydra_lib_maybes_map hydra_encode_module_namespace) opt))) ((cl:lambda (v) (hydra_module_qualified_name-namespace v)) x))) (make-hydra_core_field "local" ((cl:lambda (x) (list :literal (list :string x))) ((cl:lambda (v) (hydra_module_qualified_name-local v)) x))))))))
