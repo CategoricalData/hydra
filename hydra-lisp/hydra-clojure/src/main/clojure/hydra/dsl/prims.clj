@@ -67,8 +67,9 @@
                               (list :function (->hydra_core_function_type in-type result-type))))
                           out-type
                           (reverse inputs))
-         ;; Auto-detect type variables in order of first appearance
-         detected-vars (collect-type-vars-ordered fun-type)
+         ;; Auto-detect type variables in order of first appearance.
+         ;; Exclude qualified names (containing dots) — those are nominal type references, not parameters.
+         detected-vars (filterv #(not (.contains ^String % ".")) (collect-type-vars-ordered fun-type))
          vars (if (seq variables) (vec variables) (vec detected-vars))
          ;; Build constraints map: {name -> TypeVariableMetadata}
          constraint-map (when constraints

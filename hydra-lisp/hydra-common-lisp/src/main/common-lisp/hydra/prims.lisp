@@ -65,8 +65,10 @@
                              (let ((in-type (or (term_coder-type input-tc) (list :unit))))
                                (list :function (make-function_type in-type result-type))))
                            (reverse inputs) :initial-value out-type))
-         ;; Auto-detect type variables in order of first appearance
-         (detected-vars (collect-type-vars-ordered fun-type))
+         ;; Auto-detect type variables in order of first appearance.
+         ;; Exclude qualified names (containing dots) — those are nominal type references.
+         (all-vars (collect-type-vars-ordered fun-type))
+         (detected-vars (remove (lambda (v) (find #\. v)) all-vars))
          (vars (if variables variables detected-vars))
          ;; Build constraints map
          (constraint-map

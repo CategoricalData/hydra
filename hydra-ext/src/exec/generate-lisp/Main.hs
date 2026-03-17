@@ -12,7 +12,7 @@ testDependencyModules = [HaskellOperators.module_]
 
 main :: IO ()
 main = do
-  let universeModules = kernelModules ++ testModules
+  let universeModules = mainModules ++ testModules
 
   -- Scheme
   let schemeMainDir = "../hydra-lisp/hydra-scheme/src/gen-main/scheme"

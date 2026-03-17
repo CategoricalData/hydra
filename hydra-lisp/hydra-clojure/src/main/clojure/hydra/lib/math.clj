@@ -139,3 +139,20 @@
 
 ;; truncate :: Double -> BigInt
 (def hydra_lib_math_truncate (fn [x] (long x)))
+
+;; roundFloat64 :: Int -> Double -> Double
+(def hydra_lib_math_round_float64
+  (fn [n] (fn [x]
+    (if (== x 0.0) 0.0
+      (let [factor (Math/pow 10.0 (- n 1 (Math/floor (Math/log10 (Math/abs x)))))]
+        (/ (Math/round (* x factor)) factor))))))
+
+;; roundFloat32 :: Int -> Float -> Float
+(def hydra_lib_math_round_float32
+  (fn [n] (fn [x]
+    (if (== x 0.0) (float 0.0)
+      (let [factor (Math/pow 10.0 (- n 1 (Math/floor (Math/log10 (Math/abs (double x))))))]
+        (float (/ (Math/round (* (double x) factor)) factor)))))))
+
+;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
+(def hydra_lib_math_round_bigfloat hydra_lib_math_round_float64)

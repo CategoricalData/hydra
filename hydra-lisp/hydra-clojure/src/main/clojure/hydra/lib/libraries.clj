@@ -150,6 +150,9 @@
      (qname ns_ "foldl")      (p/prim3 (qname ns_ "foldl")
                                         (fn [f init xs] (((lists/hydra_lib_lists_foldl (fn [acc] (fn [el] ((f acc) el)))) init) xs))
                                         [] (fun b (fun a b)) b (p/tc-list a) b)
+     (qname ns_ "foldr")      (p/prim3 (qname ns_ "foldr")
+                                        (fn [f init xs] (((lists/hydra_lib_lists_foldr (fn [el] (fn [acc] ((f el) acc)))) init) xs))
+                                        [] (fun a (fun b b)) b (p/tc-list a) b)
      (qname ns_ "group")      (p/prim1 (qname ns_ "group")      lists/hydra_lib_lists_group      [] (p/tc-list a) (p/tc-list (p/tc-list a)) {"a" ["equality"]})
      (qname ns_ "head")       (p/prim1 (qname ns_ "head")       lists/hydra_lib_lists_head       [] (p/tc-list a) a)
      (qname ns_ "init")       (p/prim1 (qname ns_ "init")       lists/hydra_lib_lists_init       [] (p/tc-list a) (p/tc-list a))
@@ -283,7 +286,9 @@
 (defn register-math []
   (let [ns_ "hydra.lib.math"
         i32 (p/tc-int32)
+        f32 (p/tc-float32)
         f64 (p/tc-float64)
+        bf  (p/tc-bigfloat)
         bi  (p/tc-bigint)
         b   (p/tc-boolean)]
     (merge
@@ -323,6 +328,15 @@
       (qname ns_ "pi")       (p/prim0 (qname ns_ "pi")       (fn [] math/hydra_lib_math_pi)       [] f64)
       (qname ns_ "pow")      (p/prim2 (qname ns_ "pow")      (fn [a b] ((math/hydra_lib_math_pow a) b)) [] f64 f64 f64)
       (qname ns_ "round")    (p/prim1 (qname ns_ "round")    math/hydra_lib_math_round    [] f64 bi)
+      (qname ns_ "roundBigfloat") (p/prim2 (qname ns_ "roundBigfloat")
+                                            (fn [n x] ((math/hydra_lib_math_round_bigfloat n) x))
+                                            [] i32 bf bf)
+      (qname ns_ "roundFloat32")  (p/prim2 (qname ns_ "roundFloat32")
+                                            (fn [n x] ((math/hydra_lib_math_round_float32 n) x))
+                                            [] i32 f32 f32)
+      (qname ns_ "roundFloat64")  (p/prim2 (qname ns_ "roundFloat64")
+                                            (fn [n x] ((math/hydra_lib_math_round_float64 n) x))
+                                            [] i32 f64 f64)
       (qname ns_ "sin")      (p/prim1 (qname ns_ "sin")      math/hydra_lib_math_sin      [] f64 f64)
       (qname ns_ "sinh")     (p/prim1 (qname ns_ "sinh")     math/hydra_lib_math_sinh     [] f64 f64)
       (qname ns_ "sqrt")     (p/prim1 (qname ns_ "sqrt")     math/hydra_lib_math_sqrt     [] f64 f64)

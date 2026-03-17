@@ -383,13 +383,13 @@
   "Load all generated main modules. Uses retry loop to handle forward references."
   (let* ((base *hydra-gen-main-dir*)
          ;; Priority files: load these first for best dependency order
-         (priority '("core.lisp" "error.lisp" "compute.lisp" "context.lisp" "graph.lisp"
+         (priority '("core.lisp" "error.lisp" "context.lisp" "graph.lisp"
                      "module.lisp" "ast.lisp" "coders.lisp" "grammar.lisp" "phantoms.lisp"
                      "parsing.lisp" "query.lisp" "relational.lisp" "tabular.lisp" "testing.lisp"
-                     "topology.lisp" "typing.lisp" "util.lisp" "variants.lisp" "workflow.lisp"
+                     "topology.lisp" "typing.lisp" "util.lisp" "variants.lisp"
                      "json/model.lisp" "classes.lisp" "constants.lisp" "accessors.lisp"
                      "formatting.lisp" "tarjan.lisp" "rewriting.lisp" "sorting.lisp"
-                     "names.lisp" "schemas.lisp" "arity.lisp" "lexical.lisp" "monads.lisp"
+                     "names.lisp" "schemas.lisp" "arity.lisp" "lexical.lisp"
                      "literals.lisp" "reflect.lisp" "languages.lisp" "parsers.lisp" "grammars.lisp"
                      "templates.lisp" "encoding.lisp" "decoding.lisp" "code_generation.lisp"
                      "hoisting.lisp" "show/core.lisp" "encode/core.lisp" "decode/core.lisp"

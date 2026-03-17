@@ -214,4 +214,19 @@
 (defvar hydra_lib_math_truncate
   (lambda (x) (truncate x)))
 
+;; roundFloat64 :: Int -> Double -> Double
+(defvar hydra_lib_math_round_float64
+  (lambda (n)
+    (lambda (x)
+      (if (= x 0.0) 0.0
+          (let* ((fx (float x))
+                 (factor (expt 10.0 (- n 1 (floor (log (abs fx) 10))))))
+            (/ (fround (* fx factor)) factor))))))
+
+;; roundFloat32 :: Int -> Float -> Float
+(defvar hydra_lib_math_round_float32 hydra_lib_math_round_float64)
+
+;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
+(defvar hydra_lib_math_round_bigfloat hydra_lib_math_round_float64)
+
 (provide 'hydra.lib.math)

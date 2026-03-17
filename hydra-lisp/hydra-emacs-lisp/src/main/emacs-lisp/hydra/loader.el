@@ -384,13 +384,13 @@
 (defun hydra-load-gen-main ()
   "Load all generated main modules, then byte-compile for performance."
   (let* ((base hydra-gen-main-dir)
-         (priority '("core.el" "error.el" "compute.el" "context.el" "graph.el"
+         (priority '("core.el" "error.el" "context.el" "graph.el"
                      "module.el" "ast.el" "coders.el" "grammar.el" "phantoms.el"
                      "parsing.el" "query.el" "relational.el" "tabular.el" "testing.el"
-                     "topology.el" "typing.el" "util.el" "variants.el" "workflow.el"
+                     "topology.el" "typing.el" "util.el" "variants.el"
                      "json/model.el" "classes.el" "constants.el" "accessors.el"
                      "formatting.el" "tarjan.el" "rewriting.el" "sorting.el"
-                     "names.el" "schemas.el" "arity.el" "lexical.el" "monads.el"
+                     "names.el" "schemas.el" "arity.el" "lexical.el"
                      "literals.el" "reflect.el" "languages.el" "parsers.el" "grammars.el"
                      "templates.el" "encoding.el" "decoding.el" "code_generation.el"
                      "hoisting.el" "show/core.el" "encode/core.el" "decode/core.el"

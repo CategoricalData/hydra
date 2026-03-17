@@ -73,7 +73,9 @@
                                                (if (or (not t) (null? t)) (list 'unit '()) t))))
                                (loop (cdr ins)
                                      (list 'function (make-hydra_core_function_type in-type acc)))))))
-             (detected-vars (collect-type-vars-ordered fun-type))
+             (all-vars (collect-type-vars-ordered fun-type))
+             ;; Exclude qualified names (containing dots) — those are nominal type references
+             (detected-vars (filter (lambda (v) (not (let loop ((i 0)) (and (< i (string-length v)) (or (char=? (string-ref v i) #\.) (loop (+ i 1))))))) all-vars))
              (vars (if (and (pair? variables) (not (null? variables)))
                        variables
                        detected-vars)))

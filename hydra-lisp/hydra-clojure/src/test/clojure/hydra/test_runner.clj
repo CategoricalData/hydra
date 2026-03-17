@@ -1119,70 +1119,24 @@
     (run-simple-test path (:output tc) #(f (:input tc)))))
 
 (defn- run-json-coder-test [path tc]
-  (let [json-coder-fn (resolve-fn 'hydra.ext.org.json.coder 'hydra_ext_org_json_coder_json_coder)
-        cx (empty-context) graph @test-graph]
+  (let [encode-fn (resolve-fn 'hydra.json.encode 'hydra_json_encode_to_json)
+        decode-fn (resolve-fn 'hydra.json.decode 'hydra_json_decode_from_json)
+        empty-types ()]
     (try
-      (let [coder-result (((json-coder-fn (:type tc)) cx) graph)]
-        (if (= (first coder-result) :left)
+      (let [encode-result (encode-fn (:term tc))]
+        (if (= (first encode-result) :left)
           (do (println (str "FAIL: " path))
-              (println (str "  Failed to create JSON coder: " (second coder-result)))
+              (println (str "  JSON encode failed: " (second encode-result)))
               [0 1 0])
-          (let [coder (second coder-result)
-                ;; Encode
-                encode-result (((:encode coder) cx) (:term tc))]
-            (if (= (first encode-result) :left)
+          (let [encoded (second encode-result)]
+            (if (not (terms-match? (:json tc) encoded))
               (do (println (str "FAIL: " path))
-                  (println (str "  JSON encode failed: " (second encode-result)))
+                  (println (str "  JSON encode mismatch"))
+                  (println (str "  Expected (raw): " (pr-str (:json tc))))
+                  (println (str "  Actual (raw):   " (pr-str encoded)))
                   [0 1 0])
-              (let [encoded (second encode-result)]
-                (if (not (terms-match? (:json tc) encoded))
-                  (do (println (str "FAIL: " path))
-                      (println (str "  JSON encode mismatch"))
-                      (println (str "  Expected (raw): " (pr-str (:json tc))))
-                      (println (str "  Actual (raw):   " (pr-str encoded)))
-                      [0 1 0])
-                  ;; Roundtrip: decode back
-                  (let [decode-result (((:decode coder) cx) encoded)]
-                    (if (= (first decode-result) :left)
-                      (do (println (str "FAIL: " path))
-                          (println (str "  JSON decode failed: " (second decode-result)))
-                          [0 1 0])
-                      (let [decoded (second decode-result)]
-                        (if (terms-match? (:term tc) decoded)
-                          [1 0 0]
-                          (do (println (str "FAIL: " path))
-                              (println (str "  JSON roundtrip term mismatch"))
-                              (try
-                                (println (str "  Expected: " (show-term (:term tc))))
-                                (println (str "  Actual:   " (show-term decoded)))
-                                (catch Throwable _
-                                  (println (str "  Expected (raw): " (pr-str (:term tc))))
-                                  (println (str "  Actual (raw):   " (pr-str decoded)))))
-                              [0 1 0])))))))))))
-      (catch Throwable e
-        (println (str "FAIL: " path))
-        (println (str "  EXCEPTION: " (.getMessage e)))
-        [0 1 0]))))
-
-(defn- run-json-roundtrip-test [path tc]
-  (let [json-coder-fn (resolve-fn 'hydra.ext.org.json.coder 'hydra_ext_org_json_coder_json_coder)
-        cx (empty-context) graph @test-graph]
-    (try
-      (let [coder-result (((json-coder-fn (:type tc)) cx) graph)]
-        (if (= (first coder-result) :left)
-          (do (println (str "FAIL: " path))
-              (println (str "  Failed to create JSON coder: " (second coder-result)))
-              [0 1 0])
-          (let [coder (second coder-result)
-                ;; Encode
-                encode-result (((:encode coder) cx) (:term tc))]
-            (if (= (first encode-result) :left)
-              (do (println (str "FAIL: " path))
-                  (println (str "  JSON encode failed: " (second encode-result)))
-                  [0 1 0])
-              (let [encoded (second encode-result)
-                    ;; Decode back
-                    decode-result (((:decode coder) cx) encoded)]
+              ;; Roundtrip: decode back
+              (let [decode-result ((((decode-fn empty-types) (->hydra_core_name "test")) (:type tc)) encoded)]
                 (if (= (first decode-result) :left)
                   (do (println (str "FAIL: " path))
                       (println (str "  JSON decode failed: " (second decode-result)))
@@ -1191,7 +1145,7 @@
                     (if (terms-match? (:term tc) decoded)
                       [1 0 0]
                       (do (println (str "FAIL: " path))
-                          (println (str "  JSON roundtrip mismatch"))
+                          (println (str "  JSON roundtrip term mismatch"))
                           (try
                             (println (str "  Expected: " (show-term (:term tc))))
                             (println (str "  Actual:   " (show-term decoded)))
@@ -1204,51 +1158,79 @@
         (println (str "  EXCEPTION: " (.getMessage e)))
         [0 1 0]))))
 
-(defn- run-json-decode-test [path tc]
-  (let [json-coder-fn (resolve-fn 'hydra.ext.org.json.coder 'hydra_ext_org_json_coder_json_coder)
-        cx (empty-context) graph @test-graph]
+(defn- run-json-roundtrip-test [path tc]
+  (let [encode-fn (resolve-fn 'hydra.json.encode 'hydra_json_encode_to_json)
+        decode-fn (resolve-fn 'hydra.json.decode 'hydra_json_decode_from_json)
+        empty-types ()]
     (try
-      (let [coder-result (((json-coder-fn (:type tc)) cx) graph)]
-        (if (= (first coder-result) :left)
+      (let [encode-result (encode-fn (:term tc))]
+        (if (= (first encode-result) :left)
           (do (println (str "FAIL: " path))
-              (println (str "  Failed to create JSON coder: " (second coder-result)))
+              (println (str "  JSON encode failed: " (second encode-result)))
               [0 1 0])
-          (let [coder (second coder-result)
-                decode-result (((:decode coder) cx) (:json tc))
-                expected (:expected tc)]
-            ;; expected is an Either
-            (cond
-              (= (first expected) :left)
-              ;; Expected failure
-              (if (= (first decode-result) :left)
+          (let [encoded (second encode-result)
+                ;; Decode back
+                decode-result ((((decode-fn empty-types) (->hydra_core_name "test")) (:type tc)) encoded)]
+            (if (= (first decode-result) :left)
+              (do (println (str "FAIL: " path))
+                  (println (str "  JSON decode failed: " (second decode-result)))
+                  [0 1 0])
+              (let [decoded (second decode-result)]
+                (if (terms-match? (:term tc) decoded)
+                  [1 0 0]
+                  (do (println (str "FAIL: " path))
+                      (println (str "  JSON roundtrip mismatch"))
+                      (try
+                        (println (str "  Expected: " (show-term (:term tc))))
+                        (println (str "  Actual:   " (show-term decoded)))
+                        (catch Throwable _
+                          (println (str "  Expected (raw): " (pr-str (:term tc))))
+                          (println (str "  Actual (raw):   " (pr-str decoded)))))
+                      [0 1 0])))))))
+      (catch Throwable e
+        (println (str "FAIL: " path))
+        (println (str "  EXCEPTION: " (.getMessage e)))
+        [0 1 0]))))
+
+(defn- run-json-decode-test [path tc]
+  (let [decode-fn (resolve-fn 'hydra.json.decode 'hydra_json_decode_from_json)
+        empty-types ()]
+    (try
+      (let [decode-result ((((decode-fn empty-types) (->hydra_core_name "test")) (:type tc)) (:json tc))
+            expected (:expected tc)]
+        ;; expected is an Either
+        (cond
+          (= (first expected) :left)
+          ;; Expected failure
+          (if (= (first decode-result) :left)
+            [1 0 0]
+            (do (println (str "FAIL: " path))
+                (println "  Expected decode failure but got success")
+                [0 1 0]))
+
+          (= (first expected) :right)
+          ;; Expected success
+          (if (= (first decode-result) :left)
+            (do (println (str "FAIL: " path))
+                (println (str "  JSON decode failed: " (second decode-result)))
+                [0 1 0])
+            (let [actual (second decode-result)
+                  expected-term (second expected)]
+              (if (terms-match? expected-term actual)
                 [1 0 0]
                 (do (println (str "FAIL: " path))
-                    (println "  Expected decode failure but got success")
-                    [0 1 0]))
+                    (println (str "  JSON decode mismatch"))
+                    (try
+                      (println (str "  Expected: " (show-term expected-term)))
+                      (println (str "  Actual:   " (show-term actual)))
+                      (catch Throwable _
+                        (println (str "  Expected (raw): " (pr-str expected-term)))
+                        (println (str "  Actual (raw):   " (pr-str actual)))))
+                    [0 1 0]))))
 
-              (= (first expected) :right)
-              ;; Expected success
-              (if (= (first decode-result) :left)
-                (do (println (str "FAIL: " path))
-                    (println (str "  JSON decode failed: " (second decode-result)))
-                    [0 1 0])
-                (let [actual (second decode-result)
-                      expected-term (second expected)]
-                  (if (terms-match? expected-term actual)
-                    [1 0 0]
-                    (do (println (str "FAIL: " path))
-                        (println (str "  JSON decode mismatch"))
-                        (try
-                          (println (str "  Expected: " (show-term expected-term)))
-                          (println (str "  Actual:   " (show-term actual)))
-                          (catch Throwable _
-                            (println (str "  Expected (raw): " (pr-str expected-term)))
-                            (println (str "  Actual (raw):   " (pr-str actual)))))
-                        [0 1 0]))))
-
-              :else
-              (do (println (str "FAIL: " path " - unexpected expected format"))
-                  [0 1 0])))))
+          :else
+          (do (println (str "FAIL: " path " - unexpected expected format"))
+              [0 1 0])))
       (catch Throwable e
         (println (str "FAIL: " path))
         (println (str "  EXCEPTION: " (.getMessage e)))
@@ -1353,8 +1335,8 @@
   (require 'hydra.json.bootstrap)
   (require 'hydra.json.parser)
   (require 'hydra.json.writer)
-  (try (require 'hydra.ext.org.json.coder)
-    (catch Exception e (println "Warning: could not load hydra.ext.org.json.coder:" (.getMessage e))))
+  (require 'hydra.json.encode)
+  (require 'hydra.json.decode)
   ;; Load test suite
   (require 'hydra.test.testSuite)
   ;; Build the test graph now that all namespaces are loaded

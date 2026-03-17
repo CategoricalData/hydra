@@ -55,6 +55,11 @@
         acc
         (recur ((f acc) (first rest_)) (next rest_))))))))
 
+;; foldr :: (a -> b -> b) -> b -> [a] -> b
+(def hydra_lib_lists_foldr
+  (fn [f] (fn [init_] (fn [xs]
+    (reduce (fn [acc el] ((f el) acc)) init_ (reverse xs))))))
+
 ;; head :: [a] -> a
 (def hydra_lib_lists_head
   (fn [xs] (first xs)))
