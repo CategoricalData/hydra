@@ -1,0 +1,11 @@
+(defpackage :hydra.encode.workflow
+(:use :cl :hydra.core :hydra.encode.core :hydra.encode.module :hydra.lib.lists :hydra.workflow)
+(:export :hydra_encode_workflow_hydra_schema_spec :hydra_encode_workflow_schema_spec :hydra_encode_workflow_transform_workflow))
+
+(in-package :hydra.encode.workflow)
+
+(cl:defvar hydra_encode_workflow_hydra_schema_spec (cl:lambda (x) (list :record (make-hydra_core_record "hydra.workflow.HydraSchemaSpec" (cl:list (make-hydra_core_field "modules" ((cl:lambda (xs) (list :list ((hydra_lib_lists_map hydra_encode_module_module) xs))) ((cl:lambda (v) (hydra_workflow_hydra_schema_spec-modules v)) x))) (make-hydra_core_field "typeName" (hydra_encode_core_name ((cl:lambda (v) (hydra_workflow_hydra_schema_spec-type_name v)) x))))))))
+
+(cl:defvar hydra_encode_workflow_schema_spec (cl:lambda (match_target) ((cl:lambda (match_value) (cond ((equal (car match_target) :hydra) ((cl:lambda (y) (list :union (make-hydra_core_injection "hydra.workflow.SchemaSpec" (make-hydra_core_field "hydra" (hydra_encode_workflow_hydra_schema_spec y))))) match_value)) ((equal (car match_target) :file) ((cl:lambda (y) (list :union (make-hydra_core_injection "hydra.workflow.SchemaSpec" (make-hydra_core_field "file" ((cl:lambda (x) (list :literal (list :string x))) y))))) match_value)) ((equal (car match_target) :provided) ((cl:lambda (y) (list :union (make-hydra_core_injection "hydra.workflow.SchemaSpec" (make-hydra_core_field "provided" ((cl:lambda (_) (list :unit cl:nil)) y))))) match_value)))) (cadr match_target))))
+
+(cl:defvar hydra_encode_workflow_transform_workflow (cl:lambda (x) (list :record (make-hydra_core_record "hydra.workflow.TransformWorkflow" (cl:list (make-hydra_core_field "name" ((cl:lambda (x) (list :literal (list :string x))) ((cl:lambda (v) (hydra_workflow_transform_workflow-name v)) x))) (make-hydra_core_field "schemaSpec" (hydra_encode_workflow_schema_spec ((cl:lambda (v) (hydra_workflow_transform_workflow-schema_spec v)) x))) (make-hydra_core_field "srcDir" ((cl:lambda (x) (list :literal (list :string x))) ((cl:lambda (v) (hydra_workflow_transform_workflow-src_dir v)) x))) (make-hydra_core_field "destDir" ((cl:lambda (x) (list :literal (list :string x))) ((cl:lambda (v) (hydra_workflow_transform_workflow-dest_dir v)) x))))))))
