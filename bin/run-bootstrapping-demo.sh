@@ -23,7 +23,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 RUNS_DIR="$REPO_ROOT/bootstrap/runs"
-DEMO_DIR="$REPO_ROOT/hydra-ext/demos/bootstrapping"
+DEMO_DIR="$REPO_ROOT/hydra-ext/demos/bootstrapping/bin"
 
 # Check for dashboard-only mode
 if [ "${1:-}" = "dashboard" ]; then

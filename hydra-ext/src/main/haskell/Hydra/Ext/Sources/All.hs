@@ -171,11 +171,15 @@ hydraExtJsonModules = hydraExtModules
   ++ hydraExtDecodingModules
   ++ hydraExtEncodingModules
 
--- | Ext modules whose generated Java is checked into hydra-ext/src/gen-main/java.
---   These are the modules needed by hydra-ext demos and other Java code.
---   Not to be confused with Java coder modules.
+-- | Ext modules whose generated code is checked into hydra-ext/src/gen-main/ for each
+--   target language (Haskell, Java, Python). These are the modules needed by hydra-ext
+--   demos and other target-language code. Not to be confused with language coder modules.
+hydraExtDemoModules :: [Module]
+hydraExtDemoModules = L.nub $ L.concat [pgModules, genpgModules, rdfModules]
+
+-- | Legacy alias.
 hydraExtJavaModules :: [Module]
-hydraExtJavaModules = L.nub $ L.concat [pgModules, genpgModules, rdfModules]
+hydraExtJavaModules = hydraExtDemoModules
 
 otherExtModules :: [Module]
 otherExtModules = [

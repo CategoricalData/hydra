@@ -295,6 +295,25 @@ readManifestField basePath fieldName = do
     toNamespace (Json.ValueString s) = Namespace s
     toNamespace _ = error $ "manifest.json: expected string in " ++ fieldName
 
+-- | Read a manifest field, trying a primary name first and falling back to an alternative.
+readManifestFieldWithFallback :: FilePath -> String -> String -> IO [Namespace]
+readManifestFieldWithFallback basePath primaryField fallbackField = do
+    let manifestPath = basePath FP.</> "manifest.json"
+    parseResult <- parseJsonFile manifestPath
+    case parseResult of
+      Left err -> fail $ "Failed to parse manifest.json: " ++ err
+      Right jsonVal -> case jsonVal of
+        Json.ValueObject obj -> case M.lookup primaryField obj of
+          Just (Json.ValueArray arr) -> return $ fmap toNamespace arr
+          _ -> case M.lookup fallbackField obj of
+            Just (Json.ValueArray arr) -> return $ fmap toNamespace arr
+            Nothing -> fail $ "manifest.json missing fields: " ++ primaryField ++ " and " ++ fallbackField
+            Just _ -> fail $ "manifest.json field " ++ fallbackField ++ " is not an array"
+        _ -> fail "manifest.json is not a JSON object"
+  where
+    toNamespace (Json.ValueString s) = Namespace s
+    toNamespace _ = error $ "manifest.json: expected string in " ++ primaryField ++ "/" ++ fallbackField
+
 -- | Load modules from JSON files for a list of namespaces.
 -- Uses the universe modules to build the graph for type resolution.
 -- When doStripTypeSchemes is True, TypeSchemes are stripped from term bindings.

@@ -40,12 +40,12 @@ By default, all output goes to `/tmp/hydra-bootstrapping-demo/` with subdirector
 hydra-ext/
 ├── demos/bootstrapping/
 │   ├── README.md                    # This file
-│   ├── bootstrap-all.sh             # Run all 9 bootstrapping paths
-│   ├── haskell-to-haskell.sh        # Haskell -> JSON -> Haskell
-│   ├── haskell-to-java.sh           # Haskell -> JSON -> Java
-│   ├── haskell-to-python.sh         # Haskell -> JSON -> Python
-│   ├── java-bootstrap.sh            # Java -> JSON -> target
-│   └── python-bootstrap.sh          # Python -> JSON -> target
+│   ├── bin/
+│   │   ├── bootstrap-all.sh         # Run all 9 bootstrapping paths
+│   │   ├── haskell-to-haskell.sh    # Haskell -> JSON -> Haskell
+│   │   ├── haskell-to-java.sh       # Haskell -> JSON -> Java
+│   │   ├── haskell-to-python.sh     # Haskell -> JSON -> Python
+│   │   └── ...                      # Other host-to-target scripts
 ├── src/exec/bootstrap-from-json/
 │   └── Main.hs                      # Haskell bootstrap executable
 hydra-java/
@@ -140,7 +140,7 @@ for more details.
 
 ```bash
 cd hydra-ext
-./demos/bootstrapping/bootstrap-all.sh
+./demos/bootstrapping/bin/bootstrap-all.sh
 ```
 
 This generates code for all host/target combinations, compares the output
@@ -153,13 +153,13 @@ file counts.
 cd hydra-ext
 
 # Haskell host
-./demos/bootstrapping/haskell-to-java.sh
+./demos/bootstrapping/bin/haskell-to-java.sh
 
 # Java host
-./demos/bootstrapping/java-bootstrap.sh --target java
+./demos/bootstrapping/bin/java-bootstrap.sh --target java
 
 # Python host
-./demos/bootstrapping/python-bootstrap.sh --target python
+./demos/bootstrapping/bin/python-bootstrap.sh --target python
 ```
 
 ### Run the bootstrap executable directly
@@ -171,7 +171,7 @@ stack exec bootstrap-from-json -- --target java +RTS -K256M -A32M -RTS
 
 # Java
 cd hydra-ext
-./demos/bootstrapping/java-bootstrap.sh --target haskell
+./demos/bootstrapping/bin/java-bootstrap.sh --target haskell
 
 # Python
 cd hydra-python

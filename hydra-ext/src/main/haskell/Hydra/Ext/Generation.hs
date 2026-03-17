@@ -50,8 +50,9 @@ writeExtManifestJson :: FilePath -> IO ()
 writeExtManifestJson basePath = do
     let jsonVal = Json.ValueObject $ M.fromList [
             ("hydraBootstrapCoderModules", namespacesJson hydraBootstrapCoderModules),
+            ("hydraExtDemoModules", namespacesJson hydraExtDemoModules),
             ("hydraExtEssentialModules", namespacesJson hydraExtEssentialModules),
-            ("hydraExtJavaModules", namespacesJson hydraExtJavaModules),
+            ("hydraExtJavaModules", namespacesJson hydraExtJavaModules),  -- legacy alias
             ("hydraExtModules", namespacesJson hydraExtJsonModules)]
         jsonStr = JsonWriter.printJson jsonVal
         filePath = basePath FP.</> "manifest.json"

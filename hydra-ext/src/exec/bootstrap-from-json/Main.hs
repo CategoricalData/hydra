@@ -22,7 +22,8 @@
 --   --include-gentests     Also generate generation tests
 --   --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
 --   --types-only           Only generate type-defining modules
---   --ext-java-only        Only generate hydraExtJavaModules from ext manifest
+--   --ext-only             Only generate hydraExtDemoModules from ext manifest
+--   --ext-java-only        Legacy alias for --ext-only
 --   --json-dir <dir>       Override kernel JSON directory
 --   --ext-json-dir <dir>   Override ext JSON directory (for --include-coders)
 
@@ -121,7 +122,8 @@ parseArgs = go defaultOptions
     go opts ("--include-gentests" : rest) = go (opts { optIncludeGenTests = True }) rest
     go opts ("--kernel-only" : rest) = go (opts { optKernelOnly = True }) rest
     go opts ("--types-only" : rest) = go (opts { optTypesOnly = True }) rest
-    go opts ("--ext-java-only" : rest) = go (opts { optExtJavaOnly = True }) rest
+    go opts ("--ext-only" : rest) = go (opts { optExtJavaOnly = True }) rest
+    go opts ("--ext-java-only" : rest) = go (opts { optExtJavaOnly = True }) rest  -- legacy alias
     go opts ("--json-dir" : d : rest) = go (opts { optJsonDir = Just d }) rest
     go opts ("--ext-json-dir" : d : rest) = go (opts { optExtJsonDir = Just d }) rest
     go _ (arg : _) = Left $ "Unknown argument: " ++ arg
@@ -137,7 +139,8 @@ usage = unlines
   , "  --include-gentests     Also generate generation tests"
   , "  --kernel-only          Only generate kernel modules (exclude hydra.ext.*)"
   , "  --types-only           Only generate type-defining modules"
-  , "  --ext-java-only        Only generate hydraExtJavaModules from ext manifest"
+  , "  --ext-only             Only generate hydraExtDemoModules from ext manifest"
+  , "  --ext-java-only        Legacy alias for --ext-only"
   , "  --json-dir <dir>       Override kernel JSON directory"
   , "  --ext-json-dir <dir>   Override ext JSON directory (for --include-coders)"
   ]
@@ -237,17 +240,17 @@ main = do
     putStrLn $ "Filtering to type modules: " ++ show (length allMainMods) ++ " of " ++ show (length filtered1)
     putStrLn ""
 
-  -- When --ext-java-only is used, load the ext Java modules from JSON
-  -- and generate only those (using allMainMods as the universe for type resolution)
+  -- When --ext-only (or legacy --ext-java-only) is used, load the ext demo modules
+  -- from JSON and generate only those (using allMainMods as the universe for type resolution)
   (modsToGenerate, allModsFinal) <- if optExtJavaOnly opts
     then do
-      extJavaNamespaces <- readManifestField extJsonDir "hydraExtJavaModules"
+      extDemoNamespaces <- readManifestFieldWithFallback extJsonDir "hydraExtDemoModules" "hydraExtJavaModules"
       -- Filter out modules already loaded as kernel or coder modules
       let loadedNsSet = fmap (unNamespace . moduleNamespace) allMainMods
-          toLoad = Prelude.filter (\ns -> unNamespace ns `notElem` loadedNsSet) extJavaNamespaces
-      putStrLn $ "Loading " ++ show (length toLoad) ++ " ext Java modules from JSON..."
+          toLoad = Prelude.filter (\ns -> unNamespace ns `notElem` loadedNsSet) extDemoNamespaces
+      putStrLn $ "Loading " ++ show (length toLoad) ++ " ext demo modules from JSON..."
       extMods <- loadModulesFromJson False extJsonDir kernelModules toLoad
-      putStrLn $ "  Loaded " ++ show (length extMods) ++ " ext Java modules"
+      putStrLn $ "  Loaded " ++ show (length extMods) ++ " ext demo modules"
       putStrLn ""
       return (extMods, allMainMods ++ extMods)
     else return (allMainMods, allMainMods)

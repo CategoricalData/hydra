@@ -1,9 +1,14 @@
 package hydra.pg.dsl;
 
+import hydra.pg.model.Edge;
 import hydra.pg.model.EdgeLabel;
 import hydra.pg.model.EdgeType;
+import hydra.pg.model.Graph;
+import hydra.pg.model.GraphSchema;
+import hydra.pg.model.Vertex;
 import hydra.pg.model.VertexLabel;
 import hydra.pg.model.VertexType;
+import hydra.util.PersistentMap;
 
 /**
  * DSL for constructing property graph types (vertex and edge types, property types)
@@ -89,5 +94,45 @@ public interface Graphs {
      */
     static <T> VertexTypeBuilder<T> vertexType(String label, T idType) {
         return new VertexTypeBuilder<T>(new VertexLabel(label), idType);
+    }
+
+    /**
+     * Creates a graph from lists of vertices and edges.
+     *
+     * @param <V> the value type for vertex and edge ids
+     * @param vertices the list of vertices
+     * @param edges the list of edges
+     * @return a graph
+     */
+    static <V> Graph<V> graph(java.util.List<Vertex<V>> vertices, java.util.List<Edge<V>> edges) {
+        PersistentMap<V, Vertex<V>> vertexMap = PersistentMap.empty();
+        for (Vertex<V> v : vertices) {
+            vertexMap = vertexMap.insert(v.id, v);
+        }
+        PersistentMap<V, Edge<V>> edgeMap = PersistentMap.empty();
+        for (Edge<V> e : edges) {
+            edgeMap = edgeMap.insert(e.id, e);
+        }
+        return new Graph<>(vertexMap, edgeMap);
+    }
+
+    /**
+     * Creates a graph schema from lists of vertex types and edge types.
+     *
+     * @param <T> the type representation
+     * @param vertexTypes the list of vertex types
+     * @param edgeTypes the list of edge types
+     * @return a graph schema
+     */
+    static <T> GraphSchema<T> schema(java.util.List<VertexType<T>> vertexTypes, java.util.List<EdgeType<T>> edgeTypes) {
+        PersistentMap<VertexLabel, VertexType<T>> vertices = PersistentMap.empty();
+        for (VertexType<T> vt : vertexTypes) {
+            vertices = vertices.insert(vt.label, vt);
+        }
+        PersistentMap<EdgeLabel, EdgeType<T>> edges = PersistentMap.empty();
+        for (EdgeType<T> et : edgeTypes) {
+            edges = edges.insert(et.label, et);
+        }
+        return new GraphSchema<>(vertices, edges);
     }
 }

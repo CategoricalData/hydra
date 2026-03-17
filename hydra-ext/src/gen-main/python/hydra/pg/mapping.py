@@ -4,11 +4,12 @@ r"""A model for property graph mapping specifications. See https://github.com/Ca
 
 from __future__ import annotations
 from dataclasses import dataclass
+from functools import lru_cache
 from hydra.dsl.python import Node, frozenlist
-from typing import Annotated, Generic, TypeAlias, TypeVar
-import hydra.util
+from typing import Annotated, Generic, TypeAlias, TypeVar, cast
 import hydra.core
 import hydra.pg.model
+import hydra.util
 
 S = TypeVar("S")
 T = TypeVar("T")
@@ -33,23 +34,23 @@ class AnnotationSchema:
     in_edge: str
     in_edge_label: str
     ignore: str
-
-ANNOTATION_SCHEMA__NAME = hydra.core.Name("hydra.pg.mapping.AnnotationSchema")
-ANNOTATION_SCHEMA__VERTEX_LABEL__NAME = hydra.core.Name("vertexLabel")
-ANNOTATION_SCHEMA__EDGE_LABEL__NAME = hydra.core.Name("edgeLabel")
-ANNOTATION_SCHEMA__VERTEX_ID__NAME = hydra.core.Name("vertexId")
-ANNOTATION_SCHEMA__EDGE_ID__NAME = hydra.core.Name("edgeId")
-ANNOTATION_SCHEMA__PROPERTY_KEY__NAME = hydra.core.Name("propertyKey")
-ANNOTATION_SCHEMA__PROPERTY_VALUE__NAME = hydra.core.Name("propertyValue")
-ANNOTATION_SCHEMA__OUT_VERTEX__NAME = hydra.core.Name("outVertex")
-ANNOTATION_SCHEMA__OUT_VERTEX_LABEL__NAME = hydra.core.Name("outVertexLabel")
-ANNOTATION_SCHEMA__IN_VERTEX__NAME = hydra.core.Name("inVertex")
-ANNOTATION_SCHEMA__IN_VERTEX_LABEL__NAME = hydra.core.Name("inVertexLabel")
-ANNOTATION_SCHEMA__OUT_EDGE__NAME = hydra.core.Name("outEdge")
-ANNOTATION_SCHEMA__OUT_EDGE_LABEL__NAME = hydra.core.Name("outEdgeLabel")
-ANNOTATION_SCHEMA__IN_EDGE__NAME = hydra.core.Name("inEdge")
-ANNOTATION_SCHEMA__IN_EDGE_LABEL__NAME = hydra.core.Name("inEdgeLabel")
-ANNOTATION_SCHEMA__IGNORE__NAME = hydra.core.Name("ignore")
+    
+    TYPE_ = hydra.core.Name("hydra.pg.mapping.AnnotationSchema")
+    VERTEX_LABEL = hydra.core.Name("vertexLabel")
+    EDGE_LABEL = hydra.core.Name("edgeLabel")
+    VERTEX_ID = hydra.core.Name("vertexId")
+    EDGE_ID = hydra.core.Name("edgeId")
+    PROPERTY_KEY = hydra.core.Name("propertyKey")
+    PROPERTY_VALUE = hydra.core.Name("propertyValue")
+    OUT_VERTEX = hydra.core.Name("outVertex")
+    OUT_VERTEX_LABEL = hydra.core.Name("outVertexLabel")
+    IN_VERTEX = hydra.core.Name("inVertex")
+    IN_VERTEX_LABEL = hydra.core.Name("inVertexLabel")
+    OUT_EDGE = hydra.core.Name("outEdge")
+    OUT_EDGE_LABEL = hydra.core.Name("outEdgeLabel")
+    IN_EDGE = hydra.core.Name("inEdge")
+    IN_EDGE_LABEL = hydra.core.Name("inEdgeLabel")
+    IGNORE = hydra.core.Name("ignore")
 
 @dataclass(frozen=True)
 class EdgeSpec:
@@ -60,17 +61,19 @@ class EdgeSpec:
     out: Annotated[ValueSpec, "A specification of the out-vertex reference of each target edge"]
     in_: Annotated[ValueSpec, "A specification of the in-vertex reference of each target edge"]
     properties: Annotated[frozenlist[PropertySpec], "Zero or more property specifications for each target edge"]
+    
+    TYPE_ = hydra.core.Name("hydra.pg.mapping.EdgeSpec")
+    LABEL = hydra.core.Name("label")
+    ID = hydra.core.Name("id")
+    OUT = hydra.core.Name("out")
+    IN = hydra.core.Name("in")
+    PROPERTIES = hydra.core.Name("properties")
 
-EDGE_SPEC__NAME = hydra.core.Name("hydra.pg.mapping.EdgeSpec")
-EDGE_SPEC__LABEL__NAME = hydra.core.Name("label")
-EDGE_SPEC__ID__NAME = hydra.core.Name("id")
-EDGE_SPEC__OUT__NAME = hydra.core.Name("out")
-EDGE_SPEC__IN__NAME = hydra.core.Name("in")
-EDGE_SPEC__PROPERTIES__NAME = hydra.core.Name("properties")
+class ElementSpecVertex(Node["VertexSpec"]):
+    ...
 
-class ElementSpecVertex(Node["VertexSpec"]): ...
-
-class ElementSpecEdge(Node["EdgeSpec"]): ...
+class ElementSpecEdge(Node["EdgeSpec"]):
+    ...
 
 class _ElementSpecMeta(type):
     def __getitem__(cls, item):
@@ -80,11 +83,9 @@ class _ElementSpecMeta(type):
 class ElementSpec(metaclass=_ElementSpecMeta):
     r"""ElementSpecVertex | ElementSpecEdge"""
     
-    pass
-
-ELEMENT_SPEC__NAME = hydra.core.Name("hydra.pg.mapping.ElementSpec")
-ELEMENT_SPEC__VERTEX__NAME = hydra.core.Name("vertex")
-ELEMENT_SPEC__EDGE__NAME = hydra.core.Name("edge")
+    TYPE_ = hydra.core.Name("hydra.pg.mapping.ElementSpec")
+    VERTEX = hydra.core.Name("vertex")
+    EDGE = hydra.core.Name("edge")
 
 @dataclass(frozen=True)
 class PropertySpec:
@@ -92,38 +93,38 @@ class PropertySpec:
     
     key: Annotated[hydra.pg.model.PropertyKey, "The key of the target properties"]
     value: Annotated[ValueSpec, "A specification of the value of each target property, which must conform to the type associated with the property key"]
-
-PROPERTY_SPEC__NAME = hydra.core.Name("hydra.pg.mapping.PropertySpec")
-PROPERTY_SPEC__KEY__NAME = hydra.core.Name("key")
-PROPERTY_SPEC__VALUE__NAME = hydra.core.Name("value")
+    
+    TYPE_ = hydra.core.Name("hydra.pg.mapping.PropertySpec")
+    KEY = hydra.core.Name("key")
+    VALUE = hydra.core.Name("value")
 
 @dataclass(frozen=True)
 class Schema(Generic[S, T, V]):
     r"""A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types."""
     
-    vertex_id_types: hydra.util.Coder[S, S, hydra.core.Type, T]
-    vertex_ids: hydra.util.Coder[S, S, hydra.core.Term, V]
-    edge_id_types: hydra.util.Coder[S, S, hydra.core.Type, T]
-    edge_ids: hydra.util.Coder[S, S, hydra.core.Term, V]
-    property_types: hydra.util.Coder[S, S, hydra.core.Type, T]
-    property_values: hydra.util.Coder[S, S, hydra.core.Term, V]
+    vertex_id_types: hydra.util.Coder[hydra.core.Type, T]
+    vertex_ids: hydra.util.Coder[hydra.core.Term, V]
+    edge_id_types: hydra.util.Coder[hydra.core.Type, T]
+    edge_ids: hydra.util.Coder[hydra.core.Term, V]
+    property_types: hydra.util.Coder[hydra.core.Type, T]
+    property_values: hydra.util.Coder[hydra.core.Term, V]
     annotations: AnnotationSchema
     default_vertex_id: V
     default_edge_id: V
-
-SCHEMA__NAME = hydra.core.Name("hydra.pg.mapping.Schema")
-SCHEMA__VERTEX_ID_TYPES__NAME = hydra.core.Name("vertexIdTypes")
-SCHEMA__VERTEX_IDS__NAME = hydra.core.Name("vertexIds")
-SCHEMA__EDGE_ID_TYPES__NAME = hydra.core.Name("edgeIdTypes")
-SCHEMA__EDGE_IDS__NAME = hydra.core.Name("edgeIds")
-SCHEMA__PROPERTY_TYPES__NAME = hydra.core.Name("propertyTypes")
-SCHEMA__PROPERTY_VALUES__NAME = hydra.core.Name("propertyValues")
-SCHEMA__ANNOTATIONS__NAME = hydra.core.Name("annotations")
-SCHEMA__DEFAULT_VERTEX_ID__NAME = hydra.core.Name("defaultVertexId")
-SCHEMA__DEFAULT_EDGE_ID__NAME = hydra.core.Name("defaultEdgeId")
+    
+    TYPE_ = hydra.core.Name("hydra.pg.mapping.Schema")
+    VERTEX_ID_TYPES = hydra.core.Name("vertexIdTypes")
+    VERTEX_IDS = hydra.core.Name("vertexIds")
+    EDGE_ID_TYPES = hydra.core.Name("edgeIdTypes")
+    EDGE_IDS = hydra.core.Name("edgeIds")
+    PROPERTY_TYPES = hydra.core.Name("propertyTypes")
+    PROPERTY_VALUES = hydra.core.Name("propertyValues")
+    ANNOTATIONS = hydra.core.Name("annotations")
+    DEFAULT_VERTEX_ID = hydra.core.Name("defaultVertexId")
+    DEFAULT_EDGE_ID = hydra.core.Name("defaultEdgeId")
 
 class ValueSpecValue:
-    r"""A trivial no-op specification which passes the entire value."""
+    r"""A trivial no-op specification which passes the entire value"""
     
     __slots__ = ()
     def __eq__(self, other):
@@ -132,7 +133,7 @@ class ValueSpecValue:
         return hash("ValueSpecValue")
 
 class ValueSpecPattern(Node[str]):
-    r"""A compact path representing the function, e.g. engine-${engineInfo/model/name}."""
+    r"""A compact path representing the function, e.g. engine-${engineInfo/model/name}"""
 
 class _ValueSpecMeta(type):
     def __getitem__(cls, item):
@@ -142,11 +143,9 @@ class _ValueSpecMeta(type):
 class ValueSpec(metaclass=_ValueSpecMeta):
     r"""ValueSpecValue | ValueSpecPattern"""
     
-    pass
-
-VALUE_SPEC__NAME = hydra.core.Name("hydra.pg.mapping.ValueSpec")
-VALUE_SPEC__VALUE__NAME = hydra.core.Name("value")
-VALUE_SPEC__PATTERN__NAME = hydra.core.Name("pattern")
+    TYPE_ = hydra.core.Name("hydra.pg.mapping.ValueSpec")
+    VALUE = hydra.core.Name("value")
+    PATTERN = hydra.core.Name("pattern")
 
 @dataclass(frozen=True)
 class VertexSpec:
@@ -155,8 +154,8 @@ class VertexSpec:
     label: Annotated[hydra.pg.model.VertexLabel, "The label of the target vertices, which must conform to the vertex type associated with that label."]
     id: Annotated[ValueSpec, "A specification of the id of each target vertex"]
     properties: Annotated[frozenlist[PropertySpec], "Zero or more property specifications for each target vertex"]
-
-VERTEX_SPEC__NAME = hydra.core.Name("hydra.pg.mapping.VertexSpec")
-VERTEX_SPEC__LABEL__NAME = hydra.core.Name("label")
-VERTEX_SPEC__ID__NAME = hydra.core.Name("id")
-VERTEX_SPEC__PROPERTIES__NAME = hydra.core.Name("properties")
+    
+    TYPE_ = hydra.core.Name("hydra.pg.mapping.VertexSpec")
+    LABEL = hydra.core.Name("label")
+    ID = hydra.core.Name("id")
+    PROPERTIES = hydra.core.Name("properties")

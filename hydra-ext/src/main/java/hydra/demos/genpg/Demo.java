@@ -155,6 +155,9 @@ public class Demo {
         }
         System.out.println("  Tables: " + tableNames);
 
+        // Hydra computation (timed)
+        long startTime = System.nanoTime();
+
         LazyGraph<Term> g = transformTables(sourceRoot, tableSchemas, graphMapping);
         ConsList<Element<Term>> els = lazyGraphToElements(g);
 
@@ -165,7 +168,6 @@ public class Demo {
         System.out.println("  Vertices: " + vertexCount);
         System.out.println("  Edges: " + edgeCount);
 
-        System.out.println("Writing GraphSON to " + outputPath);
         Either<?, ConsList<hydra.json.model.Value>> jsonResult = Utils.pgElementsToGraphson(
             v -> Utils.encodeTermValue(v), els);
         if (jsonResult.isLeft()) {
@@ -178,10 +180,15 @@ public class Demo {
             .map(Writer::printJson)
             .collect(Collectors.toList());
 
+        long elapsedNs = System.nanoTime() - startTime;
+
+        // Write output (I/O, not timed)
+        System.out.println("Writing GraphSON to " + outputPath);
         Files.createDirectories(outputPath.getParent());
         Files.write(outputPath, (String.join("\n", jsonStrings) + "\n").getBytes(StandardCharsets.UTF_8));
 
         System.out.println("Done. Output written to " + outputPath);
+        System.err.println("HYDRA_TIME_MS=" + (elapsedNs / 1_000_000.0));
     }
 
     /**
