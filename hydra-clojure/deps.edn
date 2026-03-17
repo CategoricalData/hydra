@@ -1,0 +1,2 @@
+{:paths ["src/gen-main/clojure" "src/main/clojure"
+         "src/gen-test/clojure" "src/test/clojure"]}
