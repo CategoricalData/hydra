@@ -1,0 +1,195 @@
+(in-package :cl-user)
+
+;; cat :: [String] -> String
+(defvar hydra_lib_strings_cat
+  (lambda (strs)
+    (apply #'concatenate 'string strs)))
+
+;; cat2 :: String -> String -> String
+(defvar hydra_lib_strings_cat2
+  (lambda (a)
+    (lambda (b)
+      (concatenate 'string a b))))
+
+;; char_at :: Int -> String -> Int32 (char as codepoint)
+(defvar hydra_lib_strings_char_at
+  (lambda (n)
+    (lambda (s)
+      (char-code (char s n)))))
+
+;; cons :: Int32 (char as codepoint) -> String -> String
+(defvar hydra_lib_strings_cons
+  (lambda (c)
+    (lambda (s)
+      (concatenate 'string (string (code-char c)) s))))
+
+;; drop :: Int -> String -> String
+(defvar hydra_lib_strings_drop
+  (lambda (n)
+    (lambda (s)
+      (if (>= n (length s))
+          ""
+          (subseq s n)))))
+
+;; from_list :: [Int32] -> String (codepoints to string)
+(defvar hydra_lib_strings_from_list
+  (lambda (codepoints)
+    (coerce (mapcar #'code-char codepoints) 'string)))
+
+;; head :: String -> Int32 (char as codepoint)
+(defvar hydra_lib_strings_head
+  (lambda (s)
+    (char-code (char s 0))))
+
+;; intercalate :: String -> [String] -> String
+(defvar hydra_lib_strings_intercalate
+  (lambda (sep)
+    (lambda (strs)
+      (if (null strs)
+          ""
+          (let ((acc (car strs)))
+            (dolist (s (cdr strs) acc)
+              (setf acc (concatenate 'string acc sep s))))))))
+
+;; is_infix_of :: String -> String -> Bool
+(defvar hydra_lib_strings_is_infix_of
+  (lambda (needle)
+    (lambda (haystack)
+      (if (search needle haystack) t nil))))
+
+;; is_prefix_of :: String -> String -> Bool
+(defvar hydra_lib_strings_is_prefix_of
+  (lambda (prefix)
+    (lambda (s)
+      (let ((plen (length prefix)))
+        (and (<= plen (length s))
+             (string= s prefix :end1 plen))))))
+
+;; is_suffix_of :: String -> String -> Bool
+(defvar hydra_lib_strings_is_suffix_of
+  (lambda (suffix)
+    (lambda (s)
+      (let ((slen (length suffix))
+            (len (length s)))
+        (and (<= slen len)
+             (string= s suffix :start1 (- len slen)))))))
+
+;; length :: String -> Int
+(defvar hydra_lib_strings_length
+  (lambda (s)
+    (length s)))
+
+;; lines :: String -> [String]
+;; Haskell semantics: lines "" = [], lines "\n" = [""], lines "a\n" = ["a"]
+(defvar hydra_lib_strings_lines
+  (lambda (s)
+    (if (zerop (length s))
+        nil
+        (let ((len (length s))
+              (acc nil)
+              (start 0))
+          (loop for i from 0 below len
+                when (char= (char s i) #\Newline)
+                do (push (subseq s start i) acc)
+                   (setf start (1+ i)))
+          ;; Only add trailing segment if string doesn't end with newline
+          (when (< start len)
+            (push (subseq s start len) acc))
+          (nreverse acc)))))
+
+;; null :: String -> Bool
+(defvar hydra_lib_strings_null
+  (lambda (s)
+    (zerop (length s))))
+
+;; replicate :: Int -> String -> String
+(defvar hydra_lib_strings_replicate
+  (lambda (n)
+    (lambda (s)
+      (let ((acc ""))
+        (dotimes (i n acc)
+          (setf acc (concatenate 'string acc s)))))))
+
+;; reverse :: String -> String
+(defvar hydra_lib_strings_reverse
+  (lambda (s)
+    (reverse s)))
+
+;; split_on :: String -> String -> [String]
+;; Haskell semantics: splitOn "" "" = [""], splitOn "" "abc" = ["", "a", "b", "c"]
+(defvar hydra_lib_strings_split_on
+  (lambda (sep)
+    (lambda (s)
+      (let ((sep-len (length sep))
+            (s-len (length s)))
+        (if (zerop sep-len)
+            ;; Empty separator: split between each character, with "" prefix
+            (cons "" (map 'list #'string (coerce s 'list)))
+            (loop with start = 0
+                  with acc = nil
+                  for i from 0
+                  while (<= (+ i sep-len) s-len)
+                  do (when (string= s sep :start1 i :end1 (+ i sep-len))
+                       (push (subseq s start i) acc)
+                       (setf start (+ i sep-len))
+                       (setf i (1- start)))
+                  finally (push (subseq s start s-len) acc)
+                          (return (nreverse acc))))))))
+
+;; tail :: String -> String
+(defvar hydra_lib_strings_tail
+  (lambda (s)
+    (subseq s 1)))
+
+;; take :: Int -> String -> String
+(defvar hydra_lib_strings_take
+  (lambda (n)
+    (lambda (s)
+      (subseq s 0 (min n (length s))))))
+
+;; to_list :: String -> [Int32] (string to codepoints)
+(defvar hydra_lib_strings_to_list
+  (lambda (s)
+    (map 'list #'char-code s)))
+
+;; to_lower :: String -> String
+(defvar hydra_lib_strings_to_lower
+  (lambda (s)
+    (string-downcase s)))
+
+;; to_upper :: String -> String
+(defvar hydra_lib_strings_to_upper
+  (lambda (s)
+    (string-upcase s)))
+
+;; unlines :: [String] -> String
+(defvar hydra_lib_strings_unlines
+  (lambda (strs)
+    (apply #'concatenate 'string
+           (mapcar (lambda (s) (concatenate 'string s (string #\Newline))) strs))))
+
+;; unwords :: [String] -> String
+(defvar hydra_lib_strings_unwords
+  (lambda (strs)
+    (if (null strs)
+        ""
+        (let ((acc (car strs)))
+          (dolist (s (cdr strs) acc)
+            (setf acc (concatenate 'string acc " " s)))))))
+
+;; words :: String -> [String]
+(defvar hydra_lib_strings_words
+  (lambda (s)
+    (let ((chars (coerce s 'list))
+          (current nil)
+          (acc nil))
+      (dolist (c chars)
+        (if (or (char= c #\Space) (char= c #\Tab) (char= c #\Newline)
+                (char= c #\Return) (char= c #\Page))
+            (when current
+              (push (coerce (nreverse current) 'string) acc)
+              (setf current nil))
+            (push c current)))
+      (when current
+        (push (coerce (nreverse current) 'string) acc))
+      (nreverse acc))))
