@@ -65,6 +65,14 @@ executables:
     dependencies:
       - hydra-ext
 
+  generate-lisp:
+    main: Main.hs
+    source-dirs:
+      - src/exec/generate-lisp
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+
   bootstrap-from-json:
     main: Main.hs
     source-dirs:
