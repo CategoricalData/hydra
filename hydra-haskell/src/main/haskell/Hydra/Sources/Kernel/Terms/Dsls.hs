@@ -273,13 +273,13 @@ generateRecordConstructor = define "generateRecordConstructor" $
   -- Build deep fields and record using helpers
   "dFields" <~ (Lists.map
     ("ft" ~> deepField (Core.fieldTypeName (var "ft"))
-      (unwrapTTerm (Core.termVariable (Core.name (Names.localNameOf @@ Core.fieldTypeName (var "ft"))))))
+      (unwrapTTerm (Core.termVariable (Core.name (Formatting.decapitalize @@ (Names.localNameOf @@ Core.fieldTypeName (var "ft")))))))
     (var "fieldTypes")) $
   "recordTerm" <~ (wrapTermInTTerm (deepRecord (var "typeName") (var "dFields"))) $
   -- Build (paramName, TTerm<fieldType>) pairs for lambda construction
   "paramPairs" <~ (Lists.map
     ("ft" ~> pair
-      (Names.localNameOf @@ Core.fieldTypeName (var "ft"))
+      (Formatting.decapitalize @@ (Names.localNameOf @@ Core.fieldTypeName (var "ft")))
       (wrapInTTerm (Core.fieldTypeType (var "ft"))))
     (var "fieldTypes")) $
   -- Wrap in typed lambdas for each parameter (right to left)

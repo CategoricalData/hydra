@@ -174,7 +174,7 @@ generateRecordConstructor origType typeName rt =
                 Core.fieldName = (Core.Name "term"),
                 Core.fieldTerm = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.phantoms.TTerm")))),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name (Names.localNameOf (Core.fieldTypeName ft))))}))}]})) fieldTypes)
+                  Core.applicationArgument = (Core.TermVariable (Core.Name (Formatting.decapitalize (Names.localNameOf (Core.fieldTypeName ft)))))}))}]})) fieldTypes)
     in  
       let recordTerm = (Core.TermWrap (Core.WrappedTerm {
               Core.wrappedTermTypeName = (Core.Name "hydra.phantoms.TTerm"),
@@ -194,7 +194,7 @@ generateRecordConstructor origType typeName rt =
                         Core.fieldName = (Core.Name "fields"),
                         Core.fieldTerm = (Core.TermList dFields)}]}))}}))}))
       in  
-        let paramPairs = (Lists.map (\ft -> (Names.localNameOf (Core.fieldTypeName ft), (Core.TypeApplication (Core.ApplicationType {
+        let paramPairs = (Lists.map (\ft -> (Formatting.decapitalize (Names.localNameOf (Core.fieldTypeName ft)), (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                 Core.applicationTypeArgument = (Core.fieldTypeType ft)})))) fieldTypes)
         in  
