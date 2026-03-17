@@ -6,30 +6,30 @@ import java.io.Serializable;
 
 public class UnqualifiedClassInstanceCreationExpression implements Serializable, Comparable<UnqualifiedClassInstanceCreationExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.UnqualifiedClassInstanceCreationExpression");
-  
+
   public static final hydra.core.Name TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
-  
+
   public static final hydra.core.Name CLASS_OR_INTERFACE = new hydra.core.Name("classOrInterface");
-  
+
   public static final hydra.core.Name ARGUMENTS = new hydra.core.Name("arguments");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
-  
+
   public final hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate classOrInterface;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> body;
-  
+
   public UnqualifiedClassInstanceCreationExpression (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate classOrInterface, hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments, hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> body) {
     this.typeArguments = typeArguments;
     this.classOrInterface = classOrInterface;
     this.arguments = arguments;
     this.body = body;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof UnqualifiedClassInstanceCreationExpression)) {
@@ -46,12 +46,12 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable,
       this.body,
       o.body);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(typeArguments) + 3 * java.util.Objects.hashCode(classOrInterface) + 5 * java.util.Objects.hashCode(arguments) + 7 * java.util.Objects.hashCode(body);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(UnqualifiedClassInstanceCreationExpression other) {
@@ -70,19 +70,19 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable,
     }
     return ((Comparable) body).compareTo(other.body);
   }
-  
+
   public UnqualifiedClassInstanceCreationExpression withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
-  
+
   public UnqualifiedClassInstanceCreationExpression withClassOrInterface(hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate classOrInterface) {
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
-  
+
   public UnqualifiedClassInstanceCreationExpression withArguments(hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments) {
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
-  
+
   public UnqualifiedClassInstanceCreationExpression withBody(hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> body) {
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }

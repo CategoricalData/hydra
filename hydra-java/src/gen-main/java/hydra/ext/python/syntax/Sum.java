@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class Sum implements Serializable, Comparable<Sum> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Sum");
-  
+
   public static final hydra.core.Name LHS = new hydra.core.Name("lhs");
-  
+
   public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.SumLhs> lhs;
-  
+
   public final hydra.ext.python.syntax.Term rhs;
-  
+
   public Sum (hydra.util.Maybe<hydra.ext.python.syntax.SumLhs> lhs, hydra.ext.python.syntax.Term rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Sum)) {
@@ -32,12 +32,12 @@ public class Sum implements Serializable, Comparable<Sum> {
       this.rhs,
       o.rhs);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(lhs) + 3 * java.util.Objects.hashCode(rhs);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Sum other) {
@@ -48,11 +48,11 @@ public class Sum implements Serializable, Comparable<Sum> {
     }
     return ((Comparable) rhs).compareTo(other.rhs);
   }
-  
+
   public Sum withLhs(hydra.util.Maybe<hydra.ext.python.syntax.SumLhs> lhs) {
     return new Sum(lhs, rhs);
   }
-  
+
   public Sum withRhs(hydra.ext.python.syntax.Term rhs) {
     return new Sum(lhs, rhs);
   }

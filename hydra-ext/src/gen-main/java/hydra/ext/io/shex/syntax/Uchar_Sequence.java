@@ -6,30 +6,30 @@ import java.io.Serializable;
 
 public class Uchar_Sequence implements Serializable, Comparable<Uchar_Sequence> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.Uchar_Sequence");
-  
+
   public static final hydra.core.Name HEX = new hydra.core.Name("Hex");
-  
+
   public static final hydra.core.Name HEX2 = new hydra.core.Name("Hex2");
-  
+
   public static final hydra.core.Name HEX3 = new hydra.core.Name("Hex3");
-  
+
   public static final hydra.core.Name HEX4 = new hydra.core.Name("Hex4");
-  
+
   public final hydra.ext.io.shex.syntax.Hex Hex;
-  
+
   public final hydra.ext.io.shex.syntax.Hex Hex2;
-  
+
   public final hydra.ext.io.shex.syntax.Hex Hex3;
-  
+
   public final hydra.ext.io.shex.syntax.Hex Hex4;
-  
+
   public Uchar_Sequence (hydra.ext.io.shex.syntax.Hex Hex, hydra.ext.io.shex.syntax.Hex Hex2, hydra.ext.io.shex.syntax.Hex Hex3, hydra.ext.io.shex.syntax.Hex Hex4) {
     this.Hex = Hex;
     this.Hex2 = Hex2;
     this.Hex3 = Hex3;
     this.Hex4 = Hex4;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Uchar_Sequence)) {
@@ -46,12 +46,12 @@ public class Uchar_Sequence implements Serializable, Comparable<Uchar_Sequence> 
       this.Hex4,
       o.Hex4);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(Hex) + 3 * java.util.Objects.hashCode(Hex2) + 5 * java.util.Objects.hashCode(Hex3) + 7 * java.util.Objects.hashCode(Hex4);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Uchar_Sequence other) {
@@ -70,19 +70,19 @@ public class Uchar_Sequence implements Serializable, Comparable<Uchar_Sequence> 
     }
     return ((Comparable) Hex4).compareTo(other.Hex4);
   }
-  
+
   public Uchar_Sequence withHex(hydra.ext.io.shex.syntax.Hex Hex) {
     return new Uchar_Sequence(Hex, Hex2, Hex3, Hex4);
   }
-  
+
   public Uchar_Sequence withHex2(hydra.ext.io.shex.syntax.Hex Hex2) {
     return new Uchar_Sequence(Hex, Hex2, Hex3, Hex4);
   }
-  
+
   public Uchar_Sequence withHex3(hydra.ext.io.shex.syntax.Hex Hex3) {
     return new Uchar_Sequence(Hex, Hex2, Hex3, Hex4);
   }
-  
+
   public Uchar_Sequence withHex4(hydra.ext.io.shex.syntax.Hex Hex4) {
     return new Uchar_Sequence(Hex, Hex2, Hex3, Hex4);
   }

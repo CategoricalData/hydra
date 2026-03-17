@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Represent array data type.
-data ArrayType = 
+data ArrayType =
   ArrayType {
     arrayTypeElementType :: DataType,
     arrayTypeContainsNull :: Bool}
@@ -26,7 +26,7 @@ _ArrayType_elementType = Core.Name "elementType"
 _ArrayType_containsNull = Core.Name "containsNull"
 
 -- | Base class for all primitive types DataType.
-data BasePrimitiveType = 
+data BasePrimitiveType =
   -- | The data type representing byte[] values.
   BasePrimitiveTypeBinary  |
   -- | Data type representing boolean type values.
@@ -48,7 +48,7 @@ data BasePrimitiveType =
   -- | The data type representing string type values.
   BasePrimitiveTypeString  |
   -- | A timestamp type, supporting [0001-01-01T00:00:00.000000Z, 9999-12-31T23:59:59.999999Z] where the left/right-bound is a date and time of the proleptic Gregorian calendar in UTC+00:00. Internally, this is represented as the number of microseconds since the Unix epoch, 1970-01-01 00:00:00 UTC.
-  BasePrimitiveTypeTimestamp 
+  BasePrimitiveTypeTimestamp
   deriving (Eq, Ord, Read, Show)
 
 _BasePrimitiveType = Core.Name "hydra.ext.io.delta.parquet.BasePrimitiveType"
@@ -75,7 +75,7 @@ _BasePrimitiveType_string = Core.Name "string"
 
 _BasePrimitiveType_timestamp = Core.Name "timestamp"
 
-data DataType = 
+data DataType =
   -- | Represent array data type.
   DataTypeArray ArrayType |
   -- | Base class for all primitive types DataType.
@@ -101,7 +101,7 @@ _DataType_map = Core.Name "map"
 _DataType_struct = Core.Name "struct"
 
 -- | A decimal data type with fixed precision (the maximum number of digits) and scale (the number of digits on right side of dot). The precision can be up to 38, scale can also be up to 38 (less or equal to precision).
-data DecimalType = 
+data DecimalType =
   DecimalType {
     decimalTypePrecision :: Int,
     decimalTypeScale :: Int}
@@ -114,7 +114,7 @@ _DecimalType_precision = Core.Name "precision"
 _DecimalType_scale = Core.Name "scale"
 
 -- | Data type representing a map type.
-data MapType = 
+data MapType =
   MapType {
     mapTypeKeyType :: DataType,
     mapTypeValueType :: DataType,
@@ -130,7 +130,7 @@ _MapType_valueType = Core.Name "valueType"
 _MapType_valueContainsNull = Core.Name "valueContainsNull"
 
 -- | Represents a subfield of StructType with additional properties and metadata.
-data StructField = 
+data StructField =
   StructField {
     structFieldName :: String,
     structFieldDataType :: DataType,
@@ -146,7 +146,7 @@ _StructField_dataType = Core.Name "dataType"
 _StructField_nullable = Core.Name "nullable"
 
 -- | Struct type which contains one or more columns.
-data StructType = 
+data StructType =
   StructType {
     structTypeFields :: [StructField]}
   deriving (Eq, Ord, Read, Show)

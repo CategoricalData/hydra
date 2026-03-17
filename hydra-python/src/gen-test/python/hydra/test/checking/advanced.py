@@ -29,5 +29,5 @@ def annotated_terms_tests() -> hydra.testing.TestGroup:
 @lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""Advanced type checking test cases."""
-    
+
     return hydra.testing.TestGroup("Advanced", Nothing(), (annotated_terms_tests(),), ())

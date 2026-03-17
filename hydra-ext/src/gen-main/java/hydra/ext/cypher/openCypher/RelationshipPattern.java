@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class RelationshipPattern implements Serializable, Comparable<RelationshipPattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.RelationshipPattern");
-  
+
   public static final hydra.core.Name LEFT_ARROW = new hydra.core.Name("leftArrow");
-  
+
   public static final hydra.core.Name DETAIL = new hydra.core.Name("detail");
-  
+
   public static final hydra.core.Name RIGHT_ARROW = new hydra.core.Name("rightArrow");
-  
+
   public final Boolean leftArrow;
-  
+
   public final hydra.util.Maybe<hydra.ext.cypher.openCypher.RelationshipDetail> detail;
-  
+
   public final Boolean rightArrow;
-  
+
   public RelationshipPattern (Boolean leftArrow, hydra.util.Maybe<hydra.ext.cypher.openCypher.RelationshipDetail> detail, Boolean rightArrow) {
     this.leftArrow = leftArrow;
     this.detail = detail;
     this.rightArrow = rightArrow;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof RelationshipPattern)) {
@@ -39,12 +39,12 @@ public class RelationshipPattern implements Serializable, Comparable<Relationshi
       this.rightArrow,
       o.rightArrow);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(leftArrow) + 3 * java.util.Objects.hashCode(detail) + 5 * java.util.Objects.hashCode(rightArrow);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(RelationshipPattern other) {
@@ -59,15 +59,15 @@ public class RelationshipPattern implements Serializable, Comparable<Relationshi
     }
     return ((Comparable) rightArrow).compareTo(other.rightArrow);
   }
-  
+
   public RelationshipPattern withLeftArrow(Boolean leftArrow) {
     return new RelationshipPattern(leftArrow, detail, rightArrow);
   }
-  
+
   public RelationshipPattern withDetail(hydra.util.Maybe<hydra.ext.cypher.openCypher.RelationshipDetail> detail) {
     return new RelationshipPattern(leftArrow, detail, rightArrow);
   }
-  
+
   public RelationshipPattern withRightArrow(Boolean rightArrow) {
     return new RelationshipPattern(leftArrow, detail, rightArrow);
   }

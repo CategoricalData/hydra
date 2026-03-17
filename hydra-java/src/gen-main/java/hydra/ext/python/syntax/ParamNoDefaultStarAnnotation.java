@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class ParamNoDefaultStarAnnotation implements Serializable, Comparable<ParamNoDefaultStarAnnotation> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ParamNoDefaultStarAnnotation");
-  
+
   public static final hydra.core.Name PARAM_STAR_ANNOTATION = new hydra.core.Name("paramStarAnnotation");
-  
+
   public static final hydra.core.Name TYPE_COMMENT = new hydra.core.Name("typeComment");
-  
+
   public final hydra.ext.python.syntax.ParamStarAnnotation paramStarAnnotation;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment;
-  
+
   public ParamNoDefaultStarAnnotation (hydra.ext.python.syntax.ParamStarAnnotation paramStarAnnotation, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment) {
     this.paramStarAnnotation = paramStarAnnotation;
     this.typeComment = typeComment;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ParamNoDefaultStarAnnotation)) {
@@ -32,12 +32,12 @@ public class ParamNoDefaultStarAnnotation implements Serializable, Comparable<Pa
       this.typeComment,
       o.typeComment);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(paramStarAnnotation) + 3 * java.util.Objects.hashCode(typeComment);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ParamNoDefaultStarAnnotation other) {
@@ -48,11 +48,11 @@ public class ParamNoDefaultStarAnnotation implements Serializable, Comparable<Pa
     }
     return ((Comparable) typeComment).compareTo(other.typeComment);
   }
-  
+
   public ParamNoDefaultStarAnnotation withParamStarAnnotation(hydra.ext.python.syntax.ParamStarAnnotation paramStarAnnotation) {
     return new ParamNoDefaultStarAnnotation(paramStarAnnotation, typeComment);
   }
-  
+
   public ParamNoDefaultStarAnnotation withTypeComment(hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment) {
     return new ParamNoDefaultStarAnnotation(paramStarAnnotation, typeComment);
   }

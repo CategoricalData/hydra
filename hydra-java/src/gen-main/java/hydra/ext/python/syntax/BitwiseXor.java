@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class BitwiseXor implements Serializable, Comparable<BitwiseXor> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.BitwiseXor");
-  
+
   public static final hydra.core.Name LHS = new hydra.core.Name("lhs");
-  
+
   public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor> lhs;
-  
+
   public final hydra.ext.python.syntax.BitwiseAnd rhs;
-  
+
   public BitwiseXor (hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor> lhs, hydra.ext.python.syntax.BitwiseAnd rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof BitwiseXor)) {
@@ -32,12 +32,12 @@ public class BitwiseXor implements Serializable, Comparable<BitwiseXor> {
       this.rhs,
       o.rhs);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(lhs) + 3 * java.util.Objects.hashCode(rhs);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(BitwiseXor other) {
@@ -48,11 +48,11 @@ public class BitwiseXor implements Serializable, Comparable<BitwiseXor> {
     }
     return ((Comparable) rhs).compareTo(other.rhs);
   }
-  
+
   public BitwiseXor withLhs(hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor> lhs) {
     return new BitwiseXor(lhs, rhs);
   }
-  
+
   public BitwiseXor withRhs(hydra.ext.python.syntax.BitwiseAnd rhs) {
     return new BitwiseXor(lhs, rhs);
   }

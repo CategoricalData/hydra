@@ -12,7 +12,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-data FunctionType = 
+data FunctionType =
   FunctionType {
     functionTypeParameters :: [Parameter],
     functionTypeRange :: Type}
@@ -24,7 +24,7 @@ _FunctionType_parameters = Core.Name "parameters"
 
 _FunctionType_range = Core.Name "range"
 
-data Parameter = 
+data Parameter =
   Parameter {
     parameterName :: String,
     parameterType :: Type}
@@ -36,7 +36,7 @@ _Parameter_name = Core.Name "name"
 
 _Parameter_type = Core.Name "type"
 
-data PrimitiveType = 
+data PrimitiveType =
   -- | integers in the arbitrary precision format
   PrimitiveTypeBigint  |
   -- | true and false
@@ -52,7 +52,7 @@ data PrimitiveType =
   -- | a unique value usually used as a key
   PrimitiveTypeSymbol  |
   -- | also equivalent to the unit type
-  PrimitiveTypeUndefined 
+  PrimitiveTypeUndefined
   deriving (Eq, Ord, Read, Show)
 
 _PrimitiveType = Core.Name "hydra.ext.typeScript.model.PrimitiveType"
@@ -73,7 +73,7 @@ _PrimitiveType_symbol = Core.Name "symbol"
 
 _PrimitiveType_undefined = Core.Name "undefined"
 
-data Type = 
+data Type =
   -- | mutable arrays, also written Array<T>
   TypeArray Type |
   -- | functions
@@ -89,7 +89,7 @@ data Type =
   -- | The top type
   TypeUnknown  |
   -- | for functions with no documented return value
-  TypeVoid 
+  TypeVoid
   deriving (Eq, Ord, Read, Show)
 
 _Type = Core.Name "hydra.ext.typeScript.model.Type"

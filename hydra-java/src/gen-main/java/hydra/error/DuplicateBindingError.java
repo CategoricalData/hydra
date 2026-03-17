@@ -9,18 +9,18 @@ import java.io.Serializable;
  */
 public class DuplicateBindingError implements Serializable, Comparable<DuplicateBindingError> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.error.DuplicateBindingError");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   /**
    * The duplicated binding name
    */
   public final hydra.core.Name name;
-  
+
   public DuplicateBindingError (hydra.core.Name name) {
     this.name = name;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof DuplicateBindingError)) {
@@ -31,12 +31,12 @@ public class DuplicateBindingError implements Serializable, Comparable<Duplicate
       this.name,
       o.name);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DuplicateBindingError other) {

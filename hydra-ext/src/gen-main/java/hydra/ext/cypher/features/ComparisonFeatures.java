@@ -9,49 +9,49 @@ import java.io.Serializable;
  */
 public class ComparisonFeatures implements Serializable, Comparable<ComparisonFeatures> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.features.ComparisonFeatures");
-  
+
   public static final hydra.core.Name EQUAL = new hydra.core.Name("equal");
-  
+
   public static final hydra.core.Name GREATER_THAN = new hydra.core.Name("greaterThan");
-  
+
   public static final hydra.core.Name GREATER_THAN_OR_EQUAL = new hydra.core.Name("greaterThanOrEqual");
-  
+
   public static final hydra.core.Name LESS_THAN = new hydra.core.Name("lessThan");
-  
+
   public static final hydra.core.Name LESS_THAN_OR_EQUAL = new hydra.core.Name("lessThanOrEqual");
-  
+
   public static final hydra.core.Name NOT_EQUAL = new hydra.core.Name("notEqual");
-  
+
   /**
    * The = comparison operator
    */
   public final Boolean equal;
-  
+
   /**
    * The &gt; comparison operator
    */
   public final Boolean greaterThan;
-  
+
   /**
    * The &gt;= comparison operator
    */
   public final Boolean greaterThanOrEqual;
-  
+
   /**
    * The &lt; comparison operator
    */
   public final Boolean lessThan;
-  
+
   /**
    * The &lt;= comparison operator
    */
   public final Boolean lessThanOrEqual;
-  
+
   /**
    * The &lt;&gt; comparison operator
    */
   public final Boolean notEqual;
-  
+
   public ComparisonFeatures (Boolean equal, Boolean greaterThan, Boolean greaterThanOrEqual, Boolean lessThan, Boolean lessThanOrEqual, Boolean notEqual) {
     this.equal = equal;
     this.greaterThan = greaterThan;
@@ -60,7 +60,7 @@ public class ComparisonFeatures implements Serializable, Comparable<ComparisonFe
     this.lessThanOrEqual = lessThanOrEqual;
     this.notEqual = notEqual;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ComparisonFeatures)) {
@@ -81,12 +81,12 @@ public class ComparisonFeatures implements Serializable, Comparable<ComparisonFe
       this.notEqual,
       o.notEqual);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(equal) + 3 * java.util.Objects.hashCode(greaterThan) + 5 * java.util.Objects.hashCode(greaterThanOrEqual) + 7 * java.util.Objects.hashCode(lessThan) + 11 * java.util.Objects.hashCode(lessThanOrEqual) + 13 * java.util.Objects.hashCode(notEqual);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ComparisonFeatures other) {
@@ -113,27 +113,27 @@ public class ComparisonFeatures implements Serializable, Comparable<ComparisonFe
     }
     return ((Comparable) notEqual).compareTo(other.notEqual);
   }
-  
+
   public ComparisonFeatures withEqual(Boolean equal) {
     return new ComparisonFeatures(equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, notEqual);
   }
-  
+
   public ComparisonFeatures withGreaterThan(Boolean greaterThan) {
     return new ComparisonFeatures(equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, notEqual);
   }
-  
+
   public ComparisonFeatures withGreaterThanOrEqual(Boolean greaterThanOrEqual) {
     return new ComparisonFeatures(equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, notEqual);
   }
-  
+
   public ComparisonFeatures withLessThan(Boolean lessThan) {
     return new ComparisonFeatures(equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, notEqual);
   }
-  
+
   public ComparisonFeatures withLessThanOrEqual(Boolean lessThanOrEqual) {
     return new ComparisonFeatures(equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, notEqual);
   }
-  
+
   public ComparisonFeatures withNotEqual(Boolean notEqual) {
     return new ComparisonFeatures(equal, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, notEqual);
   }

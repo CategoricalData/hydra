@@ -9,50 +9,50 @@ import java.io.Serializable;
  */
 public abstract class Comparison implements Serializable, Comparable<Comparison> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.util.Comparison");
-  
+
   public static final hydra.core.Name LESS_THAN = new hydra.core.Name("lessThan");
-  
+
   public static final hydra.core.Name EQUAL_TO = new hydra.core.Name("equalTo");
-  
+
   public static final hydra.core.Name GREATER_THAN = new hydra.core.Name("greaterThan");
-  
+
   private Comparison () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(LessThan instance) ;
-    
+
     R visit(EqualTo instance) ;
-    
+
     R visit(GreaterThan instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Comparison instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(LessThan instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(EqualTo instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(GreaterThan instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class LessThan extends hydra.util.Comparison implements Serializable {
     public LessThan () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof LessThan)) {
@@ -61,12 +61,12 @@ public abstract class Comparison implements Serializable, Comparable<Comparison>
       LessThan o = (LessThan) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Comparison other) {
@@ -76,18 +76,18 @@ public abstract class Comparison implements Serializable, Comparable<Comparison>
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class EqualTo extends hydra.util.Comparison implements Serializable {
     public EqualTo () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof EqualTo)) {
@@ -96,12 +96,12 @@ public abstract class Comparison implements Serializable, Comparable<Comparison>
       EqualTo o = (EqualTo) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Comparison other) {
@@ -111,18 +111,18 @@ public abstract class Comparison implements Serializable, Comparable<Comparison>
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class GreaterThan extends hydra.util.Comparison implements Serializable {
     public GreaterThan () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof GreaterThan)) {
@@ -131,12 +131,12 @@ public abstract class Comparison implements Serializable, Comparable<Comparison>
       GreaterThan o = (GreaterThan) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Comparison other) {
@@ -146,7 +146,7 @@ public abstract class Comparison implements Serializable, Comparable<Comparison>
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

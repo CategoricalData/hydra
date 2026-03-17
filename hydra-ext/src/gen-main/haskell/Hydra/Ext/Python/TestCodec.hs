@@ -166,8 +166,8 @@ pythonImportTemplate = "import {namespace}"
 -- | Determine necessary imports for Python based on referenced namespaces
 findPythonImports :: Module.Namespaces t0 -> t1 -> [String]
 findPythonImports namespaces_ names_ =
-     
-      let mapping_ = Module.namespacesMapping namespaces_ 
+
+      let mapping_ = Module.namespacesMapping namespaces_
           filtered =
                   Maps.filterWithKey (\ns_ -> \_v -> Logic.not (Equality.equal (Lists.head (Strings.splitOn "hydra.test." (Module.unNamespace ns_))) "")) mapping_
       in (Lists.map (\entry -> Strings.cat2 "import " (Module.unNamespace (Pairs.first entry))) (Maps.toList filtered))
@@ -175,8 +175,8 @@ findPythonImports namespaces_ names_ =
 -- | Build namespaces for a Python module, resolving all imports and primitives
 namespacesForPythonModule :: Module.Module -> Graph.Graph -> Either t0 (Module.Namespaces Syntax.DottedName)
 namespacesForPythonModule mod graph_ =
-     
-      let bindings = Lexical.graphToBindings graph_ 
+
+      let bindings = Lexical.graphToBindings graph_
           defs =
                   Maybes.mapMaybe (\b -> Maybes.map (\ts -> Module.DefinitionTerm (Module.TermDefinition {
                     Module.termDefinitionName = (Core.bindingName b),
@@ -187,18 +187,18 @@ namespacesForPythonModule mod graph_ =
 -- | Generate test hierarchy for Python with nested subgroups
 generatePythonTestGroupHierarchy :: Graph.Graph -> t0 -> Testing.TestCodec -> [String] -> Testing.TestGroup -> Either String String
 generatePythonTestGroupHierarchy g namespaces_ codec groupPath testGroup =
-     
-      let cases_ = Testing.testGroupCases testGroup 
+
+      let cases_ = Testing.testGroupCases testGroup
           subgroups = Testing.testGroupSubgroups testGroup
-      in (Eithers.bind (Eithers.mapList (\tc -> generatePythonTestCase g namespaces_ codec groupPath tc) cases_) (\testCaseLines -> Eithers.bind (Eithers.mapList (\subgroup ->  
-        let groupName = Testing.testGroupName subgroup 
+      in (Eithers.bind (Eithers.mapList (\tc -> generatePythonTestCase g namespaces_ codec groupPath tc) cases_) (\testCaseLines -> Eithers.bind (Eithers.mapList (\subgroup ->
+        let groupName = Testing.testGroupName subgroup
             header = Strings.cat2 "# " groupName
         in (Eithers.map (\content -> Strings.cat [
           header,
           "\n\n",
           content]) (generatePythonTestGroupHierarchy g namespaces_ codec (Lists.concat2 groupPath [
-          groupName]) subgroup))) subgroups) (\subgroupBlocks ->  
-        let testCasesStr = Strings.intercalate "\n\n" (Lists.concat testCaseLines) 
+          groupName]) subgroup))) subgroups) (\subgroupBlocks ->
+        let testCasesStr = Strings.intercalate "\n\n" (Lists.concat testCaseLines)
             subgroupsStr = Strings.intercalate "\n\n" subgroupBlocks
         in (Right (Strings.cat [
           testCasesStr,
@@ -208,12 +208,12 @@ generatePythonTestGroupHierarchy g namespaces_ codec groupPath testGroup =
 -- | Generate a single pytest test case from a test case with metadata
 generatePythonTestCase :: Graph.Graph -> t0 -> Testing.TestCodec -> [String] -> Testing.TestCaseWithMetadata -> Either String [String]
 generatePythonTestCase g namespaces_ codec groupPath tcm =
-     
-      let name_ = Testing.testCaseWithMetadataName tcm 
+
+      let name_ = Testing.testCaseWithMetadataName tcm
           tcase = Testing.testCaseWithMetadataCase tcm
       in case tcase of
-        Testing.TestCaseDelegatedEvaluation v0 ->  
-          let input_ = Testing.delegatedEvaluationTestCaseInput v0 
+        Testing.TestCaseDelegatedEvaluation v0 ->
+          let input_ = Testing.delegatedEvaluationTestCaseInput v0
               output_ = Testing.delegatedEvaluationTestCaseOutput v0
               fullName = Logic.ifElse (Lists.null groupPath) name_ (Strings.intercalate "__" (Lists.concat2 groupPath [
                     name_]))
@@ -234,8 +234,8 @@ generatePythonTestCase g namespaces_ codec groupPath tcm =
 -- | Generate a complete test file using the Python codec
 generateTestFileWithPythonCodec :: Testing.TestCodec -> Module.Module -> Testing.TestGroup -> t0 -> Graph.Graph -> Either String (String, String)
 generateTestFileWithPythonCodec codec testModule testGroup namespaces_ g =
-    Eithers.map (\testBody ->  
-      let testModuleContent = buildPythonTestModule codec testModule testGroup testBody namespaces_ 
+    Eithers.map (\testBody ->
+      let testModuleContent = buildPythonTestModule codec testModule testGroup testBody namespaces_
           ns_ = Module.moduleNamespace testModule
           parts = Strings.splitOn "." (Module.unNamespace ns_)
           dirParts = Lists.init parts
@@ -254,8 +254,8 @@ generateTestFileWithPythonCodec codec testModule testGroup namespaces_ g =
 -- | Build the complete Python test module content
 buildPythonTestModule :: Testing.TestCodec -> t0 -> Testing.TestGroup -> String -> t1 -> String
 buildPythonTestModule codec testModule testGroup testBody namespaces_ =
-     
-      let groupName_ = Testing.testGroupName testGroup 
+
+      let groupName_ = Testing.testGroupName testGroup
           domainImports = Testing.testCodecFindImports codec Sets.empty
           standardImports =
                   [

@@ -14,7 +14,7 @@ public interface Grammar {
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Constant> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Constant>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Constant> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
@@ -26,7 +26,7 @@ public interface Grammar {
                 public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Term instance) {
                   return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"));
                 }
-                
+
                 @Override
                 public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
                   return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -34,7 +34,7 @@ public interface Grammar {
                     public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Literal.String_ s) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>right((s).value);
@@ -51,7 +51,7 @@ public interface Grammar {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Grammar> grammar(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Grammar>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Grammar>left(new hydra.error.DecodingError(err))),
@@ -60,7 +60,7 @@ public interface Grammar {
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Grammar> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Grammar>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Grammar> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
@@ -77,7 +77,7 @@ public interface Grammar {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Label> label(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Label>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Label>left(new hydra.error.DecodingError(err))),
@@ -86,7 +86,7 @@ public interface Grammar {
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Label> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Label>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Label> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
@@ -98,7 +98,7 @@ public interface Grammar {
                 public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Term instance) {
                   return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"));
                 }
-                
+
                 @Override
                 public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
                   return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -106,7 +106,7 @@ public interface Grammar {
                     public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Literal.String_ s) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>right((s).value);
@@ -123,7 +123,7 @@ public interface Grammar {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.grammar.LabeledPattern> labeledPattern(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.LabeledPattern>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.LabeledPattern>left(new hydra.error.DecodingError(err))),
@@ -132,7 +132,7 @@ public interface Grammar {
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.LabeledPattern> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.LabeledPattern>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.LabeledPattern> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -159,7 +159,7 @@ public interface Grammar {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern> pattern(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Pattern>left(new hydra.error.DecodingError(err))),
@@ -168,7 +168,7 @@ public interface Grammar {
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Pattern>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;
@@ -251,7 +251,7 @@ public interface Grammar {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Production> production(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Production>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Production>left(new hydra.error.DecodingError(err))),
@@ -260,7 +260,7 @@ public interface Grammar {
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Production> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Production>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Production> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -287,7 +287,7 @@ public interface Grammar {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Regex> regex(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Regex>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Regex>left(new hydra.error.DecodingError(err))),
@@ -296,7 +296,7 @@ public interface Grammar {
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Regex> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Regex>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Regex> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
@@ -308,7 +308,7 @@ public interface Grammar {
                 public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Term instance) {
                   return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"));
                 }
-                
+
                 @Override
                 public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
                   return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -316,7 +316,7 @@ public interface Grammar {
                     public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Literal.String_ s) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>right((s).value);
@@ -333,7 +333,7 @@ public interface Grammar {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Symbol> symbol(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Symbol>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Symbol>left(new hydra.error.DecodingError(err))),
@@ -342,7 +342,7 @@ public interface Grammar {
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Symbol> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Symbol>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Symbol> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
@@ -354,7 +354,7 @@ public interface Grammar {
                 public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Term instance) {
                   return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"));
                 }
-                
+
                 @Override
                 public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
                   return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -362,7 +362,7 @@ public interface Grammar {
                     public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Literal.String_ s) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>right((s).value);

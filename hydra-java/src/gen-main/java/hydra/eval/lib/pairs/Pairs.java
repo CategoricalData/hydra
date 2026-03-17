@@ -18,7 +18,7 @@ public interface Pairs {
             " but found "),
           hydra.show.core.Core.term(pairTerm)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Pair p) {
         hydra.util.Lazy<hydra.core.Term> fst = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((p).value));

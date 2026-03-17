@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class ConditionalExpression_TernaryCond implements Serializable, Comparable<ConditionalExpression_TernaryCond> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ConditionalExpression_TernaryCond");
-  
+
   public static final hydra.core.Name COND = new hydra.core.Name("cond");
-  
+
   public static final hydra.core.Name IF_TRUE = new hydra.core.Name("ifTrue");
-  
+
   public static final hydra.core.Name IF_FALSE = new hydra.core.Name("ifFalse");
-  
+
   public final hydra.ext.java.syntax.ConditionalOrExpression cond;
-  
+
   public final hydra.ext.java.syntax.Expression ifTrue;
-  
+
   public final hydra.ext.java.syntax.ConditionalExpression ifFalse;
-  
+
   public ConditionalExpression_TernaryCond (hydra.ext.java.syntax.ConditionalOrExpression cond, hydra.ext.java.syntax.Expression ifTrue, hydra.ext.java.syntax.ConditionalExpression ifFalse) {
     this.cond = cond;
     this.ifTrue = ifTrue;
     this.ifFalse = ifFalse;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ConditionalExpression_TernaryCond)) {
@@ -39,12 +39,12 @@ public class ConditionalExpression_TernaryCond implements Serializable, Comparab
       this.ifFalse,
       o.ifFalse);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(cond) + 3 * java.util.Objects.hashCode(ifTrue) + 5 * java.util.Objects.hashCode(ifFalse);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ConditionalExpression_TernaryCond other) {
@@ -59,15 +59,15 @@ public class ConditionalExpression_TernaryCond implements Serializable, Comparab
     }
     return ((Comparable) ifFalse).compareTo(other.ifFalse);
   }
-  
+
   public ConditionalExpression_TernaryCond withCond(hydra.ext.java.syntax.ConditionalOrExpression cond) {
     return new ConditionalExpression_TernaryCond(cond, ifTrue, ifFalse);
   }
-  
+
   public ConditionalExpression_TernaryCond withIfTrue(hydra.ext.java.syntax.Expression ifTrue) {
     return new ConditionalExpression_TernaryCond(cond, ifTrue, ifFalse);
   }
-  
+
   public ConditionalExpression_TernaryCond withIfFalse(hydra.ext.java.syntax.ConditionalExpression ifFalse) {
     return new ConditionalExpression_TernaryCond(cond, ifTrue, ifFalse);
   }

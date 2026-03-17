@@ -20,7 +20,7 @@ A = TypeVar("A")
 @dataclass(frozen=True)
 class DataTypeFeatures:
     r"""Base interface for features that relate to supporting different data types."""
-    
+
     supports_boolean_array_values: Annotated[bool, "Supports setting of an array of boolean values."]
     supports_boolean_values: Annotated[bool, "Supports setting of a boolean value."]
     supports_byte_array_values: Annotated[bool, "Supports setting of an array of byte values."]
@@ -39,7 +39,7 @@ class DataTypeFeatures:
     supports_string_array_values: Annotated[bool, "Supports setting of an array of string values."]
     supports_string_values: Annotated[bool, "Supports setting of a string value."]
     supports_uniform_list_values: Annotated[bool, "Supports setting of a List value."]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures")
     SUPPORTS_BOOLEAN_ARRAY_VALUES = hydra.core.Name("supportsBooleanArrayValues")
     SUPPORTS_BOOLEAN_VALUES = hydra.core.Name("supportsBooleanValues")
@@ -63,13 +63,13 @@ class DataTypeFeatures:
 @dataclass(frozen=True)
 class EdgeFeatures:
     r"""Features that are related to Edge operations."""
-    
+
     element_features: ElementFeatures
     properties: EdgePropertyFeatures
     supports_add_edges: Annotated[bool, "Determines if an Edge can be added to a Vertex."]
     supports_remove_edges: Annotated[bool, "Determines if an Edge can be removed from a Vertex."]
     supports_upsert: Annotated[bool, "Determines if the Graph implementation uses upsert functionality as opposed to insert functionality for Vertex.addEdge(String, Vertex, Object...)."]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.EdgeFeatures")
     ELEMENT_FEATURES = hydra.core.Name("elementFeatures")
     PROPERTIES = hydra.core.Name("properties")
@@ -80,16 +80,16 @@ class EdgeFeatures:
 @dataclass(frozen=True)
 class EdgePropertyFeatures:
     r"""Features that are related to Edge Property objects."""
-    
+
     property_features: PropertyFeatures
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.EdgePropertyFeatures")
     PROPERTY_FEATURES = hydra.core.Name("propertyFeatures")
 
 @dataclass(frozen=True)
 class ElementFeatures:
     r"""Features that are related to Element objects."""
-    
+
     supports_add_property: Annotated[bool, "Determines if an Element allows properties to be added."]
     supports_any_ids: Annotated[bool, "Determines if an Element any Java object is a suitable identifier."]
     supports_custom_ids: Annotated[bool, "Determines if an Element has a specific custom object as their internal representation."]
@@ -98,7 +98,7 @@ class ElementFeatures:
     supports_string_ids: Annotated[bool, "Determines if an Element has string identifiers as their internal representation."]
     supports_user_supplied_ids: Annotated[bool, "Determines if an Element can have a user defined identifier."]
     supports_uuid_ids: Annotated[bool, "Determines if an Element has UUID identifiers as their internal representation."]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.ElementFeatures")
     SUPPORTS_ADD_PROPERTY = hydra.core.Name("supportsAddProperty")
     SUPPORTS_ANY_IDS = hydra.core.Name("supportsAnyIds")
@@ -112,22 +112,22 @@ class ElementFeatures:
 @dataclass(frozen=True)
 class ExtraFeatures(Generic[A]):
     r"""Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features."""
-    
+
     supports_map_key: Callable[[hydra.core.Type], bool]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.ExtraFeatures")
     SUPPORTS_MAP_KEY = hydra.core.Name("supportsMapKey")
 
 @dataclass(frozen=True)
 class Features:
     r"""An interface that represents the capabilities of a Graph implementation. By default all methods of features return true and it is up to implementers to disable feature they don't support. Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations. For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().
-    
+
     As an additional notice to Graph Providers, feature methods will be used by the test suite to determine which tests will be ignored and which will be executed, therefore proper setting of these features is essential to maximizing the amount of testing performed by the suite. Further note, that these methods may be called by the TinkerPop core code to determine what operations may be appropriately executed which will have impact on features utilized by users."""
-    
+
     edge: Annotated[EdgeFeatures, "Gets the features related to edge operation."]
     graph: Annotated[GraphFeatures, "Gets the features related to graph operation."]
     vertex: Annotated[VertexFeatures, "Gets the features related to vertex operation."]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.Features")
     EDGE = hydra.core.Name("edge")
     GRAPH = hydra.core.Name("graph")
@@ -136,7 +136,7 @@ class Features:
 @dataclass(frozen=True)
 class GraphFeatures:
     r"""Features specific to a operations of a graph."""
-    
+
     supports_computer: Annotated[bool, "Determines if the Graph implementation supports GraphComputer based processing."]
     supports_concurrent_access: Annotated[bool, "Determines if the Graph implementation supports more than one connection to the same instance at the same time."]
     supports_io_read: Annotated[bool, "Determines if the Graph implementations supports read operations as executed with the GraphTraversalSource.io(String) step."]
@@ -145,7 +145,7 @@ class GraphFeatures:
     supports_threaded_transactions: Annotated[bool, "Determines if the Graph implementation supports threaded transactions which allow a transaction to be executed across multiple threads via Transaction.createThreadedTx()."]
     supports_transactions: Annotated[bool, "Determines if the Graph implementations supports transactions."]
     variables: Annotated[VariableFeatures, "Gets the features related to graph sideEffects operation."]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.GraphFeatures")
     SUPPORTS_COMPUTER = hydra.core.Name("supportsComputer")
     SUPPORTS_CONCURRENT_ACCESS = hydra.core.Name("supportsConcurrentAccess")
@@ -159,10 +159,10 @@ class GraphFeatures:
 @dataclass(frozen=True)
 class PropertyFeatures:
     r"""A base interface for Edge or Vertex Property features."""
-    
+
     data_type_features: DataTypeFeatures
     supports_properties: Annotated[bool, "Determines if an Element allows for the processing of at least one data type defined by the features."]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.PropertyFeatures")
     DATA_TYPE_FEATURES = hydra.core.Name("dataTypeFeatures")
     SUPPORTS_PROPERTIES = hydra.core.Name("supportsProperties")
@@ -170,10 +170,10 @@ class PropertyFeatures:
 @dataclass(frozen=True)
 class VariableFeatures:
     r"""Features for Graph.Variables."""
-    
+
     data_type_features: DataTypeFeatures
     supports_variables: Annotated[bool, "If any of the features on Graph.Features.VariableFeatures is true then this value must be true."]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.VariableFeatures")
     DATA_TYPE_FEATURES = hydra.core.Name("dataTypeFeatures")
     SUPPORTS_VARIABLES = hydra.core.Name("supportsVariables")
@@ -181,7 +181,7 @@ class VariableFeatures:
 @dataclass(frozen=True)
 class VertexFeatures:
     r"""Features that are related to Vertex operations."""
-    
+
     element_features: ElementFeatures
     properties: VertexPropertyFeatures
     supports_add_vertices: Annotated[bool, "Determines if a Vertex can be added to the Graph."]
@@ -190,7 +190,7 @@ class VertexFeatures:
     supports_multi_properties: Annotated[bool, "Determines if a Vertex can support multiple properties with the same key."]
     supports_remove_vertices: Annotated[bool, "Determines if a Vertex can be removed from the Graph."]
     supports_upsert: Annotated[bool, "Determines if the Graph implementation uses upsert functionality as opposed to insert functionality for Graph.addVertex(String)."]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.VertexFeatures")
     ELEMENT_FEATURES = hydra.core.Name("elementFeatures")
     PROPERTIES = hydra.core.Name("properties")
@@ -204,12 +204,12 @@ class VertexFeatures:
 @dataclass(frozen=True)
 class VertexPropertyFeatures:
     r"""Features that are related to Vertex Property objects."""
-    
+
     data_type_features: DataTypeFeatures
     property_features: PropertyFeatures
     element_features: ElementFeatures
     supports_remove: Annotated[bool, "Determines if a VertexProperty allows properties to be removed."]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures")
     DATA_TYPE_FEATURES = hydra.core.Name("dataTypeFeatures")
     PROPERTY_FEATURES = hydra.core.Name("propertyFeatures")

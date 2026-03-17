@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class MapType implements Serializable, Comparable<MapType> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.MapType");
-  
+
   public static final hydra.core.Name KEYS = new hydra.core.Name("keys");
-  
+
   public static final hydra.core.Name VALUES = new hydra.core.Name("values");
-  
+
   /**
    * The type of keys in the map
    */
   public final hydra.core.Type keys;
-  
+
   /**
    * The type of values in the map
    */
   public final hydra.core.Type values;
-  
+
   public MapType (hydra.core.Type keys, hydra.core.Type values) {
     this.keys = keys;
     this.values = values;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MapType)) {
@@ -41,12 +41,12 @@ public class MapType implements Serializable, Comparable<MapType> {
       this.values,
       o.values);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(keys) + 3 * java.util.Objects.hashCode(values);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MapType other) {
@@ -57,11 +57,11 @@ public class MapType implements Serializable, Comparable<MapType> {
     }
     return ((Comparable) values).compareTo(other.values);
   }
-  
+
   public MapType withKeys(hydra.core.Type keys) {
     return new MapType(keys, values);
   }
-  
+
   public MapType withValues(hydra.core.Type values) {
     return new MapType(keys, values);
   }

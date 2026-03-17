@@ -23,7 +23,7 @@ import qualified Data.Set as S
 annotatedTerm :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.AnnotatedTerm
 annotatedTerm cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "body" term fieldMap cx) (\field_body -> Eithers.bind (Helpers.requireField "annotation" (Helpers.decodeMap name term) fieldMap cx) (\field_annotation -> Right (Core.AnnotatedTerm {
           Core.annotatedTermBody = field_body,
@@ -33,7 +33,7 @@ annotatedTerm cx raw =
 annotatedType :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.AnnotatedType
 annotatedType cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "body" type_ fieldMap cx) (\field_body -> Eithers.bind (Helpers.requireField "annotation" (Helpers.decodeMap name term) fieldMap cx) (\field_annotation -> Right (Core.AnnotatedType {
           Core.annotatedTypeBody = field_body,
@@ -43,7 +43,7 @@ annotatedType cx raw =
 application :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Application
 application cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "function" term fieldMap cx) (\field_function -> Eithers.bind (Helpers.requireField "argument" term fieldMap cx) (\field_argument -> Right (Core.Application {
           Core.applicationFunction = field_function,
@@ -53,7 +53,7 @@ application cx raw =
 applicationType :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.ApplicationType
 applicationType cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "function" type_ fieldMap cx) (\field_function -> Eithers.bind (Helpers.requireField "argument" type_ fieldMap cx) (\field_argument -> Right (Core.ApplicationType {
           Core.applicationTypeFunction = field_function,
@@ -63,7 +63,7 @@ applicationType cx raw =
 binding :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Binding
 binding cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "name" name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "term" term fieldMap cx) (\field_term -> Eithers.bind (Helpers.requireField "type" (Helpers.decodeMaybe typeScheme) fieldMap cx) (\field_type -> Right (Core.Binding {
           Core.bindingName = field_name,
@@ -74,7 +74,7 @@ binding cx raw =
 caseStatement :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.CaseStatement
 caseStatement cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "default" (Helpers.decodeMaybe term) fieldMap cx) (\field_default -> Eithers.bind (Helpers.requireField "cases" (Helpers.decodeList field) fieldMap cx) (\field_cases -> Right (Core.CaseStatement {
           Core.caseStatementTypeName = field_typeName,
@@ -85,7 +85,7 @@ caseStatement cx raw =
 eitherType :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.EitherType
 eitherType cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "left" type_ fieldMap cx) (\field_left -> Eithers.bind (Helpers.requireField "right" type_ fieldMap cx) (\field_right -> Right (Core.EitherType {
           Core.eitherTypeLeft = field_left,
@@ -95,7 +95,7 @@ eitherType cx raw =
 pairType :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.PairType
 pairType cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "first" type_ fieldMap cx) (\field_first -> Eithers.bind (Helpers.requireField "second" type_ fieldMap cx) (\field_second -> Right (Core.PairType {
           Core.pairTypeFirst = field_first,
@@ -105,8 +105,8 @@ pairType cx raw =
 elimination :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Elimination
 elimination cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -123,7 +123,7 @@ elimination cx raw =
 field :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Field
 field cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "name" name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "term" term fieldMap cx) (\field_term -> Right (Core.Field {
           Core.fieldName = field_name,
@@ -133,7 +133,7 @@ field cx raw =
 fieldType :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.FieldType
 fieldType cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "name" name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "type" type_ fieldMap cx) (\field_type -> Right (Core.FieldType {
           Core.fieldTypeName = field_name,
@@ -143,8 +143,8 @@ fieldType cx raw =
 floatType :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.FloatType
 floatType cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -161,8 +161,8 @@ floatType cx raw =
 floatValue :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.FloatValue
 floatValue cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -197,7 +197,7 @@ floatValue cx raw =
 forallType :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.ForallType
 forallType cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "parameter" name fieldMap cx) (\field_parameter -> Eithers.bind (Helpers.requireField "body" type_ fieldMap cx) (\field_body -> Right (Core.ForallType {
           Core.forallTypeParameter = field_parameter,
@@ -207,8 +207,8 @@ forallType cx raw =
 function :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Function
 function cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -225,7 +225,7 @@ function cx raw =
 functionType :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.FunctionType
 functionType cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "domain" type_ fieldMap cx) (\field_domain -> Eithers.bind (Helpers.requireField "codomain" type_ fieldMap cx) (\field_codomain -> Right (Core.FunctionType {
           Core.functionTypeDomain = field_domain,
@@ -235,7 +235,7 @@ functionType cx raw =
 injection :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Injection
 injection cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "field" field fieldMap cx) (\field_field -> Right (Core.Injection {
           Core.injectionTypeName = field_typeName,
@@ -245,8 +245,8 @@ injection cx raw =
 integerType :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.IntegerType
 integerType cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -269,8 +269,8 @@ integerType cx raw =
 integerValue :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.IntegerValue
 integerValue cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -347,7 +347,7 @@ integerValue cx raw =
 lambda :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Lambda
 lambda cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "parameter" name fieldMap cx) (\field_parameter -> Eithers.bind (Helpers.requireField "domain" (Helpers.decodeMaybe type_) fieldMap cx) (\field_domain -> Eithers.bind (Helpers.requireField "body" term fieldMap cx) (\field_body -> Right (Core.Lambda {
           Core.lambdaParameter = field_parameter,
@@ -358,7 +358,7 @@ lambda cx raw =
 let_ :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Let
 let_ cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "bindings" (Helpers.decodeList binding) fieldMap cx) (\field_bindings -> Eithers.bind (Helpers.requireField "body" term fieldMap cx) (\field_body -> Right (Core.Let {
           Core.letBindings = field_bindings,
@@ -368,8 +368,8 @@ let_ cx raw =
 literal :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Literal
 literal cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -400,8 +400,8 @@ literal cx raw =
 literalType :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.LiteralType
 literalType cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -420,7 +420,7 @@ literalType cx raw =
 mapType :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.MapType
 mapType cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "keys" type_ fieldMap cx) (\field_keys -> Eithers.bind (Helpers.requireField "values" type_ fieldMap cx) (\field_values -> Right (Core.MapType {
           Core.mapTypeKeys = field_keys,
@@ -440,7 +440,7 @@ name cx raw =
 projection :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Projection
 projection cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "field" name fieldMap cx) (\field_field -> Right (Core.Projection {
           Core.projectionTypeName = field_typeName,
@@ -450,7 +450,7 @@ projection cx raw =
 record :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Record
 record cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "fields" (Helpers.decodeList field) fieldMap cx) (\field_fields -> Right (Core.Record {
           Core.recordTypeName = field_typeName,
@@ -460,8 +460,8 @@ record cx raw =
 term :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Term
 term cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -493,8 +493,8 @@ term cx raw =
 type_ :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Type
 type_ cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -524,7 +524,7 @@ type_ cx raw =
 typeApplicationTerm :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.TypeApplicationTerm
 typeApplicationTerm cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "body" term fieldMap cx) (\field_body -> Eithers.bind (Helpers.requireField "type" type_ fieldMap cx) (\field_type -> Right (Core.TypeApplicationTerm {
           Core.typeApplicationTermBody = field_body,
@@ -534,7 +534,7 @@ typeApplicationTerm cx raw =
 typeLambda :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.TypeLambda
 typeLambda cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "parameter" name fieldMap cx) (\field_parameter -> Eithers.bind (Helpers.requireField "body" term fieldMap cx) (\field_body -> Right (Core.TypeLambda {
           Core.typeLambdaParameter = field_parameter,
@@ -544,7 +544,7 @@ typeLambda cx raw =
 typeScheme :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.TypeScheme
 typeScheme cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "variables" (Helpers.decodeList name) fieldMap cx) (\field_variables -> Eithers.bind (Helpers.requireField "type" type_ fieldMap cx) (\field_type -> Eithers.bind (Helpers.requireField "constraints" (Helpers.decodeMaybe (Helpers.decodeMap name typeVariableMetadata)) fieldMap cx) (\field_constraints -> Right (Core.TypeScheme {
           Core.typeSchemeVariables = field_variables,
@@ -555,7 +555,7 @@ typeScheme cx raw =
 typeVariableMetadata :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.TypeVariableMetadata
 typeVariableMetadata cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "classes" (Helpers.decodeSet name) fieldMap cx) (\field_classes -> Right (Core.TypeVariableMetadata {
           Core.typeVariableMetadataClasses = field_classes})))
@@ -564,7 +564,7 @@ typeVariableMetadata cx raw =
 wrappedTerm :: Graph.Graph -> Core.Term -> Either Error.DecodingError Core.WrappedTerm
 wrappedTerm cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "body" term fieldMap cx) (\field_body -> Right (Core.WrappedTerm {
           Core.wrappedTermTypeName = field_typeName,

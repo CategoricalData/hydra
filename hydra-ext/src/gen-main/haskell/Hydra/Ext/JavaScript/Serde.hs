@@ -41,8 +41,8 @@ literalToExpr lit =
 -- | Convert a string literal to an AST expression
 stringLiteralToExpr :: Syntax.StringLiteral -> Ast.Expr
 stringLiteralToExpr s =
-     
-      let value = Syntax.stringLiteralValue s 
+
+      let value = Syntax.stringLiteralValue s
           singleQuote = Syntax.stringLiteralSingleQuote s
           quote = Logic.ifElse singleQuote "'" "\""
           escaped = escapeString value singleQuote
@@ -58,8 +58,8 @@ escapeString s singleQuote = s
 -- | Convert a template literal to an AST expression
 templateLiteralToExpr :: Syntax.TemplateLiteral -> Ast.Expr
 templateLiteralToExpr t =
-     
-      let quasis = Syntax.templateLiteralQuasis t 
+
+      let quasis = Syntax.templateLiteralQuasis t
           exprs = Syntax.templateLiteralExpressions t
       in (Serialization.cst (Strings.cat [
         "`",
@@ -123,8 +123,8 @@ objectExpressionToExpr obj =
 -- | Convert an object property to an AST expression
 propertyToExpr :: Syntax.Property -> Ast.Expr
 propertyToExpr prop =
-     
-      let key = Syntax.propertyKey prop 
+
+      let key = Syntax.propertyKey prop
           value = Syntax.propertyValue prop
           shorthand = Syntax.propertyShorthand prop
           computed = Syntax.propertyComputed prop
@@ -135,8 +135,8 @@ propertyToExpr prop =
 -- | Convert a function expression to an AST expression
 functionExpressionToExpr :: Syntax.FunctionExpression -> Ast.Expr
 functionExpressionToExpr fn =
-     
-      let mid = Syntax.functionExpressionId fn 
+
+      let mid = Syntax.functionExpressionId fn
           params = Syntax.functionExpressionParams fn
           body = Syntax.functionExpressionBody fn
           async = Syntax.functionExpressionAsync fn
@@ -159,8 +159,8 @@ functionExpressionToExpr fn =
 -- | Convert an arrow function expression to an AST expression
 arrowFunctionExpressionToExpr :: Syntax.ArrowFunctionExpression -> Ast.Expr
 arrowFunctionExpressionToExpr arrow =
-     
-      let params = Syntax.arrowFunctionExpressionParams arrow 
+
+      let params = Syntax.arrowFunctionExpressionParams arrow
           body = Syntax.arrowFunctionExpressionBody arrow
           async = Syntax.arrowFunctionExpressionAsync arrow
           asyncKw = Logic.ifElse async [
@@ -179,8 +179,8 @@ arrowFunctionExpressionToExpr arrow =
 -- | Convert a call expression to an AST expression
 callExpressionToExpr :: Syntax.CallExpression -> Ast.Expr
 callExpressionToExpr call =
-     
-      let callee = Syntax.callExpressionCallee call 
+
+      let callee = Syntax.callExpressionCallee call
           args = Syntax.callExpressionArguments call
           optional = Syntax.callExpressionOptional call
           calleeExpr = expressionToExpr callee
@@ -194,8 +194,8 @@ callExpressionToExpr call =
 -- | Convert a member expression to an AST expression
 memberExpressionToExpr :: Syntax.MemberExpression -> Ast.Expr
 memberExpressionToExpr mem =
-     
-      let obj = Syntax.memberExpressionObject mem 
+
+      let obj = Syntax.memberExpressionObject mem
           prop = Syntax.memberExpressionProperty mem
           computed = Syntax.memberExpressionComputed mem
           optional = Syntax.memberExpressionOptional mem
@@ -209,8 +209,8 @@ memberExpressionToExpr mem =
 -- | Convert a conditional expression to an AST expression
 conditionalExpressionToExpr :: Syntax.ConditionalExpression -> Ast.Expr
 conditionalExpressionToExpr cond =
-     
-      let test = Syntax.conditionalExpressionTest cond 
+
+      let test = Syntax.conditionalExpressionTest cond
           consequent = Syntax.conditionalExpressionConsequent cond
           alternate = Syntax.conditionalExpressionAlternate cond
       in (Serialization.spaceSep [
@@ -223,8 +223,8 @@ conditionalExpressionToExpr cond =
 -- | Convert a binary expression to an AST expression
 binaryExpressionToExpr :: Syntax.BinaryExpression -> Ast.Expr
 binaryExpressionToExpr bin =
-     
-      let op = Syntax.binaryExpressionOperator bin 
+
+      let op = Syntax.binaryExpressionOperator bin
           left = Syntax.binaryExpressionLeft bin
           right = Syntax.binaryExpressionRight bin
       in (Serialization.ifx (binaryOperatorToExpr op) (expressionToExpr left) (expressionToExpr right))
@@ -232,8 +232,8 @@ binaryExpressionToExpr bin =
 -- | Convert a unary expression to an AST expression
 unaryExpressionToExpr :: Syntax.UnaryExpression -> Ast.Expr
 unaryExpressionToExpr un =
-     
-      let op = Syntax.unaryExpressionOperator un 
+
+      let op = Syntax.unaryExpressionOperator un
           arg = Syntax.unaryExpressionArgument un
           prefix = Syntax.unaryExpressionPrefix un
           opStr = unaryOperatorToString op
@@ -243,8 +243,8 @@ unaryExpressionToExpr un =
 -- | Convert an assignment expression to an AST expression
 assignmentExpressionToExpr :: Syntax.AssignmentExpression -> Ast.Expr
 assignmentExpressionToExpr assign =
-     
-      let op = Syntax.assignmentExpressionOperator assign 
+
+      let op = Syntax.assignmentExpressionOperator assign
           left = Syntax.assignmentExpressionLeft assign
           right = Syntax.assignmentExpressionRight assign
           opStr = assignmentOperatorToString op
@@ -266,7 +266,7 @@ patternToExpr pat =
 -- | Convert an object pattern to an AST expression
 objectPatternToExpr :: Syntax.ObjectPattern -> Ast.Expr
 objectPatternToExpr obj =
-     
+
       let props = Syntax.objectPatternProperties obj
       in (Serialization.curlyBracesList Nothing Serialization.inlineStyle (Lists.map objectPatternPropertyToExpr props))
 
@@ -285,8 +285,8 @@ arrayPatternToExpr arr =
 -- | Convert an assignment pattern to an AST expression
 assignmentPatternToExpr :: Syntax.AssignmentPattern -> Ast.Expr
 assignmentPatternToExpr assign =
-     
-      let left = Syntax.assignmentPatternLeft assign 
+
+      let left = Syntax.assignmentPatternLeft assign
           right = Syntax.assignmentPatternRight assign
       in (Serialization.ifx Operators.defineOp (patternToExpr left) (expressionToExpr right))
 
@@ -323,8 +323,8 @@ blockStatementToExpr block =
 -- | Convert a variable declaration to an AST expression
 variableDeclarationToExpr :: Syntax.VariableDeclaration -> Ast.Expr
 variableDeclarationToExpr decl =
-     
-      let kind = Syntax.variableDeclarationKind decl 
+
+      let kind = Syntax.variableDeclarationKind decl
           declarations = Syntax.variableDeclarationDeclarations decl
       in (Serialization.suffix ";" (Serialization.spaceSep [
         variableKindToExpr kind,
@@ -333,8 +333,8 @@ variableDeclarationToExpr decl =
 -- | Convert a variable declarator to an AST expression
 variableDeclaratorToExpr :: Syntax.VariableDeclarator -> Ast.Expr
 variableDeclaratorToExpr decl =
-     
-      let id = Syntax.variableDeclaratorId decl 
+
+      let id = Syntax.variableDeclaratorId decl
           init = Syntax.variableDeclaratorInit decl
       in (Maybes.maybe (patternToExpr id) (\e -> Serialization.ifx Operators.defineOp (patternToExpr id) (expressionToExpr e)) init)
 
@@ -349,8 +349,8 @@ variableKindToExpr kind =
 -- | Convert an if statement to an AST expression
 ifStatementToExpr :: Syntax.IfStatement -> Ast.Expr
 ifStatementToExpr ifStmt =
-     
-      let test = Syntax.ifStatementTest ifStmt 
+
+      let test = Syntax.ifStatementTest ifStmt
           consequent = Syntax.ifStatementConsequent ifStmt
           alternate = Syntax.ifStatementAlternate ifStmt
           ifPart =
@@ -366,8 +366,8 @@ ifStatementToExpr ifStmt =
 -- | Convert a switch statement to an AST expression
 switchStatementToExpr :: Syntax.SwitchStatement -> Ast.Expr
 switchStatementToExpr switchStmt =
-     
-      let discriminant = Syntax.switchStatementDiscriminant switchStmt 
+
+      let discriminant = Syntax.switchStatementDiscriminant switchStmt
           cases = Syntax.switchStatementCases switchStmt
       in (Serialization.spaceSep [
         Serialization.cst "switch",
@@ -377,8 +377,8 @@ switchStatementToExpr switchStmt =
 -- | Convert a switch case to an AST expression
 switchCaseToExpr :: Syntax.SwitchCase -> Ast.Expr
 switchCaseToExpr c =
-     
-      let test = Syntax.switchCaseTest c 
+
+      let test = Syntax.switchCaseTest c
           consequent = Syntax.switchCaseConsequent c
           caseLabel =
                   Maybes.maybe (Serialization.cst "default:") (\t -> Serialization.spaceSep [
@@ -404,8 +404,8 @@ throwStatementToExpr t =
 -- | Convert a try statement to an AST expression
 tryStatementToExpr :: Syntax.TryStatement -> Ast.Expr
 tryStatementToExpr t =
-     
-      let block = Syntax.tryStatementBlock t 
+
+      let block = Syntax.tryStatementBlock t
           handler = Syntax.tryStatementHandler t
           finalizer = Syntax.tryStatementFinalizer t
           tryPart =
@@ -428,8 +428,8 @@ tryStatementToExpr t =
 -- | Convert a catch clause to an AST expression
 catchClauseToExpr :: Syntax.CatchClause -> Ast.Expr
 catchClauseToExpr c =
-     
-      let param = Syntax.catchClauseParam c 
+
+      let param = Syntax.catchClauseParam c
           body = Syntax.catchClauseBody c
           catchKw =
                   Maybes.maybe (Serialization.cst "catch") (\p -> Serialization.spaceSep [
@@ -456,8 +456,8 @@ continueStatementToExpr c =
 -- | Convert a while statement to an AST expression
 whileStatementToExpr :: Syntax.WhileStatement -> Ast.Expr
 whileStatementToExpr w =
-     
-      let test = Syntax.whileStatementTest w 
+
+      let test = Syntax.whileStatementTest w
           body = Syntax.whileStatementBody w
       in (Serialization.spaceSep [
         Serialization.cst "while",
@@ -467,8 +467,8 @@ whileStatementToExpr w =
 -- | Convert a do-while statement to an AST expression
 doWhileStatementToExpr :: Syntax.DoWhileStatement -> Ast.Expr
 doWhileStatementToExpr d =
-     
-      let body = Syntax.doWhileStatementBody d 
+
+      let body = Syntax.doWhileStatementBody d
           test = Syntax.doWhileStatementTest d
       in (Serialization.suffix ";" (Serialization.spaceSep [
         Serialization.cst "do",
@@ -479,8 +479,8 @@ doWhileStatementToExpr d =
 -- | Convert a for statement to an AST expression
 forStatementToExpr :: Syntax.ForStatement -> Ast.Expr
 forStatementToExpr f =
-     
-      let init = Syntax.forStatementInit f 
+
+      let init = Syntax.forStatementInit f
           test = Syntax.forStatementTest f
           update = Syntax.forStatementUpdate f
           body = Syntax.forStatementBody f
@@ -501,8 +501,8 @@ forStatementToExpr f =
 -- | Convert a for-in statement to an AST expression
 forInStatementToExpr :: Syntax.ForInStatement -> Ast.Expr
 forInStatementToExpr f =
-     
-      let left = Syntax.forInStatementLeft f 
+
+      let left = Syntax.forInStatementLeft f
           right = Syntax.forInStatementRight f
           body = Syntax.forInStatementBody f
           leftExpr =
@@ -520,8 +520,8 @@ forInStatementToExpr f =
 -- | Convert a for-of statement to an AST expression
 forOfStatementToExpr :: Syntax.ForOfStatement -> Ast.Expr
 forOfStatementToExpr f =
-     
-      let await = Syntax.forOfStatementAwait f 
+
+      let await = Syntax.forOfStatementAwait f
           left = Syntax.forOfStatementLeft f
           right = Syntax.forOfStatementRight f
           body = Syntax.forOfStatementBody f
@@ -541,8 +541,8 @@ forOfStatementToExpr f =
 -- | Convert a labeled statement to an AST expression
 labeledStatementToExpr :: Syntax.LabeledStatement -> Ast.Expr
 labeledStatementToExpr l =
-     
-      let label = Syntax.labeledStatementLabel l 
+
+      let label = Syntax.labeledStatementLabel l
           body = Syntax.labeledStatementBody l
       in (Serialization.spaceSep [
         Serialization.suffix ":" (identifierToExpr label),
@@ -551,8 +551,8 @@ labeledStatementToExpr l =
 -- | Convert a function declaration to an AST expression
 functionDeclarationToExpr :: Syntax.FunctionDeclaration -> Ast.Expr
 functionDeclarationToExpr fn =
-     
-      let id = Syntax.functionDeclarationId fn 
+
+      let id = Syntax.functionDeclarationId fn
           params = Syntax.functionDeclarationParams fn
           body = Syntax.functionDeclarationBody fn
           async = Syntax.functionDeclarationAsync fn
@@ -572,8 +572,8 @@ functionDeclarationToExpr fn =
 -- | Convert a class declaration to an AST expression
 classDeclarationToExpr :: Syntax.ClassDeclaration -> Ast.Expr
 classDeclarationToExpr cls =
-     
-      let id = Syntax.classDeclarationId cls 
+
+      let id = Syntax.classDeclarationId cls
           superClass = Syntax.classDeclarationSuperClass cls
           body = Syntax.classDeclarationBody cls
           extendsClause =
@@ -592,8 +592,8 @@ classDeclarationToExpr cls =
 -- | Convert a method definition to an AST expression
 methodDefinitionToExpr :: Syntax.MethodDefinition -> Ast.Expr
 methodDefinitionToExpr method =
-     
-      let key = Syntax.methodDefinitionKey method 
+
+      let key = Syntax.methodDefinitionKey method
           value = Syntax.methodDefinitionValue method
           kind = Syntax.methodDefinitionKind method
           computed = Syntax.methodDefinitionComputed method
@@ -624,8 +624,8 @@ methodDefinitionToExpr method =
 -- | Convert a JavaScript program to an AST expression
 programToExpr :: Syntax.Program -> Ast.Expr
 programToExpr prog =
-     
-      let body = Syntax.programBody prog 
+
+      let body = Syntax.programBody prog
           warning = [
                 Serialization.cst (toLineComment Constants.warningAutoGeneratedFile)]
           items = Lists.map moduleItemToExpr body
@@ -644,8 +644,8 @@ moduleItemToExpr item =
 -- | Convert an import declaration to an AST expression
 importDeclarationToExpr :: Syntax.ImportDeclaration -> Ast.Expr
 importDeclarationToExpr imp =
-     
-      let specifiers = Syntax.importDeclarationSpecifiers imp 
+
+      let specifiers = Syntax.importDeclarationSpecifiers imp
           source = Syntax.importDeclarationSource imp
           sourceExpr = stringLiteralToExpr source
           specExprs = Lists.map importSpecifierToExpr specifiers
@@ -661,8 +661,8 @@ importDeclarationToExpr imp =
 importSpecifierToExpr :: Syntax.ImportClause -> Ast.Expr
 importSpecifierToExpr spec =
     case spec of
-      Syntax.ImportClauseNamed v0 ->  
-        let imported = Syntax.importSpecifierImported v0 
+      Syntax.ImportClauseNamed v0 ->
+        let imported = Syntax.importSpecifierImported v0
             local = Syntax.importSpecifierLocal v0
         in (Logic.ifElse (Equality.equal (Syntax.unIdentifier imported) (Syntax.unIdentifier local)) (identifierToExpr local) (Serialization.spaceSep [
           identifierToExpr imported,
@@ -695,8 +695,8 @@ exportDeclarationToExpr exp =
 -- | Convert a named export to an AST expression
 namedExportToExpr :: Syntax.NamedExport -> Ast.Expr
 namedExportToExpr n =
-     
-      let specifiers = Syntax.namedExportSpecifiers n 
+
+      let specifiers = Syntax.namedExportSpecifiers n
           source = Syntax.namedExportSource n
           specExprs = Lists.map exportSpecifierToExpr specifiers
           fromClause =
@@ -713,8 +713,8 @@ namedExportToExpr n =
 -- | Convert an export specifier to an AST expression
 exportSpecifierToExpr :: Syntax.ExportSpecifier -> Ast.Expr
 exportSpecifierToExpr spec =
-     
-      let local = Syntax.exportSpecifierLocal spec 
+
+      let local = Syntax.exportSpecifierLocal spec
           exported = Syntax.exportSpecifierExported spec
       in (Logic.ifElse (Equality.equal (Syntax.unIdentifier local) (Syntax.unIdentifier exported)) (identifierToExpr local) (Serialization.spaceSep [
         identifierToExpr local,
@@ -724,8 +724,8 @@ exportSpecifierToExpr spec =
 -- | Convert an export all declaration to an AST expression
 exportAllToExpr :: Syntax.ExportAllDeclaration -> Ast.Expr
 exportAllToExpr a =
-     
-      let exported = Syntax.exportAllDeclarationExported a 
+
+      let exported = Syntax.exportAllDeclarationExported a
           source = Syntax.exportAllDeclarationSource a
           exportedClause =
                   Maybes.maybe (Serialization.cst "*") (\e -> Serialization.spaceSep [
@@ -806,16 +806,16 @@ assignmentOperatorToString op =
 -- | Convert a documentation comment to an AST expression
 documentationCommentToExpr :: Syntax.DocumentationComment -> Ast.Expr
 documentationCommentToExpr doc =
-     
-      let description = Syntax.documentationCommentDescription doc 
+
+      let description = Syntax.documentationCommentDescription doc
           tags = Syntax.documentationCommentTags doc
       in (Serialization.cst (toJavaScriptComments description tags))
 
 -- | Format a description and tags as a JSDoc comment
 toJavaScriptComments :: String -> [Syntax.DocumentationTag] -> String
 toJavaScriptComments desc tags =
-     
-      let descLines = Logic.ifElse (Equality.equal desc "") [] (Lists.map (\line -> Strings.cat2 " * " line) (Strings.lines desc)) 
+
+      let descLines = Logic.ifElse (Equality.equal desc "") [] (Lists.map (\line -> Strings.cat2 " * " line) (Strings.lines desc))
           tagLines = Lists.map documentationTagToLine tags
           allLines =
                   Lists.concat [
@@ -831,8 +831,8 @@ toJavaScriptComments desc tags =
 -- | Convert a documentation tag to a JSDoc line
 documentationTagToLine :: Syntax.DocumentationTag -> String
 documentationTagToLine tag =
-     
-      let name = Syntax.documentationTagName tag 
+
+      let name = Syntax.documentationTagName tag
           mtype = Syntax.documentationTagType tag
           mparamName = Syntax.documentationTagParamName tag
           description = Syntax.documentationTagDescription tag
@@ -863,8 +863,8 @@ typeExpressionToString typ =
       Syntax.TypeExpressionFunction _ -> "Function"
       Syntax.TypeExpressionObject _ -> "Object"
       Syntax.TypeExpressionUnion v0 -> Strings.intercalate "|" (Lists.map typeExpressionToString v0)
-      Syntax.TypeExpressionParameterized v0 ->  
-        let base = Syntax.parameterizedTypeExpressionBase v0 
+      Syntax.TypeExpressionParameterized v0 ->
+        let base = Syntax.parameterizedTypeExpressionBase v0
             args = Syntax.parameterizedTypeExpressionArguments v0
         in (Strings.cat [
           typeExpressionToString base,
@@ -880,8 +880,8 @@ toLineComment s = Strings.intercalate "\n" (Lists.map (\line -> Strings.cat2 "//
 -- | Convert a module item with comments to an AST expression
 moduleItemWithCommentsToExpr :: Syntax.ModuleItemWithComments -> Ast.Expr
 moduleItemWithCommentsToExpr miwc =
-     
-      let body = Syntax.moduleItemWithCommentsBody miwc 
+
+      let body = Syntax.moduleItemWithCommentsBody miwc
           mc = Syntax.moduleItemWithCommentsComments miwc
       in (Maybes.maybe (moduleItemToExpr body) (\c -> Serialization.newlineSep [
         documentationCommentToExpr c,
@@ -890,8 +890,8 @@ moduleItemWithCommentsToExpr miwc =
 -- | Convert a function declaration with comments to an AST expression
 functionDeclarationWithCommentsToExpr :: Syntax.FunctionDeclarationWithComments -> Ast.Expr
 functionDeclarationWithCommentsToExpr fdwc =
-     
-      let body = Syntax.functionDeclarationWithCommentsBody fdwc 
+
+      let body = Syntax.functionDeclarationWithCommentsBody fdwc
           mc = Syntax.functionDeclarationWithCommentsComments fdwc
       in (Maybes.maybe (functionDeclarationToExpr body) (\c -> Serialization.newlineSep [
         documentationCommentToExpr c,
@@ -900,8 +900,8 @@ functionDeclarationWithCommentsToExpr fdwc =
 -- | Convert a class declaration with comments to an AST expression
 classDeclarationWithCommentsToExpr :: Syntax.ClassDeclarationWithComments -> Ast.Expr
 classDeclarationWithCommentsToExpr cdwc =
-     
-      let body = Syntax.classDeclarationWithCommentsBody cdwc 
+
+      let body = Syntax.classDeclarationWithCommentsBody cdwc
           mc = Syntax.classDeclarationWithCommentsComments cdwc
       in (Maybes.maybe (classDeclarationToExpr body) (\c -> Serialization.newlineSep [
         documentationCommentToExpr c,

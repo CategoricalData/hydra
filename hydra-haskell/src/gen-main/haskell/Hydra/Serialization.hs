@@ -32,7 +32,7 @@ angleBracesList style els = Logic.ifElse (Lists.null els) (cst "<>") (brackets a
 -- | Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression.
 bracesListAdaptive :: [Ast.Expr] -> Ast.Expr
 bracesListAdaptive els =
-     
+
       let inlineList = curlyBracesList Nothing inlineStyle els
       in (Logic.ifElse (Equality.gt (expressionLength inlineList) 70) (curlyBracesList Nothing halfBlockStyle els) inlineList)
 
@@ -42,7 +42,7 @@ bracketList style els = Logic.ifElse (Lists.null els) (cst "[]") (brackets squar
 -- | Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression.
 bracketListAdaptive :: [Ast.Expr] -> Ast.Expr
 bracketListAdaptive els =
-     
+
       let inlineList = bracketList inlineStyle els
       in (Logic.ifElse (Equality.gt (expressionLength inlineList) 70) (bracketList halfBlockStyle els) inlineList)
 
@@ -78,7 +78,7 @@ customIndent idt s = Strings.cat (Lists.intersperse "\n" (Lists.map (\line -> St
 
 customIndentBlock :: String -> [Ast.Expr] -> Ast.Expr
 customIndentBlock idt els =
-     
+
       let idtOp =
               Ast.Op {
                 Ast.opSymbol = (sym ""),
@@ -115,8 +115,8 @@ doubleSpace = "  "
 -- | Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it.
 expressionLength :: Ast.Expr -> Int
 expressionLength e =
-     
-      let symbolLength = \s -> Strings.length (Ast.unSymbol s) 
+
+      let symbolLength = \s -> Strings.length (Ast.unSymbol s)
           wsLength =
                   \ws -> case ws of
                     Ast.WsNone -> 0
@@ -125,8 +125,8 @@ expressionLength e =
                     Ast.WsBreakAndIndent _ -> 10000
                     Ast.WsDoubleBreak -> 10000
           blockStyleLength =
-                  \style ->  
-                    let mindentLen = Maybes.maybe 0 Strings.length (Ast.blockStyleIndent style) 
+                  \style ->
+                    let mindentLen = Maybes.maybe 0 Strings.length (Ast.blockStyleIndent style)
                         nlBeforeLen = Logic.ifElse (Ast.blockStyleNewlineBeforeContent style) 1 0
                         nlAfterLen = Logic.ifElse (Ast.blockStyleNewlineAfterContent style) 1 0
                     in (Math.add mindentLen (Math.add nlBeforeLen nlAfterLen))
@@ -135,29 +135,29 @@ expressionLength e =
           bracketExprLength =
                   \be -> Math.add (bracketsLength (Ast.bracketExprBrackets be)) (Math.add (expressionLength (Ast.bracketExprEnclosed be)) (blockStyleLength (Ast.bracketExprStyle be)))
           indentedExpressionLength =
-                  \ie ->  
-                    let baseLen = expressionLength (Ast.indentedExpressionExpr ie) 
+                  \ie ->
+                    let baseLen = expressionLength (Ast.indentedExpressionExpr ie)
                         indentLen =
                                 case (Ast.indentedExpressionStyle ie) of
                                   Ast.IndentStyleAllLines v0 -> Strings.length v0
                                   Ast.IndentStyleSubsequentLines v0 -> Strings.length v0
                     in (Math.add baseLen indentLen)
           opLength =
-                  \op ->  
-                    let symLen = symbolLength (Ast.opSymbol op) 
+                  \op ->
+                    let symLen = symbolLength (Ast.opSymbol op)
                         padding = Ast.opPadding op
                         leftLen = wsLength (Ast.paddingLeft padding)
                         rightLen = wsLength (Ast.paddingRight padding)
                     in (Math.add symLen (Math.add leftLen rightLen))
           opExprLength =
-                  \oe ->  
-                    let opLen = opLength (Ast.opExprOp oe) 
+                  \oe ->
+                    let opLen = opLength (Ast.opExprOp oe)
                         leftLen = expressionLength (Ast.opExprLhs oe)
                         rightLen = expressionLength (Ast.opExprRhs oe)
                     in (Math.add opLen (Math.add leftLen rightLen))
           seqExprLength =
-                  \se ->  
-                    let sopLen = opLength (Ast.seqExprOp se) 
+                  \se ->
+                    let sopLen = opLength (Ast.seqExprOp se)
                         elementLens = Lists.map expressionLength (Ast.seqExprElements se)
                         totalElLen = Lists.foldl Math.add 0 elementLens
                         numSeps = Math.sub (Lists.length (Ast.seqExprElements se)) 1
@@ -211,8 +211,8 @@ infixWs op l r =
 
 infixWsList :: String -> [Ast.Expr] -> Ast.Expr
 infixWsList op opers =
-     
-      let opExpr = cst op 
+
+      let opExpr = cst op
           foldFun = \e -> \r -> Logic.ifElse (Lists.null e) [
                 r] (Lists.cons r (Lists.cons opExpr e))
       in (spaceSep (Lists.foldl foldFun [] (Lists.reverse opers)))
@@ -275,13 +275,13 @@ orOp newlines =
 
 orSep :: Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr
 orSep style l =
-     
+
       let newlines = Ast.blockStyleNewlineBeforeContent style
       in (Maybes.maybe (cst "") (\h -> Lists.foldl (\acc -> \el -> ifx (orOp newlines) acc el) h (Lists.drop 1 l)) (Lists.safeHead l))
 
 parenList :: Bool -> [Ast.Expr] -> Ast.Expr
 parenList newlines els =
-     
+
       let style = Logic.ifElse (Logic.and newlines (Equality.gt (Lists.length els) 1)) halfBlockStyle inlineStyle
       in (Logic.ifElse (Lists.null els) (cst "()") (brackets parentheses style (commaSep style els)))
 
@@ -296,11 +296,11 @@ parentheses =
 
 parenthesize :: Ast.Expr -> Ast.Expr
 parenthesize exp =
-     
+
       let assocLeft =
               \a -> case a of
                 Ast.AssociativityRight -> False
-                _ -> True 
+                _ -> True
           assocRight =
                   \a -> case a of
                     Ast.AssociativityLeft -> False
@@ -317,8 +317,8 @@ parenthesize exp =
         Ast.ExprSeq v0 -> Ast.ExprSeq (Ast.SeqExpr {
           Ast.seqExprOp = (Ast.seqExprOp v0),
           Ast.seqExprElements = (Lists.map parenthesize (Ast.seqExprElements v0))})
-        Ast.ExprOp v0 ->  
-          let op = Ast.opExprOp v0 
+        Ast.ExprOp v0 ->
+          let op = Ast.opExprOp v0
               prec = Ast.unPrecedence (Ast.opPrecedence op)
               assoc = Ast.opAssociativity op
               lhs = Ast.opExprLhs v0
@@ -327,8 +327,8 @@ parenthesize exp =
               rhs_ = parenthesize rhs
               lhs2 =
                       case lhs_ of
-                        Ast.ExprOp v1 ->  
-                          let lop = Ast.opExprOp v1 
+                        Ast.ExprOp v1 ->
+                          let lop = Ast.opExprOp v1
                               lprec = Ast.unPrecedence (Ast.opPrecedence lop)
                               lassoc = Ast.opAssociativity lop
                               comparison = Equality.compare prec lprec
@@ -339,8 +339,8 @@ parenthesize exp =
                         _ -> lhs_
               rhs2 =
                       case rhs_ of
-                        Ast.ExprOp v1 ->  
-                          let rop = Ast.opExprOp v1 
+                        Ast.ExprOp v1 ->
+                          let rop = Ast.opExprOp v1
                               rprec = Ast.unPrecedence (Ast.opPrecedence rop)
                               rassoc = Ast.opAssociativity rop
                               comparison = Equality.compare prec rprec
@@ -356,7 +356,7 @@ parenthesize exp =
 
 prefix :: String -> Ast.Expr -> Ast.Expr
 prefix p expr =
-     
+
       let preOp =
               Ast.Op {
                 Ast.opSymbol = (sym p),
@@ -369,22 +369,22 @@ prefix p expr =
 
 printExpr :: Ast.Expr -> String
 printExpr e =
-     
+
       let pad =
               \ws -> case ws of
                 Ast.WsNone -> ""
                 Ast.WsSpace -> " "
                 Ast.WsBreak -> "\n"
                 Ast.WsBreakAndIndent _ -> "\n"
-                Ast.WsDoubleBreak -> "\n\n" 
+                Ast.WsDoubleBreak -> "\n\n"
           idt =
                   \ws -> \s -> case ws of
                     Ast.WsBreakAndIndent v0 -> customIndent v0 s
                     _ -> s
       in case e of
         Ast.ExprConst v0 -> Ast.unSymbol v0
-        Ast.ExprIndent v0 ->  
-          let style = Ast.indentedExpressionStyle v0 
+        Ast.ExprIndent v0 ->
+          let style = Ast.indentedExpressionStyle v0
               expr = Ast.indentedExpressionExpr v0
               lns = Strings.lines (printExpr expr)
               ilns =
@@ -392,8 +392,8 @@ printExpr e =
                         Ast.IndentStyleAllLines v1 -> Lists.map (\line -> Strings.cat2 v1 line) lns
                         Ast.IndentStyleSubsequentLines v1 -> Logic.ifElse (Equality.equal (Lists.length lns) 1) lns (Lists.cons (Lists.head lns) (Lists.map (\line -> Strings.cat2 v1 line) (Lists.tail lns)))
           in (Strings.intercalate "\n" ilns)
-        Ast.ExprSeq v0 ->  
-          let sop = Ast.seqExprOp v0 
+        Ast.ExprSeq v0 ->
+          let sop = Ast.seqExprOp v0
               ssym = Ast.unSymbol (Ast.opSymbol sop)
               spadding = Ast.opPadding sop
               spadl = Ast.paddingLeft spadding
@@ -402,8 +402,8 @@ printExpr e =
               separator = Strings.cat2 (Strings.cat2 (pad spadl) ssym) (pad spadr)
               printedElements = Lists.map (\el -> idt spadr (printExpr el)) selements
           in (Strings.intercalate separator printedElements)
-        Ast.ExprOp v0 ->  
-          let op = Ast.opExprOp v0 
+        Ast.ExprOp v0 ->
+          let op = Ast.opExprOp v0
               sym = Ast.unSymbol (Ast.opSymbol op)
               padding = Ast.opPadding op
               padl = Ast.paddingLeft padding
@@ -413,8 +413,8 @@ printExpr e =
               lhs = idt padl (printExpr l)
               rhs = idt padr (printExpr r)
           in (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 lhs (pad padl)) sym) (pad padr)) rhs)
-        Ast.ExprBrackets v0 ->  
-          let brs = Ast.bracketExprBrackets v0 
+        Ast.ExprBrackets v0 ->
+          let brs = Ast.bracketExprBrackets v0
               l = Ast.unSymbol (Ast.bracketsOpen brs)
               r = Ast.unSymbol (Ast.bracketsClose brs)
               e = Ast.bracketExprEnclosed v0
@@ -472,7 +472,7 @@ squareBrackets =
 -- | Append a suffix string to an expression
 suffix :: String -> Ast.Expr -> Ast.Expr
 suffix s expr =
-     
+
       let sufOp =
               Ast.Op {
                 Ast.opSymbol = (sym s),
@@ -488,11 +488,11 @@ sym s = Ast.Symbol s
 
 symbolSep :: String -> Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr
 symbolSep symb style l =
-     
+
       let breakCount =
               Lists.length (Lists.filter (\x_ -> x_) [
                 Ast.blockStyleNewlineBeforeContent style,
-                (Ast.blockStyleNewlineAfterContent style)]) 
+                (Ast.blockStyleNewlineAfterContent style)])
           break =
                   Logic.ifElse (Equality.equal breakCount 0) Ast.WsSpace (Logic.ifElse (Equality.equal breakCount 1) Ast.WsBreak Ast.WsDoubleBreak)
           commaOp =

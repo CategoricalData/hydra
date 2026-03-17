@@ -13,10 +13,10 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | The identifier of an elimination constructor
-data EliminationVariant = 
+data EliminationVariant =
   EliminationVariantRecord  |
   EliminationVariantUnion  |
-  EliminationVariantWrap 
+  EliminationVariantWrap
   deriving (Eq, Ord, Read, Show)
 
 _EliminationVariant = Core.Name "hydra.variants.EliminationVariant"
@@ -28,10 +28,10 @@ _EliminationVariant_union = Core.Name "union"
 _EliminationVariant_wrap = Core.Name "wrap"
 
 -- | The identifier of a function constructor
-data FunctionVariant = 
+data FunctionVariant =
   FunctionVariantElimination  |
   FunctionVariantLambda  |
-  FunctionVariantPrimitive 
+  FunctionVariantPrimitive
   deriving (Eq, Ord, Read, Show)
 
 _FunctionVariant = Core.Name "hydra.variants.FunctionVariant"
@@ -43,12 +43,12 @@ _FunctionVariant_lambda = Core.Name "lambda"
 _FunctionVariant_primitive = Core.Name "primitive"
 
 -- | The identifier of a literal constructor
-data LiteralVariant = 
+data LiteralVariant =
   LiteralVariantBinary  |
   LiteralVariantBoolean  |
   LiteralVariantFloat  |
   LiteralVariantInteger  |
-  LiteralVariantString 
+  LiteralVariantString
   deriving (Eq, Ord, Read, Show)
 
 _LiteralVariant = Core.Name "hydra.variants.LiteralVariant"
@@ -64,7 +64,7 @@ _LiteralVariant_integer = Core.Name "integer"
 _LiteralVariant_string = Core.Name "string"
 
 -- | The identifier of a term expression constructor
-data TermVariant = 
+data TermVariant =
   TermVariantAnnotated  |
   TermVariantApplication  |
   TermVariantEither  |
@@ -82,7 +82,7 @@ data TermVariant =
   TermVariantUnion  |
   TermVariantUnit  |
   TermVariantVariable  |
-  TermVariantWrap 
+  TermVariantWrap
   deriving (Eq, Ord, Read, Show)
 
 _TermVariant = Core.Name "hydra.variants.TermVariant"
@@ -124,7 +124,7 @@ _TermVariant_variable = Core.Name "variable"
 _TermVariant_wrap = Core.Name "wrap"
 
 -- | The identifier of a type constructor
-data TypeVariant = 
+data TypeVariant =
   TypeVariantAnnotated  |
   TypeVariantApplication  |
   TypeVariantEither  |
@@ -140,7 +140,7 @@ data TypeVariant =
   TypeVariantUnion  |
   TypeVariantUnit  |
   TypeVariantVariable  |
-  TypeVariantWrap 
+  TypeVariantWrap
   deriving (Eq, Ord, Read, Show)
 
 _TypeVariant = Core.Name "hydra.variants.TypeVariant"

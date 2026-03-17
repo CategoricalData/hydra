@@ -9,56 +9,56 @@ import java.io.Serializable;
  */
 public class FunctionStructure<Env> implements Serializable, Comparable<FunctionStructure<Env>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.typing.FunctionStructure");
-  
+
   public static final hydra.core.Name TYPE_PARAMS = new hydra.core.Name("typeParams");
-  
+
   public static final hydra.core.Name PARAMS = new hydra.core.Name("params");
-  
+
   public static final hydra.core.Name BINDINGS = new hydra.core.Name("bindings");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public static final hydra.core.Name DOMAINS = new hydra.core.Name("domains");
-  
+
   public static final hydra.core.Name CODOMAIN = new hydra.core.Name("codomain");
-  
+
   public static final hydra.core.Name ENVIRONMENT = new hydra.core.Name("environment");
-  
+
   /**
    * Type parameters (from type lambdas)
    */
   public final hydra.util.ConsList<hydra.core.Name> typeParams;
-  
+
   /**
    * Value parameters (from lambdas)
    */
   public final hydra.util.ConsList<hydra.core.Name> params;
-  
+
   /**
    * Let bindings accumulated from the term
    */
   public final hydra.util.ConsList<hydra.core.Binding> bindings;
-  
+
   /**
    * The body term after removing all lambdas, lets, etc.
    */
   public final hydra.core.Term body;
-  
+
   /**
    * Domain types of the value parameters
    */
   public final hydra.util.ConsList<hydra.core.Type> domains;
-  
+
   /**
    * The return type of the function (if type inference succeeded)
    */
   public final hydra.util.Maybe<hydra.core.Type> codomain;
-  
+
   /**
    * Updated environment after processing all bindings
    */
   public final Env environment;
-  
+
   public FunctionStructure (hydra.util.ConsList<hydra.core.Name> typeParams, hydra.util.ConsList<hydra.core.Name> params, hydra.util.ConsList<hydra.core.Binding> bindings, hydra.core.Term body, hydra.util.ConsList<hydra.core.Type> domains, hydra.util.Maybe<hydra.core.Type> codomain, Env environment) {
     this.typeParams = typeParams;
     this.params = params;
@@ -68,7 +68,7 @@ public class FunctionStructure<Env> implements Serializable, Comparable<Function
     this.codomain = codomain;
     this.environment = environment;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof FunctionStructure)) {
@@ -91,12 +91,12 @@ public class FunctionStructure<Env> implements Serializable, Comparable<Function
       this.environment,
       o.environment);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(typeParams) + 3 * java.util.Objects.hashCode(params) + 5 * java.util.Objects.hashCode(bindings) + 7 * java.util.Objects.hashCode(body) + 11 * java.util.Objects.hashCode(domains) + 13 * java.util.Objects.hashCode(codomain) + 17 * java.util.Objects.hashCode(environment);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(FunctionStructure other) {
@@ -127,31 +127,31 @@ public class FunctionStructure<Env> implements Serializable, Comparable<Function
     }
     return ((Comparable) environment).compareTo(other.environment);
   }
-  
+
   public FunctionStructure withTypeParams(hydra.util.ConsList<hydra.core.Name> typeParams) {
     return new FunctionStructure(typeParams, params, bindings, body, domains, codomain, environment);
   }
-  
+
   public FunctionStructure withParams(hydra.util.ConsList<hydra.core.Name> params) {
     return new FunctionStructure(typeParams, params, bindings, body, domains, codomain, environment);
   }
-  
+
   public FunctionStructure withBindings(hydra.util.ConsList<hydra.core.Binding> bindings) {
     return new FunctionStructure(typeParams, params, bindings, body, domains, codomain, environment);
   }
-  
+
   public FunctionStructure withBody(hydra.core.Term body) {
     return new FunctionStructure(typeParams, params, bindings, body, domains, codomain, environment);
   }
-  
+
   public FunctionStructure withDomains(hydra.util.ConsList<hydra.core.Type> domains) {
     return new FunctionStructure(typeParams, params, bindings, body, domains, codomain, environment);
   }
-  
+
   public FunctionStructure withCodomain(hydra.util.Maybe<hydra.core.Type> codomain) {
     return new FunctionStructure(typeParams, params, bindings, body, domains, codomain, environment);
   }
-  
+
   public FunctionStructure withEnvironment(Env environment) {
     return new FunctionStructure(typeParams, params, bindings, body, domains, codomain, environment);
   }

@@ -14,7 +14,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | See https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent
-data Closed = 
+data Closed =
   Closed {
     closedIsClosed :: Bool,
     closedIgnoredProperties :: (Maybe (S.Set Syntax.Property))}
@@ -27,7 +27,7 @@ _Closed_isClosed = Core.Name "isClosed"
 _Closed_ignoredProperties = Core.Name "ignoredProperties"
 
 -- | Any of a number of constraint parameters which can be applied either to node or property shapes
-data CommonConstraint = 
+data CommonConstraint =
   -- | See https://www.w3.org/TR/shacl/#AndConstraintComponent
   CommonConstraintAnd (S.Set (Reference Shape)) |
   -- | See https://www.w3.org/TR/shacl/#ClosedConstraintComponent
@@ -121,7 +121,7 @@ _CommonConstraint_or = Core.Name "or"
 _CommonConstraint_xone = Core.Name "xone"
 
 -- | Common constraint parameters and other properties for SHACL shapes
-data CommonProperties = 
+data CommonProperties =
   CommonProperties {
     -- | Common constraint parameters attached to this shape
     commonPropertiesConstraints :: (S.Set CommonConstraint),
@@ -160,7 +160,7 @@ _CommonProperties_targetObjectsOf = Core.Name "targetObjectsOf"
 _CommonProperties_targetSubjectsOf = Core.Name "targetSubjectsOf"
 
 -- | An instance of a type like sh:Shape or sh:NodeShape, together with a unique IRI for that instance
-data Definition a = 
+data Definition a =
   Definition {
     definitionIri :: Syntax.Iri,
     definitionTarget :: a}
@@ -172,7 +172,7 @@ _Definition_iri = Core.Name "iri"
 
 _Definition_target = Core.Name "target"
 
-data NodeKind = 
+data NodeKind =
   -- | A blank node
   NodeKindBlankNode  |
   -- | An IRI
@@ -184,7 +184,7 @@ data NodeKind =
   -- | A blank node or a literal
   NodeKindBlankNodeOrLiteral  |
   -- | An IRI or a literal
-  NodeKindIriOrLiteral 
+  NodeKindIriOrLiteral
   deriving (Eq, Ord, Read, Show)
 
 _NodeKind = Core.Name "hydra.ext.org.w3.shacl.model.NodeKind"
@@ -202,7 +202,7 @@ _NodeKind_blankNodeOrLiteral = Core.Name "blankNodeOrLiteral"
 _NodeKind_iriOrLiteral = Core.Name "iriOrLiteral"
 
 -- | A SHACL node shape. See https://www.w3.org/TR/shacl/#node-shapes
-data NodeShape = 
+data NodeShape =
   NodeShape {
     nodeShapeCommon :: CommonProperties}
   deriving (Eq, Ord, Read, Show)
@@ -212,7 +212,7 @@ _NodeShape = Core.Name "hydra.ext.org.w3.shacl.model.NodeShape"
 _NodeShape_common = Core.Name "common"
 
 -- | A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent
-data Pattern = 
+data Pattern =
   Pattern {
     patternRegex :: String,
     patternFlags :: (Maybe String)}
@@ -225,7 +225,7 @@ _Pattern_regex = Core.Name "regex"
 _Pattern_flags = Core.Name "flags"
 
 -- | A SHACL property shape. See https://www.w3.org/TR/shacl/#property-shapes
-data PropertyShape = 
+data PropertyShape =
   PropertyShape {
     propertyShapeCommon :: CommonProperties,
     -- | Any property shape -specific constraint parameters
@@ -258,7 +258,7 @@ _PropertyShape_order = Core.Name "order"
 _PropertyShape_path = Core.Name "path"
 
 -- | A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes
-data PropertyShapeConstraint = 
+data PropertyShapeConstraint =
   -- | See https://www.w3.org/TR/shacl/#LessThanConstraintComponent
   PropertyShapeConstraintLessThan (S.Set Syntax.Property) |
   -- | See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent
@@ -288,7 +288,7 @@ _PropertyShapeConstraint_uniqueLang = Core.Name "uniqueLang"
 _PropertyShapeConstraint_qualifiedValueShape = Core.Name "qualifiedValueShape"
 
 -- | See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
-data QualifiedValueShape = 
+data QualifiedValueShape =
   QualifiedValueShape {
     qualifiedValueShapeQualifiedValueShape :: (Reference Shape),
     qualifiedValueShapeQualifiedMaxCount :: Integer,
@@ -307,7 +307,7 @@ _QualifiedValueShape_qualifiedMinCount = Core.Name "qualifiedMinCount"
 _QualifiedValueShape_qualifiedValueShapesDisjoint = Core.Name "qualifiedValueShapesDisjoint"
 
 -- | Either an instance of a type like sh:Shape or sh:NodeShape, or an IRI which refers to an instance of that type
-data Reference a = 
+data Reference a =
   ReferenceNamed Syntax.Iri |
   -- | An anonymous instance
   ReferenceAnonymous a |
@@ -323,13 +323,13 @@ _Reference_anonymous = Core.Name "anonymous"
 
 _Reference_definition = Core.Name "definition"
 
-data Severity = 
+data Severity =
   -- | A non-critical constraint violation indicating an informative message
   SeverityInfo  |
   -- | A non-critical constraint violation indicating a warning
   SeverityWarning  |
   -- | A constraint violation
-  SeverityViolation 
+  SeverityViolation
   deriving (Eq, Ord, Read, Show)
 
 _Severity = Core.Name "hydra.ext.org.w3.shacl.model.Severity"
@@ -341,7 +341,7 @@ _Severity_warning = Core.Name "warning"
 _Severity_violation = Core.Name "violation"
 
 -- | A SHACL node or property shape. See https://www.w3.org/TR/shacl/#shapes
-data Shape = 
+data Shape =
   ShapeNode NodeShape |
   ShapeProperty PropertyShape
   deriving (Eq, Ord, Read, Show)
@@ -353,7 +353,7 @@ _Shape_node = Core.Name "node"
 _Shape_property = Core.Name "property"
 
 -- | An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes
-newtype ShapesGraph = 
+newtype ShapesGraph =
   ShapesGraph {
     unShapesGraph :: (S.Set (Definition Shape))}
   deriving (Eq, Ord, Read, Show)

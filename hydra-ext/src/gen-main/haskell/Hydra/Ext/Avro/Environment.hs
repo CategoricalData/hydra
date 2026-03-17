@@ -16,7 +16,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | An Avro qualified name with optional namespace
-data AvroQualifiedName = 
+data AvroQualifiedName =
   AvroQualifiedName {
     -- | The optional namespace
     avroQualifiedNameNamespace :: (Maybe String),
@@ -31,7 +31,7 @@ _AvroQualifiedName_namespace = Core.Name "namespace"
 _AvroQualifiedName_name = Core.Name "name"
 
 -- | An Avro foreign key annotation linking a field to another type
-data AvroForeignKey = 
+data AvroForeignKey =
   AvroForeignKey {
     -- | The Hydra type name referenced by this foreign key
     avroForeignKeyTypeName :: Core.Name,
@@ -45,7 +45,7 @@ _AvroForeignKey_typeName = Core.Name "typeName"
 _AvroForeignKey_constructor = Core.Name "constructor"
 
 -- | An Avro primary key annotation identifying the element name field
-data AvroPrimaryKey = 
+data AvroPrimaryKey =
   AvroPrimaryKey {
     -- | The name of the primary key field
     avroPrimaryKeyFieldName :: Core.Name,
@@ -59,7 +59,7 @@ _AvroPrimaryKey_fieldName = Core.Name "fieldName"
 _AvroPrimaryKey_constructor = Core.Name "constructor"
 
 -- | Environment for Avro-to-Hydra code generation
-data AvroEnvironment = 
+data AvroEnvironment =
   AvroEnvironment {
     -- | Named adapters for previously processed schemas
     avroEnvironmentNamedAdapters :: (M.Map AvroQualifiedName (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term)),

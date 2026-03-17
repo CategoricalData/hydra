@@ -16,9 +16,9 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Target Python version for code generation
-data PythonVersion = 
+data PythonVersion =
   PythonVersionPython310  |
-  PythonVersionPython312 
+  PythonVersionPython312
   deriving (Eq, Ord, Read, Show)
 
 _PythonVersion = Core.Name "hydra.ext.python.helpers.PythonVersion"
@@ -28,7 +28,7 @@ _PythonVersion_python310 = Core.Name "python310"
 _PythonVersion_python312 = Core.Name "python312"
 
 -- | Environment for Python code generation
-data PythonEnvironment = 
+data PythonEnvironment =
   PythonEnvironment {
     -- | Namespace mapping for imports
     pythonEnvironmentNamespaces :: (Module.Namespaces Syntax.DottedName),
@@ -62,7 +62,7 @@ _PythonEnvironment_skipCasts = Core.Name "skipCasts"
 _PythonEnvironment_inlineVariables = Core.Name "inlineVariables"
 
 -- | Temporary metadata used to create the header section of a Python file
-data PythonModuleMetadata = 
+data PythonModuleMetadata =
   PythonModuleMetadata {
     -- | Namespace mapping for imports
     pythonModuleMetadataNamespaces :: (Module.Namespaces Syntax.DottedName),
@@ -137,7 +137,7 @@ _PythonModuleMetadata_usesRight = Core.Name "usesRight"
 _PythonModuleMetadata_usesTypeVar = Core.Name "usesTypeVar"
 
 -- | Combined graph and metadata state for Python code generation
-data PyGraph = 
+data PyGraph =
   PyGraph {
     -- | The Hydra graph being processed
     pyGraphGraph :: Graph.Graph,

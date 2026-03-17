@@ -16,10 +16,10 @@ A = TypeVar("A")
 @dataclass(frozen=True)
 class Closed:
     r"""See https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent."""
-    
+
     is_closed: bool
     ignored_properties: Maybe[frozenset[hydra.ext.org.w3.rdf.syntax.Property]]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.shacl.model.Closed")
     IS_CLOSED = hydra.core.Name("isClosed")
     IGNORED_PROPERTIES = hydra.core.Name("ignoredProperties")
@@ -97,7 +97,7 @@ class _CommonConstraintMeta(type):
 # Any of a number of constraint parameters which can be applied either to node or property shapes.
 class CommonConstraint(metaclass=_CommonConstraintMeta):
     r"""CommonConstraintAnd | CommonConstraintClosed | CommonConstraintClass | CommonConstraintDatatype | CommonConstraintDisjoint | CommonConstraintEquals | CommonConstraintHasValue | CommonConstraintIn | CommonConstraintLanguageIn | CommonConstraintNodeKind | CommonConstraintNode | CommonConstraintNot | CommonConstraintMaxExclusive | CommonConstraintMaxInclusive | CommonConstraintMaxLength | CommonConstraintMinExclusive | CommonConstraintMinInclusive | CommonConstraintMinLength | CommonConstraintPattern | CommonConstraintProperty | CommonConstraintOr | CommonConstraintXone"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.shacl.model.CommonConstraint")
     AND = hydra.core.Name("and")
     CLOSED = hydra.core.Name("closed")
@@ -125,7 +125,7 @@ class CommonConstraint(metaclass=_CommonConstraintMeta):
 @dataclass(frozen=True)
 class CommonProperties:
     r"""Common constraint parameters and other properties for SHACL shapes."""
-    
+
     constraints: Annotated[frozenset[CommonConstraint], "Common constraint parameters attached to this shape"]
     deactivated: Annotated[Maybe[bool], "See https://www.w3.org/TR/shacl/#deactivated"]
     message: Annotated[hydra.ext.org.w3.rdf.syntax.LangStrings, "See https://www.w3.org/TR/shacl/#message"]
@@ -134,7 +134,7 @@ class CommonProperties:
     target_node: Annotated[frozenset[hydra.ext.org.w3.rdf.syntax.IriOrLiteral], "See https://www.w3.org/TR/shacl/#targetNode"]
     target_objects_of: Annotated[frozenset[hydra.ext.org.w3.rdf.syntax.Property], "See https://www.w3.org/TR/shacl/#targetObjectsOf"]
     target_subjects_of: Annotated[frozenset[hydra.ext.org.w3.rdf.syntax.Property], "See https://www.w3.org/TR/shacl/#targetSubjectsOf"]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.shacl.model.CommonProperties")
     CONSTRAINTS = hydra.core.Name("constraints")
     DEACTIVATED = hydra.core.Name("deactivated")
@@ -148,10 +148,10 @@ class CommonProperties:
 @dataclass(frozen=True)
 class Definition(Generic[A]):
     r"""An instance of a type like sh:Shape or sh:NodeShape, together with a unique IRI for that instance."""
-    
+
     iri: hydra.ext.org.w3.rdf.syntax.Iri
     target: A
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.shacl.model.Definition")
     IRI = hydra.core.Name("iri")
     TARGET = hydra.core.Name("target")
@@ -159,19 +159,19 @@ class Definition(Generic[A]):
 class NodeKind(Enum):
     BLANK_NODE = hydra.core.Name("blankNode")
     r"""A blank node"""
-    
+
     IRI = hydra.core.Name("iri")
     r"""An IRI"""
-    
+
     LITERAL = hydra.core.Name("literal")
     r"""A literal"""
-    
+
     BLANK_NODE_OR_IRI = hydra.core.Name("blankNodeOrIri")
     r"""A blank node or an IRI"""
-    
+
     BLANK_NODE_OR_LITERAL = hydra.core.Name("blankNodeOrLiteral")
     r"""A blank node or a literal"""
-    
+
     IRI_OR_LITERAL = hydra.core.Name("iriOrLiteral")
     r"""An IRI or a literal"""
 
@@ -180,19 +180,19 @@ NodeKind.TYPE_ = hydra.core.Name("hydra.ext.org.w3.shacl.model.NodeKind")
 @dataclass(frozen=True)
 class NodeShape:
     r"""A SHACL node shape. See https://www.w3.org/TR/shacl/#node-shapes."""
-    
+
     common: CommonProperties
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.shacl.model.NodeShape")
     COMMON = hydra.core.Name("common")
 
 @dataclass(frozen=True)
 class Pattern:
     r"""A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent."""
-    
+
     regex: str
     flags: Maybe[str]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.shacl.model.Pattern")
     REGEX = hydra.core.Name("regex")
     FLAGS = hydra.core.Name("flags")
@@ -200,7 +200,7 @@ class Pattern:
 @dataclass(frozen=True)
 class PropertyShape:
     r"""A SHACL property shape. See https://www.w3.org/TR/shacl/#property-shapes."""
-    
+
     common: CommonProperties
     constraints: Annotated[frozenset[PropertyShapeConstraint], "Any property shape -specific constraint parameters"]
     default_value: Annotated[Maybe[hydra.ext.org.w3.rdf.syntax.Node_], "See https://www.w3.org/TR/shacl/#defaultValue"]
@@ -208,7 +208,7 @@ class PropertyShape:
     name: Annotated[hydra.ext.org.w3.rdf.syntax.LangStrings, "See https://www.w3.org/TR/shacl/#name"]
     order: Annotated[Maybe[int], "See https://www.w3.org/TR/shacl/#order"]
     path: hydra.ext.org.w3.rdf.syntax.Iri
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.shacl.model.PropertyShape")
     COMMON = hydra.core.Name("common")
     CONSTRAINTS = hydra.core.Name("constraints")
@@ -243,7 +243,7 @@ class _PropertyShapeConstraintMeta(type):
 # A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes.
 class PropertyShapeConstraint(metaclass=_PropertyShapeConstraintMeta):
     r"""PropertyShapeConstraintLessThan | PropertyShapeConstraintLessThanOrEquals | PropertyShapeConstraintMaxCount | PropertyShapeConstraintMinCount | PropertyShapeConstraintUniqueLang | PropertyShapeConstraintQualifiedValueShape"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.shacl.model.PropertyShapeConstraint")
     LESS_THAN = hydra.core.Name("lessThan")
     LESS_THAN_OR_EQUALS = hydra.core.Name("lessThanOrEquals")
@@ -255,12 +255,12 @@ class PropertyShapeConstraint(metaclass=_PropertyShapeConstraintMeta):
 @dataclass(frozen=True)
 class QualifiedValueShape:
     r"""See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent."""
-    
+
     qualified_value_shape: Reference[Shape]
     qualified_max_count: int
     qualified_min_count: int
     qualified_value_shapes_disjoint: Maybe[bool]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.shacl.model.QualifiedValueShape")
     QUALIFIED_VALUE_SHAPE = hydra.core.Name("qualifiedValueShape")
     QUALIFIED_MAX_COUNT = hydra.core.Name("qualifiedMaxCount")
@@ -283,7 +283,7 @@ class _ReferenceMeta(type):
 # Either an instance of a type like sh:Shape or sh:NodeShape, or an IRI which refers to an instance of that type.
 class Reference(metaclass=_ReferenceMeta):
     r"""ReferenceNamed | ReferenceAnonymous[A] | ReferenceDefinition[A]"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.shacl.model.Reference")
     NAMED = hydra.core.Name("named")
     ANONYMOUS = hydra.core.Name("anonymous")
@@ -292,10 +292,10 @@ class Reference(metaclass=_ReferenceMeta):
 class Severity(Enum):
     INFO = hydra.core.Name("info")
     r"""A non-critical constraint violation indicating an informative message"""
-    
+
     WARNING = hydra.core.Name("warning")
     r"""A non-critical constraint violation indicating a warning"""
-    
+
     VIOLATION = hydra.core.Name("violation")
     r"""A constraint violation"""
 
@@ -314,7 +314,7 @@ class _ShapeMeta(type):
 # A SHACL node or property shape. See https://www.w3.org/TR/shacl/#shapes.
 class Shape(metaclass=_ShapeMeta):
     r"""ShapeNode | ShapeProperty"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.w3.shacl.model.Shape")
     NODE = hydra.core.Name("node")
     PROPERTY = hydra.core.Name("property")

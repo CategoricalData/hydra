@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class BlankNodeLabel implements Serializable, Comparable<BlankNodeLabel> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.BlankNodeLabel");
-  
+
   public static final hydra.core.Name ALTS = new hydra.core.Name("alts");
-  
+
   public static final hydra.core.Name LIST_OF_ALTS = new hydra.core.Name("ListOfAlts");
-  
+
   public static final hydra.core.Name PN_CHARS = new hydra.core.Name("PnChars");
-  
+
   public final hydra.ext.io.shex.syntax.BlankNodeLabel_Alts alts;
-  
+
   public final hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts;
-  
+
   public final hydra.ext.io.shex.syntax.PnChars PnChars;
-  
+
   public BlankNodeLabel (hydra.ext.io.shex.syntax.BlankNodeLabel_Alts alts, hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts, hydra.ext.io.shex.syntax.PnChars PnChars) {
     this.alts = alts;
     this.ListOfAlts = ListOfAlts;
     this.PnChars = PnChars;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof BlankNodeLabel)) {
@@ -39,12 +39,12 @@ public class BlankNodeLabel implements Serializable, Comparable<BlankNodeLabel> 
       this.PnChars,
       o.PnChars);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(alts) + 3 * java.util.Objects.hashCode(ListOfAlts) + 5 * java.util.Objects.hashCode(PnChars);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(BlankNodeLabel other) {
@@ -59,15 +59,15 @@ public class BlankNodeLabel implements Serializable, Comparable<BlankNodeLabel> 
     }
     return ((Comparable) PnChars).compareTo(other.PnChars);
   }
-  
+
   public BlankNodeLabel withAlts(hydra.ext.io.shex.syntax.BlankNodeLabel_Alts alts) {
     return new BlankNodeLabel(alts, ListOfAlts, PnChars);
   }
-  
+
   public BlankNodeLabel withListOfAlts(hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts) {
     return new BlankNodeLabel(alts, ListOfAlts, PnChars);
   }
-  
+
   public BlankNodeLabel withPnChars(hydra.ext.io.shex.syntax.PnChars PnChars) {
     return new BlankNodeLabel(alts, ListOfAlts, PnChars);
   }

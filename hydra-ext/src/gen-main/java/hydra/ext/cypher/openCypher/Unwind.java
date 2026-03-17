@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class Unwind implements Serializable, Comparable<Unwind> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.Unwind");
-  
+
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
-  
+
   public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
-  
+
   public final hydra.ext.cypher.openCypher.Expression expression;
-  
+
   public final hydra.ext.cypher.openCypher.Variable variable;
-  
+
   public Unwind (hydra.ext.cypher.openCypher.Expression expression, hydra.ext.cypher.openCypher.Variable variable) {
     this.expression = expression;
     this.variable = variable;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Unwind)) {
@@ -32,12 +32,12 @@ public class Unwind implements Serializable, Comparable<Unwind> {
       this.variable,
       o.variable);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(expression) + 3 * java.util.Objects.hashCode(variable);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Unwind other) {
@@ -48,11 +48,11 @@ public class Unwind implements Serializable, Comparable<Unwind> {
     }
     return ((Comparable) variable).compareTo(other.variable);
   }
-  
+
   public Unwind withExpression(hydra.ext.cypher.openCypher.Expression expression) {
     return new Unwind(expression, variable);
   }
-  
+
   public Unwind withVariable(hydra.ext.cypher.openCypher.Variable variable) {
     return new Unwind(expression, variable);
   }

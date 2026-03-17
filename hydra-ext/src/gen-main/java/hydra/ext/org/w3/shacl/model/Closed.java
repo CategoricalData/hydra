@@ -9,20 +9,20 @@ import java.io.Serializable;
  */
 public class Closed implements Serializable, Comparable<Closed> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.shacl.model.Closed");
-  
+
   public static final hydra.core.Name IS_CLOSED = new hydra.core.Name("isClosed");
-  
+
   public static final hydra.core.Name IGNORED_PROPERTIES = new hydra.core.Name("ignoredProperties");
-  
+
   public final Boolean isClosed;
-  
+
   public final hydra.util.Maybe<hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property>> ignoredProperties;
-  
+
   public Closed (Boolean isClosed, hydra.util.Maybe<hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property>> ignoredProperties) {
     this.isClosed = isClosed;
     this.ignoredProperties = ignoredProperties;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Closed)) {
@@ -35,12 +35,12 @@ public class Closed implements Serializable, Comparable<Closed> {
       this.ignoredProperties,
       o.ignoredProperties);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(isClosed) + 3 * java.util.Objects.hashCode(ignoredProperties);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Closed other) {
@@ -51,11 +51,11 @@ public class Closed implements Serializable, Comparable<Closed> {
     }
     return ((Comparable) ignoredProperties).compareTo(other.ignoredProperties);
   }
-  
+
   public Closed withIsClosed(Boolean isClosed) {
     return new Closed(isClosed, ignoredProperties);
   }
-  
+
   public Closed withIgnoredProperties(hydra.util.Maybe<hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property>> ignoredProperties) {
     return new Closed(isClosed, ignoredProperties);
   }

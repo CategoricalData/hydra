@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class IfStatement implements Serializable, Comparable<IfStatement> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.IfStatement");
-  
+
   public static final hydra.core.Name CONDITION = new hydra.core.Name("condition");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public static final hydra.core.Name CONTINUATION = new hydra.core.Name("continuation");
-  
+
   public final hydra.ext.python.syntax.NamedExpression condition;
-  
+
   public final hydra.ext.python.syntax.Block body;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.IfTail> continuation;
-  
+
   public IfStatement (hydra.ext.python.syntax.NamedExpression condition, hydra.ext.python.syntax.Block body, hydra.util.Maybe<hydra.ext.python.syntax.IfTail> continuation) {
     this.condition = condition;
     this.body = body;
     this.continuation = continuation;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof IfStatement)) {
@@ -39,12 +39,12 @@ public class IfStatement implements Serializable, Comparable<IfStatement> {
       this.continuation,
       o.continuation);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(condition) + 3 * java.util.Objects.hashCode(body) + 5 * java.util.Objects.hashCode(continuation);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(IfStatement other) {
@@ -59,15 +59,15 @@ public class IfStatement implements Serializable, Comparable<IfStatement> {
     }
     return ((Comparable) continuation).compareTo(other.continuation);
   }
-  
+
   public IfStatement withCondition(hydra.ext.python.syntax.NamedExpression condition) {
     return new IfStatement(condition, body, continuation);
   }
-  
+
   public IfStatement withBody(hydra.ext.python.syntax.Block body) {
     return new IfStatement(condition, body, continuation);
   }
-  
+
   public IfStatement withContinuation(hydra.util.Maybe<hydra.ext.python.syntax.IfTail> continuation) {
     return new IfStatement(condition, body, continuation);
   }

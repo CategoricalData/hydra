@@ -6,23 +6,23 @@ import java.io.Serializable;
 
 public class ModuleDirective_ExportsOrOpens implements Serializable, Comparable<ModuleDirective_ExportsOrOpens> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ModuleDirective_ExportsOrOpens");
-  
+
   public static final hydra.core.Name PACKAGE = new hydra.core.Name("package");
-  
+
   public static final hydra.core.Name MODULES = new hydra.core.Name("modules");
-  
+
   public final hydra.ext.java.syntax.PackageName package_;
-  
+
   /**
    * At least one module
    */
   public final hydra.util.ConsList<hydra.ext.java.syntax.ModuleName> modules;
-  
+
   public ModuleDirective_ExportsOrOpens (hydra.ext.java.syntax.PackageName package_, hydra.util.ConsList<hydra.ext.java.syntax.ModuleName> modules) {
     this.package_ = package_;
     this.modules = modules;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ModuleDirective_ExportsOrOpens)) {
@@ -35,12 +35,12 @@ public class ModuleDirective_ExportsOrOpens implements Serializable, Comparable<
       this.modules,
       o.modules);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(package_) + 3 * java.util.Objects.hashCode(modules);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ModuleDirective_ExportsOrOpens other) {
@@ -51,11 +51,11 @@ public class ModuleDirective_ExportsOrOpens implements Serializable, Comparable<
     }
     return ((Comparable) modules).compareTo(other.modules);
   }
-  
+
   public ModuleDirective_ExportsOrOpens withPackage(hydra.ext.java.syntax.PackageName package_) {
     return new ModuleDirective_ExportsOrOpens(package_, modules);
   }
-  
+
   public ModuleDirective_ExportsOrOpens withModules(hydra.util.ConsList<hydra.ext.java.syntax.ModuleName> modules) {
     return new ModuleDirective_ExportsOrOpens(package_, modules);
   }

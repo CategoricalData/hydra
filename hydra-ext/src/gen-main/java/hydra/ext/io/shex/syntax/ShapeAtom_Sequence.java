@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class ShapeAtom_Sequence implements Serializable, Comparable<ShapeAtom_Sequence> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.ShapeAtom_Sequence");
-  
+
   public static final hydra.core.Name NODE_CONSTRAINT = new hydra.core.Name("NodeConstraint");
-  
+
   public static final hydra.core.Name SHAPE_OR_REF = new hydra.core.Name("ShapeOrRef");
-  
+
   public final hydra.ext.io.shex.syntax.NodeConstraint NodeConstraint;
-  
+
   public final hydra.util.Maybe<hydra.ext.io.shex.syntax.ShapeOrRef> ShapeOrRef;
-  
+
   public ShapeAtom_Sequence (hydra.ext.io.shex.syntax.NodeConstraint NodeConstraint, hydra.util.Maybe<hydra.ext.io.shex.syntax.ShapeOrRef> ShapeOrRef) {
     this.NodeConstraint = NodeConstraint;
     this.ShapeOrRef = ShapeOrRef;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ShapeAtom_Sequence)) {
@@ -32,12 +32,12 @@ public class ShapeAtom_Sequence implements Serializable, Comparable<ShapeAtom_Se
       this.ShapeOrRef,
       o.ShapeOrRef);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(NodeConstraint) + 3 * java.util.Objects.hashCode(ShapeOrRef);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ShapeAtom_Sequence other) {
@@ -48,11 +48,11 @@ public class ShapeAtom_Sequence implements Serializable, Comparable<ShapeAtom_Se
     }
     return ((Comparable) ShapeOrRef).compareTo(other.ShapeOrRef);
   }
-  
+
   public ShapeAtom_Sequence withNodeConstraint(hydra.ext.io.shex.syntax.NodeConstraint NodeConstraint) {
     return new ShapeAtom_Sequence(NodeConstraint, ShapeOrRef);
   }
-  
+
   public ShapeAtom_Sequence withShapeOrRef(hydra.util.Maybe<hydra.ext.io.shex.syntax.ShapeOrRef> ShapeOrRef) {
     return new ShapeAtom_Sequence(NodeConstraint, ShapeOrRef);
   }

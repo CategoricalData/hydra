@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class CaseBlock implements Serializable, Comparable<CaseBlock> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.CaseBlock");
-  
+
   public static final hydra.core.Name PATTERNS = new hydra.core.Name("patterns");
-  
+
   public static final hydra.core.Name GUARD = new hydra.core.Name("guard");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public final hydra.ext.python.syntax.Patterns patterns;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Guard> guard;
-  
+
   public final hydra.ext.python.syntax.Block body;
-  
+
   public CaseBlock (hydra.ext.python.syntax.Patterns patterns, hydra.util.Maybe<hydra.ext.python.syntax.Guard> guard, hydra.ext.python.syntax.Block body) {
     this.patterns = patterns;
     this.guard = guard;
     this.body = body;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof CaseBlock)) {
@@ -39,12 +39,12 @@ public class CaseBlock implements Serializable, Comparable<CaseBlock> {
       this.body,
       o.body);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(patterns) + 3 * java.util.Objects.hashCode(guard) + 5 * java.util.Objects.hashCode(body);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(CaseBlock other) {
@@ -59,15 +59,15 @@ public class CaseBlock implements Serializable, Comparable<CaseBlock> {
     }
     return ((Comparable) body).compareTo(other.body);
   }
-  
+
   public CaseBlock withPatterns(hydra.ext.python.syntax.Patterns patterns) {
     return new CaseBlock(patterns, guard, body);
   }
-  
+
   public CaseBlock withGuard(hydra.util.Maybe<hydra.ext.python.syntax.Guard> guard) {
     return new CaseBlock(patterns, guard, body);
   }
-  
+
   public CaseBlock withBody(hydra.ext.python.syntax.Block body) {
     return new CaseBlock(patterns, guard, body);
   }

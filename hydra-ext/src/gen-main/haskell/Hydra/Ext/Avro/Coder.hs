@@ -51,7 +51,7 @@ emptyAvroEnvironment =
 -- | Create an adapter between Avro schemas and Hydra types/terms
 avroHydraAdapter :: Context.Context -> Schema.Schema -> Environment.AvroEnvironment -> Either (Context.InContext Error.Error) (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term, Environment.AvroEnvironment)
 avroHydraAdapter cx schema env0 =
-     
+
       let simpleAdapter =
               \env -> \typ -> \encode -> \decode -> Right (Util.Adapter {
                 Util.adapterIsLossy = False,
@@ -59,12 +59,12 @@ avroHydraAdapter cx schema env0 =
                 Util.adapterTarget = typ,
                 Util.adapterCoder = Util.Coder {
                   Util.coderEncode = encode,
-                  Util.coderDecode = decode}}, env) 
+                  Util.coderDecode = decode}}, env)
           doubleToInt = \d -> Literals.bigintToInt32 (Math.truncate (Literals.bigfloatToFloat64 d))
           doubleToLong = \d -> Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 d))
       in case schema of
-        Schema.SchemaArray v0 -> Eithers.bind (avroHydraAdapter cx (Schema.arrayItems v0) env0) (\adEnv ->  
-          let ad = Pairs.first adEnv 
+        Schema.SchemaArray v0 -> Eithers.bind (avroHydraAdapter cx (Schema.arrayItems v0) env0) (\adEnv ->
+          let ad = Pairs.first adEnv
               env1 = Pairs.second adEnv
           in (Right (Util.Adapter {
             Util.adapterIsLossy = (Util.adapterIsLossy ad),
@@ -75,12 +75,12 @@ avroHydraAdapter cx schema env0 =
                 Model.ValueArray v1 -> Eithers.map (\ts -> Core.TermList ts) (Eithers.mapList (\jv -> Util.coderEncode (Util.adapterCoder ad) cx1 jv) v1)),
               Util.coderDecode = (\cx1 -> \t -> case t of
                 Core.TermList v1 -> Eithers.map (\jvs -> Model.ValueArray jvs) (Eithers.mapList (\tv -> Util.coderDecode (Util.adapterCoder ad) cx1 tv) v1))}}, env1)))
-        Schema.SchemaMap v0 -> Eithers.bind (avroHydraAdapter cx (Schema.mapValues v0) env0) (\adEnv ->  
-          let ad = Pairs.first adEnv 
+        Schema.SchemaMap v0 -> Eithers.bind (avroHydraAdapter cx (Schema.mapValues v0) env0) (\adEnv ->
+          let ad = Pairs.first adEnv
               env1 = Pairs.second adEnv
               pairToHydra =
-                      \cx1 -> \entry ->  
-                        let k = Pairs.first entry 
+                      \cx1 -> \entry ->
+                        let k = Pairs.first entry
                             v = Pairs.second entry
                         in (Eithers.map (\v_ -> (Core.TermLiteral (Core.LiteralString k), v_)) (Util.coderEncode (Util.adapterCoder ad) cx1 v))
           in (Right (Util.Adapter {
@@ -109,8 +109,8 @@ avroHydraAdapter cx schema env0 =
                 Graph.graphPrimitives = Maps.empty,
                 Graph.graphSchemaTypes = Maps.empty,
                 Graph.graphTypeVariables = Sets.empty}) m))}}, env1)))
-        Schema.SchemaNamed v0 ->  
-          let ns = Schema.namedNamespace v0 
+        Schema.SchemaNamed v0 ->
+          let ns = Schema.namedNamespace v0
               manns = namedAnnotationsToCore v0
               ann = Logic.ifElse (Maps.null manns) Nothing (Just manns)
               lastNs = Environment.avroEnvironmentNamespace env0
@@ -126,8 +126,8 @@ avroHydraAdapter cx schema env0 =
                         Environment.avroQualifiedNameName = (Schema.namedName v0)}
               hydraName = avroNameToHydraName qname
           in (Maybes.maybe (Eithers.bind (case (Schema.namedType v0) of
-            Schema.NamedTypeEnum v1 ->  
-              let syms = Schema.enumSymbols v1 
+            Schema.NamedTypeEnum v1 ->
+              let syms = Schema.enumSymbols v1
                   typ =
                           Core.TypeUnion (Lists.map (\s -> Core.FieldType {
                             Core.fieldTypeName = (Core.Name s),
@@ -138,8 +138,8 @@ avroHydraAdapter cx schema env0 =
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name v2),
                     Core.fieldTerm = Core.TermUnit}}))) (\_cx -> \t -> case t of
-                Core.TermUnion v2 ->  
-                  let fld = Core.injectionField v2 
+                Core.TermUnion v2 ->
+                  let fld = Core.injectionField v2
                       fn = Core.fieldName fld
                   in (Right (Model.ValueString (Core.unName fn)))))
             Schema.NamedTypeFixed _ -> simpleAdapter env1 (Core.TypeLiteral Core.LiteralTypeBinary) (\_cx -> \jv -> case jv of
@@ -152,15 +152,15 @@ avroHydraAdapter cx schema env0 =
               Graph.graphPrimitives = Maps.empty,
               Graph.graphSchemaTypes = Maps.empty,
               Graph.graphTypeVariables = Sets.empty}) t))
-            Schema.NamedTypeRecord v1 ->  
+            Schema.NamedTypeRecord v1 ->
               let avroFields = Schema.recordFields v1
-              in (Eithers.bind (prepareFields cx env1 avroFields) (\prepResult ->  
-                let adaptersByFieldName = Pairs.first prepResult 
+              in (Eithers.bind (prepareFields cx env1 avroFields) (\prepResult ->
+                let adaptersByFieldName = Pairs.first prepResult
                     env2 = Pairs.second prepResult
-                in (Eithers.bind (findAvroPrimaryKeyField cx qname avroFields) (\pk ->  
+                in (Eithers.bind (findAvroPrimaryKeyField cx qname avroFields) (\pk ->
                   let encodePair =
-                          \cx1 -> \entry ->  
-                            let k = Pairs.first entry 
+                          \cx1 -> \entry ->
+                            let k = Pairs.first entry
                                 v = Pairs.second entry
                             in (Maybes.maybe (err cx1 (Strings.cat [
                               "unrecognized field for ",
@@ -168,10 +168,10 @@ avroHydraAdapter cx schema env0 =
                               ": ",
                               k])) (\fad -> Eithers.map (\v_ -> Core.Field {
                               Core.fieldName = (Core.Name k),
-                              Core.fieldTerm = v_}) (Util.coderEncode (Util.adapterCoder (Pairs.second fad)) cx1 v)) (Maps.lookup k adaptersByFieldName)) 
+                              Core.fieldTerm = v_}) (Util.coderEncode (Util.adapterCoder (Pairs.second fad)) cx1 v)) (Maps.lookup k adaptersByFieldName))
                       decodeField =
-                              \cx1 -> \fld ->  
-                                let k = Core.unName (Core.fieldName fld) 
+                              \cx1 -> \fld ->
+                                let k = Core.unName (Core.fieldName fld)
                                     v = Core.fieldTerm fld
                                 in (Maybes.maybe (err cx1 (Strings.cat [
                                   "unrecognized field for ",
@@ -195,8 +195,8 @@ avroHydraAdapter cx schema env0 =
                           Core.recordTypeName = hydraName,
                           Core.recordFields = fields})) (Eithers.mapList (\e -> encodePair cx1 e) (Maps.toList v2))),
                       Util.coderDecode = (\cx1 -> \t -> case t of
-                        Core.TermRecord v2 -> Eithers.map (\kvs -> Model.ValueObject (Maps.fromList kvs)) (Eithers.mapList (\fld -> decodeField cx1 fld) (Core.recordFields v2)))}}, env2))))))) (\adEnv2 ->  
-            let ad = Pairs.first adEnv2 
+                        Core.TermRecord v2 -> Eithers.map (\kvs -> Model.ValueObject (Maps.fromList kvs)) (Eithers.mapList (\fld -> decodeField cx1 fld) (Core.recordFields v2)))}}, env2))))))) (\adEnv2 ->
+            let ad = Pairs.first adEnv2
                 env2 = Pairs.second adEnv2
                 env3 = putAvroHydraAdapter qname ad env2
                 env4 =
@@ -286,11 +286,11 @@ avroHydraAdapter cx schema env0 =
             Graph.graphPrimitives = Maps.empty,
             Graph.graphSchemaTypes = Maps.empty,
             Graph.graphTypeVariables = Sets.empty}) t))
-        Schema.SchemaReference v0 ->  
+        Schema.SchemaReference v0 ->
           let qname = parseAvroName (Environment.avroEnvironmentNamespace env0) v0
           in (Maybes.maybe (err cx (Strings.cat2 "Referenced Avro type has not been defined: " (showQname qname))) (\ad -> Right (ad, env0)) (getAvroHydraAdapter qname env0))
-        Schema.SchemaUnion v0 ->  
-          let schemas = Schema.unUnion v0 
+        Schema.SchemaUnion v0 ->
+          let schemas = Schema.unUnion v0
               isNull =
                       \s -> case s of
                         Schema.SchemaPrimitive v1 -> case v1 of
@@ -300,8 +300,8 @@ avroHydraAdapter cx schema env0 =
               hasNull = Logic.not (Lists.null (Lists.filter isNull schemas))
               nonNulls = Lists.filter (\s -> Logic.not (isNull s)) schemas
               forOptional =
-                      \s -> Eithers.bind (avroHydraAdapter cx s env0) (\adEnv ->  
-                        let ad = Pairs.first adEnv 
+                      \s -> Eithers.bind (avroHydraAdapter cx s env0) (\adEnv ->
+                        let ad = Pairs.first adEnv
                             env1 = Pairs.second adEnv
                         in (Right (Util.Adapter {
                           Util.adapterIsLossy = (Util.adapterIsLossy ad),
@@ -313,8 +313,8 @@ avroHydraAdapter cx schema env0 =
                               _ -> Eithers.map (\t -> Core.TermMaybe (Just t)) (Util.coderEncode (Util.adapterCoder ad) cx1 v)),
                             Util.coderDecode = (\cx1 -> \t -> case t of
                               Core.TermMaybe v1 -> Maybes.maybe (Right Model.ValueNull) (\term_ -> Util.coderDecode (Util.adapterCoder ad) cx1 term_) v1)}}, env1)))
-          in (Logic.ifElse (Equality.gt (Lists.length nonNulls) 1) (err cx "general-purpose unions are not yet supported") (Logic.ifElse (Lists.null nonNulls) (err cx "cannot generate the empty type") (Logic.ifElse hasNull (forOptional (Lists.head nonNulls)) (Eithers.bind (avroHydraAdapter cx (Lists.head nonNulls) env0) (\adEnv ->  
-            let ad = Pairs.first adEnv 
+          in (Logic.ifElse (Equality.gt (Lists.length nonNulls) 1) (err cx "general-purpose unions are not yet supported") (Logic.ifElse (Lists.null nonNulls) (err cx "cannot generate the empty type") (Logic.ifElse hasNull (forOptional (Lists.head nonNulls)) (Eithers.bind (avroHydraAdapter cx (Lists.head nonNulls) env0) (\adEnv ->
+            let ad = Pairs.first adEnv
                 env1 = Pairs.second adEnv
             in (Right (Util.Adapter {
               Util.adapterIsLossy = (Util.adapterIsLossy ad),
@@ -325,11 +325,11 @@ avroHydraAdapter cx schema env0 =
 -- | Thread AvroEnvironment through preparing multiple fields
 prepareFields :: Context.Context -> Environment.AvroEnvironment -> [Schema.Field] -> Either (Context.InContext Error.Error) (M.Map String (Schema.Field, (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term)), Environment.AvroEnvironment)
 prepareFields cx env fields =
-    Lists.foldl (\acc -> \f -> Eithers.bind acc (\accPair ->  
-      let m = Pairs.first accPair 
+    Lists.foldl (\acc -> \f -> Eithers.bind acc (\accPair ->
+      let m = Pairs.first accPair
           env1 = Pairs.second accPair
-      in (Eithers.bind (prepareField cx env1 f) (\result ->  
-        let kv = Pairs.first result 
+      in (Eithers.bind (prepareField cx env1 f) (\result ->
+        let kv = Pairs.first result
             env2 = Pairs.second result
             k = Pairs.first kv
             v = Pairs.second kv
@@ -338,14 +338,14 @@ prepareFields cx env fields =
 -- | Prepare a single field, producing an adapter and updated environment
 prepareField :: Context.Context -> Environment.AvroEnvironment -> Schema.Field -> Either (Context.InContext Error.Error) ((String, (Schema.Field, (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term))), Environment.AvroEnvironment)
 prepareField cx env f =
-     
-      let manns = fieldAnnotationsToCore f 
+
+      let manns = fieldAnnotationsToCore f
           ann = Logic.ifElse (Maps.null manns) Nothing (Just manns)
-      in (Eithers.bind (foreignKeyE cx f) (\fk -> Eithers.bind (Maybes.maybe (avroHydraAdapter cx (Schema.fieldType f) env) (\fkVal ->  
-        let fkName = Environment.avroForeignKeyTypeName fkVal 
+      in (Eithers.bind (foreignKeyE cx f) (\fk -> Eithers.bind (Maybes.maybe (avroHydraAdapter cx (Schema.fieldType f) env) (\fkVal ->
+        let fkName = Environment.avroForeignKeyTypeName fkVal
             fkConstr = Environment.avroForeignKeyConstructor fkVal
-        in (Eithers.bind (avroHydraAdapter cx (Schema.fieldType f) env) (\adEnvPair ->  
-          let ad0 = Pairs.first adEnvPair 
+        in (Eithers.bind (avroHydraAdapter cx (Schema.fieldType f) env) (\adEnvPair ->
+          let ad0 = Pairs.first adEnvPair
               env1 = Pairs.second adEnvPair
               elTyp = Core.TypeVariable fkName
               encodeValue =
@@ -376,8 +376,8 @@ prepareField cx env f =
             Core.TypeLiteral _ -> forTypeAndCoder env1 ad0 elTyp (Util.Coder {
               Util.coderEncode = encodeValue,
               Util.coderDecode = decodeTerm})
-            _ -> err cx (Strings.cat2 "unsupported type annotated as foreign key: " "unknown")))) fk) (\adEnv ->  
-        let ad = Pairs.first adEnv 
+            _ -> err cx (Strings.cat2 "unsupported type annotated as foreign key: " "unknown")))) fk) (\adEnv ->
+        let ad = Pairs.first adEnv
             env1 = Pairs.second adEnv
         in (Right ((Schema.fieldName f, (f, (annotateAdapter ann ad))), env1)))))
 
@@ -395,15 +395,15 @@ annotateAdapter ann ad =
 -- | Find the primary key field among a list of Avro fields
 findAvroPrimaryKeyField :: Context.Context -> Environment.AvroQualifiedName -> [Schema.Field] -> Either (Context.InContext Error.Error) (Maybe Environment.AvroPrimaryKey)
 findAvroPrimaryKeyField cx qname avroFields =
-     
+
       let keys = Maybes.cat (Lists.map (\f -> primaryKeyE cx f) avroFields)
       in (Logic.ifElse (Lists.null keys) (Right Nothing) (Logic.ifElse (Equality.equal (Lists.length keys) 1) (Right (Just (Lists.head keys))) (err cx (Strings.cat2 "multiple primary key fields for " (showQname qname)))))
 
 -- | Convert an Avro qualified name to a Hydra name
 avroNameToHydraName :: Environment.AvroQualifiedName -> Core.Name
 avroNameToHydraName qname =
-     
-      let mns = Environment.avroQualifiedNameNamespace qname 
+
+      let mns = Environment.avroQualifiedNameNamespace qname
           local = Environment.avroQualifiedNameName qname
       in (Names.unqualifyName (Module.QualifiedName {
         Module.qualifiedNameNamespace = (Maybes.map (\s -> Module.Namespace s) mns),
@@ -417,8 +417,8 @@ encodeAnnotationValue v =
       Model.ValueBoolean v0 -> Core.TermLiteral (Core.LiteralBoolean v0)
       Model.ValueNull -> Core.TermUnit
       Model.ValueNumber v0 -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat v0))
-      Model.ValueObject v0 -> Core.TermMap (Maps.fromList (Lists.map (\entry ->  
-        let k = Pairs.first entry 
+      Model.ValueObject v0 -> Core.TermMap (Maps.fromList (Lists.map (\entry ->
+        let k = Pairs.first entry
             v_ = Pairs.second entry
         in (Core.TermLiteral (Core.LiteralString k), (encodeAnnotationValue v_))) (Maps.toList v0)))
       Model.ValueString v0 -> Core.TermLiteral (Core.LiteralString v0)
@@ -426,16 +426,16 @@ encodeAnnotationValue v =
 -- | Extract field annotations and convert them to core Name/Term pairs
 fieldAnnotationsToCore :: Schema.Field -> M.Map Core.Name Core.Term
 fieldAnnotationsToCore f =
-    Maps.fromList (Lists.map (\entry ->  
-      let k = Pairs.first entry 
+    Maps.fromList (Lists.map (\entry ->
+      let k = Pairs.first entry
           v = Pairs.second entry
       in (Core.Name k, (encodeAnnotationValue v))) (Maps.toList (Schema.fieldAnnotations f)))
 
 -- | Extract named type annotations and convert them to core Name/Term pairs
 namedAnnotationsToCore :: Schema.Named -> M.Map Core.Name Core.Term
 namedAnnotationsToCore n =
-    Maps.fromList (Lists.map (\entry ->  
-      let k = Pairs.first entry 
+    Maps.fromList (Lists.map (\entry ->
+      let k = Pairs.first entry
           v = Pairs.second entry
       in (Core.Name k, (encodeAnnotationValue v))) (Maps.toList (Schema.namedAnnotations n)))
 
@@ -446,7 +446,7 @@ getAvroHydraAdapter qname env = Maps.lookup qname (Environment.avroEnvironmentNa
 -- | Extract a foreign key annotation from a field, if present
 foreignKeyE :: Context.Context -> Schema.Field -> Either (Context.InContext Error.Error) (Maybe Environment.AvroForeignKey)
 foreignKeyE cx f =
-    Maybes.maybe (Right Nothing) (\v -> Eithers.bind (expectObjectE cx v) (\m -> Eithers.bind (Eithers.map (\s -> Core.Name s) (requireStringE cx "type" m)) (\tname -> Eithers.bind (optStringE cx "pattern" m) (\pattern_ ->  
+    Maybes.maybe (Right Nothing) (\v -> Eithers.bind (expectObjectE cx v) (\m -> Eithers.bind (Eithers.map (\s -> Core.Name s) (requireStringE cx "type" m)) (\tname -> Eithers.bind (optStringE cx "pattern" m) (\pattern_ ->
       let constr = Maybes.maybe (\s -> Core.Name s) (\pat -> patternToNameConstructor pat) pattern_
       in (Right (Just (Environment.AvroForeignKey {
         Environment.avroForeignKeyTypeName = tname,
@@ -466,8 +466,8 @@ primaryKeyE cx f =
 -- | Parse a dotted Avro name into a qualified name
 parseAvroName :: Maybe String -> String -> Environment.AvroQualifiedName
 parseAvroName mns name_ =
-     
-      let parts = Strings.splitOn "." name_ 
+
+      let parts = Strings.splitOn "." name_
           local = Lists.last parts
       in (Logic.ifElse (Equality.equal (Lists.length parts) 1) (Environment.AvroQualifiedName {
         Environment.avroQualifiedNameNamespace = mns,
@@ -486,8 +486,8 @@ putAvroHydraAdapter qname ad env =
 -- | Recursively rewrite an Avro schema using a monadic transformation function
 rewriteAvroSchemaM :: ((Schema.Schema -> Either t0 Schema.Schema) -> Schema.Schema -> Either t0 Schema.Schema) -> Schema.Schema -> Either t0 Schema.Schema
 rewriteAvroSchemaM f schema =
-     
-      let recurse = rewriteAvroSchemaM f 
+
+      let recurse = rewriteAvroSchemaM f
           fsub =
                   \s -> case s of
                     Schema.SchemaArray v0 -> Eithers.map (\els_ -> Schema.SchemaArray (Schema.Array {
@@ -527,16 +527,16 @@ jsonToStringE cx v =
 -- | Convert an Avro qualified name to a display string
 showQname :: Environment.AvroQualifiedName -> String
 showQname qname =
-     
-      let mns = Environment.avroQualifiedNameNamespace qname 
+
+      let mns = Environment.avroQualifiedNameNamespace qname
           local = Environment.avroQualifiedNameName qname
       in (Strings.cat2 (Maybes.maybe "" (\ns -> Strings.cat2 ns ".") mns) local)
 
 -- | Parse a string into a term of the expected type
 stringToTermE :: Context.Context -> Core.Type -> String -> Either (Context.InContext Error.Error) Core.Term
 stringToTermE cx typ s =
-     
-      let readErr = err cx "failed to read value" 
+
+      let readErr = err cx "failed to read value"
           readAndWrap = \reader -> \wrapper -> Maybes.maybe readErr (\v -> Right (Core.TermLiteral (wrapper v))) (reader s)
       in case (Rewriting.deannotateType typ) of
         Core.TypeLiteral v0 -> case v0 of

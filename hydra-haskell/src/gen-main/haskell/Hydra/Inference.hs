@@ -49,20 +49,20 @@ bindConstraints flowCx cx constraints =
 -- | Place unbound type variables appearing anywhere under a typed let binding in the type scheme of that binding. These variables may appear in the binding type scheme itself or in that of a subterm, in domain types attached to functions, and in type abstraction and type application terms. This process attempts to capture type variables which have escaped unification, e.g. due to unused code. However, unbound type variables not appearing beneath any typed let binding remain unbound.
 bindUnboundTypeVariables :: Graph.Graph -> Core.Term -> Core.Term
 bindUnboundTypeVariables cx term0 =
-     
-      let svars = Sets.fromList (Maps.keys (Graph.graphSchemaTypes cx)) 
+
+      let svars = Sets.fromList (Maps.keys (Graph.graphSchemaTypes cx))
           rewrite =
                   \recurse -> \term -> case term of
-                    Core.TermLet v0 ->  
+                    Core.TermLet v0 ->
                       let forBinding =
-                              \b ->  
-                                let bname = Core.bindingName b 
+                              \b ->
+                                let bname = Core.bindingName b
                                     bterm = Core.bindingTerm b
                                 in (Maybes.maybe (Core.Binding {
                                   Core.bindingName = bname,
                                   Core.bindingTerm = (bindUnboundTypeVariables cx bterm),
-                                  Core.bindingType = Nothing}) (\ts ->  
-                                  let bvars = Sets.fromList (Core.typeSchemeVariables ts) 
+                                  Core.bindingType = Nothing}) (\ts ->
+                                  let bvars = Sets.fromList (Core.typeSchemeVariables ts)
                                       unboundInType = Rewriting.freeVariablesInType (Core.typeSchemeType ts)
                                       unboundInTerm = Rewriting.freeTypeVariablesInTerm bterm
                                       unbound = Sets.toList (Sets.difference (Sets.union unboundInType unboundInTerm) (Sets.union svars bvars))
@@ -108,7 +108,7 @@ extendContext pairs cx =
 -- | Finalize an inferred term by checking for unbound type variables, then normalizing type variables
 finalizeInferredTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 finalizeInferredTerm flowCx cx term =
-     
+
       let term2 = bindUnboundTypeVariables cx term
       in (Eithers.bind (Checking.checkForUnboundTypeVariables flowCx cx term2) (\_ -> Right (Rewriting.normalizeTypeVariablesInTerm term2)))
 
@@ -125,8 +125,8 @@ freeVariablesInContext cx =
 -- | Generate a fresh type variable
 freshVariableType :: Context.Context -> (Core.Type, Context.Context)
 freshVariableType cx =
-     
-      let result = Schemas.freshName cx 
+
+      let result = Schemas.freshName cx
           name = Pairs.first result
           cx2 = Pairs.second result
       in (Core.TypeVariable name, cx2)
@@ -134,11 +134,11 @@ freshVariableType cx =
 -- | Generalize a type to a type scheme
 generalize :: Graph.Graph -> Core.Type -> Core.TypeScheme
 generalize cx typ =
-     
+
       let isTypeVarName =
-              \name ->  
+              \name ->
                 let parts = Strings.splitOn "." (Core.unName name)
-                in (Equality.lte (Lists.length parts) 1) 
+                in (Equality.lte (Lists.length parts) 1)
           vars =
                   Lists.nub (Lists.filter (\v -> Logic.and (isUnbound cx v) (isTypeVarName v)) (Rewriting.freeVariablesInTypeOrdered typ))
           allConstraints = Graph.graphClassConstraints cx
@@ -153,19 +153,19 @@ generalize cx typ =
 -- | Infer types for all elements in a graph, using the provided ordered bindings. Returns both the inferred graph and the ordered inferred bindings.
 inferGraphTypes :: Context.Context -> [Core.Binding] -> Graph.Graph -> Either (Context.InContext Error.Error) ((Graph.Graph, [Core.Binding]), Context.Context)
 inferGraphTypes fcx0 bindings0 g0 =
-     
+
       let fcx =
               Context.Context {
                 Context.contextTrace = (Lists.cons "graph inference" (Context.contextTrace fcx0)),
                 Context.contextMessages = (Context.contextMessages fcx0),
-                Context.contextOther = (Context.contextOther fcx0)} 
+                Context.contextOther = (Context.contextOther fcx0)}
           let0 =
                   Core.Let {
                     Core.letBindings = bindings0,
                     Core.letBody = Core.TermUnit}
           fromLetTerm =
-                  \l ->  
-                    let bindings = Core.letBindings l 
+                  \l ->
+                    let bindings = Core.letBindings l
                         prims = Graph.graphPrimitives g0
                         schemaTypes = Graph.graphSchemaTypes g0
                         g =
@@ -179,8 +179,8 @@ inferGraphTypes fcx0 bindings0 g0 =
                                   Graph.graphSchemaTypes = schemaTypes,
                                   Graph.graphTypeVariables = (Graph.graphTypeVariables (Lexical.buildGraph bindings Maps.empty prims))}
                     in (g, bindings)
-      in (Eithers.bind (inferTypeOfTerm fcx g0 (Core.TermLet let0) "graph term") (\result ->  
-        let fcx2 = Typing_.inferenceResultContext result 
+      in (Eithers.bind (inferTypeOfTerm fcx g0 (Core.TermLet let0) "graph term") (\result ->
+        let fcx2 = Typing_.inferenceResultContext result
             term = Typing_.inferenceResultTerm result
         in (Eithers.bind (finalizeInferredTerm fcx2 g0 term) (\finalized -> case finalized of
           Core.TermLet v0 -> Right (fromLetTerm v0, fcx2)
@@ -195,20 +195,20 @@ inferInGraphContext fcx cx term = inferTypeOfTerm fcx cx term "single term"
 -- | Infer types for multiple terms, propagating class constraints from sub-expressions
 inferMany :: Context.Context -> Graph.Graph -> [(Core.Term, String)] -> Either (Context.InContext Error.Error) (([Core.Term], ([Core.Type], (Typing_.TypeSubst, (M.Map Core.Name Core.TypeVariableMetadata)))), Context.Context)
 inferMany fcx cx pairs =
-     
+
       let dflt =
-               
-                let e = Pairs.first (Lists.head pairs) 
+
+                let e = Pairs.first (Lists.head pairs)
                     desc = Pairs.second (Lists.head pairs)
                     tl = Lists.tail pairs
-                in (Eithers.bind (inferTypeOfTerm fcx cx e desc) (\result1 ->  
-                  let fcx2 = Typing_.inferenceResultContext result1 
+                in (Eithers.bind (inferTypeOfTerm fcx cx e desc) (\result1 ->
+                  let fcx2 = Typing_.inferenceResultContext result1
                       e1 = Typing_.inferenceResultTerm result1
                       t1 = Typing_.inferenceResultType result1
                       s1 = Typing_.inferenceResultSubst result1
                       c1 = Typing_.inferenceResultClassConstraints result1
-                  in (Eithers.bind (inferMany fcx2 (Substitution.substInContext s1 cx) tl) (\rp2 ->  
-                    let result2 = Pairs.first rp2 
+                  in (Eithers.bind (inferMany fcx2 (Substitution.substInContext s1 cx) tl) (\rp2 ->
+                    let result2 = Pairs.first rp2
                         fcx3 = Pairs.second rp2
                         e2 = Pairs.first result2
                         t2 = Pairs.first (Pairs.second result2)
@@ -222,7 +222,7 @@ inferMany fcx cx pairs =
 -- | Map a possibly untyped term to a fully typed term and its type
 inferTypeOf :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) ((Core.Term, Core.TypeScheme), Context.Context)
 inferTypeOf fcx cx term =
-     
+
       let letTerm =
               Core.TermLet (Core.Let {
                 Core.letBindings = [
@@ -231,12 +231,12 @@ inferTypeOf fcx cx term =
                     Core.bindingTerm = term,
                     Core.bindingType = Nothing}],
                 Core.letBody = (Core.TermLiteral (Core.LiteralString "ignoredBody"))})
-      in (Eithers.bind (inferTypeOfTerm fcx cx letTerm "infer type of term") (\result ->  
+      in (Eithers.bind (inferTypeOfTerm fcx cx letTerm "infer type of term") (\result ->
         let fcx2 = Typing_.inferenceResultContext result
-        in (Eithers.bind (finalizeInferredTerm fcx2 cx (Typing_.inferenceResultTerm result)) (\finalized -> Eithers.bind (Core_.let_ fcx2 cx finalized) (\letResult ->  
+        in (Eithers.bind (finalizeInferredTerm fcx2 cx (Typing_.inferenceResultTerm result)) (\finalized -> Eithers.bind (Core_.let_ fcx2 cx finalized) (\letResult ->
           let bindings = Core.letBindings letResult
-          in (Logic.ifElse (Equality.equal 1 (Lists.length bindings)) ( 
-            let binding = Lists.head bindings 
+          in (Logic.ifElse (Equality.equal 1 (Lists.length bindings)) (
+            let binding = Lists.head bindings
                 term1 = Core.bindingTerm binding
                 mts = Core.bindingType binding
             in (Maybes.maybe (Left (Context.InContext {
@@ -251,11 +251,11 @@ inferTypeOf fcx cx term =
 -- | Infer the type of an annotated term (Either version)
 inferTypeOfAnnotatedTerm :: Context.Context -> Graph.Graph -> Core.AnnotatedTerm -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfAnnotatedTerm fcx cx at =
-     
-      let term = Core.annotatedTermBody at 
+
+      let term = Core.annotatedTermBody at
           ann = Core.annotatedTermAnnotation at
-      in (Eithers.bind (inferTypeOfTerm fcx cx term "annotated term") (\result ->  
-        let fcx2 = Typing_.inferenceResultContext result 
+      in (Eithers.bind (inferTypeOfTerm fcx cx term "annotated term") (\result ->
+        let fcx2 = Typing_.inferenceResultContext result
             iterm = Typing_.inferenceResultTerm result
             itype = Typing_.inferenceResultType result
             isubst = Typing_.inferenceResultSubst result
@@ -272,22 +272,22 @@ inferTypeOfAnnotatedTerm fcx cx at =
 -- | Infer the type of a function application (Either version)
 inferTypeOfApplication :: Context.Context -> Graph.Graph -> Core.Application -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfApplication fcx0 cx app =
-     
+
       let fcx =
               Context.Context {
                 Context.contextTrace = (Lists.cons "application" (Context.contextTrace fcx0)),
                 Context.contextMessages = (Context.contextMessages fcx0),
-                Context.contextOther = (Context.contextOther fcx0)} 
+                Context.contextOther = (Context.contextOther fcx0)}
           e0 = Core.applicationFunction app
           e1 = Core.applicationArgument app
-      in (Eithers.bind (inferTypeOfTerm fcx cx e0 "lhs") (\lhsResult ->  
-        let fcx2 = Typing_.inferenceResultContext lhsResult 
+      in (Eithers.bind (inferTypeOfTerm fcx cx e0 "lhs") (\lhsResult ->
+        let fcx2 = Typing_.inferenceResultContext lhsResult
             a = Typing_.inferenceResultTerm lhsResult
             t0 = Typing_.inferenceResultType lhsResult
             s0 = Typing_.inferenceResultSubst lhsResult
             c0 = Typing_.inferenceResultClassConstraints lhsResult
-        in (Eithers.bind (inferTypeOfTerm fcx2 (Substitution.substInContext s0 cx) e1 "rhs") (\rhsResult ->  
-          let fcx3 = Typing_.inferenceResultContext rhsResult 
+        in (Eithers.bind (inferTypeOfTerm fcx2 (Substitution.substInContext s0 cx) e1 "rhs") (\rhsResult ->
+          let fcx3 = Typing_.inferenceResultContext rhsResult
               b = Typing_.inferenceResultTerm rhsResult
               t1 = Typing_.inferenceResultType rhsResult
               s1 = Typing_.inferenceResultSubst rhsResult
@@ -299,11 +299,11 @@ inferTypeOfApplication fcx0 cx app =
             Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unificationErrorMessage (Context.inContextObject _ic)))),
             Context.inContextContext = (Context.inContextContext _ic)}) (\_a -> _a) (Unification.unifyTypes fcx4 (Graph.graphSchemaTypes cx) (Substitution.substInType s1 t0) (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = t1,
-            Core.functionTypeCodomain = (Core.TypeVariable v)})) "application lhs")) (\s2 -> Eithers.bind (Checking.checkTypeSubst fcx4 cx s2) (\_ ->  
+            Core.functionTypeCodomain = (Core.TypeVariable v)})) "application lhs")) (\s2 -> Eithers.bind (Checking.checkTypeSubst fcx4 cx s2) (\_ ->
             let rExpr =
                     Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Substitution.substTypesInTerm (Substitution.composeTypeSubst s1 s2) a),
-                      Core.applicationArgument = (Substitution.substTypesInTerm s2 b)}) 
+                      Core.applicationArgument = (Substitution.substTypesInTerm s2 b)})
                 rType = Substitution.substInType s2 (Core.TypeVariable v)
                 rSubst =
                         Substitution.composeTypeSubstList [
@@ -323,28 +323,28 @@ inferTypeOfApplication fcx0 cx app =
 -- | Infer the type of a case statement (Either version)
 inferTypeOfCaseStatement :: Context.Context -> Graph.Graph -> Core.CaseStatement -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfCaseStatement fcx cx caseStmt =
-     
-      let tname = Core.caseStatementTypeName caseStmt 
+
+      let tname = Core.caseStatementTypeName caseStmt
           dflt = Core.caseStatementDefault caseStmt
           cases = Core.caseStatementCases caseStmt
           fnames = Lists.map Core.fieldName cases
-      in (Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->  
-        let schemaType = Pairs.first stRp 
+      in (Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
+        let schemaType = Pairs.first stRp
             fcx2 = Pairs.second stRp
             svars = Core.typeSchemeVariables schemaType
             stype = Core.typeSchemeType schemaType
         in (Eithers.bind (Core_.unionType fcx2 tname stype) (\sfields -> Eithers.bind (Eithers.mapMaybe (\t -> inferTypeOfTerm fcx2 cx t (Strings.cat [
           "case ",
           (Core.unName tname),
-          ".<default>"])) dflt) (\dfltRp ->  
-          let dfltResult = dfltRp 
+          ".<default>"])) dflt) (\dfltRp ->
+          let dfltResult = dfltRp
               fcx3 = Maybes.fromMaybe fcx2 (Maybes.map Typing_.inferenceResultContext dfltRp)
           in (Eithers.bind (inferMany fcx3 cx (Lists.map (\f -> (Core.fieldTerm f, (Strings.cat [
             "case ",
             (Core.unName tname),
             ".",
-            (Core.unName (Core.fieldName f))]))) cases)) (\caseRp ->  
-            let caseResults = Pairs.first caseRp 
+            (Core.unName (Core.fieldName f))]))) cases)) (\caseRp ->
+            let caseResults = Pairs.first caseRp
                 fcx4 = Pairs.second caseRp
                 iterms = Pairs.first caseResults
                 itypes = Pairs.first (Pairs.second caseResults)
@@ -387,8 +387,8 @@ inferTypeOfCaseStatement fcx cx caseStmt =
 -- | Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy.
 inferTypeOfCollection :: Context.Context -> Graph.Graph -> (Core.Type -> Core.Type) -> ([Core.Term] -> Core.Term) -> String -> S.Set Core.Name -> [Core.Term] -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfCollection fcx cx typCons trmCons desc classNames els =
-     
-      let varResult = Schemas.freshName fcx 
+
+      let varResult = Schemas.freshName fcx
           var = Pairs.first varResult
           fcx2 = Pairs.second varResult
           classConstraints =
@@ -397,8 +397,8 @@ inferTypeOfCollection fcx cx typCons trmCons desc classNames els =
       in (Logic.ifElse (Lists.null els) (Right (yieldWithConstraints fcx2 (buildTypeApplicationTerm [
         var] (trmCons [])) (typCons (Core.TypeVariable var)) Substitution.idTypeSubst classConstraints)) (Eithers.bind (inferMany fcx2 cx (Lists.zip els (Lists.map (\i -> Strings.cat [
         "#",
-        (Literals.showInt32 i)]) (Math.range 1 (Math.add (Lists.length els) 1))))) (\resultsRp ->  
-        let results = Pairs.first resultsRp 
+        (Literals.showInt32 i)]) (Math.range 1 (Math.add (Lists.length els) 1))))) (\resultsRp ->
+        let results = Pairs.first resultsRp
             fcx3 = Pairs.second resultsRp
             terms = Pairs.first results
             types = Pairs.first (Pairs.second results)
@@ -410,8 +410,8 @@ inferTypeOfCollection fcx cx typCons trmCons desc classNames els =
                       Typing_.typeConstraintRight = t,
                       Typing_.typeConstraintComment = desc}) types
             allConstraints = mergeClassConstraints classConstraints elemConstraints
-        in (Eithers.bind (mapConstraints fcx3 cx (\subst2 ->  
-          let iterm = trmCons terms 
+        in (Eithers.bind (mapConstraints fcx3 cx (\subst2 ->
+          let iterm = trmCons terms
               itype = typCons (Core.TypeVariable var)
               isubst = Substitution.composeTypeSubst subst1 subst2
           in (yieldWithConstraints fcx3 iterm itype isubst (Substitution.substInClassConstraints subst2 allConstraints))) constraints) (\mcResult -> Right mcResult)))))
@@ -419,8 +419,8 @@ inferTypeOfCollection fcx cx typCons trmCons desc classNames els =
 -- | Infer the type of an either value (Either version)
 inferTypeOfEither :: Context.Context -> Graph.Graph -> Either Core.Term Core.Term -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfEither fcx cx e =
-    Eithers.either (\l -> Eithers.bind (inferTypeOfTerm fcx cx l "either left value") (\r1 ->  
-      let fcx2 = Typing_.inferenceResultContext r1 
+    Eithers.either (\l -> Eithers.bind (inferTypeOfTerm fcx cx l "either left value") (\r1 ->
+      let fcx2 = Typing_.inferenceResultContext r1
           iterm = Typing_.inferenceResultTerm r1
           leftType = Typing_.inferenceResultType r1
           subst = Typing_.inferenceResultSubst r1
@@ -440,8 +440,8 @@ inferTypeOfEither fcx cx e =
                   Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = leftType,
                     Core.eitherTypeRight = rightType})
-      in (Right (yieldChecked fcx3 termWithBothTypes eitherType subst)))) (\r -> Eithers.bind (inferTypeOfTerm fcx cx r "either right value") (\r1 ->  
-      let fcx2 = Typing_.inferenceResultContext r1 
+      in (Right (yieldChecked fcx3 termWithBothTypes eitherType subst)))) (\r -> Eithers.bind (inferTypeOfTerm fcx cx r "either right value") (\r1 ->
+      let fcx2 = Typing_.inferenceResultContext r1
           iterm = Typing_.inferenceResultTerm r1
           rightType = Typing_.inferenceResultType r1
           subst = Typing_.inferenceResultSubst r1
@@ -482,15 +482,15 @@ inferTypeOfFunction fcx cx f =
 -- | Infer the type of a union injection (Either version)
 inferTypeOfInjection :: Context.Context -> Graph.Graph -> Core.Injection -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfInjection fcx cx injection =
-     
-      let tname = Core.injectionTypeName injection 
+
+      let tname = Core.injectionTypeName injection
           field = Core.injectionField injection
           fname = Core.fieldName field
           term = Core.fieldTerm field
-      in (Eithers.bind (inferTypeOfTerm fcx cx term "injected term") (\result ->  
+      in (Eithers.bind (inferTypeOfTerm fcx cx term "injected term") (\result ->
         let fcx2 = Typing_.inferenceResultContext result
-        in (Eithers.bind (Schemas.requireSchemaType fcx2 (Graph.graphSchemaTypes cx) tname) (\stRp ->  
-          let schemaType = Pairs.first stRp 
+        in (Eithers.bind (Schemas.requireSchemaType fcx2 (Graph.graphSchemaTypes cx) tname) (\stRp ->
+          let schemaType = Pairs.first stRp
               fcx3 = Pairs.second stRp
               svars = Core.typeSchemeVariables schemaType
               stype = Core.typeSchemeType schemaType
@@ -510,8 +510,8 @@ inferTypeOfInjection fcx cx injection =
 -- | Infer the type of a lambda function (Either version)
 inferTypeOfLambda :: Context.Context -> Graph.Graph -> Core.Lambda -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfLambda fcx cx lambda =
-     
-      let var = Core.lambdaParameter lambda 
+
+      let var = Core.lambdaParameter lambda
           body = Core.lambdaBody lambda
           vdomResult = Schemas.freshName fcx
           vdom = Pairs.first vdomResult
@@ -523,8 +523,8 @@ inferTypeOfLambda fcx cx lambda =
                       Core.typeSchemeVariables = [],
                       Core.typeSchemeType = dom,
                       Core.typeSchemeConstraints = Nothing})] cx
-      in (Eithers.bind (inferTypeOfTerm fcx2 cx2 body "lambda body") (\result ->  
-        let fcx3 = Typing_.inferenceResultContext result 
+      in (Eithers.bind (inferTypeOfTerm fcx2 cx2 body "lambda body") (\result ->
+        let fcx3 = Typing_.inferenceResultContext result
             iterm = Typing_.inferenceResultTerm result
             icod = Typing_.inferenceResultType result
             isubst = Typing_.inferenceResultSubst result
@@ -555,19 +555,19 @@ inferTypeOfLambda fcx cx lambda =
 -- | Normalize a let term before inferring its type (Either version)
 inferTypeOfLet :: Context.Context -> Graph.Graph -> Core.Let -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfLet fcx0 cx let0 =
-     
+
       let fcx =
               Context.Context {
                 Context.contextTrace = (Lists.cons "let" (Context.contextTrace fcx0)),
                 Context.contextMessages = (Context.contextMessages fcx0),
-                Context.contextOther = (Context.contextOther fcx0)} 
+                Context.contextOther = (Context.contextOther fcx0)}
           bindings0 = Core.letBindings let0
           body0 = Core.letBody let0
           names = Lists.map Core.bindingName bindings0
           nameSet = Sets.fromList names
           toPair =
-                  \binding ->  
-                    let name = Core.bindingName binding 
+                  \binding ->
+                    let name = Core.bindingName binding
                         term = Core.bindingTerm binding
                     in (name, (Lists.filter (\n -> Sets.member n nameSet) (Sets.toList (Rewriting.freeVariablesInTerm term))))
           adjList = Lists.map toPair bindings0
@@ -579,18 +579,18 @@ inferTypeOfLet fcx0 cx let0 =
                     Core.letBody = e})
           rewrittenLet = Lists.foldl createLet body0 (Lists.reverse groups)
           restoreLet =
-                  \iterm ->  
+                  \iterm ->
                     let helper =
-                            \level -> \bins -> \term ->  
+                            \level -> \bins -> \term ->
                               let nonzero =
                                       \term -> case term of
-                                        Core.TermLet v0 ->  
-                                          let bs = Core.letBindings v0 
+                                        Core.TermLet v0 ->
+                                          let bs = Core.letBindings v0
                                               letBody = Core.letBody v0
                                           in (helper (Math.sub level 1) (Lists.concat [
                                             bs,
                                             bins]) letBody)
-                              in (Logic.ifElse (Equality.equal level 0) (bins, term) (nonzero term)) 
+                              in (Logic.ifElse (Equality.equal level 0) (bins, term) (nonzero term))
                         result = helper (Lists.length groups) [] iterm
                         bindingList = Pairs.first result
                         e = Pairs.second result
@@ -599,8 +599,8 @@ inferTypeOfLet fcx0 cx let0 =
                       Core.letBindings = (Maybes.cat (Lists.map (\n -> Maps.lookup n bindingMap2) names)),
                       Core.letBody = e}))
           rewriteResult =
-                  \iresult ->  
-                    let fcxR = Typing_.inferenceResultContext iresult 
+                  \iresult ->
+                    let fcxR = Typing_.inferenceResultContext iresult
                         iterm = Typing_.inferenceResultTerm iresult
                         itype = Typing_.inferenceResultType iresult
                         isubst = Typing_.inferenceResultSubst iresult
@@ -620,12 +620,12 @@ inferTypeOfLet fcx0 cx let0 =
 -- | Infer the type of a let (letrec) term which is already in a normal form (Either version)
 inferTypeOfLetNormalized :: Context.Context -> Graph.Graph -> Core.Let -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfLetNormalized fcx0 cx0 letTerm =
-     
+
       let fcx =
               Context.Context {
                 Context.contextTrace = (Lists.cons "let-normalized" (Context.contextTrace fcx0)),
                 Context.contextMessages = (Context.contextMessages fcx0),
-                Context.contextOther = (Context.contextOther fcx0)} 
+                Context.contextOther = (Context.contextOther fcx0)}
           bins0 = Core.letBindings letTerm
           body0 = Core.letBody letTerm
           bnames = Lists.map Core.bindingName bins0
@@ -638,8 +638,8 @@ inferTypeOfLetNormalized fcx0 cx0 letTerm =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeType = t,
                     Core.typeSchemeConstraints = Nothing}) tbins0)) cx0
-      in (Eithers.bind (inferTypesOfTemporaryBindings fcx2 cx1 bins0) (\irRp ->  
-        let inferredResult = Pairs.first irRp 
+      in (Eithers.bind (inferTypesOfTemporaryBindings fcx2 cx1 bins0) (\irRp ->
+        let inferredResult = Pairs.first irRp
             fcx3 = Pairs.second irRp
             bterms1 = Pairs.first inferredResult
             tbins1 = Pairs.first (Pairs.second inferredResult)
@@ -648,8 +648,8 @@ inferTypeOfLetNormalized fcx0 cx0 letTerm =
             inferredConstraints = Pairs.second substAndConstraints
         in (Eithers.bind (Eithers.bimap (\_ic -> Context.InContext {
           Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unificationErrorMessage (Context.inContextObject _ic)))),
-          Context.inContextContext = (Context.inContextContext _ic)}) (\_a -> _a) (Unification.unifyTypeLists fcx3 (Graph.graphSchemaTypes cx0) (Lists.map (Substitution.substInType s1) tbins0) tbins1 "temporary type bindings")) (\s2 -> Eithers.bind (Checking.checkTypeSubst fcx3 cx0 s2) (\_ ->  
-          let g2base = Substitution.substInContext (Substitution.composeTypeSubst s1 s2) cx0 
+          Context.inContextContext = (Context.inContextContext _ic)}) (\_a -> _a) (Unification.unifyTypeLists fcx3 (Graph.graphSchemaTypes cx0) (Lists.map (Substitution.substInType s1) tbins0) tbins1 "temporary type bindings")) (\s2 -> Eithers.bind (Checking.checkTypeSubst fcx3 cx0 s2) (\_ ->
+          let g2base = Substitution.substInContext (Substitution.composeTypeSubst s1 s2) cx0
               constraintsWithS2 = Substitution.substInClassConstraints s2 inferredConstraints
               composedSubst = Substitution.composeTypeSubst s1 s2
               originalBindingConstraints =
@@ -669,19 +669,19 @@ inferTypeOfLetNormalized fcx0 cx0 letTerm =
                         Graph.graphTypeVariables = (Graph.graphTypeVariables g2base)}
               bterms1Subst = Lists.map (Substitution.substTypesInTerm s2) bterms1
               tsbins1 = Lists.zip bnames (Lists.map (\t -> generalize g2 (Substitution.substInType s2 t)) tbins1)
-          in (Eithers.bind (inferTypeOfTerm fcx3 (extendContext tsbins1 g2) body0 "let body") (\bodyResult ->  
-            let fcx4 = Typing_.inferenceResultContext bodyResult 
+          in (Eithers.bind (inferTypeOfTerm fcx3 (extendContext tsbins1 g2) body0 "let body") (\bodyResult ->
+            let fcx4 = Typing_.inferenceResultContext bodyResult
                 body1 = Typing_.inferenceResultTerm bodyResult
                 tbody = Typing_.inferenceResultType bodyResult
                 sbody = Typing_.inferenceResultSubst bodyResult
                 st1 =
-                        Typing_.TermSubst (Maps.fromList (Lists.map (\pair ->  
-                          let name = Pairs.first pair 
+                        Typing_.TermSubst (Maps.fromList (Lists.map (\pair ->
+                          let name = Pairs.first pair
                               ts = Pairs.second pair
                           in (name, (buildTypeApplicationTerm (Core.typeSchemeVariables ts) (Core.TermVariable name)))) tsbins1))
                 createBinding =
-                        \bindingPair ->  
-                          let nameTsPair = Pairs.first bindingPair 
+                        \bindingPair ->
+                          let nameTsPair = Pairs.first bindingPair
                               term = Pairs.second bindingPair
                               name = Pairs.first nameTsPair
                               ts = Pairs.second nameTsPair
@@ -728,8 +728,8 @@ inferTypeOfLiteral fcx lit =
 -- | Infer the type of a map (Either version)
 inferTypeOfMap :: Context.Context -> Graph.Graph -> M.Map Core.Term Core.Term -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfMap fcx cx m =
-     
-      let kvarResult = Schemas.freshName fcx 
+
+      let kvarResult = Schemas.freshName fcx
           kvar = Pairs.first kvarResult
           fcx2 = Pairs.second kvarResult
           vvarResult = Schemas.freshName fcx2
@@ -742,15 +742,15 @@ inferTypeOfMap fcx cx m =
         kvar,
         vvar] (Core.TermMap Maps.empty)) (Core.TypeMap (Core.MapType {
         Core.mapTypeKeys = (Core.TypeVariable kvar),
-        Core.mapTypeValues = (Core.TypeVariable vvar)})) Substitution.idTypeSubst keyConstraints)) (Eithers.bind (inferMany fcx3 cx (Lists.map (\k -> (k, "map key")) (Maps.keys m))) (\kRp ->  
-        let kResults = Pairs.first kRp 
+        Core.mapTypeValues = (Core.TypeVariable vvar)})) Substitution.idTypeSubst keyConstraints)) (Eithers.bind (inferMany fcx3 cx (Lists.map (\k -> (k, "map key")) (Maps.keys m))) (\kRp ->
+        let kResults = Pairs.first kRp
             fcx4 = Pairs.second kRp
             kterms = Pairs.first kResults
             ktypes = Pairs.first (Pairs.second kResults)
             ksubst = Pairs.first (Pairs.second (Pairs.second kResults))
             kElemConstraints = Pairs.second (Pairs.second (Pairs.second kResults))
-        in (Eithers.bind (inferMany fcx4 (Substitution.substInContext ksubst cx) (Lists.map (\v -> (v, "map value")) (Maps.elems m))) (\vRp ->  
-          let vResults = Pairs.first vRp 
+        in (Eithers.bind (inferMany fcx4 (Substitution.substInContext ksubst cx) (Lists.map (\v -> (v, "map value")) (Maps.elems m))) (\vRp ->
+          let vResults = Pairs.first vRp
               fcx5 = Pairs.second vRp
               vterms = Pairs.first vResults
               vtypes = Pairs.first (Pairs.second vResults)
@@ -779,7 +779,7 @@ inferTypeOfMap fcx cx m =
 -- | Infer the type of an optional (Either version)
 inferTypeOfOptional :: Context.Context -> Graph.Graph -> Maybe Core.Term -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfOptional fcx cx m =
-     
+
       let trmCons = \terms -> Logic.ifElse (Lists.null terms) (Core.TermMaybe Nothing) (Core.TermMaybe (Just (Lists.head terms)))
       in (inferTypeOfCollection fcx cx (\x -> Core.TypeMaybe x) trmCons "optional element" Sets.empty (Maybes.maybe [] Lists.singleton m))
 
@@ -788,8 +788,8 @@ inferTypeOfPair :: Context.Context -> Graph.Graph -> (Core.Term, Core.Term) -> E
 inferTypeOfPair fcx cx p =
     Eithers.bind (inferMany fcx cx [
       (Pairs.first p, "pair first element"),
-      (Pairs.second p, "pair second element")]) (\rp ->  
-      let results = Pairs.first rp 
+      (Pairs.second p, "pair second element")]) (\rp ->
+      let results = Pairs.first rp
           fcx2 = Pairs.second rp
           iterms = Pairs.first results
           itypes = Pairs.first (Pairs.second results)
@@ -815,8 +815,8 @@ inferTypeOfPrimitive :: Context.Context -> Graph.Graph -> Core.Name -> Either (C
 inferTypeOfPrimitive fcx cx name =
     Maybes.maybe (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "No such primitive: " (Core.unName name)))),
-      Context.inContextContext = fcx})) (\scheme ->  
-      let tsResult = Schemas.instantiateTypeScheme fcx scheme 
+      Context.inContextContext = fcx})) (\scheme ->
+      let tsResult = Schemas.instantiateTypeScheme fcx scheme
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
           constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
@@ -825,11 +825,11 @@ inferTypeOfPrimitive fcx cx name =
 -- | Infer the type of a record projection (Either version)
 inferTypeOfProjection :: Context.Context -> Graph.Graph -> Core.Projection -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfProjection fcx cx proj =
-     
-      let tname = Core.projectionTypeName proj 
+
+      let tname = Core.projectionTypeName proj
           fname = Core.projectionField proj
-      in (Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->  
-        let schemaType = Pairs.first stRp 
+      in (Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
+        let schemaType = Pairs.first stRp
             fcx2 = Pairs.second stRp
             svars = Core.typeSchemeVariables schemaType
             stype = Core.typeSchemeType schemaType
@@ -842,15 +842,15 @@ inferTypeOfProjection fcx cx proj =
 -- | Infer the type of a record (Either version)
 inferTypeOfRecord :: Context.Context -> Graph.Graph -> Core.Record -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfRecord fcx cx record =
-     
-      let tname = Core.recordTypeName record 
+
+      let tname = Core.recordTypeName record
           fields = Core.recordFields record
           fnames = Lists.map Core.fieldName fields
-      in (Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->  
-        let schemaType = Pairs.first stRp 
+      in (Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
+        let schemaType = Pairs.first stRp
             fcx2 = Pairs.second stRp
-        in (Eithers.bind (inferMany fcx2 cx (Lists.map (\f -> (Core.fieldTerm f, (Strings.cat2 "field " (Core.unName (Core.fieldName f))))) fields)) (\rp ->  
-          let results = Pairs.first rp 
+        in (Eithers.bind (inferMany fcx2 cx (Lists.map (\f -> (Core.fieldTerm f, (Strings.cat2 "field " (Core.unName (Core.fieldName f))))) fields)) (\rp ->
+          let results = Pairs.first rp
               fcx3 = Pairs.second rp
               svars = Core.typeSchemeVariables schemaType
               stype = Core.typeSchemeType schemaType
@@ -880,7 +880,7 @@ inferTypeOfSet fcx cx s =
 -- | Infer the type of a given term (Either version)
 inferTypeOfTerm :: Context.Context -> Graph.Graph -> Core.Term -> String -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfTerm fcx cx term desc =
-     
+
       let fcx2 =
               Context.Context {
                 Context.contextTrace = (Lists.cons desc (Context.contextTrace fcx)),
@@ -927,8 +927,8 @@ inferTypeOfUnit fcx =
 -- | Infer the type of an unwrap operation (Either version)
 inferTypeOfUnwrap :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfUnwrap fcx cx tname =
-    Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->  
-      let schemaType = Pairs.first stRp 
+    Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
+      let schemaType = Pairs.first stRp
           fcx2 = Pairs.second stRp
           svars = Core.typeSchemeVariables schemaType
           stype = Core.typeSchemeType schemaType
@@ -941,8 +941,8 @@ inferTypeOfVariable :: Context.Context -> Graph.Graph -> Core.Name -> Either (Co
 inferTypeOfVariable fcx cx name =
     Maybes.maybe (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "Variable not bound to type: " (Core.unName name)))),
-      Context.inContextContext = fcx})) (\scheme ->  
-      let tsResult = Schemas.instantiateTypeScheme fcx scheme 
+      Context.inContextContext = fcx})) (\scheme ->
+      let tsResult = Schemas.instantiateTypeScheme fcx scheme
           ts = Pairs.first tsResult
           fcx2 = Pairs.second tsResult
           constraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
@@ -956,14 +956,14 @@ inferTypeOfVariable fcx cx name =
 -- | Infer the type of a wrapped term (Either version)
 inferTypeOfWrappedTerm :: Context.Context -> Graph.Graph -> Core.WrappedTerm -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 inferTypeOfWrappedTerm fcx cx wt =
-     
-      let tname = Core.wrappedTermTypeName wt 
+
+      let tname = Core.wrappedTermTypeName wt
           term = Core.wrappedTermBody wt
-      in (Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->  
-        let schemaType = Pairs.first stRp 
+      in (Eithers.bind (Schemas.requireSchemaType fcx (Graph.graphSchemaTypes cx) tname) (\stRp ->
+        let schemaType = Pairs.first stRp
             fcx2 = Pairs.second stRp
-        in (Eithers.bind (inferTypeOfTerm fcx2 cx term "wrapped term") (\result ->  
-          let fcx3 = Typing_.inferenceResultContext result 
+        in (Eithers.bind (inferTypeOfTerm fcx2 cx term "wrapped term") (\result ->
+          let fcx3 = Typing_.inferenceResultContext result
               svars = Core.typeSchemeVariables schemaType
               stype = Core.typeSchemeType schemaType
               iterm = Typing_.inferenceResultTerm result
@@ -981,32 +981,32 @@ inferTypeOfWrappedTerm fcx cx wt =
 -- | Infer types for temporary let bindings (Either version)
 inferTypesOfTemporaryBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.Error) (([Core.Term], ([Core.Type], (Typing_.TypeSubst, (M.Map Core.Name Core.TypeVariableMetadata)))), Context.Context)
 inferTypesOfTemporaryBindings fcx cx bins =
-     
+
       let dflt =
-               
-                let binding = Lists.head bins 
+
+                let binding = Lists.head bins
                     k = Core.bindingName binding
                     v = Core.bindingTerm binding
                     tl = Lists.tail bins
                 in (Eithers.bind (inferTypeOfTerm fcx cx v (Strings.cat [
                   "temporary let binding '",
                   (Core.unName k),
-                  "'"])) (\result1 ->  
-                  let fcx2 = Typing_.inferenceResultContext result1 
+                  "'"])) (\result1 ->
+                  let fcx2 = Typing_.inferenceResultContext result1
                       j = Typing_.inferenceResultTerm result1
                       u_prime = Typing_.inferenceResultType result1
                       u = Typing_.inferenceResultSubst result1
                       c1Inferred = Typing_.inferenceResultClassConstraints result1
-                  in (Eithers.bind (Maybes.maybe (Right Maps.empty) (\ts ->  
-                    let tsResult = Schemas.instantiateTypeScheme fcx2 ts 
+                  in (Eithers.bind (Maybes.maybe (Right Maps.empty) (\ts ->
+                    let tsResult = Schemas.instantiateTypeScheme fcx2 ts
                         instantiatedTs = Pairs.first tsResult
                         freshConstraints = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints instantiatedTs)
                     in (Eithers.bind (Eithers.bimap (\_ic -> Context.InContext {
                       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unificationErrorMessage (Context.inContextObject _ic)))),
-                      Context.inContextContext = (Context.inContextContext _ic)}) (\_a -> _a) (Unification.unifyTypes fcx2 (Graph.graphSchemaTypes cx) (Core.typeSchemeType instantiatedTs) u_prime "original binding type")) (\unifySubst -> Right (Substitution.substInClassConstraints unifySubst freshConstraints)))) (Core.bindingType binding)) (\originalBindingConstraints ->  
+                      Context.inContextContext = (Context.inContextContext _ic)}) (\_a -> _a) (Unification.unifyTypes fcx2 (Graph.graphSchemaTypes cx) (Core.typeSchemeType instantiatedTs) u_prime "original binding type")) (\unifySubst -> Right (Substitution.substInClassConstraints unifySubst freshConstraints)))) (Core.bindingType binding)) (\originalBindingConstraints ->
                     let c1 = mergeClassConstraints c1Inferred originalBindingConstraints
-                    in (Eithers.bind (inferTypesOfTemporaryBindings fcx2 (Substitution.substInContext u cx) tl) (\rp2 ->  
-                      let result2 = Pairs.first rp2 
+                    in (Eithers.bind (inferTypesOfTemporaryBindings fcx2 (Substitution.substInContext u cx) tl) (\rp2 ->
+                      let result2 = Pairs.first rp2
                           fcx3 = Pairs.second rp2
                           h = Pairs.first result2
                           r_prime = Pairs.first (Pairs.second result2)
@@ -1033,10 +1033,10 @@ mapConstraints flowCx cx f constraints =
 -- | Merge two maps of class constraints. When both maps have constraints for the same variable, union the class sets.
 mergeClassConstraints :: Ord t0 => (M.Map t0 Core.TypeVariableMetadata -> M.Map t0 Core.TypeVariableMetadata -> M.Map t0 Core.TypeVariableMetadata)
 mergeClassConstraints m1 m2 =
-    Lists.foldl (\acc -> \pair ->  
-      let k = Pairs.first pair 
+    Lists.foldl (\acc -> \pair ->
+      let k = Pairs.first pair
           v = Pairs.second pair
-      in (Maybes.maybe (Maps.insert k v acc) (\existing ->  
+      in (Maybes.maybe (Maps.insert k v acc) (\existing ->
         let merged =
                 Core.TypeVariableMetadata {
                   Core.typeVariableMetadataClasses = (Sets.union (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses v))}
@@ -1045,8 +1045,8 @@ mergeClassConstraints m1 m2 =
 -- | Show an inference result for debugging
 showInferenceResult :: Typing_.InferenceResult -> String
 showInferenceResult result =
-     
-      let term = Typing_.inferenceResultTerm result 
+
+      let term = Typing_.inferenceResultTerm result
           typ = Typing_.inferenceResultType result
           subst = Typing_.inferenceResultSubst result
       in (Strings.cat [
@@ -1071,8 +1071,8 @@ yield fcx term typ subst =
 -- | Create a checked inference result
 yieldChecked :: Context.Context -> Core.Term -> Core.Type -> Typing_.TypeSubst -> Typing_.InferenceResult
 yieldChecked fcx term typ subst =
-     
-      let iterm = Substitution.substTypesInTerm subst term 
+
+      let iterm = Substitution.substTypesInTerm subst term
           itype = Substitution.substInType subst typ
       in Typing_.InferenceResult {
         Typing_.inferenceResultTerm = iterm,
@@ -1084,8 +1084,8 @@ yieldChecked fcx term typ subst =
 -- | Create a checked inference result with class constraints
 yieldCheckedWithConstraints :: Context.Context -> Core.Term -> Core.Type -> Typing_.TypeSubst -> M.Map Core.Name Core.TypeVariableMetadata -> Typing_.InferenceResult
 yieldCheckedWithConstraints fcx term typ subst constraints =
-     
-      let iterm = Substitution.substTypesInTerm subst term 
+
+      let iterm = Substitution.substTypesInTerm subst term
           itype = Substitution.substInType subst typ
           iconstraints = Substitution.substInClassConstraints subst constraints
       in Typing_.InferenceResult {
@@ -1098,8 +1098,8 @@ yieldCheckedWithConstraints fcx term typ subst constraints =
 -- | Create an inference result with debug output
 yieldDebug :: Context.Context -> t0 -> String -> Core.Term -> Core.Type -> Typing_.TypeSubst -> Either (Context.InContext Error.Error) Typing_.InferenceResult
 yieldDebug fcx cx debugId term typ subst =
-     
-      let rterm = Substitution.substTypesInTerm subst term 
+
+      let rterm = Substitution.substTypesInTerm subst term
           rtyp = Substitution.substInType subst typ
       in (Eithers.bind (Annotations.debugIf fcx debugId (Strings.cat [
         "\n\tterm: ",

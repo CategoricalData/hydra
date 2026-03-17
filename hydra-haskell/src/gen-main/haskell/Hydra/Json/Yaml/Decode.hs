@@ -23,10 +23,10 @@ import qualified Data.Set as S
 yamlToJson :: Model.Node -> Either String Model_.Value
 yamlToJson node =
     case node of
-      Model.NodeMapping v0 ->  
+      Model.NodeMapping v0 ->
         let convertEntry =
-                \kv ->  
-                  let keyNode = Pairs.first kv 
+                \kv ->
+                  let keyNode = Pairs.first kv
                       valNode = Pairs.second kv
                       keyResult =
                               case keyNode of
@@ -34,9 +34,9 @@ yamlToJson node =
                                   Model.ScalarStr v2 -> Right v2
                                   _ -> Left "non-string YAML mapping key"
                                 _ -> Left "non-scalar YAML mapping key"
-                  in (Eithers.either (\err -> Left err) (\key ->  
+                  in (Eithers.either (\err -> Left err) (\key ->
                     let valResult = yamlToJson valNode
-                    in (Eithers.map (\v -> (key, v)) valResult)) keyResult) 
+                    in (Eithers.map (\v -> (key, v)) valResult)) keyResult)
             entries = Eithers.mapList convertEntry (Maps.toList v0)
         in (Eithers.map (\es -> Model_.ValueObject (Maps.fromList es)) entries)
       Model.NodeScalar v0 -> case v0 of
@@ -45,13 +45,13 @@ yamlToJson node =
         Model.ScalarInt v1 -> Right (Model_.ValueNumber (Literals.bigintToBigfloat v1))
         Model.ScalarNull -> Right Model_.ValueNull
         Model.ScalarStr v1 -> Right (Model_.ValueString v1)
-      Model.NodeSequence v0 ->  
+      Model.NodeSequence v0 ->
         let results = Eithers.mapList (\n -> yamlToJson n) v0
         in (Eithers.map (\vs -> Model_.ValueArray vs) results)
 
 -- | Decode a YAML node to a Hydra term via JSON decoding.
 fromYaml :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Model.Node -> Either String Core.Term
 fromYaml types tname typ node =
-     
+
       let jsonResult = yamlToJson node
       in (Eithers.either (\err -> Left err) (\json -> Decode.fromJson types tname typ json) jsonResult)

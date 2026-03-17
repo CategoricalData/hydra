@@ -24,7 +24,7 @@ public interface Transform {
       () -> (hydra.util.Maybe<hydra.testing.TestGroup>) (hydra.util.Maybe.<hydra.testing.TestGroup>nothing()),
       () -> hydra.util.Maybe.just(new hydra.testing.TestGroup(name_, desc, transformedSubgroups.get(), transformedCases.get())));
   }
-  
+
   static hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> transformTestCase(hydra.testing.TestCaseWithMetadata tcm) {
     hydra.util.Maybe<String> desc = (tcm).description;
     String name_ = (tcm).name;
@@ -35,7 +35,7 @@ public interface Transform {
       public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> otherwise(hydra.testing.TestCase instance) {
         return (hydra.util.Maybe<hydra.testing.TestCaseWithMetadata>) (hydra.util.Maybe.<hydra.testing.TestCaseWithMetadata>nothing());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.CaseConversion ccase) {
         hydra.util.CaseConvention fromConv = (ccase).value.fromConvention;
@@ -47,26 +47,26 @@ public interface Transform {
           toConv,
           fromStr), new hydra.core.Term.Literal(new hydra.core.Literal.String_(toStr)))), desc, tags_));
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.Evaluation ecase) {
         hydra.core.Term input_ = (ecase).value.input;
         hydra.core.Term output_ = (ecase).value.output;
         return hydra.util.Maybe.just(new hydra.testing.TestCaseWithMetadata(name_, new hydra.testing.TestCase.DelegatedEvaluation(new hydra.testing.DelegatedEvaluationTestCase(input_, output_)), desc, tags_));
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.DelegatedEvaluation ignored) {
         return hydra.util.Maybe.just(tcm);
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.TopologicalSort tscase) {
         hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList = (tscase).value.adjacencyList;
         hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>> expected = (tscase).value.expected;
         return hydra.util.Maybe.just(new hydra.testing.TestCaseWithMetadata(name_, new hydra.testing.TestCase.DelegatedEvaluation(new hydra.testing.DelegatedEvaluationTestCase(hydra.test.transform.Transform.buildTopologicalSortCall(adjList), hydra.test.transform.Transform.encodeEitherListList(expected))), desc, tags_));
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.TopologicalSortSCC scccase) {
         hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList = (scccase).value.adjacencyList;
@@ -75,45 +75,45 @@ public interface Transform {
       }
     });
   }
-  
+
   static hydra.core.Term buildConvertCaseCall(hydra.util.CaseConvention fromConv, hydra.util.CaseConvention toConv, String input_) {
     return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.formatting.convertCase")), hydra.test.transform.Transform.encodeCaseConvention(fromConv))), hydra.test.transform.Transform.encodeCaseConvention(toConv))), new hydra.core.Term.Literal(new hydra.core.Literal.String_(input_))));
   }
-  
+
   static hydra.core.Term encodeCaseConvention(hydra.util.CaseConvention conv) {
     return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.util.CaseConvention"), new hydra.core.Field((conv).accept(new hydra.util.CaseConvention.PartialVisitor<>() {
       @Override
       public hydra.core.Name visit(hydra.util.CaseConvention.LowerSnake ignored) {
         return new hydra.core.Name("lowerSnake");
       }
-      
+
       @Override
       public hydra.core.Name visit(hydra.util.CaseConvention.UpperSnake ignored) {
         return new hydra.core.Name("upperSnake");
       }
-      
+
       @Override
       public hydra.core.Name visit(hydra.util.CaseConvention.Camel ignored) {
         return new hydra.core.Name("camel");
       }
-      
+
       @Override
       public hydra.core.Name visit(hydra.util.CaseConvention.Pascal ignored) {
         return new hydra.core.Name("pascal");
       }
     }), new hydra.core.Term.Unit())));
   }
-  
+
   static hydra.module.Namespace addGenerationPrefix(hydra.module.Namespace ns_) {
     return new hydra.module.Namespace(hydra.lib.strings.Cat2.apply(
       "generation.",
       (ns_).value));
   }
-  
+
   static hydra.module.Module transformModule(hydra.module.Module m) {
     return new hydra.module.Module(hydra.test.transform.Transform.addGenerationPrefix((m).namespace), (m).elements, (m).termDependencies, (m).typeDependencies, (m).description);
   }
-  
+
   static hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> collectTestCases(hydra.testing.TestGroup tg) {
     return hydra.lib.lists.Concat2.apply(
       (tg).cases,
@@ -121,15 +121,15 @@ public interface Transform {
         (java.util.function.Function<hydra.testing.TestGroup, hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>>) (sg -> hydra.test.transform.Transform.collectTestCases(sg)),
         (tg).subgroups)));
   }
-  
+
   static hydra.core.Term buildTopologicalSortCall(hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList) {
     return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.sorting.topologicalSort")), hydra.test.transform.Transform.encodeAdjacencyList(adjList)));
   }
-  
+
   static hydra.core.Term buildTopologicalSortSCCCall(hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList) {
     return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.sorting.topologicalSortComponents")), hydra.test.transform.Transform.encodeAdjacencyList(adjList)));
   }
-  
+
   static hydra.core.Term encodeAdjacencyList(hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> pairs) {
     return new hydra.core.Term.List(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>, hydra.core.Term>) (p -> new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(hydra.test.transform.Transform.encodeInt(hydra.lib.pairs.First.apply(p)), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
@@ -137,24 +137,24 @@ public interface Transform {
         hydra.lib.pairs.Second.apply(p)))))))),
       pairs));
   }
-  
+
   static hydra.core.Term encodeInt(Integer n) {
     return new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(n)));
   }
-  
+
   static hydra.core.Term encodeEitherListList(hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>> e) {
     return new hydra.core.Term.Either(hydra.lib.eithers.Bimap.apply(
       (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.core.Term>) (cycles -> hydra.test.transform.Transform.encodeListList(cycles)),
       (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.core.Term>) (sorted -> hydra.test.transform.Transform.encodeIntList(sorted)),
       e));
   }
-  
+
   static hydra.core.Term encodeListList(hydra.util.ConsList<hydra.util.ConsList<Integer>> lists) {
     return new hydra.core.Term.List(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.core.Term>) (l -> hydra.test.transform.Transform.encodeIntList(l)),
       lists));
   }
-  
+
   static hydra.core.Term encodeIntList(hydra.util.ConsList<Integer> ints) {
     return new hydra.core.Term.List(hydra.lib.lists.Map.apply(
       (java.util.function.Function<Integer, hydra.core.Term>) (n -> hydra.test.transform.Transform.encodeInt(n)),

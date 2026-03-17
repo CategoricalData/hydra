@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class JavaEnvironment implements Serializable, Comparable<JavaEnvironment> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.helpers.JavaEnvironment");
-  
+
   public static final hydra.core.Name ALIASES = new hydra.core.Name("aliases");
-  
+
   public static final hydra.core.Name GRAPH = new hydra.core.Name("graph");
-  
+
   /**
    * Aliases and context state
    */
   public final hydra.ext.java.helpers.Aliases aliases;
-  
+
   /**
    * Graph context for type inference
    */
   public final hydra.graph.Graph graph;
-  
+
   public JavaEnvironment (hydra.ext.java.helpers.Aliases aliases, hydra.graph.Graph graph) {
     this.aliases = aliases;
     this.graph = graph;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof JavaEnvironment)) {
@@ -41,12 +41,12 @@ public class JavaEnvironment implements Serializable, Comparable<JavaEnvironment
       this.graph,
       o.graph);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(aliases) + 3 * java.util.Objects.hashCode(graph);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(JavaEnvironment other) {
@@ -57,11 +57,11 @@ public class JavaEnvironment implements Serializable, Comparable<JavaEnvironment
     }
     return ((Comparable) graph).compareTo(other.graph);
   }
-  
+
   public JavaEnvironment withAliases(hydra.ext.java.helpers.Aliases aliases) {
     return new JavaEnvironment(aliases, graph);
   }
-  
+
   public JavaEnvironment withGraph(hydra.graph.Graph graph) {
     return new JavaEnvironment(aliases, graph);
   }

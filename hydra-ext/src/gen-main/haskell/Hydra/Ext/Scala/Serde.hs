@@ -50,8 +50,8 @@ matchOp =
 -- | Convert a case clause to an expression
 writeCase :: Meta.Case -> Ast.Expr
 writeCase c =
-     
-      let pat = Meta.casePat c 
+
+      let pat = Meta.casePat c
           term = Meta.caseBody c
       in (Serialization.spaceSep [
         Serialization.cst "case",
@@ -63,8 +63,8 @@ writeCase c =
 writeDefn :: Meta.Defn -> Ast.Expr
 writeDefn def =
     case def of
-      Meta.DefnDef v0 ->  
-        let name = Meta.defn_DefName v0 
+      Meta.DefnDef v0 ->
+        let name = Meta.defn_DefName v0
             tparams = Meta.defn_DefTparams v0
             paramss = Meta.defn_DefParamss v0
             scod = Meta.defn_DefDecltpe v0
@@ -87,8 +87,8 @@ writeDefn def =
           nameAndParams,
           (Serialization.cst "="),
           (writeTerm body)])
-      Meta.DefnType v0 ->  
-        let name = Meta.defn_TypeName v0 
+      Meta.DefnType v0 ->
+        let name = Meta.defn_TypeName v0
             tparams = Meta.defn_TypeTparams v0
             body = Meta.defn_TypeBody v0
         in (Serialization.spaceSep (Maybes.cat [
@@ -97,8 +97,8 @@ writeDefn def =
           (Logic.ifElse (Lists.null tparams) Nothing (Maybes.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map writeType_Param tparams)))),
           (Maybes.pure (Serialization.cst "=")),
           (Maybes.pure (writeType body))]))
-      Meta.DefnVal v0 ->  
-        let pats = Meta.defn_ValPats v0 
+      Meta.DefnVal v0 ->
+        let pats = Meta.defn_ValPats v0
             typ = Meta.defn_ValDecltpe v0
             rhs = Meta.defn_ValRhs v0
             firstPat = Lists.head pats
@@ -115,8 +115,8 @@ writeDefn def =
           nameAndType,
           (Serialization.cst "="),
           (writeTerm rhs)])
-      Meta.DefnClass v0 ->  
-        let mods = Meta.defn_ClassMods v0 
+      Meta.DefnClass v0 ->
+        let mods = Meta.defn_ClassMods v0
             name = Meta.defn_ClassName v0
             tparams = Meta.defn_ClassTparams v0
             ctor = Meta.defn_ClassCtor v0
@@ -135,8 +135,8 @@ writeDefn def =
           [
             Serialization.cst "class",
             nameAndParams]]))
-      Meta.DefnEnum v0 ->  
-        let name = Meta.defn_EnumName v0 
+      Meta.DefnEnum v0 ->
+        let name = Meta.defn_EnumName v0
             tparams = Meta.defn_EnumTparams v0
             template = Meta.defn_EnumTemplate v0
             stats = Meta.templateStats template
@@ -155,8 +155,8 @@ writeDefn def =
           [
             enumHeader],
           enumCases]))
-      Meta.DefnEnumCase v0 ->  
-        let name = Meta.defn_EnumCaseName v0 
+      Meta.DefnEnumCase v0 ->
+        let name = Meta.defn_EnumCaseName v0
             ctor = Meta.defn_EnumCaseCtor v0
             inits = Meta.defn_EnumCaseInits v0
             paramss = Meta.ctor_PrimaryParamss ctor
@@ -178,15 +178,15 @@ writeDefn def =
 writeImportExportStat :: Meta.ImportExportStat -> Ast.Expr
 writeImportExportStat ie =
     case ie of
-      Meta.ImportExportStatImport v0 ->  
+      Meta.ImportExportStatImport v0 ->
         let importers = Meta.importImporters v0
         in (Serialization.newlineSep (Lists.map writeImporter importers))
 
 -- | Convert an importer to an expression
 writeImporter :: Meta.Importer -> Ast.Expr
 writeImporter imp =
-     
-      let ref = Meta.importerRef imp 
+
+      let ref = Meta.importerRef imp
           importees = Meta.importerImportees imp
           refName =
                   case ref of
@@ -229,8 +229,8 @@ writeName name =
 writePat :: Meta.Pat -> Ast.Expr
 writePat pat =
     case pat of
-      Meta.PatExtract v0 ->  
-        let fun = Meta.pat_ExtractFun v0 
+      Meta.PatExtract v0 ->
+        let fun = Meta.pat_ExtractFun v0
             args = Meta.pat_ExtractArgs v0
         in (Serialization.noSep [
           writeTerm fun,
@@ -240,8 +240,8 @@ writePat pat =
 -- | Convert a package to an expression
 writePkg :: Meta.Pkg -> Ast.Expr
 writePkg pkg =
-     
-      let name = Meta.pkgName pkg 
+
+      let name = Meta.pkgName pkg
           stats = Meta.pkgStats pkg
           package =
                   Serialization.spaceSep [
@@ -265,16 +265,16 @@ writeTerm term =
     case term of
       Meta.DataLit v0 -> writeLit v0
       Meta.DataRef v0 -> writeData_Ref v0
-      Meta.DataApply v0 ->  
-        let fun = Meta.data_ApplyFun v0 
+      Meta.DataApply v0 ->
+        let fun = Meta.data_ApplyFun v0
             args = Meta.data_ApplyArgs v0
         in (Serialization.noSep [
           writeTerm fun,
           (Serialization.parenList False (Lists.map writeTerm args))])
       Meta.DataAssign _ -> Serialization.cst ">ASSIGN"
       Meta.DataTuple v0 -> Serialization.parenList False (Lists.map writeTerm (Meta.data_TupleArgs v0))
-      Meta.DataMatch v0 ->  
-        let expr = Meta.data_MatchExpr v0 
+      Meta.DataMatch v0 ->
+        let expr = Meta.data_MatchExpr v0
             mCases = Meta.data_MatchCases v0
         in (Serialization.ifx matchOp (writeTerm expr) (Serialization.newlineSep (Lists.map writeCase mCases)))
       Meta.DataFunctionData v0 -> writeData_FunctionData v0
@@ -283,8 +283,8 @@ writeTerm term =
 writeData_FunctionData :: Meta.Data_FunctionData -> Ast.Expr
 writeData_FunctionData ft =
     case ft of
-      Meta.Data_FunctionDataFunction v0 ->  
-        let params = Meta.data_FunctionParams v0 
+      Meta.Data_FunctionDataFunction v0 ->
+        let params = Meta.data_FunctionParams v0
             body = Meta.data_FunctionBody v0
         in (Serialization.spaceSep [
           Serialization.parenList False (Lists.map writeData_Param params),
@@ -298,8 +298,8 @@ writeData_Name dn = Serialization.cst (Meta.unPredefString (Meta.data_NameValue 
 -- | Convert a data parameter to an expression
 writeData_Param :: Meta.Data_Param -> Ast.Expr
 writeData_Param dp =
-     
-      let name = Meta.data_ParamName dp 
+
+      let name = Meta.data_ParamName dp
           stype = Meta.data_ParamDecltpe dp
       in (Serialization.noSep (Maybes.cat [
         Maybes.pure (writeName name),
@@ -317,8 +317,8 @@ writeData_Ref ref =
 -- | Convert a data select to an expression
 writeData_Select :: Meta.Data_Select -> Ast.Expr
 writeData_Select sel =
-     
-      let arg = Meta.data_SelectQual sel 
+
+      let arg = Meta.data_SelectQual sel
           name = Meta.data_SelectName sel
       in (Serialization.ifx dotOp (writeTerm arg) (writeTerm (Meta.DataRef (Meta.Data_RefName name))))
 
@@ -328,19 +328,19 @@ writeType typ =
     case typ of
       Meta.TypeRef v0 -> case v0 of
         Meta.Type_RefName v1 -> writeType_Name v1
-      Meta.TypeApply v0 ->  
-        let fun = Meta.type_ApplyTpe v0 
+      Meta.TypeApply v0 ->
+        let fun = Meta.type_ApplyTpe v0
             args = Meta.type_ApplyArgs v0
         in (Serialization.noSep [
           writeType fun,
           (Serialization.bracketList Serialization.inlineStyle (Lists.map writeType args))])
       Meta.TypeFunctionType v0 -> case v0 of
-        Meta.Type_FunctionTypeFunction v1 ->  
-          let dom = Lists.head (Meta.type_FunctionParams v1) 
+        Meta.Type_FunctionTypeFunction v1 ->
+          let dom = Lists.head (Meta.type_FunctionParams v1)
               cod = Meta.type_FunctionRes v1
           in (Serialization.ifx functionArrowOp (writeType dom) (writeType cod))
-      Meta.TypeLambda v0 ->  
-        let params = Meta.type_LambdaTparams v0 
+      Meta.TypeLambda v0 ->
+        let params = Meta.type_LambdaTparams v0
             body = Meta.type_LambdaTpe v0
         in (Serialization.noSep [
           writeType body,

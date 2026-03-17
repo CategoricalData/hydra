@@ -6,52 +6,52 @@ import java.io.Serializable;
 
 public abstract class AdditiveExpression implements Serializable, Comparable<AdditiveExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.AdditiveExpression");
-  
+
   public static final hydra.core.Name UNARY = new hydra.core.Name("unary");
-  
+
   public static final hydra.core.Name PLUS = new hydra.core.Name("plus");
-  
+
   public static final hydra.core.Name MINUS = new hydra.core.Name("minus");
-  
+
   private AdditiveExpression () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Unary instance) ;
-    
+
     R visit(Plus instance) ;
-    
+
     R visit(Minus instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(AdditiveExpression instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Unary instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Plus instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Minus instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Unary extends hydra.ext.java.syntax.AdditiveExpression implements Serializable {
     public final hydra.ext.java.syntax.MultiplicativeExpression value;
-    
+
     public Unary (hydra.ext.java.syntax.MultiplicativeExpression value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Unary)) {
@@ -62,12 +62,12 @@ public abstract class AdditiveExpression implements Serializable, Comparable<Add
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AdditiveExpression other) {
@@ -78,20 +78,20 @@ public abstract class AdditiveExpression implements Serializable, Comparable<Add
       Unary o = (Unary) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Plus extends hydra.ext.java.syntax.AdditiveExpression implements Serializable {
     public final hydra.ext.java.syntax.AdditiveExpression_Binary value;
-    
+
     public Plus (hydra.ext.java.syntax.AdditiveExpression_Binary value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Plus)) {
@@ -102,12 +102,12 @@ public abstract class AdditiveExpression implements Serializable, Comparable<Add
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AdditiveExpression other) {
@@ -118,20 +118,20 @@ public abstract class AdditiveExpression implements Serializable, Comparable<Add
       Plus o = (Plus) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Minus extends hydra.ext.java.syntax.AdditiveExpression implements Serializable {
     public final hydra.ext.java.syntax.AdditiveExpression_Binary value;
-    
+
     public Minus (hydra.ext.java.syntax.AdditiveExpression_Binary value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Minus)) {
@@ -142,12 +142,12 @@ public abstract class AdditiveExpression implements Serializable, Comparable<Add
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AdditiveExpression other) {
@@ -158,7 +158,7 @@ public abstract class AdditiveExpression implements Serializable, Comparable<Add
       Minus o = (Minus) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class TypeParameter implements Serializable, Comparable<TypeParameter> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.TypeParameter");
-  
+
   public static final hydra.core.Name MODIFIERS = new hydra.core.Name("modifiers");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public static final hydra.core.Name BOUND = new hydra.core.Name("bound");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.TypeParameterModifier> modifiers;
-  
+
   public final hydra.ext.java.syntax.TypeIdentifier identifier;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.TypeBound> bound;
-  
+
   public TypeParameter (hydra.util.ConsList<hydra.ext.java.syntax.TypeParameterModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.util.Maybe<hydra.ext.java.syntax.TypeBound> bound) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.bound = bound;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TypeParameter)) {
@@ -39,12 +39,12 @@ public class TypeParameter implements Serializable, Comparable<TypeParameter> {
       this.bound,
       o.bound);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(modifiers) + 3 * java.util.Objects.hashCode(identifier) + 5 * java.util.Objects.hashCode(bound);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TypeParameter other) {
@@ -59,15 +59,15 @@ public class TypeParameter implements Serializable, Comparable<TypeParameter> {
     }
     return ((Comparable) bound).compareTo(other.bound);
   }
-  
+
   public TypeParameter withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameterModifier> modifiers) {
     return new TypeParameter(modifiers, identifier, bound);
   }
-  
+
   public TypeParameter withIdentifier(hydra.ext.java.syntax.TypeIdentifier identifier) {
     return new TypeParameter(modifiers, identifier, bound);
   }
-  
+
   public TypeParameter withBound(hydra.util.Maybe<hydra.ext.java.syntax.TypeBound> bound) {
     return new TypeParameter(modifiers, identifier, bound);
   }

@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class ApplicationQuery implements Serializable, Comparable<ApplicationQuery> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.query.ApplicationQuery");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.util.ConsList<hydra.pg.query.Query> value;
-  
+
   public ApplicationQuery (hydra.util.ConsList<hydra.pg.query.Query> value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ApplicationQuery)) {
@@ -25,12 +25,12 @@ public class ApplicationQuery implements Serializable, Comparable<ApplicationQue
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ApplicationQuery other) {

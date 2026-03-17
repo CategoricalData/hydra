@@ -30,8 +30,8 @@ typeScriptLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = types}} 
-  where 
+        Coders.languageConstraintsTypes = types}}
+  where
     eliminationVariants = Sets.empty
     literalVariants =
         Sets.fromList [
@@ -73,8 +73,8 @@ typeScriptReservedWords =
     Sets.fromList (Lists.concat [
       reservedWords,
       strictModeReservedWords,
-      contextuallKeywords]) 
-  where 
+      contextuallKeywords])
+  where
     reservedWords =
         [
           "delete",

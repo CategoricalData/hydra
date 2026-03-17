@@ -25,7 +25,7 @@ colon_op = hydra.ast.Op(hydra.ast.Symbol(":"), hydra.ast.Padding(cast(hydra.ast.
 
 def json_string(s: str) -> str:
     r"""Escape and quote a string for JSON output."""
-    
+
     def hex_escape(c: int) -> str:
         @lru_cache(1)
         def hi() -> str:
@@ -43,7 +43,7 @@ def json_string(s: str) -> str:
 
 def key_value_to_expr(pair: tuple[str, hydra.json.model.Value]) -> hydra.ast.Expr:
     r"""Convert a key-value pair to an AST expression."""
-    
+
     @lru_cache(1)
     def key() -> str:
         return hydra.lib.pairs.first(pair)
@@ -54,33 +54,33 @@ def key_value_to_expr(pair: tuple[str, hydra.json.model.Value]) -> hydra.ast.Exp
 
 def value_to_expr(value: hydra.json.model.Value) -> hydra.ast.Expr:
     r"""Convert a JSON value to an AST expression for serialization."""
-    
+
     match value:
         case hydra.json.model.ValueArray(value=arr):
             return hydra.serialization.bracket_list_adaptive(hydra.lib.lists.map((lambda x1: value_to_expr(x1)), arr))
-        
+
         case hydra.json.model.ValueBoolean(value=b):
             return hydra.serialization.cst(hydra.lib.logic.if_else(b, (lambda : "true"), (lambda : "false")))
-        
+
         case hydra.json.model.ValueNull():
             return hydra.serialization.cst("null")
-        
+
         case hydra.json.model.ValueNumber(value=n):
             @lru_cache(1)
             def rounded() -> int:
                 return hydra.lib.literals.bigfloat_to_bigint(n)
             return hydra.serialization.cst(hydra.lib.logic.if_else(hydra.lib.equality.equal(n, hydra.lib.literals.bigint_to_bigfloat(rounded())), (lambda : hydra.lib.literals.show_bigint(rounded())), (lambda : hydra.lib.literals.show_bigfloat(n))))
-        
+
         case hydra.json.model.ValueObject(value=obj):
             return hydra.serialization.braces_list_adaptive(hydra.lib.lists.map((lambda x1: key_value_to_expr(x1)), hydra.lib.maps.to_list(obj)))
-        
+
         case hydra.json.model.ValueString(value=s):
             return hydra.serialization.cst(json_string(s))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
 def print_json(value: hydra.json.model.Value) -> str:
     r"""Serialize a JSON value to a string."""
-    
+
     return hydra.serialization.print_expr(value_to_expr(value))

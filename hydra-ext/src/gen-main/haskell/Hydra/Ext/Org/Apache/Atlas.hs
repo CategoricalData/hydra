@@ -16,7 +16,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | class that captures details of a struct-attribute.
-data AtlasAttributeDef = 
+data AtlasAttributeDef =
   AtlasAttributeDef {
     atlasAttributeDefName :: (Maybe String),
     atlasAttributeDefTypeName :: (Maybe String),
@@ -70,10 +70,10 @@ _AtlasAttributeDef_options = Core.Name "options"
 
 _AtlasAttributeDef_displayName = Core.Name "displayName"
 
-data AtlasAttributeDef_Cardinality = 
+data AtlasAttributeDef_Cardinality =
   AtlasAttributeDef_CardinalitySingle  |
   AtlasAttributeDef_CardinalityList  |
-  AtlasAttributeDef_CardinalitySet 
+  AtlasAttributeDef_CardinalitySet
   deriving (Eq, Ord, Read, Show)
 
 _AtlasAttributeDef_Cardinality = Core.Name "hydra.ext.org.apache.atlas.AtlasAttributeDef_Cardinality"
@@ -84,9 +84,9 @@ _AtlasAttributeDef_Cardinality_list = Core.Name "list"
 
 _AtlasAttributeDef_Cardinality_set = Core.Name "set"
 
-data AtlasAttributeDef_IndexType = 
+data AtlasAttributeDef_IndexType =
   AtlasAttributeDef_IndexTypeDefault  |
-  AtlasAttributeDef_IndexTypeString 
+  AtlasAttributeDef_IndexTypeString
   deriving (Eq, Ord, Read, Show)
 
 _AtlasAttributeDef_IndexType = Core.Name "hydra.ext.org.apache.atlas.AtlasAttributeDef_IndexType"
@@ -96,7 +96,7 @@ _AtlasAttributeDef_IndexType_default = Core.Name "default"
 _AtlasAttributeDef_IndexType_string = Core.Name "string"
 
 -- | Base class that captures common-attributes for all Atlas types.
-data AtlasBaseTypeDef = 
+data AtlasBaseTypeDef =
   AtlasBaseTypeDef {
     atlasBaseTypeDefCategory :: (Maybe TypeCategory),
     atlasBaseTypeDefGuid :: (Maybe String),
@@ -139,7 +139,7 @@ _AtlasBaseTypeDef_serviceType = Core.Name "serviceType"
 _AtlasBaseTypeDef_options = Core.Name "options"
 
 -- | class that captures details of a constraint.
-data AtlasConstraintDef = 
+data AtlasConstraintDef =
   AtlasConstraintDef {
     atlasConstraintDefType :: (Maybe String),
     atlasConstraintDefParams :: (M.Map String String)}
@@ -152,7 +152,7 @@ _AtlasConstraintDef_type = Core.Name "type"
 _AtlasConstraintDef_params = Core.Name "params"
 
 -- | class that captures details of a entity-type.
-data AtlasEntityDef = 
+data AtlasEntityDef =
   AtlasEntityDef {
     atlasEntityDefAsAtlasStruct :: AtlasStructDef,
     atlasEntityDefSuperTypes :: (S.Set String),
@@ -177,7 +177,7 @@ _AtlasEntityDef_relationshipAttributeDefs = Core.Name "relationshipAttributeDefs
 _AtlasEntityDef_businessAttributeDefs = Core.Name "businessAttributeDefs"
 
 -- | class that captures details of a struct-attribute.
-data AtlasRelationshipAttributeDef = 
+data AtlasRelationshipAttributeDef =
   AtlasRelationshipAttributeDef {
     atlasRelationshipAttributeDefAsAtlasAttribute :: AtlasAttributeDef,
     atlasRelationshipAttributeDefRelationshipTypeName :: (Maybe String),
@@ -193,7 +193,7 @@ _AtlasRelationshipAttributeDef_relationshipTypeName = Core.Name "relationshipTyp
 _AtlasRelationshipAttributeDef_isLegacyAttribute = Core.Name "isLegacyAttribute"
 
 -- | class that captures details of a struct-type.
-data AtlasStructDef = 
+data AtlasStructDef =
   AtlasStructDef {
     atlasStructDefAsAtlasBaseType :: AtlasBaseTypeDef,
     atlasStructDefAttributeDefs :: [AtlasAttributeDef]}
@@ -205,7 +205,7 @@ _AtlasStructDef_asAtlasBaseType = Core.Name "asAtlasBaseType"
 
 _AtlasStructDef_attributeDefs = Core.Name "attributeDefs"
 
-data TypeCategory = 
+data TypeCategory =
   TypeCategoryPrimitive  |
   TypeCategoryObjectIdType  |
   TypeCategoryEnum  |
@@ -215,7 +215,7 @@ data TypeCategory =
   TypeCategoryArray  |
   TypeCategoryMap  |
   TypeCategoryRelationship  |
-  TypeCategoryBusinessMetadata 
+  TypeCategoryBusinessMetadata
   deriving (Eq, Ord, Read, Show)
 
 _TypeCategory = Core.Name "hydra.ext.org.apache.atlas.TypeCategory"

@@ -18,7 +18,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A Command describes a function or operation that can be performed on any digital twin.
-data Command = 
+data Command =
   Command {
     -- | This must be 'Command'
     commandType :: Iri,
@@ -61,7 +61,7 @@ _Command_request = Core.Name "request"
 _Command_response = Core.Name "response"
 
 -- | A CommandPayload describes the inputs to or the outputs from a Command.
-data CommandPayload = 
+data CommandPayload =
   CommandPayload {
     -- | The 'programming' name of the payload. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.
     commandPayloadName :: String,
@@ -92,9 +92,9 @@ _CommandPayload_description = Core.Name "description"
 _CommandPayload_displayName = Core.Name "displayName"
 
 -- | CommandType is deprecated. Either value, synchronous or asynchronous, has the same meaning: a command that starts execution within a configurable time and that completes execution within a configurable time.
-data CommandType = 
+data CommandType =
   CommandTypeSynchronous  |
-  CommandTypeAsynchronous 
+  CommandTypeAsynchronous
   deriving (Eq, Ord, Read, Show)
 
 _CommandType = Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandType"
@@ -104,7 +104,7 @@ _CommandType_synchronous = Core.Name "synchronous"
 _CommandType_asynchronous = Core.Name "asynchronous"
 
 -- | Components enable interfaces to be composed of other interfaces. Components are different from relationships because they describe contents that are directly part of the interface. (A relationship describes a link between two interfaces.)
-data Component = 
+data Component =
   Component {
     -- | This must be 'Component'
     componentType :: Iri,
@@ -139,7 +139,7 @@ _Component_description = Core.Name "description"
 _Component_displayName = Core.Name "displayName"
 
 -- | A digital twin model identifier
-newtype Dtmi = 
+newtype Dtmi =
   Dtmi {
     unDtmi :: String}
   deriving (Eq, Ord, Read, Show)
@@ -147,7 +147,7 @@ newtype Dtmi =
 _Dtmi = Core.Name "hydra.ext.com.microsoft.azure.dtld.Dtmi"
 
 -- | An EnumValue describes an element of an Enum.
-data EnumValue = 
+data EnumValue =
   EnumValue {
     -- | The 'programming' name of the enum value. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.
     enumValueName :: String,
@@ -178,7 +178,7 @@ _EnumValue_description = Core.Name "description"
 _EnumValue_displayName = Core.Name "displayName"
 
 -- | A Field describes a field in an Object.
-data Field = 
+data Field =
   Field {
     -- | The 'programming' name of the field. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.
     fieldName :: String,
@@ -208,7 +208,7 @@ _Field_description = Core.Name "description"
 
 _Field_displayName = Core.Name "displayName"
 
-data IntegerOrString = 
+data IntegerOrString =
   IntegerOrStringInteger Int |
   IntegerOrStringString String
   deriving (Eq, Ord, Read, Show)
@@ -219,7 +219,7 @@ _IntegerOrString_integer = Core.Name "integer"
 
 _IntegerOrString_string = Core.Name "string"
 
-data Interface = 
+data Interface =
   Interface {
     -- | A digital twin model identifier for the interface
     interfaceId :: Dtmi,
@@ -261,7 +261,7 @@ _Interface_extends = Core.Name "extends"
 
 _Interface_schemas = Core.Name "schemas"
 
-data Interface_Contents = 
+data Interface_Contents =
   Interface_ContentsCommand Command |
   Interface_ContentsComponent Component |
   Interface_ContentsProperty Property |
@@ -281,7 +281,7 @@ _Interface_Contents_relationship = Core.Name "relationship"
 
 _Interface_Contents_telemetry = Core.Name "telemetry"
 
-newtype Iri = 
+newtype Iri =
   Iri {
     unIri :: String}
   deriving (Eq, Ord, Read, Show)
@@ -289,7 +289,7 @@ newtype Iri =
 _Iri = Core.Name "hydra.ext.com.microsoft.azure.dtld.Iri"
 
 -- | A MapKey describes the key in a Map. The schema of a MapKey must be string.
-data MapKey = 
+data MapKey =
   MapKey {
     -- | The 'programming' name of the map's key. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.
     mapKeyName :: String,
@@ -320,7 +320,7 @@ _MapKey_description = Core.Name "description"
 _MapKey_displayName = Core.Name "displayName"
 
 -- | A MapValue describes the values in a Map.
-data MapValue = 
+data MapValue =
   MapValue {
     -- | The 'programming' name of the map's value. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.
     mapValueName :: String,
@@ -351,7 +351,7 @@ _MapValue_description = Core.Name "description"
 _MapValue_displayName = Core.Name "displayName"
 
 -- | A Property describes the read-only and read/write state of any digital twin. For example, a device serial number may be a read-only property, the desired temperature on a thermostat may be a read-write property; and the name of a room may be a read-write property.
-data Property = 
+data Property =
   Property {
     -- | This must at least be 'Property'. It can also include a semantic type.
     propertyType :: Iri,
@@ -394,7 +394,7 @@ _Property_unit = Core.Name "unit"
 _Property_writable = Core.Name "writable"
 
 -- | A Relationship describes a link to another digital twin and enables graphs of digital twins to be created. Relationships are different from Components because they describe a link to a separate digital twin.
-data Relationship = 
+data Relationship =
   Relationship {
     -- | This must be 'Relationship'
     relationshipType :: Iri,
@@ -445,7 +445,7 @@ _Relationship_target = Core.Name "target"
 _Relationship_writable = Core.Name "writable"
 
 -- | Schemas are used to describe the on-the-wire or serialized format of the data in a digital twin interface. A full set of primitive data types are provided, along with support for a variety of complex schemas in the forms of Arrays, Enums, Maps, and Objects. Schemas described through digital twin's schema definition language are compatible with popular serialization formats, including JSON, Avro, and Protobuf.
-data Schema = 
+data Schema =
   SchemaPrimitive Schema_Primitive |
   SchemaComplex Schema_Complex
   deriving (Eq, Ord, Read, Show)
@@ -457,7 +457,7 @@ _Schema_primitive = Core.Name "primitive"
 _Schema_complex = Core.Name "complex"
 
 -- | An Array describes an indexable data type where each element is of the same schema. An Array elements' schema can itself be a primitive or complex schema.
-data Schema_Array = 
+data Schema_Array =
   Schema_Array {
     -- | This must be 'Array'
     schema_ArrayType :: Iri,
@@ -488,7 +488,7 @@ _Schema_Array_description = Core.Name "description"
 _Schema_Array_displayName = Core.Name "displayName"
 
 -- | Complex schemas are designed for supporting complex data types made up of primitive data types. Currently the following complex schemas are provided: Array, Enum, Map, and Object. A complex schema can be specified directly as the value in a schema statement or described in the interface schemas set and referenced in the schema statement.
-data Schema_Complex = 
+data Schema_Complex =
   Schema_ComplexArray Schema_Array |
   Schema_ComplexEnum Schema_Enum |
   Schema_ComplexMap Schema_Map |
@@ -506,7 +506,7 @@ _Schema_Complex_map = Core.Name "map"
 _Schema_Complex_object = Core.Name "object"
 
 -- | An Enum describes a data type with a set of named labels that map to values. The values in an Enum can be either integers or strings, but the labels are always strings.
-data Schema_Enum = 
+data Schema_Enum =
   Schema_Enum {
     -- | Enum
     schema_EnumType :: Iri,
@@ -541,7 +541,7 @@ _Schema_Enum_description = Core.Name "description"
 _Schema_Enum_displayName = Core.Name "displayName"
 
 -- | Within an interface definition, complex schemas may be defined for reusability across Telemetry, Properties, and Commands. This is designed to promote readability and improved maintenance because schemas that are reused can be defined once (per interface). Interface schemas are defined in the schemas property of an interface.
-data Schema_Interface = 
+data Schema_Interface =
   Schema_Interface {
     -- | The globally unique identifier for the schema
     schema_InterfaceId :: Dtmi,
@@ -567,7 +567,7 @@ _Schema_Interface_description = Core.Name "description"
 
 _Schema_Interface_displayName = Core.Name "displayName"
 
-data Schema_Interface_Type = 
+data Schema_Interface_Type =
   Schema_Interface_TypeArray Schema_Array |
   Schema_Interface_TypeEnum Schema_Enum |
   Schema_Interface_TypeMap Schema_Map |
@@ -585,7 +585,7 @@ _Schema_Interface_Type_map = Core.Name "map"
 _Schema_Interface_Type_object = Core.Name "object"
 
 -- | A Map describes a data type of key-value pairs where the values share the same schema. The key in a Map must be a string. The values in a Map can be any schema.
-data Schema_Map = 
+data Schema_Map =
   Schema_Map {
     -- | Map
     schema_MapType :: Iri,
@@ -620,7 +620,7 @@ _Schema_Map_description = Core.Name "description"
 _Schema_Map_displayName = Core.Name "displayName"
 
 -- | An Object describes a data type made up of named fields (like a struct in C). The fields in an Object map can be primitive or complex schemas.
-data Schema_Object = 
+data Schema_Object =
   Schema_Object {
     -- | Object
     schema_ObjectType :: Iri,
@@ -651,7 +651,7 @@ _Schema_Object_description = Core.Name "description"
 _Schema_Object_displayName = Core.Name "displayName"
 
 -- | A full set of primitive data types are provided and can be specified directly as the value in a schema statement in a digital twin interface.
-data Schema_Primitive = 
+data Schema_Primitive =
   -- | A boolean value
   Schema_PrimitiveBoolean  |
   -- | A full-date as defined in section 5.6 of RFC 3339
@@ -671,7 +671,7 @@ data Schema_Primitive =
   -- | A UTF8 string
   Schema_PrimitiveString  |
   -- | A full-time as defined in section 5.6 of RFC 3339
-  Schema_PrimitiveTime 
+  Schema_PrimitiveTime
   deriving (Eq, Ord, Read, Show)
 
 _Schema_Primitive = Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Primitive"
@@ -697,7 +697,7 @@ _Schema_Primitive_string = Core.Name "string"
 _Schema_Primitive_time = Core.Name "time"
 
 -- | Telemetry describes the data emitted by any digital twin, whether the data is a regular stream of sensor readings or a computed stream of data, such as occupancy, or an occasional error or information message.
-data Telemetry = 
+data Telemetry =
   Telemetry {
     -- | This must be at least 'Telemetry'. It can also include a semantic type
     telemetryType :: Iri,
@@ -735,7 +735,7 @@ _Telemetry_displayName = Core.Name "displayName"
 
 _Telemetry_unit = Core.Name "unit"
 
-newtype Unit = 
+newtype Unit =
   Unit {
     unUnit :: ()}
   deriving (Eq, Ord, Read, Show)

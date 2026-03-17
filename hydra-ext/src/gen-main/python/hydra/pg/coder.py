@@ -48,27 +48,27 @@ T9 = TypeVar("T9")
 
 def check(_cx: T0, b: bool, e: Either[T1, None]) -> Either[T1, None]:
     r"""Check a condition, returning an error if false."""
-    
+
     return hydra.lib.logic.if_else(b, (lambda : Right(None)), (lambda : e))
 
 def check_record_name(cx: hydra.context.Context, expected: hydra.core.Name, actual: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], None]:
     r"""Check that a record name matches the expected name."""
-    
+
     return check(cx, hydra.lib.equality.equal(actual.value, expected.value), Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Expected record of type ", expected.value), ", found record of type "), actual.value)))), cx)))
 
 def element_tree_edge(edge: hydra.pg.model.Edge[T0], deps: frozenlist[hydra.pg.model.ElementTree[T0]]) -> hydra.pg.model.ElementTree[T0]:
     r"""Create an element tree for an edge."""
-    
+
     return hydra.pg.model.ElementTree(cast(hydra.pg.model.Element, hydra.pg.model.ElementEdge(edge)), deps)
 
 def element_type_tree_edge(etype: hydra.pg.model.EdgeType[T0], deps: frozenlist[hydra.pg.model.ElementTypeTree[T0]]) -> hydra.pg.model.ElementTypeTree[T0]:
     r"""Create an element type tree for an edge type."""
-    
+
     return hydra.pg.model.ElementTypeTree(cast(hydra.pg.model.ElementType, hydra.pg.model.ElementTypeEdge(etype)), deps)
 
 def encode_property(cx: hydra.context.Context, fields: FrozenDict[hydra.core.Name, hydra.core.Term], adapter: hydra.util.Adapter[hydra.core.FieldType, T0, hydra.core.Field, T1]):
     r"""Encode a single property from a field map using a property adapter."""
-    
+
     @lru_cache(1)
     def fname() -> hydra.core.Name:
         return adapter.source.name
@@ -80,7 +80,7 @@ def encode_property(cx: hydra.context.Context, fields: FrozenDict[hydra.core.Nam
         match ftyp():
             case hydra.core.TypeMaybe():
                 return True
-            
+
             case _:
                 return False
     def encode_value(v: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[T1]]:
@@ -89,24 +89,24 @@ def encode_property(cx: hydra.context.Context, fields: FrozenDict[hydra.core.Nam
         match v1:
             case hydra.core.TermMaybe(value=ov):
                 return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda x1: encode_value(x1)), ov)
-            
+
             case _:
                 return encode_value(value)
     return hydra.lib.maybes.maybe((lambda : hydra.lib.logic.if_else(is_maybe(), (lambda : Right(Nothing())), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("expected field not found in record: ", fname().value)))), cx))))), (lambda value: hydra.lib.logic.if_else(is_maybe(), (lambda : _hoist_body_1(value, hydra.rewriting.deannotate_term(value))), (lambda : encode_value(value)))), hydra.lib.maps.lookup(fname(), fields))
 
 def encode_properties(cx: hydra.context.Context, fields: FrozenDict[hydra.core.Name, hydra.core.Term], adapters: frozenlist[hydra.util.Adapter[hydra.core.FieldType, T0, hydra.core.Field, hydra.pg.model.Property[T1]]]) -> Either[hydra.context.InContext[hydra.error.Error], FrozenDict[hydra.pg.model.PropertyKey, T1]]:
     r"""Encode all properties from a field map using property adapters."""
-    
+
     return hydra.lib.eithers.map((lambda props: hydra.lib.maps.from_list(hydra.lib.lists.map((lambda prop: (prop.key, prop.value)), props))), hydra.lib.eithers.map((lambda xs: hydra.lib.maybes.cat(xs)), hydra.lib.eithers.map_list((lambda v1: encode_property(cx, fields, v1)), adapters)))
 
 def property_types(prop_adapters: frozenlist[hydra.util.Adapter[T0, hydra.pg.model.PropertyType[T1], T2, T3]]) -> frozenlist[hydra.pg.model.PropertyType[T1]]:
     r"""Extract property types from property adapters."""
-    
+
     return hydra.lib.lists.map((lambda a: hydra.pg.model.PropertyType(a.target.key, a.target.value, True)), prop_adapters)
 
 def select_edge_id(cx: hydra.context.Context, fields: FrozenDict[hydra.core.Name, T0], ad: tuple[hydra.core.Name, hydra.util.Adapter[T1, T2, T0, T3]]) -> Either[hydra.context.InContext[hydra.error.Error], T3]:
     r"""Select an edge id from record fields using an id adapter."""
-    
+
     @lru_cache(1)
     def fname() -> hydra.core.Name:
         return hydra.lib.pairs.first(ad)
@@ -117,7 +117,7 @@ def select_edge_id(cx: hydra.context.Context, fields: FrozenDict[hydra.core.Name
 
 def select_vertex_id(cx: hydra.context.Context, fields: FrozenDict[hydra.core.Name, T0], ad: tuple[hydra.core.Name, hydra.util.Adapter[T1, T2, T0, T3]]) -> Either[hydra.context.InContext[hydra.error.Error], T3]:
     r"""Select a vertex id from record fields using an id adapter."""
-    
+
     @lru_cache(1)
     def fname() -> hydra.core.Name:
         return hydra.lib.pairs.first(ad)
@@ -128,7 +128,7 @@ def select_vertex_id(cx: hydra.context.Context, fields: FrozenDict[hydra.core.Na
 
 def edge_coder(g: T0, dir: hydra.pg.model.Direction, schema: hydra.pg.mapping.Schema[T1, T2, T3], source: T4, eid_type: T5, tname: hydra.core.Name, label: hydra.pg.model.EdgeLabel, out_label: hydra.pg.model.VertexLabel, in_label: hydra.pg.model.VertexLabel, m_id_adapter: Maybe[tuple[hydra.core.Name, hydra.util.Adapter[T6, T7, hydra.core.Term, T3]]], out_adapter: Maybe[tuple[hydra.core.Name, hydra.util.Adapter[T8, T9, hydra.core.Term, T3]]], in_adapter: Maybe[tuple[hydra.core.Name, hydra.util.Adapter[T10, T11, hydra.core.Term, T3]]], prop_adapters: frozenlist[hydra.util.Adapter[hydra.core.FieldType, hydra.pg.model.PropertyType[T5], hydra.core.Field, hydra.pg.model.Property[T3]]], vertex_adapters: frozenlist[tuple[hydra.core.Name, hydra.util.Adapter[T12, T13, hydra.core.Term, hydra.pg.model.ElementTree[T3]]]]) -> hydra.util.Adapter[T4, hydra.pg.model.ElementTypeTree[T5], hydra.core.Term, hydra.pg.model.ElementTree[T3]]:
     r"""Create an edge coder given all components."""
-    
+
     @lru_cache(1)
     def et() -> hydra.pg.model.EdgeType[T5]:
         return hydra.pg.model.EdgeType(label, eid_type, out_label, in_label, property_types(prop_adapters))
@@ -136,7 +136,7 @@ def edge_coder(g: T0, dir: hydra.pg.model.Direction, schema: hydra.pg.mapping.Sc
 
 def find_single_field_with_annotation_key(cx: hydra.context.Context, tname: hydra.core.Name, key: hydra.core.Name, fields: frozenlist[hydra.core.FieldType]) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[hydra.core.FieldType]]:
     r"""Find a single field with a given annotation key."""
-    
+
     @lru_cache(1)
     def matches() -> frozenlist[hydra.core.FieldType]:
         return hydra.lib.lists.filter((lambda f: hydra.lib.maybes.is_just(hydra.annotations.get_type_annotation(key, f.type))), fields)
@@ -144,17 +144,17 @@ def find_single_field_with_annotation_key(cx: hydra.context.Context, tname: hydr
 
 def find_id_projection_spec(cx: hydra.context.Context, required: bool, tname: hydra.core.Name, id_key: hydra.core.Name, fields: frozenlist[hydra.core.FieldType]) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[tuple[hydra.core.FieldType, tuple[hydra.pg.mapping.ValueSpec, Maybe[str]]]]]:
     r"""Find an id projection spec for a field."""
-    
+
     return hydra.lib.eithers.bind(find_single_field_with_annotation_key(cx, tname, id_key, fields), (lambda mid: hydra.lib.maybes.maybe((lambda : hydra.lib.logic.if_else(required, (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2("no ", id_key.value), " field")))), cx))), (lambda : Right(Nothing())))), (lambda mi: hydra.lib.eithers.map((lambda spec: Just((mi, (spec, hydra.lib.maybes.map((lambda s: hydra.lib.strings.to_upper(s)), Nothing()))))), hydra.lib.maybes.maybe((lambda : Right(cast(hydra.pg.mapping.ValueSpec, hydra.pg.mapping.ValueSpecValue()))), (lambda v1: hydra.pg.terms_to_elements.decode_value_spec(cx, hydra.graph.Graph(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty()), v1)), hydra.annotations.get_type_annotation(id_key, mi.type)))), mid)))
 
 def traverse_to_single_term(cx: hydra.context.Context, desc: str, traversal: Callable[[T0], Either[hydra.context.InContext[hydra.error.Error], frozenlist[T1]]], term: T0) -> Either[hydra.context.InContext[hydra.error.Error], T1]:
     r"""Traverse to a single term, failing if zero or multiple terms are found."""
-    
+
     return hydra.lib.eithers.bind(traversal(term), (lambda terms: hydra.lib.logic.if_else(hydra.lib.lists.null(terms), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(desc, " did not resolve to a term")))), cx))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(terms), 1), (lambda : Right(hydra.lib.lists.head(terms))), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(desc, " resolved to multiple terms")))), cx))))))))
 
 def projection_adapter(cx: T0, g: T1, idtype: T2, coder: hydra.util.Coder[hydra.core.Term, T3], spec: tuple[hydra.core.FieldType, tuple[hydra.pg.mapping.ValueSpec, T4]], key: str) -> Either[T5, tuple[hydra.core.Name, hydra.util.Adapter[hydra.core.Type, T2, hydra.core.Term, T3]]]:
     r"""Create a projection adapter from a projection spec."""
-    
+
     @lru_cache(1)
     def field() -> hydra.core.FieldType:
         return hydra.lib.pairs.first(spec)
@@ -165,32 +165,32 @@ def projection_adapter(cx: T0, g: T1, idtype: T2, coder: hydra.util.Coder[hydra.
 
 def edge_id_adapter(cx: hydra.context.Context, g: T0, schema: hydra.pg.mapping.Schema[T1, T2, T3], eid_type: T4, name: hydra.core.Name, id_key: hydra.core.Name, fields: frozenlist[hydra.core.FieldType]) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[tuple[hydra.core.Name, hydra.util.Adapter[hydra.core.Type, T4, hydra.core.Term, T3]]]]:
     r"""Create an edge id adapter."""
-    
+
     return hydra.lib.eithers.bind(find_id_projection_spec(cx, False, name, id_key, fields), (lambda m_id_spec: hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda id_spec: hydra.lib.eithers.map((lambda x: Just(x)), projection_adapter(cx, g, eid_type, schema.edge_ids, id_spec, "id"))), m_id_spec)))
 
 def extract_string(cx: hydra.context.Context, g: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], str]:
     r"""Extract a string from a term."""
-    
+
     return hydra.extract.core.string(cx, g, t)
 
 def find_label_string(cx: hydra.context.Context, g: hydra.graph.Graph, source: hydra.core.Type, tname: hydra.core.Name, label_key: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], str]:
     r"""Find a label string from annotations or the type name."""
-    
+
     return hydra.lib.maybes.maybe((lambda : Right(tname.value)), (lambda v1: extract_string(cx, g, v1)), hydra.annotations.get_type_annotation(label_key, source))
 
 def element_tree_vertex(vertex: hydra.pg.model.Vertex[T0], deps: frozenlist[hydra.pg.model.ElementTree[T0]]) -> hydra.pg.model.ElementTree[T0]:
     r"""Create an element tree for a vertex."""
-    
+
     return hydra.pg.model.ElementTree(cast(hydra.pg.model.Element, hydra.pg.model.ElementVertex(vertex)), deps)
 
 def element_type_tree_vertex(vtype: hydra.pg.model.VertexType[T0], deps: frozenlist[hydra.pg.model.ElementTypeTree[T0]]) -> hydra.pg.model.ElementTypeTree[T0]:
     r"""Create an element type tree for a vertex type."""
-    
+
     return hydra.pg.model.ElementTypeTree(cast(hydra.pg.model.ElementType, hydra.pg.model.ElementTypeVertex(vtype)), deps)
 
 def vertex_coder(g: T0, schema: hydra.pg.mapping.Schema[T1, T2, T3], source: T4, vid_type: T5, tname: T6, vlabel: hydra.pg.model.VertexLabel, id_adapter: tuple[hydra.core.Name, hydra.util.Adapter[T7, T8, hydra.core.Term, T3]], prop_adapters: frozenlist[hydra.util.Adapter[hydra.core.FieldType, hydra.pg.model.PropertyType[T5], hydra.core.Field, hydra.pg.model.Property[T3]]], edge_adapters: frozenlist[tuple[hydra.pg.model.Direction, tuple[hydra.core.FieldType, tuple[hydra.pg.model.EdgeLabel, hydra.util.Adapter[T9, hydra.pg.model.ElementTypeTree[T5], hydra.core.Term, hydra.pg.model.ElementTree[T3]]]]]]):
     r"""Create a vertex coder given all components."""
-    
+
     @lru_cache(1)
     def vtype() -> hydra.pg.model.VertexType[T5]:
         return hydra.pg.model.VertexType(vlabel, vid_type, property_types(prop_adapters))
@@ -204,38 +204,38 @@ def vertex_coder(g: T0, schema: hydra.pg.mapping.Schema[T1, T2, T3], source: T4,
 
 def vertex_id_adapter(cx: hydra.context.Context, g: T0, schema: hydra.pg.mapping.Schema[T1, T2, T3], vid_type: T4, name: hydra.core.Name, id_key: hydra.core.Name, fields: frozenlist[hydra.core.FieldType]) -> Either[hydra.context.InContext[hydra.error.Error], tuple[hydra.core.Name, hydra.util.Adapter[hydra.core.Type, T4, hydra.core.Term, T3]]]:
     r"""Create a vertex id adapter."""
-    
+
     return hydra.lib.eithers.bind(find_id_projection_spec(cx, True, name, id_key, fields), (lambda m_id_spec: hydra.lib.eithers.bind(Right(hydra.lib.maybes.from_just(m_id_spec)), (lambda id_spec: projection_adapter(cx, g, vid_type, schema.vertex_ids, id_spec, "id")))))
 
 def find_projection_spec(cx: hydra.context.Context, g: hydra.graph.Graph, tname: hydra.core.Name, key: hydra.core.Name, alias_key: hydra.core.Name, fields: frozenlist[hydra.core.FieldType]) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[tuple[hydra.core.FieldType, tuple[hydra.pg.mapping.ValueSpec, Maybe[str]]]]]:
     r"""Find a projection spec for a field."""
-    
+
     return hydra.lib.eithers.bind(find_single_field_with_annotation_key(cx, tname, key, fields), (lambda mfield: hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda field: hydra.lib.eithers.bind(hydra.pg.terms_to_elements.decode_value_spec(cx, g, hydra.lib.maybes.from_just(hydra.annotations.get_type_annotation(key, field.type))), (lambda spec: hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda t: hydra.lib.eithers.map((lambda x: Just(x)), extract_string(cx, g, t))), hydra.annotations.get_type_annotation(alias_key, field.type)), (lambda alias: Right(Just((field, (spec, alias))))))))), mfield)))
 
 def find_property_specs(cx: hydra.context.Context, g: hydra.graph.Graph, schema: hydra.pg.mapping.Schema[T0, T1, T2], kind: hydra.pg.model.ElementKind, fields: frozenlist[hydra.core.FieldType]) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[tuple[hydra.core.FieldType, tuple[hydra.pg.mapping.ValueSpec, Maybe[str]]]]]:
     r"""Find property specs for element fields."""
-    
+
     return hydra.lib.eithers.map_list((lambda field: (prop_key_key := hydra.core.Name(schema.annotations.property_key), prop_value_key := hydra.core.Name(schema.annotations.property_value), hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda a: hydra.lib.eithers.map((lambda x: Just(x)), extract_string(cx, g, a))), hydra.annotations.get_type_annotation(prop_key_key, field.type)), (lambda alias: hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(cast(hydra.pg.mapping.ValueSpec, hydra.pg.mapping.ValueSpecValue()))), (lambda v1: hydra.pg.terms_to_elements.decode_value_spec(cx, g, v1)), hydra.annotations.get_type_annotation(prop_value_key, field.type)), (lambda values: Right((field, (values, alias))))))))[2]), hydra.lib.lists.filter((lambda field: (annots := schema.annotations, ignore_key := hydra.core.Name(annots.ignore), special_keys := (_hoist_special_keys_1 := (lambda v1: (lambda _: (hydra.core.Name(annots.vertex_id), hydra.core.Name(annots.out_edge_label), hydra.core.Name(annots.in_edge_label)))(v1) if v1 else (lambda _: (hydra.core.Name(annots.edge_id), hydra.core.Name(annots.out_vertex), hydra.core.Name(annots.in_vertex)))(v1) if v1 else hydra.dsl.python.unsupported("no matching case in inline union elimination")), _hoist_special_keys_1(kind))[1], all_keys := hydra.lib.lists.concat(((ignore_key,), special_keys)), has_special_annotation := hydra.lib.lists.foldl((lambda b, k: hydra.lib.logic.or_(b, hydra.lib.maybes.is_just(hydra.annotations.get_type_annotation(k, field.type)))), False, all_keys), has_special_field_name := hydra.lib.lists.foldl((lambda b, k: hydra.lib.logic.or_(b, hydra.lib.equality.equal(field.name, k))), False, special_keys), hydra.lib.logic.not_(hydra.lib.logic.or_(has_special_annotation, has_special_field_name)))[6]), fields))
 
 def has_vertex_adapters(dir: hydra.pg.model.Direction, m_out_spec: Maybe[T0], m_in_spec: Maybe[T1]) -> bool:
     r"""Determine whether the spec has vertex adapters based on direction and out/in specs."""
-    
+
     match dir:
         case hydra.pg.model.Direction.OUT:
             return hydra.lib.maybes.is_just(m_in_spec)
-        
+
         case hydra.pg.model.Direction.IN:
             return hydra.lib.maybes.is_just(m_out_spec)
-        
+
         case hydra.pg.model.Direction.BOTH:
             return hydra.lib.logic.and_(hydra.lib.maybes.is_just(m_out_spec), hydra.lib.maybes.is_just(m_in_spec))
-        
+
         case _:
             raise TypeError("Unsupported Direction")
 
 def property_adapter(cx: hydra.context.Context, g: T0, schema: hydra.pg.mapping.Schema[T1, T2, T3], spec: tuple[hydra.core.FieldType, tuple[hydra.pg.mapping.ValueSpec, Maybe[str]]]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.util.Adapter[hydra.core.FieldType, hydra.pg.model.PropertyType[T2], hydra.core.Field, hydra.pg.model.Property[T3]]]:
     r"""Create a property adapter from a property spec."""
-    
+
     @lru_cache(1)
     def tfield() -> hydra.core.FieldType:
         return hydra.lib.pairs.first(spec)
@@ -252,17 +252,17 @@ def property_adapter(cx: hydra.context.Context, g: T0, schema: hydra.pg.mapping.
 
 def construct_edge_coder(cx: hydra.context.Context, g: hydra.graph.Graph, parent_label: hydra.pg.model.VertexLabel, schema: hydra.pg.mapping.Schema[T0, T1, T2], source: hydra.core.Type, vid_type: T1, eid_type: T1, dir: hydra.pg.model.Direction, name: hydra.core.Name, fields: frozenlist[hydra.core.FieldType], prop_adapters: frozenlist[hydra.util.Adapter[hydra.core.FieldType, hydra.pg.model.PropertyType[T1], hydra.core.Field, hydra.pg.model.Property[T2]]], m_out_spec: Maybe[tuple[hydra.core.FieldType, tuple[hydra.pg.mapping.ValueSpec, Maybe[str]]]], m_in_spec: Maybe[tuple[hydra.core.FieldType, tuple[hydra.pg.mapping.ValueSpec, Maybe[str]]]]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.util.Adapter[hydra.core.Type, hydra.pg.model.ElementTypeTree[T1], hydra.core.Term, hydra.pg.model.ElementTree[T2]]]:
     r"""Construct an edge coder from components."""
-    
+
     return hydra.lib.eithers.bind(find_label_string(cx, g, source, name, hydra.core.Name(schema.annotations.edge_label)), (lambda label_str: (label := hydra.pg.model.EdgeLabel(label_str), vertex_ids_schema := schema.vertex_ids, hydra.lib.eithers.bind(edge_id_adapter(cx, g, schema, eid_type, name, hydra.core.Name(schema.annotations.edge_id), fields), (lambda id_adapter: hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda s: hydra.lib.eithers.map((lambda x: Just(x)), projection_adapter(cx, g, vid_type, vertex_ids_schema, s, "out"))), m_out_spec), (lambda out_id_adapter: hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda s: hydra.lib.eithers.map((lambda x: Just(x)), projection_adapter(cx, g, vid_type, vertex_ids_schema, s, "in"))), m_in_spec), (lambda in_id_adapter: hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda s: hydra.lib.eithers.map((lambda x: Just(x)), find_incident_vertex_adapter(cx, g, schema, vid_type, eid_type, s))), m_out_spec), (lambda out_vertex_adapter: hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda s: hydra.lib.eithers.map((lambda x: Just(x)), find_incident_vertex_adapter(cx, g, schema, vid_type, eid_type, s))), m_in_spec), (lambda in_vertex_adapter: (vertex_adapters := hydra.lib.maybes.cat((out_vertex_adapter, in_vertex_adapter)), hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(parent_label)), (lambda spec: hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("no out-vertex label"))), cx))), (lambda a: Right(hydra.pg.model.VertexLabel(a))), hydra.lib.pairs.second(hydra.lib.pairs.second(spec)))), m_out_spec), (lambda out_label: hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(parent_label)), (lambda spec: hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("no in-vertex label"))), cx))), (lambda a: Right(hydra.pg.model.VertexLabel(a))), hydra.lib.pairs.second(hydra.lib.pairs.second(spec)))), m_in_spec), (lambda in_label: Right(edge_coder(g, dir, schema, source, eid_type, name, label, out_label, in_label, id_adapter, out_id_adapter, in_id_adapter, prop_adapters, vertex_adapters)))))))[1])))))))))))[2]))
 
 def construct_vertex_coder(cx: hydra.context.Context, g: hydra.graph.Graph, schema: hydra.pg.mapping.Schema[T0, T1, T2], source: hydra.core.Type, vid_type: T1, eid_type: T1, name: hydra.core.Name, fields: frozenlist[hydra.core.FieldType], prop_adapters: frozenlist[hydra.util.Adapter[hydra.core.FieldType, hydra.pg.model.PropertyType[T1], hydra.core.Field, hydra.pg.model.Property[T2]]]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.util.Adapter[hydra.core.Type, hydra.pg.model.ElementTypeTree[T1], hydra.core.Term, hydra.pg.model.ElementTree[T2]]]:
     r"""Construct a vertex coder from components."""
-    
+
     return hydra.lib.eithers.bind(find_label_string(cx, g, source, name, hydra.core.Name(schema.annotations.vertex_label)), (lambda label_str: (label := hydra.pg.model.VertexLabel(label_str), hydra.lib.eithers.bind(vertex_id_adapter(cx, g, schema, vid_type, name, hydra.core.Name(schema.annotations.vertex_id), fields), (lambda id_adapter: hydra.lib.eithers.bind(find_adjacen_edge_adapters(cx, g, schema, vid_type, eid_type, label, hydra.pg.model.Direction.OUT, fields), (lambda out_edge_adapters: hydra.lib.eithers.bind(find_adjacen_edge_adapters(cx, g, schema, vid_type, eid_type, label, hydra.pg.model.Direction.IN, fields), (lambda in_edge_adapters: Right(vertex_coder(g, schema, source, vid_type, name, label, id_adapter, prop_adapters, hydra.lib.lists.concat2(out_edge_adapters, in_edge_adapters))))))))))[1]))
 
 def element_coder(mparent: Maybe[tuple[hydra.pg.model.Direction, hydra.pg.model.VertexLabel]], schema: hydra.pg.mapping.Schema[T0, T1, T2], source: hydra.core.Type, vid_type: T1, eid_type: T1, cx: hydra.context.Context, g: hydra.graph.Graph):
     r"""Construct an element adapter for a given type, interpreting it either as a vertex specification or an edge specification."""
-    
+
     while True:
         @lru_cache(1)
         def dir() -> hydra.pg.model.Direction:
@@ -280,21 +280,21 @@ def element_coder(mparent: Maybe[tuple[hydra.pg.model.Direction, hydra.pg.model.
                 cx = cx
                 g = g
                 continue
-            
+
             case hydra.core.TypeRecord(value=fields):
                 return (name := hydra.core.Name("placeholder"), out_vertex_key := hydra.core.Name(schema.annotations.out_vertex), out_vertex_label_key := hydra.core.Name(schema.annotations.out_vertex_label), in_vertex_key := hydra.core.Name(schema.annotations.in_vertex), in_vertex_label_key := hydra.core.Name(schema.annotations.in_vertex_label), hydra.lib.eithers.bind(find_projection_spec(cx, g, name, out_vertex_key, out_vertex_label_key, fields), (lambda m_out_spec: hydra.lib.eithers.bind(find_projection_spec(cx, g, name, in_vertex_key, in_vertex_label_key, fields), (lambda m_in_spec: (kind := hydra.lib.logic.if_else(has_vertex_adapters(dir(), m_out_spec, m_in_spec), (lambda : hydra.pg.model.ElementKind.EDGE), (lambda : hydra.pg.model.ElementKind.VERTEX)), _hoist_body_1 := (lambda prop_adapters, v1: (lambda _: construct_vertex_coder(cx, g, schema, source, vid_type, eid_type, name, fields, prop_adapters))(v1) if v1 else (lambda _: construct_edge_coder(cx, g, parent_label(), schema, source, vid_type, eid_type, dir(), name, fields, prop_adapters, m_out_spec, m_in_spec))(v1) if v1 else hydra.dsl.python.unsupported("no matching case in inline union elimination")), hydra.lib.eithers.bind(find_property_specs(cx, g, schema, kind, fields), (lambda prop_specs: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: property_adapter(cx, g, schema, v1)), prop_specs), (lambda prop_adapters: _hoist_body_1(prop_adapters, kind))))))[2])))))[5]
-            
+
             case _:
                 return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Expected ", "record type"), ", found: "), "other type")))), cx))
 
 def find_adjacen_edge_adapters(cx: hydra.context.Context, g: hydra.graph.Graph, schema: hydra.pg.mapping.Schema[T0, T1, T2], vid_type: T1, eid_type: T1, parent_label: hydra.pg.model.VertexLabel, dir: hydra.pg.model.Direction, fields: frozenlist[hydra.core.FieldType]) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[tuple[hydra.pg.model.Direction, tuple[hydra.core.FieldType, tuple[hydra.pg.model.EdgeLabel, hydra.util.Adapter[hydra.core.Type, hydra.pg.model.ElementTypeTree[T1], hydra.core.Term, hydra.pg.model.ElementTree[hydra.context.InContext[hydra.error.Error]]]]]]]]:
     r"""Find adjacent edge adapters for a given direction."""
-    
+
     return hydra.lib.eithers.map((lambda xs: hydra.lib.maybes.cat(xs)), hydra.lib.eithers.map_list((lambda field: (key := (_hoist_key_1 := (lambda v1: (lambda _: schema.annotations.out_edge_label)(v1) if v1 else (lambda _: schema.annotations.in_edge_label)(v1) if v1 else hydra.dsl.python.unsupported("no matching case in inline union elimination")), hydra.core.Name(_hoist_key_1(dir)))[1], hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda a: hydra.lib.eithers.bind(extract_string(cx, g, a), (lambda label_str: hydra.lib.eithers.bind(element_coder(Just((dir, parent_label)), schema, field.type, vid_type, eid_type, cx, g), (lambda elad: Right(Just((dir, (field, (hydra.pg.model.EdgeLabel(label_str), elad)))))))))), hydra.annotations.get_type_annotation(key, field.type)))[1]), fields))
 
 def find_incident_vertex_adapter(cx: hydra.context.Context, g: hydra.graph.Graph, schema: hydra.pg.mapping.Schema[T0, T1, T2], vid_type: T1, eid_type: T1, spec: tuple[hydra.core.FieldType, tuple[hydra.pg.mapping.ValueSpec, Maybe[str]]]) -> Either[hydra.context.InContext[hydra.error.Error], tuple[hydra.core.Name, hydra.util.Adapter[hydra.core.Type, hydra.pg.model.ElementTypeTree[T1], hydra.core.Term, hydra.pg.model.ElementTree[T2]]]]:
     r"""Find an incident vertex adapter for a projection spec."""
-    
+
     @lru_cache(1)
     def field() -> hydra.core.FieldType:
         return hydra.lib.pairs.first(spec)

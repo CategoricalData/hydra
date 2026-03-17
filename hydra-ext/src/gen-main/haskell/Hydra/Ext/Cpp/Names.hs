@@ -34,7 +34,7 @@ className name = sanitizeCppName (Names.localNameOf name)
 -- | Create a type reference, optionally wrapped in shared_ptr
 createTypeReference :: Bool -> Environment.CppEnvironment -> Core.Name -> Syntax.TypeExpression
 createTypeReference isPointer env name =
-     
+
       let baseType = Syntax.TypeExpressionBasic (Syntax.BasicTypeNamed (encodeName True Util.CaseConventionPascal env name))
       in (Logic.ifElse isPointer (Utils.toConstType baseType) baseType)
 
@@ -49,8 +49,8 @@ encodeFieldName env fname = encodeName False Util.CaseConventionLowerSnake env f
 -- | Encode a name with specified convention
 encodeName :: Bool -> Util.CaseConvention -> Environment.CppEnvironment -> Core.Name -> String
 encodeName isQualified conv env name =
-     
-      let focusNs = Pairs.first (Module.namespacesFocus (Environment.cppEnvironmentNamespaces env)) 
+
+      let focusNs = Pairs.first (Module.namespacesFocus (Environment.cppEnvironmentNamespaces env))
           boundVars = Pairs.second (Environment.cppEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
           mns = Module.qualifiedNameNamespace qualName
@@ -63,8 +63,8 @@ encodeName isQualified conv env name =
 -- | Encode a qualified name with namespace
 encodeNameQualified :: Environment.CppEnvironment -> Core.Name -> String
 encodeNameQualified env name =
-     
-      let boundVars = Pairs.second (Environment.cppEnvironmentBoundTypeVariables env) 
+
+      let boundVars = Pairs.second (Environment.cppEnvironmentBoundTypeVariables env)
           focusNs = Pairs.first (Module.namespacesFocus (Environment.cppEnvironmentNamespaces env))
           qualName = Names.qualifyName name
           mns = Module.qualifiedNameNamespace qualName

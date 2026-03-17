@@ -9,44 +9,44 @@ import java.io.Serializable;
  */
 public abstract class Shape implements Serializable, Comparable<Shape> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.shacl.model.Shape");
-  
+
   public static final hydra.core.Name NODE = new hydra.core.Name("node");
-  
+
   public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
-  
+
   private Shape () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Node instance) ;
-    
+
     R visit(Property instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Shape instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Node instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Property instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Node extends hydra.ext.org.w3.shacl.model.Shape implements Serializable {
     public final hydra.ext.org.w3.shacl.model.NodeShape value;
-    
+
     public Node (hydra.ext.org.w3.shacl.model.NodeShape value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Node)) {
@@ -57,12 +57,12 @@ public abstract class Shape implements Serializable, Comparable<Shape> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Shape other) {
@@ -73,20 +73,20 @@ public abstract class Shape implements Serializable, Comparable<Shape> {
       Node o = (Node) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Property extends hydra.ext.org.w3.shacl.model.Shape implements Serializable {
     public final hydra.ext.org.w3.shacl.model.PropertyShape value;
-    
+
     public Property (hydra.ext.org.w3.shacl.model.PropertyShape value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Property)) {
@@ -97,12 +97,12 @@ public abstract class Shape implements Serializable, Comparable<Shape> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Shape other) {
@@ -113,7 +113,7 @@ public abstract class Shape implements Serializable, Comparable<Shape> {
       Property o = (Property) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

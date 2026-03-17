@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class TypeVariable implements Serializable, Comparable<TypeVariable> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.TypeVariable");
-  
+
   public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
-  
+
   public final hydra.ext.java.syntax.TypeIdentifier identifier;
-  
+
   public TypeVariable (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.TypeIdentifier identifier) {
     this.annotations = annotations;
     this.identifier = identifier;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TypeVariable)) {
@@ -32,12 +32,12 @@ public class TypeVariable implements Serializable, Comparable<TypeVariable> {
       this.identifier,
       o.identifier);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(identifier);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TypeVariable other) {
@@ -48,11 +48,11 @@ public class TypeVariable implements Serializable, Comparable<TypeVariable> {
     }
     return ((Comparable) identifier).compareTo(other.identifier);
   }
-  
+
   public TypeVariable withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     return new TypeVariable(annotations, identifier);
   }
-  
+
   public TypeVariable withIdentifier(hydra.ext.java.syntax.TypeIdentifier identifier) {
     return new TypeVariable(annotations, identifier);
   }

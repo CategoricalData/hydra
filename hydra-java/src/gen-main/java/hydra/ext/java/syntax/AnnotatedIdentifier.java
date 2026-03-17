@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class AnnotatedIdentifier implements Serializable, Comparable<AnnotatedIdentifier> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.AnnotatedIdentifier");
-  
+
   public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
-  
+
   public final hydra.ext.java.syntax.Identifier identifier;
-  
+
   public AnnotatedIdentifier (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.Identifier identifier) {
     this.annotations = annotations;
     this.identifier = identifier;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof AnnotatedIdentifier)) {
@@ -32,12 +32,12 @@ public class AnnotatedIdentifier implements Serializable, Comparable<AnnotatedId
       this.identifier,
       o.identifier);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(identifier);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotatedIdentifier other) {
@@ -48,11 +48,11 @@ public class AnnotatedIdentifier implements Serializable, Comparable<AnnotatedId
     }
     return ((Comparable) identifier).compareTo(other.identifier);
   }
-  
+
   public AnnotatedIdentifier withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     return new AnnotatedIdentifier(annotations, identifier);
   }
-  
+
   public AnnotatedIdentifier withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new AnnotatedIdentifier(annotations, identifier);
   }

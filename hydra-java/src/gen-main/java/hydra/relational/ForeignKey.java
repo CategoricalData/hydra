@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class ForeignKey implements Serializable, Comparable<ForeignKey> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.relational.ForeignKey");
-  
+
   public static final hydra.core.Name FOREIGN_RELATION = new hydra.core.Name("foreignRelation");
-  
+
   public static final hydra.core.Name KEYS = new hydra.core.Name("keys");
-  
+
   /**
    * The name of the target relation
    */
   public final hydra.relational.RelationName foreignRelation;
-  
+
   /**
    * The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation.
    */
   public final hydra.util.PersistentMap<hydra.relational.ColumnName, hydra.relational.ColumnName> keys;
-  
+
   public ForeignKey (hydra.relational.RelationName foreignRelation, hydra.util.PersistentMap<hydra.relational.ColumnName, hydra.relational.ColumnName> keys) {
     this.foreignRelation = foreignRelation;
     this.keys = keys;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ForeignKey)) {
@@ -41,12 +41,12 @@ public class ForeignKey implements Serializable, Comparable<ForeignKey> {
       this.keys,
       o.keys);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(foreignRelation) + 3 * java.util.Objects.hashCode(keys);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ForeignKey other) {
@@ -57,11 +57,11 @@ public class ForeignKey implements Serializable, Comparable<ForeignKey> {
     }
     return ((Comparable) keys).compareTo(other.keys);
   }
-  
+
   public ForeignKey withForeignRelation(hydra.relational.RelationName foreignRelation) {
     return new ForeignKey(foreignRelation, keys);
   }
-  
+
   public ForeignKey withKeys(hydra.util.PersistentMap<hydra.relational.ColumnName, hydra.relational.ColumnName> keys) {
     return new ForeignKey(foreignRelation, keys);
   }

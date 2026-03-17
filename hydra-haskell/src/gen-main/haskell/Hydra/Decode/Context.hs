@@ -22,7 +22,7 @@ import qualified Data.Set as S
 context :: Graph.Graph -> Core.Term -> Either Error.DecodingError Context.Context
 context cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "trace" (Helpers.decodeList (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
@@ -41,7 +41,7 @@ context cx raw =
 inContext :: (Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Context.InContext t0)
 inContext e cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "object" e fieldMap cx) (\field_object -> Eithers.bind (Helpers.requireField "context" context fieldMap cx) (\field_context -> Right (Context.InContext {
           Context.inContextObject = field_object,

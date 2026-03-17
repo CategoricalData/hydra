@@ -23,7 +23,7 @@ def t_term(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.phantoms.TTerm(b)), hydra.decode.core.term(cx, wrapped_term.body))
-            
+
             case _:
                 return Left(hydra.error.DecodingError("expected wrapped type"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_phantoms_t_term_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
@@ -36,7 +36,7 @@ def t_binding(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", (lambda v12, v2: t_term(a, v12, v2)), field_map(), cx), (lambda field_term: Right(hydra.phantoms.TBinding(field_name, field_term))))))
-            
+
             case _:
                 return Left(hydra.error.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_phantoms_t_binding_1(a, cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))

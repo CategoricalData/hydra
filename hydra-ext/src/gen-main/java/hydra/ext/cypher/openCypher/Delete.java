@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class Delete implements Serializable, Comparable<Delete> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.Delete");
-  
+
   public static final hydra.core.Name DETACH = new hydra.core.Name("detach");
-  
+
   public static final hydra.core.Name EXPRESSIONS = new hydra.core.Name("expressions");
-  
+
   public final Boolean detach;
-  
+
   public final hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> expressions;
-  
+
   public Delete (Boolean detach, hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> expressions) {
     this.detach = detach;
     this.expressions = expressions;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Delete)) {
@@ -32,12 +32,12 @@ public class Delete implements Serializable, Comparable<Delete> {
       this.expressions,
       o.expressions);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(detach) + 3 * java.util.Objects.hashCode(expressions);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Delete other) {
@@ -48,11 +48,11 @@ public class Delete implements Serializable, Comparable<Delete> {
     }
     return ((Comparable) expressions).compareTo(other.expressions);
   }
-  
+
   public Delete withDetach(Boolean detach) {
     return new Delete(detach, expressions);
   }
-  
+
   public Delete withExpressions(hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> expressions) {
     return new Delete(detach, expressions);
   }

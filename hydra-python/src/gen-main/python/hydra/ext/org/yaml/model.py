@@ -29,7 +29,7 @@ class _Node_Meta(type):
 # A YAML node (value).
 class Node_(metaclass=_Node_Meta):
     r"""NodeMapping | NodeScalar | NodeSequence"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.yaml.model.Node")
     MAPPING = hydra.core.Name("mapping")
     SCALAR = hydra.core.Name("scalar")
@@ -46,7 +46,7 @@ class ScalarInt(Node[int]):
 
 class ScalarNull:
     r"""Represents the lack of a value"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, ScalarNull)
@@ -63,7 +63,7 @@ class _ScalarMeta(type):
 # A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here.
 class Scalar(metaclass=_ScalarMeta):
     r"""ScalarBool | ScalarFloat | ScalarInt | ScalarNull | ScalarStr"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.org.yaml.model.Scalar")
     BOOL = hydra.core.Name("bool")
     FLOAT = hydra.core.Name("float")

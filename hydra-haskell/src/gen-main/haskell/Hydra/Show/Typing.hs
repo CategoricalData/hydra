@@ -21,8 +21,8 @@ import qualified Data.Set as S
 -- | Show a type constraint as a string
 typeConstraint :: Typing.TypeConstraint -> String
 typeConstraint tc =
-     
-      let ltyp = Typing.typeConstraintLeft tc 
+
+      let ltyp = Typing.typeConstraintLeft tc
           rtyp = Typing.typeConstraintRight tc
       in (Strings.cat [
         Core_.type_ ltyp,
@@ -32,12 +32,12 @@ typeConstraint tc =
 -- | Show a type substitution as a string
 typeSubst :: Typing.TypeSubst -> String
 typeSubst ts =
-     
-      let subst = Typing.unTypeSubst ts 
+
+      let subst = Typing.unTypeSubst ts
           pairs = Maps.toList subst
           showPair =
-                  \pair ->  
-                    let name = Core.unName (Pairs.first pair) 
+                  \pair ->
+                    let name = Core.unName (Pairs.first pair)
                         typ = Pairs.second pair
                     in (Strings.cat [
                       name,

@@ -6,26 +6,26 @@ import java.io.Serializable;
 
 public class OrderingIsomorphism<A> implements Serializable, Comparable<OrderingIsomorphism<A>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.topology.OrderingIsomorphism");
-  
+
   public static final hydra.core.Name ENCODE = new hydra.core.Name("encode");
-  
+
   public static final hydra.core.Name DECODE = new hydra.core.Name("decode");
-  
+
   /**
    * Mapping from source ordering to target ordering
    */
   public final java.util.function.Function<hydra.util.ConsList<A>, hydra.util.ConsList<A>> encode;
-  
+
   /**
    * Mapping from target ordering to source ordering
    */
   public final java.util.function.Function<hydra.util.ConsList<A>, hydra.util.ConsList<A>> decode;
-  
+
   public OrderingIsomorphism (java.util.function.Function<hydra.util.ConsList<A>, hydra.util.ConsList<A>> encode, java.util.function.Function<hydra.util.ConsList<A>, hydra.util.ConsList<A>> decode) {
     this.encode = encode;
     this.decode = decode;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof OrderingIsomorphism)) {
@@ -38,12 +38,12 @@ public class OrderingIsomorphism<A> implements Serializable, Comparable<Ordering
       this.decode,
       o.decode);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(encode) + 3 * java.util.Objects.hashCode(decode);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(OrderingIsomorphism other) {
@@ -58,11 +58,11 @@ public class OrderingIsomorphism<A> implements Serializable, Comparable<Ordering
       decode.hashCode(),
       other.decode.hashCode());
   }
-  
+
   public OrderingIsomorphism withEncode(java.util.function.Function<hydra.util.ConsList<A>, hydra.util.ConsList<A>> encode) {
     return new OrderingIsomorphism(encode, decode);
   }
-  
+
   public OrderingIsomorphism withDecode(java.util.function.Function<hydra.util.ConsList<A>, hydra.util.ConsList<A>> decode) {
     return new OrderingIsomorphism(encode, decode);
   }

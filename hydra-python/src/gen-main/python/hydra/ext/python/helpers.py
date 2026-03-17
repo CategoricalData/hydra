@@ -15,9 +15,9 @@ import hydra.module
 
 class PythonVersion(Enum):
     r"""Target Python version for code generation."""
-    
+
     PYTHON310 = hydra.core.Name("python310")
-    
+
     PYTHON312 = hydra.core.Name("python312")
 
 PythonVersion.TYPE_ = hydra.core.Name("hydra.ext.python.helpers.PythonVersion")
@@ -25,7 +25,7 @@ PythonVersion.TYPE_ = hydra.core.Name("hydra.ext.python.helpers.PythonVersion")
 @dataclass(frozen=True)
 class PythonEnvironment:
     r"""Environment for Python code generation."""
-    
+
     namespaces: Annotated[hydra.module.Namespaces[hydra.ext.python.syntax.DottedName], "Namespace mapping for imports"]
     bound_type_variables: Annotated[tuple[frozenlist[hydra.core.Name], FrozenDict[hydra.core.Name, hydra.ext.python.syntax.Name]], "Type variables in scope, with their Python names"]
     graph: Annotated[hydra.graph.Graph, "Graph context for type inference"]
@@ -33,7 +33,7 @@ class PythonEnvironment:
     version: Annotated[PythonVersion, "Target Python version"]
     skip_casts: Annotated[bool, "When True, skip generating cast() calls for reduced memory usage"]
     inline_variables: Annotated[frozenset[hydra.core.Name], "Variables that are inline let bindings (walrus operators)"]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.helpers.PythonEnvironment")
     NAMESPACES = hydra.core.Name("namespaces")
     BOUND_TYPE_VARIABLES = hydra.core.Name("boundTypeVariables")
@@ -46,7 +46,7 @@ class PythonEnvironment:
 @dataclass(frozen=True)
 class PythonModuleMetadata:
     r"""Temporary metadata used to create the header section of a Python file."""
-    
+
     namespaces: Annotated[hydra.module.Namespaces[hydra.ext.python.syntax.DottedName], "Namespace mapping for imports"]
     type_variables: Annotated[frozenset[hydra.core.Name], "Type variables used in the module"]
     uses_annotated: bool
@@ -69,7 +69,7 @@ class PythonModuleMetadata:
     uses_nothing: bool
     uses_right: bool
     uses_type_var: bool
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.helpers.PythonModuleMetadata")
     NAMESPACES = hydra.core.Name("namespaces")
     TYPE_VARIABLES = hydra.core.Name("typeVariables")
@@ -97,10 +97,10 @@ class PythonModuleMetadata:
 @dataclass(frozen=True)
 class PyGraph:
     r"""Combined graph and metadata state for Python code generation."""
-    
+
     graph: Annotated[hydra.graph.Graph, "The Hydra graph being processed"]
     metadata: Annotated[PythonModuleMetadata, "Accumulated module metadata"]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.helpers.PyGraph")
     GRAPH = hydra.core.Name("graph")
     METADATA = hydra.core.Name("metadata")

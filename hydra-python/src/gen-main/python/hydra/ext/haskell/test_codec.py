@@ -46,7 +46,7 @@ T0 = TypeVar("T0")
 
 def add_namespaces_to_namespaces(ns0: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], names: frozenset[hydra.core.Name]) -> hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName]:
     r"""Add namespaces from a set of names to existing namespaces."""
-    
+
     @lru_cache(1)
     def new_namespaces() -> frozenset[hydra.module.Namespace]:
         return hydra.lib.sets.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: hydra.names.namespace_of(x1)), hydra.lib.sets.to_list(names))))
@@ -59,32 +59,32 @@ def add_namespaces_to_namespaces(ns0: hydra.module.Namespaces[hydra.ext.haskell.
 
 def collect_test_cases(tg: hydra.testing.TestGroup) -> frozenlist[hydra.testing.TestCaseWithMetadata]:
     r"""Collect all test cases from a test group recursively."""
-    
+
     return hydra.lib.lists.concat2(tg.cases, hydra.lib.lists.concat(hydra.lib.lists.map((lambda x1: collect_test_cases(x1)), tg.subgroups)))
 
 def collect_names(graf: hydra.graph.Graph, names: frozenset[hydra.core.Name], t: hydra.core.Term) -> frozenset[hydra.core.Name]:
     r"""Collect variable names from encoded terms within a single term node."""
-    
+
     return hydra.lib.logic.if_else(hydra.schemas.is_encoded_term(hydra.rewriting.deannotate_term(t)), (lambda : hydra.lib.eithers.either((lambda _: names), (lambda decoded_term: hydra.lib.sets.union(names, hydra.rewriting.term_dependency_names(True, True, True, decoded_term))), hydra.lib.eithers.bimap((lambda _e: _e), (lambda _a: _a), hydra.decode.core.term(graf, t)))), (lambda : names))
 
 def extract_encoded_term_variable_names(graf: hydra.graph.Graph, term: hydra.core.Term) -> frozenset[hydra.core.Name]:
     r"""Extract all variable names from term-encoded terms in a given term."""
-    
+
     return hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda v1, v2: collect_names(graf, v1, v2)), hydra.lib.sets.empty(), term)
 
 def extract_test_terms(tcm: hydra.testing.TestCaseWithMetadata) -> frozenlist[hydra.core.Term]:
     r"""Extract input and output terms from a test case."""
-    
+
     match tcm.case:
         case hydra.testing.TestCaseDelegatedEvaluation(value=del_case):
             return (del_case.input, del_case.output)
-        
+
         case _:
             return ()
 
 def build_namespaces_for_test_group(mod: hydra.module.Module, tgroup: hydra.testing.TestGroup, graph_: hydra.graph.Graph) -> Either[str, hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName]]:
     r"""Build namespaces for a test group including encoded term references."""
-    
+
     @lru_cache(1)
     def test_cases_() -> frozenlist[hydra.testing.TestCaseWithMetadata]:
         return collect_test_cases(tgroup)
@@ -99,7 +99,7 @@ def build_namespaces_for_test_group(mod: hydra.module.Module, tgroup: hydra.test
 
 def build_test_module_with_codec(codec: hydra.testing.TestCodec, test_module: hydra.module.Module, test_group: hydra.testing.TestGroup, test_body: str, namespaces: T0) -> str:
     r"""Build the complete test module using a TestCodec."""
-    
+
     ns_ = test_module.namespace
     spec_ns = hydra.module.Namespace(hydra.lib.strings.cat2(ns_.value, "Spec"))
     @lru_cache(1)
@@ -121,41 +121,41 @@ def build_test_module_with_codec(codec: hydra.testing.TestCodec, test_module: hy
 
 def contains_trivially_polymorphic(term: hydra.core.Term) -> bool:
     r"""Check if a term contains any trivially polymorphic sub-terms."""
-    
+
     match term:
         case hydra.core.TermList(value=xs):
             return hydra.lib.logic.or_(hydra.lib.lists.null(xs), hydra.lib.lists.foldl(hydra.lib.logic.or_, False, hydra.lib.lists.map((lambda x1: contains_trivially_polymorphic(x1)), xs)))
-        
+
         case hydra.core.TermSet(value=s):
             return hydra.lib.logic.or_(hydra.lib.sets.null(s), hydra.lib.lists.foldl(hydra.lib.logic.or_, False, hydra.lib.lists.map((lambda x1: contains_trivially_polymorphic(x1)), hydra.lib.sets.to_list(s))))
-        
+
         case hydra.core.TermMap(value=m):
             return hydra.lib.logic.or_(hydra.lib.maps.null(m), hydra.lib.logic.or_(hydra.lib.lists.foldl(hydra.lib.logic.or_, False, hydra.lib.lists.map((lambda x1: contains_trivially_polymorphic(x1)), hydra.lib.maps.keys(m))), hydra.lib.lists.foldl(hydra.lib.logic.or_, False, hydra.lib.lists.map((lambda x1: contains_trivially_polymorphic(x1)), hydra.lib.lists.map((lambda p: hydra.lib.pairs.second(p)), hydra.lib.maps.to_list(m))))))
-        
+
         case hydra.core.TermMaybe(value=mx):
             return hydra.lib.maybes.maybe((lambda : True), (lambda x1: contains_trivially_polymorphic(x1)), mx)
-        
+
         case hydra.core.TermEither():
             return True
-        
+
         case hydra.core.TermUnion(value=inj):
             return contains_trivially_polymorphic(inj.field.term)
-        
+
         case hydra.core.TermPair(value=p):
             return hydra.lib.logic.or_(contains_trivially_polymorphic(hydra.lib.pairs.first(p)), contains_trivially_polymorphic(hydra.lib.pairs.second(p)))
-        
+
         case hydra.core.TermRecord(value=rec):
             return hydra.lib.lists.foldl(hydra.lib.logic.or_, False, hydra.lib.lists.map((lambda f: contains_trivially_polymorphic(f.term)), rec.fields))
-        
+
         case hydra.core.TermApplication(value=app):
             return hydra.lib.logic.or_(contains_trivially_polymorphic(app.function), contains_trivially_polymorphic(app.argument))
-        
+
         case _:
             return False
 
 def find_haskell_imports(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], names_: T0) -> frozenlist[str]:
     r"""Find necessary imports for Haskell based on referenced names."""
-    
+
     @lru_cache(1)
     def mapping_() -> FrozenDict[hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName]:
         return namespaces.mapping
@@ -166,27 +166,27 @@ def find_haskell_imports(namespaces: hydra.module.Namespaces[hydra.ext.haskell.a
 
 def try_infer_type_of(g: hydra.graph.Graph, term: hydra.core.Term) -> Maybe[tuple[hydra.core.Term, hydra.core.TypeScheme]]:
     r"""Try to infer the type of a term, returning Nothing if inference fails."""
-    
+
     return hydra.lib.eithers.either((lambda _: Nothing()), (lambda result: Just(hydra.lib.pairs.first(result))), hydra.inference.infer_type_of(hydra.lexical.empty_context(), g, term))
 
 def type_to_haskell(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], typ: hydra.core.Type, g: T0) -> Either[str, str]:
     r"""Convert a Hydra type to a Haskell type expression string."""
-    
+
     return hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda arg_: hydra.serialization.print_expr(hydra.serialization.parenthesize(hydra.ext.haskell.serde.type_to_expr(arg_)))), hydra.ext.haskell.coder.encode_type(namespaces, typ, hydra.lexical.empty_context(), g))
 
 def generate_type_annotation_for(g: hydra.graph.Graph, namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], input_term: hydra.core.Term, output_term: hydra.core.Term) -> Either[str, Maybe[str]]:
     r"""Generate a type annotation for polymorphic output values."""
-    
+
     return hydra.lib.logic.if_else(hydra.lib.logic.not_(contains_trivially_polymorphic(output_term)), (lambda : Right(Nothing())), (lambda : hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda result: (type_scheme := hydra.lib.pairs.second(result), typ := type_scheme.type, schema_vars := hydra.lib.sets.from_list(hydra.lib.maps.keys(g.schema_types)), free_vars := hydra.lib.sets.to_list(hydra.lib.sets.difference(hydra.rewriting.free_variables_in_type(typ), schema_vars)), is_either := (_hoist_is_either_1 := (lambda v1: (lambda _: True)(v1.value) if isinstance(v1, hydra.core.TermEither) else False), _hoist_is_either_1(hydra.rewriting.deannotate_term(output_term)))[1], hydra.lib.logic.if_else(hydra.lib.logic.or_(is_either, hydra.lib.logic.not_(hydra.lib.lists.null(free_vars))), (lambda : (int32_type := cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(hydra.core.IntegerType.INT32)))), subst := hydra.typing.TypeSubst(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda v: (v, int32_type)), free_vars))), grounded_type := hydra.substitution.subst_in_type(subst, typ), hydra.lib.eithers.map((lambda type_str: Just(hydra.lib.strings.cat2(" :: ", type_str))), type_to_haskell(namespaces, grounded_type, g)))[3]), (lambda : Right(Nothing()))))[5]), try_infer_type_of(g, input_term))))
 
 def indent_continuation_lines(n: int, s: str) -> str:
     r"""Indent continuation lines of a multi-line string."""
-    
+
     return hydra.lib.strings.intercalate(hydra.lib.strings.cat2("\n", hydra.lib.strings.from_list(hydra.lib.lists.replicate(n, 32))), hydra.lib.strings.split_on("\n", s))
 
 def generate_test_case_with_codec(g: hydra.graph.Graph, namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], codec: hydra.testing.TestCodec, depth: int, tcm: hydra.testing.TestCaseWithMetadata) -> Either[str, frozenlist[str]]:
     r"""Generate a single test case using a TestCodec."""
-    
+
     name_ = tcm.name
     tcase = tcm.case
     match tcase:
@@ -200,13 +200,13 @@ def generate_test_case_with_codec(g: hydra.graph.Graph, namespaces: hydra.module
             def continuation_indent() -> int:
                 return hydra.lib.math.add(hydra.lib.math.mul(depth, 2), 4)
             return hydra.lib.eithers.bind(codec.encode_term(input_, g), (lambda input_code: hydra.lib.eithers.bind(codec.encode_term(output_, g), (lambda output_code: hydra.lib.eithers.bind(generate_type_annotation_for(g, namespaces, input_, output_), (lambda type_annotation: (indented_input_code := indent_continuation_lines(continuation_indent(), input_code), indented_output_code := indent_continuation_lines(continuation_indent(), output_code), final_output_code := hydra.lib.maybes.maybe((lambda : indented_output_code), (lambda anno: hydra.lib.strings.cat2(indented_output_code, anno)), type_annotation), Right((hydra.lib.strings.cat(("H.it ", hydra.lib.literals.show_string(formatted_name()), " $ H.shouldBe")), hydra.lib.strings.cat(("  (", indented_input_code, ")")), hydra.lib.strings.cat(("  (", final_output_code, ")")))))[3]))))))
-        
+
         case _:
             return Right(())
 
 def generate_test_group_hierarchy(g: hydra.graph.Graph, namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], codec: hydra.testing.TestCodec, depth: int, test_group: hydra.testing.TestGroup) -> Either[str, str]:
     r"""Generate test hierarchy preserving the structure with H.describe blocks for subgroups."""
-    
+
     cases_ = test_group.cases
     subgroups = test_group.subgroups
     @lru_cache(1)
@@ -216,7 +216,7 @@ def generate_test_group_hierarchy(g: hydra.graph.Graph, namespaces: hydra.module
 
 def generate_test_file_with_codec(codec: hydra.testing.TestCodec, test_module: hydra.module.Module, test_group: hydra.testing.TestGroup, namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], g: hydra.graph.Graph) -> Either[str, tuple[str, str]]:
     r"""Generate a complete test file using a TestCodec."""
-    
+
     return hydra.lib.eithers.map((lambda test_body: (test_module_content := build_test_module_with_codec(codec, test_module, test_group, test_body, namespaces), ext := codec.file_extension.value, ns_ := test_module.namespace, spec_ns := hydra.module.Namespace(hydra.lib.strings.cat2(ns_.value, "Spec")), file_path := hydra.names.namespace_to_file_path(hydra.util.CaseConvention.PASCAL, hydra.module.FileExtension(ext), spec_ns), (file_path, test_module_content))[5]), generate_test_group_hierarchy(g, namespaces, codec, 1, test_group))
 
 # Template for Haskell import statements.
@@ -233,20 +233,20 @@ haskell_test_group_template = "spec = H.describe {groupName} $ do"
 
 def namespace_to_module_name(ns_: hydra.module.Namespace) -> str:
     r"""Convert namespace to Haskell module name."""
-    
+
     return hydra.lib.strings.intercalate(".", hydra.lib.lists.map(hydra.formatting.capitalize, hydra.lib.strings.split_on(".", ns_.value)))
 
 def term_to_haskell(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], term: hydra.core.Term, g: hydra.graph.Graph) -> Either[str, str]:
     r"""Convert a Hydra term to a Haskell expression string."""
-    
+
     return hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda arg_: hydra.serialization.print_expr(hydra.serialization.parenthesize(hydra.ext.haskell.serde.expression_to_expr(arg_)))), hydra.ext.haskell.coder.encode_term(0, namespaces, term, hydra.lexical.empty_context(), g))
 
 def haskell_test_codec(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName]) -> hydra.testing.TestCodec:
     r"""Create a Haskell TestCodec that uses the real Haskell coder."""
-    
+
     return hydra.testing.TestCodec(hydra.coders.LanguageName("haskell"), hydra.module.FileExtension("hs"), (lambda v1, v2: term_to_haskell(namespaces, v1, v2)), (lambda v1, v2: type_to_haskell(namespaces, v1, v2)), (lambda n: n), (lambda x1: namespace_to_module_name(x1)), haskell_test_case_template, haskell_test_group_template, haskell_module_template, haskell_import_template, (lambda v1: find_haskell_imports(namespaces, v1)))
 
 def generate_haskell_test_file(test_module: hydra.module.Module, test_group: hydra.testing.TestGroup, g: hydra.graph.Graph) -> Either[str, tuple[str, str]]:
     r"""Generate a Haskell test file for a test group, with type inference and namespace building."""
-    
+
     return hydra.lib.eithers.bind(build_namespaces_for_test_group(test_module, test_group, g), (lambda namespaces: generate_test_file_with_codec(haskell_test_codec(namespaces), test_module, test_group, namespaces, g)))

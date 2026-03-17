@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class Primitive implements Serializable, Comparable<Primitive> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.graph.Primitive");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   public static final hydra.core.Name IMPLEMENTATION = new hydra.core.Name("implementation");
-  
+
   /**
    * The unique name of the primitive function
    */
   public final hydra.core.Name name;
-  
+
   /**
    * The type signature of the primitive function
    */
   public final hydra.core.TypeScheme type;
-  
+
   /**
    * A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting.
    */
   public final java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>> implementation;
-  
+
   public Primitive (hydra.core.Name name, hydra.core.TypeScheme type, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>> implementation) {
     this.name = name;
     this.type = type;
     this.implementation = implementation;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Primitive)) {
@@ -51,12 +51,12 @@ public class Primitive implements Serializable, Comparable<Primitive> {
       this.implementation,
       o.implementation);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(type) + 5 * java.util.Objects.hashCode(implementation);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Primitive other) {
@@ -73,15 +73,15 @@ public class Primitive implements Serializable, Comparable<Primitive> {
       implementation.hashCode(),
       other.implementation.hashCode());
   }
-  
+
   public Primitive withName(hydra.core.Name name) {
     return new Primitive(name, type, implementation);
   }
-  
+
   public Primitive withType(hydra.core.TypeScheme type) {
     return new Primitive(name, type, implementation);
   }
-  
+
   public Primitive withImplementation(java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>> implementation) {
     return new Primitive(name, type, implementation);
   }

@@ -25,33 +25,33 @@ import qualified Data.Set as S
 -- | Encode a Hydra term to a JSON value. Returns Left for unsupported constructs.
 toJson :: Core.Term -> Either String Model.Value
 toJson term =
-     
+
       let stripped = Rewriting.deannotateTerm term
       in case stripped of
         Core.TermLiteral v0 -> encodeLiteral v0
-        Core.TermList v0 ->  
+        Core.TermList v0 ->
           let results = Eithers.mapList (\t -> toJson t) v0
           in (Eithers.map (\vs -> Model.ValueArray vs) results)
-        Core.TermSet v0 ->  
-          let terms = Sets.toList v0 
+        Core.TermSet v0 ->
+          let terms = Sets.toList v0
               results = Eithers.mapList (\t -> toJson t) terms
           in (Eithers.map (\vs -> Model.ValueArray vs) results)
-        Core.TermMaybe v0 -> Maybes.maybe (Right Model.ValueNull) (\v ->  
+        Core.TermMaybe v0 -> Maybes.maybe (Right Model.ValueNull) (\v ->
           let encodedMaybe = toJson v
           in (Eithers.map (\encoded -> Model.ValueArray [
             encoded]) encodedMaybe)) v0
-        Core.TermRecord v0 ->  
+        Core.TermRecord v0 ->
           let encodeField =
-                  \f ->  
-                    let fname = Core.unName (Core.fieldName f) 
+                  \f ->
+                    let fname = Core.unName (Core.fieldName f)
                         fterm = Core.fieldTerm f
                         encodedField = toJson fterm
-                    in (Eithers.map (\v -> (fname, v)) encodedField) 
+                    in (Eithers.map (\v -> (fname, v)) encodedField)
               fields = Core.recordFields v0
               encodedFields = Eithers.mapList encodeField fields
           in (Eithers.map (\fs -> Model.ValueObject (Maps.fromList fs)) encodedFields)
-        Core.TermUnion v0 ->  
-          let field = Core.injectionField v0 
+        Core.TermUnion v0 ->
+          let field = Core.injectionField v0
               fname = Core.unName (Core.fieldName field)
               fterm = Core.fieldTerm field
               encodedUnion = toJson fterm
@@ -59,30 +59,30 @@ toJson term =
             (fname, v)])) encodedUnion)
         Core.TermUnit -> Right (Model.ValueObject Maps.empty)
         Core.TermWrap v0 -> toJson (Core.wrappedTermBody v0)
-        Core.TermMap v0 ->  
+        Core.TermMap v0 ->
           let encodeEntry =
-                  \kv ->  
-                    let k = Pairs.first kv 
+                  \kv ->
+                    let k = Pairs.first kv
                         v = Pairs.second kv
                         encodedK = toJson k
                         encodedV = toJson v
                     in (Eithers.either (\err -> Left err) (\ek -> Eithers.map (\ev -> Model.ValueObject (Maps.fromList [
                       ("@key", ek),
-                      ("@value", ev)])) encodedV) encodedK) 
+                      ("@value", ev)])) encodedV) encodedK)
               entries = Eithers.mapList encodeEntry (Maps.toList v0)
           in (Eithers.map (\es -> Model.ValueArray es) entries)
-        Core.TermPair v0 ->  
-          let first = Pairs.first v0 
+        Core.TermPair v0 ->
+          let first = Pairs.first v0
               second = Pairs.second v0
               encodedFirst = toJson first
               encodedSecond = toJson second
           in (Eithers.either (\err -> Left err) (\ef -> Eithers.map (\es -> Model.ValueObject (Maps.fromList [
             ("@first", ef),
             ("@second", es)])) encodedSecond) encodedFirst)
-        Core.TermEither v0 -> Eithers.either (\l ->  
+        Core.TermEither v0 -> Eithers.either (\l ->
           let encodedL = toJson l
           in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
-            ("@left", v)])) encodedL)) (\r ->  
+            ("@left", v)])) encodedL)) (\r ->
           let encodedR = toJson r
           in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
             ("@right", v)])) encodedR)) v0

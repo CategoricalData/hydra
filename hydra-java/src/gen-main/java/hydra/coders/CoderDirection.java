@@ -9,42 +9,42 @@ import java.io.Serializable;
  */
 public abstract class CoderDirection implements Serializable, Comparable<CoderDirection> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.coders.CoderDirection");
-  
+
   public static final hydra.core.Name ENCODE = new hydra.core.Name("encode");
-  
+
   public static final hydra.core.Name DECODE = new hydra.core.Name("decode");
-  
+
   private CoderDirection () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Encode instance) ;
-    
+
     R visit(Decode instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(CoderDirection instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Encode instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Decode instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Encode extends hydra.coders.CoderDirection implements Serializable {
     public Encode () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Encode)) {
@@ -53,12 +53,12 @@ public abstract class CoderDirection implements Serializable, Comparable<CoderDi
       Encode o = (Encode) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CoderDirection other) {
@@ -68,18 +68,18 @@ public abstract class CoderDirection implements Serializable, Comparable<CoderDi
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Decode extends hydra.coders.CoderDirection implements Serializable {
     public Decode () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Decode)) {
@@ -88,12 +88,12 @@ public abstract class CoderDirection implements Serializable, Comparable<CoderDi
       Decode o = (Decode) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CoderDirection other) {
@@ -103,7 +103,7 @@ public abstract class CoderDirection implements Serializable, Comparable<CoderDi
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

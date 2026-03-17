@@ -9,18 +9,18 @@ import java.io.Serializable;
  */
 public class TypeVariableMetadata implements Serializable, Comparable<TypeVariableMetadata> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.TypeVariableMetadata");
-  
+
   public static final hydra.core.Name CLASSES = new hydra.core.Name("classes");
-  
+
   /**
    * The set of typeclass constraints on this type variable
    */
   public final hydra.util.PersistentSet<hydra.core.Name> classes;
-  
+
   public TypeVariableMetadata (hydra.util.PersistentSet<hydra.core.Name> classes) {
     this.classes = classes;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TypeVariableMetadata)) {
@@ -31,12 +31,12 @@ public class TypeVariableMetadata implements Serializable, Comparable<TypeVariab
       this.classes,
       o.classes);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(classes);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TypeVariableMetadata other) {

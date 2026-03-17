@@ -6,50 +6,50 @@ import java.io.Serializable;
 
 public abstract class NonLiteralKind implements Serializable, Comparable<NonLiteralKind> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.NonLiteralKind");
-  
+
   public static final hydra.core.Name I_R_I = new hydra.core.Name("IRI");
-  
+
   public static final hydra.core.Name B_N_O_D_E = new hydra.core.Name("BNODE");
-  
+
   public static final hydra.core.Name N_O_N_L_I_T_E_R_A_L = new hydra.core.Name("NONLITERAL");
-  
+
   private NonLiteralKind () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(IRI instance) ;
-    
+
     R visit(BNODE instance) ;
-    
+
     R visit(NONLITERAL instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(NonLiteralKind instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(IRI instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(BNODE instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(NONLITERAL instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class IRI extends hydra.ext.io.shex.syntax.NonLiteralKind implements Serializable {
     public IRI () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof IRI)) {
@@ -58,12 +58,12 @@ public abstract class NonLiteralKind implements Serializable, Comparable<NonLite
       IRI o = (IRI) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(NonLiteralKind other) {
@@ -73,18 +73,18 @@ public abstract class NonLiteralKind implements Serializable, Comparable<NonLite
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class BNODE extends hydra.ext.io.shex.syntax.NonLiteralKind implements Serializable {
     public BNODE () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof BNODE)) {
@@ -93,12 +93,12 @@ public abstract class NonLiteralKind implements Serializable, Comparable<NonLite
       BNODE o = (BNODE) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(NonLiteralKind other) {
@@ -108,18 +108,18 @@ public abstract class NonLiteralKind implements Serializable, Comparable<NonLite
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class NONLITERAL extends hydra.ext.io.shex.syntax.NonLiteralKind implements Serializable {
     public NONLITERAL () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof NONLITERAL)) {
@@ -128,12 +128,12 @@ public abstract class NonLiteralKind implements Serializable, Comparable<NonLite
       NONLITERAL o = (NONLITERAL) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(NonLiteralKind other) {
@@ -143,7 +143,7 @@ public abstract class NonLiteralKind implements Serializable, Comparable<NonLite
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

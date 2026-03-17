@@ -88,7 +88,9 @@ generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doH
         SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
         writeFile fullPath withNewline
       where
-        withNewline = if L.isSuffixOf "\n" s then s else s ++ "\n"
+        cleaned = unlines $ map stripTrailingWhitespace $ lines s
+        stripTrailingWhitespace line = reverse $ dropWhile (== ' ') $ reverse line
+        withNewline = if L.isSuffixOf "\n" cleaned then cleaned else cleaned ++ "\n"
 
 -- | Build a graph from a list of modules using the Haskell bootstrapGraph.
 -- Thin wrapper around modulesToGraphWith.

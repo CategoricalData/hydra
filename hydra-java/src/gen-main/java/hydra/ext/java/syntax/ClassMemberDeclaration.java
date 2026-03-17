@@ -6,68 +6,68 @@ import java.io.Serializable;
 
 public abstract class ClassMemberDeclaration implements Serializable, Comparable<ClassMemberDeclaration> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ClassMemberDeclaration");
-  
+
   public static final hydra.core.Name FIELD = new hydra.core.Name("field");
-  
+
   public static final hydra.core.Name METHOD = new hydra.core.Name("method");
-  
+
   public static final hydra.core.Name CLASS = new hydra.core.Name("class");
-  
+
   public static final hydra.core.Name INTERFACE = new hydra.core.Name("interface");
-  
+
   public static final hydra.core.Name NONE = new hydra.core.Name("none");
-  
+
   private ClassMemberDeclaration () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Field instance) ;
-    
+
     R visit(Method instance) ;
-    
+
     R visit(Class_ instance) ;
-    
+
     R visit(Interface instance) ;
-    
+
     R visit(None instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ClassMemberDeclaration instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Field instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Method instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Class_ instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Interface instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(None instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Field extends hydra.ext.java.syntax.ClassMemberDeclaration implements Serializable {
     public final hydra.ext.java.syntax.FieldDeclaration value;
-    
+
     public Field (hydra.ext.java.syntax.FieldDeclaration value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Field)) {
@@ -78,12 +78,12 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassMemberDeclaration other) {
@@ -94,20 +94,20 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
       Field o = (Field) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Method extends hydra.ext.java.syntax.ClassMemberDeclaration implements Serializable {
     public final hydra.ext.java.syntax.MethodDeclaration value;
-    
+
     public Method (hydra.ext.java.syntax.MethodDeclaration value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Method)) {
@@ -118,12 +118,12 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassMemberDeclaration other) {
@@ -134,20 +134,20 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
       Method o = (Method) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Class_ extends hydra.ext.java.syntax.ClassMemberDeclaration implements Serializable {
     public final hydra.ext.java.syntax.ClassDeclaration value;
-    
+
     public Class_ (hydra.ext.java.syntax.ClassDeclaration value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Class_)) {
@@ -158,12 +158,12 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassMemberDeclaration other) {
@@ -174,20 +174,20 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
       Class_ o = (Class_) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Interface extends hydra.ext.java.syntax.ClassMemberDeclaration implements Serializable {
     public final hydra.ext.java.syntax.InterfaceDeclaration value;
-    
+
     public Interface (hydra.ext.java.syntax.InterfaceDeclaration value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Interface)) {
@@ -198,12 +198,12 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassMemberDeclaration other) {
@@ -214,18 +214,18 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
       Interface o = (Interface) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class None extends hydra.ext.java.syntax.ClassMemberDeclaration implements Serializable {
     public None () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof None)) {
@@ -234,12 +234,12 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
       None o = (None) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassMemberDeclaration other) {
@@ -249,7 +249,7 @@ public abstract class ClassMemberDeclaration implements Serializable, Comparable
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

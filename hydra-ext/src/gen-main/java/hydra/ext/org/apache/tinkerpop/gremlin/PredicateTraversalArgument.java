@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class PredicateTraversalArgument implements Serializable, Comparable<PredicateTraversalArgument> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.PredicateTraversalArgument");
-  
+
   public static final hydra.core.Name PREDICATE = new hydra.core.Name("predicate");
-  
+
   public static final hydra.core.Name TRAVERSAL1 = new hydra.core.Name("traversal1");
-  
+
   public static final hydra.core.Name TRAVERSAL2 = new hydra.core.Name("traversal2");
-  
+
   public final hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicate predicate;
-  
+
   public final hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal traversal1;
-  
+
   public final hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> traversal2;
-  
+
   public PredicateTraversalArgument (hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicate predicate, hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal traversal1, hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> traversal2) {
     this.predicate = predicate;
     this.traversal1 = traversal1;
     this.traversal2 = traversal2;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof PredicateTraversalArgument)) {
@@ -39,12 +39,12 @@ public class PredicateTraversalArgument implements Serializable, Comparable<Pred
       this.traversal2,
       o.traversal2);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(predicate) + 3 * java.util.Objects.hashCode(traversal1) + 5 * java.util.Objects.hashCode(traversal2);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PredicateTraversalArgument other) {
@@ -59,15 +59,15 @@ public class PredicateTraversalArgument implements Serializable, Comparable<Pred
     }
     return ((Comparable) traversal2).compareTo(other.traversal2);
   }
-  
+
   public PredicateTraversalArgument withPredicate(hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicate predicate) {
     return new PredicateTraversalArgument(predicate, traversal1, traversal2);
   }
-  
+
   public PredicateTraversalArgument withTraversal1(hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal traversal1) {
     return new PredicateTraversalArgument(predicate, traversal1, traversal2);
   }
-  
+
   public PredicateTraversalArgument withTraversal2(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> traversal2) {
     return new PredicateTraversalArgument(predicate, traversal1, traversal2);
   }

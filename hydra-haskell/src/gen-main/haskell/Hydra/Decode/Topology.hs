@@ -24,7 +24,7 @@ graph = Helpers.decodeMap vertex (Helpers.decodeList vertex)
 tarjanState :: Graph.Graph -> Core.Term -> Either Error.DecodingError Topology.TarjanState
 tarjanState cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "counter" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of

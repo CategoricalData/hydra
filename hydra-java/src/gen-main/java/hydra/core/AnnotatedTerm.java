@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class AnnotatedTerm implements Serializable, Comparable<AnnotatedTerm> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.AnnotatedTerm");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public static final hydra.core.Name ANNOTATION = new hydra.core.Name("annotation");
-  
+
   /**
    * The term being annotated
    */
   public final hydra.core.Term body;
-  
+
   /**
    * The annotation as a map from keys to values
    */
   public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annotation;
-  
+
   public AnnotatedTerm (hydra.core.Term body, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annotation) {
     this.body = body;
     this.annotation = annotation;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof AnnotatedTerm)) {
@@ -41,12 +41,12 @@ public class AnnotatedTerm implements Serializable, Comparable<AnnotatedTerm> {
       this.annotation,
       o.annotation);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(body) + 3 * java.util.Objects.hashCode(annotation);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotatedTerm other) {
@@ -57,11 +57,11 @@ public class AnnotatedTerm implements Serializable, Comparable<AnnotatedTerm> {
     }
     return ((Comparable) annotation).compareTo(other.annotation);
   }
-  
+
   public AnnotatedTerm withBody(hydra.core.Term body) {
     return new AnnotatedTerm(body, annotation);
   }
-  
+
   public AnnotatedTerm withAnnotation(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annotation) {
     return new AnnotatedTerm(body, annotation);
   }

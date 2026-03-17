@@ -23,8 +23,8 @@ import qualified Data.Set as S
 alter :: Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 alter cx g funTerm keyTerm mapTerm =
     case mapTerm of
-      Core.TermMap v0 ->  
-        let currentVal = Maps.lookup keyTerm v0 
+      Core.TermMap v0 ->
+        let currentVal = Maps.lookup keyTerm v0
             newVal =
                     Core.TermApplication (Core.Application {
                       Core.applicationFunction = funTerm,
@@ -57,10 +57,10 @@ alter cx g funTerm keyTerm mapTerm =
 bimap :: Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 bimap cx g keyFun valFun mapTerm =
     case mapTerm of
-      Core.TermMap v0 ->  
+      Core.TermMap v0 ->
         let pairs = Maps.toList v0
-        in (Right (Core.TermMap (Maps.fromList (Lists.map (\p ->  
-          let k = Pairs.first p 
+        in (Right (Core.TermMap (Maps.fromList (Lists.map (\p ->
+          let k = Pairs.first p
               v = Pairs.second p
           in (Core.TermApplication (Core.Application {
             Core.applicationFunction = keyFun,
@@ -75,13 +75,13 @@ bimap cx g keyFun valFun mapTerm =
 filter :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 filter cx g valPred mapTerm =
     case mapTerm of
-      Core.TermMap v0 ->  
+      Core.TermMap v0 ->
         let pairs = Maps.toList v0
         in (Right (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.fromList"))),
           Core.applicationArgument = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
-            Core.applicationArgument = (Core.TermList (Lists.map (\p ->  
+            Core.applicationArgument = (Core.TermList (Lists.map (\p ->
               let v = Pairs.second p
               in (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -100,14 +100,14 @@ filter cx g valPred mapTerm =
 filterWithKey :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 filterWithKey cx g pred mapTerm =
     case mapTerm of
-      Core.TermMap v0 ->  
+      Core.TermMap v0 ->
         let pairs = Maps.toList v0
         in (Right (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.fromList"))),
           Core.applicationArgument = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
-            Core.applicationArgument = (Core.TermList (Lists.map (\p ->  
-              let k = Pairs.first p 
+            Core.applicationArgument = (Core.TermList (Lists.map (\p ->
+              let k = Pairs.first p
                   v = Pairs.second p
               in (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -128,10 +128,10 @@ filterWithKey cx g pred mapTerm =
 map :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 map cx g valFun mapTerm =
     case mapTerm of
-      Core.TermMap v0 ->  
+      Core.TermMap v0 ->
         let pairs = Maps.toList v0
-        in (Right (Core.TermMap (Maps.fromList (Lists.map (\p ->  
-          let k = Pairs.first p 
+        in (Right (Core.TermMap (Maps.fromList (Lists.map (\p ->
+          let k = Pairs.first p
               v = Pairs.second p
           in (k, (Core.TermApplication (Core.Application {
             Core.applicationFunction = valFun,
@@ -144,10 +144,10 @@ map cx g valFun mapTerm =
 mapKeys :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 mapKeys cx g keyFun mapTerm =
     case mapTerm of
-      Core.TermMap v0 ->  
+      Core.TermMap v0 ->
         let pairs = Maps.toList v0
-        in (Right (Core.TermMap (Maps.fromList (Lists.map (\p ->  
-          let k = Pairs.first p 
+        in (Right (Core.TermMap (Maps.fromList (Lists.map (\p ->
+          let k = Pairs.first p
               v = Pairs.second p
           in (Core.TermApplication (Core.Application {
             Core.applicationFunction = keyFun,

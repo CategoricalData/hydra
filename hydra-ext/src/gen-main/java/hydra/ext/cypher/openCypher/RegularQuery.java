@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class RegularQuery implements Serializable, Comparable<RegularQuery> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.RegularQuery");
-  
+
   public static final hydra.core.Name HEAD = new hydra.core.Name("head");
-  
+
   public static final hydra.core.Name REST = new hydra.core.Name("rest");
-  
+
   public final hydra.ext.cypher.openCypher.SingleQuery head;
-  
+
   public final hydra.util.ConsList<hydra.ext.cypher.openCypher.Union> rest;
-  
+
   public RegularQuery (hydra.ext.cypher.openCypher.SingleQuery head, hydra.util.ConsList<hydra.ext.cypher.openCypher.Union> rest) {
     this.head = head;
     this.rest = rest;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof RegularQuery)) {
@@ -32,12 +32,12 @@ public class RegularQuery implements Serializable, Comparable<RegularQuery> {
       this.rest,
       o.rest);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(head) + 3 * java.util.Objects.hashCode(rest);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(RegularQuery other) {
@@ -48,11 +48,11 @@ public class RegularQuery implements Serializable, Comparable<RegularQuery> {
     }
     return ((Comparable) rest).compareTo(other.rest);
   }
-  
+
   public RegularQuery withHead(hydra.ext.cypher.openCypher.SingleQuery head) {
     return new RegularQuery(head, rest);
   }
-  
+
   public RegularQuery withRest(hydra.util.ConsList<hydra.ext.cypher.openCypher.Union> rest) {
     return new RegularQuery(head, rest);
   }

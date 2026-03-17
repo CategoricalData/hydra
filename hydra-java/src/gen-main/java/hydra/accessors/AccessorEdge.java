@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class AccessorEdge implements Serializable, Comparable<AccessorEdge> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.accessors.AccessorEdge");
-  
+
   public static final hydra.core.Name SOURCE = new hydra.core.Name("source");
-  
+
   public static final hydra.core.Name PATH = new hydra.core.Name("path");
-  
+
   public static final hydra.core.Name TARGET = new hydra.core.Name("target");
-  
+
   /**
    * The source node of the edge
    */
   public final hydra.accessors.AccessorNode source;
-  
+
   /**
    * The accessor path connecting source to target
    */
   public final hydra.accessors.AccessorPath path;
-  
+
   /**
    * The target node of the edge
    */
   public final hydra.accessors.AccessorNode target;
-  
+
   public AccessorEdge (hydra.accessors.AccessorNode source, hydra.accessors.AccessorPath path, hydra.accessors.AccessorNode target) {
     this.source = source;
     this.path = path;
     this.target = target;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof AccessorEdge)) {
@@ -51,12 +51,12 @@ public class AccessorEdge implements Serializable, Comparable<AccessorEdge> {
       this.target,
       o.target);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(source) + 3 * java.util.Objects.hashCode(path) + 5 * java.util.Objects.hashCode(target);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AccessorEdge other) {
@@ -71,15 +71,15 @@ public class AccessorEdge implements Serializable, Comparable<AccessorEdge> {
     }
     return ((Comparable) target).compareTo(other.target);
   }
-  
+
   public AccessorEdge withSource(hydra.accessors.AccessorNode source) {
     return new AccessorEdge(source, path, target);
   }
-  
+
   public AccessorEdge withPath(hydra.accessors.AccessorPath path) {
     return new AccessorEdge(source, path, target);
   }
-  
+
   public AccessorEdge withTarget(hydra.accessors.AccessorNode target) {
     return new AccessorEdge(source, path, target);
   }

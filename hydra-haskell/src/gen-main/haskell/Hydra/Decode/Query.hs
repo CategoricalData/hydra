@@ -25,8 +25,8 @@ import qualified Data.Set as S
 comparisonConstraint :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.ComparisonConstraint
 comparisonConstraint cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -46,7 +46,7 @@ comparisonConstraint cx raw =
 edge :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Edge
 edge cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "type" Core_.name fieldMap cx) (\field_type -> Eithers.bind (Helpers.requireField "out" (Helpers.decodeMaybe Core_.name) fieldMap cx) (\field_out -> Eithers.bind (Helpers.requireField "in" (Helpers.decodeMaybe Core_.name) fieldMap cx) (\field_in -> Right (Query.Edge {
           Query.edgeType = field_type,
@@ -57,7 +57,7 @@ edge cx raw =
 graphPattern :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.GraphPattern
 graphPattern cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "graph" Core_.name fieldMap cx) (\field_graph -> Eithers.bind (Helpers.requireField "patterns" (Helpers.decodeList pattern) fieldMap cx) (\field_patterns -> Right (Query.GraphPattern {
           Query.graphPatternGraph = field_graph,
@@ -67,8 +67,8 @@ graphPattern cx raw =
 node :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Node
 node cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -85,8 +85,8 @@ node cx raw =
 path :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Path
 path cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -103,7 +103,7 @@ path cx raw =
 pathEquation :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.PathEquation
 pathEquation cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "left" path fieldMap cx) (\field_left -> Eithers.bind (Helpers.requireField "right" path fieldMap cx) (\field_right -> Right (Query.PathEquation {
           Query.pathEquationLeft = field_left,
@@ -113,8 +113,8 @@ pathEquation cx raw =
 pattern :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Pattern
 pattern cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -133,7 +133,7 @@ pattern cx raw =
 patternImplication :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.PatternImplication
 patternImplication cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "antecedent" pattern fieldMap cx) (\field_antecedent -> Eithers.bind (Helpers.requireField "consequent" pattern fieldMap cx) (\field_consequent -> Right (Query.PatternImplication {
           Query.patternImplicationAntecedent = field_antecedent,
@@ -143,7 +143,7 @@ patternImplication cx raw =
 query :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Query
 query cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "variables" (Helpers.decodeList variable) fieldMap cx) (\field_variables -> Eithers.bind (Helpers.requireField "patterns" (Helpers.decodeList pattern) fieldMap cx) (\field_patterns -> Right (Query.Query {
           Query.queryVariables = field_variables,
@@ -153,7 +153,7 @@ query cx raw =
 range :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Range
 range cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "min" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
@@ -175,8 +175,8 @@ range cx raw =
 regexQuantifier :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.RegexQuantifier
 regexQuantifier cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -209,7 +209,7 @@ regexQuantifier cx raw =
 regexSequence :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.RegexSequence
 regexSequence cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "path" path fieldMap cx) (\field_path -> Eithers.bind (Helpers.requireField "quantifier" regexQuantifier fieldMap cx) (\field_quantifier -> Right (Query.RegexSequence {
           Query.regexSequencePath = field_path,
@@ -219,8 +219,8 @@ regexSequence cx raw =
 step :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Step
 step cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -237,7 +237,7 @@ step cx raw =
 triplePattern :: Graph.Graph -> Core.Term -> Either Error.DecodingError Query.TriplePattern
 triplePattern cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "subject" node fieldMap cx) (\field_subject -> Eithers.bind (Helpers.requireField "predicate" path fieldMap cx) (\field_predicate -> Eithers.bind (Helpers.requireField "object" node fieldMap cx) (\field_object -> Right (Query.TriplePattern {
           Query.triplePatternSubject = field_subject,

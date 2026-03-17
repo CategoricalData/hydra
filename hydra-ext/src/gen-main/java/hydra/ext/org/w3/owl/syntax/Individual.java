@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class Individual implements Serializable, Comparable<Individual> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.Individual");
-  
+
   public static final hydra.core.Name NAMED = new hydra.core.Name("named");
-  
+
   public static final hydra.core.Name ANONYMOUS = new hydra.core.Name("anonymous");
-  
+
   private Individual () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Named instance) ;
-    
+
     R visit(Anonymous instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Individual instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Named instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Anonymous instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Named extends hydra.ext.org.w3.owl.syntax.Individual implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.NamedIndividual value;
-    
+
     public Named (hydra.ext.org.w3.owl.syntax.NamedIndividual value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Named)) {
@@ -54,12 +54,12 @@ public abstract class Individual implements Serializable, Comparable<Individual>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Individual other) {
@@ -70,20 +70,20 @@ public abstract class Individual implements Serializable, Comparable<Individual>
       Named o = (Named) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Anonymous extends hydra.ext.org.w3.owl.syntax.Individual implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.AnonymousIndividual value;
-    
+
     public Anonymous (hydra.ext.org.w3.owl.syntax.AnonymousIndividual value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Anonymous)) {
@@ -94,12 +94,12 @@ public abstract class Individual implements Serializable, Comparable<Individual>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Individual other) {
@@ -110,7 +110,7 @@ public abstract class Individual implements Serializable, Comparable<Individual>
       Anonymous o = (Anonymous) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

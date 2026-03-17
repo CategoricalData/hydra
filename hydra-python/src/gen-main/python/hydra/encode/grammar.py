@@ -29,37 +29,37 @@ def pattern(v1: hydra.grammar.Pattern) -> hydra.core.Term:
     match v1:
         case hydra.grammar.PatternAlternatives(value=y):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("alternatives"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: pattern(x1)), y)))))))
-        
+
         case hydra.grammar.PatternConstant(value=y2):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("constant"), constant(y2)))))
-        
+
         case hydra.grammar.PatternIgnored(value=y3):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("ignored"), pattern(y3)))))
-        
+
         case hydra.grammar.PatternLabeled(value=y4):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("labeled"), labeled_pattern(y4)))))
-        
+
         case hydra.grammar.PatternNil():
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("nil"), cast(hydra.core.Term, hydra.core.TermUnit())))))
-        
+
         case hydra.grammar.PatternNonterminal(value=y6):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("nonterminal"), symbol(y6)))))
-        
+
         case hydra.grammar.PatternOption(value=y7):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("option"), pattern(y7)))))
-        
+
         case hydra.grammar.PatternPlus(value=y8):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("plus"), pattern(y8)))))
-        
+
         case hydra.grammar.PatternRegex(value=y9):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("regex"), regex(y9)))))
-        
+
         case hydra.grammar.PatternSequence(value=y10):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("sequence"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: pattern(x1)), y10)))))))
-        
+
         case hydra.grammar.PatternStar(value=y11):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.grammar.Pattern"), hydra.core.Field(hydra.core.Name("star"), pattern(y11)))))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 

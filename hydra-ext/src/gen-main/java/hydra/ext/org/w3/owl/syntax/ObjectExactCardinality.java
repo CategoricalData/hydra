@@ -9,25 +9,25 @@ import java.io.Serializable;
  */
 public class ObjectExactCardinality implements Serializable, Comparable<ObjectExactCardinality> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectExactCardinality");
-  
+
   public static final hydra.core.Name BOUND = new hydra.core.Name("bound");
-  
+
   public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
-  
+
   public static final hydra.core.Name CLASS = new hydra.core.Name("class");
-  
+
   public final java.math.BigInteger bound;
-  
+
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
-  
+
   public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_;
-  
+
   public ObjectExactCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
     this.bound = bound;
     this.property = property;
     this.class_ = class_;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ObjectExactCardinality)) {
@@ -40,12 +40,12 @@ public class ObjectExactCardinality implements Serializable, Comparable<ObjectEx
       this.class_,
       o.class_);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(bound) + 3 * java.util.Objects.hashCode(property) + 5 * java.util.Objects.hashCode(class_);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ObjectExactCardinality other) {
@@ -60,15 +60,15 @@ public class ObjectExactCardinality implements Serializable, Comparable<ObjectEx
     }
     return ((Comparable) class_).compareTo(other.class_);
   }
-  
+
   public ObjectExactCardinality withBound(java.math.BigInteger bound) {
     return new ObjectExactCardinality(bound, property, class_);
   }
-  
+
   public ObjectExactCardinality withProperty(hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
     return new ObjectExactCardinality(bound, property, class_);
   }
-  
+
   public ObjectExactCardinality withClass(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
     return new ObjectExactCardinality(bound, property, class_);
   }

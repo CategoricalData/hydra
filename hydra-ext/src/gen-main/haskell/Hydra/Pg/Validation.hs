@@ -21,11 +21,11 @@ import qualified Data.Set as S
 
 validateEdge :: (t0 -> t1 -> Maybe String) -> (t1 -> String) -> Maybe (t1 -> Maybe Model.VertexLabel) -> Model.EdgeType t0 -> Model.Edge t1 -> Maybe String
 validateEdge checkValue showValue labelForVertexId typ el =
-     
-      let failWith = edgeError showValue el 
+
+      let failWith = edgeError showValue el
           checkLabel =
-                   
-                    let expected = Model.edgeTypeLabel typ 
+
+                    let expected = Model.edgeTypeLabel typ
                         actual = Model.edgeLabel el
                     in (verify (Equality.equal (Model.unEdgeLabel actual) (Model.unEdgeLabel expected)) (failWith (prepend "Wrong label" (edgeLabelMismatch expected actual))))
           checkId = Maybes.map (\arg_ -> failWith (prepend "Invalid id" arg_)) (checkValue (Model.edgeTypeId typ) (Model.edgeId el))
@@ -54,16 +54,16 @@ validateElement checkValue showValue labelForVertexId typ el =
 
 validateGraph :: Ord t1 => ((t0 -> t1 -> Maybe String) -> (t1 -> String) -> Model.GraphSchema t0 -> Model.Graph t1 -> Maybe String)
 validateGraph checkValue showValue schema graph =
-     
+
       let checkVertices =
-               
+
                 let checkVertex =
                         \el -> Maybes.maybe (Just (vertexError showValue el (prepend "Unexpected label" (Model.unVertexLabel (Model.vertexLabel el))))) (\t -> validateVertex checkValue showValue t el) (Maps.lookup (Model.vertexLabel el) (Model.graphSchemaVertices schema))
-                in (checkAll (Lists.map checkVertex (Maps.elems (Model.graphVertices graph)))) 
+                in (checkAll (Lists.map checkVertex (Maps.elems (Model.graphVertices graph))))
           checkEdges =
-                   
+
                     let checkEdge =
-                            \el -> Maybes.maybe (Just (edgeError showValue el (prepend "Unexpected label" (Model.unEdgeLabel (Model.edgeLabel el))))) (\t -> validateEdge checkValue showValue labelForVertexId t el) (Maps.lookup (Model.edgeLabel el) (Model.graphSchemaEdges schema)) 
+                            \el -> Maybes.maybe (Just (edgeError showValue el (prepend "Unexpected label" (Model.unEdgeLabel (Model.edgeLabel el))))) (\t -> validateEdge checkValue showValue labelForVertexId t el) (Maps.lookup (Model.edgeLabel el) (Model.graphSchemaEdges schema))
                         labelForVertexId = Just (\i -> Maybes.map Model.vertexLabel (Maps.lookup i (Model.graphVertices graph)))
                     in (checkAll (Lists.map checkEdge (Maps.elems (Model.graphEdges graph))))
       in (checkAll [
@@ -72,16 +72,16 @@ validateGraph checkValue showValue schema graph =
 
 validateProperties :: (t0 -> t1 -> Maybe String) -> [Model.PropertyType t0] -> M.Map Model.PropertyKey t1 -> Maybe String
 validateProperties checkValue types props =
-     
-      let checkTypes = checkAll (Lists.map checkType types) 
+
+      let checkTypes = checkAll (Lists.map checkType types)
           checkType =
                   \t -> Logic.ifElse (Model.propertyTypeRequired t) (Maybes.maybe (Just (prepend "Missing value for " (Model.unPropertyKey (Model.propertyTypeKey t)))) (\_ -> Nothing) (Maps.lookup (Model.propertyTypeKey t) props)) Nothing
           checkValues =
-                   
-                    let m = Maps.fromList (Lists.map (\p -> (Model.propertyTypeKey p, (Model.propertyTypeValue p))) types) 
+
+                    let m = Maps.fromList (Lists.map (\p -> (Model.propertyTypeKey p, (Model.propertyTypeValue p))) types)
                         checkPair =
-                                \pair ->  
-                                  let key = Pairs.first pair 
+                                \pair ->
+                                  let key = Pairs.first pair
                                       val = Pairs.second pair
                                   in (Maybes.maybe (Just (prepend "Unexpected key" (Model.unPropertyKey key))) (\typ -> Maybes.map (prepend "Invalid value") (checkValue typ val)) (Maps.lookup key m))
                     in (checkAll (Lists.map checkPair (Maps.toList props)))
@@ -91,11 +91,11 @@ validateProperties checkValue types props =
 
 validateVertex :: (t0 -> t1 -> Maybe String) -> (t1 -> String) -> Model.VertexType t0 -> Model.Vertex t1 -> Maybe String
 validateVertex checkValue showValue typ el =
-     
-      let failWith = vertexError showValue el 
+
+      let failWith = vertexError showValue el
           checkLabel =
-                   
-                    let expected = Model.vertexTypeLabel typ 
+
+                    let expected = Model.vertexTypeLabel typ
                         actual = Model.vertexLabel el
                     in (verify (Equality.equal (Model.unVertexLabel actual) (Model.unVertexLabel expected)) (failWith (prepend "Wrong label" (vertexLabelMismatch expected actual))))
           checkId = Maybes.map (\arg_ -> failWith (prepend "Invalid id" arg_)) (checkValue (Model.vertexTypeId typ) (Model.vertexId el))
@@ -108,7 +108,7 @@ validateVertex checkValue showValue typ el =
 
 checkAll :: [Maybe t0] -> Maybe t0
 checkAll checks =
-     
+
       let errors = Maybes.cat checks
       in (Lists.safeHead errors)
 

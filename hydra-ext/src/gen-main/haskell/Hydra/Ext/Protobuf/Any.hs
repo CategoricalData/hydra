@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | `Any` contains an arbitrary serialized protocol buffer message along with a URL that describes the type of the serialized message.
-data Any = 
+data Any =
   Any {
     -- | A URL/resource name that uniquely identifies the type of the serialized protocol buffer message.
     anyTypeUrl :: String,

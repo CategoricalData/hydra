@@ -9,18 +9,18 @@ import java.io.Serializable;
  */
 public class UndefinedTermError implements Serializable, Comparable<UndefinedTermError> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.error.UndefinedTermError");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   /**
    * The name of the undefined term
    */
   public final hydra.core.Name name;
-  
+
   public UndefinedTermError (hydra.core.Name name) {
     this.name = name;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof UndefinedTermError)) {
@@ -31,12 +31,12 @@ public class UndefinedTermError implements Serializable, Comparable<UndefinedTer
       this.name,
       o.name);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(UndefinedTermError other) {

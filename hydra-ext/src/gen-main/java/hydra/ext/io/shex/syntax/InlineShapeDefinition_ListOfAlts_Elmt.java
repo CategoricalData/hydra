@@ -6,52 +6,52 @@ import java.io.Serializable;
 
 public abstract class InlineShapeDefinition_ListOfAlts_Elmt implements Serializable, Comparable<InlineShapeDefinition_ListOfAlts_Elmt> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt");
-  
+
   public static final hydra.core.Name INCLUDE_SET = new hydra.core.Name("IncludeSet");
-  
+
   public static final hydra.core.Name EXTRA_PROPERTY_SET = new hydra.core.Name("ExtraPropertySet");
-  
+
   public static final hydra.core.Name C_L_O_S_E_D = new hydra.core.Name("CLOSED");
-  
+
   private InlineShapeDefinition_ListOfAlts_Elmt () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(IncludeSet instance) ;
-    
+
     R visit(ExtraPropertySet instance) ;
-    
+
     R visit(CLOSED instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(InlineShapeDefinition_ListOfAlts_Elmt instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(IncludeSet instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ExtraPropertySet instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(CLOSED instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class IncludeSet extends hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt implements Serializable {
     public final hydra.ext.io.shex.syntax.IncludeSet value;
-    
+
     public IncludeSet (hydra.ext.io.shex.syntax.IncludeSet value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof IncludeSet)) {
@@ -62,12 +62,12 @@ public abstract class InlineShapeDefinition_ListOfAlts_Elmt implements Serializa
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(InlineShapeDefinition_ListOfAlts_Elmt other) {
@@ -78,20 +78,20 @@ public abstract class InlineShapeDefinition_ListOfAlts_Elmt implements Serializa
       IncludeSet o = (IncludeSet) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ExtraPropertySet extends hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt implements Serializable {
     public final hydra.ext.io.shex.syntax.ExtraPropertySet value;
-    
+
     public ExtraPropertySet (hydra.ext.io.shex.syntax.ExtraPropertySet value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ExtraPropertySet)) {
@@ -102,12 +102,12 @@ public abstract class InlineShapeDefinition_ListOfAlts_Elmt implements Serializa
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(InlineShapeDefinition_ListOfAlts_Elmt other) {
@@ -118,18 +118,18 @@ public abstract class InlineShapeDefinition_ListOfAlts_Elmt implements Serializa
       ExtraPropertySet o = (ExtraPropertySet) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class CLOSED extends hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt implements Serializable {
     public CLOSED () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof CLOSED)) {
@@ -138,12 +138,12 @@ public abstract class InlineShapeDefinition_ListOfAlts_Elmt implements Serializa
       CLOSED o = (CLOSED) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(InlineShapeDefinition_ListOfAlts_Elmt other) {
@@ -153,7 +153,7 @@ public abstract class InlineShapeDefinition_ListOfAlts_Elmt implements Serializa
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

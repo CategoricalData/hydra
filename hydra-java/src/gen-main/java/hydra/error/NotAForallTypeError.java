@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class NotAForallTypeError implements Serializable, Comparable<NotAForallTypeError> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.error.NotAForallTypeError");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   public static final hydra.core.Name TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
-  
+
   /**
    * The actual type encountered
    */
   public final hydra.core.Type type;
-  
+
   /**
    * The type arguments that were being applied
    */
   public final hydra.util.ConsList<hydra.core.Type> typeArguments;
-  
+
   public NotAForallTypeError (hydra.core.Type type, hydra.util.ConsList<hydra.core.Type> typeArguments) {
     this.type = type;
     this.typeArguments = typeArguments;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof NotAForallTypeError)) {
@@ -41,12 +41,12 @@ public class NotAForallTypeError implements Serializable, Comparable<NotAForallT
       this.typeArguments,
       o.typeArguments);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(type) + 3 * java.util.Objects.hashCode(typeArguments);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NotAForallTypeError other) {
@@ -57,11 +57,11 @@ public class NotAForallTypeError implements Serializable, Comparable<NotAForallT
     }
     return ((Comparable) typeArguments).compareTo(other.typeArguments);
   }
-  
+
   public NotAForallTypeError withType(hydra.core.Type type) {
     return new NotAForallTypeError(type, typeArguments);
   }
-  
+
   public NotAForallTypeError withTypeArguments(hydra.util.ConsList<hydra.core.Type> typeArguments) {
     return new NotAForallTypeError(type, typeArguments);
   }

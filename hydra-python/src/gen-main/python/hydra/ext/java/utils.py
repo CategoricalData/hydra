@@ -58,32 +58,32 @@ def add_java_type_parameter(rt: hydra.ext.java.syntax.ReferenceType, t: hydra.ex
                 id = ct.identifier
                 args = ct.arguments
                 return Right(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(hydra.ext.java.syntax.ClassType(anns, qual, id, hydra.lib.lists.concat2(args, (cast(hydra.ext.java.syntax.TypeArgument, hydra.ext.java.syntax.TypeArgumentReference(rt)),))))))))))
-            
+
             case hydra.ext.java.syntax.ClassOrInterfaceTypeInterface():
                 return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("expected a Java class type"))), cx))
-            
+
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     def _hoist_hydra_ext_java_utils_add_java_type_parameter_2(cx, rt, v1):
         match v1:
             case hydra.ext.java.syntax.ReferenceTypeClassOrInterface(value=cit):
                 return _hoist_hydra_ext_java_utils_add_java_type_parameter_1(cx, rt, cit)
-            
+
             case hydra.ext.java.syntax.ReferenceTypeVariable(value=tv):
                 return Right(java_type_variable_to_type(tv))
-            
+
             case hydra.ext.java.syntax.ReferenceTypeArray():
                 return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("expected a Java class or interface type, or a variable"))), cx))
-            
+
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     match t:
         case hydra.ext.java.syntax.TypeReference(value=rt1):
             return _hoist_hydra_ext_java_utils_add_java_type_parameter_2(cx, rt, rt1)
-        
+
         case hydra.ext.java.syntax.TypePrimitive():
             return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("expected a reference type"))), cx))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -287,7 +287,7 @@ def java_expression_name_to_java_expression(en: hydra.ext.java.syntax.Expression
 
 def java_expression_to_java_primary(e: hydra.ext.java.syntax.Expression):
     r"""Convert an Expression to a Primary, avoiding unnecessary parentheses when the expression is already a simple primary chain."""
-    
+
     @lru_cache(1)
     def fallback() -> hydra.ext.java.syntax.Primary:
         return cast(hydra.ext.java.syntax.Primary, hydra.ext.java.syntax.PrimaryNoNewArray_(cast(hydra.ext.java.syntax.PrimaryNoNewArray, hydra.ext.java.syntax.PrimaryNoNewArrayParens(e))))
@@ -296,20 +296,20 @@ def java_expression_to_java_primary(e: hydra.ext.java.syntax.Expression):
             case hydra.ext.java.syntax.ConditionalExpressionSimple(value=cor):
                 cands = cor.value
                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(cands), 1), (lambda : (iors := hydra.lib.lists.head(cands).value, hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(iors), 1), (lambda : (xors := hydra.lib.lists.head(iors).value, hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(xors), 1), (lambda : (ands := hydra.lib.lists.head(xors).value, hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(ands), 1), (lambda : (eqs := hydra.lib.lists.head(ands).value, (_hoist_body_1 := (lambda v12: (lambda p: p)(v12.value) if isinstance(v12, hydra.ext.java.syntax.PostfixExpressionPrimary) else fallback()), _hoist_body_2 := (lambda v12: (lambda pf: _hoist_body_1(pf))(v12.value) if isinstance(v12, hydra.ext.java.syntax.UnaryExpressionNotPlusMinusPostfix) else fallback()), _hoist_body_3 := (lambda v12: (lambda npm: _hoist_body_2(npm))(v12.value) if isinstance(v12, hydra.ext.java.syntax.UnaryExpressionOther) else fallback()), _hoist_body_4 := (lambda v12: (lambda unary: _hoist_body_3(unary))(v12.value) if isinstance(v12, hydra.ext.java.syntax.MultiplicativeExpressionUnary) else fallback()), _hoist_body_5 := (lambda v12: (lambda mul: _hoist_body_4(mul))(v12.value) if isinstance(v12, hydra.ext.java.syntax.AdditiveExpressionUnary) else fallback()), _hoist_body_6 := (lambda v12: (lambda add: _hoist_body_5(add))(v12.value) if isinstance(v12, hydra.ext.java.syntax.ShiftExpressionUnary) else fallback()), _hoist_body_7 := (lambda v12: (lambda shift: _hoist_body_6(shift))(v12.value) if isinstance(v12, hydra.ext.java.syntax.RelationalExpressionSimple) else fallback()), _hoist_body_8 := (lambda v12: (lambda rel: _hoist_body_7(rel))(v12.value) if isinstance(v12, hydra.ext.java.syntax.EqualityExpressionUnary) else fallback()), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(eqs), 1), (lambda : _hoist_body_8(hydra.lib.lists.head(eqs))), (lambda : fallback())))[8])[1]), (lambda : fallback())))[1]), (lambda : fallback())))[1]), (lambda : fallback())))[1]), (lambda : fallback()))
-            
+
             case _:
                 return fallback()
     def _hoist_body_2(v1):
         match v1:
             case hydra.ext.java.syntax.AssignmentExpressionConditional(value=ce):
                 return _hoist_body_1(ce)
-            
+
             case _:
                 return fallback()
     match e:
         case hydra.ext.java.syntax.ExpressionAssignment(value=ae):
             return _hoist_body_2(ae)
-        
+
         case _:
             return fallback()
 
@@ -410,20 +410,20 @@ def java_reference_type_to_raw_type(rt: hydra.ext.java.syntax.ReferenceType):
                 qual = ct.qualifier
                 id = ct.identifier
                 return cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(hydra.ext.java.syntax.ClassType(anns, qual, id, ())))))
-            
+
             case hydra.ext.java.syntax.ClassOrInterfaceTypeInterface(value=it):
                 ct = it.value
                 anns = ct.annotations
                 qual = ct.qualifier
                 id = ct.identifier
                 return cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeInterface(hydra.ext.java.syntax.InterfaceType(hydra.ext.java.syntax.ClassType(anns, qual, id, ()))))))
-            
+
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     match rt:
         case hydra.ext.java.syntax.ReferenceTypeClassOrInterface(value=cit):
             return _hoist_hydra_ext_java_utils_java_reference_type_to_raw_type_1(cit)
-        
+
         case _:
             return rt
 
@@ -481,10 +481,10 @@ def java_type_to_java_reference_type(t: hydra.ext.java.syntax.Type, cx: hydra.co
     match t:
         case hydra.ext.java.syntax.TypeReference(value=rt):
             return Right(rt)
-        
+
         case hydra.ext.java.syntax.TypePrimitive():
             return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("expected a Java reference type"))), cx))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -495,10 +495,10 @@ def java_type_to_java_type_argument(t: hydra.ext.java.syntax.Type) -> hydra.ext.
     match t:
         case hydra.ext.java.syntax.TypeReference(value=rt):
             return cast(hydra.ext.java.syntax.TypeArgument, hydra.ext.java.syntax.TypeArgumentReference(rt))
-        
+
         case hydra.ext.java.syntax.TypePrimitive():
             return cast(hydra.ext.java.syntax.TypeArgument, hydra.ext.java.syntax.TypeArgumentWildcard(hydra.ext.java.syntax.Wildcard((), Nothing())))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -621,7 +621,7 @@ def to_java_array_type(t: hydra.ext.java.syntax.Type, cx: hydra.context.Context)
         match v1:
             case hydra.ext.java.syntax.ReferenceTypeClassOrInterface(value=cit):
                 return Right(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeArray(hydra.ext.java.syntax.ArrayType(hydra.ext.java.syntax.Dims(((),)), cast(hydra.ext.java.syntax.ArrayType_Variant, hydra.ext.java.syntax.ArrayType_VariantClassOrInterface(cit))))))))
-            
+
             case hydra.ext.java.syntax.ReferenceTypeArray(value=at):
                 old_dims = at.dims.value
                 @lru_cache(1)
@@ -629,19 +629,19 @@ def to_java_array_type(t: hydra.ext.java.syntax.Type, cx: hydra.context.Context)
                     return hydra.ext.java.syntax.Dims(hydra.lib.lists.concat2(old_dims, ((),)))
                 variant = at.variant
                 return Right(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeArray(hydra.ext.java.syntax.ArrayType(new_dims(), variant))))))
-            
+
             case hydra.ext.java.syntax.ReferenceTypeVariable():
                 return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("don't know how to make Java reference type into array type"))), cx))
-            
+
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     match t:
         case hydra.ext.java.syntax.TypeReference(value=rt):
             return _hoist_hydra_ext_java_utils_to_java_array_type_1(cx, rt)
-        
+
         case hydra.ext.java.syntax.TypePrimitive():
             return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("don't know how to make Java type into array type"))), cx))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 

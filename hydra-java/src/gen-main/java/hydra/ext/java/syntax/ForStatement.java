@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class ForStatement implements Serializable, Comparable<ForStatement> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ForStatement");
-  
+
   public static final hydra.core.Name BASIC = new hydra.core.Name("basic");
-  
+
   public static final hydra.core.Name ENHANCED = new hydra.core.Name("enhanced");
-  
+
   private ForStatement () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Basic instance) ;
-    
+
     R visit(Enhanced instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ForStatement instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Basic instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Enhanced instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Basic extends hydra.ext.java.syntax.ForStatement implements Serializable {
     public final hydra.ext.java.syntax.BasicForStatement value;
-    
+
     public Basic (hydra.ext.java.syntax.BasicForStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Basic)) {
@@ -54,12 +54,12 @@ public abstract class ForStatement implements Serializable, Comparable<ForStatem
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ForStatement other) {
@@ -70,20 +70,20 @@ public abstract class ForStatement implements Serializable, Comparable<ForStatem
       Basic o = (Basic) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Enhanced extends hydra.ext.java.syntax.ForStatement implements Serializable {
     public final hydra.ext.java.syntax.EnhancedForStatement value;
-    
+
     public Enhanced (hydra.ext.java.syntax.EnhancedForStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Enhanced)) {
@@ -94,12 +94,12 @@ public abstract class ForStatement implements Serializable, Comparable<ForStatem
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ForStatement other) {
@@ -110,7 +110,7 @@ public abstract class ForStatement implements Serializable, Comparable<ForStatem
       Enhanced o = (Enhanced) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

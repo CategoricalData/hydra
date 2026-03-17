@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class HoistPolymorphicLetBindingsTestCase implements Serializable, Comparable<HoistPolymorphicLetBindingsTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.HoistPolymorphicLetBindingsTestCase");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
-  
+
   /**
    * The input let term
    */
   public final hydra.core.Let input;
-  
+
   /**
    * The expected output let term with polymorphic bindings hoisted to top
    */
   public final hydra.core.Let output;
-  
+
   public HoistPolymorphicLetBindingsTestCase (hydra.core.Let input, hydra.core.Let output) {
     this.input = input;
     this.output = output;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof HoistPolymorphicLetBindingsTestCase)) {
@@ -41,12 +41,12 @@ public class HoistPolymorphicLetBindingsTestCase implements Serializable, Compar
       this.output,
       o.output);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(output);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(HoistPolymorphicLetBindingsTestCase other) {
@@ -57,11 +57,11 @@ public class HoistPolymorphicLetBindingsTestCase implements Serializable, Compar
     }
     return ((Comparable) output).compareTo(other.output);
   }
-  
+
   public HoistPolymorphicLetBindingsTestCase withInput(hydra.core.Let input) {
     return new HoistPolymorphicLetBindingsTestCase(input, output);
   }
-  
+
   public HoistPolymorphicLetBindingsTestCase withOutput(hydra.core.Let output) {
     return new HoistPolymorphicLetBindingsTestCase(input, output);
   }

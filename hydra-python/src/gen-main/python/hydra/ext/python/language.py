@@ -16,7 +16,7 @@ T0 = TypeVar("T0")
 @lru_cache(1)
 def python_language() -> hydra.coders.Language:
     r"""Language constraints for Python 3."""
-    
+
     @lru_cache(1)
     def elimination_variants() -> frozenset[hydra.variants.EliminationVariant]:
         return hydra.lib.sets.from_list((hydra.variants.EliminationVariant.RECORD, hydra.variants.EliminationVariant.UNION, hydra.variants.EliminationVariant.WRAP))
@@ -45,7 +45,7 @@ def python_language() -> hydra.coders.Language:
 @lru_cache(1)
 def python_reserved_words() -> frozenset[str]:
     r"""A set of reserved words in Python."""
-    
+
     # Python keywords, as enumerated at https://docs.python.org/3.13/reference/lexical_analysis.html#keywords.
     python_keywords = ("False", "None", "True", "and", "as", "assert", "async", "await", "break", "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "global", "if", "import", "in", "is", "lambda", "nonlocal", "not", "or", "pass", "raise", "return", "try", "while", "with", "yield")
     # Some additional keywords we reserve in order to avoid collision with built-in functions.

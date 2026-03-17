@@ -6,27 +6,27 @@ import java.io.Serializable;
 
 public class ClassDefinition implements Serializable, Comparable<ClassDefinition> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ClassDefinition");
-  
+
   public static final hydra.core.Name DECORATORS = new hydra.core.Name("decorators");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name TYPE_PARAMS = new hydra.core.Name("typeParams");
-  
+
   public static final hydra.core.Name ARGUMENTS = new hydra.core.Name("arguments");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Decorators> decorators;
-  
+
   public final hydra.ext.python.syntax.Name name;
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Args> arguments;
-  
+
   public final hydra.ext.python.syntax.Block body;
-  
+
   public ClassDefinition (hydra.util.Maybe<hydra.ext.python.syntax.Decorators> decorators, hydra.ext.python.syntax.Name name, hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams, hydra.util.Maybe<hydra.ext.python.syntax.Args> arguments, hydra.ext.python.syntax.Block body) {
     this.decorators = decorators;
     this.name = name;
@@ -34,7 +34,7 @@ public class ClassDefinition implements Serializable, Comparable<ClassDefinition
     this.arguments = arguments;
     this.body = body;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ClassDefinition)) {
@@ -53,12 +53,12 @@ public class ClassDefinition implements Serializable, Comparable<ClassDefinition
       this.body,
       o.body);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(decorators) + 3 * java.util.Objects.hashCode(name) + 5 * java.util.Objects.hashCode(typeParams) + 7 * java.util.Objects.hashCode(arguments) + 11 * java.util.Objects.hashCode(body);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ClassDefinition other) {
@@ -81,23 +81,23 @@ public class ClassDefinition implements Serializable, Comparable<ClassDefinition
     }
     return ((Comparable) body).compareTo(other.body);
   }
-  
+
   public ClassDefinition withDecorators(hydra.util.Maybe<hydra.ext.python.syntax.Decorators> decorators) {
     return new ClassDefinition(decorators, name, typeParams, arguments, body);
   }
-  
+
   public ClassDefinition withName(hydra.ext.python.syntax.Name name) {
     return new ClassDefinition(decorators, name, typeParams, arguments, body);
   }
-  
+
   public ClassDefinition withTypeParams(hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams) {
     return new ClassDefinition(decorators, name, typeParams, arguments, body);
   }
-  
+
   public ClassDefinition withArguments(hydra.util.Maybe<hydra.ext.python.syntax.Args> arguments) {
     return new ClassDefinition(decorators, name, typeParams, arguments, body);
   }
-  
+
   public ClassDefinition withBody(hydra.ext.python.syntax.Block body) {
     return new ClassDefinition(decorators, name, typeParams, arguments, body);
   }

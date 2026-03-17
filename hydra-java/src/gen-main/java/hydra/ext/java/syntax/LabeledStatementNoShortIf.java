@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class LabeledStatementNoShortIf implements Serializable, Comparable<LabeledStatementNoShortIf> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.LabeledStatementNoShortIf");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public static final hydra.core.Name STATEMENT = new hydra.core.Name("statement");
-  
+
   public final hydra.ext.java.syntax.Identifier identifier;
-  
+
   public final hydra.ext.java.syntax.StatementNoShortIf statement;
-  
+
   public LabeledStatementNoShortIf (hydra.ext.java.syntax.Identifier identifier, hydra.ext.java.syntax.StatementNoShortIf statement) {
     this.identifier = identifier;
     this.statement = statement;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof LabeledStatementNoShortIf)) {
@@ -32,12 +32,12 @@ public class LabeledStatementNoShortIf implements Serializable, Comparable<Label
       this.statement,
       o.statement);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(identifier) + 3 * java.util.Objects.hashCode(statement);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LabeledStatementNoShortIf other) {
@@ -48,11 +48,11 @@ public class LabeledStatementNoShortIf implements Serializable, Comparable<Label
     }
     return ((Comparable) statement).compareTo(other.statement);
   }
-  
+
   public LabeledStatementNoShortIf withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new LabeledStatementNoShortIf(identifier, statement);
   }
-  
+
   public LabeledStatementNoShortIf withStatement(hydra.ext.java.syntax.StatementNoShortIf statement) {
     return new LabeledStatementNoShortIf(identifier, statement);
   }

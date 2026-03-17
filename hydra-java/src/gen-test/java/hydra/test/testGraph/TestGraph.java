@@ -9,7 +9,7 @@ public interface TestGraph {
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> testTerms() {
     return hydra.lib.maps.FromList.apply(hydra.util.ConsList.of((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(new hydra.core.Name("testDataArthur"), hydra.test.testTerms.TestTerms.testDataArthur())))));
   }
-  
+
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> testTypes() {
     return hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
       (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(hydra.test.testTypes.TestTypes.testTypeBuddyListAName(), hydra.test.testTypes.TestTypes.testTypeBuddyListA()))),
@@ -35,11 +35,11 @@ public interface TestGraph {
       (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(hydra.test.testTypes.TestTypes.testTypeUnionPolymorphicRecursiveName(), hydra.test.testTypes.TestTypes.testTypeUnionPolymorphicRecursive()))),
       (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(hydra.test.testTypes.TestTypes.testTypeUnitName(), hydra.test.testTypes.TestTypes.testTypeUnit())))));
   }
-  
+
   static hydra.module.Namespace testNamespace() {
     return new hydra.module.Namespace("testGraph");
   }
-  
+
   static hydra.module.Namespace testSchemaNamespace() {
     return new hydra.module.Namespace("testSchemaGraph");
   }

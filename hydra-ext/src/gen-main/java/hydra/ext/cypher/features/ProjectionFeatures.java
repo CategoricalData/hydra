@@ -9,56 +9,56 @@ import java.io.Serializable;
  */
 public class ProjectionFeatures implements Serializable, Comparable<ProjectionFeatures> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.features.ProjectionFeatures");
-  
+
   public static final hydra.core.Name LIMIT = new hydra.core.Name("limit");
-  
+
   public static final hydra.core.Name ORDER_BY = new hydra.core.Name("orderBy");
-  
+
   public static final hydra.core.Name PROJECT_DISTINCT = new hydra.core.Name("projectDistinct");
-  
+
   public static final hydra.core.Name PROJECT_ALL = new hydra.core.Name("projectAll");
-  
+
   public static final hydra.core.Name PROJECT_AS = new hydra.core.Name("projectAs");
-  
+
   public static final hydra.core.Name SKIP = new hydra.core.Name("skip");
-  
+
   public static final hydra.core.Name SORT_ORDER = new hydra.core.Name("sortOrder");
-  
+
   /**
    * The LIMIT clause
    */
   public final Boolean limit;
-  
+
   /**
    * The ORDER BY clause
    */
   public final Boolean orderBy;
-  
+
   /**
    * The DISTINCT keyword
    */
   public final Boolean projectDistinct;
-  
+
   /**
    * The * projection
    */
   public final Boolean projectAll;
-  
+
   /**
    * The AS keyword
    */
   public final Boolean projectAs;
-  
+
   /**
    * The SKIP clause
    */
   public final Boolean skip;
-  
+
   /**
    * The ASC/ASCENDING and DESC/DESCENDING keywords
    */
   public final Boolean sortOrder;
-  
+
   public ProjectionFeatures (Boolean limit, Boolean orderBy, Boolean projectDistinct, Boolean projectAll, Boolean projectAs, Boolean skip, Boolean sortOrder) {
     this.limit = limit;
     this.orderBy = orderBy;
@@ -68,7 +68,7 @@ public class ProjectionFeatures implements Serializable, Comparable<ProjectionFe
     this.skip = skip;
     this.sortOrder = sortOrder;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ProjectionFeatures)) {
@@ -91,12 +91,12 @@ public class ProjectionFeatures implements Serializable, Comparable<ProjectionFe
       this.sortOrder,
       o.sortOrder);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(limit) + 3 * java.util.Objects.hashCode(orderBy) + 5 * java.util.Objects.hashCode(projectDistinct) + 7 * java.util.Objects.hashCode(projectAll) + 11 * java.util.Objects.hashCode(projectAs) + 13 * java.util.Objects.hashCode(skip) + 17 * java.util.Objects.hashCode(sortOrder);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ProjectionFeatures other) {
@@ -127,31 +127,31 @@ public class ProjectionFeatures implements Serializable, Comparable<ProjectionFe
     }
     return ((Comparable) sortOrder).compareTo(other.sortOrder);
   }
-  
+
   public ProjectionFeatures withLimit(Boolean limit) {
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }
-  
+
   public ProjectionFeatures withOrderBy(Boolean orderBy) {
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }
-  
+
   public ProjectionFeatures withProjectDistinct(Boolean projectDistinct) {
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }
-  
+
   public ProjectionFeatures withProjectAll(Boolean projectAll) {
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }
-  
+
   public ProjectionFeatures withProjectAs(Boolean projectAs) {
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }
-  
+
   public ProjectionFeatures withSkip(Boolean skip) {
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }
-  
+
   public ProjectionFeatures withSortOrder(Boolean sortOrder) {
     return new ProjectionFeatures(limit, orderBy, projectDistinct, projectAll, projectAs, skip, sortOrder);
   }

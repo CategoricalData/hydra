@@ -34,12 +34,12 @@ T2 = TypeVar("T2")
 
 def concat_pairs(acc: tuple[frozenlist[T0], frozenlist[T1]], p: tuple[frozenlist[T0], frozenlist[T1]]) -> tuple[frozenlist[T0], frozenlist[T1]]:
     r"""Concatenate two pairs of lists."""
-    
+
     return (hydra.lib.lists.concat2(hydra.lib.pairs.first(acc), hydra.lib.pairs.first(p)), hydra.lib.lists.concat2(hydra.lib.pairs.second(acc), hydra.lib.pairs.second(p)))
 
 def decode_cell(col_type: hydra.tabular.ColumnType, mvalue: Maybe[str]) -> Either[str, Maybe[hydra.core.Term]]:
     r"""Decode a single cell value based on its column type."""
-    
+
     cname = col_type.name.value
     typ = col_type.type
     def decode_value(value: str):
@@ -50,52 +50,52 @@ def decode_cell(col_type: hydra.tabular.ColumnType, mvalue: Maybe[str]) -> Eithe
             match v1:
                 case hydra.core.FloatType.BIGFLOAT:
                     return hydra.lib.maybes.maybe((lambda : Left(parse_error())), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(parsed))))))))), hydra.lib.literals.read_bigfloat(value))
-                
+
                 case hydra.core.FloatType.FLOAT32:
                     return hydra.lib.maybes.maybe((lambda : Left(parse_error())), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat32(parsed))))))))), hydra.lib.literals.read_float32(value))
-                
+
                 case hydra.core.FloatType.FLOAT64:
                     return hydra.lib.maybes.maybe((lambda : Left(parse_error())), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueFloat64(parsed))))))))), hydra.lib.literals.read_float64(value))
-                
+
                 case _:
                     return Left(hydra.lib.strings.cat(("Unsupported float type for column ", cname)))
         def _hoist_body_2(v1):
             match v1:
                 case hydra.core.IntegerType.INT32:
                     return hydra.lib.maybes.maybe((lambda : Left(parse_error())), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(parsed))))))))), hydra.lib.literals.read_int32(value))
-                
+
                 case hydra.core.IntegerType.INT64:
                     return hydra.lib.maybes.maybe((lambda : Left(parse_error())), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt64(parsed))))))))), hydra.lib.literals.read_int64(value))
-                
+
                 case _:
                     return Left(hydra.lib.strings.cat(("Unsupported integer type for column ", cname)))
         def _hoist_body_3(v1):
             match v1:
                 case hydra.core.LiteralTypeBoolean():
                     return hydra.lib.maybes.maybe((lambda : Left(parse_error())), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(parsed))))))), hydra.lib.literals.read_boolean(value))
-                
+
                 case hydra.core.LiteralTypeFloat(value=ft):
                     return _hoist_body_1(ft)
-                
+
                 case hydra.core.LiteralTypeInteger(value=it):
                     return _hoist_body_2(it)
-                
+
                 case hydra.core.LiteralTypeString():
                     return Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(value))))))
-                
+
                 case _:
                     return Left(hydra.lib.strings.cat(("Unsupported literal type for column ", cname)))
         match typ:
             case hydra.core.TypeLiteral(value=lt):
                 return _hoist_body_3(lt)
-            
+
             case _:
                 return Left(hydra.lib.strings.cat(("Unsupported type for column ", cname)))
     return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda x1: decode_value(x1)), mvalue)
 
 def decode_row(col_types: frozenlist[hydra.tabular.ColumnType], row: hydra.tabular.DataRow[str]) -> Either[str, hydra.tabular.DataRow[hydra.core.Term]]:
     r"""Decode a single data row based on column types."""
-    
+
     @lru_cache(1)
     def cells() -> frozenlist[Maybe[str]]:
         return row.value
@@ -103,7 +103,7 @@ def decode_row(col_types: frozenlist[hydra.tabular.ColumnType], row: hydra.tabul
 
 def decode_table(table_type: hydra.tabular.TableType, table: hydra.tabular.Table[str]) -> Either[str, hydra.tabular.Table[hydra.core.Term]]:
     r"""Decode a table of strings into a table of terms based on column type specifications."""
-    
+
     col_types = table_type.columns
     @lru_cache(1)
     def header() -> Maybe[hydra.tabular.HeaderRow]:
@@ -118,7 +118,7 @@ def element_is_edge(el: hydra.pg.model.Element[T0]):
         match v1:
             case hydra.pg.model.ElementEdge():
                 return True
-            
+
             case _:
                 return False
     return _hoist_hydra_demos_genpg_transform_element_is_edge_1(el)
@@ -128,7 +128,7 @@ def element_is_vertex(el: hydra.pg.model.Element[T0]):
         match v1:
             case hydra.pg.model.ElementVertex():
                 return True
-            
+
             case _:
                 return False
     return _hoist_hydra_demos_genpg_transform_element_is_vertex_1(el)
@@ -138,33 +138,33 @@ def find_tables_in_term(term: hydra.core.Term):
         match v1:
             case hydra.core.EliminationRecord(value=proj):
                 return hydra.lib.sets.insert(proj.type_name.value, names)
-            
+
             case _:
                 return names
     def _hoist_hydra_demos_genpg_transform_find_tables_in_term_2(names, v1):
         match v1:
             case hydra.core.FunctionElimination(value=e):
                 return _hoist_hydra_demos_genpg_transform_find_tables_in_term_1(names, e)
-            
+
             case _:
                 return names
     def _hoist_hydra_demos_genpg_transform_find_tables_in_term_3(names, v1):
         match v1:
             case hydra.core.TermFunction(value=f):
                 return _hoist_hydra_demos_genpg_transform_find_tables_in_term_2(names, f)
-            
+
             case _:
                 return names
     return hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda names, t: _hoist_hydra_demos_genpg_transform_find_tables_in_term_3(names, t)), hydra.lib.sets.empty(), term)
 
 def find_tables_in_terms(terms: frozenlist[hydra.core.Term]) -> frozenset[str]:
     r"""Find table names referenced in multiple terms."""
-    
+
     return hydra.lib.sets.unions(hydra.lib.lists.map((lambda x1: find_tables_in_term(x1)), terms))
 
 def table_for_edge(edge: hydra.pg.model.Edge[hydra.core.Term]) -> Either[str, str]:
     r"""Get the table name for an edge specification. Returns an error if not exactly one table is referenced."""
-    
+
     @lru_cache(1)
     def label() -> hydra.pg.model.EdgeLabel:
         return edge.label
@@ -187,7 +187,7 @@ def table_for_edge(edge: hydra.pg.model.Edge[hydra.core.Term]) -> Either[str, st
 
 def table_for_vertex(vertex: hydra.pg.model.Vertex[hydra.core.Term]) -> Either[str, str]:
     r"""Get the table name for a vertex specification. Returns an error if not exactly one table is referenced."""
-    
+
     @lru_cache(1)
     def label() -> hydra.pg.model.VertexLabel:
         return vertex.label
@@ -204,7 +204,7 @@ def table_for_vertex(vertex: hydra.pg.model.Vertex[hydra.core.Term]) -> Either[s
 
 def element_specs_by_table(graph: hydra.pg.model.LazyGraph[hydra.core.Term]) -> Either[str, FrozenDict[str, tuple[frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], frozenlist[hydra.pg.model.Edge[hydra.core.Term]]]]]:
     r"""Group element specifications by their source table."""
-    
+
     @lru_cache(1)
     def vertices() -> frozenlist[hydra.pg.model.Vertex[hydra.core.Term]]:
         return graph.vertices
@@ -215,19 +215,19 @@ def element_specs_by_table(graph: hydra.pg.model.LazyGraph[hydra.core.Term]) -> 
 
 def evaluate_properties(cx: hydra.context.Context, g: hydra.graph.Graph, specs: FrozenDict[T0, hydra.core.Term], record: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], FrozenDict[T0, hydra.core.Term]]:
     r"""Evaluate property specifications against a record term."""
-    
+
     def extract_maybe(k: T1, term: hydra.core.Term) -> Either[T2, Maybe[tuple[T1, hydra.core.Term]]]:
         match term:
             case hydra.core.TermMaybe(value=mv):
                 return Right(hydra.lib.maybes.map((lambda v: (k, v)), mv))
-            
+
             case _:
                 raise TypeError("Unsupported Term")
     return hydra.lib.eithers.map((lambda pairs: hydra.lib.maps.from_list(hydra.lib.maybes.cat(pairs))), hydra.lib.eithers.map_list((lambda pair: (k := hydra.lib.pairs.first(pair), spec := hydra.lib.pairs.second(pair), hydra.lib.eithers.bind(hydra.reduction.reduce_term(cx, g, True, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(spec, record)))), (lambda value: extract_maybe(k, hydra.rewriting.deannotate_term(value)))))[2]), hydra.lib.maps.to_list(specs)))
 
 def evaluate_edge(cx: hydra.context.Context, g: hydra.graph.Graph, edge_spec: hydra.pg.model.Edge[hydra.core.Term], record: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[hydra.pg.model.Edge[hydra.core.Term]]]:
     r"""Evaluate an edge specification against a record term to produce an optional edge."""
-    
+
     @lru_cache(1)
     def label() -> hydra.pg.model.EdgeLabel:
         return edge_spec.label
@@ -247,7 +247,7 @@ def evaluate_edge(cx: hydra.context.Context, g: hydra.graph.Graph, edge_spec: hy
 
 def evaluate_vertex(cx: hydra.context.Context, g: hydra.graph.Graph, vertex_spec: hydra.pg.model.Vertex[hydra.core.Term], record: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[hydra.pg.model.Vertex[hydra.core.Term]]]:
     r"""Evaluate a vertex specification against a record term to produce an optional vertex."""
-    
+
     @lru_cache(1)
     def label() -> hydra.pg.model.VertexLabel:
         return vertex_spec.label
@@ -261,22 +261,22 @@ def evaluate_vertex(cx: hydra.context.Context, g: hydra.graph.Graph, vertex_spec
 
 def list_any(pred: Callable[[T0], bool], xs: frozenlist[T0]) -> bool:
     r"""Check if any element in a list satisfies a predicate."""
-    
+
     return hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.filter(pred, xs)))
 
 def make_lazy_graph(vertices: frozenlist[hydra.pg.model.Vertex[T0]], edges: frozenlist[hydra.pg.model.Edge[T0]]) -> hydra.pg.model.LazyGraph[T0]:
     r"""Construct a LazyGraph from vertices and edges."""
-    
+
     return hydra.pg.model.LazyGraph(vertices, edges)
 
 def normalize_field(s: str) -> Maybe[str]:
     r"""Normalize a CSV field value - empty becomes Nothing."""
-    
+
     return hydra.lib.logic.if_else(hydra.lib.strings.null(s), (lambda : Nothing()), (lambda : Just(s)))
 
 def parse_csv_char(state: tuple[tuple[frozenlist[Maybe[str]], str], bool], c: int) -> tuple[tuple[frozenlist[Maybe[str]], str], bool]:
     r"""Process a single character during CSV parsing."""
-    
+
     @lru_cache(1)
     def acc() -> frozenlist[Maybe[str]]:
         return hydra.lib.pairs.first(hydra.lib.pairs.first(state))
@@ -290,7 +290,7 @@ def parse_csv_char(state: tuple[tuple[frozenlist[Maybe[str]], str], bool], c: in
 
 def parse_csv_line(line: str) -> Either[str, frozenlist[Maybe[str]]]:
     r"""Parse a CSV line into fields. Empty fields become Nothing."""
-    
+
     @lru_cache(1)
     def chars() -> frozenlist[int]:
         return hydra.lib.strings.to_list(line)
@@ -313,7 +313,7 @@ def parse_csv_line(line: str) -> Either[str, frozenlist[Maybe[str]]]:
 
 def strip_whitespace(s: str) -> str:
     r"""Strip leading and trailing whitespace from a string."""
-    
+
     @lru_cache(1)
     def chars() -> frozenlist[int]:
         return hydra.lib.strings.to_list(s)
@@ -329,7 +329,7 @@ def strip_whitespace(s: str) -> str:
 
 def parse_single_line(line: str) -> Either[str, Maybe[frozenlist[Maybe[str]]]]:
     r"""Parse a single CSV line, returning Nothing for empty lines."""
-    
+
     @lru_cache(1)
     def trimmed() -> str:
         return strip_whitespace(line)
@@ -337,17 +337,17 @@ def parse_single_line(line: str) -> Either[str, Maybe[frozenlist[Maybe[str]]]]:
 
 def parse_table_lines(has_header: bool, raw_lines: frozenlist[str]) -> Either[str, hydra.tabular.Table[str]]:
     r"""Parse raw CSV lines into a Table of strings."""
-    
+
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda ln: parse_single_line(ln)), raw_lines), (lambda parsed_rows: (rows := hydra.lib.maybes.cat(parsed_rows), hydra.lib.logic.if_else(has_header, (lambda : (header_row := hydra.lib.lists.head(rows), (data_rows := hydra.lib.lists.tail(rows), hydra.lib.logic.if_else(list_any((lambda m: hydra.lib.maybes.is_nothing(m)), header_row), (lambda : Left("null header column(s)")), (lambda : Right(hydra.tabular.Table(Just(hydra.tabular.HeaderRow(hydra.lib.maybes.cat(header_row))), hydra.lib.lists.map((lambda r: hydra.tabular.DataRow(r)), data_rows))))))[1])[1]), (lambda : Right(hydra.tabular.Table(Nothing(), hydra.lib.lists.map((lambda r: hydra.tabular.DataRow(r)), rows))))))[1]))
 
 def table_types_by_name(table_types: frozenlist[hydra.tabular.TableType]) -> FrozenDict[hydra.relational.RelationName, hydra.tabular.TableType]:
     r"""Build a map from table name to table type."""
-    
+
     return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda t: (t.name, t)), table_types))
 
 def term_row_to_record(table_type: hydra.tabular.TableType, row: hydra.tabular.DataRow[hydra.core.Term]) -> hydra.core.Term:
     r"""Convert a data row to a record term given a table type."""
-    
+
     tname = table_type.name.value
     col_types = table_type.columns
     @lru_cache(1)
@@ -357,10 +357,10 @@ def term_row_to_record(table_type: hydra.tabular.TableType, row: hydra.tabular.D
 
 def transform_record(cx: hydra.context.Context, g: hydra.graph.Graph, vspecs: frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], especs: frozenlist[hydra.pg.model.Edge[hydra.core.Term]], record: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], tuple[frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], frozenlist[hydra.pg.model.Edge[hydra.core.Term]]]]:
     r"""Transform a record through vertex and edge specifications to produce vertices and edges."""
-    
+
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda spec: evaluate_vertex(cx, g, spec, record)), vspecs), (lambda m_vertices: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda spec: evaluate_edge(cx, g, spec, record)), especs), (lambda m_edges: Right((hydra.lib.maybes.cat(m_vertices), hydra.lib.maybes.cat(m_edges)))))))
 
 def transform_table_rows(cx: hydra.context.Context, g: hydra.graph.Graph, vspecs: frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], especs: frozenlist[hydra.pg.model.Edge[hydra.core.Term]], table_type: hydra.tabular.TableType, rows: frozenlist[hydra.tabular.DataRow[hydra.core.Term]]) -> Either[hydra.context.InContext[hydra.error.Error], tuple[frozenlist[hydra.pg.model.Vertex[hydra.core.Term]], frozenlist[hydra.pg.model.Edge[hydra.core.Term]]]]:
     r"""Transform all rows from a table through vertex/edge specifications."""
-    
+
     return hydra.lib.eithers.map((lambda pairs: hydra.lib.lists.foldl((lambda x1, x2: concat_pairs(x1, x2)), ((), ()), pairs)), hydra.lib.eithers.map_list((lambda row: transform_record(cx, g, vspecs, especs, term_row_to_record(table_type, row))), rows))

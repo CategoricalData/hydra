@@ -12,7 +12,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A term together with an annotation
-data AnnotatedTerm = 
+data AnnotatedTerm =
   AnnotatedTerm {
     -- | The term being annotated
     annotatedTermBody :: Term,
@@ -27,7 +27,7 @@ _AnnotatedTerm_body = Name "body"
 _AnnotatedTerm_annotation = Name "annotation"
 
 -- | A type together with an annotation
-data AnnotatedType = 
+data AnnotatedType =
   AnnotatedType {
     -- | The type being annotated
     annotatedTypeBody :: Type,
@@ -42,7 +42,7 @@ _AnnotatedType_body = Name "body"
 _AnnotatedType_annotation = Name "annotation"
 
 -- | A term which applies a function to an argument
-data Application = 
+data Application =
   Application {
     -- | The left-hand side of the application
     applicationFunction :: Term,
@@ -57,7 +57,7 @@ _Application_function = Name "function"
 _Application_argument = Name "argument"
 
 -- | The type-level analog of an application term
-data ApplicationType = 
+data ApplicationType =
   ApplicationType {
     -- | The left-hand side of the application
     applicationTypeFunction :: Type,
@@ -72,7 +72,7 @@ _ApplicationType_function = Name "function"
 _ApplicationType_argument = Name "argument"
 
 -- | A field with an optional type scheme, used to bind variables to terms in a 'let' expression
-data Binding = 
+data Binding =
   Binding {
     -- | The name of the bound variable
     bindingName :: Name,
@@ -91,7 +91,7 @@ _Binding_term = Name "term"
 _Binding_type = Name "type"
 
 -- | A union elimination; a case statement
-data CaseStatement = 
+data CaseStatement =
   CaseStatement {
     -- | The name of the union type
     caseStatementTypeName :: Name,
@@ -110,7 +110,7 @@ _CaseStatement_default = Name "default"
 _CaseStatement_cases = Name "cases"
 
 -- | A type which provides a choice between a 'left' type and a 'right' type
-data EitherType = 
+data EitherType =
   EitherType {
     -- | The 'left' alternative
     eitherTypeLeft :: Type,
@@ -125,7 +125,7 @@ _EitherType_left = Name "left"
 _EitherType_right = Name "right"
 
 -- | A type which pairs a 'first' type and a 'second' type
-data PairType = 
+data PairType =
   PairType {
     -- | The first component of the pair
     pairTypeFirst :: Type,
@@ -140,7 +140,7 @@ _PairType_first = Name "first"
 _PairType_second = Name "second"
 
 -- | A corresponding elimination for an introduction term
-data Elimination = 
+data Elimination =
   -- | Eliminates a record by projecting a given field
   EliminationRecord Projection |
   -- | Eliminates a union term by matching over the fields of the union. This is a case statement.
@@ -158,7 +158,7 @@ _Elimination_union = Name "union"
 _Elimination_wrap = Name "wrap"
 
 -- | A name/term pair
-data Field = 
+data Field =
   Field {
     -- | The name of the field
     fieldName :: Name,
@@ -173,7 +173,7 @@ _Field_name = Name "name"
 _Field_term = Name "term"
 
 -- | A name/type pair
-data FieldType = 
+data FieldType =
   FieldType {
     -- | The name of the field
     fieldTypeName :: Name,
@@ -188,13 +188,13 @@ _FieldType_name = Name "name"
 _FieldType_type = Name "type"
 
 -- | A floating-point type
-data FloatType = 
+data FloatType =
   -- | An arbitrary-precision floating-point type
   FloatTypeBigfloat  |
   -- | A 32-bit floating-point type
   FloatTypeFloat32  |
   -- | A 64-bit floating-point type
-  FloatTypeFloat64 
+  FloatTypeFloat64
   deriving (Eq, Ord, Read, Show)
 
 _FloatType = Name "hydra.core.FloatType"
@@ -206,7 +206,7 @@ _FloatType_float32 = Name "float32"
 _FloatType_float64 = Name "float64"
 
 -- | A floating-point literal value
-data FloatValue = 
+data FloatValue =
   -- | An arbitrary-precision floating-point value
   FloatValueBigfloat Double |
   -- | A 32-bit floating-point value
@@ -224,7 +224,7 @@ _FloatValue_float32 = Name "float32"
 _FloatValue_float64 = Name "float64"
 
 -- | A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term.
-data ForallType = 
+data ForallType =
   ForallType {
     -- | The variable which is bound by the lambda
     forallTypeParameter :: Name,
@@ -239,7 +239,7 @@ _ForallType_parameter = Name "parameter"
 _ForallType_body = Name "body"
 
 -- | A function
-data Function = 
+data Function =
   -- | An elimination for any of a few term variants
   FunctionElimination Elimination |
   -- | A function abstraction (lambda)
@@ -257,7 +257,7 @@ _Function_lambda = Name "lambda"
 _Function_primitive = Name "primitive"
 
 -- | A function type, also known as an arrow type
-data FunctionType = 
+data FunctionType =
   FunctionType {
     -- | The domain (input) type of the function
     functionTypeDomain :: Type,
@@ -272,7 +272,7 @@ _FunctionType_domain = Name "domain"
 _FunctionType_codomain = Name "codomain"
 
 -- | An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
-data Injection = 
+data Injection =
   Injection {
     -- | The name of the union type
     injectionTypeName :: Name,
@@ -287,7 +287,7 @@ _Injection_typeName = Name "typeName"
 _Injection_field = Name "field"
 
 -- | An integer type
-data IntegerType = 
+data IntegerType =
   -- | An arbitrary-precision integer type
   IntegerTypeBigint  |
   -- | An 8-bit signed integer type
@@ -305,7 +305,7 @@ data IntegerType =
   -- | A 32-bit unsigned integer type
   IntegerTypeUint32  |
   -- | A 64-bit unsigned integer type
-  IntegerTypeUint64 
+  IntegerTypeUint64
   deriving (Eq, Ord, Read, Show)
 
 _IntegerType = Name "hydra.core.IntegerType"
@@ -329,7 +329,7 @@ _IntegerType_uint32 = Name "uint32"
 _IntegerType_uint64 = Name "uint64"
 
 -- | An integer literal value
-data IntegerValue = 
+data IntegerValue =
   -- | An arbitrary-precision integer value
   IntegerValueBigint Integer |
   -- | An 8-bit signed integer value
@@ -371,7 +371,7 @@ _IntegerValue_uint32 = Name "uint32"
 _IntegerValue_uint64 = Name "uint64"
 
 -- | A function abstraction (lambda)
-data Lambda = 
+data Lambda =
   Lambda {
     -- | The parameter of the lambda
     lambdaParameter :: Name,
@@ -390,7 +390,7 @@ _Lambda_domain = Name "domain"
 _Lambda_body = Name "body"
 
 -- | A set of (possibly recursive) 'let' bindings together with a body in which they are bound
-data Let = 
+data Let =
   Let {
     -- | The list of variable bindings
     letBindings :: [Binding],
@@ -405,7 +405,7 @@ _Let_bindings = Name "bindings"
 _Let_body = Name "body"
 
 -- | A term constant; an instance of a literal type
-data Literal = 
+data Literal =
   -- | A binary literal
   LiteralBinary B.ByteString |
   -- | A boolean literal
@@ -431,7 +431,7 @@ _Literal_integer = Name "integer"
 _Literal_string = Name "string"
 
 -- | Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants
-data LiteralType = 
+data LiteralType =
   -- | The type of a binary (byte string) value
   LiteralTypeBinary  |
   -- | The type of a boolean (true/false) value
@@ -441,7 +441,7 @@ data LiteralType =
   -- | The type of an integer value
   LiteralTypeInteger IntegerType |
   -- | The type of a string value
-  LiteralTypeString 
+  LiteralTypeString
   deriving (Eq, Ord, Read, Show)
 
 _LiteralType = Name "hydra.core.LiteralType"
@@ -457,7 +457,7 @@ _LiteralType_integer = Name "integer"
 _LiteralType_string = Name "string"
 
 -- | A map type
-data MapType = 
+data MapType =
   MapType {
     -- | The type of keys in the map
     mapTypeKeys :: Type,
@@ -472,7 +472,7 @@ _MapType_keys = Name "keys"
 _MapType_values = Name "values"
 
 -- | A unique identifier in some context; a string-valued key
-newtype Name = 
+newtype Name =
   Name {
     unName :: String}
   deriving (Eq, Ord, Read, Show)
@@ -480,7 +480,7 @@ newtype Name =
 _Name = Name "hydra.core.Name"
 
 -- | A record elimination; a projection
-data Projection = 
+data Projection =
   Projection {
     -- | The name of the record type
     projectionTypeName :: Name,
@@ -495,7 +495,7 @@ _Projection_typeName = Name "typeName"
 _Projection_field = Name "field"
 
 -- | A record, or labeled tuple; a map of field names to terms
-data Record = 
+data Record =
   Record {
     -- | The name of the record type
     recordTypeName :: Name,
@@ -510,7 +510,7 @@ _Record_typeName = Name "typeName"
 _Record_fields = Name "fields"
 
 -- | A data term
-data Term = 
+data Term =
   -- | A term annotated with metadata
   TermAnnotated AnnotatedTerm |
   -- | A function application
@@ -588,7 +588,7 @@ _Term_variable = Name "variable"
 _Term_wrap = Name "wrap"
 
 -- | A data type
-data Type = 
+data Type =
   -- | An annotated type
   TypeAnnotated AnnotatedType |
   -- | A type application
@@ -658,7 +658,7 @@ _Type_variable = Name "variable"
 _Type_wrap = Name "wrap"
 
 -- | A term applied to a type; a type application
-data TypeApplicationTerm = 
+data TypeApplicationTerm =
   TypeApplicationTerm {
     -- | The term being applied to a type
     typeApplicationTermBody :: Term,
@@ -673,7 +673,7 @@ _TypeApplicationTerm_body = Name "body"
 _TypeApplicationTerm_type = Name "type"
 
 -- | A System F type abstraction term
-data TypeLambda = 
+data TypeLambda =
   TypeLambda {
     -- | The type variable introduced by the abstraction
     typeLambdaParameter :: Name,
@@ -688,7 +688,7 @@ _TypeLambda_parameter = Name "parameter"
 _TypeLambda_body = Name "body"
 
 -- | A type expression together with free type variables occurring in the expression
-data TypeScheme = 
+data TypeScheme =
   TypeScheme {
     -- | The free type variables
     typeSchemeVariables :: [Name],
@@ -707,7 +707,7 @@ _TypeScheme_type = Name "type"
 _TypeScheme_constraints = Name "constraints"
 
 -- | Metadata associated with a type variable, including typeclass constraints
-data TypeVariableMetadata = 
+data TypeVariableMetadata =
   TypeVariableMetadata {
     -- | The set of typeclass constraints on this type variable
     typeVariableMetadataClasses :: (S.Set Name)}
@@ -718,7 +718,7 @@ _TypeVariableMetadata = Name "hydra.core.TypeVariableMetadata"
 _TypeVariableMetadata_classes = Name "classes"
 
 -- | A term wrapped in a type name
-data WrappedTerm = 
+data WrappedTerm =
   WrappedTerm {
     -- | The name of the wrapper type
     wrappedTermTypeName :: Name,

@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class ConstructorWithComments implements Serializable, Comparable<ConstructorWithComments> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.ConstructorWithComments");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public static final hydra.core.Name COMMENTS = new hydra.core.Name("comments");
-  
+
   /**
    * The constructor
    */
   public final hydra.ext.haskell.ast.Constructor body;
-  
+
   /**
    * Optional comments
    */
   public final hydra.util.Maybe<String> comments;
-  
+
   public ConstructorWithComments (hydra.ext.haskell.ast.Constructor body, hydra.util.Maybe<String> comments) {
     this.body = body;
     this.comments = comments;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ConstructorWithComments)) {
@@ -41,12 +41,12 @@ public class ConstructorWithComments implements Serializable, Comparable<Constru
       this.comments,
       o.comments);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(body) + 3 * java.util.Objects.hashCode(comments);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ConstructorWithComments other) {
@@ -57,11 +57,11 @@ public class ConstructorWithComments implements Serializable, Comparable<Constru
     }
     return ((Comparable) comments).compareTo(other.comments);
   }
-  
+
   public ConstructorWithComments withBody(hydra.ext.haskell.ast.Constructor body) {
     return new ConstructorWithComments(body, comments);
   }
-  
+
   public ConstructorWithComments withComments(hydra.util.Maybe<String> comments) {
     return new ConstructorWithComments(body, comments);
   }

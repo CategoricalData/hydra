@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class AnnotationTypeElementModifier implements Serializable, Comparable<AnnotationTypeElementModifier> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.AnnotationTypeElementModifier");
-  
+
   public static final hydra.core.Name PUBLIC = new hydra.core.Name("public");
-  
+
   public static final hydra.core.Name ABSTRACT = new hydra.core.Name("abstract");
-  
+
   private AnnotationTypeElementModifier () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Public instance) ;
-    
+
     R visit(Abstract instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(AnnotationTypeElementModifier instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Public instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Abstract instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Public extends hydra.ext.java.syntax.AnnotationTypeElementModifier implements Serializable {
     public final hydra.ext.java.syntax.Annotation value;
-    
+
     public Public (hydra.ext.java.syntax.Annotation value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Public)) {
@@ -54,12 +54,12 @@ public abstract class AnnotationTypeElementModifier implements Serializable, Com
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AnnotationTypeElementModifier other) {
@@ -70,18 +70,18 @@ public abstract class AnnotationTypeElementModifier implements Serializable, Com
       Public o = (Public) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Abstract extends hydra.ext.java.syntax.AnnotationTypeElementModifier implements Serializable {
     public Abstract () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Abstract)) {
@@ -90,12 +90,12 @@ public abstract class AnnotationTypeElementModifier implements Serializable, Com
       Abstract o = (Abstract) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AnnotationTypeElementModifier other) {
@@ -105,7 +105,7 @@ public abstract class AnnotationTypeElementModifier implements Serializable, Com
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

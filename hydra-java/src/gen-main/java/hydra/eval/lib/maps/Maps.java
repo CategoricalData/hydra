@@ -18,7 +18,7 @@ public interface Maps {
             " but found "),
           hydra.show.core.Core.term(mapTerm)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Map m) {
         hydra.util.Lazy<hydra.util.Maybe<hydra.core.Term>> currentVal = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
@@ -29,7 +29,7 @@ public interface Maps {
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> bimap(hydra.context.Context cx, T0 g, hydra.core.Term keyFun, hydra.core.Term valFun, hydra.core.Term mapTerm) {
     return (mapTerm).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -42,7 +42,7 @@ public interface Maps {
             " but found "),
           hydra.show.core.Core.term(mapTerm)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Map m) {
         hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>> pairs = new hydra.util.Lazy<>(() -> hydra.lib.maps.ToList.apply((m).value));
@@ -56,7 +56,7 @@ public interface Maps {
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> filter(hydra.context.Context cx, T0 g, hydra.core.Term valPred, hydra.core.Term mapTerm) {
     return (mapTerm).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -69,7 +69,7 @@ public interface Maps {
             " but found "),
           hydra.show.core.Core.term(mapTerm)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Map m) {
         hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>> pairs = new hydra.util.Lazy<>(() -> hydra.lib.maps.ToList.apply((m).value));
@@ -82,7 +82,7 @@ public interface Maps {
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> filterWithKey(hydra.context.Context cx, T0 g, hydra.core.Term pred, hydra.core.Term mapTerm) {
     return (mapTerm).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -95,7 +95,7 @@ public interface Maps {
             " but found "),
           hydra.show.core.Core.term(mapTerm)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Map m) {
         hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>> pairs = new hydra.util.Lazy<>(() -> hydra.lib.maps.ToList.apply((m).value));
@@ -109,7 +109,7 @@ public interface Maps {
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> map(hydra.context.Context cx, T0 g, hydra.core.Term valFun, hydra.core.Term mapTerm) {
     return (mapTerm).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -122,7 +122,7 @@ public interface Maps {
             " but found "),
           hydra.show.core.Core.term(mapTerm)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Map m) {
         hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>> pairs = new hydra.util.Lazy<>(() -> hydra.lib.maps.ToList.apply((m).value));
@@ -136,7 +136,7 @@ public interface Maps {
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> mapKeys(hydra.context.Context cx, T0 g, hydra.core.Term keyFun, hydra.core.Term mapTerm) {
     return (mapTerm).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -149,7 +149,7 @@ public interface Maps {
             " but found "),
           hydra.show.core.Core.term(mapTerm)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Map m) {
         hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>> pairs = new hydra.util.Lazy<>(() -> hydra.lib.maps.ToList.apply((m).value));

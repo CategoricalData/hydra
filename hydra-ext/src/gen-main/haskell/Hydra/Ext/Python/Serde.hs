@@ -33,8 +33,8 @@ encodeAnnotatedRhs arhs =
 -- | Serialize an annotated statement (with optional doc comment)
 encodeAnnotatedStatement :: Syntax.AnnotatedStatement -> Ast.Expr
 encodeAnnotatedStatement as_ =
-     
-      let doc_ = Syntax.annotatedStatementComment as_ 
+
+      let doc_ = Syntax.annotatedStatementComment as_
           stmt = Syntax.annotatedStatementStatement as_
       in (Serialization.newlineSep [
         Serialization.cst (toPythonComments doc_),
@@ -50,8 +50,8 @@ encodeAnnotation ann =
 -- | Serialize function arguments
 encodeArgs :: Syntax.Args -> Ast.Expr
 encodeArgs args =
-     
-      let pos = Syntax.argsPositional args 
+
+      let pos = Syntax.argsPositional args
           ks = Syntax.argsKwargOrStarred args
           kss = Syntax.argsKwargOrDoubleStarred args
       in (Serialization.commaSep Serialization.inlineStyle (Lists.concat [
@@ -70,8 +70,8 @@ encodeAssignment a =
 -- | Serialize an assignment expression (walrus operator)
 encodeAssignmentExpression :: Syntax.AssignmentExpression -> Ast.Expr
 encodeAssignmentExpression ae =
-     
-      let name = Syntax.assignmentExpressionName ae 
+
+      let name = Syntax.assignmentExpressionName ae
           expr = Syntax.assignmentExpressionExpression ae
       in (Serialization.spaceSep [
         encodeName name,
@@ -106,8 +106,8 @@ encodeAttribute attr = Serialization.dotSep (Lists.map encodeName (Syntax.unAttr
 -- | Serialize an await primary expression
 encodeAwaitPrimary :: Syntax.AwaitPrimary -> Ast.Expr
 encodeAwaitPrimary ap =
-     
-      let await_ = Syntax.awaitPrimaryAwait ap 
+
+      let await_ = Syntax.awaitPrimaryAwait ap
           primary = Syntax.awaitPrimaryPrimary ap
       in (Logic.ifElse await_ (Serialization.spaceSep [
         Serialization.cst "await",
@@ -116,8 +116,8 @@ encodeAwaitPrimary ap =
 -- | Serialize a bitwise AND expression
 encodeBitwiseAnd :: Syntax.BitwiseAnd -> Ast.Expr
 encodeBitwiseAnd band =
-     
-      let lhs = Syntax.bitwiseAndLhs band 
+
+      let lhs = Syntax.bitwiseAndLhs band
           rhs = Syntax.bitwiseAndRhs band
       in (Serialization.spaceSep (Maybes.cat [
         Maybes.map (\l -> Serialization.spaceSep [
@@ -128,8 +128,8 @@ encodeBitwiseAnd band =
 -- | Serialize a bitwise OR expression
 encodeBitwiseOr :: Syntax.BitwiseOr -> Ast.Expr
 encodeBitwiseOr bor =
-     
-      let lhs = Syntax.bitwiseOrLhs bor 
+
+      let lhs = Syntax.bitwiseOrLhs bor
           rhs = Syntax.bitwiseOrRhs bor
       in (Serialization.spaceSep (Maybes.cat [
         Maybes.map (\l -> Serialization.spaceSep [
@@ -140,8 +140,8 @@ encodeBitwiseOr bor =
 -- | Serialize a bitwise XOR expression
 encodeBitwiseXor :: Syntax.BitwiseXor -> Ast.Expr
 encodeBitwiseXor bxor =
-     
-      let lhs = Syntax.bitwiseXorLhs bxor 
+
+      let lhs = Syntax.bitwiseXorLhs bxor
           rhs = Syntax.bitwiseXorRhs bxor
       in (Serialization.spaceSep (Maybes.cat [
         Maybes.map (\l -> Serialization.spaceSep [
@@ -163,8 +163,8 @@ encodeCapturePattern cp = encodePatternCaptureTarget (Syntax.unCapturePattern cp
 -- | Serialize a case block
 encodeCaseBlock :: Syntax.CaseBlock -> Ast.Expr
 encodeCaseBlock cb =
-     
-      let patterns = Syntax.caseBlockPatterns cb 
+
+      let patterns = Syntax.caseBlockPatterns cb
           guard = Syntax.caseBlockGuard cb
           body = Syntax.caseBlockBody cb
       in (Serialization.newlineSep [
@@ -179,8 +179,8 @@ encodeCaseBlock cb =
 -- | Serialize a class definition
 encodeClassDefinition :: Syntax.ClassDefinition -> Ast.Expr
 encodeClassDefinition cd =
-     
-      let decs = Syntax.classDefinitionDecorators cd 
+
+      let decs = Syntax.classDefinitionDecorators cd
           name = Syntax.classDefinitionName cd
           args = Syntax.classDefinitionArguments cd
           body = Syntax.classDefinitionBody cd
@@ -202,8 +202,8 @@ encodeClassDefinition cd =
 -- | Serialize a class pattern
 encodeClassPattern :: Syntax.ClassPattern -> Ast.Expr
 encodeClassPattern cp =
-     
-      let noa = Syntax.classPatternNameOrAttribute cp 
+
+      let noa = Syntax.classPatternNameOrAttribute cp
           pos = Syntax.classPatternPositionalPatterns cp
           kw = Syntax.classPatternKeywordPatterns cp
       in (Serialization.noSep (Maybes.cat [
@@ -233,8 +233,8 @@ encodeComparison cmp = encodeBitwiseOr (Syntax.comparisonLhs cmp)
 -- | Serialize a conditional expression (ternary)
 encodeConditional :: Syntax.Conditional -> Ast.Expr
 encodeConditional c =
-     
-      let body = Syntax.conditionalBody c 
+
+      let body = Syntax.conditionalBody c
           cond = Syntax.conditionalIf c
           elseExpr = Syntax.conditionalElse c
       in (Serialization.spaceSep [
@@ -282,8 +282,8 @@ encodeDisjunction d =
 -- | Serialize a dotted as name
 encodeDottedAsName :: Syntax.DottedAsName -> Ast.Expr
 encodeDottedAsName dan =
-     
-      let name = Syntax.dottedAsNameName dan 
+
+      let name = Syntax.dottedAsNameName dan
           alias = Syntax.dottedAsNameAs dan
       in (Serialization.spaceSep (Maybes.cat [
         Just (encodeDottedName name),
@@ -330,8 +330,8 @@ encodeFactor f =
 -- | Serialize a raw function definition
 encodeFunctionDefRaw :: Syntax.FunctionDefRaw -> Ast.Expr
 encodeFunctionDefRaw fdr =
-     
-      let async_ = Syntax.functionDefRawAsync fdr 
+
+      let async_ = Syntax.functionDefRawAsync fdr
           name = Syntax.functionDefRawName fdr
           tparams = Syntax.functionDefRawTypeParams fdr
           params = Syntax.functionDefRawParams fdr
@@ -363,8 +363,8 @@ encodeFunctionDefRaw fdr =
 -- | Serialize a function definition
 encodeFunctionDefinition :: Syntax.FunctionDefinition -> Ast.Expr
 encodeFunctionDefinition fd =
-     
-      let decs = Syntax.functionDefinitionDecorators fd 
+
+      let decs = Syntax.functionDefinitionDecorators fd
           raw = Syntax.functionDefinitionRaw fd
       in (Serialization.newlineSep (Maybes.cat [
         Maybes.map encodeDecorators decs,
@@ -387,8 +387,8 @@ encodeGuard g =
 -- | Serialize an import from statement
 encodeImportFrom :: Syntax.ImportFrom -> Ast.Expr
 encodeImportFrom if_ =
-     
-      let prefixes = Syntax.importFromPrefixes if_ 
+
+      let prefixes = Syntax.importFromPrefixes if_
           name = Syntax.importFromDottedName if_
           targets = Syntax.importFromTargets if_
           lhs =
@@ -405,8 +405,8 @@ encodeImportFrom if_ =
 -- | Serialize an import from as name
 encodeImportFromAsName :: Syntax.ImportFromAsName -> Ast.Expr
 encodeImportFromAsName ifan =
-     
-      let name = Syntax.importFromAsNameName ifan 
+
+      let name = Syntax.importFromAsNameName ifan
           alias = Syntax.importFromAsNameAs ifan
       in (Maybes.maybe (encodeName name) (\a -> Serialization.spaceSep [
         encodeName name,
@@ -450,8 +450,8 @@ encodeInversion i =
 -- | Serialize a keyword pattern
 encodeKeywordPattern :: Syntax.KeywordPattern -> Ast.Expr
 encodeKeywordPattern kp =
-     
-      let name = Syntax.keywordPatternName kp 
+
+      let name = Syntax.keywordPatternName kp
           pat = Syntax.keywordPatternPattern kp
       in (Serialization.noSep [
         encodeName name,
@@ -466,8 +466,8 @@ encodeKeywordPatterns kp =
 -- | Serialize a key-value pair
 encodeKvpair :: Syntax.Kvpair -> Ast.Expr
 encodeKvpair kv =
-     
-      let k = Syntax.kvpairKey kv 
+
+      let k = Syntax.kvpairKey kv
           v = Syntax.kvpairValue kv
       in (Serialization.spaceSep [
         Serialization.noSep [
@@ -478,8 +478,8 @@ encodeKvpair kv =
 -- | Serialize a keyword argument
 encodeKwarg :: Syntax.Kwarg -> Ast.Expr
 encodeKwarg k =
-     
-      let name = Syntax.kwargName k 
+
+      let name = Syntax.kwargName k
           expr = Syntax.kwargValue k
       in (Serialization.noSep [
         encodeName name,
@@ -505,8 +505,8 @@ encodeKwargOrStarred ks =
 -- | Serialize a lambda expression
 encodeLambda :: Syntax.Lambda -> Ast.Expr
 encodeLambda l =
-     
-      let params = Syntax.lambdaParams l 
+
+      let params = Syntax.lambdaParams l
           body = Syntax.lambdaBody l
       in (Serialization.parens (Serialization.spaceSep [
         Serialization.cst "lambda",
@@ -522,7 +522,7 @@ encodeLambdaParamNoDefault p = encodeName (Syntax.unLambdaParamNoDefault p)
 -- | Serialize lambda parameters
 encodeLambdaParameters :: Syntax.LambdaParameters -> Ast.Expr
 encodeLambdaParameters lp =
-     
+
       let nodef = Syntax.lambdaParametersParamNoDefault lp
       in (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeLambdaParamNoDefault nodef))
 
@@ -542,8 +542,8 @@ encodeList l = Serialization.bracketListAdaptive (Lists.map encodeStarNamedExpre
 -- | Serialize a match statement
 encodeMatchStatement :: Syntax.MatchStatement -> Ast.Expr
 encodeMatchStatement ms =
-     
-      let subj = Syntax.matchStatementSubject ms 
+
+      let subj = Syntax.matchStatementSubject ms
           cases = Syntax.matchStatementCases ms
       in (Serialization.newlineSep [
         Serialization.spaceSep [
@@ -556,8 +556,8 @@ encodeMatchStatement ms =
 -- | Serialize a Python module to an AST expression
 encodeModule :: Syntax.Module -> Ast.Expr
 encodeModule mod =
-     
-      let warning = Serialization.cst (toPythonComments Constants.warningAutoGeneratedFile) 
+
+      let warning = Serialization.cst (toPythonComments Constants.warningAutoGeneratedFile)
           groups = Lists.map (\group -> Serialization.newlineSep (Lists.map encodeStatement group)) (Syntax.unModule mod)
       in (Serialization.doubleNewlineSep (Lists.cons warning groups))
 
@@ -591,8 +591,8 @@ encodeOrPattern op =
 -- | Serialize a parameter
 encodeParam :: Syntax.Param -> Ast.Expr
 encodeParam p =
-     
-      let name = Syntax.paramName p 
+
+      let name = Syntax.paramName p
           ann = Syntax.paramAnnotation p
       in (Serialization.noSep (Maybes.cat [
         Just (encodeName name),
@@ -605,7 +605,7 @@ encodeParamNoDefault pnd = encodeParam (Syntax.paramNoDefaultParam pnd)
 -- | Serialize parameters without defaults
 encodeParamNoDefaultParameters :: Syntax.ParamNoDefaultParameters -> Ast.Expr
 encodeParamNoDefaultParameters pndp =
-     
+
       let nodef = Syntax.paramNoDefaultParametersParamNoDefault pndp
       in (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeParamNoDefault nodef))
 
@@ -651,8 +651,8 @@ encodePositionalPatterns pp =
 -- | Serialize a power expression
 encodePower :: Syntax.Power -> Ast.Expr
 encodePower p =
-     
-      let lhs = Syntax.powerLhs p 
+
+      let lhs = Syntax.powerLhs p
           rhs = Syntax.powerRhs p
       in (Serialization.spaceSep (Maybes.cat [
         Just (encodeAwaitPrimary lhs),
@@ -687,8 +687,8 @@ encodePrimaryRhs rhs =
 -- | Serialize a primary with RHS
 encodePrimaryWithRhs :: Syntax.PrimaryWithRhs -> Ast.Expr
 encodePrimaryWithRhs pwr =
-     
-      let prim = Syntax.primaryWithRhsPrimary pwr 
+
+      let prim = Syntax.primaryWithRhsPrimary pwr
           rhs = Syntax.primaryWithRhsRhs pwr
       in (Serialization.noSep [
         encodePrimary prim,
@@ -697,8 +697,8 @@ encodePrimaryWithRhs pwr =
 -- | Serialize a raise expression
 encodeRaiseExpression :: Syntax.RaiseExpression -> Ast.Expr
 encodeRaiseExpression re =
-     
-      let expr = Syntax.raiseExpressionExpression re 
+
+      let expr = Syntax.raiseExpressionExpression re
           from_ = Syntax.raiseExpressionFrom re
       in (Serialization.spaceSep (Maybes.cat [
         Just (encodeExpression expr),
@@ -782,8 +782,8 @@ encodeSliceOrStarredExpression s =
 -- | Serialize slices
 encodeSlices :: Syntax.Slices -> Ast.Expr
 encodeSlices s =
-     
-      let hd = Syntax.slicesHead s 
+
+      let hd = Syntax.slicesHead s
           tl = Syntax.slicesTail s
       in (Serialization.commaSep Serialization.inlineStyle (Lists.cons (encodeSlice hd) (Lists.map encodeSliceOrStarredExpression tl)))
 
@@ -841,8 +841,8 @@ encodeStatement stmt =
 -- | Serialize a Python string literal
 encodeString :: Syntax.String_ -> Ast.Expr
 encodeString s =
-     
-      let content = Syntax.stringValue s 
+
+      let content = Syntax.stringValue s
           style = Syntax.stringQuoteStyle s
       in case style of
         Syntax.QuoteStyleSingle -> Serialization.cst (escapePythonString False content)
@@ -878,8 +878,8 @@ encodeTargetWithStarAtom t =
 -- | Serialize a TPrimaryAndName as primary.name
 encodeTPrimaryAndName :: Syntax.TPrimaryAndName -> Ast.Expr
 encodeTPrimaryAndName pn =
-     
-      let prim = Syntax.tPrimaryAndNamePrimary pn 
+
+      let prim = Syntax.tPrimaryAndNamePrimary pn
           name_ = Syntax.tPrimaryAndNameName pn
       in (Serialization.noSep [
         encodeTPrimary prim,
@@ -899,7 +899,7 @@ encodeTPrimary tp =
 -- | Serialize a Python tuple
 encodeTuple :: Syntax.Tuple -> Ast.Expr
 encodeTuple t =
-     
+
       let es = Syntax.unTuple t
       in (Logic.ifElse (Equality.equal (Lists.length es) 1) (Serialization.parens (Serialization.noSep [
         encodeStarNamedExpression (Lists.head es),
@@ -908,8 +908,8 @@ encodeTuple t =
 -- | Serialize a type alias
 encodeTypeAlias :: Syntax.TypeAlias -> Ast.Expr
 encodeTypeAlias ta =
-     
-      let name = Syntax.typeAliasName ta 
+
+      let name = Syntax.typeAliasName ta
           tparams = Syntax.typeAliasTypeParams ta
           expr = Syntax.typeAliasExpression ta
           alias =
@@ -933,8 +933,8 @@ encodeTypeParameter tp =
 -- | Serialize a typed assignment
 encodeTypedAssignment :: Syntax.TypedAssignment -> Ast.Expr
 encodeTypedAssignment ta =
-     
-      let lhs = Syntax.typedAssignmentLhs ta 
+
+      let lhs = Syntax.typedAssignmentLhs ta
           typ = Syntax.typedAssignmentType ta
           rhs = Syntax.typedAssignmentRhs ta
       in (Serialization.spaceSep (Maybes.cat [
@@ -947,8 +947,8 @@ encodeTypedAssignment ta =
 -- | Serialize an untyped assignment
 encodeUntypedAssignment :: Syntax.UntypedAssignment -> Ast.Expr
 encodeUntypedAssignment ua =
-     
-      let targets = Syntax.untypedAssignmentTargets ua 
+
+      let targets = Syntax.untypedAssignmentTargets ua
           rhs = Syntax.untypedAssignmentRhs ua
       in (Serialization.spaceSep (Lists.concat [
         Lists.map encodeStarTarget targets,
@@ -962,8 +962,8 @@ encodeValuePattern vp = encodeAttribute (Syntax.unValuePattern vp)
 -- | Serialize a while statement
 encodeWhileStatement :: Syntax.WhileStatement -> Ast.Expr
 encodeWhileStatement ws =
-     
-      let cond = Syntax.whileStatementCondition ws 
+
+      let cond = Syntax.whileStatementCondition ws
           body = Syntax.whileStatementBody ws
           else_ = Syntax.whileStatementElse ws
       in (Serialization.newlineSep (Maybes.cat [
@@ -981,8 +981,8 @@ encodeWhileStatement ws =
 -- | Escape special characters in a Python string and wrap in quotes
 escapePythonString :: Bool -> String -> String
 escapePythonString doubleQuoted s =
-     
-      let replace = \old -> \new -> \str -> Strings.intercalate new (Strings.splitOn old str) 
+
+      let replace = \old -> \new -> \str -> Strings.intercalate new (Strings.splitOn old str)
           s1 = replace "\\" "\\\\" s
           s2 = replace "\NUL" "\\x00" s1
           s3 = replace "\n" "\\n" s2

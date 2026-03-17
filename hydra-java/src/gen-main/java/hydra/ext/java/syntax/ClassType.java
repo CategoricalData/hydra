@@ -6,30 +6,30 @@ import java.io.Serializable;
 
 public class ClassType implements Serializable, Comparable<ClassType> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ClassType");
-  
+
   public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
-  
+
   public static final hydra.core.Name QUALIFIER = new hydra.core.Name("qualifier");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public static final hydra.core.Name ARGUMENTS = new hydra.core.Name("arguments");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
-  
+
   public final hydra.ext.java.syntax.ClassTypeQualifier qualifier;
-  
+
   public final hydra.ext.java.syntax.TypeIdentifier identifier;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> arguments;
-  
+
   public ClassType (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.ClassTypeQualifier qualifier, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> arguments) {
     this.annotations = annotations;
     this.qualifier = qualifier;
     this.identifier = identifier;
     this.arguments = arguments;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ClassType)) {
@@ -46,12 +46,12 @@ public class ClassType implements Serializable, Comparable<ClassType> {
       this.arguments,
       o.arguments);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(qualifier) + 5 * java.util.Objects.hashCode(identifier) + 7 * java.util.Objects.hashCode(arguments);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ClassType other) {
@@ -70,19 +70,19 @@ public class ClassType implements Serializable, Comparable<ClassType> {
     }
     return ((Comparable) arguments).compareTo(other.arguments);
   }
-  
+
   public ClassType withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
-  
+
   public ClassType withQualifier(hydra.ext.java.syntax.ClassTypeQualifier qualifier) {
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
-  
+
   public ClassType withIdentifier(hydra.ext.java.syntax.TypeIdentifier identifier) {
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
-  
+
   public ClassType withArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> arguments) {
     return new ClassType(annotations, qualifier, identifier, arguments);
   }

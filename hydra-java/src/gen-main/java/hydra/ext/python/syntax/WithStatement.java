@@ -6,30 +6,30 @@ import java.io.Serializable;
 
 public class WithStatement implements Serializable, Comparable<WithStatement> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.WithStatement");
-  
+
   public static final hydra.core.Name ASYNC = new hydra.core.Name("async");
-  
+
   public static final hydra.core.Name ITEMS = new hydra.core.Name("items");
-  
+
   public static final hydra.core.Name TYPE_COMMENT = new hydra.core.Name("typeComment");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public final Boolean async;
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.WithItem> items;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment;
-  
+
   public final hydra.ext.python.syntax.Block body;
-  
+
   public WithStatement (Boolean async, hydra.util.ConsList<hydra.ext.python.syntax.WithItem> items, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment, hydra.ext.python.syntax.Block body) {
     this.async = async;
     this.items = items;
     this.typeComment = typeComment;
     this.body = body;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof WithStatement)) {
@@ -46,12 +46,12 @@ public class WithStatement implements Serializable, Comparable<WithStatement> {
       this.body,
       o.body);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(async) + 3 * java.util.Objects.hashCode(items) + 5 * java.util.Objects.hashCode(typeComment) + 7 * java.util.Objects.hashCode(body);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(WithStatement other) {
@@ -70,19 +70,19 @@ public class WithStatement implements Serializable, Comparable<WithStatement> {
     }
     return ((Comparable) body).compareTo(other.body);
   }
-  
+
   public WithStatement withAsync(Boolean async) {
     return new WithStatement(async, items, typeComment, body);
   }
-  
+
   public WithStatement withItems(hydra.util.ConsList<hydra.ext.python.syntax.WithItem> items) {
     return new WithStatement(async, items, typeComment, body);
   }
-  
+
   public WithStatement withTypeComment(hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment) {
     return new WithStatement(async, items, typeComment, body);
   }
-  
+
   public WithStatement withBody(hydra.ext.python.syntax.Block body) {
     return new WithStatement(async, items, typeComment, body);
   }

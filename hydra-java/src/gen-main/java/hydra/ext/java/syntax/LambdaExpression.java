@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class LambdaExpression implements Serializable, Comparable<LambdaExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.LambdaExpression");
-  
+
   public static final hydra.core.Name PARAMETERS = new hydra.core.Name("parameters");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public final hydra.ext.java.syntax.LambdaParameters parameters;
-  
+
   public final hydra.ext.java.syntax.LambdaBody body;
-  
+
   public LambdaExpression (hydra.ext.java.syntax.LambdaParameters parameters, hydra.ext.java.syntax.LambdaBody body) {
     this.parameters = parameters;
     this.body = body;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof LambdaExpression)) {
@@ -32,12 +32,12 @@ public class LambdaExpression implements Serializable, Comparable<LambdaExpressi
       this.body,
       o.body);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(parameters) + 3 * java.util.Objects.hashCode(body);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LambdaExpression other) {
@@ -48,11 +48,11 @@ public class LambdaExpression implements Serializable, Comparable<LambdaExpressi
     }
     return ((Comparable) body).compareTo(other.body);
   }
-  
+
   public LambdaExpression withParameters(hydra.ext.java.syntax.LambdaParameters parameters) {
     return new LambdaExpression(parameters, body);
   }
-  
+
   public LambdaExpression withBody(hydra.ext.java.syntax.LambdaBody body) {
     return new LambdaExpression(parameters, body);
   }

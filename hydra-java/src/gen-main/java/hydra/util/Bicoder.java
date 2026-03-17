@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class Bicoder<T1, T2, V1, V2> implements Serializable, Comparable<Bicoder<T1, T2, V1, V2>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.util.Bicoder");
-  
+
   public static final hydra.core.Name ENCODE = new hydra.core.Name("encode");
-  
+
   public static final hydra.core.Name DECODE = new hydra.core.Name("decode");
-  
+
   /**
    * A function from source types to adapters
    */
   public final java.util.function.Function<T1, hydra.util.Adapter<T1, T2, V1, V2>> encode;
-  
+
   /**
    * A function from target types to adapters
    */
   public final java.util.function.Function<T2, hydra.util.Adapter<T2, T1, V2, V1>> decode;
-  
+
   public Bicoder (java.util.function.Function<T1, hydra.util.Adapter<T1, T2, V1, V2>> encode, java.util.function.Function<T2, hydra.util.Adapter<T2, T1, V2, V1>> decode) {
     this.encode = encode;
     this.decode = decode;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Bicoder)) {
@@ -41,12 +41,12 @@ public class Bicoder<T1, T2, V1, V2> implements Serializable, Comparable<Bicoder
       this.decode,
       o.decode);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(encode) + 3 * java.util.Objects.hashCode(decode);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Bicoder other) {
@@ -61,11 +61,11 @@ public class Bicoder<T1, T2, V1, V2> implements Serializable, Comparable<Bicoder
       decode.hashCode(),
       other.decode.hashCode());
   }
-  
+
   public Bicoder withEncode(java.util.function.Function<T1, hydra.util.Adapter<T1, T2, V1, V2>> encode) {
     return new Bicoder(encode, decode);
   }
-  
+
   public Bicoder withDecode(java.util.function.Function<T2, hydra.util.Adapter<T2, T1, V2, V1>> decode) {
     return new Bicoder(encode, decode);
   }

@@ -6,52 +6,52 @@ import java.io.Serializable;
 
 public abstract class EqualityExpression implements Serializable, Comparable<EqualityExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.EqualityExpression");
-  
+
   public static final hydra.core.Name UNARY = new hydra.core.Name("unary");
-  
+
   public static final hydra.core.Name EQUAL = new hydra.core.Name("equal");
-  
+
   public static final hydra.core.Name NOT_EQUAL = new hydra.core.Name("notEqual");
-  
+
   private EqualityExpression () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Unary instance) ;
-    
+
     R visit(Equal instance) ;
-    
+
     R visit(NotEqual instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(EqualityExpression instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Unary instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Equal instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(NotEqual instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Unary extends hydra.ext.java.syntax.EqualityExpression implements Serializable {
     public final hydra.ext.java.syntax.RelationalExpression value;
-    
+
     public Unary (hydra.ext.java.syntax.RelationalExpression value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Unary)) {
@@ -62,12 +62,12 @@ public abstract class EqualityExpression implements Serializable, Comparable<Equ
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(EqualityExpression other) {
@@ -78,20 +78,20 @@ public abstract class EqualityExpression implements Serializable, Comparable<Equ
       Unary o = (Unary) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Equal extends hydra.ext.java.syntax.EqualityExpression implements Serializable {
     public final hydra.ext.java.syntax.EqualityExpression_Binary value;
-    
+
     public Equal (hydra.ext.java.syntax.EqualityExpression_Binary value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Equal)) {
@@ -102,12 +102,12 @@ public abstract class EqualityExpression implements Serializable, Comparable<Equ
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(EqualityExpression other) {
@@ -118,20 +118,20 @@ public abstract class EqualityExpression implements Serializable, Comparable<Equ
       Equal o = (Equal) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class NotEqual extends hydra.ext.java.syntax.EqualityExpression implements Serializable {
     public final hydra.ext.java.syntax.EqualityExpression_Binary value;
-    
+
     public NotEqual (hydra.ext.java.syntax.EqualityExpression_Binary value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof NotEqual)) {
@@ -142,12 +142,12 @@ public abstract class EqualityExpression implements Serializable, Comparable<Equ
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(EqualityExpression other) {
@@ -158,7 +158,7 @@ public abstract class EqualityExpression implements Serializable, Comparable<Equ
       NotEqual o = (NotEqual) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

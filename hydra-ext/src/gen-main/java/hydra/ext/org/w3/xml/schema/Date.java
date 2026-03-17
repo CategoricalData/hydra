@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class Date implements Serializable, Comparable<Date> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.xml.schema.Date");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final String value;
-  
+
   public Date (String value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Date)) {
@@ -25,12 +25,12 @@ public class Date implements Serializable, Comparable<Date> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Date other) {

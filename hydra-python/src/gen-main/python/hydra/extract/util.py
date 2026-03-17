@@ -19,5 +19,5 @@ import hydra.util
 
 def comparison(cx: hydra.context.Context, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.util.Comparison]:
     r"""Extract a comparison from a term."""
-    
+
     return hydra.lib.eithers.bind(hydra.extract.core.unit_variant(cx, hydra.core.Name("hydra.util.Comparison"), graph, term), (lambda fname: hydra.lib.logic.if_else(hydra.lib.equality.equal(fname.value, "equalTo"), (lambda : Right(hydra.util.Comparison.EQUAL_TO)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(fname.value, "lessThan"), (lambda : Right(hydra.util.Comparison.LESS_THAN)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(fname.value, "greaterThan"), (lambda : Right(hydra.util.Comparison.GREATER_THAN)), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("expected comparison but found ", fname.value)))), cx))))))))))

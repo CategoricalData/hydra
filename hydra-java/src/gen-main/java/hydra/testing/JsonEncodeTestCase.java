@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class JsonEncodeTestCase implements Serializable, Comparable<JsonEncodeTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.JsonEncodeTestCase");
-  
+
   public static final hydra.core.Name TERM = new hydra.core.Name("term");
-  
+
   public static final hydra.core.Name EXPECTED = new hydra.core.Name("expected");
-  
+
   /**
    * The Hydra term to encode
    */
   public final hydra.core.Term term;
-  
+
   /**
    * The expected result: Left for error, Right for encoded JSON
    */
   public final hydra.util.Either<String, hydra.json.model.Value> expected;
-  
+
   public JsonEncodeTestCase (hydra.core.Term term, hydra.util.Either<String, hydra.json.model.Value> expected) {
     this.term = term;
     this.expected = expected;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof JsonEncodeTestCase)) {
@@ -41,12 +41,12 @@ public class JsonEncodeTestCase implements Serializable, Comparable<JsonEncodeTe
       this.expected,
       o.expected);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(term) + 3 * java.util.Objects.hashCode(expected);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(JsonEncodeTestCase other) {
@@ -59,11 +59,11 @@ public class JsonEncodeTestCase implements Serializable, Comparable<JsonEncodeTe
       expected.hashCode(),
       other.expected.hashCode());
   }
-  
+
   public JsonEncodeTestCase withTerm(hydra.core.Term term) {
     return new JsonEncodeTestCase(term, expected);
   }
-  
+
   public JsonEncodeTestCase withExpected(hydra.util.Either<String, hydra.json.model.Value> expected) {
     return new JsonEncodeTestCase(term, expected);
   }

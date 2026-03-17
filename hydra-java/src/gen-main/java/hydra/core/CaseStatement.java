@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class CaseStatement implements Serializable, Comparable<CaseStatement> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.CaseStatement");
-  
+
   public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("typeName");
-  
+
   public static final hydra.core.Name DEFAULT = new hydra.core.Name("default");
-  
+
   public static final hydra.core.Name CASES = new hydra.core.Name("cases");
-  
+
   /**
    * The name of the union type
    */
   public final hydra.core.Name typeName;
-  
+
   /**
    * An optional default case, used if none of the explicit cases match
    */
   public final hydra.util.Maybe<hydra.core.Term> default_;
-  
+
   /**
    * A list of case alternatives, one per union field
    */
   public final hydra.util.ConsList<hydra.core.Field> cases;
-  
+
   public CaseStatement (hydra.core.Name typeName, hydra.util.Maybe<hydra.core.Term> default_, hydra.util.ConsList<hydra.core.Field> cases) {
     this.typeName = typeName;
     this.default_ = default_;
     this.cases = cases;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof CaseStatement)) {
@@ -51,12 +51,12 @@ public class CaseStatement implements Serializable, Comparable<CaseStatement> {
       this.cases,
       o.cases);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(typeName) + 3 * java.util.Objects.hashCode(default_) + 5 * java.util.Objects.hashCode(cases);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(CaseStatement other) {
@@ -71,15 +71,15 @@ public class CaseStatement implements Serializable, Comparable<CaseStatement> {
     }
     return ((Comparable) cases).compareTo(other.cases);
   }
-  
+
   public CaseStatement withTypeName(hydra.core.Name typeName) {
     return new CaseStatement(typeName, default_, cases);
   }
-  
+
   public CaseStatement withDefault(hydra.util.Maybe<hydra.core.Term> default_) {
     return new CaseStatement(typeName, default_, cases);
   }
-  
+
   public CaseStatement withCases(hydra.util.ConsList<hydra.core.Field> cases) {
     return new CaseStatement(typeName, default_, cases);
   }

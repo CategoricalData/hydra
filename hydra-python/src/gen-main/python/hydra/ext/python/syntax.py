@@ -15,7 +15,7 @@ import hydra.core
 class AnnotatedStatement:
     comment: str
     statement: Statement
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.AnnotatedStatement")
     COMMENT = hydra.core.Name("comment")
     STATEMENT = hydra.core.Name("statement")
@@ -27,9 +27,9 @@ Module.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Module")
 
 class QuoteStyle(Enum):
     SINGLE = hydra.core.Name("single")
-    
+
     DOUBLE = hydra.core.Name("double")
-    
+
     TRIPLE = hydra.core.Name("triple")
 
 QuoteStyle.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.QuoteStyle")
@@ -51,7 +51,7 @@ class _NumberMeta(type):
 
 class Number(metaclass=_NumberMeta):
     r"""NumberInteger | NumberFloat"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Number")
     INTEGER = hydra.core.Name("integer")
     FLOAT = hydra.core.Name("float")
@@ -60,7 +60,7 @@ class Number(metaclass=_NumberMeta):
 class String:
     value: str
     quote_style: QuoteStyle
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.String")
     VALUE = hydra.core.Name("value")
     QUOTE_STYLE = hydra.core.Name("quoteStyle")
@@ -89,7 +89,7 @@ Eval.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Eval")
 class FuncType:
     type: frozenlist[TypeExpression]
     body: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.FuncType")
     TYPE = hydra.core.Name("type")
     BODY = hydra.core.Name("body")
@@ -109,7 +109,7 @@ class _StatementMeta(type):
 
 class Statement(metaclass=_StatementMeta):
     r"""StatementCompound | StatementSimple | StatementAnnotated"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Statement")
     COMPOUND = hydra.core.Name("compound")
     SIMPLE = hydra.core.Name("simple")
@@ -175,7 +175,7 @@ class _SimpleStatementMeta(type):
 
 class SimpleStatement(metaclass=_SimpleStatementMeta):
     r"""SimpleStatementAssignment | SimpleStatementTypeAlias | SimpleStatementStarExpressions | SimpleStatementReturn | SimpleStatementImport | SimpleStatementRaise | SimpleStatementPass | SimpleStatementDel | SimpleStatementYield | SimpleStatementAssert | SimpleStatementBreak | SimpleStatementContinue | SimpleStatementGlobal | SimpleStatementNonlocal"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SimpleStatement")
     ASSIGNMENT = hydra.core.Name("assignment")
     TYPE_ALIAS = hydra.core.Name("typeAlias")
@@ -222,7 +222,7 @@ class _CompoundStatementMeta(type):
 
 class CompoundStatement(metaclass=_CompoundStatementMeta):
     r"""CompoundStatementFunction | CompoundStatementIf | CompoundStatementClassDef | CompoundStatementWith | CompoundStatementFor | CompoundStatementTry | CompoundStatementWhile | CompoundStatementMatch"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.CompoundStatement")
     FUNCTION = hydra.core.Name("function")
     IF = hydra.core.Name("if")
@@ -248,7 +248,7 @@ class _AssignmentMeta(type):
 
 class Assignment(metaclass=_AssignmentMeta):
     r"""AssignmentTyped | AssignmentUntyped | AssignmentAug"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Assignment")
     TYPED = hydra.core.Name("typed")
     UNTYPED = hydra.core.Name("untyped")
@@ -259,7 +259,7 @@ class TypedAssignment:
     lhs: SingleTarget
     type: Expression
     rhs: Maybe[AnnotatedRhs]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TypedAssignment")
     LHS = hydra.core.Name("lhs")
     TYPE = hydra.core.Name("type")
@@ -270,7 +270,7 @@ class UntypedAssignment:
     targets: frozenlist[StarTarget]
     rhs: AnnotatedRhs
     type_comment: Maybe[TypeComment]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.UntypedAssignment")
     TARGETS = hydra.core.Name("targets")
     RHS = hydra.core.Name("rhs")
@@ -281,7 +281,7 @@ class AugAssignment:
     lhs: SingleTarget
     augassign: AugAssign
     rhs: AnnotatedRhs
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.AugAssignment")
     LHS = hydra.core.Name("lhs")
     AUGASSIGN = hydra.core.Name("augassign")
@@ -299,36 +299,36 @@ class _AnnotatedRhsMeta(type):
 
 class AnnotatedRhs(metaclass=_AnnotatedRhsMeta):
     r"""AnnotatedRhsYield | AnnotatedRhsStar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.AnnotatedRhs")
     YIELD = hydra.core.Name("yield")
     STAR = hydra.core.Name("star")
 
 class AugAssign(Enum):
     PLUS_EQUAL = hydra.core.Name("plusEqual")
-    
+
     MINUS_EQUAL = hydra.core.Name("minusEqual")
-    
+
     TIMES_EQUAL = hydra.core.Name("timesEqual")
-    
+
     AT_EQUAL = hydra.core.Name("atEqual")
-    
+
     SLASH_EQUAL = hydra.core.Name("slashEqual")
-    
+
     PERCENT_EQUAL = hydra.core.Name("percentEqual")
-    
+
     AMPERSAND_EQUAL = hydra.core.Name("ampersandEqual")
-    
+
     BAR_EQUAL = hydra.core.Name("barEqual")
-    
+
     CARET_EQUAL = hydra.core.Name("caretEqual")
-    
+
     LEFT_SHIFT_EQUAL = hydra.core.Name("leftShiftEqual")
-    
+
     RIGHT_SHIFT_EQUAL = hydra.core.Name("rightShiftEqual")
-    
+
     STAR_STAR_EQUAL = hydra.core.Name("starStarEqual")
-    
+
     DOUBLE_SLASH_EQUAL = hydra.core.Name("doubleSlashEqual")
 
 AugAssign.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.AugAssign")
@@ -347,7 +347,7 @@ RaiseStatement.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.RaiseStatement")
 class RaiseExpression:
     expression: Expression
     from_: Maybe[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.RaiseExpression")
     EXPRESSION = hydra.core.Name("expression")
     FROM = hydra.core.Name("from")
@@ -366,7 +366,7 @@ YieldStatement.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.YieldStatement")
 class AssertStatement:
     expression1: Expression
     expression2: Maybe[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.AssertStatement")
     EXPRESSION1 = hydra.core.Name("expression1")
     EXPRESSION2 = hydra.core.Name("expression2")
@@ -383,7 +383,7 @@ class _ImportStatementMeta(type):
 
 class ImportStatement(metaclass=_ImportStatementMeta):
     r"""ImportStatementName | ImportStatementFrom"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ImportStatement")
     NAME = hydra.core.Name("name")
     FROM = hydra.core.Name("from")
@@ -398,7 +398,7 @@ class ImportFrom:
     prefixes: frozenlist[RelativeImportPrefix]
     dotted_name: Maybe[DottedName]
     targets: ImportFromTargets
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ImportFrom")
     PREFIXES = hydra.core.Name("prefixes")
     DOTTED_NAME = hydra.core.Name("dottedName")
@@ -406,7 +406,7 @@ class ImportFrom:
 
 class RelativeImportPrefix(Enum):
     DOT = hydra.core.Name("dot")
-    
+
     ELLIPSIS = hydra.core.Name("ellipsis")
 
 RelativeImportPrefix.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.RelativeImportPrefix")
@@ -430,7 +430,7 @@ class _ImportFromTargetsMeta(type):
 
 class ImportFromTargets(metaclass=_ImportFromTargetsMeta):
     r"""ImportFromTargetsSimple | ImportFromTargetsParens | ImportFromTargetsStar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ImportFromTargets")
     SIMPLE = hydra.core.Name("simple")
     PARENS = hydra.core.Name("parens")
@@ -440,7 +440,7 @@ class ImportFromTargets(metaclass=_ImportFromTargetsMeta):
 class ImportFromAsName:
     name: Name
     as_: Maybe[Name]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ImportFromAsName")
     NAME = hydra.core.Name("name")
     AS = hydra.core.Name("as")
@@ -449,7 +449,7 @@ class ImportFromAsName:
 class DottedAsName:
     name: DottedName
     as_: Maybe[Name]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.DottedAsName")
     NAME = hydra.core.Name("name")
     AS = hydra.core.Name("as")
@@ -471,7 +471,7 @@ class _BlockMeta(type):
 
 class Block(metaclass=_BlockMeta):
     r"""BlockIndented | BlockSimple"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Block")
     INDENTED = hydra.core.Name("indented")
     SIMPLE = hydra.core.Name("simple")
@@ -488,7 +488,7 @@ class ClassDefinition:
     type_params: frozenlist[TypeParameter]
     arguments: Maybe[Args]
     body: Block
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ClassDefinition")
     DECORATORS = hydra.core.Name("decorators")
     NAME = hydra.core.Name("name")
@@ -500,7 +500,7 @@ class ClassDefinition:
 class FunctionDefinition:
     decorators: Maybe[Decorators]
     raw: FunctionDefRaw
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.FunctionDefinition")
     DECORATORS = hydra.core.Name("decorators")
     RAW = hydra.core.Name("raw")
@@ -514,7 +514,7 @@ class FunctionDefRaw:
     return_type: Maybe[Expression]
     func_type_comment: Maybe[FuncTypeComment]
     block: Block
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.FunctionDefRaw")
     ASYNC = hydra.core.Name("async")
     NAME = hydra.core.Name("name")
@@ -545,7 +545,7 @@ class _ParametersMeta(type):
 
 class Parameters(metaclass=_ParametersMeta):
     r"""ParametersSlashNoDefault | ParametersSlashWithDefault | ParametersParamNoDefault | ParametersParamWithDefault | ParametersStarEtc"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Parameters")
     SLASH_NO_DEFAULT = hydra.core.Name("slashNoDefault")
     SLASH_WITH_DEFAULT = hydra.core.Name("slashWithDefault")
@@ -559,7 +559,7 @@ class SlashNoDefaultParameters:
     param_no_default: frozenlist[ParamNoDefault]
     param_with_default: frozenlist[ParamWithDefault]
     star_etc: Maybe[StarEtc]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SlashNoDefaultParameters")
     SLASH = hydra.core.Name("slash")
     PARAM_NO_DEFAULT = hydra.core.Name("paramNoDefault")
@@ -571,7 +571,7 @@ class SlashWithDefaultParameters:
     param_no_default: frozenlist[ParamNoDefault]
     param_with_default: frozenlist[ParamWithDefault]
     star_etc: Maybe[StarEtc]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SlashWithDefaultParameters")
     PARAM_NO_DEFAULT = hydra.core.Name("paramNoDefault")
     PARAM_WITH_DEFAULT = hydra.core.Name("paramWithDefault")
@@ -582,7 +582,7 @@ class ParamNoDefaultParameters:
     param_no_default: frozenlist[ParamNoDefault]
     param_with_default: frozenlist[ParamWithDefault]
     star_etc: Maybe[StarEtc]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ParamNoDefaultParameters")
     PARAM_NO_DEFAULT = hydra.core.Name("paramNoDefault")
     PARAM_WITH_DEFAULT = hydra.core.Name("paramWithDefault")
@@ -592,7 +592,7 @@ class ParamNoDefaultParameters:
 class ParamWithDefaultParameters:
     param_with_default: frozenlist[ParamWithDefault]
     star_etc: Maybe[StarEtc]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ParamWithDefaultParameters")
     PARAM_WITH_DEFAULT = hydra.core.Name("paramWithDefault")
     STAR_ETC = hydra.core.Name("starEtc")
@@ -606,7 +606,7 @@ SlashNoDefault.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SlashNoDefault")
 class SlashWithDefault:
     param_no_default: frozenlist[ParamNoDefault]
     param_with_default: frozenlist[ParamWithDefault]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SlashWithDefault")
     PARAM_NO_DEFAULT = hydra.core.Name("paramNoDefault")
     PARAM_WITH_DEFAULT = hydra.core.Name("paramWithDefault")
@@ -629,7 +629,7 @@ class _StarEtcMeta(type):
 
 class StarEtc(metaclass=_StarEtcMeta):
     r"""StarEtcStarNoDefault | StarEtcStarNoDefaultStarAnnotation | StarEtcStarComma | StarEtcKeywords"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.StarEtc")
     STAR_NO_DEFAULT = hydra.core.Name("starNoDefault")
     STAR_NO_DEFAULT_STAR_ANNOTATION = hydra.core.Name("starNoDefaultStarAnnotation")
@@ -641,7 +641,7 @@ class NoDefaultStarEtc:
     param_no_default: ParamNoDefault
     param_maybe_default: frozenlist[ParamMaybeDefault]
     keywords: Maybe[Keywords]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.NoDefaultStarEtc")
     PARAM_NO_DEFAULT = hydra.core.Name("paramNoDefault")
     PARAM_MAYBE_DEFAULT = hydra.core.Name("paramMaybeDefault")
@@ -652,7 +652,7 @@ class NoDefaultStarAnnotationStarEtc:
     param_no_default_star_annotation: ParamNoDefaultStarAnnotation
     param_maybe_default: frozenlist[ParamMaybeDefault]
     keywords: Maybe[Keywords]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.NoDefaultStarAnnotationStarEtc")
     PARAM_NO_DEFAULT_STAR_ANNOTATION = hydra.core.Name("paramNoDefaultStarAnnotation")
     PARAM_MAYBE_DEFAULT = hydra.core.Name("paramMaybeDefault")
@@ -662,7 +662,7 @@ class NoDefaultStarAnnotationStarEtc:
 class CommaStarEtc:
     param_maybe_default: frozenlist[ParamMaybeDefault]
     keywords: Maybe[Keywords]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.CommaStarEtc")
     PARAM_MAYBE_DEFAULT = hydra.core.Name("paramMaybeDefault")
     KEYWORDS = hydra.core.Name("keywords")
@@ -676,7 +676,7 @@ Keywords.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Keywords")
 class ParamNoDefault:
     param: Param
     type_comment: Maybe[TypeComment]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ParamNoDefault")
     PARAM = hydra.core.Name("param")
     TYPE_COMMENT = hydra.core.Name("typeComment")
@@ -685,7 +685,7 @@ class ParamNoDefault:
 class ParamNoDefaultStarAnnotation:
     param_star_annotation: ParamStarAnnotation
     type_comment: Maybe[TypeComment]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ParamNoDefaultStarAnnotation")
     PARAM_STAR_ANNOTATION = hydra.core.Name("paramStarAnnotation")
     TYPE_COMMENT = hydra.core.Name("typeComment")
@@ -695,7 +695,7 @@ class ParamWithDefault:
     param: Param
     default: Default
     type_comment: Maybe[TypeComment]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ParamWithDefault")
     PARAM = hydra.core.Name("param")
     DEFAULT = hydra.core.Name("default")
@@ -706,7 +706,7 @@ class ParamMaybeDefault:
     param: Param
     default: Maybe[Default]
     type_comment: Maybe[TypeComment]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ParamMaybeDefault")
     PARAM = hydra.core.Name("param")
     DEFAULT = hydra.core.Name("default")
@@ -716,7 +716,7 @@ class ParamMaybeDefault:
 class Param:
     name: Name
     annotation: Maybe[Annotation]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Param")
     NAME = hydra.core.Name("name")
     ANNOTATION = hydra.core.Name("annotation")
@@ -725,7 +725,7 @@ class Param:
 class ParamStarAnnotation:
     name: Name
     annotation: StarAnnotation
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ParamStarAnnotation")
     NAME = hydra.core.Name("name")
     ANNOTATION = hydra.core.Name("annotation")
@@ -750,7 +750,7 @@ class IfStatement:
     condition: NamedExpression
     body: Block
     continuation: Maybe[IfTail]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.IfStatement")
     CONDITION = hydra.core.Name("condition")
     BODY = hydra.core.Name("body")
@@ -768,7 +768,7 @@ class _IfTailMeta(type):
 
 class IfTail(metaclass=_IfTailMeta):
     r"""IfTailElif | IfTailElse"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.IfTail")
     ELIF = hydra.core.Name("elif")
     ELSE = hydra.core.Name("else")
@@ -778,7 +778,7 @@ class WhileStatement:
     condition: NamedExpression
     body: Block
     else_: Maybe[Block]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.WhileStatement")
     CONDITION = hydra.core.Name("condition")
     BODY = hydra.core.Name("body")
@@ -792,7 +792,7 @@ class ForStatement:
     type_comment: Maybe[TypeComment]
     body: Block
     else_: Maybe[Block]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ForStatement")
     ASYNC = hydra.core.Name("async")
     TARGETS = hydra.core.Name("targets")
@@ -807,7 +807,7 @@ class WithStatement:
     items: frozenlist[WithItem]
     type_comment: Maybe[TypeComment]
     body: Block
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.WithStatement")
     ASYNC = hydra.core.Name("async")
     ITEMS = hydra.core.Name("items")
@@ -818,7 +818,7 @@ class WithStatement:
 class WithItem:
     expression: Expression
     as_: Maybe[StarTarget]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.WithItem")
     EXPRESSION = hydra.core.Name("expression")
     AS = hydra.core.Name("as")
@@ -838,7 +838,7 @@ class _TryStatementMeta(type):
 
 class TryStatement(metaclass=_TryStatementMeta):
     r"""TryStatementFinally | TryStatementExcept | TryStatementExceptStar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TryStatement")
     FINALLY = hydra.core.Name("finally")
     EXCEPT = hydra.core.Name("except")
@@ -848,7 +848,7 @@ class TryStatement(metaclass=_TryStatementMeta):
 class TryFinallyStatement:
     body: Block
     finally_: Block
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TryFinallyStatement")
     BODY = hydra.core.Name("body")
     FINALLY = hydra.core.Name("finally")
@@ -859,7 +859,7 @@ class TryExceptStatement:
     excepts: frozenlist[ExceptBlock]
     else_: Maybe[Block]
     finally_: Maybe[Block]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TryExceptStatement")
     BODY = hydra.core.Name("body")
     EXCEPTS = hydra.core.Name("excepts")
@@ -872,7 +872,7 @@ class TryExceptStarStatement:
     excepts: frozenlist[ExceptStarBlock]
     else_: Maybe[Block]
     finally_: Maybe[Block]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TryExceptStarStatement")
     BODY = hydra.core.Name("body")
     EXCEPTS = hydra.core.Name("excepts")
@@ -883,7 +883,7 @@ class TryExceptStarStatement:
 class ExceptBlock:
     expression: Maybe[ExceptExpression]
     body: Block
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ExceptBlock")
     EXPRESSION = hydra.core.Name("expression")
     BODY = hydra.core.Name("body")
@@ -892,7 +892,7 @@ class ExceptBlock:
 class ExceptExpression:
     expression: Expression
     as_: Maybe[Name]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ExceptExpression")
     EXPRESSION = hydra.core.Name("expression")
     AS = hydra.core.Name("as")
@@ -902,7 +902,7 @@ class ExceptStarBlock:
     expression: Expression
     as_: Maybe[Name]
     body: Block
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ExceptStarBlock")
     EXPRESSION = hydra.core.Name("expression")
     AS = hydra.core.Name("as")
@@ -912,7 +912,7 @@ class ExceptStarBlock:
 class MatchStatement:
     subject: SubjectExpression
     cases: frozenlist[CaseBlock]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.MatchStatement")
     SUBJECT = hydra.core.Name("subject")
     CASES = hydra.core.Name("cases")
@@ -929,7 +929,7 @@ class _SubjectExpressionMeta(type):
 
 class SubjectExpression(metaclass=_SubjectExpressionMeta):
     r"""SubjectExpressionTuple | SubjectExpressionSimple"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SubjectExpression")
     TUPLE = hydra.core.Name("tuple")
     SIMPLE = hydra.core.Name("simple")
@@ -939,7 +939,7 @@ class CaseBlock:
     patterns: Patterns
     guard: Maybe[Guard]
     body: Block
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.CaseBlock")
     PATTERNS = hydra.core.Name("patterns")
     GUARD = hydra.core.Name("guard")
@@ -962,7 +962,7 @@ class _PatternsMeta(type):
 
 class Patterns(metaclass=_PatternsMeta):
     r"""PatternsSequence | PatternsPattern"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Patterns")
     SEQUENCE = hydra.core.Name("sequence")
     PATTERN = hydra.core.Name("pattern")
@@ -979,7 +979,7 @@ class _PatternMeta(type):
 
 class Pattern(metaclass=_PatternMeta):
     r"""PatternAs | PatternOr"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Pattern")
     AS = hydra.core.Name("as")
     OR = hydra.core.Name("or")
@@ -988,7 +988,7 @@ class Pattern(metaclass=_PatternMeta):
 class AsPattern:
     pattern: OrPattern
     as_: PatternCaptureTarget
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.AsPattern")
     PATTERN = hydra.core.Name("pattern")
     AS = hydra.core.Name("as")
@@ -1032,7 +1032,7 @@ class _ClosedPatternMeta(type):
 
 class ClosedPattern(metaclass=_ClosedPatternMeta):
     r"""ClosedPatternLiteral | ClosedPatternCapture | ClosedPatternWildcard | ClosedPatternValue | ClosedPatternGroup | ClosedPatternSequence | ClosedPatternMapping | ClosedPatternClass"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ClosedPattern")
     LITERAL = hydra.core.Name("literal")
     CAPTURE = hydra.core.Name("capture")
@@ -1079,7 +1079,7 @@ class _LiteralExpressionMeta(type):
 
 class LiteralExpression(metaclass=_LiteralExpressionMeta):
     r"""LiteralExpressionNumber | LiteralExpressionComplex | LiteralExpressionString | LiteralExpressionNone | LiteralExpressionTrue | LiteralExpressionFalse"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.LiteralExpression")
     NUMBER = hydra.core.Name("number")
     COMPLEX = hydra.core.Name("complex")
@@ -1093,7 +1093,7 @@ class ComplexNumber:
     real: SignedRealNumber
     plus_or_minus: PlusOrMinus
     imaginary: ImaginaryNumber
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ComplexNumber")
     REAL = hydra.core.Name("real")
     PLUS_OR_MINUS = hydra.core.Name("plusOrMinus")
@@ -1101,7 +1101,7 @@ class ComplexNumber:
 
 class PlusOrMinus(Enum):
     PLUS = hydra.core.Name("plus")
-    
+
     MINUS = hydra.core.Name("minus")
 
 PlusOrMinus.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.PlusOrMinus")
@@ -1118,7 +1118,7 @@ class _SignedNumberMeta(type):
 
 class SignedNumber(metaclass=_SignedNumberMeta):
     r"""SignedNumberSign | SignedNumberNumber"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SignedNumber")
     SIGN = hydra.core.Name("sign")
     NUMBER = hydra.core.Name("number")
@@ -1135,7 +1135,7 @@ class _SignedRealNumberMeta(type):
 
 class SignedRealNumber(metaclass=_SignedRealNumberMeta):
     r"""SignedRealNumberSign | SignedRealNumberNumber"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SignedRealNumber")
     SIGN = hydra.core.Name("sign")
     NUMBER = hydra.core.Name("number")
@@ -1192,7 +1192,7 @@ class _SequencePatternMeta(type):
 
 class SequencePattern(metaclass=_SequencePatternMeta):
     r"""SequencePatternList | SequencePatternTuple"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SequencePattern")
     LIST = hydra.core.Name("list")
     TUPLE = hydra.core.Name("tuple")
@@ -1201,7 +1201,7 @@ class SequencePattern(metaclass=_SequencePatternMeta):
 class OpenSequencePattern:
     head: MaybeStarPattern
     tail: Maybe[MaybeSequencePattern]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.OpenSequencePattern")
     HEAD = hydra.core.Name("head")
     TAIL = hydra.core.Name("tail")
@@ -1223,7 +1223,7 @@ class _MaybeStarPatternMeta(type):
 
 class MaybeStarPattern(metaclass=_MaybeStarPatternMeta):
     r"""MaybeStarPatternStar | MaybeStarPatternPattern"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.MaybeStarPattern")
     STAR = hydra.core.Name("star")
     PATTERN = hydra.core.Name("pattern")
@@ -1244,7 +1244,7 @@ class _StarPatternMeta(type):
 
 class StarPattern(metaclass=_StarPatternMeta):
     r"""StarPatternCapture | StarPatternWildcard"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.StarPattern")
     CAPTURE = hydra.core.Name("capture")
     WILDCARD = hydra.core.Name("wildcard")
@@ -1253,7 +1253,7 @@ class StarPattern(metaclass=_StarPatternMeta):
 class MappingPattern:
     items: Maybe[ItemsPattern]
     double_star: Maybe[DoubleStarPattern]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.MappingPattern")
     ITEMS = hydra.core.Name("items")
     DOUBLE_STAR = hydra.core.Name("doubleStar")
@@ -1267,7 +1267,7 @@ ItemsPattern.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ItemsPattern")
 class KeyValuePattern:
     key: LiteralExpressionOrAttribute
     value: Pattern
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.KeyValuePattern")
     KEY = hydra.core.Name("key")
     VALUE = hydra.core.Name("value")
@@ -1284,7 +1284,7 @@ class _LiteralExpressionOrAttributeMeta(type):
 
 class LiteralExpressionOrAttribute(metaclass=_LiteralExpressionOrAttributeMeta):
     r"""LiteralExpressionOrAttributeLiteral | LiteralExpressionOrAttributeAttribute"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.LiteralExpressionOrAttribute")
     LITERAL = hydra.core.Name("literal")
     ATTRIBUTE = hydra.core.Name("attribute")
@@ -1299,7 +1299,7 @@ class ClassPattern:
     name_or_attribute: NameOrAttribute
     positional_patterns: Maybe[PositionalPatterns]
     keyword_patterns: Maybe[KeywordPatterns]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ClassPattern")
     NAME_OR_ATTRIBUTE = hydra.core.Name("nameOrAttribute")
     POSITIONAL_PATTERNS = hydra.core.Name("positionalPatterns")
@@ -1319,7 +1319,7 @@ KeywordPatterns.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.KeywordPatterns
 class KeywordPattern:
     name: Name
     pattern: Pattern
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.KeywordPattern")
     NAME = hydra.core.Name("name")
     PATTERN = hydra.core.Name("pattern")
@@ -1329,7 +1329,7 @@ class TypeAlias:
     name: Name
     type_params: frozenlist[TypeParameter]
     expression: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TypeAlias")
     NAME = hydra.core.Name("name")
     TYPE_PARAMS = hydra.core.Name("typeParams")
@@ -1350,7 +1350,7 @@ class _TypeParameterMeta(type):
 
 class TypeParameter(metaclass=_TypeParameterMeta):
     r"""TypeParameterSimple | TypeParameterStar | TypeParameterDoubleStar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TypeParameter")
     SIMPLE = hydra.core.Name("simple")
     STAR = hydra.core.Name("star")
@@ -1361,7 +1361,7 @@ class SimpleTypeParameter:
     name: Name
     bound: Maybe[Expression]
     default: Maybe[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SimpleTypeParameter")
     NAME = hydra.core.Name("name")
     BOUND = hydra.core.Name("bound")
@@ -1371,7 +1371,7 @@ class SimpleTypeParameter:
 class StarTypeParameter:
     name: Name
     default: Maybe[StarExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.StarTypeParameter")
     NAME = hydra.core.Name("name")
     DEFAULT = hydra.core.Name("default")
@@ -1380,7 +1380,7 @@ class StarTypeParameter:
 class DoubleStarTypeParameter:
     name: Name
     default: Maybe[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.DoubleStarTypeParameter")
     NAME = hydra.core.Name("name")
     DEFAULT = hydra.core.Name("default")
@@ -1400,7 +1400,7 @@ class _ExpressionMeta(type):
 
 class Expression(metaclass=_ExpressionMeta):
     r"""ExpressionConditional | ExpressionSimple | ExpressionLambda"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Expression")
     CONDITIONAL = hydra.core.Name("conditional")
     SIMPLE = hydra.core.Name("simple")
@@ -1411,7 +1411,7 @@ class Conditional:
     body: Disjunction
     if_: Disjunction
     else_: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Conditional")
     BODY = hydra.core.Name("body")
     IF = hydra.core.Name("if")
@@ -1429,7 +1429,7 @@ class _YieldExpressionMeta(type):
 
 class YieldExpression(metaclass=_YieldExpressionMeta):
     r"""YieldExpressionFrom | YieldExpressionSimple"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.YieldExpression")
     FROM = hydra.core.Name("from")
     SIMPLE = hydra.core.Name("simple")
@@ -1446,7 +1446,7 @@ class _StarExpressionMeta(type):
 
 class StarExpression(metaclass=_StarExpressionMeta):
     r"""StarExpressionStar | StarExpressionSimple"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.StarExpression")
     STAR = hydra.core.Name("star")
     SIMPLE = hydra.core.Name("simple")
@@ -1468,7 +1468,7 @@ class _StarNamedExpressionMeta(type):
 
 class StarNamedExpression(metaclass=_StarNamedExpressionMeta):
     r"""StarNamedExpressionStar | StarNamedExpressionSimple"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.StarNamedExpression")
     STAR = hydra.core.Name("star")
     SIMPLE = hydra.core.Name("simple")
@@ -1477,7 +1477,7 @@ class StarNamedExpression(metaclass=_StarNamedExpressionMeta):
 class AssignmentExpression:
     name: Name
     expression: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.AssignmentExpression")
     NAME = hydra.core.Name("name")
     EXPRESSION = hydra.core.Name("expression")
@@ -1494,7 +1494,7 @@ class _NamedExpressionMeta(type):
 
 class NamedExpression(metaclass=_NamedExpressionMeta):
     r"""NamedExpressionAssignment | NamedExpressionSimple"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.NamedExpression")
     ASSIGNMENT = hydra.core.Name("assignment")
     SIMPLE = hydra.core.Name("simple")
@@ -1521,7 +1521,7 @@ class _InversionMeta(type):
 
 class Inversion(metaclass=_InversionMeta):
     r"""InversionNot | InversionSimple"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Inversion")
     NOT = hydra.core.Name("not")
     SIMPLE = hydra.core.Name("simple")
@@ -1530,7 +1530,7 @@ class Inversion(metaclass=_InversionMeta):
 class Comparison:
     lhs: BitwiseOr
     rhs: frozenlist[CompareOpBitwiseOrPair]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Comparison")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -1539,30 +1539,30 @@ class Comparison:
 class CompareOpBitwiseOrPair:
     operator: CompareOp
     rhs: BitwiseOr
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.CompareOpBitwiseOrPair")
     OPERATOR = hydra.core.Name("operator")
     RHS = hydra.core.Name("rhs")
 
 class CompareOp(Enum):
     EQ = hydra.core.Name("eq")
-    
+
     NOTEQ = hydra.core.Name("noteq")
-    
+
     LTE = hydra.core.Name("lte")
-    
+
     LT = hydra.core.Name("lt")
-    
+
     GTE = hydra.core.Name("gte")
-    
+
     GT = hydra.core.Name("gt")
-    
+
     NOTIN = hydra.core.Name("notin")
-    
+
     IN = hydra.core.Name("in")
-    
+
     ISNOT = hydra.core.Name("isnot")
-    
+
     IS = hydra.core.Name("is")
 
 CompareOp.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.CompareOp")
@@ -1571,7 +1571,7 @@ CompareOp.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.CompareOp")
 class BitwiseOr:
     lhs: Maybe[BitwiseOr]
     rhs: BitwiseXor
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.BitwiseOr")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -1580,7 +1580,7 @@ class BitwiseOr:
 class BitwiseXor:
     lhs: Maybe[BitwiseXor]
     rhs: BitwiseAnd
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.BitwiseXor")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -1589,7 +1589,7 @@ class BitwiseXor:
 class BitwiseAnd:
     lhs: Maybe[BitwiseAnd]
     rhs: ShiftExpression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.BitwiseAnd")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -1598,7 +1598,7 @@ class BitwiseAnd:
 class ShiftExpression:
     lhs: Maybe[ShiftLhs]
     rhs: Sum
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ShiftExpression")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -1607,14 +1607,14 @@ class ShiftExpression:
 class ShiftLhs:
     operand: ShiftExpression
     operator: ShiftOp
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ShiftLhs")
     OPERAND = hydra.core.Name("operand")
     OPERATOR = hydra.core.Name("operator")
 
 class ShiftOp(Enum):
     LEFT = hydra.core.Name("left")
-    
+
     RIGHT = hydra.core.Name("right")
 
 ShiftOp.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ShiftOp")
@@ -1623,7 +1623,7 @@ ShiftOp.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ShiftOp")
 class Sum:
     lhs: Maybe[SumLhs]
     rhs: Term
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Sum")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -1632,14 +1632,14 @@ class Sum:
 class SumLhs:
     operand: Sum
     operator: SumOp
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SumLhs")
     OPERAND = hydra.core.Name("operand")
     OPERATOR = hydra.core.Name("operator")
 
 class SumOp(Enum):
     ADD = hydra.core.Name("add")
-    
+
     SUB = hydra.core.Name("sub")
 
 SumOp.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SumOp")
@@ -1648,7 +1648,7 @@ SumOp.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SumOp")
 class Term:
     lhs: Maybe[TermLhs]
     rhs: Factor
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Term")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -1657,20 +1657,20 @@ class Term:
 class TermLhs:
     operand: Term
     operator: TermOp
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TermLhs")
     OPERAND = hydra.core.Name("operand")
     OPERATOR = hydra.core.Name("operator")
 
 class TermOp(Enum):
     MUL = hydra.core.Name("mul")
-    
+
     DIV = hydra.core.Name("div")
-    
+
     FLOORDIV = hydra.core.Name("floordiv")
-    
+
     MOD = hydra.core.Name("mod")
-    
+
     MATMUL = hydra.core.Name("matmul")
 
 TermOp.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TermOp")
@@ -1693,7 +1693,7 @@ class _FactorMeta(type):
 
 class Factor(metaclass=_FactorMeta):
     r"""FactorPositive | FactorNegative | FactorComplement | FactorSimple"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Factor")
     POSITIVE = hydra.core.Name("positive")
     NEGATIVE = hydra.core.Name("negative")
@@ -1704,7 +1704,7 @@ class Factor(metaclass=_FactorMeta):
 class Power:
     lhs: AwaitPrimary
     rhs: Maybe[Factor]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Power")
     LHS = hydra.core.Name("lhs")
     RHS = hydra.core.Name("rhs")
@@ -1713,7 +1713,7 @@ class Power:
 class AwaitPrimary:
     await_: bool
     primary: Primary
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.AwaitPrimary")
     AWAIT = hydra.core.Name("await")
     PRIMARY = hydra.core.Name("primary")
@@ -1730,7 +1730,7 @@ class _PrimaryMeta(type):
 
 class Primary(metaclass=_PrimaryMeta):
     r"""PrimarySimple | PrimaryCompound"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Primary")
     SIMPLE = hydra.core.Name("simple")
     COMPOUND = hydra.core.Name("compound")
@@ -1739,7 +1739,7 @@ class Primary(metaclass=_PrimaryMeta):
 class PrimaryWithRhs:
     primary: Primary
     rhs: PrimaryRhs
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.PrimaryWithRhs")
     PRIMARY = hydra.core.Name("primary")
     RHS = hydra.core.Name("rhs")
@@ -1762,7 +1762,7 @@ class _PrimaryRhsMeta(type):
 
 class PrimaryRhs(metaclass=_PrimaryRhsMeta):
     r"""PrimaryRhsProject | PrimaryRhsGenexp | PrimaryRhsCall | PrimaryRhsSlices"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.PrimaryRhs")
     PROJECT = hydra.core.Name("project")
     GENEXP = hydra.core.Name("genexp")
@@ -1773,7 +1773,7 @@ class PrimaryRhs(metaclass=_PrimaryRhsMeta):
 class Slices:
     head: Slice
     tail: frozenlist[SliceOrStarredExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Slices")
     HEAD = hydra.core.Name("head")
     TAIL = hydra.core.Name("tail")
@@ -1790,7 +1790,7 @@ class _SliceOrStarredExpressionMeta(type):
 
 class SliceOrStarredExpression(metaclass=_SliceOrStarredExpressionMeta):
     r"""SliceOrStarredExpressionSlice | SliceOrStarredExpressionStarred"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SliceOrStarredExpression")
     SLICE = hydra.core.Name("slice")
     STARRED = hydra.core.Name("starred")
@@ -1807,7 +1807,7 @@ class _SliceMeta(type):
 
 class Slice(metaclass=_SliceMeta):
     r"""SliceNamed | SliceSlice_"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Slice")
     NAMED = hydra.core.Name("named")
     SLICE_ = hydra.core.Name("slice_")
@@ -1817,7 +1817,7 @@ class SliceExpression:
     start: Maybe[Expression]
     stop: Maybe[Expression]
     step: Maybe[Expression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SliceExpression")
     START = hydra.core.Name("start")
     STOP = hydra.core.Name("stop")
@@ -1893,7 +1893,7 @@ class _AtomMeta(type):
 
 class Atom(metaclass=_AtomMeta):
     r"""AtomName | AtomTrue | AtomFalse | AtomNone | AtomString | AtomNumber | AtomTuple | AtomGroup | AtomGenexp | AtomList | AtomListcomp | AtomDict | AtomSet | AtomDictcomp | AtomSetcomp | AtomEllipsis"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Atom")
     NAME = hydra.core.Name("name")
     TRUE = hydra.core.Name("true")
@@ -1924,7 +1924,7 @@ class _GroupMeta(type):
 
 class Group(metaclass=_GroupMeta):
     r"""GroupYield | GroupExpression"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Group")
     YIELD = hydra.core.Name("yield")
     EXPRESSION = hydra.core.Name("expression")
@@ -1933,7 +1933,7 @@ class Group(metaclass=_GroupMeta):
 class Lambda:
     params: LambdaParameters
     body: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Lambda")
     PARAMS = hydra.core.Name("params")
     BODY = hydra.core.Name("body")
@@ -1944,7 +1944,7 @@ class LambdaParameters:
     param_no_default: frozenlist[LambdaParamNoDefault]
     param_with_default: frozenlist[LambdaParamWithDefault]
     star_etc: Maybe[LambdaStarEtc]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.LambdaParameters")
     SLASH_NO_DEFAULT = hydra.core.Name("slashNoDefault")
     PARAM_NO_DEFAULT = hydra.core.Name("paramNoDefault")
@@ -1954,7 +1954,7 @@ class LambdaParameters:
 @dataclass(frozen=True)
 class LambdaSlashNoDefault:
     parameters: frozenlist[LambdaParamNoDefault]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.LambdaSlashNoDefault")
     PARAMETERS = hydra.core.Name("parameters")
 
@@ -1962,7 +1962,7 @@ class LambdaSlashNoDefault:
 class LambdaSlashWithDefault:
     param_no_default: frozenlist[LambdaParamNoDefault]
     param_with_default: frozenlist[LambdaParamWithDefault]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.LambdaSlashWithDefault")
     PARAM_NO_DEFAULT = hydra.core.Name("paramNoDefault")
     PARAM_WITH_DEFAULT = hydra.core.Name("paramWithDefault")
@@ -1985,7 +1985,7 @@ class _LambdaStarEtcMeta(type):
 
 class LambdaStarEtc(metaclass=_LambdaStarEtcMeta):
     r"""LambdaStarEtcStar | LambdaStarEtcParamNoDefault | LambdaStarEtcParamMaybeDefault | LambdaStarEtcKwds"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.LambdaStarEtc")
     STAR = hydra.core.Name("star")
     PARAM_NO_DEFAULT = hydra.core.Name("paramNoDefault")
@@ -2006,7 +2006,7 @@ LambdaParamNoDefault.TYPE_ = hydra.core.Name("hydra.ext.python.syntax.LambdaPara
 class LambdaParamWithDefault:
     param: Name
     default: Maybe[Default]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.LambdaParamWithDefault")
     PARAM = hydra.core.Name("param")
     DEFAULT = hydra.core.Name("default")
@@ -2015,7 +2015,7 @@ class LambdaParamWithDefault:
 class LambdaParamMaybeDefault:
     param: Name
     default: Maybe[Default]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.LambdaParamMaybeDefault")
     PARAM = hydra.core.Name("param")
     DEFAULT = hydra.core.Name("default")
@@ -2052,7 +2052,7 @@ class _DoubleStarredKvpairMeta(type):
 
 class DoubleStarredKvpair(metaclass=_DoubleStarredKvpairMeta):
     r"""DoubleStarredKvpairStarred | DoubleStarredKvpairPair"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.DoubleStarredKvpair")
     STARRED = hydra.core.Name("starred")
     PAIR = hydra.core.Name("pair")
@@ -2061,7 +2061,7 @@ class DoubleStarredKvpair(metaclass=_DoubleStarredKvpairMeta):
 class Kvpair:
     key: Expression
     value: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Kvpair")
     KEY = hydra.core.Name("key")
     VALUE = hydra.core.Name("value")
@@ -2077,7 +2077,7 @@ class ForIfClause:
     targets: frozenlist[StarTarget]
     in_: Disjunction
     ifs: frozenlist[Disjunction]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.ForIfClause")
     ASYNC = hydra.core.Name("async")
     TARGETS = hydra.core.Name("targets")
@@ -2088,7 +2088,7 @@ class ForIfClause:
 class Listcomp:
     expression: NamedExpression
     for_if_clauses: ForIfClauses
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Listcomp")
     EXPRESSION = hydra.core.Name("expression")
     FOR_IF_CLAUSES = hydra.core.Name("forIfClauses")
@@ -2097,7 +2097,7 @@ class Listcomp:
 class Setcomp:
     expression: NamedExpression
     for_if_clauses: ForIfClauses
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Setcomp")
     EXPRESSION = hydra.core.Name("expression")
     FOR_IF_CLAUSES = hydra.core.Name("forIfClauses")
@@ -2106,7 +2106,7 @@ class Setcomp:
 class Genexp:
     head: GenexpHead
     tail: ForIfClauses
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Genexp")
     HEAD = hydra.core.Name("head")
     TAIL = hydra.core.Name("tail")
@@ -2123,7 +2123,7 @@ class _GenexpHeadMeta(type):
 
 class GenexpHead(metaclass=_GenexpHeadMeta):
     r"""GenexpHeadAssignment | GenexpHeadExpression"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.GenexpHead")
     ASSIGNMENT = hydra.core.Name("assignment")
     EXPRESSION = hydra.core.Name("expression")
@@ -2132,7 +2132,7 @@ class GenexpHead(metaclass=_GenexpHeadMeta):
 class Dictcomp:
     kvpair: Kvpair
     for_if_clauses: ForIfClauses
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Dictcomp")
     KVPAIR = hydra.core.Name("kvpair")
     FOR_IF_CLAUSES = hydra.core.Name("forIfClauses")
@@ -2142,7 +2142,7 @@ class Args:
     positional: frozenlist[PosArg]
     kwarg_or_starred: frozenlist[KwargOrStarred]
     kwarg_or_double_starred: frozenlist[KwargOrDoubleStarred]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Args")
     POSITIONAL = hydra.core.Name("positional")
     KWARG_OR_STARRED = hydra.core.Name("kwargOrStarred")
@@ -2163,7 +2163,7 @@ class _PosArgMeta(type):
 
 class PosArg(metaclass=_PosArgMeta):
     r"""PosArgStarred | PosArgAssignment | PosArgExpression"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.PosArg")
     STARRED = hydra.core.Name("starred")
     ASSIGNMENT = hydra.core.Name("assignment")
@@ -2186,7 +2186,7 @@ class _KwargOrStarredMeta(type):
 
 class KwargOrStarred(metaclass=_KwargOrStarredMeta):
     r"""KwargOrStarredKwarg | KwargOrStarredStarred"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.KwargOrStarred")
     KWARG = hydra.core.Name("kwarg")
     STARRED = hydra.core.Name("starred")
@@ -2195,7 +2195,7 @@ class KwargOrStarred(metaclass=_KwargOrStarredMeta):
 class Kwarg:
     name: Name
     value: Expression
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.Kwarg")
     NAME = hydra.core.Name("name")
     VALUE = hydra.core.Name("value")
@@ -2212,7 +2212,7 @@ class _KwargOrDoubleStarredMeta(type):
 
 class KwargOrDoubleStarred(metaclass=_KwargOrDoubleStarredMeta):
     r"""KwargOrDoubleStarredKwarg | KwargOrDoubleStarredDoubleStarred"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.KwargOrDoubleStarred")
     KWARG = hydra.core.Name("kwarg")
     DOUBLE_STARRED = hydra.core.Name("doubleStarred")
@@ -2239,7 +2239,7 @@ class _StarTargetMeta(type):
 
 class StarTarget(metaclass=_StarTargetMeta):
     r"""StarTargetStarred | StarTargetUnstarred"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.StarTarget")
     STARRED = hydra.core.Name("starred")
     UNSTARRED = hydra.core.Name("unstarred")
@@ -2259,7 +2259,7 @@ class _TargetWithStarAtomMeta(type):
 
 class TargetWithStarAtom(metaclass=_TargetWithStarAtomMeta):
     r"""TargetWithStarAtomProject | TargetWithStarAtomSlices | TargetWithStarAtomAtom"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TargetWithStarAtom")
     PROJECT = hydra.core.Name("project")
     SLICES = hydra.core.Name("slices")
@@ -2269,7 +2269,7 @@ class TargetWithStarAtom(metaclass=_TargetWithStarAtomMeta):
 class TPrimaryAndName:
     primary: TPrimary
     name: Name
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TPrimaryAndName")
     PRIMARY = hydra.core.Name("primary")
     NAME = hydra.core.Name("name")
@@ -2278,7 +2278,7 @@ class TPrimaryAndName:
 class TPrimaryAndSlices:
     primary: TPrimary
     slices: Slices
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TPrimaryAndSlices")
     PRIMARY = hydra.core.Name("primary")
     SLICES = hydra.core.Name("slices")
@@ -2301,7 +2301,7 @@ class _StarAtomMeta(type):
 
 class StarAtom(metaclass=_StarAtomMeta):
     r"""StarAtomName | StarAtomTargetWithStarAtom | StarAtomStarTargetsTupleSeq | StarAtomStarTargetsListSeq"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.StarAtom")
     NAME = hydra.core.Name("name")
     TARGET_WITH_STAR_ATOM = hydra.core.Name("targetWithStarAtom")
@@ -2323,7 +2323,7 @@ class _SingleTargetMeta(type):
 
 class SingleTarget(metaclass=_SingleTargetMeta):
     r"""SingleTargetSubscriptAttributeTarget | SingleTargetName | SingleTargetParens"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SingleTarget")
     SUBSCRIPT_ATTRIBUTE_TARGET = hydra.core.Name("subscriptAttributeTarget")
     NAME = hydra.core.Name("name")
@@ -2341,7 +2341,7 @@ class _SingleSubscriptAttributeTargetMeta(type):
 
 class SingleSubscriptAttributeTarget(metaclass=_SingleSubscriptAttributeTargetMeta):
     r"""SingleSubscriptAttributeTargetPrimaryAndName | SingleSubscriptAttributeTargetPrimaryAndSlices"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.SingleSubscriptAttributeTarget")
     PRIMARY_AND_NAME = hydra.core.Name("primaryAndName")
     PRIMARY_AND_SLICES = hydra.core.Name("primaryAndSlices")
@@ -2367,7 +2367,7 @@ class _TPrimaryMeta(type):
 
 class TPrimary(metaclass=_TPrimaryMeta):
     r"""TPrimaryPrimaryAndName | TPrimaryPrimaryAndSlices | TPrimaryPrimaryAndGenexp | TPrimaryPrimaryAndArguments | TPrimaryAtom"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TPrimary")
     PRIMARY_AND_NAME = hydra.core.Name("primaryAndName")
     PRIMARY_AND_SLICES = hydra.core.Name("primaryAndSlices")
@@ -2379,7 +2379,7 @@ class TPrimary(metaclass=_TPrimaryMeta):
 class TPrimaryAndGenexp:
     primary: TPrimary
     genexp: Genexp
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TPrimaryAndGenexp")
     PRIMARY = hydra.core.Name("primary")
     GENEXP = hydra.core.Name("genexp")
@@ -2388,7 +2388,7 @@ class TPrimaryAndGenexp:
 class TPrimaryAndArguments:
     primary: TPrimary
     arguments: Maybe[Args]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TPrimaryAndArguments")
     PRIMARY = hydra.core.Name("primary")
     ARGUMENTS = hydra.core.Name("arguments")
@@ -2413,7 +2413,7 @@ class _DelTargetMeta(type):
 
 class DelTarget(metaclass=_DelTargetMeta):
     r"""DelTargetPrimaryAndName | DelTargetPrimaryAndSlices | DelTargetDelTAtom"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.DelTarget")
     PRIMARY_AND_NAME = hydra.core.Name("primaryAndName")
     PRIMARY_AND_SLICES = hydra.core.Name("primaryAndSlices")
@@ -2434,7 +2434,7 @@ class _DelTAtomMeta(type):
 
 class DelTAtom(metaclass=_DelTAtomMeta):
     r"""DelTAtomName | DelTAtomTarget | DelTAtomTargets"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.DelTAtom")
     NAME = hydra.core.Name("name")
     TARGET = hydra.core.Name("target")
@@ -2455,7 +2455,7 @@ class _TypeExpressionMeta(type):
 
 class TypeExpression(metaclass=_TypeExpressionMeta):
     r"""TypeExpressionExpression | TypeExpressionStarredExpression | TypeExpressionDoubleStarredExpression"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.python.syntax.TypeExpression")
     EXPRESSION = hydra.core.Name("expression")
     STARRED_EXPRESSION = hydra.core.Name("starredExpression")

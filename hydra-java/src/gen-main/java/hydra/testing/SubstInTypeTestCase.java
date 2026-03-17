@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class SubstInTypeTestCase implements Serializable, Comparable<SubstInTypeTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.SubstInTypeTestCase");
-  
+
   public static final hydra.core.Name SUBSTITUTION = new hydra.core.Name("substitution");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
-  
+
   /**
    * The type substitution as a list of (name, type) pairs
    */
   public final hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Type>> substitution;
-  
+
   /**
    * The type to substitute into
    */
   public final hydra.core.Type input;
-  
+
   /**
    * The expected result type
    */
   public final hydra.core.Type output;
-  
+
   public SubstInTypeTestCase (hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Type>> substitution, hydra.core.Type input, hydra.core.Type output) {
     this.substitution = substitution;
     this.input = input;
     this.output = output;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof SubstInTypeTestCase)) {
@@ -51,12 +51,12 @@ public class SubstInTypeTestCase implements Serializable, Comparable<SubstInType
       this.output,
       o.output);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(substitution) + 3 * java.util.Objects.hashCode(input) + 5 * java.util.Objects.hashCode(output);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SubstInTypeTestCase other) {
@@ -71,15 +71,15 @@ public class SubstInTypeTestCase implements Serializable, Comparable<SubstInType
     }
     return ((Comparable) output).compareTo(other.output);
   }
-  
+
   public SubstInTypeTestCase withSubstitution(hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Type>> substitution) {
     return new SubstInTypeTestCase(substitution, input, output);
   }
-  
+
   public SubstInTypeTestCase withInput(hydra.core.Type input) {
     return new SubstInTypeTestCase(substitution, input, output);
   }
-  
+
   public SubstInTypeTestCase withOutput(hydra.core.Type output) {
     return new SubstInTypeTestCase(substitution, input, output);
   }

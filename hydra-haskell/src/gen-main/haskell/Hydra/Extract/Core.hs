@@ -82,9 +82,9 @@ booleanLiteral cx v =
 -- | Extract a specific case handler from a case statement term
 caseField :: Context.Context -> Core.Name -> String -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Core.Field
 caseField cx name n graph term =
-     
+
       let fieldName = Core.Name n
-      in (Eithers.bind (cases cx name graph term) (\cs ->  
+      in (Eithers.bind (cases cx name graph term) (\cs ->
         let matching =
                 Lists.filter (\f -> Equality.equal (Core.unName (Core.fieldName f)) (Core.unName fieldName)) (Core.caseStatementCases cs)
         in (Logic.ifElse (Lists.null matching) (Left (Context.InContext {
@@ -113,7 +113,7 @@ cases cx name graph term0 =
 -- | Extract a field value from a list of fields
 field :: Context.Context -> Core.Name -> (Core.Term -> Either (Context.InContext Error.Error) t0) -> Graph.Graph -> [Core.Field] -> Either (Context.InContext Error.Error) t0
 field cx fname mapping graph fields =
-     
+
       let matchingFields = Lists.filter (\f -> Equality.equal (Core.unName (Core.fieldName f)) (Core.unName fname)) fields
       in (Logic.ifElse (Lists.null matchingFields) (Left (Context.InContext {
         Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "field " (Core.unName fname))) " but found ") "no matching field"))),
@@ -172,7 +172,7 @@ eitherTerm cx leftFun rightFun graph term0 =
 -- | Extract the left and right types from an either type
 eitherType :: Context.Context -> Core.Type -> Either (Context.InContext Error.Error) Core.EitherType
 eitherType cx typ =
-     
+
       let stripped = Rewriting.deannotateType typ
       in case stripped of
         Core.TypeEither v0 -> Right v0
@@ -183,7 +183,7 @@ eitherType cx typ =
 -- | Extract a function type from a type
 functionType :: Context.Context -> Core.Type -> Either (Context.InContext Error.Error) Core.FunctionType
 functionType cx typ =
-     
+
       let stripped = Rewriting.deannotateType typ
       in case stripped of
         Core.TypeFunction v0 -> Right v0
@@ -287,9 +287,9 @@ lambda cx graph term0 =
 -- | Extract a binding with the given name from a let term
 letBinding :: Context.Context -> String -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 letBinding cx n graph term =
-     
+
       let name = Core.Name n
-      in (Eithers.bind (let_ cx graph term) (\letExpr ->  
+      in (Eithers.bind (let_ cx graph term) (\letExpr ->
         let matchingBindings =
                 Lists.filter (\b -> Equality.equal (Core.unName (Core.bindingName b)) (Core.unName name)) (Core.letBindings letExpr)
         in (Logic.ifElse (Lists.null matchingBindings) (Left (Context.InContext {
@@ -330,7 +330,7 @@ listOf cx f graph term = Eithers.bind (list cx graph term) (\els -> Eithers.mapL
 -- | Extract the element type from a list type
 listType :: Context.Context -> Core.Type -> Either (Context.InContext Error.Error) Core.Type
 listType cx typ =
-     
+
       let stripped = Rewriting.deannotateType typ
       in case stripped of
         Core.TypeList v0 -> Right v0
@@ -350,10 +350,10 @@ literal cx graph term0 =
 -- | Extract a map of key-value pairs from a term, mapping functions over each key and value
 map :: Ord t0 => (Context.Context -> (Core.Term -> Either (Context.InContext Error.Error) t0) -> (Core.Term -> Either (Context.InContext Error.Error) t1) -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) (M.Map t0 t1))
 map cx fk fv graph term0 =
-     
+
       let pair =
-              \kvPair ->  
-                let kterm = Pairs.first kvPair 
+              \kvPair ->
+                let kterm = Pairs.first kvPair
                     vterm = Pairs.second kvPair
                 in (Eithers.bind (fk kterm) (\kval -> Eithers.bind (fv vterm) (\vval -> Right (kval, vval))))
       in (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> case term of
@@ -365,7 +365,7 @@ map cx fk fv graph term0 =
 -- | Extract the key and value types from a map type
 mapType :: Context.Context -> Core.Type -> Either (Context.InContext Error.Error) Core.MapType
 mapType cx typ =
-     
+
       let stripped = Rewriting.deannotateType typ
       in case stripped of
         Core.TypeMap v0 -> Right v0
@@ -395,7 +395,7 @@ maybeTerm cx f graph term0 =
 -- | Extract the base type from an optional type
 maybeType :: Context.Context -> Core.Type -> Either (Context.InContext Error.Error) Core.Type
 maybeType cx typ =
-     
+
       let stripped = Rewriting.deannotateType typ
       in case stripped of
         Core.TypeMaybe v0 -> Right v0
@@ -422,7 +422,7 @@ record cx expected graph term0 =
 -- | Extract the field types from a record type
 recordType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Error.Error) [Core.FieldType]
 recordType cx ename typ =
-     
+
       let stripped = Rewriting.deannotateType typ
       in case stripped of
         Core.TypeRecord v0 -> Right v0
@@ -446,7 +446,7 @@ setOf cx f graph term = Eithers.bind (set cx graph term) (\els -> Eithers.mapSet
 -- | Extract the element type from a set type
 setType :: Context.Context -> Core.Type -> Either (Context.InContext Error.Error) Core.Type
 setType cx typ =
-     
+
       let stripped = Rewriting.deannotateType typ
       in case stripped of
         Core.TypeSet v0 -> Right v0
@@ -531,7 +531,7 @@ uint8Value cx v =
 -- | Extract the field types from a union type
 unionType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Error.Error) [Core.FieldType]
 unionType cx ename typ =
-     
+
       let stripped = Rewriting.deannotateType typ
       in case stripped of
         Core.TypeUnion v0 -> Right v0
@@ -567,7 +567,7 @@ wrap cx expected graph term0 =
 -- | Extract the wrapped type from a wrapper type
 wrappedType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Error.Error) Core.Type
 wrappedType cx ename typ =
-     
+
       let stripped = Rewriting.deannotateType typ
       in case stripped of
         Core.TypeWrap v0 -> Right v0

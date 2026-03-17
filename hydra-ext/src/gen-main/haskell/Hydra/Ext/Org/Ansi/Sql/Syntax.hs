@@ -12,122 +12,122 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-newtype ApproximateNumericLiteral = 
+newtype ApproximateNumericLiteral =
   ApproximateNumericLiteral {
     unApproximateNumericLiteral :: String}
   deriving (Eq, Ord, Read, Show)
 
 _ApproximateNumericLiteral = Core.Name "hydra.ext.org.ansi.sql.syntax.ApproximateNumericLiteral"
 
-newtype BinaryStringLiteral = 
+newtype BinaryStringLiteral =
   BinaryStringLiteral {
     unBinaryStringLiteral :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _BinaryStringLiteral = Core.Name "hydra.ext.org.ansi.sql.syntax.BinaryStringLiteral"
 
-newtype CharacterStringLiteral = 
+newtype CharacterStringLiteral =
   CharacterStringLiteral {
     unCharacterStringLiteral :: String}
   deriving (Eq, Ord, Read, Show)
 
 _CharacterStringLiteral = Core.Name "hydra.ext.org.ansi.sql.syntax.CharacterStringLiteral"
 
-newtype ColumnName = 
+newtype ColumnName =
   ColumnName {
     unColumnName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _ColumnName = Core.Name "hydra.ext.org.ansi.sql.syntax.ColumnName"
 
-newtype DateString = 
+newtype DateString =
   DateString {
     unDateString :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _DateString = Core.Name "hydra.ext.org.ansi.sql.syntax.DateString"
 
-newtype DomainName = 
+newtype DomainName =
   DomainName {
     unDomainName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _DomainName = Core.Name "hydra.ext.org.ansi.sql.syntax.DomainName"
 
-newtype ExactNumericLiteral = 
+newtype ExactNumericLiteral =
   ExactNumericLiteral {
     unExactNumericLiteral :: String}
   deriving (Eq, Ord, Read, Show)
 
 _ExactNumericLiteral = Core.Name "hydra.ext.org.ansi.sql.syntax.ExactNumericLiteral"
 
-newtype LeftBracketOrTrigraph = 
+newtype LeftBracketOrTrigraph =
   LeftBracketOrTrigraph {
     unLeftBracketOrTrigraph :: String}
   deriving (Eq, Ord, Read, Show)
 
 _LeftBracketOrTrigraph = Core.Name "hydra.ext.org.ansi.sql.syntax.LeftBracketOrTrigraph"
 
-newtype RightBracketOrTrigraph = 
+newtype RightBracketOrTrigraph =
   RightBracketOrTrigraph {
     unRightBracketOrTrigraph :: String}
   deriving (Eq, Ord, Read, Show)
 
 _RightBracketOrTrigraph = Core.Name "hydra.ext.org.ansi.sql.syntax.RightBracketOrTrigraph"
 
-newtype NationalCharacterStringLiteral = 
+newtype NationalCharacterStringLiteral =
   NationalCharacterStringLiteral {
     unNationalCharacterStringLiteral :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _NationalCharacterStringLiteral = Core.Name "hydra.ext.org.ansi.sql.syntax.NationalCharacterStringLiteral"
 
-newtype PathResolvedUserDefinedTypeName = 
+newtype PathResolvedUserDefinedTypeName =
   PathResolvedUserDefinedTypeName {
     unPathResolvedUserDefinedTypeName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _PathResolvedUserDefinedTypeName = Core.Name "hydra.ext.org.ansi.sql.syntax.PathResolvedUserDefinedTypeName"
 
-newtype TableName = 
+newtype TableName =
   TableName {
     unTableName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _TableName = Core.Name "hydra.ext.org.ansi.sql.syntax.TableName"
 
-newtype TimeString = 
+newtype TimeString =
   TimeString {
     unTimeString :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _TimeString = Core.Name "hydra.ext.org.ansi.sql.syntax.TimeString"
 
-newtype TimestampLiteral = 
+newtype TimestampLiteral =
   TimestampLiteral {
     unTimestampLiteral :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _TimestampLiteral = Core.Name "hydra.ext.org.ansi.sql.syntax.TimestampLiteral"
 
-newtype UnicodeCharacterStringLiteral = 
+newtype UnicodeCharacterStringLiteral =
   UnicodeCharacterStringLiteral {
     unUnicodeCharacterStringLiteral :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _UnicodeCharacterStringLiteral = Core.Name "hydra.ext.org.ansi.sql.syntax.UnicodeCharacterStringLiteral"
 
-newtype UnsignedInteger = 
+newtype UnsignedInteger =
   UnsignedInteger {
     unUnsignedInteger :: String}
   deriving (Eq, Ord, Read, Show)
 
 _UnsignedInteger = Core.Name "hydra.ext.org.ansi.sql.syntax.UnsignedInteger"
 
-data ApproximateNumericType = 
+data ApproximateNumericType =
   ApproximateNumericTypeFloat (Maybe Precision) |
   ApproximateNumericTypeReal  |
-  ApproximateNumericTypeDouble 
+  ApproximateNumericTypeDouble
   deriving (Eq, Ord, Read, Show)
 
 _ApproximateNumericType = Core.Name "hydra.ext.org.ansi.sql.syntax.ApproximateNumericType"
@@ -138,14 +138,14 @@ _ApproximateNumericType_real = Core.Name "real"
 
 _ApproximateNumericType_double = Core.Name "double"
 
-newtype ArrayElement = 
+newtype ArrayElement =
   ArrayElement {
     unArrayElement :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayElement = Core.Name "hydra.ext.org.ansi.sql.syntax.ArrayElement"
 
-data ArrayElementList = 
+data ArrayElementList =
   ArrayElementList {
     arrayElementListFirst :: ArrayElement,
     arrayElementListRest :: [ArrayElement]}
@@ -157,21 +157,21 @@ _ArrayElementList_first = Core.Name "first"
 
 _ArrayElementList_rest = Core.Name "rest"
 
-newtype ArrayElementReference = 
+newtype ArrayElementReference =
   ArrayElementReference {
     unArrayElementReference :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayElementReference = Core.Name "hydra.ext.org.ansi.sql.syntax.ArrayElementReference"
 
-newtype ArrayType = 
+newtype ArrayType =
   ArrayType {
     unArrayType :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayType = Core.Name "hydra.ext.org.ansi.sql.syntax.ArrayType"
 
-data ArrayValueConstructor = 
+data ArrayValueConstructor =
   ArrayValueConstructorEnumeration ArrayValueConstructorByEnumeration |
   ArrayValueConstructorQuery ArrayValueConstructorByQuery
   deriving (Eq, Ord, Read, Show)
@@ -182,14 +182,14 @@ _ArrayValueConstructor_enumeration = Core.Name "enumeration"
 
 _ArrayValueConstructor_query = Core.Name "query"
 
-newtype ArrayValueConstructorByQuery = 
+newtype ArrayValueConstructorByQuery =
   ArrayValueConstructorByQuery {
     unArrayValueConstructorByQuery :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayValueConstructorByQuery = Core.Name "hydra.ext.org.ansi.sql.syntax.ArrayValueConstructorByQuery"
 
-data ArrayValueConstructorByEnumeration = 
+data ArrayValueConstructorByEnumeration =
   ArrayValueConstructorByEnumeration {
     arrayValueConstructorByEnumerationLeftBracketOrTrigraph :: LeftBracketOrTrigraph,
     arrayValueConstructorByEnumerationArrayElementList :: ArrayElementList,
@@ -204,28 +204,28 @@ _ArrayValueConstructorByEnumeration_ArrayElementList = Core.Name "ArrayElementLi
 
 _ArrayValueConstructorByEnumeration_RightBracketOrTrigraph = Core.Name "RightBracketOrTrigraph"
 
-newtype ArrayValueExpression = 
+newtype ArrayValueExpression =
   ArrayValueExpression {
     unArrayValueExpression :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayValueExpression = Core.Name "hydra.ext.org.ansi.sql.syntax.ArrayValueExpression"
 
-newtype AsSubqueryClause = 
+newtype AsSubqueryClause =
   AsSubqueryClause {
     unAsSubqueryClause :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _AsSubqueryClause = Core.Name "hydra.ext.org.ansi.sql.syntax.AsSubqueryClause"
 
-newtype AttributeOrMethodReference = 
+newtype AttributeOrMethodReference =
   AttributeOrMethodReference {
     unAttributeOrMethodReference :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _AttributeOrMethodReference = Core.Name "hydra.ext.org.ansi.sql.syntax.AttributeOrMethodReference"
 
-data BinaryLargeObjectStringType = 
+data BinaryLargeObjectStringType =
   BinaryLargeObjectStringTypeBinary (Maybe LargeObjectLength) |
   BinaryLargeObjectStringTypeBlob (Maybe LargeObjectLength)
   deriving (Eq, Ord, Read, Show)
@@ -236,7 +236,7 @@ _BinaryLargeObjectStringType_binary = Core.Name "binary"
 
 _BinaryLargeObjectStringType_blob = Core.Name "blob"
 
-data BooleanFactor = 
+data BooleanFactor =
   BooleanFactor {
     booleanFactorNOT :: (Maybe ()),
     booleanFactorBooleanTest :: BooleanTest}
@@ -248,10 +248,10 @@ _BooleanFactor_NOT = Core.Name "NOT"
 
 _BooleanFactor_BooleanTest = Core.Name "BooleanTest"
 
-data BooleanLiteral = 
+data BooleanLiteral =
   BooleanLiteralTRUE  |
   BooleanLiteralFALSE  |
-  BooleanLiteralUNKNOWN 
+  BooleanLiteralUNKNOWN
   deriving (Eq, Ord, Read, Show)
 
 _BooleanLiteral = Core.Name "hydra.ext.org.ansi.sql.syntax.BooleanLiteral"
@@ -262,14 +262,14 @@ _BooleanLiteral_FALSE = Core.Name "FALSE"
 
 _BooleanLiteral_UNKNOWN = Core.Name "UNKNOWN"
 
-newtype BooleanPredicand = 
+newtype BooleanPredicand =
   BooleanPredicand {
     unBooleanPredicand :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _BooleanPredicand = Core.Name "hydra.ext.org.ansi.sql.syntax.BooleanPredicand"
 
-data BooleanPrimary = 
+data BooleanPrimary =
   BooleanPrimaryPredicate Predicate |
   BooleanPrimaryPredicand BooleanPredicand
   deriving (Eq, Ord, Read, Show)
@@ -280,7 +280,7 @@ _BooleanPrimary_predicate = Core.Name "predicate"
 
 _BooleanPrimary_predicand = Core.Name "predicand"
 
-data BooleanTerm = 
+data BooleanTerm =
   BooleanTermFactor BooleanFactor |
   BooleanTermAnd BooleanTerm_And
   deriving (Eq, Ord, Read, Show)
@@ -291,7 +291,7 @@ _BooleanTerm_factor = Core.Name "factor"
 
 _BooleanTerm_and = Core.Name "and"
 
-data BooleanTerm_And = 
+data BooleanTerm_And =
   BooleanTerm_And {
     booleanTerm_AndLhs :: BooleanTerm,
     booleanTerm_AndRhs :: BooleanFactor}
@@ -303,7 +303,7 @@ _BooleanTerm_And_lhs = Core.Name "lhs"
 
 _BooleanTerm_And_rhs = Core.Name "rhs"
 
-data BooleanTest = 
+data BooleanTest =
   BooleanTest {
     booleanTestBooleanPrimary :: BooleanPrimary,
     booleanTestSequence :: (Maybe BooleanTest_Sequence_Option)}
@@ -315,7 +315,7 @@ _BooleanTest_BooleanPrimary = Core.Name "BooleanPrimary"
 
 _BooleanTest_Sequence = Core.Name "Sequence"
 
-data BooleanTest_Sequence_Option = 
+data BooleanTest_Sequence_Option =
   BooleanTest_Sequence_Option {
     booleanTest_Sequence_OptionNOT :: (Maybe ()),
     booleanTest_Sequence_OptionTruthValue :: TruthValue}
@@ -327,14 +327,14 @@ _BooleanTest_Sequence_Option_NOT = Core.Name "NOT"
 
 _BooleanTest_Sequence_Option_TruthValue = Core.Name "TruthValue"
 
-newtype BooleanType = 
+newtype BooleanType =
   BooleanType {
     unBooleanType :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _BooleanType = Core.Name "hydra.ext.org.ansi.sql.syntax.BooleanType"
 
-data BooleanValueExpression = 
+data BooleanValueExpression =
   BooleanValueExpressionTerm BooleanTerm |
   BooleanValueExpressionOr BooleanValueExpression_Or
   deriving (Eq, Ord, Read, Show)
@@ -345,7 +345,7 @@ _BooleanValueExpression_term = Core.Name "term"
 
 _BooleanValueExpression_or = Core.Name "or"
 
-data BooleanValueExpression_Or = 
+data BooleanValueExpression_Or =
   BooleanValueExpression_Or {
     booleanValueExpression_OrLhs :: BooleanValueExpression,
     booleanValueExpression_OrRhs :: BooleanTerm}
@@ -357,28 +357,28 @@ _BooleanValueExpression_Or_lhs = Core.Name "lhs"
 
 _BooleanValueExpression_Or_rhs = Core.Name "rhs"
 
-newtype CaseExpression = 
+newtype CaseExpression =
   CaseExpression {
     unCaseExpression :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _CaseExpression = Core.Name "hydra.ext.org.ansi.sql.syntax.CaseExpression"
 
-newtype CastSpecification = 
+newtype CastSpecification =
   CastSpecification {
     unCastSpecification :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _CastSpecification = Core.Name "hydra.ext.org.ansi.sql.syntax.CastSpecification"
 
-newtype CharacterSetSpecification = 
+newtype CharacterSetSpecification =
   CharacterSetSpecification {
     unCharacterSetSpecification :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _CharacterSetSpecification = Core.Name "hydra.ext.org.ansi.sql.syntax.CharacterSetSpecification"
 
-data CharacterStringType = 
+data CharacterStringType =
   CharacterStringTypeCharacter (Maybe Length) |
   CharacterStringTypeChar (Maybe Length) |
   CharacterStringTypeCharacterVarying Length |
@@ -407,14 +407,14 @@ _CharacterStringType_charLargeObject = Core.Name "charLargeObject"
 
 _CharacterStringType_clob = Core.Name "clob"
 
-newtype CollateClause = 
+newtype CollateClause =
   CollateClause {
     unCollateClause :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _CollateClause = Core.Name "hydra.ext.org.ansi.sql.syntax.CollateClause"
 
-data CollectionType = 
+data CollectionType =
   CollectionTypeArray ArrayType |
   CollectionTypeMultiset MultisetType
   deriving (Eq, Ord, Read, Show)
@@ -425,7 +425,7 @@ _CollectionType_array = Core.Name "array"
 
 _CollectionType_multiset = Core.Name "multiset"
 
-data CollectionValueConstructor = 
+data CollectionValueConstructor =
   CollectionValueConstructorArray ArrayValueConstructor |
   CollectionValueConstructorMultiset MultisetValueConstructor
   deriving (Eq, Ord, Read, Show)
@@ -436,7 +436,7 @@ _CollectionValueConstructor_array = Core.Name "array"
 
 _CollectionValueConstructor_multiset = Core.Name "multiset"
 
-data CollectionValueExpression = 
+data CollectionValueExpression =
   CollectionValueExpressionArray ArrayValueExpression |
   CollectionValueExpressionMultiset MultisetValueExpression
   deriving (Eq, Ord, Read, Show)
@@ -447,14 +447,14 @@ _CollectionValueExpression_array = Core.Name "array"
 
 _CollectionValueExpression_multiset = Core.Name "multiset"
 
-newtype ColumnConstraintDefinition = 
+newtype ColumnConstraintDefinition =
   ColumnConstraintDefinition {
     unColumnConstraintDefinition :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ColumnConstraintDefinition = Core.Name "hydra.ext.org.ansi.sql.syntax.ColumnConstraintDefinition"
 
-data ColumnDefinition = 
+data ColumnDefinition =
   ColumnDefinition {
     columnDefinitionName :: ColumnName,
     columnDefinitionTypeOrDomain :: (Maybe ColumnDefinition_TypeOrDomain_Option),
@@ -478,7 +478,7 @@ _ColumnDefinition_constraints = Core.Name "constraints"
 
 _ColumnDefinition_collate = Core.Name "collate"
 
-data ColumnDefinition_TypeOrDomain_Option = 
+data ColumnDefinition_TypeOrDomain_Option =
   ColumnDefinition_TypeOrDomain_OptionDataType DataType |
   ColumnDefinition_TypeOrDomain_OptionDomainName DomainName
   deriving (Eq, Ord, Read, Show)
@@ -489,7 +489,7 @@ _ColumnDefinition_TypeOrDomain_Option_DataType = Core.Name "DataType"
 
 _ColumnDefinition_TypeOrDomain_Option_DomainName = Core.Name "DomainName"
 
-data ColumnDefinition_DefaultOrIdentityOrGeneration_Option = 
+data ColumnDefinition_DefaultOrIdentityOrGeneration_Option =
   ColumnDefinition_DefaultOrIdentityOrGeneration_OptionDefaultClause DefaultClause |
   ColumnDefinition_DefaultOrIdentityOrGeneration_OptionIdentityColumnSpecification IdentityColumnSpecification |
   ColumnDefinition_DefaultOrIdentityOrGeneration_OptionGenerationClause GenerationClause
@@ -505,7 +505,7 @@ _ColumnDefinition_DefaultOrIdentityOrGeneration_Option_IdentityColumnSpecificati
 
 _ColumnDefinition_DefaultOrIdentityOrGeneration_Option_GenerationClause = Core.Name "GenerationClause"
 
-data ColumnNameList = 
+data ColumnNameList =
   ColumnNameList {
     columnNameListFirst :: ColumnName,
     columnNameListRest :: [ColumnName]}
@@ -517,21 +517,21 @@ _ColumnNameList_first = Core.Name "first"
 
 _ColumnNameList_rest = Core.Name "rest"
 
-newtype ColumnOptions = 
+newtype ColumnOptions =
   ColumnOptions {
     unColumnOptions :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ColumnOptions = Core.Name "hydra.ext.org.ansi.sql.syntax.ColumnOptions"
 
-newtype ColumnReference = 
+newtype ColumnReference =
   ColumnReference {
     unColumnReference :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ColumnReference = Core.Name "hydra.ext.org.ansi.sql.syntax.ColumnReference"
 
-data CommonValueExpression = 
+data CommonValueExpression =
   CommonValueExpressionNumeric NumericValueExpression |
   CommonValueExpressionString StringValueExpression |
   CommonValueExpressionDatetime DatetimeValueExpression |
@@ -557,7 +557,7 @@ _CommonValueExpression_reference = Core.Name "reference"
 
 _CommonValueExpression_collection = Core.Name "collection"
 
-data ContextuallyTypedRowValueExpression = 
+data ContextuallyTypedRowValueExpression =
   ContextuallyTypedRowValueExpressionSpecialCase RowValueSpecialCase |
   ContextuallyTypedRowValueExpressionConstructor ContextuallyTypedRowValueConstructor
   deriving (Eq, Ord, Read, Show)
@@ -568,14 +568,14 @@ _ContextuallyTypedRowValueExpression_specialCase = Core.Name "specialCase"
 
 _ContextuallyTypedRowValueExpression_constructor = Core.Name "constructor"
 
-newtype ContextuallyTypedRowValueConstructor = 
+newtype ContextuallyTypedRowValueConstructor =
   ContextuallyTypedRowValueConstructor {
     unContextuallyTypedRowValueConstructor :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ContextuallyTypedRowValueConstructor = Core.Name "hydra.ext.org.ansi.sql.syntax.ContextuallyTypedRowValueConstructor"
 
-data ContextuallyTypedRowValueExpressionList = 
+data ContextuallyTypedRowValueExpressionList =
   ContextuallyTypedRowValueExpressionList {
     contextuallyTypedRowValueExpressionListFirst :: ContextuallyTypedRowValueExpression,
     contextuallyTypedRowValueExpressionListRest :: [ContextuallyTypedRowValueExpression]}
@@ -588,7 +588,7 @@ _ContextuallyTypedRowValueExpressionList_first = Core.Name "first"
 
 _ContextuallyTypedRowValueExpressionList_rest = Core.Name "rest"
 
-newtype ContextuallyTypedTableValueConstructor = 
+newtype ContextuallyTypedTableValueConstructor =
   ContextuallyTypedTableValueConstructor {
     unContextuallyTypedTableValueConstructor :: ContextuallyTypedRowValueExpressionList}
   deriving (Eq, Ord, Read, Show)
@@ -596,7 +596,7 @@ newtype ContextuallyTypedTableValueConstructor =
 _ContextuallyTypedTableValueConstructor =
     Core.Name "hydra.ext.org.ansi.sql.syntax.ContextuallyTypedTableValueConstructor"
 
-data DataType = 
+data DataType =
   DataTypePredefined PredefinedType |
   DataTypeRow RowType |
   DataTypeNamed PathResolvedUserDefinedTypeName |
@@ -616,14 +616,14 @@ _DataType_reference = Core.Name "reference"
 
 _DataType_collection = Core.Name "collection"
 
-newtype DateLiteral = 
+newtype DateLiteral =
   DateLiteral {
     unDateLiteral :: DateString}
   deriving (Eq, Ord, Read, Show)
 
 _DateLiteral = Core.Name "hydra.ext.org.ansi.sql.syntax.DateLiteral"
 
-data DatetimeLiteral = 
+data DatetimeLiteral =
   DatetimeLiteralDate DateLiteral |
   DatetimeLiteralTime TimeLiteral |
   DatetimeLiteralTimestamp TimestampLiteral
@@ -637,35 +637,35 @@ _DatetimeLiteral_time = Core.Name "time"
 
 _DatetimeLiteral_timestamp = Core.Name "timestamp"
 
-newtype DatetimeType = 
+newtype DatetimeType =
   DatetimeType {
     unDatetimeType :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _DatetimeType = Core.Name "hydra.ext.org.ansi.sql.syntax.DatetimeType"
 
-newtype DatetimeValueExpression = 
+newtype DatetimeValueExpression =
   DatetimeValueExpression {
     unDatetimeValueExpression :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _DatetimeValueExpression = Core.Name "hydra.ext.org.ansi.sql.syntax.DatetimeValueExpression"
 
-newtype DefaultClause = 
+newtype DefaultClause =
   DefaultClause {
     unDefaultClause :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _DefaultClause = Core.Name "hydra.ext.org.ansi.sql.syntax.DefaultClause"
 
-data ExactNumericType = 
+data ExactNumericType =
   ExactNumericTypeNumeric (Maybe ExactNumericType_Numeric_Option) |
   ExactNumericTypeDecimal (Maybe ExactNumericType_Decimal_Option) |
   ExactNumericTypeDec (Maybe ExactNumericType_Dec_Option) |
   ExactNumericTypeSmallint  |
   ExactNumericTypeInteger  |
   ExactNumericTypeInt  |
-  ExactNumericTypeBigint 
+  ExactNumericTypeBigint
   deriving (Eq, Ord, Read, Show)
 
 _ExactNumericType = Core.Name "hydra.ext.org.ansi.sql.syntax.ExactNumericType"
@@ -684,7 +684,7 @@ _ExactNumericType_int = Core.Name "int"
 
 _ExactNumericType_bigint = Core.Name "bigint"
 
-data ExactNumericType_Numeric_Option = 
+data ExactNumericType_Numeric_Option =
   ExactNumericType_Numeric_Option {
     exactNumericType_Numeric_OptionPrecision :: Precision,
     exactNumericType_Numeric_OptionSequence :: (Maybe Scale)}
@@ -696,7 +696,7 @@ _ExactNumericType_Numeric_Option_Precision = Core.Name "Precision"
 
 _ExactNumericType_Numeric_Option_Sequence = Core.Name "Sequence"
 
-data ExactNumericType_Decimal_Option = 
+data ExactNumericType_Decimal_Option =
   ExactNumericType_Decimal_Option {
     exactNumericType_Decimal_OptionPrecision :: Precision,
     exactNumericType_Decimal_OptionSequence :: (Maybe Scale)}
@@ -708,7 +708,7 @@ _ExactNumericType_Decimal_Option_Precision = Core.Name "Precision"
 
 _ExactNumericType_Decimal_Option_Sequence = Core.Name "Sequence"
 
-data ExactNumericType_Dec_Option = 
+data ExactNumericType_Dec_Option =
   ExactNumericType_Dec_Option {
     exactNumericType_Dec_OptionPrecision :: Precision,
     exactNumericType_Dec_OptionSequence :: (Maybe Scale)}
@@ -720,14 +720,14 @@ _ExactNumericType_Dec_Option_Precision = Core.Name "Precision"
 
 _ExactNumericType_Dec_Option_Sequence = Core.Name "Sequence"
 
-newtype FieldReference = 
+newtype FieldReference =
   FieldReference {
     unFieldReference :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _FieldReference = Core.Name "hydra.ext.org.ansi.sql.syntax.FieldReference"
 
-data FromConstructor = 
+data FromConstructor =
   FromConstructor {
     fromConstructorColumns :: (Maybe InsertColumnList),
     fromConstructorOverride :: (Maybe OverrideClause),
@@ -742,21 +742,21 @@ _FromConstructor_override = Core.Name "override"
 
 _FromConstructor_values = Core.Name "values"
 
-newtype FromDefault = 
+newtype FromDefault =
   FromDefault {
     unFromDefault :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _FromDefault = Core.Name "hydra.ext.org.ansi.sql.syntax.FromDefault"
 
-newtype FromSubquery = 
+newtype FromSubquery =
   FromSubquery {
     unFromSubquery :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _FromSubquery = Core.Name "hydra.ext.org.ansi.sql.syntax.FromSubquery"
 
-data GeneralLiteral = 
+data GeneralLiteral =
   GeneralLiteralString CharacterStringLiteral |
   GeneralLiteralNationalString NationalCharacterStringLiteral |
   GeneralLiteralUnicode UnicodeCharacterStringLiteral |
@@ -782,23 +782,23 @@ _GeneralLiteral_interval = Core.Name "interval"
 
 _GeneralLiteral_boolean = Core.Name "boolean"
 
-newtype GeneralValueSpecification = 
+newtype GeneralValueSpecification =
   GeneralValueSpecification {
     unGeneralValueSpecification :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _GeneralValueSpecification = Core.Name "hydra.ext.org.ansi.sql.syntax.GeneralValueSpecification"
 
-newtype GenerationClause = 
+newtype GenerationClause =
   GenerationClause {
     unGenerationClause :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _GenerationClause = Core.Name "hydra.ext.org.ansi.sql.syntax.GenerationClause"
 
-data GlobalOrLocal = 
+data GlobalOrLocal =
   GlobalOrLocalGlobal  |
-  GlobalOrLocalLocal 
+  GlobalOrLocalLocal
   deriving (Eq, Ord, Read, Show)
 
 _GlobalOrLocal = Core.Name "hydra.ext.org.ansi.sql.syntax.GlobalOrLocal"
@@ -807,21 +807,21 @@ _GlobalOrLocal_global = Core.Name "global"
 
 _GlobalOrLocal_local = Core.Name "local"
 
-newtype IdentityColumnSpecification = 
+newtype IdentityColumnSpecification =
   IdentityColumnSpecification {
     unIdentityColumnSpecification :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _IdentityColumnSpecification = Core.Name "hydra.ext.org.ansi.sql.syntax.IdentityColumnSpecification"
 
-newtype InsertColumnList = 
+newtype InsertColumnList =
   InsertColumnList {
     unInsertColumnList :: ColumnNameList}
   deriving (Eq, Ord, Read, Show)
 
 _InsertColumnList = Core.Name "hydra.ext.org.ansi.sql.syntax.InsertColumnList"
 
-data InsertColumnsAndSource = 
+data InsertColumnsAndSource =
   InsertColumnsAndSourceSubquery FromSubquery |
   InsertColumnsAndSourceConstructor FromConstructor |
   InsertColumnsAndSourceDefault FromDefault
@@ -835,7 +835,7 @@ _InsertColumnsAndSource_constructor = Core.Name "constructor"
 
 _InsertColumnsAndSource_default = Core.Name "default"
 
-data InsertStatement = 
+data InsertStatement =
   InsertStatement {
     insertStatementTarget :: InsertionTarget,
     insertStatementColumnsAndSource :: InsertColumnsAndSource}
@@ -847,112 +847,112 @@ _InsertStatement_target = Core.Name "target"
 
 _InsertStatement_columnsAndSource = Core.Name "columnsAndSource"
 
-newtype InsertionTarget = 
+newtype InsertionTarget =
   InsertionTarget {
     unInsertionTarget :: TableName}
   deriving (Eq, Ord, Read, Show)
 
 _InsertionTarget = Core.Name "hydra.ext.org.ansi.sql.syntax.InsertionTarget"
 
-newtype IntervalLiteral = 
+newtype IntervalLiteral =
   IntervalLiteral {
     unIntervalLiteral :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _IntervalLiteral = Core.Name "hydra.ext.org.ansi.sql.syntax.IntervalLiteral"
 
-newtype IntervalType = 
+newtype IntervalType =
   IntervalType {
     unIntervalType :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _IntervalType = Core.Name "hydra.ext.org.ansi.sql.syntax.IntervalType"
 
-newtype IntervalValueExpression = 
+newtype IntervalValueExpression =
   IntervalValueExpression {
     unIntervalValueExpression :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _IntervalValueExpression = Core.Name "hydra.ext.org.ansi.sql.syntax.IntervalValueExpression"
 
-newtype LargeObjectLength = 
+newtype LargeObjectLength =
   LargeObjectLength {
     unLargeObjectLength :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _LargeObjectLength = Core.Name "hydra.ext.org.ansi.sql.syntax.LargeObjectLength"
 
-newtype Length = 
+newtype Length =
   Length {
     unLength :: UnsignedInteger}
   deriving (Eq, Ord, Read, Show)
 
 _Length = Core.Name "hydra.ext.org.ansi.sql.syntax.Length"
 
-newtype LikeClause = 
+newtype LikeClause =
   LikeClause {
     unLikeClause :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _LikeClause = Core.Name "hydra.ext.org.ansi.sql.syntax.LikeClause"
 
-newtype MethodInvocation = 
+newtype MethodInvocation =
   MethodInvocation {
     unMethodInvocation :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _MethodInvocation = Core.Name "hydra.ext.org.ansi.sql.syntax.MethodInvocation"
 
-newtype MultisetElementReference = 
+newtype MultisetElementReference =
   MultisetElementReference {
     unMultisetElementReference :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _MultisetElementReference = Core.Name "hydra.ext.org.ansi.sql.syntax.MultisetElementReference"
 
-newtype MultisetType = 
+newtype MultisetType =
   MultisetType {
     unMultisetType :: DataType}
   deriving (Eq, Ord, Read, Show)
 
 _MultisetType = Core.Name "hydra.ext.org.ansi.sql.syntax.MultisetType"
 
-newtype MultisetValueConstructor = 
+newtype MultisetValueConstructor =
   MultisetValueConstructor {
     unMultisetValueConstructor :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _MultisetValueConstructor = Core.Name "hydra.ext.org.ansi.sql.syntax.MultisetValueConstructor"
 
-newtype MultisetValueExpression = 
+newtype MultisetValueExpression =
   MultisetValueExpression {
     unMultisetValueExpression :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _MultisetValueExpression = Core.Name "hydra.ext.org.ansi.sql.syntax.MultisetValueExpression"
 
-newtype NationalCharacterStringType = 
+newtype NationalCharacterStringType =
   NationalCharacterStringType {
     unNationalCharacterStringType :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _NationalCharacterStringType = Core.Name "hydra.ext.org.ansi.sql.syntax.NationalCharacterStringType"
 
-newtype NewSpecification = 
+newtype NewSpecification =
   NewSpecification {
     unNewSpecification :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _NewSpecification = Core.Name "hydra.ext.org.ansi.sql.syntax.NewSpecification"
 
-newtype NextValueExpression = 
+newtype NextValueExpression =
   NextValueExpression {
     unNextValueExpression :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _NextValueExpression = Core.Name "hydra.ext.org.ansi.sql.syntax.NextValueExpression"
 
-data NumericType = 
+data NumericType =
   NumericTypeExact ExactNumericType |
   NumericTypeApproximate ApproximateNumericType
   deriving (Eq, Ord, Read, Show)
@@ -963,16 +963,16 @@ _NumericType_exact = Core.Name "exact"
 
 _NumericType_approximate = Core.Name "approximate"
 
-newtype NumericValueExpression = 
+newtype NumericValueExpression =
   NumericValueExpression {
     unNumericValueExpression :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _NumericValueExpression = Core.Name "hydra.ext.org.ansi.sql.syntax.NumericValueExpression"
 
-data OverrideClause = 
+data OverrideClause =
   OverrideClauseOVERRIDINGspUSERspVALUE  |
-  OverrideClauseOVERRIDINGspSYSTEMspVALUE 
+  OverrideClauseOVERRIDINGspSYSTEMspVALUE
   deriving (Eq, Ord, Read, Show)
 
 _OverrideClause = Core.Name "hydra.ext.org.ansi.sql.syntax.OverrideClause"
@@ -981,21 +981,21 @@ _OverrideClause_OVERRIDINGspUSERspVALUE = Core.Name "OVERRIDINGspUSERspVALUE"
 
 _OverrideClause_OVERRIDINGspSYSTEMspVALUE = Core.Name "OVERRIDINGspSYSTEMspVALUE"
 
-newtype ParenthesizedValueExpression = 
+newtype ParenthesizedValueExpression =
   ParenthesizedValueExpression {
     unParenthesizedValueExpression :: ValueExpression}
   deriving (Eq, Ord, Read, Show)
 
 _ParenthesizedValueExpression = Core.Name "hydra.ext.org.ansi.sql.syntax.ParenthesizedValueExpression"
 
-newtype Precision = 
+newtype Precision =
   Precision {
     unPrecision :: UnsignedInteger}
   deriving (Eq, Ord, Read, Show)
 
 _Precision = Core.Name "hydra.ext.org.ansi.sql.syntax.Precision"
 
-data PredefinedType = 
+data PredefinedType =
   PredefinedTypeString PredefinedType_String |
   PredefinedTypeNationalString PredefinedType_NationalString |
   PredefinedTypeBlob BinaryLargeObjectStringType |
@@ -1021,7 +1021,7 @@ _PredefinedType_datetime = Core.Name "datetime"
 
 _PredefinedType_interval = Core.Name "interval"
 
-data PredefinedType_String = 
+data PredefinedType_String =
   PredefinedType_String {
     predefinedType_StringType :: CharacterStringType,
     predefinedType_StringCharacters :: (Maybe CharacterSetSpecification),
@@ -1036,7 +1036,7 @@ _PredefinedType_String_characters = Core.Name "characters"
 
 _PredefinedType_String_collate = Core.Name "collate"
 
-data PredefinedType_NationalString = 
+data PredefinedType_NationalString =
   PredefinedType_NationalString {
     predefinedType_NationalStringType :: NationalCharacterStringType,
     predefinedType_NationalStringCollate :: (Maybe CollateClause)}
@@ -1048,49 +1048,49 @@ _PredefinedType_NationalString_type = Core.Name "type"
 
 _PredefinedType_NationalString_collate = Core.Name "collate"
 
-newtype Predicate = 
+newtype Predicate =
   Predicate {
     unPredicate :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _Predicate = Core.Name "hydra.ext.org.ansi.sql.syntax.Predicate"
 
-newtype QueryExpression = 
+newtype QueryExpression =
   QueryExpression {
     unQueryExpression :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _QueryExpression = Core.Name "hydra.ext.org.ansi.sql.syntax.QueryExpression"
 
-newtype ReferenceScopeCheck = 
+newtype ReferenceScopeCheck =
   ReferenceScopeCheck {
     unReferenceScopeCheck :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ReferenceScopeCheck = Core.Name "hydra.ext.org.ansi.sql.syntax.ReferenceScopeCheck"
 
-newtype ReferenceType = 
+newtype ReferenceType =
   ReferenceType {
     unReferenceType :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ReferenceType = Core.Name "hydra.ext.org.ansi.sql.syntax.ReferenceType"
 
-newtype RowType = 
+newtype RowType =
   RowType {
     unRowType :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _RowType = Core.Name "hydra.ext.org.ansi.sql.syntax.RowType"
 
-newtype RowValueSpecialCase = 
+newtype RowValueSpecialCase =
   RowValueSpecialCase {
     unRowValueSpecialCase :: NonparenthesizedValueExpressionPrimary}
   deriving (Eq, Ord, Read, Show)
 
 _RowValueSpecialCase = Core.Name "hydra.ext.org.ansi.sql.syntax.RowValueSpecialCase"
 
-data NonparenthesizedValueExpressionPrimary = 
+data NonparenthesizedValueExpressionPrimary =
   NonparenthesizedValueExpressionPrimaryUnsigned UnsignedValueSpecification |
   NonparenthesizedValueExpressionPrimaryColumn ColumnReference |
   NonparenthesizedValueExpressionPrimarySetFunction SetFunctionSpecification |
@@ -1153,100 +1153,100 @@ _NonparenthesizedValueExpressionPrimary_routine = Core.Name "routine"
 
 _NonparenthesizedValueExpressionPrimary_next = Core.Name "next"
 
-newtype ReferenceResolution = 
+newtype ReferenceResolution =
   ReferenceResolution {
     unReferenceResolution :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _ReferenceResolution = Core.Name "hydra.ext.org.ansi.sql.syntax.ReferenceResolution"
 
-newtype ReferenceValueExpression = 
+newtype ReferenceValueExpression =
   ReferenceValueExpression {
     unReferenceValueExpression :: ValueExpressionPrimary}
   deriving (Eq, Ord, Read, Show)
 
 _ReferenceValueExpression = Core.Name "hydra.ext.org.ansi.sql.syntax.ReferenceValueExpression"
 
-newtype RowValueExpression = 
+newtype RowValueExpression =
   RowValueExpression {
     unRowValueExpression :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _RowValueExpression = Core.Name "hydra.ext.org.ansi.sql.syntax.RowValueExpression"
 
-newtype RoutineInvocation = 
+newtype RoutineInvocation =
   RoutineInvocation {
     unRoutineInvocation :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _RoutineInvocation = Core.Name "hydra.ext.org.ansi.sql.syntax.RoutineInvocation"
 
-newtype ScalarSubquery = 
+newtype ScalarSubquery =
   ScalarSubquery {
     unScalarSubquery :: Subquery}
   deriving (Eq, Ord, Read, Show)
 
 _ScalarSubquery = Core.Name "hydra.ext.org.ansi.sql.syntax.ScalarSubquery"
 
-newtype Scale = 
+newtype Scale =
   Scale {
     unScale :: UnsignedInteger}
   deriving (Eq, Ord, Read, Show)
 
 _Scale = Core.Name "hydra.ext.org.ansi.sql.syntax.Scale"
 
-newtype SelfReferencingColumnSpecification = 
+newtype SelfReferencingColumnSpecification =
   SelfReferencingColumnSpecification {
     unSelfReferencingColumnSpecification :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _SelfReferencingColumnSpecification = Core.Name "hydra.ext.org.ansi.sql.syntax.SelfReferencingColumnSpecification"
 
-newtype SetFunctionSpecification = 
+newtype SetFunctionSpecification =
   SetFunctionSpecification {
     unSetFunctionSpecification :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _SetFunctionSpecification = Core.Name "hydra.ext.org.ansi.sql.syntax.SetFunctionSpecification"
 
-newtype StaticMethodInvocation = 
+newtype StaticMethodInvocation =
   StaticMethodInvocation {
     unStaticMethodInvocation :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _StaticMethodInvocation = Core.Name "hydra.ext.org.ansi.sql.syntax.StaticMethodInvocation"
 
-newtype StringValueExpression = 
+newtype StringValueExpression =
   StringValueExpression {
     unStringValueExpression :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _StringValueExpression = Core.Name "hydra.ext.org.ansi.sql.syntax.StringValueExpression"
 
-newtype Subquery = 
+newtype Subquery =
   Subquery {
     unSubquery :: QueryExpression}
   deriving (Eq, Ord, Read, Show)
 
 _Subquery = Core.Name "hydra.ext.org.ansi.sql.syntax.Subquery"
 
-newtype SubtableClause = 
+newtype SubtableClause =
   SubtableClause {
     unSubtableClause :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _SubtableClause = Core.Name "hydra.ext.org.ansi.sql.syntax.SubtableClause"
 
-newtype SubtypeTreatment = 
+newtype SubtypeTreatment =
   SubtypeTreatment {
     unSubtypeTreatment :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _SubtypeTreatment = Core.Name "hydra.ext.org.ansi.sql.syntax.SubtypeTreatment"
 
-data TableCommitAction = 
+data TableCommitAction =
   TableCommitActionPreserve  |
-  TableCommitActionDelete 
+  TableCommitActionDelete
   deriving (Eq, Ord, Read, Show)
 
 _TableCommitAction = Core.Name "hydra.ext.org.ansi.sql.syntax.TableCommitAction"
@@ -1255,14 +1255,14 @@ _TableCommitAction_preserve = Core.Name "preserve"
 
 _TableCommitAction_delete = Core.Name "delete"
 
-newtype TableConstraintDefinition = 
+newtype TableConstraintDefinition =
   TableConstraintDefinition {
     unTableConstraintDefinition :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _TableConstraintDefinition = Core.Name "hydra.ext.org.ansi.sql.syntax.TableConstraintDefinition"
 
-data TableContentsSource = 
+data TableContentsSource =
   TableContentsSourceList TableElementList |
   TableContentsSourceSubtable TableContentsSource_Subtable |
   TableContentsSourceSubquery AsSubqueryClause
@@ -1276,7 +1276,7 @@ _TableContentsSource_subtable = Core.Name "subtable"
 
 _TableContentsSource_subquery = Core.Name "subquery"
 
-data TableContentsSource_Subtable = 
+data TableContentsSource_Subtable =
   TableContentsSource_Subtable {
     tableContentsSource_SubtableType :: PathResolvedUserDefinedTypeName,
     tableContentsSource_SubtableSubtable :: (Maybe SubtableClause),
@@ -1291,7 +1291,7 @@ _TableContentsSource_Subtable_subtable = Core.Name "subtable"
 
 _TableContentsSource_Subtable_elements = Core.Name "elements"
 
-data TableDefinition = 
+data TableDefinition =
   TableDefinition {
     tableDefinitionScope :: (Maybe TableScope),
     tableDefinitionName :: TableName,
@@ -1309,7 +1309,7 @@ _TableDefinition_source = Core.Name "source"
 
 _TableDefinition_commitActions = Core.Name "commitActions"
 
-data TableElement = 
+data TableElement =
   TableElementColumn ColumnDefinition |
   TableElementTableConstraint TableConstraintDefinition |
   TableElementLike LikeClause |
@@ -1329,7 +1329,7 @@ _TableElement_selfReferencingColumn = Core.Name "selfReferencingColumn"
 
 _TableElement_columOptions = Core.Name "columOptions"
 
-data TableElementList = 
+data TableElementList =
   TableElementList {
     tableElementListFirst :: TableElement,
     tableElementListRest :: [TableElement]}
@@ -1341,24 +1341,24 @@ _TableElementList_first = Core.Name "first"
 
 _TableElementList_rest = Core.Name "rest"
 
-newtype TableScope = 
+newtype TableScope =
   TableScope {
     unTableScope :: GlobalOrLocal}
   deriving (Eq, Ord, Read, Show)
 
 _TableScope = Core.Name "hydra.ext.org.ansi.sql.syntax.TableScope"
 
-newtype TimeLiteral = 
+newtype TimeLiteral =
   TimeLiteral {
     unTimeLiteral :: TimeString}
   deriving (Eq, Ord, Read, Show)
 
 _TimeLiteral = Core.Name "hydra.ext.org.ansi.sql.syntax.TimeLiteral"
 
-data TruthValue = 
+data TruthValue =
   TruthValueTRUE  |
   TruthValueFALSE  |
-  TruthValueUNKNOWN 
+  TruthValueUNKNOWN
   deriving (Eq, Ord, Read, Show)
 
 _TruthValue = Core.Name "hydra.ext.org.ansi.sql.syntax.TruthValue"
@@ -1369,7 +1369,7 @@ _TruthValue_FALSE = Core.Name "FALSE"
 
 _TruthValue_UNKNOWN = Core.Name "UNKNOWN"
 
-data UnsignedLiteral = 
+data UnsignedLiteral =
   UnsignedLiteralNumeric UnsignedNumericLiteral |
   UnsignedLiteralGeneral GeneralLiteral
   deriving (Eq, Ord, Read, Show)
@@ -1380,7 +1380,7 @@ _UnsignedLiteral_numeric = Core.Name "numeric"
 
 _UnsignedLiteral_general = Core.Name "general"
 
-data UnsignedNumericLiteral = 
+data UnsignedNumericLiteral =
   UnsignedNumericLiteralExact ExactNumericLiteral |
   UnsignedNumericLiteralApproximate ApproximateNumericLiteral
   deriving (Eq, Ord, Read, Show)
@@ -1391,7 +1391,7 @@ _UnsignedNumericLiteral_exact = Core.Name "exact"
 
 _UnsignedNumericLiteral_approximate = Core.Name "approximate"
 
-data UnsignedValueSpecification = 
+data UnsignedValueSpecification =
   UnsignedValueSpecificationLiteral UnsignedLiteral |
   UnsignedValueSpecificationGeneral GeneralValueSpecification
   deriving (Eq, Ord, Read, Show)
@@ -1402,14 +1402,14 @@ _UnsignedValueSpecification_literal = Core.Name "literal"
 
 _UnsignedValueSpecification_general = Core.Name "general"
 
-newtype UserDefinedTypeValueExpression = 
+newtype UserDefinedTypeValueExpression =
   UserDefinedTypeValueExpression {
     unUserDefinedTypeValueExpression :: ValueExpressionPrimary}
   deriving (Eq, Ord, Read, Show)
 
 _UserDefinedTypeValueExpression = Core.Name "hydra.ext.org.ansi.sql.syntax.UserDefinedTypeValueExpression"
 
-data ValueExpression = 
+data ValueExpression =
   ValueExpressionCommon CommonValueExpression |
   ValueExpressionBoolean BooleanValueExpression |
   ValueExpressionRow RowValueExpression
@@ -1423,7 +1423,7 @@ _ValueExpression_boolean = Core.Name "boolean"
 
 _ValueExpression_row = Core.Name "row"
 
-data ValueExpressionPrimary = 
+data ValueExpressionPrimary =
   ValueExpressionPrimaryParens ParenthesizedValueExpression |
   ValueExpressionPrimaryNoparens NonparenthesizedValueExpressionPrimary
   deriving (Eq, Ord, Read, Show)
@@ -1434,7 +1434,7 @@ _ValueExpressionPrimary_parens = Core.Name "parens"
 
 _ValueExpressionPrimary_noparens = Core.Name "noparens"
 
-newtype WindowFunction = 
+newtype WindowFunction =
   WindowFunction {
     unWindowFunction :: ()}
   deriving (Eq, Ord, Read, Show)

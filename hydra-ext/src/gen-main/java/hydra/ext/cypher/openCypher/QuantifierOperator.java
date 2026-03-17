@@ -6,58 +6,58 @@ import java.io.Serializable;
 
 public abstract class QuantifierOperator implements Serializable, Comparable<QuantifierOperator> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.QuantifierOperator");
-  
+
   public static final hydra.core.Name ALL = new hydra.core.Name("all");
-  
+
   public static final hydra.core.Name ANY = new hydra.core.Name("any");
-  
+
   public static final hydra.core.Name NONE = new hydra.core.Name("none");
-  
+
   public static final hydra.core.Name SINGLE = new hydra.core.Name("single");
-  
+
   private QuantifierOperator () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(All instance) ;
-    
+
     R visit(Any instance) ;
-    
+
     R visit(None instance) ;
-    
+
     R visit(Single instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(QuantifierOperator instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(All instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Any instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(None instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Single instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class All extends hydra.ext.cypher.openCypher.QuantifierOperator implements Serializable {
     public All () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof All)) {
@@ -66,12 +66,12 @@ public abstract class QuantifierOperator implements Serializable, Comparable<Qua
       All o = (All) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(QuantifierOperator other) {
@@ -81,18 +81,18 @@ public abstract class QuantifierOperator implements Serializable, Comparable<Qua
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Any extends hydra.ext.cypher.openCypher.QuantifierOperator implements Serializable {
     public Any () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Any)) {
@@ -101,12 +101,12 @@ public abstract class QuantifierOperator implements Serializable, Comparable<Qua
       Any o = (Any) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(QuantifierOperator other) {
@@ -116,18 +116,18 @@ public abstract class QuantifierOperator implements Serializable, Comparable<Qua
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class None extends hydra.ext.cypher.openCypher.QuantifierOperator implements Serializable {
     public None () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof None)) {
@@ -136,12 +136,12 @@ public abstract class QuantifierOperator implements Serializable, Comparable<Qua
       None o = (None) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(QuantifierOperator other) {
@@ -151,18 +151,18 @@ public abstract class QuantifierOperator implements Serializable, Comparable<Qua
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Single extends hydra.ext.cypher.openCypher.QuantifierOperator implements Serializable {
     public Single () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Single)) {
@@ -171,12 +171,12 @@ public abstract class QuantifierOperator implements Serializable, Comparable<Qua
       Single o = (Single) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(QuantifierOperator other) {
@@ -186,7 +186,7 @@ public abstract class QuantifierOperator implements Serializable, Comparable<Qua
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

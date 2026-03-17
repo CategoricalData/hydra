@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class TopologicalSortTestCase implements Serializable, Comparable<TopologicalSortTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TopologicalSortTestCase");
-  
+
   public static final hydra.core.Name ADJACENCY_LIST = new hydra.core.Name("adjacencyList");
-  
+
   public static final hydra.core.Name EXPECTED = new hydra.core.Name("expected");
-  
+
   /**
    * The directed graph as an adjacency list (node to list of dependencies)
    */
   public final hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjacencyList;
-  
+
   /**
    * The expected result: Left for cycles, Right for sorted nodes
    */
   public final hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>> expected;
-  
+
   public TopologicalSortTestCase (hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjacencyList, hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>> expected) {
     this.adjacencyList = adjacencyList;
     this.expected = expected;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TopologicalSortTestCase)) {
@@ -41,12 +41,12 @@ public class TopologicalSortTestCase implements Serializable, Comparable<Topolog
       this.expected,
       o.expected);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(adjacencyList) + 3 * java.util.Objects.hashCode(expected);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TopologicalSortTestCase other) {
@@ -59,11 +59,11 @@ public class TopologicalSortTestCase implements Serializable, Comparable<Topolog
       expected.hashCode(),
       other.expected.hashCode());
   }
-  
+
   public TopologicalSortTestCase withAdjacencyList(hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjacencyList) {
     return new TopologicalSortTestCase(adjacencyList, expected);
   }
-  
+
   public TopologicalSortTestCase withExpected(hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>> expected) {
     return new TopologicalSortTestCase(adjacencyList, expected);
   }

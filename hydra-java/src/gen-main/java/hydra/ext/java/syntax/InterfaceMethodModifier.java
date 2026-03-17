@@ -6,84 +6,84 @@ import java.io.Serializable;
 
 public abstract class InterfaceMethodModifier implements Serializable, Comparable<InterfaceMethodModifier> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.InterfaceMethodModifier");
-  
+
   public static final hydra.core.Name ANNOTATION = new hydra.core.Name("annotation");
-  
+
   public static final hydra.core.Name PUBLIC = new hydra.core.Name("public");
-  
+
   public static final hydra.core.Name PRIVATE = new hydra.core.Name("private");
-  
+
   public static final hydra.core.Name ABSTRACT = new hydra.core.Name("abstract");
-  
+
   public static final hydra.core.Name DEFAULT = new hydra.core.Name("default");
-  
+
   public static final hydra.core.Name STATIC = new hydra.core.Name("static");
-  
+
   public static final hydra.core.Name STRICTFP = new hydra.core.Name("strictfp");
-  
+
   private InterfaceMethodModifier () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Annotation instance) ;
-    
+
     R visit(Public instance) ;
-    
+
     R visit(Private instance) ;
-    
+
     R visit(Abstract instance) ;
-    
+
     R visit(Default instance) ;
-    
+
     R visit(Static instance) ;
-    
+
     R visit(Strictfp instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(InterfaceMethodModifier instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Annotation instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Public instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Private instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Abstract instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Default instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Static instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Strictfp instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Annotation extends hydra.ext.java.syntax.InterfaceMethodModifier implements Serializable {
     public final hydra.ext.java.syntax.Annotation value;
-    
+
     public Annotation (hydra.ext.java.syntax.Annotation value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Annotation)) {
@@ -94,12 +94,12 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(InterfaceMethodModifier other) {
@@ -110,18 +110,18 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
       Annotation o = (Annotation) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Public extends hydra.ext.java.syntax.InterfaceMethodModifier implements Serializable {
     public Public () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Public)) {
@@ -130,12 +130,12 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
       Public o = (Public) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(InterfaceMethodModifier other) {
@@ -145,18 +145,18 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Private extends hydra.ext.java.syntax.InterfaceMethodModifier implements Serializable {
     public Private () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Private)) {
@@ -165,12 +165,12 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
       Private o = (Private) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(InterfaceMethodModifier other) {
@@ -180,18 +180,18 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Abstract extends hydra.ext.java.syntax.InterfaceMethodModifier implements Serializable {
     public Abstract () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Abstract)) {
@@ -200,12 +200,12 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
       Abstract o = (Abstract) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(InterfaceMethodModifier other) {
@@ -215,18 +215,18 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Default extends hydra.ext.java.syntax.InterfaceMethodModifier implements Serializable {
     public Default () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Default)) {
@@ -235,12 +235,12 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
       Default o = (Default) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(InterfaceMethodModifier other) {
@@ -250,18 +250,18 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Static extends hydra.ext.java.syntax.InterfaceMethodModifier implements Serializable {
     public Static () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Static)) {
@@ -270,12 +270,12 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
       Static o = (Static) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(InterfaceMethodModifier other) {
@@ -285,18 +285,18 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Strictfp extends hydra.ext.java.syntax.InterfaceMethodModifier implements Serializable {
     public Strictfp () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Strictfp)) {
@@ -305,12 +305,12 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
       Strictfp o = (Strictfp) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(InterfaceMethodModifier other) {
@@ -320,7 +320,7 @@ public abstract class InterfaceMethodModifier implements Serializable, Comparabl
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

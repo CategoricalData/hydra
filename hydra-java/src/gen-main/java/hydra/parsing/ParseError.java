@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class ParseError implements Serializable, Comparable<ParseError> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.parsing.ParseError");
-  
+
   public static final hydra.core.Name MESSAGE = new hydra.core.Name("message");
-  
+
   public static final hydra.core.Name REMAINDER = new hydra.core.Name("remainder");
-  
+
   /**
    * An error message
    */
   public final String message;
-  
+
   /**
    * The remaining input at the point of failure
    */
   public final String remainder;
-  
+
   public ParseError (String message, String remainder) {
     this.message = message;
     this.remainder = remainder;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ParseError)) {
@@ -41,12 +41,12 @@ public class ParseError implements Serializable, Comparable<ParseError> {
       this.remainder,
       o.remainder);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(message) + 3 * java.util.Objects.hashCode(remainder);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ParseError other) {
@@ -57,11 +57,11 @@ public class ParseError implements Serializable, Comparable<ParseError> {
     }
     return ((Comparable) remainder).compareTo(other.remainder);
   }
-  
+
   public ParseError withMessage(String message) {
     return new ParseError(message, remainder);
   }
-  
+
   public ParseError withRemainder(String remainder) {
     return new ParseError(message, remainder);
   }

@@ -31,27 +31,27 @@ T2 = TypeVar("T2")
 
 def application_pattern(name: hydra.ext.haskell.ast.Name, args: frozenlist[hydra.ext.haskell.ast.Pattern]) -> hydra.ext.haskell.ast.Pattern:
     r"""Create an application pattern from a name and argument patterns."""
-    
+
     return cast(hydra.ext.haskell.ast.Pattern, hydra.ext.haskell.ast.PatternApplication(hydra.ext.haskell.ast.ApplicationPattern(name, args)))
 
 def raw_name(n: str) -> hydra.ext.haskell.ast.Name:
     r"""Create a raw Haskell name from a string without sanitization."""
-    
+
     return cast(hydra.ext.haskell.ast.Name, hydra.ext.haskell.ast.NameNormal(hydra.ext.haskell.ast.QualifiedName((), hydra.ext.haskell.ast.NamePart(n))))
 
 def sanitize_haskell_name(v1: str) -> str:
     r"""Sanitize a string to be a valid Haskell identifier, escaping reserved words."""
-    
+
     return hydra.formatting.sanitize_with_underscores(hydra.ext.haskell.language.reserved_words(), v1)
 
 def simple_name(arg_: str) -> hydra.ext.haskell.ast.Name:
     r"""Create a sanitized Haskell name from a string."""
-    
+
     return raw_name(sanitize_haskell_name(arg_))
 
 def element_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], name: hydra.core.Name) -> hydra.ext.haskell.ast.Name:
     r"""Generate a Haskell name reference for a Hydra element."""
-    
+
     @lru_cache(1)
     def namespace_pair() -> tuple[hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName]:
         return namespaces.focus
@@ -76,44 +76,44 @@ def element_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.
 
 def hsapp(l: hydra.ext.haskell.ast.Expression, r: hydra.ext.haskell.ast.Expression) -> hydra.ext.haskell.ast.Expression:
     r"""Create a Haskell function application expression."""
-    
+
     return cast(hydra.ext.haskell.ast.Expression, hydra.ext.haskell.ast.ExpressionApplication(hydra.ext.haskell.ast.ApplicationExpression(l, r)))
 
 def hslambda(name: hydra.ext.haskell.ast.Name, rhs: hydra.ext.haskell.ast.Expression) -> hydra.ext.haskell.ast.Expression:
     r"""Create a Haskell lambda expression."""
-    
+
     return cast(hydra.ext.haskell.ast.Expression, hydra.ext.haskell.ast.ExpressionLambda(hydra.ext.haskell.ast.LambdaExpression((cast(hydra.ext.haskell.ast.Pattern, hydra.ext.haskell.ast.PatternName(name)),), rhs)))
 
 def hslit(lit: hydra.ext.haskell.ast.Literal) -> hydra.ext.haskell.ast.Expression:
     r"""Create a Haskell literal expression."""
-    
+
     return cast(hydra.ext.haskell.ast.Expression, hydra.ext.haskell.ast.ExpressionLiteral(lit))
 
 def hsvar(s: str) -> hydra.ext.haskell.ast.Expression:
     r"""Create a Haskell variable expression from a string."""
-    
+
     return cast(hydra.ext.haskell.ast.Expression, hydra.ext.haskell.ast.ExpressionVariable(raw_name(s)))
 
 def namespaces_for_module(mod: hydra.module.Module, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName]]:
     r"""Compute the Haskell module namespaces for a Hydra module."""
-    
+
     return hydra.lib.eithers.bind(hydra.schemas.module_dependency_namespaces(cx, g, True, True, True, True, mod), (lambda nss: (ns := mod.namespace, to_module_name := (lambda namespace: (namespace_str := namespace.value, parts := hydra.lib.strings.split_on(".", namespace_str), last_part := hydra.lib.lists.last(parts), capitalized := hydra.formatting.capitalize(last_part), hydra.ext.haskell.ast.ModuleName(capitalized))[4]), to_pair := (lambda name: (name, to_module_name(name))), add_pair := (lambda state, name_pair: (current_map := hydra.lib.pairs.first(state), current_set := hydra.lib.pairs.second(state), name := hydra.lib.pairs.first(name_pair), alias := hydra.lib.pairs.second(name_pair), alias_str := alias.value, hydra.lib.logic.if_else(hydra.lib.sets.member(alias, current_set), (lambda : add_pair(state, (name, hydra.ext.haskell.ast.ModuleName(hydra.lib.strings.cat2(alias_str, "_"))))), (lambda : (hydra.lib.maps.insert(name, alias, current_map), hydra.lib.sets.insert(alias, current_set)))))[5]), focus_pair := to_pair(ns), nss_as_list := hydra.lib.sets.to_list(nss), nss_pairs := hydra.lib.lists.map((lambda x1: to_pair(x1)), nss_as_list), empty_state := (hydra.lib.maps.empty(), hydra.lib.sets.empty()), final_state := hydra.lib.lists.foldl((lambda x1, x2: add_pair(x1, x2)), empty_state, nss_pairs), result_map := hydra.lib.pairs.first(final_state), Right(hydra.module.Namespaces(focus_pair, result_map)))[10]))
 
 def newtype_accessor_name(name: hydra.core.Name) -> str:
     r"""Generate an accessor name for a newtype wrapper (e.g., 'unFoo' for Foo)."""
-    
+
     return hydra.lib.strings.cat2("un", hydra.names.local_name_of(name))
 
 def type_name_for_record(sname: hydra.core.Name) -> str:
     r"""Extract the local type name from a fully qualified record type name."""
-    
+
     sname_str = sname.value
     parts = hydra.lib.strings.split_on(".", sname_str)
     return hydra.lib.lists.last(parts)
 
 def record_field_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], sname: hydra.core.Name, fname: hydra.core.Name) -> hydra.ext.haskell.ast.Name:
     r"""Generate a Haskell name for a record field accessor."""
-    
+
     fname_str = fname.value
     @lru_cache(1)
     def qname() -> hydra.module.QualifiedName:
@@ -139,7 +139,7 @@ def record_field_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell
 
 def simple_value_binding(hname: hydra.ext.haskell.ast.Name, rhs: hydra.ext.haskell.ast.Expression, bindings: Maybe[hydra.ext.haskell.ast.LocalBindings]) -> hydra.ext.haskell.ast.ValueBinding:
     r"""Create a simple value binding (e.g., 'foo = expr' or 'foo = expr where ...')."""
-    
+
     @lru_cache(1)
     def pat() -> hydra.ext.haskell.ast.Pattern:
         return cast(hydra.ext.haskell.ast.Pattern, hydra.ext.haskell.ast.PatternApplication(hydra.ext.haskell.ast.ApplicationPattern(hname, ())))
@@ -148,14 +148,14 @@ def simple_value_binding(hname: hydra.ext.haskell.ast.Name, rhs: hydra.ext.haske
 
 def to_type_application(types: frozenlist[hydra.ext.haskell.ast.Type]) -> hydra.ext.haskell.ast.Type:
     r"""Convert a list of types into a nested type application."""
-    
+
     def app(l: frozenlist[hydra.ext.haskell.ast.Type]) -> hydra.ext.haskell.ast.Type:
         return hydra.lib.logic.if_else(hydra.lib.equality.gt(hydra.lib.lists.length(l), 1), (lambda : cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeApplication(hydra.ext.haskell.ast.ApplicationType(app(hydra.lib.lists.tail(l)), hydra.lib.lists.head(l))))), (lambda : hydra.lib.lists.head(l)))
     return app(hydra.lib.lists.reverse(types))
 
 def union_field_reference(bound_names: frozenset[hydra.core.Name], namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], sname: hydra.core.Name, fname: hydra.core.Name) -> hydra.ext.haskell.ast.Name:
     r"""Generate a Haskell name for a union variant constructor, with disambiguation."""
-    
+
     fname_str = fname.value
     @lru_cache(1)
     def qname() -> hydra.module.QualifiedName:
@@ -186,7 +186,7 @@ def union_field_reference(bound_names: frozenset[hydra.core.Name], namespaces: h
 
 def unpack_forall_type(t: hydra.core.Type) -> tuple[frozenlist[hydra.core.Name], hydra.core.Type]:
     r"""Unpack nested forall types into a list of type variables and the inner type."""
-    
+
     match hydra.rewriting.deannotate_type(t):
         case hydra.core.TypeForall(value=fat):
             v = fat.parameter
@@ -201,6 +201,6 @@ def unpack_forall_type(t: hydra.core.Type) -> tuple[frozenlist[hydra.core.Name],
             def final_type() -> hydra.core.Type:
                 return hydra.lib.pairs.second(recursive_result())
             return (hydra.lib.lists.cons(v, vars()), final_type())
-        
+
         case _:
             return ((), t)

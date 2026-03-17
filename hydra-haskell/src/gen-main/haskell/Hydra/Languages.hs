@@ -28,8 +28,8 @@ hydraLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = types}} 
-  where 
+        Coders.languageConstraintsTypes = types}}
+  where
     eliminationVariants = Sets.fromList Reflect.eliminationVariants
     literalVariants = Sets.fromList Reflect.literalVariants
     floatTypes = Sets.fromList Reflect.floatTypes

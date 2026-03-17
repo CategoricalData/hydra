@@ -32,7 +32,7 @@ type PathName = String
 
 _PathName = Core.Name "com.gdblab.pathAlgebra.syntax.PathName"
 
-data PathQuery = 
+data PathQuery =
   PathQuery {
     pathQueryProjection :: Projection,
     pathQueryRestrictorExt :: (Maybe RestrictorExt),
@@ -53,7 +53,7 @@ _PathQuery_groupBy = Core.Name "groupBy"
 
 _PathQuery_orderBy = Core.Name "orderBy"
 
-data Projection = 
+data Projection =
   Projection {
     projectionPartProj :: PartProj,
     projectionGroupProj :: GroupProj,
@@ -68,7 +68,7 @@ _Projection_groupProj = Core.Name "groupProj"
 
 _Projection_pathProj = Core.Name "pathProj"
 
-data PartProj = 
+data PartProj =
   PartProjAll  |
   PartProjLimited Number
   deriving (Eq, Ord, Read, Show)
@@ -79,7 +79,7 @@ _PartProj_all = Core.Name "all"
 
 _PartProj_limited = Core.Name "limited"
 
-data GroupProj = 
+data GroupProj =
   GroupProjAll  |
   GroupProjLimited Number
   deriving (Eq, Ord, Read, Show)
@@ -90,7 +90,7 @@ _GroupProj_all = Core.Name "all"
 
 _GroupProj_limited = Core.Name "limited"
 
-data PathProj = 
+data PathProj =
   PathProjAll  |
   PathProjLimited Number
   deriving (Eq, Ord, Read, Show)
@@ -101,12 +101,12 @@ _PathProj_all = Core.Name "all"
 
 _PathProj_limited = Core.Name "limited"
 
-data RestrictorExt = 
+data RestrictorExt =
   RestrictorExtWalk  |
   RestrictorExtTrail  |
   RestrictorExtSimple  |
   RestrictorExtAcyclic  |
-  RestrictorExtShortest 
+  RestrictorExtShortest
   deriving (Eq, Ord, Read, Show)
 
 _RestrictorExt = Core.Name "com.gdblab.pathAlgebra.syntax.RestrictorExt"
@@ -121,28 +121,28 @@ _RestrictorExt_acyclic = Core.Name "acyclic"
 
 _RestrictorExt_shortest = Core.Name "shortest"
 
-newtype OrderBy = 
+newtype OrderBy =
   OrderBy {
     unOrderBy :: OrderByOption}
   deriving (Eq, Ord, Read, Show)
 
 _OrderBy = Core.Name "com.gdblab.pathAlgebra.syntax.OrderBy"
 
-newtype GroupBy = 
+newtype GroupBy =
   GroupBy {
     unGroupBy :: GroupByOption}
   deriving (Eq, Ord, Read, Show)
 
 _GroupBy = Core.Name "com.gdblab.pathAlgebra.syntax.GroupBy"
 
-data OrderByOption = 
+data OrderByOption =
   OrderByOptionPartition  |
   OrderByOptionGroup  |
   OrderByOptionPath  |
   OrderByOptionPartitionGroup  |
   OrderByOptionPartitionPath  |
   OrderByOptionGroupPath  |
-  OrderByOptionPartitionGroupPath 
+  OrderByOptionPartitionGroupPath
   deriving (Eq, Ord, Read, Show)
 
 _OrderByOption = Core.Name "com.gdblab.pathAlgebra.syntax.OrderByOption"
@@ -161,14 +161,14 @@ _OrderByOption_groupPath = Core.Name "groupPath"
 
 _OrderByOption_partitionGroupPath = Core.Name "partitionGroupPath"
 
-data GroupByOption = 
+data GroupByOption =
   GroupByOptionSource  |
   GroupByOptionTarget  |
   GroupByOptionLength  |
   GroupByOptionSourceTarget  |
   GroupByOptionSourceLength  |
   GroupByOptionTargetLength  |
-  GroupByOptionSourceTargetLength 
+  GroupByOptionSourceTargetLength
   deriving (Eq, Ord, Read, Show)
 
 _GroupByOption = Core.Name "com.gdblab.pathAlgebra.syntax.GroupByOption"
@@ -187,7 +187,7 @@ _GroupByOption_targetLength = Core.Name "targetLength"
 
 _GroupByOption_sourceTargetLength = Core.Name "sourceTargetLength"
 
-data PathPattern = 
+data PathPattern =
   PathPattern {
     pathPatternPathName :: PathName,
     pathPatternStartNode :: NodePattern,
@@ -208,7 +208,7 @@ _PathPattern_endNode = Core.Name "endNode"
 
 _PathPattern_condition = Core.Name "condition"
 
-data NodePattern = 
+data NodePattern =
   NodePattern {
     nodePatternVariable :: (Maybe Variable)}
   deriving (Eq, Ord, Read, Show)
@@ -217,7 +217,7 @@ _NodePattern = Core.Name "com.gdblab.pathAlgebra.syntax.NodePattern"
 
 _NodePattern_variable = Core.Name "variable"
 
-data EdgePattern = 
+data EdgePattern =
   EdgePattern {
     edgePatternDirection :: EdgeDirection,
     edgePatternRpq :: (Maybe Rpq)}
@@ -229,10 +229,10 @@ _EdgePattern_direction = Core.Name "direction"
 
 _EdgePattern_rpq = Core.Name "rpq"
 
-data EdgeDirection = 
+data EdgeDirection =
   EdgeDirectionOutgoing  |
   EdgeDirectionIncoming  |
-  EdgeDirectionUndirected 
+  EdgeDirectionUndirected
   deriving (Eq, Ord, Read, Show)
 
 _EdgeDirection = Core.Name "com.gdblab.pathAlgebra.syntax.EdgeDirection"
@@ -243,7 +243,7 @@ _EdgeDirection_incoming = Core.Name "incoming"
 
 _EdgeDirection_undirected = Core.Name "undirected"
 
-data Rpq = 
+data Rpq =
   RpqParenthesis Rpq |
   RpqLabel Label |
   RpqNegated Label |
@@ -275,7 +275,7 @@ _Rpq_concatenation = Core.Name "concatenation"
 
 _Rpq_alternation = Core.Name "alternation"
 
-data Plus = 
+data Plus =
   Plus {
     plusExpression :: Rpq,
     plusRestrictor :: (Maybe RpqRestrictor)}
@@ -287,7 +287,7 @@ _Plus_expression = Core.Name "expression"
 
 _Plus_restrictor = Core.Name "restrictor"
 
-data Star = 
+data Star =
   Star {
     starExpression :: Rpq,
     starRestrictor :: (Maybe RpqRestrictor)}
@@ -299,7 +299,7 @@ _Star_expression = Core.Name "expression"
 
 _Star_restrictor = Core.Name "restrictor"
 
-data Concatenation = 
+data Concatenation =
   Concatenation {
     concatenationLeft :: Rpq,
     concatenationRight :: Rpq}
@@ -311,7 +311,7 @@ _Concatenation_left = Core.Name "left"
 
 _Concatenation_right = Core.Name "right"
 
-data Alternation = 
+data Alternation =
   Alternation {
     alternationLeft :: Rpq,
     alternationRight :: Rpq}
@@ -323,14 +323,14 @@ _Alternation_left = Core.Name "left"
 
 _Alternation_right = Core.Name "right"
 
-newtype RpqRestrictor = 
+newtype RpqRestrictor =
   RpqRestrictor {
     unRpqRestrictor :: RestrictorExt}
   deriving (Eq, Ord, Read, Show)
 
 _RpqRestrictor = Core.Name "com.gdblab.pathAlgebra.syntax.RpqRestrictor"
 
-data ComplexCondition = 
+data ComplexCondition =
   ComplexConditionSimple Condition |
   ComplexConditionCompound CompoundComplexCondition
   deriving (Eq, Ord, Read, Show)
@@ -341,7 +341,7 @@ _ComplexCondition_simple = Core.Name "simple"
 
 _ComplexCondition_compound = Core.Name "compound"
 
-data CompoundComplexCondition = 
+data CompoundComplexCondition =
   CompoundComplexCondition {
     compoundComplexConditionLhs :: Condition,
     compoundComplexConditionOperator :: BoolOp,
@@ -356,7 +356,7 @@ _CompoundComplexCondition_operator = Core.Name "operator"
 
 _CompoundComplexCondition_rhs = Core.Name "rhs"
 
-data Condition = 
+data Condition =
   Condition {
     conditionFunction :: Function,
     conditionCompareSym :: CompareSym,
@@ -371,13 +371,13 @@ _Condition_compareSym = Core.Name "compareSym"
 
 _Condition_value = Core.Name "value"
 
-data CompareSym = 
+data CompareSym =
   CompareSymEqual  |
   CompareSymNotEqual  |
   CompareSymLessThan  |
   CompareSymGreaterThan  |
   CompareSymLessThanOrEqual  |
-  CompareSymGreaterThanOrEqual 
+  CompareSymGreaterThanOrEqual
   deriving (Eq, Ord, Read, Show)
 
 _CompareSym = Core.Name "com.gdblab.pathAlgebra.syntax.CompareSym"
@@ -394,7 +394,7 @@ _CompareSym_lessThanOrEqual = Core.Name "lessThanOrEqual"
 
 _CompareSym_greaterThanOrEqual = Core.Name "greaterThanOrEqual"
 
-data Function = 
+data Function =
   FunctionSimple SimpleFunction |
   FunctionNested NestedFunction |
   FunctionComplex ComplexFunction
@@ -408,7 +408,7 @@ _Function_nested = Core.Name "nested"
 
 _Function_complex = Core.Name "complex"
 
-data SimpleFunction = 
+data SimpleFunction =
   SimpleFunction {
     simpleFunctionName :: Text,
     simpleFunctionArgument :: Text}
@@ -420,7 +420,7 @@ _SimpleFunction_name = Core.Name "name"
 
 _SimpleFunction_argument = Core.Name "argument"
 
-data NestedFunction = 
+data NestedFunction =
   NestedFunction {
     nestedFunctionName :: Text,
     nestedFunctionInnerFunction :: Function}
@@ -432,7 +432,7 @@ _NestedFunction_name = Core.Name "name"
 
 _NestedFunction_innerFunction = Core.Name "innerFunction"
 
-data ComplexFunction = 
+data ComplexFunction =
   ComplexFunction {
     complexFunctionName :: Text,
     complexFunctionInnerFunction :: Function,
@@ -447,9 +447,9 @@ _ComplexFunction_innerFunction = Core.Name "innerFunction"
 
 _ComplexFunction_additionalArg = Core.Name "additionalArg"
 
-data BoolOp = 
+data BoolOp =
   BoolOpAnd  |
-  BoolOpOr 
+  BoolOpOr
   deriving (Eq, Ord, Read, Show)
 
 _BoolOp = Core.Name "com.gdblab.pathAlgebra.syntax.BoolOp"

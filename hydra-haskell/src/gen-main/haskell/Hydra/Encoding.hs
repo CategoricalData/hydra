@@ -159,8 +159,8 @@ encoderFullResultTypeNamed ename typ =
 -- | Build encoder function type
 encoderType :: Core.Type -> Core.Type
 encoderType typ =
-     
-      let resultType = encoderFullResultType typ 
+
+      let resultType = encoderFullResultType typ
           baseType =
                   Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = resultType,
@@ -170,8 +170,8 @@ encoderType typ =
 -- | Build encoder function type with element name for nominal types
 encoderTypeNamed :: Core.Name -> Core.Type -> Core.Type
 encoderTypeNamed ename typ =
-     
-      let resultType = encoderFullResultTypeNamed ename typ 
+
+      let resultType = encoderFullResultTypeNamed ename typ
           baseType =
                   Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = resultType,
@@ -181,8 +181,8 @@ encoderTypeNamed ename typ =
 -- | Construct a TypeScheme for an encoder function from a source type
 encoderTypeScheme :: Core.Type -> Core.TypeScheme
 encoderTypeScheme typ =
-     
-      let typeVars = encoderCollectForallVariables typ 
+
+      let typeVars = encoderCollectForallVariables typ
           encoderFunType = encoderType typ
           allOrdVars = encoderCollectOrdVars typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars
@@ -197,8 +197,8 @@ encoderTypeScheme typ =
 -- | Construct a TypeScheme for an encoder function, with element name for nominal types
 encoderTypeSchemeNamed :: Core.Name -> Core.Type -> Core.TypeScheme
 encoderTypeSchemeNamed ename typ =
-     
-      let typeVars = encoderCollectForallVariables typ 
+
+      let typeVars = encoderCollectForallVariables typ
           encoderFunType = encoderTypeNamed ename typ
           allOrdVars = encoderCollectOrdVars typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars

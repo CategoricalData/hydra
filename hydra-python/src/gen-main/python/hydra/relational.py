@@ -20,10 +20,10 @@ ColumnName.TYPE_ = hydra.core.Name("hydra.relational.ColumnName")
 @dataclass(frozen=True)
 class ColumnSchema(Generic[T]):
     r"""An abstract specification of the domain represented by a column in a relation; a role."""
-    
+
     name: Annotated[ColumnName, "A unique name for the column"]
     domain: Annotated[T, "The domain (type) of the column"]
-    
+
     TYPE_ = hydra.core.Name("hydra.relational.ColumnSchema")
     NAME = hydra.core.Name("name")
     DOMAIN = hydra.core.Name("domain")
@@ -31,10 +31,10 @@ class ColumnSchema(Generic[T]):
 @dataclass(frozen=True)
 class ForeignKey:
     r"""A mapping from certain columns of a source relation to primary key columns of a target relation."""
-    
+
     foreign_relation: Annotated[RelationName, "The name of the target relation"]
     keys: Annotated[FrozenDict[ColumnName, ColumnName], "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."]
-    
+
     TYPE_ = hydra.core.Name("hydra.relational.ForeignKey")
     FOREIGN_RELATION = hydra.core.Name("foreignRelation")
     KEYS = hydra.core.Name("keys")
@@ -57,12 +57,12 @@ RelationName.TYPE_ = hydra.core.Name("hydra.relational.RelationName")
 @dataclass(frozen=True)
 class RelationSchema(Generic[T]):
     r"""An abstract relation; the name and columns of a relation without its actual data."""
-    
+
     name: Annotated[RelationName, "A unique name for the relation"]
     columns: Annotated[frozenlist[ColumnSchema[T]], "A list of column specifications"]
     primary_keys: Annotated[frozenlist[PrimaryKey], "Any number of primary keys for the relation, each of which must be valid for this relation"]
     foreign_keys: Annotated[frozenlist[ForeignKey], "Any number of foreign keys, each of which must be valid for both this relation and the target relation"]
-    
+
     TYPE_ = hydra.core.Name("hydra.relational.RelationSchema")
     NAME = hydra.core.Name("name")
     COLUMNS = hydra.core.Name("columns")

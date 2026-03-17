@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class RecordPattern implements Serializable, Comparable<RecordPattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.RecordPattern");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name FIELDS = new hydra.core.Name("fields");
-  
+
   /**
    * The constructor name
    */
   public final hydra.ext.haskell.ast.Name name;
-  
+
   /**
    * The field patterns
    */
   public final hydra.util.ConsList<hydra.ext.haskell.ast.PatternField> fields;
-  
+
   public RecordPattern (hydra.ext.haskell.ast.Name name, hydra.util.ConsList<hydra.ext.haskell.ast.PatternField> fields) {
     this.name = name;
     this.fields = fields;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof RecordPattern)) {
@@ -41,12 +41,12 @@ public class RecordPattern implements Serializable, Comparable<RecordPattern> {
       this.fields,
       o.fields);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(fields);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(RecordPattern other) {
@@ -57,11 +57,11 @@ public class RecordPattern implements Serializable, Comparable<RecordPattern> {
     }
     return ((Comparable) fields).compareTo(other.fields);
   }
-  
+
   public RecordPattern withName(hydra.ext.haskell.ast.Name name) {
     return new RecordPattern(name, fields);
   }
-  
+
   public RecordPattern withFields(hydra.util.ConsList<hydra.ext.haskell.ast.PatternField> fields) {
     return new RecordPattern(name, fields);
   }

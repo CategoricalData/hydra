@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class Genexp implements Serializable, Comparable<Genexp> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Genexp");
-  
+
   public static final hydra.core.Name HEAD = new hydra.core.Name("head");
-  
+
   public static final hydra.core.Name TAIL = new hydra.core.Name("tail");
-  
+
   public final hydra.ext.python.syntax.GenexpHead head;
-  
+
   public final hydra.ext.python.syntax.ForIfClauses tail;
-  
+
   public Genexp (hydra.ext.python.syntax.GenexpHead head, hydra.ext.python.syntax.ForIfClauses tail) {
     this.head = head;
     this.tail = tail;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Genexp)) {
@@ -32,12 +32,12 @@ public class Genexp implements Serializable, Comparable<Genexp> {
       this.tail,
       o.tail);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(head) + 3 * java.util.Objects.hashCode(tail);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Genexp other) {
@@ -48,11 +48,11 @@ public class Genexp implements Serializable, Comparable<Genexp> {
     }
     return ((Comparable) tail).compareTo(other.tail);
   }
-  
+
   public Genexp withHead(hydra.ext.python.syntax.GenexpHead head) {
     return new Genexp(head, tail);
   }
-  
+
   public Genexp withTail(hydra.ext.python.syntax.ForIfClauses tail) {
     return new Genexp(head, tail);
   }

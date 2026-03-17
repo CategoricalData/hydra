@@ -12,7 +12,7 @@ public interface Utils {
       hydra.pg.graphson.utils.Utils.<T0>elementsToVerticesWithAdjacentEdges_edges(partitioned.get()),
       hydra.pg.graphson.utils.Utils.<T0>elementsToVerticesWithAdjacentEdges_vertexMap0(hydra.pg.graphson.utils.Utils.<T0>elementsToVerticesWithAdjacentEdges_vertices(partitioned.get()))));
   }
-  
+
   static <T0> hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>> elementsToVerticesWithAdjacentEdges_partitioned(hydra.util.ConsList<hydra.pg.model.Element<T0>> els) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>, java.util.function.Function<hydra.pg.model.Element<T0>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>>>) (acc -> (java.util.function.Function<hydra.pg.model.Element<T0>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>>) (el -> ((java.util.function.Function<hydra.pg.model.Element, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>>) (v1 -> ((java.util.function.Function<hydra.pg.model.Element<T0>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>>) ((java.util.function.Function<hydra.pg.model.Element<T0>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>>) (u -> (u).accept(new hydra.pg.model.Element.PartialVisitor<>() {
@@ -22,7 +22,7 @@ public interface Utils {
             (v).value,
             hydra.lib.pairs.First.apply(acc)), hydra.lib.pairs.Second.apply(acc))));
         }
-        
+
         @Override
         public hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>> visit(hydra.pg.model.Element.Edge<T0> e) {
           return (hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>(hydra.lib.pairs.First.apply(acc), hydra.lib.lists.Cons.apply(
@@ -33,21 +33,21 @@ public interface Utils {
       (hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>((hydra.util.ConsList<hydra.pg.model.Vertex<T0>>) (hydra.util.ConsList.<hydra.pg.model.Vertex<T0>>empty()), (hydra.util.ConsList<hydra.pg.model.Edge<T0>>) (hydra.util.ConsList.<hydra.pg.model.Edge<T0>>empty())))),
       els);
   }
-  
+
   static <T0> hydra.util.ConsList<hydra.pg.model.Vertex<T0>> elementsToVerticesWithAdjacentEdges_vertices(hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>> partitioned) {
     return hydra.lib.lists.Reverse.apply(hydra.lib.pairs.First.apply(partitioned));
   }
-  
+
   static <T0> hydra.util.ConsList<hydra.pg.model.Edge<T0>> elementsToVerticesWithAdjacentEdges_edges(hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>> partitioned) {
     return hydra.lib.lists.Reverse.apply(hydra.lib.pairs.Second.apply(partitioned));
   }
-  
+
   static <T0> hydra.util.PersistentMap<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>> elementsToVerticesWithAdjacentEdges_vertexMap0(hydra.util.ConsList<hydra.pg.model.Vertex<T0>> vertices) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.pg.model.Vertex<T0>, hydra.util.Pair<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>>) (v -> (hydra.util.Pair<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>) ((hydra.util.Pair<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>) (new hydra.util.Pair<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>(((java.util.function.Function<hydra.pg.model.Vertex<T0>, T0>) (projected -> projected.id)).apply(v), (hydra.pg.model.VertexWithAdjacentEdges<T0>) (new hydra.pg.model.VertexWithAdjacentEdges<T0>(v, (hydra.util.ConsList<hydra.pg.model.AdjacentEdge<T0>>) (hydra.util.ConsList.<hydra.pg.model.AdjacentEdge<T0>>empty()), (hydra.util.ConsList<hydra.pg.model.AdjacentEdge<T0>>) (hydra.util.ConsList.<hydra.pg.model.AdjacentEdge<T0>>empty()))))))),
       vertices));
   }
-  
+
   static <T0> hydra.util.PersistentMap<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>> elementsToVerticesWithAdjacentEdges_vertexMap1(hydra.util.ConsList<hydra.pg.model.Edge<T0>> edges, hydra.util.PersistentMap<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>> vertexMap0) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.PersistentMap<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>, java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.util.PersistentMap<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>>>) (vmap -> (java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.util.PersistentMap<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>>) (edge -> {
@@ -83,31 +83,31 @@ public interface Utils {
       vertexMap0,
       edges);
   }
-  
+
   static <T0> T0 elementsToVerticesWithAdjacentEdges_edgeId(hydra.pg.model.Edge<T0> edge) {
     return ((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.id)).apply(edge);
   }
-  
+
   static <T0> T0 elementsToVerticesWithAdjacentEdges_outV(hydra.pg.model.Edge<T0> edge) {
     return ((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.out)).apply(edge);
   }
-  
+
   static <T0> T0 elementsToVerticesWithAdjacentEdges_inV(hydra.pg.model.Edge<T0> edge) {
     return ((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.in)).apply(edge);
   }
-  
+
   static <T0> hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0> elementsToVerticesWithAdjacentEdges_props(hydra.pg.model.Edge<T0> edge) {
     return ((java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0>>) (projected -> projected.properties)).apply(edge);
   }
-  
+
   static <T0> hydra.pg.model.AdjacentEdge<T0> elementsToVerticesWithAdjacentEdges_adjEdgeOut(T0 edgeId, T0 inV, hydra.pg.model.EdgeLabel label, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0> props) {
     return (hydra.pg.model.AdjacentEdge<T0>) (new hydra.pg.model.AdjacentEdge<T0>(label, edgeId, inV, props));
   }
-  
+
   static <T0> hydra.pg.model.AdjacentEdge<T0> elementsToVerticesWithAdjacentEdges_adjEdgeIn(T0 edgeId, hydra.pg.model.EdgeLabel label, T0 outV, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0> props) {
     return (hydra.pg.model.AdjacentEdge<T0>) (new hydra.pg.model.AdjacentEdge<T0>(label, edgeId, outV, props));
   }
-  
+
   static <T0> hydra.util.PersistentMap<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>> elementsToVerticesWithAdjacentEdges_vmap1(hydra.pg.model.AdjacentEdge<T0> adjEdgeOut, T0 outV, hydra.util.PersistentMap<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>> vmap) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> vmap,
@@ -121,18 +121,18 @@ public interface Utils {
         outV,
         vmap));
   }
-  
+
   static <T0> hydra.util.Either<T0, hydra.pg.graphson.syntax.Value> encodeStringValue(String s) {
     return hydra.util.Either.<T0, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.String_(s));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> encodeTermValue(hydra.core.Term term) {
     return hydra.rewriting.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.Term instance) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unsupported term variant for GraphSON encoding")), hydra.lexical.Lexical.emptyContext())));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Term.Literal lit) {
         return (lit).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -140,17 +140,17 @@ public interface Utils {
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.Literal instance) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unsupported literal type for GraphSON encoding")), hydra.lexical.Lexical.emptyContext())));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Binary b) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Binary(hydra.lib.literals.BinaryToString.apply((b).value)));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Boolean_ b) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Boolean_((b).value));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Float_ fv) {
             return (fv).value.accept(new hydra.core.FloatValue.PartialVisitor<>() {
@@ -158,24 +158,24 @@ public interface Utils {
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.FloatValue instance) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unsupported float type")), hydra.lexical.Lexical.emptyContext())));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.FloatValue.Bigfloat f) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.BigDecimal(new hydra.pg.graphson.syntax.BigDecimalValue(hydra.lib.literals.ShowBigfloat.apply((f).value))));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.FloatValue.Float32 f) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Float_(new hydra.pg.graphson.syntax.FloatValue.Finite((f).value)));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.FloatValue.Float64 f) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Double_(new hydra.pg.graphson.syntax.DoubleValue.Finite((f).value)));
               }
             });
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Integer_ iv) {
             return (iv).value.accept(new hydra.core.IntegerValue.PartialVisitor<>() {
@@ -183,38 +183,38 @@ public interface Utils {
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.IntegerValue instance) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unsupported integer type")), hydra.lexical.Lexical.emptyContext())));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.IntegerValue.Bigint i) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.BigInteger((i).value));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.IntegerValue.Int32 i) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Integer_((i).value));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.IntegerValue.Int64 i) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Long_((i).value));
               }
             });
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.String_ s) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.String_((s).value));
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Term.Unit ignored) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Null());
       }
     });
   }
-  
+
   static <T0, T1> hydra.util.Either<T1, hydra.util.ConsList<hydra.json.model.Value>> pgElementsToGraphson(java.util.function.Function<T0, hydra.util.Either<T1, hydra.pg.graphson.syntax.Value>> encodeValue, hydra.util.ConsList<hydra.pg.model.Element<T0>> els) {
     return hydra.lib.eithers.MapList.apply(
       (java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, hydra.util.Either<T1, hydra.json.model.Value>>) (v1 -> hydra.pg.graphson.construct.Construct.<T0, T1>pgVertexWithAdjacentEdgesToJson(

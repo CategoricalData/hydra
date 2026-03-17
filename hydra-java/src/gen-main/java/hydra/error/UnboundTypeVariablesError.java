@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class UnboundTypeVariablesError implements Serializable, Comparable<UnboundTypeVariablesError> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.error.UnboundTypeVariablesError");
-  
+
   public static final hydra.core.Name VARIABLES = new hydra.core.Name("variables");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   /**
    * The set of unbound type variable names
    */
   public final hydra.util.PersistentSet<hydra.core.Name> variables;
-  
+
   /**
    * The type containing the unbound variables
    */
   public final hydra.core.Type type;
-  
+
   public UnboundTypeVariablesError (hydra.util.PersistentSet<hydra.core.Name> variables, hydra.core.Type type) {
     this.variables = variables;
     this.type = type;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof UnboundTypeVariablesError)) {
@@ -41,12 +41,12 @@ public class UnboundTypeVariablesError implements Serializable, Comparable<Unbou
       this.type,
       o.type);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(variables) + 3 * java.util.Objects.hashCode(type);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(UnboundTypeVariablesError other) {
@@ -57,11 +57,11 @@ public class UnboundTypeVariablesError implements Serializable, Comparable<Unbou
     }
     return ((Comparable) type).compareTo(other.type);
   }
-  
+
   public UnboundTypeVariablesError withVariables(hydra.util.PersistentSet<hydra.core.Name> variables) {
     return new UnboundTypeVariablesError(variables, type);
   }
-  
+
   public UnboundTypeVariablesError withType(hydra.core.Type type) {
     return new UnboundTypeVariablesError(variables, type);
   }

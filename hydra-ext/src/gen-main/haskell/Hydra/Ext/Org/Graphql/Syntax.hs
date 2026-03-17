@@ -13,42 +13,42 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-newtype Name = 
+newtype Name =
   Name {
     unName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Name = Core.Name "hydra.ext.org.graphql.syntax.Name"
 
-newtype IntValue = 
+newtype IntValue =
   IntValue {
     unIntValue :: String}
   deriving (Eq, Ord, Read, Show)
 
 _IntValue = Core.Name "hydra.ext.org.graphql.syntax.IntValue"
 
-newtype FloatValue = 
+newtype FloatValue =
   FloatValue {
     unFloatValue :: String}
   deriving (Eq, Ord, Read, Show)
 
 _FloatValue = Core.Name "hydra.ext.org.graphql.syntax.FloatValue"
 
-newtype StringValue = 
+newtype StringValue =
   StringValue {
     unStringValue :: String}
   deriving (Eq, Ord, Read, Show)
 
 _StringValue = Core.Name "hydra.ext.org.graphql.syntax.StringValue"
 
-newtype Document = 
+newtype Document =
   Document {
     unDocument :: [Definition]}
   deriving (Eq, Ord, Read, Show)
 
 _Document = Core.Name "hydra.ext.org.graphql.syntax.Document"
 
-data Definition = 
+data Definition =
   DefinitionExecutable ExecutableDefinition |
   DefinitionTypeSystem TypeSystemDefinitionOrExtension
   deriving (Eq, Ord, Read, Show)
@@ -59,14 +59,14 @@ _Definition_executable = Core.Name "executable"
 
 _Definition_typeSystem = Core.Name "typeSystem"
 
-newtype ExecutableDocument = 
+newtype ExecutableDocument =
   ExecutableDocument {
     unExecutableDocument :: [ExecutableDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _ExecutableDocument = Core.Name "hydra.ext.org.graphql.syntax.ExecutableDocument"
 
-data ExecutableDefinition = 
+data ExecutableDefinition =
   ExecutableDefinitionOperation OperationDefinition |
   ExecutableDefinitionFragment FragmentDefinition
   deriving (Eq, Ord, Read, Show)
@@ -77,7 +77,7 @@ _ExecutableDefinition_operation = Core.Name "operation"
 
 _ExecutableDefinition_fragment = Core.Name "fragment"
 
-data OperationDefinition = 
+data OperationDefinition =
   OperationDefinitionSequence OperationDefinition_Sequence |
   OperationDefinitionSelectionSet SelectionSet
   deriving (Eq, Ord, Read, Show)
@@ -88,7 +88,7 @@ _OperationDefinition_sequence = Core.Name "sequence"
 
 _OperationDefinition_SelectionSet = Core.Name "SelectionSet"
 
-data OperationDefinition_Sequence = 
+data OperationDefinition_Sequence =
   OperationDefinition_Sequence {
     operationDefinition_SequenceOperationType :: OperationType,
     operationDefinition_SequenceName :: (Maybe Name),
@@ -109,10 +109,10 @@ _OperationDefinition_Sequence_Directives = Core.Name "Directives"
 
 _OperationDefinition_Sequence_SelectionSet = Core.Name "SelectionSet"
 
-data OperationType = 
+data OperationType =
   OperationTypeQuery  |
   OperationTypeMutation  |
-  OperationTypeSubscription 
+  OperationTypeSubscription
   deriving (Eq, Ord, Read, Show)
 
 _OperationType = Core.Name "hydra.ext.org.graphql.syntax.OperationType"
@@ -123,14 +123,14 @@ _OperationType_Mutation = Core.Name "Mutation"
 
 _OperationType_Subscription = Core.Name "Subscription"
 
-newtype SelectionSet = 
+newtype SelectionSet =
   SelectionSet {
     unSelectionSet :: [Selection]}
   deriving (Eq, Ord, Read, Show)
 
 _SelectionSet = Core.Name "hydra.ext.org.graphql.syntax.SelectionSet"
 
-data Selection = 
+data Selection =
   SelectionField Field |
   SelectionFragmentSpread FragmentSpread |
   SelectionInlineFragment InlineFragment
@@ -144,7 +144,7 @@ _Selection_FragmentSpread = Core.Name "FragmentSpread"
 
 _Selection_InlineFragment = Core.Name "InlineFragment"
 
-data Field = 
+data Field =
   Field {
     fieldAlias :: (Maybe Alias),
     fieldName :: Name,
@@ -165,9 +165,9 @@ _Field_Directives = Core.Name "Directives"
 
 _Field_SelectionSet = Core.Name "SelectionSet"
 
-data Alias = 
+data Alias =
   AliasName Name |
-  AliasColon 
+  AliasColon
   deriving (Eq, Ord, Read, Show)
 
 _Alias = Core.Name "hydra.ext.org.graphql.syntax.Alias"
@@ -176,14 +176,14 @@ _Alias_Name = Core.Name "Name"
 
 _Alias_Colon = Core.Name "Colon"
 
-newtype Arguments = 
+newtype Arguments =
   Arguments {
     unArguments :: [Argument]}
   deriving (Eq, Ord, Read, Show)
 
 _Arguments = Core.Name "hydra.ext.org.graphql.syntax.Arguments"
 
-data Argument = 
+data Argument =
   Argument {
     argumentName :: Name,
     argumentValue :: Value}
@@ -195,7 +195,7 @@ _Argument_Name = Core.Name "Name"
 
 _Argument_Value = Core.Name "Value"
 
-data FragmentSpread = 
+data FragmentSpread =
   FragmentSpread {
     fragmentSpreadFragmentName :: FragmentName,
     fragmentSpreadDirectives :: (Maybe Directives)}
@@ -207,7 +207,7 @@ _FragmentSpread_FragmentName = Core.Name "FragmentName"
 
 _FragmentSpread_Directives = Core.Name "Directives"
 
-data InlineFragment = 
+data InlineFragment =
   InlineFragment {
     inlineFragmentTypeCondition :: (Maybe TypeCondition),
     inlineFragmentDirectives :: (Maybe Directives),
@@ -222,7 +222,7 @@ _InlineFragment_Directives = Core.Name "Directives"
 
 _InlineFragment_SelectionSet = Core.Name "SelectionSet"
 
-data FragmentDefinition = 
+data FragmentDefinition =
   FragmentDefinition {
     fragmentDefinitionFragmentName :: FragmentName,
     fragmentDefinitionTypeCondition :: TypeCondition,
@@ -240,14 +240,14 @@ _FragmentDefinition_Directives = Core.Name "Directives"
 
 _FragmentDefinition_SelectionSet = Core.Name "SelectionSet"
 
-newtype FragmentName = 
+newtype FragmentName =
   FragmentName {
     unFragmentName :: Name}
   deriving (Eq, Ord, Read, Show)
 
 _FragmentName = Core.Name "hydra.ext.org.graphql.syntax.FragmentName"
 
-data TypeCondition = 
+data TypeCondition =
   TypeConditionOn  |
   TypeConditionNamedType NamedType
   deriving (Eq, Ord, Read, Show)
@@ -258,7 +258,7 @@ _TypeCondition_On = Core.Name "On"
 
 _TypeCondition_NamedType = Core.Name "NamedType"
 
-data Value = 
+data Value =
   ValueVariable Variable |
   ValueInt IntValue |
   ValueFloat FloatValue |
@@ -290,9 +290,9 @@ _Value_list = Core.Name "list"
 
 _Value_object = Core.Name "object"
 
-data BooleanValue = 
+data BooleanValue =
   BooleanValueTrue  |
-  BooleanValueFalse 
+  BooleanValueFalse
   deriving (Eq, Ord, Read, Show)
 
 _BooleanValue = Core.Name "hydra.ext.org.graphql.syntax.BooleanValue"
@@ -301,21 +301,21 @@ _BooleanValue_True = Core.Name "True"
 
 _BooleanValue_False = Core.Name "False"
 
-newtype NullValue = 
+newtype NullValue =
   NullValue {
     unNullValue :: ()}
   deriving (Eq, Ord, Read, Show)
 
 _NullValue = Core.Name "hydra.ext.org.graphql.syntax.NullValue"
 
-newtype EnumValue = 
+newtype EnumValue =
   EnumValue {
     unEnumValue :: Name}
   deriving (Eq, Ord, Read, Show)
 
 _EnumValue = Core.Name "hydra.ext.org.graphql.syntax.EnumValue"
 
-data ListValue = 
+data ListValue =
   ListValueSequence ListValue_Sequence |
   ListValueSequence2 [Value]
   deriving (Eq, Ord, Read, Show)
@@ -326,13 +326,13 @@ _ListValue_sequence = Core.Name "sequence"
 
 _ListValue_sequence2 = Core.Name "sequence2"
 
-data ListValue_Sequence = 
+data ListValue_Sequence =
   ListValue_Sequence {}
   deriving (Eq, Ord, Read, Show)
 
 _ListValue_Sequence = Core.Name "hydra.ext.org.graphql.syntax.ListValue_Sequence"
 
-data ObjectValue = 
+data ObjectValue =
   ObjectValueSequence ObjectValue_Sequence |
   ObjectValueSequence2 [ObjectField]
   deriving (Eq, Ord, Read, Show)
@@ -343,13 +343,13 @@ _ObjectValue_sequence = Core.Name "sequence"
 
 _ObjectValue_sequence2 = Core.Name "sequence2"
 
-data ObjectValue_Sequence = 
+data ObjectValue_Sequence =
   ObjectValue_Sequence {}
   deriving (Eq, Ord, Read, Show)
 
 _ObjectValue_Sequence = Core.Name "hydra.ext.org.graphql.syntax.ObjectValue_Sequence"
 
-data ObjectField = 
+data ObjectField =
   ObjectField {
     objectFieldName :: Name,
     objectFieldValue :: Value}
@@ -361,7 +361,7 @@ _ObjectField_Name = Core.Name "Name"
 
 _ObjectField_Value = Core.Name "Value"
 
-data VariablesDefinition = 
+data VariablesDefinition =
   VariablesDefinition {
     variablesDefinitionVariable :: Variable,
     variablesDefinitionType :: Type,
@@ -379,21 +379,21 @@ _VariablesDefinition_DefaultValue = Core.Name "DefaultValue"
 
 _VariablesDefinition_Directives = Core.Name "Directives"
 
-newtype Variable = 
+newtype Variable =
   Variable {
     unVariable :: Name}
   deriving (Eq, Ord, Read, Show)
 
 _Variable = Core.Name "hydra.ext.org.graphql.syntax.Variable"
 
-newtype DefaultValue = 
+newtype DefaultValue =
   DefaultValue {
     unDefaultValue :: Value}
   deriving (Eq, Ord, Read, Show)
 
 _DefaultValue = Core.Name "hydra.ext.org.graphql.syntax.DefaultValue"
 
-data Type = 
+data Type =
   TypeNamed NamedType |
   TypeList ListType |
   TypeNonNull NonNullType
@@ -407,21 +407,21 @@ _Type_list = Core.Name "list"
 
 _Type_nonNull = Core.Name "nonNull"
 
-newtype NamedType = 
+newtype NamedType =
   NamedType {
     unNamedType :: Name}
   deriving (Eq, Ord, Read, Show)
 
 _NamedType = Core.Name "hydra.ext.org.graphql.syntax.NamedType"
 
-newtype ListType = 
+newtype ListType =
   ListType {
     unListType :: Type}
   deriving (Eq, Ord, Read, Show)
 
 _ListType = Core.Name "hydra.ext.org.graphql.syntax.ListType"
 
-data NonNullType = 
+data NonNullType =
   NonNullTypeNamed NamedType |
   NonNullTypeList ListType
   deriving (Eq, Ord, Read, Show)
@@ -432,14 +432,14 @@ _NonNullType_named = Core.Name "named"
 
 _NonNullType_list = Core.Name "list"
 
-newtype Directives = 
+newtype Directives =
   Directives {
     unDirectives :: [Directive]}
   deriving (Eq, Ord, Read, Show)
 
 _Directives = Core.Name "hydra.ext.org.graphql.syntax.Directives"
 
-data Directive = 
+data Directive =
   Directive {
     directiveName :: Name,
     directiveArguments :: (Maybe Arguments)}
@@ -451,14 +451,14 @@ _Directive_Name = Core.Name "Name"
 
 _Directive_Arguments = Core.Name "Arguments"
 
-newtype TypeSystemDocment = 
+newtype TypeSystemDocment =
   TypeSystemDocment {
     unTypeSystemDocment :: [TypeSystemDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _TypeSystemDocment = Core.Name "hydra.ext.org.graphql.syntax.TypeSystemDocment"
 
-data TypeSystemDefinition = 
+data TypeSystemDefinition =
   TypeSystemDefinitionSchema SchemaDefinition |
   TypeSystemDefinitionType TypeDefinition |
   TypeSystemDefinitionDirective DirectiveDefinition
@@ -472,14 +472,14 @@ _TypeSystemDefinition_type = Core.Name "type"
 
 _TypeSystemDefinition_directive = Core.Name "directive"
 
-newtype TypeSystemExtensionDocument = 
+newtype TypeSystemExtensionDocument =
   TypeSystemExtensionDocument {
     unTypeSystemExtensionDocument :: [TypeSystemDefinitionOrExtension]}
   deriving (Eq, Ord, Read, Show)
 
 _TypeSystemExtensionDocument = Core.Name "hydra.ext.org.graphql.syntax.TypeSystemExtensionDocument"
 
-data TypeSystemDefinitionOrExtension = 
+data TypeSystemDefinitionOrExtension =
   TypeSystemDefinitionOrExtensionDefinition TypeSystemDefinition |
   TypeSystemDefinitionOrExtensionExtension TypeSystemExtension
   deriving (Eq, Ord, Read, Show)
@@ -490,7 +490,7 @@ _TypeSystemDefinitionOrExtension_definition = Core.Name "definition"
 
 _TypeSystemDefinitionOrExtension_extension = Core.Name "extension"
 
-data TypeSystemExtension = 
+data TypeSystemExtension =
   TypeSystemExtensionSchema SchemaExtension |
   TypeSystemExtensionType TypeExtension
   deriving (Eq, Ord, Read, Show)
@@ -501,7 +501,7 @@ _TypeSystemExtension_schema = Core.Name "schema"
 
 _TypeSystemExtension_type = Core.Name "type"
 
-data SchemaDefinition = 
+data SchemaDefinition =
   SchemaDefinition {
     schemaDefinitionDescription :: (Maybe Description),
     schemaDefinitionDirectives :: (Maybe Directives),
@@ -516,7 +516,7 @@ _SchemaDefinition_Directives = Core.Name "Directives"
 
 _SchemaDefinition_RootOperationTypeDefinition = Core.Name "RootOperationTypeDefinition"
 
-data SchemaExtension = 
+data SchemaExtension =
   SchemaExtensionSequence SchemaExtension_Sequence |
   SchemaExtensionSequence2 Directives
   deriving (Eq, Ord, Read, Show)
@@ -527,7 +527,7 @@ _SchemaExtension_sequence = Core.Name "sequence"
 
 _SchemaExtension_sequence2 = Core.Name "sequence2"
 
-data SchemaExtension_Sequence = 
+data SchemaExtension_Sequence =
   SchemaExtension_Sequence {
     schemaExtension_SequenceDirectives :: (Maybe Directives),
     schemaExtension_SequenceRootOperationTypeDefinition :: RootOperationTypeDefinition}
@@ -539,7 +539,7 @@ _SchemaExtension_Sequence_Directives = Core.Name "Directives"
 
 _SchemaExtension_Sequence_RootOperationTypeDefinition = Core.Name "RootOperationTypeDefinition"
 
-data RootOperationTypeDefinition = 
+data RootOperationTypeDefinition =
   RootOperationTypeDefinition {
     rootOperationTypeDefinitionOperationType :: OperationType,
     rootOperationTypeDefinitionNamedType :: NamedType}
@@ -551,14 +551,14 @@ _RootOperationTypeDefinition_OperationType = Core.Name "OperationType"
 
 _RootOperationTypeDefinition_NamedType = Core.Name "NamedType"
 
-newtype Description = 
+newtype Description =
   Description {
     unDescription :: StringValue}
   deriving (Eq, Ord, Read, Show)
 
 _Description = Core.Name "hydra.ext.org.graphql.syntax.Description"
 
-data TypeDefinition = 
+data TypeDefinition =
   TypeDefinitionScalar ScalarTypeDefinition |
   TypeDefinitionObject ObjectTypeDefinition |
   TypeDefinitionInterface InterfaceTypeDefinition |
@@ -581,7 +581,7 @@ _TypeDefinition_enum = Core.Name "enum"
 
 _TypeDefinition_inputObject = Core.Name "inputObject"
 
-data TypeExtension = 
+data TypeExtension =
   TypeExtensionScalar ScalarTypeExtension |
   TypeExtensionObject ObjectTypeExtension |
   TypeExtensionInterface InterfaceTypeExtension |
@@ -604,7 +604,7 @@ _TypeExtension_enum = Core.Name "enum"
 
 _TypeExtension_inputObject = Core.Name "inputObject"
 
-data ScalarTypeDefinition = 
+data ScalarTypeDefinition =
   ScalarTypeDefinition {
     scalarTypeDefinitionDescription :: (Maybe Description),
     scalarTypeDefinitionName :: Name,
@@ -619,7 +619,7 @@ _ScalarTypeDefinition_Name = Core.Name "Name"
 
 _ScalarTypeDefinition_Directives = Core.Name "Directives"
 
-data ScalarTypeExtension = 
+data ScalarTypeExtension =
   ScalarTypeExtension {
     scalarTypeExtensionName :: Name,
     scalarTypeExtensionDirectives :: Directives}
@@ -631,7 +631,7 @@ _ScalarTypeExtension_Name = Core.Name "Name"
 
 _ScalarTypeExtension_Directives = Core.Name "Directives"
 
-data ObjectTypeDefinition = 
+data ObjectTypeDefinition =
   ObjectTypeDefinition {
     objectTypeDefinitionDescription :: (Maybe Description),
     objectTypeDefinitionName :: Name,
@@ -652,7 +652,7 @@ _ObjectTypeDefinition_Directives = Core.Name "Directives"
 
 _ObjectTypeDefinition_FieldsDefinition = Core.Name "FieldsDefinition"
 
-data ObjectTypeExtension = 
+data ObjectTypeExtension =
   ObjectTypeExtensionSequence ObjectTypeExtension_Sequence |
   ObjectTypeExtensionSequence2 ObjectTypeExtension_Sequence2 |
   ObjectTypeExtensionSequence3 ObjectTypeExtension_Sequence3
@@ -666,7 +666,7 @@ _ObjectTypeExtension_sequence2 = Core.Name "sequence2"
 
 _ObjectTypeExtension_sequence3 = Core.Name "sequence3"
 
-data ObjectTypeExtension_Sequence = 
+data ObjectTypeExtension_Sequence =
   ObjectTypeExtension_Sequence {
     objectTypeExtension_SequenceName :: Name,
     objectTypeExtension_SequenceImplementsInterfaces :: (Maybe ImplementsInterfaces),
@@ -684,7 +684,7 @@ _ObjectTypeExtension_Sequence_Directives = Core.Name "Directives"
 
 _ObjectTypeExtension_Sequence_FieldsDefinition = Core.Name "FieldsDefinition"
 
-data ObjectTypeExtension_Sequence2 = 
+data ObjectTypeExtension_Sequence2 =
   ObjectTypeExtension_Sequence2 {
     objectTypeExtension_Sequence2Name :: Name,
     objectTypeExtension_Sequence2ImplementsInterfaces :: (Maybe ImplementsInterfaces),
@@ -699,7 +699,7 @@ _ObjectTypeExtension_Sequence2_ImplementsInterfaces = Core.Name "ImplementsInter
 
 _ObjectTypeExtension_Sequence2_Directives = Core.Name "Directives"
 
-data ObjectTypeExtension_Sequence3 = 
+data ObjectTypeExtension_Sequence3 =
   ObjectTypeExtension_Sequence3 {
     objectTypeExtension_Sequence3Name :: Name,
     objectTypeExtension_Sequence3ImplementsInterfaces :: ImplementsInterfaces}
@@ -711,7 +711,7 @@ _ObjectTypeExtension_Sequence3_Name = Core.Name "Name"
 
 _ObjectTypeExtension_Sequence3_ImplementsInterfaces = Core.Name "ImplementsInterfaces"
 
-data ImplementsInterfaces = 
+data ImplementsInterfaces =
   ImplementsInterfacesSequence ImplementsInterfaces_Sequence |
   ImplementsInterfacesSequence2 ImplementsInterfaces_Sequence2
   deriving (Eq, Ord, Read, Show)
@@ -722,7 +722,7 @@ _ImplementsInterfaces_sequence = Core.Name "sequence"
 
 _ImplementsInterfaces_sequence2 = Core.Name "sequence2"
 
-data ImplementsInterfaces_Sequence = 
+data ImplementsInterfaces_Sequence =
   ImplementsInterfaces_Sequence {
     implementsInterfaces_SequenceImplementsInterfaces :: ImplementsInterfaces,
     implementsInterfaces_SequenceNamedType :: NamedType}
@@ -734,7 +734,7 @@ _ImplementsInterfaces_Sequence_ImplementsInterfaces = Core.Name "ImplementsInter
 
 _ImplementsInterfaces_Sequence_NamedType = Core.Name "NamedType"
 
-data ImplementsInterfaces_Sequence2 = 
+data ImplementsInterfaces_Sequence2 =
   ImplementsInterfaces_Sequence2 {
     implementsInterfaces_Sequence2Amp :: (Maybe ()),
     implementsInterfaces_Sequence2NamedType :: NamedType}
@@ -746,14 +746,14 @@ _ImplementsInterfaces_Sequence2_Amp = Core.Name "Amp"
 
 _ImplementsInterfaces_Sequence2_NamedType = Core.Name "NamedType"
 
-newtype FieldsDefinition = 
+newtype FieldsDefinition =
   FieldsDefinition {
     unFieldsDefinition :: [FieldDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _FieldsDefinition = Core.Name "hydra.ext.org.graphql.syntax.FieldsDefinition"
 
-data FieldDefinition = 
+data FieldDefinition =
   FieldDefinition {
     fieldDefinitionDescription :: (Maybe Description),
     fieldDefinitionName :: Name,
@@ -774,14 +774,14 @@ _FieldDefinition_Type = Core.Name "Type"
 
 _FieldDefinition_Directives = Core.Name "Directives"
 
-newtype ArgumentsDefinition = 
+newtype ArgumentsDefinition =
   ArgumentsDefinition {
     unArgumentsDefinition :: [InputValueDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _ArgumentsDefinition = Core.Name "hydra.ext.org.graphql.syntax.ArgumentsDefinition"
 
-data InputValueDefinition = 
+data InputValueDefinition =
   InputValueDefinition {
     inputValueDefinitionDescription :: (Maybe Description),
     inputValueDefinitionName :: Name,
@@ -802,7 +802,7 @@ _InputValueDefinition_DefaultValue = Core.Name "DefaultValue"
 
 _InputValueDefinition_Directives = Core.Name "Directives"
 
-data InterfaceTypeDefinition = 
+data InterfaceTypeDefinition =
   InterfaceTypeDefinitionSequence InterfaceTypeDefinition_Sequence |
   InterfaceTypeDefinitionSequence2 InterfaceTypeDefinition_Sequence2
   deriving (Eq, Ord, Read, Show)
@@ -813,7 +813,7 @@ _InterfaceTypeDefinition_sequence = Core.Name "sequence"
 
 _InterfaceTypeDefinition_sequence2 = Core.Name "sequence2"
 
-data InterfaceTypeDefinition_Sequence = 
+data InterfaceTypeDefinition_Sequence =
   InterfaceTypeDefinition_Sequence {
     interfaceTypeDefinition_SequenceDescription :: (Maybe Description),
     interfaceTypeDefinition_SequenceName :: Name,
@@ -834,7 +834,7 @@ _InterfaceTypeDefinition_Sequence_Directives = Core.Name "Directives"
 
 _InterfaceTypeDefinition_Sequence_FieldsDefinition = Core.Name "FieldsDefinition"
 
-data InterfaceTypeDefinition_Sequence2 = 
+data InterfaceTypeDefinition_Sequence2 =
   InterfaceTypeDefinition_Sequence2 {
     interfaceTypeDefinition_Sequence2Description :: (Maybe Description),
     interfaceTypeDefinition_Sequence2Name :: Name,
@@ -852,7 +852,7 @@ _InterfaceTypeDefinition_Sequence2_ImplementsInterfaces = Core.Name "ImplementsI
 
 _InterfaceTypeDefinition_Sequence2_Directives = Core.Name "Directives"
 
-data InterfaceTypeExtension = 
+data InterfaceTypeExtension =
   InterfaceTypeExtensionSequence InterfaceTypeExtension_Sequence |
   InterfaceTypeExtensionSequence2 InterfaceTypeExtension_Sequence2 |
   InterfaceTypeExtensionSequence3 InterfaceTypeExtension_Sequence3
@@ -866,7 +866,7 @@ _InterfaceTypeExtension_sequence2 = Core.Name "sequence2"
 
 _InterfaceTypeExtension_sequence3 = Core.Name "sequence3"
 
-data InterfaceTypeExtension_Sequence = 
+data InterfaceTypeExtension_Sequence =
   InterfaceTypeExtension_Sequence {
     interfaceTypeExtension_SequenceName :: Name,
     interfaceTypeExtension_SequenceImplementsInterfaces :: (Maybe ImplementsInterfaces),
@@ -884,7 +884,7 @@ _InterfaceTypeExtension_Sequence_Directives = Core.Name "Directives"
 
 _InterfaceTypeExtension_Sequence_FieldsDefinition = Core.Name "FieldsDefinition"
 
-data InterfaceTypeExtension_Sequence2 = 
+data InterfaceTypeExtension_Sequence2 =
   InterfaceTypeExtension_Sequence2 {
     interfaceTypeExtension_Sequence2Name :: Name,
     interfaceTypeExtension_Sequence2ImplementsInterfaces :: (Maybe ImplementsInterfaces),
@@ -899,7 +899,7 @@ _InterfaceTypeExtension_Sequence2_ImplementsInterfaces = Core.Name "ImplementsIn
 
 _InterfaceTypeExtension_Sequence2_Directives = Core.Name "Directives"
 
-data InterfaceTypeExtension_Sequence3 = 
+data InterfaceTypeExtension_Sequence3 =
   InterfaceTypeExtension_Sequence3 {
     interfaceTypeExtension_Sequence3Name :: Name,
     interfaceTypeExtension_Sequence3ImplementsInterfaces :: ImplementsInterfaces}
@@ -911,7 +911,7 @@ _InterfaceTypeExtension_Sequence3_Name = Core.Name "Name"
 
 _InterfaceTypeExtension_Sequence3_ImplementsInterfaces = Core.Name "ImplementsInterfaces"
 
-data UnionTypeDefinition = 
+data UnionTypeDefinition =
   UnionTypeDefinition {
     unionTypeDefinitionDescription :: (Maybe Description),
     unionTypeDefinitionName :: Name,
@@ -929,7 +929,7 @@ _UnionTypeDefinition_Directives = Core.Name "Directives"
 
 _UnionTypeDefinition_UnionMemberTypes = Core.Name "UnionMemberTypes"
 
-data UnionMemberTypes = 
+data UnionMemberTypes =
   UnionMemberTypesSequence UnionMemberTypes_Sequence |
   UnionMemberTypesSequence2 UnionMemberTypes_Sequence2
   deriving (Eq, Ord, Read, Show)
@@ -940,7 +940,7 @@ _UnionMemberTypes_sequence = Core.Name "sequence"
 
 _UnionMemberTypes_sequence2 = Core.Name "sequence2"
 
-data UnionMemberTypes_Sequence = 
+data UnionMemberTypes_Sequence =
   UnionMemberTypes_Sequence {
     unionMemberTypes_SequenceUnionMemberTypes :: UnionMemberTypes,
     unionMemberTypes_SequenceNamedType :: NamedType}
@@ -952,7 +952,7 @@ _UnionMemberTypes_Sequence_UnionMemberTypes = Core.Name "UnionMemberTypes"
 
 _UnionMemberTypes_Sequence_NamedType = Core.Name "NamedType"
 
-data UnionMemberTypes_Sequence2 = 
+data UnionMemberTypes_Sequence2 =
   UnionMemberTypes_Sequence2 {
     unionMemberTypes_Sequence2Or :: (Maybe ()),
     unionMemberTypes_Sequence2NamedType :: NamedType}
@@ -964,7 +964,7 @@ _UnionMemberTypes_Sequence2_Or = Core.Name "Or"
 
 _UnionMemberTypes_Sequence2_NamedType = Core.Name "NamedType"
 
-data UnionTypeExtension = 
+data UnionTypeExtension =
   UnionTypeExtensionSequence UnionTypeExtension_Sequence |
   UnionTypeExtensionSequence2 UnionTypeExtension_Sequence2
   deriving (Eq, Ord, Read, Show)
@@ -975,7 +975,7 @@ _UnionTypeExtension_sequence = Core.Name "sequence"
 
 _UnionTypeExtension_sequence2 = Core.Name "sequence2"
 
-data UnionTypeExtension_Sequence = 
+data UnionTypeExtension_Sequence =
   UnionTypeExtension_Sequence {
     unionTypeExtension_SequenceName :: Name,
     unionTypeExtension_SequenceDirectives :: (Maybe Directives),
@@ -990,7 +990,7 @@ _UnionTypeExtension_Sequence_Directives = Core.Name "Directives"
 
 _UnionTypeExtension_Sequence_UnionMemberTypes = Core.Name "UnionMemberTypes"
 
-data UnionTypeExtension_Sequence2 = 
+data UnionTypeExtension_Sequence2 =
   UnionTypeExtension_Sequence2 {
     unionTypeExtension_Sequence2Name :: Name,
     unionTypeExtension_Sequence2Directives :: Directives}
@@ -1002,7 +1002,7 @@ _UnionTypeExtension_Sequence2_Name = Core.Name "Name"
 
 _UnionTypeExtension_Sequence2_Directives = Core.Name "Directives"
 
-data EnumTypeDefinition = 
+data EnumTypeDefinition =
   EnumTypeDefinition {
     enumTypeDefinitionDescription :: (Maybe Description),
     enumTypeDefinitionName :: Name,
@@ -1020,14 +1020,14 @@ _EnumTypeDefinition_Directives = Core.Name "Directives"
 
 _EnumTypeDefinition_EnumValuesDefinition = Core.Name "EnumValuesDefinition"
 
-newtype EnumValuesDefinition = 
+newtype EnumValuesDefinition =
   EnumValuesDefinition {
     unEnumValuesDefinition :: [EnumValueDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _EnumValuesDefinition = Core.Name "hydra.ext.org.graphql.syntax.EnumValuesDefinition"
 
-data EnumValueDefinition = 
+data EnumValueDefinition =
   EnumValueDefinition {
     enumValueDefinitionDescription :: (Maybe Description),
     enumValueDefinitionEnumValue :: EnumValue,
@@ -1042,7 +1042,7 @@ _EnumValueDefinition_EnumValue = Core.Name "EnumValue"
 
 _EnumValueDefinition_Directives = Core.Name "Directives"
 
-data EnumTypeExtension = 
+data EnumTypeExtension =
   EnumTypeExtensionSequence EnumTypeExtension_Sequence |
   EnumTypeExtensionSequence2 EnumTypeExtension_Sequence2
   deriving (Eq, Ord, Read, Show)
@@ -1053,7 +1053,7 @@ _EnumTypeExtension_sequence = Core.Name "sequence"
 
 _EnumTypeExtension_sequence2 = Core.Name "sequence2"
 
-data EnumTypeExtension_Sequence = 
+data EnumTypeExtension_Sequence =
   EnumTypeExtension_Sequence {
     enumTypeExtension_SequenceName :: Name,
     enumTypeExtension_SequenceDirectives :: (Maybe Directives),
@@ -1068,7 +1068,7 @@ _EnumTypeExtension_Sequence_Directives = Core.Name "Directives"
 
 _EnumTypeExtension_Sequence_EnumValuesDefinition = Core.Name "EnumValuesDefinition"
 
-data EnumTypeExtension_Sequence2 = 
+data EnumTypeExtension_Sequence2 =
   EnumTypeExtension_Sequence2 {
     enumTypeExtension_Sequence2Name :: Name,
     enumTypeExtension_Sequence2Directives :: Directives}
@@ -1080,7 +1080,7 @@ _EnumTypeExtension_Sequence2_Name = Core.Name "Name"
 
 _EnumTypeExtension_Sequence2_Directives = Core.Name "Directives"
 
-data InputObjectTypeDefinition = 
+data InputObjectTypeDefinition =
   InputObjectTypeDefinitionSequence InputObjectTypeDefinition_Sequence |
   InputObjectTypeDefinitionSequence2 InputObjectTypeDefinition_Sequence2
   deriving (Eq, Ord, Read, Show)
@@ -1091,7 +1091,7 @@ _InputObjectTypeDefinition_sequence = Core.Name "sequence"
 
 _InputObjectTypeDefinition_sequence2 = Core.Name "sequence2"
 
-data InputObjectTypeDefinition_Sequence = 
+data InputObjectTypeDefinition_Sequence =
   InputObjectTypeDefinition_Sequence {
     inputObjectTypeDefinition_SequenceDescription :: (Maybe Description),
     inputObjectTypeDefinition_SequenceName :: Name,
@@ -1109,7 +1109,7 @@ _InputObjectTypeDefinition_Sequence_Directives = Core.Name "Directives"
 
 _InputObjectTypeDefinition_Sequence_InputFieldsDefinition = Core.Name "InputFieldsDefinition"
 
-data InputObjectTypeDefinition_Sequence2 = 
+data InputObjectTypeDefinition_Sequence2 =
   InputObjectTypeDefinition_Sequence2 {
     inputObjectTypeDefinition_Sequence2Description :: (Maybe Description),
     inputObjectTypeDefinition_Sequence2Name :: Name,
@@ -1124,14 +1124,14 @@ _InputObjectTypeDefinition_Sequence2_Name = Core.Name "Name"
 
 _InputObjectTypeDefinition_Sequence2_Directives = Core.Name "Directives"
 
-newtype InputFieldsDefinition = 
+newtype InputFieldsDefinition =
   InputFieldsDefinition {
     unInputFieldsDefinition :: [InputValueDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _InputFieldsDefinition = Core.Name "hydra.ext.org.graphql.syntax.InputFieldsDefinition"
 
-data InputObjectTypeExtension = 
+data InputObjectTypeExtension =
   InputObjectTypeExtensionSequence InputObjectTypeExtension_Sequence |
   InputObjectTypeExtensionSequence2 InputObjectTypeExtension_Sequence2
   deriving (Eq, Ord, Read, Show)
@@ -1142,7 +1142,7 @@ _InputObjectTypeExtension_sequence = Core.Name "sequence"
 
 _InputObjectTypeExtension_sequence2 = Core.Name "sequence2"
 
-data InputObjectTypeExtension_Sequence = 
+data InputObjectTypeExtension_Sequence =
   InputObjectTypeExtension_Sequence {
     inputObjectTypeExtension_SequenceName :: Name,
     inputObjectTypeExtension_SequenceDirectives :: (Maybe Directives),
@@ -1157,7 +1157,7 @@ _InputObjectTypeExtension_Sequence_Directives = Core.Name "Directives"
 
 _InputObjectTypeExtension_Sequence_InputFieldsDefinition = Core.Name "InputFieldsDefinition"
 
-data InputObjectTypeExtension_Sequence2 = 
+data InputObjectTypeExtension_Sequence2 =
   InputObjectTypeExtension_Sequence2 {
     inputObjectTypeExtension_Sequence2Name :: Name,
     inputObjectTypeExtension_Sequence2Directives :: Directives}
@@ -1169,7 +1169,7 @@ _InputObjectTypeExtension_Sequence2_Name = Core.Name "Name"
 
 _InputObjectTypeExtension_Sequence2_Directives = Core.Name "Directives"
 
-data DirectiveDefinition = 
+data DirectiveDefinition =
   DirectiveDefinition {
     directiveDefinitionDescription :: (Maybe Description),
     directiveDefinitionName :: Name,
@@ -1190,7 +1190,7 @@ _DirectiveDefinition_Repeatable = Core.Name "Repeatable"
 
 _DirectiveDefinition_DirectiveLocations = Core.Name "DirectiveLocations"
 
-data DirectiveLocations = 
+data DirectiveLocations =
   DirectiveLocationsSequence DirectiveLocations_Sequence |
   DirectiveLocationsSequence2 DirectiveLocations_Sequence2
   deriving (Eq, Ord, Read, Show)
@@ -1201,7 +1201,7 @@ _DirectiveLocations_sequence = Core.Name "sequence"
 
 _DirectiveLocations_sequence2 = Core.Name "sequence2"
 
-data DirectiveLocations_Sequence = 
+data DirectiveLocations_Sequence =
   DirectiveLocations_Sequence {
     directiveLocations_SequenceDirectiveLocations :: DirectiveLocations,
     directiveLocations_SequenceDirectiveLocation :: DirectiveLocation}
@@ -1213,7 +1213,7 @@ _DirectiveLocations_Sequence_DirectiveLocations = Core.Name "DirectiveLocations"
 
 _DirectiveLocations_Sequence_DirectiveLocation = Core.Name "DirectiveLocation"
 
-data DirectiveLocations_Sequence2 = 
+data DirectiveLocations_Sequence2 =
   DirectiveLocations_Sequence2 {
     directiveLocations_Sequence2Or :: (Maybe ()),
     directiveLocations_Sequence2DirectiveLocation :: DirectiveLocation}
@@ -1225,7 +1225,7 @@ _DirectiveLocations_Sequence2_Or = Core.Name "Or"
 
 _DirectiveLocations_Sequence2_DirectiveLocation = Core.Name "DirectiveLocation"
 
-data DirectiveLocation = 
+data DirectiveLocation =
   DirectiveLocationExecutable ExecutableDirectiveLocation |
   DirectiveLocationTypeSystem TypeSystemDirectiveLocation
   deriving (Eq, Ord, Read, Show)
@@ -1236,7 +1236,7 @@ _DirectiveLocation_executable = Core.Name "executable"
 
 _DirectiveLocation_typeSystem = Core.Name "typeSystem"
 
-data ExecutableDirectiveLocation = 
+data ExecutableDirectiveLocation =
   ExecutableDirectiveLocationQUERY  |
   ExecutableDirectiveLocationMUTATION  |
   ExecutableDirectiveLocationSUBSCRIPTION  |
@@ -1244,7 +1244,7 @@ data ExecutableDirectiveLocation =
   ExecutableDirectiveLocationFRAGMENTlowbarDEFINITION  |
   ExecutableDirectiveLocationFRAGMENTlowbarSPREAD  |
   ExecutableDirectiveLocationINLINElowbarFRAGMENT  |
-  ExecutableDirectiveLocationVARIABLElowbarDEFINITION 
+  ExecutableDirectiveLocationVARIABLElowbarDEFINITION
   deriving (Eq, Ord, Read, Show)
 
 _ExecutableDirectiveLocation = Core.Name "hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation"
@@ -1265,7 +1265,7 @@ _ExecutableDirectiveLocation_INLINElowbarFRAGMENT = Core.Name "INLINElowbarFRAGM
 
 _ExecutableDirectiveLocation_VARIABLElowbarDEFINITION = Core.Name "VARIABLElowbarDEFINITION"
 
-data TypeSystemDirectiveLocation = 
+data TypeSystemDirectiveLocation =
   TypeSystemDirectiveLocationSCHEMA  |
   TypeSystemDirectiveLocationSCALAR  |
   TypeSystemDirectiveLocationOBJECT  |
@@ -1276,7 +1276,7 @@ data TypeSystemDirectiveLocation =
   TypeSystemDirectiveLocationENUM  |
   TypeSystemDirectiveLocationENUMlowbarVALUE  |
   TypeSystemDirectiveLocationINPUTlowbarOBJECT  |
-  TypeSystemDirectiveLocationINPUTlowbarFIELDlowbarDEFINITION 
+  TypeSystemDirectiveLocationINPUTlowbarFIELDlowbarDEFINITION
   deriving (Eq, Ord, Read, Show)
 
 _TypeSystemDirectiveLocation = Core.Name "hydra.ext.org.graphql.syntax.TypeSystemDirectiveLocation"

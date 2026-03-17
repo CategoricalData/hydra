@@ -14,7 +14,7 @@ public interface Relational {
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnName> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.ColumnName>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnName> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
@@ -26,7 +26,7 @@ public interface Relational {
                 public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Term instance) {
                   return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"));
                 }
-                
+
                 @Override
                 public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
                   return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -34,7 +34,7 @@ public interface Relational {
                     public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Literal.String_ s) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>right((s).value);
@@ -51,7 +51,7 @@ public interface Relational {
         cx,
         raw));
   }
-  
+
   static <T0> hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnSchema<T0>> columnSchema(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>> t, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnSchema<T0>>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.relational.ColumnSchema<T0>>left(new hydra.error.DecodingError(err))),
@@ -60,7 +60,7 @@ public interface Relational {
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnSchema<T0>> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.ColumnSchema<T0>>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnSchema<T0>> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -85,7 +85,7 @@ public interface Relational {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.relational.ForeignKey> foreignKey(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ForeignKey>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.relational.ForeignKey>left(new hydra.error.DecodingError(err))),
@@ -94,7 +94,7 @@ public interface Relational {
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.ForeignKey> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.ForeignKey>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.ForeignKey> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -127,7 +127,7 @@ public interface Relational {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.relational.PrimaryKey> primaryKey(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.relational.PrimaryKey>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.relational.PrimaryKey>left(new hydra.error.DecodingError(err))),
@@ -136,7 +136,7 @@ public interface Relational {
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.PrimaryKey> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.PrimaryKey>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.PrimaryKey> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
@@ -153,7 +153,7 @@ public interface Relational {
         cx,
         raw));
   }
-  
+
   static <T0> hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relation<T0>> relation(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>> v, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relation<T0>>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.relational.Relation<T0>>left(new hydra.error.DecodingError(err))),
@@ -162,7 +162,7 @@ public interface Relational {
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relation<T0>> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.Relation<T0>>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relation<T0>> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
@@ -180,7 +180,7 @@ public interface Relational {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationName> relationName(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationName>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.relational.RelationName>left(new hydra.error.DecodingError(err))),
@@ -189,7 +189,7 @@ public interface Relational {
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationName> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.RelationName>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationName> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
@@ -201,7 +201,7 @@ public interface Relational {
                 public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Term instance) {
                   return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"));
                 }
-                
+
                 @Override
                 public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
                   return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -209,7 +209,7 @@ public interface Relational {
                     public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Literal.String_ s) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>right((s).value);
@@ -226,7 +226,7 @@ public interface Relational {
         cx,
         raw));
   }
-  
+
   static <T0> hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>> relationSchema(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>> t, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>left(new hydra.error.DecodingError(err))),
@@ -235,7 +235,7 @@ public interface Relational {
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -288,7 +288,7 @@ public interface Relational {
         cx,
         raw));
   }
-  
+
   static <T0> hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relationship<T0>> relationship(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>> v, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relationship<T0>>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.relational.Relationship<T0>>left(new hydra.error.DecodingError(err))),
@@ -297,7 +297,7 @@ public interface Relational {
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relationship<T0>> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.Relationship<T0>>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relationship<T0>> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
@@ -318,7 +318,7 @@ public interface Relational {
         cx,
         raw));
   }
-  
+
   static <T0> hydra.util.Either<hydra.error.DecodingError, hydra.relational.Row<T0>> row(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>> v, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.relational.Row<T0>>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.relational.Row<T0>>left(new hydra.error.DecodingError(err))),
@@ -327,7 +327,7 @@ public interface Relational {
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.Row<T0>> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.Row<T0>>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.Row<T0>> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(

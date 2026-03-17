@@ -29,8 +29,8 @@ csharpLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = typePredicate}} 
-  where 
+        Coders.languageConstraintsTypes = typePredicate}}
+  where
     eliminationVariants =
         Sets.fromList [
           Variants.EliminationVariantRecord,
@@ -99,8 +99,8 @@ csharpReservedWords :: S.Set String
 csharpReservedWords =
     Sets.fromList (Lists.concat [
       keywords,
-      contextualKeywords]) 
-  where 
+      contextualKeywords])
+  where
     keywords =
         [
           "DEFAULT",

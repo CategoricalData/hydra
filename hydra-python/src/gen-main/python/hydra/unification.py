@@ -27,7 +27,7 @@ T0 = TypeVar("T0")
 
 def join_types(cx: hydra.context.Context, left: hydra.core.Type, right: hydra.core.Type, comment: str):
     r"""Join two types, producing a list of type constraints.The comment is used to provide context for the constraints."""
-    
+
     @lru_cache(1)
     def sleft() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(left)
@@ -50,137 +50,137 @@ def join_types(cx: hydra.context.Context, left: hydra.core.Type, right: hydra.co
         match v1:
             case hydra.core.TypeApplication(value=r):
                 return Right((join_one(l.function, r.function), join_one(l.argument, r.argument)))
-            
+
             case _:
                 return cannot_unify()
     def _hoist_body_2(l, v1):
         match v1:
             case hydra.core.TypeEither(value=r):
                 return Right((join_one(l.left, r.left), join_one(l.right, r.right)))
-            
+
             case _:
                 return cannot_unify()
     def _hoist_body_3(l, v1):
         match v1:
             case hydra.core.TypeFunction(value=r):
                 return Right((join_one(l.domain, r.domain), join_one(l.codomain, r.codomain)))
-            
+
             case _:
                 return cannot_unify()
     def _hoist_body_4(l, v1):
         match v1:
             case hydra.core.TypeList(value=r):
                 return Right((join_one(l, r),))
-            
+
             case _:
                 return cannot_unify()
     def _hoist_body_5(l, v1):
         match v1:
             case hydra.core.TypeMap(value=r):
                 return Right((join_one(l.keys, r.keys), join_one(l.values, r.values)))
-            
+
             case _:
                 return cannot_unify()
     def _hoist_body_6(l, v1):
         match v1:
             case hydra.core.TypeMaybe(value=r):
                 return Right((join_one(l, r),))
-            
+
             case _:
                 return cannot_unify()
     def _hoist_body_7(l, v1):
         match v1:
             case hydra.core.TypePair(value=r):
                 return Right((join_one(l.first, r.first), join_one(l.second, r.second)))
-            
+
             case _:
                 return cannot_unify()
     def _hoist_body_8(l, v1):
         match v1:
             case hydra.core.TypeRecord(value=r):
                 return join_row_types(l, r)
-            
+
             case _:
                 return cannot_unify()
     def _hoist_body_9(l, v1):
         match v1:
             case hydra.core.TypeSet(value=r):
                 return Right((join_one(l, r),))
-            
+
             case _:
                 return cannot_unify()
     def _hoist_body_10(l, v1):
         match v1:
             case hydra.core.TypeUnion(value=r):
                 return join_row_types(l, r)
-            
+
             case _:
                 return cannot_unify()
     def _hoist_body_11(v1):
         match v1:
             case hydra.core.TypeUnit():
                 return Right(())
-            
+
             case _:
                 return cannot_unify()
     def _hoist_body_12(l, v1):
         match v1:
             case hydra.core.TypeWrap(value=r):
                 return Right((join_one(l, r),))
-            
+
             case _:
                 return cannot_unify()
     match sleft():
         case hydra.core.TypeApplication(value=l):
             return _hoist_body_1(l, sright())
-        
+
         case hydra.core.TypeEither(value=l2):
             return _hoist_body_2(l2, sright())
-        
+
         case hydra.core.TypeFunction(value=l3):
             return _hoist_body_3(l3, sright())
-        
+
         case hydra.core.TypeList(value=l4):
             return _hoist_body_4(l4, sright())
-        
+
         case hydra.core.TypeLiteral():
             return assert_equal()
-        
+
         case hydra.core.TypeMap(value=l5):
             return _hoist_body_5(l5, sright())
-        
+
         case hydra.core.TypeMaybe(value=l6):
             return _hoist_body_6(l6, sright())
-        
+
         case hydra.core.TypePair(value=l7):
             return _hoist_body_7(l7, sright())
-        
+
         case hydra.core.TypeRecord(value=l8):
             return _hoist_body_8(l8, sright())
-        
+
         case hydra.core.TypeSet(value=l9):
             return _hoist_body_9(l9, sright())
-        
+
         case hydra.core.TypeUnion(value=l10):
             return _hoist_body_10(l10, sright())
-        
+
         case hydra.core.TypeUnit():
             return _hoist_body_11(sright())
-        
+
         case hydra.core.TypeWrap(value=l11):
             return _hoist_body_12(l11, sright())
-        
+
         case _:
             return cannot_unify()
 
 def variable_occurs_in_type(var: hydra.core.Name, typ0: hydra.core.Type) -> bool:
     r"""Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables."""
-    
+
     def try_type(b: bool, typ: hydra.core.Type) -> bool:
         match typ:
             case hydra.core.TypeVariable(value=v):
                 return hydra.lib.logic.or_(b, hydra.lib.equality.equal(v.value, var.value))
-            
+
             case _:
                 return b
     return hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda x1, x2: try_type(x1, x2)), False, typ0)
@@ -192,7 +192,7 @@ def unify_type_constraints(cx: hydra.context.Context, schema_types: FrozenDict[h
       * Unify(∅) = I (the identity substitution x ↦ x)
       * Unify({(x, x)} ∪ E) = Unify(E)
       * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))."""
-    
+
     def with_constraint(c: hydra.typing.TypeConstraint, rest: frozenlist[hydra.typing.TypeConstraint]):
         @lru_cache(1)
         def sleft() -> hydra.core.Type:
@@ -220,20 +220,20 @@ def unify_type_constraints(cx: hydra.context.Context, schema_types: FrozenDict[h
             match sright():
                 case hydra.core.TypeVariable(value=name):
                     return try_binding(name, sleft())
-                
+
                 case _:
                     return no_vars()
         def _hoist_body_1(name, v1):
             match v1:
                 case hydra.core.TypeVariable(value=name2):
                     return hydra.lib.logic.if_else(hydra.lib.equality.equal(name.value, name2.value), (lambda : unify_type_constraints(cx, schema_types, rest)), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(name, schema_types)), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(name2, schema_types)), (lambda : Left(hydra.context.InContext(hydra.error.UnificationError(sleft(), sright(), hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Attempted to unify schema names ", name.value), " and "), name2.value), " ("), comment), ")")), cx))), (lambda : bind(name2, sleft())))), (lambda : bind(name, sright())))))
-                
+
                 case _:
                     return try_binding(name, sright())
         match sleft():
             case hydra.core.TypeVariable(value=name):
                 return _hoist_body_1(name, sright())
-            
+
             case _:
                 return dflt()
     return hydra.lib.logic.if_else(hydra.lib.lists.null(constraints), (lambda : Right(hydra.substitution.id_type_subst())), (lambda : with_constraint(hydra.lib.lists.head(constraints), hydra.lib.lists.tail(constraints))))

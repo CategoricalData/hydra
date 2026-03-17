@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class FunctionalObjectProperty implements Serializable, Comparable<FunctionalObjectProperty> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.FunctionalObjectProperty");
-  
+
   public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
-  
+
   public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
-  
+
   public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
-  
+
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
-  
+
   public FunctionalObjectProperty (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
     this.annotations = annotations;
     this.property = property;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof FunctionalObjectProperty)) {
@@ -32,12 +32,12 @@ public class FunctionalObjectProperty implements Serializable, Comparable<Functi
       this.property,
       o.property);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(property);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(FunctionalObjectProperty other) {
@@ -48,11 +48,11 @@ public class FunctionalObjectProperty implements Serializable, Comparable<Functi
     }
     return ((Comparable) property).compareTo(other.property);
   }
-  
+
   public FunctionalObjectProperty withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new FunctionalObjectProperty(annotations, property);
   }
-  
+
   public FunctionalObjectProperty withProperty(hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
     return new FunctionalObjectProperty(annotations, property);
   }

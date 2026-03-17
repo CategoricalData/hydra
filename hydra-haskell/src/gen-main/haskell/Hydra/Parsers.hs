@@ -20,7 +20,7 @@ import qualified Data.Set as S
 -- | Try the first parser; if it fails without consuming input, try the second
 alt :: Parsing.Parser t0 -> Parsing.Parser t0 -> Parsing.Parser t0
 alt p1 p2 =
-     
+
       let parse =
               \input -> (\x -> case x of
                 Parsing.ParseResultSuccess v0 -> Parsing.ParseResultSuccess v0
@@ -34,7 +34,7 @@ anyChar = satisfy (\_ -> True)
 -- | Apply a parser containing a function to a parser containing a value
 apply :: Parsing.Parser (t0 -> t1) -> Parsing.Parser t0 -> Parsing.Parser t1
 apply pf pa =
-     
+
       let parse =
               \input -> (\x -> case x of
                 Parsing.ParseResultSuccess v0 -> (\x -> case x of
@@ -52,7 +52,7 @@ between open close p = bind open (\_ -> bind p (\x -> bind close (\_ -> pure x))
 -- | Sequence two parsers, passing the result of the first to a function that produces the second
 bind :: Parsing.Parser t0 -> (t0 -> Parsing.Parser t1) -> Parsing.Parser t1
 bind pa f =
-     
+
       let parse =
               \input -> (\x -> case x of
                 Parsing.ParseResultSuccess v0 -> Parsing.unParser (f (Parsing.parseSuccessValue v0)) (Parsing.parseSuccessRemainder v0)
@@ -94,7 +94,7 @@ many p = alt (some p) (pure [])
 -- | Apply a function to the result of a parser
 map :: (t0 -> t1) -> Parsing.Parser t0 -> Parsing.Parser t1
 map f pa =
-     
+
       let parse =
               \input -> (\x -> case x of
                 Parsing.ParseResultSuccess v0 -> Parsing.ParseResultSuccess (Parsing.ParseSuccess {
@@ -121,13 +121,13 @@ runParser p input = Parsing.unParser p input
 -- | Parse a character (codepoint) that satisfies the given predicate
 satisfy :: (Int -> Bool) -> Parsing.Parser Int
 satisfy pred =
-     
+
       let parse =
-              \input ->  
+              \input ->
                 let codes = Strings.toList input
                 in (Maybes.maybe (Parsing.ParseResultFailure (Parsing.ParseError {
                   Parsing.parseErrorMessage = "unexpected end of input",
-                  Parsing.parseErrorRemainder = input})) (\c ->  
+                  Parsing.parseErrorRemainder = input})) (\c ->
                   let rest = Strings.fromList (Lists.drop 1 codes)
                   in (Logic.ifElse (pred c) (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
                     Parsing.parseSuccessValue = c,
@@ -151,8 +151,8 @@ some p = bind p (\x -> bind (many p) (\xs -> pure (Lists.cons x xs)))
 -- | Parse a specific string
 string :: String -> Parsing.Parser String
 string str =
-    Parsing.Parser (\input ->  
-      let strCodes = Strings.toList str 
+    Parsing.Parser (\input ->
+      let strCodes = Strings.toList str
           inputCodes = Strings.toList input
           strLen = Lists.length strCodes
           inputPrefix = Lists.take strLen inputCodes

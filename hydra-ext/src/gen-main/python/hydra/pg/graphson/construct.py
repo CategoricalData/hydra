@@ -26,12 +26,12 @@ T2 = TypeVar("T2")
 
 def edge_property_to_graphson(encode_value: Callable[[T0], Either[T1, T2]], prop: tuple[hydra.pg.model.PropertyKey, T0]) -> Either[T1, tuple[hydra.pg.graphson.syntax.PropertyKey, T1]]:
     r"""Convert a property graph edge property to a GraphSON property."""
-    
+
     return hydra.lib.eithers.map((lambda gv: (hydra.pg.graphson.syntax.PropertyKey(hydra.lib.pairs.first(prop).value), gv)), encode_value(hydra.lib.pairs.second(prop)))
 
 def adjacent_edge_to_graphson(encode_value: Callable[[T0], Either[T1, hydra.pg.graphson.syntax.Value]], edge: hydra.pg.model.AdjacentEdge[T0]) -> Either[hydra.pg.graphson.syntax.Value, tuple[hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge]]:
     r"""Convert a property graph adjacent edge to a GraphSON adjacent edge."""
-    
+
     @lru_cache(1)
     def label() -> hydra.pg.model.EdgeLabel:
         return edge.label
@@ -48,23 +48,23 @@ def adjacent_edge_to_graphson(encode_value: Callable[[T0], Either[T1, hydra.pg.g
 
 def aggregate_map(pairs: frozenlist[tuple[T0, T1]]) -> FrozenDict[T0, frozenlist[tuple[T0, T1]]]:
     r"""Aggregate a list of key-value pairs into a map where each key maps to a list of values."""
-    
+
     return hydra.lib.lists.foldl((lambda m, p: (k := hydra.lib.pairs.first(p), v := hydra.lib.pairs.second(p), existing := hydra.lib.maps.lookup(k, m), hydra.lib.maps.insert(k, hydra.lib.maybes.maybe((lambda : hydra.lib.lists.pure(v)), (lambda vs: hydra.lib.lists.cons(v, vs)), existing), m))[3]), hydra.lib.maps.empty(), pairs)
 
 @lru_cache(1)
 def graphson_vertex_to_json_coder() -> hydra.util.Coder[hydra.pg.graphson.syntax.Vertex, hydra.json.model.Value]:
     r"""A coder that converts GraphSON vertices to JSON. Decoding is not supported."""
-    
+
     return hydra.util.Coder((lambda _cx, v: Right(hydra.pg.graphson.coder.vertex_to_json(v))), (lambda _cx, _: Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("decoding GraphSON JSON is currently unsupported"))), _cx))))
 
 def vertex_property_to_graphson(encode_value: Callable[[T0], Either[T1, hydra.pg.graphson.syntax.Value]], prop: tuple[hydra.pg.model.PropertyKey, T0]) -> Either[T1, tuple[hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.VertexPropertyValue]]:
     r"""Convert a property graph vertex property to a GraphSON vertex property."""
-    
+
     return hydra.lib.eithers.map((lambda gv: (hydra.pg.graphson.syntax.PropertyKey(hydra.lib.pairs.first(prop).value), hydra.pg.graphson.syntax.VertexPropertyValue(Nothing(), gv))), encode_value(hydra.lib.pairs.second(prop)))
 
 def pg_vertex_with_adjacent_edges_to_graphson_vertex(encode_value: Callable[[T0], Either[T1, hydra.pg.graphson.syntax.Value]], vae: hydra.pg.model.VertexWithAdjacentEdges[T0]) -> Either[hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.Vertex]:
     r"""Convert a property graph vertex with adjacent edges to a GraphSON vertex."""
-    
+
     @lru_cache(1)
     def vertex() -> hydra.pg.model.Vertex[T0]:
         return vae.vertex
@@ -87,5 +87,5 @@ def pg_vertex_with_adjacent_edges_to_graphson_vertex(encode_value: Callable[[T0]
 
 def pg_vertex_with_adjacent_edges_to_json(encode_value: Callable[[T0], Either[T1, hydra.pg.graphson.syntax.Value]], vertex: hydra.pg.model.VertexWithAdjacentEdges[T0]) -> Either[hydra.pg.graphson.syntax.Vertex, hydra.json.model.Value]:
     r"""Convert a property graph vertex with adjacent edges to JSON."""
-    
+
     return hydra.lib.eithers.bind(pg_vertex_with_adjacent_edges_to_graphson_vertex(encode_value, vertex), (lambda g_vertex: Right(hydra.pg.graphson.coder.vertex_to_json(g_vertex))))

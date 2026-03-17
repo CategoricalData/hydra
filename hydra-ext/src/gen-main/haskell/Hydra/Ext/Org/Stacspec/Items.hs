@@ -15,7 +15,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | An Asset is an object that contains a URI to data associated with the Item that can be downloaded or streamed. It is allowed to add additional fields.
-data Asset = 
+data Asset =
   Asset {
     -- | URI to the asset object. Relative and absolute URI are both allowed.
     assetHref :: Uri,
@@ -42,7 +42,7 @@ _Asset_type = Core.Name "type"
 _Asset_roles = Core.Name "roles"
 
 -- | This object describes a STAC Item. The fields id, type, bbox, geometry and properties are inherited from GeoJSON.
-data Item = 
+data Item =
   Item {
     itemFeature :: Model.Feature,
     -- | The STAC version the Item implements
@@ -72,7 +72,7 @@ _Item_assets = Core.Name "assets"
 _Item_collection = Core.Name "collection"
 
 -- | This object describes a relationship with another entity. Data providers are advised to be liberal with the links section, to describe things like the Catalog an Item is in, related Items, parent or child Items (modeled in different ways, like an 'acquisition' or derived data). It is allowed to add additional fields such as a title and type.
-data Link = 
+data Link =
   Link {
     -- | The actual link in the format of an URL. Relative and absolute links are both allowed.
     linkHref :: Url,
@@ -94,7 +94,7 @@ _Link_type = Core.Name "type"
 
 _Link_title = Core.Name "title"
 
-newtype MediaType = 
+newtype MediaType =
   MediaType {
     unMediaType :: String}
   deriving (Eq, Ord, Read, Show)
@@ -102,7 +102,7 @@ newtype MediaType =
 _MediaType = Core.Name "hydra.ext.org.stacspec.items.MediaType"
 
 -- | STAC Items use a variety of rel types in the link object, to describe the exact nature of the link between this Item and the entity it is linking to. It is recommended to use the official IANA Link Relation Types where possible. The following table explains places where STAC use custom rel types are used with Items. This happens where there is not a clear official option, or where STAC uses an official type but adds additional meaning for the STAC context.
-data RelationType = 
+data RelationType =
   RelationTypeIana Linkrelations.LinkRelationType |
   RelationTypeStac StacRelationType |
   RelationTypeOther String
@@ -117,7 +117,7 @@ _RelationType_stac = Core.Name "stac"
 _RelationType_other = Core.Name "other"
 
 -- | The roles field is used to describe the purpose of each asset. It is recommended to include one for every asset, to give users a sense of why they might want to make use of the asset. There are some emerging standards that enable clients to take particular action when they encounter particular roles, listed below. But implementors are encouraged to come up with their own terms to describe the role.
-data Role = 
+data Role =
   -- | An asset that represents a thumbnail of the Item, typically a true color image (for Items with assets in the visible wavelengths), lower-resolution (typically smaller 600x600 pixels), and typically a JPEG or PNG (suitable for display in a web browser). Multiple assets may have this purpose, but it recommended that the type and roles be unique tuples. For example, Sentinel-2 L2A provides thumbnail images in both JPEG and JPEG2000 formats, and would be distinguished by their media types.
   RoleThumbnail  |
   -- | An asset that represents a possibly larger view than the thumbnail of the Item, for example, a true color composite of multi-band data.
@@ -141,7 +141,7 @@ _Role_metadata = Core.Name "metadata"
 
 _Role_other = Core.Name "other"
 
-data StacRelationType = 
+data StacRelationType =
   -- | STRONGLY RECOMMENDED. Absolute URL to the Item if it is available at a public URL. This is particularly useful when in a download package that includes metadata, so that the downstream user can know where the data has come from.
   StacRelationTypeSelf  |
   -- | URL to the root STAC entity (Catalog or Collection).
@@ -151,7 +151,7 @@ data StacRelationType =
   -- | STRONGLY RECOMMENDED. URL to a Collection. Absolute URLs should be used whenever possible. The referenced Collection is STRONGLY RECOMMENDED to implement the same STAC version as the Item. A link with this rel type is required if the collection field in properties is present.
   StacRelationTypeCollection  |
   -- | URL to a STAC Item that was used as input data in the creation of this Item.
-  StacRelationTypeDerivedFrom 
+  StacRelationTypeDerivedFrom
   deriving (Eq, Ord, Read, Show)
 
 _StacRelationType = Core.Name "hydra.ext.org.stacspec.items.StacRelationType"
@@ -166,21 +166,21 @@ _StacRelationType_collection = Core.Name "collection"
 
 _StacRelationType_derivedFrom = Core.Name "derivedFrom"
 
-newtype StacVersion = 
+newtype StacVersion =
   StacVersion {
     unStacVersion :: String}
   deriving (Eq, Ord, Read, Show)
 
 _StacVersion = Core.Name "hydra.ext.org.stacspec.items.StacVersion"
 
-newtype Uri = 
+newtype Uri =
   Uri {
     unUri :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Uri = Core.Name "hydra.ext.org.stacspec.items.Uri"
 
-newtype Url = 
+newtype Url =
   Url {
     unUrl :: String}
   deriving (Eq, Ord, Read, Show)

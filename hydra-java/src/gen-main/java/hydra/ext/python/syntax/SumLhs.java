@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class SumLhs implements Serializable, Comparable<SumLhs> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.SumLhs");
-  
+
   public static final hydra.core.Name OPERAND = new hydra.core.Name("operand");
-  
+
   public static final hydra.core.Name OPERATOR = new hydra.core.Name("operator");
-  
+
   public final hydra.ext.python.syntax.Sum operand;
-  
+
   public final hydra.ext.python.syntax.SumOp operator;
-  
+
   public SumLhs (hydra.ext.python.syntax.Sum operand, hydra.ext.python.syntax.SumOp operator) {
     this.operand = operand;
     this.operator = operator;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof SumLhs)) {
@@ -32,12 +32,12 @@ public class SumLhs implements Serializable, Comparable<SumLhs> {
       this.operator,
       o.operator);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(operand) + 3 * java.util.Objects.hashCode(operator);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SumLhs other) {
@@ -48,11 +48,11 @@ public class SumLhs implements Serializable, Comparable<SumLhs> {
     }
     return ((Comparable) operator).compareTo(other.operator);
   }
-  
+
   public SumLhs withOperand(hydra.ext.python.syntax.Sum operand) {
     return new SumLhs(operand, operator);
   }
-  
+
   public SumLhs withOperator(hydra.ext.python.syntax.SumOp operator) {
     return new SumLhs(operand, operator);
   }

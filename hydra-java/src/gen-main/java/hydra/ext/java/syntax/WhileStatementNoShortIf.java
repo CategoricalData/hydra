@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class WhileStatementNoShortIf implements Serializable, Comparable<WhileStatementNoShortIf> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.WhileStatementNoShortIf");
-  
+
   public static final hydra.core.Name COND = new hydra.core.Name("cond");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.Expression> cond;
-  
+
   public final hydra.ext.java.syntax.StatementNoShortIf body;
-  
+
   public WhileStatementNoShortIf (hydra.util.Maybe<hydra.ext.java.syntax.Expression> cond, hydra.ext.java.syntax.StatementNoShortIf body) {
     this.cond = cond;
     this.body = body;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof WhileStatementNoShortIf)) {
@@ -32,12 +32,12 @@ public class WhileStatementNoShortIf implements Serializable, Comparable<WhileSt
       this.body,
       o.body);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(cond) + 3 * java.util.Objects.hashCode(body);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(WhileStatementNoShortIf other) {
@@ -48,11 +48,11 @@ public class WhileStatementNoShortIf implements Serializable, Comparable<WhileSt
     }
     return ((Comparable) body).compareTo(other.body);
   }
-  
+
   public WhileStatementNoShortIf withCond(hydra.util.Maybe<hydra.ext.java.syntax.Expression> cond) {
     return new WhileStatementNoShortIf(cond, body);
   }
-  
+
   public WhileStatementNoShortIf withBody(hydra.ext.java.syntax.StatementNoShortIf body) {
     return new WhileStatementNoShortIf(cond, body);
   }

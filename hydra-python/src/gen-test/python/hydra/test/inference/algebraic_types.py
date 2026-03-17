@@ -62,5 +62,5 @@ def test_group_for_sets() -> hydra.testing.TestGroup:
 @lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""Algebraic data type tests."""
-    
+
     return hydra.testing.TestGroup("Algebraic terms", Nothing(), (test_group_for_collection_primitives(), test_group_for_eithers(), test_group_for_folds(), test_group_for_lists(), test_group_for_maps(), test_group_for_optionals(), test_group_for_pairs(), test_group_for_sets()), ())

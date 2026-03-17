@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class TopologicalSortBindingsTestCase implements Serializable, Comparable<TopologicalSortBindingsTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TopologicalSortBindingsTestCase");
-  
+
   public static final hydra.core.Name BINDINGS = new hydra.core.Name("bindings");
-  
+
   public static final hydra.core.Name EXPECTED = new hydra.core.Name("expected");
-  
+
   /**
    * The bindings as a list of (name, term) pairs
    */
   public final hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>> bindings;
-  
+
   /**
    * The expected groups of bindings in topological order
    */
   public final hydra.util.ConsList<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>> expected;
-  
+
   public TopologicalSortBindingsTestCase (hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>> bindings, hydra.util.ConsList<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>> expected) {
     this.bindings = bindings;
     this.expected = expected;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TopologicalSortBindingsTestCase)) {
@@ -41,12 +41,12 @@ public class TopologicalSortBindingsTestCase implements Serializable, Comparable
       this.expected,
       o.expected);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(bindings) + 3 * java.util.Objects.hashCode(expected);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TopologicalSortBindingsTestCase other) {
@@ -57,11 +57,11 @@ public class TopologicalSortBindingsTestCase implements Serializable, Comparable
     }
     return ((Comparable) expected).compareTo(other.expected);
   }
-  
+
   public TopologicalSortBindingsTestCase withBindings(hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>> bindings) {
     return new TopologicalSortBindingsTestCase(bindings, expected);
   }
-  
+
   public TopologicalSortBindingsTestCase withExpected(hydra.util.ConsList<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>> expected) {
     return new TopologicalSortBindingsTestCase(bindings, expected);
   }

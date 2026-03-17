@@ -14,5 +14,5 @@ import hydra.testing
 @lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""The group of all hoisting tests."""
-    
+
     return hydra.testing.TestGroup("hoisting", Nothing(), (hydra.test.hoisting.cases.all_tests(), hydra.test.hoisting.let.all_tests()), ())

@@ -9,20 +9,20 @@ import java.io.Serializable;
  */
 public class LazyGraph<V> implements Serializable, Comparable<LazyGraph<V>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.LazyGraph");
-  
+
   public static final hydra.core.Name VERTICES = new hydra.core.Name("vertices");
-  
+
   public static final hydra.core.Name EDGES = new hydra.core.Name("edges");
-  
+
   public final hydra.util.ConsList<hydra.pg.model.Vertex<V>> vertices;
-  
+
   public final hydra.util.ConsList<hydra.pg.model.Edge<V>> edges;
-  
+
   public LazyGraph (hydra.util.ConsList<hydra.pg.model.Vertex<V>> vertices, hydra.util.ConsList<hydra.pg.model.Edge<V>> edges) {
     this.vertices = vertices;
     this.edges = edges;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof LazyGraph)) {
@@ -35,12 +35,12 @@ public class LazyGraph<V> implements Serializable, Comparable<LazyGraph<V>> {
       this.edges,
       o.edges);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(vertices) + 3 * java.util.Objects.hashCode(edges);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LazyGraph other) {
@@ -51,11 +51,11 @@ public class LazyGraph<V> implements Serializable, Comparable<LazyGraph<V>> {
     }
     return ((Comparable) edges).compareTo(other.edges);
   }
-  
+
   public LazyGraph withVertices(hydra.util.ConsList<hydra.pg.model.Vertex<V>> vertices) {
     return new LazyGraph(vertices, edges);
   }
-  
+
   public LazyGraph withEdges(hydra.util.ConsList<hydra.pg.model.Edge<V>> edges) {
     return new LazyGraph(vertices, edges);
   }

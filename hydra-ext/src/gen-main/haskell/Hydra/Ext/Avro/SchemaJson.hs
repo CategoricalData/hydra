@@ -232,7 +232,7 @@ decodeSchema cx v = decodeSchema cx v
 -- | Extract annotation entries (keys starting with @) from a JSON object map
 getAnnotations :: M.Map String t0 -> M.Map String t0
 getAnnotations m =
-    Maps.fromList (Maybes.cat (Lists.map (\entry ->  
-      let k = Pairs.first entry 
+    Maps.fromList (Maybes.cat (Lists.map (\entry ->
+      let k = Pairs.first entry
           v = Pairs.second entry
       in (Logic.ifElse (Equality.equal (Strings.charAt 0 k) 64) (Maybes.pure (Strings.fromList (Lists.drop 1 (Strings.toList k)), v)) Nothing)) (Maps.toList m)))

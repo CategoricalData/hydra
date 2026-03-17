@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class BracketExpr implements Serializable, Comparable<BracketExpr> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ast.BracketExpr");
-  
+
   public static final hydra.core.Name BRACKETS = new hydra.core.Name("brackets");
-  
+
   public static final hydra.core.Name ENCLOSED = new hydra.core.Name("enclosed");
-  
+
   public static final hydra.core.Name STYLE = new hydra.core.Name("style");
-  
+
   /**
    * The bracket pair enclosing the expression
    */
   public final hydra.ast.Brackets brackets;
-  
+
   /**
    * The expression within the brackets
    */
   public final hydra.ast.Expr enclosed;
-  
+
   /**
    * The formatting style for the bracketed block
    */
   public final hydra.ast.BlockStyle style;
-  
+
   public BracketExpr (hydra.ast.Brackets brackets, hydra.ast.Expr enclosed, hydra.ast.BlockStyle style) {
     this.brackets = brackets;
     this.enclosed = enclosed;
     this.style = style;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof BracketExpr)) {
@@ -51,12 +51,12 @@ public class BracketExpr implements Serializable, Comparable<BracketExpr> {
       this.style,
       o.style);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(brackets) + 3 * java.util.Objects.hashCode(enclosed) + 5 * java.util.Objects.hashCode(style);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(BracketExpr other) {
@@ -71,15 +71,15 @@ public class BracketExpr implements Serializable, Comparable<BracketExpr> {
     }
     return ((Comparable) style).compareTo(other.style);
   }
-  
+
   public BracketExpr withBrackets(hydra.ast.Brackets brackets) {
     return new BracketExpr(brackets, enclosed, style);
   }
-  
+
   public BracketExpr withEnclosed(hydra.ast.Expr enclosed) {
     return new BracketExpr(brackets, enclosed, style);
   }
-  
+
   public BracketExpr withStyle(hydra.ast.BlockStyle style) {
     return new BracketExpr(brackets, enclosed, style);
   }

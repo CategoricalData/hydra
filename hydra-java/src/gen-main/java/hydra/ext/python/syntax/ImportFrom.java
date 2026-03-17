@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class ImportFrom implements Serializable, Comparable<ImportFrom> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ImportFrom");
-  
+
   public static final hydra.core.Name PREFIXES = new hydra.core.Name("prefixes");
-  
+
   public static final hydra.core.Name DOTTED_NAME = new hydra.core.Name("dottedName");
-  
+
   public static final hydra.core.Name TARGETS = new hydra.core.Name("targets");
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.RelativeImportPrefix> prefixes;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.DottedName> dottedName;
-  
+
   public final hydra.ext.python.syntax.ImportFromTargets targets;
-  
+
   public ImportFrom (hydra.util.ConsList<hydra.ext.python.syntax.RelativeImportPrefix> prefixes, hydra.util.Maybe<hydra.ext.python.syntax.DottedName> dottedName, hydra.ext.python.syntax.ImportFromTargets targets) {
     this.prefixes = prefixes;
     this.dottedName = dottedName;
     this.targets = targets;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ImportFrom)) {
@@ -39,12 +39,12 @@ public class ImportFrom implements Serializable, Comparable<ImportFrom> {
       this.targets,
       o.targets);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(prefixes) + 3 * java.util.Objects.hashCode(dottedName) + 5 * java.util.Objects.hashCode(targets);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ImportFrom other) {
@@ -59,15 +59,15 @@ public class ImportFrom implements Serializable, Comparable<ImportFrom> {
     }
     return ((Comparable) targets).compareTo(other.targets);
   }
-  
+
   public ImportFrom withPrefixes(hydra.util.ConsList<hydra.ext.python.syntax.RelativeImportPrefix> prefixes) {
     return new ImportFrom(prefixes, dottedName, targets);
   }
-  
+
   public ImportFrom withDottedName(hydra.util.Maybe<hydra.ext.python.syntax.DottedName> dottedName) {
     return new ImportFrom(prefixes, dottedName, targets);
   }
-  
+
   public ImportFrom withTargets(hydra.ext.python.syntax.ImportFromTargets targets) {
     return new ImportFrom(prefixes, dottedName, targets);
   }

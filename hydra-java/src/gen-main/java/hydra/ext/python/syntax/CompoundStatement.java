@@ -6,92 +6,92 @@ import java.io.Serializable;
 
 public abstract class CompoundStatement implements Serializable, Comparable<CompoundStatement> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.CompoundStatement");
-  
+
   public static final hydra.core.Name FUNCTION = new hydra.core.Name("function");
-  
+
   public static final hydra.core.Name IF = new hydra.core.Name("if");
-  
+
   public static final hydra.core.Name CLASS_DEF = new hydra.core.Name("classDef");
-  
+
   public static final hydra.core.Name WITH = new hydra.core.Name("with");
-  
+
   public static final hydra.core.Name FOR = new hydra.core.Name("for");
-  
+
   public static final hydra.core.Name TRY = new hydra.core.Name("try");
-  
+
   public static final hydra.core.Name WHILE = new hydra.core.Name("while");
-  
+
   public static final hydra.core.Name MATCH = new hydra.core.Name("match");
-  
+
   private CompoundStatement () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Function instance) ;
-    
+
     R visit(If instance) ;
-    
+
     R visit(ClassDef instance) ;
-    
+
     R visit(With instance) ;
-    
+
     R visit(For instance) ;
-    
+
     R visit(Try instance) ;
-    
+
     R visit(While instance) ;
-    
+
     R visit(Match instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(CompoundStatement instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Function instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(If instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ClassDef instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(With instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(For instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Try instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(While instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Match instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Function extends hydra.ext.python.syntax.CompoundStatement implements Serializable {
     public final hydra.ext.python.syntax.FunctionDefinition value;
-    
+
     public Function (hydra.ext.python.syntax.FunctionDefinition value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Function)) {
@@ -102,12 +102,12 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
@@ -118,20 +118,20 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
       Function o = (Function) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class If extends hydra.ext.python.syntax.CompoundStatement implements Serializable {
     public final hydra.ext.python.syntax.IfStatement value;
-    
+
     public If (hydra.ext.python.syntax.IfStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof If)) {
@@ -142,12 +142,12 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
@@ -158,20 +158,20 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
       If o = (If) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ClassDef extends hydra.ext.python.syntax.CompoundStatement implements Serializable {
     public final hydra.ext.python.syntax.ClassDefinition value;
-    
+
     public ClassDef (hydra.ext.python.syntax.ClassDefinition value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ClassDef)) {
@@ -182,12 +182,12 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
@@ -198,20 +198,20 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
       ClassDef o = (ClassDef) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class With extends hydra.ext.python.syntax.CompoundStatement implements Serializable {
     public final hydra.ext.python.syntax.WithStatement value;
-    
+
     public With (hydra.ext.python.syntax.WithStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof With)) {
@@ -222,12 +222,12 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
@@ -238,20 +238,20 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
       With o = (With) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class For extends hydra.ext.python.syntax.CompoundStatement implements Serializable {
     public final hydra.ext.python.syntax.ForStatement value;
-    
+
     public For (hydra.ext.python.syntax.ForStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof For)) {
@@ -262,12 +262,12 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
@@ -278,20 +278,20 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
       For o = (For) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Try extends hydra.ext.python.syntax.CompoundStatement implements Serializable {
     public final hydra.ext.python.syntax.TryStatement value;
-    
+
     public Try (hydra.ext.python.syntax.TryStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Try)) {
@@ -302,12 +302,12 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
@@ -318,20 +318,20 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
       Try o = (Try) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class While extends hydra.ext.python.syntax.CompoundStatement implements Serializable {
     public final hydra.ext.python.syntax.WhileStatement value;
-    
+
     public While (hydra.ext.python.syntax.WhileStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof While)) {
@@ -342,12 +342,12 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
@@ -358,20 +358,20 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
       While o = (While) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Match extends hydra.ext.python.syntax.CompoundStatement implements Serializable {
     public final hydra.ext.python.syntax.MatchStatement value;
-    
+
     public Match (hydra.ext.python.syntax.MatchStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Match)) {
@@ -382,12 +382,12 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
@@ -398,7 +398,7 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
       Match o = (Match) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

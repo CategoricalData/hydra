@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class TypedPattern implements Serializable, Comparable<TypedPattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.TypedPattern");
-  
+
   public static final hydra.core.Name INNER = new hydra.core.Name("inner");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   /**
    * The inner pattern
    */
   public final hydra.ext.haskell.ast.Pattern inner;
-  
+
   /**
    * The type annotation
    */
   public final hydra.ext.haskell.ast.Type type;
-  
+
   public TypedPattern (hydra.ext.haskell.ast.Pattern inner, hydra.ext.haskell.ast.Type type) {
     this.inner = inner;
     this.type = type;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TypedPattern)) {
@@ -41,12 +41,12 @@ public class TypedPattern implements Serializable, Comparable<TypedPattern> {
       this.type,
       o.type);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(inner) + 3 * java.util.Objects.hashCode(type);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TypedPattern other) {
@@ -57,11 +57,11 @@ public class TypedPattern implements Serializable, Comparable<TypedPattern> {
     }
     return ((Comparable) type).compareTo(other.type);
   }
-  
+
   public TypedPattern withInner(hydra.ext.haskell.ast.Pattern inner) {
     return new TypedPattern(inner, type);
   }
-  
+
   public TypedPattern withType(hydra.ext.haskell.ast.Type type) {
     return new TypedPattern(inner, type);
   }

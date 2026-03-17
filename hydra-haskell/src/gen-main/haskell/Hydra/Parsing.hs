@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | An error which occurred while parsing
-data ParseError = 
+data ParseError =
   ParseError {
     -- | An error message
     parseErrorMessage :: String,
@@ -28,7 +28,7 @@ _ParseError_message = Core.Name "message"
 _ParseError_remainder = Core.Name "remainder"
 
 -- | The result of a parse operation
-data ParseResult a = 
+data ParseResult a =
   -- | A successful parse, with a value and the remaining unparsed input
   ParseResultSuccess (ParseSuccess a) |
   -- | A failed parse, with an error message and the remaining input
@@ -42,7 +42,7 @@ _ParseResult_success = Core.Name "success"
 _ParseResult_failure = Core.Name "failure"
 
 -- | A successful parse result
-data ParseSuccess a = 
+data ParseSuccess a =
   ParseSuccess {
     -- | The parsed value
     parseSuccessValue :: a,
@@ -57,7 +57,7 @@ _ParseSuccess_value = Core.Name "value"
 _ParseSuccess_remainder = Core.Name "remainder"
 
 -- | A parser which consumes characters from a string and produces a value
-newtype Parser a = 
+newtype Parser a =
   Parser {
     unParser :: (String -> ParseResult a)}
 

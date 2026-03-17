@@ -24,7 +24,7 @@ T2 = TypeVar("T2")
 
 def adjacency_list_to_map(pairs: frozenlist[tuple[T0, frozenlist[T1]]]) -> FrozenDict[T0, frozenlist[tuple[T0, frozenlist[T1]]]]:
     r"""Convert an adjacency list to a map, concatenating values for duplicate keys."""
-    
+
     return hydra.lib.lists.foldl((lambda mp, p: (k := hydra.lib.pairs.first(p), vs := hydra.lib.pairs.second(p), existing := hydra.lib.maybes.maybe((lambda : ()), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(k, mp)), hydra.lib.maps.insert(k, hydra.lib.lists.concat2(existing, vs), mp))[3]), hydra.lib.maps.empty(), pairs)
 
 def create_ordering_isomorphism(source_ord: frozenlist[T0], target_ord: frozenlist[T0]) -> hydra.topology.OrderingIsomorphism[T1]:
@@ -42,7 +42,7 @@ def create_ordering_isomorphism(source_ord: frozenlist[T0], target_ord: frozenli
 
 def find_reachable_nodes(adj: Callable[[T0], frozenset[T0]], root: T0) -> frozenset[T0]:
     r"""Given an adjacency function and a distinguished root node, find all reachable nodes (including the root node)."""
-    
+
     def visit(visited: frozenset[T0], node: T0) -> frozenset[T0]:
         @lru_cache(1)
         def to_visit() -> frozenset[T0]:
@@ -52,7 +52,7 @@ def find_reachable_nodes(adj: Callable[[T0], frozenset[T0]], root: T0) -> frozen
 
 def propagate_tags(edges: frozenlist[tuple[T0, frozenlist[T0]]], node_tags: frozenlist[tuple[T0, frozenlist[T1]]]) -> frozenlist[tuple[T0, frozenset[T1]]]:
     r"""Given a graph as an adjacency list of edges and a list of explicit tags per node, compute the full set of tags for each node by propagating tags through edges. If there is an edge from n1 to n2 and n2 has tag t, then n1 also has tag t. Note: pairs in the output are not ordered."""
-    
+
     @lru_cache(1)
     def adj_map() -> FrozenDict[T0, frozenlist[T0]]:
         return adjacency_list_to_map(edges)
@@ -71,7 +71,7 @@ def propagate_tags(edges: frozenlist[tuple[T0, frozenlist[T0]]], node_tags: froz
 
 def topological_sort_components(pairs: frozenlist[tuple[T0, frozenlist[T0]]]) -> frozenlist[frozenlist[T0]]:
     r"""Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order, i.e. dependencies before dependents."""
-    
+
     @lru_cache(1)
     def graph_result() -> tuple[FrozenDict[int, frozenlist[int]], Callable[[int], T0]]:
         return hydra.tarjan.adjacency_lists_to_graph(pairs)
@@ -82,7 +82,7 @@ def topological_sort_components(pairs: frozenlist[tuple[T0, frozenlist[T0]]]) ->
 
 def topological_sort(pairs: frozenlist[tuple[T0, frozenlist[T0]]]) -> Either[frozenlist[frozenlist[T0]], frozenlist[T0]]:
     r"""Sort a directed acyclic graph (DAG) based on an adjacency list. Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list."""
-    
+
     @lru_cache(1)
     def sccs() -> frozenlist[frozenlist[T0]]:
         return topological_sort_components(pairs)
@@ -95,7 +95,7 @@ def topological_sort(pairs: frozenlist[tuple[T0, frozenlist[T0]]]) -> Either[fro
 
 def topological_sort_nodes(get_key: Callable[[T0], T1], get_adj: Callable[[T0], frozenlist[T1]], nodes: frozenlist[T0]) -> frozenlist[frozenlist[T0]]:
     r"""Sort a directed acyclic graph (DAG) of nodes using two helper functions: one for node keys, and one for the adjacency list of connected node keys. The result is a list of strongly-connected components (cycles), in which singleton lists represent acyclic nodes."""
-    
+
     @lru_cache(1)
     def nodes_by_key() -> FrozenDict[T0, T0]:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda n: (get_key(n), n)), nodes))

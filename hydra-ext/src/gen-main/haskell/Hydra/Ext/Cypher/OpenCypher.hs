@@ -13,7 +13,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-data Query = 
+data Query =
   QueryRegular RegularQuery |
   QueryStandalone StandaloneCall
   deriving (Eq, Ord, Read, Show)
@@ -24,7 +24,7 @@ _Query_regular = Core.Name "regular"
 
 _Query_standalone = Core.Name "standalone"
 
-data RegularQuery = 
+data RegularQuery =
   RegularQuery {
     regularQueryHead :: SingleQuery,
     regularQueryRest :: [Union]}
@@ -36,7 +36,7 @@ _RegularQuery_head = Core.Name "head"
 
 _RegularQuery_rest = Core.Name "rest"
 
-data Union = 
+data Union =
   Union {
     unionAll :: Bool,
     unionQuery :: SingleQuery}
@@ -48,7 +48,7 @@ _Union_all = Core.Name "all"
 
 _Union_query = Core.Name "query"
 
-data SingleQuery = 
+data SingleQuery =
   SingleQuerySinglePart SinglePartQuery |
   SingleQueryMultiPart MultiPartQuery
   deriving (Eq, Ord, Read, Show)
@@ -59,7 +59,7 @@ _SingleQuery_singlePart = Core.Name "singlePart"
 
 _SingleQuery_multiPart = Core.Name "multiPart"
 
-data SinglePartQuery = 
+data SinglePartQuery =
   SinglePartQuery {
     singlePartQueryReading :: [ReadingClause],
     singlePartQueryUpdating :: [UpdatingClause],
@@ -74,7 +74,7 @@ _SinglePartQuery_updating = Core.Name "updating"
 
 _SinglePartQuery_return = Core.Name "return"
 
-data WithClause = 
+data WithClause =
   WithClause {
     withClauseReading :: [ReadingClause],
     withClauseUpdating :: [UpdatingClause],
@@ -89,7 +89,7 @@ _WithClause_updating = Core.Name "updating"
 
 _WithClause_with = Core.Name "with"
 
-data MultiPartQuery = 
+data MultiPartQuery =
   MultiPartQuery {
     multiPartQueryWith :: [WithClause],
     multiPartQueryBody :: SinglePartQuery}
@@ -101,7 +101,7 @@ _MultiPartQuery_with = Core.Name "with"
 
 _MultiPartQuery_body = Core.Name "body"
 
-data UpdatingClause = 
+data UpdatingClause =
   UpdatingClauseCreate Create |
   UpdatingClauseMerge Merge |
   UpdatingClauseDelete Delete |
@@ -121,7 +121,7 @@ _UpdatingClause_set = Core.Name "set"
 
 _UpdatingClause_remove = Core.Name "remove"
 
-data ReadingClause = 
+data ReadingClause =
   ReadingClauseMatch Match |
   ReadingClauseUnwind Unwind |
   ReadingClauseInQueryCall InQueryCall
@@ -135,7 +135,7 @@ _ReadingClause_unwind = Core.Name "unwind"
 
 _ReadingClause_inQueryCall = Core.Name "inQueryCall"
 
-data Match = 
+data Match =
   Match {
     matchOptional :: Bool,
     matchPattern :: Pattern,
@@ -150,7 +150,7 @@ _Match_pattern = Core.Name "pattern"
 
 _Match_where = Core.Name "where"
 
-data Unwind = 
+data Unwind =
   Unwind {
     unwindExpression :: Expression,
     unwindVariable :: Variable}
@@ -162,7 +162,7 @@ _Unwind_expression = Core.Name "expression"
 
 _Unwind_variable = Core.Name "variable"
 
-data Merge = 
+data Merge =
   Merge {
     mergePatternPart :: PatternPart,
     mergeActions :: [MergeAction]}
@@ -174,9 +174,9 @@ _Merge_patternPart = Core.Name "patternPart"
 
 _Merge_actions = Core.Name "actions"
 
-data MatchOrCreate = 
+data MatchOrCreate =
   MatchOrCreateMatch  |
-  MatchOrCreateCreate 
+  MatchOrCreateCreate
   deriving (Eq, Ord, Read, Show)
 
 _MatchOrCreate = Core.Name "hydra.ext.cypher.openCypher.MatchOrCreate"
@@ -185,7 +185,7 @@ _MatchOrCreate_match = Core.Name "match"
 
 _MatchOrCreate_create = Core.Name "create"
 
-data MergeAction = 
+data MergeAction =
   MergeAction {
     mergeActionAction :: MatchOrCreate,
     mergeActionSet :: Set}
@@ -197,21 +197,21 @@ _MergeAction_action = Core.Name "action"
 
 _MergeAction_set = Core.Name "set"
 
-newtype Create = 
+newtype Create =
   Create {
     unCreate :: Pattern}
   deriving (Eq, Ord, Read, Show)
 
 _Create = Core.Name "hydra.ext.cypher.openCypher.Create"
 
-newtype Set = 
+newtype Set =
   Set {
     unSet :: [SetItem]}
   deriving (Eq, Ord, Read, Show)
 
 _Set = Core.Name "hydra.ext.cypher.openCypher.Set"
 
-data SetItem = 
+data SetItem =
   SetItemProperty PropertyEquals |
   SetItemVariableEqual VariableEquals |
   SetItemVariablePlusEqual VariablePlusEquals |
@@ -228,7 +228,7 @@ _SetItem_variablePlusEqual = Core.Name "variablePlusEqual"
 
 _SetItem_variableLabels = Core.Name "variableLabels"
 
-data PropertyEquals = 
+data PropertyEquals =
   PropertyEquals {
     propertyEqualsLhs :: PropertyExpression,
     propertyEqualsRhs :: Expression}
@@ -240,7 +240,7 @@ _PropertyEquals_lhs = Core.Name "lhs"
 
 _PropertyEquals_rhs = Core.Name "rhs"
 
-data VariableEquals = 
+data VariableEquals =
   VariableEquals {
     variableEqualsLhs :: Variable,
     variableEqualsRhs :: Expression}
@@ -252,7 +252,7 @@ _VariableEquals_lhs = Core.Name "lhs"
 
 _VariableEquals_rhs = Core.Name "rhs"
 
-data VariablePlusEquals = 
+data VariablePlusEquals =
   VariablePlusEquals {
     variablePlusEqualsLhs :: Variable,
     variablePlusEqualsRhs :: Expression}
@@ -264,7 +264,7 @@ _VariablePlusEquals_lhs = Core.Name "lhs"
 
 _VariablePlusEquals_rhs = Core.Name "rhs"
 
-data VariableAndNodeLabels = 
+data VariableAndNodeLabels =
   VariableAndNodeLabels {
     variableAndNodeLabelsVariable :: Variable,
     variableAndNodeLabelsLabels :: NodeLabels}
@@ -276,7 +276,7 @@ _VariableAndNodeLabels_variable = Core.Name "variable"
 
 _VariableAndNodeLabels_labels = Core.Name "labels"
 
-data Delete = 
+data Delete =
   Delete {
     deleteDetach :: Bool,
     deleteExpressions :: [Expression]}
@@ -288,14 +288,14 @@ _Delete_detach = Core.Name "detach"
 
 _Delete_expressions = Core.Name "expressions"
 
-newtype Remove = 
+newtype Remove =
   Remove {
     unRemove :: [RemoveItem]}
   deriving (Eq, Ord, Read, Show)
 
 _Remove = Core.Name "hydra.ext.cypher.openCypher.Remove"
 
-data RemoveItem = 
+data RemoveItem =
   RemoveItemVariableLabels VariableAndNodeLabels |
   RemoveItemProperty PropertyExpression
   deriving (Eq, Ord, Read, Show)
@@ -306,7 +306,7 @@ _RemoveItem_variableLabels = Core.Name "variableLabels"
 
 _RemoveItem_property = Core.Name "property"
 
-data InQueryCall = 
+data InQueryCall =
   InQueryCall {
     inQueryCallCall :: ExplicitProcedureInvocation,
     inQueryCallYieldItems :: (Maybe YieldItems)}
@@ -318,7 +318,7 @@ _InQueryCall_call = Core.Name "call"
 
 _InQueryCall_yieldItems = Core.Name "yieldItems"
 
-data ProcedureInvocation = 
+data ProcedureInvocation =
   ProcedureInvocationExplicit ExplicitProcedureInvocation |
   ProcedureInvocationImplicit ImplicitProcedureInvocation
   deriving (Eq, Ord, Read, Show)
@@ -329,7 +329,7 @@ _ProcedureInvocation_explicit = Core.Name "explicit"
 
 _ProcedureInvocation_implicit = Core.Name "implicit"
 
-data StarOrYieldItems = 
+data StarOrYieldItems =
   StarOrYieldItemsStar  |
   StarOrYieldItemsItems YieldItems
   deriving (Eq, Ord, Read, Show)
@@ -340,7 +340,7 @@ _StarOrYieldItems_star = Core.Name "star"
 
 _StarOrYieldItems_items = Core.Name "items"
 
-data StandaloneCall = 
+data StandaloneCall =
   StandaloneCall {
     standaloneCallCall :: ProcedureInvocation,
     standaloneCallYieldItems :: (Maybe StarOrYieldItems)}
@@ -352,7 +352,7 @@ _StandaloneCall_call = Core.Name "call"
 
 _StandaloneCall_yieldItems = Core.Name "yieldItems"
 
-data YieldItems = 
+data YieldItems =
   YieldItems {
     yieldItemsItems :: [YieldItem],
     yieldItemsWhere :: (Maybe Where)}
@@ -364,7 +364,7 @@ _YieldItems_items = Core.Name "items"
 
 _YieldItems_where = Core.Name "where"
 
-data YieldItem = 
+data YieldItem =
   YieldItem {
     yieldItemField :: (Maybe ProcedureResultField),
     yieldItemVariable :: Variable}
@@ -376,7 +376,7 @@ _YieldItem_field = Core.Name "field"
 
 _YieldItem_variable = Core.Name "variable"
 
-data With = 
+data With =
   With {
     withProjection :: ProjectionBody,
     withWhere :: (Maybe Where)}
@@ -388,14 +388,14 @@ _With_projection = Core.Name "projection"
 
 _With_where = Core.Name "where"
 
-newtype Return = 
+newtype Return =
   Return {
     unReturn :: ProjectionBody}
   deriving (Eq, Ord, Read, Show)
 
 _Return = Core.Name "hydra.ext.cypher.openCypher.Return"
 
-data ProjectionBody = 
+data ProjectionBody =
   ProjectionBody {
     projectionBodyDistinct :: Bool,
     projectionBodyProjectionItems :: ProjectionItems,
@@ -416,7 +416,7 @@ _ProjectionBody_skip = Core.Name "skip"
 
 _ProjectionBody_limit = Core.Name "limit"
 
-data ProjectionItems = 
+data ProjectionItems =
   ProjectionItems {
     projectionItemsStar :: Bool,
     projectionItemsExplicit :: [ProjectionItem]}
@@ -428,7 +428,7 @@ _ProjectionItems_star = Core.Name "star"
 
 _ProjectionItems_explicit = Core.Name "explicit"
 
-data ProjectionItem = 
+data ProjectionItem =
   ProjectionItem {
     projectionItemExpression :: Expression,
     projectionItemVariable :: (Maybe Variable)}
@@ -440,30 +440,30 @@ _ProjectionItem_expression = Core.Name "expression"
 
 _ProjectionItem_variable = Core.Name "variable"
 
-newtype Order = 
+newtype Order =
   Order {
     unOrder :: [SortItem]}
   deriving (Eq, Ord, Read, Show)
 
 _Order = Core.Name "hydra.ext.cypher.openCypher.Order"
 
-newtype Skip = 
+newtype Skip =
   Skip {
     unSkip :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _Skip = Core.Name "hydra.ext.cypher.openCypher.Skip"
 
-newtype Limit = 
+newtype Limit =
   Limit {
     unLimit :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _Limit = Core.Name "hydra.ext.cypher.openCypher.Limit"
 
-data SortOrder = 
+data SortOrder =
   SortOrderAscending  |
-  SortOrderDescending 
+  SortOrderDescending
   deriving (Eq, Ord, Read, Show)
 
 _SortOrder = Core.Name "hydra.ext.cypher.openCypher.SortOrder"
@@ -472,7 +472,7 @@ _SortOrder_ascending = Core.Name "ascending"
 
 _SortOrder_descending = Core.Name "descending"
 
-data SortItem = 
+data SortItem =
   SortItem {
     sortItemExpression :: Expression,
     sortItemOrder :: (Maybe SortOrder)}
@@ -484,21 +484,21 @@ _SortItem_expression = Core.Name "expression"
 
 _SortItem_order = Core.Name "order"
 
-newtype Where = 
+newtype Where =
   Where {
     unWhere :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _Where = Core.Name "hydra.ext.cypher.openCypher.Where"
 
-newtype Pattern = 
+newtype Pattern =
   Pattern {
     unPattern :: [PatternPart]}
   deriving (Eq, Ord, Read, Show)
 
 _Pattern = Core.Name "hydra.ext.cypher.openCypher.Pattern"
 
-data PatternPart = 
+data PatternPart =
   PatternPart {
     patternPartVariable :: (Maybe Variable),
     patternPartPattern :: AnonymousPatternPart}
@@ -510,14 +510,14 @@ _PatternPart_variable = Core.Name "variable"
 
 _PatternPart_pattern = Core.Name "pattern"
 
-newtype AnonymousPatternPart = 
+newtype AnonymousPatternPart =
   AnonymousPatternPart {
     unAnonymousPatternPart :: PatternElement}
   deriving (Eq, Ord, Read, Show)
 
 _AnonymousPatternPart = Core.Name "hydra.ext.cypher.openCypher.AnonymousPatternPart"
 
-data NodePatternChain = 
+data NodePatternChain =
   NodePatternChain {
     nodePatternChainNodePattern :: NodePattern,
     nodePatternChainChain :: [PatternElementChain]}
@@ -529,7 +529,7 @@ _NodePatternChain_nodePattern = Core.Name "nodePattern"
 
 _NodePatternChain_chain = Core.Name "chain"
 
-data PatternElement = 
+data PatternElement =
   PatternElementChained NodePatternChain |
   PatternElementParenthesized PatternElement
   deriving (Eq, Ord, Read, Show)
@@ -540,7 +540,7 @@ _PatternElement_chained = Core.Name "chained"
 
 _PatternElement_parenthesized = Core.Name "parenthesized"
 
-data RelationshipsPattern = 
+data RelationshipsPattern =
   RelationshipsPattern {
     relationshipsPatternNodePattern :: NodePattern,
     relationshipsPatternChain :: [PatternElementChain]}
@@ -552,7 +552,7 @@ _RelationshipsPattern_nodePattern = Core.Name "nodePattern"
 
 _RelationshipsPattern_chain = Core.Name "chain"
 
-data NodePattern = 
+data NodePattern =
   NodePattern {
     nodePatternVariable :: (Maybe Variable),
     nodePatternLabels :: (Maybe NodeLabels),
@@ -567,7 +567,7 @@ _NodePattern_labels = Core.Name "labels"
 
 _NodePattern_properties = Core.Name "properties"
 
-data PatternElementChain = 
+data PatternElementChain =
   PatternElementChain {
     patternElementChainRelationship :: RelationshipPattern,
     patternElementChainNode :: NodePattern}
@@ -579,7 +579,7 @@ _PatternElementChain_relationship = Core.Name "relationship"
 
 _PatternElementChain_node = Core.Name "node"
 
-data RelationshipPattern = 
+data RelationshipPattern =
   RelationshipPattern {
     relationshipPatternLeftArrow :: Bool,
     relationshipPatternDetail :: (Maybe RelationshipDetail),
@@ -594,7 +594,7 @@ _RelationshipPattern_detail = Core.Name "detail"
 
 _RelationshipPattern_rightArrow = Core.Name "rightArrow"
 
-data RelationshipDetail = 
+data RelationshipDetail =
   RelationshipDetail {
     relationshipDetailVariable :: (Maybe Variable),
     relationshipDetailTypes :: (Maybe RelationshipTypes),
@@ -612,7 +612,7 @@ _RelationshipDetail_range = Core.Name "range"
 
 _RelationshipDetail_properties = Core.Name "properties"
 
-data Properties = 
+data Properties =
   PropertiesMap MapLiteral |
   PropertiesParameter Parameter
   deriving (Eq, Ord, Read, Show)
@@ -623,28 +623,28 @@ _Properties_map = Core.Name "map"
 
 _Properties_parameter = Core.Name "parameter"
 
-newtype RelationshipTypes = 
+newtype RelationshipTypes =
   RelationshipTypes {
     unRelationshipTypes :: [RelTypeName]}
   deriving (Eq, Ord, Read, Show)
 
 _RelationshipTypes = Core.Name "hydra.ext.cypher.openCypher.RelationshipTypes"
 
-newtype NodeLabels = 
+newtype NodeLabels =
   NodeLabels {
     unNodeLabels :: [NodeLabel]}
   deriving (Eq, Ord, Read, Show)
 
 _NodeLabels = Core.Name "hydra.ext.cypher.openCypher.NodeLabels"
 
-newtype NodeLabel = 
+newtype NodeLabel =
   NodeLabel {
     unNodeLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
 _NodeLabel = Core.Name "hydra.ext.cypher.openCypher.NodeLabel"
 
-data RangeLiteral = 
+data RangeLiteral =
   RangeLiteral {
     rangeLiteralStart :: (Maybe Integer),
     rangeLiteralEnd :: (Maybe Integer)}
@@ -656,14 +656,14 @@ _RangeLiteral_start = Core.Name "start"
 
 _RangeLiteral_end = Core.Name "end"
 
-newtype RelTypeName = 
+newtype RelTypeName =
   RelTypeName {
     unRelTypeName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _RelTypeName = Core.Name "hydra.ext.cypher.openCypher.RelTypeName"
 
-data PropertyExpression = 
+data PropertyExpression =
   PropertyExpression {
     propertyExpressionAtom :: Atom,
     propertyExpressionLookups :: [PropertyLookup]}
@@ -675,35 +675,35 @@ _PropertyExpression_atom = Core.Name "atom"
 
 _PropertyExpression_lookups = Core.Name "lookups"
 
-newtype Expression = 
+newtype Expression =
   Expression {
     unExpression :: OrExpression}
   deriving (Eq, Ord, Read, Show)
 
 _Expression = Core.Name "hydra.ext.cypher.openCypher.Expression"
 
-newtype OrExpression = 
+newtype OrExpression =
   OrExpression {
     unOrExpression :: [XorExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _OrExpression = Core.Name "hydra.ext.cypher.openCypher.OrExpression"
 
-newtype XorExpression = 
+newtype XorExpression =
   XorExpression {
     unXorExpression :: [AndExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _XorExpression = Core.Name "hydra.ext.cypher.openCypher.XorExpression"
 
-newtype AndExpression = 
+newtype AndExpression =
   AndExpression {
     unAndExpression :: [NotExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _AndExpression = Core.Name "hydra.ext.cypher.openCypher.AndExpression"
 
-data NotExpression = 
+data NotExpression =
   NotExpression {
     notExpressionNot :: Bool,
     notExpressionExpression :: ComparisonExpression}
@@ -715,7 +715,7 @@ _NotExpression_not = Core.Name "not"
 
 _NotExpression_expression = Core.Name "expression"
 
-data ComparisonExpression = 
+data ComparisonExpression =
   ComparisonExpression {
     comparisonExpressionLeft :: StringListNullPredicateExpression,
     comparisonExpressionRight :: [PartialComparisonExpression]}
@@ -727,13 +727,13 @@ _ComparisonExpression_left = Core.Name "left"
 
 _ComparisonExpression_right = Core.Name "right"
 
-data ComparisonOperator = 
+data ComparisonOperator =
   ComparisonOperatorEq  |
   ComparisonOperatorNeq  |
   ComparisonOperatorLt  |
   ComparisonOperatorGt  |
   ComparisonOperatorLte  |
-  ComparisonOperatorGte 
+  ComparisonOperatorGte
   deriving (Eq, Ord, Read, Show)
 
 _ComparisonOperator = Core.Name "hydra.ext.cypher.openCypher.ComparisonOperator"
@@ -750,7 +750,7 @@ _ComparisonOperator_lte = Core.Name "lte"
 
 _ComparisonOperator_gte = Core.Name "gte"
 
-data PartialComparisonExpression = 
+data PartialComparisonExpression =
   PartialComparisonExpression {
     partialComparisonExpressionOperator :: ComparisonOperator,
     partialComparisonExpressionRight :: StringListNullPredicateExpression}
@@ -762,7 +762,7 @@ _PartialComparisonExpression_operator = Core.Name "operator"
 
 _PartialComparisonExpression_right = Core.Name "right"
 
-data StringListNullPredicateExpression = 
+data StringListNullPredicateExpression =
   StringListNullPredicateExpression {
     stringListNullPredicateExpressionLeft :: AddOrSubtractExpression,
     stringListNullPredicateExpressionRight :: [StringListNullPredicateRightHandSide]}
@@ -774,7 +774,7 @@ _StringListNullPredicateExpression_left = Core.Name "left"
 
 _StringListNullPredicateExpression_right = Core.Name "right"
 
-data StringListNullPredicateRightHandSide = 
+data StringListNullPredicateRightHandSide =
   StringListNullPredicateRightHandSideString StringPredicateExpression |
   StringListNullPredicateRightHandSideList ListPredicateExpression |
   StringListNullPredicateRightHandSideNull NullPredicateExpression
@@ -788,7 +788,7 @@ _StringListNullPredicateRightHandSide_list = Core.Name "list"
 
 _StringListNullPredicateRightHandSide_null = Core.Name "null"
 
-data StringPredicateExpression = 
+data StringPredicateExpression =
   StringPredicateExpression {
     stringPredicateExpressionOperator :: StringPredicateOperator,
     stringPredicateExpressionExpression :: AddOrSubtractExpression}
@@ -800,10 +800,10 @@ _StringPredicateExpression_operator = Core.Name "operator"
 
 _StringPredicateExpression_expression = Core.Name "expression"
 
-data StringPredicateOperator = 
+data StringPredicateOperator =
   StringPredicateOperatorStartsWith  |
   StringPredicateOperatorEndsWith  |
-  StringPredicateOperatorContains 
+  StringPredicateOperatorContains
   deriving (Eq, Ord, Read, Show)
 
 _StringPredicateOperator = Core.Name "hydra.ext.cypher.openCypher.StringPredicateOperator"
@@ -814,21 +814,21 @@ _StringPredicateOperator_endsWith = Core.Name "endsWith"
 
 _StringPredicateOperator_contains = Core.Name "contains"
 
-newtype ListPredicateExpression = 
+newtype ListPredicateExpression =
   ListPredicateExpression {
     unListPredicateExpression :: AddOrSubtractExpression}
   deriving (Eq, Ord, Read, Show)
 
 _ListPredicateExpression = Core.Name "hydra.ext.cypher.openCypher.ListPredicateExpression"
 
-newtype NullPredicateExpression = 
+newtype NullPredicateExpression =
   NullPredicateExpression {
     unNullPredicateExpression :: Bool}
   deriving (Eq, Ord, Read, Show)
 
 _NullPredicateExpression = Core.Name "hydra.ext.cypher.openCypher.NullPredicateExpression"
 
-data AddOrSubtractExpression = 
+data AddOrSubtractExpression =
   AddOrSubtractExpression {
     addOrSubtractExpressionLeft :: MultiplyDivideModuloExpression,
     addOrSubtractExpressionRight :: [AddOrSubtractRightHandSide]}
@@ -840,7 +840,7 @@ _AddOrSubtractExpression_left = Core.Name "left"
 
 _AddOrSubtractExpression_right = Core.Name "right"
 
-data AddOrSubtractRightHandSide = 
+data AddOrSubtractRightHandSide =
   AddOrSubtractRightHandSide {
     addOrSubtractRightHandSideOperator :: AddOrSubtractOperator,
     addOrSubtractRightHandSideExpression :: MultiplyDivideModuloExpression}
@@ -852,9 +852,9 @@ _AddOrSubtractRightHandSide_operator = Core.Name "operator"
 
 _AddOrSubtractRightHandSide_expression = Core.Name "expression"
 
-data AddOrSubtractOperator = 
+data AddOrSubtractOperator =
   AddOrSubtractOperatorAdd  |
-  AddOrSubtractOperatorSubtract 
+  AddOrSubtractOperatorSubtract
   deriving (Eq, Ord, Read, Show)
 
 _AddOrSubtractOperator = Core.Name "hydra.ext.cypher.openCypher.AddOrSubtractOperator"
@@ -863,7 +863,7 @@ _AddOrSubtractOperator_add = Core.Name "add"
 
 _AddOrSubtractOperator_subtract = Core.Name "subtract"
 
-data MultiplyDivideModuloExpression = 
+data MultiplyDivideModuloExpression =
   MultiplyDivideModuloExpression {
     multiplyDivideModuloExpressionLeft :: PowerOfExpression,
     multiplyDivideModuloExpressionRight :: [MultiplyDivideModuloRightHandSide]}
@@ -875,7 +875,7 @@ _MultiplyDivideModuloExpression_left = Core.Name "left"
 
 _MultiplyDivideModuloExpression_right = Core.Name "right"
 
-data MultiplyDivideModuloRightHandSide = 
+data MultiplyDivideModuloRightHandSide =
   MultiplyDivideModuloRightHandSide {
     multiplyDivideModuloRightHandSideOperator :: MultiplyDivideModuloOperator,
     multiplyDivideModuloRightHandSideExpression :: PowerOfExpression}
@@ -887,10 +887,10 @@ _MultiplyDivideModuloRightHandSide_operator = Core.Name "operator"
 
 _MultiplyDivideModuloRightHandSide_expression = Core.Name "expression"
 
-data MultiplyDivideModuloOperator = 
+data MultiplyDivideModuloOperator =
   MultiplyDivideModuloOperatorMultiply  |
   MultiplyDivideModuloOperatorDivide  |
-  MultiplyDivideModuloOperatorModulo 
+  MultiplyDivideModuloOperatorModulo
   deriving (Eq, Ord, Read, Show)
 
 _MultiplyDivideModuloOperator = Core.Name "hydra.ext.cypher.openCypher.MultiplyDivideModuloOperator"
@@ -901,14 +901,14 @@ _MultiplyDivideModuloOperator_divide = Core.Name "divide"
 
 _MultiplyDivideModuloOperator_modulo = Core.Name "modulo"
 
-newtype PowerOfExpression = 
+newtype PowerOfExpression =
   PowerOfExpression {
     unPowerOfExpression :: [UnaryAddOrSubtractExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _PowerOfExpression = Core.Name "hydra.ext.cypher.openCypher.PowerOfExpression"
 
-data UnaryAddOrSubtractExpression = 
+data UnaryAddOrSubtractExpression =
   UnaryAddOrSubtractExpression {
     unaryAddOrSubtractExpressionOperator :: (Maybe AddOrSubtractOperator),
     unaryAddOrSubtractExpressionExpression :: NonArithmeticOperatorExpression}
@@ -920,7 +920,7 @@ _UnaryAddOrSubtractExpression_operator = Core.Name "operator"
 
 _UnaryAddOrSubtractExpression_expression = Core.Name "expression"
 
-data ListOperatorExpressionOrPropertyLookup = 
+data ListOperatorExpressionOrPropertyLookup =
   ListOperatorExpressionOrPropertyLookupList ListOperatorExpression |
   ListOperatorExpressionOrPropertyLookupProperty PropertyLookup
   deriving (Eq, Ord, Read, Show)
@@ -931,7 +931,7 @@ _ListOperatorExpressionOrPropertyLookup_list = Core.Name "list"
 
 _ListOperatorExpressionOrPropertyLookup_property = Core.Name "property"
 
-data NonArithmeticOperatorExpression = 
+data NonArithmeticOperatorExpression =
   NonArithmeticOperatorExpression {
     nonArithmeticOperatorExpressionAtom :: Atom,
     nonArithmeticOperatorExpressionListsAndLookups :: [ListOperatorExpressionOrPropertyLookup],
@@ -946,7 +946,7 @@ _NonArithmeticOperatorExpression_listsAndLookups = Core.Name "listsAndLookups"
 
 _NonArithmeticOperatorExpression_labels = Core.Name "labels"
 
-data RangeExpression = 
+data RangeExpression =
   RangeExpression {
     rangeExpressionStart :: (Maybe Expression),
     rangeExpressionEnd :: (Maybe Expression)}
@@ -958,7 +958,7 @@ _RangeExpression_start = Core.Name "start"
 
 _RangeExpression_end = Core.Name "end"
 
-data ListOperatorExpression = 
+data ListOperatorExpression =
   ListOperatorExpressionSingle Expression |
   ListOperatorExpressionRange RangeExpression
   deriving (Eq, Ord, Read, Show)
@@ -969,14 +969,14 @@ _ListOperatorExpression_single = Core.Name "single"
 
 _ListOperatorExpression_range = Core.Name "range"
 
-newtype PropertyLookup = 
+newtype PropertyLookup =
   PropertyLookup {
     unPropertyLookup :: PropertyKeyName}
   deriving (Eq, Ord, Read, Show)
 
 _PropertyLookup = Core.Name "hydra.ext.cypher.openCypher.PropertyLookup"
 
-data Atom = 
+data Atom =
   AtomLiteral Literal |
   AtomParameter Parameter |
   AtomCase CaseExpression |
@@ -1017,7 +1017,7 @@ _Atom_existentialSubquery = Core.Name "existentialSubquery"
 
 _Atom_variable = Core.Name "variable"
 
-data CaseExpression = 
+data CaseExpression =
   CaseExpression {
     caseExpressionExpression :: (Maybe Expression),
     caseExpressionAlternatives :: [CaseAlternative],
@@ -1032,7 +1032,7 @@ _CaseExpression_alternatives = Core.Name "alternatives"
 
 _CaseExpression_else = Core.Name "else"
 
-data CaseAlternative = 
+data CaseAlternative =
   CaseAlternative {
     caseAlternativeCondition :: Expression,
     caseAlternativeResult :: Expression}
@@ -1044,7 +1044,7 @@ _CaseAlternative_condition = Core.Name "condition"
 
 _CaseAlternative_result = Core.Name "result"
 
-data ListComprehension = 
+data ListComprehension =
   ListComprehension {
     listComprehensionLeft :: FilterExpression,
     listComprehensionRight :: (Maybe Expression)}
@@ -1056,7 +1056,7 @@ _ListComprehension_left = Core.Name "left"
 
 _ListComprehension_right = Core.Name "right"
 
-data PatternComprehension = 
+data PatternComprehension =
   PatternComprehension {
     patternComprehensionVariable :: (Maybe Variable),
     patternComprehensionPattern :: RelationshipsPattern,
@@ -1074,7 +1074,7 @@ _PatternComprehension_where = Core.Name "where"
 
 _PatternComprehension_right = Core.Name "right"
 
-data Quantifier = 
+data Quantifier =
   Quantifier {
     quantifierOperator :: QuantifierOperator,
     quantifierExpression :: FilterExpression}
@@ -1086,11 +1086,11 @@ _Quantifier_operator = Core.Name "operator"
 
 _Quantifier_expression = Core.Name "expression"
 
-data QuantifierOperator = 
+data QuantifierOperator =
   QuantifierOperatorAll  |
   QuantifierOperatorAny  |
   QuantifierOperatorNone  |
-  QuantifierOperatorSingle 
+  QuantifierOperatorSingle
   deriving (Eq, Ord, Read, Show)
 
 _QuantifierOperator = Core.Name "hydra.ext.cypher.openCypher.QuantifierOperator"
@@ -1103,7 +1103,7 @@ _QuantifierOperator_none = Core.Name "none"
 
 _QuantifierOperator_single = Core.Name "single"
 
-data FilterExpression = 
+data FilterExpression =
   FilterExpression {
     filterExpressionIdInColl :: IdInColl,
     filterExpressionWhere :: (Maybe Where)}
@@ -1115,21 +1115,21 @@ _FilterExpression_idInColl = Core.Name "idInColl"
 
 _FilterExpression_where = Core.Name "where"
 
-newtype PatternPredicate = 
+newtype PatternPredicate =
   PatternPredicate {
     unPatternPredicate :: RelationshipsPattern}
   deriving (Eq, Ord, Read, Show)
 
 _PatternPredicate = Core.Name "hydra.ext.cypher.openCypher.PatternPredicate"
 
-newtype ParenthesizedExpression = 
+newtype ParenthesizedExpression =
   ParenthesizedExpression {
     unParenthesizedExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _ParenthesizedExpression = Core.Name "hydra.ext.cypher.openCypher.ParenthesizedExpression"
 
-data IdInColl = 
+data IdInColl =
   IdInColl {
     idInCollVariable :: Variable,
     idInCollExpression :: Expression}
@@ -1141,7 +1141,7 @@ _IdInColl_variable = Core.Name "variable"
 
 _IdInColl_expression = Core.Name "expression"
 
-data FunctionInvocation = 
+data FunctionInvocation =
   FunctionInvocation {
     functionInvocationName :: QualifiedName,
     functionInvocationDistinct :: Bool,
@@ -1156,7 +1156,7 @@ _FunctionInvocation_distinct = Core.Name "distinct"
 
 _FunctionInvocation_arguments = Core.Name "arguments"
 
-data QualifiedName = 
+data QualifiedName =
   QualifiedName {
     qualifiedNameNamespace :: String,
     qualifiedNameLocal :: String}
@@ -1168,7 +1168,7 @@ _QualifiedName_namespace = Core.Name "namespace"
 
 _QualifiedName_local = Core.Name "local"
 
-data PatternWhere = 
+data PatternWhere =
   PatternWhere {
     patternWherePattern :: Pattern,
     patternWhereWhere :: (Maybe Where)}
@@ -1180,7 +1180,7 @@ _PatternWhere_pattern = Core.Name "pattern"
 
 _PatternWhere_where = Core.Name "where"
 
-data ExistentialSubquery = 
+data ExistentialSubquery =
   ExistentialSubqueryRegular RegularQuery |
   ExistentialSubqueryPattern PatternWhere
   deriving (Eq, Ord, Read, Show)
@@ -1191,7 +1191,7 @@ _ExistentialSubquery_regular = Core.Name "regular"
 
 _ExistentialSubquery_pattern = Core.Name "pattern"
 
-data ExplicitProcedureInvocation = 
+data ExplicitProcedureInvocation =
   ExplicitProcedureInvocation {
     explicitProcedureInvocationName :: QualifiedName,
     explicitProcedureInvocationArguments :: [Expression]}
@@ -1203,28 +1203,28 @@ _ExplicitProcedureInvocation_name = Core.Name "name"
 
 _ExplicitProcedureInvocation_arguments = Core.Name "arguments"
 
-newtype ImplicitProcedureInvocation = 
+newtype ImplicitProcedureInvocation =
   ImplicitProcedureInvocation {
     unImplicitProcedureInvocation :: QualifiedName}
   deriving (Eq, Ord, Read, Show)
 
 _ImplicitProcedureInvocation = Core.Name "hydra.ext.cypher.openCypher.ImplicitProcedureInvocation"
 
-newtype ProcedureResultField = 
+newtype ProcedureResultField =
   ProcedureResultField {
     unProcedureResultField :: String}
   deriving (Eq, Ord, Read, Show)
 
 _ProcedureResultField = Core.Name "hydra.ext.cypher.openCypher.ProcedureResultField"
 
-newtype Variable = 
+newtype Variable =
   Variable {
     unVariable :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Variable = Core.Name "hydra.ext.cypher.openCypher.Variable"
 
-data Literal = 
+data Literal =
   LiteralBoolean Bool |
   LiteralNull  |
   LiteralNumber NumberLiteral |
@@ -1247,7 +1247,7 @@ _Literal_list = Core.Name "list"
 
 _Literal_map = Core.Name "map"
 
-data NumberLiteral = 
+data NumberLiteral =
   NumberLiteralDouble Double |
   NumberLiteralInteger Integer
   deriving (Eq, Ord, Read, Show)
@@ -1258,28 +1258,28 @@ _NumberLiteral_double = Core.Name "double"
 
 _NumberLiteral_integer = Core.Name "integer"
 
-newtype StringLiteral = 
+newtype StringLiteral =
   StringLiteral {
     unStringLiteral :: String}
   deriving (Eq, Ord, Read, Show)
 
 _StringLiteral = Core.Name "hydra.ext.cypher.openCypher.StringLiteral"
 
-newtype ListLiteral = 
+newtype ListLiteral =
   ListLiteral {
     unListLiteral :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 
 _ListLiteral = Core.Name "hydra.ext.cypher.openCypher.ListLiteral"
 
-newtype MapLiteral = 
+newtype MapLiteral =
   MapLiteral {
     unMapLiteral :: [KeyValuePair]}
   deriving (Eq, Ord, Read, Show)
 
 _MapLiteral = Core.Name "hydra.ext.cypher.openCypher.MapLiteral"
 
-data KeyValuePair = 
+data KeyValuePair =
   KeyValuePair {
     keyValuePairKey :: PropertyKeyName,
     keyValuePairValue :: Expression}
@@ -1291,14 +1291,14 @@ _KeyValuePair_key = Core.Name "key"
 
 _KeyValuePair_value = Core.Name "value"
 
-newtype PropertyKeyName = 
+newtype PropertyKeyName =
   PropertyKeyName {
     unPropertyKeyName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _PropertyKeyName = Core.Name "hydra.ext.cypher.openCypher.PropertyKeyName"
 
-data Parameter = 
+data Parameter =
   ParameterSymbolic String |
   ParameterInteger Integer
   deriving (Eq, Ord, Read, Show)

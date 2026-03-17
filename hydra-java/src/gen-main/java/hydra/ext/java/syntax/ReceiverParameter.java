@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class ReceiverParameter implements Serializable, Comparable<ReceiverParameter> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ReceiverParameter");
-  
+
   public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
-  
+
   public static final hydra.core.Name UNANN_TYPE = new hydra.core.Name("unannType");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
-  
+
   public final hydra.ext.java.syntax.UnannType unannType;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.Identifier> identifier;
-  
+
   public ReceiverParameter (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.UnannType unannType, hydra.util.Maybe<hydra.ext.java.syntax.Identifier> identifier) {
     this.annotations = annotations;
     this.unannType = unannType;
     this.identifier = identifier;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ReceiverParameter)) {
@@ -39,12 +39,12 @@ public class ReceiverParameter implements Serializable, Comparable<ReceiverParam
       this.identifier,
       o.identifier);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(unannType) + 5 * java.util.Objects.hashCode(identifier);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ReceiverParameter other) {
@@ -59,15 +59,15 @@ public class ReceiverParameter implements Serializable, Comparable<ReceiverParam
     }
     return ((Comparable) identifier).compareTo(other.identifier);
   }
-  
+
   public ReceiverParameter withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     return new ReceiverParameter(annotations, unannType, identifier);
   }
-  
+
   public ReceiverParameter withUnannType(hydra.ext.java.syntax.UnannType unannType) {
     return new ReceiverParameter(annotations, unannType, identifier);
   }
-  
+
   public ReceiverParameter withIdentifier(hydra.util.Maybe<hydra.ext.java.syntax.Identifier> identifier) {
     return new ReceiverParameter(annotations, unannType, identifier);
   }

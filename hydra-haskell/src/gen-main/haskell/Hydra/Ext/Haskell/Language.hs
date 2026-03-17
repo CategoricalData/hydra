@@ -29,8 +29,8 @@ haskellLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = typePredicate}} 
-  where 
+        Coders.languageConstraintsTypes = typePredicate}}
+  where
     eliminationVariants =
         Sets.fromList [
           Variants.EliminationVariantRecord,
@@ -98,14 +98,14 @@ haskellLanguage =
     typePredicate = \_ -> True
 
 -- | Created on 2025-02-28 using GHCi 9.6.6
--- | 
+-- |
 -- | You can reproduce these lists of symbols by issuing the command `:browse Prelude` in GHCi, pasting the results into
 -- | /tmp/browse_Prelude.txt, and then running the Bash command provided with each list.
--- | 
+-- |
 -- | See also https://www.haskell.org/onlinereport/standard-prelude.html
 reservedWords :: S.Set String
-reservedWords = Sets.fromList (Lists.concat2 keywordSymbols reservedSymbols) 
-  where 
+reservedWords = Sets.fromList (Lists.concat2 keywordSymbols reservedSymbols)
+  where
     keywordSymbols =
         [
           "case",

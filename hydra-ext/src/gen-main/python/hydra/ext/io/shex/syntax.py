@@ -16,7 +16,7 @@ class ShexDoc:
     list_of_directive: frozenlist[Directive]
     sequence: Maybe[ShexDoc_Sequence_Option]
     prefix_decl: PrefixDecl
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShexDoc")
     LIST_OF_DIRECTIVE = hydra.core.Name("listOfDirective")
     SEQUENCE = hydra.core.Name("Sequence")
@@ -26,7 +26,7 @@ class ShexDoc:
 class ShexDoc_Sequence_Option:
     alts: ShexDoc_Sequence_Option_Alts
     list_of_statement: frozenlist[Statement]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option")
     ALTS = hydra.core.Name("alts")
     LIST_OF_STATEMENT = hydra.core.Name("listOfStatement")
@@ -43,7 +43,7 @@ class _ShexDoc_Sequence_Option_AltsMeta(type):
 
 class ShexDoc_Sequence_Option_Alts(metaclass=_ShexDoc_Sequence_Option_AltsMeta):
     r"""ShexDoc_Sequence_Option_AltsNotStartAction | ShexDoc_Sequence_Option_AltsStartActions"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option_Alts")
     NOT_START_ACTION = hydra.core.Name("NotStartAction")
     START_ACTIONS = hydra.core.Name("StartActions")
@@ -60,7 +60,7 @@ class _DirectiveMeta(type):
 
 class Directive(metaclass=_DirectiveMeta):
     r"""DirectiveBaseDecl | DirectivePrefixDecl"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Directive")
     BASE_DECL = hydra.core.Name("BaseDecl")
     PREFIX_DECL = hydra.core.Name("PrefixDecl")
@@ -74,7 +74,7 @@ BaseDecl.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.BaseDecl")
 class PrefixDecl:
     pname_ns: PnameNs
     iri_ref: IriRef
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PrefixDecl")
     PNAME_NS = hydra.core.Name("PnameNs")
     IRI_REF = hydra.core.Name("IriRef")
@@ -91,7 +91,7 @@ class _NotStartActionMeta(type):
 
 class NotStartAction(metaclass=_NotStartActionMeta):
     r"""NotStartActionStart | NotStartActionShapeExprDecl"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NotStartAction")
     START = hydra.core.Name("start")
     SHAPE_EXPR_DECL = hydra.core.Name("shapeExprDecl")
@@ -100,7 +100,7 @@ class NotStartAction(metaclass=_NotStartActionMeta):
 class NotStartAction_ShapeExprDecl:
     shape_expr_label: ShapeExprLabel
     alts: NotStartAction_ShapeExprDecl_Alts
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NotStartAction_ShapeExprDecl")
     SHAPE_EXPR_LABEL = hydra.core.Name("ShapeExprLabel")
     ALTS = hydra.core.Name("alts")
@@ -121,7 +121,7 @@ class _NotStartAction_ShapeExprDecl_AltsMeta(type):
 
 class NotStartAction_ShapeExprDecl_Alts(metaclass=_NotStartAction_ShapeExprDecl_AltsMeta):
     r"""NotStartAction_ShapeExprDecl_AltsShapeExpression | NotStartAction_ShapeExprDecl_AltsEXTERNAL"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NotStartAction_ShapeExprDecl_Alts")
     SHAPE_EXPRESSION = hydra.core.Name("ShapeExpression")
     E_X_T_E_R_N_A_L = hydra.core.Name("EXTERNAL")
@@ -143,7 +143,7 @@ class _StatementMeta(type):
 
 class Statement(metaclass=_StatementMeta):
     r"""StatementDirective | StatementNotStartAction"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Statement")
     DIRECTIVE = hydra.core.Name("Directive")
     NOT_START_ACTION = hydra.core.Name("NotStartAction")
@@ -162,7 +162,7 @@ InlineShapeExpression.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineSh
 class ShapeOr:
     shape_and: ShapeAnd
     list_of_sequence: frozenlist[ShapeAnd]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeOr")
     SHAPE_AND = hydra.core.Name("ShapeAnd")
     LIST_OF_SEQUENCE = hydra.core.Name("listOfSequence")
@@ -171,7 +171,7 @@ class ShapeOr:
 class InlineShapeOr:
     shape_and: ShapeAnd
     list_of_sequence: frozenlist[InlineShapeAnd]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeOr")
     SHAPE_AND = hydra.core.Name("ShapeAnd")
     LIST_OF_SEQUENCE = hydra.core.Name("listOfSequence")
@@ -180,7 +180,7 @@ class InlineShapeOr:
 class ShapeAnd:
     shape_not: ShapeNot
     list_of_sequence: frozenlist[ShapeNot]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeAnd")
     SHAPE_NOT = hydra.core.Name("ShapeNot")
     LIST_OF_SEQUENCE = hydra.core.Name("listOfSequence")
@@ -189,7 +189,7 @@ class ShapeAnd:
 class InlineShapeAnd:
     inline_shape_not: InlineShapeNot
     list_of_sequence: frozenlist[InlineShapeNot]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAnd")
     INLINE_SHAPE_NOT = hydra.core.Name("InlineShapeNot")
     LIST_OF_SEQUENCE = hydra.core.Name("listOfSequence")
@@ -198,7 +198,7 @@ class InlineShapeAnd:
 class ShapeNot:
     n_o_t: Maybe[None]
     shape_atom: ShapeAtom
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeNot")
     N_O_T = hydra.core.Name("NOT")
     SHAPE_ATOM = hydra.core.Name("ShapeAtom")
@@ -207,7 +207,7 @@ class ShapeNot:
 class InlineShapeNot:
     n_o_t: Maybe[None]
     inline_shape_atom: InlineShapeAtom
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeNot")
     N_O_T = hydra.core.Name("NOT")
     INLINE_SHAPE_ATOM = hydra.core.Name("InlineShapeAtom")
@@ -234,7 +234,7 @@ class _ShapeAtomMeta(type):
 
 class ShapeAtom(metaclass=_ShapeAtomMeta):
     r"""ShapeAtomSequence | ShapeAtomShapeOrRef | ShapeAtomSequence2 | ShapeAtomPeriod"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeAtom")
     SEQUENCE = hydra.core.Name("sequence")
     SHAPE_OR_REF = hydra.core.Name("ShapeOrRef")
@@ -245,7 +245,7 @@ class ShapeAtom(metaclass=_ShapeAtomMeta):
 class ShapeAtom_Sequence:
     node_constraint: NodeConstraint
     shape_or_ref: Maybe[ShapeOrRef]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeAtom_Sequence")
     NODE_CONSTRAINT = hydra.core.Name("NodeConstraint")
     SHAPE_OR_REF = hydra.core.Name("ShapeOrRef")
@@ -272,7 +272,7 @@ class _InlineShapeAtomMeta(type):
 
 class InlineShapeAtom(metaclass=_InlineShapeAtomMeta):
     r"""InlineShapeAtomSequence | InlineShapeAtomSequence2 | InlineShapeAtomSequence3 | InlineShapeAtomPeriod"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAtom")
     SEQUENCE = hydra.core.Name("sequence")
     SEQUENCE2 = hydra.core.Name("sequence2")
@@ -283,7 +283,7 @@ class InlineShapeAtom(metaclass=_InlineShapeAtomMeta):
 class InlineShapeAtom_Sequence:
     node_constraint: NodeConstraint
     inline_shape_or_ref: Maybe[InlineShapeOrRef]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAtom_Sequence")
     NODE_CONSTRAINT = hydra.core.Name("NodeConstraint")
     INLINE_SHAPE_OR_REF = hydra.core.Name("InlineShapeOrRef")
@@ -292,7 +292,7 @@ class InlineShapeAtom_Sequence:
 class InlineShapeAtom_Sequence2:
     inline_shape_or_ref: InlineShapeOrRef
     node_constraint: Maybe[NodeConstraint]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAtom_Sequence2")
     INLINE_SHAPE_OR_REF = hydra.core.Name("InlineShapeOrRef")
     NODE_CONSTRAINT = hydra.core.Name("NodeConstraint")
@@ -315,7 +315,7 @@ class _ShapeOrRefMeta(type):
 
 class ShapeOrRef(metaclass=_ShapeOrRefMeta):
     r"""ShapeOrRefShapeDefinition | ShapeOrRefAtpNameLn | ShapeOrRefAtpNameNs | ShapeOrRefSequence"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeOrRef")
     SHAPE_DEFINITION = hydra.core.Name("ShapeDefinition")
     ATP_NAME_LN = hydra.core.Name("AtpNameLn")
@@ -340,7 +340,7 @@ class _InlineShapeOrRefMeta(type):
 
 class InlineShapeOrRef(metaclass=_InlineShapeOrRefMeta):
     r"""InlineShapeOrRefInlineShapeDefinition | InlineShapeOrRefAtpNameLn | InlineShapeOrRefAtpNameNs | InlineShapeOrRefSequence"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeOrRef")
     INLINE_SHAPE_DEFINITION = hydra.core.Name("InlineShapeDefinition")
     ATP_NAME_LN = hydra.core.Name("AtpNameLn")
@@ -371,7 +371,7 @@ class _NodeConstraintMeta(type):
 
 class NodeConstraint(metaclass=_NodeConstraintMeta):
     r"""NodeConstraintSequence | NodeConstraintSequence2 | NodeConstraintSequence3 | NodeConstraintSequence4 | NodeConstraintSequence5 | NodeConstraintListOfXsFacet"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint")
     SEQUENCE = hydra.core.Name("sequence")
     SEQUENCE2 = hydra.core.Name("sequence2")
@@ -384,7 +384,7 @@ class NodeConstraint(metaclass=_NodeConstraintMeta):
 class NodeConstraint_Sequence2:
     non_literal_kind: NonLiteralKind
     list_of_string_facet: frozenlist[StringFacet]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint_Sequence2")
     NON_LITERAL_KIND = hydra.core.Name("NonLiteralKind")
     LIST_OF_STRING_FACET = hydra.core.Name("listOfStringFacet")
@@ -393,7 +393,7 @@ class NodeConstraint_Sequence2:
 class NodeConstraint_Sequence3:
     datatype: Datatype
     list_of_xs_facet: frozenlist[XsFacet]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint_Sequence3")
     DATATYPE = hydra.core.Name("Datatype")
     LIST_OF_XS_FACET = hydra.core.Name("listOfXsFacet")
@@ -402,7 +402,7 @@ class NodeConstraint_Sequence3:
 class NodeConstraint_Sequence4:
     value_set: ValueSet
     list_of_xs_facet: frozenlist[XsFacet]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint_Sequence4")
     VALUE_SET = hydra.core.Name("ValueSet")
     LIST_OF_XS_FACET = hydra.core.Name("listOfXsFacet")
@@ -411,16 +411,16 @@ class NodeConstraint_Sequence4:
 class NodeConstraint_Sequence5:
     value_set: ValueSet
     list_of_xs_facet: frozenlist[XsFacet]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint_Sequence5")
     VALUE_SET = hydra.core.Name("ValueSet")
     LIST_OF_XS_FACET = hydra.core.Name("listOfXsFacet")
 
 class NonLiteralKind(Enum):
     I_R_I = hydra.core.Name("IRI")
-    
+
     B_N_O_D_E = hydra.core.Name("BNODE")
-    
+
     N_O_N_L_I_T_E_R_A_L = hydra.core.Name("NONLITERAL")
 
 NonLiteralKind.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NonLiteralKind")
@@ -437,7 +437,7 @@ class _XsFacetMeta(type):
 
 class XsFacet(metaclass=_XsFacetMeta):
     r"""XsFacetStringFacet | XsFacetNumericFacet"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.XsFacet")
     STRING_FACET = hydra.core.Name("StringFacet")
     NUMERIC_FACET = hydra.core.Name("NumericFacet")
@@ -454,7 +454,7 @@ class _StringFacetMeta(type):
 
 class StringFacet(metaclass=_StringFacetMeta):
     r"""StringFacetSequence | StringFacetRegexp"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringFacet")
     SEQUENCE = hydra.core.Name("sequence")
     REGEXP = hydra.core.Name("Regexp")
@@ -463,16 +463,16 @@ class StringFacet(metaclass=_StringFacetMeta):
 class StringFacet_Sequence:
     string_length: StringLength
     integer: Integer
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringFacet_Sequence")
     STRING_LENGTH = hydra.core.Name("StringLength")
     INTEGER = hydra.core.Name("Integer")
 
 class StringLength(Enum):
     L_E_N_G_T_H = hydra.core.Name("LENGTH")
-    
+
     M_I_N_L_E_N_G_T_H = hydra.core.Name("MINLENGTH")
-    
+
     M_A_X_L_E_N_G_T_H = hydra.core.Name("MAXLENGTH")
 
 StringLength.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLength")
@@ -489,7 +489,7 @@ class _NumericFacetMeta(type):
 
 class NumericFacet(metaclass=_NumericFacetMeta):
     r"""NumericFacetSequence | NumericFacetSequence2"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NumericFacet")
     SEQUENCE = hydra.core.Name("sequence")
     SEQUENCE2 = hydra.core.Name("sequence2")
@@ -498,7 +498,7 @@ class NumericFacet(metaclass=_NumericFacetMeta):
 class NumericFacet_Sequence:
     numeric_range: NumericRange
     numeric_literal: NumericLiteral
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NumericFacet_Sequence")
     NUMERIC_RANGE = hydra.core.Name("NumericRange")
     NUMERIC_LITERAL = hydra.core.Name("NumericLiteral")
@@ -507,25 +507,25 @@ class NumericFacet_Sequence:
 class NumericFacet_Sequence2:
     numeric_length: NumericLength
     integer: Integer
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NumericFacet_Sequence2")
     NUMERIC_LENGTH = hydra.core.Name("NumericLength")
     INTEGER = hydra.core.Name("Integer")
 
 class NumericRange(Enum):
     M_I_N_I_N_C_L_U_S_I_V_E = hydra.core.Name("MININCLUSIVE")
-    
+
     M_I_N_E_X_C_L_U_S_I_V_E = hydra.core.Name("MINEXCLUSIVE")
-    
+
     M_A_X_I_N_C_L_U_S_I_V_E = hydra.core.Name("MAXINCLUSIVE")
-    
+
     M_A_X_E_X_C_L_U_S_I_V_E = hydra.core.Name("MAXEXCLUSIVE")
 
 NumericRange.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NumericRange")
 
 class NumericLength(Enum):
     T_O_T_A_L_D_I_G_I_T_S = hydra.core.Name("TOTALDIGITS")
-    
+
     F_R_A_C_T_I_O_N_D_I_G_I_T_S = hydra.core.Name("FRACTIONDIGITS")
 
 NumericLength.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NumericLength")
@@ -536,7 +536,7 @@ class ShapeDefinition:
     triple_expression: Maybe[TripleExpression]
     list_of_annotation: frozenlist[Annotation]
     semantic_actions: SemanticActions
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeDefinition")
     LIST_OF_ALTS = hydra.core.Name("listOfAlts")
     TRIPLE_EXPRESSION = hydra.core.Name("TripleExpression")
@@ -562,7 +562,7 @@ class _ShapeDefinition_ListOfAlts_ElmtMeta(type):
 
 class ShapeDefinition_ListOfAlts_Elmt(metaclass=_ShapeDefinition_ListOfAlts_ElmtMeta):
     r"""ShapeDefinition_ListOfAlts_ElmtIncludeSet | ShapeDefinition_ListOfAlts_ElmtExtraPropertySet | ShapeDefinition_ListOfAlts_ElmtCLOSED"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt")
     INCLUDE_SET = hydra.core.Name("IncludeSet")
     EXTRA_PROPERTY_SET = hydra.core.Name("ExtraPropertySet")
@@ -572,7 +572,7 @@ class ShapeDefinition_ListOfAlts_Elmt(metaclass=_ShapeDefinition_ListOfAlts_Elmt
 class InlineShapeDefinition:
     list_of_alts: frozenlist[InlineShapeDefinition_ListOfAlts_Elmt]
     triple_expression: Maybe[TripleExpression]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeDefinition")
     LIST_OF_ALTS = hydra.core.Name("listOfAlts")
     TRIPLE_EXPRESSION = hydra.core.Name("TripleExpression")
@@ -596,7 +596,7 @@ class _InlineShapeDefinition_ListOfAlts_ElmtMeta(type):
 
 class InlineShapeDefinition_ListOfAlts_Elmt(metaclass=_InlineShapeDefinition_ListOfAlts_ElmtMeta):
     r"""InlineShapeDefinition_ListOfAlts_ElmtIncludeSet | InlineShapeDefinition_ListOfAlts_ElmtExtraPropertySet | InlineShapeDefinition_ListOfAlts_ElmtCLOSED"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt")
     INCLUDE_SET = hydra.core.Name("IncludeSet")
     EXTRA_PROPERTY_SET = hydra.core.Name("ExtraPropertySet")
@@ -624,7 +624,7 @@ class _OneOfTripleExprMeta(type):
 
 class OneOfTripleExpr(metaclass=_OneOfTripleExprMeta):
     r"""OneOfTripleExprGroupTripleExpr | OneOfTripleExprMultiElementOneOf"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.OneOfTripleExpr")
     GROUP_TRIPLE_EXPR = hydra.core.Name("GroupTripleExpr")
     MULTI_ELEMENT_ONE_OF = hydra.core.Name("MultiElementOneOf")
@@ -633,7 +633,7 @@ class OneOfTripleExpr(metaclass=_OneOfTripleExprMeta):
 class MultiElementOneOf:
     group_triple_expr: GroupTripleExpr
     list_of_sequence: frozenlist[GroupTripleExpr]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.MultiElementOneOf")
     GROUP_TRIPLE_EXPR = hydra.core.Name("GroupTripleExpr")
     LIST_OF_SEQUENCE = hydra.core.Name("listOfSequence")
@@ -650,7 +650,7 @@ class _InnerTripleExprMeta(type):
 
 class InnerTripleExpr(metaclass=_InnerTripleExprMeta):
     r"""InnerTripleExprMultiElementGroup | InnerTripleExprMultiElementOneOf"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InnerTripleExpr")
     MULTI_ELEMENT_GROUP = hydra.core.Name("MultiElementGroup")
     MULTI_ELEMENT_ONE_OF = hydra.core.Name("MultiElementOneOf")
@@ -667,7 +667,7 @@ class _GroupTripleExprMeta(type):
 
 class GroupTripleExpr(metaclass=_GroupTripleExprMeta):
     r"""GroupTripleExprSingleElementGroup | GroupTripleExprMultiElementGroup"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.GroupTripleExpr")
     SINGLE_ELEMENT_GROUP = hydra.core.Name("SingleElementGroup")
     MULTI_ELEMENT_GROUP = hydra.core.Name("MultiElementGroup")
@@ -676,7 +676,7 @@ class GroupTripleExpr(metaclass=_GroupTripleExprMeta):
 class SingleElementGroup:
     unary_triple_expr: UnaryTripleExpr
     semi: Maybe[None]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.SingleElementGroup")
     UNARY_TRIPLE_EXPR = hydra.core.Name("UnaryTripleExpr")
     SEMI = hydra.core.Name("Semi")
@@ -686,7 +686,7 @@ class MultiElementGroup:
     unary_triple_expr: UnaryTripleExpr
     list_of_sequence: frozenlist[UnaryTripleExpr]
     semi: Maybe[None]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.MultiElementGroup")
     UNARY_TRIPLE_EXPR = hydra.core.Name("UnaryTripleExpr")
     LIST_OF_SEQUENCE = hydra.core.Name("listOfSequence")
@@ -704,7 +704,7 @@ class _UnaryTripleExprMeta(type):
 
 class UnaryTripleExpr(metaclass=_UnaryTripleExprMeta):
     r"""UnaryTripleExprSequence | UnaryTripleExprInclude"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.UnaryTripleExpr")
     SEQUENCE = hydra.core.Name("sequence")
     INCLUDE = hydra.core.Name("Include")
@@ -713,7 +713,7 @@ class UnaryTripleExpr(metaclass=_UnaryTripleExprMeta):
 class UnaryTripleExpr_Sequence:
     sequence: Maybe[TripleExprLabel]
     alts: UnaryTripleExpr_Sequence_Alts
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.UnaryTripleExpr_Sequence")
     SEQUENCE = hydra.core.Name("Sequence")
     ALTS = hydra.core.Name("alts")
@@ -730,7 +730,7 @@ class _UnaryTripleExpr_Sequence_AltsMeta(type):
 
 class UnaryTripleExpr_Sequence_Alts(metaclass=_UnaryTripleExpr_Sequence_AltsMeta):
     r"""UnaryTripleExpr_Sequence_AltsTripleConstraint | UnaryTripleExpr_Sequence_AltsBracketedTripleExpr"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.UnaryTripleExpr_Sequence_Alts")
     TRIPLE_CONSTRAINT = hydra.core.Name("TripleConstraint")
     BRACKETED_TRIPLE_EXPR = hydra.core.Name("BracketedTripleExpr")
@@ -741,7 +741,7 @@ class BracketedTripleExpr:
     cardinality: Maybe[Cardinality]
     list_of_annotation: frozenlist[Annotation]
     semantic_actions: SemanticActions
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.BracketedTripleExpr")
     INNER_TRIPLE_EXPR = hydra.core.Name("InnerTripleExpr")
     CARDINALITY = hydra.core.Name("Cardinality")
@@ -756,7 +756,7 @@ class TripleConstraint:
     cardinality: Maybe[Cardinality]
     list_of_annotation: frozenlist[Annotation]
     semantic_actions: SemanticActions
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.TripleConstraint")
     SENSE_FLAGS = hydra.core.Name("SenseFlags")
     PREDICATE = hydra.core.Name("Predicate")
@@ -795,7 +795,7 @@ class _CardinalityMeta(type):
 
 class Cardinality(metaclass=_CardinalityMeta):
     r"""CardinalityAst | CardinalityPlus | CardinalityQuest | CardinalityRepeatRange"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Cardinality")
     AST = hydra.core.Name("Ast")
     PLUS = hydra.core.Name("Plus")
@@ -824,7 +824,7 @@ class _ValueSetValueMeta(type):
 
 class ValueSetValue(metaclass=_ValueSetValueMeta):
     r"""ValueSetValueIriRange | ValueSetValueLiteral"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ValueSetValue")
     IRI_RANGE = hydra.core.Name("IriRange")
     LITERAL = hydra.core.Name("Literal")
@@ -841,7 +841,7 @@ class _IriRangeMeta(type):
 
 class IriRange(metaclass=_IriRangeMeta):
     r"""IriRangeSequence | IriRangeSequence2"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.IriRange")
     SEQUENCE = hydra.core.Name("sequence")
     SEQUENCE2 = hydra.core.Name("sequence2")
@@ -850,7 +850,7 @@ class IriRange(metaclass=_IriRangeMeta):
 class IriRange_Sequence:
     iri: Iri
     sequence: Maybe[frozenlist[Exclusion]]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.IriRange_Sequence")
     IRI = hydra.core.Name("Iri")
     SEQUENCE = hydra.core.Name("Sequence")
@@ -869,7 +869,7 @@ Include.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Include")
 class Annotation:
     predicate: Predicate
     alts: Annotation_Alts
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Annotation")
     PREDICATE = hydra.core.Name("Predicate")
     ALTS = hydra.core.Name("alts")
@@ -886,7 +886,7 @@ class _Annotation_AltsMeta(type):
 
 class Annotation_Alts(metaclass=_Annotation_AltsMeta):
     r"""Annotation_AltsIri | Annotation_AltsLiteral"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Annotation_Alts")
     IRI = hydra.core.Name("Iri")
     LITERAL = hydra.core.Name("Literal")
@@ -900,7 +900,7 @@ SemanticActions.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.SemanticAction
 class CodeDecl:
     iri: Iri
     alts: CodeDecl_Alts
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.CodeDecl")
     IRI = hydra.core.Name("Iri")
     ALTS = hydra.core.Name("alts")
@@ -921,7 +921,7 @@ class _CodeDecl_AltsMeta(type):
 
 class CodeDecl_Alts(metaclass=_CodeDecl_AltsMeta):
     r"""CodeDecl_AltsCode | CodeDecl_AltsPercnt"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.CodeDecl_Alts")
     CODE = hydra.core.Name("Code")
     PERCNT = hydra.core.Name("Percnt")
@@ -941,7 +941,7 @@ class _LiteralMeta(type):
 
 class Literal(metaclass=_LiteralMeta):
     r"""LiteralRdfLiteral | LiteralNumericLiteral | LiteralBooleanLiteral"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Literal")
     RDF_LITERAL = hydra.core.Name("RdfLiteral")
     NUMERIC_LITERAL = hydra.core.Name("NumericLiteral")
@@ -959,7 +959,7 @@ class _PredicateMeta(type):
 
 class Predicate(metaclass=_PredicateMeta):
     r"""PredicateIri | PredicateRdfType"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Predicate")
     IRI = hydra.core.Name("Iri")
     RDF_TYPE = hydra.core.Name("RdfType")
@@ -981,7 +981,7 @@ class _ShapeExprLabelMeta(type):
 
 class ShapeExprLabel(metaclass=_ShapeExprLabelMeta):
     r"""ShapeExprLabelIri | ShapeExprLabelBlankNode"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeExprLabel")
     IRI = hydra.core.Name("Iri")
     BLANK_NODE = hydra.core.Name("BlankNode")
@@ -998,7 +998,7 @@ class _TripleExprLabelMeta(type):
 
 class TripleExprLabel(metaclass=_TripleExprLabelMeta):
     r"""TripleExprLabelIri | TripleExprLabelBlankNode"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.TripleExprLabel")
     IRI = hydra.core.Name("Iri")
     BLANK_NODE = hydra.core.Name("BlankNode")
@@ -1018,7 +1018,7 @@ class _NumericLiteralMeta(type):
 
 class NumericLiteral(metaclass=_NumericLiteralMeta):
     r"""NumericLiteralInteger | NumericLiteralDecimal | NumericLiteralDouble"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NumericLiteral")
     INTEGER = hydra.core.Name("Integer")
     DECIMAL = hydra.core.Name("Decimal")
@@ -1028,7 +1028,7 @@ class NumericLiteral(metaclass=_NumericLiteralMeta):
 class RdfLiteral:
     string: String
     alts: Maybe[RdfLiteral_Alts_Option]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.RdfLiteral")
     STRING = hydra.core.Name("String")
     ALTS = hydra.core.Name("Alts")
@@ -1045,14 +1045,14 @@ class _RdfLiteral_Alts_OptionMeta(type):
 
 class RdfLiteral_Alts_Option(metaclass=_RdfLiteral_Alts_OptionMeta):
     r"""RdfLiteral_Alts_OptionLangTag | RdfLiteral_Alts_OptionSequence"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.RdfLiteral_Alts_Option")
     LANG_TAG = hydra.core.Name("LangTag")
     SEQUENCE = hydra.core.Name("sequence")
 
 class BooleanLiteral(Enum):
     TRUE = hydra.core.Name("True")
-    
+
     FALSE = hydra.core.Name("False")
 
 BooleanLiteral.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.BooleanLiteral")
@@ -1075,7 +1075,7 @@ class _StringMeta(type):
 
 class String(metaclass=_StringMeta):
     r"""StringStringLiteral1 | StringStringLiteralLong1 | StringStringLiteral2 | StringStringLiteralLong2"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.String")
     STRING_LITERAL1 = hydra.core.Name("StringLiteral1")
     STRING_LITERAL_LONG1 = hydra.core.Name("StringLiteralLong1")
@@ -1094,7 +1094,7 @@ class _IriMeta(type):
 
 class Iri(metaclass=_IriMeta):
     r"""IriIriRef | IriPrefixedName"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Iri")
     IRI_REF = hydra.core.Name("IriRef")
     PREFIXED_NAME = hydra.core.Name("PrefixedName")
@@ -1111,7 +1111,7 @@ class _PrefixedNameMeta(type):
 
 class PrefixedName(metaclass=_PrefixedNameMeta):
     r"""PrefixedNamePnameLn | PrefixedNamePnameNs"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PrefixedName")
     PNAME_LN = hydra.core.Name("PnameLn")
     PNAME_NS = hydra.core.Name("PnameNs")
@@ -1146,7 +1146,7 @@ class _Code_ElmtMeta(type):
 
 class Code_Elmt(metaclass=_Code_ElmtMeta):
     r"""Code_ElmtRegex | Code_ElmtSequence | Code_ElmtUchar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Code_Elmt")
     REGEX = hydra.core.Name("regex")
     SEQUENCE = hydra.core.Name("sequence")
@@ -1156,7 +1156,7 @@ class Code_Elmt(metaclass=_Code_ElmtMeta):
 class RepeatRange:
     integer: Integer
     sequence: Maybe[Maybe[Maybe[RepeatRange_Sequence_Option_Option_Option]]]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.RepeatRange")
     INTEGER = hydra.core.Name("Integer")
     SEQUENCE = hydra.core.Name("Sequence")
@@ -1177,7 +1177,7 @@ class _RepeatRange_Sequence_Option_Option_OptionMeta(type):
 
 class RepeatRange_Sequence_Option_Option_Option(metaclass=_RepeatRange_Sequence_Option_Option_OptionMeta):
     r"""RepeatRange_Sequence_Option_Option_OptionInteger | RepeatRange_Sequence_Option_Option_OptionAst"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.RepeatRange_Sequence_Option_Option_Option")
     INTEGER = hydra.core.Name("Integer")
     AST = hydra.core.Name("Ast")
@@ -1204,7 +1204,7 @@ class _IriRef_ElmtMeta(type):
 
 class IriRef_Elmt(metaclass=_IriRef_ElmtMeta):
     r"""IriRef_ElmtRegex | IriRef_ElmtUchar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.IriRef_Elmt")
     REGEX = hydra.core.Name("regex")
     UCHAR = hydra.core.Name("Uchar")
@@ -1218,7 +1218,7 @@ PnameNs.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnameNs")
 class PnameLn:
     pname_ns: PnameNs
     pn_local: PnLocal
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnameLn")
     PNAME_NS = hydra.core.Name("PnameNs")
     PN_LOCAL = hydra.core.Name("PnLocal")
@@ -1232,7 +1232,7 @@ AtpNameNs.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.AtpNameNs")
 class AtpNameLn:
     pname_ns: PnameNs
     pn_local: PnLocal
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.AtpNameLn")
     PNAME_NS = hydra.core.Name("PnameNs")
     PN_LOCAL = hydra.core.Name("PnLocal")
@@ -1241,7 +1241,7 @@ class AtpNameLn:
 class Regexp:
     list_of_alts: frozenlist[Regexp_ListOfAlts_Elmt]
     list_of_regex: frozenlist[str]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Regexp")
     LIST_OF_ALTS = hydra.core.Name("listOfAlts")
     LIST_OF_REGEX = hydra.core.Name("listOfRegex")
@@ -1261,7 +1261,7 @@ class _Regexp_ListOfAlts_ElmtMeta(type):
 
 class Regexp_ListOfAlts_Elmt(metaclass=_Regexp_ListOfAlts_ElmtMeta):
     r"""Regexp_ListOfAlts_ElmtRegex | Regexp_ListOfAlts_ElmtSequence | Regexp_ListOfAlts_ElmtUchar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Regexp_ListOfAlts_Elmt")
     REGEX = hydra.core.Name("regex")
     SEQUENCE = hydra.core.Name("sequence")
@@ -1272,7 +1272,7 @@ class BlankNodeLabel:
     alts: BlankNodeLabel_Alts
     list_of_alts: Maybe[frozenlist[BlankNodeLabel_ListOfAlts_Option_Elmt]]
     pn_chars: PnChars
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.BlankNodeLabel")
     ALTS = hydra.core.Name("alts")
     LIST_OF_ALTS = hydra.core.Name("ListOfAlts")
@@ -1290,7 +1290,7 @@ class _BlankNodeLabel_AltsMeta(type):
 
 class BlankNodeLabel_Alts(metaclass=_BlankNodeLabel_AltsMeta):
     r"""BlankNodeLabel_AltsPnCharsU | BlankNodeLabel_AltsRegex"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.BlankNodeLabel_Alts")
     PN_CHARS_U = hydra.core.Name("PnCharsU")
     REGEX = hydra.core.Name("regex")
@@ -1311,7 +1311,7 @@ class _BlankNodeLabel_ListOfAlts_Option_ElmtMeta(type):
 
 class BlankNodeLabel_ListOfAlts_Option_Elmt(metaclass=_BlankNodeLabel_ListOfAlts_Option_ElmtMeta):
     r"""BlankNodeLabel_ListOfAlts_Option_ElmtPnChars | BlankNodeLabel_ListOfAlts_Option_ElmtPeriod"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt")
     PN_CHARS = hydra.core.Name("PnChars")
     PERIOD = hydra.core.Name("Period")
@@ -1356,7 +1356,7 @@ class _StringLiteral1_ElmtMeta(type):
 
 class StringLiteral1_Elmt(metaclass=_StringLiteral1_ElmtMeta):
     r"""StringLiteral1_ElmtRegex | StringLiteral1_ElmtEchar | StringLiteral1_ElmtUchar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteral1_Elmt")
     REGEX = hydra.core.Name("regex")
     ECHAR = hydra.core.Name("Echar")
@@ -1382,7 +1382,7 @@ class _StringLiteral2_ElmtMeta(type):
 
 class StringLiteral2_Elmt(metaclass=_StringLiteral2_ElmtMeta):
     r"""StringLiteral2_ElmtRegex | StringLiteral2_ElmtEchar | StringLiteral2_ElmtUchar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteral2_Elmt")
     REGEX = hydra.core.Name("regex")
     ECHAR = hydra.core.Name("Echar")
@@ -1408,7 +1408,7 @@ class _StringLiteralLong1_ElmtMeta(type):
 
 class StringLiteralLong1_Elmt(metaclass=_StringLiteralLong1_ElmtMeta):
     r"""StringLiteralLong1_ElmtSequence | StringLiteralLong1_ElmtEchar | StringLiteralLong1_ElmtUchar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt")
     SEQUENCE = hydra.core.Name("sequence")
     ECHAR = hydra.core.Name("Echar")
@@ -1418,7 +1418,7 @@ class StringLiteralLong1_Elmt(metaclass=_StringLiteralLong1_ElmtMeta):
 class StringLiteralLong1_Elmt_Sequence:
     alts: Maybe[StringLiteralLong1_Elmt_Sequence_Alts_Option]
     regex: str
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence")
     ALTS = hydra.core.Name("Alts")
     REGEX = hydra.core.Name("regex")
@@ -1439,7 +1439,7 @@ class _StringLiteralLong1_Elmt_Sequence_Alts_OptionMeta(type):
 
 class StringLiteralLong1_Elmt_Sequence_Alts_Option(metaclass=_StringLiteralLong1_Elmt_Sequence_Alts_OptionMeta):
     r"""StringLiteralLong1_Elmt_Sequence_Alts_OptionApos | StringLiteralLong1_Elmt_Sequence_Alts_OptionSequence"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option")
     APOS = hydra.core.Name("Apos")
     SEQUENCE = hydra.core.Name("sequence")
@@ -1468,7 +1468,7 @@ class _StringLiteralLong2_ElmtMeta(type):
 
 class StringLiteralLong2_Elmt(metaclass=_StringLiteralLong2_ElmtMeta):
     r"""StringLiteralLong2_ElmtSequence | StringLiteralLong2_ElmtEchar | StringLiteralLong2_ElmtUchar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt")
     SEQUENCE = hydra.core.Name("sequence")
     ECHAR = hydra.core.Name("Echar")
@@ -1478,7 +1478,7 @@ class StringLiteralLong2_Elmt(metaclass=_StringLiteralLong2_ElmtMeta):
 class StringLiteralLong2_Elmt_Sequence:
     alts: Maybe[StringLiteralLong2_Elmt_Sequence_Alts_Option]
     regex: str
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt_Sequence")
     ALTS = hydra.core.Name("Alts")
     REGEX = hydra.core.Name("regex")
@@ -1499,7 +1499,7 @@ class _StringLiteralLong2_Elmt_Sequence_Alts_OptionMeta(type):
 
 class StringLiteralLong2_Elmt_Sequence_Alts_Option(metaclass=_StringLiteralLong2_Elmt_Sequence_Alts_OptionMeta):
     r"""StringLiteralLong2_Elmt_Sequence_Alts_OptionQuot | StringLiteralLong2_Elmt_Sequence_Alts_OptionSequence"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option")
     QUOT = hydra.core.Name("Quot")
     SEQUENCE = hydra.core.Name("sequence")
@@ -1520,7 +1520,7 @@ class _UcharMeta(type):
 
 class Uchar(metaclass=_UcharMeta):
     r"""UcharSequence | UcharSequence2"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Uchar")
     SEQUENCE = hydra.core.Name("sequence")
     SEQUENCE2 = hydra.core.Name("sequence2")
@@ -1531,7 +1531,7 @@ class Uchar_Sequence:
     hex2: Hex
     hex3: Hex
     hex4: Hex
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Uchar_Sequence")
     HEX = hydra.core.Name("Hex")
     HEX2 = hydra.core.Name("Hex2")
@@ -1548,7 +1548,7 @@ class Uchar_Sequence2:
     hex6: Hex
     hex7: Hex
     hex8: Hex
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Uchar_Sequence2")
     HEX = hydra.core.Name("Hex")
     HEX2 = hydra.core.Name("Hex2")
@@ -1576,7 +1576,7 @@ class _PnCharsBaseMeta(type):
 
 class PnCharsBase(metaclass=_PnCharsBaseMeta):
     r"""PnCharsBaseRegex | PnCharsBaseRegex2"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnCharsBase")
     REGEX = hydra.core.Name("regex")
     REGEX2 = hydra.core.Name("regex2")
@@ -1597,7 +1597,7 @@ class _PnCharsUMeta(type):
 
 class PnCharsU(metaclass=_PnCharsUMeta):
     r"""PnCharsUPnCharsBase | PnCharsULowbar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnCharsU")
     PN_CHARS_BASE = hydra.core.Name("PnCharsBase")
     LOWBAR = hydra.core.Name("Lowbar")
@@ -1621,7 +1621,7 @@ class _PnCharsMeta(type):
 
 class PnChars(metaclass=_PnCharsMeta):
     r"""PnCharsPnCharsU | PnCharsMinus | PnCharsRegex"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnChars")
     PN_CHARS_U = hydra.core.Name("PnCharsU")
     MINUS = hydra.core.Name("Minus")
@@ -1631,7 +1631,7 @@ class PnChars(metaclass=_PnCharsMeta):
 class PnPrefix:
     pn_chars_base: PnCharsBase
     sequence: Maybe[PnPrefix_Sequence_Option]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnPrefix")
     PN_CHARS_BASE = hydra.core.Name("PnCharsBase")
     SEQUENCE = hydra.core.Name("Sequence")
@@ -1640,7 +1640,7 @@ class PnPrefix:
 class PnPrefix_Sequence_Option:
     alts: PnPrefix_Sequence_Option_Alts
     pn_chars: PnChars
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnPrefix_Sequence_Option")
     ALTS = hydra.core.Name("alts")
     PN_CHARS = hydra.core.Name("PnChars")
@@ -1661,7 +1661,7 @@ class _PnPrefix_Sequence_Option_AltsMeta(type):
 
 class PnPrefix_Sequence_Option_Alts(metaclass=_PnPrefix_Sequence_Option_AltsMeta):
     r"""PnPrefix_Sequence_Option_AltsPnChars | PnPrefix_Sequence_Option_AltsPeriod"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnPrefix_Sequence_Option_Alts")
     PN_CHARS = hydra.core.Name("PnChars")
     PERIOD = hydra.core.Name("Period")
@@ -1670,7 +1670,7 @@ class PnPrefix_Sequence_Option_Alts(metaclass=_PnPrefix_Sequence_Option_AltsMeta
 class PnLocal:
     alts: PnLocal_Alts
     sequence: Maybe[PnLocal_Sequence_Option]
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal")
     ALTS = hydra.core.Name("alts")
     SEQUENCE = hydra.core.Name("Sequence")
@@ -1697,7 +1697,7 @@ class _PnLocal_AltsMeta(type):
 
 class PnLocal_Alts(metaclass=_PnLocal_AltsMeta):
     r"""PnLocal_AltsPnCharsU | PnLocal_AltsColon | PnLocal_AltsRegex | PnLocal_AltsPlx"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal_Alts")
     PN_CHARS_U = hydra.core.Name("PnCharsU")
     COLON = hydra.core.Name("Colon")
@@ -1708,7 +1708,7 @@ class PnLocal_Alts(metaclass=_PnLocal_AltsMeta):
 class PnLocal_Sequence_Option:
     list_of_alts: frozenlist[PnLocal_Sequence_Option_ListOfAlts_Elmt]
     alts: PnLocal_Sequence_Option_Alts
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal_Sequence_Option")
     LIST_OF_ALTS = hydra.core.Name("listOfAlts")
     ALTS = hydra.core.Name("alts")
@@ -1739,7 +1739,7 @@ class _PnLocal_Sequence_Option_ListOfAlts_ElmtMeta(type):
 
 class PnLocal_Sequence_Option_ListOfAlts_Elmt(metaclass=_PnLocal_Sequence_Option_ListOfAlts_ElmtMeta):
     r"""PnLocal_Sequence_Option_ListOfAlts_ElmtPnChars | PnLocal_Sequence_Option_ListOfAlts_ElmtPeriod | PnLocal_Sequence_Option_ListOfAlts_ElmtColon | PnLocal_Sequence_Option_ListOfAlts_ElmtPlx"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt")
     PN_CHARS = hydra.core.Name("PnChars")
     PERIOD = hydra.core.Name("Period")
@@ -1765,7 +1765,7 @@ class _PnLocal_Sequence_Option_AltsMeta(type):
 
 class PnLocal_Sequence_Option_Alts(metaclass=_PnLocal_Sequence_Option_AltsMeta):
     r"""PnLocal_Sequence_Option_AltsPnChars | PnLocal_Sequence_Option_AltsColon | PnLocal_Sequence_Option_AltsPlx"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_Alts")
     PN_CHARS = hydra.core.Name("PnChars")
     COLON = hydra.core.Name("Colon")
@@ -1783,7 +1783,7 @@ class _PlxMeta(type):
 
 class Plx(metaclass=_PlxMeta):
     r"""PlxPercent | PlxPnLocalEsc"""
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Plx")
     PERCENT = hydra.core.Name("Percent")
     PN_LOCAL_ESC = hydra.core.Name("PnLocalEsc")
@@ -1792,7 +1792,7 @@ class Plx(metaclass=_PlxMeta):
 class Percent:
     hex: Hex
     hex2: Hex
-    
+
     TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Percent")
     HEX = hydra.core.Name("Hex")
     HEX2 = hydra.core.Name("Hex2")

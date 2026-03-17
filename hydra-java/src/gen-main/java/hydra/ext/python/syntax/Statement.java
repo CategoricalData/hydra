@@ -6,52 +6,52 @@ import java.io.Serializable;
 
 public abstract class Statement implements Serializable, Comparable<Statement> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Statement");
-  
+
   public static final hydra.core.Name COMPOUND = new hydra.core.Name("compound");
-  
+
   public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
-  
+
   public static final hydra.core.Name ANNOTATED = new hydra.core.Name("annotated");
-  
+
   private Statement () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Compound instance) ;
-    
+
     R visit(Simple instance) ;
-    
+
     R visit(Annotated instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Statement instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Compound instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Simple instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Annotated instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Compound extends hydra.ext.python.syntax.Statement implements Serializable {
     public final hydra.ext.python.syntax.CompoundStatement value;
-    
+
     public Compound (hydra.ext.python.syntax.CompoundStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Compound)) {
@@ -62,12 +62,12 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Statement other) {
@@ -78,20 +78,20 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
       Compound o = (Compound) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Simple extends hydra.ext.python.syntax.Statement implements Serializable {
     public final hydra.util.ConsList<hydra.ext.python.syntax.SimpleStatement> value;
-    
+
     public Simple (hydra.util.ConsList<hydra.ext.python.syntax.SimpleStatement> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Simple)) {
@@ -102,12 +102,12 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Statement other) {
@@ -118,20 +118,20 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
       Simple o = (Simple) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Annotated extends hydra.ext.python.syntax.Statement implements Serializable {
     public final hydra.ext.python.syntax.AnnotatedStatement value;
-    
+
     public Annotated (hydra.ext.python.syntax.AnnotatedStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Annotated)) {
@@ -142,12 +142,12 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Statement other) {
@@ -158,7 +158,7 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
       Annotated o = (Annotated) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

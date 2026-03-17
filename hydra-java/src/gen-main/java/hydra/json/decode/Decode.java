@@ -15,14 +15,14 @@ public interface Decode {
           "unsupported type for JSON decoding: ",
           hydra.show.core.Core.type(typ))));
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Type.Literal lt) {
         return hydra.json.decode.Decode.decodeLiteral(
           (lt).value,
           value);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Type.List elemType) {
         hydra.util.Either<String, hydra.util.ConsList<hydra.json.model.Value>> arrResult = hydra.json.decode.Decode.expectArray(value);
@@ -43,7 +43,7 @@ public interface Decode {
           }),
           arrResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Type.Set elemType) {
         hydra.util.Either<String, hydra.util.ConsList<hydra.json.model.Value>> arrResult = hydra.json.decode.Decode.expectArray(value);
@@ -64,7 +64,7 @@ public interface Decode {
           }),
           arrResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Type.Maybe innerType) {
         java.util.function.Function<hydra.util.ConsList<hydra.json.model.Value>, hydra.util.Either<String, hydra.core.Term>> decodeJust = (java.util.function.Function<hydra.util.ConsList<hydra.json.model.Value>, hydra.util.Either<String, hydra.core.Term>>) (arr -> hydra.lib.eithers.Map.apply(
@@ -93,19 +93,19 @@ public interface Decode {
           public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.json.model.Value instance) {
             return hydra.util.Either.<String, hydra.core.Term>left("expected null or single-element array for Maybe");
           }
-          
+
           @Override
           public hydra.util.Either<String, hydra.core.Term> visit(hydra.json.model.Value.Null ignored) {
             return hydra.util.Either.<String, hydra.core.Term>right(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())));
           }
-          
+
           @Override
           public hydra.util.Either<String, hydra.core.Term> visit(hydra.json.model.Value.Array arr) {
             return (decodeMaybeArray).apply((arr).value);
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Type.Record rt) {
         hydra.util.Either<String, hydra.util.PersistentMap<String, hydra.json.model.Value>> objResult = hydra.json.decode.Decode.expectObject(value);
@@ -140,7 +140,7 @@ public interface Decode {
           }),
           objResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Type.Union rt) {
         java.util.function.Function<String, java.util.function.Function<hydra.util.Maybe<hydra.json.model.Value>, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Term>>>> decodeVariant = (java.util.function.Function<String, java.util.function.Function<hydra.util.Maybe<hydra.json.model.Value>, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Term>>>>) (key -> (java.util.function.Function<hydra.util.Maybe<hydra.json.model.Value>, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Term>>>) (val -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Term>>) (ftype -> {
@@ -187,7 +187,7 @@ public interface Decode {
           (java.util.function.Function<hydra.util.PersistentMap<String, hydra.json.model.Value>, hydra.util.Either<String, hydra.core.Term>>) (obj -> (processUnion).apply(obj)),
           objResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Type.Unit ignored) {
         hydra.util.Either<String, hydra.util.PersistentMap<String, hydra.json.model.Value>> objResult = hydra.json.decode.Decode.expectObject(value);
@@ -195,7 +195,7 @@ public interface Decode {
           (java.util.function.Function<hydra.util.PersistentMap<String, hydra.json.model.Value>, hydra.core.Term>) (_2 -> new hydra.core.Term.Unit()),
           objResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Type.Wrap wn) {
         hydra.util.Either<String, hydra.core.Term> decoded = hydra.json.decode.Decode.fromJson(
@@ -207,7 +207,7 @@ public interface Decode {
           (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v -> new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(tname, v))),
           decoded);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Type.Map mt) {
         hydra.util.Either<String, hydra.util.ConsList<hydra.json.model.Value>> arrResult = hydra.json.decode.Decode.expectArray(value);
@@ -263,7 +263,7 @@ public interface Decode {
           }),
           arrResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Type.Pair pt) {
         hydra.core.Type firstType = (pt).value.first;
@@ -305,7 +305,7 @@ public interface Decode {
           }),
           objResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Type.Either et) {
         hydra.core.Type leftType = (et).value.left;
@@ -348,7 +348,7 @@ public interface Decode {
           }),
           objResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Type.Variable name) {
         hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> lookedUp = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
@@ -367,7 +367,7 @@ public interface Decode {
       }
     });
   }
-  
+
   static hydra.util.Either<String, hydra.core.Term> decodeLiteral(hydra.core.LiteralType lt, hydra.json.model.Value value) {
     return (lt).accept(new hydra.core.LiteralType.PartialVisitor<>() {
       @Override
@@ -377,7 +377,7 @@ public interface Decode {
           (java.util.function.Function<String, hydra.core.Term>) (s -> new hydra.core.Term.Literal(new hydra.core.Literal.Binary(hydra.lib.literals.StringToBinary.apply(s)))),
           strResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.LiteralType.Boolean_ ignored) {
         return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
@@ -385,28 +385,28 @@ public interface Decode {
           public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.json.model.Value instance) {
             return hydra.util.Either.<String, hydra.core.Term>left("expected boolean");
           }
-          
+
           @Override
           public hydra.util.Either<String, hydra.core.Term> visit(hydra.json.model.Value.Boolean_ b) {
             return hydra.util.Either.<String, hydra.core.Term>right(new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_((b).value)));
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.LiteralType.Float_ ft) {
         return hydra.json.decode.Decode.decodeFloat(
           (ft).value,
           value);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.LiteralType.Integer_ it) {
         return hydra.json.decode.Decode.decodeInteger(
           (it).value,
           value);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.LiteralType.String_ ignored) {
         hydra.util.Either<String, String> strResult = hydra.json.decode.Decode.expectString(value);
@@ -416,7 +416,7 @@ public interface Decode {
       }
     });
   }
-  
+
   static hydra.util.Either<String, hydra.core.Term> decodeFloat(hydra.core.FloatType ft, hydra.json.model.Value value) {
     return (ft).accept(new hydra.core.FloatType.PartialVisitor<>() {
       @Override
@@ -426,7 +426,7 @@ public interface Decode {
           (java.util.function.Function<java.math.BigDecimal, hydra.core.Term>) (n -> new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Bigfloat(n)))),
           numResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.FloatType.Float32 ignored) {
         hydra.util.Either<String, String> strResult = hydra.json.decode.Decode.expectString(value);
@@ -443,7 +443,7 @@ public interface Decode {
           }),
           strResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.FloatType.Float64 ignored) {
         hydra.util.Either<String, java.math.BigDecimal> numResult = hydra.json.decode.Decode.expectNumber(value);
@@ -453,7 +453,7 @@ public interface Decode {
       }
     });
   }
-  
+
   static hydra.util.Either<String, hydra.core.Term> decodeInteger(hydra.core.IntegerType it, hydra.json.model.Value value) {
     return (it).accept(new hydra.core.IntegerType.PartialVisitor<>() {
       @Override
@@ -472,7 +472,7 @@ public interface Decode {
           }),
           strResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.IntegerType.Int64 ignored) {
         hydra.util.Either<String, String> strResult = hydra.json.decode.Decode.expectString(value);
@@ -489,7 +489,7 @@ public interface Decode {
           }),
           strResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.IntegerType.Uint32 ignored) {
         hydra.util.Either<String, String> strResult = hydra.json.decode.Decode.expectString(value);
@@ -506,7 +506,7 @@ public interface Decode {
           }),
           strResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.IntegerType.Uint64 ignored) {
         hydra.util.Either<String, String> strResult = hydra.json.decode.Decode.expectString(value);
@@ -523,7 +523,7 @@ public interface Decode {
           }),
           strResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.IntegerType.Int8 ignored) {
         hydra.util.Either<String, java.math.BigDecimal> numResult = hydra.json.decode.Decode.expectNumber(value);
@@ -531,7 +531,7 @@ public interface Decode {
           (java.util.function.Function<java.math.BigDecimal, hydra.core.Term>) (n -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int8(hydra.lib.literals.BigintToInt8.apply(hydra.lib.literals.BigfloatToBigint.apply(n)))))),
           numResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.IntegerType.Int16 ignored) {
         hydra.util.Either<String, java.math.BigDecimal> numResult = hydra.json.decode.Decode.expectNumber(value);
@@ -539,7 +539,7 @@ public interface Decode {
           (java.util.function.Function<java.math.BigDecimal, hydra.core.Term>) (n -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int16(hydra.lib.literals.BigintToInt16.apply(hydra.lib.literals.BigfloatToBigint.apply(n)))))),
           numResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.IntegerType.Int32 ignored) {
         hydra.util.Either<String, java.math.BigDecimal> numResult = hydra.json.decode.Decode.expectNumber(value);
@@ -547,7 +547,7 @@ public interface Decode {
           (java.util.function.Function<java.math.BigDecimal, hydra.core.Term>) (n -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(hydra.lib.literals.BigintToInt32.apply(hydra.lib.literals.BigfloatToBigint.apply(n)))))),
           numResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.IntegerType.Uint8 ignored) {
         hydra.util.Either<String, java.math.BigDecimal> numResult = hydra.json.decode.Decode.expectNumber(value);
@@ -555,7 +555,7 @@ public interface Decode {
           (java.util.function.Function<java.math.BigDecimal, hydra.core.Term>) (n -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Uint8(hydra.lib.literals.BigintToUint8.apply(hydra.lib.literals.BigfloatToBigint.apply(n)))))),
           numResult);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.IntegerType.Uint16 ignored) {
         hydra.util.Either<String, java.math.BigDecimal> numResult = hydra.json.decode.Decode.expectNumber(value);
@@ -565,56 +565,56 @@ public interface Decode {
       }
     });
   }
-  
+
   static hydra.util.Either<String, String> expectString(hydra.json.model.Value value) {
     return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, String> otherwise(hydra.json.model.Value instance) {
         return hydra.util.Either.<String, String>left("expected string");
       }
-      
+
       @Override
       public hydra.util.Either<String, String> visit(hydra.json.model.Value.String_ s) {
         return hydra.util.Either.<String, String>right((s).value);
       }
     });
   }
-  
+
   static hydra.util.Either<String, hydra.util.ConsList<hydra.json.model.Value>> expectArray(hydra.json.model.Value value) {
     return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<hydra.json.model.Value>> otherwise(hydra.json.model.Value instance) {
         return hydra.util.Either.<String, hydra.util.ConsList<hydra.json.model.Value>>left("expected array");
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<hydra.json.model.Value>> visit(hydra.json.model.Value.Array arr) {
         return hydra.util.Either.<String, hydra.util.ConsList<hydra.json.model.Value>>right((arr).value);
       }
     });
   }
-  
+
   static hydra.util.Either<String, hydra.util.PersistentMap<String, hydra.json.model.Value>> expectObject(hydra.json.model.Value value) {
     return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.util.PersistentMap<String, hydra.json.model.Value>> otherwise(hydra.json.model.Value instance) {
         return hydra.util.Either.<String, hydra.util.PersistentMap<String, hydra.json.model.Value>>left("expected object");
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.util.PersistentMap<String, hydra.json.model.Value>> visit(hydra.json.model.Value.Object_ obj) {
         return hydra.util.Either.<String, hydra.util.PersistentMap<String, hydra.json.model.Value>>right((obj).value);
       }
     });
   }
-  
+
   static hydra.util.Either<String, java.math.BigDecimal> expectNumber(hydra.json.model.Value value) {
     return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, java.math.BigDecimal> otherwise(hydra.json.model.Value instance) {
         return hydra.util.Either.<String, java.math.BigDecimal>left("expected number");
       }
-      
+
       @Override
       public hydra.util.Either<String, java.math.BigDecimal> visit(hydra.json.model.Value.Number_ n) {
         return hydra.util.Either.<String, java.math.BigDecimal>right((n).value);

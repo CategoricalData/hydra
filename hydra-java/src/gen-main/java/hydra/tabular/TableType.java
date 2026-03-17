@@ -9,20 +9,20 @@ import java.io.Serializable;
  */
 public class TableType implements Serializable, Comparable<TableType> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.tabular.TableType");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name COLUMNS = new hydra.core.Name("columns");
-  
+
   public final hydra.relational.RelationName name;
-  
+
   public final hydra.util.ConsList<hydra.tabular.ColumnType> columns;
-  
+
   public TableType (hydra.relational.RelationName name, hydra.util.ConsList<hydra.tabular.ColumnType> columns) {
     this.name = name;
     this.columns = columns;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TableType)) {
@@ -35,12 +35,12 @@ public class TableType implements Serializable, Comparable<TableType> {
       this.columns,
       o.columns);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(columns);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TableType other) {
@@ -51,11 +51,11 @@ public class TableType implements Serializable, Comparable<TableType> {
     }
     return ((Comparable) columns).compareTo(other.columns);
   }
-  
+
   public TableType withName(hydra.relational.RelationName name) {
     return new TableType(name, columns);
   }
-  
+
   public TableType withColumns(hydra.util.ConsList<hydra.tabular.ColumnType> columns) {
     return new TableType(name, columns);
   }

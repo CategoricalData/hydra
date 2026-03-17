@@ -14,7 +14,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-data Array = 
+data Array =
   Array {
     arrayItems :: Schema}
   deriving (Eq, Ord, Read, Show)
@@ -23,7 +23,7 @@ _Array = Core.Name "hydra.ext.org.apache.avro.schema.Array"
 
 _Array_items = Core.Name "items"
 
-data Enum = 
+data Enum =
   Enum {
     -- | a JSON array, listing symbols, as JSON strings. All symbols in an enum must be unique; duplicates are prohibited. Every symbol must match the regular expression [A-Za-z_][A-Za-z0-9_]* (the same requirement as for names)
     enumSymbols :: [String],
@@ -37,7 +37,7 @@ _Enum_symbols = Core.Name "symbols"
 
 _Enum_default = Core.Name "default"
 
-data Field = 
+data Field =
   Field {
     -- | a JSON string providing the name of the field
     fieldName :: String,
@@ -71,7 +71,7 @@ _Field_aliases = Core.Name "aliases"
 
 _Field_annotations = Core.Name "annotations"
 
-data Fixed = 
+data Fixed =
   Fixed {
     -- | an integer, specifying the number of bytes per value
     fixedSize :: Int}
@@ -81,7 +81,7 @@ _Fixed = Core.Name "hydra.ext.org.apache.avro.schema.Fixed"
 
 _Fixed_size = Core.Name "size"
 
-data Map = 
+data Map =
   Map {
     mapValues :: Schema}
   deriving (Eq, Ord, Read, Show)
@@ -90,7 +90,7 @@ _Map = Core.Name "hydra.ext.org.apache.avro.schema.Map"
 
 _Map_values = Core.Name "values"
 
-data Named = 
+data Named =
   Named {
     -- | a string naming this schema
     namedName :: String,
@@ -119,7 +119,7 @@ _Named_type = Core.Name "type"
 
 _Named_annotations = Core.Name "annotations"
 
-data NamedType = 
+data NamedType =
   NamedTypeEnum Enum |
   NamedTypeFixed Fixed |
   NamedTypeRecord Record
@@ -133,10 +133,10 @@ _NamedType_fixed = Core.Name "fixed"
 
 _NamedType_record = Core.Name "record"
 
-data Order = 
+data Order =
   OrderAscending  |
   OrderDescending  |
-  OrderIgnore 
+  OrderIgnore
   deriving (Eq, Ord, Read, Show)
 
 _Order = Core.Name "hydra.ext.org.apache.avro.schema.Order"
@@ -147,7 +147,7 @@ _Order_descending = Core.Name "descending"
 
 _Order_ignore = Core.Name "ignore"
 
-data Primitive = 
+data Primitive =
   -- | no value
   PrimitiveNull  |
   -- | A binary value
@@ -163,7 +163,7 @@ data Primitive =
   -- | sequence of 8-bit unsigned bytes
   PrimitiveBytes  |
   -- | unicode character sequence
-  PrimitiveString 
+  PrimitiveString
   deriving (Eq, Ord, Read, Show)
 
 _Primitive = Core.Name "hydra.ext.org.apache.avro.schema.Primitive"
@@ -184,7 +184,7 @@ _Primitive_bytes = Core.Name "bytes"
 
 _Primitive_string = Core.Name "string"
 
-data Record = 
+data Record =
   Record {
     -- | a JSON array, listing fields
     recordFields :: [Field]}
@@ -194,7 +194,7 @@ _Record = Core.Name "hydra.ext.org.apache.avro.schema.Record"
 
 _Record_fields = Core.Name "fields"
 
-data Schema = 
+data Schema =
   SchemaArray Array |
   SchemaMap Map |
   SchemaNamed Named |
@@ -218,7 +218,7 @@ _Schema_reference = Core.Name "reference"
 
 _Schema_union = Core.Name "union"
 
-newtype Union = 
+newtype Union =
   Union {
     unUnion :: [Schema]}
   deriving (Eq, Ord, Read, Show)

@@ -29,8 +29,8 @@ scalaLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = typePredicate}} 
-  where 
+        Coders.languageConstraintsTypes = typePredicate}}
+  where
     eliminationVariants =
         Sets.fromList [
           Variants.EliminationVariantRecord,
@@ -98,8 +98,8 @@ scalaReservedWords =
     Sets.fromList (Lists.concat [
       keywords,
       classNames,
-      hydraScalaKeywords]) 
-  where 
+      hydraScalaKeywords])
+  where
     keywords =
         [
           "abstract",

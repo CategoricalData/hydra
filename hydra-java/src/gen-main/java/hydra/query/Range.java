@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class Range implements Serializable, Comparable<Range> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.Range");
-  
+
   public static final hydra.core.Name MIN = new hydra.core.Name("min");
-  
+
   public static final hydra.core.Name MAX = new hydra.core.Name("max");
-  
+
   /**
    * The minimum value (inclusive)
    */
   public final Integer min;
-  
+
   /**
    * The maximum value (inclusive)
    */
   public final Integer max;
-  
+
   public Range (Integer min, Integer max) {
     this.min = min;
     this.max = max;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Range)) {
@@ -41,12 +41,12 @@ public class Range implements Serializable, Comparable<Range> {
       this.max,
       o.max);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(min) + 3 * java.util.Objects.hashCode(max);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Range other) {
@@ -57,11 +57,11 @@ public class Range implements Serializable, Comparable<Range> {
     }
     return ((Comparable) max).compareTo(other.max);
   }
-  
+
   public Range withMin(Integer min) {
     return new Range(min, max);
   }
-  
+
   public Range withMax(Integer max) {
     return new Range(min, max);
   }

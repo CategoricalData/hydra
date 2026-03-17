@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class ModuleHead implements Serializable, Comparable<ModuleHead> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.ModuleHead");
-  
+
   public static final hydra.core.Name COMMENTS = new hydra.core.Name("comments");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name EXPORTS = new hydra.core.Name("exports");
-  
+
   /**
    * Optional module-level comments
    */
   public final hydra.util.Maybe<String> comments;
-  
+
   /**
    * The module name
    */
   public final hydra.ext.haskell.ast.ModuleName name;
-  
+
   /**
    * Export list
    */
   public final hydra.util.ConsList<hydra.ext.haskell.ast.Export> exports;
-  
+
   public ModuleHead (hydra.util.Maybe<String> comments, hydra.ext.haskell.ast.ModuleName name, hydra.util.ConsList<hydra.ext.haskell.ast.Export> exports) {
     this.comments = comments;
     this.name = name;
     this.exports = exports;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ModuleHead)) {
@@ -51,12 +51,12 @@ public class ModuleHead implements Serializable, Comparable<ModuleHead> {
       this.exports,
       o.exports);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(comments) + 3 * java.util.Objects.hashCode(name) + 5 * java.util.Objects.hashCode(exports);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ModuleHead other) {
@@ -71,15 +71,15 @@ public class ModuleHead implements Serializable, Comparable<ModuleHead> {
     }
     return ((Comparable) exports).compareTo(other.exports);
   }
-  
+
   public ModuleHead withComments(hydra.util.Maybe<String> comments) {
     return new ModuleHead(comments, name, exports);
   }
-  
+
   public ModuleHead withName(hydra.ext.haskell.ast.ModuleName name) {
     return new ModuleHead(comments, name, exports);
   }
-  
+
   public ModuleHead withExports(hydra.util.ConsList<hydra.ext.haskell.ast.Export> exports) {
     return new ModuleHead(comments, name, exports);
   }

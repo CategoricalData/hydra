@@ -25,7 +25,7 @@ import qualified Data.Set as S
 accessorEdge :: Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorEdge
 accessorEdge cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "source" accessorNode fieldMap cx) (\field_source -> Eithers.bind (Helpers.requireField "path" accessorPath fieldMap cx) (\field_path -> Eithers.bind (Helpers.requireField "target" accessorNode fieldMap cx) (\field_target -> Right (Accessors.AccessorEdge {
           Accessors.accessorEdgeSource = field_source,
@@ -36,7 +36,7 @@ accessorEdge cx raw =
 accessorGraph :: Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorGraph
 accessorGraph cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "nodes" (Helpers.decodeList accessorNode) fieldMap cx) (\field_nodes -> Eithers.bind (Helpers.requireField "edges" (Helpers.decodeList accessorEdge) fieldMap cx) (\field_edges -> Right (Accessors.AccessorGraph {
           Accessors.accessorGraphNodes = field_nodes,
@@ -46,7 +46,7 @@ accessorGraph cx raw =
 accessorNode :: Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorNode
 accessorNode cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "label" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
@@ -71,8 +71,8 @@ accessorPath cx raw =
 termAccessor :: Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.TermAccessor
 termAccessor cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =

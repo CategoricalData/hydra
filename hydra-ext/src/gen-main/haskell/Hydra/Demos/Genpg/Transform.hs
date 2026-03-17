@@ -40,11 +40,11 @@ concatPairs acc p = (Lists.concat2 (Pairs.first acc) (Pairs.first p), (Lists.con
 -- | Decode a single cell value based on its column type
 decodeCell :: Tabular.ColumnType -> Maybe String -> Either String (Maybe Core.Term)
 decodeCell colType mvalue =
-     
-      let cname = Relational.unColumnName (Tabular.columnTypeName colType) 
+
+      let cname = Relational.unColumnName (Tabular.columnTypeName colType)
           typ = Tabular.columnTypeType colType
           decodeValue =
-                  \value ->  
+                  \value ->
                     let parseError =
                             Strings.cat [
                               "Invalid value for column ",
@@ -79,18 +79,18 @@ decodeCell colType mvalue =
 -- | Decode a single data row based on column types
 decodeRow :: [Tabular.ColumnType] -> Tabular.DataRow String -> Either String (Tabular.DataRow Core.Term)
 decodeRow colTypes row =
-     
+
       let cells = Tabular.unDataRow row
-      in (Eithers.map (\decodedCells -> Tabular.DataRow decodedCells) (Eithers.mapList (\pair ->  
-        let colType = Pairs.first pair 
+      in (Eithers.map (\decodedCells -> Tabular.DataRow decodedCells) (Eithers.mapList (\pair ->
+        let colType = Pairs.first pair
             mvalue = Pairs.second pair
         in (decodeCell colType mvalue)) (Lists.zip colTypes cells)))
 
 -- | Decode a table of strings into a table of terms based on column type specifications
 decodeTable :: Tabular.TableType -> Tabular.Table String -> Either String (Tabular.Table Core.Term)
 decodeTable tableType table =
-     
-      let colTypes = Tabular.tableTypeColumns tableType 
+
+      let colTypes = Tabular.tableTypeColumns tableType
           header = Tabular.tableHeader table
           rows = Tabular.tableData table
       in (Eithers.map (\decodedRows -> Tabular.Table {
@@ -114,20 +114,20 @@ elementIsVertex el =
 -- | Group element specifications by their source table
 elementSpecsByTable :: Model.LazyGraph Core.Term -> Either String (M.Map String ([Model.Vertex Core.Term], [Model.Edge Core.Term]))
 elementSpecsByTable graph =
-     
-      let vertices = Model.lazyGraphVertices graph 
+
+      let vertices = Model.lazyGraphVertices graph
           edges = Model.lazyGraphEdges graph
-      in (Eithers.bind (Eithers.mapList (\v -> Eithers.map (\t -> (t, v)) (tableForVertex v)) vertices) (\vertexPairs -> Eithers.bind (Eithers.mapList (\e -> Eithers.map (\t -> (t, e)) (tableForEdge e)) edges) (\edgePairs ->  
+      in (Eithers.bind (Eithers.mapList (\v -> Eithers.map (\t -> (t, v)) (tableForVertex v)) vertices) (\vertexPairs -> Eithers.bind (Eithers.mapList (\e -> Eithers.map (\t -> (t, e)) (tableForEdge e)) edges) (\edgePairs ->
         let addVertex =
-                \m -> \p ->  
-                  let table = Pairs.first p 
+                \m -> \p ->
+                  let table = Pairs.first p
                       v = Pairs.second p
                       existing = Maps.lookup table m
                       current = Maybes.fromMaybe ([], []) existing
-                  in (Maps.insert table (Lists.cons v (Pairs.first current), (Pairs.second current)) m) 
+                  in (Maps.insert table (Lists.cons v (Pairs.first current), (Pairs.second current)) m)
             addEdge =
-                    \m -> \p ->  
-                      let table = Pairs.first p 
+                    \m -> \p ->
+                      let table = Pairs.first p
                           e = Pairs.second p
                           existing = Maps.lookup table m
                           current = Maybes.fromMaybe ([], []) existing
@@ -138,8 +138,8 @@ elementSpecsByTable graph =
 -- | Evaluate an edge specification against a record term to produce an optional edge
 evaluateEdge :: Context.Context -> Graph.Graph -> Model.Edge Core.Term -> Core.Term -> Either (Context.InContext Error.Error) (Maybe (Model.Edge Core.Term))
 evaluateEdge cx g edgeSpec record =
-     
-      let label = Model.edgeLabel edgeSpec 
+
+      let label = Model.edgeLabel edgeSpec
           idSpec = Model.edgeId edgeSpec
           outSpec = Model.edgeOut edgeSpec
           inSpec = Model.edgeIn edgeSpec
@@ -160,12 +160,12 @@ evaluateEdge cx g edgeSpec record =
 -- | Evaluate property specifications against a record term
 evaluateProperties :: Ord t0 => (Context.Context -> Graph.Graph -> M.Map t0 Core.Term -> Core.Term -> Either (Context.InContext Error.Error) (M.Map t0 Core.Term))
 evaluateProperties cx g specs record =
-     
+
       let extractMaybe =
               \k -> \term -> case term of
                 Core.TermMaybe v0 -> Right (Maybes.map (\v -> (k, v)) v0)
-      in (Eithers.map (\pairs -> Maps.fromList (Maybes.cat pairs)) (Eithers.mapList (\pair ->  
-        let k = Pairs.first pair 
+      in (Eithers.map (\pairs -> Maps.fromList (Maybes.cat pairs)) (Eithers.mapList (\pair ->
+        let k = Pairs.first pair
             spec = Pairs.second pair
         in (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
           Core.applicationFunction = spec,
@@ -174,8 +174,8 @@ evaluateProperties cx g specs record =
 -- | Evaluate a vertex specification against a record term to produce an optional vertex
 evaluateVertex :: Context.Context -> Graph.Graph -> Model.Vertex Core.Term -> Core.Term -> Either (Context.InContext Error.Error) (Maybe (Model.Vertex Core.Term))
 evaluateVertex cx g vertexSpec record =
-     
-      let label = Model.vertexLabel vertexSpec 
+
+      let label = Model.vertexLabel vertexSpec
           idSpec = Model.vertexId vertexSpec
           propSpecs = Model.vertexProperties vertexSpec
       in (Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
@@ -218,8 +218,8 @@ normalizeField s = Logic.ifElse (Strings.null s) Nothing (Just s)
 -- | Process a single character during CSV parsing
 parseCsvChar :: (([Maybe String], String), Bool) -> Int -> (([Maybe String], String), Bool)
 parseCsvChar state c =
-     
-      let acc = Pairs.first (Pairs.first state) 
+
+      let acc = Pairs.first (Pairs.first state)
           field = Pairs.second (Pairs.first state)
           inQuotes = Pairs.second state
       in (Logic.ifElse (Equality.equal c 34) (Logic.ifElse inQuotes ((acc, field), False) (Logic.ifElse (Strings.null field) ((acc, field), True) ((acc, (Strings.cat2 field "\"")), inQuotes))) (Logic.ifElse (Logic.and (Equality.equal c 44) (Logic.not inQuotes)) ((Lists.cons (normalizeField field) acc, ""), False) ((acc, (Strings.cat2 field (Strings.fromList [
@@ -228,8 +228,8 @@ parseCsvChar state c =
 -- | Parse a CSV line into fields. Empty fields become Nothing.
 parseCsvLine :: String -> Either String [Maybe String]
 parseCsvLine line =
-     
-      let chars = Strings.toList line 
+
+      let chars = Strings.toList line
           initState = (([], ""), False)
           finalState = Lists.foldl parseCsvChar initState chars
           acc = Pairs.first (Pairs.first finalState)
@@ -240,17 +240,17 @@ parseCsvLine line =
 -- | Parse a single CSV line, returning Nothing for empty lines
 parseSingleLine :: String -> Either String (Maybe [Maybe String])
 parseSingleLine line =
-     
+
       let trimmed = stripWhitespace line
       in (Logic.ifElse (Strings.null trimmed) (Right Nothing) (Eithers.map (\x -> Just x) (parseCsvLine trimmed)))
 
 -- | Parse raw CSV lines into a Table of strings
 parseTableLines :: Bool -> [String] -> Either String (Tabular.Table String)
 parseTableLines hasHeader rawLines =
-    Eithers.bind (Eithers.mapList (\ln -> parseSingleLine ln) rawLines) (\parsedRows ->  
+    Eithers.bind (Eithers.mapList (\ln -> parseSingleLine ln) rawLines) (\parsedRows ->
       let rows = Maybes.cat parsedRows
-      in (Logic.ifElse hasHeader ( 
-        let headerRow = Lists.head rows 
+      in (Logic.ifElse hasHeader (
+        let headerRow = Lists.head rows
             dataRows = Lists.tail rows
         in (Logic.ifElse (listAny (\m -> Maybes.isNothing m) headerRow) (Left "null header column(s)") (Right (Tabular.Table {
           Tabular.tableHeader = (Just (Tabular.HeaderRow (Maybes.cat headerRow))),
@@ -261,8 +261,8 @@ parseTableLines hasHeader rawLines =
 -- | Strip leading and trailing whitespace from a string
 stripWhitespace :: String -> String
 stripWhitespace s =
-     
-      let chars = Strings.toList s 
+
+      let chars = Strings.toList s
           isSpaceChar = \c -> Chars.isSpace c
           trimLeft = Lists.dropWhile isSpaceChar chars
           trimRight = Lists.reverse (Lists.dropWhile isSpaceChar (Lists.reverse trimLeft))
@@ -271,8 +271,8 @@ stripWhitespace s =
 -- | Get the table name for an edge specification. Returns an error if not exactly one table is referenced.
 tableForEdge :: Model.Edge Core.Term -> Either String String
 tableForEdge edge =
-     
-      let label = Model.edgeLabel edge 
+
+      let label = Model.edgeLabel edge
           id = Model.edgeId edge
           outId = Model.edgeOut edge
           inId = Model.edgeIn edge
@@ -290,8 +290,8 @@ tableForEdge edge =
 -- | Get the table name for a vertex specification. Returns an error if not exactly one table is referenced.
 tableForVertex :: Model.Vertex Core.Term -> Either String String
 tableForVertex vertex =
-     
-      let label = Model.vertexLabel vertex 
+
+      let label = Model.vertexLabel vertex
           id = Model.vertexId vertex
           props = Model.vertexProperties vertex
           tables = findTablesInTerms (Lists.cons id (Maps.elems props))
@@ -307,13 +307,13 @@ tableTypesByName tableTypes = Maps.fromList (Lists.map (\t -> (Tabular.tableType
 -- | Convert a data row to a record term given a table type
 termRowToRecord :: Tabular.TableType -> Tabular.DataRow Core.Term -> Core.Term
 termRowToRecord tableType row =
-     
-      let tname = Relational.unRelationName (Tabular.tableTypeName tableType) 
+
+      let tname = Relational.unRelationName (Tabular.tableTypeName tableType)
           colTypes = Tabular.tableTypeColumns tableType
           cells = Tabular.unDataRow row
       in (Core.TermRecord (Core.Record {
         Core.recordTypeName = (Core.Name tname),
-        Core.recordFields = (Lists.zipWith (\colType -> \mvalue ->  
+        Core.recordFields = (Lists.zipWith (\colType -> \mvalue ->
           let cname = Relational.unColumnName (Tabular.columnTypeName colType)
           in Core.Field {
             Core.fieldName = (Core.Name cname),

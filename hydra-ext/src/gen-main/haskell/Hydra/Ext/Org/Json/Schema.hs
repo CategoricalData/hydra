@@ -13,7 +13,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-data Document = 
+data Document =
   Document {
     documentId :: (Maybe String),
     documentDefinitions :: (Maybe (M.Map Keyword Schema)),
@@ -28,21 +28,21 @@ _Document_definitions = Core.Name "definitions"
 
 _Document_root = Core.Name "root"
 
-newtype Keyword = 
+newtype Keyword =
   Keyword {
     unKeyword :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Keyword = Core.Name "hydra.ext.org.json.schema.Keyword"
 
-newtype Schema = 
+newtype Schema =
   Schema {
     unSchema :: [Restriction]}
   deriving (Eq, Ord, Read, Show)
 
 _Schema = Core.Name "hydra.ext.org.json.schema.Schema"
 
-data Restriction = 
+data Restriction =
   RestrictionType Type |
   RestrictionString StringRestriction |
   RestrictionNumber NumericRestriction |
@@ -74,7 +74,7 @@ _Restriction_title = Core.Name "title"
 
 _Restriction_description = Core.Name "description"
 
-data Type = 
+data Type =
   TypeSingle TypeName |
   TypeMultiple [TypeName]
   deriving (Eq, Ord, Read, Show)
@@ -85,14 +85,14 @@ _Type_single = Core.Name "single"
 
 _Type_multiple = Core.Name "multiple"
 
-data TypeName = 
+data TypeName =
   TypeNameString  |
   TypeNameInteger  |
   TypeNameNumber  |
   TypeNameBoolean  |
   TypeNameNull  |
   TypeNameArray  |
-  TypeNameObject 
+  TypeNameObject
   deriving (Eq, Ord, Read, Show)
 
 _TypeName = Core.Name "hydra.ext.org.json.schema.TypeName"
@@ -111,7 +111,7 @@ _TypeName_array = Core.Name "array"
 
 _TypeName_object = Core.Name "object"
 
-data StringRestriction = 
+data StringRestriction =
   StringRestrictionMinLength Int |
   StringRestrictionMaxLength Int |
   StringRestrictionPattern RegularExpression
@@ -125,14 +125,14 @@ _StringRestriction_maxLength = Core.Name "maxLength"
 
 _StringRestriction_pattern = Core.Name "pattern"
 
-newtype RegularExpression = 
+newtype RegularExpression =
   RegularExpression {
     unRegularExpression :: String}
   deriving (Eq, Ord, Read, Show)
 
 _RegularExpression = Core.Name "hydra.ext.org.json.schema.RegularExpression"
 
-data NumericRestriction = 
+data NumericRestriction =
   NumericRestrictionMinimum Limit |
   NumericRestrictionMaximum Limit |
   NumericRestrictionMultipleOf Int
@@ -146,7 +146,7 @@ _NumericRestriction_maximum = Core.Name "maximum"
 
 _NumericRestriction_multipleOf = Core.Name "multipleOf"
 
-data Limit = 
+data Limit =
   Limit {
     limitValue :: Int,
     limitExclusive :: Bool}
@@ -158,7 +158,7 @@ _Limit_value = Core.Name "value"
 
 _Limit_exclusive = Core.Name "exclusive"
 
-data ArrayRestriction = 
+data ArrayRestriction =
   ArrayRestrictionItems Items |
   ArrayRestrictionAdditionalItems AdditionalItems |
   ArrayRestrictionMinItems Int |
@@ -178,7 +178,7 @@ _ArrayRestriction_maxItems = Core.Name "maxItems"
 
 _ArrayRestriction_uniqueItems = Core.Name "uniqueItems"
 
-data Items = 
+data Items =
   ItemsSameItems Schema |
   ItemsVarItems [Schema]
   deriving (Eq, Ord, Read, Show)
@@ -189,7 +189,7 @@ _Items_sameItems = Core.Name "sameItems"
 
 _Items_varItems = Core.Name "varItems"
 
-data AdditionalItems = 
+data AdditionalItems =
   AdditionalItemsAny Bool |
   AdditionalItemsSchema Schema
   deriving (Eq, Ord, Read, Show)
@@ -200,7 +200,7 @@ _AdditionalItems_any = Core.Name "any"
 
 _AdditionalItems_schema = Core.Name "schema"
 
-data ObjectRestriction = 
+data ObjectRestriction =
   ObjectRestrictionProperties (M.Map Keyword Schema) |
   ObjectRestrictionAdditionalProperties AdditionalItems |
   ObjectRestrictionRequired [Keyword] |
@@ -226,7 +226,7 @@ _ObjectRestriction_dependencies = Core.Name "dependencies"
 
 _ObjectRestriction_patternProperties = Core.Name "patternProperties"
 
-data SchemaOrArray = 
+data SchemaOrArray =
   SchemaOrArraySchema Schema |
   SchemaOrArrayArray [Keyword]
   deriving (Eq, Ord, Read, Show)
@@ -237,7 +237,7 @@ _SchemaOrArray_schema = Core.Name "schema"
 
 _SchemaOrArray_array = Core.Name "array"
 
-data MultipleRestriction = 
+data MultipleRestriction =
   MultipleRestrictionAllOf [Schema] |
   MultipleRestrictionAnyOf [Schema] |
   MultipleRestrictionOneOf [Schema] |
@@ -257,7 +257,7 @@ _MultipleRestriction_not = Core.Name "not"
 
 _MultipleRestriction_enum = Core.Name "enum"
 
-newtype SchemaReference = 
+newtype SchemaReference =
   SchemaReference {
     unSchemaReference :: String}
   deriving (Eq, Ord, Read, Show)

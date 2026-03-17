@@ -25,7 +25,7 @@ import qualified Data.Set as S
 annotationSchema :: Graph.Graph -> Core.Term -> Either Error.DecodingError Mapping.AnnotationSchema
 annotationSchema cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "vertexLabel" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
@@ -108,7 +108,7 @@ annotationSchema cx raw =
 edgeSpec :: Graph.Graph -> Core.Term -> Either Error.DecodingError Mapping.EdgeSpec
 edgeSpec cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "label" Model.edgeLabel fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" valueSpec fieldMap cx) (\field_id -> Eithers.bind (Helpers.requireField "out" valueSpec fieldMap cx) (\field_out -> Eithers.bind (Helpers.requireField "in" valueSpec fieldMap cx) (\field_in -> Eithers.bind (Helpers.requireField "properties" (Helpers.decodeList propertySpec) fieldMap cx) (\field_properties -> Right (Mapping.EdgeSpec {
           Mapping.edgeSpecLabel = field_label,
@@ -121,8 +121,8 @@ edgeSpec cx raw =
 elementSpec :: Graph.Graph -> Core.Term -> Either Error.DecodingError Mapping.ElementSpec
 elementSpec cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -138,7 +138,7 @@ elementSpec cx raw =
 propertySpec :: Graph.Graph -> Core.Term -> Either Error.DecodingError Mapping.PropertySpec
 propertySpec cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "key" Model.propertyKey fieldMap cx) (\field_key -> Eithers.bind (Helpers.requireField "value" valueSpec fieldMap cx) (\field_value -> Right (Mapping.PropertySpec {
           Mapping.propertySpecKey = field_key,
@@ -148,8 +148,8 @@ propertySpec cx raw =
 valueSpec :: Graph.Graph -> Core.Term -> Either Error.DecodingError Mapping.ValueSpec
 valueSpec cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -169,7 +169,7 @@ valueSpec cx raw =
 vertexSpec :: Graph.Graph -> Core.Term -> Either Error.DecodingError Mapping.VertexSpec
 vertexSpec cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "label" Model.vertexLabel fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" valueSpec fieldMap cx) (\field_id -> Eithers.bind (Helpers.requireField "properties" (Helpers.decodeList propertySpec) fieldMap cx) (\field_properties -> Right (Mapping.VertexSpec {
           Mapping.vertexSpecLabel = field_label,

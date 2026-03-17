@@ -14,7 +14,7 @@ public interface Coders {
         public hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.coders.CoderDirection>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;
@@ -46,7 +46,7 @@ public interface Coders {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.coders.LanguageName> languageName(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.coders.LanguageName>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.coders.LanguageName>left(new hydra.error.DecodingError(err))),
@@ -55,7 +55,7 @@ public interface Coders {
         public hydra.util.Either<hydra.error.DecodingError, hydra.coders.LanguageName> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.coders.LanguageName>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.coders.LanguageName> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
@@ -67,7 +67,7 @@ public interface Coders {
                 public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Term instance) {
                   return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"));
                 }
-                
+
                 @Override
                 public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
                   return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -75,7 +75,7 @@ public interface Coders {
                     public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Literal.String_ s) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>right((s).value);
@@ -92,7 +92,7 @@ public interface Coders {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder> traversalOrder(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.coders.TraversalOrder>left(new hydra.error.DecodingError(err))),
@@ -101,7 +101,7 @@ public interface Coders {
         public hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.coders.TraversalOrder>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;

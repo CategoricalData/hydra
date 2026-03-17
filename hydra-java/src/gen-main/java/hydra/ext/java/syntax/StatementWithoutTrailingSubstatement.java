@@ -6,124 +6,124 @@ import java.io.Serializable;
 
 public abstract class StatementWithoutTrailingSubstatement implements Serializable, Comparable<StatementWithoutTrailingSubstatement> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.StatementWithoutTrailingSubstatement");
-  
+
   public static final hydra.core.Name BLOCK = new hydra.core.Name("block");
-  
+
   public static final hydra.core.Name EMPTY = new hydra.core.Name("empty");
-  
+
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
-  
+
   public static final hydra.core.Name ASSERT = new hydra.core.Name("assert");
-  
+
   public static final hydra.core.Name SWITCH = new hydra.core.Name("switch");
-  
+
   public static final hydra.core.Name DO = new hydra.core.Name("do");
-  
+
   public static final hydra.core.Name BREAK = new hydra.core.Name("break");
-  
+
   public static final hydra.core.Name CONTINUE = new hydra.core.Name("continue");
-  
+
   public static final hydra.core.Name RETURN = new hydra.core.Name("return");
-  
+
   public static final hydra.core.Name SYNCHRONIZED = new hydra.core.Name("synchronized");
-  
+
   public static final hydra.core.Name THROW = new hydra.core.Name("throw");
-  
+
   public static final hydra.core.Name TRY = new hydra.core.Name("try");
-  
+
   private StatementWithoutTrailingSubstatement () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Block instance) ;
-    
+
     R visit(Empty instance) ;
-    
+
     R visit(Expression instance) ;
-    
+
     R visit(Assert instance) ;
-    
+
     R visit(Switch instance) ;
-    
+
     R visit(Do instance) ;
-    
+
     R visit(Break instance) ;
-    
+
     R visit(Continue instance) ;
-    
+
     R visit(Return instance) ;
-    
+
     R visit(Synchronized instance) ;
-    
+
     R visit(Throw instance) ;
-    
+
     R visit(Try instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(StatementWithoutTrailingSubstatement instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Block instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Empty instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Expression instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Assert instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Switch instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Do instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Break instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Continue instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Return instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Synchronized instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Throw instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Try instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Block extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement implements Serializable {
     public final hydra.ext.java.syntax.Block value;
-    
+
     public Block (hydra.ext.java.syntax.Block value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Block)) {
@@ -134,12 +134,12 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StatementWithoutTrailingSubstatement other) {
@@ -150,18 +150,18 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
       Block o = (Block) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Empty extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement implements Serializable {
     public Empty () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Empty)) {
@@ -170,12 +170,12 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
       Empty o = (Empty) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StatementWithoutTrailingSubstatement other) {
@@ -185,20 +185,20 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Expression extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement implements Serializable {
     public final hydra.ext.java.syntax.ExpressionStatement value;
-    
+
     public Expression (hydra.ext.java.syntax.ExpressionStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Expression)) {
@@ -209,12 +209,12 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StatementWithoutTrailingSubstatement other) {
@@ -225,20 +225,20 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
       Expression o = (Expression) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Assert extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement implements Serializable {
     public final hydra.ext.java.syntax.AssertStatement value;
-    
+
     public Assert (hydra.ext.java.syntax.AssertStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Assert)) {
@@ -249,12 +249,12 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StatementWithoutTrailingSubstatement other) {
@@ -265,20 +265,20 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
       Assert o = (Assert) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Switch extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement implements Serializable {
     public final hydra.ext.java.syntax.SwitchStatement value;
-    
+
     public Switch (hydra.ext.java.syntax.SwitchStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Switch)) {
@@ -289,12 +289,12 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StatementWithoutTrailingSubstatement other) {
@@ -305,20 +305,20 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
       Switch o = (Switch) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Do extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement implements Serializable {
     public final hydra.ext.java.syntax.DoStatement value;
-    
+
     public Do (hydra.ext.java.syntax.DoStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Do)) {
@@ -329,12 +329,12 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StatementWithoutTrailingSubstatement other) {
@@ -345,20 +345,20 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
       Do o = (Do) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Break extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement implements Serializable {
     public final hydra.ext.java.syntax.BreakStatement value;
-    
+
     public Break (hydra.ext.java.syntax.BreakStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Break)) {
@@ -369,12 +369,12 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StatementWithoutTrailingSubstatement other) {
@@ -385,20 +385,20 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
       Break o = (Break) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Continue extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement implements Serializable {
     public final hydra.ext.java.syntax.ContinueStatement value;
-    
+
     public Continue (hydra.ext.java.syntax.ContinueStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Continue)) {
@@ -409,12 +409,12 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StatementWithoutTrailingSubstatement other) {
@@ -425,20 +425,20 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
       Continue o = (Continue) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Return extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement implements Serializable {
     public final hydra.ext.java.syntax.ReturnStatement value;
-    
+
     public Return (hydra.ext.java.syntax.ReturnStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Return)) {
@@ -449,12 +449,12 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StatementWithoutTrailingSubstatement other) {
@@ -465,20 +465,20 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
       Return o = (Return) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Synchronized extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement implements Serializable {
     public final hydra.ext.java.syntax.SynchronizedStatement value;
-    
+
     public Synchronized (hydra.ext.java.syntax.SynchronizedStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Synchronized)) {
@@ -489,12 +489,12 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StatementWithoutTrailingSubstatement other) {
@@ -505,20 +505,20 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
       Synchronized o = (Synchronized) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Throw extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement implements Serializable {
     public final hydra.ext.java.syntax.ThrowStatement value;
-    
+
     public Throw (hydra.ext.java.syntax.ThrowStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Throw)) {
@@ -529,12 +529,12 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StatementWithoutTrailingSubstatement other) {
@@ -545,20 +545,20 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
       Throw o = (Throw) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Try extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement implements Serializable {
     public final hydra.ext.java.syntax.TryStatement value;
-    
+
     public Try (hydra.ext.java.syntax.TryStatement value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Try)) {
@@ -569,12 +569,12 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StatementWithoutTrailingSubstatement other) {
@@ -585,7 +585,7 @@ public abstract class StatementWithoutTrailingSubstatement implements Serializab
       Try o = (Try) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

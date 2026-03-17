@@ -17,10 +17,10 @@ def value_spec(v1: hydra.pg.mapping.ValueSpec) -> hydra.core.Term:
     match v1:
         case hydra.pg.mapping.ValueSpecValue():
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.mapping.ValueSpec"), hydra.core.Field(hydra.core.Name("value"), cast(hydra.core.Term, hydra.core.TermUnit())))))
-        
+
         case hydra.pg.mapping.ValueSpecPattern(value=y2):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.mapping.ValueSpec"), hydra.core.Field(hydra.core.Name("pattern"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(y2))))))))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -37,9 +37,9 @@ def element_spec(v1: hydra.pg.mapping.ElementSpec) -> hydra.core.Term:
     match v1:
         case hydra.pg.mapping.ElementSpecVertex(value=y):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.mapping.ElementSpec"), hydra.core.Field(hydra.core.Name("vertex"), vertex_spec(y)))))
-        
+
         case hydra.pg.mapping.ElementSpecEdge(value=y2):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.mapping.ElementSpec"), hydra.core.Field(hydra.core.Name("edge"), edge_spec(y2)))))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")

@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class AsPattern implements Serializable, Comparable<AsPattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.AsPattern");
-  
+
   public static final hydra.core.Name PATTERN = new hydra.core.Name("pattern");
-  
+
   public static final hydra.core.Name AS = new hydra.core.Name("as");
-  
+
   public final hydra.ext.python.syntax.OrPattern pattern;
-  
+
   public final hydra.ext.python.syntax.PatternCaptureTarget as;
-  
+
   public AsPattern (hydra.ext.python.syntax.OrPattern pattern, hydra.ext.python.syntax.PatternCaptureTarget as) {
     this.pattern = pattern;
     this.as = as;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof AsPattern)) {
@@ -32,12 +32,12 @@ public class AsPattern implements Serializable, Comparable<AsPattern> {
       this.as,
       o.as);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(pattern) + 3 * java.util.Objects.hashCode(as);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AsPattern other) {
@@ -48,11 +48,11 @@ public class AsPattern implements Serializable, Comparable<AsPattern> {
     }
     return ((Comparable) as).compareTo(other.as);
   }
-  
+
   public AsPattern withPattern(hydra.ext.python.syntax.OrPattern pattern) {
     return new AsPattern(pattern, as);
   }
-  
+
   public AsPattern withAs(hydra.ext.python.syntax.PatternCaptureTarget as) {
     return new AsPattern(pattern, as);
   }

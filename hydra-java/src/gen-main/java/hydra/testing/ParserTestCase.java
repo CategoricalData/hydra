@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class ParserTestCase<A> implements Serializable, Comparable<ParserTestCase<A>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.ParserTestCase");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
-  
+
   /**
    * The input string to parse
    */
   public final String input;
-  
+
   /**
    * The expected parse result
    */
   public final hydra.parsing.ParseResult<A> output;
-  
+
   public ParserTestCase (String input, hydra.parsing.ParseResult<A> output) {
     this.input = input;
     this.output = output;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ParserTestCase)) {
@@ -41,12 +41,12 @@ public class ParserTestCase<A> implements Serializable, Comparable<ParserTestCas
       this.output,
       o.output);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(output);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ParserTestCase other) {
@@ -57,11 +57,11 @@ public class ParserTestCase<A> implements Serializable, Comparable<ParserTestCas
     }
     return ((Comparable) output).compareTo(other.output);
   }
-  
+
   public ParserTestCase withInput(String input) {
     return new ParserTestCase(input, output);
   }
-  
+
   public ParserTestCase withOutput(hydra.parsing.ParseResult<A> output) {
     return new ParserTestCase(input, output);
   }

@@ -13,27 +13,27 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-newtype Identifier = 
+newtype Identifier =
   Identifier {
     unIdentifier :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Identifier = Core.Name "hydra.ext.csharp.syntax.Identifier"
 
-newtype Keyword = 
+newtype Keyword =
   Keyword {
     unKeyword :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Keyword = Core.Name "hydra.ext.csharp.syntax.Keyword"
 
-data Literal = 
+data Literal =
   LiteralBoolean Bool |
   LiteralInteger IntegerLiteral |
   LiteralReal Double |
   LiteralCharacter String |
   LiteralString String |
-  LiteralNull 
+  LiteralNull
   deriving (Eq, Ord, Read, Show)
 
 _Literal = Core.Name "hydra.ext.csharp.syntax.Literal"
@@ -50,7 +50,7 @@ _Literal_string = Core.Name "string"
 
 _Literal_null = Core.Name "null"
 
-data IntegerLiteral = 
+data IntegerLiteral =
   IntegerLiteralDecimal String |
   IntegerLiteralHexadecimal String |
   IntegerLiteralBinary Integer
@@ -64,21 +64,21 @@ _IntegerLiteral_hexadecimal = Core.Name "hexadecimal"
 
 _IntegerLiteral_binary = Core.Name "binary"
 
-newtype NamespaceName = 
+newtype NamespaceName =
   NamespaceName {
     unNamespaceName :: NamespaceOrTypeName}
   deriving (Eq, Ord, Read, Show)
 
 _NamespaceName = Core.Name "hydra.ext.csharp.syntax.NamespaceName"
 
-newtype TypeName = 
+newtype TypeName =
   TypeName {
     unTypeName :: NamespaceOrTypeName}
   deriving (Eq, Ord, Read, Show)
 
 _TypeName = Core.Name "hydra.ext.csharp.syntax.TypeName"
 
-data NamespaceOrTypeName = 
+data NamespaceOrTypeName =
   NamespaceOrTypeNameIdentifier IdentifierNamespaceOrTypeName |
   NamespaceOrTypeNameQualified QualifiedNamespaceOrTypeName |
   NamespaceOrTypeNameAlias QualifiedAliasMember
@@ -92,7 +92,7 @@ _NamespaceOrTypeName_qualified = Core.Name "qualified"
 
 _NamespaceOrTypeName_alias = Core.Name "alias"
 
-data IdentifierNamespaceOrTypeName = 
+data IdentifierNamespaceOrTypeName =
   IdentifierNamespaceOrTypeName {
     identifierNamespaceOrTypeNameIdentifier :: Identifier,
     identifierNamespaceOrTypeNameArguments :: (Maybe TypeArgumentList)}
@@ -104,7 +104,7 @@ _IdentifierNamespaceOrTypeName_identifier = Core.Name "identifier"
 
 _IdentifierNamespaceOrTypeName_arguments = Core.Name "arguments"
 
-data QualifiedNamespaceOrTypeName = 
+data QualifiedNamespaceOrTypeName =
   QualifiedNamespaceOrTypeName {
     qualifiedNamespaceOrTypeNameNamespaceOrType :: NamespaceOrTypeName,
     qualifiedNamespaceOrTypeNameIdentifier :: Identifier,
@@ -119,7 +119,7 @@ _QualifiedNamespaceOrTypeName_identifier = Core.Name "identifier"
 
 _QualifiedNamespaceOrTypeName_arguments = Core.Name "arguments"
 
-data Type = 
+data Type =
   TypeReference ReferenceType |
   TypeValue ValueType |
   TypeParam TypeParameter |
@@ -136,12 +136,12 @@ _Type_param = Core.Name "param"
 
 _Type_pointer = Core.Name "pointer"
 
-data ReferenceType = 
+data ReferenceType =
   ReferenceTypeClass ClassType |
   ReferenceTypeInterface InterfaceType |
   ReferenceTypeArray ArrayType |
   ReferenceTypeDelegate DelegateType |
-  ReferenceTypeDynamic 
+  ReferenceTypeDynamic
   deriving (Eq, Ord, Read, Show)
 
 _ReferenceType = Core.Name "hydra.ext.csharp.syntax.ReferenceType"
@@ -156,10 +156,10 @@ _ReferenceType_delegate = Core.Name "delegate"
 
 _ReferenceType_dynamic = Core.Name "dynamic"
 
-data ClassType = 
+data ClassType =
   ClassTypeTypeName TypeName |
   ClassTypeObject  |
-  ClassTypeString 
+  ClassTypeString
   deriving (Eq, Ord, Read, Show)
 
 _ClassType = Core.Name "hydra.ext.csharp.syntax.ClassType"
@@ -170,14 +170,14 @@ _ClassType_object = Core.Name "object"
 
 _ClassType_string = Core.Name "string"
 
-newtype InterfaceType = 
+newtype InterfaceType =
   InterfaceType {
     unInterfaceType :: TypeName}
   deriving (Eq, Ord, Read, Show)
 
 _InterfaceType = Core.Name "hydra.ext.csharp.syntax.InterfaceType"
 
-data ArrayType = 
+data ArrayType =
   ArrayType {
     arrayTypeType :: NonArrayType,
     arrayTypeRank :: [RankSpecifier]}
@@ -189,7 +189,7 @@ _ArrayType_type = Core.Name "type"
 
 _ArrayType_rank = Core.Name "rank"
 
-data NonArrayType = 
+data NonArrayType =
   NonArrayTypeValue ValueType |
   NonArrayTypeClass ClassType |
   NonArrayTypeInterface InterfaceType |
@@ -215,21 +215,21 @@ _NonArrayType_parameter = Core.Name "parameter"
 
 _NonArrayType_pointer = Core.Name "pointer"
 
-newtype RankSpecifier = 
+newtype RankSpecifier =
   RankSpecifier {
     unRankSpecifier :: Int}
   deriving (Eq, Ord, Read, Show)
 
 _RankSpecifier = Core.Name "hydra.ext.csharp.syntax.RankSpecifier"
 
-newtype DelegateType = 
+newtype DelegateType =
   DelegateType {
     unDelegateType :: TypeName}
   deriving (Eq, Ord, Read, Show)
 
 _DelegateType = Core.Name "hydra.ext.csharp.syntax.DelegateType"
 
-data ValueType = 
+data ValueType =
   ValueTypeNonNullable StructOrEnumType |
   ValueTypeNullable StructOrEnumType
   deriving (Eq, Ord, Read, Show)
@@ -240,7 +240,7 @@ _ValueType_nonNullable = Core.Name "nonNullable"
 
 _ValueType_nullable = Core.Name "nullable"
 
-data StructOrEnumType = 
+data StructOrEnumType =
   StructOrEnumTypeStruct StructType |
   StructOrEnumTypeEnum EnumType
   deriving (Eq, Ord, Read, Show)
@@ -251,7 +251,7 @@ _StructOrEnumType_struct = Core.Name "struct"
 
 _StructOrEnumType_enum = Core.Name "enum"
 
-data StructType = 
+data StructType =
   StructTypeTypeName TypeName |
   StructTypeSimple SimpleType |
   StructTypeTuple TupleType
@@ -265,9 +265,9 @@ _StructType_simple = Core.Name "simple"
 
 _StructType_tuple = Core.Name "tuple"
 
-data SimpleType = 
+data SimpleType =
   SimpleTypeNumeric NumericType |
-  SimpleTypeBool 
+  SimpleTypeBool
   deriving (Eq, Ord, Read, Show)
 
 _SimpleType = Core.Name "hydra.ext.csharp.syntax.SimpleType"
@@ -276,10 +276,10 @@ _SimpleType_numeric = Core.Name "numeric"
 
 _SimpleType_bool = Core.Name "bool"
 
-data NumericType = 
+data NumericType =
   NumericTypeIntegral IntegralType |
   NumericTypeFloatingPoint FloatingPointType |
-  NumericTypeDecimal 
+  NumericTypeDecimal
   deriving (Eq, Ord, Read, Show)
 
 _NumericType = Core.Name "hydra.ext.csharp.syntax.NumericType"
@@ -290,7 +290,7 @@ _NumericType_floatingPoint = Core.Name "floatingPoint"
 
 _NumericType_decimal = Core.Name "decimal"
 
-data IntegralType = 
+data IntegralType =
   IntegralTypeSbyte  |
   IntegralTypeByte  |
   IntegralTypeShort  |
@@ -299,7 +299,7 @@ data IntegralType =
   IntegralTypeUint  |
   IntegralTypeLong  |
   IntegralTypeUlong  |
-  IntegralTypeChar 
+  IntegralTypeChar
   deriving (Eq, Ord, Read, Show)
 
 _IntegralType = Core.Name "hydra.ext.csharp.syntax.IntegralType"
@@ -322,9 +322,9 @@ _IntegralType_ulong = Core.Name "ulong"
 
 _IntegralType_char = Core.Name "char"
 
-data FloatingPointType = 
+data FloatingPointType =
   FloatingPointTypeFloat  |
-  FloatingPointTypeDouble 
+  FloatingPointTypeDouble
   deriving (Eq, Ord, Read, Show)
 
 _FloatingPointType = Core.Name "hydra.ext.csharp.syntax.FloatingPointType"
@@ -333,14 +333,14 @@ _FloatingPointType_float = Core.Name "float"
 
 _FloatingPointType_double = Core.Name "double"
 
-newtype TupleType = 
+newtype TupleType =
   TupleType {
     unTupleType :: [TupleTypeElement]}
   deriving (Eq, Ord, Read, Show)
 
 _TupleType = Core.Name "hydra.ext.csharp.syntax.TupleType"
 
-data TupleTypeElement = 
+data TupleTypeElement =
   TupleTypeElement {
     tupleTypeElementType :: Type,
     tupleTypeElementIdentifier :: (Maybe Identifier)}
@@ -352,28 +352,28 @@ _TupleTypeElement_type = Core.Name "type"
 
 _TupleTypeElement_identifier = Core.Name "identifier"
 
-newtype EnumType = 
+newtype EnumType =
   EnumType {
     unEnumType :: TypeName}
   deriving (Eq, Ord, Read, Show)
 
 _EnumType = Core.Name "hydra.ext.csharp.syntax.EnumType"
 
-newtype TypeArgumentList = 
+newtype TypeArgumentList =
   TypeArgumentList {
     unTypeArgumentList :: [Type]}
   deriving (Eq, Ord, Read, Show)
 
 _TypeArgumentList = Core.Name "hydra.ext.csharp.syntax.TypeArgumentList"
 
-newtype TypeParameter = 
+newtype TypeParameter =
   TypeParameter {
     unTypeParameter :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _TypeParameter = Core.Name "hydra.ext.csharp.syntax.TypeParameter"
 
-data UnmanagedType = 
+data UnmanagedType =
   UnmanagedTypeValue ValueType |
   UnmanagedTypePointer PointerType
   deriving (Eq, Ord, Read, Show)
@@ -384,14 +384,14 @@ _UnmanagedType_value = Core.Name "value"
 
 _UnmanagedType_pointer = Core.Name "pointer"
 
-newtype VariableReference = 
+newtype VariableReference =
   VariableReference {
     unVariableReference :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _VariableReference = Core.Name "hydra.ext.csharp.syntax.VariableReference"
 
-data Pattern = 
+data Pattern =
   PatternDeclaration DeclarationPattern |
   PatternConstant Expression |
   PatternVar Designation
@@ -405,7 +405,7 @@ _Pattern_constant = Core.Name "constant"
 
 _Pattern_var = Core.Name "var"
 
-data DeclarationPattern = 
+data DeclarationPattern =
   DeclarationPattern {
     declarationPatternType :: Type,
     declarationPatternDesignation :: Designation}
@@ -417,21 +417,21 @@ _DeclarationPattern_type = Core.Name "type"
 
 _DeclarationPattern_designation = Core.Name "designation"
 
-newtype Designation = 
+newtype Designation =
   Designation {
     unDesignation :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _Designation = Core.Name "hydra.ext.csharp.syntax.Designation"
 
-newtype ArgumentList = 
+newtype ArgumentList =
   ArgumentList {
     unArgumentList :: [Argument]}
   deriving (Eq, Ord, Read, Show)
 
 _ArgumentList = Core.Name "hydra.ext.csharp.syntax.ArgumentList"
 
-data Argument = 
+data Argument =
   Argument {
     argumentName :: (Maybe Identifier),
     argumentValue :: ArgumentValue}
@@ -443,7 +443,7 @@ _Argument_name = Core.Name "name"
 
 _Argument_value = Core.Name "value"
 
-data ArgumentValue = 
+data ArgumentValue =
   ArgumentValueExpression Expression |
   ArgumentValueIn VariableReference |
   ArgumentValueRef VariableReference |
@@ -460,7 +460,7 @@ _ArgumentValue_ref = Core.Name "ref"
 
 _ArgumentValue_out = Core.Name "out"
 
-data PrimaryExpression = 
+data PrimaryExpression =
   PrimaryExpressionNoArray PrimaryNoArrayCreationExpression |
   PrimaryExpressionArray ArrayCreationExpression
   deriving (Eq, Ord, Read, Show)
@@ -471,7 +471,7 @@ _PrimaryExpression_noArray = Core.Name "noArray"
 
 _PrimaryExpression_array = Core.Name "array"
 
-data PrimaryNoArrayCreationExpression = 
+data PrimaryNoArrayCreationExpression =
   PrimaryNoArrayCreationExpressionLiteral Literal |
   PrimaryNoArrayCreationExpressionInterpolatedString InterpolatedStringExpression |
   PrimaryNoArrayCreationExpressionSimpleName SimpleName |
@@ -557,7 +557,7 @@ _PrimaryNoArrayCreationExpression_pointerElementAccess = Core.Name "pointerEleme
 
 _PrimaryNoArrayCreationExpression_stackalloc = Core.Name "stackalloc"
 
-data InterpolatedStringExpression = 
+data InterpolatedStringExpression =
   InterpolatedStringExpressionRegular InterpolatedRegularStringExpression |
   InterpolatedStringExpressionVerbatim InterpolatedVerbatimStringExpression
   deriving (Eq, Ord, Read, Show)
@@ -568,14 +568,14 @@ _InterpolatedStringExpression_regular = Core.Name "regular"
 
 _InterpolatedStringExpression_verbatim = Core.Name "verbatim"
 
-newtype InterpolatedRegularStringExpression = 
+newtype InterpolatedRegularStringExpression =
   InterpolatedRegularStringExpression {
     unInterpolatedRegularStringExpression :: String}
   deriving (Eq, Ord, Read, Show)
 
 _InterpolatedRegularStringExpression = Core.Name "hydra.ext.csharp.syntax.InterpolatedRegularStringExpression"
 
-data RegularInterpolation = 
+data RegularInterpolation =
   RegularInterpolation {
     regularInterpolationExpression :: Expression,
     regularInterpolationWidth :: (Maybe Expression),
@@ -590,14 +590,14 @@ _RegularInterpolation_width = Core.Name "width"
 
 _RegularInterpolation_format = Core.Name "format"
 
-newtype InterpolatedVerbatimStringExpression = 
+newtype InterpolatedVerbatimStringExpression =
   InterpolatedVerbatimStringExpression {
     unInterpolatedVerbatimStringExpression :: String}
   deriving (Eq, Ord, Read, Show)
 
 _InterpolatedVerbatimStringExpression = Core.Name "hydra.ext.csharp.syntax.InterpolatedVerbatimStringExpression"
 
-data VerbatimInterpolation = 
+data VerbatimInterpolation =
   VerbatimInterpolation {
     verbatimInterpolationExpression :: Expression,
     verbatimInterpolationWidth :: (Maybe ConstantExpression),
@@ -612,7 +612,7 @@ _VerbatimInterpolation_width = Core.Name "width"
 
 _VerbatimInterpolation_format = Core.Name "format"
 
-data SimpleName = 
+data SimpleName =
   SimpleName {
     simpleNameIdentifier :: Identifier,
     simpleNameTypeArguments :: (Maybe TypeArgumentList)}
@@ -624,7 +624,7 @@ _SimpleName_identifier = Core.Name "identifier"
 
 _SimpleName_typeArguments = Core.Name "typeArguments"
 
-data TupleExpression = 
+data TupleExpression =
   TupleExpressionElements [TupleElement] |
   TupleExpressionDeconstruction DeconstructionTuple
   deriving (Eq, Ord, Read, Show)
@@ -635,7 +635,7 @@ _TupleExpression_elements = Core.Name "elements"
 
 _TupleExpression_deconstruction = Core.Name "deconstruction"
 
-data TupleElement = 
+data TupleElement =
   TupleElement {
     tupleElementName :: (Maybe Identifier),
     tupleElementExpression :: Expression}
@@ -647,14 +647,14 @@ _TupleElement_name = Core.Name "name"
 
 _TupleElement_expression = Core.Name "expression"
 
-newtype DeconstructionTuple = 
+newtype DeconstructionTuple =
   DeconstructionTuple {
     unDeconstructionTuple :: [DeconstructionElement]}
   deriving (Eq, Ord, Read, Show)
 
 _DeconstructionTuple = Core.Name "hydra.ext.csharp.syntax.DeconstructionTuple"
 
-data DeconstructionElement = 
+data DeconstructionElement =
   DeconstructionElementTuple DeconstructionTuple |
   DeconstructionElementIdentifier Identifier
   deriving (Eq, Ord, Read, Show)
@@ -665,7 +665,7 @@ _DeconstructionElement_tuple = Core.Name "tuple"
 
 _DeconstructionElement_identifier = Core.Name "identifier"
 
-data MemberAccess = 
+data MemberAccess =
   MemberAccess {
     memberAccessHead :: MemberAccessHead,
     memberAccessIdentifier :: Identifier,
@@ -680,7 +680,7 @@ _MemberAccess_identifier = Core.Name "identifier"
 
 _MemberAccess_typeArguments = Core.Name "typeArguments"
 
-data MemberAccessHead = 
+data MemberAccessHead =
   MemberAccessHeadPrimary PrimaryExpression |
   MemberAccessHeadPredefined PredefinedType |
   MemberAccessHeadQualifiedAlias QualifiedAliasMember
@@ -694,7 +694,7 @@ _MemberAccessHead_predefined = Core.Name "predefined"
 
 _MemberAccessHead_qualifiedAlias = Core.Name "qualifiedAlias"
 
-data PredefinedType = 
+data PredefinedType =
   PredefinedTypeBool  |
   PredefinedTypeByte  |
   PredefinedTypeChar  |
@@ -709,7 +709,7 @@ data PredefinedType =
   PredefinedTypeString  |
   PredefinedTypeUint  |
   PredefinedTypeUlong  |
-  PredefinedTypeUshort 
+  PredefinedTypeUshort
   deriving (Eq, Ord, Read, Show)
 
 _PredefinedType = Core.Name "hydra.ext.csharp.syntax.PredefinedType"
@@ -744,7 +744,7 @@ _PredefinedType_ulong = Core.Name "ulong"
 
 _PredefinedType_ushort = Core.Name "ushort"
 
-data NullConditionalMemberAccess = 
+data NullConditionalMemberAccess =
   NullConditionalMemberAccess {
     nullConditionalMemberAccessExpression :: PrimaryExpression,
     nullConditionalMemberAccessIdentifier :: Identifier,
@@ -762,7 +762,7 @@ _NullConditionalMemberAccess_typeArguments = Core.Name "typeArguments"
 
 _NullConditionalMemberAccess_dependentAccess = Core.Name "dependentAccess"
 
-data DependentAccess = 
+data DependentAccess =
   DependentAccessMemberAccess DependentAccessForMember |
   DependentAccessElementAccess ArgumentList |
   DependentAccessInvocation (Maybe ArgumentList)
@@ -776,7 +776,7 @@ _DependentAccess_elementAccess = Core.Name "elementAccess"
 
 _DependentAccess_invocation = Core.Name "invocation"
 
-data DependentAccessForMember = 
+data DependentAccessForMember =
   DependentAccessForMember {
     dependentAccessForMemberIdentifier :: Identifier,
     dependentAccessForMemberTypeArguments :: (Maybe TypeArgumentList)}
@@ -788,7 +788,7 @@ _DependentAccessForMember_identifier = Core.Name "identifier"
 
 _DependentAccessForMember_typeArguments = Core.Name "typeArguments"
 
-data NullConditionalProjectionInitializer = 
+data NullConditionalProjectionInitializer =
   NullConditionalProjectionInitializer {
     nullConditionalProjectionInitializerExpression :: PrimaryExpression,
     nullConditionalProjectionInitializerIdentifier :: Identifier,
@@ -803,7 +803,7 @@ _NullConditionalProjectionInitializer_identifier = Core.Name "identifier"
 
 _NullConditionalProjectionInitializer_typeArguments = Core.Name "typeArguments"
 
-data InvocationExpression = 
+data InvocationExpression =
   InvocationExpression {
     invocationExpressionExpression :: PrimaryExpression,
     invocationExpressionArguments :: (Maybe ArgumentList)}
@@ -815,7 +815,7 @@ _InvocationExpression_expression = Core.Name "expression"
 
 _InvocationExpression_arguments = Core.Name "arguments"
 
-data NullConditionalInvocationExpression = 
+data NullConditionalInvocationExpression =
   NullConditionalInvocationExpression {
     nullConditionalInvocationExpressionHead :: NullConditionalInvocationExpressionHead,
     nullConditionalInvocationExpressionArguments :: (Maybe ArgumentList)}
@@ -827,7 +827,7 @@ _NullConditionalInvocationExpression_head = Core.Name "head"
 
 _NullConditionalInvocationExpression_arguments = Core.Name "arguments"
 
-data NullConditionalInvocationExpressionHead = 
+data NullConditionalInvocationExpressionHead =
   NullConditionalInvocationExpressionHeadMember NullConditionalMemberAccess |
   NullConditionalInvocationExpressionHeadElement NullConditionalElementAccess
   deriving (Eq, Ord, Read, Show)
@@ -838,7 +838,7 @@ _NullConditionalInvocationExpressionHead_member = Core.Name "member"
 
 _NullConditionalInvocationExpressionHead_element = Core.Name "element"
 
-data ElementAccess = 
+data ElementAccess =
   ElementAccess {
     elementAccessExpression :: PrimaryNoArrayCreationExpression,
     elementAccessArguments :: ArgumentList}
@@ -850,7 +850,7 @@ _ElementAccess_expression = Core.Name "expression"
 
 _ElementAccess_arguments = Core.Name "arguments"
 
-data NullConditionalElementAccess = 
+data NullConditionalElementAccess =
   NullConditionalElementAccess {
     nullConditionalElementAccessExpression :: PrimaryNoArrayCreationExpression,
     nullConditionalElementAccessArguments :: ArgumentList,
@@ -865,7 +865,7 @@ _NullConditionalElementAccess_arguments = Core.Name "arguments"
 
 _NullConditionalElementAccess_dependentAccess = Core.Name "dependentAccess"
 
-data BaseAccess = 
+data BaseAccess =
   BaseAccessIdentifier BaseAccessWithIdentifier |
   BaseAccessArguments ArgumentList
   deriving (Eq, Ord, Read, Show)
@@ -876,7 +876,7 @@ _BaseAccess_identifier = Core.Name "identifier"
 
 _BaseAccess_arguments = Core.Name "arguments"
 
-data BaseAccessWithIdentifier = 
+data BaseAccessWithIdentifier =
   BaseAccessWithIdentifier {
     baseAccessWithIdentifierIdentifier :: Identifier,
     baseAccessWithIdentifierTypeArguments :: (Maybe TypeArgumentList)}
@@ -888,7 +888,7 @@ _BaseAccessWithIdentifier_identifier = Core.Name "identifier"
 
 _BaseAccessWithIdentifier_typeArguments = Core.Name "typeArguments"
 
-data ObjectCreationExpression = 
+data ObjectCreationExpression =
   ObjectCreationExpression {
     objectCreationExpressionType :: Type,
     objectCreationExpressionArguments :: (Maybe ArgumentList),
@@ -903,7 +903,7 @@ _ObjectCreationExpression_arguments = Core.Name "arguments"
 
 _ObjectCreationExpression_initializer = Core.Name "initializer"
 
-data ObjectOrCollectionInitializer = 
+data ObjectOrCollectionInitializer =
   ObjectOrCollectionInitializerObject [MemberInitializer] |
   ObjectOrCollectionInitializerCollection [ElementInitializer]
   deriving (Eq, Ord, Read, Show)
@@ -914,7 +914,7 @@ _ObjectOrCollectionInitializer_object = Core.Name "object"
 
 _ObjectOrCollectionInitializer_collection = Core.Name "collection"
 
-data MemberInitializer = 
+data MemberInitializer =
   MemberInitializer {
     memberInitializerTarget :: InitializerTarget,
     memberInitializerValue :: InitializerValue}
@@ -926,7 +926,7 @@ _MemberInitializer_target = Core.Name "target"
 
 _MemberInitializer_value = Core.Name "value"
 
-data InitializerTarget = 
+data InitializerTarget =
   InitializerTargetIdentifier Identifier |
   InitializerTargetArguments ArgumentList
   deriving (Eq, Ord, Read, Show)
@@ -937,7 +937,7 @@ _InitializerTarget_identifier = Core.Name "identifier"
 
 _InitializerTarget_arguments = Core.Name "arguments"
 
-data InitializerValue = 
+data InitializerValue =
   InitializerValueExpression Expression |
   InitializerValueObjectOrCollection ObjectOrCollectionInitializer
   deriving (Eq, Ord, Read, Show)
@@ -948,7 +948,7 @@ _InitializerValue_expression = Core.Name "expression"
 
 _InitializerValue_objectOrCollection = Core.Name "objectOrCollection"
 
-data ElementInitializer = 
+data ElementInitializer =
   ElementInitializerSingle NonAssignmentExpression |
   ElementInitializerList ExpressionList
   deriving (Eq, Ord, Read, Show)
@@ -959,14 +959,14 @@ _ElementInitializer_single = Core.Name "single"
 
 _ElementInitializer_list = Core.Name "list"
 
-newtype ExpressionList = 
+newtype ExpressionList =
   ExpressionList {
     unExpressionList :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 
 _ExpressionList = Core.Name "hydra.ext.csharp.syntax.ExpressionList"
 
-data ArrayCreationExpression = 
+data ArrayCreationExpression =
   ArrayCreationExpressionNonArrayType NonArrayTypeArrayCreationExpression |
   ArrayCreationExpressionArrayType ArrayTypeArrayCreationExpression |
   ArrayCreationExpressionRankSpecifier RankSpecifierArrayCreationExpression
@@ -980,7 +980,7 @@ _ArrayCreationExpression_arrayType = Core.Name "arrayType"
 
 _ArrayCreationExpression_rankSpecifier = Core.Name "rankSpecifier"
 
-data NonArrayTypeArrayCreationExpression = 
+data NonArrayTypeArrayCreationExpression =
   NonArrayTypeArrayCreationExpression {
     nonArrayTypeArrayCreationExpressionType :: NonArrayType,
     nonArrayTypeArrayCreationExpressionExpressions :: ExpressionList,
@@ -998,7 +998,7 @@ _NonArrayTypeArrayCreationExpression_rankSpecifiers = Core.Name "rankSpecifiers"
 
 _NonArrayTypeArrayCreationExpression_initializer = Core.Name "initializer"
 
-data ArrayTypeArrayCreationExpression = 
+data ArrayTypeArrayCreationExpression =
   ArrayTypeArrayCreationExpression {
     arrayTypeArrayCreationExpressionType :: ArrayType,
     arrayTypeArrayCreationExpressionInitializer :: ArrayInitializer}
@@ -1010,7 +1010,7 @@ _ArrayTypeArrayCreationExpression_type = Core.Name "type"
 
 _ArrayTypeArrayCreationExpression_initializer = Core.Name "initializer"
 
-data RankSpecifierArrayCreationExpression = 
+data RankSpecifierArrayCreationExpression =
   RankSpecifierArrayCreationExpression {
     rankSpecifierArrayCreationExpressionRankSpecifier :: RankSpecifier,
     rankSpecifierArrayCreationExpressionInitializer :: ArrayInitializer}
@@ -1022,7 +1022,7 @@ _RankSpecifierArrayCreationExpression_rankSpecifier = Core.Name "rankSpecifier"
 
 _RankSpecifierArrayCreationExpression_initializer = Core.Name "initializer"
 
-data DelegateCreationExpression = 
+data DelegateCreationExpression =
   DelegateCreationExpression {
     delegateCreationExpressionType :: DelegateType,
     delegateCreationExpressionExpression :: Expression}
@@ -1034,14 +1034,14 @@ _DelegateCreationExpression_type = Core.Name "type"
 
 _DelegateCreationExpression_expression = Core.Name "expression"
 
-newtype MemberDeclaratorList = 
+newtype MemberDeclaratorList =
   MemberDeclaratorList {
     unMemberDeclaratorList :: [MemberDeclarator]}
   deriving (Eq, Ord, Read, Show)
 
 _MemberDeclaratorList = Core.Name "hydra.ext.csharp.syntax.MemberDeclaratorList"
 
-data MemberDeclarator = 
+data MemberDeclarator =
   MemberDeclaratorName SimpleName |
   MemberDeclaratorMemberAccess MemberAccess |
   MemberDeclaratorNullConditionalProjectionInitializer NullConditionalProjectionInitializer |
@@ -1061,7 +1061,7 @@ _MemberDeclarator_baseAccess = Core.Name "baseAccess"
 
 _MemberDeclarator_assignment = Core.Name "assignment"
 
-data AssignmentMemberDeclarator = 
+data AssignmentMemberDeclarator =
   AssignmentMemberDeclarator {
     assignmentMemberDeclaratorIdentifier :: Identifier,
     assignmentMemberDeclaratorExpression :: Expression}
@@ -1073,10 +1073,10 @@ _AssignmentMemberDeclarator_identifier = Core.Name "identifier"
 
 _AssignmentMemberDeclarator_expression = Core.Name "expression"
 
-data TypeofExpression = 
+data TypeofExpression =
   TypeofExpressionType Type |
   TypeofExpressionUnboundTypeName UnboundTypeName |
-  TypeofExpressionVoid 
+  TypeofExpressionVoid
   deriving (Eq, Ord, Read, Show)
 
 _TypeofExpression = Core.Name "hydra.ext.csharp.syntax.TypeofExpression"
@@ -1087,14 +1087,14 @@ _TypeofExpression_unboundTypeName = Core.Name "unboundTypeName"
 
 _TypeofExpression_void = Core.Name "void"
 
-newtype UnboundTypeName = 
+newtype UnboundTypeName =
   UnboundTypeName {
     unUnboundTypeName :: [UnboundTypeNamePart]}
   deriving (Eq, Ord, Read, Show)
 
 _UnboundTypeName = Core.Name "hydra.ext.csharp.syntax.UnboundTypeName"
 
-data UnboundTypeNamePart = 
+data UnboundTypeNamePart =
   UnboundTypeNamePart {
     unboundTypeNamePartIdentifier :: Identifier,
     unboundTypeNamePartAliased :: Bool,
@@ -1109,9 +1109,9 @@ _UnboundTypeNamePart_aliased = Core.Name "aliased"
 
 _UnboundTypeNamePart_dimension = Core.Name "dimension"
 
-data DefaultValueExpression = 
+data DefaultValueExpression =
   DefaultValueExpressionExplicitlyTyped Type |
-  DefaultValueExpressionDefaultLiteral 
+  DefaultValueExpressionDefaultLiteral
   deriving (Eq, Ord, Read, Show)
 
 _DefaultValueExpression = Core.Name "hydra.ext.csharp.syntax.DefaultValueExpression"
@@ -1120,7 +1120,7 @@ _DefaultValueExpression_explicitlyTyped = Core.Name "explicitlyTyped"
 
 _DefaultValueExpression_defaultLiteral = Core.Name "defaultLiteral"
 
-data StackallocExpression = 
+data StackallocExpression =
   StackallocExpression {
     stackallocExpressionType :: (Maybe UnmanagedType),
     stackallocExpressionExpression :: (Maybe ConstantExpression),
@@ -1135,7 +1135,7 @@ _StackallocExpression_expression = Core.Name "expression"
 
 _StackallocExpression_initializer = Core.Name "initializer"
 
-data NamedEntity = 
+data NamedEntity =
   NamedEntity {
     namedEntityTarget :: NamedEntityTarget,
     namedEntityParts :: [NamedEntityPart]}
@@ -1147,7 +1147,7 @@ _NamedEntity_target = Core.Name "target"
 
 _NamedEntity_parts = Core.Name "parts"
 
-data NamedEntityPart = 
+data NamedEntityPart =
   NamedEntityPart {
     namedEntityPartIdentifier :: Identifier,
     namedEntityPartTypeArguments :: (Maybe TypeArgumentList)}
@@ -1159,7 +1159,7 @@ _NamedEntityPart_identifier = Core.Name "identifier"
 
 _NamedEntityPart_typeArguments = Core.Name "typeArguments"
 
-data NamedEntityTarget = 
+data NamedEntityTarget =
   NamedEntityTargetName SimpleName |
   NamedEntityTargetThis  |
   NamedEntityTargetBase  |
@@ -1179,7 +1179,7 @@ _NamedEntityTarget_predefinedType = Core.Name "predefinedType"
 
 _NamedEntityTarget_qualifiedAliasMember = Core.Name "qualifiedAliasMember"
 
-data UnaryExpression = 
+data UnaryExpression =
   UnaryExpressionPrimary PrimaryExpression |
   UnaryExpressionPlus UnaryExpression |
   UnaryExpressionMinus UnaryExpression |
@@ -1217,7 +1217,7 @@ _UnaryExpression_pointerIndirection = Core.Name "pointerIndirection"
 
 _UnaryExpression_addressOf = Core.Name "addressOf"
 
-data CastExpression = 
+data CastExpression =
   CastExpression {
     castExpressionType :: Type,
     castExpressionExpression :: UnaryExpression}
@@ -1229,7 +1229,7 @@ _CastExpression_type = Core.Name "type"
 
 _CastExpression_expression = Core.Name "expression"
 
-data MultiplicativeExpression = 
+data MultiplicativeExpression =
   MultiplicativeExpressionSimple UnaryExpression |
   MultiplicativeExpressionBinary BinaryMultiplicativeExpression
   deriving (Eq, Ord, Read, Show)
@@ -1240,7 +1240,7 @@ _MultiplicativeExpression_simple = Core.Name "simple"
 
 _MultiplicativeExpression_binary = Core.Name "binary"
 
-data BinaryMultiplicativeExpression = 
+data BinaryMultiplicativeExpression =
   BinaryMultiplicativeExpression {
     binaryMultiplicativeExpressionLeft :: MultiplicativeExpression,
     binaryMultiplicativeExpressionOperator :: MultiplicativeOperator,
@@ -1255,10 +1255,10 @@ _BinaryMultiplicativeExpression_operator = Core.Name "operator"
 
 _BinaryMultiplicativeExpression_right = Core.Name "right"
 
-data MultiplicativeOperator = 
+data MultiplicativeOperator =
   MultiplicativeOperatorTimes  |
   MultiplicativeOperatorDivide  |
-  MultiplicativeOperatorModulo 
+  MultiplicativeOperatorModulo
   deriving (Eq, Ord, Read, Show)
 
 _MultiplicativeOperator = Core.Name "hydra.ext.csharp.syntax.MultiplicativeOperator"
@@ -1269,7 +1269,7 @@ _MultiplicativeOperator_divide = Core.Name "divide"
 
 _MultiplicativeOperator_modulo = Core.Name "modulo"
 
-data AdditiveExpression = 
+data AdditiveExpression =
   AdditiveExpressionSimple MultiplicativeExpression |
   AdditiveExpressionBinary BinaryAdditiveExpression
   deriving (Eq, Ord, Read, Show)
@@ -1280,7 +1280,7 @@ _AdditiveExpression_simple = Core.Name "simple"
 
 _AdditiveExpression_binary = Core.Name "binary"
 
-data BinaryAdditiveExpression = 
+data BinaryAdditiveExpression =
   BinaryAdditiveExpression {
     binaryAdditiveExpressionLeft :: AdditiveExpression,
     binaryAdditiveExpressionOperator :: AdditiveOperator,
@@ -1295,9 +1295,9 @@ _BinaryAdditiveExpression_operator = Core.Name "operator"
 
 _BinaryAdditiveExpression_right = Core.Name "right"
 
-data AdditiveOperator = 
+data AdditiveOperator =
   AdditiveOperatorPlus  |
-  AdditiveOperatorMinus 
+  AdditiveOperatorMinus
   deriving (Eq, Ord, Read, Show)
 
 _AdditiveOperator = Core.Name "hydra.ext.csharp.syntax.AdditiveOperator"
@@ -1306,7 +1306,7 @@ _AdditiveOperator_plus = Core.Name "plus"
 
 _AdditiveOperator_minus = Core.Name "minus"
 
-data ShiftExpression = 
+data ShiftExpression =
   ShiftExpressionSimple AdditiveExpression |
   ShiftExpressionBinary BinaryShiftExpression
   deriving (Eq, Ord, Read, Show)
@@ -1317,7 +1317,7 @@ _ShiftExpression_simple = Core.Name "simple"
 
 _ShiftExpression_binary = Core.Name "binary"
 
-data BinaryShiftExpression = 
+data BinaryShiftExpression =
   BinaryShiftExpression {
     binaryShiftExpressionLeft :: ShiftExpression,
     binaryShiftExpressionOperator :: ShiftOperator,
@@ -1332,9 +1332,9 @@ _BinaryShiftExpression_operator = Core.Name "operator"
 
 _BinaryShiftExpression_right = Core.Name "right"
 
-data ShiftOperator = 
+data ShiftOperator =
   ShiftOperatorLeft  |
-  ShiftOperatorRight 
+  ShiftOperatorRight
   deriving (Eq, Ord, Read, Show)
 
 _ShiftOperator = Core.Name "hydra.ext.csharp.syntax.ShiftOperator"
@@ -1343,7 +1343,7 @@ _ShiftOperator_left = Core.Name "left"
 
 _ShiftOperator_right = Core.Name "right"
 
-data RelationalExpression = 
+data RelationalExpression =
   RelationalExpressionSimple ShiftExpression |
   RelationalExpressionBinary BinaryRelationalExpression |
   RelationalExpressionIsType IsTypeExpression |
@@ -1363,7 +1363,7 @@ _RelationalExpression_isPattern = Core.Name "isPattern"
 
 _RelationalExpression_asType = Core.Name "asType"
 
-data BinaryRelationalExpression = 
+data BinaryRelationalExpression =
   BinaryRelationalExpression {
     binaryRelationalExpressionLeft :: RelationalExpression,
     binaryRelationalExpressionOperator :: RelationalOperator,
@@ -1378,11 +1378,11 @@ _BinaryRelationalExpression_operator = Core.Name "operator"
 
 _BinaryRelationalExpression_right = Core.Name "right"
 
-data RelationalOperator = 
+data RelationalOperator =
   RelationalOperatorLessThan  |
   RelationalOperatorGreaterThan  |
   RelationalOperatorLessThanOrEqual  |
-  RelationalOperatorGreaterThanOrEqual 
+  RelationalOperatorGreaterThanOrEqual
   deriving (Eq, Ord, Read, Show)
 
 _RelationalOperator = Core.Name "hydra.ext.csharp.syntax.RelationalOperator"
@@ -1395,7 +1395,7 @@ _RelationalOperator_lessThanOrEqual = Core.Name "lessThanOrEqual"
 
 _RelationalOperator_greaterThanOrEqual = Core.Name "greaterThanOrEqual"
 
-data IsTypeExpression = 
+data IsTypeExpression =
   IsTypeExpression {
     isTypeExpressionExpression :: RelationalExpression,
     isTypeExpressionType :: Type}
@@ -1407,7 +1407,7 @@ _IsTypeExpression_expression = Core.Name "expression"
 
 _IsTypeExpression_type = Core.Name "type"
 
-data IsPatternExpression = 
+data IsPatternExpression =
   IsPatternExpression {
     isPatternExpressionExpression :: RelationalExpression,
     isPatternExpressionPattern :: Pattern}
@@ -1419,7 +1419,7 @@ _IsPatternExpression_expression = Core.Name "expression"
 
 _IsPatternExpression_pattern = Core.Name "pattern"
 
-data AsTypeExpression = 
+data AsTypeExpression =
   AsTypeExpression {
     asTypeExpressionExpression :: RelationalExpression,
     asTypeExpressionType :: Type}
@@ -1431,7 +1431,7 @@ _AsTypeExpression_expression = Core.Name "expression"
 
 _AsTypeExpression_type = Core.Name "type"
 
-data EqualityExpression = 
+data EqualityExpression =
   EqualityExpressionSimple RelationalExpression |
   EqualityExpressionBinary BinaryEqualityExpression
   deriving (Eq, Ord, Read, Show)
@@ -1442,7 +1442,7 @@ _EqualityExpression_simple = Core.Name "simple"
 
 _EqualityExpression_binary = Core.Name "binary"
 
-data BinaryEqualityExpression = 
+data BinaryEqualityExpression =
   BinaryEqualityExpression {
     binaryEqualityExpressionLeft :: EqualityExpression,
     binaryEqualityExpressionOperator :: EqualityOperator,
@@ -1457,9 +1457,9 @@ _BinaryEqualityExpression_operator = Core.Name "operator"
 
 _BinaryEqualityExpression_right = Core.Name "right"
 
-data EqualityOperator = 
+data EqualityOperator =
   EqualityOperatorEqual  |
-  EqualityOperatorNotEqual 
+  EqualityOperatorNotEqual
   deriving (Eq, Ord, Read, Show)
 
 _EqualityOperator = Core.Name "hydra.ext.csharp.syntax.EqualityOperator"
@@ -1468,7 +1468,7 @@ _EqualityOperator_equal = Core.Name "equal"
 
 _EqualityOperator_notEqual = Core.Name "notEqual"
 
-data AndExpression = 
+data AndExpression =
   AndExpressionSimple EqualityExpression |
   AndExpressionBinary BinaryAndExpression
   deriving (Eq, Ord, Read, Show)
@@ -1479,7 +1479,7 @@ _AndExpression_simple = Core.Name "simple"
 
 _AndExpression_binary = Core.Name "binary"
 
-data BinaryAndExpression = 
+data BinaryAndExpression =
   BinaryAndExpression {
     binaryAndExpressionLeft :: AndExpression,
     binaryAndExpressionRight :: EqualityExpression}
@@ -1491,7 +1491,7 @@ _BinaryAndExpression_left = Core.Name "left"
 
 _BinaryAndExpression_right = Core.Name "right"
 
-data ExclusiveOrExpression = 
+data ExclusiveOrExpression =
   ExclusiveOrExpressionSimple AndExpression |
   ExclusiveOrExpressionBinary BinaryExclusiveOrExpression
   deriving (Eq, Ord, Read, Show)
@@ -1502,7 +1502,7 @@ _ExclusiveOrExpression_simple = Core.Name "simple"
 
 _ExclusiveOrExpression_binary = Core.Name "binary"
 
-data BinaryExclusiveOrExpression = 
+data BinaryExclusiveOrExpression =
   BinaryExclusiveOrExpression {
     binaryExclusiveOrExpressionLeft :: ExclusiveOrExpression,
     binaryExclusiveOrExpressionRight :: AndExpression}
@@ -1514,7 +1514,7 @@ _BinaryExclusiveOrExpression_left = Core.Name "left"
 
 _BinaryExclusiveOrExpression_right = Core.Name "right"
 
-data InclusiveOrExpression = 
+data InclusiveOrExpression =
   InclusiveOrExpressionSimple ExclusiveOrExpression |
   InclusiveOrExpressionBinary BinaryInclusiveOrExpression
   deriving (Eq, Ord, Read, Show)
@@ -1525,7 +1525,7 @@ _InclusiveOrExpression_simple = Core.Name "simple"
 
 _InclusiveOrExpression_binary = Core.Name "binary"
 
-data BinaryInclusiveOrExpression = 
+data BinaryInclusiveOrExpression =
   BinaryInclusiveOrExpression {
     binaryInclusiveOrExpressionLeft :: InclusiveOrExpression,
     binaryInclusiveOrExpressionRight :: ExclusiveOrExpression}
@@ -1537,7 +1537,7 @@ _BinaryInclusiveOrExpression_left = Core.Name "left"
 
 _BinaryInclusiveOrExpression_right = Core.Name "right"
 
-data ConditionalAndExpression = 
+data ConditionalAndExpression =
   ConditionalAndExpressionSimple InclusiveOrExpression |
   ConditionalAndExpressionBinary BinaryConditionalAndExpression
   deriving (Eq, Ord, Read, Show)
@@ -1548,7 +1548,7 @@ _ConditionalAndExpression_simple = Core.Name "simple"
 
 _ConditionalAndExpression_binary = Core.Name "binary"
 
-data BinaryConditionalAndExpression = 
+data BinaryConditionalAndExpression =
   BinaryConditionalAndExpression {
     binaryConditionalAndExpressionLeft :: ConditionalAndExpression,
     binaryConditionalAndExpressionRight :: InclusiveOrExpression}
@@ -1560,7 +1560,7 @@ _BinaryConditionalAndExpression_left = Core.Name "left"
 
 _BinaryConditionalAndExpression_right = Core.Name "right"
 
-data ConditionalOrExpression = 
+data ConditionalOrExpression =
   ConditionalOrExpressionSimple ConditionalAndExpression |
   ConditionalOrExpressionBinary BinaryConditionalOrExpression
   deriving (Eq, Ord, Read, Show)
@@ -1571,7 +1571,7 @@ _ConditionalOrExpression_simple = Core.Name "simple"
 
 _ConditionalOrExpression_binary = Core.Name "binary"
 
-data BinaryConditionalOrExpression = 
+data BinaryConditionalOrExpression =
   BinaryConditionalOrExpression {
     binaryConditionalOrExpressionLeft :: ConditionalOrExpression,
     binaryConditionalOrExpressionRight :: ConditionalAndExpression}
@@ -1583,7 +1583,7 @@ _BinaryConditionalOrExpression_left = Core.Name "left"
 
 _BinaryConditionalOrExpression_right = Core.Name "right"
 
-data NullCoalescingExpression = 
+data NullCoalescingExpression =
   NullCoalescingExpressionSimple ConditionalOrExpression |
   NullCoalescingExpressionBinary BinaryNullCoalescingExpression |
   NullCoalescingExpressionThrow NullCoalescingExpression
@@ -1597,7 +1597,7 @@ _NullCoalescingExpression_binary = Core.Name "binary"
 
 _NullCoalescingExpression_throw = Core.Name "throw"
 
-data BinaryNullCoalescingExpression = 
+data BinaryNullCoalescingExpression =
   BinaryNullCoalescingExpression {
     binaryNullCoalescingExpressionLeft :: ConditionalOrExpression,
     binaryNullCoalescingExpressionRight :: NullCoalescingExpression}
@@ -1609,7 +1609,7 @@ _BinaryNullCoalescingExpression_left = Core.Name "left"
 
 _BinaryNullCoalescingExpression_right = Core.Name "right"
 
-data DeclarationExpression = 
+data DeclarationExpression =
   DeclarationExpression {
     declarationExpressionType :: LocalVariableType,
     declarationExpressionIdentifier :: Identifier}
@@ -1621,9 +1621,9 @@ _DeclarationExpression_type = Core.Name "type"
 
 _DeclarationExpression_identifier = Core.Name "identifier"
 
-data LocalVariableType = 
+data LocalVariableType =
   LocalVariableTypeType Type |
-  LocalVariableTypeVar 
+  LocalVariableTypeVar
   deriving (Eq, Ord, Read, Show)
 
 _LocalVariableType = Core.Name "hydra.ext.csharp.syntax.LocalVariableType"
@@ -1632,7 +1632,7 @@ _LocalVariableType_type = Core.Name "type"
 
 _LocalVariableType_var = Core.Name "var"
 
-data ConditionalExpression = 
+data ConditionalExpression =
   ConditionalExpressionSimple NullCoalescingExpression |
   ConditionalExpressionSimpleConditional SimpleConditionalExpression |
   ConditionalExpressionRefConditional RefConditionalExpression
@@ -1646,7 +1646,7 @@ _ConditionalExpression_simpleConditional = Core.Name "simpleConditional"
 
 _ConditionalExpression_refConditional = Core.Name "refConditional"
 
-data SimpleConditionalExpression = 
+data SimpleConditionalExpression =
   SimpleConditionalExpression {
     simpleConditionalExpressionCondition :: NullCoalescingExpression,
     simpleConditionalExpressionTrue :: Expression,
@@ -1661,7 +1661,7 @@ _SimpleConditionalExpression_true = Core.Name "true"
 
 _SimpleConditionalExpression_false = Core.Name "false"
 
-data RefConditionalExpression = 
+data RefConditionalExpression =
   RefConditionalExpression {
     refConditionalExpressionCondition :: NullCoalescingExpression,
     refConditionalExpressionTrue :: VariableReference,
@@ -1676,7 +1676,7 @@ _RefConditionalExpression_true = Core.Name "true"
 
 _RefConditionalExpression_false = Core.Name "false"
 
-data LambdaExpression = 
+data LambdaExpression =
   LambdaExpression {
     lambdaExpressionAsync :: Bool,
     lambdaExpressionSignature :: AnonymousFunctionSignature,
@@ -1691,7 +1691,7 @@ _LambdaExpression_signature = Core.Name "signature"
 
 _LambdaExpression_body = Core.Name "body"
 
-data AnonymousMethodExpression = 
+data AnonymousMethodExpression =
   AnonymousMethodExpression {
     anonymousMethodExpressionAsync :: Bool,
     anonymousMethodExpressionSignature :: [ExplicitAnonymousFunctionParameter],
@@ -1706,7 +1706,7 @@ _AnonymousMethodExpression_signature = Core.Name "signature"
 
 _AnonymousMethodExpression_body = Core.Name "body"
 
-data AnonymousFunctionSignature = 
+data AnonymousFunctionSignature =
   AnonymousFunctionSignatureExplicit [ExplicitAnonymousFunctionParameter] |
   AnonymousFunctionSignatureImplicit [Identifier]
   deriving (Eq, Ord, Read, Show)
@@ -1717,7 +1717,7 @@ _AnonymousFunctionSignature_explicit = Core.Name "explicit"
 
 _AnonymousFunctionSignature_implicit = Core.Name "implicit"
 
-data ExplicitAnonymousFunctionParameter = 
+data ExplicitAnonymousFunctionParameter =
   ExplicitAnonymousFunctionParameter {
     explicitAnonymousFunctionParameterModifier :: (Maybe AnonymousFunctionParameterModifier),
     explicitAnonymousFunctionParameterType :: Type,
@@ -1732,10 +1732,10 @@ _ExplicitAnonymousFunctionParameter_type = Core.Name "type"
 
 _ExplicitAnonymousFunctionParameter_identifier = Core.Name "identifier"
 
-data AnonymousFunctionParameterModifier = 
+data AnonymousFunctionParameterModifier =
   AnonymousFunctionParameterModifierRef  |
   AnonymousFunctionParameterModifierOut  |
-  AnonymousFunctionParameterModifierIn 
+  AnonymousFunctionParameterModifierIn
   deriving (Eq, Ord, Read, Show)
 
 _AnonymousFunctionParameterModifier = Core.Name "hydra.ext.csharp.syntax.AnonymousFunctionParameterModifier"
@@ -1746,7 +1746,7 @@ _AnonymousFunctionParameterModifier_out = Core.Name "out"
 
 _AnonymousFunctionParameterModifier_in = Core.Name "in"
 
-data AnonymousFunctionBody = 
+data AnonymousFunctionBody =
   AnonymousFunctionBodyNullConditionalInvocation NullConditionalInvocationExpression |
   AnonymousFunctionBodyExpression Expression |
   AnonymousFunctionBodyRef VariableReference |
@@ -1763,7 +1763,7 @@ _AnonymousFunctionBody_ref = Core.Name "ref"
 
 _AnonymousFunctionBody_block = Core.Name "block"
 
-data QueryExpression = 
+data QueryExpression =
   QueryExpression {
     queryExpressionFrom :: FromClause,
     queryExpressionBody :: QueryBody}
@@ -1775,7 +1775,7 @@ _QueryExpression_from = Core.Name "from"
 
 _QueryExpression_body = Core.Name "body"
 
-data FromClause = 
+data FromClause =
   FromClause {
     fromClauseType :: (Maybe Type),
     fromClauseIdentifier :: Identifier,
@@ -1790,7 +1790,7 @@ _FromClause_identifier = Core.Name "identifier"
 
 _FromClause_in = Core.Name "in"
 
-data QueryBody = 
+data QueryBody =
   QueryBody {
     queryBodyClauses :: [QueryBodyClause],
     queryBodySelectOrGroup :: SelectOrGroupClause,
@@ -1805,7 +1805,7 @@ _QueryBody_selectOrGroup = Core.Name "selectOrGroup"
 
 _QueryBody_continuation = Core.Name "continuation"
 
-data QueryBodyClause = 
+data QueryBodyClause =
   QueryBodyClauseFrom FromClause |
   QueryBodyClauseLet LetClause |
   QueryBodyClauseWhere BooleanExpression |
@@ -1825,7 +1825,7 @@ _QueryBodyClause_join = Core.Name "join"
 
 _QueryBodyClause_orderby = Core.Name "orderby"
 
-data LetClause = 
+data LetClause =
   LetClause {
     letClauseLeft :: Identifier,
     letClauseRight :: Expression}
@@ -1837,7 +1837,7 @@ _LetClause_left = Core.Name "left"
 
 _LetClause_right = Core.Name "right"
 
-data JoinClause = 
+data JoinClause =
   JoinClause {
     joinClauseType :: (Maybe Type),
     joinClauseIdentifier :: Identifier,
@@ -1861,7 +1861,7 @@ _JoinClause_equals = Core.Name "equals"
 
 _JoinClause_into = Core.Name "into"
 
-data Ordering = 
+data Ordering =
   Ordering {
     orderingExpression :: Expression,
     orderingDirection :: (Maybe OrderingDirection)}
@@ -1873,9 +1873,9 @@ _Ordering_expression = Core.Name "expression"
 
 _Ordering_direction = Core.Name "direction"
 
-data OrderingDirection = 
+data OrderingDirection =
   OrderingDirectionAscending  |
-  OrderingDirectionDescending 
+  OrderingDirectionDescending
   deriving (Eq, Ord, Read, Show)
 
 _OrderingDirection = Core.Name "hydra.ext.csharp.syntax.OrderingDirection"
@@ -1884,7 +1884,7 @@ _OrderingDirection_ascending = Core.Name "ascending"
 
 _OrderingDirection_descending = Core.Name "descending"
 
-data SelectOrGroupClause = 
+data SelectOrGroupClause =
   SelectOrGroupClauseSelect Expression |
   SelectOrGroupClauseGroup GroupClause
   deriving (Eq, Ord, Read, Show)
@@ -1895,7 +1895,7 @@ _SelectOrGroupClause_select = Core.Name "select"
 
 _SelectOrGroupClause_group = Core.Name "group"
 
-data GroupClause = 
+data GroupClause =
   GroupClause {
     groupClauseGrouped :: Expression,
     groupClauseBy :: Expression}
@@ -1907,7 +1907,7 @@ _GroupClause_grouped = Core.Name "grouped"
 
 _GroupClause_by = Core.Name "by"
 
-data QueryContinuation = 
+data QueryContinuation =
   QueryContinuation {
     queryContinuationInto :: Identifier,
     queryContinuationBody :: QueryBody}
@@ -1919,7 +1919,7 @@ _QueryContinuation_into = Core.Name "into"
 
 _QueryContinuation_body = Core.Name "body"
 
-data Assignment = 
+data Assignment =
   Assignment {
     assignmentLeft :: UnaryExpression,
     assignmentOperator :: AssignmentOperator,
@@ -1934,7 +1934,7 @@ _Assignment_operator = Core.Name "operator"
 
 _Assignment_right = Core.Name "right"
 
-data AssignmentOperator = 
+data AssignmentOperator =
   AssignmentOperatorSimple Bool |
   AssignmentOperatorPlusEquals  |
   AssignmentOperatorMinusEquals  |
@@ -1945,7 +1945,7 @@ data AssignmentOperator =
   AssignmentOperatorOrEquals  |
   AssignmentOperatorXorEquals  |
   AssignmentOperatorLeftShiftEquals  |
-  AssignmentOperatorRightShiftEquals 
+  AssignmentOperatorRightShiftEquals
   deriving (Eq, Ord, Read, Show)
 
 _AssignmentOperator = Core.Name "hydra.ext.csharp.syntax.AssignmentOperator"
@@ -1972,7 +1972,7 @@ _AssignmentOperator_leftShiftEquals = Core.Name "leftShiftEquals"
 
 _AssignmentOperator_rightShiftEquals = Core.Name "rightShiftEquals"
 
-data Expression = 
+data Expression =
   ExpressionNonAssignment NonAssignmentExpression |
   ExpressionAssignment Assignment
   deriving (Eq, Ord, Read, Show)
@@ -1983,7 +1983,7 @@ _Expression_nonAssignment = Core.Name "nonAssignment"
 
 _Expression_assignment = Core.Name "assignment"
 
-data NonAssignmentExpression = 
+data NonAssignmentExpression =
   NonAssignmentExpressionDeclaration DeclarationExpression |
   NonAssignmentExpressionConditional ConditionalExpression |
   NonAssignmentExpressionLambda LambdaExpression |
@@ -2000,21 +2000,21 @@ _NonAssignmentExpression_lambda = Core.Name "lambda"
 
 _NonAssignmentExpression_query = Core.Name "query"
 
-newtype ConstantExpression = 
+newtype ConstantExpression =
   ConstantExpression {
     unConstantExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _ConstantExpression = Core.Name "hydra.ext.csharp.syntax.ConstantExpression"
 
-newtype BooleanExpression = 
+newtype BooleanExpression =
   BooleanExpression {
     unBooleanExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _BooleanExpression = Core.Name "hydra.ext.csharp.syntax.BooleanExpression"
 
-data Statement = 
+data Statement =
   StatementLabeled LabeledStatement |
   StatementDeclaration DeclarationStatement |
   StatementEmbedded EmbeddedStatement
@@ -2028,7 +2028,7 @@ _Statement_declaration = Core.Name "declaration"
 
 _Statement_embedded = Core.Name "embedded"
 
-data EmbeddedStatement = 
+data EmbeddedStatement =
   EmbeddedStatementBlock Block |
   EmbeddedStatementEmpty  |
   EmbeddedStatementExpression StatementExpression |
@@ -2075,14 +2075,14 @@ _EmbeddedStatement_unsafe = Core.Name "unsafe"
 
 _EmbeddedStatement_fixed = Core.Name "fixed"
 
-newtype Block = 
+newtype Block =
   Block {
     unBlock :: [Statement]}
   deriving (Eq, Ord, Read, Show)
 
 _Block = Core.Name "hydra.ext.csharp.syntax.Block"
 
-data LabeledStatement = 
+data LabeledStatement =
   LabeledStatement {
     labeledStatementLabel :: Identifier,
     labeledStatementStatement :: Statement}
@@ -2094,7 +2094,7 @@ _LabeledStatement_label = Core.Name "label"
 
 _LabeledStatement_statement = Core.Name "statement"
 
-data DeclarationStatement = 
+data DeclarationStatement =
   DeclarationStatementVariable LocalVariableDeclaration |
   DeclarationStatementConstant LocalConstantDeclaration |
   DeclarationStatementFunction LocalFunctionDeclaration
@@ -2108,7 +2108,7 @@ _DeclarationStatement_constant = Core.Name "constant"
 
 _DeclarationStatement_function = Core.Name "function"
 
-data LocalVariableDeclaration = 
+data LocalVariableDeclaration =
   LocalVariableDeclarationImplicitlyTyped ImplicitlyTypedLocalVariableDeclaration |
   LocalVariableDeclarationExplicitlyTyped ExplicitlyTypedLocalVariableDeclaration |
   LocalVariableDeclarationRef RefLocalVariableDeclaration
@@ -2122,7 +2122,7 @@ _LocalVariableDeclaration_explicitlyTyped = Core.Name "explicitlyTyped"
 
 _LocalVariableDeclaration_ref = Core.Name "ref"
 
-data ImplicitlyTypedLocalVariableDeclaration = 
+data ImplicitlyTypedLocalVariableDeclaration =
   ImplicitlyTypedLocalVariableDeclarationVar ImplicitlyTypedLocalVariableDeclarator |
   ImplicitlyTypedLocalVariableDeclarationRefVar RefVarImplicitlyTypedLocalVariableDeclaration
   deriving (Eq, Ord, Read, Show)
@@ -2133,7 +2133,7 @@ _ImplicitlyTypedLocalVariableDeclaration_var = Core.Name "var"
 
 _ImplicitlyTypedLocalVariableDeclaration_refVar = Core.Name "refVar"
 
-data RefVarImplicitlyTypedLocalVariableDeclaration = 
+data RefVarImplicitlyTypedLocalVariableDeclaration =
   RefVarImplicitlyTypedLocalVariableDeclaration {
     refVarImplicitlyTypedLocalVariableDeclarationRefKind :: RefKind,
     refVarImplicitlyTypedLocalVariableDeclarationDeclarator :: RefLocalVariableDeclarator}
@@ -2146,7 +2146,7 @@ _RefVarImplicitlyTypedLocalVariableDeclaration_refKind = Core.Name "refKind"
 
 _RefVarImplicitlyTypedLocalVariableDeclaration_declarator = Core.Name "declarator"
 
-data ImplicitlyTypedLocalVariableDeclarator = 
+data ImplicitlyTypedLocalVariableDeclarator =
   ImplicitlyTypedLocalVariableDeclarator {
     implicitlyTypedLocalVariableDeclaratorIdentifier :: Identifier,
     implicitlyTypedLocalVariableDeclaratorExpression :: Expression}
@@ -2158,7 +2158,7 @@ _ImplicitlyTypedLocalVariableDeclarator_identifier = Core.Name "identifier"
 
 _ImplicitlyTypedLocalVariableDeclarator_expression = Core.Name "expression"
 
-data ExplicitlyTypedLocalVariableDeclaration = 
+data ExplicitlyTypedLocalVariableDeclaration =
   ExplicitlyTypedLocalVariableDeclaration {
     explicitlyTypedLocalVariableDeclarationType :: Type,
     explicitlyTypedLocalVariableDeclarationDeclarators :: [ExplicitlyTypedLocalVariableDeclarator]}
@@ -2170,7 +2170,7 @@ _ExplicitlyTypedLocalVariableDeclaration_type = Core.Name "type"
 
 _ExplicitlyTypedLocalVariableDeclaration_declarators = Core.Name "declarators"
 
-data ExplicitlyTypedLocalVariableDeclarator = 
+data ExplicitlyTypedLocalVariableDeclarator =
   ExplicitlyTypedLocalVariableDeclarator {
     explicitlyTypedLocalVariableDeclaratorIdentifier :: Identifier,
     explicitlyTypedLocalVariableDeclaratorInitializer :: (Maybe LocalVariableInitializer)}
@@ -2182,7 +2182,7 @@ _ExplicitlyTypedLocalVariableDeclarator_identifier = Core.Name "identifier"
 
 _ExplicitlyTypedLocalVariableDeclarator_initializer = Core.Name "initializer"
 
-data LocalVariableInitializer = 
+data LocalVariableInitializer =
   LocalVariableInitializerExpression Expression |
   LocalVariableInitializerInitializer ArrayInitializer
   deriving (Eq, Ord, Read, Show)
@@ -2193,7 +2193,7 @@ _LocalVariableInitializer_expression = Core.Name "expression"
 
 _LocalVariableInitializer_initializer = Core.Name "initializer"
 
-data RefLocalVariableDeclaration = 
+data RefLocalVariableDeclaration =
   RefLocalVariableDeclaration {
     refLocalVariableDeclarationRefKind :: RefKind,
     refLocalVariableDeclarationType :: Type,
@@ -2208,7 +2208,7 @@ _RefLocalVariableDeclaration_type = Core.Name "type"
 
 _RefLocalVariableDeclaration_declarators = Core.Name "declarators"
 
-data RefLocalVariableDeclarator = 
+data RefLocalVariableDeclarator =
   RefLocalVariableDeclarator {
     refLocalVariableDeclaratorLeft :: Identifier,
     refLocalVariableDeclaratorRight :: VariableReference}
@@ -2220,7 +2220,7 @@ _RefLocalVariableDeclarator_left = Core.Name "left"
 
 _RefLocalVariableDeclarator_right = Core.Name "right"
 
-data LocalConstantDeclaration = 
+data LocalConstantDeclaration =
   LocalConstantDeclaration {
     localConstantDeclarationType :: Type,
     localConstantDeclarationDeclarators :: [ConstantDeclarator]}
@@ -2232,7 +2232,7 @@ _LocalConstantDeclaration_type = Core.Name "type"
 
 _LocalConstantDeclaration_declarators = Core.Name "declarators"
 
-data ConstantDeclarator = 
+data ConstantDeclarator =
   ConstantDeclarator {
     constantDeclaratorIdentifier :: Identifier,
     constantDeclaratorExpression :: ConstantExpression}
@@ -2244,7 +2244,7 @@ _ConstantDeclarator_identifier = Core.Name "identifier"
 
 _ConstantDeclarator_expression = Core.Name "expression"
 
-data LocalFunctionDeclaration = 
+data LocalFunctionDeclaration =
   LocalFunctionDeclarationStandard StandardLocalFunctionDeclaration |
   LocalFunctionDeclarationRef RefLocalFunctionDeclaration
   deriving (Eq, Ord, Read, Show)
@@ -2255,7 +2255,7 @@ _LocalFunctionDeclaration_standard = Core.Name "standard"
 
 _LocalFunctionDeclaration_ref = Core.Name "ref"
 
-data StandardLocalFunctionDeclaration = 
+data StandardLocalFunctionDeclaration =
   StandardLocalFunctionDeclaration {
     standardLocalFunctionDeclarationModifiers :: [LocalFunctionModifier],
     standardLocalFunctionDeclarationReturnType :: ReturnType,
@@ -2273,7 +2273,7 @@ _StandardLocalFunctionDeclaration_header = Core.Name "header"
 
 _StandardLocalFunctionDeclaration_body = Core.Name "body"
 
-data RefLocalFunctionDeclaration = 
+data RefLocalFunctionDeclaration =
   RefLocalFunctionDeclaration {
     refLocalFunctionDeclarationModifiers :: [RefLocalFunctionModifier],
     refLocalFunctionDeclarationRefKind :: RefKind,
@@ -2294,7 +2294,7 @@ _RefLocalFunctionDeclaration_header = Core.Name "header"
 
 _RefLocalFunctionDeclaration_body = Core.Name "body"
 
-data LocalFunctionHeader = 
+data LocalFunctionHeader =
   LocalFunctionHeader {
     localFunctionHeaderIdentifier :: Identifier,
     localFunctionHeaderTypeParameters :: (Maybe TypeParameterList),
@@ -2312,9 +2312,9 @@ _LocalFunctionHeader_parameters = Core.Name "parameters"
 
 _LocalFunctionHeader_constraints = Core.Name "constraints"
 
-data LocalFunctionModifier = 
+data LocalFunctionModifier =
   LocalFunctionModifierRef RefLocalFunctionModifier |
-  LocalFunctionModifierAsync 
+  LocalFunctionModifierAsync
   deriving (Eq, Ord, Read, Show)
 
 _LocalFunctionModifier = Core.Name "hydra.ext.csharp.syntax.LocalFunctionModifier"
@@ -2323,9 +2323,9 @@ _LocalFunctionModifier_ref = Core.Name "ref"
 
 _LocalFunctionModifier_async = Core.Name "async"
 
-data RefLocalFunctionModifier = 
+data RefLocalFunctionModifier =
   RefLocalFunctionModifierStatic  |
-  RefLocalFunctionModifierUnsafe 
+  RefLocalFunctionModifierUnsafe
   deriving (Eq, Ord, Read, Show)
 
 _RefLocalFunctionModifier = Core.Name "hydra.ext.csharp.syntax.RefLocalFunctionModifier"
@@ -2334,7 +2334,7 @@ _RefLocalFunctionModifier_static = Core.Name "static"
 
 _RefLocalFunctionModifier_unsafe = Core.Name "unsafe"
 
-data LocalFunctionBody = 
+data LocalFunctionBody =
   LocalFunctionBodyBlock Block |
   LocalFunctionBodyNullConditionalInvocation NullConditionalInvocationExpression |
   LocalFunctionBodyExpression Expression
@@ -2348,7 +2348,7 @@ _LocalFunctionBody_nullConditionalInvocation = Core.Name "nullConditionalInvocat
 
 _LocalFunctionBody_expression = Core.Name "expression"
 
-data RefLocalFunctionBody = 
+data RefLocalFunctionBody =
   RefLocalFunctionBodyBlock Block |
   RefLocalFunctionBodyRef VariableReference
   deriving (Eq, Ord, Read, Show)
@@ -2359,7 +2359,7 @@ _RefLocalFunctionBody_block = Core.Name "block"
 
 _RefLocalFunctionBody_ref = Core.Name "ref"
 
-data StatementExpression = 
+data StatementExpression =
   StatementExpressionNullConditionalInvocation NullConditionalInvocationExpression |
   StatementExpressionInvocation InvocationExpression |
   StatementExpressionObjectCreation ObjectCreationExpression |
@@ -2391,7 +2391,7 @@ _StatementExpression_preDecrement = Core.Name "preDecrement"
 
 _StatementExpression_await = Core.Name "await"
 
-data SelectionStatement = 
+data SelectionStatement =
   SelectionStatementIf IfStatement |
   SelectionStatementSwitch SwitchStatement
   deriving (Eq, Ord, Read, Show)
@@ -2402,7 +2402,7 @@ _SelectionStatement_if = Core.Name "if"
 
 _SelectionStatement_switch = Core.Name "switch"
 
-data IfStatement = 
+data IfStatement =
   IfStatement {
     ifStatementCondition :: BooleanExpression,
     ifStatementIfBranch :: EmbeddedStatement,
@@ -2417,7 +2417,7 @@ _IfStatement_ifBranch = Core.Name "ifBranch"
 
 _IfStatement_elseBranch = Core.Name "elseBranch"
 
-data SwitchStatement = 
+data SwitchStatement =
   SwitchStatement {
     switchStatementExpression :: Expression,
     switchStatementBranches :: [SwitchSection]}
@@ -2429,7 +2429,7 @@ _SwitchStatement_expression = Core.Name "expression"
 
 _SwitchStatement_branches = Core.Name "branches"
 
-data SwitchSection = 
+data SwitchSection =
   SwitchSection {
     switchSectionLabels :: [SwitchLabel],
     switchSectionStatements :: [Statement]}
@@ -2441,9 +2441,9 @@ _SwitchSection_labels = Core.Name "labels"
 
 _SwitchSection_statements = Core.Name "statements"
 
-data SwitchLabel = 
+data SwitchLabel =
   SwitchLabelBranch SwitchBranch |
-  SwitchLabelDefault 
+  SwitchLabelDefault
   deriving (Eq, Ord, Read, Show)
 
 _SwitchLabel = Core.Name "hydra.ext.csharp.syntax.SwitchLabel"
@@ -2452,7 +2452,7 @@ _SwitchLabel_branch = Core.Name "branch"
 
 _SwitchLabel_default = Core.Name "default"
 
-data SwitchBranch = 
+data SwitchBranch =
   SwitchBranch {
     switchBranchPattern :: Pattern,
     switchBranchGuard :: (Maybe Expression)}
@@ -2464,7 +2464,7 @@ _SwitchBranch_pattern = Core.Name "pattern"
 
 _SwitchBranch_guard = Core.Name "guard"
 
-data IterationStatement = 
+data IterationStatement =
   IterationStatementWhile WhileStatement |
   IterationStatementDo DoStatement |
   IterationStatementFor ForStatement |
@@ -2481,7 +2481,7 @@ _IterationStatement_for = Core.Name "for"
 
 _IterationStatement_foreach = Core.Name "foreach"
 
-data WhileStatement = 
+data WhileStatement =
   WhileStatement {
     whileStatementCondition :: BooleanExpression,
     whileStatementBody :: EmbeddedStatement}
@@ -2493,7 +2493,7 @@ _WhileStatement_condition = Core.Name "condition"
 
 _WhileStatement_body = Core.Name "body"
 
-data DoStatement = 
+data DoStatement =
   DoStatement {
     doStatementBody :: EmbeddedStatement,
     doStatementWhile :: BooleanExpression}
@@ -2505,7 +2505,7 @@ _DoStatement_body = Core.Name "body"
 
 _DoStatement_while = Core.Name "while"
 
-data ForStatement = 
+data ForStatement =
   ForStatement {
     forStatementInitializer :: (Maybe ForInitializer),
     forStatementCondition :: (Maybe BooleanExpression),
@@ -2523,7 +2523,7 @@ _ForStatement_iterator = Core.Name "iterator"
 
 _ForStatement_body = Core.Name "body"
 
-data ForInitializer = 
+data ForInitializer =
   ForInitializerVariable LocalVariableDeclaration |
   ForInitializerStatements StatementExpressionList
   deriving (Eq, Ord, Read, Show)
@@ -2534,14 +2534,14 @@ _ForInitializer_variable = Core.Name "variable"
 
 _ForInitializer_statements = Core.Name "statements"
 
-newtype StatementExpressionList = 
+newtype StatementExpressionList =
   StatementExpressionList {
     unStatementExpressionList :: [StatementExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _StatementExpressionList = Core.Name "hydra.ext.csharp.syntax.StatementExpressionList"
 
-data ForeachStatement = 
+data ForeachStatement =
   ForeachStatement {
     foreachStatementKind :: (Maybe RefKind),
     foreachStatementType :: LocalVariableType,
@@ -2562,7 +2562,7 @@ _ForeachStatement_expression = Core.Name "expression"
 
 _ForeachStatement_body = Core.Name "body"
 
-data JumpStatement = 
+data JumpStatement =
   JumpStatementBreak  |
   JumpStatementContinue  |
   JumpStatementGoto GotoStatement |
@@ -2582,10 +2582,10 @@ _JumpStatement_return = Core.Name "return"
 
 _JumpStatement_throw = Core.Name "throw"
 
-data GotoStatement = 
+data GotoStatement =
   GotoStatementIdentifier Identifier |
   GotoStatementCase ConstantExpression |
-  GotoStatementDefault 
+  GotoStatementDefault
   deriving (Eq, Ord, Read, Show)
 
 _GotoStatement = Core.Name "hydra.ext.csharp.syntax.GotoStatement"
@@ -2596,7 +2596,7 @@ _GotoStatement_case = Core.Name "case"
 
 _GotoStatement_default = Core.Name "default"
 
-data ReturnStatement = 
+data ReturnStatement =
   ReturnStatementSimple  |
   ReturnStatementValue Expression |
   ReturnStatementRef VariableReference
@@ -2610,7 +2610,7 @@ _ReturnStatement_value = Core.Name "value"
 
 _ReturnStatement_ref = Core.Name "ref"
 
-data TryStatement = 
+data TryStatement =
   TryStatement {
     tryStatementBody :: Block,
     tryStatementCatches :: CatchClauses,
@@ -2625,7 +2625,7 @@ _TryStatement_catches = Core.Name "catches"
 
 _TryStatement_finally = Core.Name "finally"
 
-data CatchClauses = 
+data CatchClauses =
   CatchClausesSpecific [SpecificCatchClause] |
   CatchClausesGeneral Block
   deriving (Eq, Ord, Read, Show)
@@ -2636,7 +2636,7 @@ _CatchClauses_specific = Core.Name "specific"
 
 _CatchClauses_general = Core.Name "general"
 
-data SpecificCatchClause = 
+data SpecificCatchClause =
   SpecificCatchClause {
     specificCatchClauseSpecifier :: (Maybe ExceptionSpecifier),
     specificCatchClauseFilter :: (Maybe BooleanExpression),
@@ -2651,7 +2651,7 @@ _SpecificCatchClause_filter = Core.Name "filter"
 
 _SpecificCatchClause_body = Core.Name "body"
 
-data ExceptionSpecifier = 
+data ExceptionSpecifier =
   ExceptionSpecifier {
     exceptionSpecifierType :: Type,
     exceptionSpecifierIdentifier :: (Maybe Identifier)}
@@ -2663,7 +2663,7 @@ _ExceptionSpecifier_type = Core.Name "type"
 
 _ExceptionSpecifier_identifier = Core.Name "identifier"
 
-data LockStatement = 
+data LockStatement =
   LockStatement {
     lockStatementExpression :: Expression,
     lockStatementBody :: EmbeddedStatement}
@@ -2675,7 +2675,7 @@ _LockStatement_expression = Core.Name "expression"
 
 _LockStatement_body = Core.Name "body"
 
-data UsingStatement = 
+data UsingStatement =
   UsingStatement {
     usingStatementAcquisition :: ResourceAcquisition,
     usingStatementBody :: EmbeddedStatement}
@@ -2687,7 +2687,7 @@ _UsingStatement_acquisition = Core.Name "acquisition"
 
 _UsingStatement_body = Core.Name "body"
 
-data ResourceAcquisition = 
+data ResourceAcquisition =
   ResourceAcquisitionLocal LocalVariableDeclaration |
   ResourceAcquisitionExpression Expression
   deriving (Eq, Ord, Read, Show)
@@ -2698,9 +2698,9 @@ _ResourceAcquisition_local = Core.Name "local"
 
 _ResourceAcquisition_expression = Core.Name "expression"
 
-data YieldStatement = 
+data YieldStatement =
   YieldStatementReturn Expression |
-  YieldStatementBreak 
+  YieldStatementBreak
   deriving (Eq, Ord, Read, Show)
 
 _YieldStatement = Core.Name "hydra.ext.csharp.syntax.YieldStatement"
@@ -2709,7 +2709,7 @@ _YieldStatement_return = Core.Name "return"
 
 _YieldStatement_break = Core.Name "break"
 
-data CompilationUnit = 
+data CompilationUnit =
   CompilationUnit {
     compilationUnitExterns :: [ExternAliasDirective],
     compilationUnitUsings :: [UsingDirective],
@@ -2727,7 +2727,7 @@ _CompilationUnit_attributes = Core.Name "attributes"
 
 _CompilationUnit_members = Core.Name "members"
 
-data NamespaceDeclaration = 
+data NamespaceDeclaration =
   NamespaceDeclaration {
     namespaceDeclarationName :: QualifiedIdentifier,
     namespaceDeclarationBody :: NamespaceBody}
@@ -2739,14 +2739,14 @@ _NamespaceDeclaration_name = Core.Name "name"
 
 _NamespaceDeclaration_body = Core.Name "body"
 
-newtype QualifiedIdentifier = 
+newtype QualifiedIdentifier =
   QualifiedIdentifier {
     unQualifiedIdentifier :: [Identifier]}
   deriving (Eq, Ord, Read, Show)
 
 _QualifiedIdentifier = Core.Name "hydra.ext.csharp.syntax.QualifiedIdentifier"
 
-data NamespaceBody = 
+data NamespaceBody =
   NamespaceBody {
     namespaceBodyExterns :: [ExternAliasDirective],
     namespaceBodyUsings :: [UsingDirective],
@@ -2761,14 +2761,14 @@ _NamespaceBody_usings = Core.Name "usings"
 
 _NamespaceBody_members = Core.Name "members"
 
-newtype ExternAliasDirective = 
+newtype ExternAliasDirective =
   ExternAliasDirective {
     unExternAliasDirective :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _ExternAliasDirective = Core.Name "hydra.ext.csharp.syntax.ExternAliasDirective"
 
-data UsingDirective = 
+data UsingDirective =
   UsingDirectiveAlias UsingAliasDirective |
   UsingDirectiveNamespace NamespaceName |
   UsingDirectiveStatic TypeName
@@ -2782,7 +2782,7 @@ _UsingDirective_namespace = Core.Name "namespace"
 
 _UsingDirective_static = Core.Name "static"
 
-data UsingAliasDirective = 
+data UsingAliasDirective =
   UsingAliasDirective {
     usingAliasDirectiveAlias :: Identifier,
     usingAliasDirectiveName :: NamespaceOrTypeName}
@@ -2794,7 +2794,7 @@ _UsingAliasDirective_alias = Core.Name "alias"
 
 _UsingAliasDirective_name = Core.Name "name"
 
-data NamespaceMemberDeclaration = 
+data NamespaceMemberDeclaration =
   NamespaceMemberDeclarationNamespace NamespaceDeclaration |
   NamespaceMemberDeclarationType TypeDeclaration
   deriving (Eq, Ord, Read, Show)
@@ -2805,7 +2805,7 @@ _NamespaceMemberDeclaration_namespace = Core.Name "namespace"
 
 _NamespaceMemberDeclaration_type = Core.Name "type"
 
-data TypeDeclaration = 
+data TypeDeclaration =
   TypeDeclarationClass ClassDeclaration |
   TypeDeclarationStruct StructDeclaration |
   TypeDeclarationInterface InterfaceDeclaration |
@@ -2825,7 +2825,7 @@ _TypeDeclaration_enum = Core.Name "enum"
 
 _TypeDeclaration_delegate = Core.Name "delegate"
 
-data QualifiedAliasMember = 
+data QualifiedAliasMember =
   QualifiedAliasMember {
     qualifiedAliasMemberAlias :: Identifier,
     qualifiedAliasMemberMember :: Identifier,
@@ -2840,7 +2840,7 @@ _QualifiedAliasMember_member = Core.Name "member"
 
 _QualifiedAliasMember_arguments = Core.Name "arguments"
 
-data ClassDeclaration = 
+data ClassDeclaration =
   ClassDeclaration {
     classDeclarationAttributes :: [AttributeSection],
     classDeclarationModifiers :: [ClassModifier],
@@ -2870,7 +2870,7 @@ _ClassDeclaration_constraints = Core.Name "constraints"
 
 _ClassDeclaration_body = Core.Name "body"
 
-data ClassModifier = 
+data ClassModifier =
   ClassModifierNew  |
   ClassModifierPublic  |
   ClassModifierProtected  |
@@ -2879,7 +2879,7 @@ data ClassModifier =
   ClassModifierAbstract  |
   ClassModifierSealed  |
   ClassModifierStatic  |
-  ClassModifierUnsafe 
+  ClassModifierUnsafe
   deriving (Eq, Ord, Read, Show)
 
 _ClassModifier = Core.Name "hydra.ext.csharp.syntax.ClassModifier"
@@ -2902,14 +2902,14 @@ _ClassModifier_static = Core.Name "static"
 
 _ClassModifier_unsafe = Core.Name "unsafe"
 
-newtype TypeParameterList = 
+newtype TypeParameterList =
   TypeParameterList {
     unTypeParameterList :: [TypeParameterPart]}
   deriving (Eq, Ord, Read, Show)
 
 _TypeParameterList = Core.Name "hydra.ext.csharp.syntax.TypeParameterList"
 
-data TypeParameterPart = 
+data TypeParameterPart =
   TypeParameterPart {
     typeParameterPartAttributes :: (Maybe Attributes),
     typeParameterPartName :: TypeParameter}
@@ -2921,7 +2921,7 @@ _TypeParameterPart_attributes = Core.Name "attributes"
 
 _TypeParameterPart_name = Core.Name "name"
 
-data ClassBase = 
+data ClassBase =
   ClassBaseClass (Maybe ClassType) |
   ClassBaseInterfaces [InterfaceType]
   deriving (Eq, Ord, Read, Show)
@@ -2932,7 +2932,7 @@ _ClassBase_class = Core.Name "class"
 
 _ClassBase_interfaces = Core.Name "interfaces"
 
-data TypeParameterConstraintsClause = 
+data TypeParameterConstraintsClause =
   TypeParameterConstraintsClause {
     typeParameterConstraintsClauseParameter :: TypeParameter,
     typeParameterConstraintsClauseConstraints :: [TypeParameterConstraints]}
@@ -2944,7 +2944,7 @@ _TypeParameterConstraintsClause_parameter = Core.Name "parameter"
 
 _TypeParameterConstraintsClause_constraints = Core.Name "constraints"
 
-data TypeParameterConstraints = 
+data TypeParameterConstraints =
   TypeParameterConstraints {
     typeParameterConstraintsPrimary :: (Maybe PrimaryConstraint),
     typeParameterConstraintsSecondary :: (Maybe SecondaryConstraints),
@@ -2959,11 +2959,11 @@ _TypeParameterConstraints_secondary = Core.Name "secondary"
 
 _TypeParameterConstraints_constructor = Core.Name "constructor"
 
-data PrimaryConstraint = 
+data PrimaryConstraint =
   PrimaryConstraintClassType ClassType |
   PrimaryConstraintClass  |
   PrimaryConstraintStruct  |
-  PrimaryConstraintUnmanaged 
+  PrimaryConstraintUnmanaged
   deriving (Eq, Ord, Read, Show)
 
 _PrimaryConstraint = Core.Name "hydra.ext.csharp.syntax.PrimaryConstraint"
@@ -2976,14 +2976,14 @@ _PrimaryConstraint_struct = Core.Name "struct"
 
 _PrimaryConstraint_unmanaged = Core.Name "unmanaged"
 
-newtype SecondaryConstraints = 
+newtype SecondaryConstraints =
   SecondaryConstraints {
     unSecondaryConstraints :: [SecondaryConstraint]}
   deriving (Eq, Ord, Read, Show)
 
 _SecondaryConstraints = Core.Name "hydra.ext.csharp.syntax.SecondaryConstraints"
 
-data SecondaryConstraint = 
+data SecondaryConstraint =
   SecondaryConstraintInterface InterfaceType |
   SecondaryConstraintParameter TypeParameter
   deriving (Eq, Ord, Read, Show)
@@ -2994,14 +2994,14 @@ _SecondaryConstraint_interface = Core.Name "interface"
 
 _SecondaryConstraint_parameter = Core.Name "parameter"
 
-newtype ClassBody = 
+newtype ClassBody =
   ClassBody {
     unClassBody :: [ClassMemberDeclaration]}
   deriving (Eq, Ord, Read, Show)
 
 _ClassBody = Core.Name "hydra.ext.csharp.syntax.ClassBody"
 
-data ClassMemberDeclaration = 
+data ClassMemberDeclaration =
   ClassMemberDeclarationConstant ConstantDeclaration |
   ClassMemberDeclarationField FieldDeclaration |
   ClassMemberDeclarationMethod MethodDeclaration |
@@ -3039,7 +3039,7 @@ _ClassMemberDeclaration_staticConstructor = Core.Name "staticConstructor"
 
 _ClassMemberDeclaration_type = Core.Name "type"
 
-data ConstantDeclaration = 
+data ConstantDeclaration =
   ConstantDeclaration {
     constantDeclarationAttributes :: (Maybe Attributes),
     constantDeclarationModifiers :: [ConstantModifier],
@@ -3057,12 +3057,12 @@ _ConstantDeclaration_type = Core.Name "type"
 
 _ConstantDeclaration_declarators = Core.Name "declarators"
 
-data ConstantModifier = 
+data ConstantModifier =
   ConstantModifierNew  |
   ConstantModifierPublic  |
   ConstantModifierProtected  |
   ConstantModifierInternal  |
-  ConstantModifierPrivate 
+  ConstantModifierPrivate
   deriving (Eq, Ord, Read, Show)
 
 _ConstantModifier = Core.Name "hydra.ext.csharp.syntax.ConstantModifier"
@@ -3077,7 +3077,7 @@ _ConstantModifier_internal = Core.Name "internal"
 
 _ConstantModifier_private = Core.Name "private"
 
-data FieldDeclaration = 
+data FieldDeclaration =
   FieldDeclaration {
     fieldDeclarationAttributes :: (Maybe Attributes),
     fieldDeclarationModifiers :: [FieldModifier],
@@ -3095,7 +3095,7 @@ _FieldDeclaration_type = Core.Name "type"
 
 _FieldDeclaration_declarators = Core.Name "declarators"
 
-data FieldModifier = 
+data FieldModifier =
   FieldModifierNew  |
   FieldModifierPublic  |
   FieldModifierProtected  |
@@ -3104,7 +3104,7 @@ data FieldModifier =
   FieldModifierStatic  |
   FieldModifierReadonly  |
   FieldModifierVolatile  |
-  FieldModifierUnsafe 
+  FieldModifierUnsafe
   deriving (Eq, Ord, Read, Show)
 
 _FieldModifier = Core.Name "hydra.ext.csharp.syntax.FieldModifier"
@@ -3127,14 +3127,14 @@ _FieldModifier_volatile = Core.Name "volatile"
 
 _FieldModifier_unsafe = Core.Name "unsafe"
 
-newtype VariableDeclarators = 
+newtype VariableDeclarators =
   VariableDeclarators {
     unVariableDeclarators :: [VariableDeclarator]}
   deriving (Eq, Ord, Read, Show)
 
 _VariableDeclarators = Core.Name "hydra.ext.csharp.syntax.VariableDeclarators"
 
-data VariableDeclarator = 
+data VariableDeclarator =
   VariableDeclarator {
     variableDeclaratorIdentifier :: Identifier,
     variableDeclaratorInitializer :: (Maybe VariableInitializer)}
@@ -3146,7 +3146,7 @@ _VariableDeclarator_identifier = Core.Name "identifier"
 
 _VariableDeclarator_initializer = Core.Name "initializer"
 
-data MethodDeclaration = 
+data MethodDeclaration =
   MethodDeclarationStandard StandardMethodDeclaration |
   MethodDeclarationRefReturn RefReturnMethodDeclaration
   deriving (Eq, Ord, Read, Show)
@@ -3157,7 +3157,7 @@ _MethodDeclaration_standard = Core.Name "standard"
 
 _MethodDeclaration_refReturn = Core.Name "refReturn"
 
-data StandardMethodDeclaration = 
+data StandardMethodDeclaration =
   StandardMethodDeclaration {
     standardMethodDeclarationAttributes :: (Maybe Attributes),
     standardMethodDeclarationModifiers :: [MethodModifier],
@@ -3178,7 +3178,7 @@ _StandardMethodDeclaration_header = Core.Name "header"
 
 _StandardMethodDeclaration_body = Core.Name "body"
 
-data RefReturnMethodDeclaration = 
+data RefReturnMethodDeclaration =
   RefReturnMethodDeclaration {
     refReturnMethodDeclarationAttributes :: (Maybe Attributes),
     refReturnMethodDeclarationModifiers :: [RefMethodModifier],
@@ -3202,7 +3202,7 @@ _RefReturnMethodDeclaration_header = Core.Name "header"
 
 _RefReturnMethodDeclaration_body = Core.Name "body"
 
-data MethodModifiers = 
+data MethodModifiers =
   MethodModifiers {
     methodModifiersModifiers :: [MethodModifier],
     methodModifiersPartial :: Bool}
@@ -3214,9 +3214,9 @@ _MethodModifiers_modifiers = Core.Name "modifiers"
 
 _MethodModifiers_partial = Core.Name "partial"
 
-data RefKind = 
+data RefKind =
   RefKindRef  |
-  RefKindRefReadonly 
+  RefKindRefReadonly
   deriving (Eq, Ord, Read, Show)
 
 _RefKind = Core.Name "hydra.ext.csharp.syntax.RefKind"
@@ -3225,7 +3225,7 @@ _RefKind_ref = Core.Name "ref"
 
 _RefKind_refReadonly = Core.Name "refReadonly"
 
-data MethodHeader = 
+data MethodHeader =
   MethodHeader {
     methodHeaderName :: MemberName,
     methodHeaderTypeParameters :: (Maybe TypeParameterList),
@@ -3243,9 +3243,9 @@ _MethodHeader_parameters = Core.Name "parameters"
 
 _MethodHeader_constraints = Core.Name "constraints"
 
-data MethodModifier = 
+data MethodModifier =
   MethodModifierRef RefMethodModifier |
-  MethodModifierAsync 
+  MethodModifierAsync
   deriving (Eq, Ord, Read, Show)
 
 _MethodModifier = Core.Name "hydra.ext.csharp.syntax.MethodModifier"
@@ -3254,7 +3254,7 @@ _MethodModifier_ref = Core.Name "ref"
 
 _MethodModifier_async = Core.Name "async"
 
-data RefMethodModifier = 
+data RefMethodModifier =
   RefMethodModifierNew  |
   RefMethodModifierPublic  |
   RefMethodModifierProtected  |
@@ -3266,7 +3266,7 @@ data RefMethodModifier =
   RefMethodModifierOverride  |
   RefMethodModifierAbstract  |
   RefMethodModifierExtern  |
-  RefMethodModifierUnsafe 
+  RefMethodModifierUnsafe
   deriving (Eq, Ord, Read, Show)
 
 _RefMethodModifier = Core.Name "hydra.ext.csharp.syntax.RefMethodModifier"
@@ -3295,9 +3295,9 @@ _RefMethodModifier_extern = Core.Name "extern"
 
 _RefMethodModifier_unsafe = Core.Name "unsafe"
 
-data ReturnType = 
+data ReturnType =
   ReturnTypeRef Type |
-  ReturnTypeVoid 
+  ReturnTypeVoid
   deriving (Eq, Ord, Read, Show)
 
 _ReturnType = Core.Name "hydra.ext.csharp.syntax.ReturnType"
@@ -3306,7 +3306,7 @@ _ReturnType_ref = Core.Name "ref"
 
 _ReturnType_void = Core.Name "void"
 
-data MemberName = 
+data MemberName =
   MemberName {
     memberNameInterfaceType :: (Maybe TypeName),
     memberNameIdentifier :: Identifier}
@@ -3318,11 +3318,11 @@ _MemberName_interfaceType = Core.Name "interfaceType"
 
 _MemberName_identifier = Core.Name "identifier"
 
-data MethodBody = 
+data MethodBody =
   MethodBodyBlock Block |
   MethodBodyNullConditionalInvocation NullConditionalInvocationExpression |
   MethodBodyExpression Expression |
-  MethodBodyEmpty 
+  MethodBodyEmpty
   deriving (Eq, Ord, Read, Show)
 
 _MethodBody = Core.Name "hydra.ext.csharp.syntax.MethodBody"
@@ -3335,10 +3335,10 @@ _MethodBody_expression = Core.Name "expression"
 
 _MethodBody_empty = Core.Name "empty"
 
-data RefMethodBody = 
+data RefMethodBody =
   RefMethodBodyBlock Block |
   RefMethodBodyRef VariableReference |
-  RefMethodBodyEmpty 
+  RefMethodBodyEmpty
   deriving (Eq, Ord, Read, Show)
 
 _RefMethodBody = Core.Name "hydra.ext.csharp.syntax.RefMethodBody"
@@ -3349,7 +3349,7 @@ _RefMethodBody_ref = Core.Name "ref"
 
 _RefMethodBody_empty = Core.Name "empty"
 
-data FormalParameterList = 
+data FormalParameterList =
   FormalParameterList {
     formalParameterListFixed :: [FixedParameter],
     formalParameterListArray :: (Maybe ParameterArray)}
@@ -3361,7 +3361,7 @@ _FormalParameterList_fixed = Core.Name "fixed"
 
 _FormalParameterList_array = Core.Name "array"
 
-data FixedParameter = 
+data FixedParameter =
   FixedParameter {
     fixedParameterAttributes :: (Maybe Attributes),
     fixedParameterModifier :: (Maybe ParameterModifier),
@@ -3382,9 +3382,9 @@ _FixedParameter_identifier = Core.Name "identifier"
 
 _FixedParameter_defaultArgument = Core.Name "defaultArgument"
 
-data ParameterModifier = 
+data ParameterModifier =
   ParameterModifierMode ParameterModeModifier |
-  ParameterModifierThis 
+  ParameterModifierThis
   deriving (Eq, Ord, Read, Show)
 
 _ParameterModifier = Core.Name "hydra.ext.csharp.syntax.ParameterModifier"
@@ -3393,10 +3393,10 @@ _ParameterModifier_mode = Core.Name "mode"
 
 _ParameterModifier_this = Core.Name "this"
 
-data ParameterModeModifier = 
+data ParameterModeModifier =
   ParameterModeModifierRef  |
   ParameterModeModifierOut  |
-  ParameterModeModifierIn 
+  ParameterModeModifierIn
   deriving (Eq, Ord, Read, Show)
 
 _ParameterModeModifier = Core.Name "hydra.ext.csharp.syntax.ParameterModeModifier"
@@ -3407,7 +3407,7 @@ _ParameterModeModifier_out = Core.Name "out"
 
 _ParameterModeModifier_in = Core.Name "in"
 
-data ParameterArray = 
+data ParameterArray =
   ParameterArray {
     parameterArrayAttributes :: (Maybe Attributes),
     parameterArrayType :: ArrayType,
@@ -3422,7 +3422,7 @@ _ParameterArray_type = Core.Name "type"
 
 _ParameterArray_identifier = Core.Name "identifier"
 
-data PropertyDeclaration = 
+data PropertyDeclaration =
   PropertyDeclarationStandard StandardPropertyDeclaration |
   PropertyDeclarationRefReturn RefReturnPropertyDeclaration
   deriving (Eq, Ord, Read, Show)
@@ -3433,7 +3433,7 @@ _PropertyDeclaration_standard = Core.Name "standard"
 
 _PropertyDeclaration_refReturn = Core.Name "refReturn"
 
-data StandardPropertyDeclaration = 
+data StandardPropertyDeclaration =
   StandardPropertyDeclaration {
     standardPropertyDeclarationAttributes :: (Maybe Attributes),
     standardPropertyDeclarationModifiers :: [PropertyModifier],
@@ -3454,7 +3454,7 @@ _StandardPropertyDeclaration_name = Core.Name "name"
 
 _StandardPropertyDeclaration_body = Core.Name "body"
 
-data RefReturnPropertyDeclaration = 
+data RefReturnPropertyDeclaration =
   RefReturnPropertyDeclaration {
     refReturnPropertyDeclarationAttributes :: (Maybe Attributes),
     refReturnPropertyDeclarationModifiers :: [PropertyModifier],
@@ -3478,7 +3478,7 @@ _RefReturnPropertyDeclaration_name = Core.Name "name"
 
 _RefReturnPropertyDeclaration_body = Core.Name "body"
 
-data PropertyModifier = 
+data PropertyModifier =
   PropertyModifierNew  |
   PropertyModifierPublic  |
   PropertyModifierProtected  |
@@ -3490,7 +3490,7 @@ data PropertyModifier =
   PropertyModifierOverride  |
   PropertyModifierAbstract  |
   PropertyModifierExtern  |
-  PropertyModifierUnsafe 
+  PropertyModifierUnsafe
   deriving (Eq, Ord, Read, Show)
 
 _PropertyModifier = Core.Name "hydra.ext.csharp.syntax.PropertyModifier"
@@ -3519,7 +3519,7 @@ _PropertyModifier_extern = Core.Name "extern"
 
 _PropertyModifier_unsafe = Core.Name "unsafe"
 
-data PropertyBody = 
+data PropertyBody =
   PropertyBodyBlock BlockPropertyBody |
   PropertyBodyExpression Expression
   deriving (Eq, Ord, Read, Show)
@@ -3530,7 +3530,7 @@ _PropertyBody_block = Core.Name "block"
 
 _PropertyBody_expression = Core.Name "expression"
 
-data BlockPropertyBody = 
+data BlockPropertyBody =
   BlockPropertyBody {
     blockPropertyBodyAccessors :: AccessorDeclarations,
     blockPropertyBodyInitializer :: (Maybe VariableInitializer)}
@@ -3542,7 +3542,7 @@ _BlockPropertyBody_accessors = Core.Name "accessors"
 
 _BlockPropertyBody_initializer = Core.Name "initializer"
 
-data RefPropertyBody = 
+data RefPropertyBody =
   RefPropertyBodyBlock RefGetAccessorDeclaration |
   RefPropertyBodyRef VariableReference
   deriving (Eq, Ord, Read, Show)
@@ -3553,7 +3553,7 @@ _RefPropertyBody_block = Core.Name "block"
 
 _RefPropertyBody_ref = Core.Name "ref"
 
-data AccessorDeclarations = 
+data AccessorDeclarations =
   AccessorDeclarationsGet (Maybe AccessorDeclaration) |
   AccessorDeclarationsSet (Maybe AccessorDeclaration)
   deriving (Eq, Ord, Read, Show)
@@ -3564,7 +3564,7 @@ _AccessorDeclarations_get = Core.Name "get"
 
 _AccessorDeclarations_set = Core.Name "set"
 
-data AccessorDeclaration = 
+data AccessorDeclaration =
   AccessorDeclaration {
     accessorDeclarationAttributes :: (Maybe Attributes),
     accessorDeclarationModifier :: (Maybe AccessorModifier),
@@ -3579,14 +3579,14 @@ _AccessorDeclaration_modifier = Core.Name "modifier"
 
 _AccessorDeclaration_body = Core.Name "body"
 
-data AccessorModifier = 
+data AccessorModifier =
   AccessorModifierProtected  |
   AccessorModifierInternal  |
   AccessorModifierPrivate  |
   AccessorModifierProtectedInternal  |
   AccessorModifierInternalProtected  |
   AccessorModifierProtectedPrivate  |
-  AccessorModifierPrivateProtected 
+  AccessorModifierPrivateProtected
   deriving (Eq, Ord, Read, Show)
 
 _AccessorModifier = Core.Name "hydra.ext.csharp.syntax.AccessorModifier"
@@ -3605,10 +3605,10 @@ _AccessorModifier_protectedPrivate = Core.Name "protectedPrivate"
 
 _AccessorModifier_privateProtected = Core.Name "privateProtected"
 
-data AccessorBody = 
+data AccessorBody =
   AccessorBodyBlock Block |
   AccessorBodyExpression Expression |
-  AccessorBodyEmpty 
+  AccessorBodyEmpty
   deriving (Eq, Ord, Read, Show)
 
 _AccessorBody = Core.Name "hydra.ext.csharp.syntax.AccessorBody"
@@ -3619,7 +3619,7 @@ _AccessorBody_expression = Core.Name "expression"
 
 _AccessorBody_empty = Core.Name "empty"
 
-data RefGetAccessorDeclaration = 
+data RefGetAccessorDeclaration =
   RefGetAccessorDeclaration {
     refGetAccessorDeclarationAttributes :: (Maybe Attributes),
     refGetAccessorDeclarationModifier :: (Maybe AccessorModifier),
@@ -3634,10 +3634,10 @@ _RefGetAccessorDeclaration_modifier = Core.Name "modifier"
 
 _RefGetAccessorDeclaration_body = Core.Name "body"
 
-data RefAccessorBody = 
+data RefAccessorBody =
   RefAccessorBodyBlock Block |
   RefAccessorBodyRef VariableReference |
-  RefAccessorBodyEmpty 
+  RefAccessorBodyEmpty
   deriving (Eq, Ord, Read, Show)
 
 _RefAccessorBody = Core.Name "hydra.ext.csharp.syntax.RefAccessorBody"
@@ -3648,7 +3648,7 @@ _RefAccessorBody_ref = Core.Name "ref"
 
 _RefAccessorBody_empty = Core.Name "empty"
 
-data EventDeclaration = 
+data EventDeclaration =
   EventDeclarationStandard StandardEventDeclaration |
   EventDeclarationAccessors AccessorsEventDeclaration
   deriving (Eq, Ord, Read, Show)
@@ -3659,7 +3659,7 @@ _EventDeclaration_standard = Core.Name "standard"
 
 _EventDeclaration_accessors = Core.Name "accessors"
 
-data StandardEventDeclaration = 
+data StandardEventDeclaration =
   StandardEventDeclaration {
     standardEventDeclarationAttributes :: (Maybe Attributes),
     standardEventDeclarationModifiers :: [EventModifier],
@@ -3677,7 +3677,7 @@ _StandardEventDeclaration_type = Core.Name "type"
 
 _StandardEventDeclaration_declarators = Core.Name "declarators"
 
-data AccessorsEventDeclaration = 
+data AccessorsEventDeclaration =
   AccessorsEventDeclaration {
     accessorsEventDeclarationAttributes :: (Maybe Attributes),
     accessorsEventDeclarationModifiers :: [EventModifier],
@@ -3698,7 +3698,7 @@ _AccessorsEventDeclaration_name = Core.Name "name"
 
 _AccessorsEventDeclaration_accessors = Core.Name "accessors"
 
-data EventModifier = 
+data EventModifier =
   EventModifierNew  |
   EventModifierPublic  |
   EventModifierProtected  |
@@ -3710,7 +3710,7 @@ data EventModifier =
   EventModifierOverride  |
   EventModifierAbstract  |
   EventModifierExtern  |
-  EventModifierUnsafe 
+  EventModifierUnsafe
   deriving (Eq, Ord, Read, Show)
 
 _EventModifier = Core.Name "hydra.ext.csharp.syntax.EventModifier"
@@ -3739,7 +3739,7 @@ _EventModifier_extern = Core.Name "extern"
 
 _EventModifier_unsafe = Core.Name "unsafe"
 
-data EventAccessorDeclarations = 
+data EventAccessorDeclarations =
   EventAccessorDeclarationsAdd AddRemoveAccessorDeclaration |
   EventAccessorDeclarationsRemove AddRemoveAccessorDeclaration
   deriving (Eq, Ord, Read, Show)
@@ -3750,7 +3750,7 @@ _EventAccessorDeclarations_add = Core.Name "add"
 
 _EventAccessorDeclarations_remove = Core.Name "remove"
 
-data AddRemoveAccessorDeclaration = 
+data AddRemoveAccessorDeclaration =
   AddRemoveAccessorDeclaration {
     addRemoveAccessorDeclarationAttributes :: (Maybe Attributes),
     addRemoveAccessorDeclarationBody :: Block}
@@ -3762,7 +3762,7 @@ _AddRemoveAccessorDeclaration_attributes = Core.Name "attributes"
 
 _AddRemoveAccessorDeclaration_body = Core.Name "body"
 
-data IndexerDeclaration = 
+data IndexerDeclaration =
   IndexerDeclarationStandard StandardIndexerDeclaration |
   IndexerDeclarationRef RefIndexerDeclaration
   deriving (Eq, Ord, Read, Show)
@@ -3773,7 +3773,7 @@ _IndexerDeclaration_standard = Core.Name "standard"
 
 _IndexerDeclaration_ref = Core.Name "ref"
 
-data StandardIndexerDeclaration = 
+data StandardIndexerDeclaration =
   StandardIndexerDeclaration {
     standardIndexerDeclarationAttributes :: (Maybe Attributes),
     standardIndexerDeclarationModifiers :: [IndexerModifier],
@@ -3791,7 +3791,7 @@ _StandardIndexerDeclaration_declarator = Core.Name "declarator"
 
 _StandardIndexerDeclaration_body = Core.Name "body"
 
-data RefIndexerDeclaration = 
+data RefIndexerDeclaration =
   RefIndexerDeclaration {
     refIndexerDeclarationAttributes :: (Maybe Attributes),
     refIndexerDeclarationModifiers :: [IndexerModifier],
@@ -3812,7 +3812,7 @@ _RefIndexerDeclaration_declarator = Core.Name "declarator"
 
 _RefIndexerDeclaration_body = Core.Name "body"
 
-data IndexerModifier = 
+data IndexerModifier =
   IndexerModifierNew  |
   IndexerModifierPublic  |
   IndexerModifierProtected  |
@@ -3823,7 +3823,7 @@ data IndexerModifier =
   IndexerModifierOverride  |
   IndexerModifierAbstract  |
   IndexerModifierExtern  |
-  IndexerModifierUnsafe 
+  IndexerModifierUnsafe
   deriving (Eq, Ord, Read, Show)
 
 _IndexerModifier = Core.Name "hydra.ext.csharp.syntax.IndexerModifier"
@@ -3850,7 +3850,7 @@ _IndexerModifier_extern = Core.Name "extern"
 
 _IndexerModifier_unsafe = Core.Name "unsafe"
 
-data IndexerDeclarator = 
+data IndexerDeclarator =
   IndexerDeclarator {
     indexerDeclaratorType :: Type,
     indexerDeclaratorInterface :: (Maybe InterfaceType),
@@ -3865,7 +3865,7 @@ _IndexerDeclarator_interface = Core.Name "interface"
 
 _IndexerDeclarator_parameters = Core.Name "parameters"
 
-data IndexerBody = 
+data IndexerBody =
   IndexerBodyBlock AccessorDeclarations |
   IndexerBodyExpression Expression
   deriving (Eq, Ord, Read, Show)
@@ -3876,7 +3876,7 @@ _IndexerBody_block = Core.Name "block"
 
 _IndexerBody_expression = Core.Name "expression"
 
-data RefIndexerBody = 
+data RefIndexerBody =
   RefIndexerBodyBlock RefGetAccessorDeclaration |
   RefIndexerBodyRef VariableReference
   deriving (Eq, Ord, Read, Show)
@@ -3887,7 +3887,7 @@ _RefIndexerBody_block = Core.Name "block"
 
 _RefIndexerBody_ref = Core.Name "ref"
 
-data OperatorDeclaration = 
+data OperatorDeclaration =
   OperatorDeclaration {
     operatorDeclarationAttributes :: (Maybe Attributes),
     operatorDeclarationModifiers :: [OperatorModifier],
@@ -3905,11 +3905,11 @@ _OperatorDeclaration_declarator = Core.Name "declarator"
 
 _OperatorDeclaration_body = Core.Name "body"
 
-data OperatorModifier = 
+data OperatorModifier =
   OperatorModifierPublic  |
   OperatorModifierStatic  |
   OperatorModifierExtern  |
-  OperatorModifierUnsafe 
+  OperatorModifierUnsafe
   deriving (Eq, Ord, Read, Show)
 
 _OperatorModifier = Core.Name "hydra.ext.csharp.syntax.OperatorModifier"
@@ -3922,7 +3922,7 @@ _OperatorModifier_extern = Core.Name "extern"
 
 _OperatorModifier_unsafe = Core.Name "unsafe"
 
-data OperatorDeclarator = 
+data OperatorDeclarator =
   OperatorDeclaratorUnary UnaryOperatorDeclarator |
   OperatorDeclaratorBinary BinaryOperatorDeclarator |
   OperatorDeclaratorConversion ConversionOperatorDeclarator
@@ -3936,7 +3936,7 @@ _OperatorDeclarator_binary = Core.Name "binary"
 
 _OperatorDeclarator_conversion = Core.Name "conversion"
 
-data UnaryOperatorDeclarator = 
+data UnaryOperatorDeclarator =
   UnaryOperatorDeclarator {
     unaryOperatorDeclaratorType :: Type,
     unaryOperatorDeclaratorOperator :: OverloadableUnaryOperator,
@@ -3951,7 +3951,7 @@ _UnaryOperatorDeclarator_operator = Core.Name "operator"
 
 _UnaryOperatorDeclarator_parameter = Core.Name "parameter"
 
-data OverloadableUnaryOperator = 
+data OverloadableUnaryOperator =
   OverloadableUnaryOperatorPlus  |
   OverloadableUnaryOperatorMinus  |
   OverloadableUnaryOperatorNot  |
@@ -3959,7 +3959,7 @@ data OverloadableUnaryOperator =
   OverloadableUnaryOperatorIncrement  |
   OverloadableUnaryOperatorDecrement  |
   OverloadableUnaryOperatorTrue  |
-  OverloadableUnaryOperatorFalse 
+  OverloadableUnaryOperatorFalse
   deriving (Eq, Ord, Read, Show)
 
 _OverloadableUnaryOperator = Core.Name "hydra.ext.csharp.syntax.OverloadableUnaryOperator"
@@ -3980,7 +3980,7 @@ _OverloadableUnaryOperator_true = Core.Name "true"
 
 _OverloadableUnaryOperator_false = Core.Name "false"
 
-data BinaryOperatorDeclarator = 
+data BinaryOperatorDeclarator =
   BinaryOperatorDeclarator {
     binaryOperatorDeclaratorType :: Type,
     binaryOperatorDeclaratorOperator :: OverloadableBinaryOperator,
@@ -3998,7 +3998,7 @@ _BinaryOperatorDeclarator_left = Core.Name "left"
 
 _BinaryOperatorDeclarator_right = Core.Name "right"
 
-data OverloadableBinaryOperator = 
+data OverloadableBinaryOperator =
   OverloadableBinaryOperatorAdd  |
   OverloadableBinaryOperatorSubtract  |
   OverloadableBinaryOperatorMultiply  |
@@ -4014,7 +4014,7 @@ data OverloadableBinaryOperator =
   OverloadableBinaryOperatorGreaterThan  |
   OverloadableBinaryOperatorLessThan  |
   OverloadableBinaryOperatorGreaterThanOrEqual  |
-  OverloadableBinaryOperatorLessThanOrEqual 
+  OverloadableBinaryOperatorLessThanOrEqual
   deriving (Eq, Ord, Read, Show)
 
 _OverloadableBinaryOperator = Core.Name "hydra.ext.csharp.syntax.OverloadableBinaryOperator"
@@ -4051,7 +4051,7 @@ _OverloadableBinaryOperator_greaterThanOrEqual = Core.Name "greaterThanOrEqual"
 
 _OverloadableBinaryOperator_lessThanOrEqual = Core.Name "lessThanOrEqual"
 
-data ConversionOperatorDeclarator = 
+data ConversionOperatorDeclarator =
   ConversionOperatorDeclarator {
     conversionOperatorDeclaratorKind :: ConversionKind,
     conversionOperatorDeclaratorType :: Type,
@@ -4066,9 +4066,9 @@ _ConversionOperatorDeclarator_type = Core.Name "type"
 
 _ConversionOperatorDeclarator_parameter = Core.Name "parameter"
 
-data ConversionKind = 
+data ConversionKind =
   ConversionKindImplicit  |
-  ConversionKindExplicit 
+  ConversionKindExplicit
   deriving (Eq, Ord, Read, Show)
 
 _ConversionKind = Core.Name "hydra.ext.csharp.syntax.ConversionKind"
@@ -4077,10 +4077,10 @@ _ConversionKind_implicit = Core.Name "implicit"
 
 _ConversionKind_explicit = Core.Name "explicit"
 
-data OperatorBody = 
+data OperatorBody =
   OperatorBodyBlock Block |
   OperatorBodyExpression Expression |
-  OperatorBodyEmpty 
+  OperatorBodyEmpty
   deriving (Eq, Ord, Read, Show)
 
 _OperatorBody = Core.Name "hydra.ext.csharp.syntax.OperatorBody"
@@ -4091,7 +4091,7 @@ _OperatorBody_expression = Core.Name "expression"
 
 _OperatorBody_empty = Core.Name "empty"
 
-data ConstructorDeclaration = 
+data ConstructorDeclaration =
   ConstructorDeclaration {
     constructorDeclarationAttributes :: (Maybe Attributes),
     constructorDeclarationModifiers :: [ConstructorModifier],
@@ -4109,13 +4109,13 @@ _ConstructorDeclaration_declarator = Core.Name "declarator"
 
 _ConstructorDeclaration_body = Core.Name "body"
 
-data ConstructorModifier = 
+data ConstructorModifier =
   ConstructorModifierPublic  |
   ConstructorModifierProtected  |
   ConstructorModifierInternal  |
   ConstructorModifierPrivate  |
   ConstructorModifierExtern  |
-  ConstructorModifierUnsafe 
+  ConstructorModifierUnsafe
   deriving (Eq, Ord, Read, Show)
 
 _ConstructorModifier = Core.Name "hydra.ext.csharp.syntax.ConstructorModifier"
@@ -4132,7 +4132,7 @@ _ConstructorModifier_extern = Core.Name "extern"
 
 _ConstructorModifier_unsafe = Core.Name "unsafe"
 
-data ConstructorDeclarator = 
+data ConstructorDeclarator =
   ConstructorDeclarator {
     constructorDeclaratorName :: Identifier,
     constructorDeclaratorParameters :: (Maybe FormalParameterList),
@@ -4147,7 +4147,7 @@ _ConstructorDeclarator_parameters = Core.Name "parameters"
 
 _ConstructorDeclarator_initializer = Core.Name "initializer"
 
-data ConstructorInitializer = 
+data ConstructorInitializer =
   ConstructorInitializerBase (Maybe ArgumentList) |
   ConstructorInitializerThis (Maybe ArgumentList)
   deriving (Eq, Ord, Read, Show)
@@ -4158,10 +4158,10 @@ _ConstructorInitializer_base = Core.Name "base"
 
 _ConstructorInitializer_this = Core.Name "this"
 
-data ConstructorBody = 
+data ConstructorBody =
   ConstructorBodyBlock Block |
   ConstructorBodyExpression Expression |
-  ConstructorBodyEmpty 
+  ConstructorBodyEmpty
   deriving (Eq, Ord, Read, Show)
 
 _ConstructorBody = Core.Name "hydra.ext.csharp.syntax.ConstructorBody"
@@ -4172,7 +4172,7 @@ _ConstructorBody_expression = Core.Name "expression"
 
 _ConstructorBody_empty = Core.Name "empty"
 
-data StaticConstructorDeclaration = 
+data StaticConstructorDeclaration =
   StaticConstructorDeclaration {
     staticConstructorDeclarationAttributes :: (Maybe Attributes),
     staticConstructorDeclarationModifiers :: StaticConstructorModifiers,
@@ -4190,7 +4190,7 @@ _StaticConstructorDeclaration_name = Core.Name "name"
 
 _StaticConstructorDeclaration_body = Core.Name "body"
 
-data StaticConstructorModifiers = 
+data StaticConstructorModifiers =
   StaticConstructorModifiers {
     staticConstructorModifiersExtern :: Bool,
     staticConstructorModifiersUnsafe :: Bool}
@@ -4202,10 +4202,10 @@ _StaticConstructorModifiers_extern = Core.Name "extern"
 
 _StaticConstructorModifiers_unsafe = Core.Name "unsafe"
 
-data StaticConstructorBody = 
+data StaticConstructorBody =
   StaticConstructorBodyBlock Block |
   StaticConstructorBodyExpression Expression |
-  StaticConstructorBodyEmpty 
+  StaticConstructorBodyEmpty
   deriving (Eq, Ord, Read, Show)
 
 _StaticConstructorBody = Core.Name "hydra.ext.csharp.syntax.StaticConstructorBody"
@@ -4216,7 +4216,7 @@ _StaticConstructorBody_expression = Core.Name "expression"
 
 _StaticConstructorBody_empty = Core.Name "empty"
 
-data FinalizerDeclaration = 
+data FinalizerDeclaration =
   FinalizerDeclaration {
     finalizerDeclarationAttributes :: (Maybe Attributes),
     finalizerDeclarationExtern :: Bool,
@@ -4237,10 +4237,10 @@ _FinalizerDeclaration_name = Core.Name "name"
 
 _FinalizerDeclaration_body = Core.Name "body"
 
-data FinalizerBody = 
+data FinalizerBody =
   FinalizerBodyBlock Block |
   FinalizerBodyExpression Expression |
-  FinalizerBodyEmpty 
+  FinalizerBodyEmpty
   deriving (Eq, Ord, Read, Show)
 
 _FinalizerBody = Core.Name "hydra.ext.csharp.syntax.FinalizerBody"
@@ -4251,7 +4251,7 @@ _FinalizerBody_expression = Core.Name "expression"
 
 _FinalizerBody_empty = Core.Name "empty"
 
-data StructDeclaration = 
+data StructDeclaration =
   StructDeclaration {
     structDeclarationAttributes :: (Maybe Attributes),
     structDeclarationModifiers :: [StructModifier],
@@ -4284,14 +4284,14 @@ _StructDeclaration_constraints = Core.Name "constraints"
 
 _StructDeclaration_body = Core.Name "body"
 
-data StructModifier = 
+data StructModifier =
   StructModifierNew  |
   StructModifierPublic  |
   StructModifierProtected  |
   StructModifierInternal  |
   StructModifierPrivate  |
   StructModifierReadonly  |
-  StructModifierUnsafe 
+  StructModifierUnsafe
   deriving (Eq, Ord, Read, Show)
 
 _StructModifier = Core.Name "hydra.ext.csharp.syntax.StructModifier"
@@ -4310,7 +4310,7 @@ _StructModifier_readonly = Core.Name "readonly"
 
 _StructModifier_unsafe = Core.Name "unsafe"
 
-data StructMemberDeclaration = 
+data StructMemberDeclaration =
   StructMemberDeclarationConstant ConstantDeclaration |
   StructMemberDeclarationField FieldDeclaration |
   StructMemberDeclarationMethod MethodDeclaration |
@@ -4348,14 +4348,14 @@ _StructMemberDeclaration_type = Core.Name "type"
 
 _StructMemberDeclaration_fixedSizeBuffer = Core.Name "fixedSizeBuffer"
 
-newtype ArrayInitializer = 
+newtype ArrayInitializer =
   ArrayInitializer {
     unArrayInitializer :: [VariableInitializer]}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayInitializer = Core.Name "hydra.ext.csharp.syntax.ArrayInitializer"
 
-data VariableInitializer = 
+data VariableInitializer =
   VariableInitializerExpression Expression |
   VariableInitializerArray ArrayInitializer
   deriving (Eq, Ord, Read, Show)
@@ -4366,7 +4366,7 @@ _VariableInitializer_expression = Core.Name "expression"
 
 _VariableInitializer_array = Core.Name "array"
 
-data InterfaceDeclaration = 
+data InterfaceDeclaration =
   InterfaceDeclaration {
     interfaceDeclarationAttributes :: (Maybe Attributes),
     interfaceDeclarationModifiers :: [InterfaceModifier],
@@ -4396,13 +4396,13 @@ _InterfaceDeclaration_constraints = Core.Name "constraints"
 
 _InterfaceDeclaration_body = Core.Name "body"
 
-data InterfaceModifier = 
+data InterfaceModifier =
   InterfaceModifierNew  |
   InterfaceModifierPublic  |
   InterfaceModifierProtected  |
   InterfaceModifierInternal  |
   InterfaceModifierPrivate  |
-  InterfaceModifierUnsafe 
+  InterfaceModifierUnsafe
   deriving (Eq, Ord, Read, Show)
 
 _InterfaceModifier = Core.Name "hydra.ext.csharp.syntax.InterfaceModifier"
@@ -4419,14 +4419,14 @@ _InterfaceModifier_private = Core.Name "private"
 
 _InterfaceModifier_unsafe = Core.Name "unsafe"
 
-newtype VariantTypeParameters = 
+newtype VariantTypeParameters =
   VariantTypeParameters {
     unVariantTypeParameters :: [VariantTypeParameter]}
   deriving (Eq, Ord, Read, Show)
 
 _VariantTypeParameters = Core.Name "hydra.ext.csharp.syntax.VariantTypeParameters"
 
-data VariantTypeParameter = 
+data VariantTypeParameter =
   VariantTypeParameter {
     variantTypeParameterAttributes :: (Maybe Attributes),
     variantTypeParameterVariance :: (Maybe VarianceAnnotation),
@@ -4441,9 +4441,9 @@ _VariantTypeParameter_variance = Core.Name "variance"
 
 _VariantTypeParameter_parameter = Core.Name "parameter"
 
-data VarianceAnnotation = 
+data VarianceAnnotation =
   VarianceAnnotationIn  |
-  VarianceAnnotationOut 
+  VarianceAnnotationOut
   deriving (Eq, Ord, Read, Show)
 
 _VarianceAnnotation = Core.Name "hydra.ext.csharp.syntax.VarianceAnnotation"
@@ -4452,7 +4452,7 @@ _VarianceAnnotation_in = Core.Name "in"
 
 _VarianceAnnotation_out = Core.Name "out"
 
-data InterfaceMemberDeclaration = 
+data InterfaceMemberDeclaration =
   InterfaceMemberDeclarationMethod InterfaceMethodDeclaration |
   InterfaceMemberDeclarationProperty InterfacePropertyDeclaration |
   InterfaceMemberDeclarationEvent InterfaceEventDeclaration |
@@ -4469,7 +4469,7 @@ _InterfaceMemberDeclaration_event = Core.Name "event"
 
 _InterfaceMemberDeclaration_indexer = Core.Name "indexer"
 
-data InterfaceMethodDeclaration = 
+data InterfaceMethodDeclaration =
   InterfaceMethodDeclaration {
     interfaceMethodDeclarationAttributes :: (Maybe Attributes),
     interfaceMethodDeclarationNew :: Bool,
@@ -4490,7 +4490,7 @@ _InterfaceMethodDeclaration_refKind = Core.Name "refKind"
 
 _InterfaceMethodDeclaration_header = Core.Name "header"
 
-data InterfaceMethodHeader = 
+data InterfaceMethodHeader =
   InterfaceMethodHeader {
     interfaceMethodHeaderName :: Identifier,
     interfaceMethodHeaderParameters :: (Maybe FormalParameterList),
@@ -4508,7 +4508,7 @@ _InterfaceMethodHeader_typeParameters = Core.Name "typeParameters"
 
 _InterfaceMethodHeader_constraints = Core.Name "constraints"
 
-data InterfacePropertyDeclaration = 
+data InterfacePropertyDeclaration =
   InterfacePropertyDeclaration {
     interfacePropertyDeclarationAttributes :: (Maybe Attributes),
     interfacePropertyDeclarationNew :: Bool,
@@ -4532,7 +4532,7 @@ _InterfacePropertyDeclaration_name = Core.Name "name"
 
 _InterfacePropertyDeclaration_accessors = Core.Name "accessors"
 
-data InterfaceAccessors = 
+data InterfaceAccessors =
   InterfaceAccessors {
     interfaceAccessorsAttributes :: (Maybe Attributes),
     interfaceAccessorsGet :: (Maybe Attributes),
@@ -4547,7 +4547,7 @@ _InterfaceAccessors_get = Core.Name "get"
 
 _InterfaceAccessors_set = Core.Name "set"
 
-data InterfaceEventDeclaration = 
+data InterfaceEventDeclaration =
   InterfaceEventDeclaration {
     interfaceEventDeclarationAttributes :: (Maybe Attributes),
     interfaceEventDeclarationNew :: Bool,
@@ -4565,7 +4565,7 @@ _InterfaceEventDeclaration_type = Core.Name "type"
 
 _InterfaceEventDeclaration_name = Core.Name "name"
 
-data InterfaceIndexerDeclaration = 
+data InterfaceIndexerDeclaration =
   InterfaceIndexerDeclaration {
     interfaceIndexerDeclarationAttributes :: (Maybe Attributes),
     interfaceIndexerDeclarationNew :: Bool,
@@ -4589,7 +4589,7 @@ _InterfaceIndexerDeclaration_parameters = Core.Name "parameters"
 
 _InterfaceIndexerDeclaration_accessors = Core.Name "accessors"
 
-data EnumDeclaration = 
+data EnumDeclaration =
   EnumDeclaration {
     enumDeclarationAttributes :: (Maybe Attributes),
     enumDeclarationModifiers :: [EnumModifier],
@@ -4610,7 +4610,7 @@ _EnumDeclaration_base = Core.Name "base"
 
 _EnumDeclaration_body = Core.Name "body"
 
-data EnumBase = 
+data EnumBase =
   EnumBaseType IntegralType |
   EnumBaseName TypeName
   deriving (Eq, Ord, Read, Show)
@@ -4621,19 +4621,19 @@ _EnumBase_type = Core.Name "type"
 
 _EnumBase_name = Core.Name "name"
 
-newtype EnumBody = 
+newtype EnumBody =
   EnumBody {
     unEnumBody :: [EnumMemberDeclaration]}
   deriving (Eq, Ord, Read, Show)
 
 _EnumBody = Core.Name "hydra.ext.csharp.syntax.EnumBody"
 
-data EnumModifier = 
+data EnumModifier =
   EnumModifierNew  |
   EnumModifierPublic  |
   EnumModifierProtected  |
   EnumModifierInternal  |
-  EnumModifierPrivate 
+  EnumModifierPrivate
   deriving (Eq, Ord, Read, Show)
 
 _EnumModifier = Core.Name "hydra.ext.csharp.syntax.EnumModifier"
@@ -4648,7 +4648,7 @@ _EnumModifier_internal = Core.Name "internal"
 
 _EnumModifier_private = Core.Name "private"
 
-data EnumMemberDeclaration = 
+data EnumMemberDeclaration =
   EnumMemberDeclaration {
     enumMemberDeclarationAttributes :: (Maybe Attributes),
     enumMemberDeclarationName :: Identifier,
@@ -4663,7 +4663,7 @@ _EnumMemberDeclaration_name = Core.Name "name"
 
 _EnumMemberDeclaration_value = Core.Name "value"
 
-data DelegateDeclaration = 
+data DelegateDeclaration =
   DelegateDeclaration {
     delegateDeclarationAttributes :: (Maybe Attributes),
     delegateDeclarationModifiers :: [DelegateModifier],
@@ -4687,7 +4687,7 @@ _DelegateDeclaration_refReturnType = Core.Name "refReturnType"
 
 _DelegateDeclaration_header = Core.Name "header"
 
-data DelegateHeader = 
+data DelegateHeader =
   DelegateHeader {
     delegateHeaderName :: Identifier,
     delegateHeaderTypeParameters :: (Maybe VariantTypeParameters),
@@ -4705,13 +4705,13 @@ _DelegateHeader_parameters = Core.Name "parameters"
 
 _DelegateHeader_constraints = Core.Name "constraints"
 
-data DelegateModifier = 
+data DelegateModifier =
   DelegateModifierNew  |
   DelegateModifierPublic  |
   DelegateModifierProtected  |
   DelegateModifierInternal  |
   DelegateModifierPrivate  |
-  DelegateModifierUnsafe 
+  DelegateModifierUnsafe
   deriving (Eq, Ord, Read, Show)
 
 _DelegateModifier = Core.Name "hydra.ext.csharp.syntax.DelegateModifier"
@@ -4728,7 +4728,7 @@ _DelegateModifier_private = Core.Name "private"
 
 _DelegateModifier_unsafe = Core.Name "unsafe"
 
-data GlobalAttributeSection = 
+data GlobalAttributeSection =
   GlobalAttributeSection {
     globalAttributeSectionTarget :: Identifier,
     globalAttributeSectionAttributes :: AttributeList}
@@ -4740,14 +4740,14 @@ _GlobalAttributeSection_target = Core.Name "target"
 
 _GlobalAttributeSection_attributes = Core.Name "attributes"
 
-newtype Attributes = 
+newtype Attributes =
   Attributes {
     unAttributes :: [AttributeSection]}
   deriving (Eq, Ord, Read, Show)
 
 _Attributes = Core.Name "hydra.ext.csharp.syntax.Attributes"
 
-data AttributeSection = 
+data AttributeSection =
   AttributeSection {
     attributeSectionTarget :: (Maybe AttributeTarget),
     attributeSectionAttributes :: AttributeList}
@@ -4759,7 +4759,7 @@ _AttributeSection_target = Core.Name "target"
 
 _AttributeSection_attributes = Core.Name "attributes"
 
-data AttributeTarget = 
+data AttributeTarget =
   AttributeTargetIdentifier Identifier |
   AttributeTargetKeyword Keyword
   deriving (Eq, Ord, Read, Show)
@@ -4770,14 +4770,14 @@ _AttributeTarget_identifier = Core.Name "identifier"
 
 _AttributeTarget_keyword = Core.Name "keyword"
 
-newtype AttributeList = 
+newtype AttributeList =
   AttributeList {
     unAttributeList :: [Attribute]}
   deriving (Eq, Ord, Read, Show)
 
 _AttributeList = Core.Name "hydra.ext.csharp.syntax.AttributeList"
 
-data Attribute = 
+data Attribute =
   Attribute {
     attributeName :: AttributeName,
     attributeArguments :: (Maybe AttributeArguments)}
@@ -4789,14 +4789,14 @@ _Attribute_name = Core.Name "name"
 
 _Attribute_arguments = Core.Name "arguments"
 
-newtype AttributeName = 
+newtype AttributeName =
   AttributeName {
     unAttributeName :: TypeName}
   deriving (Eq, Ord, Read, Show)
 
 _AttributeName = Core.Name "hydra.ext.csharp.syntax.AttributeName"
 
-data AttributeArguments = 
+data AttributeArguments =
   AttributeArguments {
     attributeArgumentsPositonal :: (Maybe PositionalArgumentList),
     attributeArgumentsNamed :: (Maybe NamedArgumentList)}
@@ -4808,14 +4808,14 @@ _AttributeArguments_positonal = Core.Name "positonal"
 
 _AttributeArguments_named = Core.Name "named"
 
-newtype PositionalArgumentList = 
+newtype PositionalArgumentList =
   PositionalArgumentList {
     unPositionalArgumentList :: [PositionalArgument]}
   deriving (Eq, Ord, Read, Show)
 
 _PositionalArgumentList = Core.Name "hydra.ext.csharp.syntax.PositionalArgumentList"
 
-data PositionalArgument = 
+data PositionalArgument =
   PositionalArgument {
     positionalArgumentName :: (Maybe Identifier),
     positionalArgumentValue :: AttributeArgumentExpression}
@@ -4827,14 +4827,14 @@ _PositionalArgument_name = Core.Name "name"
 
 _PositionalArgument_value = Core.Name "value"
 
-newtype NamedArgumentList = 
+newtype NamedArgumentList =
   NamedArgumentList {
     unNamedArgumentList :: [NamedArgument]}
   deriving (Eq, Ord, Read, Show)
 
 _NamedArgumentList = Core.Name "hydra.ext.csharp.syntax.NamedArgumentList"
 
-data NamedArgument = 
+data NamedArgument =
   NamedArgument {
     namedArgumentName :: Identifier,
     namedArgumentValue :: AttributeArgumentExpression}
@@ -4846,14 +4846,14 @@ _NamedArgument_name = Core.Name "name"
 
 _NamedArgument_value = Core.Name "value"
 
-newtype AttributeArgumentExpression = 
+newtype AttributeArgumentExpression =
   AttributeArgumentExpression {
     unAttributeArgumentExpression :: NonAssignmentExpression}
   deriving (Eq, Ord, Read, Show)
 
 _AttributeArgumentExpression = Core.Name "hydra.ext.csharp.syntax.AttributeArgumentExpression"
 
-data PointerType = 
+data PointerType =
   PointerTypeValueType (Maybe ValueType) |
   PointerTypePointerDepth Int
   deriving (Eq, Ord, Read, Show)
@@ -4864,7 +4864,7 @@ _PointerType_valueType = Core.Name "valueType"
 
 _PointerType_pointerDepth = Core.Name "pointerDepth"
 
-data PointerMemberAccess = 
+data PointerMemberAccess =
   PointerMemberAccess {
     pointerMemberAccessPointer :: PrimaryExpression,
     pointerMemberAccessMember :: Identifier,
@@ -4879,7 +4879,7 @@ _PointerMemberAccess_member = Core.Name "member"
 
 _PointerMemberAccess_typeArguments = Core.Name "typeArguments"
 
-data PointerElementAccess = 
+data PointerElementAccess =
   PointerElementAccess {
     pointerElementAccessPointer :: PrimaryNoArrayCreationExpression,
     pointerElementAccessIndex :: Expression}
@@ -4891,7 +4891,7 @@ _PointerElementAccess_pointer = Core.Name "pointer"
 
 _PointerElementAccess_index = Core.Name "index"
 
-data FixedStatement = 
+data FixedStatement =
   FixedStatement {
     fixedStatementPointerType :: PointerType,
     fixedStatementDeclarators :: [FixedPointerDeclarator],
@@ -4906,7 +4906,7 @@ _FixedStatement_declarators = Core.Name "declarators"
 
 _FixedStatement_statement = Core.Name "statement"
 
-data FixedPointerDeclarator = 
+data FixedPointerDeclarator =
   FixedPointerDeclaratorReference VariableReference |
   FixedPointerDeclaratorExpression Expression
   deriving (Eq, Ord, Read, Show)
@@ -4917,7 +4917,7 @@ _FixedPointerDeclarator_reference = Core.Name "reference"
 
 _FixedPointerDeclarator_expression = Core.Name "expression"
 
-data FixedSizeBufferDeclaration = 
+data FixedSizeBufferDeclaration =
   FixedSizeBufferDeclaration {
     fixedSizeBufferDeclarationAttributes :: (Maybe Attributes),
     fixedSizeBufferDeclarationModifiers :: [FixedSizeBufferModifier],
@@ -4935,12 +4935,12 @@ _FixedSizeBufferDeclaration_elementType = Core.Name "elementType"
 
 _FixedSizeBufferDeclaration_declarators = Core.Name "declarators"
 
-data FixedSizeBufferModifier = 
+data FixedSizeBufferModifier =
   FixedSizeBufferModifierNew  |
   FixedSizeBufferModifierPublic  |
   FixedSizeBufferModifierInternal  |
   FixedSizeBufferModifierPrivate  |
-  FixedSizeBufferModifierUnsafe 
+  FixedSizeBufferModifierUnsafe
   deriving (Eq, Ord, Read, Show)
 
 _FixedSizeBufferModifier = Core.Name "hydra.ext.csharp.syntax.FixedSizeBufferModifier"
@@ -4955,7 +4955,7 @@ _FixedSizeBufferModifier_private = Core.Name "private"
 
 _FixedSizeBufferModifier_unsafe = Core.Name "unsafe"
 
-data FixedSizeBufferDeclarator = 
+data FixedSizeBufferDeclarator =
   FixedSizeBufferDeclarator {
     fixedSizeBufferDeclaratorName :: Identifier,
     fixedSizeBufferDeclaratorSize :: ConstantExpression}

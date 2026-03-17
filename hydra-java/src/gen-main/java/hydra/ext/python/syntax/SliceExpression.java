@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class SliceExpression implements Serializable, Comparable<SliceExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.SliceExpression");
-  
+
   public static final hydra.core.Name START = new hydra.core.Name("start");
-  
+
   public static final hydra.core.Name STOP = new hydra.core.Name("stop");
-  
+
   public static final hydra.core.Name STEP = new hydra.core.Name("step");
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Expression> start;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Expression> stop;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Expression> step;
-  
+
   public SliceExpression (hydra.util.Maybe<hydra.ext.python.syntax.Expression> start, hydra.util.Maybe<hydra.ext.python.syntax.Expression> stop, hydra.util.Maybe<hydra.ext.python.syntax.Expression> step) {
     this.start = start;
     this.stop = stop;
     this.step = step;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof SliceExpression)) {
@@ -39,12 +39,12 @@ public class SliceExpression implements Serializable, Comparable<SliceExpression
       this.step,
       o.step);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(start) + 3 * java.util.Objects.hashCode(stop) + 5 * java.util.Objects.hashCode(step);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SliceExpression other) {
@@ -59,15 +59,15 @@ public class SliceExpression implements Serializable, Comparable<SliceExpression
     }
     return ((Comparable) step).compareTo(other.step);
   }
-  
+
   public SliceExpression withStart(hydra.util.Maybe<hydra.ext.python.syntax.Expression> start) {
     return new SliceExpression(start, stop, step);
   }
-  
+
   public SliceExpression withStop(hydra.util.Maybe<hydra.ext.python.syntax.Expression> stop) {
     return new SliceExpression(start, stop, step);
   }
-  
+
   public SliceExpression withStep(hydra.util.Maybe<hydra.ext.python.syntax.Expression> step) {
     return new SliceExpression(start, stop, step);
   }

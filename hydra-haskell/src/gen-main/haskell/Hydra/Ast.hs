@@ -13,11 +13,11 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Operator associativity
-data Associativity = 
+data Associativity =
   AssociativityNone  |
   AssociativityLeft  |
   AssociativityRight  |
-  AssociativityBoth 
+  AssociativityBoth
   deriving (Eq, Ord, Read, Show)
 
 _Associativity = Core.Name "hydra.ast.Associativity"
@@ -31,7 +31,7 @@ _Associativity_right = Core.Name "right"
 _Associativity_both = Core.Name "both"
 
 -- | Formatting option for code blocks
-data BlockStyle = 
+data BlockStyle =
   BlockStyle {
     -- | An optional indentation string
     blockStyleIndent :: (Maybe String),
@@ -50,7 +50,7 @@ _BlockStyle_newlineBeforeContent = Core.Name "newlineBeforeContent"
 _BlockStyle_newlineAfterContent = Core.Name "newlineAfterContent"
 
 -- | An expression enclosed by brackets
-data BracketExpr = 
+data BracketExpr =
   BracketExpr {
     -- | The bracket pair enclosing the expression
     bracketExprBrackets :: Brackets,
@@ -69,7 +69,7 @@ _BracketExpr_enclosed = Core.Name "enclosed"
 _BracketExpr_style = Core.Name "style"
 
 -- | Matching open and close bracket symbols
-data Brackets = 
+data Brackets =
   Brackets {
     -- | The opening bracket symbol
     bracketsOpen :: Symbol,
@@ -84,7 +84,7 @@ _Brackets_open = Core.Name "open"
 _Brackets_close = Core.Name "close"
 
 -- | An abstract expression
-data Expr = 
+data Expr =
   -- | A constant symbol
   ExprConst Symbol |
   -- | An indented expression
@@ -110,7 +110,7 @@ _Expr_brackets = Core.Name "brackets"
 _Expr_seq = Core.Name "seq"
 
 -- | An expression indented in a certain style
-data IndentedExpression = 
+data IndentedExpression =
   IndentedExpression {
     -- | The indentation style
     indentedExpressionStyle :: IndentStyle,
@@ -125,7 +125,7 @@ _IndentedExpression_style = Core.Name "style"
 _IndentedExpression_expr = Core.Name "expr"
 
 -- | Any of several indentation styles
-data IndentStyle = 
+data IndentStyle =
   -- | Indent all lines with the given string
   IndentStyleAllLines String |
   -- | Indent only lines after the first with the given string
@@ -139,7 +139,7 @@ _IndentStyle_allLines = Core.Name "allLines"
 _IndentStyle_subsequentLines = Core.Name "subsequentLines"
 
 -- | An operator symbol
-data Op = 
+data Op =
   Op {
     -- | The operator symbol
     opSymbol :: Symbol,
@@ -162,7 +162,7 @@ _Op_precedence = Core.Name "precedence"
 _Op_associativity = Core.Name "associativity"
 
 -- | An operator expression
-data OpExpr = 
+data OpExpr =
   OpExpr {
     -- | The operator
     opExprOp :: Op,
@@ -181,7 +181,7 @@ _OpExpr_lhs = Core.Name "lhs"
 _OpExpr_rhs = Core.Name "rhs"
 
 -- | Left and right padding for an operator
-data Padding = 
+data Padding =
   Padding {
     -- | Padding to the left of the operator
     paddingLeft :: Ws,
@@ -196,7 +196,7 @@ _Padding_left = Core.Name "left"
 _Padding_right = Core.Name "right"
 
 -- | Operator precedence
-newtype Precedence = 
+newtype Precedence =
   Precedence {
     unPrecedence :: Int}
   deriving (Eq, Ord, Read, Show)
@@ -204,7 +204,7 @@ newtype Precedence =
 _Precedence = Core.Name "hydra.ast.Precedence"
 
 -- | A sequence of expressions joined by a separator operator. Unlike OpExpr, parenthesize ignores SeqExpr boundaries.
-data SeqExpr = 
+data SeqExpr =
   SeqExpr {
     -- | The separator operator
     seqExprOp :: Op,
@@ -219,7 +219,7 @@ _SeqExpr_op = Core.Name "op"
 _SeqExpr_elements = Core.Name "elements"
 
 -- | Any symbol
-newtype Symbol = 
+newtype Symbol =
   Symbol {
     unSymbol :: String}
   deriving (Eq, Ord, Read, Show)
@@ -227,7 +227,7 @@ newtype Symbol =
 _Symbol = Core.Name "hydra.ast.Symbol"
 
 -- | One of several classes of whitespace
-data Ws = 
+data Ws =
   -- | No whitespace
   WsNone  |
   -- | A single space
@@ -237,7 +237,7 @@ data Ws =
   -- | A line break followed by indentation
   WsBreakAndIndent String |
   -- | Two line breaks
-  WsDoubleBreak 
+  WsDoubleBreak
   deriving (Eq, Ord, Read, Show)
 
 _Ws = Core.Name "hydra.ast.Ws"

@@ -14,7 +14,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A column type, consisting of a name and a value type
-data ColumnType = 
+data ColumnType =
   ColumnType {
     columnTypeName :: Relational.ColumnName,
     columnTypeType :: Core.Type}
@@ -27,7 +27,7 @@ _ColumnType_name = Core.Name "name"
 _ColumnType_type = Core.Name "type"
 
 -- | A data row, containing optional-valued cells; one per column
-newtype DataRow v = 
+newtype DataRow v =
   DataRow {
     unDataRow :: [Maybe v]}
   deriving (Eq, Ord, Read, Show)
@@ -35,7 +35,7 @@ newtype DataRow v =
 _DataRow = Core.Name "hydra.tabular.DataRow"
 
 -- | A header row, containing column names (but no types or data)
-newtype HeaderRow = 
+newtype HeaderRow =
   HeaderRow {
     unHeaderRow :: [String]}
   deriving (Eq, Ord, Read, Show)
@@ -43,7 +43,7 @@ newtype HeaderRow =
 _HeaderRow = Core.Name "hydra.tabular.HeaderRow"
 
 -- | A simple table as in a CSV file, having an optional header row and any number of data rows
-data Table v = 
+data Table v =
   Table {
     -- | The optional header row of the table. If present, the header must have the same number of cells as each data row.
     tableHeader :: (Maybe HeaderRow),
@@ -58,7 +58,7 @@ _Table_header = Core.Name "header"
 _Table_data = Core.Name "data"
 
 -- | A type definition for a table, including column names and types
-data TableType = 
+data TableType =
   TableType {
     tableTypeName :: Relational.RelationName,
     tableTypeColumns :: [ColumnType]}

@@ -36,12 +36,12 @@ colonOp =
 -- | Escape and quote a string for JSON output
 jsonString :: String -> String
 jsonString s =
-     
+
       let hexEscape =
-              \c ->  
-                let hi = Strings.fromList (Lists.pure (Strings.charAt (Math.div c 16) "0123456789abcdef")) 
+              \c ->
+                let hi = Strings.fromList (Lists.pure (Strings.charAt (Math.div c 16) "0123456789abcdef"))
                     lo = Strings.fromList (Lists.pure (Strings.charAt (Math.mod c 16) "0123456789abcdef"))
-                in (Strings.cat2 (Strings.cat2 "\\u00" hi) lo) 
+                in (Strings.cat2 (Strings.cat2 "\\u00" hi) lo)
           escape =
                   \c -> Logic.ifElse (Equality.equal c 34) "\\\"" (Logic.ifElse (Equality.equal c 92) "\\\\" (Logic.ifElse (Equality.equal c 8) "\\b" (Logic.ifElse (Equality.equal c 12) "\\f" (Logic.ifElse (Equality.equal c 10) "\\n" (Logic.ifElse (Equality.equal c 13) "\\r" (Logic.ifElse (Equality.equal c 9) "\\t" (Logic.ifElse (Equality.lt c 32) (hexEscape c) (Strings.fromList (Lists.pure c)))))))))
           escaped = Strings.cat (Lists.map escape (Strings.toList s))
@@ -50,8 +50,8 @@ jsonString s =
 -- | Convert a key-value pair to an AST expression
 keyValueToExpr :: (String, Model.Value) -> Ast.Expr
 keyValueToExpr pair =
-     
-      let key = Pairs.first pair 
+
+      let key = Pairs.first pair
           value = Pairs.second pair
       in (Serialization.ifx colonOp (Serialization.cst (jsonString key)) (valueToExpr value))
 
@@ -66,7 +66,7 @@ valueToExpr value =
       Model.ValueArray v0 -> Serialization.bracketListAdaptive (Lists.map valueToExpr v0)
       Model.ValueBoolean v0 -> Serialization.cst (Logic.ifElse v0 "true" "false")
       Model.ValueNull -> Serialization.cst "null"
-      Model.ValueNumber v0 ->  
+      Model.ValueNumber v0 ->
         let rounded = Literals.bigfloatToBigint v0
         in (Serialization.cst (Logic.ifElse (Equality.equal v0 (Literals.bigintToBigfloat rounded)) (Literals.showBigint rounded) (Literals.showBigfloat v0)))
       Model.ValueObject v0 -> Serialization.bracesListAdaptive (Lists.map keyValueToExpr (Maps.toList v0))

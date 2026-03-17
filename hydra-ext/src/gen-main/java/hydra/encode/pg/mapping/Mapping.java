@@ -24,7 +24,7 @@ public interface Mapping {
       new hydra.core.Field(new hydra.core.Name("inEdgeLabel"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).inEdgeLabel))),
       new hydra.core.Field(new hydra.core.Name("ignore"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).ignore))))));
   }
-  
+
   static hydra.core.Term edgeSpec(hydra.pg.mapping.EdgeSpec x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.mapping.EdgeSpec"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("label"), hydra.encode.pg.model.Model.edgeLabel((x).label)),
@@ -35,41 +35,41 @@ public interface Mapping {
         hydra.encode.pg.mapping.Mapping::propertySpec,
         (x).properties))))));
   }
-  
+
   static hydra.core.Term elementSpec(hydra.pg.mapping.ElementSpec v1) {
     return (v1).accept(new hydra.pg.mapping.ElementSpec.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.pg.mapping.ElementSpec.Vertex y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.mapping.ElementSpec"), new hydra.core.Field(new hydra.core.Name("vertex"), hydra.encode.pg.mapping.Mapping.vertexSpec((y).value))));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.pg.mapping.ElementSpec.Edge y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.mapping.ElementSpec"), new hydra.core.Field(new hydra.core.Name("edge"), hydra.encode.pg.mapping.Mapping.edgeSpec((y).value))));
       }
     });
   }
-  
+
   static hydra.core.Term propertySpec(hydra.pg.mapping.PropertySpec x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.mapping.PropertySpec"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("key"), hydra.encode.pg.model.Model.propertyKey((x).key)),
       new hydra.core.Field(new hydra.core.Name("value"), hydra.encode.pg.mapping.Mapping.valueSpec((x).value)))));
   }
-  
+
   static hydra.core.Term valueSpec(hydra.pg.mapping.ValueSpec v1) {
     return (v1).accept(new hydra.pg.mapping.ValueSpec.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.pg.mapping.ValueSpec.Value y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.mapping.ValueSpec"), new hydra.core.Field(new hydra.core.Name("value"), new hydra.core.Term.Unit())));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.pg.mapping.ValueSpec.Pattern y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.pg.mapping.ValueSpec"), new hydra.core.Field(new hydra.core.Name("pattern"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((y).value)))));
       }
     });
   }
-  
+
   static hydra.core.Term vertexSpec(hydra.pg.mapping.VertexSpec x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.mapping.VertexSpec"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("label"), hydra.encode.pg.model.Model.vertexLabel((x).label)),

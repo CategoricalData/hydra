@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class RangeLiteral implements Serializable, Comparable<RangeLiteral> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.RangeLiteral");
-  
+
   public static final hydra.core.Name START = new hydra.core.Name("start");
-  
+
   public static final hydra.core.Name END = new hydra.core.Name("end");
-  
+
   public final hydra.util.Maybe<java.math.BigInteger> start;
-  
+
   public final hydra.util.Maybe<java.math.BigInteger> end;
-  
+
   public RangeLiteral (hydra.util.Maybe<java.math.BigInteger> start, hydra.util.Maybe<java.math.BigInteger> end) {
     this.start = start;
     this.end = end;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof RangeLiteral)) {
@@ -32,12 +32,12 @@ public class RangeLiteral implements Serializable, Comparable<RangeLiteral> {
       this.end,
       o.end);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(start) + 3 * java.util.Objects.hashCode(end);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(RangeLiteral other) {
@@ -48,11 +48,11 @@ public class RangeLiteral implements Serializable, Comparable<RangeLiteral> {
     }
     return ((Comparable) end).compareTo(other.end);
   }
-  
+
   public RangeLiteral withStart(hydra.util.Maybe<java.math.BigInteger> start) {
     return new RangeLiteral(start, end);
   }
-  
+
   public RangeLiteral withEnd(hydra.util.Maybe<java.math.BigInteger> end) {
     return new RangeLiteral(start, end);
   }

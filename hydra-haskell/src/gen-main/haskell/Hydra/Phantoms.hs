@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | An association of a named term (element) with a phantom type
-data TBinding a = 
+data TBinding a =
   TBinding {
     -- | The name of the term
     tBindingName :: Core.Name,
@@ -28,7 +28,7 @@ _TBinding_name = Core.Name "name"
 _TBinding_term = Core.Name "term"
 
 -- | An association of a term with a phantom type
-newtype TTerm a = 
+newtype TTerm a =
   TTerm {
     unTTerm :: Core.Term}
   deriving (Eq, Ord, Read, Show)

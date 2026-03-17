@@ -9,18 +9,18 @@ import java.io.Serializable;
  */
 public class NotAFunctionTypeError implements Serializable, Comparable<NotAFunctionTypeError> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.error.NotAFunctionTypeError");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   /**
    * The actual type encountered
    */
   public final hydra.core.Type type;
-  
+
   public NotAFunctionTypeError (hydra.core.Type type) {
     this.type = type;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof NotAFunctionTypeError)) {
@@ -31,12 +31,12 @@ public class NotAFunctionTypeError implements Serializable, Comparable<NotAFunct
       this.type,
       o.type);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(type);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NotAFunctionTypeError other) {

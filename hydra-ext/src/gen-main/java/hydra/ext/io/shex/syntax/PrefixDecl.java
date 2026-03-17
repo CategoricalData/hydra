@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class PrefixDecl implements Serializable, Comparable<PrefixDecl> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.PrefixDecl");
-  
+
   public static final hydra.core.Name PNAME_NS = new hydra.core.Name("PnameNs");
-  
+
   public static final hydra.core.Name IRI_REF = new hydra.core.Name("IriRef");
-  
+
   public final hydra.ext.io.shex.syntax.PnameNs PnameNs;
-  
+
   public final hydra.ext.io.shex.syntax.IriRef IriRef;
-  
+
   public PrefixDecl (hydra.ext.io.shex.syntax.PnameNs PnameNs, hydra.ext.io.shex.syntax.IriRef IriRef) {
     this.PnameNs = PnameNs;
     this.IriRef = IriRef;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof PrefixDecl)) {
@@ -32,12 +32,12 @@ public class PrefixDecl implements Serializable, Comparable<PrefixDecl> {
       this.IriRef,
       o.IriRef);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(PnameNs) + 3 * java.util.Objects.hashCode(IriRef);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PrefixDecl other) {
@@ -48,11 +48,11 @@ public class PrefixDecl implements Serializable, Comparable<PrefixDecl> {
     }
     return ((Comparable) IriRef).compareTo(other.IriRef);
   }
-  
+
   public PrefixDecl withPnameNs(hydra.ext.io.shex.syntax.PnameNs PnameNs) {
     return new PrefixDecl(PnameNs, IriRef);
   }
-  
+
   public PrefixDecl withIriRef(hydra.ext.io.shex.syntax.IriRef IriRef) {
     return new PrefixDecl(PnameNs, IriRef);
   }

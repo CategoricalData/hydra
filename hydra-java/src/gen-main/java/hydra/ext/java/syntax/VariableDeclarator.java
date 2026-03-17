@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class VariableDeclarator implements Serializable, Comparable<VariableDeclarator> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.VariableDeclarator");
-  
+
   public static final hydra.core.Name ID = new hydra.core.Name("id");
-  
+
   public static final hydra.core.Name INITIALIZER = new hydra.core.Name("initializer");
-  
+
   public final hydra.ext.java.syntax.VariableDeclaratorId id;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.VariableInitializer> initializer;
-  
+
   public VariableDeclarator (hydra.ext.java.syntax.VariableDeclaratorId id, hydra.util.Maybe<hydra.ext.java.syntax.VariableInitializer> initializer) {
     this.id = id;
     this.initializer = initializer;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof VariableDeclarator)) {
@@ -32,12 +32,12 @@ public class VariableDeclarator implements Serializable, Comparable<VariableDecl
       this.initializer,
       o.initializer);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(id) + 3 * java.util.Objects.hashCode(initializer);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(VariableDeclarator other) {
@@ -48,11 +48,11 @@ public class VariableDeclarator implements Serializable, Comparable<VariableDecl
     }
     return ((Comparable) initializer).compareTo(other.initializer);
   }
-  
+
   public VariableDeclarator withId(hydra.ext.java.syntax.VariableDeclaratorId id) {
     return new VariableDeclarator(id, initializer);
   }
-  
+
   public VariableDeclarator withInitializer(hydra.util.Maybe<hydra.ext.java.syntax.VariableInitializer> initializer) {
     return new VariableDeclarator(id, initializer);
   }

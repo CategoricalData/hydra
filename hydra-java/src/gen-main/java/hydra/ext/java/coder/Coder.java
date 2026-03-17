@@ -9,30 +9,30 @@ public interface Coder {
   static hydra.ext.java.helpers.JavaFeatures java8Features() {
     return new hydra.ext.java.helpers.JavaFeatures(false);
   }
-  
+
   static hydra.ext.java.helpers.JavaFeatures java11Features() {
     return new hydra.ext.java.helpers.JavaFeatures(true);
   }
-  
+
   static hydra.ext.java.helpers.JavaFeatures javaFeatures() {
     return hydra.ext.java.coder.Coder.java11Features();
   }
-  
+
   static hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> classModsPublic() {
     return hydra.util.ConsList.of(new hydra.ext.java.syntax.ClassModifier.Public());
   }
-  
+
   static hydra.ext.java.syntax.ClassBodyDeclarationWithComments noComment(hydra.ext.java.syntax.ClassBodyDeclaration decl) {
     return new hydra.ext.java.syntax.ClassBodyDeclarationWithComments(decl, (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()));
   }
-  
+
   static hydra.ext.java.syntax.TypeArgumentsOrDiamond typeArgsOrDiamond(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> args) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.ext.java.coder.Coder.javaFeatures().supportsDiamondOperator,
       () -> new hydra.ext.java.syntax.TypeArgumentsOrDiamond.Diamond(),
       () -> new hydra.ext.java.syntax.TypeArgumentsOrDiamond.Arguments(args));
   }
-  
+
   static String bindingNameToFilePath(hydra.core.Name name) {
     hydra.module.QualifiedName qn = hydra.names.Names.qualifyName(name);
     String local = (qn).local;
@@ -47,23 +47,23 @@ public interface Coder {
       new hydra.module.FileExtension("java"),
       unq);
   }
-  
+
   static String javaIdentifierToString(hydra.ext.java.syntax.Identifier id) {
     return (id).value;
   }
-  
+
   static hydra.util.ConsList<hydra.core.Name> boundTypeVariables(hydra.core.Type typ) {
     return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.core.Type instance) {
         return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty());
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Annotated at) {
         return hydra.ext.java.coder.Coder.boundTypeVariables((at).value.body);
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
         return hydra.lib.lists.Cons.apply(
@@ -72,18 +72,18 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.ConsList<hydra.core.Type> extractTypeApplicationArgs(hydra.core.Type typ) {
     return hydra.lib.lists.Reverse.apply(hydra.ext.java.coder.Coder.extractTypeApplicationArgs_go(typ));
   }
-  
+
   static hydra.util.ConsList<hydra.core.Type> extractTypeApplicationArgs_go(hydra.core.Type t) {
     return (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Type> otherwise(hydra.core.Type instance) {
         return (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty());
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Application at) {
         return hydra.lib.lists.Cons.apply(
@@ -92,7 +92,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> javaTypeParametersForType(hydra.core.Type typ) {
     hydra.util.ConsList<hydra.core.Name> boundVars = hydra.ext.java.coder.Coder.javaTypeParametersForType_bvars(typ);
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> freeVars = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
@@ -106,14 +106,14 @@ public interface Coder {
       toParam,
       vars.get());
   }
-  
+
   static hydra.util.ConsList<hydra.core.Name> javaTypeParametersForType_bvars(hydra.core.Type t) {
     return (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.core.Type instance) {
         return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty());
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
         return hydra.lib.lists.Cons.apply(
@@ -122,24 +122,24 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> javaTypeArgumentsForType(hydra.core.Type typ) {
     return hydra.lib.lists.Reverse.apply(hydra.lib.lists.Map.apply(
       hydra.ext.java.utils.Utils::typeParameterToTypeArgument,
       hydra.ext.java.coder.Coder.javaTypeParametersForType(typ)));
   }
-  
+
   static Boolean isLambdaBoundVariable(hydra.core.Name name) {
     String v = (name).value;
     return hydra.lib.equality.Lte.apply(
       hydra.lib.strings.Length.apply(v),
       4);
   }
-  
+
   static Boolean isLocalVariable(hydra.core.Name name) {
     return hydra.lib.maybes.IsNothing.apply(hydra.names.Names.qualifyName(name).namespace);
   }
-  
+
   static hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> serializableTypes(Boolean isSer) {
     hydra.util.Lazy<hydra.ext.java.syntax.InterfaceType> javaSerializableType = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.InterfaceType(new hydra.ext.java.syntax.ClassType((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>empty()), new hydra.ext.java.syntax.ClassTypeQualifier.None(), hydra.ext.java.utils.Utils.javaTypeIdentifier("Serializable"), (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()))));
     return hydra.lib.logic.IfElse.lazy(
@@ -147,14 +147,14 @@ public interface Coder {
       () -> hydra.util.ConsList.of(javaSerializableType.get()),
       () -> (hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType>) (hydra.util.ConsList.<hydra.ext.java.syntax.InterfaceType>empty()));
   }
-  
+
   static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.java.syntax.Type> encodeLiteralType(hydra.core.LiteralType lt, T0 cx, T1 g) {
     return (lt).accept(new hydra.core.LiteralType.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.LiteralType.Binary ignored) {
         return hydra.util.Either.<T2, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.Array(new hydra.ext.java.syntax.ArrayType(new hydra.ext.java.syntax.Dims(hydra.util.ConsList.of((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>empty()))), new hydra.ext.java.syntax.ArrayType_Variant.Primitive(new hydra.ext.java.syntax.PrimitiveTypeWithAnnotations(new hydra.ext.java.syntax.PrimitiveType.Numeric(new hydra.ext.java.syntax.NumericType.Integral(new hydra.ext.java.syntax.IntegralType.Byte_())), (hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>empty())))))));
       }
-      
+
       @Override
       public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.LiteralType.Boolean_ ignored) {
         return hydra.ext.java.coder.Coder.<T0, T1, T2>encodeLiteralType_simple(
@@ -162,7 +162,7 @@ public interface Coder {
           cx,
           g);
       }
-      
+
       @Override
       public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.LiteralType.Float_ ft) {
         return (ft).value.accept(new hydra.core.FloatType.PartialVisitor<>() {
@@ -175,7 +175,7 @@ public interface Coder {
                 "math"))),
               "BigDecimal"));
           }
-          
+
           @Override
           public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.FloatType.Float32 ignored) {
             return hydra.ext.java.coder.Coder.<T0, T1, T2>encodeLiteralType_simple(
@@ -183,7 +183,7 @@ public interface Coder {
               cx,
               g);
           }
-          
+
           @Override
           public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.FloatType.Float64 ignored) {
             return hydra.ext.java.coder.Coder.<T0, T1, T2>encodeLiteralType_simple(
@@ -193,7 +193,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.LiteralType.Integer_ it) {
         return (it).value.accept(new hydra.core.IntegerType.PartialVisitor<>() {
@@ -206,7 +206,7 @@ public interface Coder {
                 "math"))),
               "BigInteger"));
           }
-          
+
           @Override
           public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.IntegerType.Int8 ignored) {
             return hydra.ext.java.coder.Coder.<T0, T1, T2>encodeLiteralType_simple(
@@ -214,7 +214,7 @@ public interface Coder {
               cx,
               g);
           }
-          
+
           @Override
           public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.IntegerType.Int16 ignored) {
             return hydra.ext.java.coder.Coder.<T0, T1, T2>encodeLiteralType_simple(
@@ -222,7 +222,7 @@ public interface Coder {
               cx,
               g);
           }
-          
+
           @Override
           public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.IntegerType.Int32 ignored) {
             return hydra.ext.java.coder.Coder.<T0, T1, T2>encodeLiteralType_simple(
@@ -230,7 +230,7 @@ public interface Coder {
               cx,
               g);
           }
-          
+
           @Override
           public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.IntegerType.Int64 ignored) {
             return hydra.ext.java.coder.Coder.<T0, T1, T2>encodeLiteralType_simple(
@@ -238,7 +238,7 @@ public interface Coder {
               cx,
               g);
           }
-          
+
           @Override
           public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.IntegerType.Uint8 ignored) {
             return hydra.ext.java.coder.Coder.<T0, T1, T2>encodeLiteralType_simple(
@@ -246,7 +246,7 @@ public interface Coder {
               cx,
               g);
           }
-          
+
           @Override
           public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.IntegerType.Uint16 ignored) {
             return hydra.ext.java.coder.Coder.<T0, T1, T2>encodeLiteralType_simple(
@@ -254,7 +254,7 @@ public interface Coder {
               cx,
               g);
           }
-          
+
           @Override
           public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.IntegerType.Uint32 ignored) {
             return hydra.ext.java.coder.Coder.<T0, T1, T2>encodeLiteralType_simple(
@@ -262,7 +262,7 @@ public interface Coder {
               cx,
               g);
           }
-          
+
           @Override
           public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.IntegerType.Uint64 ignored) {
             return hydra.util.Either.<T2, hydra.ext.java.syntax.Type>right(hydra.ext.java.utils.Utils.javaRefType(
@@ -274,7 +274,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<T2, hydra.ext.java.syntax.Type> visit(hydra.core.LiteralType.String_ ignored) {
         return hydra.ext.java.coder.Coder.<T0, T1, T2>encodeLiteralType_simple(
@@ -284,14 +284,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.java.syntax.Type> encodeLiteralType_simple(String n, T0 cx, T1 g) {
     return hydra.util.Either.<T2, hydra.ext.java.syntax.Type>right(hydra.ext.java.utils.Utils.javaRefType(
       (hydra.util.ConsList<hydra.ext.java.syntax.ReferenceType>) (hydra.util.ConsList.<hydra.ext.java.syntax.ReferenceType>empty()),
       (hydra.util.Maybe<hydra.ext.java.syntax.PackageName>) (hydra.util.Maybe.<hydra.ext.java.syntax.PackageName>nothing()),
       n));
   }
-  
+
   static String elementsClassName(hydra.module.Namespace ns) {
     String nsStr = (ns).value;
     hydra.util.ConsList<String> parts = hydra.lib.strings.SplitOn.apply(
@@ -301,13 +301,13 @@ public interface Coder {
       hydra.ext.java.language.Language.reservedWords(),
       hydra.formatting.Formatting.capitalize(hydra.lib.lists.Last.apply(parts)));
   }
-  
+
   static Boolean isRecursiveVariable(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name name) {
     return hydra.lib.sets.Member.apply(
       name,
       (aliases).recursiveVars);
   }
-  
+
   static hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> interfaceTypes(Boolean isSer, hydra.ext.java.helpers.Aliases aliases, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName) {
     hydra.util.Lazy<hydra.ext.java.syntax.TypeArgument> selfTypeArg = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.TypeArgument.Reference(hydra.ext.java.utils.Utils.nameToJavaReferenceType(
       aliases,
@@ -326,29 +326,29 @@ public interface Coder {
         javaComparableType.get()),
       () -> (hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType>) (hydra.util.ConsList.<hydra.ext.java.syntax.InterfaceType>empty()));
   }
-  
+
   static Boolean isNonComparableType(hydra.core.Type typ) {
     return hydra.rewriting.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type instance) {
         return false;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Either ignored) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Function ignored) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Unit ignored) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Literal lt) {
         return (lt).value.accept(new hydra.core.LiteralType.PartialVisitor<>() {
@@ -356,28 +356,28 @@ public interface Coder {
           public Boolean otherwise(hydra.core.LiteralType instance) {
             return false;
           }
-          
+
           @Override
           public Boolean visit(hydra.core.LiteralType.Binary ignored) {
             return true;
           }
         });
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Forall ft) {
         return hydra.ext.java.coder.Coder.isNonComparableType((ft).value.body);
       }
     });
   }
-  
+
   static Boolean isBinaryType(hydra.core.Type typ) {
     return hydra.rewriting.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type instance) {
         return false;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Literal lt) {
         return (lt).value.accept(new hydra.core.LiteralType.PartialVisitor<>() {
@@ -385,7 +385,7 @@ public interface Coder {
           public Boolean otherwise(hydra.core.LiteralType instance) {
             return false;
           }
-          
+
           @Override
           public Boolean visit(hydra.core.LiteralType.Binary ignored) {
             return true;
@@ -394,14 +394,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static Boolean isBigNumericType(hydra.core.Type typ) {
     return hydra.rewriting.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type instance) {
         return false;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Literal lt) {
         return (lt).value.accept(new hydra.core.LiteralType.PartialVisitor<>() {
@@ -409,7 +409,7 @@ public interface Coder {
           public Boolean otherwise(hydra.core.LiteralType instance) {
             return false;
           }
-          
+
           @Override
           public Boolean visit(hydra.core.LiteralType.Float_ ft) {
             return (ft).value.accept(new hydra.core.FloatType.PartialVisitor<>() {
@@ -417,14 +417,14 @@ public interface Coder {
               public Boolean otherwise(hydra.core.FloatType instance) {
                 return false;
               }
-              
+
               @Override
               public Boolean visit(hydra.core.FloatType.Bigfloat ignored) {
                 return true;
               }
             });
           }
-          
+
           @Override
           public Boolean visit(hydra.core.LiteralType.Integer_ it) {
             return (it).value.accept(new hydra.core.IntegerType.PartialVisitor<>() {
@@ -432,7 +432,7 @@ public interface Coder {
               public Boolean otherwise(hydra.core.IntegerType instance) {
                 return false;
               }
-              
+
               @Override
               public Boolean visit(hydra.core.IntegerType.Bigint ignored) {
                 return true;
@@ -443,7 +443,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.ext.java.syntax.Identifier innerClassRef(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name name, String local) {
     String id = hydra.ext.java.utils.Utils.nameToJavaName(
       aliases,
@@ -454,7 +454,7 @@ public interface Coder {
         "."),
       local));
   }
-  
+
   static hydra.util.ConsList<hydra.core.Type> peelExpectedTypes(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> subst, Integer n, hydra.core.Type t) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
@@ -466,7 +466,7 @@ public interface Coder {
         public hydra.util.ConsList<hydra.core.Type> otherwise(hydra.core.Type instance) {
           return (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty());
         }
-        
+
         @Override
         public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Function ft) {
           return hydra.lib.lists.Cons.apply(
@@ -482,14 +482,14 @@ public interface Coder {
         }
       }));
   }
-  
+
   static hydra.core.Type applySubstFull(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> s, hydra.core.Type t) {
     return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.core.Type otherwise(hydra.core.Type instance) {
         return t;
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Variable v) {
         return hydra.lib.maps.FindWithDefault.applyLazy(
@@ -497,7 +497,7 @@ public interface Coder {
           (v).value,
           s);
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Function ft) {
         return new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.ext.java.coder.Coder.applySubstFull(
@@ -506,7 +506,7 @@ public interface Coder {
           s,
           (ft).value.codomain)));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Application at) {
         return new hydra.core.Type.Application(new hydra.core.ApplicationType(hydra.ext.java.coder.Coder.applySubstFull(
@@ -515,28 +515,28 @@ public interface Coder {
           s,
           (at).value.argument)));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.List inner) {
         return new hydra.core.Type.List(hydra.ext.java.coder.Coder.applySubstFull(
           s,
           (inner).value));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Set inner) {
         return new hydra.core.Type.Set(hydra.ext.java.coder.Coder.applySubstFull(
           s,
           (inner).value));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Maybe inner) {
         return new hydra.core.Type.Maybe(hydra.ext.java.coder.Coder.applySubstFull(
           s,
           (inner).value));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Map mt) {
         return new hydra.core.Type.Map(new hydra.core.MapType(hydra.ext.java.coder.Coder.applySubstFull(
@@ -545,7 +545,7 @@ public interface Coder {
           s,
           (mt).value.values)));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Pair pt) {
         return new hydra.core.Type.Pair(new hydra.core.PairType(hydra.ext.java.coder.Coder.applySubstFull(
@@ -554,7 +554,7 @@ public interface Coder {
           s,
           (pt).value.second)));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Either et) {
         return new hydra.core.Type.Either(new hydra.core.EitherType(hydra.ext.java.coder.Coder.applySubstFull(
@@ -563,7 +563,7 @@ public interface Coder {
           s,
           (et).value.right)));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Forall ft) {
         return new hydra.core.Type.Forall(new hydra.core.ForallType((ft).value.parameter, hydra.ext.java.coder.Coder.applySubstFull(
@@ -574,14 +574,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.ConsList<hydra.core.Name> collectForallParams(hydra.core.Type t) {
     return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.core.Type instance) {
         return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty());
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Forall fa) {
         return hydra.lib.lists.Cons.apply(
@@ -590,107 +590,107 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.core.Type stripForalls(hydra.core.Type t) {
     return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.core.Type otherwise(hydra.core.Type instance) {
         return t;
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Forall fa) {
         return hydra.ext.java.coder.Coder.stripForalls((fa).value.body);
       }
     });
   }
-  
+
   static hydra.util.PersistentSet<hydra.core.Name> collectTypeVars(hydra.core.Type typ) {
     return hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType(typ));
   }
-  
+
   static hydra.util.PersistentSet<hydra.core.Name> collectTypeVars_go(hydra.core.Type t) {
     return (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> otherwise(hydra.core.Type instance) {
         return (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply());
       }
-      
+
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Variable name) {
         return hydra.lib.sets.Singleton.apply((name).value);
       }
-      
+
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Function ft) {
         return hydra.lib.sets.Union.apply(
           hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((ft).value.domain)),
           hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((ft).value.codomain)));
       }
-      
+
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Application at) {
         return hydra.lib.sets.Union.apply(
           hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((at).value.function)),
           hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((at).value.argument)));
       }
-      
+
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.List inner) {
         return hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((inner).value));
       }
-      
+
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Set inner) {
         return hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((inner).value));
       }
-      
+
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Maybe inner) {
         return hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((inner).value));
       }
-      
+
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Map mt) {
         return hydra.lib.sets.Union.apply(
           hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((mt).value.keys)),
           hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((mt).value.values)));
       }
-      
+
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Pair pt) {
         return hydra.lib.sets.Union.apply(
           hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((pt).value.first)),
           hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((pt).value.second)));
       }
-      
+
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Either et) {
         return hydra.lib.sets.Union.apply(
           hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((et).value.left)),
           hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((et).value.right)));
       }
-      
+
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
         return hydra.ext.java.coder.Coder.collectTypeVars_go(hydra.rewriting.Rewriting.deannotateType((ft).value.body));
       }
     });
   }
-  
+
   static hydra.core.Type substituteTypeVarsWithTypes(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> subst, hydra.core.Type t) {
     return hydra.ext.java.coder.Coder.substituteTypeVarsWithTypes_go(
       subst,
       hydra.rewriting.Rewriting.deannotateType(t));
   }
-  
+
   static hydra.core.Type substituteTypeVarsWithTypes_go(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> subst, hydra.core.Type t) {
     return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.core.Type otherwise(hydra.core.Type instance) {
         return t;
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Variable v) {
         return hydra.lib.maybes.Cases.applyLazy(
@@ -700,7 +700,7 @@ public interface Coder {
           () -> t,
           (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (rep -> rep));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Function ft) {
         return new hydra.core.Type.Function(new hydra.core.FunctionType(hydra.ext.java.coder.Coder.substituteTypeVarsWithTypes_go(
@@ -709,7 +709,7 @@ public interface Coder {
           subst,
           (ft).value.codomain)));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Application at) {
         return new hydra.core.Type.Application(new hydra.core.ApplicationType(hydra.ext.java.coder.Coder.substituteTypeVarsWithTypes_go(
@@ -718,28 +718,28 @@ public interface Coder {
           subst,
           (at).value.argument)));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.List inner) {
         return new hydra.core.Type.List(hydra.ext.java.coder.Coder.substituteTypeVarsWithTypes_go(
           subst,
           (inner).value));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Set inner) {
         return new hydra.core.Type.Set(hydra.ext.java.coder.Coder.substituteTypeVarsWithTypes_go(
           subst,
           (inner).value));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Maybe inner) {
         return new hydra.core.Type.Maybe(hydra.ext.java.coder.Coder.substituteTypeVarsWithTypes_go(
           subst,
           (inner).value));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Map mt) {
         return new hydra.core.Type.Map(new hydra.core.MapType(hydra.ext.java.coder.Coder.substituteTypeVarsWithTypes_go(
@@ -748,7 +748,7 @@ public interface Coder {
           subst,
           (mt).value.values)));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Pair pt) {
         return new hydra.core.Type.Pair(new hydra.core.PairType(hydra.ext.java.coder.Coder.substituteTypeVarsWithTypes_go(
@@ -757,7 +757,7 @@ public interface Coder {
           subst,
           (pt).value.second)));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Either et) {
         return new hydra.core.Type.Either(new hydra.core.EitherType(hydra.ext.java.coder.Coder.substituteTypeVarsWithTypes_go(
@@ -766,7 +766,7 @@ public interface Coder {
           subst,
           (et).value.right)));
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Forall ft) {
         return new hydra.core.Type.Forall(new hydra.core.ForallType((ft).value.parameter, hydra.ext.java.coder.Coder.substituteTypeVarsWithTypes_go(
@@ -775,7 +775,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassBodyDeclarationWithComments> addComment(hydra.ext.java.syntax.ClassBodyDeclaration decl, hydra.core.FieldType field, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.util.Maybe<String>, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>) (c -> new hydra.ext.java.syntax.ClassBodyDeclarationWithComments(decl, c)),
@@ -784,14 +784,14 @@ public interface Coder {
         g,
         field));
   }
-  
+
   static hydra.ext.java.helpers.JavaEnvironment insertBranchVar(hydra.core.Name name, hydra.ext.java.helpers.JavaEnvironment env) {
     hydra.ext.java.helpers.Aliases aliases = (env).aliases;
     return new hydra.ext.java.helpers.JavaEnvironment(new hydra.ext.java.helpers.Aliases((aliases).currentNamespace, (aliases).packages, hydra.lib.sets.Insert.apply(
       name,
       (aliases).branchVars), (aliases).recursiveVars, (aliases).inScopeTypeParams, (aliases).polymorphicLocals, (aliases).inScopeJavaVars, (aliases).varRenames, (aliases).lambdaVars, (aliases).typeVarSubst, (aliases).trustedTypeVars, (aliases).methodCodomain, (aliases).thunkedVars), (env).graph);
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> getCodomain(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> ann, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.core.FunctionType, hydra.core.Type>) (ft -> (ft).codomain),
@@ -800,7 +800,7 @@ public interface Coder {
         cx,
         g));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType> getFunctionType(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> ann, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.Bimap.apply(
@@ -819,14 +819,14 @@ public interface Coder {
               "expected function type, got: ",
               hydra.show.core.Core.type(t)))), cx)));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType> visit(hydra.core.Type.Function ft) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType>right((ft).value);
           }
         })))));
   }
-  
+
   static hydra.util.Pair<hydra.util.ConsList<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>> wrapLazyArguments(hydra.core.Name name, hydra.util.ConsList<hydra.ext.java.syntax.Expression> args) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.And.apply(
@@ -925,11 +925,11 @@ public interface Coder {
                   args)), hydra.util.Maybe.just("applyLazy")))),
               () -> (hydra.util.Pair<hydra.util.ConsList<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>(args, (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())))))))));
   }
-  
+
   static hydra.ext.java.syntax.Expression wrapInSupplierLambda(hydra.ext.java.syntax.Expression expr) {
     return new hydra.ext.java.syntax.Expression.Lambda(new hydra.ext.java.syntax.LambdaExpression(new hydra.ext.java.syntax.LambdaParameters.Tuple((hydra.util.ConsList<hydra.ext.java.syntax.LambdaParameters>) (hydra.util.ConsList.<hydra.ext.java.syntax.LambdaParameters>empty())), new hydra.ext.java.syntax.LambdaBody.Expression(expr)));
   }
-  
+
   static hydra.ext.java.syntax.Identifier elementJavaIdentifier(Boolean isPrim, Boolean isMethod, hydra.ext.java.helpers.Aliases aliases, hydra.core.Name name) {
     hydra.module.QualifiedName qn = hydra.names.Names.qualifyName(name);
     String local = (qn).local;
@@ -960,13 +960,13 @@ public interface Coder {
             sep.get()),
           hydra.ext.java.utils.Utils.sanitizeJavaName(local))))));
   }
-  
+
   static String elementJavaIdentifier_qualify(hydra.ext.java.helpers.Aliases aliases, hydra.util.Maybe<hydra.module.Namespace> mns, String s) {
     return hydra.ext.java.utils.Utils.nameToJavaName(
       aliases,
       hydra.names.Names.unqualifyName(new hydra.module.QualifiedName(mns, s))).value;
   }
-  
+
   static Boolean isLambdaBoundIn(hydra.core.Name name, hydra.util.PersistentSet<hydra.core.Name> lambdaVars) {
     return hydra.lib.logic.Or.apply(
       hydra.lib.sets.Member.apply(
@@ -988,11 +988,11 @@ public interface Coder {
             new hydra.core.Name(hydra.names.Names.localNameOf(name)),
             lambdaVars))));
   }
-  
+
   static Boolean isLambdaBoundIn_isQualified(hydra.core.Name n) {
     return hydra.lib.maybes.IsJust.apply(hydra.names.Names.qualifyName(n).namespace);
   }
-  
+
   static hydra.core.Name findMatchingLambdaVar(hydra.core.Name name, hydra.util.PersistentSet<hydra.core.Name> lambdaVars) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.sets.Member.apply(
@@ -1017,7 +1017,7 @@ public interface Coder {
           () -> new hydra.core.Name(hydra.names.Names.localNameOf(name)),
           () -> name)));
   }
-  
+
   static hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit> constructElementsInterface(hydra.module.Module mod, hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMemberDeclaration> members) {
     hydra.ext.java.syntax.InterfaceBody body = new hydra.ext.java.syntax.InterfaceBody(members);
     String className = hydra.ext.java.coder.Coder.elementsClassName((mod).namespace);
@@ -1028,14 +1028,14 @@ public interface Coder {
     hydra.ext.java.syntax.PackageDeclaration pkg = hydra.ext.java.utils.Utils.javaPackageDeclaration((mod).namespace);
     return (hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>) ((hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>) (new hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>(elName, new hydra.ext.java.syntax.CompilationUnit.Ordinary(new hydra.ext.java.syntax.OrdinaryCompilationUnit(hydra.util.Maybe.just(pkg), (hydra.util.ConsList<hydra.ext.java.syntax.ImportDeclaration>) (hydra.util.ConsList.<hydra.ext.java.syntax.ImportDeclaration>empty()), hydra.util.ConsList.of(decl))))));
   }
-  
+
   static hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMemberDeclaration> splitConstantInitializer(hydra.ext.java.syntax.InterfaceMemberDeclaration member) {
     return (member).accept(new hydra.ext.java.syntax.InterfaceMemberDeclaration.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMemberDeclaration> otherwise(hydra.ext.java.syntax.InterfaceMemberDeclaration instance) {
         return hydra.util.ConsList.of(member);
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMemberDeclaration> visit(hydra.ext.java.syntax.InterfaceMemberDeclaration.Constant cd) {
         return hydra.lib.lists.Bind.apply(
@@ -1047,7 +1047,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMemberDeclaration> splitConstantInitializer_splitVar(hydra.util.ConsList<hydra.ext.java.syntax.ConstantModifier> mods, hydra.ext.java.syntax.UnannType utype, hydra.ext.java.syntax.VariableDeclarator vd) {
     hydra.util.Maybe<hydra.ext.java.syntax.VariableInitializer> mInit = (vd).initializer;
     hydra.ext.java.syntax.VariableDeclaratorId vid = (vd).id;
@@ -1059,7 +1059,7 @@ public interface Coder {
         public hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMemberDeclaration> otherwise(hydra.ext.java.syntax.VariableInitializer instance) {
           return hydra.util.ConsList.of(new hydra.ext.java.syntax.InterfaceMemberDeclaration.Constant(new hydra.ext.java.syntax.ConstantDeclaration(mods, utype, hydra.util.ConsList.of(vd))));
         }
-        
+
         @Override
         public hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMemberDeclaration> visit(hydra.ext.java.syntax.VariableInitializer.Expression expr) {
           String varName = hydra.ext.java.coder.Coder.javaIdentifierToString((vid).identifier);
@@ -1088,7 +1088,7 @@ public interface Coder {
         }
       })));
   }
-  
+
   static Boolean isUnresolvedInferenceVar(hydra.core.Name name) {
     hydra.util.ConsList<Integer> chars = hydra.lib.strings.ToList.apply((name).value);
     return hydra.lib.logic.IfElse.lazy(
@@ -1108,7 +1108,7 @@ public interface Coder {
               rest.get())));
         })).get()));
   }
-  
+
   static Boolean isUnresolvedInferenceVar_isDigit(Integer c) {
     return hydra.lib.logic.And.apply(
       hydra.lib.equality.Gte.apply(
@@ -1118,7 +1118,7 @@ public interface Coder {
         c,
         57));
   }
-  
+
   static hydra.ext.java.helpers.JavaSymbolClass classifyDataTerm(hydra.core.TypeScheme ts, hydra.core.Term term) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.rewriting.Rewriting.isLambda(term),
@@ -1147,14 +1147,14 @@ public interface Coder {
           () -> new hydra.ext.java.helpers.JavaSymbolClass.NullaryFunction());
       })).get());
   }
-  
+
   static Integer classifyDataTerm_countLambdaParams(hydra.core.Term t) {
     return hydra.rewriting.Rewriting.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public Integer otherwise(hydra.core.Term instance) {
         return 0;
       }
-      
+
       @Override
       public Integer visit(hydra.core.Term.Function f) {
         return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -1162,7 +1162,7 @@ public interface Coder {
           public Integer otherwise(hydra.core.Function instance) {
             return 0;
           }
-          
+
           @Override
           public Integer visit(hydra.core.Function.Lambda lam) {
             return hydra.lib.math.Add.apply(
@@ -1171,28 +1171,28 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public Integer visit(hydra.core.Term.Let lt) {
         return hydra.ext.java.coder.Coder.classifyDataTerm_countLambdaParams((lt).value.body);
       }
     });
   }
-  
+
   static hydra.core.Term classifyDataTerm_stripTypeLambdas(hydra.core.Term t) {
     return hydra.rewriting.Rewriting.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.core.Term otherwise(hydra.core.Term instance) {
         return t;
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeLambda tl) {
         return hydra.ext.java.coder.Coder.classifyDataTerm_stripTypeLambdas((tl).value.body);
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.helpers.JavaSymbolClass> classifyDataReference(hydra.core.Name name, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.core.Binding>>right(hydra.lexical.Lexical.dereferenceElement(
@@ -1210,7 +1210,7 @@ public interface Coder {
             ts,
             (el).term))))))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> encodeType(hydra.ext.java.helpers.Aliases aliases, hydra.util.PersistentSet<hydra.core.Name> boundVars, hydra.core.Type t, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.util.PersistentSet<hydra.core.Name> inScopeTypeParams = (aliases).inScopeTypeParams;
     hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> typeVarSubst = (aliases).typeVarSubst;
@@ -1221,7 +1221,7 @@ public interface Coder {
           "can't encode unsupported type in Java: ",
           hydra.show.core.Core.type(t)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Application at) {
         return hydra.lib.eithers.Bind.apply(
@@ -1247,7 +1247,7 @@ public interface Coder {
               jlhs,
               cx)))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Function ft) {
         return hydra.lib.eithers.Bind.apply(
@@ -1279,7 +1279,7 @@ public interface Coder {
               hydra.ext.java.names.Names.javaUtilFunctionPackageName(),
               "Function"))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Forall fa) {
         return hydra.lib.eithers.Bind.apply(
@@ -1296,7 +1296,7 @@ public interface Coder {
             jbody,
             cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.List et) {
         return hydra.lib.eithers.Bind.apply(
@@ -1317,7 +1317,7 @@ public interface Coder {
               hydra.ext.java.names.Names.hydraUtilPackageName(),
               "ConsList"))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Literal lt) {
         return hydra.ext.java.coder.Coder.encodeLiteralType(
@@ -1325,7 +1325,7 @@ public interface Coder {
           cx,
           g);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Either et) {
         return hydra.lib.eithers.Bind.apply(
@@ -1357,7 +1357,7 @@ public interface Coder {
               hydra.ext.java.names.Names.hydraUtilPackageName(),
               "Either"))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Map mt) {
         return hydra.lib.eithers.Bind.apply(
@@ -1389,7 +1389,7 @@ public interface Coder {
               hydra.ext.java.names.Names.hydraUtilPackageName(),
               "PersistentMap"))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Pair pt) {
         return hydra.lib.eithers.Bind.apply(
@@ -1421,7 +1421,7 @@ public interface Coder {
               hydra.ext.java.names.Names.hydraUtilPackageName(),
               "Pair"))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Unit ignored) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>right(hydra.ext.java.utils.Utils.javaRefType(
@@ -1429,7 +1429,7 @@ public interface Coder {
           hydra.ext.java.names.Names.javaLangPackageName(),
           "Void"));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Record rt) {
         return hydra.lib.logic.IfElse.lazy(
@@ -1440,7 +1440,7 @@ public interface Coder {
             "Void")),
           () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unexpected anonymous record type")), cx))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Maybe ot) {
         return hydra.lib.eithers.Bind.apply(
@@ -1459,7 +1459,7 @@ public interface Coder {
             hydra.ext.java.names.Names.hydraUtilPackageName(),
             "Maybe"))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Set st) {
         return hydra.lib.eithers.Bind.apply(
@@ -1478,12 +1478,12 @@ public interface Coder {
             hydra.ext.java.names.Names.hydraUtilPackageName(),
             "PersistentSet"))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Union ignored) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unexpected anonymous union type")), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Variable name0) {
         hydra.util.Lazy<hydra.core.Name> name = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
@@ -1532,14 +1532,14 @@ public interface Coder {
               cx,
               g)))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Wrap ignored) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unexpected anonymous wrap type")), cx)));
       }
     });
   }
-  
+
   static <T0, T1, T2> hydra.util.Either<T2, hydra.util.Maybe<hydra.core.Type>> encodeType_resolveIfTypedef(T0 aliases, hydra.util.PersistentSet<hydra.core.Name> boundVars, hydra.util.PersistentSet<hydra.core.Name> inScopeTypeParams, hydra.core.Name name, T1 cx, hydra.graph.Graph g) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.Or.apply(
@@ -1568,17 +1568,17 @@ public interface Coder {
                 public hydra.util.Either<T2, hydra.util.Maybe<hydra.core.Type>> otherwise(hydra.core.Type instance) {
                   return hydra.util.Either.<T2, hydra.util.Maybe<hydra.core.Type>>right(hydra.util.Maybe.just((ts).type));
                 }
-                
+
                 @Override
                 public hydra.util.Either<T2, hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Record ignored) {
                   return hydra.util.Either.<T2, hydra.util.Maybe<hydra.core.Type>>right((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()));
                 }
-                
+
                 @Override
                 public hydra.util.Either<T2, hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Union ignored) {
                   return hydra.util.Either.<T2, hydra.util.Maybe<hydra.core.Type>>right((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()));
                 }
-                
+
                 @Override
                 public hydra.util.Either<T2, hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Wrap ignored) {
                   return hydra.util.Either.<T2, hydra.util.Maybe<hydra.core.Type>>right((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()));
@@ -1586,7 +1586,7 @@ public interface Coder {
               }))));
         })).get()));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>> javaTypeArgumentsForNamedType(hydra.core.Name tname, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.schemas.Schemas.requireType(
@@ -1597,7 +1597,7 @@ public interface Coder {
         (java.util.function.Function<hydra.ext.java.syntax.TypeParameter, hydra.ext.java.syntax.TypeArgument>) (tp_ -> hydra.ext.java.utils.Utils.typeParameterToTypeArgument(tp_)),
         hydra.ext.java.coder.Coder.javaTypeParametersForType(typ)))));
   }
-  
+
   static hydra.ext.java.syntax.Expression encodeLiteral(hydra.core.Literal lit) {
     return (lit).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
@@ -1609,39 +1609,39 @@ public interface Coder {
             (java.util.function.Function<Integer, hydra.ext.java.syntax.Expression>) (w -> hydra.ext.java.utils.Utils.javaLiteralToJavaExpression(new hydra.ext.java.syntax.Literal.Integer_(new hydra.ext.java.syntax.IntegerLiteral(hydra.lib.literals.Int32ToBigint.apply(w))))),
             byteValues))));
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.Literal.Boolean_ b) {
         return hydra.ext.java.coder.Coder.encodeLiteral_litExp(hydra.ext.java.utils.Utils.javaBoolean((b).value));
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.Literal.Float_ f) {
         return hydra.ext.java.coder.Coder.encodeLiteral_encodeFloat((f).value);
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.Literal.Integer_ i) {
         return hydra.ext.java.coder.Coder.encodeLiteral_encodeInteger((i).value);
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.Literal.String_ s) {
         return hydra.ext.java.coder.Coder.encodeLiteral_litExp(hydra.ext.java.utils.Utils.javaString((s).value));
       }
     });
   }
-  
+
   static hydra.ext.java.syntax.Expression encodeLiteral_litExp(hydra.ext.java.syntax.Literal l) {
     return hydra.ext.java.utils.Utils.javaLiteralToJavaExpression(l);
   }
-  
+
   static hydra.ext.java.syntax.Expression encodeLiteral_primCast(hydra.ext.java.syntax.PrimitiveType pt, hydra.ext.java.syntax.Expression expr) {
     return hydra.ext.java.utils.Utils.javaCastExpressionToJavaExpression(hydra.ext.java.utils.Utils.javaCastPrimitive(
       pt,
       hydra.ext.java.utils.Utils.javaExpressionToJavaUnaryExpression(expr)));
   }
-  
+
   static hydra.ext.java.syntax.Expression encodeLiteral_encodeFloat(hydra.core.FloatValue f) {
     return (f).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
@@ -1653,21 +1653,21 @@ public interface Coder {
           hydra.util.ConsList.of(hydra.ext.java.coder.Coder.encodeLiteral(new hydra.core.Literal.String_(hydra.lib.literals.ShowBigfloat.apply((v).value)))),
           (hydra.util.Maybe<hydra.ext.java.syntax.ClassBody>) (hydra.util.Maybe.<hydra.ext.java.syntax.ClassBody>nothing()));
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.FloatValue.Float32 v) {
         return hydra.ext.java.coder.Coder.encodeLiteral_primCast(
           new hydra.ext.java.syntax.PrimitiveType.Numeric(new hydra.ext.java.syntax.NumericType.FloatingPoint(new hydra.ext.java.syntax.FloatingPointType.Float_())),
           hydra.ext.java.coder.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.FloatingPoint(new hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.Float32ToBigfloat.apply((v).value)))));
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.FloatValue.Float64 v) {
         return hydra.ext.java.coder.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.FloatingPoint(new hydra.ext.java.syntax.FloatingPointLiteral(hydra.lib.literals.Float64ToBigfloat.apply((v).value))));
       }
     });
   }
-  
+
   static hydra.ext.java.syntax.Expression encodeLiteral_encodeInteger(hydra.core.IntegerValue i) {
     return (i).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
@@ -1679,52 +1679,52 @@ public interface Coder {
           hydra.util.ConsList.of(hydra.ext.java.coder.Coder.encodeLiteral(new hydra.core.Literal.String_(hydra.lib.literals.ShowBigint.apply((v).value)))),
           (hydra.util.Maybe<hydra.ext.java.syntax.ClassBody>) (hydra.util.Maybe.<hydra.ext.java.syntax.ClassBody>nothing()));
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.IntegerValue.Int8 v) {
         return hydra.ext.java.coder.Coder.encodeLiteral_primCast(
           new hydra.ext.java.syntax.PrimitiveType.Numeric(new hydra.ext.java.syntax.NumericType.Integral(new hydra.ext.java.syntax.IntegralType.Byte_())),
           hydra.ext.java.coder.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.Integer_(new hydra.ext.java.syntax.IntegerLiteral(hydra.lib.literals.Int8ToBigint.apply((v).value)))));
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.IntegerValue.Int16 v) {
         return hydra.ext.java.coder.Coder.encodeLiteral_primCast(
           new hydra.ext.java.syntax.PrimitiveType.Numeric(new hydra.ext.java.syntax.NumericType.Integral(new hydra.ext.java.syntax.IntegralType.Short_())),
           hydra.ext.java.coder.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.Integer_(new hydra.ext.java.syntax.IntegerLiteral(hydra.lib.literals.Int16ToBigint.apply((v).value)))));
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.IntegerValue.Int32 v) {
         return hydra.ext.java.coder.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.Integer_(new hydra.ext.java.syntax.IntegerLiteral(hydra.lib.literals.Int32ToBigint.apply((v).value))));
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.IntegerValue.Int64 v) {
         return hydra.ext.java.coder.Coder.encodeLiteral_primCast(
           new hydra.ext.java.syntax.PrimitiveType.Numeric(new hydra.ext.java.syntax.NumericType.Integral(new hydra.ext.java.syntax.IntegralType.Long_())),
           hydra.ext.java.coder.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.Integer_(new hydra.ext.java.syntax.IntegerLiteral(hydra.lib.literals.Int64ToBigint.apply((v).value)))));
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.IntegerValue.Uint8 v) {
         return hydra.ext.java.coder.Coder.encodeLiteral_primCast(
           new hydra.ext.java.syntax.PrimitiveType.Numeric(new hydra.ext.java.syntax.NumericType.Integral(new hydra.ext.java.syntax.IntegralType.Short_())),
           hydra.ext.java.coder.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.Integer_(new hydra.ext.java.syntax.IntegerLiteral(hydra.lib.literals.Uint8ToBigint.apply((v).value)))));
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.IntegerValue.Uint16 v) {
         return hydra.ext.java.coder.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.Character_((v).value));
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.IntegerValue.Uint32 v) {
         return hydra.ext.java.coder.Coder.encodeLiteral_primCast(
           new hydra.ext.java.syntax.PrimitiveType.Numeric(new hydra.ext.java.syntax.NumericType.Integral(new hydra.ext.java.syntax.IntegralType.Long_())),
           hydra.ext.java.coder.Coder.encodeLiteral_litExp(new hydra.ext.java.syntax.Literal.Integer_(new hydra.ext.java.syntax.IntegerLiteral(hydra.lib.literals.Uint32ToBigint.apply((v).value)))));
       }
-      
+
       @Override
       public hydra.ext.java.syntax.Expression visit(hydra.core.IntegerValue.Uint64 v) {
         return hydra.ext.java.utils.Utils.javaConstructorCall(
@@ -1736,7 +1736,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.FormalParameter> fieldTypeToFormalParam(hydra.ext.java.helpers.Aliases aliases, hydra.core.FieldType ft, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.java.coder.Coder.encodeType(
@@ -1749,7 +1749,7 @@ public interface Coder {
         jt,
         (ft).name))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> applyCastIfSafe(hydra.ext.java.helpers.Aliases aliases, hydra.core.Type castType, hydra.ext.java.syntax.Expression expr, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.util.PersistentSet<hydra.core.Name> castVars = hydra.ext.java.coder.Coder.collectTypeVars(castType);
     hydra.util.PersistentSet<hydra.core.Name> inScope = (aliases).inScopeTypeParams;
@@ -1786,7 +1786,7 @@ public interface Coder {
             hydra.ext.java.utils.Utils.javaExpressionToJavaUnaryExpression(expr)))))))),
       () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression>right(expr));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> encodeVariable(hydra.ext.java.helpers.JavaEnvironment env, hydra.core.Name name, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.ext.java.helpers.Aliases aliases = (env).aliases;
     hydra.core.Name resolvedName = hydra.ext.java.utils.Utils.lookupJavaVarName(
@@ -1876,7 +1876,7 @@ public interface Coder {
                         cx,
                         g);
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.ext.java.helpers.JavaSymbolClass.LocalVariable ignored) {
                       return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression>right(hydra.ext.java.utils.Utils.javaIdentifierToJavaExpression(hydra.ext.java.coder.Coder.elementJavaIdentifier(
@@ -1885,7 +1885,7 @@ public interface Coder {
                         aliases,
                         resolvedName)));
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.ext.java.helpers.JavaSymbolClass.Constant ignored) {
                       return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression>right(hydra.ext.java.utils.Utils.javaIdentifierToJavaExpression(hydra.ext.java.coder.Coder.elementJavaIdentifier(
@@ -1894,7 +1894,7 @@ public interface Coder {
                         aliases,
                         name)));
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.ext.java.helpers.JavaSymbolClass.NullaryFunction ignored) {
                       return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression>right(hydra.ext.java.utils.Utils.javaMethodInvocationToJavaExpression(hydra.ext.java.utils.Utils.methodInvocation(
@@ -1906,7 +1906,7 @@ public interface Coder {
                           name),
                         (hydra.util.ConsList<hydra.ext.java.syntax.Expression>) (hydra.util.ConsList.<hydra.ext.java.syntax.Expression>empty()))));
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.ext.java.helpers.JavaSymbolClass.UnaryFunction ignored) {
                       return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression>right(hydra.ext.java.utils.Utils.javaIdentifierToJavaExpression(hydra.ext.java.coder.Coder.elementJavaIdentifier(
@@ -1917,7 +1917,7 @@ public interface Coder {
                     }
                   })))))))));
   }
-  
+
   static hydra.ext.java.syntax.Expression encodeVariable_buildCurried(hydra.util.ConsList<hydra.core.Name> params, hydra.ext.java.syntax.Expression inner) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(params),
@@ -1928,7 +1928,7 @@ public interface Coder {
           hydra.lib.lists.Tail.apply(params),
           inner)));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> encodeVariable_hoistedLambdaCase(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name name, Integer arity, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> paramNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<Integer, hydra.core.Name>) (i -> new hydra.core.Name(hydra.lib.strings.Cat2.apply(
@@ -1981,7 +1981,7 @@ public interface Coder {
                   hydra.ext.java.utils.Utils.javaExpressionToJavaUnaryExpression(lam))))))));
           }))))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> encodeNullaryConstant(hydra.ext.java.helpers.JavaEnvironment env, hydra.core.Type typ, hydra.core.Function fun, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.ext.java.helpers.Aliases aliases = (env).aliases;
     return (fun).accept(new hydra.core.Function.PartialVisitor<>() {
@@ -1995,7 +1995,7 @@ public interface Coder {
               " in ",
               hydra.show.core.Core.function(fun)))))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Function.Primitive name) {
         return hydra.lib.eithers.Bind.apply(
@@ -2042,14 +2042,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>> encodeNullaryConstant_typeArgsFromReturnType(hydra.ext.java.helpers.Aliases aliases, hydra.core.Type t, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>> otherwise(hydra.core.Type instance) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>>right((hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>> visit(hydra.core.Type.Set st) {
         return hydra.lib.eithers.Bind.apply(
@@ -2065,7 +2065,7 @@ public interface Coder {
               cx),
             (java.util.function.Function<hydra.ext.java.syntax.ReferenceType, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>>>) (rt -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>>right(hydra.util.ConsList.of(new hydra.ext.java.syntax.TypeArgument.Reference(rt)))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>> visit(hydra.core.Type.List lt_) {
         return hydra.lib.eithers.Bind.apply(
@@ -2081,7 +2081,7 @@ public interface Coder {
               cx),
             (java.util.function.Function<hydra.ext.java.syntax.ReferenceType, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>>>) (rt -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>>right(hydra.util.ConsList.of(new hydra.ext.java.syntax.TypeArgument.Reference(rt)))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>> visit(hydra.core.Type.Maybe mt) {
         return hydra.lib.eithers.Bind.apply(
@@ -2097,7 +2097,7 @@ public interface Coder {
               cx),
             (java.util.function.Function<hydra.ext.java.syntax.ReferenceType, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>>>) (rt -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>>right(hydra.util.ConsList.of(new hydra.ext.java.syntax.TypeArgument.Reference(rt)))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>> visit(hydra.core.Type.Map mp) {
         return hydra.lib.eithers.Bind.apply(
@@ -2128,14 +2128,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> buildTypeVarSubst(hydra.util.PersistentSet<hydra.core.Name> schemeVarSet, hydra.core.Type freshTyp, hydra.core.Type canonTyp) {
     return hydra.ext.java.coder.Coder.buildTypeVarSubst_go(
       schemeVarSet,
       hydra.rewriting.Rewriting.deannotateType(freshTyp),
       hydra.rewriting.Rewriting.deannotateType(canonTyp));
   }
-  
+
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> buildTypeVarSubst_go(hydra.util.PersistentSet<hydra.core.Name> svs, hydra.core.Type ft, hydra.core.Type ct) {
     java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>>> goSub = (java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>>>) (a -> (java.util.function.Function<hydra.core.Type, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>>) (b -> hydra.ext.java.coder.Coder.buildTypeVarSubst_go(
       svs,
@@ -2149,7 +2149,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Forall cfa) {
             return hydra.ext.java.coder.Coder.buildTypeVarSubst_go(
@@ -2159,7 +2159,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Variable fn) {
         return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2167,7 +2167,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Variable cn) {
             return hydra.lib.logic.IfElse.lazy(
@@ -2185,7 +2185,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Function fft) {
         return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2193,7 +2193,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Function cft) {
             return hydra.lib.maps.Union.apply(
@@ -2202,7 +2202,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Application fat) {
         return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2210,7 +2210,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Application cat) {
             return hydra.lib.maps.Union.apply(
@@ -2219,7 +2219,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.List fl) {
         return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2227,14 +2227,14 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.List cl) {
             return (goSub).apply((fl).value).apply((cl).value);
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Set fs) {
         return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2242,14 +2242,14 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Set cs) {
             return (goSub).apply((fs).value).apply((cs).value);
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Maybe fm) {
         return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2257,14 +2257,14 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Maybe cm) {
             return (goSub).apply((fm).value).apply((cm).value);
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Map fmt) {
         return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2272,7 +2272,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Map cmt) {
             return hydra.lib.maps.Union.apply(
@@ -2281,7 +2281,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Pair fpt) {
         return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2289,7 +2289,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Pair cpt) {
             return hydra.lib.maps.Union.apply(
@@ -2298,7 +2298,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Either fet) {
         return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2306,7 +2306,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Either cet) {
             return hydra.lib.maps.Union.apply(
@@ -2315,7 +2315,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Forall ffa) {
         return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2326,7 +2326,7 @@ public interface Coder {
               hydra.rewriting.Rewriting.deannotateType((ffa).value.body),
               ct);
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Forall cfa) {
             return (goSub).apply((ffa).value.body).apply((cfa).value.body);
@@ -2335,14 +2335,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> buildTypeSubst(hydra.util.PersistentSet<hydra.core.Name> schemeVarSet, hydra.core.Type schemeType, hydra.core.Type actualType) {
     return hydra.ext.java.coder.Coder.buildTypeSubst_go(
       schemeVarSet,
       hydra.rewriting.Rewriting.deannotateType(schemeType),
       hydra.rewriting.Rewriting.deannotateType(actualType));
   }
-  
+
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> buildTypeSubst_go(hydra.util.PersistentSet<hydra.core.Name> svs, hydra.core.Type st, hydra.core.Type at) {
     java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>> goSub = (java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>>) (a -> (java.util.function.Function<hydra.core.Type, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>) (b -> hydra.ext.java.coder.Coder.buildTypeSubst_go(
       svs,
@@ -2353,7 +2353,7 @@ public interface Coder {
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> otherwise(hydra.core.Type instance) {
         return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply()));
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Variable v) {
         return hydra.lib.logic.IfElse.lazy(
@@ -2365,7 +2365,7 @@ public interface Coder {
             at),
           () -> (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())));
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Function sft) {
         return (at).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2373,7 +2373,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Function aft) {
             return hydra.lib.maps.Union.apply(
@@ -2382,7 +2382,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Application sat) {
         return (at).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2390,7 +2390,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Application aat) {
             return hydra.lib.maps.Union.apply(
@@ -2399,7 +2399,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.List sl) {
         return (at).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2407,14 +2407,14 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.List al) {
             return (goSub).apply((sl).value).apply((al).value);
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Set ss) {
         return (at).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2422,14 +2422,14 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Set as_) {
             return (goSub).apply((ss).value).apply((as_).value);
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Maybe sm) {
         return (at).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2437,14 +2437,14 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Maybe am) {
             return (goSub).apply((sm).value).apply((am).value);
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Map smt) {
         return (at).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2452,7 +2452,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Map amt) {
             return hydra.lib.maps.Union.apply(
@@ -2461,7 +2461,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Pair spt) {
         return (at).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2469,7 +2469,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Pair apt) {
             return hydra.lib.maps.Union.apply(
@@ -2478,7 +2478,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Either set_) {
         return (at).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2486,7 +2486,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> otherwise(hydra.core.Type instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Either aet) {
             return hydra.lib.maps.Union.apply(
@@ -2495,7 +2495,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Forall sfa) {
         return (at).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2503,7 +2503,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> otherwise(hydra.core.Type instance) {
             return (goSub).apply((sfa).value.body).apply(at);
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> visit(hydra.core.Type.Forall afa) {
             return (goSub).apply((sfa).value.body).apply((afa).value.body);
@@ -2512,15 +2512,15 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.graph.Graph javaEnvGetGraph(hydra.ext.java.helpers.JavaEnvironment env) {
     return (env).graph;
   }
-  
+
   static hydra.ext.java.helpers.JavaEnvironment javaEnvSetGraph(hydra.graph.Graph g, hydra.ext.java.helpers.JavaEnvironment env) {
     return new hydra.ext.java.helpers.JavaEnvironment((env).aliases, g);
   }
-  
+
   static <T0, T1> hydra.util.Either<T1, hydra.typing.FunctionStructure<hydra.ext.java.helpers.JavaEnvironment>> analyzeJavaFunction(hydra.ext.java.helpers.JavaEnvironment env, hydra.core.Term term, hydra.context.Context cx, T0 g) {
     return hydra.coderUtils.CoderUtils.analyzeFunctionTerm(
       cx,
@@ -2531,7 +2531,7 @@ public interface Coder {
       env,
       term);
   }
-  
+
   static <T0> T0 withLambda(hydra.ext.java.helpers.JavaEnvironment env, hydra.core.Lambda lam, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, T0> k) {
     return hydra.schemas.Schemas.withLambdaContext(
       hydra.ext.java.coder.Coder::javaEnvGetGraph,
@@ -2549,7 +2549,7 @@ public interface Coder {
         return (k).apply(env2);
       }));
   }
-  
+
   static <T0> T0 withTypeLambda(hydra.ext.java.helpers.JavaEnvironment v1, hydra.core.TypeLambda v2, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, T0> v3) {
     return hydra.schemas.Schemas.withTypeLambdaContext(
       hydra.ext.java.coder.Coder::javaEnvGetGraph,
@@ -2560,7 +2560,7 @@ public interface Coder {
       v2,
       v3);
   }
-  
+
   static hydra.core.Term propagateType(hydra.core.Type typ, hydra.core.Term term) {
     java.util.function.Function<hydra.core.Term, hydra.core.Term> setTypeAnn = (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> hydra.annotations.Annotations.setTermAnnotation(
       hydra.constants.Constants.key_type(),
@@ -2571,7 +2571,7 @@ public interface Coder {
       public hydra.core.Term otherwise(hydra.core.Term instance) {
         return (setTypeAnn).apply(term);
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Function f) {
         return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -2579,7 +2579,7 @@ public interface Coder {
           public hydra.core.Term otherwise(hydra.core.Function instance) {
             return (setTypeAnn).apply(term);
           }
-          
+
           @Override
           public hydra.core.Term visit(hydra.core.Function.Lambda lam) {
             hydra.core.Term annotated = (setTypeAnn).apply(term);
@@ -2588,7 +2588,7 @@ public interface Coder {
               public hydra.core.Term otherwise(hydra.core.Type instance) {
                 return annotated;
               }
-              
+
               @Override
               public hydra.core.Term visit(hydra.core.Type.Function ft) {
                 return hydra.ext.java.coder.Coder.propagateType_propagateIntoLambda(
@@ -2599,7 +2599,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Let lt) {
         return (setTypeAnn).apply(hydra.ext.java.coder.Coder.propagateType_rebuildLet(
@@ -2611,21 +2611,21 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.core.Term propagateType_propagateIntoLambda(hydra.core.Type cod, hydra.core.Term t) {
     return (t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.core.Term otherwise(hydra.core.Term instance) {
         return t;
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Annotated at) {
         return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.ext.java.coder.Coder.propagateType_propagateIntoLambda(
           cod,
           (at).value.body), (at).value.annotation));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Function f) {
         return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -2633,7 +2633,7 @@ public interface Coder {
           public hydra.core.Term otherwise(hydra.core.Function instance) {
             return t;
           }
-          
+
           @Override
           public hydra.core.Term visit(hydra.core.Function.Lambda lam) {
             return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((lam).value.parameter, (lam).value.domain, hydra.ext.java.coder.Coder.propagateType(
@@ -2644,14 +2644,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.core.Term propagateType_rebuildLet(hydra.core.Term t, hydra.util.ConsList<hydra.core.Binding> bindings, hydra.core.Term newBody) {
     return (t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.core.Term otherwise(hydra.core.Term instance) {
         return t;
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Annotated at) {
         return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.ext.java.coder.Coder.propagateType_rebuildLet(
@@ -2659,14 +2659,14 @@ public interface Coder {
           bindings,
           newBody), (at).value.annotation));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Let _lt) {
         return new hydra.core.Term.Let(new hydra.core.Let(bindings, newBody));
       }
     });
   }
-  
+
   static hydra.util.ConsList<hydra.core.Binding> flattenBindings(hydra.util.ConsList<hydra.core.Binding> bindings) {
     return hydra.lib.lists.Bind.apply(
       bindings,
@@ -2675,7 +2675,7 @@ public interface Coder {
         public hydra.util.ConsList<hydra.core.Binding> otherwise(hydra.core.Term instance) {
           return hydra.util.ConsList.of(b);
         }
-        
+
         @Override
         public hydra.util.ConsList<hydra.core.Binding> visit(hydra.core.Term.Let lt) {
           return hydra.lib.lists.Concat2.apply(
@@ -2684,7 +2684,7 @@ public interface Coder {
         }
       })));
   }
-  
+
   static hydra.util.ConsList<hydra.core.Binding> dedupBindings(hydra.util.PersistentSet<hydra.core.Name> inScope, hydra.util.ConsList<hydra.core.Binding> bs) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(bs),
@@ -2734,14 +2734,14 @@ public interface Coder {
         })).get();
       })).get());
   }
-  
+
   static hydra.core.Name freshJavaName(hydra.core.Name base, hydra.util.PersistentSet<hydra.core.Name> avoid) {
     return hydra.ext.java.coder.Coder.freshJavaName_go(
       base,
       avoid,
       2);
   }
-  
+
   static hydra.core.Name freshJavaName_go(hydra.core.Name base, hydra.util.PersistentSet<hydra.core.Name> avoid, Integer i) {
     hydra.core.Name candidate = new hydra.core.Name(hydra.lib.strings.Cat2.apply(
       (base).value,
@@ -2758,7 +2758,7 @@ public interface Coder {
           1)),
       () -> candidate);
   }
-  
+
   static Boolean needsThunking(hydra.core.Term t) {
     return hydra.rewriting.Rewriting.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -2770,24 +2770,24 @@ public interface Coder {
           false,
           hydra.rewriting.Rewriting.subterms(t));
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Term.Let _lt) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Term.TypeApplication _ta) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Term.TypeLambda _tl) {
         return true;
       }
     });
   }
-  
+
   static Boolean bindingIsFunctionType(hydra.core.Binding b) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.rewriting.Rewriting.deannotateTerm((b).term).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -2795,7 +2795,7 @@ public interface Coder {
         public Boolean otherwise(hydra.core.Term instance) {
           return false;
         }
-        
+
         @Override
         public Boolean visit(hydra.core.Term.Function _f) {
           return true;
@@ -2806,12 +2806,12 @@ public interface Coder {
         public Boolean otherwise(hydra.core.Type instance) {
           return false;
         }
-        
+
         @Override
         public Boolean visit(hydra.core.Type.Function _ft) {
           return true;
         }
-        
+
         @Override
         public Boolean visit(hydra.core.Type.Forall fa) {
           return hydra.rewriting.Rewriting.deannotateType((fa).value.body).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -2819,7 +2819,7 @@ public interface Coder {
             public Boolean otherwise(hydra.core.Type instance) {
               return false;
             }
-            
+
             @Override
             public Boolean visit(hydra.core.Type.Function _ft2) {
               return true;
@@ -2829,14 +2829,14 @@ public interface Coder {
       })),
       (b).type);
   }
-  
+
   static hydra.util.Maybe<hydra.core.Type> decodeTypeFromTerm(hydra.core.Term term) {
     return hydra.rewriting.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Term instance) {
         return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Union inj) {
         return hydra.lib.logic.IfElse.lazy(
@@ -2856,7 +2856,7 @@ public interface Coder {
                   public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Term instance) {
                     return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
                   }
-                  
+
                   @Override
                   public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Wrap wt) {
                     return (wt).value.body.accept(new hydra.core.Term.PartialVisitor<>() {
@@ -2864,7 +2864,7 @@ public interface Coder {
                       public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Term instance) {
                         return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
                       }
-                      
+
                       @Override
                       public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Literal lit) {
                         return (lit).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -2872,7 +2872,7 @@ public interface Coder {
                           public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Literal instance) {
                             return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
                           }
-                          
+
                           @Override
                           public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Literal.String_ s) {
                             return hydra.util.Maybe.just(new hydra.core.Type.Variable(new hydra.core.Name((s).value)));
@@ -2891,7 +2891,7 @@ public interface Coder {
                     public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Term instance) {
                       return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
                     }
-                    
+
                     @Override
                     public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Record rec) {
                       return hydra.lib.maybes.Bind.apply(
@@ -2912,7 +2912,7 @@ public interface Coder {
                       public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Term instance) {
                         return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
                       }
-                      
+
                       @Override
                       public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Record rec) {
                         return hydra.lib.maybes.Bind.apply(
@@ -2943,7 +2943,7 @@ public interface Coder {
                         public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Term instance) {
                           return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
                         }
-                        
+
                         @Override
                         public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Record rec) {
                           return hydra.lib.maybes.Bind.apply(
@@ -2974,7 +2974,7 @@ public interface Coder {
                           public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Term instance) {
                             return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
                           }
-                          
+
                           @Override
                           public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Union litInj) {
                             return hydra.lib.logic.IfElse.lazy(
@@ -2992,14 +2992,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Maybe<hydra.core.Type> tryInferFunctionType(hydra.core.Function fun) {
     return (fun).accept(new hydra.core.Function.PartialVisitor<>() {
       @Override
       public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Function instance) {
         return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Function.Lambda lam) {
         return hydra.lib.maybes.Bind.apply(
@@ -3010,7 +3010,7 @@ public interface Coder {
               public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Term instance) {
                 return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
               }
-              
+
               @Override
               public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Annotated at) {
                 return hydra.lib.maybes.Bind.apply(
@@ -3019,7 +3019,7 @@ public interface Coder {
                     (at).value.annotation),
                   (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Type>>) (typeTerm -> hydra.ext.java.coder.Coder.decodeTypeFromTerm(typeTerm)));
               }
-              
+
               @Override
               public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Function innerFun) {
                 return hydra.ext.java.coder.Coder.tryInferFunctionType((innerFun).value);
@@ -3032,14 +3032,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Type>> collectTypeApps(hydra.core.Term t, hydra.util.ConsList<hydra.core.Type> acc) {
     return hydra.rewriting.Rewriting.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Type>> otherwise(hydra.core.Term instance) {
         return (hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Type>>(hydra.rewriting.Rewriting.deannotateTerm(t), acc)));
       }
-      
+
       @Override
       public hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Term.TypeApplication ta) {
         return hydra.ext.java.coder.Coder.collectTypeApps(
@@ -3050,14 +3050,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Type>> collectTypeApps0(hydra.core.Term t, hydra.util.ConsList<hydra.core.Type> acc) {
     return hydra.rewriting.Rewriting.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Type>> otherwise(hydra.core.Term instance) {
         return (hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Type>>(t, acc)));
       }
-      
+
       @Override
       public hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Term.TypeApplication ta) {
         return hydra.ext.java.coder.Coder.collectTypeApps0(
@@ -3068,14 +3068,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static Integer countFunctionParams(hydra.core.Type t) {
     return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Integer otherwise(hydra.core.Type instance) {
         return 0;
       }
-      
+
       @Override
       public Integer visit(hydra.core.Type.Function ft) {
         return hydra.lib.math.Add.apply(
@@ -3084,7 +3084,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> peelDomainTypes(Integer n, hydra.core.Type t) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Lte.apply(
@@ -3096,7 +3096,7 @@ public interface Coder {
         public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> otherwise(hydra.core.Type instance) {
           return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()), t)));
         }
-        
+
         @Override
         public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Function ft) {
           hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> rest = hydra.ext.java.coder.Coder.peelDomainTypes(
@@ -3110,33 +3110,33 @@ public interface Coder {
         }
       }));
   }
-  
+
   static hydra.core.Type unwrapReturnType(hydra.core.Type t) {
     return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.core.Type otherwise(hydra.core.Type instance) {
         return t;
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Function ft) {
         return hydra.ext.java.coder.Coder.unwrapReturnType((ft).value.codomain);
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Application at) {
         return hydra.ext.java.coder.Coder.unwrapReturnType((at).value.argument);
       }
     });
   }
-  
+
   static hydra.util.Maybe<hydra.core.Name> findPairFirst(hydra.core.Type t) {
     return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Maybe<hydra.core.Name> otherwise(hydra.core.Type instance) {
         return (hydra.util.Maybe<hydra.core.Name>) (hydra.util.Maybe.<hydra.core.Name>nothing());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.Name> visit(hydra.core.Type.Pair pt) {
         return hydra.rewriting.Rewriting.deannotateType((pt).value.first).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -3144,7 +3144,7 @@ public interface Coder {
           public hydra.util.Maybe<hydra.core.Name> otherwise(hydra.core.Type instance) {
             return (hydra.util.Maybe<hydra.core.Name>) (hydra.util.Maybe.<hydra.core.Name>nothing());
           }
-          
+
           @Override
           public hydra.util.Maybe<hydra.core.Name> visit(hydra.core.Type.Variable v) {
             return hydra.util.Maybe.just((v).value);
@@ -3153,14 +3153,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> extractInOutPair(hydra.core.Type t) {
     return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
         return (hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>empty());
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Function ft) {
         return hydra.rewriting.Rewriting.deannotateType((ft).value.domain).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -3168,7 +3168,7 @@ public interface Coder {
           public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
             return (hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>empty());
           }
-          
+
           @Override
           public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable inVar) {
             hydra.core.Type retType = hydra.ext.java.coder.Coder.unwrapReturnType((ft).value.codomain);
@@ -3177,7 +3177,7 @@ public interface Coder {
               public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
                 return (hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>empty());
               }
-              
+
               @Override
               public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Pair pt) {
                 return hydra.rewriting.Rewriting.deannotateType((pt).value.first).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -3185,7 +3185,7 @@ public interface Coder {
                   public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
                     return (hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>empty());
                   }
-                  
+
                   @Override
                   public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable outVar) {
                     return hydra.util.ConsList.of((hydra.util.Pair<hydra.core.Name, hydra.core.Name>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Name>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Name>((inVar).value, (outVar).value))));
@@ -3198,20 +3198,20 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> extractDirectReturn(hydra.util.PersistentSet<hydra.core.Name> tparamSet, hydra.core.Type t) {
     return hydra.ext.java.coder.Coder.extractDirectReturn_go(
       tparamSet,
       t);
   }
-  
+
   static hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> extractDirectReturn_go(hydra.util.PersistentSet<hydra.core.Name> tparamSet, hydra.core.Type t) {
     return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
         return (hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>empty());
       }
-      
+
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Function ft) {
         hydra.core.Type cod = (ft).value.codomain;
@@ -3223,7 +3223,7 @@ public interface Coder {
               tparamSet,
               cod);
           }
-          
+
           @Override
           public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable inVar) {
             return hydra.lib.logic.IfElse.lazy(
@@ -3235,7 +3235,7 @@ public interface Coder {
                 public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
                   return (hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>empty());
                 }
-                
+
                 @Override
                 public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Function ft2) {
                   hydra.core.Type midArg = hydra.rewriting.Rewriting.deannotateType((ft2).value.domain);
@@ -3248,7 +3248,7 @@ public interface Coder {
                         public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
                           return (hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>empty());
                         }
-                        
+
                         @Override
                         public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable outVar) {
                           return hydra.lib.logic.IfElse.lazy(
@@ -3260,7 +3260,7 @@ public interface Coder {
                         }
                       });
                     }
-                    
+
                     @Override
                     public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable midVar) {
                       return hydra.lib.logic.IfElse.lazy(
@@ -3273,7 +3273,7 @@ public interface Coder {
                           public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
                             return (hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>empty());
                           }
-                          
+
                           @Override
                           public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable outVar) {
                             return hydra.lib.logic.IfElse.lazy(
@@ -3296,13 +3296,13 @@ public interface Coder {
       }
     });
   }
-  
+
   static <T0> hydra.util.PersistentMap<T0, hydra.core.Type> nameMapToTypeMap(hydra.util.PersistentMap<T0, hydra.core.Name> m) {
     return hydra.lib.maps.Map.apply(
       (java.util.function.Function<hydra.core.Name, hydra.core.Type>) (v -> new hydra.core.Type.Variable(v)),
       m);
   }
-  
+
   static <T0, T1> hydra.util.PersistentMap<T0, hydra.util.ConsList<T1>> groupPairsByFirst(hydra.util.ConsList<hydra.util.Pair<T0, T1>> pairs) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.PersistentMap<T0, hydra.util.ConsList<T1>>, java.util.function.Function<hydra.util.Pair<T0, T1>, hydra.util.PersistentMap<T0, hydra.util.ConsList<T1>>>>) (m -> (java.util.function.Function<hydra.util.Pair<T0, T1>, hydra.util.PersistentMap<T0, hydra.util.ConsList<T1>>>) (p -> {
@@ -3320,15 +3320,15 @@ public interface Coder {
       (hydra.util.PersistentMap<T0, hydra.util.ConsList<T1>>) ((hydra.util.PersistentMap<T0, hydra.util.ConsList<T1>>) (hydra.lib.maps.Empty.<T0, hydra.util.ConsList<T1>>apply())),
       pairs);
   }
-  
+
   static <T0, T1> T0 groupPairsByFirst_k(hydra.util.Pair<T0, T1> p) {
     return hydra.lib.pairs.First.apply(p);
   }
-  
+
   static <T0, T1> T1 groupPairsByFirst_v(hydra.util.Pair<T0, T1> p) {
     return hydra.lib.pairs.Second.apply(p);
   }
-  
+
   static <T0> hydra.util.PersistentMap<T0, T0> selfRefSubstitution(hydra.util.PersistentMap<T0, hydra.util.ConsList<T0>> grouped) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.PersistentMap<T0, T0>, java.util.function.Function<hydra.util.Pair<T0, hydra.util.ConsList<T0>>, hydra.util.PersistentMap<T0, T0>>>) (subst -> (java.util.function.Function<hydra.util.Pair<T0, hydra.util.ConsList<T0>>, hydra.util.PersistentMap<T0, T0>>) (entry -> hydra.ext.java.coder.Coder.<T0>selfRefSubstitution_processGroup(
@@ -3338,7 +3338,7 @@ public interface Coder {
       (hydra.util.PersistentMap<T0, T0>) ((hydra.util.PersistentMap<T0, T0>) (hydra.lib.maps.Empty.<T0, T0>apply())),
       hydra.lib.maps.ToList.apply(grouped));
   }
-  
+
   static <T0> hydra.util.PersistentMap<T0, T0> selfRefSubstitution_processGroup(hydra.util.PersistentMap<T0, T0> subst, T0 inVar, hydra.util.ConsList<T0> outVars) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Elem.apply(
@@ -3358,7 +3358,7 @@ public interface Coder {
         outVars),
       () -> subst);
   }
-  
+
   static <T0> hydra.util.PersistentMap<T0, T0> directRefSubstitution(hydra.util.PersistentSet<T0> directInputVars, hydra.util.Maybe<T0> codVar, hydra.util.PersistentMap<T0, hydra.util.ConsList<T0>> grouped) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.PersistentMap<T0, T0>, java.util.function.Function<hydra.util.Pair<T0, hydra.util.ConsList<T0>>, hydra.util.PersistentMap<T0, T0>>>) (subst -> (java.util.function.Function<hydra.util.Pair<T0, hydra.util.ConsList<T0>>, hydra.util.PersistentMap<T0, T0>>) (entry -> hydra.ext.java.coder.Coder.<T0>directRefSubstitution_processGroup(
@@ -3370,7 +3370,7 @@ public interface Coder {
       (hydra.util.PersistentMap<T0, T0>) ((hydra.util.PersistentMap<T0, T0>) (hydra.lib.maps.Empty.<T0, T0>apply())),
       hydra.lib.maps.ToList.apply(grouped));
   }
-  
+
   static <T0> hydra.util.PersistentMap<T0, T0> directRefSubstitution_processGroup(hydra.util.PersistentSet<T0> directInputVars, hydra.util.Maybe<T0> codVar, hydra.util.PersistentMap<T0, T0> subst, T0 inVar, hydra.util.ConsList<T0> outVars) {
     hydra.util.Lazy<hydra.util.ConsList<T0>> safeNonSelfVars = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.<T0>directRefSubstitution_processGroup_safeNonSelfVars(
       codVar,
@@ -3398,7 +3398,7 @@ public interface Coder {
         safeNonSelfVars.get()),
       () -> subst);
   }
-  
+
   static <T0> hydra.util.ConsList<T0> directRefSubstitution_processGroup_nonSelfVars(T0 inVar, hydra.util.ConsList<T0> outVars) {
     return hydra.lib.lists.Filter.apply(
       (java.util.function.Function<T0, Boolean>) (v -> hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
@@ -3406,7 +3406,7 @@ public interface Coder {
         inVar))),
       outVars);
   }
-  
+
   static <T0> hydra.util.ConsList<T0> directRefSubstitution_processGroup_safeNonSelfVars(hydra.util.Maybe<T0> codVar, hydra.util.PersistentSet<T0> directInputVars, hydra.util.ConsList<T0> nonSelfVars) {
     return hydra.lib.lists.Filter.apply(
       (java.util.function.Function<T0, Boolean>) (v -> hydra.lib.logic.And.apply(
@@ -3418,7 +3418,7 @@ public interface Coder {
           codVar)))),
       nonSelfVars);
   }
-  
+
   static <T0> hydra.util.Maybe<T0> findSelfRefVar(hydra.util.PersistentMap<T0, hydra.util.ConsList<T0>> grouped) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>>> selfRefs = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.<T0>findSelfRefVar_selfRefs(grouped));
     return hydra.lib.logic.IfElse.lazy(
@@ -3426,7 +3426,7 @@ public interface Coder {
       () -> (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
       () -> hydra.util.Maybe.just(hydra.lib.pairs.First.apply(hydra.lib.lists.Head.apply(selfRefs.get()))));
   }
-  
+
   static <T0> hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>> findSelfRefVar_selfRefs(hydra.util.PersistentMap<T0, hydra.util.ConsList<T0>> grouped) {
     return hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.util.Pair<T0, hydra.util.ConsList<T0>>, Boolean>) (entry -> hydra.lib.lists.Elem.apply(
@@ -3434,7 +3434,7 @@ public interface Coder {
         hydra.lib.pairs.Second.apply(entry))),
       hydra.lib.maps.ToList.apply(grouped));
   }
-  
+
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> detectAccumulatorUnification(hydra.util.ConsList<hydra.core.Type> doms, hydra.core.Type cod, hydra.util.ConsList<hydra.core.Name> tparams) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>> allPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Bind.apply(
       doms,
@@ -3465,7 +3465,7 @@ public interface Coder {
       public hydra.util.Maybe<hydra.core.Name> otherwise(hydra.core.Type instance) {
         return (hydra.util.Maybe<hydra.core.Name>) (hydra.util.Maybe.<hydra.core.Name>nothing());
       }
-      
+
       @Override
       public hydra.util.Maybe<hydra.core.Name> visit(hydra.core.Type.Variable v) {
         return hydra.util.Maybe.just((v).value);
@@ -3510,14 +3510,14 @@ public interface Coder {
         danglingSubst.get()),
       hydra.ext.java.coder.Coder.nameMapToTypeMap(directRefSubst.get()));
   }
-  
+
   static Boolean typesMatch(hydra.core.Type a, hydra.core.Type b) {
     return (a).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type instance) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Variable va) {
         return (b).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -3525,7 +3525,7 @@ public interface Coder {
           public Boolean otherwise(hydra.core.Type instance) {
             return true;
           }
-          
+
           @Override
           public Boolean visit(hydra.core.Type.Variable vb) {
             return hydra.lib.equality.Equal.apply(
@@ -3534,7 +3534,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Wrap wa) {
         return (b).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -3542,7 +3542,7 @@ public interface Coder {
           public Boolean otherwise(hydra.core.Type instance) {
             return true;
           }
-          
+
           @Override
           public Boolean visit(hydra.core.Type.Wrap wb) {
             return hydra.lib.equality.Equal.apply(
@@ -3553,7 +3553,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static Boolean isSimpleName(hydra.core.Name name) {
     return hydra.lib.equality.Equal.apply(
       hydra.lib.lists.Length.apply(hydra.lib.strings.SplitOn.apply(
@@ -3561,7 +3561,7 @@ public interface Coder {
         (name).value)),
       1);
   }
-  
+
   static <T0, T1> hydra.util.Either<T1, hydra.util.ConsList<hydra.core.Type>> filterPhantomTypeArgs(hydra.core.Name calleeName, hydra.util.ConsList<hydra.core.Type> allTypeArgs, T0 cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.util.Either.<T1, hydra.util.Maybe<hydra.core.Binding>>right(hydra.lexical.Lexical.dereferenceElement(
@@ -3609,7 +3609,7 @@ public interface Coder {
                 overgenSubst)));
           }))))));
   }
-  
+
   static hydra.util.ConsList<hydra.core.Type> filterPhantomTypeArgs_filterAndApply(hydra.util.ConsList<hydra.core.Type> allTypeArgs, hydra.util.ConsList<Boolean> keepFlags, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> overgenSubst) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Type>> filtered = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.Pair<hydra.core.Type, Boolean>, hydra.core.Type>) (p -> hydra.lib.pairs.First.apply(p)),
@@ -3627,7 +3627,7 @@ public interface Coder {
         filtered.get()),
       () -> filtered.get());
   }
-  
+
   static <T0> hydra.util.ConsList<T0> filterByFlags(hydra.util.ConsList<T0> xs, hydra.util.ConsList<Boolean> flags) {
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.Pair<T0, Boolean>, T0>) (p -> hydra.lib.pairs.First.apply(p)),
@@ -3637,14 +3637,14 @@ public interface Coder {
           xs,
           flags)));
   }
-  
+
   static hydra.core.Type applySubstSimple(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> subst, hydra.core.Type t) {
     return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.core.Type otherwise(hydra.core.Type instance) {
         return t;
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Variable v) {
         return hydra.lib.maps.FindWithDefault.applyLazy(
@@ -3654,7 +3654,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static <T0> hydra.util.PersistentMap<hydra.core.Name, T0> buildArgSubst(hydra.util.PersistentSet<hydra.core.Name> schemeVarSet, hydra.util.ConsList<hydra.core.Type> schemeDoms, hydra.util.ConsList<T0> argTypes) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Bind.apply(
       hydra.lib.lists.Zip.apply(
@@ -3667,7 +3667,7 @@ public interface Coder {
           public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, T0>> otherwise(hydra.core.Type instance) {
             return (hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, T0>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.core.Name, T0>>empty());
           }
-          
+
           @Override
           public hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, T0>> visit(hydra.core.Type.Variable v) {
             return hydra.lib.logic.IfElse.lazy(
@@ -3680,11 +3680,11 @@ public interface Coder {
         });
       })));
   }
-  
+
   static <T0> T0 buildArgSubst_argType(hydra.util.Pair<hydra.core.Type, T0> p) {
     return hydra.lib.pairs.Second.apply(p);
   }
-  
+
   static hydra.util.ConsList<hydra.core.Type> resolveTypeApps(hydra.util.ConsList<hydra.core.Name> schemeVars, hydra.util.ConsList<hydra.core.Type> fallbackTypeApps, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> argSubst) {
     hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> resolvedVars = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply(argSubst)));
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> unresolvedVars = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
@@ -3711,7 +3711,7 @@ public interface Coder {
         fullSubst.get())),
       schemeVars);
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Type>> correctTypeAppsWithArgs(hydra.util.ConsList<hydra.core.Name> schemeVars, hydra.util.ConsList<hydra.core.Type> fallbackTypeApps, hydra.core.Type schemeType, hydra.util.ConsList<hydra.core.Term> args, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> irSubst = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Zip.apply(
       schemeVars,
@@ -3770,7 +3770,7 @@ public interface Coder {
           })).get();
         })).get())));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Type>> correctTypeApps(T0 gr, hydra.core.Name name, hydra.util.ConsList<hydra.core.Term> args, hydra.util.ConsList<hydra.core.Type> fallbackTypeApps, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.core.Binding>>right(hydra.lexical.Lexical.dereferenceElement(
@@ -3850,14 +3850,14 @@ public interface Coder {
                 g));
           }))))));
   }
-  
+
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> buildSubstFromAnnotations_go(hydra.util.PersistentSet<hydra.core.Name> schemeVarSet, hydra.graph.Graph g, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Term instance) {
         return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Term.Annotated at) {
         hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> anns = (at).value.annotation;
@@ -3874,7 +3874,7 @@ public interface Coder {
               public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Term instance) {
                 return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
               }
-              
+
               @Override
               public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Term.Function f) {
                 return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -3882,7 +3882,7 @@ public interface Coder {
                   public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Function instance) {
                     return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
                   }
-                  
+
                   @Override
                   public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Function.Lambda lam) {
                     return hydra.lib.maybes.Cases.applyLazy(
@@ -3893,7 +3893,7 @@ public interface Coder {
                         public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
                           return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
                         }
-                        
+
                         @Override
                         public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Function ft) {
                           return hydra.ext.java.coder.Coder.buildTypeVarSubst(
@@ -3917,7 +3917,7 @@ public interface Coder {
           annSubst.get(),
           bodySubst);
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Term.Application app) {
         return hydra.lib.maps.Union.apply(
@@ -3930,7 +3930,7 @@ public interface Coder {
             g,
             (app).value.argument));
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Term.Function f) {
         return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -3938,7 +3938,7 @@ public interface Coder {
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Function instance) {
             return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Function.Lambda lam) {
             return hydra.ext.java.coder.Coder.buildSubstFromAnnotations_go(
@@ -3946,7 +3946,7 @@ public interface Coder {
               g,
               (lam).value.body);
           }
-          
+
           @Override
           public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Function.Elimination elim) {
             return (elim).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
@@ -3954,7 +3954,7 @@ public interface Coder {
               public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Elimination instance) {
                 return (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
               }
-              
+
               @Override
               public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Elimination.Union cs) {
                 hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>> caseSubsts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
@@ -3981,7 +3981,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Term.Let lt) {
         hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>> bindingSubst = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
@@ -4000,7 +4000,7 @@ public interface Coder {
             g,
             (lt).value.body));
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Term.List terms) {
         return hydra.lib.lists.Foldl.apply(
@@ -4013,7 +4013,7 @@ public interface Coder {
           (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())),
           (terms).value);
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Term.Maybe mt) {
         return hydra.lib.maybes.Cases.applyLazy(
@@ -4024,7 +4024,7 @@ public interface Coder {
             g,
             t)));
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Term.Pair p) {
         return hydra.lib.maps.Union.apply(
@@ -4037,7 +4037,7 @@ public interface Coder {
             g,
             hydra.lib.pairs.Second.apply((p).value)));
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Term.Record r) {
         return hydra.lib.lists.Foldl.apply(
@@ -4050,7 +4050,7 @@ public interface Coder {
           (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())),
           (r).value.fields);
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Term.Set terms) {
         return hydra.lib.lists.Foldl.apply(
@@ -4063,7 +4063,7 @@ public interface Coder {
           (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())),
           hydra.lib.sets.ToList.apply((terms).value));
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Term.TypeApplication ta) {
         return hydra.ext.java.coder.Coder.buildSubstFromAnnotations_go(
@@ -4071,7 +4071,7 @@ public interface Coder {
           g,
           (ta).value.body);
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Term.TypeLambda tl) {
         return hydra.ext.java.coder.Coder.buildSubstFromAnnotations_go(
@@ -4079,7 +4079,7 @@ public interface Coder {
           g,
           (tl).value.body);
       }
-      
+
       @Override
       public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> visit(hydra.core.Term.Either e) {
         return hydra.lib.eithers.Either.apply(
@@ -4095,21 +4095,21 @@ public interface Coder {
       }
     });
   }
-  
+
   static <T0, T1> hydra.util.Either<T1, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>> buildSubstFromAnnotations(hydra.util.PersistentSet<hydra.core.Name> schemeVarSet, hydra.core.Term term, T0 cx, hydra.graph.Graph g) {
     return hydra.util.Either.<T1, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>>right(hydra.ext.java.coder.Coder.buildSubstFromAnnotations_go(
       schemeVarSet,
       g,
       term));
   }
-  
+
   static hydra.core.Term applyOvergenSubstToTermAnnotations_go(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> subst, hydra.graph.Graph cx, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.core.Term otherwise(hydra.core.Term instance) {
         return term;
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Annotated at) {
         hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> ann = (at).value.annotation;
@@ -4138,7 +4138,7 @@ public interface Coder {
           cx,
           inner), ann_.get()));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Application app) {
         return new hydra.core.Term.Application(new hydra.core.Application(hydra.ext.java.coder.Coder.applyOvergenSubstToTermAnnotations_go(
@@ -4149,7 +4149,7 @@ public interface Coder {
           cx,
           (app).value.argument)));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Function f) {
         return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -4157,7 +4157,7 @@ public interface Coder {
           public hydra.core.Term otherwise(hydra.core.Function instance) {
             return term;
           }
-          
+
           @Override
           public hydra.core.Term visit(hydra.core.Function.Lambda lam) {
             return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((lam).value.parameter, hydra.lib.maybes.Map.apply(
@@ -4169,7 +4169,7 @@ public interface Coder {
               cx,
               (lam).value.body))));
           }
-          
+
           @Override
           public hydra.core.Term visit(hydra.core.Function.Elimination elim) {
             return (elim).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
@@ -4177,7 +4177,7 @@ public interface Coder {
               public hydra.core.Term otherwise(hydra.core.Elimination instance) {
                 return term;
               }
-              
+
               @Override
               public hydra.core.Term visit(hydra.core.Elimination.Union cs) {
                 return new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Union(new hydra.core.CaseStatement((cs).value.typeName, hydra.lib.maybes.Map.apply(
@@ -4196,7 +4196,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Let lt) {
         return new hydra.core.Term.Let(new hydra.core.Let(hydra.lib.lists.Map.apply(
@@ -4209,7 +4209,7 @@ public interface Coder {
           cx,
           (lt).value.body)));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeApplication ta) {
         return new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(hydra.ext.java.coder.Coder.applyOvergenSubstToTermAnnotations_go(
@@ -4219,7 +4219,7 @@ public interface Coder {
           subst,
           (ta).value.type)));
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeLambda tl) {
         return new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda((tl).value.parameter, hydra.ext.java.coder.Coder.applyOvergenSubstToTermAnnotations_go(
@@ -4229,18 +4229,18 @@ public interface Coder {
       }
     });
   }
-  
+
   static <T0, T1> hydra.util.Either<T1, hydra.core.Term> applyOvergenSubstToTermAnnotations(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> subst, hydra.core.Term term0, T0 cx, hydra.graph.Graph g) {
     return hydra.util.Either.<T1, hydra.core.Term>right(hydra.ext.java.coder.Coder.applyOvergenSubstToTermAnnotations_go(
       subst,
       g,
       term0));
   }
-  
+
   static hydra.ext.java.syntax.ReferenceType javaComparableRefType() {
     return new hydra.ext.java.syntax.ReferenceType.ClassOrInterface(new hydra.ext.java.syntax.ClassOrInterfaceType.Class_(new hydra.ext.java.syntax.ClassType((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>empty()), new hydra.ext.java.syntax.ClassTypeQualifier.None(), hydra.ext.java.utils.Utils.javaTypeIdentifier("Comparable"), (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()))));
   }
-  
+
   static hydra.ext.java.syntax.Expression comparableCompareExpr(String otherVar, String fname) {
     hydra.ext.java.syntax.Expression arg = hydra.ext.java.utils.Utils.javaExpressionNameToJavaExpression(hydra.ext.java.utils.Utils.fieldExpression(
       hydra.ext.java.utils.Utils.javaIdentifier(otherVar),
@@ -4251,7 +4251,7 @@ public interface Coder {
     hydra.util.Lazy<hydra.ext.java.syntax.MethodInvocation_Header> header = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.MethodInvocation_Header.Complex(new hydra.ext.java.syntax.MethodInvocation_Complex(castVar, (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()), new hydra.ext.java.syntax.Identifier(hydra.ext.java.names.Names.compareToMethodName()))));
     return hydra.ext.java.utils.Utils.javaMethodInvocationToJavaExpression(new hydra.ext.java.syntax.MethodInvocation(header.get(), hydra.util.ConsList.of(arg)));
   }
-  
+
   static hydra.ext.java.syntax.Expression arraysCompareExpr(String otherVar, String fname) {
     hydra.util.Lazy<hydra.ext.java.syntax.Expression> arg1 = new hydra.util.Lazy<>(() -> hydra.ext.java.utils.Utils.javaExpressionNameToJavaExpression(new hydra.ext.java.syntax.ExpressionName((hydra.util.Maybe<hydra.ext.java.syntax.AmbiguousName>) (hydra.util.Maybe.<hydra.ext.java.syntax.AmbiguousName>nothing()), new hydra.ext.java.syntax.Identifier(hydra.ext.java.utils.Utils.sanitizeJavaName(fname)))));
     hydra.ext.java.syntax.Expression arg2 = hydra.ext.java.utils.Utils.javaExpressionNameToJavaExpression(hydra.ext.java.utils.Utils.fieldExpression(
@@ -4262,7 +4262,7 @@ public interface Coder {
       arg1.get(),
       arg2)));
   }
-  
+
   static hydra.ext.java.syntax.Expression hashCodeCompareExpr(String otherVar, String fname) {
     hydra.util.Lazy<hydra.ext.java.syntax.MethodInvocation_Header> header = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.MethodInvocation_Header.Complex(new hydra.ext.java.syntax.MethodInvocation_Complex(new hydra.ext.java.syntax.MethodInvocation_Variant.Type(hydra.ext.java.utils.Utils.javaTypeName(new hydra.ext.java.syntax.Identifier("Integer"))), (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()), new hydra.ext.java.syntax.Identifier("compare"))));
     hydra.util.Lazy<hydra.ext.java.syntax.Expression> otherHashCode = new hydra.util.Lazy<>(() -> hydra.ext.java.utils.Utils.javaMethodInvocationToJavaExpression(new hydra.ext.java.syntax.MethodInvocation(new hydra.ext.java.syntax.MethodInvocation_Header.Complex(new hydra.ext.java.syntax.MethodInvocation_Complex(new hydra.ext.java.syntax.MethodInvocation_Variant.Expression(hydra.ext.java.utils.Utils.fieldExpression(
@@ -4273,7 +4273,7 @@ public interface Coder {
       thisHashCode.get(),
       otherHashCode.get())));
   }
-  
+
   static hydra.ext.java.syntax.Expression compareFieldExpr(String otherVar, hydra.core.FieldType ft) {
     String fname = (ft).name.value;
     hydra.core.Type ftype = (ft).type;
@@ -4291,13 +4291,13 @@ public interface Coder {
           otherVar,
           fname)));
   }
-  
+
   static hydra.ext.java.syntax.Expression cmpNotZeroExpr() {
     hydra.util.Lazy<hydra.ext.java.syntax.EqualityExpression> lhs = new hydra.util.Lazy<>(() -> hydra.ext.java.utils.Utils.javaRelationalExpressionToJavaEqualityExpression(hydra.ext.java.utils.Utils.javaPostfixExpressionToJavaRelationalExpression(new hydra.ext.java.syntax.PostfixExpression.Name(new hydra.ext.java.syntax.ExpressionName((hydra.util.Maybe<hydra.ext.java.syntax.AmbiguousName>) (hydra.util.Maybe.<hydra.ext.java.syntax.AmbiguousName>nothing()), hydra.ext.java.utils.Utils.javaIdentifier("cmp"))))));
     hydra.ext.java.syntax.RelationalExpression rhs = hydra.ext.java.utils.Utils.javaPostfixExpressionToJavaRelationalExpression(new hydra.ext.java.syntax.PostfixExpression.Primary(hydra.ext.java.utils.Utils.javaLiteralToJavaPrimary(hydra.ext.java.utils.Utils.javaInt(new java.math.BigInteger("0")))));
     return hydra.ext.java.utils.Utils.javaEqualityExpressionToJavaExpression(new hydra.ext.java.syntax.EqualityExpression.NotEqual(new hydra.ext.java.syntax.EqualityExpression_Binary(lhs.get(), rhs)));
   }
-  
+
   static <T0> hydra.ext.java.syntax.BlockStatement cmpDeclStatement(T0 aliases) {
     return hydra.ext.java.utils.Utils.<T0>variableDeclarationStatement(
       aliases,
@@ -4305,7 +4305,7 @@ public interface Coder {
       hydra.ext.java.utils.Utils.javaIdentifier("cmp"),
       hydra.ext.java.utils.Utils.javaIntExpression(new java.math.BigInteger("0")));
   }
-  
+
   static hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> compareAndReturnStmts(String otherVar, hydra.core.FieldType f) {
     return hydra.util.ConsList.of(
       new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaAssignmentStatement(
@@ -4315,7 +4315,7 @@ public interface Coder {
           f))),
       new hydra.ext.java.syntax.BlockStatement.Statement(new hydra.ext.java.syntax.Statement.IfThen(new hydra.ext.java.syntax.IfThenStatement(hydra.ext.java.coder.Coder.cmpNotZeroExpr(), hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(hydra.ext.java.utils.Utils.javaExpressionNameToJavaExpression(new hydra.ext.java.syntax.ExpressionName((hydra.util.Maybe<hydra.ext.java.syntax.AmbiguousName>) (hydra.util.Maybe.<hydra.ext.java.syntax.AmbiguousName>nothing()), hydra.ext.java.utils.Utils.javaIdentifier("cmp")))))))));
   }
-  
+
   static <T0> hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> compareToBody(T0 aliases, String otherVar, hydra.util.ConsList<hydra.core.FieldType> fields) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(fields),
@@ -4339,7 +4339,7 @@ public interface Coder {
               otherVar,
               hydra.lib.lists.Last.apply(fields))))))))));
   }
-  
+
   static hydra.ext.java.syntax.Expression tagCompareExpr() {
     hydra.util.Lazy<hydra.ext.java.syntax.MethodInvocation> otherGetClass = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.MethodInvocation(new hydra.ext.java.syntax.MethodInvocation_Header.Complex(new hydra.ext.java.syntax.MethodInvocation_Complex(new hydra.ext.java.syntax.MethodInvocation_Variant.Expression(new hydra.ext.java.syntax.ExpressionName((hydra.util.Maybe<hydra.ext.java.syntax.AmbiguousName>) (hydra.util.Maybe.<hydra.ext.java.syntax.AmbiguousName>nothing()), new hydra.ext.java.syntax.Identifier(hydra.ext.java.names.Names.otherInstanceName()))), (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()), new hydra.ext.java.syntax.Identifier("getClass"))), (hydra.util.ConsList<hydra.ext.java.syntax.Expression>) (hydra.util.ConsList.<hydra.ext.java.syntax.Expression>empty())));
     hydra.util.Lazy<hydra.ext.java.syntax.MethodInvocation> otherGetName = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.MethodInvocation(new hydra.ext.java.syntax.MethodInvocation_Header.Complex(new hydra.ext.java.syntax.MethodInvocation_Complex(new hydra.ext.java.syntax.MethodInvocation_Variant.Primary(hydra.ext.java.utils.Utils.javaMethodInvocationToJavaPrimary(otherGetClass.get())), (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()), new hydra.ext.java.syntax.Identifier("getName"))), (hydra.util.ConsList<hydra.ext.java.syntax.Expression>) (hydra.util.ConsList.<hydra.ext.java.syntax.Expression>empty())));
@@ -4347,13 +4347,13 @@ public interface Coder {
     hydra.util.Lazy<hydra.ext.java.syntax.MethodInvocation> thisGetName = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.MethodInvocation(new hydra.ext.java.syntax.MethodInvocation_Header.Complex(new hydra.ext.java.syntax.MethodInvocation_Complex(new hydra.ext.java.syntax.MethodInvocation_Variant.Primary(hydra.ext.java.utils.Utils.javaMethodInvocationToJavaPrimary(thisGetClass.get())), (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()), new hydra.ext.java.syntax.Identifier("getName"))), (hydra.util.ConsList<hydra.ext.java.syntax.Expression>) (hydra.util.ConsList.<hydra.ext.java.syntax.Expression>empty())));
     return hydra.ext.java.utils.Utils.javaMethodInvocationToJavaExpression(new hydra.ext.java.syntax.MethodInvocation(new hydra.ext.java.syntax.MethodInvocation_Header.Complex(new hydra.ext.java.syntax.MethodInvocation_Complex(new hydra.ext.java.syntax.MethodInvocation_Variant.Primary(hydra.ext.java.utils.Utils.javaMethodInvocationToJavaPrimary(thisGetName.get())), (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()), new hydra.ext.java.syntax.Identifier(hydra.ext.java.names.Names.compareToMethodName()))), hydra.util.ConsList.of(hydra.ext.java.utils.Utils.javaMethodInvocationToJavaExpression(otherGetName.get()))));
   }
-  
+
   static hydra.ext.java.syntax.Expression tagCmpNotZeroExpr() {
     hydra.util.Lazy<hydra.ext.java.syntax.EqualityExpression> lhs = new hydra.util.Lazy<>(() -> hydra.ext.java.utils.Utils.javaRelationalExpressionToJavaEqualityExpression(hydra.ext.java.utils.Utils.javaPostfixExpressionToJavaRelationalExpression(new hydra.ext.java.syntax.PostfixExpression.Name(new hydra.ext.java.syntax.ExpressionName((hydra.util.Maybe<hydra.ext.java.syntax.AmbiguousName>) (hydra.util.Maybe.<hydra.ext.java.syntax.AmbiguousName>nothing()), hydra.ext.java.utils.Utils.javaIdentifier("tagCmp"))))));
     hydra.ext.java.syntax.RelationalExpression rhs = hydra.ext.java.utils.Utils.javaPostfixExpressionToJavaRelationalExpression(new hydra.ext.java.syntax.PostfixExpression.Primary(hydra.ext.java.utils.Utils.javaLiteralToJavaPrimary(hydra.ext.java.utils.Utils.javaInt(new java.math.BigInteger("0")))));
     return hydra.ext.java.utils.Utils.javaEqualityExpressionToJavaExpression(new hydra.ext.java.syntax.EqualityExpression.NotEqual(new hydra.ext.java.syntax.EqualityExpression_Binary(lhs.get(), rhs)));
   }
-  
+
   static <T0> hydra.ext.java.syntax.ClassBodyDeclaration recordCompareToMethod(hydra.ext.java.helpers.Aliases aliases, T0 tparams, hydra.core.Name elName, hydra.util.ConsList<hydra.core.FieldType> fields) {
     hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = hydra.util.ConsList.of(
       hydra.ext.java.utils.Utils.overrideAnnotation(),
@@ -4377,7 +4377,7 @@ public interface Coder {
         hydra.ext.java.names.Names.otherInstanceName(),
         fields)));
   }
-  
+
   static <T0> hydra.ext.java.syntax.ClassBodyDeclaration variantCompareToMethod(hydra.ext.java.helpers.Aliases aliases, T0 tparams, hydra.core.Name parentName, hydra.core.Name variantName, hydra.util.ConsList<hydra.core.FieldType> fields) {
     hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = hydra.util.ConsList.of(
       hydra.ext.java.utils.Utils.overrideAnnotation(),
@@ -4436,7 +4436,7 @@ public interface Coder {
       result,
       hydra.util.Maybe.just(body.get()));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassBodyDeclaration> recordMemberVar(hydra.ext.java.helpers.Aliases aliases, hydra.core.FieldType ft, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.core.Name fname = (ft).name;
     hydra.core.Type ftype = (ft).type;
@@ -4455,7 +4455,7 @@ public interface Coder {
         jt,
         hydra.ext.java.utils.Utils.fieldNameToJavaVariableDeclarator(fname)))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassBodyDeclaration> recordWithMethod(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name elName, hydra.util.ConsList<hydra.core.FieldType> fields, hydra.core.FieldType field, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.ext.java.syntax.Identifier consId = new hydra.ext.java.syntax.Identifier(hydra.ext.java.utils.Utils.sanitizeJavaName(hydra.names.Names.localNameOf(elName)));
     hydra.util.Lazy<hydra.util.ConsList<hydra.ext.java.syntax.Expression>> fieldArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
@@ -4492,11 +4492,11 @@ public interface Coder {
         result.get(),
         hydra.util.Maybe.just(hydra.util.ConsList.of(returnStmt.get()))))));
   }
-  
+
   static <T0> hydra.util.ConsList<T0> recordWithMethod_anns() {
     return (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty());
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassBodyDeclaration> recordConstructor(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name elName, hydra.util.ConsList<hydra.core.FieldType> fields, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>> assignStmts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.core.FieldType, hydra.ext.java.syntax.BlockStatement>) (f -> new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.toAssignStmt((f).name))),
@@ -4516,7 +4516,7 @@ public interface Coder {
         params,
         assignStmts.get()))));
   }
-  
+
   static hydra.ext.java.syntax.InclusiveOrExpression eqClause(String tmpName, hydra.core.FieldType ft) {
     String fname = (ft).name.value;
     hydra.core.Type ftype = (ft).type;
@@ -4534,7 +4534,7 @@ public interface Coder {
           tmpName,
           fname)));
   }
-  
+
   static hydra.ext.java.syntax.InclusiveOrExpression equalsClause(String tmpName, String fname) {
     hydra.util.Lazy<hydra.ext.java.syntax.MethodInvocation_Header> header = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.MethodInvocation_Header.Complex(new hydra.ext.java.syntax.MethodInvocation_Complex(new hydra.ext.java.syntax.MethodInvocation_Variant.Type(hydra.ext.java.utils.Utils.javaTypeName(new hydra.ext.java.syntax.Identifier("java.util.Objects"))), (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()), new hydra.ext.java.syntax.Identifier(hydra.ext.java.names.Names.equalsMethodName()))));
     hydra.ext.java.syntax.Expression otherArg = hydra.ext.java.utils.Utils.javaExpressionNameToJavaExpression(hydra.ext.java.utils.Utils.fieldExpression(
@@ -4547,7 +4547,7 @@ public interface Coder {
       thisArg,
       otherArg))));
   }
-  
+
   static hydra.ext.java.syntax.InclusiveOrExpression arraysEqualsClause(String tmpName, String fname) {
     hydra.util.Lazy<hydra.ext.java.syntax.MethodInvocation_Header> header = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.MethodInvocation_Header.Complex(new hydra.ext.java.syntax.MethodInvocation_Complex(new hydra.ext.java.syntax.MethodInvocation_Variant.Type(hydra.ext.java.utils.Utils.javaTypeName(new hydra.ext.java.syntax.Identifier("java.util.Arrays"))), (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()), new hydra.ext.java.syntax.Identifier(hydra.ext.java.names.Names.equalsMethodName()))));
     hydra.ext.java.syntax.Expression otherArg = hydra.ext.java.utils.Utils.javaExpressionNameToJavaExpression(hydra.ext.java.utils.Utils.fieldExpression(
@@ -4560,7 +4560,7 @@ public interface Coder {
       thisArg,
       otherArg))));
   }
-  
+
   static hydra.ext.java.syntax.InclusiveOrExpression compareToZeroClause(String tmpName, String fname) {
     hydra.ext.java.syntax.Expression compareToArg = hydra.ext.java.utils.Utils.javaExpressionNameToJavaExpression(hydra.ext.java.utils.Utils.fieldExpression(
       hydra.ext.java.utils.Utils.javaIdentifier(tmpName),
@@ -4573,7 +4573,7 @@ public interface Coder {
     hydra.ext.java.syntax.RelationalExpression rhs = hydra.ext.java.utils.Utils.javaPostfixExpressionToJavaRelationalExpression(new hydra.ext.java.syntax.PostfixExpression.Primary(hydra.ext.java.utils.Utils.javaLiteralToJavaPrimary(hydra.ext.java.utils.Utils.javaInt(new java.math.BigInteger("0")))));
     return hydra.ext.java.utils.Utils.javaEqualityExpressionToJavaInclusiveOrExpression(new hydra.ext.java.syntax.EqualityExpression.Equal(new hydra.ext.java.syntax.EqualityExpression_Binary(lhs, rhs)));
   }
-  
+
   static hydra.ext.java.syntax.ClassBodyDeclaration recordEqualsMethod(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name elName, hydra.util.ConsList<hydra.core.FieldType> fields) {
     hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = hydra.util.ConsList.of(hydra.ext.java.utils.Utils.overrideAnnotation());
     String tmpName = "o";
@@ -4627,14 +4627,14 @@ public interface Coder {
         castStmt.get(),
         returnAllFieldsEqual.get())));
   }
-  
+
   static hydra.ext.java.syntax.MultiplicativeExpression hashCodeMultPair(java.math.BigInteger i, hydra.core.Name fname) {
     String fnameStr = (fname).value;
     hydra.ext.java.syntax.MultiplicativeExpression lhs = new hydra.ext.java.syntax.MultiplicativeExpression.Unary(hydra.ext.java.utils.Utils.javaPrimaryToJavaUnaryExpression(hydra.ext.java.utils.Utils.javaLiteralToJavaPrimary(hydra.ext.java.utils.Utils.javaInt(i))));
     hydra.util.Lazy<hydra.ext.java.syntax.UnaryExpression> rhs = new hydra.util.Lazy<>(() -> hydra.ext.java.utils.Utils.javaPostfixExpressionToJavaUnaryExpression(hydra.ext.java.utils.Utils.javaMethodInvocationToJavaPostfixExpression(new hydra.ext.java.syntax.MethodInvocation(new hydra.ext.java.syntax.MethodInvocation_Header.Complex(new hydra.ext.java.syntax.MethodInvocation_Complex(new hydra.ext.java.syntax.MethodInvocation_Variant.Type(hydra.ext.java.utils.Utils.javaTypeName(new hydra.ext.java.syntax.Identifier("java.util.Objects"))), (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()), new hydra.ext.java.syntax.Identifier(hydra.ext.java.names.Names.hashCodeMethodName()))), hydra.util.ConsList.of(hydra.ext.java.utils.Utils.javaExpressionNameToJavaExpression(new hydra.ext.java.syntax.ExpressionName((hydra.util.Maybe<hydra.ext.java.syntax.AmbiguousName>) (hydra.util.Maybe.<hydra.ext.java.syntax.AmbiguousName>nothing()), new hydra.ext.java.syntax.Identifier(hydra.ext.java.utils.Utils.sanitizeJavaName(fnameStr)))))))));
     return new hydra.ext.java.syntax.MultiplicativeExpression.Times(new hydra.ext.java.syntax.MultiplicativeExpression_Binary(lhs, rhs.get()));
   }
-  
+
   static hydra.util.ConsList<java.math.BigInteger> first20Primes() {
     return hydra.util.ConsList.of(
       new java.math.BigInteger("2"),
@@ -4658,7 +4658,7 @@ public interface Coder {
       new java.math.BigInteger("67"),
       new java.math.BigInteger("71"));
   }
-  
+
   static hydra.ext.java.syntax.ClassBodyDeclaration recordHashCodeMethod(hydra.util.ConsList<hydra.core.FieldType> fields) {
     hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = hydra.util.ConsList.of(hydra.ext.java.utils.Utils.overrideAnnotation());
     hydra.util.ConsList<hydra.ext.java.syntax.MethodModifier> mods = hydra.util.ConsList.of(new hydra.ext.java.syntax.MethodModifier.Public());
@@ -4683,7 +4683,7 @@ public interface Coder {
       result,
       hydra.util.Maybe.just(hydra.util.ConsList.of(returnSum.get())));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassBodyDeclarationWithComments> constantDecl(String javaName, hydra.ext.java.helpers.Aliases aliases, hydra.core.Name name, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.ext.java.helpers.JavaEnvironment env = new hydra.ext.java.helpers.JavaEnvironment(aliases, g);
     hydra.util.ConsList<hydra.ext.java.syntax.FieldModifier> mods = hydra.util.ConsList.of(
@@ -4722,7 +4722,7 @@ public interface Coder {
             var)));
         }))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassBodyDeclarationWithComments> constantDeclForFieldType(hydra.ext.java.helpers.Aliases aliases, hydra.core.FieldType ftyp, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.core.Name name = (ftyp).name;
     String javaName = hydra.formatting.Formatting.nonAlnumToUnderscores(hydra.formatting.Formatting.convertCase(
@@ -4736,7 +4736,7 @@ public interface Coder {
       cx,
       g);
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassBodyDeclarationWithComments> constantDeclForTypeName(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name name, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.ext.java.coder.Coder.constantDecl(
       "TYPE_",
@@ -4745,7 +4745,7 @@ public interface Coder {
       cx,
       g);
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassDeclaration> declarationForRecordType(Boolean isInner, Boolean isSer, hydra.ext.java.helpers.Aliases aliases, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName, hydra.util.ConsList<hydra.core.FieldType> fields, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.ext.java.coder.Coder.declarationForRecordType_(
       isInner,
@@ -4758,7 +4758,7 @@ public interface Coder {
       cx,
       g);
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassDeclaration> declarationForRecordType_(Boolean isInner, Boolean isSer, hydra.ext.java.helpers.Aliases aliases, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName, hydra.util.Maybe<hydra.core.Name> parentName, hydra.util.ConsList<hydra.core.FieldType> fields, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
@@ -4878,7 +4878,7 @@ public interface Coder {
                   bodyDecls.get()));
               }))))))))));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>> takeTypeArgs(String label, Integer n, hydra.util.ConsList<hydra.ext.java.syntax.Type> tyapps, hydra.context.Context cx, T0 g) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Lt.apply(
@@ -4898,7 +4898,7 @@ public interface Coder {
           n,
           tyapps)));
   }
-  
+
   static <T0, T1> hydra.util.Either<T1, Boolean> isFieldUnitType(hydra.core.Name typeName, hydra.core.Name fieldName, T0 cx, hydra.graph.Graph g) {
     hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme> schemaTypes = (g).schemaTypes;
     return hydra.lib.maybes.Cases.applyLazy(
@@ -4911,7 +4911,7 @@ public interface Coder {
         public hydra.util.Either<T1, Boolean> otherwise(hydra.core.Type instance) {
           return hydra.util.Either.<T1, Boolean>right(false);
         }
-        
+
         @Override
         public hydra.util.Either<T1, Boolean> visit(hydra.core.Type.Union rt) {
           return hydra.util.Either.<T1, Boolean>right(hydra.lib.maybes.Cases.applyLazy(
@@ -4925,7 +4925,7 @@ public interface Coder {
         }
       })));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> encodeTerm(hydra.ext.java.helpers.JavaEnvironment env, hydra.core.Term term, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.ext.java.coder.Coder.encodeTermInternal(
       env,
@@ -4935,7 +4935,7 @@ public interface Coder {
       cx,
       g);
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> encodeTermInternal(hydra.ext.java.helpers.JavaEnvironment env, hydra.util.ConsList<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>> anns, hydra.util.ConsList<hydra.ext.java.syntax.Type> tyapps, hydra.core.Term term, hydra.context.Context cx, hydra.graph.Graph g0) {
     hydra.ext.java.helpers.Aliases aliases = (env).aliases;
     hydra.graph.Graph g = (env).graph;
@@ -4949,7 +4949,7 @@ public interface Coder {
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> otherwise(hydra.core.Term instance) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression>right(hydra.ext.java.coder.Coder.encodeLiteral(new hydra.core.Literal.String_("Unimplemented term variant")));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Annotated at) {
         return hydra.ext.java.coder.Coder.encodeTermInternal(
@@ -4962,7 +4962,7 @@ public interface Coder {
           cx,
           g);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Application app) {
         return hydra.ext.java.coder.Coder.encodeApplication(
@@ -4971,7 +4971,7 @@ public interface Coder {
           cx,
           g);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Either et) {
         return hydra.lib.eithers.Bind.apply(
@@ -5003,7 +5003,7 @@ public interface Coder {
                     public hydra.util.Maybe<hydra.util.Pair<hydra.core.Type, hydra.core.Type>> otherwise(hydra.core.Type instance) {
                       return (hydra.util.Maybe<hydra.util.Pair<hydra.core.Type, hydra.core.Type>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Type, hydra.core.Type>>nothing());
                     }
-                    
+
                     @Override
                     public hydra.util.Maybe<hydra.util.Pair<hydra.core.Type, hydra.core.Type>> visit(hydra.core.Type.Either et2) {
                       return hydra.util.Maybe.just((hydra.util.Pair<hydra.core.Type, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Type, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Type, hydra.core.Type>((et2).value.left, (et2).value.right))));
@@ -5047,7 +5047,7 @@ public interface Coder {
               }));
           }));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Function f) {
         hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>> combinedAnns = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
@@ -5084,7 +5084,7 @@ public interface Coder {
                   cx,
                   g);
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Type.Function ft) {
                 return hydra.ext.java.coder.Coder.encodeFunction(
@@ -5097,7 +5097,7 @@ public interface Coder {
               }
             })))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Let lt) {
         hydra.util.ConsList<hydra.core.Binding> bindings = (lt).value.bindings;
@@ -5184,7 +5184,7 @@ public interface Coder {
                 }));
             })));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.List els) {
         return hydra.lib.logic.IfElse.lazy(
@@ -5210,12 +5210,12 @@ public interface Coder {
               new hydra.ext.java.syntax.Identifier("of"),
               jels))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Literal l) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression>right(hydra.ext.java.coder.Coder.encodeLiteral((l).value));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Map m) {
         return hydra.lib.logic.IfElse.lazy(
@@ -5257,7 +5257,7 @@ public interface Coder {
                   pairExprs.get())));
               })))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Maybe mt) {
         return hydra.lib.maybes.Cases.applyLazy(
@@ -5281,7 +5281,7 @@ public interface Coder {
               new hydra.ext.java.syntax.Identifier("just"),
               hydra.util.ConsList.of(expr))))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Pair p) {
         return hydra.lib.eithers.Bind.apply(
@@ -5310,7 +5310,7 @@ public interface Coder {
                   jterm2),
                 (hydra.util.Maybe<hydra.ext.java.syntax.ClassBody>) (hydra.util.Maybe.<hydra.ext.java.syntax.ClassBody>nothing())))))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Record rec) {
         hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>> combinedAnnsRec = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
@@ -5337,7 +5337,7 @@ public interface Coder {
             public hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> otherwise(hydra.core.Type instance) {
               return (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>nothing());
             }
-            
+
             @Override
             public hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> visit(hydra.core.Type.Record rt) {
               return hydra.util.Maybe.just(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
@@ -5470,7 +5470,7 @@ public interface Coder {
               }));
           }));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Set s) {
         return hydra.lib.logic.IfElse.lazy(
@@ -5499,7 +5499,7 @@ public interface Coder {
                 jels)))));
           })).get());
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.TypeLambda tl) {
         return hydra.ext.java.coder.Coder.withTypeLambda(
@@ -5528,7 +5528,7 @@ public interface Coder {
                     public hydra.core.Term otherwise(hydra.core.Type instance) {
                       return (tl).value.body;
                     }
-                    
+
                     @Override
                     public hydra.core.Term visit(hydra.core.Type.Forall fa) {
                       return hydra.annotations.Annotations.setTermAnnotation(
@@ -5545,7 +5545,7 @@ public interface Coder {
               }));
           }));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Union inj) {
         hydra.core.Field injField = (inj).value.field;
@@ -5581,7 +5581,7 @@ public interface Coder {
               args,
               (hydra.util.Maybe<hydra.ext.java.syntax.ClassBody>) (hydra.util.Maybe.<hydra.ext.java.syntax.ClassBody>nothing())))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Variable name) {
         return hydra.ext.java.coder.Coder.encodeVariable(
@@ -5590,12 +5590,12 @@ public interface Coder {
           cx,
           g);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Unit ignored) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression>right(hydra.ext.java.utils.Utils.javaLiteralToJavaExpression(new hydra.ext.java.syntax.Literal.Null()));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Wrap wt) {
         return hydra.lib.eithers.Bind.apply(
@@ -5609,7 +5609,7 @@ public interface Coder {
             hydra.util.ConsList.of(jarg),
             (hydra.util.Maybe<hydra.ext.java.syntax.ClassBody>) (hydra.util.Maybe.<hydra.ext.java.syntax.ClassBody>nothing())))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.TypeApplication ta) {
         hydra.core.Type atyp = (ta).value.type;
@@ -5676,7 +5676,7 @@ public interface Coder {
                             cx,
                             g);
                         }
-                        
+
                         @Override
                         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Variable varName) {
                           return hydra.lib.eithers.Bind.apply(
@@ -5698,7 +5698,7 @@ public interface Coder {
                               cx,
                               g)));
                         }
-                        
+
                         @Override
                         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Either eitherTerm) {
                           return hydra.lib.logic.IfElse.lazy(
@@ -5773,7 +5773,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static <T0, T1> hydra.util.Either<T1, hydra.util.ConsList<hydra.core.Term>> annotateLambdaArgs(hydra.core.Name cname, hydra.util.ConsList<hydra.core.Type> tApps, hydra.util.ConsList<hydra.core.Term> argTerms, T0 cx, hydra.graph.Graph g) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(tApps),
@@ -5832,14 +5832,14 @@ public interface Coder {
               })).get());
           })))));
   }
-  
+
   static hydra.ext.java.syntax.Expression applyJavaArg(hydra.ext.java.syntax.Expression expr, hydra.ext.java.syntax.Expression jarg) {
     return hydra.ext.java.utils.Utils.javaMethodInvocationToJavaExpression(hydra.ext.java.utils.Utils.methodInvocation(
       hydra.util.Maybe.just(hydra.util.Either.<hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary>right(hydra.ext.java.utils.Utils.javaExpressionToJavaPrimary(expr))),
       new hydra.ext.java.syntax.Identifier(hydra.ext.java.names.Names.applyMethodName()),
       hydra.util.ConsList.of(jarg)));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> encodeApplication(hydra.ext.java.helpers.JavaEnvironment env, hydra.core.Application app, hydra.context.Context cx, hydra.graph.Graph g0) {
     hydra.ext.java.helpers.Aliases aliases = (env).aliases;
     hydra.util.Lazy<hydra.util.Pair<hydra.core.Term, hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Type>>>> gathered = new hydra.util.Lazy<>(() -> hydra.coderUtils.CoderUtils.gatherArgsWithTypeApps(
@@ -5873,7 +5873,7 @@ public interface Coder {
             public hydra.util.Maybe<hydra.core.Name> otherwise(hydra.core.Term instance) {
               return (hydra.util.Maybe<hydra.core.Name>) (hydra.util.Maybe.<hydra.core.Name>nothing());
             }
-            
+
             @Override
             public hydra.util.Maybe<hydra.core.Name> visit(hydra.core.Term.Function f) {
               return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -5881,14 +5881,14 @@ public interface Coder {
                 public hydra.util.Maybe<hydra.core.Name> otherwise(hydra.core.Function instance) {
                   return (hydra.util.Maybe<hydra.core.Name>) (hydra.util.Maybe.<hydra.core.Name>nothing());
                 }
-                
+
                 @Override
                 public hydra.util.Maybe<hydra.core.Name> visit(hydra.core.Function.Primitive n) {
                   return hydra.util.Maybe.just((n).value);
                 }
               });
             }
-            
+
             @Override
             public hydra.util.Maybe<hydra.core.Name> visit(hydra.core.Term.Variable n) {
               return hydra.util.Maybe.just((n).value);
@@ -5917,7 +5917,7 @@ public interface Coder {
                   cx,
                   g);
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Function f) {
                 return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -5933,7 +5933,7 @@ public interface Coder {
                       cx,
                       g);
                   }
-                  
+
                   @Override
                   public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Function.Primitive name) {
                     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> hargs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Take.apply(
@@ -5966,7 +5966,7 @@ public interface Coder {
                   }
                 });
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Variable name) {
                 return hydra.lib.logic.IfElse.lazy(
@@ -6020,7 +6020,7 @@ public interface Coder {
                         public Integer otherwise(hydra.ext.java.helpers.JavaSymbolClass instance) {
                           return arity;
                         }
-                        
+
                         @Override
                         public Integer visit(hydra.ext.java.helpers.JavaSymbolClass.HoistedLambda n) {
                           return (n).value;
@@ -6075,7 +6075,7 @@ public interface Coder {
             })));
         }))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> encodeApplication_fallback(hydra.ext.java.helpers.JavaEnvironment env, hydra.ext.java.helpers.Aliases aliases, hydra.graph.Graph gr, hydra.util.ConsList<hydra.core.Type> typeApps, hydra.core.Term lhs, hydra.core.Term rhs, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.Bimap.apply(
@@ -6111,7 +6111,7 @@ public interface Coder {
                   jfun,
                   jarg))))));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Type.Function ft) {
             hydra.core.Type cod = (ft).value.codomain;
@@ -6135,7 +6135,7 @@ public interface Coder {
                       jfun,
                       jarg))))));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Function f) {
                 return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -6157,7 +6157,7 @@ public interface Coder {
                           jfun,
                           jarg))))));
                   }
-                  
+
                   @Override
                   public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Function.Elimination e) {
                     return hydra.lib.eithers.Bind.apply(
@@ -6207,7 +6207,7 @@ public interface Coder {
           }
         })))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> functionCall(hydra.ext.java.helpers.JavaEnvironment env, Boolean isPrim, hydra.core.Name name, hydra.util.ConsList<hydra.core.Term> args, hydra.util.ConsList<hydra.core.Type> typeApps, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.ext.java.helpers.Aliases aliases = (env).aliases;
     Boolean isLambdaBound = hydra.ext.java.coder.Coder.isLambdaBoundIn(
@@ -6324,7 +6324,7 @@ public interface Coder {
           })).get());
       }));
   }
-  
+
   static hydra.ext.java.syntax.Expression buildCurriedLambda(hydra.util.ConsList<hydra.core.Name> params, hydra.ext.java.syntax.Expression inner) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.ext.java.syntax.Expression, java.util.function.Function<hydra.core.Name, hydra.ext.java.syntax.Expression>>) (acc -> (java.util.function.Function<hydra.core.Name, hydra.ext.java.syntax.Expression>) (p -> hydra.ext.java.utils.Utils.javaLambda(
@@ -6333,7 +6333,7 @@ public interface Coder {
       inner,
       hydra.lib.lists.Reverse.apply(params));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> encodeFunction(hydra.ext.java.helpers.JavaEnvironment env, hydra.core.Type dom, hydra.core.Type cod, hydra.core.Function fun, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.ext.java.helpers.Aliases aliases = (env).aliases;
     return (fun).accept(new hydra.core.Function.PartialVisitor<>() {
@@ -6343,7 +6343,7 @@ public interface Coder {
           "Unimplemented function variant: ",
           hydra.show.core.Core.function(fun)))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Function.Elimination elm) {
         return hydra.ext.java.coder.Coder.encodeElimination(
@@ -6355,7 +6355,7 @@ public interface Coder {
           cx,
           g);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Function.Lambda lam) {
         return hydra.ext.java.coder.Coder.withLambda(
@@ -6416,7 +6416,7 @@ public interface Coder {
                       }));
                   }));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Term.Function f2) {
                 return (f2).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -6471,7 +6471,7 @@ public interface Coder {
                           }));
                       }));
                   }
-                  
+
                   @Override
                   public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Function.Lambda innerLam) {
                     return hydra.rewriting.Rewriting.deannotateType(cod).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -6481,7 +6481,7 @@ public interface Coder {
                           "expected function type for lambda body, but got: ",
                           hydra.show.core.Core.type(cod)))), cx)));
                       }
-                      
+
                       @Override
                       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Type.Function ft) {
                         hydra.core.Type cod2 = (ft).value.codomain;
@@ -6513,7 +6513,7 @@ public interface Coder {
             });
           }));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Function.Primitive name) {
         Integer arity = hydra.arity.Arity.typeArity(new hydra.core.Type.Function(new hydra.core.FunctionType(dom, cod)));
@@ -6585,14 +6585,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static <T0> hydra.core.Type extractArgType(T0 _lhs, hydra.core.Type typ) {
     return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.core.Type otherwise(hydra.core.Type instance) {
         return typ;
       }
-      
+
       @Override
       public hydra.core.Type visit(hydra.core.Type.Application at1) {
         return (at1).value.function.accept(new hydra.core.Type.PartialVisitor<>() {
@@ -6600,7 +6600,7 @@ public interface Coder {
           public hydra.core.Type otherwise(hydra.core.Type instance) {
             return typ;
           }
-          
+
           @Override
           public hydra.core.Type visit(hydra.core.Type.Application _at2) {
             return (at1).value.argument;
@@ -6609,7 +6609,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.core.Term annotateBodyWithCod(hydra.core.Type typ, hydra.core.Term term) {
     java.util.function.Function<hydra.core.Term, hydra.core.Term> setAnn = (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> hydra.annotations.Annotations.setTermAnnotation(
       hydra.constants.Constants.key_type(),
@@ -6620,12 +6620,12 @@ public interface Coder {
       public hydra.core.Term otherwise(hydra.core.Term instance) {
         return (setAnn).apply(term);
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeApplication _ta) {
         return (setAnn).apply(term);
       }
-      
+
       @Override
       public hydra.core.Term visit(hydra.core.Term.Application app) {
         hydra.core.Term lhs = (app).value.function;
@@ -6635,7 +6635,7 @@ public interface Coder {
           public hydra.core.Term otherwise(hydra.core.Term instance) {
             return rhs;
           }
-          
+
           @Override
           public hydra.core.Term visit(hydra.core.Term.TypeApplication _ta2) {
             return hydra.ext.java.coder.Coder.annotateBodyWithCod(
@@ -6649,7 +6649,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>> domTypeArgs(hydra.ext.java.helpers.Aliases aliases, hydra.core.Type d, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.util.ConsList<hydra.core.Type> args = hydra.ext.java.coder.Coder.extractTypeApplicationArgs(hydra.rewriting.Rewriting.deannotateType(d));
     return hydra.lib.logic.IfElse.lazy(
@@ -6670,7 +6670,7 @@ public interface Coder {
         args),
       () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>>right(hydra.ext.java.coder.Coder.javaTypeArgumentsForType(d)));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassBodyDeclarationWithComments> otherwiseBranch(hydra.ext.java.helpers.JavaEnvironment env, hydra.ext.java.helpers.Aliases aliases, hydra.core.Type dom, hydra.core.Type cod, hydra.core.Name tname, hydra.ext.java.syntax.Type jcod, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> targs, hydra.core.Term d, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = hydra.util.ConsList.of(hydra.ext.java.utils.Utils.overrideAnnotation());
     hydra.util.Lazy<hydra.ext.java.syntax.Type> jdom = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.Type.Reference(hydra.ext.java.utils.Utils.nameToJavaReferenceType(
@@ -6729,7 +6729,7 @@ public interface Coder {
           }));
       }));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassBodyDeclarationWithComments> visitBranch(hydra.ext.java.helpers.JavaEnvironment env, hydra.ext.java.helpers.Aliases aliases, hydra.core.Type dom, hydra.core.Name tname, hydra.ext.java.syntax.Type jcod, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> targs, hydra.core.Field field, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = hydra.util.ConsList.of(hydra.ext.java.utils.Utils.overrideAnnotation());
     hydra.ext.java.syntax.Type jdom = new hydra.ext.java.syntax.Type.Reference(hydra.ext.java.utils.Utils.nameToJavaReferenceType(
@@ -6747,7 +6747,7 @@ public interface Coder {
           "visitBranch: field term is not a lambda: ",
           hydra.show.core.Core.term((field).term)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassBodyDeclarationWithComments> visit(hydra.core.Term.Function f) {
         return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -6757,7 +6757,7 @@ public interface Coder {
               "visitBranch: field term is not a lambda: ",
               hydra.show.core.Core.term((field).term)))), cx)));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassBodyDeclarationWithComments> visit(hydra.core.Function.Lambda lam) {
             return hydra.ext.java.coder.Coder.withLambda(
@@ -6819,7 +6819,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> encodeElimination(hydra.ext.java.helpers.JavaEnvironment env, hydra.util.Maybe<hydra.ext.java.syntax.Expression> marg, hydra.core.Type dom, hydra.core.Type cod, hydra.core.Elimination elm, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.ext.java.helpers.Aliases aliases = (env).aliases;
     return (elm).accept(new hydra.core.Elimination.PartialVisitor<>() {
@@ -6833,7 +6833,7 @@ public interface Coder {
               " in ",
               "encodeElimination"))))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Elimination.Record proj) {
         hydra.core.Name fname = (proj).value.field;
@@ -6866,7 +6866,7 @@ public interface Coder {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression>right(hydra.ext.java.utils.Utils.javaFieldAccessToJavaExpression(new hydra.ext.java.syntax.FieldAccess(qual, hydra.ext.java.utils.Utils.javaIdentifier((fname).value))));
               }))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Elimination.Union cs) {
         hydra.util.Maybe<hydra.core.Term> def_ = (cs).value.default_;
@@ -6960,7 +6960,7 @@ public interface Coder {
                   }))))));
           }));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.core.Elimination.Wrap wrapName) {
         java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.ext.java.syntax.Expression> withArg = (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.ext.java.syntax.Expression>) (ja -> hydra.ext.java.utils.Utils.javaFieldAccessToJavaExpression(new hydra.ext.java.syntax.FieldAccess(new hydra.ext.java.syntax.FieldAccess_Qualifier.Primary(hydra.ext.java.utils.Utils.javaExpressionToJavaPrimary(ja)), hydra.ext.java.utils.Utils.javaIdentifier(hydra.ext.java.names.Names.valueFieldName()))));
@@ -6979,7 +6979,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.ext.java.syntax.BlockStatement>> toDeclInit(hydra.ext.java.helpers.Aliases aliasesExt, hydra.graph.Graph gExt, hydra.util.PersistentSet<hydra.core.Name> recursiveVars, hydra.util.ConsList<hydra.core.Binding> flatBindings, hydra.core.Name name, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.sets.Member.apply(
@@ -7043,7 +7043,7 @@ public interface Coder {
       })).get(),
       () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.ext.java.syntax.BlockStatement>>right((hydra.util.Maybe<hydra.ext.java.syntax.BlockStatement>) (hydra.util.Maybe.<hydra.ext.java.syntax.BlockStatement>nothing())));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.BlockStatement> toDeclStatement(hydra.ext.java.helpers.JavaEnvironment envExt, hydra.ext.java.helpers.Aliases aliasesExt, hydra.graph.Graph gExt, hydra.util.PersistentSet<hydra.core.Name> recursiveVars, hydra.util.PersistentSet<hydra.core.Name> thunkedVars, hydra.util.ConsList<hydra.core.Binding> flatBindings, hydra.core.Name name, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.util.Lazy<hydra.core.Binding> binding = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
@@ -7121,7 +7121,7 @@ public interface Coder {
                   rhs))))));
         }))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>> bindingsToStatements(hydra.ext.java.helpers.JavaEnvironment env, hydra.util.ConsList<hydra.core.Binding> bindings, hydra.context.Context cx, hydra.graph.Graph g0) {
     hydra.ext.java.helpers.Aliases aliases = (env).aliases;
     hydra.util.ConsList<hydra.core.Binding> flatBindings = hydra.ext.java.coder.Coder.dedupBindings(
@@ -7232,7 +7232,7 @@ public interface Coder {
           sorted.get()),
         (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>>>) (groups -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>>right((hydra.util.Pair<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>(hydra.lib.lists.Concat.apply(groups), envExtended)))))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassDeclaration> toClassDecl(Boolean isInner, Boolean isSer, hydra.ext.java.helpers.Aliases aliases, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName, hydra.core.Type t, hydra.context.Context cx, hydra.graph.Graph g) {
     java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassDeclaration>> wrap = (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassDeclaration>>) (t_ -> hydra.ext.java.coder.Coder.declarationForRecordType(
       isInner,
@@ -7248,7 +7248,7 @@ public interface Coder {
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassDeclaration> otherwise(hydra.core.Type instance) {
         return (wrap).apply(t);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassDeclaration> visit(hydra.core.Type.Record rt) {
         return hydra.ext.java.coder.Coder.declarationForRecordType(
@@ -7261,7 +7261,7 @@ public interface Coder {
           cx,
           g);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassDeclaration> visit(hydra.core.Type.Union rt) {
         return hydra.ext.java.coder.Coder.declarationForUnionType(
@@ -7273,7 +7273,7 @@ public interface Coder {
           cx,
           g);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassDeclaration> visit(hydra.core.Type.Forall fa) {
         hydra.core.Type body = (fa).value.body;
@@ -7291,7 +7291,7 @@ public interface Coder {
           cx,
           g);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassDeclaration> visit(hydra.core.Type.Wrap wt) {
         return hydra.ext.java.coder.Coder.declarationForRecordType(
@@ -7306,7 +7306,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassDeclaration> declarationForUnionType(Boolean isSer, hydra.ext.java.helpers.Aliases aliases, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName, hydra.util.ConsList<hydra.core.FieldType> fields, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
@@ -7511,14 +7511,14 @@ public interface Coder {
           }));
       }));
   }
-  
+
   static hydra.ext.java.syntax.ClassDeclaration augmentVariantClass(hydra.ext.java.helpers.Aliases aliases, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName, hydra.ext.java.syntax.ClassDeclaration cd) {
     return (cd).accept(new hydra.ext.java.syntax.ClassDeclaration.PartialVisitor<>() {
       @Override
       public hydra.ext.java.syntax.ClassDeclaration otherwise(hydra.ext.java.syntax.ClassDeclaration instance) {
         return cd;
       }
-      
+
       @Override
       public hydra.ext.java.syntax.ClassDeclaration visit(hydra.ext.java.syntax.ClassDeclaration.Normal ncd) {
         hydra.ext.java.syntax.ClassBodyDeclarationWithComments acceptDecl = hydra.ext.java.coder.Coder.noComment(hydra.ext.java.utils.Utils.toAcceptMethod(
@@ -7546,7 +7546,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>> encodeTypeDefinition(hydra.ext.java.syntax.PackageDeclaration pkg, hydra.ext.java.helpers.Aliases aliases, hydra.module.TypeDefinition tdef, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.core.Type typ = (tdef).type;
     Boolean serializable = hydra.ext.java.coder.Coder.isSerializableJavaType(typ);
@@ -7575,7 +7575,7 @@ public interface Coder {
           return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>right((hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>) ((hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>) (new hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>(name, new hydra.ext.java.syntax.CompilationUnit.Ordinary(new hydra.ext.java.syntax.OrdinaryCompilationUnit(hydra.util.Maybe.just(pkg), imports.get(), hydra.util.ConsList.of(tdecl)))))));
         }))));
   }
-  
+
   static hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> peelDomainsAndCod(Integer n, hydra.core.Type t) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Lte.apply(
@@ -7587,7 +7587,7 @@ public interface Coder {
         public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> otherwise(hydra.core.Type instance) {
           return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()), t)));
         }
-        
+
         @Override
         public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Function ft) {
           hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> rest = hydra.ext.java.coder.Coder.peelDomainsAndCod(
@@ -7601,43 +7601,43 @@ public interface Coder {
         }
       }));
   }
-  
+
   static Boolean isSerializableJavaType(hydra.core.Type typ) {
     return hydra.rewriting.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type instance) {
         return false;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Record rt) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Union rt) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Wrap wt) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Type.Forall fa) {
         return hydra.ext.java.coder.Coder.isSerializableJavaType((fa).value.body);
       }
     });
   }
-  
+
   static <T0, T1, T2> hydra.util.Either<T2, hydra.core.Type> correctCastType(hydra.core.Term innerBody, hydra.util.ConsList<hydra.core.Type> typeArgs, hydra.core.Type fallback, T0 cx, T1 g) {
     return hydra.rewriting.Rewriting.deannotateTerm(innerBody).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T2, hydra.core.Type> otherwise(hydra.core.Term instance) {
         return hydra.util.Either.<T2, hydra.core.Type>right(fallback);
       }
-      
+
       @Override
       public hydra.util.Either<T2, hydra.core.Type> visit(hydra.core.Term.Pair _p) {
         return hydra.lib.logic.IfElse.lazy(
@@ -7649,7 +7649,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> typeAppFallbackCast(hydra.ext.java.helpers.JavaEnvironment env, hydra.ext.java.helpers.Aliases aliases, hydra.util.ConsList<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>> anns, hydra.util.ConsList<hydra.ext.java.syntax.Type> tyapps, hydra.ext.java.syntax.Type jatyp, hydra.core.Term body, hydra.core.Type typ, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.core.Term annotatedBody = hydra.annotations.Annotations.setTermAnnotation(
       hydra.constants.Constants.key_type(),
@@ -7680,7 +7680,7 @@ public interface Coder {
             rt,
             hydra.ext.java.utils.Utils.javaExpressionToJavaUnaryExpression(jbody))))))))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> typeAppNullaryOrHoisted(hydra.ext.java.helpers.JavaEnvironment env, hydra.ext.java.helpers.Aliases aliases, hydra.util.ConsList<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>> anns, hydra.util.ConsList<hydra.ext.java.syntax.Type> tyapps, hydra.ext.java.syntax.Type jatyp, hydra.core.Term body, hydra.core.Type correctedTyp, hydra.core.Name varName, hydra.ext.java.helpers.JavaSymbolClass cls, hydra.util.ConsList<hydra.core.Type> allTypeArgs, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.module.QualifiedName qn = hydra.names.Names.qualifyName(varName);
     String localName = (qn).local;
@@ -7699,7 +7699,7 @@ public interface Coder {
           cx,
           g);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.ext.java.helpers.JavaSymbolClass.NullaryFunction _u) {
         return hydra.lib.maybes.Cases.applyLazy(
@@ -7747,7 +7747,7 @@ public interface Coder {
                   (hydra.util.ConsList<hydra.ext.java.syntax.Expression>) (hydra.util.ConsList.<hydra.ext.java.syntax.Expression>empty()))))))));
           }));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Expression> visit(hydra.ext.java.helpers.JavaSymbolClass.HoistedLambda arity) {
         return hydra.lib.maybes.Cases.applyLazy(
@@ -7814,14 +7814,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> flattenApps(hydra.core.Term t, hydra.util.ConsList<hydra.core.Term> acc) {
     return hydra.rewriting.Rewriting.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> otherwise(hydra.core.Term instance) {
         return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>(acc, t)));
       }
-      
+
       @Override
       public hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term> visit(hydra.core.Term.Application app) {
         return hydra.ext.java.coder.Coder.flattenApps(
@@ -7832,14 +7832,14 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Term> collectLambdaDomains(hydra.core.Term t) {
     return hydra.rewriting.Rewriting.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Term> otherwise(hydra.core.Term instance) {
         return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Term>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()), t)));
       }
-      
+
       @Override
       public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Term> visit(hydra.core.Term.Function f) {
         return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -7847,7 +7847,7 @@ public interface Coder {
           public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Term> otherwise(hydra.core.Function instance) {
             return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Term>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()), t)));
           }
-          
+
           @Override
           public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Term> visit(hydra.core.Function.Lambda lam) {
             return hydra.lib.maybes.Cases.applyLazy(
@@ -7864,7 +7864,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.core.Term rebuildApps(hydra.core.Term f, hydra.util.ConsList<hydra.core.Term> args, hydra.core.Type fType) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(args),
@@ -7877,7 +7877,7 @@ public interface Coder {
             f,
             args);
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Type.Function ft) {
           hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(args));
@@ -7895,7 +7895,7 @@ public interface Coder {
         }
       }));
   }
-  
+
   static hydra.core.Term propagateTypesInAppChain(hydra.core.Type fixedCod, hydra.core.Type resultType, hydra.core.Term t) {
     hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>> flattened = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.flattenApps(
       t,
@@ -7945,7 +7945,7 @@ public interface Coder {
             hydra.util.Maybe.just(hydra.encode.core.Core.type(resultType)),
             t);
         }
-        
+
         @Override
         public hydra.core.Term visit(hydra.core.Term.Application app) {
           hydra.core.Term lhs = (app).value.function;
@@ -7954,7 +7954,7 @@ public interface Coder {
             public hydra.core.Term otherwise(hydra.core.Term instance) {
               return lhs;
             }
-            
+
             @Override
             public hydra.core.Term visit(hydra.core.Term.Function fn) {
               return (fn).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -7962,7 +7962,7 @@ public interface Coder {
                 public hydra.core.Term otherwise(hydra.core.Function instance) {
                   return lhs;
                 }
-                
+
                 @Override
                 public hydra.core.Term visit(hydra.core.Function.Elimination elim) {
                   return (elim).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
@@ -7970,7 +7970,7 @@ public interface Coder {
                     public hydra.core.Term otherwise(hydra.core.Elimination instance) {
                       return lhs;
                     }
-                    
+
                     @Override
                     public hydra.core.Term visit(hydra.core.Elimination.Union cs) {
                       hydra.util.Lazy<hydra.core.Type> dom = new hydra.util.Lazy<>(() -> hydra.schemas.Schemas.nominalApplication(
@@ -7995,7 +7995,7 @@ public interface Coder {
         }
       }));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>> encodeTermTCO(hydra.ext.java.helpers.JavaEnvironment env0, hydra.core.Name funcName, hydra.util.ConsList<hydra.core.Name> paramNames, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> tcoVarRenames, Integer tcoDepth, hydra.core.Term term, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.ext.java.helpers.Aliases aliases0 = (env0).aliases;
     hydra.util.Lazy<hydra.ext.java.helpers.JavaEnvironment> env = new hydra.util.Lazy<>(() -> new hydra.ext.java.helpers.JavaEnvironment(new hydra.ext.java.helpers.Aliases((aliases0).currentNamespace, (aliases0).packages, (aliases0).branchVars, (aliases0).recursiveVars, (aliases0).inScopeTypeParams, (aliases0).polymorphicLocals, (aliases0).inScopeJavaVars, hydra.lib.maps.Union.apply(
@@ -8011,7 +8011,7 @@ public interface Coder {
       public Boolean otherwise(hydra.core.Term instance) {
         return false;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.Term.Variable n) {
         return hydra.lib.equality.Equal.apply(
@@ -8032,7 +8032,7 @@ public interface Coder {
             public Boolean otherwise(hydra.core.Term instance) {
               return false;
             }
-            
+
             @Override
             public Boolean visit(hydra.core.Term.Variable n) {
               return hydra.lib.equality.Equal.apply(
@@ -8097,7 +8097,7 @@ public interface Coder {
                       g),
                     (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>>right(hydra.util.ConsList.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(expr)))))));
                 }
-                
+
                 @Override
                 public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>> visit(hydra.core.Term.Function f) {
                   return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -8111,7 +8111,7 @@ public interface Coder {
                           g),
                         (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>>right(hydra.util.ConsList.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(expr)))))));
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>> visit(hydra.core.Function.Elimination e) {
                       return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
@@ -8125,7 +8125,7 @@ public interface Coder {
                               g),
                             (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>>right(hydra.util.ConsList.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(expr)))))));
                         }
-                        
+
                         @Override
                         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>> visit(hydra.core.Elimination.Union cs) {
                           hydra.ext.java.helpers.Aliases aliases = env.get().aliases;
@@ -8176,7 +8176,7 @@ public interface Coder {
                                         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.BlockStatement> otherwise(hydra.core.Term instance) {
                                           return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.BlockStatement>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("TCO: case branch is not a lambda")), cx)));
                                         }
-                                        
+
                                         @Override
                                         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.BlockStatement> visit(hydra.core.Term.Function f2) {
                                           return (f2).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -8184,7 +8184,7 @@ public interface Coder {
                                             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.BlockStatement> otherwise(hydra.core.Function instance) {
                                               return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.BlockStatement>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("TCO: case branch is not a lambda")), cx)));
                                             }
-                                            
+
                                             @Override
                                             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.BlockStatement> visit(hydra.core.Function.Lambda lam) {
                                               return hydra.ext.java.coder.Coder.withLambda(
@@ -8302,7 +8302,7 @@ public interface Coder {
                 g),
               (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>>>) (expr -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>>right(hydra.util.ConsList.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(expr))))))));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>> visit(hydra.core.Term.Let lt) {
           hydra.util.ConsList<hydra.core.Binding> letBindings = (lt).value.bindings;
@@ -8333,7 +8333,7 @@ public interface Coder {
         }
       }));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.InterfaceMemberDeclaration> encodeTermDefinition(hydra.ext.java.helpers.JavaEnvironment env, hydra.module.TermDefinition tdef, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.core.Name name = (tdef).name;
     hydra.core.Term term0 = (tdef).term;
@@ -8412,7 +8412,7 @@ public interface Coder {
                   public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
                     return (hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>nothing());
                   }
-                  
+
                   @Override
                   public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable n) {
                     return hydra.util.Maybe.just((hydra.util.Pair<hydra.core.Name, hydra.core.Name>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Name>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Name>(k.get(), (n).value))));
@@ -8573,11 +8573,11 @@ public interface Coder {
           }));
       }));
   }
-  
+
   static <T0> hydra.util.Maybe<T0> encodeTermDefinition_noCond() {
     return (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing());
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>> encodeDefinitions(hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.ext.java.helpers.Aliases aliases = hydra.ext.java.utils.Utils.importAliasesForModule(mod);
     hydra.ext.java.helpers.JavaEnvironment env = new hydra.ext.java.helpers.JavaEnvironment(aliases, g);
@@ -8619,7 +8619,7 @@ public interface Coder {
           typeUnits,
           termUnits)))))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<String, String>> moduleToJava(hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.java.coder.Coder.encodeDefinitions(

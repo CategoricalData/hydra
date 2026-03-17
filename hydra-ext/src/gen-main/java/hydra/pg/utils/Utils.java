@@ -9,7 +9,7 @@ public interface Utils {
   static hydra.pg.mapping.AnnotationSchema defaultTinkerpopAnnotations() {
     return new hydra.pg.mapping.AnnotationSchema("vertexLabel", "edgeLabel", "vertexId", "edgeId", "key", "value", "outVertex", "outVertexLabel", "inVertex", "inVertexLabel", "outEdge", "outEdgeLabel", "inEdge", "inEdgeLabel", "ignore");
   }
-  
+
   static <T0> hydra.pg.mapping.Schema<T0, java.lang.Void, String> examplePgSchema() {
     return new hydra.pg.mapping.Schema<T0, java.lang.Void, String>((hydra.util.Coder<hydra.core.Type, java.lang.Void>) ((hydra.util.Coder<hydra.core.Type, java.lang.Void>) (new hydra.util.Coder<hydra.core.Type, java.lang.Void>((java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>>>) (ignored -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>>) (_2 -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>right(null))), (java.util.function.Function<hydra.context.Context, java.util.function.Function<java.lang.Void, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>>>) (ignored -> (java.util.function.Function<java.lang.Void, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>>) (_2 -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right(new hydra.core.Type.Unit())))))), (hydra.util.Coder<hydra.core.Term, String>) ((hydra.util.Coder<hydra.core.Term, String>) (new hydra.util.Coder<hydra.core.Term, String>((java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, String>>>) (cx -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, String>>) (t -> hydra.pg.utils.Utils.expString(
       cx,
@@ -19,14 +19,14 @@ public interface Utils {
       cx,
       t))), (java.util.function.Function<hydra.context.Context, java.util.function.Function<String, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>) (_cx -> (java.util.function.Function<String, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (s -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Literal(new hydra.core.Literal.String_(s)))))))), hydra.pg.utils.Utils.defaultTinkerpopAnnotations(), "defaultVertexId", "defaultEdgeId");
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, String> expString(hydra.context.Context cx, hydra.core.Term term) {
     return hydra.extract.core.Core.string(
       cx,
       new hydra.graph.Graph((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
       term);
   }
-  
+
   static <T0> hydra.util.ConsList<hydra.pg.model.Element<T0>> lazyGraphToElements(hydra.pg.model.LazyGraph<T0> lg) {
     return hydra.lib.lists.Concat2.apply(
       hydra.lib.lists.Map.apply(
@@ -36,7 +36,7 @@ public interface Utils {
         (java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.pg.model.Element<T0>>) (x -> (hydra.pg.model.Element<T0>) (new hydra.pg.model.Element.Edge(x))),
         ((java.util.function.Function<hydra.pg.model.LazyGraph<T0>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>) (projected -> projected.edges)).apply(lg)));
   }
-  
+
   static <T0, T1, T2> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.json.model.Value> pgElementToJson(hydra.pg.mapping.Schema<T0, T1, T2> schema, hydra.pg.model.Element<T2> el, hydra.context.Context cx) {
     return ((java.util.function.Function<hydra.pg.model.Element, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.json.model.Value>>) (v1 -> ((java.util.function.Function<hydra.pg.model.Element<T2>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.json.model.Value>>) ((java.util.function.Function<hydra.pg.model.Element<T2>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.json.model.Value>>) (u -> (u).accept(new hydra.pg.model.Element.PartialVisitor<>() {
       @Override
@@ -65,7 +65,7 @@ public interface Utils {
                     hydra.lib.maps.ToList.apply(((java.util.function.Function<hydra.pg.model.Vertex<T2>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T2>>) (projected -> projected.properties)).apply((vertex).value))))));
           }));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.json.model.Value> visit(hydra.pg.model.Element.Edge<T2> edge) {
         return hydra.lib.eithers.Bind.apply(
@@ -100,15 +100,15 @@ public interface Utils {
       }
     })))).apply(v1))).apply(el);
   }
-  
+
   static <T2> T2 pgElementToJson_v(hydra.util.Pair<hydra.pg.model.PropertyKey, T2> pair) {
     return hydra.lib.pairs.Second.apply(pair);
   }
-  
+
   static <T2> T2 pgElementToJson_v2(hydra.util.Pair<hydra.pg.model.PropertyKey, T2> pair) {
     return hydra.lib.pairs.Second.apply(pair);
   }
-  
+
   static <T0, T1, T2> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.json.model.Value> pgElementsToJson(hydra.pg.mapping.Schema<T0, T1, T2> schema, hydra.util.ConsList<hydra.pg.model.Element<T2>> els, hydra.context.Context cx) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.util.ConsList<hydra.json.model.Value>, hydra.json.model.Value>) (els_ -> new hydra.json.model.Value.Array(els_)),
@@ -119,7 +119,7 @@ public interface Utils {
           cx)),
         els));
   }
-  
+
   static <T0> hydra.util.ConsList<hydra.pg.model.Element<T0>> propertyGraphElements(hydra.pg.model.Graph<T0> g) {
     return hydra.lib.lists.Concat2.apply(
       hydra.lib.lists.Map.apply(
@@ -129,7 +129,7 @@ public interface Utils {
         (java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.pg.model.Element<T0>>) (x -> (hydra.pg.model.Element<T0>) (new hydra.pg.model.Element.Edge(x))),
         hydra.lib.maps.Elems.apply(((java.util.function.Function<hydra.pg.model.Graph<T0>, hydra.util.PersistentMap<T0, hydra.pg.model.Edge<T0>>>) (projected -> projected.edges)).apply(g))));
   }
-  
+
   static <T0, T1, T2> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.context.Context, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T2>>>>>> typeApplicationTermToPropertyGraph(hydra.pg.mapping.Schema<T0, T1, T2> schema, hydra.core.Type typ, T1 vidType, T1 eidType, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.pg.coder.Coder.<T0, T1, T2>elementCoder(
@@ -144,7 +144,7 @@ public interface Utils {
         (java.util.function.Function<hydra.pg.model.ElementTree<T2>, hydra.util.ConsList<hydra.pg.model.Element<T2>>>) (tree -> hydra.pg.utils.Utils.<T2>typeApplicationTermToPropertyGraph_flattenTree(tree)),
         ((java.util.function.Function<hydra.util.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T2>>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.model.ElementTree<T2>>>>>) ((java.util.function.Function<hydra.util.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T2>>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.model.ElementTree<T2>>>>>) (projected -> projected.encode))).apply(((java.util.function.Function<hydra.util.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>, hydra.util.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T2>>>) ((java.util.function.Function<hydra.util.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>, hydra.util.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T2>>>) ((java.util.function.Function<hydra.util.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>, hydra.util.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T2>>>) ((java.util.function.Function<hydra.util.Adapter<hydra.core.Type, hydra.pg.model.ElementTypeTree<T1>, hydra.core.Term, hydra.pg.model.ElementTree<T2>>, hydra.util.Coder<hydra.core.Term, hydra.pg.model.ElementTree<T2>>>) (projected -> projected.coder))))).apply(adapter)).apply(cx_).apply(term)))))));
   }
-  
+
   static <T3> hydra.util.ConsList<hydra.pg.model.Element<T3>> typeApplicationTermToPropertyGraph_flattenTree(hydra.pg.model.ElementTree<T3> t) {
     return hydra.lib.lists.Cons.apply(
       ((java.util.function.Function<hydra.pg.model.ElementTree<T3>, hydra.pg.model.Element<T3>>) (projected -> projected.self)).apply(t),

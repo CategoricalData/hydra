@@ -15,10 +15,10 @@ A = TypeVar("A")
 @dataclass(frozen=True)
 class ParseError:
     r"""An error which occurred while parsing."""
-    
+
     message: Annotated[str, "An error message"]
     remainder: Annotated[str, "The remaining input at the point of failure"]
-    
+
     TYPE_ = hydra.core.Name("hydra.parsing.ParseError")
     MESSAGE = hydra.core.Name("message")
     REMAINDER = hydra.core.Name("remainder")
@@ -36,7 +36,7 @@ class _ParseResultMeta(type):
 # The result of a parse operation.
 class ParseResult(metaclass=_ParseResultMeta):
     r"""ParseResultSuccess[A] | ParseResultFailure"""
-    
+
     TYPE_ = hydra.core.Name("hydra.parsing.ParseResult")
     SUCCESS = hydra.core.Name("success")
     FAILURE = hydra.core.Name("failure")
@@ -44,10 +44,10 @@ class ParseResult(metaclass=_ParseResultMeta):
 @dataclass(frozen=True)
 class ParseSuccess(Generic[A]):
     r"""A successful parse result."""
-    
+
     value: Annotated[A, "The parsed value"]
     remainder: Annotated[str, "The remaining unparsed input"]
-    
+
     TYPE_ = hydra.core.Name("hydra.parsing.ParseSuccess")
     VALUE = hydra.core.Name("value")
     REMAINDER = hydra.core.Name("remainder")

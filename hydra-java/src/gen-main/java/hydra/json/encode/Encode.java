@@ -15,12 +15,12 @@ public interface Encode {
           "unsupported term variant for JSON encoding: ",
           hydra.show.core.Core.term(term))));
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Literal lit) {
         return hydra.json.encode.Encode.encodeLiteral((lit).value);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.List terms) {
         hydra.util.Lazy<hydra.util.Either<String, hydra.util.ConsList<hydra.json.model.Value>>> results = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
@@ -30,7 +30,7 @@ public interface Encode {
           (java.util.function.Function<hydra.util.ConsList<hydra.json.model.Value>, hydra.json.model.Value>) (vs -> new hydra.json.model.Value.Array(vs)),
           results.get());
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Set vals) {
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> terms = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply((vals).value));
@@ -41,7 +41,7 @@ public interface Encode {
           (java.util.function.Function<hydra.util.ConsList<hydra.json.model.Value>, hydra.json.model.Value>) (vs -> new hydra.json.model.Value.Array(vs)),
           results.get());
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Maybe opt) {
         return hydra.lib.maybes.Maybe.applyLazy(
@@ -54,7 +54,7 @@ public interface Encode {
           }),
           (opt).value);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Record r) {
         java.util.function.Function<hydra.core.Field, hydra.util.Either<String, hydra.util.Pair<String, hydra.json.model.Value>>> encodeField = (java.util.function.Function<hydra.core.Field, hydra.util.Either<String, hydra.util.Pair<String, hydra.json.model.Value>>>) (f -> {
@@ -73,7 +73,7 @@ public interface Encode {
           (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<String, hydra.json.model.Value>>, hydra.json.model.Value>) (fs -> new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(fs))),
           encodedFields.get());
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Union inj) {
         hydra.core.Field field = (inj).value.field;
@@ -84,17 +84,17 @@ public interface Encode {
           (java.util.function.Function<hydra.json.model.Value, hydra.json.model.Value>) (v -> new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(hydra.util.ConsList.of((hydra.util.Pair<String, hydra.json.model.Value>) ((hydra.util.Pair<String, hydra.json.model.Value>) (new hydra.util.Pair<String, hydra.json.model.Value>(fname, v))))))),
           encodedUnion);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Unit ignored) {
         return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Object_((hydra.util.PersistentMap<String, hydra.json.model.Value>) ((hydra.util.PersistentMap<String, hydra.json.model.Value>) (hydra.lib.maps.Empty.<String, hydra.json.model.Value>apply()))));
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Wrap wt) {
         return hydra.json.encode.Encode.toJson((wt).value.body);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Map m) {
         java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Either<String, hydra.json.model.Value>> encodeEntry = (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Either<String, hydra.json.model.Value>>) (kv -> {
@@ -118,7 +118,7 @@ public interface Encode {
           (java.util.function.Function<hydra.util.ConsList<hydra.json.model.Value>, hydra.json.model.Value>) (es -> new hydra.json.model.Value.Array(es)),
           entries.get());
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Pair p) {
         hydra.util.Lazy<hydra.core.Term> first = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((p).value));
@@ -134,7 +134,7 @@ public interface Encode {
             encodedSecond)),
           encodedFirst);
       }
-      
+
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Either e) {
         return hydra.lib.eithers.Either.apply(
@@ -154,97 +154,97 @@ public interface Encode {
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<T0, hydra.json.model.Value> encodeLiteral(hydra.core.Literal lit) {
     return (lit).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.Literal.Binary b) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.String_(hydra.lib.literals.BinaryToString.apply((b).value)));
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.Literal.Boolean_ b) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Boolean_((b).value));
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.Literal.Float_ f) {
         return hydra.json.encode.Encode.<T0>encodeFloat((f).value);
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.Literal.Integer_ i) {
         return hydra.json.encode.Encode.<T0>encodeInteger((i).value);
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.Literal.String_ s) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.String_((s).value));
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<T0, hydra.json.model.Value> encodeFloat(hydra.core.FloatValue fv) {
     return (fv).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.FloatValue.Bigfloat bf) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Number_((bf).value));
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.FloatValue.Float32 f) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.String_(hydra.lib.literals.ShowFloat32.apply((f).value)));
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.FloatValue.Float64 f) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.Float64ToBigfloat.apply((f).value)));
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<T0, hydra.json.model.Value> encodeInteger(hydra.core.IntegerValue iv) {
     return (iv).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.IntegerValue.Bigint bi) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.String_(hydra.lib.literals.ShowBigint.apply((bi).value)));
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.IntegerValue.Int64 i) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.String_(hydra.lib.literals.ShowInt64.apply((i).value)));
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.IntegerValue.Uint32 i) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.String_(hydra.lib.literals.ShowUint32.apply((i).value)));
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.IntegerValue.Uint64 i) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.String_(hydra.lib.literals.ShowUint64.apply((i).value)));
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.IntegerValue.Int8 i) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToBigfloat.apply(hydra.lib.literals.Int8ToBigint.apply((i).value))));
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.IntegerValue.Int16 i) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToBigfloat.apply(hydra.lib.literals.Int16ToBigint.apply((i).value))));
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.IntegerValue.Int32 i) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToBigfloat.apply(hydra.lib.literals.Int32ToBigint.apply((i).value))));
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.IntegerValue.Uint8 i) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToBigfloat.apply(hydra.lib.literals.Uint8ToBigint.apply((i).value))));
       }
-      
+
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.IntegerValue.Uint16 i) {
         return hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Number_(hydra.lib.literals.BigintToBigfloat.apply(hydra.lib.literals.Uint16ToBigint.apply((i).value))));

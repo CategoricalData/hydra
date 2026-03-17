@@ -56,17 +56,17 @@ def escape_java_string(s: str) -> str:
 
 def sanitize_java_comment(s: str) -> str:
     r"""Sanitize a string for use in a Java comment."""
-    
+
     return hydra.lib.strings.intercalate("&gt;", hydra.lib.strings.split_on(">", hydra.lib.strings.intercalate("&lt;", hydra.lib.strings.split_on("<", s))))
 
 def single_line_comment(c: str) -> hydra.ast.Expr:
     r"""Create a single-line Java comment."""
-    
+
     return hydra.serialization.cst(hydra.lib.strings.cat2("// ", sanitize_java_comment(c)))
 
 def with_comments(mc: Maybe[str], expr: hydra.ast.Expr) -> hydra.ast.Expr:
     r"""Wrap an expression with optional Javadoc comments."""
-    
+
     return hydra.lib.maybes.maybe((lambda : expr), (lambda c: hydra.serialization.newline_sep((hydra.serialization.cst(hydra.lib.strings.cat2("/**\n", hydra.lib.strings.cat2(hydra.lib.strings.intercalate("\n", hydra.lib.lists.map((lambda l: hydra.lib.strings.cat2(" * ", l)), hydra.lib.strings.lines(sanitize_java_comment(c)))), "\n */"))), expr))), mc)
 
 def write_identifier(id: hydra.ext.java.syntax.Identifier) -> hydra.ast.Expr:
@@ -108,10 +108,10 @@ def write_floating_point_type(ft: hydra.ext.java.syntax.FloatingPointType) -> hy
     match ft:
         case hydra.ext.java.syntax.FloatingPointType.FLOAT:
             return hydra.serialization.cst("float")
-        
+
         case hydra.ext.java.syntax.FloatingPointType.DOUBLE:
             return hydra.serialization.cst("double")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -119,19 +119,19 @@ def write_integral_type(t: hydra.ext.java.syntax.IntegralType) -> hydra.ast.Expr
     match t:
         case hydra.ext.java.syntax.IntegralType.BYTE:
             return hydra.serialization.cst("byte")
-        
+
         case hydra.ext.java.syntax.IntegralType.SHORT:
             return hydra.serialization.cst("short")
-        
+
         case hydra.ext.java.syntax.IntegralType.INT:
             return hydra.serialization.cst("int")
-        
+
         case hydra.ext.java.syntax.IntegralType.LONG:
             return hydra.serialization.cst("long")
-        
+
         case hydra.ext.java.syntax.IntegralType.CHAR:
             return hydra.serialization.cst("char")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -139,10 +139,10 @@ def write_numeric_type(nt: hydra.ext.java.syntax.NumericType) -> hydra.ast.Expr:
     match nt:
         case hydra.ext.java.syntax.NumericTypeIntegral(value=it):
             return write_integral_type(it)
-        
+
         case hydra.ext.java.syntax.NumericTypeFloatingPoint(value=ft):
             return write_floating_point_type(ft)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -150,10 +150,10 @@ def write_primitive_type(pt: hydra.ext.java.syntax.PrimitiveType) -> hydra.ast.E
     match pt:
         case hydra.ext.java.syntax.PrimitiveTypeNumeric(value=nt):
             return write_numeric_type(nt)
-        
+
         case hydra.ext.java.syntax.PrimitiveTypeBoolean():
             return hydra.serialization.cst("boolean")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -248,10 +248,10 @@ def write_lambda_parameters(p: hydra.ext.java.syntax.LambdaParameters) -> hydra.
     match p:
         case hydra.ext.java.syntax.LambdaParametersTuple(value=l):
             return hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: write_lambda_parameters(x1)), l))
-        
+
         case hydra.ext.java.syntax.LambdaParametersSingle(value=id):
             return write_identifier(id)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -270,7 +270,7 @@ def write_integer_literal(il: hydra.ext.java.syntax.IntegerLiteral) -> hydra.ast
 
 def write_string_literal(sl: hydra.ext.java.syntax.StringLiteral) -> hydra.ast.Expr:
     r"""Serialize a Java string literal with proper Unicode escaping."""
-    
+
     s = sl.value
     return hydra.serialization.cst(hydra.lib.strings.cat2("\"", hydra.lib.strings.cat2(escape_java_string(s), "\"")))
 
@@ -278,25 +278,25 @@ def write_literal(l: hydra.ext.java.syntax.Literal) -> hydra.ast.Expr:
     match l:
         case hydra.ext.java.syntax.LiteralNull():
             return hydra.serialization.cst("null")
-        
+
         case hydra.ext.java.syntax.LiteralInteger(value=il):
             return write_integer_literal(il)
-        
+
         case hydra.ext.java.syntax.LiteralFloatingPoint(value=fl):
             return write_floating_point_literal(fl)
-        
+
         case hydra.ext.java.syntax.LiteralBoolean(value=b):
             return hydra.serialization.cst(hydra.lib.logic.if_else(b, (lambda : "true"), (lambda : "false")))
-        
+
         case hydra.ext.java.syntax.LiteralCharacter(value=c):
             @lru_cache(1)
             def ci() -> int:
                 return hydra.lib.literals.bigint_to_int32(hydra.lib.literals.uint16_to_bigint(c))
             return hydra.serialization.cst(hydra.lib.strings.cat2("'", hydra.lib.strings.cat2(hydra.lib.logic.if_else(hydra.lib.equality.equal(ci(), 39), (lambda : "\\'"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(ci(), 92), (lambda : "\\\\"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(ci(), 10), (lambda : "\\n"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(ci(), 13), (lambda : "\\r"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(ci(), 9), (lambda : "\\t"), (lambda : hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.gte(ci(), 32), hydra.lib.equality.lt(ci(), 127)), (lambda : hydra.lib.strings.from_list((ci(),))), (lambda : java_unicode_escape(ci()))))))))))))), "'")))
-        
+
         case hydra.ext.java.syntax.LiteralString(value=sl):
             return write_string_literal(sl)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -313,13 +313,13 @@ def write_additive_expression(e: hydra.ext.java.syntax.AdditiveExpression) -> hy
     match e:
         case hydra.ext.java.syntax.AdditiveExpressionUnary(value=m):
             return write_multiplicative_expression(m)
-        
+
         case hydra.ext.java.syntax.AdditiveExpressionPlus(value=b):
             return hydra.serialization.infix_ws("+", write_additive_expression(b.lhs), write_multiplicative_expression(b.rhs))
-        
+
         case hydra.ext.java.syntax.AdditiveExpressionMinus(value=b2):
             return hydra.serialization.infix_ws("-", write_additive_expression(b2.lhs), write_multiplicative_expression(b2.rhs))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -330,13 +330,13 @@ def write_annotation(ann: hydra.ext.java.syntax.Annotation) -> hydra.ast.Expr:
     match ann:
         case hydra.ext.java.syntax.AnnotationNormal(value=n):
             return write_normal_annotation(n)
-        
+
         case hydra.ext.java.syntax.AnnotationMarker(value=m):
             return write_marker_annotation(m)
-        
+
         case hydra.ext.java.syntax.AnnotationSingleElement(value=s):
             return write_single_element_annotation(s)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -346,16 +346,16 @@ def write_array_creation_expression(ace: hydra.ext.java.syntax.ArrayCreationExpr
             pt = pa.type
             ai = pa.array
             return hydra.serialization.space_sep((hydra.serialization.cst("new"), hydra.serialization.no_sep((write_primitive_type_with_annotations(pt), hydra.serialization.cst("[]"))), write_array_initializer(ai)))
-        
+
         case hydra.ext.java.syntax.ArrayCreationExpressionClassOrInterfaceArray():
             return hydra.serialization.cst("STUB:ArrayCreationExpression")
-        
+
         case hydra.ext.java.syntax.ArrayCreationExpressionPrimitive():
             return hydra.serialization.cst("STUB:ArrayCreationExpression")
-        
+
         case hydra.ext.java.syntax.ArrayCreationExpressionClassOrInterface():
             return hydra.serialization.cst("STUB:ArrayCreationExpression")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -371,13 +371,13 @@ def write_array_type(at: hydra.ext.java.syntax.ArrayType) -> hydra.ast.Expr:
         match variant:
             case hydra.ext.java.syntax.ArrayType_VariantPrimitive(value=pt):
                 return write_primitive_type_with_annotations(pt)
-            
+
             case hydra.ext.java.syntax.ArrayType_VariantClassOrInterface(value=cit):
                 return write_class_or_interface_type(cit)
-            
+
             case hydra.ext.java.syntax.ArrayType_VariantVariable(value=tv):
                 return write_type_variable(tv)
-            
+
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     return hydra.serialization.no_sep((var_expr(), write_dims(dims)))
@@ -393,10 +393,10 @@ def write_assignment_expression(e: hydra.ext.java.syntax.AssignmentExpression) -
     match e:
         case hydra.ext.java.syntax.AssignmentExpressionConditional(value=c):
             return write_conditional_expression(c)
-        
+
         case hydra.ext.java.syntax.AssignmentExpressionAssignment(value=a):
             return write_assignment(a)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -407,13 +407,13 @@ def write_block_statement(s: hydra.ext.java.syntax.BlockStatement) -> hydra.ast.
     match s:
         case hydra.ext.java.syntax.BlockStatementLocalVariableDeclaration(value=d):
             return write_local_variable_declaration_statement(d)
-        
+
         case hydra.ext.java.syntax.BlockStatementClass(value=cd):
             return write_class_declaration(cd)
-        
+
         case hydra.ext.java.syntax.BlockStatementStatement(value=s2):
             return write_statement(s2)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -421,13 +421,13 @@ def write_cast_expression(e: hydra.ext.java.syntax.CastExpression) -> hydra.ast.
     match e:
         case hydra.ext.java.syntax.CastExpressionPrimitive(value=p):
             return write_cast_expression_primitive(p)
-        
+
         case hydra.ext.java.syntax.CastExpressionNotPlusMinus(value=npm):
             return write_cast_expression_not_plus_minus(npm)
-        
+
         case hydra.ext.java.syntax.CastExpressionLambda(value=l):
             return write_cast_expression_lambda(l)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -453,16 +453,16 @@ def write_class_body_declaration(d: hydra.ext.java.syntax.ClassBodyDeclaration) 
     match d:
         case hydra.ext.java.syntax.ClassBodyDeclarationClassMember(value=d2):
             return write_class_member_declaration(d2)
-        
+
         case hydra.ext.java.syntax.ClassBodyDeclarationInstanceInitializer(value=i):
             return write_instance_initializer(i)
-        
+
         case hydra.ext.java.syntax.ClassBodyDeclarationStaticInitializer(value=i2):
             return write_static_initializer(i2)
-        
+
         case hydra.ext.java.syntax.ClassBodyDeclarationConstructorDeclaration(value=d22):
             return write_constructor_declaration(d22)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -475,10 +475,10 @@ def write_class_declaration(d: hydra.ext.java.syntax.ClassDeclaration) -> hydra.
     match d:
         case hydra.ext.java.syntax.ClassDeclarationNormal(value=nd):
             return write_normal_class_declaration(nd)
-        
+
         case hydra.ext.java.syntax.ClassDeclarationEnum(value=ed):
             return write_enum_declaration(ed)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -491,10 +491,10 @@ def write_class_instance_creation_expression_qualifier(q: hydra.ext.java.syntax.
     match q:
         case hydra.ext.java.syntax.ClassInstanceCreationExpression_QualifierExpression(value=en):
             return write_expression_name(en)
-        
+
         case hydra.ext.java.syntax.ClassInstanceCreationExpression_QualifierPrimary(value=p):
             return write_primary(p)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -502,19 +502,19 @@ def write_class_member_declaration(d: hydra.ext.java.syntax.ClassMemberDeclarati
     match d:
         case hydra.ext.java.syntax.ClassMemberDeclarationField(value=fd):
             return write_field_declaration(fd)
-        
+
         case hydra.ext.java.syntax.ClassMemberDeclarationMethod(value=md):
             return write_method_declaration(md)
-        
+
         case hydra.ext.java.syntax.ClassMemberDeclarationClass(value=cd):
             return write_class_declaration(cd)
-        
+
         case hydra.ext.java.syntax.ClassMemberDeclarationInterface(value=id):
             return write_interface_declaration(id)
-        
+
         case hydra.ext.java.syntax.ClassMemberDeclarationNone():
             return hydra.serialization.cst(";")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -522,28 +522,28 @@ def write_class_modifier(m: hydra.ext.java.syntax.ClassModifier) -> hydra.ast.Ex
     match m:
         case hydra.ext.java.syntax.ClassModifierAnnotation(value=ann):
             return write_annotation(ann)
-        
+
         case hydra.ext.java.syntax.ClassModifierPublic():
             return hydra.serialization.cst("public")
-        
+
         case hydra.ext.java.syntax.ClassModifierProtected():
             return hydra.serialization.cst("protected")
-        
+
         case hydra.ext.java.syntax.ClassModifierPrivate():
             return hydra.serialization.cst("private")
-        
+
         case hydra.ext.java.syntax.ClassModifierAbstract():
             return hydra.serialization.cst("abstract")
-        
+
         case hydra.ext.java.syntax.ClassModifierStatic():
             return hydra.serialization.cst("static")
-        
+
         case hydra.ext.java.syntax.ClassModifierFinal():
             return hydra.serialization.cst("final")
-        
+
         case hydra.ext.java.syntax.ClassModifierStrictfp():
             return hydra.serialization.cst("strictfp")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -551,10 +551,10 @@ def write_class_or_interface_type(cit: hydra.ext.java.syntax.ClassOrInterfaceTyp
     match cit:
         case hydra.ext.java.syntax.ClassOrInterfaceTypeClass(value=ct):
             return write_class_type(ct)
-        
+
         case hydra.ext.java.syntax.ClassOrInterfaceTypeInterface(value=it):
             return write_interface_type(it)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -573,13 +573,13 @@ def write_class_type(ct: hydra.ext.java.syntax.ClassType) -> hydra.ast.Expr:
         match qual:
             case hydra.ext.java.syntax.ClassTypeQualifierNone():
                 return write_type_identifier(id)
-            
+
             case hydra.ext.java.syntax.ClassTypeQualifierPackage(value=pkg):
                 return hydra.serialization.dot_sep((write_package_name(pkg), write_type_identifier(id)))
-            
+
             case hydra.ext.java.syntax.ClassTypeQualifierParent(value=cit):
                 return hydra.serialization.dot_sep((write_class_or_interface_type(cit), write_type_identifier(id)))
-            
+
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(anns), (lambda : Nothing()), (lambda : Just(hydra.serialization.comma_sep(hydra.serialization.inline_style, hydra.lib.lists.map((lambda x1: write_annotation(x1)), anns))))), Just(qualified_id()))))), hydra.lib.logic.if_else(hydra.lib.lists.null(args), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style, hydra.lib.lists.map((lambda x1: write_type_argument(x1)), args))))))))
@@ -591,13 +591,13 @@ def write_conditional_expression(c: hydra.ext.java.syntax.ConditionalExpression)
     match c:
         case hydra.ext.java.syntax.ConditionalExpressionSimple(value=co):
             return write_conditional_or_expression(co)
-        
+
         case hydra.ext.java.syntax.ConditionalExpressionTernaryCond(value=tc):
             return write_conditional_expression_ternary_cond(tc)
-        
+
         case hydra.ext.java.syntax.ConditionalExpressionTernaryLambda(value=tl):
             return write_conditional_expression_ternary_lambda(tl)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -632,16 +632,16 @@ def write_constructor_modifier(m: hydra.ext.java.syntax.ConstructorModifier) -> 
     match m:
         case hydra.ext.java.syntax.ConstructorModifierAnnotation(value=ann):
             return write_annotation(ann)
-        
+
         case hydra.ext.java.syntax.ConstructorModifierPublic():
             return hydra.serialization.cst("public")
-        
+
         case hydra.ext.java.syntax.ConstructorModifierProtected():
             return hydra.serialization.cst("protected")
-        
+
         case hydra.ext.java.syntax.ConstructorModifierPrivate():
             return hydra.serialization.cst("private")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -649,13 +649,13 @@ def write_element_value(ev: hydra.ext.java.syntax.ElementValue) -> hydra.ast.Exp
     match ev:
         case hydra.ext.java.syntax.ElementValueConditionalExpression(value=c):
             return write_conditional_expression(c)
-        
+
         case hydra.ext.java.syntax.ElementValueElementValueArrayInitializer(value=evai):
             return hydra.serialization.comma_sep(hydra.serialization.inline_style, hydra.lib.lists.map((lambda x1: write_element_value(x1)), evai.value))
-        
+
         case hydra.ext.java.syntax.ElementValueAnnotation(value=ann):
             return write_annotation(ann)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -668,13 +668,13 @@ def write_equality_expression(e: hydra.ext.java.syntax.EqualityExpression) -> hy
     match e:
         case hydra.ext.java.syntax.EqualityExpressionUnary(value=r):
             return write_relational_expression(r)
-        
+
         case hydra.ext.java.syntax.EqualityExpressionEqual(value=b):
             return hydra.serialization.infix_ws("==", write_equality_expression(b.lhs), write_relational_expression(b.rhs))
-        
+
         case hydra.ext.java.syntax.EqualityExpressionNotEqual(value=b2):
             return hydra.serialization.infix_ws("!=", write_equality_expression(b2.lhs), write_relational_expression(b2.rhs))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -685,10 +685,10 @@ def write_expression(e: hydra.ext.java.syntax.Expression) -> hydra.ast.Expr:
     match e:
         case hydra.ext.java.syntax.ExpressionLambda(value=l):
             return write_lambda_expression(l)
-        
+
         case hydra.ext.java.syntax.ExpressionAssignment(value=a):
             return write_assignment_expression(a)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -701,13 +701,13 @@ def write_field_access(fa: hydra.ext.java.syntax.FieldAccess) -> hydra.ast.Expr:
     match qual:
         case hydra.ext.java.syntax.FieldAccess_QualifierPrimary(value=p):
             return hydra.serialization.dot_sep((write_primary(p), write_identifier(id)))
-        
+
         case hydra.ext.java.syntax.FieldAccess_QualifierSuper():
             return hydra.serialization.dot_sep((hydra.serialization.cst("super"), write_identifier(id)))
-        
+
         case hydra.ext.java.syntax.FieldAccess_QualifierTyped(value=tn):
             return hydra.serialization.dot_sep((write_type_name(tn), hydra.serialization.cst("super"), write_identifier(id)))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -721,28 +721,28 @@ def write_field_modifier(m: hydra.ext.java.syntax.FieldModifier) -> hydra.ast.Ex
     match m:
         case hydra.ext.java.syntax.FieldModifierAnnotation(value=ann):
             return write_annotation(ann)
-        
+
         case hydra.ext.java.syntax.FieldModifierPublic():
             return hydra.serialization.cst("public")
-        
+
         case hydra.ext.java.syntax.FieldModifierProtected():
             return hydra.serialization.cst("protected")
-        
+
         case hydra.ext.java.syntax.FieldModifierPrivate():
             return hydra.serialization.cst("private")
-        
+
         case hydra.ext.java.syntax.FieldModifierStatic():
             return hydra.serialization.cst("static")
-        
+
         case hydra.ext.java.syntax.FieldModifierFinal():
             return hydra.serialization.cst("final")
-        
+
         case hydra.ext.java.syntax.FieldModifierTransient():
             return hydra.serialization.cst("transient")
-        
+
         case hydra.ext.java.syntax.FieldModifierVolatile():
             return hydra.serialization.cst("volatile")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -750,10 +750,10 @@ def write_formal_parameter(p: hydra.ext.java.syntax.FormalParameter) -> hydra.as
     match p:
         case hydra.ext.java.syntax.FormalParameterSimple(value=s):
             return write_formal_parameter_simple(s)
-        
+
         case hydra.ext.java.syntax.FormalParameterVariableArity(value=v):
             return write_variable_arity_parameter(v)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -778,10 +778,10 @@ def write_interface_declaration(d: hydra.ext.java.syntax.InterfaceDeclaration) -
     match d:
         case hydra.ext.java.syntax.InterfaceDeclarationNormalInterface(value=n):
             return write_normal_interface_declaration(n)
-        
+
         case hydra.ext.java.syntax.InterfaceDeclarationAnnotationType(value=a):
             return write_annotation_type_declaration(a)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -789,16 +789,16 @@ def write_interface_member_declaration(d: hydra.ext.java.syntax.InterfaceMemberD
     match d:
         case hydra.ext.java.syntax.InterfaceMemberDeclarationConstant(value=c):
             return write_constant_declaration(c)
-        
+
         case hydra.ext.java.syntax.InterfaceMemberDeclarationInterfaceMethod(value=im):
             return write_interface_method_declaration(im)
-        
+
         case hydra.ext.java.syntax.InterfaceMemberDeclarationClass(value=cd):
             return write_class_declaration(cd)
-        
+
         case hydra.ext.java.syntax.InterfaceMemberDeclarationInterface(value=id):
             return write_interface_declaration(id)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -812,25 +812,25 @@ def write_interface_method_modifier(m: hydra.ext.java.syntax.InterfaceMethodModi
     match m:
         case hydra.ext.java.syntax.InterfaceMethodModifierAnnotation(value=a):
             return write_annotation(a)
-        
+
         case hydra.ext.java.syntax.InterfaceMethodModifierPublic():
             return hydra.serialization.cst("public")
-        
+
         case hydra.ext.java.syntax.InterfaceMethodModifierPrivate():
             return hydra.serialization.cst("private")
-        
+
         case hydra.ext.java.syntax.InterfaceMethodModifierAbstract():
             return hydra.serialization.cst("abstract")
-        
+
         case hydra.ext.java.syntax.InterfaceMethodModifierDefault():
             return hydra.serialization.cst("default")
-        
+
         case hydra.ext.java.syntax.InterfaceMethodModifierStatic():
             return hydra.serialization.cst("static")
-        
+
         case hydra.ext.java.syntax.InterfaceMethodModifierStrictfp():
             return hydra.serialization.cst("strictfp")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -838,25 +838,25 @@ def write_interface_modifier(m: hydra.ext.java.syntax.InterfaceModifier) -> hydr
     match m:
         case hydra.ext.java.syntax.InterfaceModifierAnnotation(value=a):
             return write_annotation(a)
-        
+
         case hydra.ext.java.syntax.InterfaceModifierPublic():
             return hydra.serialization.cst("public")
-        
+
         case hydra.ext.java.syntax.InterfaceModifierProtected():
             return hydra.serialization.cst("protected")
-        
+
         case hydra.ext.java.syntax.InterfaceModifierPrivate():
             return hydra.serialization.cst("private")
-        
+
         case hydra.ext.java.syntax.InterfaceModifierAbstract():
             return hydra.serialization.cst("abstract")
-        
+
         case hydra.ext.java.syntax.InterfaceModifierStatic():
             return hydra.serialization.cst("static")
-        
+
         case hydra.ext.java.syntax.InterfaceModifierStrictfb():
             return hydra.serialization.cst("strictfb")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -867,10 +867,10 @@ def write_lambda_body(b: hydra.ext.java.syntax.LambdaBody) -> hydra.ast.Expr:
     match b:
         case hydra.ext.java.syntax.LambdaBodyExpression(value=e):
             return write_expression(e)
-        
+
         case hydra.ext.java.syntax.LambdaBodyBlock(value=b2):
             return write_block(b2)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -883,13 +883,13 @@ def write_left_hand_side(lhs: hydra.ext.java.syntax.LeftHandSide) -> hydra.ast.E
     match lhs:
         case hydra.ext.java.syntax.LeftHandSideExpressionName(value=en):
             return write_expression_name(en)
-        
+
         case hydra.ext.java.syntax.LeftHandSideFieldAccess(value=fa):
             return write_field_access(fa)
-        
+
         case hydra.ext.java.syntax.LeftHandSideArrayAccess(value=aa):
             return write_array_access(aa)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -897,10 +897,10 @@ def write_local_name(t: hydra.ext.java.syntax.LocalVariableType) -> hydra.ast.Ex
     match t:
         case hydra.ext.java.syntax.LocalVariableTypeType(value=ut):
             return write_unann_type(ut)
-        
+
         case hydra.ext.java.syntax.LocalVariableTypeVar():
             return hydra.serialization.cst("var")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -917,10 +917,10 @@ def write_method_body(b: hydra.ext.java.syntax.MethodBody) -> hydra.ast.Expr:
     match b:
         case hydra.ext.java.syntax.MethodBodyBlock(value=block):
             return write_block(block)
-        
+
         case hydra.ext.java.syntax.MethodBodyNone():
             return hydra.serialization.cst(";")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -957,7 +957,7 @@ def write_method_invocation(mi: hydra.ext.java.syntax.MethodInvocation) -> hydra
         match header:
             case hydra.ext.java.syntax.MethodInvocation_HeaderSimple(value=mname):
                 return write_method_name(mname)
-            
+
             case hydra.ext.java.syntax.MethodInvocation_HeaderComplex(value=cx):
                 cvar = cx.variant
                 targs = cx.type_arguments
@@ -969,23 +969,23 @@ def write_method_invocation(mi: hydra.ext.java.syntax.MethodInvocation) -> hydra
                     match v1:
                         case hydra.ext.java.syntax.MethodInvocation_VariantType(value=tname):
                             return hydra.serialization.dot_sep((write_type_name(tname), id_sec()))
-                        
+
                         case hydra.ext.java.syntax.MethodInvocation_VariantExpression(value=en):
                             return hydra.serialization.dot_sep((write_expression_name(en), id_sec()))
-                        
+
                         case hydra.ext.java.syntax.MethodInvocation_VariantPrimary(value=p):
                             return hydra.serialization.dot_sep((write_primary(p), id_sec()))
-                        
+
                         case hydra.ext.java.syntax.MethodInvocation_VariantSuper():
                             return hydra.serialization.dot_sep((hydra.serialization.cst("super"), id_sec()))
-                        
+
                         case hydra.ext.java.syntax.MethodInvocation_VariantTypeSuper(value=tname):
                             return hydra.serialization.dot_sep((write_type_name(tname), hydra.serialization.cst("super"), id_sec()))
-                        
+
                         case _:
                             raise AssertionError("Unreachable: all variants handled")
                 return _hoist_body_1(cvar)
-            
+
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     return hydra.serialization.no_sep((header_sec(), arg_sec()))
@@ -994,31 +994,31 @@ def write_method_modifier(m: hydra.ext.java.syntax.MethodModifier) -> hydra.ast.
     match m:
         case hydra.ext.java.syntax.MethodModifierAnnotation(value=ann):
             return write_annotation(ann)
-        
+
         case hydra.ext.java.syntax.MethodModifierPublic():
             return hydra.serialization.cst("public")
-        
+
         case hydra.ext.java.syntax.MethodModifierProtected():
             return hydra.serialization.cst("protected")
-        
+
         case hydra.ext.java.syntax.MethodModifierPrivate():
             return hydra.serialization.cst("private")
-        
+
         case hydra.ext.java.syntax.MethodModifierAbstract():
             return hydra.serialization.cst("abstract")
-        
+
         case hydra.ext.java.syntax.MethodModifierFinal():
             return hydra.serialization.cst("final")
-        
+
         case hydra.ext.java.syntax.MethodModifierSynchronized():
             return hydra.serialization.cst("synchronized")
-        
+
         case hydra.ext.java.syntax.MethodModifierNative():
             return hydra.serialization.cst("native")
-        
+
         case hydra.ext.java.syntax.MethodModifierStrictfb():
             return hydra.serialization.cst("strictfb")
-        
+
         case _:
             raise TypeError("Unsupported MethodModifier")
 
@@ -1026,16 +1026,16 @@ def write_multiplicative_expression(e: hydra.ext.java.syntax.MultiplicativeExpre
     match e:
         case hydra.ext.java.syntax.MultiplicativeExpressionUnary(value=u):
             return write_unary_expression(u)
-        
+
         case hydra.ext.java.syntax.MultiplicativeExpressionTimes(value=b):
             return hydra.serialization.infix_ws("*", write_multiplicative_expression(b.lhs), write_unary_expression(b.rhs))
-        
+
         case hydra.ext.java.syntax.MultiplicativeExpressionDivide(value=b2):
             return hydra.serialization.infix_ws("/", write_multiplicative_expression(b2.lhs), write_unary_expression(b2.rhs))
-        
+
         case hydra.ext.java.syntax.MultiplicativeExpressionMod(value=b3):
             return hydra.serialization.infix_ws("%", write_multiplicative_expression(b3.lhs), write_unary_expression(b3.rhs))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1065,16 +1065,16 @@ def write_postfix_expression(e: hydra.ext.java.syntax.PostfixExpression) -> hydr
     match e:
         case hydra.ext.java.syntax.PostfixExpressionPrimary(value=p):
             return write_primary(p)
-        
+
         case hydra.ext.java.syntax.PostfixExpressionName(value=en):
             return write_expression_name(en)
-        
+
         case hydra.ext.java.syntax.PostfixExpressionPostIncrement(value=pi):
             return write_post_increment_expression(pi)
-        
+
         case hydra.ext.java.syntax.PostfixExpressionPostDecrement(value=pd):
             return write_post_decrement_expression(pd)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1082,10 +1082,10 @@ def write_primary(p: hydra.ext.java.syntax.Primary) -> hydra.ast.Expr:
     match p:
         case hydra.ext.java.syntax.PrimaryNoNewArray_(value=n):
             return write_primary_no_new_array(n)
-        
+
         case hydra.ext.java.syntax.PrimaryArrayCreation(value=a):
             return write_array_creation_expression(a)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1093,34 +1093,34 @@ def write_primary_no_new_array(p: hydra.ext.java.syntax.PrimaryNoNewArray) -> hy
     match p:
         case hydra.ext.java.syntax.PrimaryNoNewArrayLiteral(value=l):
             return write_literal(l)
-        
+
         case hydra.ext.java.syntax.PrimaryNoNewArrayClassLiteral(value=cl):
             return write_class_literal(cl)
-        
+
         case hydra.ext.java.syntax.PrimaryNoNewArrayThis():
             return hydra.serialization.cst("this")
-        
+
         case hydra.ext.java.syntax.PrimaryNoNewArrayDotThis(value=n):
             return hydra.serialization.dot_sep((write_type_name(n), hydra.serialization.cst("this")))
-        
+
         case hydra.ext.java.syntax.PrimaryNoNewArrayParens(value=e):
             return hydra.serialization.paren_list(False, (write_expression(e),))
-        
+
         case hydra.ext.java.syntax.PrimaryNoNewArrayClassInstance(value=ci):
             return write_class_instance_creation_expression(ci)
-        
+
         case hydra.ext.java.syntax.PrimaryNoNewArrayFieldAccess(value=fa):
             return write_field_access(fa)
-        
+
         case hydra.ext.java.syntax.PrimaryNoNewArrayArrayAccess(value=aa):
             return write_array_access(aa)
-        
+
         case hydra.ext.java.syntax.PrimaryNoNewArrayMethodInvocation(value=mi):
             return write_method_invocation(mi)
-        
+
         case hydra.ext.java.syntax.PrimaryNoNewArrayMethodReference(value=mr):
             return write_method_reference(mr)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1133,13 +1133,13 @@ def write_reference_type(rt: hydra.ext.java.syntax.ReferenceType) -> hydra.ast.E
     match rt:
         case hydra.ext.java.syntax.ReferenceTypeClassOrInterface(value=cit):
             return write_class_or_interface_type(cit)
-        
+
         case hydra.ext.java.syntax.ReferenceTypeVariable(value=v):
             return write_type_variable(v)
-        
+
         case hydra.ext.java.syntax.ReferenceTypeArray(value=at):
             return write_array_type(at)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1147,22 +1147,22 @@ def write_relational_expression(e: hydra.ext.java.syntax.RelationalExpression) -
     match e:
         case hydra.ext.java.syntax.RelationalExpressionSimple(value=s):
             return write_shift_expression(s)
-        
+
         case hydra.ext.java.syntax.RelationalExpressionLessThan(value=lt):
             return write_relational_expression_less_than(lt)
-        
+
         case hydra.ext.java.syntax.RelationalExpressionGreaterThan(value=gt):
             return write_relational_expression_greater_than(gt)
-        
+
         case hydra.ext.java.syntax.RelationalExpressionLessThanEqual(value=lte):
             return write_relational_expression_less_than_equal(lte)
-        
+
         case hydra.ext.java.syntax.RelationalExpressionGreaterThanEqual(value=gte):
             return write_relational_expression_greater_than_equal(gte)
-        
+
         case hydra.ext.java.syntax.RelationalExpressionInstanceof(value=i):
             return write_relational_expression_instance_of(i)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1185,10 +1185,10 @@ def write_result(r: hydra.ext.java.syntax.Result) -> hydra.ast.Expr:
     match r:
         case hydra.ext.java.syntax.ResultType(value=t):
             return write_unann_type(t)
-        
+
         case hydra.ext.java.syntax.ResultVoid():
             return hydra.serialization.cst("void")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1200,16 +1200,16 @@ def write_shift_expression(e: hydra.ext.java.syntax.ShiftExpression) -> hydra.as
     match e:
         case hydra.ext.java.syntax.ShiftExpressionUnary(value=a):
             return write_additive_expression(a)
-        
+
         case hydra.ext.java.syntax.ShiftExpressionShiftLeft(value=b):
             return hydra.serialization.infix_ws("<<", write_shift_expression(b.lhs), write_additive_expression(b.rhs))
-        
+
         case hydra.ext.java.syntax.ShiftExpressionShiftRight(value=b2):
             return hydra.serialization.infix_ws(">>", write_shift_expression(b2.lhs), write_additive_expression(b2.rhs))
-        
+
         case hydra.ext.java.syntax.ShiftExpressionShiftRightZeroFill(value=b3):
             return hydra.serialization.infix_ws(">>>", write_shift_expression(b3.lhs), write_additive_expression(b3.rhs))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1222,22 +1222,22 @@ def write_statement(s: hydra.ext.java.syntax.Statement) -> hydra.ast.Expr:
     match s:
         case hydra.ext.java.syntax.StatementWithoutTrailing(value=s2):
             return write_statement_without_trailing_substatement(s2)
-        
+
         case hydra.ext.java.syntax.StatementLabeled(value=l):
             return write_labeled_statement(l)
-        
+
         case hydra.ext.java.syntax.StatementIfThen(value=it):
             return write_if_then_statement(it)
-        
+
         case hydra.ext.java.syntax.StatementIfThenElse(value=ite):
             return write_if_then_else_statement(ite)
-        
+
         case hydra.ext.java.syntax.StatementWhile(value=w):
             return write_while_statement(w)
-        
+
         case hydra.ext.java.syntax.StatementFor(value=f):
             return write_for_statement(f)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1245,25 +1245,25 @@ def write_statement_expression(e: hydra.ext.java.syntax.StatementExpression) -> 
     match e:
         case hydra.ext.java.syntax.StatementExpressionAssignment(value=a):
             return write_assignment(a)
-        
+
         case hydra.ext.java.syntax.StatementExpressionPreIncrement(value=pi):
             return write_pre_increment_expression(pi)
-        
+
         case hydra.ext.java.syntax.StatementExpressionPreDecrement(value=pd):
             return write_pre_decrement_expression(pd)
-        
+
         case hydra.ext.java.syntax.StatementExpressionPostIncrement(value=pi2):
             return write_post_increment_expression(pi2)
-        
+
         case hydra.ext.java.syntax.StatementExpressionPostDecrement(value=pd2):
             return write_post_decrement_expression(pd2)
-        
+
         case hydra.ext.java.syntax.StatementExpressionMethodInvocation(value=m):
             return write_method_invocation(m)
-        
+
         case hydra.ext.java.syntax.StatementExpressionClassInstanceCreation(value=cic):
             return write_class_instance_creation_expression(cic)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1271,40 +1271,40 @@ def write_statement_without_trailing_substatement(s: hydra.ext.java.syntax.State
     match s:
         case hydra.ext.java.syntax.StatementWithoutTrailingSubstatementBlock(value=b):
             return write_block(b)
-        
+
         case hydra.ext.java.syntax.StatementWithoutTrailingSubstatementEmpty():
             return hydra.serialization.cst(";")
-        
+
         case hydra.ext.java.syntax.StatementWithoutTrailingSubstatementExpression(value=e):
             return write_expression_statement(e)
-        
+
         case hydra.ext.java.syntax.StatementWithoutTrailingSubstatementAssert(value=a):
             return write_assert_statement(a)
-        
+
         case hydra.ext.java.syntax.StatementWithoutTrailingSubstatementSwitch(value=s2):
             return write_switch_statement(s2)
-        
+
         case hydra.ext.java.syntax.StatementWithoutTrailingSubstatementDo(value=d):
             return write_do_statement(d)
-        
+
         case hydra.ext.java.syntax.StatementWithoutTrailingSubstatementBreak(value=b2):
             return write_break_statement(b2)
-        
+
         case hydra.ext.java.syntax.StatementWithoutTrailingSubstatementContinue(value=c):
             return write_continue_statement(c)
-        
+
         case hydra.ext.java.syntax.StatementWithoutTrailingSubstatementReturn(value=r):
             return write_return_statement(r)
-        
+
         case hydra.ext.java.syntax.StatementWithoutTrailingSubstatementSynchronized(value=s22):
             return write_synchronized_statement(s22)
-        
+
         case hydra.ext.java.syntax.StatementWithoutTrailingSubstatementThrow(value=t):
             return write_throw_statement(t)
-        
+
         case hydra.ext.java.syntax.StatementWithoutTrailingSubstatementTry(value=t2):
             return write_try_statement(t2)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1315,10 +1315,10 @@ def write_type(t: hydra.ext.java.syntax.Type) -> hydra.ast.Expr:
     match t:
         case hydra.ext.java.syntax.TypePrimitive(value=pt):
             return write_primitive_type_with_annotations(pt)
-        
+
         case hydra.ext.java.syntax.TypeReference(value=rt):
             return write_reference_type(rt)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1326,10 +1326,10 @@ def write_type_argument(a: hydra.ext.java.syntax.TypeArgument) -> hydra.ast.Expr
     match a:
         case hydra.ext.java.syntax.TypeArgumentReference(value=rt):
             return write_reference_type(rt)
-        
+
         case hydra.ext.java.syntax.TypeArgumentWildcard(value=w):
             return write_wildcard(w)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1337,10 +1337,10 @@ def write_type_arguments_or_diamond(targs: hydra.ext.java.syntax.TypeArgumentsOr
     match targs:
         case hydra.ext.java.syntax.TypeArgumentsOrDiamondArguments(value=args):
             return hydra.serialization.angle_braces_list(hydra.serialization.inline_style, hydra.lib.lists.map((lambda x1: write_type_argument(x1)), args))
-        
+
         case hydra.ext.java.syntax.TypeArgumentsOrDiamondDiamond():
             return hydra.serialization.cst("<>")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1348,12 +1348,12 @@ def write_type_bound(b: hydra.ext.java.syntax.TypeBound) -> hydra.ast.Expr:
     match b:
         case hydra.ext.java.syntax.TypeBoundVariable(value=tv):
             return write_type_variable(tv)
-        
+
         case hydra.ext.java.syntax.TypeBoundClassOrInterface(value=ci):
             cit = ci.type
             additional = ci.additional
             return hydra.lib.logic.if_else(hydra.lib.lists.null(additional), (lambda : write_class_or_interface_type(cit)), (lambda : hydra.serialization.space_sep(hydra.lib.lists.cons(write_class_or_interface_type(cit), hydra.lib.lists.map((lambda x1: write_additional_bound(x1)), additional)))))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1378,19 +1378,19 @@ def write_unary_expression(e: hydra.ext.java.syntax.UnaryExpression) -> hydra.as
     match e:
         case hydra.ext.java.syntax.UnaryExpressionPreIncrement(value=pi):
             return write_pre_increment_expression(pi)
-        
+
         case hydra.ext.java.syntax.UnaryExpressionPreDecrement(value=pd):
             return write_pre_decrement_expression(pd)
-        
+
         case hydra.ext.java.syntax.UnaryExpressionPlus(value=p):
             return hydra.serialization.space_sep((hydra.serialization.cst("+"), write_unary_expression(p)))
-        
+
         case hydra.ext.java.syntax.UnaryExpressionMinus(value=m):
             return hydra.serialization.space_sep((hydra.serialization.cst("-"), write_unary_expression(m)))
-        
+
         case hydra.ext.java.syntax.UnaryExpressionOther(value=o):
             return write_unary_expression_not_plus_minus(o)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1398,16 +1398,16 @@ def write_unary_expression_not_plus_minus(e: hydra.ext.java.syntax.UnaryExpressi
     match e:
         case hydra.ext.java.syntax.UnaryExpressionNotPlusMinusPostfix(value=p):
             return write_postfix_expression(p)
-        
+
         case hydra.ext.java.syntax.UnaryExpressionNotPlusMinusTilde(value=u):
             return hydra.serialization.space_sep((hydra.serialization.cst("~"), write_unary_expression(u)))
-        
+
         case hydra.ext.java.syntax.UnaryExpressionNotPlusMinusNot(value=u2):
             return hydra.serialization.no_sep((hydra.serialization.cst("!"), write_unary_expression(u2)))
-        
+
         case hydra.ext.java.syntax.UnaryExpressionNotPlusMinusCast(value=c):
             return write_cast_expression(c)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1430,10 +1430,10 @@ def write_variable_initializer(i: hydra.ext.java.syntax.VariableInitializer) -> 
     match i:
         case hydra.ext.java.syntax.VariableInitializerExpression(value=e):
             return write_expression(e)
-        
+
         case hydra.ext.java.syntax.VariableInitializerArrayInitializer(value=ai):
             return write_array_initializer(ai)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1441,10 +1441,10 @@ def write_variable_modifier(m: hydra.ext.java.syntax.VariableModifier) -> hydra.
     match m:
         case hydra.ext.java.syntax.VariableModifierAnnotation(value=ann):
             return write_annotation(ann)
-        
+
         case hydra.ext.java.syntax.VariableModifierFinal():
             return hydra.serialization.cst("final")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1465,10 +1465,10 @@ def write_wildcard_bounds(b: hydra.ext.java.syntax.WildcardBounds) -> hydra.ast.
     match b:
         case hydra.ext.java.syntax.WildcardBoundsExtends(value=rt):
             return hydra.serialization.space_sep((hydra.serialization.cst("extends"), write_reference_type(rt)))
-        
+
         case hydra.ext.java.syntax.WildcardBoundsSuper(value=rt2):
             return hydra.serialization.space_sep((hydra.serialization.cst("super"), write_reference_type(rt2)))
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1476,16 +1476,16 @@ def write_import_declaration(imp: hydra.ext.java.syntax.ImportDeclaration) -> hy
     match imp:
         case hydra.ext.java.syntax.ImportDeclarationSingleType(value=st):
             return hydra.serialization.with_semi(hydra.serialization.space_sep((hydra.serialization.cst("import"), write_type_name(st.value))))
-        
+
         case hydra.ext.java.syntax.ImportDeclarationTypeImportOnDemand():
             return hydra.serialization.cst("STUB:ImportDeclarationTypeImportOnDemand")
-        
+
         case hydra.ext.java.syntax.ImportDeclarationSingleStaticImport():
             return hydra.serialization.cst("STUB:ImportDeclarationSingleStaticImport")
-        
+
         case hydra.ext.java.syntax.ImportDeclarationStaticImportOnDemand():
             return hydra.serialization.cst("STUB:ImportDeclarationStaticImportOnDemand")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1501,13 +1501,13 @@ def write_type_declaration(d: hydra.ext.java.syntax.TypeDeclaration) -> hydra.as
     match d:
         case hydra.ext.java.syntax.TypeDeclarationClass(value=d2):
             return write_class_declaration(d2)
-        
+
         case hydra.ext.java.syntax.TypeDeclarationInterface(value=d22):
             return write_interface_declaration(d22)
-        
+
         case hydra.ext.java.syntax.TypeDeclarationNone():
             return hydra.serialization.cst(";")
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -1535,7 +1535,7 @@ def write_compilation_unit(u: hydra.ext.java.syntax.CompilationUnit) -> hydra.as
             def types_sec() -> Maybe[hydra.ast.Expr]:
                 return hydra.lib.logic.if_else(hydra.lib.lists.null(types), (lambda : Nothing()), (lambda : Just(hydra.serialization.double_newline_sep(hydra.lib.lists.map((lambda x1: write_type_declaration_with_comments(x1)), types)))))
             return hydra.serialization.double_newline_sep(hydra.lib.maybes.cat((warning(), pkg_sec(), imports_sec(), types_sec())))
-        
+
         case _:
             raise TypeError("Unsupported CompilationUnit")
 

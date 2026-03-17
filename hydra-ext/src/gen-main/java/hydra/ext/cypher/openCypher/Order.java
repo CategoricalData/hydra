@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class Order implements Serializable, Comparable<Order> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.Order");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.util.ConsList<hydra.ext.cypher.openCypher.SortItem> value;
-  
+
   public Order (hydra.util.ConsList<hydra.ext.cypher.openCypher.SortItem> value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Order)) {
@@ -25,12 +25,12 @@ public class Order implements Serializable, Comparable<Order> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Order other) {

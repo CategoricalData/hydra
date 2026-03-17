@@ -68,7 +68,7 @@ jsonExponentPart =
 -- | Parse a JSON number (integer, decimal, or scientific notation)
 jsonNumber :: Parsing.Parser Model.Value
 jsonNumber =
-    token (Parsers.bind jsonIntegerPart (\intPart -> Parsers.bind jsonFractionPart (\fracPart -> Parsers.bind jsonExponentPart (\expPart ->  
+    token (Parsers.bind jsonIntegerPart (\intPart -> Parsers.bind jsonFractionPart (\fracPart -> Parsers.bind jsonExponentPart (\expPart ->
       let numStr =
               Strings.cat2 (Strings.cat2 intPart (Maybes.maybe "" Equality.identity fracPart)) (Maybes.maybe "" Equality.identity expPart)
       in (Parsers.pure (Model.ValueNumber (Maybes.maybe 0.0 Equality.identity (Literals.readBigfloat numStr))))))))

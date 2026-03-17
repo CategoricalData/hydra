@@ -35,7 +35,7 @@ import qualified Data.Set as S
 -- | Aggregate annotations from nested structures
 aggregateAnnotations :: Ord t2 => ((t0 -> Maybe t1) -> (t1 -> t0) -> (t1 -> M.Map t2 t3) -> t0 -> M.Map t2 t3)
 aggregateAnnotations getValue getX getAnns t =
-     
+
       let toPairs =
               \rest -> \t -> Maybes.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t)
       in (Maps.fromList (Lists.concat (toPairs [] t)))
@@ -98,7 +98,7 @@ getTermAnnotation key term = Maps.lookup key (termAnnotationInternal term)
 -- | Get term description (Either version)
 getTermDescription :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) (Maybe String)
 getTermDescription cx graph term =
-     
+
       let peel =
               \t -> case t of
                 Core.TermTypeLambda v0 -> peel (Core.typeLambdaBody v0)
@@ -118,9 +118,9 @@ getTypeAnnotation key typ = Maps.lookup key (typeAnnotationInternal typ)
 -- | Get type classes from term
 getTypeClasses :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) (M.Map Core.Name (S.Set Classes.TypeClass))
 getTypeClasses cx graph term =
-     
+
       let decodeClass =
-              \term ->  
+              \term ->
                 let byName =
                         Maps.fromList [
                           (Core.Name "equality", Classes.TypeClassEquality),
@@ -139,7 +139,7 @@ getTypeDescription cx graph typ = getDescription cx graph (typeAnnotationInterna
 -- | For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression.
 isNativeType :: Core.Binding -> Bool
 isNativeType el =
-     
+
       let isFlaggedAsFirstClassType =
               Maybes.fromMaybe False (Maybes.map (\_ -> True) (getTermAnnotation Constants.key_firstClassType (Core.bindingTerm el)))
       in (Maybes.maybe False (\ts -> Logic.and (Equality.equal ts (Core.TypeScheme {
@@ -154,7 +154,7 @@ hasDescription anns = Maybes.isJust (Maps.lookup Constants.key_description anns)
 -- | Check if flag is set (Either version)
 hasFlag :: Context.Context -> Core.Name -> Either (Context.InContext Error.Error) Bool
 hasFlag cx flag =
-     
+
       let term = getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False)) cx
       in (Core___.boolean cx (Graph.Graph {
         Graph.graphBoundTerms = Maps.empty,
@@ -173,15 +173,15 @@ hasTypeDescription typ = hasDescription (typeAnnotationInternal typ)
 -- | Return a zero-indexed counter for the given key and updated context (pure version)
 nextCount :: Core.Name -> Context.Context -> (Int, Context.Context)
 nextCount key cx =
-     
+
       let count = getCount key cx
       in (count, (putCount key (Math.add count 1) cx))
 
 -- | Normalize term annotations
 normalizeTermAnnotations :: Core.Term -> Core.Term
 normalizeTermAnnotations term =
-     
-      let anns = termAnnotationInternal term 
+
+      let anns = termAnnotationInternal term
           stripped = Rewriting.deannotateTerm term
       in (Logic.ifElse (Maps.null anns) stripped (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = stripped,
@@ -190,8 +190,8 @@ normalizeTermAnnotations term =
 -- | Normalize type annotations
 normalizeTypeAnnotations :: Core.Type -> Core.Type
 normalizeTypeAnnotations typ =
-     
-      let anns = typeAnnotationInternal typ 
+
+      let anns = typeAnnotationInternal typ
           stripped = Rewriting.deannotateType typ
       in (Logic.ifElse (Maps.null anns) stripped (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = stripped,
@@ -225,8 +225,8 @@ setDescription d =
 -- | Set term annotation
 setTermAnnotation :: Core.Name -> Maybe Core.Term -> Core.Term -> Core.Term
 setTermAnnotation key val term =
-     
-      let term_ = Rewriting.deannotateTerm term 
+
+      let term_ = Rewriting.deannotateTerm term
           anns = setAnnotation key val (termAnnotationInternal term)
       in (Logic.ifElse (Maps.null anns) term_ (Core.TermAnnotated (Core.AnnotatedTerm {
         Core.annotatedTermBody = term_,
@@ -244,8 +244,8 @@ setType mt = setAnnotation Constants.key_type (Maybes.map Core__.type_ mt)
 -- | Set type annotation
 setTypeAnnotation :: Core.Name -> Maybe Core.Term -> Core.Type -> Core.Type
 setTypeAnnotation key val typ =
-     
-      let typ_ = Rewriting.deannotateType typ 
+
+      let typ_ = Rewriting.deannotateType typ
           anns = setAnnotation key val (typeAnnotationInternal typ)
       in (Logic.ifElse (Maps.null anns) typ_ (Core.TypeAnnotated (Core.AnnotatedType {
         Core.annotatedTypeBody = typ_,
@@ -254,7 +254,7 @@ setTypeAnnotation key val typ =
 -- | Set type classes on term
 setTypeClasses :: M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Term -> Core.Term
 setTypeClasses m term =
-     
+
       let encodeClass =
               \tc -> case tc of
                 Classes.TypeClassEquality -> Core.TermUnion (Core.Injection {
@@ -266,10 +266,10 @@ setTypeClasses m term =
                   Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "ordering"),
-                    Core.fieldTerm = Core.TermUnit}}) 
+                    Core.fieldTerm = Core.TermUnit}})
           encodePair =
-                  \nameClasses ->  
-                    let name = Pairs.first nameClasses 
+                  \nameClasses ->
+                    let name = Pairs.first nameClasses
                         classes = Pairs.second nameClasses
                     in (Core__.name name, (Core.TermSet (Sets.fromList (Lists.map encodeClass (Sets.toList classes)))))
           encoded = Logic.ifElse (Maps.null m) Nothing (Just (Core.TermMap (Maps.fromList (Lists.map encodePair (Maps.toList m)))))
@@ -283,7 +283,7 @@ setTypeDescription d =
 -- | Get internal term annotations
 termAnnotationInternal :: Core.Term -> M.Map Core.Name Core.Term
 termAnnotationInternal term =
-     
+
       let getAnn =
               \t -> case t of
                 Core.TermAnnotated v0 -> Just v0
@@ -293,7 +293,7 @@ termAnnotationInternal term =
 -- | Get internal type annotations
 typeAnnotationInternal :: Core.Type -> M.Map Core.Name Core.Term
 typeAnnotationInternal typ =
-     
+
       let getAnn =
               \t -> case t of
                 Core.TypeAnnotated v0 -> Just v0
@@ -303,8 +303,8 @@ typeAnnotationInternal typ =
 -- | Create a type element with proper annotations
 typeElement :: Core.Name -> Core.Type -> Core.Binding
 typeElement name typ =
-     
-      let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type") 
+
+      let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
           dataTerm =
                   normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = (Core__.type_ typ),

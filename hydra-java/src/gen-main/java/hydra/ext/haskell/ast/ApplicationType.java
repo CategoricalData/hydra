@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class ApplicationType implements Serializable, Comparable<ApplicationType> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.ApplicationType");
-  
+
   public static final hydra.core.Name CONTEXT = new hydra.core.Name("context");
-  
+
   public static final hydra.core.Name ARGUMENT = new hydra.core.Name("argument");
-  
+
   /**
    * The type being applied
    */
   public final hydra.ext.haskell.ast.Type context;
-  
+
   /**
    * The type argument
    */
   public final hydra.ext.haskell.ast.Type argument;
-  
+
   public ApplicationType (hydra.ext.haskell.ast.Type context, hydra.ext.haskell.ast.Type argument) {
     this.context = context;
     this.argument = argument;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ApplicationType)) {
@@ -41,12 +41,12 @@ public class ApplicationType implements Serializable, Comparable<ApplicationType
       this.argument,
       o.argument);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(context) + 3 * java.util.Objects.hashCode(argument);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ApplicationType other) {
@@ -57,11 +57,11 @@ public class ApplicationType implements Serializable, Comparable<ApplicationType
     }
     return ((Comparable) argument).compareTo(other.argument);
   }
-  
+
   public ApplicationType withContext(hydra.ext.haskell.ast.Type context) {
     return new ApplicationType(context, argument);
   }
-  
+
   public ApplicationType withArgument(hydra.ext.haskell.ast.Type argument) {
     return new ApplicationType(context, argument);
   }

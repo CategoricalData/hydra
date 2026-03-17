@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class ForallType implements Serializable, Comparable<ForallType> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.ForallType");
-  
+
   public static final hydra.core.Name PARAMETER = new hydra.core.Name("parameter");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   /**
    * The variable which is bound by the lambda
    */
   public final hydra.core.Name parameter;
-  
+
   /**
    * The body of the lambda
    */
   public final hydra.core.Type body;
-  
+
   public ForallType (hydra.core.Name parameter, hydra.core.Type body) {
     this.parameter = parameter;
     this.body = body;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ForallType)) {
@@ -41,12 +41,12 @@ public class ForallType implements Serializable, Comparable<ForallType> {
       this.body,
       o.body);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(parameter) + 3 * java.util.Objects.hashCode(body);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ForallType other) {
@@ -57,11 +57,11 @@ public class ForallType implements Serializable, Comparable<ForallType> {
     }
     return ((Comparable) body).compareTo(other.body);
   }
-  
+
   public ForallType withParameter(hydra.core.Name parameter) {
     return new ForallType(parameter, body);
   }
-  
+
   public ForallType withBody(hydra.core.Type body) {
     return new ForallType(parameter, body);
   }

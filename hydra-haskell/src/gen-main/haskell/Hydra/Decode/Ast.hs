@@ -24,8 +24,8 @@ import qualified Data.Set as S
 associativity :: Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Associativity
 associativity cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -43,7 +43,7 @@ associativity cx raw =
 blockStyle :: Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.BlockStyle
 blockStyle cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "indent" (Helpers.decodeMaybe (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
@@ -66,7 +66,7 @@ blockStyle cx raw =
 bracketExpr :: Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.BracketExpr
 bracketExpr cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "brackets" brackets fieldMap cx) (\field_brackets -> Eithers.bind (Helpers.requireField "enclosed" expr fieldMap cx) (\field_enclosed -> Eithers.bind (Helpers.requireField "style" blockStyle fieldMap cx) (\field_style -> Right (Ast.BracketExpr {
           Ast.bracketExprBrackets = field_brackets,
@@ -77,7 +77,7 @@ bracketExpr cx raw =
 brackets :: Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Brackets
 brackets cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "open" symbol fieldMap cx) (\field_open -> Eithers.bind (Helpers.requireField "close" symbol fieldMap cx) (\field_close -> Right (Ast.Brackets {
           Ast.bracketsOpen = field_open,
@@ -87,8 +87,8 @@ brackets cx raw =
 expr :: Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Expr
 expr cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -107,7 +107,7 @@ expr cx raw =
 indentedExpression :: Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.IndentedExpression
 indentedExpression cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "style" indentStyle fieldMap cx) (\field_style -> Eithers.bind (Helpers.requireField "expr" expr fieldMap cx) (\field_expr -> Right (Ast.IndentedExpression {
           Ast.indentedExpressionStyle = field_style,
@@ -117,8 +117,8 @@ indentedExpression cx raw =
 indentStyle :: Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.IndentStyle
 indentStyle cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =
@@ -142,7 +142,7 @@ indentStyle cx raw =
 op :: Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Op
 op cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "symbol" symbol fieldMap cx) (\field_symbol -> Eithers.bind (Helpers.requireField "padding" padding fieldMap cx) (\field_padding -> Eithers.bind (Helpers.requireField "precedence" precedence fieldMap cx) (\field_precedence -> Eithers.bind (Helpers.requireField "associativity" associativity fieldMap cx) (\field_associativity -> Right (Ast.Op {
           Ast.opSymbol = field_symbol,
@@ -154,7 +154,7 @@ op cx raw =
 opExpr :: Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.OpExpr
 opExpr cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "op" op fieldMap cx) (\field_op -> Eithers.bind (Helpers.requireField "lhs" expr fieldMap cx) (\field_lhs -> Eithers.bind (Helpers.requireField "rhs" expr fieldMap cx) (\field_rhs -> Right (Ast.OpExpr {
           Ast.opExprOp = field_op,
@@ -165,7 +165,7 @@ opExpr cx raw =
 padding :: Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Padding
 padding cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "left" ws fieldMap cx) (\field_left -> Eithers.bind (Helpers.requireField "right" ws fieldMap cx) (\field_right -> Right (Ast.Padding {
           Ast.paddingLeft = field_left,
@@ -187,7 +187,7 @@ precedence cx raw =
 seqExpr :: Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.SeqExpr
 seqExpr cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermRecord v0 ->  
+      Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
         in (Eithers.bind (Helpers.requireField "op" op fieldMap cx) (\field_op -> Eithers.bind (Helpers.requireField "elements" (Helpers.decodeList expr) fieldMap cx) (\field_elements -> Right (Ast.SeqExpr {
           Ast.seqExprOp = field_op,
@@ -207,8 +207,8 @@ symbol cx raw =
 ws :: Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Ws
 ws cx raw =
     Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
-      Core.TermUnion v0 ->  
-        let field = Core.injectionField v0 
+      Core.TermUnion v0 ->
+        let field = Core.injectionField v0
             fname = Core.fieldName field
             fterm = Core.fieldTerm field
             variantMap =

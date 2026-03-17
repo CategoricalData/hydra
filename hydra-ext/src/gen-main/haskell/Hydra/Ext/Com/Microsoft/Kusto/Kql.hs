@@ -12,7 +12,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-data BetweenExpression = 
+data BetweenExpression =
   BetweenExpression {
     betweenExpressionNot :: Bool,
     betweenExpressionExpression :: Expression,
@@ -30,7 +30,7 @@ _BetweenExpression_lowerBound = Core.Name "lowerBound"
 
 _BetweenExpression_upperBound = Core.Name "upperBound"
 
-data BinaryExpression = 
+data BinaryExpression =
   BinaryExpression {
     binaryExpressionLeft :: Expression,
     binaryExpressionOperator :: BinaryOperator,
@@ -45,7 +45,7 @@ _BinaryExpression_operator = Core.Name "operator"
 
 _BinaryExpression_right = Core.Name "right"
 
-data BinaryOperator = 
+data BinaryOperator =
   BinaryOperatorCaseInsensitiveEqual  |
   BinaryOperatorContains  |
   BinaryOperatorDivide  |
@@ -63,7 +63,7 @@ data BinaryOperator =
   BinaryOperatorNotEqual  |
   BinaryOperatorPlus  |
   BinaryOperatorStartsWith  |
-  BinaryOperatorTimes 
+  BinaryOperatorTimes
   deriving (Eq, Ord, Read, Show)
 
 _BinaryOperator = Core.Name "hydra.ext.com.microsoft.kusto.kql.BinaryOperator"
@@ -104,7 +104,7 @@ _BinaryOperator_startsWith = Core.Name "startsWith"
 
 _BinaryOperator_times = Core.Name "times"
 
-data BuiltInFunction = 
+data BuiltInFunction =
   BuiltInFunctionAgo  |
   BuiltInFunctionBin  |
   BuiltInFunctionCount  |
@@ -117,7 +117,7 @@ data BuiltInFunction =
   BuiltInFunctionRange  |
   BuiltInFunctionStartofday  |
   BuiltInFunctionStrcat  |
-  BuiltInFunctionTodynamic 
+  BuiltInFunctionTodynamic
   deriving (Eq, Ord, Read, Show)
 
 _BuiltInFunction = Core.Name "hydra.ext.com.microsoft.kusto.kql.BuiltInFunction"
@@ -148,7 +148,7 @@ _BuiltInFunction_strcat = Core.Name "strcat"
 
 _BuiltInFunction_todynamic = Core.Name "todynamic"
 
-data ColumnAlias = 
+data ColumnAlias =
   ColumnAlias {
     columnAliasColumn :: ColumnName,
     columnAliasAlias :: ColumnName}
@@ -160,7 +160,7 @@ _ColumnAlias_column = Core.Name "column"
 
 _ColumnAlias_alias = Core.Name "alias"
 
-data ColumnAssignment = 
+data ColumnAssignment =
   ColumnAssignment {
     columnAssignmentColumn :: ColumnName,
     columnAssignmentExpression :: Expression}
@@ -172,14 +172,14 @@ _ColumnAssignment_column = Core.Name "column"
 
 _ColumnAssignment_expression = Core.Name "expression"
 
-newtype ColumnName = 
+newtype ColumnName =
   ColumnName {
     unColumnName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _ColumnName = Core.Name "hydra.ext.com.microsoft.kusto.kql.ColumnName"
 
-data Columns = 
+data Columns =
   ColumnsAll  |
   ColumnsSingle ColumnName
   deriving (Eq, Ord, Read, Show)
@@ -190,7 +190,7 @@ _Columns_all = Core.Name "all"
 
 _Columns_single = Core.Name "single"
 
-data Command = 
+data Command =
   CommandCount  |
   -- | See https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/distinct-operator
   CommandDistinct [ColumnName] |
@@ -257,14 +257,14 @@ _Command_union = Core.Name "union"
 
 _Command_where = Core.Name "where"
 
-newtype Datetime = 
+newtype Datetime =
   Datetime {
     unDatetime :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Datetime = Core.Name "hydra.ext.com.microsoft.kusto.kql.Datetime"
 
-data Duration = 
+data Duration =
   Duration {
     durationValue :: Int,
     durationUnit :: DurationUnit}
@@ -276,10 +276,10 @@ _Duration_value = Core.Name "value"
 
 _Duration_unit = Core.Name "unit"
 
-data DurationUnit = 
+data DurationUnit =
   DurationUnitSecond  |
   DurationUnitMinute  |
-  DurationUnitHour 
+  DurationUnitHour
   deriving (Eq, Ord, Read, Show)
 
 _DurationUnit = Core.Name "hydra.ext.com.microsoft.kusto.kql.DurationUnit"
@@ -290,7 +290,7 @@ _DurationUnit_minute = Core.Name "minute"
 
 _DurationUnit_hour = Core.Name "hour"
 
-data Expression = 
+data Expression =
   ExpressionAnd [Expression] |
   ExpressionAny  |
   ExpressionBetween BetweenExpression |
@@ -337,7 +337,7 @@ _Expression_property = Core.Name "property"
 
 _Expression_unary = Core.Name "unary"
 
-data Function = 
+data Function =
   FunctionBuiltIn BuiltInFunction |
   FunctionCustom FunctionName
   deriving (Eq, Ord, Read, Show)
@@ -348,7 +348,7 @@ _Function_builtIn = Core.Name "builtIn"
 
 _Function_custom = Core.Name "custom"
 
-data FunctionExpression = 
+data FunctionExpression =
   FunctionExpression {
     functionExpressionFunction :: Function,
     functionExpressionArguments :: [Expression]}
@@ -360,14 +360,14 @@ _FunctionExpression_function = Core.Name "function"
 
 _FunctionExpression_arguments = Core.Name "arguments"
 
-newtype FunctionName = 
+newtype FunctionName =
   FunctionName {
     unFunctionName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _FunctionName = Core.Name "hydra.ext.com.microsoft.kusto.kql.FunctionName"
 
-data IndexExpression = 
+data IndexExpression =
   IndexExpression {
     indexExpressionExpression :: Expression,
     indexExpressionIndex :: String}
@@ -379,7 +379,7 @@ _IndexExpression_expression = Core.Name "expression"
 
 _IndexExpression_index = Core.Name "index"
 
-data JoinCommand = 
+data JoinCommand =
   JoinCommand {
     joinCommandKind :: JoinKind,
     joinCommandExpression :: TableName,
@@ -394,7 +394,7 @@ _JoinCommand_expression = Core.Name "expression"
 
 _JoinCommand_on = Core.Name "on"
 
-data JoinKind = 
+data JoinKind =
   JoinKindLeftouter  |
   JoinKindLeftsemi  |
   JoinKindLeftanti  |
@@ -403,7 +403,7 @@ data JoinKind =
   JoinKindInnerunique  |
   JoinKindRightouter  |
   JoinKindRightsemi  |
-  JoinKindRightanti 
+  JoinKindRightanti
   deriving (Eq, Ord, Read, Show)
 
 _JoinKind = Core.Name "hydra.ext.com.microsoft.kusto.kql.JoinKind"
@@ -426,7 +426,7 @@ _JoinKind_rightsemi = Core.Name "rightsemi"
 
 _JoinKind_rightanti = Core.Name "rightanti"
 
-data KeyValuePair = 
+data KeyValuePair =
   KeyValuePair {
     keyValuePairKey :: String,
     keyValuePairValue :: Expression}
@@ -438,7 +438,7 @@ _KeyValuePair_key = Core.Name "key"
 
 _KeyValuePair_value = Core.Name "value"
 
-data LetBinding = 
+data LetBinding =
   LetBinding {
     letBindingName :: ColumnName,
     letBindingExpression :: Expression}
@@ -450,7 +450,7 @@ _LetBinding_name = Core.Name "name"
 
 _LetBinding_expression = Core.Name "expression"
 
-data LetExpression = 
+data LetExpression =
   LetExpression {
     letExpressionBindings :: [LetBinding],
     letExpressionExpression :: TabularExpression}
@@ -462,7 +462,7 @@ _LetExpression_bindings = Core.Name "bindings"
 
 _LetExpression_expression = Core.Name "expression"
 
-data Literal = 
+data Literal =
   LiteralDuration Duration |
   LiteralDatetime Datetime |
   LiteralString String |
@@ -488,9 +488,9 @@ _Literal_double = Core.Name "double"
 
 _Literal_boolean = Core.Name "boolean"
 
-data Order = 
+data Order =
   OrderAscending  |
-  OrderDescending 
+  OrderDescending
   deriving (Eq, Ord, Read, Show)
 
 _Order = Core.Name "hydra.ext.com.microsoft.kusto.kql.Order"
@@ -499,7 +499,7 @@ _Order_ascending = Core.Name "ascending"
 
 _Order_descending = Core.Name "descending"
 
-data Parameter = 
+data Parameter =
   Parameter {
     parameterKey :: String,
     parameterValue :: Literal}
@@ -511,7 +511,7 @@ _Parameter_key = Core.Name "key"
 
 _Parameter_value = Core.Name "value"
 
-data ParseCommand = 
+data ParseCommand =
   ParseCommand {
     parseCommandColumn :: ColumnName,
     parseCommandPairs :: [KeyValuePair]}
@@ -523,14 +523,14 @@ _ParseCommand_column = Core.Name "column"
 
 _ParseCommand_pairs = Core.Name "pairs"
 
-newtype PipelineExpression = 
+newtype PipelineExpression =
   PipelineExpression {
     unPipelineExpression :: [TabularExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _PipelineExpression = Core.Name "hydra.ext.com.microsoft.kusto.kql.PipelineExpression"
 
-data PrintCommand = 
+data PrintCommand =
   PrintCommand {
     printCommandColumn :: (Maybe ColumnName),
     printCommandExpression :: Expression}
@@ -542,7 +542,7 @@ _PrintCommand_column = Core.Name "column"
 
 _PrintCommand_expression = Core.Name "expression"
 
-data Projection = 
+data Projection =
   Projection {
     projectionExpression :: Expression,
     projectionAlias :: (Maybe ColumnName)}
@@ -554,7 +554,7 @@ _Projection_expression = Core.Name "expression"
 
 _Projection_alias = Core.Name "alias"
 
-data PropertyExpression = 
+data PropertyExpression =
   PropertyExpression {
     propertyExpressionExpression :: Expression,
     propertyExpressionProperty :: String}
@@ -566,7 +566,7 @@ _PropertyExpression_expression = Core.Name "expression"
 
 _PropertyExpression_property = Core.Name "property"
 
-newtype Query = 
+newtype Query =
   Query {
     unQuery :: TabularExpression}
   deriving (Eq, Ord, Read, Show)
@@ -574,7 +574,7 @@ newtype Query =
 _Query = Core.Name "hydra.ext.com.microsoft.kusto.kql.Query"
 
 -- | Search across all datasets and columns or, if provided, specific datasets and/or columns
-data SearchCommand = 
+data SearchCommand =
   SearchCommand {
     searchCommandDatasets :: [TableName],
     searchCommandPattern :: Expression}
@@ -586,7 +586,7 @@ _SearchCommand_datasets = Core.Name "datasets"
 
 _SearchCommand_pattern = Core.Name "pattern"
 
-data SummarizeCommand = 
+data SummarizeCommand =
   SummarizeCommand {
     summarizeCommandColumns :: [ColumnAssignment],
     summarizeCommandBy :: [ColumnName]}
@@ -598,14 +598,14 @@ _SummarizeCommand_columns = Core.Name "columns"
 
 _SummarizeCommand_by = Core.Name "by"
 
-newtype TableName = 
+newtype TableName =
   TableName {
     unTableName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _TableName = Core.Name "hydra.ext.com.microsoft.kusto.kql.TableName"
 
-data TopCommand = 
+data TopCommand =
   TopCommand {
     topCommandCount :: Int,
     topCommandSort :: [SortBy]}
@@ -617,7 +617,7 @@ _TopCommand_count = Core.Name "count"
 
 _TopCommand_sort = Core.Name "sort"
 
-data SortBy = 
+data SortBy =
   SortBy {
     sortByColumn :: ColumnName,
     sortByOrder :: (Maybe Order)}
@@ -629,7 +629,7 @@ _SortBy_column = Core.Name "column"
 
 _SortBy_order = Core.Name "order"
 
-data TabularExpression = 
+data TabularExpression =
   TabularExpressionCommand Command |
   TabularExpressionPipeline PipelineExpression |
   TabularExpressionLet LetExpression |
@@ -646,7 +646,7 @@ _TabularExpression_let = Core.Name "let"
 
 _TabularExpression_table = Core.Name "table"
 
-data UnaryExpression = 
+data UnaryExpression =
   UnaryExpression {
     unaryExpressionOperator :: UnaryOperator,
     unaryExpressionExpression :: Expression}
@@ -658,15 +658,15 @@ _UnaryExpression_operator = Core.Name "operator"
 
 _UnaryExpression_expression = Core.Name "expression"
 
-data UnaryOperator = 
-  UnaryOperatorNot 
+data UnaryOperator =
+  UnaryOperatorNot
   deriving (Eq, Ord, Read, Show)
 
 _UnaryOperator = Core.Name "hydra.ext.com.microsoft.kusto.kql.UnaryOperator"
 
 _UnaryOperator_not = Core.Name "not"
 
-data UnionCommand = 
+data UnionCommand =
   UnionCommand {
     unionCommandParameters :: [Parameter],
     unionCommandKind :: (Maybe UnionKind),
@@ -687,9 +687,9 @@ _UnionCommand_isFuzzy = Core.Name "isFuzzy"
 
 _UnionCommand_tables = Core.Name "tables"
 
-data UnionKind = 
+data UnionKind =
   UnionKindInner  |
-  UnionKindOuter 
+  UnionKindOuter
   deriving (Eq, Ord, Read, Show)
 
 _UnionKind = Core.Name "hydra.ext.com.microsoft.kusto.kql.UnionKind"

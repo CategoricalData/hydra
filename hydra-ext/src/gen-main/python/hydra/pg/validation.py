@@ -118,30 +118,30 @@ def validate_element(check_value: Callable[[T0, T1], Maybe[str]], show_value: Ca
         match v1:
             case hydra.pg.model.ElementEdge(value=e):
                 return Just(prepend("Edge instead of vertex", show_value(e.id)))
-            
+
             case hydra.pg.model.ElementVertex(value=vertex):
                 return validate_vertex(check_value, show_value, vt, vertex)
-            
+
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     def _hoist_hydra_pg_validation_validate_element_2(check_value, et, label_for_vertex_id, show_value, v1):
         match v1:
             case hydra.pg.model.ElementVertex(value=v):
                 return Just(prepend("Vertex instead of edge", show_value(v.id)))
-            
+
             case hydra.pg.model.ElementEdge(value=edge):
                 return validate_edge(check_value, show_value, label_for_vertex_id, et, edge)
-            
+
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     def _hoist_hydra_pg_validation_validate_element_3(check_value, el, label_for_vertex_id, show_value, v1):
         match v1:
             case hydra.pg.model.ElementTypeVertex(value=vt):
                 return _hoist_hydra_pg_validation_validate_element_1(check_value, show_value, vt, el)
-            
+
             case hydra.pg.model.ElementTypeEdge(value=et):
                 return _hoist_hydra_pg_validation_validate_element_2(check_value, et, label_for_vertex_id, show_value, el)
-            
+
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     return _hoist_hydra_pg_validation_validate_element_3(check_value, el, label_for_vertex_id, show_value, typ)

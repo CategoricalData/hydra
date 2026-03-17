@@ -29,8 +29,8 @@ pythonLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = typePredicate}} 
-  where 
+        Coders.languageConstraintsTypes = typePredicate}}
+  where
     eliminationVariants =
         Sets.fromList [
           Variants.EliminationVariantRecord,
@@ -100,8 +100,8 @@ pythonReservedWords =
     Sets.fromList (Lists.concat [
       pythonKeywords,
       pythonBuiltInFunctions,
-      hydraPythonKeywords]) 
-  where 
+      hydraPythonKeywords])
+  where
     pythonKeywords =
         [
           "False",

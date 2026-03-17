@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class TypeDeclarationWithComments implements Serializable, Comparable<TypeDeclarationWithComments> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.TypeDeclarationWithComments");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public static final hydra.core.Name COMMENTS = new hydra.core.Name("comments");
-  
+
   public final hydra.ext.java.syntax.TypeDeclaration value;
-  
+
   public final hydra.util.Maybe<String> comments;
-  
+
   public TypeDeclarationWithComments (hydra.ext.java.syntax.TypeDeclaration value, hydra.util.Maybe<String> comments) {
     this.value = value;
     this.comments = comments;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TypeDeclarationWithComments)) {
@@ -32,12 +32,12 @@ public class TypeDeclarationWithComments implements Serializable, Comparable<Typ
       this.comments,
       o.comments);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value) + 3 * java.util.Objects.hashCode(comments);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TypeDeclarationWithComments other) {
@@ -48,11 +48,11 @@ public class TypeDeclarationWithComments implements Serializable, Comparable<Typ
     }
     return ((Comparable) comments).compareTo(other.comments);
   }
-  
+
   public TypeDeclarationWithComments withValue(hydra.ext.java.syntax.TypeDeclaration value) {
     return new TypeDeclarationWithComments(value, comments);
   }
-  
+
   public TypeDeclarationWithComments withComments(hydra.util.Maybe<String> comments) {
     return new TypeDeclarationWithComments(value, comments);
   }

@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class CatchFormalParameter implements Serializable, Comparable<CatchFormalParameter> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.CatchFormalParameter");
-  
+
   public static final hydra.core.Name MODIFIERS = new hydra.core.Name("modifiers");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   public static final hydra.core.Name ID = new hydra.core.Name("id");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers;
-  
+
   public final hydra.ext.java.syntax.CatchType type;
-  
+
   public final hydra.ext.java.syntax.VariableDeclaratorId id;
-  
+
   public CatchFormalParameter (hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.CatchType type, hydra.ext.java.syntax.VariableDeclaratorId id) {
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof CatchFormalParameter)) {
@@ -39,12 +39,12 @@ public class CatchFormalParameter implements Serializable, Comparable<CatchForma
       this.id,
       o.id);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(modifiers) + 3 * java.util.Objects.hashCode(type) + 5 * java.util.Objects.hashCode(id);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(CatchFormalParameter other) {
@@ -59,15 +59,15 @@ public class CatchFormalParameter implements Serializable, Comparable<CatchForma
     }
     return ((Comparable) id).compareTo(other.id);
   }
-  
+
   public CatchFormalParameter withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new CatchFormalParameter(modifiers, type, id);
   }
-  
+
   public CatchFormalParameter withType(hydra.ext.java.syntax.CatchType type) {
     return new CatchFormalParameter(modifiers, type, id);
   }
-  
+
   public CatchFormalParameter withId(hydra.ext.java.syntax.VariableDeclaratorId id) {
     return new CatchFormalParameter(modifiers, type, id);
   }

@@ -42,8 +42,8 @@ applicationExpressionToExpr app =
 -- | Convert an application pattern to an AST expression
 applicationPatternToExpr :: Ast_.ApplicationPattern -> Ast.Expr
 applicationPatternToExpr appPat =
-     
-      let name = Ast_.applicationPatternName appPat 
+
+      let name = Ast_.applicationPatternName appPat
           pats = Ast_.applicationPatternArgs appPat
       in (Serialization.spaceSep (Lists.cons (nameToExpr name) (Lists.map patternToExpr pats)))
 
@@ -57,8 +57,8 @@ assertionToExpr sert =
 -- | Convert a case expression to an AST expression
 caseExpressionToExpr :: Ast_.CaseExpression -> Ast.Expr
 caseExpressionToExpr caseExpr =
-     
-      let cs = Ast_.caseExpressionCase caseExpr 
+
+      let cs = Ast_.caseExpressionCase caseExpr
           alts = Ast_.caseExpressionAlternatives caseExpr
           ofOp =
                   Ast.Op {
@@ -82,8 +82,8 @@ caseRhsToExpr rhs = expressionToExpr (Ast_.unCaseRhs rhs)
 -- | Convert a class assertion to an AST expression
 classAssertionToExpr :: Ast_.ClassAssertion -> Ast.Expr
 classAssertionToExpr clsAsrt =
-     
-      let name = Ast_.classAssertionName clsAsrt 
+
+      let name = Ast_.classAssertionName clsAsrt
           types = Ast_.classAssertionTypes clsAsrt
       in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
         Serialization.commaSep Serialization.halfBlockStyle (Lists.map typeToExpr types)]))
@@ -92,13 +92,13 @@ classAssertionToExpr clsAsrt =
 constructorToExpr :: Ast_.Constructor -> Ast.Expr
 constructorToExpr cons =
     case cons of
-      Ast_.ConstructorOrdinary v0 ->  
-        let name = Ast_.ordinaryConstructorName v0 
+      Ast_.ConstructorOrdinary v0 ->
+        let name = Ast_.ordinaryConstructorName v0
             types = Ast_.ordinaryConstructorFields v0
         in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
           Serialization.spaceSep (Lists.map typeToExpr types)]))
-      Ast_.ConstructorRecord v0 ->  
-        let name = Ast_.recordConstructorName v0 
+      Ast_.ConstructorRecord v0 ->
+        let name = Ast_.recordConstructorName v0
             fields = Ast_.recordConstructorFields v0
         in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
           Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map fieldWithCommentsToExpr fields)]))
@@ -106,8 +106,8 @@ constructorToExpr cons =
 -- | Convert a data constructor with comments to an AST expression
 constructorWithCommentsToExpr :: Ast_.ConstructorWithComments -> Ast.Expr
 constructorWithCommentsToExpr consWithComments =
-     
-      let body = Ast_.constructorWithCommentsBody consWithComments 
+
+      let body = Ast_.constructorWithCommentsBody consWithComments
           mc = Ast_.constructorWithCommentsComments consWithComments
       in (Maybes.maybe (constructorToExpr body) (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
         constructorToExpr body])) mc)
@@ -123,8 +123,8 @@ dataOrNewtypeToExpr kw =
 declarationHeadToExpr :: Ast_.DeclarationHead -> Ast.Expr
 declarationHeadToExpr hd =
     case hd of
-      Ast_.DeclarationHeadApplication v0 ->  
-        let fun = Ast_.applicationDeclarationHeadFunction v0 
+      Ast_.DeclarationHeadApplication v0 ->
+        let fun = Ast_.applicationDeclarationHeadFunction v0
             op = Ast_.applicationDeclarationHeadOperand v0
         in (Serialization.spaceSep (Lists.cons (declarationHeadToExpr fun) [
           variableToExpr op]))
@@ -134,8 +134,8 @@ declarationHeadToExpr hd =
 declarationToExpr :: Ast_.Declaration -> Ast.Expr
 declarationToExpr decl =
     case decl of
-      Ast_.DeclarationData v0 ->  
-        let kw = Ast_.dataDeclarationKeyword v0 
+      Ast_.DeclarationData v0 ->
+        let kw = Ast_.dataDeclarationKeyword v0
             hd = Ast_.dataDeclarationHead v0
             cons = Ast_.dataDeclarationConstructors v0
             deriv = Ast_.dataDeclarationDeriving v0
@@ -151,14 +151,14 @@ declarationToExpr decl =
                         Serialization.cst "="])),
                       constructors]
         in (Serialization.indentBlock (Lists.concat2 mainParts derivingClause))
-      Ast_.DeclarationType v0 ->  
-        let hd = Ast_.typeDeclarationName v0 
+      Ast_.DeclarationType v0 ->
+        let hd = Ast_.typeDeclarationName v0
             typ = Ast_.typeDeclarationType v0
         in (Serialization.spaceSep (Lists.cons (Serialization.cst "type") (Lists.cons (declarationHeadToExpr hd) (Lists.cons (Serialization.cst "=") [
           typeToExpr typ]))))
       Ast_.DeclarationValueBinding v0 -> valueBindingToExpr v0
-      Ast_.DeclarationTypedBinding v0 ->  
-        let typeSig = Ast_.typedBindingTypeSignature v0 
+      Ast_.DeclarationTypedBinding v0 ->
+        let typeSig = Ast_.typedBindingTypeSignature v0
             vb = Ast_.typedBindingValueBinding v0
             name = Ast_.typeSignatureName typeSig
             htype = Ast_.typeSignatureType typeSig
@@ -171,8 +171,8 @@ declarationToExpr decl =
 -- | Convert a declaration with comments to an AST expression
 declarationWithCommentsToExpr :: Ast_.DeclarationWithComments -> Ast.Expr
 declarationWithCommentsToExpr declWithComments =
-     
-      let body = Ast_.declarationWithCommentsBody declWithComments 
+
+      let body = Ast_.declarationWithCommentsBody declWithComments
           mc = Ast_.declarationWithCommentsComments declWithComments
       in (Maybes.maybe (declarationToExpr body) (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
         declarationToExpr body])) mc)
@@ -188,8 +188,8 @@ expressionToExpr expr =
       Ast_.ExpressionIf v0 -> ifExpressionToExpr v0
       Ast_.ExpressionLiteral v0 -> literalToExpr v0
       Ast_.ExpressionLambda v0 -> Serialization.parenthesize (lambdaExpressionToExpr v0)
-      Ast_.ExpressionLet v0 ->  
-        let bindings = Ast_.letExpressionBindings v0 
+      Ast_.ExpressionLet v0 ->
+        let bindings = Ast_.letExpressionBindings v0
             inner = Ast_.letExpressionInner v0
             encodeBinding = \binding -> Serialization.indentSubsequentLines "    " (localBindingToExpr binding)
         in (Serialization.indentBlock (Lists.cons (Serialization.cst "") (Lists.cons (Serialization.spaceSep (Lists.cons (Serialization.cst "let") [
@@ -204,12 +204,12 @@ expressionToExpr expr =
 -- | Convert a record construction expression to an AST expression
 constructRecordExpressionToExpr :: Ast_.ConstructRecordExpression -> Ast.Expr
 constructRecordExpressionToExpr constructRecord =
-     
-      let name = Ast_.constructRecordExpressionName constructRecord 
+
+      let name = Ast_.constructRecordExpressionName constructRecord
           updates = Ast_.constructRecordExpressionFields constructRecord
           fromUpdate =
-                  \update ->  
-                    let fn = Ast_.fieldUpdateName update 
+                  \update ->
+                    let fn = Ast_.fieldUpdateName update
                         val = Ast_.fieldUpdateValue update
                     in (Serialization.ifx Operators.defineOp (nameToExpr fn) (expressionToExpr val))
           body = Serialization.commaSep Serialization.halfBlockStyle (Lists.map fromUpdate updates)
@@ -219,8 +219,8 @@ constructRecordExpressionToExpr constructRecord =
 -- | Convert a field declaration to an AST expression
 fieldToExpr :: Ast_.Field -> Ast.Expr
 fieldToExpr field =
-     
-      let name = Ast_.fieldName field 
+
+      let name = Ast_.fieldName field
           typ = Ast_.fieldType field
       in (Serialization.spaceSep (Lists.cons (nameToExpr name) (Lists.cons (Serialization.cst "::") [
         typeToExpr typ])))
@@ -228,8 +228,8 @@ fieldToExpr field =
 -- | Convert a field with comments to an AST expression
 fieldWithCommentsToExpr :: Ast_.FieldWithComments -> Ast.Expr
 fieldWithCommentsToExpr fieldWithComments =
-     
-      let field = Ast_.fieldWithCommentsField fieldWithComments 
+
+      let field = Ast_.fieldWithCommentsField fieldWithComments
           mc = Ast_.fieldWithCommentsComments fieldWithComments
       in (Maybes.maybe (fieldToExpr field) (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
         fieldToExpr field])) mc)
@@ -237,8 +237,8 @@ fieldWithCommentsToExpr fieldWithComments =
 -- | Convert an if-then-else expression to an AST expression
 ifExpressionToExpr :: Ast_.IfExpression -> Ast.Expr
 ifExpressionToExpr ifExpr =
-     
-      let eif = Ast_.ifExpressionCondition ifExpr 
+
+      let eif = Ast_.ifExpressionCondition ifExpr
           ethen = Ast_.ifExpressionThen ifExpr
           eelse = Ast_.ifExpressionElse ifExpr
           ifOp =
@@ -264,8 +264,8 @@ importExportSpecToExpr spec = nameToExpr (Ast_.importExportSpecName spec)
 -- | Convert an import statement to an AST expression
 importToExpr :: Ast_.Import -> Ast.Expr
 importToExpr import_ =
-     
-      let qual = Ast_.importQualified import_ 
+
+      let qual = Ast_.importQualified import_
           modName = Ast_.importModule import_
           mod = Ast_.importAs import_
           mspec = Ast_.importSpec import_
@@ -286,8 +286,8 @@ importToExpr import_ =
 -- | Convert a lambda expression to an AST expression
 lambdaExpressionToExpr :: Ast_.LambdaExpression -> Ast.Expr
 lambdaExpressionToExpr lambdaExpr =
-     
-      let bindings = Ast_.lambdaExpressionBindings lambdaExpr 
+
+      let bindings = Ast_.lambdaExpressionBindings lambdaExpr
           inner = Ast_.lambdaExpressionInner lambdaExpr
           head = Serialization.spaceSep (Lists.map patternToExpr bindings)
           body = expressionToExpr inner
@@ -296,7 +296,7 @@ lambdaExpressionToExpr lambdaExpr =
 -- | Convert a literal value to an AST expression
 literalToExpr :: Ast_.Literal -> Ast.Expr
 literalToExpr lit =
-     
+
       let parensIfNeg =
               \b -> \e -> Logic.ifElse b (Strings.cat [
                 "(",
@@ -320,8 +320,8 @@ localBindingToExpr binding =
 -- | Convert a module head to an AST expression
 moduleHeadToExpr :: Ast_.ModuleHead -> Ast.Expr
 moduleHeadToExpr moduleHead =
-     
-      let mc = Ast_.moduleHeadComments moduleHead 
+
+      let mc = Ast_.moduleHeadComments moduleHead
           modName = Ast_.moduleHeadName moduleHead
           mname = Ast_.unModuleName modName
           head =
@@ -333,8 +333,8 @@ moduleHeadToExpr moduleHead =
 -- | Convert a Haskell module to an AST expression
 moduleToExpr :: Ast_.Module -> Ast.Expr
 moduleToExpr module_ =
-     
-      let mh = Ast_.moduleHead module_ 
+
+      let mh = Ast_.moduleHead module_
           imports = Ast_.moduleImports module_
           decls = Ast_.moduleDeclarations module_
           warning = [
@@ -384,8 +384,8 @@ statementToExpr stmt = expressionToExpr (Ast_.unStatement stmt)
 -- | Convert a type signature to an AST expression
 typeSignatureToExpr :: Ast_.TypeSignature -> Ast.Expr
 typeSignatureToExpr typeSig =
-     
-      let name = Ast_.typeSignatureName typeSig 
+
+      let name = Ast_.typeSignatureName typeSig
           typ = Ast_.typeSignatureType typeSig
           nameExpr = nameToExpr name
           typeExpr = typeToExpr typ
@@ -404,16 +404,16 @@ typeSignatureToExpr typeSig =
 typeToExpr :: Ast_.Type -> Ast.Expr
 typeToExpr htype =
     case htype of
-      Ast_.TypeApplication v0 ->  
-        let lhs = Ast_.applicationTypeContext v0 
+      Ast_.TypeApplication v0 ->
+        let lhs = Ast_.applicationTypeContext v0
             rhs = Ast_.applicationTypeArgument v0
         in (Serialization.ifx Operators.appOp (typeToExpr lhs) (typeToExpr rhs))
-      Ast_.TypeCtx v0 ->  
-        let ctx = Ast_.contextTypeCtx v0 
+      Ast_.TypeCtx v0 ->
+        let ctx = Ast_.contextTypeCtx v0
             typ = Ast_.contextTypeType v0
         in (Serialization.ifx Operators.assertOp (assertionToExpr ctx) (typeToExpr typ))
-      Ast_.TypeFunction v0 ->  
-        let dom = Ast_.functionTypeDomain v0 
+      Ast_.TypeFunction v0 ->
+        let dom = Ast_.functionTypeDomain v0
             cod = Ast_.functionTypeCodomain v0
         in (Serialization.ifx Operators.arrowOp (typeToExpr dom) (typeToExpr cod))
       Ast_.TypeList v0 -> Serialization.bracketList Serialization.inlineStyle [
@@ -425,8 +425,8 @@ typeToExpr htype =
 valueBindingToExpr :: Ast_.ValueBinding -> Ast.Expr
 valueBindingToExpr vb =
     case vb of
-      Ast_.ValueBindingSimple v0 ->  
-        let pat = Ast_.simpleValueBindingPattern v0 
+      Ast_.ValueBindingSimple v0 ->
+        let pat = Ast_.simpleValueBindingPattern v0
             rhs = Ast_.simpleValueBindingRhs v0
             local = Ast_.simpleValueBindingLocalBindings v0
             lhsExpr = patternToExpr pat
@@ -442,7 +442,7 @@ valueBindingToExpr vb =
                         lhsExpr,
                         (Serialization.cst "=")],
                       (Serialization.tabIndent rhsExpr)]) inlineBody
-        in (Maybes.maybe body (\localBindings ->  
+        in (Maybes.maybe body (\localBindings ->
           let bindings = Ast_.unLocalBindings localBindings
           in (Serialization.indentBlock (Lists.cons body [
             Serialization.indentBlock (Lists.cons (Serialization.cst "where") (Lists.map localBindingToExpr bindings))]))) local)
@@ -462,8 +462,8 @@ toSimpleComments c = Strings.intercalate "\n" (Lists.map (\s -> Strings.cat2 "--
 -- | Write a qualified name as a string
 writeQualifiedName :: Ast_.QualifiedName -> String
 writeQualifiedName qname =
-     
-      let qualifiers = Ast_.qualifiedNameQualifiers qname 
+
+      let qualifiers = Ast_.qualifiedNameQualifiers qname
           unqual = Ast_.qualifiedNameUnqualified qname
           h = \namePart -> Ast_.unNamePart namePart
           allParts = Lists.concat2 (Lists.map h qualifiers) [

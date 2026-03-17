@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A Rust crate, represented as a collection of top-level items
-data Crate = 
+data Crate =
   Crate {
     -- | The top-level items in the crate
     crateItems :: [ItemWithComments]}
@@ -24,7 +24,7 @@ _Crate = Core.Name "hydra.ext.rust.syntax.Crate"
 _Crate_items = Core.Name "items"
 
 -- | A top-level item in a Rust module or crate
-data Item = 
+data Item =
   -- | A use declaration
   ItemUse UseDeclaration |
   -- | A struct definition
@@ -74,7 +74,7 @@ _Item_static = Core.Name "static"
 _Item_macro = Core.Name "macro"
 
 -- | An item together with optional doc comments and visibility
-data ItemWithComments = 
+data ItemWithComments =
   ItemWithComments {
     -- | Optional documentation comment
     itemWithCommentsDoc :: (Maybe String),
@@ -93,7 +93,7 @@ _ItemWithComments_visibility = Core.Name "visibility"
 _ItemWithComments_item = Core.Name "item"
 
 -- | A use declaration (e.g., use std::collections::BTreeMap;)
-data UseDeclaration = 
+data UseDeclaration =
   UseDeclaration {
     -- | Whether the use is public (pub use)
     useDeclarationPublic :: Bool,
@@ -108,7 +108,7 @@ _UseDeclaration_public = Core.Name "public"
 _UseDeclaration_tree = Core.Name "tree"
 
 -- | A use tree, representing the structure of a use path
-data UseTree = 
+data UseTree =
   -- | A simple path import
   UseTreePath UsePath |
   -- | A renamed import (e.g., BTreeMap as Map)
@@ -130,7 +130,7 @@ _UseTree_glob = Core.Name "glob"
 _UseTree_group = Core.Name "group"
 
 -- | A simple path import within a use tree
-data UsePath = 
+data UsePath =
   UsePath {
     -- | The path segments
     usePathSegments :: [String]}
@@ -141,7 +141,7 @@ _UsePath = Core.Name "hydra.ext.rust.syntax.UsePath"
 _UsePath_segments = Core.Name "segments"
 
 -- | A renamed import (e.g., BTreeMap as Map)
-data UseRename = 
+data UseRename =
   UseRename {
     -- | The original path segments
     useRenamePath :: [String],
@@ -156,7 +156,7 @@ _UseRename_path = Core.Name "path"
 _UseRename_alias = Core.Name "alias"
 
 -- | A grouped import (e.g., std::collections::{BTreeMap, BTreeSet})
-data UseGroup = 
+data UseGroup =
   UseGroup {
     -- | The common prefix path segments
     useGroupPrefix :: [String],
@@ -171,7 +171,7 @@ _UseGroup_prefix = Core.Name "prefix"
 _UseGroup_trees = Core.Name "trees"
 
 -- | A struct definition (e.g., struct Foo<T> { bar: T })
-data StructDef = 
+data StructDef =
   StructDef {
     -- | The struct name
     structDefName :: String,
@@ -206,13 +206,13 @@ _StructDef_public = Core.Name "public"
 _StructDef_doc = Core.Name "doc"
 
 -- | The body of a struct definition
-data StructBody = 
+data StructBody =
   -- | A struct with named fields
   StructBodyNamed [StructField] |
   -- | A tuple struct
   StructBodyTuple [TupleField] |
   -- | A unit struct
-  StructBodyUnit 
+  StructBodyUnit
   deriving (Eq, Ord, Read, Show)
 
 _StructBody = Core.Name "hydra.ext.rust.syntax.StructBody"
@@ -224,7 +224,7 @@ _StructBody_tuple = Core.Name "tuple"
 _StructBody_unit = Core.Name "unit"
 
 -- | A named field within a struct definition
-data StructField = 
+data StructField =
   StructField {
     -- | The field name
     structFieldName :: String,
@@ -247,7 +247,7 @@ _StructField_public = Core.Name "public"
 _StructField_doc = Core.Name "doc"
 
 -- | A positional field within a tuple struct
-data TupleField = 
+data TupleField =
   TupleField {
     -- | The field type
     tupleFieldType :: Type,
@@ -262,7 +262,7 @@ _TupleField_type = Core.Name "type"
 _TupleField_public = Core.Name "public"
 
 -- | An enum definition (e.g., enum Foo<T> { Bar(T), Baz { x: i32 } })
-data EnumDef = 
+data EnumDef =
   EnumDef {
     -- | The enum name
     enumDefName :: String,
@@ -297,7 +297,7 @@ _EnumDef_public = Core.Name "public"
 _EnumDef_doc = Core.Name "doc"
 
 -- | A variant of an enum definition
-data EnumVariant = 
+data EnumVariant =
   EnumVariant {
     -- | The variant name
     enumVariantName :: String,
@@ -316,7 +316,7 @@ _EnumVariant_body = Core.Name "body"
 _EnumVariant_doc = Core.Name "doc"
 
 -- | The body of an enum variant
-data EnumVariantBody = 
+data EnumVariantBody =
   -- | A unit variant (e.g., Foo)
   EnumVariantBodyUnit  |
   -- | A tuple variant (e.g., Foo(i32, String))
@@ -334,7 +334,7 @@ _EnumVariantBody_tuple = Core.Name "tuple"
 _EnumVariantBody_struct = Core.Name "struct"
 
 -- | A function definition (e.g., fn foo<T>(x: T) -> String { ... })
-data FnDef = 
+data FnDef =
   FnDef {
     -- | The function name
     fnDefName :: String,
@@ -385,7 +385,7 @@ _FnDef_unsafe = Core.Name "unsafe"
 _FnDef_doc = Core.Name "doc"
 
 -- | A function parameter
-data FnParam = 
+data FnParam =
   FnParam {
     -- | The parameter pattern
     fnParamPattern :: Pattern,
@@ -400,10 +400,10 @@ _FnParam_pattern = Core.Name "pattern"
 _FnParam_type = Core.Name "type"
 
 -- | A self parameter in a method
-data SelfParam = 
+data SelfParam =
   SelfParamOwned  |
   SelfParamRef  |
-  SelfParamRefMut 
+  SelfParamRefMut
   deriving (Eq, Ord, Read, Show)
 
 _SelfParam = Core.Name "hydra.ext.rust.syntax.SelfParam"
@@ -415,7 +415,7 @@ _SelfParam_ref = Core.Name "ref"
 _SelfParam_refMut = Core.Name "refMut"
 
 -- | A method parameter, which may be self or a regular parameter
-data MethodParam = 
+data MethodParam =
   -- | A self parameter
   MethodParamSelf SelfParam |
   -- | A regular function parameter
@@ -429,7 +429,7 @@ _MethodParam_self = Core.Name "self"
 _MethodParam_regular = Core.Name "regular"
 
 -- | A type alias definition (e.g., type Foo<T> = Bar<T>;)
-data TypeAlias = 
+data TypeAlias =
   TypeAlias {
     -- | The alias name
     typeAliasName :: String,
@@ -456,7 +456,7 @@ _TypeAlias_public = Core.Name "public"
 _TypeAlias_doc = Core.Name "doc"
 
 -- | A constant item (e.g., const FOO: u32 = 42;)
-data ConstDef = 
+data ConstDef =
   ConstDef {
     -- | The constant name
     constDefName :: String,
@@ -483,7 +483,7 @@ _ConstDef_public = Core.Name "public"
 _ConstDef_doc = Core.Name "doc"
 
 -- | A static item (e.g., static FOO: u32 = 42;)
-data StaticDef = 
+data StaticDef =
   StaticDef {
     -- | The static name
     staticDefName :: String,
@@ -514,7 +514,7 @@ _StaticDef_public = Core.Name "public"
 _StaticDef_doc = Core.Name "doc"
 
 -- | A module definition (either inline or external)
-data ModDef = 
+data ModDef =
   ModDef {
     -- | The module name
     modDefName :: String,
@@ -537,7 +537,7 @@ _ModDef_public = Core.Name "public"
 _ModDef_doc = Core.Name "doc"
 
 -- | An impl block (e.g., impl<T> Trait for Foo<T> { ... })
-data ImplBlock = 
+data ImplBlock =
   ImplBlock {
     -- | Generic type parameters
     implBlockGenerics :: [GenericParam],
@@ -568,7 +568,7 @@ _ImplBlock_selfType = Core.Name "selfType"
 _ImplBlock_items = Core.Name "items"
 
 -- | An item within an impl block
-data ImplItem = 
+data ImplItem =
   -- | A method definition
   ImplItemMethod ImplMethod |
   -- | An associated type definition
@@ -586,7 +586,7 @@ _ImplItem_type = Core.Name "type"
 _ImplItem_const = Core.Name "const"
 
 -- | A method within an impl block
-data ImplMethod = 
+data ImplMethod =
   ImplMethod {
     -- | The method name
     implMethodName :: String,
@@ -629,7 +629,7 @@ _ImplMethod_default = Core.Name "default"
 _ImplMethod_doc = Core.Name "doc"
 
 -- | A trait definition (e.g., trait Foo<T>: Bar + Baz { ... })
-data TraitDef = 
+data TraitDef =
   TraitDef {
     -- | The trait name
     traitDefName :: String,
@@ -668,7 +668,7 @@ _TraitDef_unsafe = Core.Name "unsafe"
 _TraitDef_doc = Core.Name "doc"
 
 -- | An item within a trait definition
-data TraitItem = 
+data TraitItem =
   -- | A method signature or default method
   TraitItemMethod TraitMethod |
   -- | An associated type
@@ -686,7 +686,7 @@ _TraitItem_type = Core.Name "type"
 _TraitItem_const = Core.Name "const"
 
 -- | A method signature or default method within a trait
-data TraitMethod = 
+data TraitMethod =
   TraitMethod {
     -- | The method name
     traitMethodName :: String,
@@ -721,7 +721,7 @@ _TraitMethod_defaultBody = Core.Name "defaultBody"
 _TraitMethod_doc = Core.Name "doc"
 
 -- | An associated type within a trait
-data TraitType = 
+data TraitType =
   TraitType {
     -- | The associated type name
     traitTypeName :: String,
@@ -744,7 +744,7 @@ _TraitType_default = Core.Name "default"
 _TraitType_doc = Core.Name "doc"
 
 -- | An associated constant within a trait
-data TraitConst = 
+data TraitConst =
   TraitConst {
     -- | The constant name
     traitConstName :: String,
@@ -767,7 +767,7 @@ _TraitConst_default = Core.Name "default"
 _TraitConst_doc = Core.Name "doc"
 
 -- | A generic type parameter (e.g., T: Clone + Debug)
-data GenericParam = 
+data GenericParam =
   GenericParam {
     -- | The parameter name
     genericParamName :: String,
@@ -782,7 +782,7 @@ _GenericParam_name = Core.Name "name"
 _GenericParam_bounds = Core.Name "bounds"
 
 -- | A bound on a type parameter
-data TypeParamBound = 
+data TypeParamBound =
   -- | A trait bound
   TypeParamBoundTrait TypePath |
   -- | A lifetime bound
@@ -796,7 +796,7 @@ _TypeParamBound_trait = Core.Name "trait"
 _TypeParamBound_lifetime = Core.Name "lifetime"
 
 -- | A lifetime (e.g., 'a, 'static)
-data Lifetime = 
+data Lifetime =
   Lifetime {
     -- | The lifetime name (without the leading quote)
     lifetimeName :: String}
@@ -807,7 +807,7 @@ _Lifetime = Core.Name "hydra.ext.rust.syntax.Lifetime"
 _Lifetime_name = Core.Name "name"
 
 -- | A where clause (e.g., where T: Clone, U: Debug)
-data WhereClause = 
+data WhereClause =
   WhereClause {
     -- | The predicates in the where clause
     whereClausePredicates :: [WherePredicate]}
@@ -818,7 +818,7 @@ _WhereClause = Core.Name "hydra.ext.rust.syntax.WhereClause"
 _WhereClause_predicates = Core.Name "predicates"
 
 -- | A single predicate in a where clause
-data WherePredicate = 
+data WherePredicate =
   WherePredicate {
     -- | The type being constrained
     wherePredicateType :: Type,
@@ -833,7 +833,7 @@ _WherePredicate_type = Core.Name "type"
 _WherePredicate_bounds = Core.Name "bounds"
 
 -- | A Rust type expression
-data Type = 
+data Type =
   -- | A path type, possibly with generic arguments
   TypePath_ TypePath |
   -- | A reference type
@@ -891,7 +891,7 @@ _Type_rawPointer = Core.Name "rawPointer"
 _Type_macro = Core.Name "macro"
 
 -- | A path-based type, possibly with generic arguments
-data TypePath = 
+data TypePath =
   TypePath {
     -- | Whether the path is absolute (starts with ::)
     typePathGlobal :: Bool,
@@ -906,7 +906,7 @@ _TypePath_global = Core.Name "global"
 _TypePath_segments = Core.Name "segments"
 
 -- | A segment within a type path
-data PathSegment = 
+data PathSegment =
   PathSegment {
     -- | The segment name
     pathSegmentName :: String,
@@ -921,7 +921,7 @@ _PathSegment_name = Core.Name "name"
 _PathSegment_arguments = Core.Name "arguments"
 
 -- | Generic arguments to a path segment
-data GenericArguments = 
+data GenericArguments =
   -- | No generic arguments
   GenericArgumentsNone  |
   -- | Angle-bracketed arguments
@@ -939,7 +939,7 @@ _GenericArguments_angleBracketed = Core.Name "angleBracketed"
 _GenericArguments_parenthesized = Core.Name "parenthesized"
 
 -- | Angle-bracketed generic arguments
-data AngleBracketedArgs = 
+data AngleBracketedArgs =
   AngleBracketedArgs {
     -- | The generic arguments
     angleBracketedArgsArgs :: [GenericArg]}
@@ -950,7 +950,7 @@ _AngleBracketedArgs = Core.Name "hydra.ext.rust.syntax.AngleBracketedArgs"
 _AngleBracketedArgs_args = Core.Name "args"
 
 -- | A single generic argument
-data GenericArg = 
+data GenericArg =
   -- | A type argument
   GenericArgType Type |
   -- | A lifetime argument
@@ -972,7 +972,7 @@ _GenericArg_const = Core.Name "const"
 _GenericArg_binding = Core.Name "binding"
 
 -- | An associated type binding within generic arguments
-data TypeBinding = 
+data TypeBinding =
   TypeBinding {
     -- | The associated type name
     typeBindingName :: String,
@@ -987,7 +987,7 @@ _TypeBinding_name = Core.Name "name"
 _TypeBinding_type = Core.Name "type"
 
 -- | Parenthesized generic arguments for Fn traits
-data ParenthesizedArgs = 
+data ParenthesizedArgs =
   ParenthesizedArgs {
     -- | The input types
     parenthesizedArgsInputs :: [Type],
@@ -1002,7 +1002,7 @@ _ParenthesizedArgs_inputs = Core.Name "inputs"
 _ParenthesizedArgs_output = Core.Name "output"
 
 -- | A reference type (e.g., &T, &mut T, &'a T)
-data ReferenceType = 
+data ReferenceType =
   ReferenceType {
     -- | Optional lifetime annotation
     referenceTypeLifetime :: (Maybe Lifetime),
@@ -1021,7 +1021,7 @@ _ReferenceType_mutable = Core.Name "mutable"
 _ReferenceType_type = Core.Name "type"
 
 -- | An array type with a fixed size (e.g., [T; 3])
-data ArrayType = 
+data ArrayType =
   ArrayType {
     -- | The element type
     arrayTypeElement :: Type,
@@ -1036,7 +1036,7 @@ _ArrayType_element = Core.Name "element"
 _ArrayType_length = Core.Name "length"
 
 -- | A function pointer type (e.g., fn(i32, i32) -> i32)
-data FnPointerType = 
+data FnPointerType =
   FnPointerType {
     -- | The parameter types
     fnPointerTypeParams :: [Type],
@@ -1051,7 +1051,7 @@ _FnPointerType_params = Core.Name "params"
 _FnPointerType_returnType = Core.Name "returnType"
 
 -- | A raw pointer type (e.g., *const T, *mut T)
-data RawPointerType = 
+data RawPointerType =
   RawPointerType {
     -- | Whether the pointer is mutable (*mut vs *const)
     rawPointerTypeMutable :: Bool,
@@ -1066,7 +1066,7 @@ _RawPointerType_mutable = Core.Name "mutable"
 _RawPointerType_type = Core.Name "type"
 
 -- | A Rust expression
-data Expression = 
+data Expression =
   -- | A literal value
   ExpressionLiteral Literal |
   -- | A path expression
@@ -1204,7 +1204,7 @@ _Expression_macro = Core.Name "macro"
 _Expression_paren = Core.Name "paren"
 
 -- | A path used as an expression
-data ExprPath = 
+data ExprPath =
   ExprPath {
     -- | Whether the path is global
     exprPathGlobal :: Bool,
@@ -1219,7 +1219,7 @@ _ExprPath_global = Core.Name "global"
 _ExprPath_segments = Core.Name "segments"
 
 -- | A function call expression
-data CallExpr = 
+data CallExpr =
   CallExpr {
     -- | The function being called
     callExprFunction :: Expression,
@@ -1234,7 +1234,7 @@ _CallExpr_function = Core.Name "function"
 _CallExpr_args = Core.Name "args"
 
 -- | A method call expression
-data MethodCallExpr = 
+data MethodCallExpr =
   MethodCallExpr {
     -- | The receiver expression
     methodCallExprReceiver :: Expression,
@@ -1257,7 +1257,7 @@ _MethodCallExpr_turbofish = Core.Name "turbofish"
 _MethodCallExpr_args = Core.Name "args"
 
 -- | A field access expression
-data FieldAccessExpr = 
+data FieldAccessExpr =
   FieldAccessExpr {
     -- | The expression being accessed
     fieldAccessExprObject :: Expression,
@@ -1272,7 +1272,7 @@ _FieldAccessExpr_object = Core.Name "object"
 _FieldAccessExpr_field = Core.Name "field"
 
 -- | A tuple index expression
-data TupleIndexExpr = 
+data TupleIndexExpr =
   TupleIndexExpr {
     -- | The tuple expression
     tupleIndexExprTuple :: Expression,
@@ -1287,7 +1287,7 @@ _TupleIndexExpr_tuple = Core.Name "tuple"
 _TupleIndexExpr_index = Core.Name "index"
 
 -- | A closure expression
-data ClosureExpr = 
+data ClosureExpr =
   ClosureExpr {
     -- | Whether the closure captures by move
     closureExprMove :: Bool,
@@ -1310,7 +1310,7 @@ _ClosureExpr_returnType = Core.Name "returnType"
 _ClosureExpr_body = Core.Name "body"
 
 -- | A closure parameter
-data ClosureParam = 
+data ClosureParam =
   ClosureParam {
     -- | The parameter pattern
     closureParamPattern :: Pattern,
@@ -1325,7 +1325,7 @@ _ClosureParam_pattern = Core.Name "pattern"
 _ClosureParam_type = Core.Name "type"
 
 -- | An if expression, optionally with if let
-data IfExpr = 
+data IfExpr =
   IfExpr {
     -- | The condition
     ifExprCondition :: IfCondition,
@@ -1344,7 +1344,7 @@ _IfExpr_thenBlock = Core.Name "thenBlock"
 _IfExpr_elseBranch = Core.Name "elseBranch"
 
 -- | The condition of an if expression
-data IfCondition = 
+data IfCondition =
   -- | A boolean condition
   IfConditionBool Expression |
   -- | A let condition
@@ -1358,7 +1358,7 @@ _IfCondition_bool = Core.Name "bool"
 _IfCondition_let = Core.Name "let"
 
 -- | A match expression
-data MatchExpr = 
+data MatchExpr =
   MatchExpr {
     -- | The expression being matched
     matchExprScrutinee :: Expression,
@@ -1373,7 +1373,7 @@ _MatchExpr_scrutinee = Core.Name "scrutinee"
 _MatchExpr_arms = Core.Name "arms"
 
 -- | A single arm in a match expression
-data MatchArm = 
+data MatchArm =
   MatchArm {
     -- | The pattern to match
     matchArmPattern :: Pattern,
@@ -1392,7 +1392,7 @@ _MatchArm_guard = Core.Name "guard"
 _MatchArm_body = Core.Name "body"
 
 -- | A loop expression
-data LoopExpr = 
+data LoopExpr =
   LoopExpr {
     -- | Optional loop label
     loopExprLabel :: (Maybe String),
@@ -1407,7 +1407,7 @@ _LoopExpr_label = Core.Name "label"
 _LoopExpr_body = Core.Name "body"
 
 -- | A while expression, optionally with while let
-data WhileExpr = 
+data WhileExpr =
   WhileExpr {
     -- | Optional loop label
     whileExprLabel :: (Maybe String),
@@ -1426,7 +1426,7 @@ _WhileExpr_condition = Core.Name "condition"
 _WhileExpr_body = Core.Name "body"
 
 -- | A for expression
-data ForExpr = 
+data ForExpr =
   ForExpr {
     -- | Optional loop label
     forExprLabel :: (Maybe String),
@@ -1449,7 +1449,7 @@ _ForExpr_iter = Core.Name "iter"
 _ForExpr_body = Core.Name "body"
 
 -- | A binary operation
-data BinaryExpr = 
+data BinaryExpr =
   BinaryExpr {
     -- | The left-hand operand
     binaryExprLeft :: Expression,
@@ -1468,7 +1468,7 @@ _BinaryExpr_op = Core.Name "op"
 _BinaryExpr_right = Core.Name "right"
 
 -- | A binary operator
-data BinaryOp = 
+data BinaryOp =
   BinaryOpAdd  |
   BinaryOpSub  |
   BinaryOpMul  |
@@ -1486,7 +1486,7 @@ data BinaryOp =
   BinaryOpLt  |
   BinaryOpLe  |
   BinaryOpGt  |
-  BinaryOpGe 
+  BinaryOpGe
   deriving (Eq, Ord, Read, Show)
 
 _BinaryOp = Core.Name "hydra.ext.rust.syntax.BinaryOp"
@@ -1528,7 +1528,7 @@ _BinaryOp_gt = Core.Name "gt"
 _BinaryOp_ge = Core.Name "ge"
 
 -- | A unary operation
-data UnaryExpr = 
+data UnaryExpr =
   UnaryExpr {
     -- | The unary operator
     unaryExprOp :: UnaryOp,
@@ -1543,9 +1543,9 @@ _UnaryExpr_op = Core.Name "op"
 _UnaryExpr_operand = Core.Name "operand"
 
 -- | A unary operator
-data UnaryOp = 
+data UnaryOp =
   UnaryOpNeg  |
-  UnaryOpNot 
+  UnaryOpNot
   deriving (Eq, Ord, Read, Show)
 
 _UnaryOp = Core.Name "hydra.ext.rust.syntax.UnaryOp"
@@ -1555,7 +1555,7 @@ _UnaryOp_neg = Core.Name "neg"
 _UnaryOp_not = Core.Name "not"
 
 -- | A reference expression
-data RefExpr = 
+data RefExpr =
   RefExpr {
     -- | Whether the reference is mutable
     refExprMutable :: Bool,
@@ -1570,7 +1570,7 @@ _RefExpr_mutable = Core.Name "mutable"
 _RefExpr_expr = Core.Name "expr"
 
 -- | A struct literal expression
-data StructExpr = 
+data StructExpr =
   StructExpr {
     -- | The struct path
     structExprPath :: ExprPath,
@@ -1589,7 +1589,7 @@ _StructExpr_fields = Core.Name "fields"
 _StructExpr_rest = Core.Name "rest"
 
 -- | A field-value pair in a struct literal
-data FieldValue = 
+data FieldValue =
   FieldValue {
     -- | The field name
     fieldValueName :: String,
@@ -1604,7 +1604,7 @@ _FieldValue_name = Core.Name "name"
 _FieldValue_value = Core.Name "value"
 
 -- | An array expression
-data ArrayExpr = 
+data ArrayExpr =
   -- | An array literal
   ArrayExprElements [Expression] |
   -- | An array repeat expression
@@ -1618,7 +1618,7 @@ _ArrayExpr_elements = Core.Name "elements"
 _ArrayExpr_repeat = Core.Name "repeat"
 
 -- | An index expression
-data IndexExpr = 
+data IndexExpr =
   IndexExpr {
     -- | The expression being indexed
     indexExprObject :: Expression,
@@ -1633,7 +1633,7 @@ _IndexExpr_object = Core.Name "object"
 _IndexExpr_index = Core.Name "index"
 
 -- | A range expression
-data RangeExpr = 
+data RangeExpr =
   RangeExpr {
     -- | The lower bound (optional)
     rangeExprFrom :: (Maybe Expression),
@@ -1652,7 +1652,7 @@ _RangeExpr_to = Core.Name "to"
 _RangeExpr_inclusive = Core.Name "inclusive"
 
 -- | A type cast expression
-data CastExpr = 
+data CastExpr =
   CastExpr {
     -- | The expression being cast
     castExprExpr :: Expression,
@@ -1667,7 +1667,7 @@ _CastExpr_expr = Core.Name "expr"
 _CastExpr_type = Core.Name "type"
 
 -- | A type ascription expression
-data TypeAscriptionExpr = 
+data TypeAscriptionExpr =
   TypeAscriptionExpr {
     -- | The expression
     typeAscriptionExprExpr :: Expression,
@@ -1682,7 +1682,7 @@ _TypeAscriptionExpr_expr = Core.Name "expr"
 _TypeAscriptionExpr_type = Core.Name "type"
 
 -- | An assignment expression
-data AssignExpr = 
+data AssignExpr =
   AssignExpr {
     -- | The left-hand side (target)
     assignExprTarget :: Expression,
@@ -1697,7 +1697,7 @@ _AssignExpr_target = Core.Name "target"
 _AssignExpr_value = Core.Name "value"
 
 -- | A compound assignment expression
-data CompoundAssignExpr = 
+data CompoundAssignExpr =
   CompoundAssignExpr {
     -- | The left-hand side (target)
     compoundAssignExprTarget :: Expression,
@@ -1716,7 +1716,7 @@ _CompoundAssignExpr_op = Core.Name "op"
 _CompoundAssignExpr_value = Core.Name "value"
 
 -- | A compound assignment operator
-data CompoundAssignOp = 
+data CompoundAssignOp =
   CompoundAssignOpAddAssign  |
   CompoundAssignOpSubAssign  |
   CompoundAssignOpMulAssign  |
@@ -1726,7 +1726,7 @@ data CompoundAssignOp =
   CompoundAssignOpBitOrAssign  |
   CompoundAssignOpBitXorAssign  |
   CompoundAssignOpShlAssign  |
-  CompoundAssignOpShrAssign 
+  CompoundAssignOpShrAssign
   deriving (Eq, Ord, Read, Show)
 
 _CompoundAssignOp = Core.Name "hydra.ext.rust.syntax.CompoundAssignOp"
@@ -1752,7 +1752,7 @@ _CompoundAssignOp_shlAssign = Core.Name "shlAssign"
 _CompoundAssignOp_shrAssign = Core.Name "shrAssign"
 
 -- | A macro invocation
-data MacroInvocation = 
+data MacroInvocation =
   MacroInvocation {
     -- | The macro path
     macroInvocationPath :: [String],
@@ -1771,10 +1771,10 @@ _MacroInvocation_delimiter = Core.Name "delimiter"
 _MacroInvocation_tokens = Core.Name "tokens"
 
 -- | The delimiter style for a macro invocation
-data MacroDelimiter = 
+data MacroDelimiter =
   MacroDelimiterParen  |
   MacroDelimiterBracket  |
-  MacroDelimiterBrace 
+  MacroDelimiterBrace
   deriving (Eq, Ord, Read, Show)
 
 _MacroDelimiter = Core.Name "hydra.ext.rust.syntax.MacroDelimiter"
@@ -1786,7 +1786,7 @@ _MacroDelimiter_bracket = Core.Name "bracket"
 _MacroDelimiter_brace = Core.Name "brace"
 
 -- | A statement within a block
-data Statement = 
+data Statement =
   -- | A let binding
   StatementLet LetStatement |
   -- | An expression statement
@@ -1794,7 +1794,7 @@ data Statement =
   -- | An item declaration within a block
   StatementItem Item |
   -- | An empty statement
-  StatementEmpty 
+  StatementEmpty
   deriving (Eq, Ord, Read, Show)
 
 _Statement = Core.Name "hydra.ext.rust.syntax.Statement"
@@ -1808,7 +1808,7 @@ _Statement_item = Core.Name "item"
 _Statement_empty = Core.Name "empty"
 
 -- | A let statement
-data LetStatement = 
+data LetStatement =
   LetStatement {
     -- | The binding pattern
     letStatementPattern :: Pattern,
@@ -1831,7 +1831,7 @@ _LetStatement_type = Core.Name "type"
 _LetStatement_init = Core.Name "init"
 
 -- | A block expression
-data Block = 
+data Block =
   Block {
     -- | The statements in the block
     blockStatements :: [Statement],
@@ -1846,7 +1846,7 @@ _Block_statements = Core.Name "statements"
 _Block_expression = Core.Name "expression"
 
 -- | A Rust pattern (used in let, match, function parameters, etc.)
-data Pattern = 
+data Pattern =
   -- | A wildcard pattern (_)
   PatternWildcard  |
   -- | An identifier pattern
@@ -1904,7 +1904,7 @@ _Pattern_rest = Core.Name "rest"
 _Pattern_paren = Core.Name "paren"
 
 -- | An identifier pattern
-data IdentifierPattern = 
+data IdentifierPattern =
   IdentifierPattern {
     -- | The identifier name
     identifierPatternName :: String,
@@ -1923,7 +1923,7 @@ _IdentifierPattern_mutable = Core.Name "mutable"
 _IdentifierPattern_atPattern = Core.Name "atPattern"
 
 -- | A reference pattern
-data RefPattern = 
+data RefPattern =
   RefPattern {
     -- | Whether the reference is mutable
     refPatternMutable :: Bool,
@@ -1938,7 +1938,7 @@ _RefPattern_mutable = Core.Name "mutable"
 _RefPattern_pattern = Core.Name "pattern"
 
 -- | A struct pattern
-data StructPattern = 
+data StructPattern =
   StructPattern {
     -- | The struct path
     structPatternPath :: ExprPath,
@@ -1957,7 +1957,7 @@ _StructPattern_fields = Core.Name "fields"
 _StructPattern_rest = Core.Name "rest"
 
 -- | A field pattern within a struct pattern
-data FieldPattern = 
+data FieldPattern =
   FieldPattern {
     -- | The field name
     fieldPatternName :: String,
@@ -1972,7 +1972,7 @@ _FieldPattern_name = Core.Name "name"
 _FieldPattern_pattern = Core.Name "pattern"
 
 -- | A tuple struct pattern
-data TupleStructPattern = 
+data TupleStructPattern =
   TupleStructPattern {
     -- | The path to the tuple struct or variant
     tupleStructPatternPath :: ExprPath,
@@ -1987,7 +1987,7 @@ _TupleStructPattern_path = Core.Name "path"
 _TupleStructPattern_elements = Core.Name "elements"
 
 -- | A range pattern
-data RangePattern = 
+data RangePattern =
   RangePattern {
     -- | The lower bound
     rangePatternFrom :: (Maybe Pattern),
@@ -2006,7 +2006,7 @@ _RangePattern_to = Core.Name "to"
 _RangePattern_inclusive = Core.Name "inclusive"
 
 -- | A literal value
-data Literal = 
+data Literal =
   -- | An integer literal
   LiteralInteger IntegerLiteral |
   -- | A floating-point literal
@@ -2044,7 +2044,7 @@ _Literal_byte = Core.Name "byte"
 _Literal_bool = Core.Name "bool"
 
 -- | An integer literal with optional suffix
-data IntegerLiteral = 
+data IntegerLiteral =
   IntegerLiteral {
     -- | The integer value
     integerLiteralValue :: Integer,
@@ -2059,7 +2059,7 @@ _IntegerLiteral_value = Core.Name "value"
 _IntegerLiteral_suffix = Core.Name "suffix"
 
 -- | A floating-point literal with optional suffix
-data FloatLiteral = 
+data FloatLiteral =
   FloatLiteral {
     -- | The float value
     floatLiteralValue :: Double,
@@ -2074,7 +2074,7 @@ _FloatLiteral_value = Core.Name "value"
 _FloatLiteral_suffix = Core.Name "suffix"
 
 -- | An attribute (e.g., #[derive(Clone)], #[cfg(test)])
-data Attribute = 
+data Attribute =
   Attribute {
     -- | Whether the attribute is an inner attribute (#![...] vs #[...])
     attributeInner :: Bool,
@@ -2093,7 +2093,7 @@ _Attribute_path = Core.Name "path"
 _Attribute_tokens = Core.Name "tokens"
 
 -- | A visibility qualifier
-data Visibility = 
+data Visibility =
   -- | Public (pub)
   VisibilityPublic  |
   -- | Crate-visible (pub(crate))
@@ -2101,7 +2101,7 @@ data Visibility =
   -- | Visible to a specific path (pub(in path))
   VisibilityRestricted [String] |
   -- | Private (default)
-  VisibilityPrivate 
+  VisibilityPrivate
   deriving (Eq, Ord, Read, Show)
 
 _Visibility = Core.Name "hydra.ext.rust.syntax.Visibility"
@@ -2115,7 +2115,7 @@ _Visibility_restricted = Core.Name "restricted"
 _Visibility_private = Core.Name "private"
 
 -- | A let condition (e.g., let Some(x) = opt)
-data LetCondition = 
+data LetCondition =
   LetCondition {
     -- | The pattern
     letConditionPattern :: Pattern,
@@ -2130,7 +2130,7 @@ _LetCondition_pattern = Core.Name "pattern"
 _LetCondition_expr = Core.Name "expr"
 
 -- | An array repeat expression (e.g., [0; 10])
-data ArrayRepeat = 
+data ArrayRepeat =
   ArrayRepeat {
     -- | The element expression
     arrayRepeatElement :: Expression,

@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class SplitArgs implements Serializable, Comparable<SplitArgs> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.SplitArgs");
-  
+
   public static final hydra.core.Name SCOPE = new hydra.core.Name("scope");
-  
+
   public static final hydra.core.Name DELIMITER = new hydra.core.Name("delimiter");
-  
+
   public final hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument> scope;
-  
+
   public final hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument delimiter;
-  
+
   public SplitArgs (hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument> scope, hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument delimiter) {
     this.scope = scope;
     this.delimiter = delimiter;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof SplitArgs)) {
@@ -32,12 +32,12 @@ public class SplitArgs implements Serializable, Comparable<SplitArgs> {
       this.delimiter,
       o.delimiter);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(scope) + 3 * java.util.Objects.hashCode(delimiter);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SplitArgs other) {
@@ -48,11 +48,11 @@ public class SplitArgs implements Serializable, Comparable<SplitArgs> {
     }
     return ((Comparable) delimiter).compareTo(other.delimiter);
   }
-  
+
   public SplitArgs withScope(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument> scope) {
     return new SplitArgs(scope, delimiter);
   }
-  
+
   public SplitArgs withDelimiter(hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument delimiter) {
     return new SplitArgs(scope, delimiter);
   }

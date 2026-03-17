@@ -6,68 +6,68 @@ import java.io.Serializable;
 
 public abstract class Parameters implements Serializable, Comparable<Parameters> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Parameters");
-  
+
   public static final hydra.core.Name SLASH_NO_DEFAULT = new hydra.core.Name("slashNoDefault");
-  
+
   public static final hydra.core.Name SLASH_WITH_DEFAULT = new hydra.core.Name("slashWithDefault");
-  
+
   public static final hydra.core.Name PARAM_NO_DEFAULT = new hydra.core.Name("paramNoDefault");
-  
+
   public static final hydra.core.Name PARAM_WITH_DEFAULT = new hydra.core.Name("paramWithDefault");
-  
+
   public static final hydra.core.Name STAR_ETC = new hydra.core.Name("starEtc");
-  
+
   private Parameters () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(SlashNoDefault instance) ;
-    
+
     R visit(SlashWithDefault instance) ;
-    
+
     R visit(ParamNoDefault instance) ;
-    
+
     R visit(ParamWithDefault instance) ;
-    
+
     R visit(StarEtc instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Parameters instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(SlashNoDefault instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(SlashWithDefault instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ParamNoDefault instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ParamWithDefault instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(StarEtc instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class SlashNoDefault extends hydra.ext.python.syntax.Parameters implements Serializable {
     public final hydra.ext.python.syntax.SlashNoDefaultParameters value;
-    
+
     public SlashNoDefault (hydra.ext.python.syntax.SlashNoDefaultParameters value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof SlashNoDefault)) {
@@ -78,12 +78,12 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Parameters other) {
@@ -94,20 +94,20 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
       SlashNoDefault o = (SlashNoDefault) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class SlashWithDefault extends hydra.ext.python.syntax.Parameters implements Serializable {
     public final hydra.ext.python.syntax.SlashWithDefaultParameters value;
-    
+
     public SlashWithDefault (hydra.ext.python.syntax.SlashWithDefaultParameters value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof SlashWithDefault)) {
@@ -118,12 +118,12 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Parameters other) {
@@ -134,20 +134,20 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
       SlashWithDefault o = (SlashWithDefault) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ParamNoDefault extends hydra.ext.python.syntax.Parameters implements Serializable {
     public final hydra.ext.python.syntax.ParamNoDefaultParameters value;
-    
+
     public ParamNoDefault (hydra.ext.python.syntax.ParamNoDefaultParameters value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ParamNoDefault)) {
@@ -158,12 +158,12 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Parameters other) {
@@ -174,20 +174,20 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
       ParamNoDefault o = (ParamNoDefault) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ParamWithDefault extends hydra.ext.python.syntax.Parameters implements Serializable {
     public final hydra.ext.python.syntax.ParamWithDefaultParameters value;
-    
+
     public ParamWithDefault (hydra.ext.python.syntax.ParamWithDefaultParameters value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ParamWithDefault)) {
@@ -198,12 +198,12 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Parameters other) {
@@ -214,20 +214,20 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
       ParamWithDefault o = (ParamWithDefault) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class StarEtc extends hydra.ext.python.syntax.Parameters implements Serializable {
     public final hydra.ext.python.syntax.StarEtc value;
-    
+
     public StarEtc (hydra.ext.python.syntax.StarEtc value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof StarEtc)) {
@@ -238,12 +238,12 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Parameters other) {
@@ -254,7 +254,7 @@ public abstract class Parameters implements Serializable, Comparable<Parameters>
       StarEtc o = (StarEtc) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

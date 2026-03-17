@@ -18,7 +18,7 @@ public interface Eithers {
             " but found "),
           hydra.show.core.Core.term(eitherTerm)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Either e) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(hydra.lib.eithers.Either.apply(
@@ -28,7 +28,7 @@ public interface Eithers {
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> bimap(hydra.context.Context cx, T0 g, hydra.core.Term leftFun, hydra.core.Term rightFun, hydra.core.Term eitherTerm) {
     return (eitherTerm).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -41,7 +41,7 @@ public interface Eithers {
             " but found "),
           hydra.show.core.Core.term(eitherTerm)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Either e) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(hydra.lib.eithers.Either.apply(
@@ -51,7 +51,7 @@ public interface Eithers {
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> either(hydra.context.Context cx, T0 g, hydra.core.Term leftFun, hydra.core.Term rightFun, hydra.core.Term eitherTerm) {
     return (eitherTerm).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -64,7 +64,7 @@ public interface Eithers {
             " but found "),
           hydra.show.core.Core.term(eitherTerm)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Either e) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(hydra.lib.eithers.Either.apply(
@@ -74,7 +74,7 @@ public interface Eithers {
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> foldl(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term funTerm, hydra.core.Term initTerm, hydra.core.Term listTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.list(
@@ -86,7 +86,7 @@ public interface Eithers {
         new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(initTerm)),
         elements))));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> map(hydra.context.Context cx, T0 g, hydra.core.Term rightFun, hydra.core.Term eitherTerm) {
     return (eitherTerm).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -99,7 +99,7 @@ public interface Eithers {
             " but found "),
           hydra.show.core.Core.term(eitherTerm)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Either e) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(hydra.lib.eithers.Either.apply(
@@ -109,7 +109,7 @@ public interface Eithers {
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> mapList(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term funTerm, hydra.core.Term listTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.list(
@@ -121,7 +121,7 @@ public interface Eithers {
         new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(new hydra.core.Term.List((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())))),
         hydra.lib.lists.Reverse.apply(elements)))));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> mapMaybe(hydra.context.Context cx, T0 g, hydra.core.Term funTerm, hydra.core.Term maybeTerm) {
     return (maybeTerm).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -134,7 +134,7 @@ public interface Eithers {
             " but found "),
           hydra.show.core.Core.term(maybeTerm)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Maybe opt) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(hydra.lib.maybes.Maybe.applyLazy(
@@ -144,7 +144,7 @@ public interface Eithers {
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> mapSet(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term funTerm, hydra.core.Term setTerm) {
     return hydra.lib.eithers.Bind.apply(
       hydra.extract.core.Core.set(

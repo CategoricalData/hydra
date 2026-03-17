@@ -15,7 +15,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A two-level bidirectional encoder which adapts types to types and terms to terms
-data Adapter t1 t2 v1 v2 = 
+data Adapter t1 t2 v1 v2 =
   Adapter {
     -- | Whether information may be lost in the course of this adaptation
     adapterIsLossy :: Bool,
@@ -37,7 +37,7 @@ _Adapter_target = Core.Name "target"
 _Adapter_coder = Core.Name "coder"
 
 -- | A two-level encoder and decoder, operating both at a type level and an instance (data) level
-data Bicoder t1 t2 v1 v2 = 
+data Bicoder t1 t2 v1 v2 =
   Bicoder {
     -- | A function from source types to adapters
     bicoderEncode :: (t1 -> Adapter t1 t2 v1 v2),
@@ -51,11 +51,11 @@ _Bicoder_encode = Core.Name "encode"
 _Bicoder_decode = Core.Name "decode"
 
 -- | A naming convention for symbols, such as camelCase or snake_case
-data CaseConvention = 
+data CaseConvention =
   CaseConventionCamel  |
   CaseConventionPascal  |
   CaseConventionLowerSnake  |
-  CaseConventionUpperSnake 
+  CaseConventionUpperSnake
   deriving (Eq, Ord, Read, Show)
 
 _CaseConvention = Core.Name "hydra.util.CaseConvention"
@@ -69,7 +69,7 @@ _CaseConvention_lowerSnake = Core.Name "lowerSnake"
 _CaseConvention_upperSnake = Core.Name "upperSnake"
 
 -- | An encoder and decoder; a bidirectional transformation between two types
-data Coder v1 v2 = 
+data Coder v1 v2 =
   Coder {
     -- | A function which encodes source values as target values in a given context
     coderEncode :: (Context.Context -> v1 -> Either (Context.InContext Error.Error) v2),
@@ -83,10 +83,10 @@ _Coder_encode = Core.Name "encode"
 _Coder_decode = Core.Name "decode"
 
 -- | An equality judgement: less than, equal to, or greater than
-data Comparison = 
+data Comparison =
   ComparisonLessThan  |
   ComparisonEqualTo  |
-  ComparisonGreaterThan 
+  ComparisonGreaterThan
   deriving (Eq, Ord, Read, Show)
 
 _Comparison = Core.Name "hydra.util.Comparison"
@@ -98,7 +98,7 @@ _Comparison_equalTo = Core.Name "equalTo"
 _Comparison_greaterThan = Core.Name "greaterThan"
 
 -- | Numeric precision: arbitrary precision, or precision to a specified number of bits
-data Precision = 
+data Precision =
   -- | Arbitrary precision
   PrecisionArbitrary  |
   -- | Precision to a specified number of bits

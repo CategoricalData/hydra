@@ -103,8 +103,8 @@ decodeBindingName n =
 -- | Generate a decoder for an Either type
 decodeEitherType :: Core.EitherType -> Core.Term
 decodeEitherType et =
-     
-      let leftDecoder = decodeType (Core.eitherTypeLeft et) 
+
+      let leftDecoder = decodeType (Core.eitherTypeLeft et)
           rightDecoder = decodeType (Core.eitherTypeRight et)
       in (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -123,7 +123,7 @@ decodeForallType ft =
 -- | Generate a decoder for a list type
 decodeListType :: Core.Type -> Core.Term
 decodeListType elemType =
-     
+
       let elemDecoder = decodeType elemType
       in (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeList")),
@@ -1072,8 +1072,8 @@ decodeLiteralType lt =
 -- | Generate a decoder for a map type
 decodeMapType :: Core.MapType -> Core.Term
 decodeMapType mt =
-     
-      let keyDecoder = decodeType (Core.mapTypeKeys mt) 
+
+      let keyDecoder = decodeType (Core.mapTypeKeys mt)
           valDecoder = decodeType (Core.mapTypeValues mt)
       in (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1084,7 +1084,7 @@ decodeMapType mt =
 -- | Generate a decoder for an optional type
 decodeMaybeType :: Core.Type -> Core.Term
 decodeMaybeType elemType =
-     
+
       let elemDecoder = decodeType elemType
       in (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeMaybe")),
@@ -1095,8 +1095,8 @@ decodeModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Conte
 decodeModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError (Context.inContextObject ic)))),
-      Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->  
-      let decodedTypeDeps = Lists.map decodeNamespace (Module.moduleTypeDependencies mod) 
+      Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
+      let decodedTypeDeps = Lists.map decodeNamespace (Module.moduleTypeDependencies mod)
           decodedTermDeps = Lists.map decodeNamespace (Module.moduleTermDependencies mod)
           allDecodedDeps = Lists.nub (Lists.concat2 decodedTypeDeps decodedTermDeps)
       in (Right (Just (Module.Module {
@@ -1123,8 +1123,8 @@ decodeNamespace ns =
 -- | Generate a decoder for a pair type
 decodePairType :: Core.PairType -> Core.Term
 decodePairType pt =
-     
-      let firstDecoder = decodeType (Core.pairTypeFirst pt) 
+
+      let firstDecoder = decodeType (Core.pairTypeFirst pt)
           secondDecoder = decodeType (Core.pairTypeSecond pt)
       in (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1139,7 +1139,7 @@ decodeRecordType rt = decodeRecordTypeImpl (Core.Name "unknown") rt
 -- | Generate a decoder for a record type with a type name
 decodeRecordTypeImpl :: Core.Name -> [Core.FieldType] -> Core.Term
 decodeRecordTypeImpl tname rt =
-     
+
       let decodeFieldTerm =
               \ft -> Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1149,7 +1149,7 @@ decodeRecordTypeImpl tname rt =
                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldTypeName ft))))})),
                     Core.applicationArgument = (decodeType (Core.fieldTypeType ft))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}) 
+                Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})
           localVarName =
                   \ft -> Core.Name (Strings.cat [
                     "field_",
@@ -1223,7 +1223,7 @@ decodeRecordTypeNamed ename rt = decodeRecordTypeImpl ename rt
 -- | Generate a decoder for a set type
 decodeSetType :: Core.Type -> Core.Term
 decodeSetType elemType =
-     
+
       let elemDecoder = decodeType elemType
       in (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeSet")),
@@ -1305,7 +1305,7 @@ decodeUnionType rt = decodeUnionTypeNamed (Core.Name "unknown") rt
 -- | Generate a decoder for a union type with the given element name
 decodeUnionTypeNamed :: Core.Name -> [Core.FieldType] -> Core.Term
 decodeUnionTypeNamed ename rt =
-     
+
       let toVariantPair =
               \ft -> Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                 Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
@@ -1430,7 +1430,7 @@ decodeWrappedType wt = decodeWrappedTypeNamed (Core.Name "unknown") wt
 -- | Generate a decoder for a wrapped type with the given element name
 decodeWrappedTypeNamed :: Core.Name -> Core.Type -> Core.Term
 decodeWrappedTypeNamed ename wt =
-     
+
       let bodyDecoder = decodeType wt
       in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "cx"),
@@ -1566,8 +1566,8 @@ decoderResultType typ =
 -- | Build decoder function type
 decoderType :: Core.Type -> Core.Type
 decoderType typ =
-     
-      let resultType = decoderFullResultType typ 
+
+      let resultType = decoderFullResultType typ
           baseType =
                   Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
@@ -1581,8 +1581,8 @@ decoderType typ =
 -- | Build decoder function type with element name
 decoderTypeNamed :: Core.Name -> Core.Type -> Core.Type
 decoderTypeNamed ename typ =
-     
-      let resultType = decoderFullResultTypeNamed ename typ 
+
+      let resultType = decoderFullResultTypeNamed ename typ
           baseType =
                   Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
@@ -1596,8 +1596,8 @@ decoderTypeNamed ename typ =
 -- | Build type scheme for a decoder function
 decoderTypeScheme :: Core.Type -> Core.TypeScheme
 decoderTypeScheme typ =
-     
-      let typeVars = collectTypeVariables typ 
+
+      let typeVars = collectTypeVariables typ
           allOrdVars = collectOrdConstrainedVariables typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars
           constraints =
@@ -1611,8 +1611,8 @@ decoderTypeScheme typ =
 -- | Build type scheme for a decoder function with element name
 decoderTypeSchemeNamed :: Core.Name -> Core.Type -> Core.TypeScheme
 decoderTypeSchemeNamed ename typ =
-     
-      let typeVars = collectTypeVariables typ 
+
+      let typeVars = collectTypeVariables typ
           allOrdVars = collectOrdConstrainedVariables typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars
           constraints =

@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class PairType implements Serializable, Comparable<PairType> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.PairType");
-  
+
   public static final hydra.core.Name FIRST = new hydra.core.Name("first");
-  
+
   public static final hydra.core.Name SECOND = new hydra.core.Name("second");
-  
+
   /**
    * The first component of the pair
    */
   public final hydra.core.Type first;
-  
+
   /**
    * The second component of the pair
    */
   public final hydra.core.Type second;
-  
+
   public PairType (hydra.core.Type first, hydra.core.Type second) {
     this.first = first;
     this.second = second;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof PairType)) {
@@ -41,12 +41,12 @@ public class PairType implements Serializable, Comparable<PairType> {
       this.second,
       o.second);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(first) + 3 * java.util.Objects.hashCode(second);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PairType other) {
@@ -57,11 +57,11 @@ public class PairType implements Serializable, Comparable<PairType> {
     }
     return ((Comparable) second).compareTo(other.second);
   }
-  
+
   public PairType withFirst(hydra.core.Type first) {
     return new PairType(first, second);
   }
-  
+
   public PairType withSecond(hydra.core.Type second) {
     return new PairType(first, second);
   }

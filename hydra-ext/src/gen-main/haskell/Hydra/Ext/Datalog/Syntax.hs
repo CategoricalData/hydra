@@ -12,35 +12,35 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-newtype Constant = 
+newtype Constant =
   Constant {
     unConstant :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Constant = Core.Name "hydra.ext.datalog.syntax.Constant"
 
-newtype Relation = 
+newtype Relation =
   Relation {
     unRelation :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Relation = Core.Name "hydra.ext.datalog.syntax.Relation"
 
-newtype Variable = 
+newtype Variable =
   Variable {
     unVariable :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Variable = Core.Name "hydra.ext.datalog.syntax.Variable"
 
-newtype Program = 
+newtype Program =
   Program {
     unProgram :: [Program_Elmt]}
   deriving (Eq, Ord, Read, Show)
 
 _Program = Core.Name "hydra.ext.datalog.syntax.Program"
 
-data Program_Elmt = 
+data Program_Elmt =
   Program_ElmtFact Fact |
   Program_ElmtRule Rule
   deriving (Eq, Ord, Read, Show)
@@ -51,7 +51,7 @@ _Program_Elmt_Fact = Core.Name "Fact"
 
 _Program_Elmt_Rule = Core.Name "Rule"
 
-data Fact = 
+data Fact =
   Fact {
     factRelation :: Relation,
     factConstantList :: ConstantList}
@@ -63,7 +63,7 @@ _Fact_Relation = Core.Name "Relation"
 
 _Fact_ConstantList = Core.Name "ConstantList"
 
-data Rule = 
+data Rule =
   Rule {
     ruleAtom :: Atom,
     ruleAtomList :: AtomList}
@@ -75,7 +75,7 @@ _Rule_Atom = Core.Name "Atom"
 
 _Rule_AtomList = Core.Name "AtomList"
 
-data Atom = 
+data Atom =
   Atom {
     atomRelation :: Relation,
     atomTermList :: TermList}
@@ -87,7 +87,7 @@ _Atom_Relation = Core.Name "Relation"
 
 _Atom_TermList = Core.Name "TermList"
 
-data AtomList = 
+data AtomList =
   AtomListSingle Atom |
   AtomListMultiple AtomList_Multiple
   deriving (Eq, Ord, Read, Show)
@@ -98,7 +98,7 @@ _AtomList_single = Core.Name "single"
 
 _AtomList_multiple = Core.Name "multiple"
 
-data AtomList_Multiple = 
+data AtomList_Multiple =
   AtomList_Multiple {
     atomList_MultipleAtom :: Atom,
     atomList_MultipleAtomList :: AtomList}
@@ -110,7 +110,7 @@ _AtomList_Multiple_Atom = Core.Name "Atom"
 
 _AtomList_Multiple_AtomList = Core.Name "AtomList"
 
-data Term = 
+data Term =
   TermConstant Constant |
   TermVariable Variable
   deriving (Eq, Ord, Read, Show)
@@ -121,7 +121,7 @@ _Term_Constant = Core.Name "Constant"
 
 _Term_Variable = Core.Name "Variable"
 
-data TermList = 
+data TermList =
   TermListSingle Term |
   TermListMultiple TermList_Multiple
   deriving (Eq, Ord, Read, Show)
@@ -132,7 +132,7 @@ _TermList_single = Core.Name "single"
 
 _TermList_multiple = Core.Name "multiple"
 
-data TermList_Multiple = 
+data TermList_Multiple =
   TermList_Multiple {
     termList_MultipleTerm :: Term,
     termList_MultipleTermList :: TermList}
@@ -144,7 +144,7 @@ _TermList_Multiple_Term = Core.Name "Term"
 
 _TermList_Multiple_TermList = Core.Name "TermList"
 
-data ConstantList = 
+data ConstantList =
   ConstantListSingle Constant |
   ConstantListMultiple ConstantList_Multiple
   deriving (Eq, Ord, Read, Show)
@@ -155,7 +155,7 @@ _ConstantList_single = Core.Name "single"
 
 _ConstantList_multiple = Core.Name "multiple"
 
-data ConstantList_Multiple = 
+data ConstantList_Multiple =
   ConstantList_Multiple {
     constantList_MultipleConstant :: Constant,
     constantList_MultipleConstantList :: ConstantList}

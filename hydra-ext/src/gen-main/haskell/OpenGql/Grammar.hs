@@ -12,7 +12,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-data GqlProgram = 
+data GqlProgram =
   GqlProgram {
     gqlProgramActivity :: (Maybe ProgramActivity),
     gqlProgramClose :: (Maybe SessionCloseCommand)}
@@ -24,7 +24,7 @@ _GqlProgram_activity = Core.Name "activity"
 
 _GqlProgram_close = Core.Name "close"
 
-data ProgramActivity = 
+data ProgramActivity =
   ProgramActivitySession SessionActivity |
   ProgramActivityTransaction TransactionActivity
   deriving (Eq, Ord, Read, Show)
@@ -35,7 +35,7 @@ _ProgramActivity_session = Core.Name "session"
 
 _ProgramActivity_transaction = Core.Name "transaction"
 
-data SessionActivity = 
+data SessionActivity =
   SessionActivityReset [SessionResetCommand] |
   SessionActivitySetAndResetCommands SessionSetAndResetCommands
   deriving (Eq, Ord, Read, Show)
@@ -46,7 +46,7 @@ _SessionActivity_reset = Core.Name "reset"
 
 _SessionActivity_setAndResetCommands = Core.Name "setAndResetCommands"
 
-data SessionSetAndResetCommands = 
+data SessionSetAndResetCommands =
   SessionSetAndResetCommands {
     sessionSetAndResetCommandsSet :: [SessionSetCommand],
     sessionSetAndResetCommandsReset :: [SessionResetCommand]}
@@ -58,7 +58,7 @@ _SessionSetAndResetCommands_set = Core.Name "set"
 
 _SessionSetAndResetCommands_reset = Core.Name "reset"
 
-data TransactionActivity = 
+data TransactionActivity =
   TransactionActivityStart StartAndMaybeProcedureAndMaybeEnd |
   TransactionActivityProcedure ProcedureAndMaybeEnd |
   TransactionActivityEnd EndTransactionCommand
@@ -72,7 +72,7 @@ _TransactionActivity_procedure = Core.Name "procedure"
 
 _TransactionActivity_end = Core.Name "end"
 
-data StartAndMaybeProcedureAndMaybeEnd = 
+data StartAndMaybeProcedureAndMaybeEnd =
   StartAndMaybeProcedureAndMaybeEnd {
     startAndMaybeProcedureAndMaybeEndStart :: StartTransactionCommand,
     startAndMaybeProcedureAndMaybeEndProcedureAndEnd :: (Maybe ProcedureAndMaybeEnd)}
@@ -84,7 +84,7 @@ _StartAndMaybeProcedureAndMaybeEnd_start = Core.Name "start"
 
 _StartAndMaybeProcedureAndMaybeEnd_procedureAndEnd = Core.Name "procedureAndEnd"
 
-data ProcedureAndMaybeEnd = 
+data ProcedureAndMaybeEnd =
   ProcedureAndMaybeEnd {
     procedureAndMaybeEndProcedure :: ProcedureSpecification,
     procedureAndMaybeEndEnd :: (Maybe EndTransactionCommand)}
@@ -96,7 +96,7 @@ _ProcedureAndMaybeEnd_procedure = Core.Name "procedure"
 
 _ProcedureAndMaybeEnd_end = Core.Name "end"
 
-data EndTransactionCommand = 
+data EndTransactionCommand =
   EndTransactionCommandRollback RollbackCommand |
   EndTransactionCommandCommit CommitCommand
   deriving (Eq, Ord, Read, Show)
@@ -107,7 +107,7 @@ _EndTransactionCommand_rollback = Core.Name "rollback"
 
 _EndTransactionCommand_commit = Core.Name "commit"
 
-data SessionSetCommand = 
+data SessionSetCommand =
   SessionSetCommandSchema SessionSetSchemaClause |
   SessionSetCommandGraph SessionSetGraphClause |
   SessionSetCommandTimeZone SessionSetTimeZoneClause |
@@ -140,7 +140,7 @@ type SetTimeZoneValue = TimeZoneString
 
 _SetTimeZoneValue = Core.Name "openGql.grammar.SetTimeZoneValue"
 
-data SessionSetParameterClause = 
+data SessionSetParameterClause =
   SessionSetParameterClauseGraph SessionSetGraphParameterClause |
   SessionSetParameterClauseBindings SessionSetBindingTableParameterClause |
   SessionSetParameterClauseValue SessionSetValueParameterClause
@@ -154,7 +154,7 @@ _SessionSetParameterClause_bindings = Core.Name "bindings"
 
 _SessionSetParameterClause_value = Core.Name "value"
 
-data SessionSetGraphParameterClause = 
+data SessionSetGraphParameterClause =
   SessionSetGraphParameterClause {
     sessionSetGraphParameterClauseGraph :: SessionSetParameterName,
     sessionSetGraphParameterClauseInitializer :: OptTypedGraphInitializer}
@@ -166,7 +166,7 @@ _SessionSetGraphParameterClause_graph = Core.Name "graph"
 
 _SessionSetGraphParameterClause_initializer = Core.Name "initializer"
 
-data SessionSetBindingTableParameterClause = 
+data SessionSetBindingTableParameterClause =
   SessionSetBindingTableParameterClause {
     sessionSetBindingTableParameterClauseBinding :: Bool,
     sessionSetBindingTableParameterClauseParam :: SessionSetParameterName,
@@ -181,7 +181,7 @@ _SessionSetBindingTableParameterClause_param = Core.Name "param"
 
 _SessionSetBindingTableParameterClause_init = Core.Name "init"
 
-data SessionSetValueParameterClause = 
+data SessionSetValueParameterClause =
   SessionSetValueParameterClause {
     sessionSetValueParameterClauseValue :: SessionSetParameterName,
     sessionSetValueParameterClauseInitializer :: OptTypedValueInitializer}
@@ -193,7 +193,7 @@ _SessionSetValueParameterClause_value = Core.Name "value"
 
 _SessionSetValueParameterClause_initializer = Core.Name "initializer"
 
-data SessionSetParameterName = 
+data SessionSetParameterName =
   SessionSetParameterName {
     sessionSetParameterNameIfNotExists :: Bool,
     sessionSetParameterNameParameter :: SessionParameterSpecification}
@@ -209,7 +209,7 @@ type SessionResetCommand = (Maybe SessionResetArguments)
 
 _SessionResetCommand = Core.Name "openGql.grammar.SessionResetCommand"
 
-data SessionResetArguments = 
+data SessionResetArguments =
   SessionResetArgumentsParametersOrCharacteristics AllParametersOrCharacteristics |
   SessionResetArgumentsSchema  |
   SessionResetArgumentsGraph  |
@@ -229,7 +229,7 @@ _SessionResetArguments_timeZone = Core.Name "timeZone"
 
 _SessionResetArguments_parameterSessionSpecification = Core.Name "parameterSessionSpecification"
 
-data AllParametersOrCharacteristics = 
+data AllParametersOrCharacteristics =
   AllParametersOrCharacteristics {
     allParametersOrCharacteristicsAll :: Bool,
     allParametersOrCharacteristicsType :: ParametersOrCharacteristics}
@@ -241,9 +241,9 @@ _AllParametersOrCharacteristics_all = Core.Name "all"
 
 _AllParametersOrCharacteristics_type = Core.Name "type"
 
-data ParametersOrCharacteristics = 
+data ParametersOrCharacteristics =
   ParametersOrCharacteristicsParameters  |
-  ParametersOrCharacteristicsCharacteristics 
+  ParametersOrCharacteristicsCharacteristics
   deriving (Eq, Ord, Read, Show)
 
 _ParametersOrCharacteristics = Core.Name "openGql.grammar.ParametersOrCharacteristics"
@@ -252,7 +252,7 @@ _ParametersOrCharacteristics_parameters = Core.Name "parameters"
 
 _ParametersOrCharacteristics_characteristics = Core.Name "characteristics"
 
-data ParameterSessionSpecification = 
+data ParameterSessionSpecification =
   ParameterSessionSpecification {
     parameterSessionSpecificationParameter :: Bool,
     parameterSessionSpecificationSessionParameterSpecification :: SessionParameterSpecification}
@@ -284,9 +284,9 @@ type TransactionMode = TransactionAccessMode
 
 _TransactionMode = Core.Name "openGql.grammar.TransactionMode"
 
-data TransactionAccessMode = 
+data TransactionAccessMode =
   TransactionAccessModeReadOnly  |
-  TransactionAccessModeReadWrite 
+  TransactionAccessModeReadWrite
   deriving (Eq, Ord, Read, Show)
 
 _TransactionAccessMode = Core.Name "openGql.grammar.TransactionAccessMode"
@@ -319,7 +319,7 @@ type NestedQuerySpecification = ProcedureBody
 
 _NestedQuerySpecification = Core.Name "openGql.grammar.NestedQuerySpecification"
 
-data ProcedureBody = 
+data ProcedureBody =
   ProcedureBody {
     procedureBodyAtSchema :: (Maybe AtSchemaClause),
     procedureBodyBindings :: (Maybe BindingVariableDefinitionBlock),
@@ -338,7 +338,7 @@ type BindingVariableDefinitionBlock = [BindingVariableDefinition]
 
 _BindingVariableDefinitionBlock = Core.Name "openGql.grammar.BindingVariableDefinitionBlock"
 
-data BindingVariableDefinition = 
+data BindingVariableDefinition =
   BindingVariableDefinitionGraph GraphVariableDefinition |
   BindingVariableDefinitionTable BindingTableVariableDefinition |
   BindingVariableDefinitionValue ValueVariableDefinition
@@ -352,7 +352,7 @@ _BindingVariableDefinition_table = Core.Name "table"
 
 _BindingVariableDefinition_value = Core.Name "value"
 
-data StatementBlock = 
+data StatementBlock =
   StatementBlock {
     statementBlockStatement :: Statement,
     statementBlockNextStatements :: [NextStatement]}
@@ -364,7 +364,7 @@ _StatementBlock_statement = Core.Name "statement"
 
 _StatementBlock_nextStatements = Core.Name "nextStatements"
 
-data Statement = 
+data Statement =
   StatementLinearCatalogModifying LinearCatalogModifyingStatement |
   StatementLinearDataModifying LinearDataModifyingStatement |
   StatementCompositeQuery CompositeQueryStatement
@@ -378,7 +378,7 @@ _Statement_linearDataModifying = Core.Name "linearDataModifying"
 
 _Statement_compositeQuery = Core.Name "compositeQuery"
 
-data NextStatement = 
+data NextStatement =
   NextStatement {
     nextStatementYieldClause :: (Maybe YieldClause),
     nextStatementStatement :: Statement}
@@ -390,7 +390,7 @@ _NextStatement_yieldClause = Core.Name "yieldClause"
 
 _NextStatement_statement = Core.Name "statement"
 
-data GraphVariableDefinition = 
+data GraphVariableDefinition =
   GraphVariableDefinition {
     graphVariableDefinitionVariable :: BindingVariable,
     graphVariableDefinitionInitializer :: OptTypedGraphInitializer}
@@ -402,7 +402,7 @@ _GraphVariableDefinition_variable = Core.Name "variable"
 
 _GraphVariableDefinition_initializer = Core.Name "initializer"
 
-data OptTypedGraphInitializer = 
+data OptTypedGraphInitializer =
   OptTypedGraphInitializer {
     optTypedGraphInitializerType :: (Maybe TypedGraphReferenceValueType),
     optTypedGraphInitializerInitializer :: GraphInitializer}
@@ -414,7 +414,7 @@ _OptTypedGraphInitializer_type = Core.Name "type"
 
 _OptTypedGraphInitializer_initializer = Core.Name "initializer"
 
-data TypedGraphReferenceValueType = 
+data TypedGraphReferenceValueType =
   TypedGraphReferenceValueType {
     typedGraphReferenceValueTypeTyped :: (Maybe Typed),
     typedGraphReferenceValueTypeValueType :: GraphReferenceValueType}
@@ -430,7 +430,7 @@ type GraphInitializer = ()
 
 _GraphInitializer = Core.Name "openGql.grammar.GraphInitializer"
 
-data BindingTableVariableDefinition = 
+data BindingTableVariableDefinition =
   BindingTableVariableDefinition {
     bindingTableVariableDefinitionBinding :: Bool,
     bindingTableVariableDefinitionVariable :: BindingVariable,
@@ -445,7 +445,7 @@ _BindingTableVariableDefinition_variable = Core.Name "variable"
 
 _BindingTableVariableDefinition_initializer = Core.Name "initializer"
 
-data OptTypedBindingTableInitializer = 
+data OptTypedBindingTableInitializer =
   OptTypedBindingTableInitializer {
     optTypedBindingTableInitializerType :: (Maybe TypedBindingTableReferenceValueType),
     optTypedBindingTableInitializerInitializer :: BindingTableInitializer}
@@ -457,7 +457,7 @@ _OptTypedBindingTableInitializer_type = Core.Name "type"
 
 _OptTypedBindingTableInitializer_initializer = Core.Name "initializer"
 
-data TypedBindingTableReferenceValueType = 
+data TypedBindingTableReferenceValueType =
   TypedBindingTableReferenceValueType {
     typedBindingTableReferenceValueTypeTyped :: (Maybe Typed),
     typedBindingTableReferenceValueTypeValueType :: BindingTableReferenceValueType}
@@ -473,7 +473,7 @@ type BindingTableInitializer = ()
 
 _BindingTableInitializer = Core.Name "openGql.grammar.BindingTableInitializer"
 
-data ValueVariableDefinition = 
+data ValueVariableDefinition =
   ValueVariableDefinition {
     valueVariableDefinitionVariable :: BindingVariable,
     valueVariableDefinitionInitializer :: OptTypedValueInitializer}
@@ -485,7 +485,7 @@ _ValueVariableDefinition_variable = Core.Name "variable"
 
 _ValueVariableDefinition_initializer = Core.Name "initializer"
 
-data OptTypedValueInitializer = 
+data OptTypedValueInitializer =
   OptTypedValueInitializer {
     optTypedValueInitializerType :: (Maybe TypedValueType),
     optTypedValueInitializerInitializer :: ValueInitializer}
@@ -497,7 +497,7 @@ _OptTypedValueInitializer_type = Core.Name "type"
 
 _OptTypedValueInitializer_initializer = Core.Name "initializer"
 
-data TypedValueType = 
+data TypedValueType =
   TypedValueType {
     typedValueTypeTyped :: (Maybe Typed),
     typedValueTypeValueType :: ValueType}
@@ -513,7 +513,7 @@ type ValueInitializer = ()
 
 _ValueInitializer = Core.Name "openGql.grammar.ValueInitializer"
 
-data GraphExpression = 
+data GraphExpression =
   GraphExpressionObject ObjectExpressionPrimary |
   GraphExpressionReference GraphReference |
   GraphExpressionName ObjectNameOrBindingVariable |
@@ -530,9 +530,9 @@ _GraphExpression_name = Core.Name "name"
 
 _GraphExpression_current = Core.Name "current"
 
-data CurrentGraph = 
+data CurrentGraph =
   CurrentGraphGraph  |
-  CurrentGraphPropertyGraph 
+  CurrentGraphPropertyGraph
   deriving (Eq, Ord, Read, Show)
 
 _CurrentGraph = Core.Name "openGql.grammar.CurrentGraph"
@@ -541,7 +541,7 @@ _CurrentGraph_graph = Core.Name "graph"
 
 _CurrentGraph_propertyGraph = Core.Name "propertyGraph"
 
-data BindingTableExpression = 
+data BindingTableExpression =
   BindingTableExpressionNested NestedBindingTableQuerySpecification |
   BindingTableExpressionObject ObjectExpressionPrimary |
   BindingTableExpressionTable BindingTableReference |
@@ -562,7 +562,7 @@ type NestedBindingTableQuerySpecification = ()
 
 _NestedBindingTableQuerySpecification = Core.Name "openGql.grammar.NestedBindingTableQuerySpecification"
 
-data ObjectExpressionPrimary = 
+data ObjectExpressionPrimary =
   ObjectExpressionPrimaryVariable PrimaryValueExpression |
   ObjectExpressionPrimaryParenthesized ParenthesizedValueExpression |
   ObjectExpressionPrimaryNonParenthesized NonParenthesizedPrimaryValueExpressionSpecialCase
@@ -580,7 +580,7 @@ type LinearCatalogModifyingStatement = [SimpleCatalogModifyingStatement]
 
 _LinearCatalogModifyingStatement = Core.Name "openGql.grammar.LinearCatalogModifyingStatement"
 
-data SimpleCatalogModifyingStatement = 
+data SimpleCatalogModifyingStatement =
   SimpleCatalogModifyingStatementPrimitive PrimitiveCatalogModifyingStatement |
   SimpleCatalogModifyingStatementCallProcedure CallCatalogModifyingProcedureStatement
   deriving (Eq, Ord, Read, Show)
@@ -591,7 +591,7 @@ _SimpleCatalogModifyingStatement_primitive = Core.Name "primitive"
 
 _SimpleCatalogModifyingStatement_callProcedure = Core.Name "callProcedure"
 
-data PrimitiveCatalogModifyingStatement = 
+data PrimitiveCatalogModifyingStatement =
   PrimitiveCatalogModifyingStatementCreateSchema CreateSchemaStatement |
   PrimitiveCatalogModifyingStatementDropSchema DropSchemaStatement |
   PrimitiveCatalogModifyingStatementCreateGraph CreateGraphStatement |
@@ -614,7 +614,7 @@ _PrimitiveCatalogModifyingStatement_createGraphType = Core.Name "createGraphType
 
 _PrimitiveCatalogModifyingStatement_dropGraphType = Core.Name "dropGraphType"
 
-data CreateSchemaStatement = 
+data CreateSchemaStatement =
   CreateSchemaStatement {
     createSchemaStatementIfNotExists :: Bool,
     createSchemaStatementParentAndName :: CatalogSchemaParentAndName}
@@ -626,7 +626,7 @@ _CreateSchemaStatement_ifNotExists = Core.Name "ifNotExists"
 
 _CreateSchemaStatement_parentAndName = Core.Name "parentAndName"
 
-data DropSchemaStatement = 
+data DropSchemaStatement =
   DropSchemaStatement {
     dropSchemaStatementIfExists :: Bool,
     dropSchemaStatementParentAndName :: CatalogSchemaParentAndName}
@@ -638,7 +638,7 @@ _DropSchemaStatement_ifExists = Core.Name "ifExists"
 
 _DropSchemaStatement_parentAndName = Core.Name "parentAndName"
 
-data CreateGraphStatement = 
+data CreateGraphStatement =
   CreateGraphStatement {
     createGraphStatementCreateOption :: CreateGraphOption,
     createGraphStatementParentAndName :: CatalogGraphParentAndName,
@@ -656,9 +656,9 @@ _CreateGraphStatement_type = Core.Name "type"
 
 _CreateGraphStatement_source = Core.Name "source"
 
-data CreateGraphOption = 
+data CreateGraphOption =
   CreateGraphOptionGraphIfNotExists Bool |
-  CreateGraphOptionOrReplace 
+  CreateGraphOptionOrReplace
   deriving (Eq, Ord, Read, Show)
 
 _CreateGraphOption = Core.Name "openGql.grammar.CreateGraphOption"
@@ -667,7 +667,7 @@ _CreateGraphOption_graphIfNotExists = Core.Name "graphIfNotExists"
 
 _CreateGraphOption_orReplace = Core.Name "orReplace"
 
-data GraphTypeOption = 
+data GraphTypeOption =
   GraphTypeOptionOpenGraphType OpenGraphType |
   GraphTypeOptionOfGraphType OfGraphType
   deriving (Eq, Ord, Read, Show)
@@ -678,7 +678,7 @@ _GraphTypeOption_openGraphType = Core.Name "openGraphType"
 
 _GraphTypeOption_ofGraphType = Core.Name "ofGraphType"
 
-data OpenGraphType = 
+data OpenGraphType =
   OpenGraphType {
     openGraphTypeTyped :: (Maybe Typed),
     openGraphTypeGraph :: Bool}
@@ -690,7 +690,7 @@ _OpenGraphType_typed = Core.Name "typed"
 
 _OpenGraphType_graph = Core.Name "graph"
 
-data OfGraphType = 
+data OfGraphType =
   OfGraphTypeLikeGraph GraphTypeLikeGraph |
   OfGraphTypeReference TypedGraphTypeReference |
   OfGraphTypeNested TypedNestedGraphTypeSpecification
@@ -712,7 +712,7 @@ type GraphSource = GraphExpression
 
 _GraphSource = Core.Name "openGql.grammar.GraphSource"
 
-data TypedGraphTypeReference = 
+data TypedGraphTypeReference =
   TypedGraphTypeReference {
     typedGraphTypeReferenceTyped :: (Maybe Typed),
     typedGraphTypeReferenceReference :: GraphTypeReference}
@@ -724,7 +724,7 @@ _TypedGraphTypeReference_typed = Core.Name "typed"
 
 _TypedGraphTypeReference_reference = Core.Name "reference"
 
-data TypedNestedGraphTypeSpecification = 
+data TypedNestedGraphTypeSpecification =
   TypedNestedGraphTypeSpecification {
     typedNestedGraphTypeSpecificationTyped :: (Maybe Typed),
     typedNestedGraphTypeSpecificationGraph :: Bool,
@@ -739,7 +739,7 @@ _TypedNestedGraphTypeSpecification_graph = Core.Name "graph"
 
 _TypedNestedGraphTypeSpecification_specification = Core.Name "specification"
 
-data DropGraphStatement = 
+data DropGraphStatement =
   DropGraphStatement {
     dropGraphStatementIfExists :: Bool,
     dropGraphStatementParentAndName :: CatalogGraphParentAndName}
@@ -751,7 +751,7 @@ _DropGraphStatement_ifExists = Core.Name "ifExists"
 
 _DropGraphStatement_parentAndName = Core.Name "parentAndName"
 
-data CreateGraphTypeStatement = 
+data CreateGraphTypeStatement =
   CreateGraphTypeStatement {
     createGraphTypeStatementCreateOption :: CreateGraphTypeOption,
     createGraphTypeStatementParentAndName :: CatalogGraphTypeParentAndName,
@@ -766,9 +766,9 @@ _CreateGraphTypeStatement_parentAndName = Core.Name "parentAndName"
 
 _CreateGraphTypeStatement_source = Core.Name "source"
 
-data CreateGraphTypeOption = 
+data CreateGraphTypeOption =
   CreateGraphTypeOptionTypeIfNotExists Bool |
-  CreateGraphTypeOptionOrReplace 
+  CreateGraphTypeOptionOrReplace
   deriving (Eq, Ord, Read, Show)
 
 _CreateGraphTypeOption = Core.Name "openGql.grammar.CreateGraphTypeOption"
@@ -777,7 +777,7 @@ _CreateGraphTypeOption_typeIfNotExists = Core.Name "typeIfNotExists"
 
 _CreateGraphTypeOption_orReplace = Core.Name "orReplace"
 
-data GraphTypeSource = 
+data GraphTypeSource =
   GraphTypeSourceCopyOf CopyOfGraphType |
   GraphTypeSourceLikeGraph GraphTypeLikeGraph |
   GraphTypeSourceNestedSpecification NestedGraphTypeSpecification
@@ -795,7 +795,7 @@ type CopyOfGraphType = GraphTypeReference
 
 _CopyOfGraphType = Core.Name "openGql.grammar.CopyOfGraphType"
 
-data DropGraphTypeStatement = 
+data DropGraphTypeStatement =
   DropGraphTypeStatement {
     dropGraphTypeStatementIfExists :: Bool,
     dropGraphTypeStatementParentAndName :: CatalogGraphTypeParentAndName}
@@ -811,7 +811,7 @@ type CallCatalogModifyingProcedureStatement = CallProcedureStatement
 
 _CallCatalogModifyingProcedureStatement = Core.Name "openGql.grammar.CallCatalogModifyingProcedureStatement"
 
-data LinearDataModifyingStatement = 
+data LinearDataModifyingStatement =
   LinearDataModifyingStatementFocused FocusedLinearDataModifyingStatement |
   LinearDataModifyingStatementAmbient AmbientLinearDataModifyingStatement
   deriving (Eq, Ord, Read, Show)
@@ -822,7 +822,7 @@ _LinearDataModifyingStatement_focused = Core.Name "focused"
 
 _LinearDataModifyingStatement_ambient = Core.Name "ambient"
 
-data FocusedLinearDataModifyingStatement = 
+data FocusedLinearDataModifyingStatement =
   FocusedLinearDataModifyingStatementSimple FocusedLinearDataModifyingStatementBody |
   FocusedLinearDataModifyingStatementNested FocusedNestedDataModifyingProcedureSpecification
   deriving (Eq, Ord, Read, Show)
@@ -833,7 +833,7 @@ _FocusedLinearDataModifyingStatement_simple = Core.Name "simple"
 
 _FocusedLinearDataModifyingStatement_nested = Core.Name "nested"
 
-data FocusedLinearDataModifyingStatementBody = 
+data FocusedLinearDataModifyingStatementBody =
   FocusedLinearDataModifyingStatementBody {
     focusedLinearDataModifyingStatementBodyUseGraph :: UseGraphClause,
     focusedLinearDataModifyingStatementBodySimpleAccess :: SimpleLinearDataAccessingStatement,
@@ -848,7 +848,7 @@ _FocusedLinearDataModifyingStatementBody_simpleAccess = Core.Name "simpleAccess"
 
 _FocusedLinearDataModifyingStatementBody_primitiveResult = Core.Name "primitiveResult"
 
-data FocusedNestedDataModifyingProcedureSpecification = 
+data FocusedNestedDataModifyingProcedureSpecification =
   FocusedNestedDataModifyingProcedureSpecification {
     focusedNestedDataModifyingProcedureSpecificationUseGraph :: UseGraphClause,
     focusedNestedDataModifyingProcedureSpecificationNestedSpec :: NestedDataModifyingProcedureSpecification}
@@ -861,7 +861,7 @@ _FocusedNestedDataModifyingProcedureSpecification_useGraph = Core.Name "useGraph
 
 _FocusedNestedDataModifyingProcedureSpecification_nestedSpec = Core.Name "nestedSpec"
 
-data AmbientLinearDataModifyingStatement = 
+data AmbientLinearDataModifyingStatement =
   AmbientLinearDataModifyingStatementSimple AmbientLinearDataModifyingStatementBody |
   AmbientLinearDataModifyingStatementNested NestedDataModifyingProcedureSpecification
   deriving (Eq, Ord, Read, Show)
@@ -872,7 +872,7 @@ _AmbientLinearDataModifyingStatement_simple = Core.Name "simple"
 
 _AmbientLinearDataModifyingStatement_nested = Core.Name "nested"
 
-data AmbientLinearDataModifyingStatementBody = 
+data AmbientLinearDataModifyingStatementBody =
   AmbientLinearDataModifyingStatementBody {
     ambientLinearDataModifyingStatementBodySimpleAccess :: SimpleLinearDataAccessingStatement,
     ambientLinearDataModifyingStatementBodyPrimitiveResult :: (Maybe PrimitiveResultStatement)}
@@ -888,7 +888,7 @@ type SimpleLinearDataAccessingStatement = [SimpleDataAccessingStatement]
 
 _SimpleLinearDataAccessingStatement = Core.Name "openGql.grammar.SimpleLinearDataAccessingStatement"
 
-data SimpleDataAccessingStatement = 
+data SimpleDataAccessingStatement =
   SimpleDataAccessingStatementQuery SimpleQueryStatement |
   SimpleDataAccessingStatementModifying SimpleDataModifyingStatement
   deriving (Eq, Ord, Read, Show)
@@ -899,7 +899,7 @@ _SimpleDataAccessingStatement_query = Core.Name "query"
 
 _SimpleDataAccessingStatement_modifying = Core.Name "modifying"
 
-data SimpleDataModifyingStatement = 
+data SimpleDataModifyingStatement =
   SimpleDataModifyingStatementPrimitive PrimitiveDataModifyingStatement |
   SimpleDataModifyingStatementCallProcedure CallDataModifyingProcedureStatement
   deriving (Eq, Ord, Read, Show)
@@ -910,7 +910,7 @@ _SimpleDataModifyingStatement_primitive = Core.Name "primitive"
 
 _SimpleDataModifyingStatement_callProcedure = Core.Name "callProcedure"
 
-data PrimitiveDataModifyingStatement = 
+data PrimitiveDataModifyingStatement =
   PrimitiveDataModifyingStatementInsert InsertStatement |
   PrimitiveDataModifyingStatementSet SetStatement |
   PrimitiveDataModifyingStatementRemove RemoveStatement |
@@ -939,7 +939,7 @@ type SetItemList = [SetItem]
 
 _SetItemList = Core.Name "openGql.grammar.SetItemList"
 
-data SetItem = 
+data SetItem =
   SetItemProperty SetPropertyItem |
   SetItemAllProperties SetAllPropertiesItem |
   SetItemLabel SetLabelItem
@@ -953,7 +953,7 @@ _SetItem_allProperties = Core.Name "allProperties"
 
 _SetItem_label = Core.Name "label"
 
-data SetPropertyItem = 
+data SetPropertyItem =
   SetPropertyItem {
     setPropertyItemVariable :: BindingVariableReference,
     setPropertyItemPropertyName :: PropertyName,
@@ -968,7 +968,7 @@ _SetPropertyItem_propertyName = Core.Name "propertyName"
 
 _SetPropertyItem_value = Core.Name "value"
 
-data SetAllPropertiesItem = 
+data SetAllPropertiesItem =
   SetAllPropertiesItem {
     setAllPropertiesItemVariable :: BindingVariableReference,
     setAllPropertiesItemProperties :: (Maybe PropertyKeyValuePairList)}
@@ -980,7 +980,7 @@ _SetAllPropertiesItem_variable = Core.Name "variable"
 
 _SetAllPropertiesItem_properties = Core.Name "properties"
 
-data SetLabelItem = 
+data SetLabelItem =
   SetLabelItem {
     setLabelItemVariable :: BindingVariableReference,
     setLabelItemIsOrColon :: IsOrColon,
@@ -1003,7 +1003,7 @@ type RemoveItemList = [RemoveItem]
 
 _RemoveItemList = Core.Name "openGql.grammar.RemoveItemList"
 
-data RemoveItem = 
+data RemoveItem =
   RemoveItemProperty RemovePropertyItem |
   RemoveItemLabel RemoveLabelItem
   deriving (Eq, Ord, Read, Show)
@@ -1014,7 +1014,7 @@ _RemoveItem_property = Core.Name "property"
 
 _RemoveItem_label = Core.Name "label"
 
-data RemovePropertyItem = 
+data RemovePropertyItem =
   RemovePropertyItem {
     removePropertyItemVariable :: BindingVariableReference,
     removePropertyItemPropertyName :: PropertyName}
@@ -1026,7 +1026,7 @@ _RemovePropertyItem_variable = Core.Name "variable"
 
 _RemovePropertyItem_propertyName = Core.Name "propertyName"
 
-data RemoveLabelItem = 
+data RemoveLabelItem =
   RemoveLabelItem {
     removeLabelItemVariable :: BindingVariableReference,
     removeLabelItemIsOrColon :: IsOrColon,
@@ -1041,7 +1041,7 @@ _RemoveLabelItem_isOrColon = Core.Name "isOrColon"
 
 _RemoveLabelItem_label = Core.Name "label"
 
-data DeleteStatement = 
+data DeleteStatement =
   DeleteStatement {
     deleteStatementDetach :: (Maybe DetachOption),
     deleteStatementItems :: DeleteItemList}
@@ -1053,9 +1053,9 @@ _DeleteStatement_detach = Core.Name "detach"
 
 _DeleteStatement_items = Core.Name "items"
 
-data DetachOption = 
+data DetachOption =
   DetachOptionDetach  |
-  DetachOptionNoDetach 
+  DetachOptionNoDetach
   deriving (Eq, Ord, Read, Show)
 
 _DetachOption = Core.Name "openGql.grammar.DetachOption"
@@ -1080,7 +1080,7 @@ type CompositeQueryStatement = CompositeQueryExpression
 
 _CompositeQueryStatement = Core.Name "openGql.grammar.CompositeQueryStatement"
 
-data CompositeQueryExpression = 
+data CompositeQueryExpression =
   CompositeQueryExpressionSimple CompositeQueryExpressionConjunction |
   CompositeQueryExpressionPrimary CompositeQueryPrimary
   deriving (Eq, Ord, Read, Show)
@@ -1091,7 +1091,7 @@ _CompositeQueryExpression_simple = Core.Name "simple"
 
 _CompositeQueryExpression_primary = Core.Name "primary"
 
-data CompositeQueryExpressionConjunction = 
+data CompositeQueryExpressionConjunction =
   CompositeQueryExpressionConjunction {
     compositeQueryExpressionConjunctionLeft :: CompositeQueryExpression,
     compositeQueryExpressionConjunctionConjunction :: QueryConjunction,
@@ -1106,9 +1106,9 @@ _CompositeQueryExpressionConjunction_conjunction = Core.Name "conjunction"
 
 _CompositeQueryExpressionConjunction_right = Core.Name "right"
 
-data QueryConjunction = 
+data QueryConjunction =
   QueryConjunctionSetOperator SetOperator |
-  QueryConjunctionOtherwise 
+  QueryConjunctionOtherwise
   deriving (Eq, Ord, Read, Show)
 
 _QueryConjunction = Core.Name "openGql.grammar.QueryConjunction"
@@ -1117,7 +1117,7 @@ _QueryConjunction_setOperator = Core.Name "setOperator"
 
 _QueryConjunction_otherwise = Core.Name "otherwise"
 
-data SetOperator = 
+data SetOperator =
   SetOperator {
     setOperatorOperatorType :: SetOperatorType,
     setOperatorQuantifier :: (Maybe SetQuantifier)}
@@ -1129,10 +1129,10 @@ _SetOperator_operatorType = Core.Name "operatorType"
 
 _SetOperator_quantifier = Core.Name "quantifier"
 
-data SetOperatorType = 
+data SetOperatorType =
   SetOperatorTypeUnion  |
   SetOperatorTypeExcept  |
-  SetOperatorTypeIntersect 
+  SetOperatorTypeIntersect
   deriving (Eq, Ord, Read, Show)
 
 _SetOperatorType = Core.Name "openGql.grammar.SetOperatorType"
@@ -1147,7 +1147,7 @@ type CompositeQueryPrimary = LinearQueryStatement
 
 _CompositeQueryPrimary = Core.Name "openGql.grammar.CompositeQueryPrimary"
 
-data LinearQueryStatement = 
+data LinearQueryStatement =
   LinearQueryStatementFocused FocusedLinearQueryStatement |
   LinearQueryStatementAmbient AmbientLinearQueryStatement
   deriving (Eq, Ord, Read, Show)
@@ -1158,7 +1158,7 @@ _LinearQueryStatement_focused = Core.Name "focused"
 
 _LinearQueryStatement_ambient = Core.Name "ambient"
 
-data FocusedLinearQueryStatement = 
+data FocusedLinearQueryStatement =
   FocusedLinearQueryStatementParts FocusedLinearQueryStatementPartsAndResult |
   FocusedLinearQueryStatementPrimitive FocusedPrimitiveResultStatement |
   FocusedLinearQueryStatementNested FocusedNestedQuerySpecification |
@@ -1175,7 +1175,7 @@ _FocusedLinearQueryStatement_nested = Core.Name "nested"
 
 _FocusedLinearQueryStatement_select = Core.Name "select"
 
-data FocusedLinearQueryStatementPartsAndResult = 
+data FocusedLinearQueryStatementPartsAndResult =
   FocusedLinearQueryStatementPartsAndResult {
     focusedLinearQueryStatementPartsAndResultParts :: [FocusedLinearQueryStatementPart],
     focusedLinearQueryStatementPartsAndResultResult :: FocusedLinearQueryAndPrimitiveResultStatementPart}
@@ -1187,7 +1187,7 @@ _FocusedLinearQueryStatementPartsAndResult_parts = Core.Name "parts"
 
 _FocusedLinearQueryStatementPartsAndResult_result = Core.Name "result"
 
-data FocusedLinearQueryStatementPart = 
+data FocusedLinearQueryStatementPart =
   FocusedLinearQueryStatementPart {
     focusedLinearQueryStatementPartUseGraph :: UseGraphClause,
     focusedLinearQueryStatementPartSimple :: SimpleLinearQueryStatement}
@@ -1199,7 +1199,7 @@ _FocusedLinearQueryStatementPart_useGraph = Core.Name "useGraph"
 
 _FocusedLinearQueryStatementPart_simple = Core.Name "simple"
 
-data FocusedLinearQueryAndPrimitiveResultStatementPart = 
+data FocusedLinearQueryAndPrimitiveResultStatementPart =
   FocusedLinearQueryAndPrimitiveResultStatementPart {
     focusedLinearQueryAndPrimitiveResultStatementPartUseGraph :: UseGraphClause,
     focusedLinearQueryAndPrimitiveResultStatementPartSimple :: SimpleLinearQueryStatement,
@@ -1215,7 +1215,7 @@ _FocusedLinearQueryAndPrimitiveResultStatementPart_simple = Core.Name "simple"
 
 _FocusedLinearQueryAndPrimitiveResultStatementPart_primitiveResult = Core.Name "primitiveResult"
 
-data FocusedPrimitiveResultStatement = 
+data FocusedPrimitiveResultStatement =
   FocusedPrimitiveResultStatement {
     focusedPrimitiveResultStatementUseGraph :: UseGraphClause,
     focusedPrimitiveResultStatementPrimitiveResult :: PrimitiveResultStatement}
@@ -1227,7 +1227,7 @@ _FocusedPrimitiveResultStatement_useGraph = Core.Name "useGraph"
 
 _FocusedPrimitiveResultStatement_primitiveResult = Core.Name "primitiveResult"
 
-data FocusedNestedQuerySpecification = 
+data FocusedNestedQuerySpecification =
   FocusedNestedQuerySpecification {
     focusedNestedQuerySpecificationUseGraph :: UseGraphClause,
     focusedNestedQuerySpecificationNested :: NestedQuerySpecification}
@@ -1239,7 +1239,7 @@ _FocusedNestedQuerySpecification_useGraph = Core.Name "useGraph"
 
 _FocusedNestedQuerySpecification_nested = Core.Name "nested"
 
-data AmbientLinearQueryStatement = 
+data AmbientLinearQueryStatement =
   AmbientLinearQueryStatementSimple AmbientLinearQueryStatementSimpleAndPrimitiveResult |
   AmbientLinearQueryStatementNested NestedQuerySpecification
   deriving (Eq, Ord, Read, Show)
@@ -1250,7 +1250,7 @@ _AmbientLinearQueryStatement_simple = Core.Name "simple"
 
 _AmbientLinearQueryStatement_nested = Core.Name "nested"
 
-data AmbientLinearQueryStatementSimpleAndPrimitiveResult = 
+data AmbientLinearQueryStatementSimpleAndPrimitiveResult =
   AmbientLinearQueryStatementSimpleAndPrimitiveResult {
     ambientLinearQueryStatementSimpleAndPrimitiveResultSimple :: (Maybe SimpleLinearQueryStatement),
     ambientLinearQueryStatementSimpleAndPrimitiveResultPrimitiveResult :: PrimitiveResultStatement}
@@ -1267,7 +1267,7 @@ type SimpleLinearQueryStatement = [SimpleQueryStatement]
 
 _SimpleLinearQueryStatement = Core.Name "openGql.grammar.SimpleLinearQueryStatement"
 
-data SimpleQueryStatement = 
+data SimpleQueryStatement =
   SimpleQueryStatementPrimitive PrimitiveQueryStatement |
   SimpleQueryStatementCall CallQueryStatement
   deriving (Eq, Ord, Read, Show)
@@ -1278,7 +1278,7 @@ _SimpleQueryStatement_primitive = Core.Name "primitive"
 
 _SimpleQueryStatement_call = Core.Name "call"
 
-data PrimitiveQueryStatement = 
+data PrimitiveQueryStatement =
   PrimitiveQueryStatementMatch MatchStatement |
   PrimitiveQueryStatementLet LetStatement |
   PrimitiveQueryStatementFor ForStatement |
@@ -1298,7 +1298,7 @@ _PrimitiveQueryStatement_filter = Core.Name "filter"
 
 _PrimitiveQueryStatement_orderByAndPage = Core.Name "orderByAndPage"
 
-data MatchStatement = 
+data MatchStatement =
   MatchStatementSimple SimpleMatchStatement |
   MatchStatementOptional OptionalMatchStatement
   deriving (Eq, Ord, Read, Show)
@@ -1317,7 +1317,7 @@ type OptionalMatchStatement = OptionalOperand
 
 _OptionalMatchStatement = Core.Name "openGql.grammar.OptionalMatchStatement"
 
-data OptionalOperand = 
+data OptionalOperand =
   OptionalOperandSimple SimpleMatchStatement |
   OptionalOperandBraceBlock MatchStatementBlock |
   OptionalOperandParenBlock MatchStatementBlock
@@ -1339,7 +1339,7 @@ type CallQueryStatement = CallProcedureStatement
 
 _CallQueryStatement = Core.Name "openGql.grammar.CallQueryStatement"
 
-data FilterStatement = 
+data FilterStatement =
   FilterStatementWhereClause WhereClause |
   FilterStatementSearchCondition SearchCondition
   deriving (Eq, Ord, Read, Show)
@@ -1358,7 +1358,7 @@ type LetVariableDefinitionList = [LetVariableDefinition]
 
 _LetVariableDefinitionList = Core.Name "openGql.grammar.LetVariableDefinitionList"
 
-data LetVariableDefinition = 
+data LetVariableDefinition =
   LetVariableDefinitionValueVariable ValueVariableDefinition |
   LetVariableDefinitionBindingEqualsValue BindingEqualsValue
   deriving (Eq, Ord, Read, Show)
@@ -1369,7 +1369,7 @@ _LetVariableDefinition_valueVariable = Core.Name "valueVariable"
 
 _LetVariableDefinition_bindingEqualsValue = Core.Name "bindingEqualsValue"
 
-data BindingEqualsValue = 
+data BindingEqualsValue =
   BindingEqualsValue {
     bindingEqualsValueBinding :: BindingVariable,
     bindingEqualsValueValue :: ValueExpression}
@@ -1381,7 +1381,7 @@ _BindingEqualsValue_binding = Core.Name "binding"
 
 _BindingEqualsValue_value = Core.Name "value"
 
-data ForStatement = 
+data ForStatement =
   ForStatement {
     forStatementItem :: ForItem,
     forStatementOrdinalityOrOffset :: (Maybe ForOrdinalityOrOffset)}
@@ -1393,7 +1393,7 @@ _ForStatement_item = Core.Name "item"
 
 _ForStatement_ordinalityOrOffset = Core.Name "ordinalityOrOffset"
 
-data ForItem = 
+data ForItem =
   ForItem {
     forItemAlias :: ForItemAlias,
     forItemSource :: ForItemSource}
@@ -1413,7 +1413,7 @@ type ForItemSource = ValueExpression
 
 _ForItemSource = Core.Name "openGql.grammar.ForItemSource"
 
-data ForOrdinalityOrOffset = 
+data ForOrdinalityOrOffset =
   ForOrdinalityOrOffset {
     forOrdinalityOrOffsetType :: OrdinalityOrOffsetType,
     forOrdinalityOrOffsetVariable :: BindingVariable}
@@ -1425,9 +1425,9 @@ _ForOrdinalityOrOffset_type = Core.Name "type"
 
 _ForOrdinalityOrOffset_variable = Core.Name "variable"
 
-data OrdinalityOrOffsetType = 
+data OrdinalityOrOffsetType =
   OrdinalityOrOffsetTypeOrdinality  |
-  OrdinalityOrOffsetTypeOffset 
+  OrdinalityOrOffsetTypeOffset
   deriving (Eq, Ord, Read, Show)
 
 _OrdinalityOrOffsetType = Core.Name "openGql.grammar.OrdinalityOrOffsetType"
@@ -1436,7 +1436,7 @@ _OrdinalityOrOffsetType_ordinality = Core.Name "ordinality"
 
 _OrdinalityOrOffsetType_offset = Core.Name "offset"
 
-data OrderByAndPageStatement = 
+data OrderByAndPageStatement =
   OrderByAndPageStatementOrderByAndOptionalOffsetAndLimit OrderByAndOptionalOffsetAndLimit |
   OrderByAndPageStatementOffsetAndOptionalLimit OffsetAndOptionalLimit |
   OrderByAndPageStatementLimitOnly LimitClause
@@ -1450,7 +1450,7 @@ _OrderByAndPageStatement_offsetAndOptionalLimit = Core.Name "offsetAndOptionalLi
 
 _OrderByAndPageStatement_limitOnly = Core.Name "limitOnly"
 
-data OrderByAndOptionalOffsetAndLimit = 
+data OrderByAndOptionalOffsetAndLimit =
   OrderByAndOptionalOffsetAndLimit {
     orderByAndOptionalOffsetAndLimitOrderBy :: OrderByClause,
     orderByAndOptionalOffsetAndLimitOffset :: (Maybe OffsetClause),
@@ -1465,7 +1465,7 @@ _OrderByAndOptionalOffsetAndLimit_offset = Core.Name "offset"
 
 _OrderByAndOptionalOffsetAndLimit_limit = Core.Name "limit"
 
-data OffsetAndOptionalLimit = 
+data OffsetAndOptionalLimit =
   OffsetAndOptionalLimit {
     offsetAndOptionalLimitOffset :: OffsetClause,
     offsetAndOptionalLimitLimit :: (Maybe LimitClause)}
@@ -1477,9 +1477,9 @@ _OffsetAndOptionalLimit_offset = Core.Name "offset"
 
 _OffsetAndOptionalLimit_limit = Core.Name "limit"
 
-data PrimitiveResultStatement = 
+data PrimitiveResultStatement =
   PrimitiveResultStatementReturnAndOptionalOrderBy ReturnAndOptionalOrderByAndPage |
-  PrimitiveResultStatementFinish 
+  PrimitiveResultStatementFinish
   deriving (Eq, Ord, Read, Show)
 
 _PrimitiveResultStatement = Core.Name "openGql.grammar.PrimitiveResultStatement"
@@ -1488,7 +1488,7 @@ _PrimitiveResultStatement_returnAndOptionalOrderBy = Core.Name "returnAndOptiona
 
 _PrimitiveResultStatement_finish = Core.Name "finish"
 
-data ReturnAndOptionalOrderByAndPage = 
+data ReturnAndOptionalOrderByAndPage =
   ReturnAndOptionalOrderByAndPage {
     returnAndOptionalOrderByAndPageReturn :: ReturnStatement,
     returnAndOptionalOrderByAndPageOrderByAndPage :: (Maybe OrderByAndPageStatement)}
@@ -1504,9 +1504,9 @@ type ReturnStatement = ReturnStatementBody
 
 _ReturnStatement = Core.Name "openGql.grammar.ReturnStatement"
 
-data ReturnStatementBody = 
+data ReturnStatementBody =
   ReturnStatementBodyItems ReturnItemsAndGroupBy |
-  ReturnStatementBodyNoBindings 
+  ReturnStatementBodyNoBindings
   deriving (Eq, Ord, Read, Show)
 
 _ReturnStatementBody = Core.Name "openGql.grammar.ReturnStatementBody"
@@ -1515,7 +1515,7 @@ _ReturnStatementBody_items = Core.Name "items"
 
 _ReturnStatementBody_noBindings = Core.Name "noBindings"
 
-data ReturnItemsAndGroupBy = 
+data ReturnItemsAndGroupBy =
   ReturnItemsAndGroupBy {
     returnItemsAndGroupByQuantifier :: (Maybe SetQuantifier),
     returnItemsAndGroupByItems :: ReturnItems,
@@ -1530,7 +1530,7 @@ _ReturnItemsAndGroupBy_items = Core.Name "items"
 
 _ReturnItemsAndGroupBy_groupBy = Core.Name "groupBy"
 
-data ReturnItems = 
+data ReturnItems =
   ReturnItemsAsterisk  |
   ReturnItemsItemList ReturnItemList
   deriving (Eq, Ord, Read, Show)
@@ -1545,7 +1545,7 @@ type ReturnItemList = [ReturnItem]
 
 _ReturnItemList = Core.Name "openGql.grammar.ReturnItemList"
 
-data ReturnItem = 
+data ReturnItem =
   ReturnItem {
     returnItemExpression :: AggregatingValueExpression,
     returnItemAlias :: (Maybe ReturnItemAlias)}
@@ -1561,7 +1561,7 @@ type ReturnItemAlias = String
 
 _ReturnItemAlias = Core.Name "openGql.grammar.ReturnItemAlias"
 
-data SelectStatement = 
+data SelectStatement =
   SelectStatement {
     selectStatementQuantifier :: (Maybe SetQuantifier),
     selectStatementItems :: SelectItems,
@@ -1576,7 +1576,7 @@ _SelectStatement_items = Core.Name "items"
 
 _SelectStatement_body = Core.Name "body"
 
-data SelectItems = 
+data SelectItems =
   SelectItemsAsterisk  |
   SelectItemsItemList SelectItemList
   deriving (Eq, Ord, Read, Show)
@@ -1587,7 +1587,7 @@ _SelectItems_asterisk = Core.Name "asterisk"
 
 _SelectItems_itemList = Core.Name "itemList"
 
-data SelectStatementBodyAndClauses = 
+data SelectStatementBodyAndClauses =
   SelectStatementBodyAndClauses {
     selectStatementBodyAndClausesBody :: SelectStatementBody,
     selectStatementBodyAndClausesWhere :: (Maybe WhereClause),
@@ -1618,7 +1618,7 @@ type SelectItemList = [SelectItem]
 
 _SelectItemList = Core.Name "openGql.grammar.SelectItemList"
 
-data SelectItem = 
+data SelectItem =
   SelectItem {
     selectItemExpression :: AggregatingValueExpression,
     selectItemAlias :: (Maybe SelectItemAlias)}
@@ -1638,7 +1638,7 @@ type HavingClause = SearchCondition
 
 _HavingClause = Core.Name "openGql.grammar.HavingClause"
 
-data SelectStatementBody = 
+data SelectStatementBody =
   SelectStatementBodyGraphMatchList SelectGraphMatchList |
   SelectStatementBodyQuerySpecification SelectQuerySpecification
   deriving (Eq, Ord, Read, Show)
@@ -1653,7 +1653,7 @@ type SelectGraphMatchList = [SelectGraphMatch]
 
 _SelectGraphMatchList = Core.Name "openGql.grammar.SelectGraphMatchList"
 
-data SelectGraphMatch = 
+data SelectGraphMatch =
   SelectGraphMatch {
     selectGraphMatchGraphExpression :: GraphExpression,
     selectGraphMatchMatchStatement :: MatchStatement}
@@ -1665,7 +1665,7 @@ _SelectGraphMatch_graphExpression = Core.Name "graphExpression"
 
 _SelectGraphMatch_matchStatement = Core.Name "matchStatement"
 
-data SelectQuerySpecification = 
+data SelectQuerySpecification =
   SelectQuerySpecificationNested NestedQuerySpecification |
   SelectQuerySpecificationGraphAndNested GraphAndNestedQuerySpecification
   deriving (Eq, Ord, Read, Show)
@@ -1676,7 +1676,7 @@ _SelectQuerySpecification_nested = Core.Name "nested"
 
 _SelectQuerySpecification_graphAndNested = Core.Name "graphAndNested"
 
-data GraphAndNestedQuerySpecification = 
+data GraphAndNestedQuerySpecification =
   GraphAndNestedQuerySpecification {
     graphAndNestedQuerySpecificationGraphExpression :: GraphExpression,
     graphAndNestedQuerySpecificationNested :: NestedQuerySpecification}
@@ -1688,7 +1688,7 @@ _GraphAndNestedQuerySpecification_graphExpression = Core.Name "graphExpression"
 
 _GraphAndNestedQuerySpecification_nested = Core.Name "nested"
 
-data CallProcedureStatement = 
+data CallProcedureStatement =
   CallProcedureStatement {
     callProcedureStatementOptional :: Bool,
     callProcedureStatementCall :: ProcedureCall}
@@ -1700,7 +1700,7 @@ _CallProcedureStatement_optional = Core.Name "optional"
 
 _CallProcedureStatement_call = Core.Name "call"
 
-data ProcedureCall = 
+data ProcedureCall =
   ProcedureCallInline InlineProcedureCall |
   ProcedureCallNamed NamedProcedureCall
   deriving (Eq, Ord, Read, Show)
@@ -1711,7 +1711,7 @@ _ProcedureCall_inline = Core.Name "inline"
 
 _ProcedureCall_named = Core.Name "named"
 
-data InlineProcedureCall = 
+data InlineProcedureCall =
   InlineProcedureCall {
     inlineProcedureCallScope :: (Maybe VariableScopeClause),
     inlineProcedureCallNested :: NestedProcedureSpecification}
@@ -1731,7 +1731,7 @@ type BindingVariableReferenceList = [BindingVariableReference]
 
 _BindingVariableReferenceList = Core.Name "openGql.grammar.BindingVariableReferenceList"
 
-data NamedProcedureCall = 
+data NamedProcedureCall =
   NamedProcedureCall {
     namedProcedureCallReference :: ProcedureReference,
     namedProcedureCallArguments :: (Maybe ProcedureArgumentList),
@@ -1762,7 +1762,7 @@ type UseGraphClause = GraphExpression
 
 _UseGraphClause = Core.Name "openGql.grammar.UseGraphClause"
 
-data GraphPatternBindingTable = 
+data GraphPatternBindingTable =
   GraphPatternBindingTable {
     graphPatternBindingTablePattern :: GraphPattern,
     graphPatternBindingTableYieldClause :: (Maybe GraphPatternYieldClause)}
@@ -1778,9 +1778,9 @@ type GraphPatternYieldClause = GraphPatternYieldItemList
 
 _GraphPatternYieldClause = Core.Name "openGql.grammar.GraphPatternYieldClause"
 
-data GraphPatternYieldItemList = 
+data GraphPatternYieldItemList =
   GraphPatternYieldItemListItems [GraphPatternYieldItem] |
-  GraphPatternYieldItemListNoBindings 
+  GraphPatternYieldItemListNoBindings
   deriving (Eq, Ord, Read, Show)
 
 _GraphPatternYieldItemList = Core.Name "openGql.grammar.GraphPatternYieldItemList"
@@ -1793,7 +1793,7 @@ type GraphPatternYieldItem = BindingVariableReference
 
 _GraphPatternYieldItem = Core.Name "openGql.grammar.GraphPatternYieldItem"
 
-data GraphPattern = 
+data GraphPattern =
   GraphPattern {
     graphPatternMatchMode :: (Maybe MatchMode),
     graphPatternPathPatterns :: PathPatternList,
@@ -1811,7 +1811,7 @@ _GraphPattern_keepClause = Core.Name "keepClause"
 
 _GraphPattern_whereClause = Core.Name "whereClause"
 
-data MatchMode = 
+data MatchMode =
   MatchModeRepeatableElements RepeatableElementsMatchMode |
   MatchModeDifferentEdges DifferentEdgesMatchMode
   deriving (Eq, Ord, Read, Show)
@@ -1830,9 +1830,9 @@ type DifferentEdgesMatchMode = EdgeBindingsOrEdges
 
 _DifferentEdgesMatchMode = Core.Name "openGql.grammar.DifferentEdgesMatchMode"
 
-data ElementBindingsOrElements = 
+data ElementBindingsOrElements =
   ElementBindingsOrElementsElementBindings Bool |
-  ElementBindingsOrElementsElements 
+  ElementBindingsOrElementsElements
   deriving (Eq, Ord, Read, Show)
 
 _ElementBindingsOrElements = Core.Name "openGql.grammar.ElementBindingsOrElements"
@@ -1841,9 +1841,9 @@ _ElementBindingsOrElements_elementBindings = Core.Name "elementBindings"
 
 _ElementBindingsOrElements_elements = Core.Name "elements"
 
-data EdgeBindingsOrEdges = 
+data EdgeBindingsOrEdges =
   EdgeBindingsOrEdgesEdgeBindings Bool |
-  EdgeBindingsOrEdgesEdges 
+  EdgeBindingsOrEdgesEdges
   deriving (Eq, Ord, Read, Show)
 
 _EdgeBindingsOrEdges = Core.Name "openGql.grammar.EdgeBindingsOrEdges"
@@ -1856,7 +1856,7 @@ type PathPatternList = [PathPattern]
 
 _PathPatternList = Core.Name "openGql.grammar.PathPatternList"
 
-data PathPattern = 
+data PathPattern =
   PathPattern {
     pathPatternVariableDeclaration :: (Maybe PathVariableDeclaration),
     pathPatternPrefix :: (Maybe PathPatternPrefix),
@@ -1891,7 +1891,7 @@ type InsertPathPatternList = [InsertPathPattern]
 
 _InsertPathPatternList = Core.Name "openGql.grammar.InsertPathPatternList"
 
-data InsertPathPattern = 
+data InsertPathPattern =
   InsertPathPattern {
     insertPathPatternStartNode :: InsertNodePattern,
     insertPathPatternEdgesAndNodes :: [InsertEdgeAndNode]}
@@ -1903,7 +1903,7 @@ _InsertPathPattern_startNode = Core.Name "startNode"
 
 _InsertPathPattern_edgesAndNodes = Core.Name "edgesAndNodes"
 
-data InsertEdgeAndNode = 
+data InsertEdgeAndNode =
   InsertEdgeAndNode {
     insertEdgeAndNodeEdge :: InsertEdgePattern,
     insertEdgeAndNodeNode :: InsertNodePattern}
@@ -1919,7 +1919,7 @@ type InsertNodePattern = (Maybe InsertElementPatternFiller)
 
 _InsertNodePattern = Core.Name "openGql.grammar.InsertNodePattern"
 
-data InsertEdgePattern = 
+data InsertEdgePattern =
   InsertEdgePatternPointingLeft InsertEdgePointingLeft |
   InsertEdgePatternPointingRight InsertEdgePointingRight |
   InsertEdgePatternUndirected InsertEdgeUndirected
@@ -1945,7 +1945,7 @@ type InsertEdgeUndirected = (Maybe InsertElementPatternFiller)
 
 _InsertEdgeUndirected = Core.Name "openGql.grammar.InsertEdgeUndirected"
 
-data InsertElementPatternFiller = 
+data InsertElementPatternFiller =
   InsertElementPatternFiller {
     insertElementPatternFillerVariableDeclaration :: (Maybe ElementVariableDeclaration),
     insertElementPatternFillerLabelAndProperties :: (Maybe LabelAndPropertySetSpecification)}
@@ -1957,7 +1957,7 @@ _InsertElementPatternFiller_variableDeclaration = Core.Name "variableDeclaration
 
 _InsertElementPatternFiller_labelAndProperties = Core.Name "labelAndProperties"
 
-data LabelAndPropertySetSpecification = 
+data LabelAndPropertySetSpecification =
   LabelAndPropertySetSpecification {
     labelAndPropertySetSpecificationIsOrColon :: (Maybe IsOrColon),
     labelAndPropertySetSpecificationLabelSet :: (Maybe LabelSetSpecification),
@@ -1972,7 +1972,7 @@ _LabelAndPropertySetSpecification_labelSet = Core.Name "labelSet"
 
 _LabelAndPropertySetSpecification_propertySpecification = Core.Name "propertySpecification"
 
-data PathPatternPrefix = 
+data PathPatternPrefix =
   PathPatternPrefixModePrefix PathModePrefix |
   PathPatternPrefixSearchPrefix PathSearchPrefix
   deriving (Eq, Ord, Read, Show)
@@ -1983,7 +1983,7 @@ _PathPatternPrefix_modePrefix = Core.Name "modePrefix"
 
 _PathPatternPrefix_searchPrefix = Core.Name "searchPrefix"
 
-data PathModePrefix = 
+data PathModePrefix =
   PathModePrefix {
     pathModePrefixMode :: PathMode,
     pathModePrefixOrPaths :: (Maybe PathOrPaths)}
@@ -1995,11 +1995,11 @@ _PathModePrefix_mode = Core.Name "mode"
 
 _PathModePrefix_orPaths = Core.Name "orPaths"
 
-data PathMode = 
+data PathMode =
   PathModeWalk  |
   PathModeTrail  |
   PathModeSimple  |
-  PathModeAcyclic 
+  PathModeAcyclic
   deriving (Eq, Ord, Read, Show)
 
 _PathMode = Core.Name "openGql.grammar.PathMode"
@@ -2012,7 +2012,7 @@ _PathMode_simple = Core.Name "simple"
 
 _PathMode_acyclic = Core.Name "acyclic"
 
-data PathSearchPrefix = 
+data PathSearchPrefix =
   PathSearchPrefixAll AllPathSearch |
   PathSearchPrefixAny AnyPathSearch |
   PathSearchPrefixShortest ShortestPathSearch
@@ -2026,7 +2026,7 @@ _PathSearchPrefix_any = Core.Name "any"
 
 _PathSearchPrefix_shortest = Core.Name "shortest"
 
-data AllPathSearch = 
+data AllPathSearch =
   AllPathSearch {
     allPathSearchMode :: (Maybe PathMode),
     allPathSearchOrPaths :: (Maybe PathOrPaths)}
@@ -2038,9 +2038,9 @@ _AllPathSearch_mode = Core.Name "mode"
 
 _AllPathSearch_orPaths = Core.Name "orPaths"
 
-data PathOrPaths = 
+data PathOrPaths =
   PathOrPathsPath  |
-  PathOrPathsPaths 
+  PathOrPathsPaths
   deriving (Eq, Ord, Read, Show)
 
 _PathOrPaths = Core.Name "openGql.grammar.PathOrPaths"
@@ -2049,7 +2049,7 @@ _PathOrPaths_path = Core.Name "path"
 
 _PathOrPaths_paths = Core.Name "paths"
 
-data AnyPathSearch = 
+data AnyPathSearch =
   AnyPathSearch {
     anyPathSearchNumberOfPaths :: (Maybe NumberOfPaths),
     anyPathSearchMode :: (Maybe PathMode),
@@ -2068,7 +2068,7 @@ type NumberOfPaths = NonNegativeIntegerSpecification
 
 _NumberOfPaths = Core.Name "openGql.grammar.NumberOfPaths"
 
-data ShortestPathSearch = 
+data ShortestPathSearch =
   ShortestPathSearchAllShortest AllShortestPathSearch |
   ShortestPathSearchAnyShortest AnyShortestPathSearch |
   ShortestPathSearchCountedShortest CountedShortestPathSearch |
@@ -2085,7 +2085,7 @@ _ShortestPathSearch_countedShortest = Core.Name "countedShortest"
 
 _ShortestPathSearch_countedShortestGroup = Core.Name "countedShortestGroup"
 
-data AllShortestPathSearch = 
+data AllShortestPathSearch =
   AllShortestPathSearch {
     allShortestPathSearchMode :: (Maybe PathMode),
     allShortestPathSearchOrPaths :: (Maybe PathOrPaths)}
@@ -2097,7 +2097,7 @@ _AllShortestPathSearch_mode = Core.Name "mode"
 
 _AllShortestPathSearch_orPaths = Core.Name "orPaths"
 
-data AnyShortestPathSearch = 
+data AnyShortestPathSearch =
   AnyShortestPathSearch {
     anyShortestPathSearchMode :: (Maybe PathMode),
     anyShortestPathSearchOrPaths :: (Maybe PathOrPaths)}
@@ -2109,7 +2109,7 @@ _AnyShortestPathSearch_mode = Core.Name "mode"
 
 _AnyShortestPathSearch_orPaths = Core.Name "orPaths"
 
-data CountedShortestPathSearch = 
+data CountedShortestPathSearch =
   CountedShortestPathSearch {
     countedShortestPathSearchNumberOfPaths :: NumberOfPaths,
     countedShortestPathSearchMode :: (Maybe PathMode),
@@ -2124,7 +2124,7 @@ _CountedShortestPathSearch_mode = Core.Name "mode"
 
 _CountedShortestPathSearch_orPaths = Core.Name "orPaths"
 
-data CountedShortestGroupSearch = 
+data CountedShortestGroupSearch =
   CountedShortestGroupSearch {
     countedShortestGroupSearchNumberOfGroups :: (Maybe NumberOfGroups),
     countedShortestGroupSearchMode :: (Maybe PathMode),
@@ -2146,7 +2146,7 @@ type NumberOfGroups = NonNegativeIntegerSpecification
 
 _NumberOfGroups = Core.Name "openGql.grammar.NumberOfGroups"
 
-data PathPatternExpression = 
+data PathPatternExpression =
   PathPatternExpressionTerm PathTerm |
   PathPatternExpressionMultisetAlternation [PathTerm] |
   PathPatternExpressionPatternUnion [PathTerm]
@@ -2164,7 +2164,7 @@ type PathTerm = [PathFactor]
 
 _PathTerm = Core.Name "openGql.grammar.PathTerm"
 
-data PathFactor = 
+data PathFactor =
   PathFactorPrimary PathPrimary |
   PathFactorQuantifiedPrimary QuantifiedPathPrimary |
   PathFactorQuestionedPrimary QuestionedPathPrimary
@@ -2178,7 +2178,7 @@ _PathFactor_quantifiedPrimary = Core.Name "quantifiedPrimary"
 
 _PathFactor_questionedPrimary = Core.Name "questionedPrimary"
 
-data QuantifiedPathPrimary = 
+data QuantifiedPathPrimary =
   QuantifiedPathPrimary {
     quantifiedPathPrimaryPrimary :: PathPrimary,
     quantifiedPathPrimaryQuantifier :: GraphPatternQuantifier}
@@ -2194,7 +2194,7 @@ type QuestionedPathPrimary = PathPrimary
 
 _QuestionedPathPrimary = Core.Name "openGql.grammar.QuestionedPathPrimary"
 
-data PathPrimary = 
+data PathPrimary =
   PathPrimaryElementPattern ElementPattern |
   PathPrimaryParenthesizedExpression ParenthesizedPathPatternExpression |
   PathPrimarySimplifiedExpression SimplifiedPathPatternExpression
@@ -2208,7 +2208,7 @@ _PathPrimary_parenthesizedExpression = Core.Name "parenthesizedExpression"
 
 _PathPrimary_simplifiedExpression = Core.Name "simplifiedExpression"
 
-data ElementPattern = 
+data ElementPattern =
   ElementPatternNode NodePattern |
   ElementPatternEdge EdgePattern
   deriving (Eq, Ord, Read, Show)
@@ -2223,7 +2223,7 @@ type NodePattern = ElementPatternFiller
 
 _NodePattern = Core.Name "openGql.grammar.NodePattern"
 
-data ElementPatternFiller = 
+data ElementPatternFiller =
   ElementPatternFiller {
     elementPatternFillerVariableDeclaration :: (Maybe ElementVariableDeclaration),
     elementPatternFillerIsLabelExpression :: (Maybe IsLabelExpression),
@@ -2238,7 +2238,7 @@ _ElementPatternFiller_isLabelExpression = Core.Name "isLabelExpression"
 
 _ElementPatternFiller_predicate = Core.Name "predicate"
 
-data ElementVariableDeclaration = 
+data ElementVariableDeclaration =
   ElementVariableDeclaration {
     elementVariableDeclarationTemp :: (Maybe Bool),
     elementVariableDeclarationVariable :: ElementVariable}
@@ -2250,7 +2250,7 @@ _ElementVariableDeclaration_temp = Core.Name "temp"
 
 _ElementVariableDeclaration_variable = Core.Name "variable"
 
-data IsLabelExpression = 
+data IsLabelExpression =
   IsLabelExpression {
     isLabelExpressionIsOrColon :: IsOrColon,
     isLabelExpressionLabel :: LabelExpression}
@@ -2262,9 +2262,9 @@ _IsLabelExpression_isOrColon = Core.Name "isOrColon"
 
 _IsLabelExpression_label = Core.Name "label"
 
-data IsOrColon = 
+data IsOrColon =
   IsOrColonIs  |
-  IsOrColonColon 
+  IsOrColonColon
   deriving (Eq, Ord, Read, Show)
 
 _IsOrColon = Core.Name "openGql.grammar.IsOrColon"
@@ -2273,7 +2273,7 @@ _IsOrColon_is = Core.Name "is"
 
 _IsOrColon_colon = Core.Name "colon"
 
-data ElementPatternPredicate = 
+data ElementPatternPredicate =
   ElementPatternPredicateWhereClause ElementPatternWhereClause |
   ElementPatternPredicatePropertySpecification ElementPropertySpecification
   deriving (Eq, Ord, Read, Show)
@@ -2296,7 +2296,7 @@ type PropertyKeyValuePairList = [PropertyKeyValuePair]
 
 _PropertyKeyValuePairList = Core.Name "openGql.grammar.PropertyKeyValuePairList"
 
-data PropertyKeyValuePair = 
+data PropertyKeyValuePair =
   PropertyKeyValuePair {
     propertyKeyValuePairName :: PropertyName,
     propertyKeyValuePairValue :: ValueExpression}
@@ -2308,7 +2308,7 @@ _PropertyKeyValuePair_name = Core.Name "name"
 
 _PropertyKeyValuePair_value = Core.Name "value"
 
-data EdgePattern = 
+data EdgePattern =
   EdgePatternFullEdge FullEdgePattern |
   EdgePatternAbbreviatedEdge AbbreviatedEdgePattern
   deriving (Eq, Ord, Read, Show)
@@ -2319,7 +2319,7 @@ _EdgePattern_fullEdge = Core.Name "fullEdge"
 
 _EdgePattern_abbreviatedEdge = Core.Name "abbreviatedEdge"
 
-data FullEdgePattern = 
+data FullEdgePattern =
   FullEdgePatternPointingLeft FullEdgePointingLeft |
   FullEdgePatternUndirected FullEdgeUndirected |
   FullEdgePatternPointingRight FullEdgePointingRight |
@@ -2373,14 +2373,14 @@ type FullEdgeAnyDirection = ElementPatternFiller
 
 _FullEdgeAnyDirection = Core.Name "openGql.grammar.FullEdgeAnyDirection"
 
-data AbbreviatedEdgePattern = 
+data AbbreviatedEdgePattern =
   AbbreviatedEdgePatternLeftArrow  |
   AbbreviatedEdgePatternTilde  |
   AbbreviatedEdgePatternRightArrow  |
   AbbreviatedEdgePatternLeftArrowTilde  |
   AbbreviatedEdgePatternTildeRightArrow  |
   AbbreviatedEdgePatternLeftMinusRight  |
-  AbbreviatedEdgePatternMinusSign 
+  AbbreviatedEdgePatternMinusSign
   deriving (Eq, Ord, Read, Show)
 
 _AbbreviatedEdgePattern = Core.Name "openGql.grammar.AbbreviatedEdgePattern"
@@ -2399,7 +2399,7 @@ _AbbreviatedEdgePattern_leftMinusRight = Core.Name "leftMinusRight"
 
 _AbbreviatedEdgePattern_minusSign = Core.Name "minusSign"
 
-data ParenthesizedPathPatternExpression = 
+data ParenthesizedPathPatternExpression =
   ParenthesizedPathPatternExpression {
     parenthesizedPathPatternExpressionSubpathDeclaration :: (Maybe SubpathVariableDeclaration),
     parenthesizedPathPatternExpressionPathMode :: (Maybe PathModePrefix),
@@ -2425,7 +2425,7 @@ type ParenthesizedPathPatternWhereClause = SearchCondition
 
 _ParenthesizedPathPatternWhereClause = Core.Name "openGql.grammar.ParenthesizedPathPatternWhereClause"
 
-data LabelExpression = 
+data LabelExpression =
   LabelExpressionNegation LabelExpression |
   LabelExpressionConjunction ConjunctionLabelExpression |
   LabelExpressionDisjunction DisjunctionLabelExpression |
@@ -2448,7 +2448,7 @@ _LabelExpression_wildcard = Core.Name "wildcard"
 
 _LabelExpression_parenthesized = Core.Name "parenthesized"
 
-data ConjunctionLabelExpression = 
+data ConjunctionLabelExpression =
   ConjunctionLabelExpression {
     conjunctionLabelExpressionLeft :: LabelExpression,
     conjunctionLabelExpressionRight :: LabelExpression}
@@ -2460,7 +2460,7 @@ _ConjunctionLabelExpression_left = Core.Name "left"
 
 _ConjunctionLabelExpression_right = Core.Name "right"
 
-data DisjunctionLabelExpression = 
+data DisjunctionLabelExpression =
   DisjunctionLabelExpression {
     disjunctionLabelExpressionLeft :: LabelExpression,
     disjunctionLabelExpressionRight :: LabelExpression}
@@ -2480,7 +2480,7 @@ type ElementVariableReference = BindingVariableReference
 
 _ElementVariableReference = Core.Name "openGql.grammar.ElementVariableReference"
 
-data GraphPatternQuantifier = 
+data GraphPatternQuantifier =
   GraphPatternQuantifierAsterisk  |
   GraphPatternQuantifierPlusSign  |
   GraphPatternQuantifierFixed FixedQuantifier |
@@ -2501,7 +2501,7 @@ type FixedQuantifier = UnsignedInteger
 
 _FixedQuantifier = Core.Name "openGql.grammar.FixedQuantifier"
 
-data GeneralQuantifier = 
+data GeneralQuantifier =
   GeneralQuantifier {
     generalQuantifierLowerBound :: (Maybe LowerBound),
     generalQuantifierUpperBound :: (Maybe UpperBound)}
@@ -2521,7 +2521,7 @@ type UpperBound = UnsignedInteger
 
 _UpperBound = Core.Name "openGql.grammar.UpperBound"
 
-data SimplifiedPathPatternExpression = 
+data SimplifiedPathPatternExpression =
   SimplifiedPathPatternExpressionLeft SimplifiedDefaultingLeft |
   SimplifiedPathPatternExpressionUndirected SimplifiedDefaultingUndirected |
   SimplifiedPathPatternExpressionRight SimplifiedDefaultingRight |
@@ -2575,7 +2575,7 @@ type SimplifiedDefaultingAnyDirection = SimplifiedContents
 
 _SimplifiedDefaultingAnyDirection = Core.Name "openGql.grammar.SimplifiedDefaultingAnyDirection"
 
-data SimplifiedContents = 
+data SimplifiedContents =
   SimplifiedContentsTerm SimplifiedTerm |
   SimplifiedContentsPathUnion SimplifiedPathUnion |
   SimplifiedContentsMultisetAlternation SimplifiedMultisetAlternation
@@ -2597,7 +2597,7 @@ type SimplifiedMultisetAlternation = [SimplifiedTerm]
 
 _SimplifiedMultisetAlternation = Core.Name "openGql.grammar.SimplifiedMultisetAlternation"
 
-data SimplifiedTerm = 
+data SimplifiedTerm =
   SimplifiedTermFactorLow SimplifiedFactorLow |
   SimplifiedTermConcatenation SimplifiedConcatenation
   deriving (Eq, Ord, Read, Show)
@@ -2608,7 +2608,7 @@ _SimplifiedTerm_factorLow = Core.Name "factorLow"
 
 _SimplifiedTerm_concatenation = Core.Name "concatenation"
 
-data SimplifiedConcatenation = 
+data SimplifiedConcatenation =
   SimplifiedConcatenation {
     simplifiedConcatenationInitialTerm :: SimplifiedTerm,
     simplifiedConcatenationNextFactor :: SimplifiedFactorLow}
@@ -2620,7 +2620,7 @@ _SimplifiedConcatenation_initialTerm = Core.Name "initialTerm"
 
 _SimplifiedConcatenation_nextFactor = Core.Name "nextFactor"
 
-data SimplifiedFactorLow = 
+data SimplifiedFactorLow =
   SimplifiedFactorLowFactorHigh SimplifiedFactorHigh |
   SimplifiedFactorLowConjunction SimplifiedConjunction
   deriving (Eq, Ord, Read, Show)
@@ -2631,7 +2631,7 @@ _SimplifiedFactorLow_factorHigh = Core.Name "factorHigh"
 
 _SimplifiedFactorLow_conjunction = Core.Name "conjunction"
 
-data SimplifiedConjunction = 
+data SimplifiedConjunction =
   SimplifiedConjunction {
     simplifiedConjunctionLeft :: SimplifiedFactorLow,
     simplifiedConjunctionRight :: SimplifiedFactorHigh}
@@ -2643,7 +2643,7 @@ _SimplifiedConjunction_left = Core.Name "left"
 
 _SimplifiedConjunction_right = Core.Name "right"
 
-data SimplifiedFactorHigh = 
+data SimplifiedFactorHigh =
   SimplifiedFactorHighTertiary SimplifiedTertiary |
   SimplifiedFactorHighQuantified SimplifiedQuantified |
   SimplifiedFactorHighQuestioned SimplifiedQuestioned
@@ -2657,7 +2657,7 @@ _SimplifiedFactorHigh_quantified = Core.Name "quantified"
 
 _SimplifiedFactorHigh_questioned = Core.Name "questioned"
 
-data SimplifiedQuantified = 
+data SimplifiedQuantified =
   SimplifiedQuantified {
     simplifiedQuantifiedTertiary :: SimplifiedTertiary,
     simplifiedQuantifiedQuantifier :: GraphPatternQuantifier}
@@ -2673,7 +2673,7 @@ type SimplifiedQuestioned = SimplifiedTertiary
 
 _SimplifiedQuestioned = Core.Name "openGql.grammar.SimplifiedQuestioned"
 
-data SimplifiedTertiary = 
+data SimplifiedTertiary =
   SimplifiedTertiaryDirectionOverride SimplifiedDirectionOverride |
   SimplifiedTertiarySecondary SimplifiedSecondary
   deriving (Eq, Ord, Read, Show)
@@ -2684,7 +2684,7 @@ _SimplifiedTertiary_directionOverride = Core.Name "directionOverride"
 
 _SimplifiedTertiary_secondary = Core.Name "secondary"
 
-data SimplifiedDirectionOverride = 
+data SimplifiedDirectionOverride =
   SimplifiedDirectionOverrideOverrideLeft SimplifiedOverrideLeft |
   SimplifiedDirectionOverrideOverrideUndirected SimplifiedOverrideUndirected |
   SimplifiedDirectionOverrideOverrideRight SimplifiedOverrideRight |
@@ -2738,7 +2738,7 @@ type SimplifiedOverrideAnyDirection = SimplifiedSecondary
 
 _SimplifiedOverrideAnyDirection = Core.Name "openGql.grammar.SimplifiedOverrideAnyDirection"
 
-data SimplifiedSecondary = 
+data SimplifiedSecondary =
   SimplifiedSecondaryPrimary SimplifiedPrimary |
   SimplifiedSecondaryNegation SimplifiedNegation
   deriving (Eq, Ord, Read, Show)
@@ -2753,7 +2753,7 @@ type SimplifiedNegation = SimplifiedPrimary
 
 _SimplifiedNegation = Core.Name "openGql.grammar.SimplifiedNegation"
 
-data SimplifiedPrimary = 
+data SimplifiedPrimary =
   SimplifiedPrimaryLabelName LabelName |
   SimplifiedPrimaryParenthesizedContents SimplifiedContents
   deriving (Eq, Ord, Read, Show)
@@ -2776,7 +2776,7 @@ type YieldItemList = [YieldItem]
 
 _YieldItemList = Core.Name "openGql.grammar.YieldItemList"
 
-data YieldItem = 
+data YieldItem =
   YieldItem {
     yieldItemName :: YieldItemName,
     yieldItemAlias :: (Maybe YieldItemAlias)}
@@ -2800,9 +2800,9 @@ type GroupByClause = GroupingElementList
 
 _GroupByClause = Core.Name "openGql.grammar.GroupByClause"
 
-data GroupingElementList = 
+data GroupingElementList =
   GroupingElementListElements [GroupingElement] |
-  GroupingElementListEmptySet 
+  GroupingElementListEmptySet
   deriving (Eq, Ord, Read, Show)
 
 _GroupingElementList = Core.Name "openGql.grammar.GroupingElementList"
@@ -2823,7 +2823,7 @@ type SortSpecificationList = [SortSpecification]
 
 _SortSpecificationList = Core.Name "openGql.grammar.SortSpecificationList"
 
-data SortSpecification = 
+data SortSpecification =
   SortSpecification {
     sortSpecificationSortKey :: SortKey,
     sortSpecificationOrdering :: (Maybe OrderingSpecification),
@@ -2842,9 +2842,9 @@ type SortKey = AggregatingValueExpression
 
 _SortKey = Core.Name "openGql.grammar.SortKey"
 
-data OrderingSpecification = 
+data OrderingSpecification =
   OrderingSpecificationAscending  |
-  OrderingSpecificationDescending 
+  OrderingSpecificationDescending
   deriving (Eq, Ord, Read, Show)
 
 _OrderingSpecification = Core.Name "openGql.grammar.OrderingSpecification"
@@ -2853,9 +2853,9 @@ _OrderingSpecification_ascending = Core.Name "ascending"
 
 _OrderingSpecification_descending = Core.Name "descending"
 
-data NullOrdering = 
+data NullOrdering =
   NullOrderingNullsFirst  |
-  NullOrderingNullsLast 
+  NullOrderingNullsLast
   deriving (Eq, Ord, Read, Show)
 
 _NullOrdering = Core.Name "openGql.grammar.NullOrdering"
@@ -2868,7 +2868,7 @@ type LimitClause = NonNegativeIntegerSpecification
 
 _LimitClause = Core.Name "openGql.grammar.LimitClause"
 
-data OffsetClause = 
+data OffsetClause =
   OffsetClause {
     offsetClauseSynonym :: OffsetSynonym,
     offsetClauseValue :: NonNegativeIntegerSpecification}
@@ -2880,9 +2880,9 @@ _OffsetClause_synonym = Core.Name "synonym"
 
 _OffsetClause_value = Core.Name "value"
 
-data OffsetSynonym = 
+data OffsetSynonym =
   OffsetSynonymOffset  |
-  OffsetSynonymSkipReservedWord 
+  OffsetSynonymSkipReservedWord
   deriving (Eq, Ord, Read, Show)
 
 _OffsetSynonym = Core.Name "openGql.grammar.OffsetSynonym"
@@ -2891,7 +2891,7 @@ _OffsetSynonym_offset = Core.Name "offset"
 
 _OffsetSynonym_skipReservedWord = Core.Name "skipReservedWord"
 
-data SchemaReference = 
+data SchemaReference =
   SchemaReferenceAbsoluteReference AbsoluteCatalogSchemaReference |
   SchemaReferenceRelativeReference RelativeCatalogSchemaReference |
   SchemaReferenceParameterSpecification ReferenceParameterSpecification
@@ -2905,7 +2905,7 @@ _SchemaReference_relativeReference = Core.Name "relativeReference"
 
 _SchemaReference_parameterSpecification = Core.Name "parameterSpecification"
 
-data AbsoluteCatalogSchemaReference = 
+data AbsoluteCatalogSchemaReference =
   AbsoluteCatalogSchemaReferenceRoot  |
   AbsoluteCatalogSchemaReferenceDirectoryAndSchema AbsoluteDirectoryAndSchema
   deriving (Eq, Ord, Read, Show)
@@ -2916,7 +2916,7 @@ _AbsoluteCatalogSchemaReference_root = Core.Name "root"
 
 _AbsoluteCatalogSchemaReference_directoryAndSchema = Core.Name "directoryAndSchema"
 
-data AbsoluteDirectoryAndSchema = 
+data AbsoluteDirectoryAndSchema =
   AbsoluteDirectoryAndSchema {
     absoluteDirectoryAndSchemaDirectoryPath :: AbsoluteDirectoryPath,
     absoluteDirectoryAndSchemaSchemaName :: SchemaName}
@@ -2932,7 +2932,7 @@ type CatalogSchemaParentAndName = AbsoluteDirectoryAndSchema
 
 _CatalogSchemaParentAndName = Core.Name "openGql.grammar.CatalogSchemaParentAndName"
 
-data RelativeCatalogSchemaReference = 
+data RelativeCatalogSchemaReference =
   RelativeCatalogSchemaReferencePredefinedReference PredefinedSchemaReference |
   RelativeCatalogSchemaReferenceDirectoryAndSchema RelativeDirectoryAndSchema
   deriving (Eq, Ord, Read, Show)
@@ -2943,7 +2943,7 @@ _RelativeCatalogSchemaReference_predefinedReference = Core.Name "predefinedRefer
 
 _RelativeCatalogSchemaReference_directoryAndSchema = Core.Name "directoryAndSchema"
 
-data RelativeDirectoryAndSchema = 
+data RelativeDirectoryAndSchema =
   RelativeDirectoryAndSchema {
     relativeDirectoryAndSchemaDirectoryPath :: RelativeDirectoryPath,
     relativeDirectoryAndSchemaSchemaName :: SchemaName}
@@ -2955,10 +2955,10 @@ _RelativeDirectoryAndSchema_directoryPath = Core.Name "directoryPath"
 
 _RelativeDirectoryAndSchema_schemaName = Core.Name "schemaName"
 
-data PredefinedSchemaReference = 
+data PredefinedSchemaReference =
   PredefinedSchemaReferenceHomeSchema  |
   PredefinedSchemaReferenceCurrentSchema  |
-  PredefinedSchemaReferencePeriod 
+  PredefinedSchemaReferencePeriod
   deriving (Eq, Ord, Read, Show)
 
 _PredefinedSchemaReference = Core.Name "openGql.grammar.PredefinedSchemaReference"
@@ -2973,7 +2973,7 @@ type AbsoluteDirectoryPath = (Maybe SimpleDirectoryPath)
 
 _AbsoluteDirectoryPath = Core.Name "openGql.grammar.AbsoluteDirectoryPath"
 
-data RelativeDirectoryPath = 
+data RelativeDirectoryPath =
   RelativeDirectoryPath {
     relativeDirectoryPathParentDirectories :: Int,
     relativeDirectoryPathSimplePath :: (Maybe SimpleDirectoryPath)}
@@ -2989,7 +2989,7 @@ type SimpleDirectoryPath = [DirectoryName]
 
 _SimpleDirectoryPath = Core.Name "openGql.grammar.SimpleDirectoryPath"
 
-data GraphReference = 
+data GraphReference =
   GraphReferenceParentAndGraphName ParentAndGraphName |
   GraphReferenceDelimitedGraphName DelimitedGraphName |
   GraphReferenceHomeGraph HomeGraph |
@@ -3006,7 +3006,7 @@ _GraphReference_homeGraph = Core.Name "homeGraph"
 
 _GraphReference_parameterSpecification = Core.Name "parameterSpecification"
 
-data ParentAndGraphName = 
+data ParentAndGraphName =
   ParentAndGraphName {
     parentAndGraphNameParentReference :: CatalogObjectParentReference,
     parentAndGraphNameGraphName :: GraphName}
@@ -3018,7 +3018,7 @@ _ParentAndGraphName_parentReference = Core.Name "parentReference"
 
 _ParentAndGraphName_graphName = Core.Name "graphName"
 
-data CatalogGraphParentAndName = 
+data CatalogGraphParentAndName =
   CatalogGraphParentAndName {
     catalogGraphParentAndNameParentReference :: (Maybe CatalogObjectParentReference),
     catalogGraphParentAndNameGraphName :: GraphName}
@@ -3030,9 +3030,9 @@ _CatalogGraphParentAndName_parentReference = Core.Name "parentReference"
 
 _CatalogGraphParentAndName_graphName = Core.Name "graphName"
 
-data HomeGraph = 
+data HomeGraph =
   HomeGraphHomePropertyGraph  |
-  HomeGraphHomeGraph 
+  HomeGraphHomeGraph
   deriving (Eq, Ord, Read, Show)
 
 _HomeGraph = Core.Name "openGql.grammar.HomeGraph"
@@ -3041,7 +3041,7 @@ _HomeGraph_homePropertyGraph = Core.Name "homePropertyGraph"
 
 _HomeGraph_homeGraph = Core.Name "homeGraph"
 
-data GraphTypeReference = 
+data GraphTypeReference =
   GraphTypeReferenceParentAndTypeName CatalogGraphTypeParentAndName |
   GraphTypeReferenceParameterSpecification ReferenceParameterSpecification
   deriving (Eq, Ord, Read, Show)
@@ -3052,7 +3052,7 @@ _GraphTypeReference_parentAndTypeName = Core.Name "parentAndTypeName"
 
 _GraphTypeReference_parameterSpecification = Core.Name "parameterSpecification"
 
-data CatalogGraphTypeParentAndName = 
+data CatalogGraphTypeParentAndName =
   CatalogGraphTypeParentAndName {
     catalogGraphTypeParentAndNameParentReference :: (Maybe CatalogObjectParentReference),
     catalogGraphTypeParentAndNameGraphTypeName :: GraphTypeName}
@@ -3064,7 +3064,7 @@ _CatalogGraphTypeParentAndName_parentReference = Core.Name "parentReference"
 
 _CatalogGraphTypeParentAndName_graphTypeName = Core.Name "graphTypeName"
 
-data BindingTableReference = 
+data BindingTableReference =
   BindingTableReferenceParentAndTableName ParentAndTableName |
   BindingTableReferenceDelimitedBindingTableName DelimitedBindingTableName |
   BindingTableReferenceParameterSpecification ReferenceParameterSpecification
@@ -3078,7 +3078,7 @@ _BindingTableReference_delimitedBindingTableName = Core.Name "delimitedBindingTa
 
 _BindingTableReference_parameterSpecification = Core.Name "parameterSpecification"
 
-data ParentAndTableName = 
+data ParentAndTableName =
   ParentAndTableName {
     parentAndTableNameParentReference :: CatalogObjectParentReference,
     parentAndTableNameTableName :: BindingTableName}
@@ -3090,7 +3090,7 @@ _ParentAndTableName_parentReference = Core.Name "parentReference"
 
 _ParentAndTableName_tableName = Core.Name "tableName"
 
-data ProcedureReference = 
+data ProcedureReference =
   ProcedureReferenceParentAndProcedureName CatalogProcedureParentAndName |
   ProcedureReferenceParameterSpecification ReferenceParameterSpecification
   deriving (Eq, Ord, Read, Show)
@@ -3101,7 +3101,7 @@ _ProcedureReference_parentAndProcedureName = Core.Name "parentAndProcedureName"
 
 _ProcedureReference_parameterSpecification = Core.Name "parameterSpecification"
 
-data CatalogProcedureParentAndName = 
+data CatalogProcedureParentAndName =
   CatalogProcedureParentAndName {
     catalogProcedureParentAndNameParentReference :: (Maybe CatalogObjectParentReference),
     catalogProcedureParentAndNameProcedureName :: ProcedureName}
@@ -3113,7 +3113,7 @@ _CatalogProcedureParentAndName_parentReference = Core.Name "parentReference"
 
 _CatalogProcedureParentAndName_procedureName = Core.Name "procedureName"
 
-data CatalogObjectParentReference = 
+data CatalogObjectParentReference =
   CatalogObjectParentReferenceSchemaAndObjects SchemaAndObjects |
   CatalogObjectParentReferenceObjectsOnly [ObjectName]
   deriving (Eq, Ord, Read, Show)
@@ -3124,7 +3124,7 @@ _CatalogObjectParentReference_schemaAndObjects = Core.Name "schemaAndObjects"
 
 _CatalogObjectParentReference_objectsOnly = Core.Name "objectsOnly"
 
-data SchemaAndObjects = 
+data SchemaAndObjects =
   SchemaAndObjects {
     schemaAndObjectsSchemaReference :: SchemaReference,
     schemaAndObjectsObjects :: [ObjectName]}
@@ -3152,7 +3152,7 @@ type ElementTypeList = [ElementTypeSpecification]
 
 _ElementTypeList = Core.Name "openGql.grammar.ElementTypeList"
 
-data ElementTypeSpecification = 
+data ElementTypeSpecification =
   ElementTypeSpecificationNodeType NodeTypeSpecification |
   ElementTypeSpecificationEdgeType EdgeTypeSpecification
   deriving (Eq, Ord, Read, Show)
@@ -3163,7 +3163,7 @@ _ElementTypeSpecification_nodeType = Core.Name "nodeType"
 
 _ElementTypeSpecification_edgeType = Core.Name "edgeType"
 
-data NodeTypeSpecification = 
+data NodeTypeSpecification =
   NodeTypeSpecificationPattern NodeTypePattern |
   NodeTypeSpecificationPhrase NodeTypePhrase
   deriving (Eq, Ord, Read, Show)
@@ -3174,7 +3174,7 @@ _NodeTypeSpecification_pattern = Core.Name "pattern"
 
 _NodeTypeSpecification_phrase = Core.Name "phrase"
 
-data NodeTypePattern = 
+data NodeTypePattern =
   NodeTypePattern {
     nodeTypePatternSynonymAndTypeName :: (Maybe NodeSynonymAndTypeName),
     nodeTypePatternAlias :: (Maybe LocalNodeTypeAlias),
@@ -3189,7 +3189,7 @@ _NodeTypePattern_alias = Core.Name "alias"
 
 _NodeTypePattern_filler = Core.Name "filler"
 
-data NodeSynonymAndTypeName = 
+data NodeSynonymAndTypeName =
   NodeSynonymAndTypeName {
     nodeSynonymAndTypeNameNodeSynonym :: NodeSynonym,
     nodeSynonymAndTypeNameTypeName :: (Maybe NodeTypeName)}
@@ -3201,7 +3201,7 @@ _NodeSynonymAndTypeName_nodeSynonym = Core.Name "nodeSynonym"
 
 _NodeSynonymAndTypeName_typeName = Core.Name "typeName"
 
-data NodeTypePhrase = 
+data NodeTypePhrase =
   NodeTypePhrase {
     nodeTypePhraseSynonym :: NodeSynonym,
     nodeTypePhraseTypePhraseFiller :: NodeTypePhraseFiller,
@@ -3216,7 +3216,7 @@ _NodeTypePhrase_typePhraseFiller = Core.Name "typePhraseFiller"
 
 _NodeTypePhrase_alias = Core.Name "alias"
 
-data NodeTypePhraseFiller = 
+data NodeTypePhraseFiller =
   NodeTypePhraseFillerTypeName NodeTypeNameWithFiller |
   NodeTypePhraseFillerFillerOnly NodeTypeFiller
   deriving (Eq, Ord, Read, Show)
@@ -3227,7 +3227,7 @@ _NodeTypePhraseFiller_typeName = Core.Name "typeName"
 
 _NodeTypePhraseFiller_fillerOnly = Core.Name "fillerOnly"
 
-data NodeTypeNameWithFiller = 
+data NodeTypeNameWithFiller =
   NodeTypeNameWithFiller {
     nodeTypeNameWithFillerTypeName :: NodeTypeName,
     nodeTypeNameWithFillerFiller :: (Maybe NodeTypeFiller)}
@@ -3239,7 +3239,7 @@ _NodeTypeNameWithFiller_typeName = Core.Name "typeName"
 
 _NodeTypeNameWithFiller_filler = Core.Name "filler"
 
-data NodeTypeFiller = 
+data NodeTypeFiller =
   NodeTypeFillerKeyLabelSet NodeKeyLabelSetWithContent |
   NodeTypeFillerImpliedContent NodeTypeImpliedContent
   deriving (Eq, Ord, Read, Show)
@@ -3250,7 +3250,7 @@ _NodeTypeFiller_keyLabelSet = Core.Name "keyLabelSet"
 
 _NodeTypeFiller_impliedContent = Core.Name "impliedContent"
 
-data NodeKeyLabelSetWithContent = 
+data NodeKeyLabelSetWithContent =
   NodeKeyLabelSetWithContent {
     nodeKeyLabelSetWithContentKeyLabelSet :: NodeTypeKeyLabelSet,
     nodeKeyLabelSetWithContentImpliedContent :: (Maybe NodeTypeImpliedContent)}
@@ -3266,7 +3266,7 @@ type LocalNodeTypeAlias = String
 
 _LocalNodeTypeAlias = Core.Name "openGql.grammar.LocalNodeTypeAlias"
 
-data NodeTypeImpliedContent = 
+data NodeTypeImpliedContent =
   NodeTypeImpliedContentLabelSet NodeTypeLabelSet |
   NodeTypeImpliedContentPropertyTypes NodeTypePropertyTypes |
   NodeTypeImpliedContentLabelSetWithProperties NodeLabelSetWithProperties
@@ -3280,7 +3280,7 @@ _NodeTypeImpliedContent_propertyTypes = Core.Name "propertyTypes"
 
 _NodeTypeImpliedContent_labelSetWithProperties = Core.Name "labelSetWithProperties"
 
-data NodeLabelSetWithProperties = 
+data NodeLabelSetWithProperties =
   NodeLabelSetWithProperties {
     nodeLabelSetWithPropertiesLabelSet :: NodeTypeLabelSet,
     nodeLabelSetWithPropertiesPropertyTypes :: NodeTypePropertyTypes}
@@ -3304,7 +3304,7 @@ type NodeTypePropertyTypes = PropertyTypesSpecification
 
 _NodeTypePropertyTypes = Core.Name "openGql.grammar.NodeTypePropertyTypes"
 
-data EdgeTypeSpecification = 
+data EdgeTypeSpecification =
   EdgeTypeSpecificationPattern EdgeTypePattern |
   EdgeTypeSpecificationPhrase EdgeTypePhrase
   deriving (Eq, Ord, Read, Show)
@@ -3315,7 +3315,7 @@ _EdgeTypeSpecification_pattern = Core.Name "pattern"
 
 _EdgeTypeSpecification_phrase = Core.Name "phrase"
 
-data EdgeTypePattern = 
+data EdgeTypePattern =
   EdgeTypePattern {
     edgeTypePatternKindAndSynonym :: (Maybe EdgeKindAndSynonym),
     edgeTypePatternPatternType :: EdgeTypePatternType}
@@ -3327,7 +3327,7 @@ _EdgeTypePattern_kindAndSynonym = Core.Name "kindAndSynonym"
 
 _EdgeTypePattern_patternType = Core.Name "patternType"
 
-data EdgeKindAndSynonym = 
+data EdgeKindAndSynonym =
   EdgeKindAndSynonym {
     edgeKindAndSynonymKind :: (Maybe EdgeKind),
     edgeKindAndSynonymSynonym :: EdgeSynonym,
@@ -3342,7 +3342,7 @@ _EdgeKindAndSynonym_synonym = Core.Name "synonym"
 
 _EdgeKindAndSynonym_typeName = Core.Name "typeName"
 
-data EdgeTypePatternType = 
+data EdgeTypePatternType =
   EdgeTypePatternTypeDirected EdgeTypePatternDirected |
   EdgeTypePatternTypeUndirected EdgeTypePatternUndirected
   deriving (Eq, Ord, Read, Show)
@@ -3353,7 +3353,7 @@ _EdgeTypePatternType_directed = Core.Name "directed"
 
 _EdgeTypePatternType_undirected = Core.Name "undirected"
 
-data EdgeTypePhrase = 
+data EdgeTypePhrase =
   EdgeTypePhrase {
     edgeTypePhraseKind :: EdgeKind,
     edgeTypePhraseSynonym :: EdgeSynonym,
@@ -3371,7 +3371,7 @@ _EdgeTypePhrase_typeNameAndFiller = Core.Name "typeNameAndFiller"
 
 _EdgeTypePhrase_endpointPair = Core.Name "endpointPair"
 
-data EdgeTypePhraseFiller = 
+data EdgeTypePhraseFiller =
   EdgeTypePhraseFillerTypeNameWithFiller EdgeTypeNameWithFiller |
   EdgeTypePhraseFillerFillerOnly EdgeTypeFiller
   deriving (Eq, Ord, Read, Show)
@@ -3382,7 +3382,7 @@ _EdgeTypePhraseFiller_typeNameWithFiller = Core.Name "typeNameWithFiller"
 
 _EdgeTypePhraseFiller_fillerOnly = Core.Name "fillerOnly"
 
-data EdgeTypeNameWithFiller = 
+data EdgeTypeNameWithFiller =
   EdgeTypeNameWithFiller {
     edgeTypeNameWithFillerTypeName :: EdgeTypeName,
     edgeTypeNameWithFillerFiller :: (Maybe EdgeTypeFiller)}
@@ -3394,7 +3394,7 @@ _EdgeTypeNameWithFiller_typeName = Core.Name "typeName"
 
 _EdgeTypeNameWithFiller_filler = Core.Name "filler"
 
-data EdgeTypeFiller = 
+data EdgeTypeFiller =
   EdgeTypeFillerKeyLabelSetWithContent EdgeKeyLabelSetWithContent |
   EdgeTypeFillerImpliedContent EdgeTypeImpliedContent
   deriving (Eq, Ord, Read, Show)
@@ -3405,7 +3405,7 @@ _EdgeTypeFiller_keyLabelSetWithContent = Core.Name "keyLabelSetWithContent"
 
 _EdgeTypeFiller_impliedContent = Core.Name "impliedContent"
 
-data EdgeKeyLabelSetWithContent = 
+data EdgeKeyLabelSetWithContent =
   EdgeKeyLabelSetWithContent {
     edgeKeyLabelSetWithContentKeyLabelSet :: EdgeTypeKeyLabelSet,
     edgeKeyLabelSetWithContentImpliedContent :: (Maybe EdgeTypeImpliedContent)}
@@ -3417,7 +3417,7 @@ _EdgeKeyLabelSetWithContent_keyLabelSet = Core.Name "keyLabelSet"
 
 _EdgeKeyLabelSetWithContent_impliedContent = Core.Name "impliedContent"
 
-data EdgeTypeImpliedContent = 
+data EdgeTypeImpliedContent =
   EdgeTypeImpliedContentLabelSet EdgeTypeLabelSet |
   EdgeTypeImpliedContentPropertyTypes EdgeTypePropertyTypes |
   EdgeTypeImpliedContentLabelSetWithProperties EdgeLabelSetWithProperties
@@ -3431,7 +3431,7 @@ _EdgeTypeImpliedContent_propertyTypes = Core.Name "propertyTypes"
 
 _EdgeTypeImpliedContent_labelSetWithProperties = Core.Name "labelSetWithProperties"
 
-data EdgeLabelSetWithProperties = 
+data EdgeLabelSetWithProperties =
   EdgeLabelSetWithProperties {
     edgeLabelSetWithPropertiesLabelSet :: EdgeTypeLabelSet,
     edgeLabelSetWithPropertiesPropertyTypes :: EdgeTypePropertyTypes}
@@ -3455,7 +3455,7 @@ type EdgeTypePropertyTypes = PropertyTypesSpecification
 
 _EdgeTypePropertyTypes = Core.Name "openGql.grammar.EdgeTypePropertyTypes"
 
-data EdgeTypePatternDirected = 
+data EdgeTypePatternDirected =
   EdgeTypePatternDirectedPointingRight EdgeTypePatternPointingRight |
   EdgeTypePatternDirectedPointingLeft EdgeTypePatternPointingLeft
   deriving (Eq, Ord, Read, Show)
@@ -3466,7 +3466,7 @@ _EdgeTypePatternDirected_pointingRight = Core.Name "pointingRight"
 
 _EdgeTypePatternDirected_pointingLeft = Core.Name "pointingLeft"
 
-data EdgeTypePatternPointingRight = 
+data EdgeTypePatternPointingRight =
   EdgeTypePatternPointingRight {
     edgeTypePatternPointingRightSource :: SourceNodeTypeReference,
     edgeTypePatternPointingRightArc :: ArcTypePointingRight,
@@ -3481,7 +3481,7 @@ _EdgeTypePatternPointingRight_arc = Core.Name "arc"
 
 _EdgeTypePatternPointingRight_destination = Core.Name "destination"
 
-data EdgeTypePatternPointingLeft = 
+data EdgeTypePatternPointingLeft =
   EdgeTypePatternPointingLeft {
     edgeTypePatternPointingLeftDestination :: DestinationNodeTypeReference,
     edgeTypePatternPointingLeftArc :: ArcTypePointingLeft,
@@ -3496,7 +3496,7 @@ _EdgeTypePatternPointingLeft_arc = Core.Name "arc"
 
 _EdgeTypePatternPointingLeft_source = Core.Name "source"
 
-data EdgeTypePatternUndirected = 
+data EdgeTypePatternUndirected =
   EdgeTypePatternUndirected {
     edgeTypePatternUndirectedSource :: SourceNodeTypeReference,
     edgeTypePatternUndirectedArc :: ArcTypeUndirected,
@@ -3523,7 +3523,7 @@ type ArcTypeUndirected = EdgeTypeFiller
 
 _ArcTypeUndirected = Core.Name "openGql.grammar.ArcTypeUndirected"
 
-data SourceNodeTypeReference = 
+data SourceNodeTypeReference =
   SourceNodeTypeReferenceAlias SourceNodeTypeAlias |
   SourceNodeTypeReferenceFiller (Maybe NodeTypeFiller)
   deriving (Eq, Ord, Read, Show)
@@ -3534,7 +3534,7 @@ _SourceNodeTypeReference_alias = Core.Name "alias"
 
 _SourceNodeTypeReference_filler = Core.Name "filler"
 
-data DestinationNodeTypeReference = 
+data DestinationNodeTypeReference =
   DestinationNodeTypeReferenceAlias DestinationNodeTypeAlias |
   DestinationNodeTypeReferenceFiller (Maybe NodeTypeFiller)
   deriving (Eq, Ord, Read, Show)
@@ -3545,9 +3545,9 @@ _DestinationNodeTypeReference_alias = Core.Name "alias"
 
 _DestinationNodeTypeReference_filler = Core.Name "filler"
 
-data EdgeKind = 
+data EdgeKind =
   EdgeKindDirected  |
-  EdgeKindUndirected 
+  EdgeKindUndirected
   deriving (Eq, Ord, Read, Show)
 
 _EdgeKind = Core.Name "openGql.grammar.EdgeKind"
@@ -3560,7 +3560,7 @@ type EndpointPairPhrase = EndpointPair
 
 _EndpointPairPhrase = Core.Name "openGql.grammar.EndpointPairPhrase"
 
-data EndpointPair = 
+data EndpointPair =
   EndpointPairDirectedPair EndpointPairDirected |
   EndpointPairUndirectedPair EndpointPairUndirected
   deriving (Eq, Ord, Read, Show)
@@ -3571,7 +3571,7 @@ _EndpointPair_directedPair = Core.Name "directedPair"
 
 _EndpointPair_undirectedPair = Core.Name "undirectedPair"
 
-data EndpointPairDirected = 
+data EndpointPairDirected =
   EndpointPairDirectedPointingRight EndpointPairPointingRight |
   EndpointPairDirectedPointingLeft EndpointPairPointingLeft
   deriving (Eq, Ord, Read, Show)
@@ -3582,7 +3582,7 @@ _EndpointPairDirected_pointingRight = Core.Name "pointingRight"
 
 _EndpointPairDirected_pointingLeft = Core.Name "pointingLeft"
 
-data EndpointPairPointingRight = 
+data EndpointPairPointingRight =
   EndpointPairPointingRight {
     endpointPairPointingRightSourceAlias :: SourceNodeTypeAlias,
     endpointPairPointingRightConnector :: ConnectorPointingRight,
@@ -3597,7 +3597,7 @@ _EndpointPairPointingRight_connector = Core.Name "connector"
 
 _EndpointPairPointingRight_destinationAlias = Core.Name "destinationAlias"
 
-data EndpointPairPointingLeft = 
+data EndpointPairPointingLeft =
   EndpointPairPointingLeft {
     endpointPairPointingLeftDestinationAlias :: DestinationNodeTypeAlias,
     endpointPairPointingLeftSourceAlias :: SourceNodeTypeAlias}
@@ -3609,7 +3609,7 @@ _EndpointPairPointingLeft_destinationAlias = Core.Name "destinationAlias"
 
 _EndpointPairPointingLeft_sourceAlias = Core.Name "sourceAlias"
 
-data EndpointPairUndirected = 
+data EndpointPairUndirected =
   EndpointPairUndirected {
     endpointPairUndirectedSourceAlias :: SourceNodeTypeAlias,
     endpointPairUndirectedConnector :: ConnectorUndirected,
@@ -3624,9 +3624,9 @@ _EndpointPairUndirected_connector = Core.Name "connector"
 
 _EndpointPairUndirected_destinationAlias = Core.Name "destinationAlias"
 
-data ConnectorPointingRight = 
+data ConnectorPointingRight =
   ConnectorPointingRightTo  |
-  ConnectorPointingRightRightArrow 
+  ConnectorPointingRightRightArrow
   deriving (Eq, Ord, Read, Show)
 
 _ConnectorPointingRight = Core.Name "openGql.grammar.ConnectorPointingRight"
@@ -3635,9 +3635,9 @@ _ConnectorPointingRight_to = Core.Name "to"
 
 _ConnectorPointingRight_rightArrow = Core.Name "rightArrow"
 
-data ConnectorUndirected = 
+data ConnectorUndirected =
   ConnectorUndirectedTo  |
-  ConnectorUndirectedTilde 
+  ConnectorUndirectedTilde
   deriving (Eq, Ord, Read, Show)
 
 _ConnectorUndirected = Core.Name "openGql.grammar.ConnectorUndirected"
@@ -3654,7 +3654,7 @@ type DestinationNodeTypeAlias = String
 
 _DestinationNodeTypeAlias = Core.Name "openGql.grammar.DestinationNodeTypeAlias"
 
-data LabelSetPhrase = 
+data LabelSetPhrase =
   LabelSetPhraseSingleLabel LabelName |
   LabelSetPhraseMultipleLabels LabelSetSpecification |
   LabelSetPhraseIsOrColonWithLabels IsOrColonWithLabels
@@ -3668,7 +3668,7 @@ _LabelSetPhrase_multipleLabels = Core.Name "multipleLabels"
 
 _LabelSetPhrase_isOrColonWithLabels = Core.Name "isOrColonWithLabels"
 
-data IsOrColonWithLabels = 
+data IsOrColonWithLabels =
   IsOrColonWithLabels {
     isOrColonWithLabelsIsOrColon :: IsOrColon,
     isOrColonWithLabelsLabels :: LabelSetSpecification}
@@ -3692,7 +3692,7 @@ type PropertyTypeList = [PropertyType]
 
 _PropertyTypeList = Core.Name "openGql.grammar.PropertyTypeList"
 
-data PropertyType = 
+data PropertyType =
   PropertyType {
     propertyTypeName :: PropertyName,
     propertyTypeTyped :: (Maybe Typed),
@@ -3711,7 +3711,7 @@ type PropertyValueType = ValueType
 
 _PropertyValueType = Core.Name "openGql.grammar.PropertyValueType"
 
-data BindingTableType = 
+data BindingTableType =
   BindingTableType {
     bindingTableTypeBinding :: Bool,
     bindingTableTypeFieldTypes :: FieldTypesSpecification}
@@ -3723,7 +3723,7 @@ _BindingTableType_binding = Core.Name "binding"
 
 _BindingTableType_fieldTypes = Core.Name "fieldTypes"
 
-data ValueType = 
+data ValueType =
   ValueTypePredefinedType PredefinedType |
   ValueTypePathValueType PathValueType |
   ValueTypeListValueTypeAlt1 ListValueTypeAlt1 |
@@ -3758,7 +3758,7 @@ _ValueType_closedDynamicUnionTypeAlt1 = Core.Name "closedDynamicUnionTypeAlt1"
 
 _ValueType_closedDynamicUnionTypeAlt2 = Core.Name "closedDynamicUnionTypeAlt2"
 
-data ListValueTypeAlt1 = 
+data ListValueTypeAlt1 =
   ListValueTypeAlt1 {
     listValueTypeAlt1TypeName :: ListValueTypeName,
     listValueTypeAlt1ValueType :: ValueType,
@@ -3776,7 +3776,7 @@ _ListValueTypeAlt1_maxLength = Core.Name "maxLength"
 
 _ListValueTypeAlt1_notNull = Core.Name "notNull"
 
-data ListValueTypeAlt2 = 
+data ListValueTypeAlt2 =
   ListValueTypeAlt2 {
     listValueTypeAlt2ValueType :: ValueType,
     listValueTypeAlt2TypeName :: ListValueTypeName,
@@ -3794,7 +3794,7 @@ _ListValueTypeAlt2_maxLength = Core.Name "maxLength"
 
 _ListValueTypeAlt2_notNull = Core.Name "notNull"
 
-data ListValueTypeAlt3 = 
+data ListValueTypeAlt3 =
   ListValueTypeAlt3 {
     listValueTypeAlt3TypeName :: ListValueTypeName,
     listValueTypeAlt3MaxLength :: (Maybe MaxLength),
@@ -3809,7 +3809,7 @@ _ListValueTypeAlt3_maxLength = Core.Name "maxLength"
 
 _ListValueTypeAlt3_notNull = Core.Name "notNull"
 
-data OpenDynamicUnionType = 
+data OpenDynamicUnionType =
   OpenDynamicUnionType {
     openDynamicUnionTypeValue :: Bool,
     openDynamicUnionTypeNotNull :: Bool}
@@ -3821,7 +3821,7 @@ _OpenDynamicUnionType_value = Core.Name "value"
 
 _OpenDynamicUnionType_notNull = Core.Name "notNull"
 
-data DynamicPropertyValueType = 
+data DynamicPropertyValueType =
   DynamicPropertyValueType {
     dynamicPropertyValueTypeAny :: (Maybe Bool),
     dynamicPropertyValueTypeProperty :: (),
@@ -3839,7 +3839,7 @@ _DynamicPropertyValueType_value = Core.Name "value"
 
 _DynamicPropertyValueType_notNull = Core.Name "notNull"
 
-data ClosedDynamicUnionTypeAlt1 = 
+data ClosedDynamicUnionTypeAlt1 =
   ClosedDynamicUnionTypeAlt1 {
     closedDynamicUnionTypeAlt1AnyValue :: (Maybe Bool),
     closedDynamicUnionTypeAlt1ValueTypes :: [ValueType]}
@@ -3851,7 +3851,7 @@ _ClosedDynamicUnionTypeAlt1_anyValue = Core.Name "anyValue"
 
 _ClosedDynamicUnionTypeAlt1_valueTypes = Core.Name "valueTypes"
 
-data ClosedDynamicUnionTypeAlt2 = 
+data ClosedDynamicUnionTypeAlt2 =
   ClosedDynamicUnionTypeAlt2 {
     closedDynamicUnionTypeAlt2ValueTypes :: [ValueType]}
   deriving (Eq, Ord, Read, Show)
@@ -3864,7 +3864,7 @@ type Typed = ()
 
 _Typed = Core.Name "openGql.grammar.Typed"
 
-data PredefinedType = 
+data PredefinedType =
   PredefinedTypeBooleanType BooleanType |
   PredefinedTypeCharacterStringType CharacterStringType |
   PredefinedTypeByteStringType ByteStringType |
@@ -3890,7 +3890,7 @@ _PredefinedType_referenceValueType = Core.Name "referenceValueType"
 
 _PredefinedType_immaterialValueType = Core.Name "immaterialValueType"
 
-data BooleanType = 
+data BooleanType =
   BooleanType {
     booleanTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -3899,7 +3899,7 @@ _BooleanType = Core.Name "openGql.grammar.BooleanType"
 
 _BooleanType_notNull = Core.Name "notNull"
 
-data CharacterStringType = 
+data CharacterStringType =
   CharacterStringTypeStringType StringType |
   CharacterStringTypeCharType CharType |
   CharacterStringTypeVarcharType VarcharType
@@ -3913,7 +3913,7 @@ _CharacterStringType_charType = Core.Name "charType"
 
 _CharacterStringType_varcharType = Core.Name "varcharType"
 
-data StringType = 
+data StringType =
   StringType {
     stringTypeMinLength :: (Maybe MinLength),
     stringTypeMaxLength :: (Maybe MaxLength),
@@ -3928,7 +3928,7 @@ _StringType_maxLength = Core.Name "maxLength"
 
 _StringType_notNull = Core.Name "notNull"
 
-data CharType = 
+data CharType =
   CharType {
     charTypeFixedLength :: (Maybe FixedLength),
     charTypeNotNull :: Bool}
@@ -3940,7 +3940,7 @@ _CharType_fixedLength = Core.Name "fixedLength"
 
 _CharType_notNull = Core.Name "notNull"
 
-data VarcharType = 
+data VarcharType =
   VarcharType {
     varcharTypeMaxLength :: (Maybe MaxLength),
     varcharTypeNotNull :: Bool}
@@ -3952,7 +3952,7 @@ _VarcharType_maxLength = Core.Name "maxLength"
 
 _VarcharType_notNull = Core.Name "notNull"
 
-data ByteStringType = 
+data ByteStringType =
   ByteStringTypeBytesType BytesType |
   ByteStringTypeBinaryType BinaryType |
   ByteStringTypeVarbinaryType VarbinaryType
@@ -3966,7 +3966,7 @@ _ByteStringType_binaryType = Core.Name "binaryType"
 
 _ByteStringType_varbinaryType = Core.Name "varbinaryType"
 
-data BytesType = 
+data BytesType =
   BytesType {
     bytesTypeMinLength :: (Maybe MinLength),
     bytesTypeMaxLength :: (Maybe MaxLength),
@@ -3981,7 +3981,7 @@ _BytesType_maxLength = Core.Name "maxLength"
 
 _BytesType_notNull = Core.Name "notNull"
 
-data BinaryType = 
+data BinaryType =
   BinaryType {
     binaryTypeFixedLength :: (Maybe FixedLength),
     binaryTypeNotNull :: Bool}
@@ -3993,7 +3993,7 @@ _BinaryType_fixedLength = Core.Name "fixedLength"
 
 _BinaryType_notNull = Core.Name "notNull"
 
-data VarbinaryType = 
+data VarbinaryType =
   VarbinaryType {
     varbinaryTypeMaxLength :: (Maybe MaxLength),
     varbinaryTypeNotNull :: Bool}
@@ -4017,7 +4017,7 @@ type MaxLength = UnsignedInteger
 
 _MaxLength = Core.Name "openGql.grammar.MaxLength"
 
-data NumericType = 
+data NumericType =
   NumericTypeExact ExactNumericType |
   NumericTypeApproximate ApproximateNumericType
   deriving (Eq, Ord, Read, Show)
@@ -4028,7 +4028,7 @@ _NumericType_exact = Core.Name "exact"
 
 _NumericType_approximate = Core.Name "approximate"
 
-data ExactNumericType = 
+data ExactNumericType =
   ExactNumericTypeBinary BinaryExactNumericType |
   ExactNumericTypeDecimal DecimalExactNumericType
   deriving (Eq, Ord, Read, Show)
@@ -4039,7 +4039,7 @@ _ExactNumericType_binary = Core.Name "binary"
 
 _ExactNumericType_decimal = Core.Name "decimal"
 
-data BinaryExactNumericType = 
+data BinaryExactNumericType =
   BinaryExactNumericTypeSigned SignedBinaryExactNumericType |
   BinaryExactNumericTypeUnsigned UnsignedBinaryExactNumericType
   deriving (Eq, Ord, Read, Show)
@@ -4050,7 +4050,7 @@ _BinaryExactNumericType_signed = Core.Name "signed"
 
 _BinaryExactNumericType_unsigned = Core.Name "unsigned"
 
-data SignedBinaryExactNumericType = 
+data SignedBinaryExactNumericType =
   SignedBinaryExactNumericTypeInt8 Int8Type |
   SignedBinaryExactNumericTypeInt16 Int16Type |
   SignedBinaryExactNumericTypeInt32 Int32Type |
@@ -4085,7 +4085,7 @@ _SignedBinaryExactNumericType_bigInt = Core.Name "bigInt"
 
 _SignedBinaryExactNumericType_signedVerboseType = Core.Name "signedVerboseType"
 
-data Int8Type = 
+data Int8Type =
   Int8Type {
     int8TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4094,7 +4094,7 @@ _Int8Type = Core.Name "openGql.grammar.Int8Type"
 
 _Int8Type_notNull = Core.Name "notNull"
 
-data Int16Type = 
+data Int16Type =
   Int16Type {
     int16TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4103,7 +4103,7 @@ _Int16Type = Core.Name "openGql.grammar.Int16Type"
 
 _Int16Type_notNull = Core.Name "notNull"
 
-data Int32Type = 
+data Int32Type =
   Int32Type {
     int32TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4112,7 +4112,7 @@ _Int32Type = Core.Name "openGql.grammar.Int32Type"
 
 _Int32Type_notNull = Core.Name "notNull"
 
-data Int64Type = 
+data Int64Type =
   Int64Type {
     int64TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4121,7 +4121,7 @@ _Int64Type = Core.Name "openGql.grammar.Int64Type"
 
 _Int64Type_notNull = Core.Name "notNull"
 
-data Int128Type = 
+data Int128Type =
   Int128Type {
     int128TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4130,7 +4130,7 @@ _Int128Type = Core.Name "openGql.grammar.Int128Type"
 
 _Int128Type_notNull = Core.Name "notNull"
 
-data Int256Type = 
+data Int256Type =
   Int256Type {
     int256TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4139,7 +4139,7 @@ _Int256Type = Core.Name "openGql.grammar.Int256Type"
 
 _Int256Type_notNull = Core.Name "notNull"
 
-data SmallIntType = 
+data SmallIntType =
   SmallIntType {
     smallIntTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4148,7 +4148,7 @@ _SmallIntType = Core.Name "openGql.grammar.SmallIntType"
 
 _SmallIntType_notNull = Core.Name "notNull"
 
-data BigIntType = 
+data BigIntType =
   BigIntType {
     bigIntTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4157,7 +4157,7 @@ _BigIntType = Core.Name "openGql.grammar.BigIntType"
 
 _BigIntType_notNull = Core.Name "notNull"
 
-data IntWithPrecision = 
+data IntWithPrecision =
   IntWithPrecision {
     intWithPrecisionPrecision :: (Maybe Precision),
     intWithPrecisionNotNull :: Bool}
@@ -4169,7 +4169,7 @@ _IntWithPrecision_precision = Core.Name "precision"
 
 _IntWithPrecision_notNull = Core.Name "notNull"
 
-data SignedVerboseBinaryExactNumericType = 
+data SignedVerboseBinaryExactNumericType =
   SignedVerboseBinaryExactNumericType {
     signedVerboseBinaryExactNumericTypeSigned :: Bool,
     signedVerboseBinaryExactNumericTypeVerboseType :: VerboseBinaryExactNumericType}
@@ -4181,7 +4181,7 @@ _SignedVerboseBinaryExactNumericType_signed = Core.Name "signed"
 
 _SignedVerboseBinaryExactNumericType_verboseType = Core.Name "verboseType"
 
-data UnsignedBinaryExactNumericType = 
+data UnsignedBinaryExactNumericType =
   UnsignedBinaryExactNumericTypeUint8 Uint8Type |
   UnsignedBinaryExactNumericTypeUint16 Uint16Type |
   UnsignedBinaryExactNumericTypeUint32 Uint32Type |
@@ -4216,7 +4216,7 @@ _UnsignedBinaryExactNumericType_uBigInt = Core.Name "uBigInt"
 
 _UnsignedBinaryExactNumericType_unsigned = Core.Name "unsigned"
 
-data Uint8Type = 
+data Uint8Type =
   Uint8Type {
     uint8TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4225,7 +4225,7 @@ _Uint8Type = Core.Name "openGql.grammar.Uint8Type"
 
 _Uint8Type_notNull = Core.Name "notNull"
 
-data Uint16Type = 
+data Uint16Type =
   Uint16Type {
     uint16TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4234,7 +4234,7 @@ _Uint16Type = Core.Name "openGql.grammar.Uint16Type"
 
 _Uint16Type_notNull = Core.Name "notNull"
 
-data Uint32Type = 
+data Uint32Type =
   Uint32Type {
     uint32TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4243,7 +4243,7 @@ _Uint32Type = Core.Name "openGql.grammar.Uint32Type"
 
 _Uint32Type_notNull = Core.Name "notNull"
 
-data Uint64Type = 
+data Uint64Type =
   Uint64Type {
     uint64TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4252,7 +4252,7 @@ _Uint64Type = Core.Name "openGql.grammar.Uint64Type"
 
 _Uint64Type_notNull = Core.Name "notNull"
 
-data Uint128Type = 
+data Uint128Type =
   Uint128Type {
     uint128TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4261,7 +4261,7 @@ _Uint128Type = Core.Name "openGql.grammar.Uint128Type"
 
 _Uint128Type_notNull = Core.Name "notNull"
 
-data Uint256Type = 
+data Uint256Type =
   Uint256Type {
     uint256TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4270,7 +4270,7 @@ _Uint256Type = Core.Name "openGql.grammar.Uint256Type"
 
 _Uint256Type_notNull = Core.Name "notNull"
 
-data USmallIntType = 
+data USmallIntType =
   USmallIntType {
     uSmallIntTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4279,7 +4279,7 @@ _USmallIntType = Core.Name "openGql.grammar.USmallIntType"
 
 _USmallIntType_notNull = Core.Name "notNull"
 
-data UBigIntType = 
+data UBigIntType =
   UBigIntType {
     uBigIntTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4288,7 +4288,7 @@ _UBigIntType = Core.Name "openGql.grammar.UBigIntType"
 
 _UBigIntType_notNull = Core.Name "notNull"
 
-data UintWithPrecision = 
+data UintWithPrecision =
   UintWithPrecision {
     uintWithPrecisionPrecision :: (Maybe Precision),
     uintWithPrecisionNotNull :: Bool}
@@ -4300,7 +4300,7 @@ _UintWithPrecision_precision = Core.Name "precision"
 
 _UintWithPrecision_notNull = Core.Name "notNull"
 
-data VerboseBinaryExactNumericType = 
+data VerboseBinaryExactNumericType =
   VerboseBinaryExactNumericTypeInteger8 Integer8Type |
   VerboseBinaryExactNumericTypeInteger16 Integer16Type |
   VerboseBinaryExactNumericTypeInteger32 Integer32Type |
@@ -4332,7 +4332,7 @@ _VerboseBinaryExactNumericType_integerWithPrecision = Core.Name "integerWithPrec
 
 _VerboseBinaryExactNumericType_bigInteger = Core.Name "bigInteger"
 
-data Integer8Type = 
+data Integer8Type =
   Integer8Type {
     integer8TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4341,7 +4341,7 @@ _Integer8Type = Core.Name "openGql.grammar.Integer8Type"
 
 _Integer8Type_notNull = Core.Name "notNull"
 
-data Integer16Type = 
+data Integer16Type =
   Integer16Type {
     integer16TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4350,7 +4350,7 @@ _Integer16Type = Core.Name "openGql.grammar.Integer16Type"
 
 _Integer16Type_notNull = Core.Name "notNull"
 
-data Integer32Type = 
+data Integer32Type =
   Integer32Type {
     integer32TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4359,7 +4359,7 @@ _Integer32Type = Core.Name "openGql.grammar.Integer32Type"
 
 _Integer32Type_notNull = Core.Name "notNull"
 
-data Integer64Type = 
+data Integer64Type =
   Integer64Type {
     integer64TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4368,7 +4368,7 @@ _Integer64Type = Core.Name "openGql.grammar.Integer64Type"
 
 _Integer64Type_notNull = Core.Name "notNull"
 
-data Integer128Type = 
+data Integer128Type =
   Integer128Type {
     integer128TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4377,7 +4377,7 @@ _Integer128Type = Core.Name "openGql.grammar.Integer128Type"
 
 _Integer128Type_notNull = Core.Name "notNull"
 
-data Integer256Type = 
+data Integer256Type =
   Integer256Type {
     integer256TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4386,7 +4386,7 @@ _Integer256Type = Core.Name "openGql.grammar.Integer256Type"
 
 _Integer256Type_notNull = Core.Name "notNull"
 
-data SmallIntegerType = 
+data SmallIntegerType =
   SmallIntegerType {
     smallIntegerTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4395,7 +4395,7 @@ _SmallIntegerType = Core.Name "openGql.grammar.SmallIntegerType"
 
 _SmallIntegerType_notNull = Core.Name "notNull"
 
-data BigIntegerType = 
+data BigIntegerType =
   BigIntegerType {
     bigIntegerTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4404,7 +4404,7 @@ _BigIntegerType = Core.Name "openGql.grammar.BigIntegerType"
 
 _BigIntegerType_notNull = Core.Name "notNull"
 
-data IntegerWithPrecision = 
+data IntegerWithPrecision =
   IntegerWithPrecision {
     integerWithPrecisionPrecision :: (Maybe Precision),
     integerWithPrecisionNotNull :: Bool}
@@ -4424,7 +4424,7 @@ type DecimalExactNumericType = (Maybe PrecisionAndScale)
 
 _DecimalExactNumericType = Core.Name "openGql.grammar.DecimalExactNumericType"
 
-data PrecisionAndScale = 
+data PrecisionAndScale =
   PrecisionAndScale {
     precisionAndScalePrecision :: Precision,
     precisionAndScaleScale :: (Maybe Scale),
@@ -4443,7 +4443,7 @@ type Scale = UnsignedDecimalInteger
 
 _Scale = Core.Name "openGql.grammar.Scale"
 
-data ApproximateNumericType = 
+data ApproximateNumericType =
   ApproximateNumericTypeFloat16 Float16Type |
   ApproximateNumericTypeFloat32 Float32Type |
   ApproximateNumericTypeFloat64 Float64Type |
@@ -4472,7 +4472,7 @@ _ApproximateNumericType_real = Core.Name "real"
 
 _ApproximateNumericType_doubleWithPrecision = Core.Name "doubleWithPrecision"
 
-data Float16Type = 
+data Float16Type =
   Float16Type {
     float16TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4481,7 +4481,7 @@ _Float16Type = Core.Name "openGql.grammar.Float16Type"
 
 _Float16Type_notNull = Core.Name "notNull"
 
-data Float32Type = 
+data Float32Type =
   Float32Type {
     float32TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4490,7 +4490,7 @@ _Float32Type = Core.Name "openGql.grammar.Float32Type"
 
 _Float32Type_notNull = Core.Name "notNull"
 
-data Float64Type = 
+data Float64Type =
   Float64Type {
     float64TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4499,7 +4499,7 @@ _Float64Type = Core.Name "openGql.grammar.Float64Type"
 
 _Float64Type_notNull = Core.Name "notNull"
 
-data Float128Type = 
+data Float128Type =
   Float128Type {
     float128TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4508,7 +4508,7 @@ _Float128Type = Core.Name "openGql.grammar.Float128Type"
 
 _Float128Type_notNull = Core.Name "notNull"
 
-data Float256Type = 
+data Float256Type =
   Float256Type {
     float256TypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4517,7 +4517,7 @@ _Float256Type = Core.Name "openGql.grammar.Float256Type"
 
 _Float256Type_notNull = Core.Name "notNull"
 
-data FloatTypeWithPrecision = 
+data FloatTypeWithPrecision =
   FloatTypeWithPrecision {
     floatTypeWithPrecisionPrecisionAndScale :: (Maybe PrecisionAndScale),
     floatTypeWithPrecisionNotNull :: Bool}
@@ -4529,7 +4529,7 @@ _FloatTypeWithPrecision_precisionAndScale = Core.Name "precisionAndScale"
 
 _FloatTypeWithPrecision_notNull = Core.Name "notNull"
 
-data RealType = 
+data RealType =
   RealType {
     realTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4538,7 +4538,7 @@ _RealType = Core.Name "openGql.grammar.RealType"
 
 _RealType_notNull = Core.Name "notNull"
 
-data DoubleTypeWithPrecision = 
+data DoubleTypeWithPrecision =
   DoubleTypeWithPrecision {
     doubleTypeWithPrecisionPrecision :: Bool,
     doubleTypeWithPrecisionNotNull :: Bool}
@@ -4550,7 +4550,7 @@ _DoubleTypeWithPrecision_precision = Core.Name "precision"
 
 _DoubleTypeWithPrecision_notNull = Core.Name "notNull"
 
-data TemporalType = 
+data TemporalType =
   TemporalTypeInstantType TemporalInstantType |
   TemporalTypeDurationType TemporalDurationType
   deriving (Eq, Ord, Read, Show)
@@ -4561,7 +4561,7 @@ _TemporalType_instantType = Core.Name "instantType"
 
 _TemporalType_durationType = Core.Name "durationType"
 
-data TemporalInstantType = 
+data TemporalInstantType =
   TemporalInstantTypeDatetimeType DatetimeType |
   TemporalInstantTypeLocaldatetimeType LocaldatetimeType |
   TemporalInstantTypeDateType DateType |
@@ -4581,7 +4581,7 @@ _TemporalInstantType_timeType = Core.Name "timeType"
 
 _TemporalInstantType_localtimeType = Core.Name "localtimeType"
 
-data DatetimeType = 
+data DatetimeType =
   DatetimeTypeZonedDatetime ZonedDatetimeType |
   DatetimeTypeTimestampWithTimeZone TimestampWithTimeZoneType
   deriving (Eq, Ord, Read, Show)
@@ -4592,7 +4592,7 @@ _DatetimeType_zonedDatetime = Core.Name "zonedDatetime"
 
 _DatetimeType_timestampWithTimeZone = Core.Name "timestampWithTimeZone"
 
-data ZonedDatetimeType = 
+data ZonedDatetimeType =
   ZonedDatetimeType {
     zonedDatetimeTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4601,7 +4601,7 @@ _ZonedDatetimeType = Core.Name "openGql.grammar.ZonedDatetimeType"
 
 _ZonedDatetimeType_notNull = Core.Name "notNull"
 
-data TimestampWithTimeZoneType = 
+data TimestampWithTimeZoneType =
   TimestampWithTimeZoneType {
     timestampWithTimeZoneTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4610,7 +4610,7 @@ _TimestampWithTimeZoneType = Core.Name "openGql.grammar.TimestampWithTimeZoneTyp
 
 _TimestampWithTimeZoneType_notNull = Core.Name "notNull"
 
-data LocaldatetimeType = 
+data LocaldatetimeType =
   LocaldatetimeTypeLocalDatetime LocalDatetimeType |
   LocaldatetimeTypeTimestampWithoutTimeZone TimestampWithoutTimeZoneType
   deriving (Eq, Ord, Read, Show)
@@ -4621,7 +4621,7 @@ _LocaldatetimeType_localDatetime = Core.Name "localDatetime"
 
 _LocaldatetimeType_timestampWithoutTimeZone = Core.Name "timestampWithoutTimeZone"
 
-data LocalDatetimeType = 
+data LocalDatetimeType =
   LocalDatetimeType {
     localDatetimeTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4630,7 +4630,7 @@ _LocalDatetimeType = Core.Name "openGql.grammar.LocalDatetimeType"
 
 _LocalDatetimeType_notNull = Core.Name "notNull"
 
-data TimestampWithoutTimeZoneType = 
+data TimestampWithoutTimeZoneType =
   TimestampWithoutTimeZoneType {
     timestampWithoutTimeZoneTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4639,7 +4639,7 @@ _TimestampWithoutTimeZoneType = Core.Name "openGql.grammar.TimestampWithoutTimeZ
 
 _TimestampWithoutTimeZoneType_notNull = Core.Name "notNull"
 
-data DateType = 
+data DateType =
   DateType {
     dateTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4648,7 +4648,7 @@ _DateType = Core.Name "openGql.grammar.DateType"
 
 _DateType_notNull = Core.Name "notNull"
 
-data TimeType = 
+data TimeType =
   TimeTypeZonedTime ZonedTimeType |
   TimeTypeTimeWithTimeZone TimeWithTimeZoneType
   deriving (Eq, Ord, Read, Show)
@@ -4659,7 +4659,7 @@ _TimeType_zonedTime = Core.Name "zonedTime"
 
 _TimeType_timeWithTimeZone = Core.Name "timeWithTimeZone"
 
-data ZonedTimeType = 
+data ZonedTimeType =
   ZonedTimeType {
     zonedTimeTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4668,7 +4668,7 @@ _ZonedTimeType = Core.Name "openGql.grammar.ZonedTimeType"
 
 _ZonedTimeType_notNull = Core.Name "notNull"
 
-data TimeWithTimeZoneType = 
+data TimeWithTimeZoneType =
   TimeWithTimeZoneType {
     timeWithTimeZoneTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4677,7 +4677,7 @@ _TimeWithTimeZoneType = Core.Name "openGql.grammar.TimeWithTimeZoneType"
 
 _TimeWithTimeZoneType_notNull = Core.Name "notNull"
 
-data LocaltimeType = 
+data LocaltimeType =
   LocaltimeTypeLocalTime LocalTimeType |
   LocaltimeTypeTimeWithoutTimeZone TimeWithoutTimeZoneType
   deriving (Eq, Ord, Read, Show)
@@ -4688,7 +4688,7 @@ _LocaltimeType_localTime = Core.Name "localTime"
 
 _LocaltimeType_timeWithoutTimeZone = Core.Name "timeWithoutTimeZone"
 
-data LocalTimeType = 
+data LocalTimeType =
   LocalTimeType {
     localTimeTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4697,7 +4697,7 @@ _LocalTimeType = Core.Name "openGql.grammar.LocalTimeType"
 
 _LocalTimeType_notNull = Core.Name "notNull"
 
-data TimeWithoutTimeZoneType = 
+data TimeWithoutTimeZoneType =
   TimeWithoutTimeZoneType {
     timeWithoutTimeZoneTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4706,7 +4706,7 @@ _TimeWithoutTimeZoneType = Core.Name "openGql.grammar.TimeWithoutTimeZoneType"
 
 _TimeWithoutTimeZoneType_notNull = Core.Name "notNull"
 
-data TemporalDurationType = 
+data TemporalDurationType =
   TemporalDurationType {
     temporalDurationTypeQualifier :: TemporalDurationQualifier,
     temporalDurationTypeNotNull :: Bool}
@@ -4718,9 +4718,9 @@ _TemporalDurationType_qualifier = Core.Name "qualifier"
 
 _TemporalDurationType_notNull = Core.Name "notNull"
 
-data TemporalDurationQualifier = 
+data TemporalDurationQualifier =
   TemporalDurationQualifierYearToMonth  |
-  TemporalDurationQualifierDayToSecond 
+  TemporalDurationQualifierDayToSecond
   deriving (Eq, Ord, Read, Show)
 
 _TemporalDurationQualifier = Core.Name "openGql.grammar.TemporalDurationQualifier"
@@ -4729,7 +4729,7 @@ _TemporalDurationQualifier_yearToMonth = Core.Name "yearToMonth"
 
 _TemporalDurationQualifier_dayToSecond = Core.Name "dayToSecond"
 
-data ReferenceValueType = 
+data ReferenceValueType =
   ReferenceValueTypeGraph GraphReferenceValueType |
   ReferenceValueTypeBindingTable BindingTableReferenceValueType |
   ReferenceValueTypeNode NodeReferenceValueType |
@@ -4746,7 +4746,7 @@ _ReferenceValueType_node = Core.Name "node"
 
 _ReferenceValueType_edge = Core.Name "edge"
 
-data ImmaterialValueType = 
+data ImmaterialValueType =
   ImmaterialValueTypeNullType NullType |
   ImmaterialValueTypeEmptyType EmptyType
   deriving (Eq, Ord, Read, Show)
@@ -4765,7 +4765,7 @@ type EmptyType = ()
 
 _EmptyType = Core.Name "openGql.grammar.EmptyType"
 
-data GraphReferenceValueType = 
+data GraphReferenceValueType =
   GraphReferenceValueTypeOpen OpenGraphReferenceValueType |
   GraphReferenceValueTypeClosed ClosedGraphReferenceValueType
   deriving (Eq, Ord, Read, Show)
@@ -4776,7 +4776,7 @@ _GraphReferenceValueType_open = Core.Name "open"
 
 _GraphReferenceValueType_closed = Core.Name "closed"
 
-data ClosedGraphReferenceValueType = 
+data ClosedGraphReferenceValueType =
   ClosedGraphReferenceValueType {
     closedGraphReferenceValueTypeProperty :: Bool,
     closedGraphReferenceValueTypeNestedSpec :: NestedGraphTypeSpecification,
@@ -4791,7 +4791,7 @@ _ClosedGraphReferenceValueType_nestedSpec = Core.Name "nestedSpec"
 
 _ClosedGraphReferenceValueType_notNull = Core.Name "notNull"
 
-data OpenGraphReferenceValueType = 
+data OpenGraphReferenceValueType =
   OpenGraphReferenceValueType {
     openGraphReferenceValueTypeAny :: (Maybe Bool),
     openGraphReferenceValueTypeProperty :: Bool,
@@ -4806,7 +4806,7 @@ _OpenGraphReferenceValueType_property = Core.Name "property"
 
 _OpenGraphReferenceValueType_notNull = Core.Name "notNull"
 
-data BindingTableReferenceValueType = 
+data BindingTableReferenceValueType =
   BindingTableReferenceValueType {
     bindingTableReferenceValueTypeBindingTableType :: BindingTableType,
     bindingTableReferenceValueTypeNotNull :: Bool}
@@ -4818,7 +4818,7 @@ _BindingTableReferenceValueType_bindingTableType = Core.Name "bindingTableType"
 
 _BindingTableReferenceValueType_notNull = Core.Name "notNull"
 
-data NodeReferenceValueType = 
+data NodeReferenceValueType =
   NodeReferenceValueTypeOpen OpenNodeReferenceValueType |
   NodeReferenceValueTypeClosed ClosedNodeReferenceValueType
   deriving (Eq, Ord, Read, Show)
@@ -4829,7 +4829,7 @@ _NodeReferenceValueType_open = Core.Name "open"
 
 _NodeReferenceValueType_closed = Core.Name "closed"
 
-data ClosedNodeReferenceValueType = 
+data ClosedNodeReferenceValueType =
   ClosedNodeReferenceValueType {
     closedNodeReferenceValueTypeNodeTypeSpec :: NodeTypeSpecification,
     closedNodeReferenceValueTypeNotNull :: Bool}
@@ -4841,7 +4841,7 @@ _ClosedNodeReferenceValueType_nodeTypeSpec = Core.Name "nodeTypeSpec"
 
 _ClosedNodeReferenceValueType_notNull = Core.Name "notNull"
 
-data OpenNodeReferenceValueType = 
+data OpenNodeReferenceValueType =
   OpenNodeReferenceValueType {
     openNodeReferenceValueTypeAny :: Bool,
     openNodeReferenceValueTypeNodeSynonym :: NodeSynonym,
@@ -4856,7 +4856,7 @@ _OpenNodeReferenceValueType_nodeSynonym = Core.Name "nodeSynonym"
 
 _OpenNodeReferenceValueType_notNull = Core.Name "notNull"
 
-data EdgeReferenceValueType = 
+data EdgeReferenceValueType =
   EdgeReferenceValueTypeOpen OpenEdgeReferenceValueType |
   EdgeReferenceValueTypeClosed ClosedEdgeReferenceValueType
   deriving (Eq, Ord, Read, Show)
@@ -4867,7 +4867,7 @@ _EdgeReferenceValueType_open = Core.Name "open"
 
 _EdgeReferenceValueType_closed = Core.Name "closed"
 
-data ClosedEdgeReferenceValueType = 
+data ClosedEdgeReferenceValueType =
   ClosedEdgeReferenceValueType {
     closedEdgeReferenceValueTypeEdgeTypeSpec :: EdgeTypeSpecification,
     closedEdgeReferenceValueTypeNotNull :: Bool}
@@ -4879,7 +4879,7 @@ _ClosedEdgeReferenceValueType_edgeTypeSpec = Core.Name "edgeTypeSpec"
 
 _ClosedEdgeReferenceValueType_notNull = Core.Name "notNull"
 
-data OpenEdgeReferenceValueType = 
+data OpenEdgeReferenceValueType =
   OpenEdgeReferenceValueType {
     openEdgeReferenceValueTypeAny :: Bool,
     openEdgeReferenceValueTypeEdgeSynonym :: EdgeSynonym,
@@ -4894,7 +4894,7 @@ _OpenEdgeReferenceValueType_edgeSynonym = Core.Name "edgeSynonym"
 
 _OpenEdgeReferenceValueType_notNull = Core.Name "notNull"
 
-data PathValueType = 
+data PathValueType =
   PathValueType {
     pathValueTypeNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -4903,7 +4903,7 @@ _PathValueType = Core.Name "openGql.grammar.PathValueType"
 
 _PathValueType_notNull = Core.Name "notNull"
 
-data ListValueTypeName = 
+data ListValueTypeName =
   ListValueTypeName {
     listValueTypeNameGroup :: Bool,
     listValueTypeNameSynonym :: ListValueTypeNameSynonym}
@@ -4915,9 +4915,9 @@ _ListValueTypeName_group = Core.Name "group"
 
 _ListValueTypeName_synonym = Core.Name "synonym"
 
-data ListValueTypeNameSynonym = 
+data ListValueTypeNameSynonym =
   ListValueTypeNameSynonymList  |
-  ListValueTypeNameSynonymArray 
+  ListValueTypeNameSynonymArray
   deriving (Eq, Ord, Read, Show)
 
 _ListValueTypeNameSynonym = Core.Name "openGql.grammar.ListValueTypeNameSynonym"
@@ -4926,7 +4926,7 @@ _ListValueTypeNameSynonym_list = Core.Name "list"
 
 _ListValueTypeNameSynonym_array = Core.Name "array"
 
-data RecordType = 
+data RecordType =
   RecordTypeAnyRecord AnyRecordType |
   RecordTypeSpecifiedRecord SpecifiedRecordType
   deriving (Eq, Ord, Read, Show)
@@ -4937,7 +4937,7 @@ _RecordType_anyRecord = Core.Name "anyRecord"
 
 _RecordType_specifiedRecord = Core.Name "specifiedRecord"
 
-data AnyRecordType = 
+data AnyRecordType =
   AnyRecordType {
     anyRecordTypeAny :: Bool,
     anyRecordTypeNotNull :: Bool}
@@ -4949,7 +4949,7 @@ _AnyRecordType_any = Core.Name "any"
 
 _AnyRecordType_notNull = Core.Name "notNull"
 
-data SpecifiedRecordType = 
+data SpecifiedRecordType =
   SpecifiedRecordType {
     specifiedRecordTypeRecord :: Bool,
     specifiedRecordTypeFieldTypes :: FieldTypesSpecification,
@@ -4976,7 +4976,7 @@ type NotNull = ()
 
 _NotNull = Core.Name "openGql.grammar.NotNull"
 
-data FieldType = 
+data FieldType =
   FieldType {
     fieldTypeFieldName :: FieldName,
     fieldTypeTyped :: (Maybe Typed),
@@ -4995,7 +4995,7 @@ type SearchCondition = BooleanValueExpression
 
 _SearchCondition = Core.Name "openGql.grammar.SearchCondition"
 
-data Predicate = 
+data Predicate =
   PredicateExistsPredicate ExistsPredicate |
   PredicateNullPredicate NullPredicate |
   PredicateValueTypePredicate ValueTypePredicate |
@@ -5027,7 +5027,7 @@ _Predicate_samePredicate = Core.Name "samePredicate"
 
 _Predicate_propertyExistsPredicate = Core.Name "propertyExistsPredicate"
 
-data ComparisonPredicatePart2 = 
+data ComparisonPredicatePart2 =
   ComparisonPredicatePart2 {
     comparisonPredicatePart2CompOp :: CompOp,
     comparisonPredicatePart2ValueExpression :: ValueExpression}
@@ -5039,13 +5039,13 @@ _ComparisonPredicatePart2_compOp = Core.Name "compOp"
 
 _ComparisonPredicatePart2_valueExpression = Core.Name "valueExpression"
 
-data CompOp = 
+data CompOp =
   CompOpEquals  |
   CompOpNotEquals  |
   CompOpLessThan  |
   CompOpGreaterThan  |
   CompOpLessThanOrEquals  |
-  CompOpGreaterThanOrEquals 
+  CompOpGreaterThanOrEquals
   deriving (Eq, Ord, Read, Show)
 
 _CompOp = Core.Name "openGql.grammar.CompOp"
@@ -5062,7 +5062,7 @@ _CompOp_lessThanOrEquals = Core.Name "lessThanOrEquals"
 
 _CompOp_greaterThanOrEquals = Core.Name "greaterThanOrEquals"
 
-data ExistsPredicate = 
+data ExistsPredicate =
   ExistsPredicateGraphPatternBrace GraphPattern |
   ExistsPredicateGraphPatternParen GraphPattern |
   ExistsPredicateMatchBlockBrace MatchStatementBlock |
@@ -5082,7 +5082,7 @@ _ExistsPredicate_matchBlockParen = Core.Name "matchBlockParen"
 
 _ExistsPredicate_nestedQuery = Core.Name "nestedQuery"
 
-data NullPredicate = 
+data NullPredicate =
   NullPredicate {
     nullPredicateValueExpression :: PrimaryValueExpression,
     nullPredicateNullPart :: NullPredicatePart2}
@@ -5094,7 +5094,7 @@ _NullPredicate_valueExpression = Core.Name "valueExpression"
 
 _NullPredicate_nullPart = Core.Name "nullPart"
 
-data NullPredicatePart2 = 
+data NullPredicatePart2 =
   NullPredicatePart2 {
     nullPredicatePart2Not :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -5103,7 +5103,7 @@ _NullPredicatePart2 = Core.Name "openGql.grammar.NullPredicatePart2"
 
 _NullPredicatePart2_not = Core.Name "not"
 
-data ValueTypePredicate = 
+data ValueTypePredicate =
   ValueTypePredicate {
     valueTypePredicateValueExpression :: PrimaryValueExpression,
     valueTypePredicateValueTypePart :: ValueTypePredicatePart2}
@@ -5115,7 +5115,7 @@ _ValueTypePredicate_valueExpression = Core.Name "valueExpression"
 
 _ValueTypePredicate_valueTypePart = Core.Name "valueTypePart"
 
-data ValueTypePredicatePart2 = 
+data ValueTypePredicatePart2 =
   ValueTypePredicatePart2 {
     valueTypePredicatePart2Not :: Bool,
     valueTypePredicatePart2Typed :: Typed,
@@ -5130,7 +5130,7 @@ _ValueTypePredicatePart2_typed = Core.Name "typed"
 
 _ValueTypePredicatePart2_valueType = Core.Name "valueType"
 
-data NormalizedPredicatePart2 = 
+data NormalizedPredicatePart2 =
   NormalizedPredicatePart2 {
     normalizedPredicatePart2Not :: Bool,
     normalizedPredicatePart2NormalForm :: (Maybe NormalForm)}
@@ -5142,7 +5142,7 @@ _NormalizedPredicatePart2_not = Core.Name "not"
 
 _NormalizedPredicatePart2_normalForm = Core.Name "normalForm"
 
-data DirectedPredicate = 
+data DirectedPredicate =
   DirectedPredicate {
     directedPredicateElementVariableReference :: ElementVariableReference,
     directedPredicateDirectedPart :: DirectedPredicatePart2}
@@ -5154,7 +5154,7 @@ _DirectedPredicate_elementVariableReference = Core.Name "elementVariableReferenc
 
 _DirectedPredicate_directedPart = Core.Name "directedPart"
 
-data DirectedPredicatePart2 = 
+data DirectedPredicatePart2 =
   DirectedPredicatePart2 {
     directedPredicatePart2Not :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -5163,7 +5163,7 @@ _DirectedPredicatePart2 = Core.Name "openGql.grammar.DirectedPredicatePart2"
 
 _DirectedPredicatePart2_not = Core.Name "not"
 
-data LabeledPredicate = 
+data LabeledPredicate =
   LabeledPredicate {
     labeledPredicateElementVariableReference :: ElementVariableReference,
     labeledPredicateLabeledPart :: LabeledPredicatePart2}
@@ -5175,7 +5175,7 @@ _LabeledPredicate_elementVariableReference = Core.Name "elementVariableReference
 
 _LabeledPredicate_labeledPart = Core.Name "labeledPart"
 
-data LabeledPredicatePart2 = 
+data LabeledPredicatePart2 =
   LabeledPredicatePart2 {
     labeledPredicatePart2IsLabeledOrColon :: IsLabeledOrColon,
     labeledPredicatePart2LabelExpression :: LabelExpression}
@@ -5187,9 +5187,9 @@ _LabeledPredicatePart2_isLabeledOrColon = Core.Name "isLabeledOrColon"
 
 _LabeledPredicatePart2_labelExpression = Core.Name "labelExpression"
 
-data IsLabeledOrColon = 
+data IsLabeledOrColon =
   IsLabeledOrColonNot Bool |
-  IsLabeledOrColonColon 
+  IsLabeledOrColonColon
   deriving (Eq, Ord, Read, Show)
 
 _IsLabeledOrColon = Core.Name "openGql.grammar.IsLabeledOrColon"
@@ -5198,7 +5198,7 @@ _IsLabeledOrColon_not = Core.Name "not"
 
 _IsLabeledOrColon_colon = Core.Name "colon"
 
-data SourceDestinationPredicate = 
+data SourceDestinationPredicate =
   SourceDestinationPredicateSourcePredicate SourcePredicate |
   SourceDestinationPredicateDestinationPredicate DestinationPredicate
   deriving (Eq, Ord, Read, Show)
@@ -5213,7 +5213,7 @@ type NodeReference = ElementVariableReference
 
 _NodeReference = Core.Name "openGql.grammar.NodeReference"
 
-data SourcePredicate = 
+data SourcePredicate =
   SourcePredicate {
     sourcePredicateNot :: Bool,
     sourcePredicateSourceOf :: EdgeReference}
@@ -5225,7 +5225,7 @@ _SourcePredicate_not = Core.Name "not"
 
 _SourcePredicate_sourceOf = Core.Name "sourceOf"
 
-data DestinationPredicate = 
+data DestinationPredicate =
   DestinationPredicate {
     destinationPredicateNodeReference :: NodeReference,
     destinationPredicateNot :: Bool,
@@ -5244,7 +5244,7 @@ type EdgeReference = ElementVariableReference
 
 _EdgeReference = Core.Name "openGql.grammar.EdgeReference"
 
-data AllDifferentPredicate = 
+data AllDifferentPredicate =
   AllDifferentPredicate {
     allDifferentPredicateReferences :: [ElementVariableReference]}
   deriving (Eq, Ord, Read, Show)
@@ -5253,7 +5253,7 @@ _AllDifferentPredicate = Core.Name "openGql.grammar.AllDifferentPredicate"
 
 _AllDifferentPredicate_references = Core.Name "references"
 
-data SamePredicate = 
+data SamePredicate =
   SamePredicate {
     samePredicateReferences :: [ElementVariableReference]}
   deriving (Eq, Ord, Read, Show)
@@ -5262,7 +5262,7 @@ _SamePredicate = Core.Name "openGql.grammar.SamePredicate"
 
 _SamePredicate_references = Core.Name "references"
 
-data PropertyExistsPredicate = 
+data PropertyExistsPredicate =
   PropertyExistsPredicate {
     propertyExistsPredicateElementVariableReference :: ElementVariableReference,
     propertyExistsPredicatePropertyName :: PropertyName}
@@ -5274,7 +5274,7 @@ _PropertyExistsPredicate_elementVariableReference = Core.Name "elementVariableRe
 
 _PropertyExistsPredicate_propertyName = Core.Name "propertyName"
 
-data ValueExpression = 
+data ValueExpression =
   ValueExpressionSigned SignedExpr |
   ValueExpressionMultDiv MultDivExpr |
   ValueExpressionAddSubtract AddSubtractExpr |
@@ -5324,7 +5324,7 @@ _ValueExpression_valueFunction = Core.Name "valueFunction"
 
 _ValueExpression_primary = Core.Name "primary"
 
-data SignedExpr = 
+data SignedExpr =
   SignedExpr {
     signedExprSign :: Sign,
     signedExprValueExpression :: ValueExpression}
@@ -5336,7 +5336,7 @@ _SignedExpr_sign = Core.Name "sign"
 
 _SignedExpr_valueExpression = Core.Name "valueExpression"
 
-data MultDivExpr = 
+data MultDivExpr =
   MultDivExpr {
     multDivExprLeft :: ValueExpression,
     multDivExprOperator :: MultDivOperator,
@@ -5351,7 +5351,7 @@ _MultDivExpr_operator = Core.Name "operator"
 
 _MultDivExpr_right = Core.Name "right"
 
-data AddSubtractExpr = 
+data AddSubtractExpr =
   AddSubtractExpr {
     addSubtractExprLeft :: ValueExpression,
     addSubtractExprOperator :: AddSubtractOperator,
@@ -5366,7 +5366,7 @@ _AddSubtractExpr_operator = Core.Name "operator"
 
 _AddSubtractExpr_right = Core.Name "right"
 
-data ConcatenationExpr = 
+data ConcatenationExpr =
   ConcatenationExpr {
     concatenationExprLeft :: ValueExpression,
     concatenationExprRight :: ValueExpression}
@@ -5382,7 +5382,7 @@ type NotExpr = ValueExpression
 
 _NotExpr = Core.Name "openGql.grammar.NotExpr"
 
-data IsNotExpr = 
+data IsNotExpr =
   IsNotExpr {
     isNotExprValueExpression :: ValueExpression,
     isNotExprNot :: Bool,
@@ -5397,7 +5397,7 @@ _IsNotExpr_not = Core.Name "not"
 
 _IsNotExpr_truthValue = Core.Name "truthValue"
 
-data ConjunctiveExpr = 
+data ConjunctiveExpr =
   ConjunctiveExpr {
     conjunctiveExprLeft :: ValueExpression,
     conjunctiveExprRight :: ValueExpression}
@@ -5409,7 +5409,7 @@ _ConjunctiveExpr_left = Core.Name "left"
 
 _ConjunctiveExpr_right = Core.Name "right"
 
-data DisjunctiveExpr = 
+data DisjunctiveExpr =
   DisjunctiveExpr {
     disjunctiveExprLeft :: ValueExpression,
     disjunctiveExprOperator :: DisjunctiveOperator,
@@ -5424,7 +5424,7 @@ _DisjunctiveExpr_operator = Core.Name "operator"
 
 _DisjunctiveExpr_right = Core.Name "right"
 
-data ComparisonExpr = 
+data ComparisonExpr =
   ComparisonExpr {
     comparisonExprValueExpression :: ValueExpression,
     comparisonExprComparison :: ComparisonPredicatePart2}
@@ -5436,7 +5436,7 @@ _ComparisonExpr_valueExpression = Core.Name "valueExpression"
 
 _ComparisonExpr_comparison = Core.Name "comparison"
 
-data NormalizedPredicateExpr = 
+data NormalizedPredicateExpr =
   NormalizedPredicateExpr {
     normalizedPredicateExprValueExpression :: ValueExpression,
     normalizedPredicateExprNormalizedPredicate :: NormalizedPredicatePart2}
@@ -5448,9 +5448,9 @@ _NormalizedPredicateExpr_valueExpression = Core.Name "valueExpression"
 
 _NormalizedPredicateExpr_normalizedPredicate = Core.Name "normalizedPredicate"
 
-data Sign = 
+data Sign =
   SignPlus  |
-  SignMinus 
+  SignMinus
   deriving (Eq, Ord, Read, Show)
 
 _Sign = Core.Name "openGql.grammar.Sign"
@@ -5459,9 +5459,9 @@ _Sign_plus = Core.Name "plus"
 
 _Sign_minus = Core.Name "minus"
 
-data MultDivOperator = 
+data MultDivOperator =
   MultDivOperatorMultiply  |
-  MultDivOperatorDivide 
+  MultDivOperatorDivide
   deriving (Eq, Ord, Read, Show)
 
 _MultDivOperator = Core.Name "openGql.grammar.MultDivOperator"
@@ -5470,9 +5470,9 @@ _MultDivOperator_multiply = Core.Name "multiply"
 
 _MultDivOperator_divide = Core.Name "divide"
 
-data AddSubtractOperator = 
+data AddSubtractOperator =
   AddSubtractOperatorAdd  |
-  AddSubtractOperatorSubtract 
+  AddSubtractOperatorSubtract
   deriving (Eq, Ord, Read, Show)
 
 _AddSubtractOperator = Core.Name "openGql.grammar.AddSubtractOperator"
@@ -5481,9 +5481,9 @@ _AddSubtractOperator_add = Core.Name "add"
 
 _AddSubtractOperator_subtract = Core.Name "subtract"
 
-data DisjunctiveOperator = 
+data DisjunctiveOperator =
   DisjunctiveOperatorOr  |
-  DisjunctiveOperatorXor 
+  DisjunctiveOperatorXor
   deriving (Eq, Ord, Read, Show)
 
 _DisjunctiveOperator = Core.Name "openGql.grammar.DisjunctiveOperator"
@@ -5492,7 +5492,7 @@ _DisjunctiveOperator_or = Core.Name "or"
 
 _DisjunctiveOperator_xor = Core.Name "xor"
 
-data ValueFunction = 
+data ValueFunction =
   ValueFunctionNumeric NumericValueFunction |
   ValueFunctionDatetimeSubtraction DatetimeSubtraction |
   ValueFunctionDatetime DatetimeValueFunction |
@@ -5519,7 +5519,7 @@ type BooleanValueExpression = ValueExpression
 
 _BooleanValueExpression = Core.Name "openGql.grammar.BooleanValueExpression"
 
-data CharacterOrByteStringFunction = 
+data CharacterOrByteStringFunction =
   CharacterOrByteStringFunctionSub SubCharacterOrByteString |
   CharacterOrByteStringFunctionTrimSingle TrimSingleCharacterOrByteString |
   CharacterOrByteStringFunctionFold FoldCharacterString |
@@ -5539,7 +5539,7 @@ _CharacterOrByteStringFunction_trimMultiCharacter = Core.Name "trimMultiCharacte
 
 _CharacterOrByteStringFunction_normalize = Core.Name "normalize"
 
-data SubCharacterOrByteString = 
+data SubCharacterOrByteString =
   SubCharacterOrByteString {
     subCharacterOrByteStringSide :: Side,
     subCharacterOrByteStringValueExpression :: ValueExpression,
@@ -5554,9 +5554,9 @@ _SubCharacterOrByteString_valueExpression = Core.Name "valueExpression"
 
 _SubCharacterOrByteString_stringLength = Core.Name "stringLength"
 
-data Side = 
+data Side =
   SideLeft  |
-  SideRight 
+  SideRight
   deriving (Eq, Ord, Read, Show)
 
 _Side = Core.Name "openGql.grammar.Side"
@@ -5569,7 +5569,7 @@ type TrimSingleCharacterOrByteString = TrimOperands
 
 _TrimSingleCharacterOrByteString = Core.Name "openGql.grammar.TrimSingleCharacterOrByteString"
 
-data FoldCharacterString = 
+data FoldCharacterString =
   FoldCharacterString {
     foldCharacterStringCase :: Case,
     foldCharacterStringValueExpression :: ValueExpression}
@@ -5581,9 +5581,9 @@ _FoldCharacterString_case = Core.Name "case"
 
 _FoldCharacterString_valueExpression = Core.Name "valueExpression"
 
-data Case = 
+data Case =
   CaseUpper  |
-  CaseLower 
+  CaseLower
   deriving (Eq, Ord, Read, Show)
 
 _Case = Core.Name "openGql.grammar.Case"
@@ -5592,7 +5592,7 @@ _Case_upper = Core.Name "upper"
 
 _Case_lower = Core.Name "lower"
 
-data TrimMultiCharacterCharacterString = 
+data TrimMultiCharacterCharacterString =
   TrimMultiCharacterCharacterString {
     trimMultiCharacterCharacterStringTrimType :: TrimType,
     trimMultiCharacterCharacterStringValueExpression :: ValueExpression,
@@ -5607,10 +5607,10 @@ _TrimMultiCharacterCharacterString_valueExpression = Core.Name "valueExpression"
 
 _TrimMultiCharacterCharacterString_optionalValueExpression = Core.Name "optionalValueExpression"
 
-data TrimType = 
+data TrimType =
   TrimTypeBtrim  |
   TrimTypeLtrim  |
-  TrimTypeRtrim 
+  TrimTypeRtrim
   deriving (Eq, Ord, Read, Show)
 
 _TrimType = Core.Name "openGql.grammar.TrimType"
@@ -5621,7 +5621,7 @@ _TrimType_ltrim = Core.Name "ltrim"
 
 _TrimType_rtrim = Core.Name "rtrim"
 
-data NormalizeCharacterString = 
+data NormalizeCharacterString =
   NormalizeCharacterString {
     normalizeCharacterStringValueExpression :: ValueExpression,
     normalizeCharacterStringNormalForm :: (Maybe NormalForm)}
@@ -5645,7 +5645,7 @@ type AggregatingValueExpression = ValueExpression
 
 _AggregatingValueExpression = Core.Name "openGql.grammar.AggregatingValueExpression"
 
-data PrimaryValueExpression = 
+data PrimaryValueExpression =
   PrimaryValueExpressionParenthesized ParenthesizedValueExpression |
   PrimaryValueExpressionAggregateFunction AggregateFunction |
   PrimaryValueExpressionUnsignedValueSpecification UnsignedValueSpecification |
@@ -5687,7 +5687,7 @@ type ParenthesizedValueExpression = ValueExpression
 
 _ParenthesizedValueExpression = Core.Name "openGql.grammar.ParenthesizedValueExpression"
 
-data NonParenthesizedPrimaryValueExpression = 
+data NonParenthesizedPrimaryValueExpression =
   NonParenthesizedPrimaryValueExpressionSpecial NonParenthesizedPrimaryValueExpressionSpecialCase |
   NonParenthesizedPrimaryValueExpressionBindingVariable BindingVariableReference
   deriving (Eq, Ord, Read, Show)
@@ -5698,7 +5698,7 @@ _NonParenthesizedPrimaryValueExpression_special = Core.Name "special"
 
 _NonParenthesizedPrimaryValueExpression_bindingVariable = Core.Name "bindingVariable"
 
-data NonParenthesizedPrimaryValueExpressionSpecialCase = 
+data NonParenthesizedPrimaryValueExpressionSpecialCase =
   NonParenthesizedPrimaryValueExpressionSpecialCaseAggregateFunction AggregateFunction |
   NonParenthesizedPrimaryValueExpressionSpecialCaseUnsignedValueSpecification UnsignedValueSpecification |
   NonParenthesizedPrimaryValueExpressionSpecialCasePathValueConstructor PathValueConstructor |
@@ -5731,7 +5731,7 @@ _NonParenthesizedPrimaryValueExpressionSpecialCase_elementIdFunction = Core.Name
 
 _NonParenthesizedPrimaryValueExpressionSpecialCase_letValueExpression = Core.Name "letValueExpression"
 
-data UnsignedValueSpecification = 
+data UnsignedValueSpecification =
   UnsignedValueSpecificationUnsignedLiteral UnsignedLiteral |
   UnsignedValueSpecificationGeneralValueSpecification GeneralValueSpecification
   deriving (Eq, Ord, Read, Show)
@@ -5742,7 +5742,7 @@ _UnsignedValueSpecification_unsignedLiteral = Core.Name "unsignedLiteral"
 
 _UnsignedValueSpecification_generalValueSpecification = Core.Name "generalValueSpecification"
 
-data NonNegativeIntegerSpecification = 
+data NonNegativeIntegerSpecification =
   NonNegativeIntegerSpecificationUnsignedInteger UnsignedInteger |
   NonNegativeIntegerSpecificationDynamicParameterSpecification DynamicParameterSpecification
   deriving (Eq, Ord, Read, Show)
@@ -5753,9 +5753,9 @@ _NonNegativeIntegerSpecification_unsignedInteger = Core.Name "unsignedInteger"
 
 _NonNegativeIntegerSpecification_dynamicParameterSpecification = Core.Name "dynamicParameterSpecification"
 
-data GeneralValueSpecification = 
+data GeneralValueSpecification =
   GeneralValueSpecificationDynamicParameterSpecification DynamicParameterSpecification |
-  GeneralValueSpecificationSessionUser 
+  GeneralValueSpecificationSessionUser
   deriving (Eq, Ord, Read, Show)
 
 _GeneralValueSpecification = Core.Name "openGql.grammar.GeneralValueSpecification"
@@ -5768,7 +5768,7 @@ type DynamicParameterSpecification = ParameterName
 
 _DynamicParameterSpecification = Core.Name "openGql.grammar.DynamicParameterSpecification"
 
-data LetValueExpression = 
+data LetValueExpression =
   LetValueExpression {
     letValueExpressionLetVariables :: LetVariableDefinitionList,
     letValueExpressionValueExpression :: ValueExpression}
@@ -5784,7 +5784,7 @@ type ValueQueryExpression = NestedQuerySpecification
 
 _ValueQueryExpression = Core.Name "openGql.grammar.ValueQueryExpression"
 
-data CaseExpression = 
+data CaseExpression =
   CaseExpressionAbbreviation CaseAbbreviation |
   CaseExpressionSpecification CaseSpecification
   deriving (Eq, Ord, Read, Show)
@@ -5795,7 +5795,7 @@ _CaseExpression_abbreviation = Core.Name "abbreviation"
 
 _CaseExpression_specification = Core.Name "specification"
 
-data CaseAbbreviation = 
+data CaseAbbreviation =
   CaseAbbreviationNullIf NullIfAbbreviation |
   CaseAbbreviationCoalesce [ValueExpression]
   deriving (Eq, Ord, Read, Show)
@@ -5806,7 +5806,7 @@ _CaseAbbreviation_nullIf = Core.Name "nullIf"
 
 _CaseAbbreviation_coalesce = Core.Name "coalesce"
 
-data NullIfAbbreviation = 
+data NullIfAbbreviation =
   NullIfAbbreviation {
     nullIfAbbreviationFirst :: ValueExpression,
     nullIfAbbreviationSecond :: ValueExpression}
@@ -5818,7 +5818,7 @@ _NullIfAbbreviation_first = Core.Name "first"
 
 _NullIfAbbreviation_second = Core.Name "second"
 
-data CaseSpecification = 
+data CaseSpecification =
   CaseSpecificationSimple SimpleCase |
   CaseSpecificationSearched SearchedCase
   deriving (Eq, Ord, Read, Show)
@@ -5829,7 +5829,7 @@ _CaseSpecification_simple = Core.Name "simple"
 
 _CaseSpecification_searched = Core.Name "searched"
 
-data SimpleCase = 
+data SimpleCase =
   SimpleCase {
     simpleCaseCaseOperand :: CaseOperand,
     simpleCaseWhenClauses :: [SimpleWhenClause],
@@ -5844,7 +5844,7 @@ _SimpleCase_whenClauses = Core.Name "whenClauses"
 
 _SimpleCase_elseClause = Core.Name "elseClause"
 
-data SearchedCase = 
+data SearchedCase =
   SearchedCase {
     searchedCaseWhenClauses :: [SearchedWhenClause],
     searchedCaseElseClause :: (Maybe ElseClause)}
@@ -5856,7 +5856,7 @@ _SearchedCase_whenClauses = Core.Name "whenClauses"
 
 _SearchedCase_elseClause = Core.Name "elseClause"
 
-data SimpleWhenClause = 
+data SimpleWhenClause =
   SimpleWhenClause {
     simpleWhenClauseWhenOperands :: WhenOperandList,
     simpleWhenClauseResult :: Result}
@@ -5868,7 +5868,7 @@ _SimpleWhenClause_whenOperands = Core.Name "whenOperands"
 
 _SimpleWhenClause_result = Core.Name "result"
 
-data SearchedWhenClause = 
+data SearchedWhenClause =
   SearchedWhenClause {
     searchedWhenClauseSearchCondition :: SearchCondition,
     searchedWhenClauseResult :: Result}
@@ -5884,7 +5884,7 @@ type ElseClause = Result
 
 _ElseClause = Core.Name "openGql.grammar.ElseClause"
 
-data CaseOperand = 
+data CaseOperand =
   CaseOperandValueExpression NonParenthesizedPrimaryValueExpression |
   CaseOperandElementReference ElementVariableReference
   deriving (Eq, Ord, Read, Show)
@@ -5899,7 +5899,7 @@ type WhenOperandList = [WhenOperand]
 
 _WhenOperandList = Core.Name "openGql.grammar.WhenOperandList"
 
-data WhenOperand = 
+data WhenOperand =
   WhenOperandValueExpression NonParenthesizedPrimaryValueExpression |
   WhenOperandComparison ComparisonPredicatePart2 |
   WhenOperandNullPredicate NullPredicatePart2 |
@@ -5931,9 +5931,9 @@ _WhenOperand_sourcePredicate = Core.Name "sourcePredicate"
 
 _WhenOperand_destinationPredicate = Core.Name "destinationPredicate"
 
-data Result = 
+data Result =
   ResultSimple ResultExpression |
-  ResultNullLiteral 
+  ResultNullLiteral
   deriving (Eq, Ord, Read, Show)
 
 _Result = Core.Name "openGql.grammar.Result"
@@ -5946,7 +5946,7 @@ type ResultExpression = ValueExpression
 
 _ResultExpression = Core.Name "openGql.grammar.ResultExpression"
 
-data CastSpecification = 
+data CastSpecification =
   CastSpecification {
     castSpecificationOperand :: CastOperand,
     castSpecificationTarget :: CastTarget}
@@ -5958,9 +5958,9 @@ _CastSpecification_operand = Core.Name "operand"
 
 _CastSpecification_target = Core.Name "target"
 
-data CastOperand = 
+data CastOperand =
   CastOperandValueExpression ValueExpression |
-  CastOperandNullLiteral 
+  CastOperandNullLiteral
   deriving (Eq, Ord, Read, Show)
 
 _CastOperand = Core.Name "openGql.grammar.CastOperand"
@@ -5973,7 +5973,7 @@ type CastTarget = ValueType
 
 _CastTarget = Core.Name "openGql.grammar.CastTarget"
 
-data AggregateFunction = 
+data AggregateFunction =
   AggregateFunctionCountAll  |
   AggregateFunctionGeneralSetFunction GeneralSetFunction |
   AggregateFunctionBinarySetFunction BinarySetFunction
@@ -5987,7 +5987,7 @@ _AggregateFunction_generalSetFunction = Core.Name "generalSetFunction"
 
 _AggregateFunction_binarySetFunction = Core.Name "binarySetFunction"
 
-data GeneralSetFunction = 
+data GeneralSetFunction =
   GeneralSetFunction {
     generalSetFunctionFunctionType :: GeneralSetFunctionType,
     generalSetFunctionSetQuantifier :: (Maybe SetQuantifier),
@@ -6002,7 +6002,7 @@ _GeneralSetFunction_setQuantifier = Core.Name "setQuantifier"
 
 _GeneralSetFunction_valueExpression = Core.Name "valueExpression"
 
-data BinarySetFunction = 
+data BinarySetFunction =
   BinarySetFunction {
     binarySetFunctionFunctionType :: BinarySetFunctionType,
     binarySetFunctionDependentValue :: DependentValueExpression,
@@ -6017,7 +6017,7 @@ _BinarySetFunction_dependentValue = Core.Name "dependentValue"
 
 _BinarySetFunction_independentValue = Core.Name "independentValue"
 
-data GeneralSetFunctionType = 
+data GeneralSetFunctionType =
   GeneralSetFunctionTypeAvg  |
   GeneralSetFunctionTypeCount  |
   GeneralSetFunctionTypeMax  |
@@ -6025,7 +6025,7 @@ data GeneralSetFunctionType =
   GeneralSetFunctionTypeSum  |
   GeneralSetFunctionTypeCollectList  |
   GeneralSetFunctionTypeStddevSamp  |
-  GeneralSetFunctionTypeStddevPop 
+  GeneralSetFunctionTypeStddevPop
   deriving (Eq, Ord, Read, Show)
 
 _GeneralSetFunctionType = Core.Name "openGql.grammar.GeneralSetFunctionType"
@@ -6046,9 +6046,9 @@ _GeneralSetFunctionType_stddevSamp = Core.Name "stddevSamp"
 
 _GeneralSetFunctionType_stddevPop = Core.Name "stddevPop"
 
-data SetQuantifier = 
+data SetQuantifier =
   SetQuantifierDistinct  |
-  SetQuantifierAll 
+  SetQuantifierAll
   deriving (Eq, Ord, Read, Show)
 
 _SetQuantifier = Core.Name "openGql.grammar.SetQuantifier"
@@ -6057,9 +6057,9 @@ _SetQuantifier_distinct = Core.Name "distinct"
 
 _SetQuantifier_all = Core.Name "all"
 
-data BinarySetFunctionType = 
+data BinarySetFunctionType =
   BinarySetFunctionTypePercentileCont  |
-  BinarySetFunctionTypePercentileDisc 
+  BinarySetFunctionTypePercentileDisc
   deriving (Eq, Ord, Read, Show)
 
 _BinarySetFunctionType = Core.Name "openGql.grammar.BinarySetFunctionType"
@@ -6068,7 +6068,7 @@ _BinarySetFunctionType_percentileCont = Core.Name "percentileCont"
 
 _BinarySetFunctionType_percentileDisc = Core.Name "percentileDisc"
 
-data DependentValueExpression = 
+data DependentValueExpression =
   DependentValueExpression {
     dependentValueExpressionSetQuantifier :: (Maybe SetQuantifier),
     dependentValueExpressionNumericValue :: NumericValueExpression}
@@ -6088,7 +6088,7 @@ type ElementIdFunction = ElementVariableReference
 
 _ElementIdFunction = Core.Name "openGql.grammar.ElementIdFunction"
 
-data PropertyReference = 
+data PropertyReference =
   PropertyReference {
     propertyReferenceValueExpression :: PrimaryValueExpression,
     propertyReferencePropertyName :: PropertyName}
@@ -6116,7 +6116,7 @@ type PathValueConstructorByEnumeration = PathElementList
 
 _PathValueConstructorByEnumeration = Core.Name "openGql.grammar.PathValueConstructorByEnumeration"
 
-data PathElementList = 
+data PathElementList =
   PathElementList {
     pathElementListStart :: PathElementListStart,
     pathElementListSteps :: [PathElementListStep]}
@@ -6132,7 +6132,7 @@ type PathElementListStart = NodeReferenceValueExpression
 
 _PathElementListStart = Core.Name "openGql.grammar.PathElementListStart"
 
-data PathElementListStep = 
+data PathElementListStep =
   PathElementListStep {
     pathElementListStepEdgeReference :: EdgeReferenceValueExpression,
     pathElementListStepNodeReference :: NodeReferenceValueExpression}
@@ -6148,7 +6148,7 @@ type ListValueExpression = ValueExpression
 
 _ListValueExpression = Core.Name "openGql.grammar.ListValueExpression"
 
-data ListValueFunction = 
+data ListValueFunction =
   ListValueFunctionTrim TrimListFunction |
   ListValueFunctionElements ElementsFunction
   deriving (Eq, Ord, Read, Show)
@@ -6159,7 +6159,7 @@ _ListValueFunction_trim = Core.Name "trim"
 
 _ListValueFunction_elements = Core.Name "elements"
 
-data TrimListFunction = 
+data TrimListFunction =
   TrimListFunction {
     trimListFunctionListValue :: ListValueExpression,
     trimListFunctionNumericValue :: NumericValueExpression}
@@ -6179,7 +6179,7 @@ type ListValueConstructor = ListValueConstructorByEnumeration
 
 _ListValueConstructor = Core.Name "openGql.grammar.ListValueConstructor"
 
-data ListValueConstructorByEnumeration = 
+data ListValueConstructorByEnumeration =
   ListValueConstructorByEnumeration {
     listValueConstructorByEnumerationListValueTypeName :: (Maybe ListValueTypeName),
     listValueConstructorByEnumerationElements :: (Maybe ListElementList)}
@@ -6211,7 +6211,7 @@ type FieldList = [Field]
 
 _FieldList = Core.Name "openGql.grammar.FieldList"
 
-data Field = 
+data Field =
   Field {
     fieldName :: FieldName,
     fieldValue :: ValueExpression}
@@ -6227,7 +6227,7 @@ type TruthValue = BooleanLiteral
 
 _TruthValue = Core.Name "openGql.grammar.TruthValue"
 
-data NumericValueExpression = 
+data NumericValueExpression =
   NumericValueExpressionSigned SignedNumericValueExpression |
   NumericValueExpressionMultiplicationOrDivision MulDivNumericValueExpression |
   NumericValueExpressionAdditionOrSubtraction AddSubNumericValueExpression |
@@ -6247,7 +6247,7 @@ _NumericValueExpression_primary = Core.Name "primary"
 
 _NumericValueExpression_function = Core.Name "function"
 
-data SignedNumericValueExpression = 
+data SignedNumericValueExpression =
   SignedNumericValueExpression {
     signedNumericValueExpressionSign :: Sign,
     signedNumericValueExpressionExpression :: NumericValueExpression}
@@ -6259,7 +6259,7 @@ _SignedNumericValueExpression_sign = Core.Name "sign"
 
 _SignedNumericValueExpression_expression = Core.Name "expression"
 
-data MulDivNumericValueExpression = 
+data MulDivNumericValueExpression =
   MulDivNumericValueExpression {
     mulDivNumericValueExpressionLeft :: NumericValueExpression,
     mulDivNumericValueExpressionOperator :: MultDivOperator,
@@ -6274,7 +6274,7 @@ _MulDivNumericValueExpression_operator = Core.Name "operator"
 
 _MulDivNumericValueExpression_right = Core.Name "right"
 
-data AddSubNumericValueExpression = 
+data AddSubNumericValueExpression =
   AddSubNumericValueExpression {
     addSubNumericValueExpressionLeft :: NumericValueExpression,
     addSubNumericValueExpressionOperator :: AddSubtractOperator,
@@ -6289,7 +6289,7 @@ _AddSubNumericValueExpression_operator = Core.Name "operator"
 
 _AddSubNumericValueExpression_right = Core.Name "right"
 
-data NumericValueFunction = 
+data NumericValueFunction =
   NumericValueFunctionLength LengthExpression |
   NumericValueFunctionCardinality CardinalityExpression |
   NumericValueFunctionAbsoluteValue AbsoluteValueExpression |
@@ -6333,7 +6333,7 @@ _NumericValueFunction_floor = Core.Name "floor"
 
 _NumericValueFunction_ceiling = Core.Name "ceiling"
 
-data LengthExpression = 
+data LengthExpression =
   LengthExpressionChar CharLengthExpression |
   LengthExpressionByte ByteLengthExpression |
   LengthExpressionPath PathLengthExpression
@@ -6347,7 +6347,7 @@ _LengthExpression_byte = Core.Name "byte"
 
 _LengthExpression_path = Core.Name "path"
 
-data CardinalityExpression = 
+data CardinalityExpression =
   CardinalityExpressionCardinality CardinalityArgumentExpression |
   CardinalityExpressionSize ListValueExpression
   deriving (Eq, Ord, Read, Show)
@@ -6378,7 +6378,7 @@ type AbsoluteValueExpression = ValueExpression
 
 _AbsoluteValueExpression = Core.Name "openGql.grammar.AbsoluteValueExpression"
 
-data ModulusExpression = 
+data ModulusExpression =
   ModulusExpression {
     modulusExpressionDividend :: NumericValueExpressionDividend,
     modulusExpressionDivisor :: NumericValueExpressionDivisor}
@@ -6398,7 +6398,7 @@ type NumericValueExpressionDivisor = NumericValueExpression
 
 _NumericValueExpressionDivisor = Core.Name "openGql.grammar.NumericValueExpressionDivisor"
 
-data TrigonometricFunction = 
+data TrigonometricFunction =
   TrigonometricFunction {
     trigonometricFunctionName :: TrigonometricFunctionName,
     trigonometricFunctionValue :: NumericValueExpression}
@@ -6410,7 +6410,7 @@ _TrigonometricFunction_name = Core.Name "name"
 
 _TrigonometricFunction_value = Core.Name "value"
 
-data TrigonometricFunctionName = 
+data TrigonometricFunctionName =
   TrigonometricFunctionNameSin  |
   TrigonometricFunctionNameCos  |
   TrigonometricFunctionNameTan  |
@@ -6422,7 +6422,7 @@ data TrigonometricFunctionName =
   TrigonometricFunctionNameAcos  |
   TrigonometricFunctionNameAtan  |
   TrigonometricFunctionNameDegrees  |
-  TrigonometricFunctionNameRadians 
+  TrigonometricFunctionNameRadians
   deriving (Eq, Ord, Read, Show)
 
 _TrigonometricFunctionName = Core.Name "openGql.grammar.TrigonometricFunctionName"
@@ -6451,7 +6451,7 @@ _TrigonometricFunctionName_degrees = Core.Name "degrees"
 
 _TrigonometricFunctionName_radians = Core.Name "radians"
 
-data GeneralLogarithmFunction = 
+data GeneralLogarithmFunction =
   GeneralLogarithmFunction {
     generalLogarithmFunctionBase :: GeneralLogarithmBase,
     generalLogarithmFunctionArgument :: GeneralLogarithmArgument}
@@ -6483,7 +6483,7 @@ type ExponentialFunction = NumericValueExpression
 
 _ExponentialFunction = Core.Name "openGql.grammar.ExponentialFunction"
 
-data PowerFunction = 
+data PowerFunction =
   PowerFunction {
     powerFunctionBase :: NumericValueExpressionBase,
     powerFunctionExponent :: NumericValueExpressionExponent}
@@ -6523,7 +6523,7 @@ type ByteStringValueExpression = ValueExpression
 
 _ByteStringValueExpression = Core.Name "openGql.grammar.ByteStringValueExpression"
 
-data TrimOperands = 
+data TrimOperands =
   TrimOperands {
     trimOperandsSpecification :: (Maybe TrimSpecification),
     trimOperandsCharacterOrByteString :: (Maybe TrimCharacterOrByteString),
@@ -6542,10 +6542,10 @@ type TrimCharacterOrByteStringSource = ValueExpression
 
 _TrimCharacterOrByteStringSource = Core.Name "openGql.grammar.TrimCharacterOrByteStringSource"
 
-data TrimSpecification = 
+data TrimSpecification =
   TrimSpecificationLeading  |
   TrimSpecificationTrailing  |
-  TrimSpecificationBoth 
+  TrimSpecificationBoth
   deriving (Eq, Ord, Read, Show)
 
 _TrimSpecification = Core.Name "openGql.grammar.TrimSpecification"
@@ -6560,11 +6560,11 @@ type TrimCharacterOrByteString = ValueExpression
 
 _TrimCharacterOrByteString = Core.Name "openGql.grammar.TrimCharacterOrByteString"
 
-data NormalForm = 
+data NormalForm =
   NormalFormNfc  |
   NormalFormNfd  |
   NormalFormNfkc  |
-  NormalFormNfkd 
+  NormalFormNfkd
   deriving (Eq, Ord, Read, Show)
 
 _NormalForm = Core.Name "openGql.grammar.NormalForm"
@@ -6585,7 +6585,7 @@ type DatetimeValueExpression = ValueExpression
 
 _DatetimeValueExpression = Core.Name "openGql.grammar.DatetimeValueExpression"
 
-data DatetimeValueFunction = 
+data DatetimeValueFunction =
   DatetimeValueFunctionDateFunction DateFunction |
   DatetimeValueFunctionTimeFunction TimeFunction |
   DatetimeValueFunctionDatetimeFunction DatetimeFunction |
@@ -6605,7 +6605,7 @@ _DatetimeValueFunction_localtimeFunction = Core.Name "localtimeFunction"
 
 _DatetimeValueFunction_localdatetimeFunction = Core.Name "localdatetimeFunction"
 
-data DateFunction = 
+data DateFunction =
   DateFunctionCurrentDate  |
   DateFunctionDateWithParams (Maybe DateFunctionParameters)
   deriving (Eq, Ord, Read, Show)
@@ -6616,7 +6616,7 @@ _DateFunction_currentDate = Core.Name "currentDate"
 
 _DateFunction_dateWithParams = Core.Name "dateWithParams"
 
-data TimeFunction = 
+data TimeFunction =
   TimeFunctionCurrentTime  |
   TimeFunctionZonedTimeWithParams (Maybe TimeFunctionParameters)
   deriving (Eq, Ord, Read, Show)
@@ -6631,7 +6631,7 @@ type LocaltimeFunction = (Maybe TimeFunctionParameters)
 
 _LocaltimeFunction = Core.Name "openGql.grammar.LocaltimeFunction"
 
-data DatetimeFunction = 
+data DatetimeFunction =
   DatetimeFunctionCurrentTimestamp  |
   DatetimeFunctionZonedDatetimeWithParams (Maybe DatetimeFunctionParameters)
   deriving (Eq, Ord, Read, Show)
@@ -6642,7 +6642,7 @@ _DatetimeFunction_currentTimestamp = Core.Name "currentTimestamp"
 
 _DatetimeFunction_zonedDatetimeWithParams = Core.Name "zonedDatetimeWithParams"
 
-data LocaldatetimeFunction = 
+data LocaldatetimeFunction =
   LocaldatetimeFunctionLocalTimestamp  |
   LocaldatetimeFunctionLocalDatetimeWithParams (Maybe DatetimeFunctionParameters)
   deriving (Eq, Ord, Read, Show)
@@ -6653,7 +6653,7 @@ _LocaldatetimeFunction_localTimestamp = Core.Name "localTimestamp"
 
 _LocaldatetimeFunction_localDatetimeWithParams = Core.Name "localDatetimeWithParams"
 
-data DateFunctionParameters = 
+data DateFunctionParameters =
   DateFunctionParametersDateString DateString |
   DateFunctionParametersRecordConstructor RecordConstructor
   deriving (Eq, Ord, Read, Show)
@@ -6664,7 +6664,7 @@ _DateFunctionParameters_dateString = Core.Name "dateString"
 
 _DateFunctionParameters_recordConstructor = Core.Name "recordConstructor"
 
-data TimeFunctionParameters = 
+data TimeFunctionParameters =
   TimeFunctionParametersTimeString TimeString |
   TimeFunctionParametersRecordConstructor RecordConstructor
   deriving (Eq, Ord, Read, Show)
@@ -6675,7 +6675,7 @@ _TimeFunctionParameters_timeString = Core.Name "timeString"
 
 _TimeFunctionParameters_recordConstructor = Core.Name "recordConstructor"
 
-data DatetimeFunctionParameters = 
+data DatetimeFunctionParameters =
   DatetimeFunctionParametersDatetimeString DatetimeString |
   DatetimeFunctionParametersRecordConstructor RecordConstructor
   deriving (Eq, Ord, Read, Show)
@@ -6690,7 +6690,7 @@ type DurationValueExpression = ValueExpression
 
 _DurationValueExpression = Core.Name "openGql.grammar.DurationValueExpression"
 
-data DatetimeSubtraction = 
+data DatetimeSubtraction =
   DatetimeSubtraction {
     datetimeSubtractionParameters :: DatetimeSubtractionParameters,
     datetimeSubtractionTemporalDurationQualifier :: (Maybe TemporalDurationQualifier)}
@@ -6702,7 +6702,7 @@ _DatetimeSubtraction_parameters = Core.Name "parameters"
 
 _DatetimeSubtraction_temporalDurationQualifier = Core.Name "temporalDurationQualifier"
 
-data DatetimeSubtractionParameters = 
+data DatetimeSubtractionParameters =
   DatetimeSubtractionParameters {
     datetimeSubtractionParametersExpression1 :: DatetimeValueExpression1,
     datetimeSubtractionParametersExpression2 :: DatetimeValueExpression2}
@@ -6722,7 +6722,7 @@ type DatetimeValueExpression2 = DatetimeValueExpression
 
 _DatetimeValueExpression2 = Core.Name "openGql.grammar.DatetimeValueExpression2"
 
-data DurationValueFunction = 
+data DurationValueFunction =
   DurationValueFunctionDurationFunction DurationFunction |
   DurationValueFunctionAbsoluteValue AbsoluteValueExpression
   deriving (Eq, Ord, Read, Show)
@@ -6737,7 +6737,7 @@ type DurationFunction = DurationFunctionParameters
 
 _DurationFunction = Core.Name "openGql.grammar.DurationFunction"
 
-data DurationFunctionParameters = 
+data DurationFunctionParameters =
   DurationFunctionParametersDurationString DurationString |
   DurationFunctionParametersRecordConstructor RecordConstructor
   deriving (Eq, Ord, Read, Show)
@@ -6784,7 +6784,7 @@ type EdgeTypeName = String
 
 _EdgeTypeName = Core.Name "openGql.grammar.EdgeTypeName"
 
-data BindingTableName = 
+data BindingTableName =
   BindingTableNameRegularIdentifier String |
   BindingTableNameDelimitedBindingTableName DelimitedBindingTableName
   deriving (Eq, Ord, Read, Show)
@@ -6831,7 +6831,7 @@ type BindingVariable = String
 
 _BindingVariable = Core.Name "openGql.grammar.BindingVariable"
 
-data UnsignedLiteral = 
+data UnsignedLiteral =
   UnsignedLiteralNumeric UnsignedNumericLiteral |
   UnsignedLiteralGeneral GeneralLiteral
   deriving (Eq, Ord, Read, Show)
@@ -6842,7 +6842,7 @@ _UnsignedLiteral_numeric = Core.Name "numeric"
 
 _UnsignedLiteral_general = Core.Name "general"
 
-data GeneralLiteral = 
+data GeneralLiteral =
   GeneralLiteralBoolean BooleanLiteral |
   GeneralLiteralCharacterString CharacterStringLiteral |
   GeneralLiteralByteString ByteStringLiteral |
@@ -6871,7 +6871,7 @@ _GeneralLiteral_list = Core.Name "list"
 
 _GeneralLiteral_record = Core.Name "record"
 
-data TemporalLiteral = 
+data TemporalLiteral =
   TemporalLiteralDate DateLiteral |
   TemporalLiteralTime TimeLiteral |
   TemporalLiteralDatetime DatetimeLiteral
@@ -6921,7 +6921,7 @@ type CharacterStringLiteral = String
 
 _CharacterStringLiteral = Core.Name "openGql.grammar.CharacterStringLiteral"
 
-data UnsignedNumericLiteral = 
+data UnsignedNumericLiteral =
   UnsignedNumericLiteralExact ExactNumericLiteral |
   UnsignedNumericLiteralApproximate ApproximateNumericLiteral
   deriving (Eq, Ord, Read, Show)
@@ -6932,7 +6932,7 @@ _UnsignedNumericLiteral_exact = Core.Name "exact"
 
 _UnsignedNumericLiteral_approximate = Core.Name "approximate"
 
-data ExactNumericLiteral = 
+data ExactNumericLiteral =
   ExactNumericLiteralScientificWithSuffix String |
   ExactNumericLiteralCommonWithSuffix String |
   ExactNumericLiteralCommonWithoutSuffix String |
@@ -6952,7 +6952,7 @@ _ExactNumericLiteral_integerWithSuffix = Core.Name "integerWithSuffix"
 
 _ExactNumericLiteral_unsignedInteger = Core.Name "unsignedInteger"
 
-data ApproximateNumericLiteral = 
+data ApproximateNumericLiteral =
   ApproximateNumericLiteralScientificWithSuffix String |
   ApproximateNumericLiteralScientificWithoutSuffix String |
   ApproximateNumericLiteralCommonWithSuffix String |
@@ -6969,7 +6969,7 @@ _ApproximateNumericLiteral_commonWithSuffix = Core.Name "commonWithSuffix"
 
 _ApproximateNumericLiteral_integerWithSuffix = Core.Name "integerWithSuffix"
 
-data UnsignedInteger = 
+data UnsignedInteger =
   UnsignedIntegerDecimal String |
   UnsignedIntegerHexadecimal String |
   UnsignedIntegerOctal String |
@@ -7014,9 +7014,9 @@ type DurationString = CharacterStringLiteral
 
 _DurationString = Core.Name "openGql.grammar.DurationString"
 
-data NodeSynonym = 
+data NodeSynonym =
   NodeSynonymNode  |
-  NodeSynonymVertex 
+  NodeSynonymVertex
   deriving (Eq, Ord, Read, Show)
 
 _NodeSynonym = Core.Name "openGql.grammar.NodeSynonym"
@@ -7025,9 +7025,9 @@ _NodeSynonym_node = Core.Name "node"
 
 _NodeSynonym_vertex = Core.Name "vertex"
 
-data EdgesSynonym = 
+data EdgesSynonym =
   EdgesSynonymEdges  |
-  EdgesSynonymRelationships 
+  EdgesSynonymRelationships
   deriving (Eq, Ord, Read, Show)
 
 _EdgesSynonym = Core.Name "openGql.grammar.EdgesSynonym"
@@ -7036,9 +7036,9 @@ _EdgesSynonym_edges = Core.Name "edges"
 
 _EdgesSynonym_relationships = Core.Name "relationships"
 
-data EdgeSynonym = 
+data EdgeSynonym =
   EdgeSynonymEdge  |
-  EdgeSynonymRelationship 
+  EdgeSynonymRelationship
   deriving (Eq, Ord, Read, Show)
 
 _EdgeSynonym = Core.Name "openGql.grammar.EdgeSynonym"
@@ -7047,9 +7047,9 @@ _EdgeSynonym_edge = Core.Name "edge"
 
 _EdgeSynonym_relationship = Core.Name "relationship"
 
-data Implies = 
+data Implies =
   ImpliesRightDoubleArrow  |
-  ImpliesImplies 
+  ImpliesImplies
   deriving (Eq, Ord, Read, Show)
 
 _Implies = Core.Name "openGql.grammar.Implies"
@@ -7062,10 +7062,10 @@ type ParameterName = String
 
 _ParameterName = Core.Name "openGql.grammar.ParameterName"
 
-data BooleanLiteral = 
+data BooleanLiteral =
   BooleanLiteralTrue  |
   BooleanLiteralFalse  |
-  BooleanLiteralUnknown 
+  BooleanLiteralUnknown
   deriving (Eq, Ord, Read, Show)
 
 _BooleanLiteral = Core.Name "openGql.grammar.BooleanLiteral"

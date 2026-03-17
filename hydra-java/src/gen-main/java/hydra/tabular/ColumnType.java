@@ -9,20 +9,20 @@ import java.io.Serializable;
  */
 public class ColumnType implements Serializable, Comparable<ColumnType> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.tabular.ColumnType");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   public final hydra.relational.ColumnName name;
-  
+
   public final hydra.core.Type type;
-  
+
   public ColumnType (hydra.relational.ColumnName name, hydra.core.Type type) {
     this.name = name;
     this.type = type;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ColumnType)) {
@@ -35,12 +35,12 @@ public class ColumnType implements Serializable, Comparable<ColumnType> {
       this.type,
       o.type);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(type);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ColumnType other) {
@@ -51,11 +51,11 @@ public class ColumnType implements Serializable, Comparable<ColumnType> {
     }
     return ((Comparable) type).compareTo(other.type);
   }
-  
+
   public ColumnType withName(hydra.relational.ColumnName name) {
     return new ColumnType(name, type);
   }
-  
+
   public ColumnType withType(hydra.core.Type type) {
     return new ColumnType(name, type);
   }

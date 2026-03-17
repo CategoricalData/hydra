@@ -14,7 +14,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A definition, which may be either a term or type definition
-data Definition = 
+data Definition =
   -- | A term definition
   DefinitionTerm TermDefinition |
   -- | A type definition
@@ -28,7 +28,7 @@ _Definition_term = Core.Name "term"
 _Definition_type = Core.Name "type"
 
 -- | A file extension (without the dot), e.g. "json" or "py"
-newtype FileExtension = 
+newtype FileExtension =
   FileExtension {
     unFileExtension :: String}
   deriving (Eq, Ord, Read, Show)
@@ -36,7 +36,7 @@ newtype FileExtension =
 _FileExtension = Core.Name "hydra.module.FileExtension"
 
 -- | A library of primitive functions
-data Library = 
+data Library =
   Library {
     -- | A common prefix for all primitive function names in the library
     libraryNamespace :: Namespace,
@@ -54,7 +54,7 @@ _Library_prefix = Core.Name "prefix"
 _Library_primitives = Core.Name "primitives"
 
 -- | A logical collection of elements in the same namespace, having dependencies on zero or more other modules
-data Module = 
+data Module =
   Module {
     -- | A common prefix for all element names in the module
     moduleNamespace :: Namespace,
@@ -81,7 +81,7 @@ _Module_typeDependencies = Core.Name "typeDependencies"
 _Module_description = Core.Name "description"
 
 -- | A prefix for element names
-newtype Namespace = 
+newtype Namespace =
   Namespace {
     unNamespace :: String}
   deriving (Eq, Ord, Read, Show)
@@ -89,7 +89,7 @@ newtype Namespace =
 _Namespace = Core.Name "hydra.module.Namespace"
 
 -- | A mapping from namespaces to values of type n, with a focus on one namespace
-data Namespaces n = 
+data Namespaces n =
   Namespaces {
     -- | The namespace in focus, together with its associated value
     namespacesFocus :: (Namespace, n),
@@ -104,7 +104,7 @@ _Namespaces_focus = Core.Name "focus"
 _Namespaces_mapping = Core.Name "mapping"
 
 -- | A qualified name consisting of an optional namespace together with a mandatory local name
-data QualifiedName = 
+data QualifiedName =
   QualifiedName {
     -- | The optional namespace
     qualifiedNameNamespace :: (Maybe Namespace),
@@ -119,7 +119,7 @@ _QualifiedName_namespace = Core.Name "namespace"
 _QualifiedName_local = Core.Name "local"
 
 -- | A term-level definition, including a name, a term, and the type scheme of the term
-data TermDefinition = 
+data TermDefinition =
   TermDefinition {
     -- | The name of the term
     termDefinitionName :: Core.Name,
@@ -138,7 +138,7 @@ _TermDefinition_term = Core.Name "term"
 _TermDefinition_type = Core.Name "type"
 
 -- | A type-level definition, including a name and the type
-data TypeDefinition = 
+data TypeDefinition =
   TypeDefinition {
     -- | The name of the type
     typeDefinitionName :: Core.Name,

@@ -70,9 +70,9 @@ fromEitherString cx e =
 -- | Generate a message name for a structural type reference
 structuralTypeName :: t0 -> Environment.StructuralTypeRef -> Proto3.TypeName
 structuralTypeName localNs ref =
-     
+
       let typeSuffix =
-              \typ ->  
+              \typ ->
                 let st = simplifyType typ
                 in case st of
                   Core.TypeLiteral v0 -> case v0 of
@@ -114,12 +114,12 @@ structuralTypeName localNs ref =
 -- | Generate a helper message definition for a structural type
 generateStructuralTypeMessage :: Context.Context -> t0 -> Module.Namespace -> Environment.StructuralTypeRef -> Either (Context.InContext Error.Error) (Proto3.Definition, Context.Context)
 generateStructuralTypeMessage cx g localNs ref =
-     
-      let cx1 = Annotations.resetCount key_proto_field_index cx 
+
+      let cx1 = Annotations.resetCount key_proto_field_index cx
           cx2 = Pairs.second (Annotations.nextCount key_proto_field_index cx1)
           makeField =
-                  \cx0 -> \fname -> \ftyp -> Eithers.bind (encodeSimpleTypeForHelper cx0 localNs ftyp) (\ft ->  
-                    let idxPair = Annotations.nextCount key_proto_field_index cx0 
+                  \cx0 -> \fname -> \ftyp -> Eithers.bind (encodeSimpleTypeForHelper cx0 localNs ftyp) (\ft ->
+                    let idxPair = Annotations.nextCount key_proto_field_index cx0
                         idx = Pairs.first idxPair
                         cx1_ = Pairs.second idxPair
                     in (Right (Proto3.Field {
@@ -129,14 +129,14 @@ generateStructuralTypeMessage cx g localNs ref =
                       Proto3.fieldNumber = idx,
                       Proto3.fieldOptions = []}, cx1_)))
       in case ref of
-        Environment.StructuralTypeRefEither v0 ->  
-          let lt = Pairs.first v0 
+        Environment.StructuralTypeRefEither v0 ->
+          let lt = Pairs.first v0
               rt = Pairs.second v0
-          in (Eithers.bind (makeField cx2 "left" lt) (\leftResult ->  
-            let leftField = Pairs.first leftResult 
+          in (Eithers.bind (makeField cx2 "left" lt) (\leftResult ->
+            let leftField = Pairs.first leftResult
                 cx3 = Pairs.second leftResult
-            in (Eithers.bind (makeField cx3 "right" rt) (\rightResult ->  
-              let rightField = Pairs.first rightResult 
+            in (Eithers.bind (makeField cx3 "right" rt) (\rightResult ->
+              let rightField = Pairs.first rightResult
                   cx4 = Pairs.second rightResult
               in (Right (Proto3.DefinitionMessage (Proto3.MessageDefinition {
                 Proto3.messageDefinitionName = (structuralTypeName localNs ref),
@@ -144,14 +144,14 @@ generateStructuralTypeMessage cx g localNs ref =
                   leftField,
                   rightField],
                 Proto3.messageDefinitionOptions = []}), cx4))))))
-        Environment.StructuralTypeRefPair v0 ->  
-          let ft = Pairs.first v0 
+        Environment.StructuralTypeRefPair v0 ->
+          let ft = Pairs.first v0
               st = Pairs.second v0
-          in (Eithers.bind (makeField cx2 "first" ft) (\firstResult ->  
-            let firstField = Pairs.first firstResult 
+          in (Eithers.bind (makeField cx2 "first" ft) (\firstResult ->
+            let firstField = Pairs.first firstResult
                 cx3 = Pairs.second firstResult
-            in (Eithers.bind (makeField cx3 "second" st) (\secondResult ->  
-              let secondField = Pairs.first secondResult 
+            in (Eithers.bind (makeField cx3 "second" st) (\secondResult ->
+              let secondField = Pairs.first secondResult
                   cx4 = Pairs.second secondResult
               in (Right (Proto3.DefinitionMessage (Proto3.MessageDefinition {
                 Proto3.messageDefinitionName = (structuralTypeName localNs ref),
@@ -163,7 +163,7 @@ generateStructuralTypeMessage cx g localNs ref =
 -- | Encode a simple type for helper message fields
 encodeSimpleTypeForHelper :: Context.Context -> Module.Namespace -> Core.Type -> Either (Context.InContext Error.Error) Proto3.SimpleType
 encodeSimpleTypeForHelper cx localNs typ =
-     
+
       let forNominal = \name -> Right (Proto3.SimpleTypeReference (encodeTypeReference localNs name))
       in case (simplifyType typ) of
         Core.TypeLiteral v0 -> Eithers.map (\st -> Proto3.SimpleTypeScalar st) (encodeScalarType cx v0)
@@ -181,7 +181,7 @@ collectStructuralTypes types =
 -- | Collect structural type references from a single type
 collectStructuralTypes_collectFromType :: Core.Type -> S.Set Environment.StructuralTypeRef
 collectStructuralTypes_collectFromType typ =
-    Rewriting.foldOverType Coders.TraversalOrderPre (\acc -> \t ->  
+    Rewriting.foldOverType Coders.TraversalOrderPre (\acc -> \t ->
       let st = simplifyType t
       in case st of
         Core.TypeEither v0 -> Sets.insert (Environment.StructuralTypeRefEither (Core.eitherTypeLeft v0, (Core.eitherTypeRight v0))) acc
@@ -191,12 +191,12 @@ collectStructuralTypes_collectFromType typ =
 -- | Convert a Hydra module to Protocol Buffers v3 source files
 moduleToProtobuf :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (M.Map String String)
 moduleToProtobuf mod defs cx g =
-     
-      let ns_ = Module.moduleNamespace mod 
+
+      let ns_ = Module.moduleNamespace mod
           partitioned = Schemas.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
-      in (Eithers.bind (constructModule cx g mod typeDefs) (\pfile ->  
-        let content = Serialization.printExpr (Serialization.parenthesize (Serde.writeProtoFile pfile)) 
+      in (Eithers.bind (constructModule cx g mod typeDefs) (\pfile ->
+        let content = Serialization.printExpr (Serialization.parenthesize (Serde.writeProtoFile pfile))
             path = Proto3.unFileReference (namespaceToFileReference ns_)
         in (Right (Maps.singleton path content))))
 
@@ -209,12 +209,12 @@ javaPackageOptionName = "java_package"
 -- | Construct a Protobuf file from a Hydra module and its type definitions
 constructModule :: Context.Context -> Graph.Graph -> Module.Module -> [Module.TypeDefinition] -> Either (Context.InContext Error.Error) Proto3.ProtoFile
 constructModule cx g mod typeDefs =
-     
-      let ns_ = Module.moduleNamespace mod 
+
+      let ns_ = Module.moduleNamespace mod
           desc = Module.moduleDescription mod
           toDef =
-                  \td ->  
-                    let name = Module.typeDefinitionName td 
+                  \td ->
+                    let name = Module.typeDefinitionName td
                         typ = Module.typeDefinitionType td
                         encodeDefEither = \n -> \t -> encodeDefinition cx g ns_ n t
                         flatTyp = flattenType typ
@@ -244,7 +244,7 @@ constructModule cx g mod typeDefs =
                     _ -> False
           checkFieldType_empty = \typ -> Schemas.isUnitType typ
           checkFields =
-                  \checkType -> \checkFieldType -> \ts -> Lists.foldl (\b -> \t -> Logic.or b (Rewriting.foldOverType Coders.TraversalOrderPre (\b2 -> \t2 -> Logic.or b2 ( 
+                  \checkType -> \checkFieldType -> \ts -> Lists.foldl (\b -> \t -> Logic.or b (Rewriting.foldOverType Coders.TraversalOrderPre (\b2 -> \t2 -> Logic.or b2 (
                     let checkResult = checkType t2
                     in (Maybes.maybe (case t2 of
                       Core.TypeRecord v0 -> Lists.foldl (\b3 -> \f -> Logic.or b3 (checkFieldType (Rewriting.deannotateType (Core.fieldTypeType f)))) False v0
@@ -257,9 +257,9 @@ constructModule cx g mod typeDefs =
           emptyImport =
                   Logic.ifElse (checkFields emptyCheckType checkFieldType_empty types) [
                     Proto3.FileReference "google/protobuf/empty.proto"] []
-      in (Eithers.bind (Schemas.moduleDependencyNamespaces cx g True False False False mod) (\schemaImports -> Eithers.bind (Eithers.mapList toDef typeDefs) (\definitions ->  
+      in (Eithers.bind (Schemas.moduleDependencyNamespaces cx g True False False False mod) (\schemaImports -> Eithers.bind (Eithers.mapList toDef typeDefs) (\definitions ->
         let schemaImportList = Lists.map (\n -> namespaceToFileReference n) (Sets.toList schemaImports)
-        in (Eithers.bind (mapAccumResult (\cx0 -> \ref -> generateStructuralTypeMessage cx0 g ns_ ref) cx (Sets.toList structRefs)) (\helperResult ->  
+        in (Eithers.bind (mapAccumResult (\cx0 -> \ref -> generateStructuralTypeMessage cx0 g ns_ ref) cx (Sets.toList structRefs)) (\helperResult ->
           let helperDefs = Pairs.first helperResult
           in (Right (Proto3.ProtoFile {
             Proto3.protoFilePackage = (namespaceToPackageName ns_),
@@ -275,8 +275,8 @@ constructModule cx g mod typeDefs =
 -- | Thread context through a list, accumulating results
 mapAccumResult :: (t0 -> t1 -> Either t2 (t3, t0)) -> t0 -> [t1] -> Either t2 ([t3], t0)
 mapAccumResult f cx0 xs =
-    Lists.foldl (\accE -> \x -> Eithers.bind accE (\accPair ->  
-      let bs = Pairs.first accPair 
+    Lists.foldl (\accE -> \x -> Eithers.bind accE (\accPair ->
+      let bs = Pairs.first accPair
           cxN = Pairs.second accPair
       in (Eithers.map (\resultPair -> (Lists.concat [
         bs,
@@ -286,8 +286,8 @@ mapAccumResult f cx0 xs =
 -- | Encode a Hydra type as a Protobuf definition
 encodeDefinition :: Context.Context -> Graph.Graph -> Module.Namespace -> Core.Name -> Core.Type -> Either String Proto3.Definition
 encodeDefinition cx g localNs name typ =
-     
-      let cx1 = Annotations.resetCount key_proto_field_index cx 
+
+      let cx1 = Annotations.resetCount key_proto_field_index cx
           cx2 = Pairs.second (Annotations.nextCount key_proto_field_index cx1)
           wrapAsRecordType =
                   \t -> Core.TypeRecord [
@@ -305,15 +305,15 @@ encodeDefinition cx g localNs name typ =
 -- | Encode a Hydra union type as a Protobuf enum definition
 encodeEnumDefinition :: Context.Context -> Graph.Graph -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Error.Error) Proto3.EnumDefinition
 encodeEnumDefinition cx g options tname fts =
-     
+
       let unspecifiedField =
               Proto3.EnumValue {
                 Proto3.enumValueName = (encodeEnumValueName tname (Core.Name "unspecified")),
                 Proto3.enumValueNumber = 0,
-                Proto3.enumValueOptions = []} 
+                Proto3.enumValueOptions = []}
           encodeEnumField =
-                  \field -> \idx ->  
-                    let fname = Core.fieldTypeName field 
+                  \field -> \idx ->
+                    let fname = Core.fieldTypeName field
                         ftype = Core.fieldTypeType field
                     in (Eithers.bind (findOptions cx g ftype) (\opts -> Right (Proto3.EnumValue {
                       Proto3.enumValueName = (encodeEnumValueName tname fname),
@@ -328,8 +328,8 @@ encodeEnumDefinition cx g options tname fts =
 -- | Encode an enum value name from type name and field name
 encodeEnumValueName :: Core.Name -> Core.Name -> Proto3.EnumValueName
 encodeEnumValueName tname fname =
-     
-      let prefix = Formatting.nonAlnumToUnderscores (Formatting.convertCaseCamelToUpperSnake (Names.localNameOf tname)) 
+
+      let prefix = Formatting.nonAlnumToUnderscores (Formatting.convertCaseCamelToUpperSnake (Names.localNameOf tname))
           suffix = Formatting.nonAlnumToUnderscores (Formatting.convertCaseCamelToUpperSnake (Core.unName fname))
       in (Proto3.EnumValueName (Strings.cat [
         prefix,
@@ -344,15 +344,15 @@ encodeFieldName preserve name =
 -- | Encode a Hydra field type as a Protobuf field
 encodeFieldType :: Context.Context -> Graph.Graph -> Module.Namespace -> Core.FieldType -> Either (Context.InContext Error.Error) (Proto3.Field, Context.Context)
 encodeFieldType cx g localNs ft =
-     
-      let fname = Core.fieldTypeName ft 
+
+      let fname = Core.fieldTypeName ft
           ftype = Core.fieldTypeType ft
           encodeType_ =
                   \cx0 -> \g0 -> \ns0 -> \typ -> case (simplifyType typ) of
-                    Core.TypeEither v0 ->  
+                    Core.TypeEither v0 ->
                       let ref = Environment.StructuralTypeRefEither (Core.eitherTypeLeft v0, (Core.eitherTypeRight v0))
                       in (Right (Proto3.FieldTypeSimple (Proto3.SimpleTypeReference (structuralTypeName ns0 ref))))
-                    Core.TypePair v0 ->  
+                    Core.TypePair v0 ->
                       let ref = Environment.StructuralTypeRefPair (Core.pairTypeFirst v0, (Core.pairTypeSecond v0))
                       in (Right (Proto3.FieldTypeSimple (Proto3.SimpleTypeReference (structuralTypeName ns0 ref))))
                     Core.TypeList v0 -> Eithers.map (\st -> Proto3.FieldTypeRepeated st) (encodeSimpleType_ cx0 g0 ns0 True v0)
@@ -363,26 +363,26 @@ encodeFieldType cx g localNs ft =
                     Core.TypeMaybe v0 -> case (Rewriting.deannotateType v0) of
                       Core.TypeLiteral v1 -> Eithers.map (\st -> Proto3.FieldTypeSimple st) (encodeScalarTypeWrapped cx0 v1)
                       _ -> encodeType_ cx0 g0 ns0 v0
-                    Core.TypeUnion v0 -> Eithers.bind (mapAccumResult (\cx_ -> \f -> encodeFieldType cx_ g0 ns0 f) cx0 v0) (\pfields ->  
+                    Core.TypeUnion v0 -> Eithers.bind (mapAccumResult (\cx_ -> \f -> encodeFieldType cx_ g0 ns0 f) cx0 v0) (\pfields ->
                       let fields_ = Pairs.first pfields
                       in (Right (Proto3.FieldTypeOneof fields_)))
                     _ -> Eithers.map (\st -> Proto3.FieldTypeSimple st) (encodeSimpleType_ cx0 g0 ns0 True typ)
           encodeSimpleType_ =
-                  \cx0 -> \g0 -> \ns0 -> \noms -> \typ ->  
+                  \cx0 -> \g0 -> \ns0 -> \noms -> \typ ->
                     let forNominal = \name -> Right (Proto3.SimpleTypeReference (encodeTypeReference ns0 name))
                     in case (simplifyType typ) of
                       Core.TypeLiteral v0 -> Eithers.map (\st -> Proto3.SimpleTypeScalar st) (encodeScalarType cx0 v0)
                       Core.TypeRecord _ -> unexpectedE cx0 "named type reference" "anonymous record type"
                       Core.TypeUnion _ -> unexpectedE cx0 "named type reference" "anonymous union type"
                       Core.TypeUnit -> Right (Proto3.SimpleTypeReference (Proto3.TypeName "google.protobuf.Empty"))
-                      Core.TypeVariable v0 -> Logic.ifElse noms (forNominal v0) (Eithers.bind (Lexical.requireElement cx0 g0 v0) (\el ->  
+                      Core.TypeVariable v0 -> Logic.ifElse noms (forNominal v0) (Eithers.bind (Lexical.requireElement cx0 g0 v0) (\el ->
                         let term = Core.bindingTerm el
                         in (Eithers.bind (Eithers.bimap (\de -> Context.InContext {
                           Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError de))),
                           Context.inContextContext = cx0}) (\t -> t) (Core_.type_ g0 term)) (\resolvedTyp -> encodeSimpleType_ cx0 g0 ns0 noms resolvedTyp))))
                       _ -> unexpectedE cx0 "simple type" (Core___.type_ (Rewriting.removeTypeAnnotations typ))
-      in (Eithers.bind (findOptions cx g ftype) (\options -> Eithers.bind (encodeType_ cx g localNs ftype) (\ft_ ->  
-        let idxPair = Annotations.nextCount key_proto_field_index cx 
+      in (Eithers.bind (findOptions cx g ftype) (\options -> Eithers.bind (encodeType_ cx g localNs ftype) (\ft_ ->
+        let idxPair = Annotations.nextCount key_proto_field_index cx
             idx = Pairs.first idxPair
             cx1 = Pairs.second idxPair
         in (Eithers.bind (readBooleanAnnotation cx g Constants.key_preserveFieldName ftype) (\preserve -> Right (Proto3.Field {
@@ -395,7 +395,7 @@ encodeFieldType cx g localNs ft =
 -- | Encode a Hydra record type as a Protobuf message definition
 encodeRecordType :: Context.Context -> Graph.Graph -> Module.Namespace -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Error.Error) Proto3.MessageDefinition
 encodeRecordType cx g localNs options tname fts =
-    Eithers.bind (mapAccumResult (\cx_ -> \f -> encodeFieldType cx_ g localNs f) cx fts) (\result ->  
+    Eithers.bind (mapAccumResult (\cx_ -> \f -> encodeFieldType cx_ g localNs f) cx fts) (\result ->
       let pfields = Pairs.first result
       in (Right (Proto3.MessageDefinition {
         Proto3.messageDefinitionName = (encodeTypeName tname),
@@ -424,7 +424,7 @@ encodeScalarType cx lt =
 -- | Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars)
 encodeScalarTypeWrapped :: Context.Context -> Core.LiteralType -> Either (Context.InContext Error.Error) Proto3.SimpleType
 encodeScalarTypeWrapped cx lt =
-     
+
       let toType =
               \label -> Right (Proto3.SimpleTypeReference (Proto3.TypeName (Strings.cat [
                 "google.protobuf.",
@@ -453,12 +453,12 @@ encodeTypeName name = Proto3.TypeName (Names.localNameOf name)
 -- | Encode a Hydra name as a Protobuf type reference
 encodeTypeReference :: Module.Namespace -> Core.Name -> Proto3.TypeName
 encodeTypeReference localNs name =
-     
-      let qn = Names.qualifyName name 
+
+      let qn = Names.qualifyName name
           local = Module.qualifiedNameLocal qn
           ns_ = Module.qualifiedNameNamespace qn
           localNsParts = Lists.init (Strings.splitOn "." (Module.unNamespace localNs))
-      in (Proto3.TypeName (Maybes.maybe local (\nsVal ->  
+      in (Proto3.TypeName (Maybes.maybe local (\nsVal ->
         let nsParts = Lists.init (Strings.splitOn "." (Module.unNamespace nsVal))
         in (Logic.ifElse (Equality.equal nsParts localNsParts) local (Strings.intercalate "." (Lists.concat [
           nsParts,
@@ -476,11 +476,11 @@ flattenType typ =
 -- | Find Protobuf options for a type (description and deprecated)
 findOptions :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.Error) [Proto3.Option]
 findOptions cx g typ =
-    Eithers.bind (Annotations.getTypeDescription cx g typ) (\mdesc -> Eithers.bind (readBooleanAnnotation cx g Constants.key_deprecated typ) (\bdep ->  
+    Eithers.bind (Annotations.getTypeDescription cx g typ) (\mdesc -> Eithers.bind (readBooleanAnnotation cx g Constants.key_deprecated typ) (\bdep ->
       let mdescAnn =
               Maybes.map (\desc_ -> Proto3.Option {
                 Proto3.optionName = Serde.descriptionOptionName,
-                Proto3.optionValue = (Proto3.ValueString desc_)}) mdesc 
+                Proto3.optionValue = (Proto3.ValueString desc_)}) mdesc
           mdepAnn =
                   Logic.ifElse bdep (Just (Proto3.Option {
                     Proto3.optionName = "deprecated",
@@ -504,7 +504,7 @@ isEnumDefinition typ =
 -- | Convert a Hydra namespace to a Protobuf file reference
 namespaceToFileReference :: Module.Namespace -> Proto3.FileReference
 namespaceToFileReference ns_ =
-     
+
       let pns =
               Strings.intercalate "/" (Lists.map (\s -> Formatting.convertCaseCamelToLowerSnake s) (Strings.splitOn "." (Module.unNamespace ns_)))
       in (Proto3.FileReference (Strings.cat2 pns ".proto"))

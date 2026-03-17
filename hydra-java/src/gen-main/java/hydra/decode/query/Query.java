@@ -14,7 +14,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.ComparisonConstraint> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.ComparisonConstraint>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.ComparisonConstraint> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;
@@ -66,7 +66,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.Edge> edge(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.Edge>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.Edge>left(new hydra.error.DecodingError(err))),
@@ -75,7 +75,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Edge> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.Edge>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Edge> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -116,7 +116,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.GraphPattern> graphPattern(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.GraphPattern>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.GraphPattern>left(new hydra.error.DecodingError(err))),
@@ -125,7 +125,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.GraphPattern> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.GraphPattern>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.GraphPattern> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -155,7 +155,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.Node> node(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.Node>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.Node>left(new hydra.error.DecodingError(err))),
@@ -164,7 +164,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Node> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.Node>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Node> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;
@@ -201,7 +201,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.Path> path(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.Path>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.Path>left(new hydra.error.DecodingError(err))),
@@ -210,7 +210,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Path> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.Path>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Path> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;
@@ -247,7 +247,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.PathEquation> pathEquation(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.PathEquation>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.PathEquation>left(new hydra.error.DecodingError(err))),
@@ -256,7 +256,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.PathEquation> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.PathEquation>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.PathEquation> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -283,7 +283,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.Pattern> pattern(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.Pattern>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.Pattern>left(new hydra.error.DecodingError(err))),
@@ -292,7 +292,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Pattern> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.Pattern>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Pattern> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;
@@ -345,7 +345,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.PatternImplication> patternImplication(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.PatternImplication>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.PatternImplication>left(new hydra.error.DecodingError(err))),
@@ -354,7 +354,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.PatternImplication> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.PatternImplication>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.PatternImplication> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -381,7 +381,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.Query> query(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.Query>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.Query>left(new hydra.error.DecodingError(err))),
@@ -390,7 +390,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Query> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.Query>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Query> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -423,7 +423,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.Range> range(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.Range>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.Range>left(new hydra.error.DecodingError(err))),
@@ -432,7 +432,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Range> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.Range>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Range> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -446,7 +446,7 @@ public interface Query {
                   public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Term instance) {
                     return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected literal"));
                   }
-                  
+
                   @Override
                   public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.Term.Literal v) {
                     return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -454,7 +454,7 @@ public interface Query {
                       public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Literal instance) {
                         return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 literal"));
                       }
-                      
+
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.Literal.Integer_ v1) {
                         return (v1).value.accept(new hydra.core.IntegerValue.PartialVisitor<>() {
@@ -462,7 +462,7 @@ public interface Query {
                           public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.IntegerValue instance) {
                             return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 value"));
                           }
-                          
+
                           @Override
                           public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.IntegerValue.Int32 i) {
                             return hydra.util.Either.<hydra.error.DecodingError, Integer>right((i).value);
@@ -487,7 +487,7 @@ public interface Query {
                     public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Term instance) {
                       return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected literal"));
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.Term.Literal v) {
                       return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -495,7 +495,7 @@ public interface Query {
                         public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Literal instance) {
                           return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 literal"));
                         }
-                        
+
                         @Override
                         public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.Literal.Integer_ v1) {
                           return (v1).value.accept(new hydra.core.IntegerValue.PartialVisitor<>() {
@@ -503,7 +503,7 @@ public interface Query {
                             public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.IntegerValue instance) {
                               return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 value"));
                             }
-                            
+
                             @Override
                             public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.IntegerValue.Int32 i) {
                               return hydra.util.Either.<hydra.error.DecodingError, Integer>right((i).value);
@@ -525,7 +525,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.RegexQuantifier> regexQuantifier(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.RegexQuantifier>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.RegexQuantifier>left(new hydra.error.DecodingError(err))),
@@ -534,7 +534,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.RegexQuantifier> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.RegexQuantifier>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.RegexQuantifier> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;
@@ -570,7 +570,7 @@ public interface Query {
                   public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Term instance) {
                     return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected literal"));
                   }
-                  
+
                   @Override
                   public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.Term.Literal v) {
                     return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -578,7 +578,7 @@ public interface Query {
                       public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Literal instance) {
                         return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 literal"));
                       }
-                      
+
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.Literal.Integer_ v1) {
                         return (v1).value.accept(new hydra.core.IntegerValue.PartialVisitor<>() {
@@ -586,7 +586,7 @@ public interface Query {
                           public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.IntegerValue instance) {
                             return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 value"));
                           }
-                          
+
                           @Override
                           public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.IntegerValue.Int32 i) {
                             return hydra.util.Either.<hydra.error.DecodingError, Integer>right((i).value);
@@ -608,7 +608,7 @@ public interface Query {
                   public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Term instance) {
                     return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected literal"));
                   }
-                  
+
                   @Override
                   public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.Term.Literal v) {
                     return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -616,7 +616,7 @@ public interface Query {
                       public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Literal instance) {
                         return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 literal"));
                       }
-                      
+
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.Literal.Integer_ v1) {
                         return (v1).value.accept(new hydra.core.IntegerValue.PartialVisitor<>() {
@@ -624,7 +624,7 @@ public interface Query {
                           public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.IntegerValue instance) {
                             return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 value"));
                           }
-                          
+
                           @Override
                           public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.IntegerValue.Int32 i) {
                             return hydra.util.Either.<hydra.error.DecodingError, Integer>right((i).value);
@@ -657,7 +657,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.RegexSequence> regexSequence(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.RegexSequence>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.RegexSequence>left(new hydra.error.DecodingError(err))),
@@ -666,7 +666,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.RegexSequence> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.RegexSequence>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.RegexSequence> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -693,7 +693,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.Step> step(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.Step>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.Step>left(new hydra.error.DecodingError(err))),
@@ -702,7 +702,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Step> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.Step>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Step> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;
@@ -739,7 +739,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.TriplePattern> triplePattern(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.TriplePattern>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.TriplePattern>left(new hydra.error.DecodingError(err))),
@@ -748,7 +748,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.TriplePattern> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.TriplePattern>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.TriplePattern> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -783,7 +783,7 @@ public interface Query {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.query.Variable> variable(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.query.Variable>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.query.Variable>left(new hydra.error.DecodingError(err))),
@@ -792,7 +792,7 @@ public interface Query {
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Variable> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.query.Variable>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.query.Variable> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
@@ -804,7 +804,7 @@ public interface Query {
                 public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Term instance) {
                   return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"));
                 }
-                
+
                 @Override
                 public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
                   return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -812,7 +812,7 @@ public interface Query {
                     public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
                     }
-                    
+
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Literal.String_ s) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>right((s).value);

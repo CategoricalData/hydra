@@ -22,15 +22,15 @@ import qualified Data.Set as S
 -- | Convert PDL annotations to an optional expression (doc comment)
 exprAnnotations :: Pdl.Annotations -> Maybe Ast.Expr
 exprAnnotations anns =
-     
+
       let d = Pdl.annotationsDoc anns
       in (Maybes.map (\s -> Serialization.cst (Formatting.javaStyleComment s)) d)
 
 -- | Convert a PDL enum field to an expression
 exprEnumField :: Pdl.EnumField -> Ast.Expr
 exprEnumField ef =
-     
-      let name = Pdl.unEnumFieldName (Pdl.enumFieldName ef) 
+
+      let name = Pdl.unEnumFieldName (Pdl.enumFieldName ef)
           anns = Pdl.enumFieldAnnotations ef
       in (withAnnotations anns (Serialization.cst name))
 
@@ -44,18 +44,18 @@ exprImport qn =
 -- | Convert a named schema to an expression
 exprNamedSchema :: Pdl.NamedSchema -> Ast.Expr
 exprNamedSchema ns =
-     
-      let qn = Pdl.namedSchemaQualifiedName ns 
+
+      let qn = Pdl.namedSchemaQualifiedName ns
           t = Pdl.namedSchemaType ns
           anns = Pdl.namedSchemaAnnotations ns
       in (withAnnotations anns (case t of
-        Pdl.NamedSchemaTypeRecord v0 ->  
+        Pdl.NamedSchemaTypeRecord v0 ->
           let fields = Pdl.recordSchemaFields v0
           in (Serialization.spaceSep [
             Serialization.cst "record",
             (exprQualifiedName qn),
             (Serialization.curlyBracesList Nothing Serialization.fullBlockStyle (Lists.map exprRecordField fields))])
-        Pdl.NamedSchemaTypeEnum v0 ->  
+        Pdl.NamedSchemaTypeEnum v0 ->
           let fields = Pdl.enumSchemaFields v0
           in (Serialization.spaceSep [
             Serialization.cst "enum",
@@ -82,8 +82,8 @@ exprPrimitiveType pt =
 -- | Convert a qualified name to an expression
 exprQualifiedName :: Pdl.QualifiedName -> Ast.Expr
 exprQualifiedName qn =
-     
-      let name = Pdl.unName (Pdl.qualifiedNameName qn) 
+
+      let name = Pdl.unName (Pdl.qualifiedNameName qn)
           ns = Pdl.qualifiedNameNamespace qn
           parts =
                   Maybes.cat [
@@ -94,8 +94,8 @@ exprQualifiedName qn =
 -- | Convert a record field to an expression
 exprRecordField :: Pdl.RecordField -> Ast.Expr
 exprRecordField rf =
-     
-      let name = Pdl.unFieldName (Pdl.recordFieldName rf) 
+
+      let name = Pdl.unFieldName (Pdl.recordFieldName rf)
           schema = Pdl.recordFieldValue rf
           optional = Pdl.recordFieldOptional rf
           anns = Pdl.recordFieldAnnotations rf
@@ -127,8 +127,8 @@ exprSchema schema =
 -- | Convert a schema file to an expression
 exprSchemaFile :: Pdl.SchemaFile -> Ast.Expr
 exprSchemaFile sf =
-     
-      let ns = Pdl.unNamespace (Pdl.schemaFileNamespace sf) 
+
+      let ns = Pdl.unNamespace (Pdl.schemaFileNamespace sf)
           pkg = Pdl.schemaFilePackage sf
           imports = Pdl.schemaFileImports sf
           schemas = Pdl.schemaFileSchemas sf
@@ -152,8 +152,8 @@ exprSchemaFile sf =
 -- | Convert a union member to an expression
 exprUnionMember :: Pdl.UnionMember -> Ast.Expr
 exprUnionMember um =
-     
-      let alias = Pdl.unionMemberAlias um 
+
+      let alias = Pdl.unionMemberAlias um
           schema = Pdl.unionMemberValue um
           anns = Pdl.unionMemberAnnotations um
       in (withAnnotations anns (Serialization.spaceSep (Maybes.cat [

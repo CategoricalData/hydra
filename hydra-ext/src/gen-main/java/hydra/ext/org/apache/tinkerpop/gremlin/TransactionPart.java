@@ -6,50 +6,50 @@ import java.io.Serializable;
 
 public abstract class TransactionPart implements Serializable, Comparable<TransactionPart> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TransactionPart");
-  
+
   public static final hydra.core.Name BEGIN = new hydra.core.Name("begin");
-  
+
   public static final hydra.core.Name COMMIT = new hydra.core.Name("commit");
-  
+
   public static final hydra.core.Name ROLLBACK = new hydra.core.Name("rollback");
-  
+
   private TransactionPart () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Begin instance) ;
-    
+
     R visit(Commit instance) ;
-    
+
     R visit(Rollback instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(TransactionPart instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Begin instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Commit instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Rollback instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Begin extends hydra.ext.org.apache.tinkerpop.gremlin.TransactionPart implements Serializable {
     public Begin () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Begin)) {
@@ -58,12 +58,12 @@ public abstract class TransactionPart implements Serializable, Comparable<Transa
       Begin o = (Begin) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TransactionPart other) {
@@ -73,18 +73,18 @@ public abstract class TransactionPart implements Serializable, Comparable<Transa
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Commit extends hydra.ext.org.apache.tinkerpop.gremlin.TransactionPart implements Serializable {
     public Commit () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Commit)) {
@@ -93,12 +93,12 @@ public abstract class TransactionPart implements Serializable, Comparable<Transa
       Commit o = (Commit) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TransactionPart other) {
@@ -108,18 +108,18 @@ public abstract class TransactionPart implements Serializable, Comparable<Transa
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Rollback extends hydra.ext.org.apache.tinkerpop.gremlin.TransactionPart implements Serializable {
     public Rollback () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Rollback)) {
@@ -128,12 +128,12 @@ public abstract class TransactionPart implements Serializable, Comparable<Transa
       Rollback o = (Rollback) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TransactionPart other) {
@@ -143,7 +143,7 @@ public abstract class TransactionPart implements Serializable, Comparable<Transa
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

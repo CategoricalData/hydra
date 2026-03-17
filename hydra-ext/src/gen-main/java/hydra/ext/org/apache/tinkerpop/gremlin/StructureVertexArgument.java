@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class StructureVertexArgument implements Serializable, Comparable<StructureVertexArgument> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.StructureVertexArgument");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
-  
+
   private StructureVertexArgument () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Value instance) ;
-    
+
     R visit(Variable instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(StructureVertexArgument instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Value instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Variable instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Value extends hydra.ext.org.apache.tinkerpop.gremlin.StructureVertexArgument implements Serializable {
     public final hydra.ext.org.apache.tinkerpop.gremlin.StructureVertex value;
-    
+
     public Value (hydra.ext.org.apache.tinkerpop.gremlin.StructureVertex value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Value)) {
@@ -54,12 +54,12 @@ public abstract class StructureVertexArgument implements Serializable, Comparabl
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StructureVertexArgument other) {
@@ -70,20 +70,20 @@ public abstract class StructureVertexArgument implements Serializable, Comparabl
       Value o = (Value) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Variable extends hydra.ext.org.apache.tinkerpop.gremlin.StructureVertexArgument implements Serializable {
     public final hydra.ext.org.apache.tinkerpop.gremlin.Identifier value;
-    
+
     public Variable (hydra.ext.org.apache.tinkerpop.gremlin.Identifier value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Variable)) {
@@ -94,12 +94,12 @@ public abstract class StructureVertexArgument implements Serializable, Comparabl
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StructureVertexArgument other) {
@@ -110,7 +110,7 @@ public abstract class StructureVertexArgument implements Serializable, Comparabl
       Variable o = (Variable) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

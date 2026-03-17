@@ -29,8 +29,8 @@ javaScriptLanguage =
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
-        Coders.languageConstraintsTypes = typePredicate}} 
-  where 
+        Coders.languageConstraintsTypes = typePredicate}}
+  where
     eliminationVariants =
         Sets.fromList [
           Variants.EliminationVariantRecord,
@@ -102,8 +102,8 @@ javaScriptReservedWords =
       futureReserved,
       strictModeReserved,
       builtIns,
-      hydraJavaScriptKeywords]) 
-  where 
+      hydraJavaScriptKeywords])
+  where
     keywords =
         [
           "await",

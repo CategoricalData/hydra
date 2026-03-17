@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class StarredExpression implements Serializable, Comparable<StarredExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.StarredExpression");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.ext.python.syntax.Expression value;
-  
+
   public StarredExpression (hydra.ext.python.syntax.Expression value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof StarredExpression)) {
@@ -25,12 +25,12 @@ public class StarredExpression implements Serializable, Comparable<StarredExpres
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StarredExpression other) {

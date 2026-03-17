@@ -15,7 +15,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | An error that occurred during type checking
-data CheckingError = 
+data CheckingError =
   -- | A post-unification consistency check failure
   CheckingErrorIncorrectUnification IncorrectUnificationError |
   -- | A type that is not a forall type when one was expected
@@ -61,7 +61,7 @@ _CheckingError_untypedLambda = Core.Name "untypedLambda"
 _CheckingError_untypedLetBinding = Core.Name "untypedLetBinding"
 
 -- | An error that occurred during decoding of a term
-newtype DecodingError = 
+newtype DecodingError =
   DecodingError {
     unDecodingError :: String}
   deriving (Eq, Ord, Read, Show)
@@ -69,7 +69,7 @@ newtype DecodingError =
 _DecodingError = Core.Name "hydra.error.DecodingError"
 
 -- | A duplicate binding name in a let expression
-data DuplicateBindingError = 
+data DuplicateBindingError =
   DuplicateBindingError {
     -- | The duplicated binding name
     duplicateBindingErrorName :: Core.Name}
@@ -80,7 +80,7 @@ _DuplicateBindingError = Core.Name "hydra.error.DuplicateBindingError"
 _DuplicateBindingError_name = Core.Name "name"
 
 -- | A duplicate field name in a record or union type
-data DuplicateFieldError = 
+data DuplicateFieldError =
   DuplicateFieldError {
     -- | The duplicated field name
     duplicateFieldErrorName :: Core.Name}
@@ -91,7 +91,7 @@ _DuplicateFieldError = Core.Name "hydra.error.DuplicateFieldError"
 _DuplicateFieldError_name = Core.Name "name"
 
 -- | An error of any kind, with kernel errors particularly differentiated
-data Error = 
+data Error =
   -- | A type checking error
   ErrorChecking CheckingError |
   -- | An error that occurred during decoding of a term
@@ -141,7 +141,7 @@ _Error_unexpectedTypeVariant = Core.Name "unexpectedTypeVariant"
 _Error_unification = Core.Name "unification"
 
 -- | A post-unification consistency check failure
-data IncorrectUnificationError = 
+data IncorrectUnificationError =
   IncorrectUnificationError {
     -- | The substitution that failed the consistency check
     incorrectUnificationErrorSubstitution :: Typing.TypeSubst}
@@ -152,7 +152,7 @@ _IncorrectUnificationError = Core.Name "hydra.error.IncorrectUnificationError"
 _IncorrectUnificationError_substitution = Core.Name "substitution"
 
 -- | A type that is not a forall type when type arguments are being applied
-data NotAForallTypeError = 
+data NotAForallTypeError =
   NotAForallTypeError {
     -- | The actual type encountered
     notAForallTypeErrorType :: Core.Type,
@@ -167,7 +167,7 @@ _NotAForallTypeError_type = Core.Name "type"
 _NotAForallTypeError_typeArguments = Core.Name "typeArguments"
 
 -- | A type that is not a function type when one was expected in an application
-data NotAFunctionTypeError = 
+data NotAFunctionTypeError =
   NotAFunctionTypeError {
     -- | The actual type encountered
     notAFunctionTypeErrorType :: Core.Type}
@@ -178,7 +178,7 @@ _NotAFunctionTypeError = Core.Name "hydra.error.NotAFunctionTypeError"
 _NotAFunctionTypeError_type = Core.Name "type"
 
 -- | Any other error
-newtype OtherError = 
+newtype OtherError =
   OtherError {
     unOtherError :: String}
   deriving (Eq, Ord, Read, Show)
@@ -186,7 +186,7 @@ newtype OtherError =
 _OtherError = Core.Name "hydra.error.OtherError"
 
 -- | A type constructor applied to the wrong number of type arguments
-data TypeArityMismatchError = 
+data TypeArityMismatchError =
   TypeArityMismatchError {
     -- | The type being checked
     typeArityMismatchErrorType :: Core.Type,
@@ -209,7 +209,7 @@ _TypeArityMismatchError_actualArity = Core.Name "actualArity"
 _TypeArityMismatchError_typeArguments = Core.Name "typeArguments"
 
 -- | A type mismatch between expected and actual types
-data TypeMismatchError = 
+data TypeMismatchError =
   TypeMismatchError {
     -- | The expected type
     typeMismatchErrorExpectedType :: Core.Type,
@@ -224,7 +224,7 @@ _TypeMismatchError_expectedType = Core.Name "expectedType"
 _TypeMismatchError_actualType = Core.Name "actualType"
 
 -- | Type variables that appear free in a type but are not bound in scope
-data UnboundTypeVariablesError = 
+data UnboundTypeVariablesError =
   UnboundTypeVariablesError {
     -- | The set of unbound type variable names
     unboundTypeVariablesErrorVariables :: (S.Set Core.Name),
@@ -239,7 +239,7 @@ _UnboundTypeVariablesError_variables = Core.Name "variables"
 _UnboundTypeVariablesError_type = Core.Name "type"
 
 -- | A reference to a field that does not exist in the given type
-data UndefinedFieldError = 
+data UndefinedFieldError =
   UndefinedFieldError {
     -- | The name of the undefined field
     undefinedFieldErrorFieldName :: Core.Name,
@@ -254,7 +254,7 @@ _UndefinedFieldError_fieldName = Core.Name "fieldName"
 _UndefinedFieldError_typeName = Core.Name "typeName"
 
 -- | A reference to a term (element, binding, or primitive) that is not defined
-data UndefinedTermError = 
+data UndefinedTermError =
   UndefinedTermError {
     -- | The name of the undefined term
     undefinedTermErrorName :: Core.Name}
@@ -265,7 +265,7 @@ _UndefinedTermError = Core.Name "hydra.error.UndefinedTermError"
 _UndefinedTermError_name = Core.Name "name"
 
 -- | A reference to a type or type variable that is not defined
-data UndefinedTypeError = 
+data UndefinedTypeError =
   UndefinedTypeError {
     -- | The name of the undefined type
     undefinedTypeErrorName :: Core.Name}
@@ -276,7 +276,7 @@ _UndefinedTypeError = Core.Name "hydra.error.UndefinedTypeError"
 _UndefinedTypeError_name = Core.Name "name"
 
 -- | Multiple types that should all be equal but are not
-data UnequalTypesError = 
+data UnequalTypesError =
   UnequalTypesError {
     -- | The list of types that are not all equal
     unequalTypesErrorTypes :: [Core.Type],
@@ -291,7 +291,7 @@ _UnequalTypesError_types = Core.Name "types"
 _UnequalTypesError_description = Core.Name "description"
 
 -- | An unexpected term variant was encountered
-data UnexpectedTermVariantError = 
+data UnexpectedTermVariantError =
   UnexpectedTermVariantError {
     -- | The expected term variant
     unexpectedTermVariantErrorExpectedVariant :: Variants.TermVariant,
@@ -306,7 +306,7 @@ _UnexpectedTermVariantError_expectedVariant = Core.Name "expectedVariant"
 _UnexpectedTermVariantError_actualTerm = Core.Name "actualTerm"
 
 -- | An unexpected type variant was encountered
-data UnexpectedTypeVariantError = 
+data UnexpectedTypeVariantError =
   UnexpectedTypeVariantError {
     -- | The expected type variant
     unexpectedTypeVariantErrorExpectedVariant :: Variants.TypeVariant,
@@ -321,7 +321,7 @@ _UnexpectedTypeVariantError_expectedVariant = Core.Name "expectedVariant"
 _UnexpectedTypeVariantError_actualType = Core.Name "actualType"
 
 -- | An error that occurred during type unification
-data UnificationError = 
+data UnificationError =
   UnificationError {
     -- | The left-hand type in the unification
     unificationErrorLeftType :: Core.Type,
@@ -340,7 +340,7 @@ _UnificationError_rightType = Core.Name "rightType"
 _UnificationError_message = Core.Name "message"
 
 -- | A term variant that the type checker does not support
-data UnsupportedTermVariantError = 
+data UnsupportedTermVariantError =
   UnsupportedTermVariantError {
     -- | The unsupported term variant
     unsupportedTermVariantErrorTermVariant :: Variants.TermVariant}
@@ -351,14 +351,14 @@ _UnsupportedTermVariantError = Core.Name "hydra.error.UnsupportedTermVariantErro
 _UnsupportedTermVariantError_termVariant = Core.Name "termVariant"
 
 -- | A lambda expression without a type annotation on its parameter
-data UntypedLambdaError = 
+data UntypedLambdaError =
   UntypedLambdaError {}
   deriving (Eq, Ord, Read, Show)
 
 _UntypedLambdaError = Core.Name "hydra.error.UntypedLambdaError"
 
 -- | A let binding without a type annotation
-data UntypedLetBindingError = 
+data UntypedLetBindingError =
   UntypedLetBindingError {
     -- | The untyped binding
     untypedLetBindingErrorBinding :: Core.Binding}

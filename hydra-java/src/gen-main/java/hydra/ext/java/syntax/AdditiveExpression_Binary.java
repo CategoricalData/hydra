@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class AdditiveExpression_Binary implements Serializable, Comparable<AdditiveExpression_Binary> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.AdditiveExpression_Binary");
-  
+
   public static final hydra.core.Name LHS = new hydra.core.Name("lhs");
-  
+
   public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
-  
+
   public final hydra.ext.java.syntax.AdditiveExpression lhs;
-  
+
   public final hydra.ext.java.syntax.MultiplicativeExpression rhs;
-  
+
   public AdditiveExpression_Binary (hydra.ext.java.syntax.AdditiveExpression lhs, hydra.ext.java.syntax.MultiplicativeExpression rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof AdditiveExpression_Binary)) {
@@ -32,12 +32,12 @@ public class AdditiveExpression_Binary implements Serializable, Comparable<Addit
       this.rhs,
       o.rhs);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(lhs) + 3 * java.util.Objects.hashCode(rhs);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AdditiveExpression_Binary other) {
@@ -48,11 +48,11 @@ public class AdditiveExpression_Binary implements Serializable, Comparable<Addit
     }
     return ((Comparable) rhs).compareTo(other.rhs);
   }
-  
+
   public AdditiveExpression_Binary withLhs(hydra.ext.java.syntax.AdditiveExpression lhs) {
     return new AdditiveExpression_Binary(lhs, rhs);
   }
-  
+
   public AdditiveExpression_Binary withRhs(hydra.ext.java.syntax.MultiplicativeExpression rhs) {
     return new AdditiveExpression_Binary(lhs, rhs);
   }

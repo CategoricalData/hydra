@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class SubClassOf implements Serializable, Comparable<SubClassOf> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.SubClassOf");
-  
+
   public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
-  
+
   public static final hydra.core.Name SUB_CLASS = new hydra.core.Name("subClass");
-  
+
   public static final hydra.core.Name SUPER_CLASS = new hydra.core.Name("superClass");
-  
+
   public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
-  
+
   public final hydra.ext.org.w3.owl.syntax.ClassExpression subClass;
-  
+
   public final hydra.ext.org.w3.owl.syntax.ClassExpression superClass;
-  
+
   public SubClassOf (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ClassExpression subClass, hydra.ext.org.w3.owl.syntax.ClassExpression superClass) {
     this.annotations = annotations;
     this.subClass = subClass;
     this.superClass = superClass;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof SubClassOf)) {
@@ -39,12 +39,12 @@ public class SubClassOf implements Serializable, Comparable<SubClassOf> {
       this.superClass,
       o.superClass);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(subClass) + 5 * java.util.Objects.hashCode(superClass);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SubClassOf other) {
@@ -59,15 +59,15 @@ public class SubClassOf implements Serializable, Comparable<SubClassOf> {
     }
     return ((Comparable) superClass).compareTo(other.superClass);
   }
-  
+
   public SubClassOf withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new SubClassOf(annotations, subClass, superClass);
   }
-  
+
   public SubClassOf withSubClass(hydra.ext.org.w3.owl.syntax.ClassExpression subClass) {
     return new SubClassOf(annotations, subClass, superClass);
   }
-  
+
   public SubClassOf withSuperClass(hydra.ext.org.w3.owl.syntax.ClassExpression superClass) {
     return new SubClassOf(annotations, subClass, superClass);
   }

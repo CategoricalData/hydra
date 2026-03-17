@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class MethodDeclarator implements Serializable, Comparable<MethodDeclarator> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodDeclarator");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public static final hydra.core.Name RECEIVER_PARAMETER = new hydra.core.Name("receiverParameter");
-  
+
   public static final hydra.core.Name FORMAL_PARAMETERS = new hydra.core.Name("formalParameters");
-  
+
   public final hydra.ext.java.syntax.Identifier identifier;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters;
-  
+
   public MethodDeclarator (hydra.ext.java.syntax.Identifier identifier, hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter, hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters) {
     this.identifier = identifier;
     this.receiverParameter = receiverParameter;
     this.formalParameters = formalParameters;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MethodDeclarator)) {
@@ -39,12 +39,12 @@ public class MethodDeclarator implements Serializable, Comparable<MethodDeclarat
       this.formalParameters,
       o.formalParameters);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(identifier) + 3 * java.util.Objects.hashCode(receiverParameter) + 5 * java.util.Objects.hashCode(formalParameters);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MethodDeclarator other) {
@@ -59,15 +59,15 @@ public class MethodDeclarator implements Serializable, Comparable<MethodDeclarat
     }
     return ((Comparable) formalParameters).compareTo(other.formalParameters);
   }
-  
+
   public MethodDeclarator withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new MethodDeclarator(identifier, receiverParameter, formalParameters);
   }
-  
+
   public MethodDeclarator withReceiverParameter(hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter) {
     return new MethodDeclarator(identifier, receiverParameter, formalParameters);
   }
-  
+
   public MethodDeclarator withFormalParameters(hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters) {
     return new MethodDeclarator(identifier, receiverParameter, formalParameters);
   }

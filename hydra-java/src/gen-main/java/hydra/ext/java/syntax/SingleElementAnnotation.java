@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class SingleElementAnnotation implements Serializable, Comparable<SingleElementAnnotation> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.SingleElementAnnotation");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.ext.java.syntax.TypeName name;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.ElementValue> value;
-  
+
   public SingleElementAnnotation (hydra.ext.java.syntax.TypeName name, hydra.util.Maybe<hydra.ext.java.syntax.ElementValue> value) {
     this.name = name;
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof SingleElementAnnotation)) {
@@ -32,12 +32,12 @@ public class SingleElementAnnotation implements Serializable, Comparable<SingleE
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SingleElementAnnotation other) {
@@ -48,11 +48,11 @@ public class SingleElementAnnotation implements Serializable, Comparable<SingleE
     }
     return ((Comparable) value).compareTo(other.value);
   }
-  
+
   public SingleElementAnnotation withName(hydra.ext.java.syntax.TypeName name) {
     return new SingleElementAnnotation(name, value);
   }
-  
+
   public SingleElementAnnotation withValue(hydra.util.Maybe<hydra.ext.java.syntax.ElementValue> value) {
     return new SingleElementAnnotation(name, value);
   }

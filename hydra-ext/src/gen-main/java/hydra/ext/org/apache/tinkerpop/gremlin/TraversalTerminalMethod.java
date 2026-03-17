@@ -6,90 +6,90 @@ import java.io.Serializable;
 
 public abstract class TraversalTerminalMethod implements Serializable, Comparable<TraversalTerminalMethod> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.gremlin.TraversalTerminalMethod");
-  
+
   public static final hydra.core.Name EXPLAIN = new hydra.core.Name("explain");
-  
+
   public static final hydra.core.Name ITERATE = new hydra.core.Name("iterate");
-  
+
   public static final hydra.core.Name HAS_NEXT = new hydra.core.Name("hasNext");
-  
+
   public static final hydra.core.Name TRY_NEXT = new hydra.core.Name("tryNext");
-  
+
   public static final hydra.core.Name NEXT = new hydra.core.Name("next");
-  
+
   public static final hydra.core.Name TO_LIST = new hydra.core.Name("toList");
-  
+
   public static final hydra.core.Name TO_SET = new hydra.core.Name("toSet");
-  
+
   public static final hydra.core.Name TO_BULK_SET = new hydra.core.Name("toBulkSet");
-  
+
   private TraversalTerminalMethod () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Explain instance) ;
-    
+
     R visit(Iterate instance) ;
-    
+
     R visit(HasNext instance) ;
-    
+
     R visit(TryNext instance) ;
-    
+
     R visit(Next instance) ;
-    
+
     R visit(ToList instance) ;
-    
+
     R visit(ToSet instance) ;
-    
+
     R visit(ToBulkSet instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(TraversalTerminalMethod instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Explain instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Iterate instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(HasNext instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(TryNext instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Next instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ToList instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ToSet instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ToBulkSet instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Explain extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalTerminalMethod implements Serializable {
     public Explain () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Explain)) {
@@ -98,12 +98,12 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       Explain o = (Explain) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalTerminalMethod other) {
@@ -113,18 +113,18 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Iterate extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalTerminalMethod implements Serializable {
     public Iterate () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Iterate)) {
@@ -133,12 +133,12 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       Iterate o = (Iterate) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalTerminalMethod other) {
@@ -148,18 +148,18 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class HasNext extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalTerminalMethod implements Serializable {
     public HasNext () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof HasNext)) {
@@ -168,12 +168,12 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       HasNext o = (HasNext) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalTerminalMethod other) {
@@ -183,18 +183,18 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class TryNext extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalTerminalMethod implements Serializable {
     public TryNext () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof TryNext)) {
@@ -203,12 +203,12 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       TryNext o = (TryNext) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalTerminalMethod other) {
@@ -218,20 +218,20 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Next extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalTerminalMethod implements Serializable {
     public final hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.IntegerLiteral> value;
-    
+
     public Next (hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.IntegerLiteral> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Next)) {
@@ -242,12 +242,12 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalTerminalMethod other) {
@@ -258,18 +258,18 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       Next o = (Next) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ToList extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalTerminalMethod implements Serializable {
     public ToList () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ToList)) {
@@ -278,12 +278,12 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       ToList o = (ToList) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalTerminalMethod other) {
@@ -293,18 +293,18 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ToSet extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalTerminalMethod implements Serializable {
     public ToSet () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ToSet)) {
@@ -313,12 +313,12 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       ToSet o = (ToSet) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalTerminalMethod other) {
@@ -328,18 +328,18 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ToBulkSet extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalTerminalMethod implements Serializable {
     public ToBulkSet () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ToBulkSet)) {
@@ -348,12 +348,12 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       ToBulkSet o = (ToBulkSet) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalTerminalMethod other) {
@@ -363,7 +363,7 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

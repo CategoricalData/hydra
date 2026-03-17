@@ -14,7 +14,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Environment for C++ code generation
-data CppEnvironment = 
+data CppEnvironment =
   CppEnvironment {
     -- | Namespace mapping for code generation
     cppEnvironmentNamespaces :: (Module.Namespaces String),

@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class PrefixedName implements Serializable, Comparable<PrefixedName> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.shex.syntax.PrefixedName");
-  
+
   public static final hydra.core.Name PNAME_LN = new hydra.core.Name("PnameLn");
-  
+
   public static final hydra.core.Name PNAME_NS = new hydra.core.Name("PnameNs");
-  
+
   private PrefixedName () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(PnameLn instance) ;
-    
+
     R visit(PnameNs instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(PrefixedName instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(PnameLn instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(PnameNs instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class PnameLn extends hydra.ext.io.shex.syntax.PrefixedName implements Serializable {
     public final hydra.ext.io.shex.syntax.PnameLn value;
-    
+
     public PnameLn (hydra.ext.io.shex.syntax.PnameLn value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof PnameLn)) {
@@ -54,12 +54,12 @@ public abstract class PrefixedName implements Serializable, Comparable<PrefixedN
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PrefixedName other) {
@@ -70,20 +70,20 @@ public abstract class PrefixedName implements Serializable, Comparable<PrefixedN
       PnameLn o = (PnameLn) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class PnameNs extends hydra.ext.io.shex.syntax.PrefixedName implements Serializable {
     public final hydra.ext.io.shex.syntax.PnameNs value;
-    
+
     public PnameNs (hydra.ext.io.shex.syntax.PnameNs value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof PnameNs)) {
@@ -94,12 +94,12 @@ public abstract class PrefixedName implements Serializable, Comparable<PrefixedN
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PrefixedName other) {
@@ -110,7 +110,7 @@ public abstract class PrefixedName implements Serializable, Comparable<PrefixedN
       PnameNs o = (PnameNs) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

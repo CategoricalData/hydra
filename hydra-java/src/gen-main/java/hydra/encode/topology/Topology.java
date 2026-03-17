@@ -14,7 +14,7 @@ public interface Topology {
         xs))),
       m));
   }
-  
+
   static hydra.core.Term tarjanState(hydra.topology.TarjanState x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.topology.TarjanState"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("counter"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32((x).counter)))),
@@ -38,7 +38,7 @@ public interface Topology {
           xs2))),
         (x).sccs))))));
   }
-  
+
   static hydra.core.Term vertex(Integer x) {
     return new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(x)));
   }

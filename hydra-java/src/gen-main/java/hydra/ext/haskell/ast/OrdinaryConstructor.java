@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class OrdinaryConstructor implements Serializable, Comparable<OrdinaryConstructor> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.OrdinaryConstructor");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name FIELDS = new hydra.core.Name("fields");
-  
+
   /**
    * The name of the constructor
    */
   public final hydra.ext.haskell.ast.Name name;
-  
+
   /**
    * The types of the positional fields
    */
   public final hydra.util.ConsList<hydra.ext.haskell.ast.Type> fields;
-  
+
   public OrdinaryConstructor (hydra.ext.haskell.ast.Name name, hydra.util.ConsList<hydra.ext.haskell.ast.Type> fields) {
     this.name = name;
     this.fields = fields;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof OrdinaryConstructor)) {
@@ -41,12 +41,12 @@ public class OrdinaryConstructor implements Serializable, Comparable<OrdinaryCon
       this.fields,
       o.fields);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(fields);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(OrdinaryConstructor other) {
@@ -57,11 +57,11 @@ public class OrdinaryConstructor implements Serializable, Comparable<OrdinaryCon
     }
     return ((Comparable) fields).compareTo(other.fields);
   }
-  
+
   public OrdinaryConstructor withName(hydra.ext.haskell.ast.Name name) {
     return new OrdinaryConstructor(name, fields);
   }
-  
+
   public OrdinaryConstructor withFields(hydra.util.ConsList<hydra.ext.haskell.ast.Type> fields) {
     return new OrdinaryConstructor(name, fields);
   }

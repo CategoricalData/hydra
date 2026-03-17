@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class NormalizeTypeVariablesTestCase implements Serializable, Comparable<NormalizeTypeVariablesTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.NormalizeTypeVariablesTestCase");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
-  
+
   /**
    * The term with type annotations to normalize
    */
   public final hydra.core.Term input;
-  
+
   /**
    * The expected term with normalized type variable names
    */
   public final hydra.core.Term output;
-  
+
   public NormalizeTypeVariablesTestCase (hydra.core.Term input, hydra.core.Term output) {
     this.input = input;
     this.output = output;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof NormalizeTypeVariablesTestCase)) {
@@ -41,12 +41,12 @@ public class NormalizeTypeVariablesTestCase implements Serializable, Comparable<
       this.output,
       o.output);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(output);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NormalizeTypeVariablesTestCase other) {
@@ -57,11 +57,11 @@ public class NormalizeTypeVariablesTestCase implements Serializable, Comparable<
     }
     return ((Comparable) output).compareTo(other.output);
   }
-  
+
   public NormalizeTypeVariablesTestCase withInput(hydra.core.Term input) {
     return new NormalizeTypeVariablesTestCase(input, output);
   }
-  
+
   public NormalizeTypeVariablesTestCase withOutput(hydra.core.Term output) {
     return new NormalizeTypeVariablesTestCase(input, output);
   }

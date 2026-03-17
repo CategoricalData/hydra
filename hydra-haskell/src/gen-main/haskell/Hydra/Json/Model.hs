@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A JSON value
-data Value = 
+data Value =
   -- | A JSON array
   ValueArray [Value] |
   -- | A boolean value

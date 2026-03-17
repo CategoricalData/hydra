@@ -14,7 +14,7 @@ public interface Typing {
       "\u2261",
       hydra.show.core.Core.type(rtyp)));
   }
-  
+
   static String typeSubst(hydra.typing.TypeSubst ts) {
     hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> subst = (ts).value;
     hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>> pairs = new hydra.util.Lazy<>(() -> hydra.lib.maps.ToList.apply(subst));

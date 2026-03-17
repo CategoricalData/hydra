@@ -6,122 +6,122 @@ import java.io.Serializable;
 
 public abstract class AssignmentOperator implements Serializable, Comparable<AssignmentOperator> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.AssignmentOperator");
-  
+
   public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
-  
+
   public static final hydra.core.Name TIMES = new hydra.core.Name("times");
-  
+
   public static final hydra.core.Name DIV = new hydra.core.Name("div");
-  
+
   public static final hydra.core.Name MOD = new hydra.core.Name("mod");
-  
+
   public static final hydra.core.Name PLUS = new hydra.core.Name("plus");
-  
+
   public static final hydra.core.Name MINUS = new hydra.core.Name("minus");
-  
+
   public static final hydra.core.Name SHIFT_LEFT = new hydra.core.Name("shiftLeft");
-  
+
   public static final hydra.core.Name SHIFT_RIGHT = new hydra.core.Name("shiftRight");
-  
+
   public static final hydra.core.Name SHIFT_RIGHT_ZERO_FILL = new hydra.core.Name("shiftRightZeroFill");
-  
+
   public static final hydra.core.Name AND = new hydra.core.Name("and");
-  
+
   public static final hydra.core.Name XOR = new hydra.core.Name("xor");
-  
+
   public static final hydra.core.Name OR = new hydra.core.Name("or");
-  
+
   private AssignmentOperator () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Simple instance) ;
-    
+
     R visit(Times instance) ;
-    
+
     R visit(Div instance) ;
-    
+
     R visit(Mod instance) ;
-    
+
     R visit(Plus instance) ;
-    
+
     R visit(Minus instance) ;
-    
+
     R visit(ShiftLeft instance) ;
-    
+
     R visit(ShiftRight instance) ;
-    
+
     R visit(ShiftRightZeroFill instance) ;
-    
+
     R visit(And instance) ;
-    
+
     R visit(Xor instance) ;
-    
+
     R visit(Or instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(AssignmentOperator instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Simple instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Times instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Div instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Mod instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Plus instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Minus instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ShiftLeft instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ShiftRight instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(ShiftRightZeroFill instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(And instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Xor instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Or instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Simple extends hydra.ext.java.syntax.AssignmentOperator implements Serializable {
     public Simple () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Simple)) {
@@ -130,12 +130,12 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       Simple o = (Simple) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AssignmentOperator other) {
@@ -145,18 +145,18 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Times extends hydra.ext.java.syntax.AssignmentOperator implements Serializable {
     public Times () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Times)) {
@@ -165,12 +165,12 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       Times o = (Times) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AssignmentOperator other) {
@@ -180,18 +180,18 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Div extends hydra.ext.java.syntax.AssignmentOperator implements Serializable {
     public Div () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Div)) {
@@ -200,12 +200,12 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       Div o = (Div) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AssignmentOperator other) {
@@ -215,18 +215,18 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Mod extends hydra.ext.java.syntax.AssignmentOperator implements Serializable {
     public Mod () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Mod)) {
@@ -235,12 +235,12 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       Mod o = (Mod) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AssignmentOperator other) {
@@ -250,18 +250,18 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Plus extends hydra.ext.java.syntax.AssignmentOperator implements Serializable {
     public Plus () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Plus)) {
@@ -270,12 +270,12 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       Plus o = (Plus) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AssignmentOperator other) {
@@ -285,18 +285,18 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Minus extends hydra.ext.java.syntax.AssignmentOperator implements Serializable {
     public Minus () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Minus)) {
@@ -305,12 +305,12 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       Minus o = (Minus) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AssignmentOperator other) {
@@ -320,18 +320,18 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ShiftLeft extends hydra.ext.java.syntax.AssignmentOperator implements Serializable {
     public ShiftLeft () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ShiftLeft)) {
@@ -340,12 +340,12 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       ShiftLeft o = (ShiftLeft) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AssignmentOperator other) {
@@ -355,18 +355,18 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ShiftRight extends hydra.ext.java.syntax.AssignmentOperator implements Serializable {
     public ShiftRight () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ShiftRight)) {
@@ -375,12 +375,12 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       ShiftRight o = (ShiftRight) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AssignmentOperator other) {
@@ -390,18 +390,18 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class ShiftRightZeroFill extends hydra.ext.java.syntax.AssignmentOperator implements Serializable {
     public ShiftRightZeroFill () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof ShiftRightZeroFill)) {
@@ -410,12 +410,12 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       ShiftRightZeroFill o = (ShiftRightZeroFill) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AssignmentOperator other) {
@@ -425,18 +425,18 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class And extends hydra.ext.java.syntax.AssignmentOperator implements Serializable {
     public And () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof And)) {
@@ -445,12 +445,12 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       And o = (And) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AssignmentOperator other) {
@@ -460,18 +460,18 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Xor extends hydra.ext.java.syntax.AssignmentOperator implements Serializable {
     public Xor () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Xor)) {
@@ -480,12 +480,12 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       Xor o = (Xor) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AssignmentOperator other) {
@@ -495,18 +495,18 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Or extends hydra.ext.java.syntax.AssignmentOperator implements Serializable {
     public Or () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Or)) {
@@ -515,12 +515,12 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       Or o = (Or) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AssignmentOperator other) {
@@ -530,7 +530,7 @@ public abstract class AssignmentOperator implements Serializable, Comparable<Ass
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

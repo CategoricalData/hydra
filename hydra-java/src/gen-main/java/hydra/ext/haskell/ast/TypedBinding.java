@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class TypedBinding implements Serializable, Comparable<TypedBinding> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.TypedBinding");
-  
+
   public static final hydra.core.Name TYPE_SIGNATURE = new hydra.core.Name("typeSignature");
-  
+
   public static final hydra.core.Name VALUE_BINDING = new hydra.core.Name("valueBinding");
-  
+
   /**
    * The type signature
    */
   public final hydra.ext.haskell.ast.TypeSignature typeSignature;
-  
+
   /**
    * The value binding
    */
   public final hydra.ext.haskell.ast.ValueBinding valueBinding;
-  
+
   public TypedBinding (hydra.ext.haskell.ast.TypeSignature typeSignature, hydra.ext.haskell.ast.ValueBinding valueBinding) {
     this.typeSignature = typeSignature;
     this.valueBinding = valueBinding;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TypedBinding)) {
@@ -41,12 +41,12 @@ public class TypedBinding implements Serializable, Comparable<TypedBinding> {
       this.valueBinding,
       o.valueBinding);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(typeSignature) + 3 * java.util.Objects.hashCode(valueBinding);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TypedBinding other) {
@@ -57,11 +57,11 @@ public class TypedBinding implements Serializable, Comparable<TypedBinding> {
     }
     return ((Comparable) valueBinding).compareTo(other.valueBinding);
   }
-  
+
   public TypedBinding withTypeSignature(hydra.ext.haskell.ast.TypeSignature typeSignature) {
     return new TypedBinding(typeSignature, valueBinding);
   }
-  
+
   public TypedBinding withValueBinding(hydra.ext.haskell.ast.ValueBinding valueBinding) {
     return new TypedBinding(typeSignature, valueBinding);
   }

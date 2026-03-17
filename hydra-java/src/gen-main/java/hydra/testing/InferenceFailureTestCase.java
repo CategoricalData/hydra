@@ -9,18 +9,18 @@ import java.io.Serializable;
  */
 public class InferenceFailureTestCase implements Serializable, Comparable<InferenceFailureTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.InferenceFailureTestCase");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   /**
    * The term for which inference should fail
    */
   public final hydra.core.Term input;
-  
+
   public InferenceFailureTestCase (hydra.core.Term input) {
     this.input = input;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof InferenceFailureTestCase)) {
@@ -31,12 +31,12 @@ public class InferenceFailureTestCase implements Serializable, Comparable<Infere
       this.input,
       o.input);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(input);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InferenceFailureTestCase other) {

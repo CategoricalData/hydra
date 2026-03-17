@@ -40,12 +40,12 @@ T0 = TypeVar("T0")
 
 def bind_constraints(flow_cx: hydra.context.Context, cx: hydra.graph.Graph, constraints: frozenlist[hydra.typing.TypeConstraint]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.TypeSubst]:
     r"""Unify type constraints and check the substitution."""
-    
+
     return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _ic: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_ic.object.message))), _ic.context)), (lambda _a: _a), hydra.unification.unify_type_constraints(flow_cx, cx.schema_types, constraints)), (lambda s: hydra.lib.eithers.bind(hydra.checking.check_type_subst(flow_cx, cx, s), (lambda _: Right(s)))))
 
 def bind_unbound_type_variables(cx: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.core.Term:
     r"""Place unbound type variables appearing anywhere under a typed let binding in the type scheme of that binding. These variables may appear in the binding type scheme itself or in that of a subterm, in domain types attached to functions, and in type abstraction and type application terms. This process attempts to capture type variables which have escaped unification, e.g. due to unused code. However, unbound type variables not appearing beneath any typed let binding remain unbound."""
-    
+
     @lru_cache(1)
     def svars() -> frozenset[hydra.core.Name]:
         return hydra.lib.sets.from_list(hydra.lib.maps.keys(cx.schema_types))
@@ -57,24 +57,24 @@ def bind_unbound_type_variables(cx: hydra.graph.Graph, term0: hydra.core.Term) -
                     bterm = b.term
                     return hydra.lib.maybes.maybe((lambda : hydra.core.Binding(bname, bind_unbound_type_variables(cx, bterm), Nothing())), (lambda ts: (bvars := hydra.lib.sets.from_list(ts.variables), unbound_in_type := hydra.rewriting.free_variables_in_type(ts.type), unbound_in_term := hydra.rewriting.free_type_variables_in_term(bterm), unbound := hydra.lib.sets.to_list(hydra.lib.sets.difference(hydra.lib.sets.union(unbound_in_type, unbound_in_term), hydra.lib.sets.union(svars(), bvars))), ts2 := hydra.core.TypeScheme(hydra.lib.lists.concat2(ts.variables, unbound), ts.type, ts.constraints), bterm2 := hydra.lib.lists.foldl((lambda t, v: cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(v, t)))), bterm, unbound), hydra.core.Binding(bname, bterm2, Just(ts2)))[6]), b.type)
                 return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map((lambda x1: for_binding(x1)), l.bindings), bind_unbound_type_variables(cx, l.body))))
-            
+
             case _:
                 return recurse(term)
     return hydra.rewriting.rewrite_term((lambda x1, x2: rewrite(x1, x2)), term0)
 
 def build_type_application_term(tvars: frozenlist[hydra.core.Name], body: hydra.core.Term) -> hydra.core.Term:
     r"""Fold a list of type variables over a term to build a type application term."""
-    
+
     return hydra.lib.lists.foldl((lambda t, v: cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(t, cast(hydra.core.Type, hydra.core.TypeVariable(v)))))), body, tvars)
 
 def extend_context(pairs: frozenlist[tuple[hydra.core.Name, hydra.core.TypeScheme]], cx: hydra.graph.Graph) -> hydra.graph.Graph:
     r"""Add (term variable, type scheme) pairs to the graph's bound types."""
-    
+
     return hydra.graph.Graph(cx.bound_terms, hydra.lib.maps.union(hydra.lib.maps.from_list(pairs), cx.bound_types), cx.class_constraints, cx.lambda_variables, cx.metadata, cx.primitives, cx.schema_types, cx.type_variables)
 
 def finalize_inferred_term(flow_cx: hydra.context.Context, cx: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
     r"""Finalize an inferred term by checking for unbound type variables, then normalizing type variables."""
-    
+
     @lru_cache(1)
     def term2() -> hydra.core.Term:
         return bind_unbound_type_variables(cx, term)
@@ -82,12 +82,12 @@ def finalize_inferred_term(flow_cx: hydra.context.Context, cx: hydra.graph.Graph
 
 def merge_class_constraints(m1: FrozenDict[T0, hydra.core.TypeVariableMetadata], m2: FrozenDict[T0, hydra.core.TypeVariableMetadata]) -> FrozenDict[T0, hydra.core.TypeVariableMetadata]:
     r"""Merge two maps of class constraints. When both maps have constraints for the same variable, union the class sets."""
-    
+
     return hydra.lib.lists.foldl((lambda acc, pair: (k := hydra.lib.pairs.first(pair), v := hydra.lib.pairs.second(pair), hydra.lib.maybes.maybe((lambda : hydra.lib.maps.insert(k, v, acc)), (lambda existing: (merged := hydra.core.TypeVariableMetadata(hydra.lib.sets.union(existing.classes, v.classes)), hydra.lib.maps.insert(k, merged, acc))[1]), hydra.lib.maps.lookup(k, acc)))[2]), m1, hydra.lib.maps.to_list(m2))
 
 def fresh_variable_type(cx: hydra.context.Context) -> tuple[hydra.core.Type, hydra.context.Context]:
     r"""Generate a fresh type variable."""
-    
+
     @lru_cache(1)
     def result() -> tuple[hydra.core.Name, hydra.context.Context]:
         return hydra.schemas.fresh_name(cx)
@@ -101,7 +101,7 @@ def fresh_variable_type(cx: hydra.context.Context) -> tuple[hydra.core.Type, hyd
 
 def yield_checked(fcx: hydra.context.Context, term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst) -> hydra.typing.InferenceResult:
     r"""Create a checked inference result."""
-    
+
     @lru_cache(1)
     def iterm() -> hydra.core.Term:
         return hydra.substitution.subst_types_in_term(subst, term)
@@ -112,39 +112,39 @@ def yield_checked(fcx: hydra.context.Context, term: hydra.core.Term, typ: hydra.
 
 def map_constraints(flow_cx: hydra.context.Context, cx: hydra.graph.Graph, f: Callable[[hydra.typing.TypeSubst], T0], constraints: frozenlist[hydra.typing.TypeConstraint]) -> Either[hydra.context.InContext[hydra.error.Error], T0]:
     r"""Map over type constraints after unification."""
-    
+
     return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _ic: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_ic.object.message))), _ic.context)), (lambda _a: _a), hydra.unification.unify_type_constraints(flow_cx, cx.schema_types, constraints)), (lambda s: hydra.lib.eithers.bind(hydra.checking.check_type_subst(flow_cx, cx, s), (lambda _: Right(f(s))))))
 
 def yield_with_constraints(fcx: hydra.context.Context, term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst, constraints: FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]) -> hydra.typing.InferenceResult:
     r"""Create an inference result with class constraints."""
-    
+
     return hydra.typing.InferenceResult(hydra.substitution.subst_types_in_term(subst, term), hydra.substitution.subst_in_type(subst, typ), subst, constraints, fcx)
 
 def yield_(fcx: hydra.context.Context, term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst) -> hydra.typing.InferenceResult:
     r"""Create an inference result with no class constraints."""
-    
+
     return hydra.typing.InferenceResult(hydra.substitution.subst_types_in_term(subst, term), hydra.substitution.subst_in_type(subst, typ), subst, hydra.lib.maps.empty(), fcx)
 
 def infer_type_of_projection(fcx: hydra.context.Context, cx: hydra.graph.Graph, proj: hydra.core.Projection) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a record projection (Either version)."""
-    
+
     tname = proj.type_name
     fname = proj.field
     return hydra.lib.eithers.bind(hydra.schemas.require_schema_type(fcx, cx.schema_types, tname), (lambda st_rp: (schema_type := hydra.lib.pairs.first(st_rp), fcx2 := hydra.lib.pairs.second(st_rp), svars := schema_type.variables, stype := schema_type.type, hydra.lib.eithers.bind(hydra.extract.core.record_type(fcx2, tname, stype), (lambda sfields: hydra.lib.eithers.bind(hydra.schemas.find_field_type(fcx2, fname, sfields), (lambda ftyp: Right(yield_(fcx2, build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(tname, fname)))))))), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(hydra.schemas.nominal_application(tname, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), ftyp))), hydra.substitution.id_type_subst())))))))[4]))
 
 def infer_type_of_unwrap(fcx: hydra.context.Context, cx: hydra.graph.Graph, tname: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of an unwrap operation (Either version)."""
-    
+
     return hydra.lib.eithers.bind(hydra.schemas.require_schema_type(fcx, cx.schema_types, tname), (lambda st_rp: (schema_type := hydra.lib.pairs.first(st_rp), fcx2 := hydra.lib.pairs.second(st_rp), svars := schema_type.variables, stype := schema_type.type, hydra.lib.eithers.bind(hydra.extract.core.wrapped_type(fcx2, tname, stype), (lambda wtyp: Right(yield_(fcx2, build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(tname))))))), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(hydra.schemas.nominal_application(tname, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), wtyp))), hydra.substitution.id_type_subst())))))[4]))
 
 def free_variables_in_context(cx: hydra.graph.Graph) -> frozenset[hydra.core.Name]:
     r"""Get all free variables in a graph's bound types."""
-    
+
     return hydra.lib.lists.foldl((lambda x1, x2: hydra.lib.sets.union(x1, x2)), hydra.lib.sets.empty(), hydra.lib.lists.map((lambda x1: hydra.rewriting.free_variables_in_type_scheme_simple(x1)), hydra.lib.maps.elems(cx.bound_types)))
 
 def yield_checked_with_constraints(fcx: hydra.context.Context, term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst, constraints: FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]) -> hydra.typing.InferenceResult:
     r"""Create a checked inference result with class constraints."""
-    
+
     @lru_cache(1)
     def iterm() -> hydra.core.Term:
         return hydra.substitution.subst_types_in_term(subst, term)
@@ -158,17 +158,17 @@ def yield_checked_with_constraints(fcx: hydra.context.Context, term: hydra.core.
 
 def infer_type_of_primitive(fcx: hydra.context.Context, cx: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a primitive function (Either version)."""
-    
+
     return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("No such primitive: ", name.value)))), fcx))), (lambda scheme: (ts_result := hydra.schemas.instantiate_type_scheme(fcx, scheme), ts := hydra.lib.pairs.first(ts_result), fcx2 := hydra.lib.pairs.second(ts_result), constraints := hydra.lib.maybes.from_maybe((lambda : hydra.lib.maps.empty()), ts.constraints), Right(yield_checked_with_constraints(fcx2, build_type_application_term(ts.variables, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(name))))), ts.type, hydra.substitution.id_type_subst(), constraints)))[4]), hydra.lib.maybes.map((lambda v1: v1.type), hydra.lib.maps.lookup(name, cx.primitives)))
 
 def is_unbound(cx: hydra.graph.Graph, v: hydra.core.Name) -> bool:
     r"""Check if a variable is unbound in context."""
-    
+
     return hydra.lib.logic.and_(hydra.lib.logic.not_(hydra.lib.sets.member(v, free_variables_in_context(cx))), hydra.lib.logic.not_(hydra.lib.maps.member(v, cx.schema_types)))
 
 def generalize(cx: hydra.graph.Graph, typ: hydra.core.Type) -> hydra.core.TypeScheme:
     r"""Generalize a type to a type scheme."""
-    
+
     def is_type_var_name(name: hydra.core.Name) -> bool:
         @lru_cache(1)
         def parts() -> frozenlist[str]:
@@ -188,22 +188,22 @@ def generalize(cx: hydra.graph.Graph, typ: hydra.core.Type) -> hydra.core.TypeSc
 
 def infer_type_of_literal(fcx: hydra.context.Context, lit: hydra.core.Literal) -> hydra.typing.InferenceResult:
     r"""Infer the type of a literal."""
-    
+
     return hydra.typing.InferenceResult(cast(hydra.core.Term, hydra.core.TermLiteral(lit)), cast(hydra.core.Type, hydra.core.TypeLiteral(hydra.reflect.literal_type(lit))), hydra.substitution.id_type_subst(), hydra.lib.maps.empty(), fcx)
 
 def infer_type_of_unit(fcx: hydra.context.Context) -> hydra.typing.InferenceResult:
     r"""The trivial inference rule for the unit term."""
-    
+
     return hydra.typing.InferenceResult(cast(hydra.core.Term, hydra.core.TermUnit()), cast(hydra.core.Type, hydra.core.TypeUnit()), hydra.substitution.id_type_subst(), hydra.lib.maps.empty(), fcx)
 
 def infer_type_of_variable(fcx: hydra.context.Context, cx: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a variable (Either version)."""
-    
+
     return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("Variable not bound to type: ", name.value)))), fcx))), (lambda scheme: (ts_result := hydra.schemas.instantiate_type_scheme(fcx, scheme), ts := hydra.lib.pairs.first(ts_result), fcx2 := hydra.lib.pairs.second(ts_result), constraints := hydra.lib.maybes.from_maybe((lambda : hydra.lib.maps.empty()), ts.constraints), Right(hydra.typing.InferenceResult(build_type_application_term(ts.variables, cast(hydra.core.Term, hydra.core.TermVariable(name))), ts.type, hydra.substitution.id_type_subst(), constraints, fcx2)))[4]), hydra.lib.maps.lookup(name, cx.bound_types))
 
 def infer_many(fcx: hydra.context.Context, cx: hydra.graph.Graph, pairs: frozenlist[tuple[hydra.core.Term, str]]) -> Either[hydra.context.InContext[hydra.error.Error], tuple[tuple[frozenlist[hydra.core.Term], tuple[frozenlist[hydra.core.Type], tuple[hydra.typing.TypeSubst, FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]]]], hydra.context.Context]]:
     r"""Infer types for multiple terms, propagating class constraints from sub-expressions."""
-    
+
     @lru_cache(1)
     def dflt() -> Either[hydra.context.InContext[hydra.error.Error], tuple[tuple[frozenlist[hydra.core.Term], tuple[frozenlist[hydra.core.Type], tuple[hydra.typing.TypeSubst, FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]]]], hydra.context.Context]]:
         @lru_cache(1)
@@ -220,14 +220,14 @@ def infer_many(fcx: hydra.context.Context, cx: hydra.graph.Graph, pairs: frozenl
 
 def infer_type_of_annotated_term(fcx: hydra.context.Context, cx: hydra.graph.Graph, at: hydra.core.AnnotatedTerm) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of an annotated term (Either version)."""
-    
+
     term = at.body
     ann = at.annotation
     return hydra.lib.eithers.bind(infer_type_of_term(fcx, cx, term, "annotated term"), (lambda result: (fcx2 := result.context, iterm := result.term, itype := result.type, isubst := result.subst, iconstraints := result.class_constraints, Right(hydra.typing.InferenceResult(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(iterm, ann))), itype, isubst, iconstraints, fcx2)))[5]))
 
 def infer_type_of_application(fcx0: hydra.context.Context, cx: hydra.graph.Graph, app: hydra.core.Application) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a function application (Either version)."""
-    
+
     @lru_cache(1)
     def fcx() -> hydra.context.Context:
         return hydra.context.Context(hydra.lib.lists.cons("application", fcx0.trace), fcx0.messages, fcx0.other)
@@ -237,7 +237,7 @@ def infer_type_of_application(fcx0: hydra.context.Context, cx: hydra.graph.Graph
 
 def infer_type_of_case_statement(fcx: hydra.context.Context, cx: hydra.graph.Graph, case_stmt: hydra.core.CaseStatement) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a case statement (Either version)."""
-    
+
     tname = case_stmt.type_name
     dflt = case_stmt.default
     cases = case_stmt.cases
@@ -248,7 +248,7 @@ def infer_type_of_case_statement(fcx: hydra.context.Context, cx: hydra.graph.Gra
 
 def infer_type_of_collection(fcx: hydra.context.Context, cx: hydra.graph.Graph, typ_cons: Callable[[hydra.core.Type], hydra.core.Type], trm_cons: Callable[[frozenlist[hydra.core.Term]], hydra.core.Term], desc: str, class_names: frozenset[hydra.core.Name], els: frozenlist[hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy."""
-    
+
     @lru_cache(1)
     def var_result() -> tuple[hydra.core.Name, hydra.context.Context]:
         return hydra.schemas.fresh_name(fcx)
@@ -265,44 +265,44 @@ def infer_type_of_collection(fcx: hydra.context.Context, cx: hydra.graph.Graph, 
 
 def infer_type_of_either(fcx: hydra.context.Context, cx: hydra.graph.Graph, e: Either[hydra.core.Term, hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of an either value (Either version)."""
-    
+
     return hydra.lib.eithers.either((lambda l: hydra.lib.eithers.bind(infer_type_of_term(fcx, cx, l, "either left value"), (lambda r1: (fcx2 := r1.context, iterm := r1.term, left_type := r1.type, subst := r1.subst, fv_result := fresh_variable_type(fcx2), right_type := hydra.lib.pairs.first(fv_result), fcx3 := hydra.lib.pairs.second(fv_result), either_term := cast(hydra.core.Term, hydra.core.TermEither(Left(iterm))), term_with_left_type := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(either_term, left_type))), term_with_both_types := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(term_with_left_type, right_type))), either_type := cast(hydra.core.Type, hydra.core.TypeEither(hydra.core.EitherType(left_type, right_type))), Right(yield_checked(fcx3, term_with_both_types, either_type, subst)))[11]))), (lambda r: hydra.lib.eithers.bind(infer_type_of_term(fcx, cx, r, "either right value"), (lambda r1: (fcx2 := r1.context, iterm := r1.term, right_type := r1.type, subst := r1.subst, fv_result := fresh_variable_type(fcx2), left_type := hydra.lib.pairs.first(fv_result), fcx3 := hydra.lib.pairs.second(fv_result), either_term := cast(hydra.core.Term, hydra.core.TermEither(Right(iterm))), term_with_left_type := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(either_term, left_type))), term_with_both_types := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(term_with_left_type, right_type))), either_type := cast(hydra.core.Type, hydra.core.TypeEither(hydra.core.EitherType(left_type, right_type))), Right(yield_checked(fcx3, term_with_both_types, either_type, subst)))[11]))), e)
 
 def infer_type_of_elimination(fcx: hydra.context.Context, cx: hydra.graph.Graph, elm: hydra.core.Elimination) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of an elimination (Either version)."""
-    
+
     match elm:
         case hydra.core.EliminationRecord(value=p):
             return infer_type_of_projection(fcx, cx, p)
-        
+
         case hydra.core.EliminationUnion(value=c):
             return infer_type_of_case_statement(fcx, cx, c)
-        
+
         case hydra.core.EliminationWrap(value=tname):
             return infer_type_of_unwrap(fcx, cx, tname)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
 def infer_type_of_function(fcx: hydra.context.Context, cx: hydra.graph.Graph, f: hydra.core.Function) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a function (Either version)."""
-    
+
     match f:
         case hydra.core.FunctionElimination(value=elm):
             return infer_type_of_elimination(fcx, cx, elm)
-        
+
         case hydra.core.FunctionLambda(value=l):
             return infer_type_of_lambda(fcx, cx, l)
-        
+
         case hydra.core.FunctionPrimitive(value=name):
             return infer_type_of_primitive(fcx, cx, name)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
 def infer_type_of_injection(fcx: hydra.context.Context, cx: hydra.graph.Graph, injection: hydra.core.Injection) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a union injection (Either version)."""
-    
+
     tname = injection.type_name
     field = injection.field
     fname = field.name
@@ -311,7 +311,7 @@ def infer_type_of_injection(fcx: hydra.context.Context, cx: hydra.graph.Graph, i
 
 def infer_type_of_lambda(fcx: hydra.context.Context, cx: hydra.graph.Graph, lambda_: hydra.core.Lambda) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a lambda function (Either version)."""
-    
+
     var = lambda_.parameter
     body = lambda_.body
     @lru_cache(1)
@@ -333,7 +333,7 @@ def infer_type_of_lambda(fcx: hydra.context.Context, cx: hydra.graph.Graph, lamb
 
 def infer_type_of_let(fcx0: hydra.context.Context, cx: hydra.graph.Graph, let0: hydra.core.Let) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Normalize a let term before inferring its type (Either version)."""
-    
+
     @lru_cache(1)
     def fcx() -> hydra.context.Context:
         return hydra.context.Context(hydra.lib.lists.cons("let", fcx0.trace), fcx0.messages, fcx0.other)
@@ -371,7 +371,7 @@ def infer_type_of_let(fcx0: hydra.context.Context, cx: hydra.graph.Graph, let0: 
                         bs = l.bindings
                         let_body = l.body
                         return helper(hydra.lib.math.sub(level, 1), hydra.lib.lists.concat((bs, bins)), let_body)
-                    
+
                     case _:
                         raise TypeError("Unsupported Term")
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(level, 0), (lambda : (bins, term)), (lambda : nonzero(term)))
@@ -400,14 +400,14 @@ def infer_type_of_let(fcx0: hydra.context.Context, cx: hydra.graph.Graph, let0: 
         match rewritten_let():
             case hydra.core.TermLet(value=l):
                 return infer_type_of_let_normalized(fcx(), cx, l)
-            
+
             case _:
                 return infer_type_of_term(fcx(), cx, rewritten_let(), "empty let term")
     return hydra.lib.eithers.map((lambda x1: rewrite_result(x1)), res())
 
 def infer_type_of_let_normalized(fcx0: hydra.context.Context, cx0: hydra.graph.Graph, let_term: hydra.core.Let) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a let (letrec) term which is already in a normal form (Either version)."""
-    
+
     @lru_cache(1)
     def fcx() -> hydra.context.Context:
         return hydra.context.Context(hydra.lib.lists.cons("let-normalized", fcx0.trace), fcx0.messages, fcx0.other)
@@ -435,12 +435,12 @@ def infer_type_of_let_normalized(fcx0: hydra.context.Context, cx0: hydra.graph.G
 
 def infer_type_of_list(fcx: hydra.context.Context, cx: hydra.graph.Graph, v1: frozenlist[hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a list (Either version)."""
-    
+
     return infer_type_of_collection(fcx, cx, (lambda x: cast(hydra.core.Type, hydra.core.TypeList(x))), (lambda x: cast(hydra.core.Term, hydra.core.TermList(x))), "list element", hydra.lib.sets.empty(), v1)
 
 def infer_type_of_map(fcx: hydra.context.Context, cx: hydra.graph.Graph, m: FrozenDict[hydra.core.Term, hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a map (Either version)."""
-    
+
     @lru_cache(1)
     def kvar_result() -> tuple[hydra.core.Name, hydra.context.Context]:
         return hydra.schemas.fresh_name(fcx)
@@ -466,19 +466,19 @@ def infer_type_of_map(fcx: hydra.context.Context, cx: hydra.graph.Graph, m: Froz
 
 def infer_type_of_optional(fcx: hydra.context.Context, cx: hydra.graph.Graph, m: Maybe[hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of an optional (Either version)."""
-    
+
     def trm_cons(terms: frozenlist[hydra.core.Term]) -> hydra.core.Term:
         return hydra.lib.logic.if_else(hydra.lib.lists.null(terms), (lambda : cast(hydra.core.Term, hydra.core.TermMaybe(Nothing()))), (lambda : cast(hydra.core.Term, hydra.core.TermMaybe(Just(hydra.lib.lists.head(terms))))))
     return infer_type_of_collection(fcx, cx, (lambda x: cast(hydra.core.Type, hydra.core.TypeMaybe(x))), (lambda x1: trm_cons(x1)), "optional element", hydra.lib.sets.empty(), hydra.lib.maybes.maybe((lambda : ()), (lambda x1: hydra.lib.lists.singleton(x1)), m))
 
 def infer_type_of_pair(fcx: hydra.context.Context, cx: hydra.graph.Graph, p: tuple[hydra.core.Term, hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a pair (Either version)."""
-    
+
     return hydra.lib.eithers.bind(infer_many(fcx, cx, ((hydra.lib.pairs.first(p), "pair first element"), (hydra.lib.pairs.second(p), "pair second element"))), (lambda rp: (results := hydra.lib.pairs.first(rp), fcx2 := hydra.lib.pairs.second(rp), iterms := hydra.lib.pairs.first(results), itypes := hydra.lib.pairs.first(hydra.lib.pairs.second(results)), isubst := hydra.lib.pairs.first(hydra.lib.pairs.second(hydra.lib.pairs.second(results))), pair_elem_constraints := hydra.lib.pairs.second(hydra.lib.pairs.second(hydra.lib.pairs.second(results))), ifst := hydra.lib.lists.head(iterms), isnd := hydra.lib.lists.head(hydra.lib.lists.tail(iterms)), ty_fst := hydra.lib.lists.head(itypes), ty_snd := hydra.lib.lists.head(hydra.lib.lists.tail(itypes)), pair_term := cast(hydra.core.Term, hydra.core.TermPair((ifst, isnd))), term_with_types := cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(pair_term, ty_fst))), ty_snd))), Right(yield_with_constraints(fcx2, term_with_types, cast(hydra.core.Type, hydra.core.TypePair(hydra.core.PairType(ty_fst, ty_snd))), isubst, pair_elem_constraints)))[12]))
 
 def infer_type_of_record(fcx: hydra.context.Context, cx: hydra.graph.Graph, record: hydra.core.Record) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a record (Either version)."""
-    
+
     tname = record.type_name
     fields = record.fields
     @lru_cache(1)
@@ -488,93 +488,93 @@ def infer_type_of_record(fcx: hydra.context.Context, cx: hydra.graph.Graph, reco
 
 def infer_type_of_set(fcx: hydra.context.Context, cx: hydra.graph.Graph, s: frozenset[hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a set (Either version)."""
-    
+
     return infer_type_of_collection(fcx, cx, (lambda x: cast(hydra.core.Type, hydra.core.TypeSet(x))), (lambda terms: cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list(terms)))), "set element", hydra.lib.sets.singleton(hydra.core.Name("ordering")), hydra.lib.sets.to_list(s))
 
 def infer_type_of_term(fcx: hydra.context.Context, cx: hydra.graph.Graph, term: hydra.core.Term, desc: str) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a given term (Either version)."""
-    
+
     @lru_cache(1)
     def fcx2() -> hydra.context.Context:
         return hydra.context.Context(hydra.lib.lists.cons(desc, fcx.trace), fcx.messages, fcx.other)
     match term:
         case hydra.core.TermAnnotated(value=a):
             return infer_type_of_annotated_term(fcx2(), cx, a)
-        
+
         case hydra.core.TermApplication(value=a2):
             return infer_type_of_application(fcx2(), cx, a2)
-        
+
         case hydra.core.TermEither(value=e):
             return infer_type_of_either(fcx2(), cx, e)
-        
+
         case hydra.core.TermFunction(value=f):
             return infer_type_of_function(fcx2(), cx, f)
-        
+
         case hydra.core.TermLet(value=l):
             return infer_type_of_let(fcx2(), cx, l)
-        
+
         case hydra.core.TermList(value=els):
             return infer_type_of_list(fcx2(), cx, els)
-        
+
         case hydra.core.TermLiteral(value=l2):
             return Right(infer_type_of_literal(fcx2(), l2))
-        
+
         case hydra.core.TermMap(value=m):
             return infer_type_of_map(fcx2(), cx, m)
-        
+
         case hydra.core.TermMaybe(value=m2):
             return infer_type_of_optional(fcx2(), cx, m2)
-        
+
         case hydra.core.TermPair(value=p):
             return infer_type_of_pair(fcx2(), cx, p)
-        
+
         case hydra.core.TermRecord(value=r):
             return infer_type_of_record(fcx2(), cx, r)
-        
+
         case hydra.core.TermSet(value=s):
             return infer_type_of_set(fcx2(), cx, s)
-        
+
         case hydra.core.TermTypeApplication(value=tt):
             return infer_type_of_type_application(fcx2(), cx, tt)
-        
+
         case hydra.core.TermTypeLambda(value=ta):
             return infer_type_of_type_lambda(fcx2(), cx, ta)
-        
+
         case hydra.core.TermUnion(value=i):
             return infer_type_of_injection(fcx2(), cx, i)
-        
+
         case hydra.core.TermUnit():
             return Right(infer_type_of_unit(fcx2()))
-        
+
         case hydra.core.TermVariable(value=name):
             return infer_type_of_variable(fcx2(), cx, name)
-        
+
         case hydra.core.TermWrap(value=w):
             return infer_type_of_wrapped_term(fcx2(), cx, w)
-        
+
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
 def infer_type_of_type_application(fcx: hydra.context.Context, cx: hydra.graph.Graph, tt: hydra.core.TypeApplicationTerm) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a type application (Either version)."""
-    
+
     return infer_type_of_term(fcx, cx, tt.body, "type application term")
 
 def infer_type_of_type_lambda(fcx: hydra.context.Context, cx: hydra.graph.Graph, ta: hydra.core.TypeLambda) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a type abstraction (Either version)."""
-    
+
     return infer_type_of_term(fcx, cx, ta.body, "type abstraction")
 
 def infer_type_of_wrapped_term(fcx: hydra.context.Context, cx: hydra.graph.Graph, wt: hydra.core.WrappedTerm) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a wrapped term (Either version)."""
-    
+
     tname = wt.type_name
     term = wt.body
     return hydra.lib.eithers.bind(hydra.schemas.require_schema_type(fcx, cx.schema_types, tname), (lambda st_rp: (schema_type := hydra.lib.pairs.first(st_rp), fcx2 := hydra.lib.pairs.second(st_rp), hydra.lib.eithers.bind(infer_type_of_term(fcx2, cx, term, "wrapped term"), (lambda result: (fcx3 := result.context, svars := schema_type.variables, stype := schema_type.type, iterm := result.term, itype := result.type, isubst := result.subst, ityp := cast(hydra.core.Type, hydra.core.TypeWrap(itype)), hydra.lib.eithers.bind(map_constraints(fcx3, cx, (lambda subst: yield_(fcx3, build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(tname, iterm)))), hydra.schemas.nominal_application(tname, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), hydra.substitution.compose_type_subst(isubst, subst))), (hydra.typing.TypeConstraint(stype, ityp, "schema type of wrapper"),)), (lambda mc_result: Right(mc_result))))[7])))[2]))
 
 def infer_types_of_temporary_bindings(fcx: hydra.context.Context, cx: hydra.graph.Graph, bins: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.error.Error], tuple[tuple[frozenlist[hydra.core.Term], tuple[frozenlist[hydra.core.Type], tuple[hydra.typing.TypeSubst, FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]]]], hydra.context.Context]]:
     r"""Infer types for temporary let bindings (Either version)."""
-    
+
     @lru_cache(1)
     def dflt() -> Either[hydra.context.InContext[hydra.error.Error], tuple[tuple[frozenlist[hydra.core.Term], tuple[frozenlist[hydra.core.Type], tuple[hydra.typing.TypeSubst, FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]]]], hydra.context.Context]]:
         @lru_cache(1)
@@ -590,12 +590,12 @@ def infer_types_of_temporary_bindings(fcx: hydra.context.Context, cx: hydra.grap
 
 def for_inferred_term(fcx: hydra.context.Context, cx: hydra.graph.Graph, term: hydra.core.Term, desc: str, f: Callable[[hydra.typing.InferenceResult], T0]) -> Either[hydra.context.InContext[hydra.error.Error], tuple[T0, hydra.context.Context]]:
     r"""Infer a term's type and map over the result."""
-    
+
     return hydra.lib.eithers.bind(infer_type_of_term(fcx, cx, term, desc), (lambda rp: Right((f(rp), rp.context))))
 
 def infer_graph_types(fcx0: hydra.context.Context, bindings0: frozenlist[hydra.core.Binding], g0: hydra.graph.Graph):
     r"""Infer types for all elements in a graph, using the provided ordered bindings. Returns both the inferred graph and the ordered inferred bindings."""
-    
+
     @lru_cache(1)
     def fcx() -> hydra.context.Context:
         return hydra.context.Context(hydra.lib.lists.cons("graph inference", fcx0.trace), fcx0.messages, fcx0.other)
@@ -614,12 +614,12 @@ def infer_graph_types(fcx0: hydra.context.Context, bindings0: frozenlist[hydra.c
 
 def infer_in_graph_context(fcx: hydra.context.Context, cx: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Infer the type of a term in a given inference context."""
-    
+
     return infer_type_of_term(fcx, cx, term, "single term")
 
 def infer_type_of(fcx: hydra.context.Context, cx: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], tuple[tuple[hydra.core.Term, hydra.core.TypeScheme], hydra.context.Context]]:
     r"""Map a possibly untyped term to a fully typed term and its type."""
-    
+
     @lru_cache(1)
     def let_term() -> hydra.core.Term:
         return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let((hydra.core.Binding(hydra.core.Name("ignoredVariableName"), term, Nothing()),), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("ignoredBody")))))))
@@ -627,7 +627,7 @@ def infer_type_of(fcx: hydra.context.Context, cx: hydra.graph.Graph, term: hydra
 
 def show_inference_result(result: hydra.typing.InferenceResult) -> str:
     r"""Show an inference result for debugging."""
-    
+
     term = result.term
     typ = result.type
     subst = result.subst
@@ -635,7 +635,7 @@ def show_inference_result(result: hydra.typing.InferenceResult) -> str:
 
 def yield_debug(fcx: hydra.context.Context, cx: T0, debug_id: str, term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst) -> Either[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult]:
     r"""Create an inference result with debug output."""
-    
+
     @lru_cache(1)
     def rterm() -> hydra.core.Term:
         return hydra.substitution.subst_types_in_term(subst, term)

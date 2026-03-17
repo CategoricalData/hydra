@@ -9,7 +9,7 @@ public interface Formatting {
   static hydra.testing.TestGroup allTests() {
     return new hydra.testing.TestGroup("formatting", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), hydra.util.ConsList.of(hydra.test.formatting.Formatting.caseConversionTests()), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>empty()));
   }
-  
+
   static hydra.testing.TestGroup caseConversionTests() {
     return new hydra.testing.TestGroup("case conversion", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>empty()), hydra.util.ConsList.of(
       new hydra.testing.TestCaseWithMetadata("#1 (lower_snake_case -> UPPER_SNAKE_CASE)", new hydra.testing.TestCase.CaseConversion(new hydra.testing.CaseConversionTestCase(new hydra.util.CaseConvention.LowerSnake(), new hydra.util.CaseConvention.UpperSnake(), "a_hello_world_42_a42_42a_b", "A_HELLO_WORLD_42_A42_42A_B")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),

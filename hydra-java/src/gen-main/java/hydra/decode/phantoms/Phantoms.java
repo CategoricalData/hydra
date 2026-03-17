@@ -14,7 +14,7 @@ public interface Phantoms {
         public hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>left(new hydra.error.DecodingError("expected record"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>> visit(hydra.core.Term.Record record) {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
@@ -42,7 +42,7 @@ public interface Phantoms {
         cx,
         raw));
   }
-  
+
   static <T0, T1> hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>> tTerm(T0 a, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>left(new hydra.error.DecodingError(err))),
@@ -51,7 +51,7 @@ public interface Phantoms {
         public hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>left(new hydra.error.DecodingError("expected wrapped type"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(

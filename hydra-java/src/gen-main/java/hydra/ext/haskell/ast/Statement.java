@@ -9,15 +9,15 @@ import java.io.Serializable;
  */
 public class Statement implements Serializable, Comparable<Statement> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.Statement");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.ext.haskell.ast.Expression value;
-  
+
   public Statement (hydra.ext.haskell.ast.Expression value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Statement)) {
@@ -28,12 +28,12 @@ public class Statement implements Serializable, Comparable<Statement> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Statement other) {

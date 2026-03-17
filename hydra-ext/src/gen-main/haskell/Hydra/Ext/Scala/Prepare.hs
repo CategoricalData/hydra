@@ -24,16 +24,16 @@ prepareLiteralType at =
         Core.LiteralBinary v1 -> Core.LiteralString (Literals.binaryToString v1)
         _ -> v), (Sets.fromList [
         "replace binary strings with character strings"])))
-      Core.LiteralTypeFloat v0 ->  
-        let result = prepareFloatType v0 
+      Core.LiteralTypeFloat v0 ->
+        let result = prepareFloatType v0
             rtyp = Pairs.first result
             rep = Pairs.first (Pairs.second result)
             msgs = Pairs.second (Pairs.second result)
         in (Core.LiteralTypeFloat rtyp, ((\v -> case v of
           Core.LiteralFloat v1 -> Core.LiteralFloat (rep v1)
           _ -> v), msgs))
-      Core.LiteralTypeInteger v0 ->  
-        let result = prepareIntegerType v0 
+      Core.LiteralTypeInteger v0 ->
+        let result = prepareIntegerType v0
             rtyp = Pairs.first result
             rep = Pairs.first (Pairs.second result)
             msgs = Pairs.second (Pairs.second result)
@@ -78,8 +78,8 @@ prepareIntegerType it =
 prepareType :: t0 -> Core.Type -> (Core.Type, ((Core.Term -> Core.Term), (S.Set String)))
 prepareType cx typ =
     case (Rewriting.deannotateType typ) of
-      Core.TypeLiteral v0 ->  
-        let result = prepareLiteralType v0 
+      Core.TypeLiteral v0 ->
+        let result = prepareLiteralType v0
             rtyp = Pairs.first result
             rep = Pairs.first (Pairs.second result)
             msgs = Pairs.second (Pairs.second result)

@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class Properties implements Serializable, Comparable<Properties> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.openCypher.Properties");
-  
+
   public static final hydra.core.Name MAP = new hydra.core.Name("map");
-  
+
   public static final hydra.core.Name PARAMETER = new hydra.core.Name("parameter");
-  
+
   private Properties () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Map instance) ;
-    
+
     R visit(Parameter instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Properties instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Map instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Parameter instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Map extends hydra.ext.cypher.openCypher.Properties implements Serializable {
     public final hydra.ext.cypher.openCypher.MapLiteral value;
-    
+
     public Map (hydra.ext.cypher.openCypher.MapLiteral value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Map)) {
@@ -54,12 +54,12 @@ public abstract class Properties implements Serializable, Comparable<Properties>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Properties other) {
@@ -70,20 +70,20 @@ public abstract class Properties implements Serializable, Comparable<Properties>
       Map o = (Map) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Parameter extends hydra.ext.cypher.openCypher.Properties implements Serializable {
     public final hydra.ext.cypher.openCypher.Parameter value;
-    
+
     public Parameter (hydra.ext.cypher.openCypher.Parameter value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Parameter)) {
@@ -94,12 +94,12 @@ public abstract class Properties implements Serializable, Comparable<Properties>
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Properties other) {
@@ -110,7 +110,7 @@ public abstract class Properties implements Serializable, Comparable<Properties>
       Parameter o = (Parameter) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

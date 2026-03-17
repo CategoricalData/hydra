@@ -14,10 +14,10 @@ A = TypeVar("A")
 @dataclass(frozen=True)
 class TBinding(Generic[A]):
     r"""An association of a named term (element) with a phantom type."""
-    
+
     name: Annotated[hydra.core.Name, "The name of the term"]
     term: Annotated[TTerm[A], "The term with its phantom type"]
-    
+
     TYPE_ = hydra.core.Name("hydra.phantoms.TBinding")
     NAME = hydra.core.Name("name")
     TERM = hydra.core.Name("term")

@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class TPrimaryAndArguments implements Serializable, Comparable<TPrimaryAndArguments> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.TPrimaryAndArguments");
-  
+
   public static final hydra.core.Name PRIMARY = new hydra.core.Name("primary");
-  
+
   public static final hydra.core.Name ARGUMENTS = new hydra.core.Name("arguments");
-  
+
   public final hydra.ext.python.syntax.TPrimary primary;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.Args> arguments;
-  
+
   public TPrimaryAndArguments (hydra.ext.python.syntax.TPrimary primary, hydra.util.Maybe<hydra.ext.python.syntax.Args> arguments) {
     this.primary = primary;
     this.arguments = arguments;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TPrimaryAndArguments)) {
@@ -32,12 +32,12 @@ public class TPrimaryAndArguments implements Serializable, Comparable<TPrimaryAn
       this.arguments,
       o.arguments);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(primary) + 3 * java.util.Objects.hashCode(arguments);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TPrimaryAndArguments other) {
@@ -48,11 +48,11 @@ public class TPrimaryAndArguments implements Serializable, Comparable<TPrimaryAn
     }
     return ((Comparable) arguments).compareTo(other.arguments);
   }
-  
+
   public TPrimaryAndArguments withPrimary(hydra.ext.python.syntax.TPrimary primary) {
     return new TPrimaryAndArguments(primary, arguments);
   }
-  
+
   public TPrimaryAndArguments withArguments(hydra.util.Maybe<hydra.ext.python.syntax.Args> arguments) {
     return new TPrimaryAndArguments(primary, arguments);
   }

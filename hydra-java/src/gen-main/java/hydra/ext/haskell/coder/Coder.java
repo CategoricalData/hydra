@@ -9,15 +9,15 @@ public interface Coder {
   static Boolean includeTypeDefinitions() {
     return false;
   }
-  
+
   static Boolean useCoreImport() {
     return true;
   }
-  
+
   static hydra.core.Name keyHaskellVar() {
     return new hydra.core.Name("haskellVar");
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> adaptTypeToHaskellAndEncode(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Type typ, hydra.context.Context cx, T0 g) {
     java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>> enc = (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>>) (t -> hydra.ext.haskell.coder.Coder.<T0>encodeType(
       namespaces,
@@ -36,14 +36,14 @@ public interface Coder {
               typ)),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>>) (adaptedType -> (enc).apply(adaptedType)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Variable ignored) {
         return (enc).apply(typ);
       }
     });
   }
-  
+
   static String constantForFieldName(hydra.core.Name tname, hydra.core.Name fname) {
     return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "_",
@@ -51,13 +51,13 @@ public interface Coder {
       "_",
       (fname).value));
   }
-  
+
   static String constantForTypeName(hydra.core.Name tname) {
     return hydra.lib.strings.Cat2.apply(
       "_",
       hydra.names.Names.localNameOf(tname));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Module> constructModule(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs, hydra.context.Context cx, hydra.graph.Graph g) {
     java.util.function.Function<hydra.module.Definition, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.haskell.ast.DeclarationWithComments>>> createDeclarations = (java.util.function.Function<hydra.module.Definition, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.haskell.ast.DeclarationWithComments>>>) (def -> (def).accept(new hydra.module.Definition.PartialVisitor<>() {
       @Override
@@ -71,7 +71,7 @@ public interface Coder {
           cx,
           g);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.haskell.ast.DeclarationWithComments>> visit(hydra.module.Definition.Term term) {
         return hydra.lib.eithers.Bind.apply(
@@ -149,7 +149,7 @@ public interface Coder {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Module>right(new hydra.ext.haskell.ast.Module(hydra.util.Maybe.just(new hydra.ext.haskell.ast.ModuleHead(mc, (importName).apply((h).apply((mod).namespace)), (hydra.util.ConsList<hydra.ext.haskell.ast.Export>) (hydra.util.ConsList.<hydra.ext.haskell.ast.Export>empty()))), imports.get(), decls.get()));
       }));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> encodeCaseExpression(Integer depth, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.CaseStatement stmt, hydra.ext.haskell.ast.Expression scrutinee, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.util.Maybe<hydra.core.Term> def = (stmt).default_;
     hydra.core.Name dn = (stmt).typeName;
@@ -191,7 +191,7 @@ public interface Coder {
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.haskell.ast.Pattern>> otherwise(hydra.core.Type instance) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.haskell.ast.Pattern>>right(singleArg);
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.haskell.ast.Pattern>> visit(hydra.core.Type.Unit ignored) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.haskell.ast.Pattern>>right(hydra.ext.haskell.coder.Coder.<hydra.ext.haskell.ast.Pattern>encodeCaseExpression_noArgs());
@@ -253,11 +253,11 @@ public interface Coder {
               dcases))))))));
       }));
   }
-  
+
   static <T0> hydra.util.ConsList<T0> encodeCaseExpression_noArgs() {
     return (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty());
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> encodeFunction(Integer depth, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Function fun, hydra.context.Context cx, hydra.graph.Graph g) {
     return (fun).accept(new hydra.core.Function.PartialVisitor<>() {
       @Override
@@ -271,7 +271,7 @@ public interface Coder {
                 hydra.lib.maybes.FromJust.apply(hydra.names.Names.namespaceOf((name).value)),
                 hydra.ext.haskell.utils.Utils.newtypeAccessorName((name).value)))));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Elimination.Record proj) {
             hydra.core.Name dn = (proj).value.typeName;
@@ -281,7 +281,7 @@ public interface Coder {
               dn,
               fname)));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Elimination.Union stmt) {
             return hydra.lib.eithers.Map.apply(
@@ -298,7 +298,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Function.Lambda lam) {
         hydra.core.Term body = (lam).value.body;
@@ -316,7 +316,7 @@ public interface Coder {
               v),
             hbody))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Function.Primitive name) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(new hydra.ext.haskell.ast.Expression.Variable(hydra.ext.haskell.utils.Utils.elementReference(
@@ -325,7 +325,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> encodeLiteral(hydra.core.Literal l, hydra.context.Context cx) {
     return (l).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
@@ -334,14 +334,14 @@ public interface Coder {
           "literal value ",
           hydra.show.core.Core.literal(l)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Literal.Binary bs) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hsapp(
           hydra.ext.haskell.utils.Utils.hsvar("Literals.stringToBinary"),
           hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.String_(hydra.lib.literals.BinaryToString.apply((bs).value)))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Literal.Boolean_ b) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hsvar(hydra.lib.logic.IfElse.lazy(
@@ -349,7 +349,7 @@ public interface Coder {
           () -> "True",
           () -> "False")));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Literal.Float_ fv) {
         return (fv).value.accept(new hydra.core.FloatValue.PartialVisitor<>() {
@@ -357,19 +357,19 @@ public interface Coder {
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.FloatValue.Float32 f) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.Float_((f).value)));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.FloatValue.Float64 f) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.Double_((f).value)));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.FloatValue.Bigfloat f) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.Double_(hydra.lib.literals.BigfloatToFloat64.apply((f).value))));
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Literal.Integer_ iv) {
         return (iv).value.accept(new hydra.core.IntegerValue.PartialVisitor<>() {
@@ -377,56 +377,56 @@ public interface Coder {
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.IntegerValue.Bigint i) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.Integer_((i).value)));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.IntegerValue.Int8 i) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.Integer_(hydra.lib.literals.Int8ToBigint.apply((i).value))));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.IntegerValue.Int16 i) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.Integer_(hydra.lib.literals.Int16ToBigint.apply((i).value))));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.IntegerValue.Int32 i) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.Int((i).value)));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.IntegerValue.Int64 i) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.Integer_(hydra.lib.literals.Int64ToBigint.apply((i).value))));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.IntegerValue.Uint8 i) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.Integer_(hydra.lib.literals.Uint8ToBigint.apply((i).value))));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.IntegerValue.Uint16 i) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.Integer_(hydra.lib.literals.Uint16ToBigint.apply((i).value))));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.IntegerValue.Uint32 i) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.Integer_(hydra.lib.literals.Uint32ToBigint.apply((i).value))));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.IntegerValue.Uint64 i) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.Integer_(hydra.lib.literals.Uint64ToBigint.apply((i).value))));
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Literal.String_ s) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hslit(new hydra.ext.haskell.ast.Literal.String_((s).value)));
       }
     });
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> encodeTerm(Integer depth, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Term term, hydra.context.Context cx, hydra.graph.Graph g) {
     java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>> encode = (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>>) (t -> hydra.ext.haskell.coder.Coder.encodeTerm(
       depth,
@@ -477,7 +477,7 @@ public interface Coder {
           "unexpected term: ",
           hydra.show.core.Core.term(term)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Application app) {
         hydra.core.Term arg = (app).value.argument;
@@ -494,7 +494,7 @@ public interface Coder {
                   hfun,
                   harg))))));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Function f) {
             return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -508,7 +508,7 @@ public interface Coder {
                       hfun,
                       harg))))));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Function.Elimination e) {
                 return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
@@ -522,7 +522,7 @@ public interface Coder {
                           hfun,
                           harg))))));
                   }
-                  
+
                   @Override
                   public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Elimination.Union stmt) {
                     return hydra.lib.eithers.Bind.apply(
@@ -541,7 +541,7 @@ public interface Coder {
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Either e) {
         return hydra.lib.eithers.Either.apply(
@@ -557,7 +557,7 @@ public interface Coder {
               hr))))),
           (e).value);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Function f) {
         return hydra.ext.haskell.coder.Coder.encodeFunction(
@@ -567,7 +567,7 @@ public interface Coder {
           cx,
           g);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Let letTerm) {
         java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Let, hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term>>> collectBindings = new java.util.concurrent.atomic.AtomicReference<>();
@@ -579,7 +579,7 @@ public interface Coder {
             public hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term> otherwise(hydra.core.Term instance) {
               return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term>(bs, body)));
             }
-            
+
             @Override
             public hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term> visit(hydra.core.Term.Let innerLt) {
               hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term> innerResult = collectBindings.get().apply((innerLt).value);
@@ -611,7 +611,7 @@ public interface Coder {
             (encode).apply(finalBody.get()),
             (java.util.function.Function<hydra.ext.haskell.ast.Expression, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>>) (hinner -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(new hydra.ext.haskell.ast.Expression.Let(new hydra.ext.haskell.ast.LetExpression(hbindings, hinner)))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.List els) {
         return hydra.lib.eithers.Bind.apply(
@@ -620,14 +620,14 @@ public interface Coder {
             (els).value),
           (java.util.function.Function<hydra.util.ConsList<hydra.ext.haskell.ast.Expression>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>>) (helems -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(new hydra.ext.haskell.ast.Expression.List(helems))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Literal v) {
         return hydra.ext.haskell.coder.Coder.encodeLiteral(
           (v).value,
           cx);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Map m) {
         return hydra.lib.logic.IfElse.lazy(
@@ -635,7 +635,7 @@ public interface Coder {
           () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hsvar("M.empty")),
           () -> (nonemptyMap).apply((m).value));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Maybe m) {
         return hydra.lib.maybes.Cases.applyLazy(
@@ -647,7 +647,7 @@ public interface Coder {
               hydra.ext.haskell.utils.Utils.hsvar("Just"),
               ht))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Pair p) {
         return hydra.lib.eithers.Bind.apply(
@@ -658,7 +658,7 @@ public interface Coder {
               f,
               s)))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Record record) {
         hydra.util.ConsList<hydra.core.Field> fields = (record).value.fields;
@@ -683,7 +683,7 @@ public interface Coder {
             fields),
           (java.util.function.Function<hydra.util.ConsList<hydra.ext.haskell.ast.FieldUpdate>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>>) (updates -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(new hydra.ext.haskell.ast.Expression.ConstructRecord(new hydra.ext.haskell.ast.ConstructRecordExpression(typeName, updates)))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Set s) {
         return hydra.lib.logic.IfElse.lazy(
@@ -691,19 +691,19 @@ public interface Coder {
           () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(hydra.ext.haskell.utils.Utils.hsvar("S.empty")),
           () -> (nonemptySet).apply((s).value));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.TypeLambda abs) {
         hydra.core.Term term1 = (abs).value.body;
         return (encode).apply(term1);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.TypeApplication typed) {
         hydra.core.Term term1 = (typed).value.body;
         return (encode).apply(term1);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Union injection) {
         hydra.core.Field field = (injection).value.field;
@@ -731,26 +731,26 @@ public interface Coder {
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> otherwise(hydra.core.Type instance) {
               return dflt.get();
             }
-            
+
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Type.Unit ignored) {
               return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(lhs.get());
             }
           })));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Unit ignored) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(new hydra.ext.haskell.ast.Expression.Tuple((hydra.util.ConsList<hydra.ext.haskell.ast.Expression>) (hydra.util.ConsList.<hydra.ext.haskell.ast.Expression>empty())));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Variable name) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression>right(new hydra.ext.haskell.ast.Expression.Variable(hydra.ext.haskell.utils.Utils.elementReference(
           namespaces,
           (name).value)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Expression> visit(hydra.core.Term.Wrap wrapped) {
         hydra.core.Name tname = (wrapped).value.typeName;
@@ -766,7 +766,7 @@ public interface Coder {
       }
     });
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> encodeType(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Type typ, hydra.context.Context cx, T0 g) {
     java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>> encode = (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>>) (t -> hydra.ext.haskell.coder.Coder.<T0>encodeType(
       namespaces,
@@ -781,7 +781,7 @@ public interface Coder {
           "unexpected type: ",
           hydra.show.core.Core.type(typ)))), cx)));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Application app) {
         hydra.core.Type lhs = (app).value.function;
@@ -794,7 +794,7 @@ public interface Coder {
               hlhs,
               hrhs)))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Either eitherType) {
         hydra.core.Type left_ = (eitherType).value.left;
@@ -808,7 +808,7 @@ public interface Coder {
               hleft,
               hright)))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Function funType) {
         hydra.core.Type cod = (funType).value.codomain;
@@ -819,21 +819,21 @@ public interface Coder {
             (encode).apply(cod),
             (java.util.function.Function<hydra.ext.haskell.ast.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>>) (hcod -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Function(new hydra.ext.haskell.ast.FunctionType(hdom, hcod)))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Forall forallType) {
         hydra.core.Type body = (forallType).value.body;
         hydra.core.Name v = (forallType).value.parameter;
         return (encode).apply(body);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.List lt) {
         return hydra.lib.eithers.Bind.apply(
           (encode).apply((lt).value),
           (java.util.function.Function<hydra.ext.haskell.ast.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>>) (hlt -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.List(hlt))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Literal lt) {
         return (lt).value.accept(new hydra.core.LiteralType.PartialVisitor<>() {
@@ -843,17 +843,17 @@ public interface Coder {
               "unexpected literal type: ",
               hydra.show.core.Core.literalType((lt).value)))), cx)));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.LiteralType.Binary ignored) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("B.ByteString")));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.LiteralType.Boolean_ ignored) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("Bool")));
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.LiteralType.Float_ ft) {
             return (ft).value.accept(new hydra.core.FloatType.PartialVisitor<>() {
@@ -861,19 +861,19 @@ public interface Coder {
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.FloatType.Float32 ignored) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("Float")));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.FloatType.Float64 ignored) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("Double")));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.FloatType.Bigfloat ignored) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("Double")));
               }
             });
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.LiteralType.Integer_ it) {
             return (it).value.accept(new hydra.core.IntegerType.PartialVisitor<>() {
@@ -883,41 +883,41 @@ public interface Coder {
                   "unexpected integer type: ",
                   hydra.show.core.Core.integerType((it).value)))), cx)));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.IntegerType.Bigint ignored) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("Integer")));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.IntegerType.Int8 ignored) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("I.Int8")));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.IntegerType.Int16 ignored) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("I.Int16")));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.IntegerType.Int32 ignored) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("Int")));
               }
-              
+
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.IntegerType.Int64 ignored) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("I.Int64")));
               }
             });
           }
-          
+
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.LiteralType.String_ ignored) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("String")));
           }
         });
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Map mapType) {
         hydra.core.Type kt = (mapType).value.keys;
@@ -931,7 +931,7 @@ public interface Coder {
               hkt,
               hvt)))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Maybe ot) {
         return hydra.lib.eithers.Bind.apply(
@@ -940,7 +940,7 @@ public interface Coder {
             new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("Maybe")),
             hot)))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Pair pt) {
         return hydra.lib.eithers.Bind.apply(
@@ -951,7 +951,7 @@ public interface Coder {
               f,
               s)))))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Record ignored) {
         return hydra.ext.haskell.coder.Coder.encodeType_ref(
@@ -961,7 +961,7 @@ public interface Coder {
           namespaces,
           new hydra.core.Name("placeholder"));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Set st) {
         return hydra.lib.eithers.Bind.apply(
@@ -970,7 +970,7 @@ public interface Coder {
             new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("S.Set")),
             hst)))));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Union ignored) {
         return hydra.ext.haskell.coder.Coder.encodeType_ref(
@@ -980,12 +980,12 @@ public interface Coder {
           namespaces,
           new hydra.core.Name("placeholder"));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Unit ignored) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(unitTuple.get());
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Variable v1) {
         return hydra.ext.haskell.coder.Coder.encodeType_ref(
@@ -995,7 +995,7 @@ public interface Coder {
           namespaces,
           (v1).value);
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Wrap ignored) {
         return hydra.ext.haskell.coder.Coder.encodeType_ref(
@@ -1007,11 +1007,11 @@ public interface Coder {
       }
     });
   }
-  
+
   static <T1> hydra.util.Either<T1, hydra.ext.haskell.ast.Type> encodeType_ref(java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, java.util.function.Function<hydra.core.Name, hydra.ext.haskell.ast.Name>> hydra_ext_haskell_utils_elementReference2, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Name name) {
     return hydra.util.Either.<T1, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable((hydra_ext_haskell_utils_elementReference2).apply(namespaces).apply(name)));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> encodeTypeWithClassAssertions(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>> explicitClasses, hydra.core.Type typ, hydra.context.Context cx, T0 g) {
     hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>>> classes = new hydra.util.Lazy<>(() -> hydra.lib.maps.Union.apply(
       explicitClasses,
@@ -1026,7 +1026,7 @@ public interface Coder {
         public String visit(hydra.classes.TypeClass.Equality ignored) {
           return "Eq";
         }
-        
+
         @Override
         public String visit(hydra.classes.TypeClass.Ordering ignored) {
           return "Ord";
@@ -1059,7 +1059,7 @@ public interface Coder {
           return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Ctx(new hydra.ext.haskell.ast.ContextType(hassert.get(), htyp)));
         })).get())));
   }
-  
+
   static <T1, T2> hydra.util.ConsList<hydra.util.Pair<T1, T2>> encodeTypeWithClassAssertions_toPairs(hydra.util.Pair<T1, hydra.util.PersistentSet<T2>> mapEntry) {
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<T2, hydra.util.Pair<T1, T2>>) (v1 -> hydra.ext.haskell.coder.Coder.<T1, T2, T2>encodeTypeWithClassAssertions_toPair(
@@ -1067,19 +1067,19 @@ public interface Coder {
         v1)),
       hydra.lib.sets.ToList.apply(hydra.ext.haskell.coder.Coder.<T1, T2>encodeTypeWithClassAssertions_clsSet(mapEntry)));
   }
-  
+
   static <T1, T2> T1 encodeTypeWithClassAssertions_name(hydra.util.Pair<T1, hydra.util.PersistentSet<T2>> mapEntry) {
     return hydra.lib.pairs.First.apply(mapEntry);
   }
-  
+
   static <T1, T2> hydra.util.PersistentSet<T2> encodeTypeWithClassAssertions_clsSet(hydra.util.Pair<T1, hydra.util.PersistentSet<T2>> mapEntry) {
     return hydra.lib.pairs.Second.apply(mapEntry);
   }
-  
+
   static <T1, T2, T3> hydra.util.Pair<T1, T3> encodeTypeWithClassAssertions_toPair(hydra.util.Pair<T1, hydra.util.PersistentSet<T2>> mapEntry, T3 c) {
     return (hydra.util.Pair<T1, T3>) ((hydra.util.Pair<T1, T3>) (new hydra.util.Pair<T1, T3>(hydra.ext.haskell.coder.Coder.<T1, T2>encodeTypeWithClassAssertions_name(mapEntry), c)));
   }
-  
+
   static hydra.util.PersistentSet<hydra.core.Name> findOrdVariables(hydra.core.Type typ) {
     java.util.function.Function<hydra.core.Name, Boolean> isTypeVariable = (java.util.function.Function<hydra.core.Name, Boolean>) (v -> hydra.lib.maybes.IsNothing.apply(hydra.names.Names.namespaceOf(v)));
     java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>> tryType = (java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>>) (names -> (java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>) (t -> hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -1087,7 +1087,7 @@ public interface Coder {
       public hydra.util.PersistentSet<hydra.core.Name> otherwise(hydra.core.Type instance) {
         return names;
       }
-      
+
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Variable v) {
         return hydra.lib.logic.IfElse.lazy(
@@ -1103,13 +1103,13 @@ public interface Coder {
       public hydra.util.PersistentSet<hydra.core.Name> otherwise(hydra.core.Type instance) {
         return names;
       }
-      
+
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Map mapType) {
         hydra.core.Type kt = (mapType).value.keys;
         return (tryType).apply(names).apply(kt);
       }
-      
+
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Set et) {
         return (tryType).apply(names).apply((et).value);
@@ -1121,17 +1121,17 @@ public interface Coder {
       (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
       typ);
   }
-  
+
   static hydra.util.PersistentMap<hydra.core.Name, hydra.util.PersistentSet<hydra.classes.TypeClass>> getImplicitTypeClasses(hydra.core.Type typ) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       p0 -> hydra.ext.haskell.coder.Coder.<hydra.core.Name>getImplicitTypeClasses_toPair(p0),
       hydra.lib.sets.ToList.apply(hydra.ext.haskell.coder.Coder.findOrdVariables(typ))));
   }
-  
+
   static <T0> hydra.util.Pair<T0, hydra.util.PersistentSet<hydra.classes.TypeClass>> getImplicitTypeClasses_toPair(T0 name) {
     return (hydra.util.Pair<T0, hydra.util.PersistentSet<hydra.classes.TypeClass>>) ((hydra.util.Pair<T0, hydra.util.PersistentSet<hydra.classes.TypeClass>>) (new hydra.util.Pair<T0, hydra.util.PersistentSet<hydra.classes.TypeClass>>(name, hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(new hydra.classes.TypeClass.Ordering())))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Module> moduleToHaskellModule(hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.haskell.utils.Utils.namespacesForModule(
@@ -1145,7 +1145,7 @@ public interface Coder {
         cx,
         g)));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<String, String>> moduleToHaskell(hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs, hydra.context.Context cx, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.haskell.coder.Coder.moduleToHaskellModule(
@@ -1164,7 +1164,7 @@ public interface Coder {
           s));
       }));
   }
-  
+
   static hydra.util.ConsList<hydra.ext.haskell.ast.DeclarationWithComments> nameDecls(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Name name, hydra.core.Type typ) {
     java.util.function.Function<hydra.core.FieldType, hydra.util.Pair<String, String>> toConstant = (java.util.function.Function<hydra.core.FieldType, hydra.util.Pair<String, String>>) (fieldType -> {
       hydra.core.Name fname = (fieldType).name;
@@ -1196,7 +1196,7 @@ public interface Coder {
           fieldDecls.get())),
       () -> (hydra.util.ConsList<hydra.ext.haskell.ast.DeclarationWithComments>) (hydra.util.ConsList.<hydra.ext.haskell.ast.DeclarationWithComments>empty()));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.DeclarationWithComments> toDataDeclaration(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.module.TermDefinition def, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.core.Name name = (def).name;
     hydra.ext.haskell.ast.Name hname = hydra.ext.haskell.utils.Utils.simpleName(hydra.names.Names.localNameOf(name));
@@ -1212,7 +1212,7 @@ public interface Coder {
           public hydra.ext.haskell.ast.ValueBinding otherwise(hydra.ext.haskell.ast.Pattern instance) {
             return vb;
           }
-          
+
           @Override
           public hydra.ext.haskell.ast.ValueBinding visit(hydra.ext.haskell.ast.Pattern.Application appPat) {
             hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> args = (appPat).value.args;
@@ -1223,7 +1223,7 @@ public interface Coder {
               public hydra.ext.haskell.ast.ValueBinding otherwise(hydra.ext.haskell.ast.Expression instance) {
                 return vb;
               }
-              
+
               @Override
               public hydra.ext.haskell.ast.ValueBinding visit(hydra.ext.haskell.ast.Expression.Lambda lambda_) {
                 hydra.ext.haskell.ast.Expression body = (lambda_).value.inner;
@@ -1284,7 +1284,7 @@ public interface Coder {
               }));
           }));
       }
-      
+
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.DeclarationWithComments> visit(hydra.core.Term.Let letTerm) {
         hydra.core.Term env = (letTerm).value.body;
@@ -1331,7 +1331,7 @@ public interface Coder {
         term),
       (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.DeclarationWithComments>>) (comments -> toDecl.get().apply(comments).apply(hname).apply(term).apply((hydra.util.Maybe<hydra.ext.haskell.ast.LocalBindings>) (hydra.util.Maybe.<hydra.ext.haskell.ast.LocalBindings>nothing()))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.ext.haskell.ast.DeclarationWithComments>> toTypeDeclarationsFrom(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Name elementName, hydra.core.Type typ, hydra.context.Context cx, hydra.graph.Graph g) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.ext.haskell.ast.Name, java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, hydra.ext.haskell.ast.DeclarationHead>>> declHead = new java.util.concurrent.atomic.AtomicReference<>();
     declHead.set((java.util.function.Function<hydra.ext.haskell.ast.Name, java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, hydra.ext.haskell.ast.DeclarationHead>>) (name -> (java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, hydra.ext.haskell.ast.DeclarationHead>) (vars_ -> hydra.lib.logic.IfElse.lazy(
@@ -1457,14 +1457,14 @@ public interface Coder {
                   g),
                 (java.util.function.Function<hydra.ext.haskell.ast.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Declaration>>) (htype -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Declaration>right(new hydra.ext.haskell.ast.Declaration.Type(new hydra.ext.haskell.ast.TypeDeclaration(hd.get(), htype)))));
             }
-            
+
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Declaration> visit(hydra.core.Type.Record rt) {
               return hydra.lib.eithers.Bind.apply(
                 (recordCons).apply(lname).apply((rt).value),
                 (java.util.function.Function<hydra.ext.haskell.ast.ConstructorWithComments, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Declaration>>) (cons -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Declaration>right(new hydra.ext.haskell.ast.Declaration.Data(new hydra.ext.haskell.ast.DataDeclaration(new hydra.ext.haskell.ast.DataOrNewtype.Data(), (hydra.util.ConsList<hydra.ext.haskell.ast.Assertion>) (hydra.util.ConsList.<hydra.ext.haskell.ast.Assertion>empty()), hd.get(), hydra.util.ConsList.of(cons), hydra.util.ConsList.of(deriv.get()))))));
             }
-            
+
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Declaration> visit(hydra.core.Type.Union rt) {
               return hydra.lib.eithers.Bind.apply(
@@ -1473,7 +1473,7 @@ public interface Coder {
                   (rt).value),
                 (java.util.function.Function<hydra.util.ConsList<hydra.ext.haskell.ast.ConstructorWithComments>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Declaration>>) (cons -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Declaration>right(new hydra.ext.haskell.ast.Declaration.Data(new hydra.ext.haskell.ast.DataDeclaration(new hydra.ext.haskell.ast.DataOrNewtype.Data(), (hydra.util.ConsList<hydra.ext.haskell.ast.Assertion>) (hydra.util.ConsList.<hydra.ext.haskell.ast.Assertion>empty()), hd.get(), cons, hydra.util.ConsList.of(deriv.get()))))));
             }
-            
+
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Declaration> visit(hydra.core.Type.Wrap wrapped) {
               return hydra.lib.eithers.Bind.apply(
@@ -1511,7 +1511,7 @@ public interface Coder {
               }))))));
       }));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.DeclarationWithComments> typeDecl(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Name name, hydra.core.Type typ, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.core.Term rawTerm = hydra.encode.core.Core.type(typ);
     java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>> rewrite = (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (recurse -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term -> {
@@ -1520,7 +1520,7 @@ public interface Coder {
         public hydra.util.Maybe<String> otherwise(hydra.core.Term instance) {
           return (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing());
         }
-        
+
         @Override
         public hydra.util.Maybe<String> visit(hydra.core.Term.Literal lit) {
           return (lit).value.accept(new hydra.core.Literal.PartialVisitor<>() {
@@ -1528,7 +1528,7 @@ public interface Coder {
             public hydra.util.Maybe<String> otherwise(hydra.core.Literal instance) {
               return (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing());
             }
-            
+
             @Override
             public hydra.util.Maybe<String> visit(hydra.core.Literal.String_ s) {
               return hydra.util.Maybe.just((s).value);
@@ -1541,7 +1541,7 @@ public interface Coder {
         public hydra.util.Maybe<hydra.core.Name> otherwise(hydra.core.Term instance) {
           return (hydra.util.Maybe<hydra.core.Name>) (hydra.util.Maybe.<hydra.core.Name>nothing());
         }
-        
+
         @Override
         public hydra.util.Maybe<hydra.core.Name> visit(hydra.core.Term.Wrap wt) {
           return hydra.lib.logic.IfElse.lazy(
@@ -1589,7 +1589,7 @@ public interface Coder {
         public hydra.util.Maybe<hydra.core.Field> otherwise(hydra.core.Term instance) {
           return (hydra.util.Maybe<hydra.core.Field>) (hydra.util.Maybe.<hydra.core.Field>nothing());
         }
-        
+
         @Override
         public hydra.util.Maybe<hydra.core.Field> visit(hydra.core.Term.Union inj) {
           return hydra.lib.logic.IfElse.lazy(
@@ -1633,7 +1633,7 @@ public interface Coder {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.DeclarationWithComments>right(new hydra.ext.haskell.ast.DeclarationWithComments(decl.get(), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())));
       }));
   }
-  
+
   static <T0> hydra.util.PersistentMap<T0, hydra.util.PersistentSet<hydra.classes.TypeClass>> typeSchemeConstraintsToClassMap(hydra.util.Maybe<hydra.util.PersistentMap<T0, hydra.core.TypeVariableMetadata>> maybeConstraints) {
     java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.classes.TypeClass>> nameToTypeClass = (java.util.function.Function<hydra.core.Name, hydra.util.Maybe<hydra.classes.TypeClass>>) (className -> {
       String classNameStr = (className).value;

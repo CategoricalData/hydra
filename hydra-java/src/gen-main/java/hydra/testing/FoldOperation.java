@@ -9,53 +9,53 @@ import java.io.Serializable;
  */
 public abstract class FoldOperation implements Serializable, Comparable<FoldOperation> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.FoldOperation");
-  
+
   public static final hydra.core.Name SUM_INT32_LITERALS = new hydra.core.Name("sumInt32Literals");
-  
+
   public static final hydra.core.Name COLLECT_LIST_LENGTHS = new hydra.core.Name("collectListLengths");
-  
+
   public static final hydra.core.Name COLLECT_LABELS = new hydra.core.Name("collectLabels");
-  
+
   private FoldOperation () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(SumInt32Literals instance) ;
-    
+
     R visit(CollectListLengths instance) ;
-    
+
     R visit(CollectLabels instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(FoldOperation instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(SumInt32Literals instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(CollectListLengths instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(CollectLabels instance) {
       return otherwise(instance);
     }
   }
-  
+
   /**
    * Sum all Int32 literals in a term
    */
   public static final class SumInt32Literals extends hydra.testing.FoldOperation implements Serializable {
     public SumInt32Literals () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof SumInt32Literals)) {
@@ -64,12 +64,12 @@ public abstract class FoldOperation implements Serializable, Comparable<FoldOper
       SumInt32Literals o = (SumInt32Literals) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FoldOperation other) {
@@ -79,21 +79,21 @@ public abstract class FoldOperation implements Serializable, Comparable<FoldOper
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Collect the lengths of all list terms (returns list of integers in traversal order)
    */
   public static final class CollectListLengths extends hydra.testing.FoldOperation implements Serializable {
     public CollectListLengths () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof CollectListLengths)) {
@@ -102,12 +102,12 @@ public abstract class FoldOperation implements Serializable, Comparable<FoldOper
       CollectListLengths o = (CollectListLengths) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FoldOperation other) {
@@ -117,21 +117,21 @@ public abstract class FoldOperation implements Serializable, Comparable<FoldOper
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   /**
    * Collect labels (first element of pairs where first is a string literal)
    */
   public static final class CollectLabels extends hydra.testing.FoldOperation implements Serializable {
     public CollectLabels () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof CollectLabels)) {
@@ -140,12 +140,12 @@ public abstract class FoldOperation implements Serializable, Comparable<FoldOper
       CollectLabels o = (CollectLabels) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FoldOperation other) {
@@ -155,7 +155,7 @@ public abstract class FoldOperation implements Serializable, Comparable<FoldOper
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

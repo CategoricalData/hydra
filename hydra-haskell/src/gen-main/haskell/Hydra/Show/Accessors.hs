@@ -25,8 +25,8 @@ import qualified Data.Set as S
 -- | Convert a term accessor to a string representation
 termAccessor :: Accessors.TermAccessor -> Maybe String
 termAccessor accessor =
-     
-      let idx = \i -> Nothing 
+
+      let idx = \i -> Nothing
           idxSuff = \suffix -> \i -> Maybes.map (\s -> Strings.cat2 s suffix) (idx i)
       in case accessor of
         Accessors.TermAccessorAnnotatedBody -> Nothing
@@ -53,11 +53,11 @@ termAccessor accessor =
 -- | Build an accessor graph from a term
 termToAccessorGraph :: M.Map Module.Namespace String -> Core.Term -> Accessors.AccessorGraph
 termToAccessorGraph namespaces term =
-     
-      let dontCareAccessor = Accessors.TermAccessorAnnotatedBody 
+
+      let dontCareAccessor = Accessors.TermAccessorAnnotatedBody
           helper =
-                  \ids -> \mroot -> \path -> \state -> \accessorTerm ->  
-                    let accessor = Pairs.first accessorTerm 
+                  \ids -> \mroot -> \path -> \state -> \accessorTerm ->
+                    let accessor = Pairs.first accessorTerm
                         currentTerm = Pairs.second accessorTerm
                         nodesEdges = Pairs.first state
                         visited = Pairs.second state
@@ -65,13 +65,13 @@ termToAccessorGraph namespaces term =
                         edges = Pairs.second nodesEdges
                         nextPath = Lists.cons accessor path
                     in case currentTerm of
-                      Core.TermLet v0 ->  
-                        let bindings = Core.letBindings v0 
+                      Core.TermLet v0 ->
+                        let bindings = Core.letBindings v0
                             env = Core.letBody v0
                             bindingNames = Lists.map Core.bindingName bindings
                             addBindingName =
-                                    \nodesVisitedIds -> \name ->  
-                                      let currentNodesVisited = Pairs.first nodesVisitedIds 
+                                    \nodesVisitedIds -> \name ->
+                                      let currentNodesVisited = Pairs.first nodesVisitedIds
                                           currentIds = Pairs.second nodesVisitedIds
                                           currentNodes = Pairs.first currentNodesVisited
                                           currentVisited = Pairs.second currentNodesVisited
@@ -91,20 +91,20 @@ termToAccessorGraph namespaces term =
                             visited1 = Pairs.second (Pairs.first nodesVisitedIds1)
                             ids1 = Pairs.second nodesVisitedIds1
                             addBindingTerm =
-                                    \currentState -> \nodeBinding ->  
-                                      let root = Pairs.first nodeBinding 
+                                    \currentState -> \nodeBinding ->
+                                      let root = Pairs.first nodeBinding
                                           binding = Pairs.second nodeBinding
                                           term1 = Core.bindingTerm binding
                                       in (helper ids1 (Just root) [] currentState (dontCareAccessor, term1))
                             nodeBindingPairs = Lists.zip nodes1 bindings
                             stateAfterBindings = Lists.foldl addBindingTerm ((Lists.concat2 nodes1 nodes, edges), visited1) nodeBindingPairs
                         in (helper ids1 mroot nextPath stateAfterBindings (Accessors.TermAccessorLetBody, env))
-                      Core.TermVariable v0 -> Maybes.maybe state (\root -> Maybes.maybe state (\node ->  
+                      Core.TermVariable v0 -> Maybes.maybe state (\root -> Maybes.maybe state (\node ->
                         let edge =
                                 Accessors.AccessorEdge {
                                   Accessors.accessorEdgeSource = root,
                                   Accessors.accessorEdgePath = (Accessors.AccessorPath (Lists.reverse nextPath)),
-                                  Accessors.accessorEdgeTarget = node} 
+                                  Accessors.accessorEdgeTarget = node}
                             newEdges = Lists.cons edge edges
                         in ((nodes, newEdges), visited)) (Maps.lookup v0 ids)) mroot
                       _ -> Lists.foldl (helper ids mroot nextPath) state (Rewriting.subtermsWithAccessors currentTerm)

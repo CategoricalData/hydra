@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class MatchFeatures implements Serializable, Comparable<MatchFeatures> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.features.MatchFeatures");
-  
+
   public static final hydra.core.Name MATCH = new hydra.core.Name("match");
-  
+
   public static final hydra.core.Name OPTIONAL_MATCH = new hydra.core.Name("optionalMatch");
-  
+
   /**
    * The basic (non-optional) MATCH clause
    */
   public final Boolean match;
-  
+
   /**
    * OPTIONAL MATCH
    */
   public final Boolean optionalMatch;
-  
+
   public MatchFeatures (Boolean match, Boolean optionalMatch) {
     this.match = match;
     this.optionalMatch = optionalMatch;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MatchFeatures)) {
@@ -41,12 +41,12 @@ public class MatchFeatures implements Serializable, Comparable<MatchFeatures> {
       this.optionalMatch,
       o.optionalMatch);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(match) + 3 * java.util.Objects.hashCode(optionalMatch);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MatchFeatures other) {
@@ -57,11 +57,11 @@ public class MatchFeatures implements Serializable, Comparable<MatchFeatures> {
     }
     return ((Comparable) optionalMatch).compareTo(other.optionalMatch);
   }
-  
+
   public MatchFeatures withMatch(Boolean match) {
     return new MatchFeatures(match, optionalMatch);
   }
-  
+
   public MatchFeatures withOptionalMatch(Boolean optionalMatch) {
     return new MatchFeatures(match, optionalMatch);
   }

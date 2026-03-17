@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class ForCond implements Serializable, Comparable<ForCond> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ForCond");
-  
+
   public static final hydra.core.Name INIT = new hydra.core.Name("init");
-  
+
   public static final hydra.core.Name COND = new hydra.core.Name("cond");
-  
+
   public static final hydra.core.Name UPDATE = new hydra.core.Name("update");
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.ForInit> init;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.Expression> cond;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.ForUpdate> update;
-  
+
   public ForCond (hydra.util.Maybe<hydra.ext.java.syntax.ForInit> init, hydra.util.Maybe<hydra.ext.java.syntax.Expression> cond, hydra.util.Maybe<hydra.ext.java.syntax.ForUpdate> update) {
     this.init = init;
     this.cond = cond;
     this.update = update;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ForCond)) {
@@ -39,12 +39,12 @@ public class ForCond implements Serializable, Comparable<ForCond> {
       this.update,
       o.update);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(init) + 3 * java.util.Objects.hashCode(cond) + 5 * java.util.Objects.hashCode(update);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ForCond other) {
@@ -59,15 +59,15 @@ public class ForCond implements Serializable, Comparable<ForCond> {
     }
     return ((Comparable) update).compareTo(other.update);
   }
-  
+
   public ForCond withInit(hydra.util.Maybe<hydra.ext.java.syntax.ForInit> init) {
     return new ForCond(init, cond, update);
   }
-  
+
   public ForCond withCond(hydra.util.Maybe<hydra.ext.java.syntax.Expression> cond) {
     return new ForCond(init, cond, update);
   }
-  
+
   public ForCond withUpdate(hydra.util.Maybe<hydra.ext.java.syntax.ForUpdate> update) {
     return new ForCond(init, cond, update);
   }

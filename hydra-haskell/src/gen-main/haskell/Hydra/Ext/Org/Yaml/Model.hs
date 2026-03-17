@@ -17,7 +17,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A YAML node (value)
-data Node = 
+data Node =
   -- | A mapping from nodes to nodes
   NodeMapping (M.Map Node Node) |
   -- | A scalar value
@@ -35,7 +35,7 @@ _Node_scalar = Core.Name "scalar"
 _Node_sequence = Core.Name "sequence"
 
 -- | A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
-data Scalar = 
+data Scalar =
   -- | Represents a true/false value
   ScalarBool Bool |
   -- | Represents an approximation to real numbers

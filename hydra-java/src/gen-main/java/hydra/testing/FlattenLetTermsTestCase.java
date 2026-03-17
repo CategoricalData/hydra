@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class FlattenLetTermsTestCase implements Serializable, Comparable<FlattenLetTermsTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.FlattenLetTermsTestCase");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
-  
+
   /**
    * The term to flatten
    */
   public final hydra.core.Term input;
-  
+
   /**
    * The expected flattened term
    */
   public final hydra.core.Term output;
-  
+
   public FlattenLetTermsTestCase (hydra.core.Term input, hydra.core.Term output) {
     this.input = input;
     this.output = output;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof FlattenLetTermsTestCase)) {
@@ -41,12 +41,12 @@ public class FlattenLetTermsTestCase implements Serializable, Comparable<Flatten
       this.output,
       o.output);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(output);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(FlattenLetTermsTestCase other) {
@@ -57,11 +57,11 @@ public class FlattenLetTermsTestCase implements Serializable, Comparable<Flatten
     }
     return ((Comparable) output).compareTo(other.output);
   }
-  
+
   public FlattenLetTermsTestCase withInput(hydra.core.Term input) {
     return new FlattenLetTermsTestCase(input, output);
   }
-  
+
   public FlattenLetTermsTestCase withOutput(hydra.core.Term output) {
     return new FlattenLetTermsTestCase(input, output);
   }

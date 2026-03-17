@@ -220,7 +220,7 @@ encodeLiteralType lt =
 
 encodeType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Error.Error) Syntax.TypeExpression
 encodeType cx g typ =
-     
+
       let t = Rewriting.deannotateType typ
       in case t of
         Core.TypeApplication v0 -> encodeApplicationType cx g v0
@@ -286,7 +286,7 @@ encodeTypeAlias cx g name typ comment =
 
 encodeTypeDefinition :: Context.Context -> t0 -> Core.Name -> Core.Type -> Either (Context.InContext Error.Error) [Syntax.Declaration]
 encodeTypeDefinition cx g name typ =
-     
+
       let t = Rewriting.deannotateType typ
       in case t of
         Core.TypeForall v0 -> encodeTypeDefinition cx g name (Core.forallTypeBody v0)
@@ -299,8 +299,8 @@ encodeTypeDefinition cx g name typ =
 
 encodeFieldType :: t0 -> Core.FieldType -> Context.Context -> t1 -> Either (Context.InContext Error.Error) Syntax.VariableDeclaration
 encodeFieldType isParameter ft cx g =
-     
-      let fname = Core.fieldTypeName ft 
+
+      let fname = Core.fieldTypeName ft
           ftype = Core.fieldTypeType ft
       in (Eithers.bind (encodeType cx g ftype) (\cppType -> Right (Syntax.VariableDeclaration {
         Syntax.variableDeclarationType = (Just cppType),
@@ -373,7 +373,7 @@ createVisitorInterface tname variants =
       Syntax.templateDeclarationDeclaration = (cppClassDeclaration (visitorName tname) [] (Just (Syntax.ClassBody (Lists.concat [
         [
           memberSpecificationPublic],
-        (Lists.map (\ft ->  
+        (Lists.map (\ft ->
           let fname = Core.fieldTypeName ft
           in (Syntax.MemberSpecificationMember (Syntax.MemberDeclarationFunction (Syntax.FunctionDeclaration {
             Syntax.functionDeclarationPrefixSpecifiers = [
@@ -423,7 +423,7 @@ createPartialVisitorInterface tname variants =
             Syntax.functionDeclarationSuffixSpecifiers = [
               Syntax.FunctionSpecifierSuffixConst],
             Syntax.functionDeclarationBody = Syntax.FunctionBodyPure}))],
-        (Lists.map (\ft ->  
+        (Lists.map (\ft ->
           let fname = Core.fieldTypeName ft
           in (Syntax.MemberSpecificationMember (Syntax.MemberDeclarationFunction (Syntax.FunctionDeclaration {
             Syntax.functionDeclarationPrefixSpecifiers = [],
@@ -475,8 +475,8 @@ createUnionBaseClass name variants =
 
 createVariantClass :: Context.Context -> t0 -> Core.Name -> Core.Name -> Core.FieldType -> Either (Context.InContext Error.Error) Syntax.Declaration
 createVariantClass cx g tname parentClass ft =
-     
-      let fname = Core.fieldTypeName ft 
+
+      let fname = Core.fieldTypeName ft
           variantType = Core.fieldTypeType ft
           hasValue = Logic.not (Schemas.isUnitType variantType)
           valueField =
@@ -493,7 +493,7 @@ createVariantClass cx g tname parentClass ft =
                       Syntax.parameterName = "value",
                       Syntax.parameterUnnamed = False,
                       Syntax.parameterDefaultValue = Nothing}]) (encodeType cx g (Rewriting.deannotateType variantType))) (Right [])
-      in (Eithers.bind valueField (\vFields -> Eithers.bind constructorParams (\vParams ->  
+      in (Eithers.bind valueField (\vFields -> Eithers.bind constructorParams (\vParams ->
         let initList =
                 Logic.ifElse hasValue [
                   Syntax.MemInitializer {
@@ -534,7 +534,7 @@ createAcceptImplementation tname variants =
             Syntax.parameterDefaultValue = Nothing}],
         Syntax.functionDeclarationSuffixSpecifiers = [
           Syntax.FunctionSpecifierSuffixConst],
-        Syntax.functionDeclarationBody = (Syntax.FunctionBodyCompound (Syntax.CompoundStatement (Lists.map (\ft ->  
+        Syntax.functionDeclarationBody = (Syntax.FunctionBodyCompound (Syntax.CompoundStatement (Lists.map (\ft ->
           let fname = Core.fieldTypeName ft
           in (Syntax.StatementSelection (Syntax.SelectionStatement {
             Syntax.selectionStatementCondition = (Syntax.ExpressionAssignment (Syntax.AssignmentExpressionAssignment (Syntax.ExplicitAssignment {
@@ -608,7 +608,7 @@ gatherMetadata defs = True
 
 isStdContainerType :: Core.Type -> Bool
 isStdContainerType typ =
-     
+
       let t = Rewriting.deannotateType typ
       in case t of
         Core.TypeApplication v0 -> isStdContainerType (Core.applicationTypeFunction v0)
@@ -620,8 +620,8 @@ isStdContainerType typ =
 
 isStructType :: Core.Type -> Bool
 isStructType rawType =
-     
-      let t = Schemas.fullyStripType rawType 
+
+      let t = Schemas.fullyStripType rawType
           isLiteral =
                   case t of
                     Core.TypeLiteral _ -> True
@@ -630,7 +630,7 @@ isStructType rawType =
 
 isTemplateType :: Core.Type -> Bool
 isTemplateType typ =
-     
+
       let t = Rewriting.deannotateType typ
       in (Logic.or (case t of
         Core.TypeLiteral v0 -> case v0 of
@@ -640,10 +640,10 @@ isTemplateType typ =
 
 generateTypeFile :: Module.Namespace -> Module.TypeDefinition -> Context.Context -> t0 -> Either (Context.InContext Error.Error) (String, String)
 generateTypeFile ns def_ cx g =
-     
-      let name = Module.typeDefinitionName def_ 
+
+      let name = Module.typeDefinitionName def_
           typ = Module.typeDefinitionType def_
-      in (Eithers.bind (encodeTypeDefinition cx g name typ) (\decls ->  
+      in (Eithers.bind (encodeTypeDefinition cx g name typ) (\decls ->
         let includes = findIncludes True ns [
               def_]
         in (Right (serializeHeaderFile name includes [
@@ -655,7 +655,7 @@ generateTypeFiles ns defs cx g =
 
 moduleToCpp :: Module.Module -> [Module.Definition] -> Context.Context -> t0 -> Either (Context.InContext Error.Error) (M.Map String String)
 moduleToCpp mod defs cx g =
-     
-      let ns = Module.moduleNamespace mod 
+
+      let ns = Module.moduleNamespace mod
           typeDefs = Pairs.first (Schemas.partitionDefinitions defs)
       in (Eithers.bind (generateTypeFiles ns typeDefs cx g) (\typeFiles -> Right (Maps.fromList typeFiles)))

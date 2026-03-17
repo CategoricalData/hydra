@@ -106,8 +106,8 @@ haskellImportTemplate = "import qualified {namespace} as {alias}"
 -- | Find necessary imports for Haskell based on referenced names
 findHaskellImports :: Module.Namespaces Ast.ModuleName -> t0 -> [String]
 findHaskellImports namespaces names_ =
-     
-      let mapping_ = Module.namespacesMapping namespaces 
+
+      let mapping_ = Module.namespacesMapping namespaces
           filtered =
                   Maps.filterWithKey (\ns_ -> \_v -> Logic.not (Equality.equal (Lists.head (Strings.splitOn "hydra.test." (Module.unNamespace ns_))) "")) mapping_
       in (Lists.map (\entry -> Strings.cat [
@@ -124,17 +124,17 @@ namespaceToModuleName ns_ =
 -- | Generate test hierarchy preserving the structure with H.describe blocks for subgroups
 generateTestGroupHierarchy :: Graph.Graph -> Module.Namespaces Ast.ModuleName -> Testing.TestCodec -> Int -> Testing.TestGroup -> Either String String
 generateTestGroupHierarchy g namespaces codec depth testGroup =
-     
-      let cases_ = Testing.testGroupCases testGroup 
+
+      let cases_ = Testing.testGroupCases testGroup
           subgroups = Testing.testGroupSubgroups testGroup
           indent = Strings.fromList (Lists.replicate (Math.mul depth 2) 32)
-      in (Eithers.bind (Eithers.mapList (\tc -> generateTestCaseWithCodec g namespaces codec depth tc) cases_) (\testCaseLinesRaw ->  
-        let testCaseLines = Lists.map (\lines_ -> Lists.map (\line -> Strings.cat2 indent line) lines_) testCaseLinesRaw 
+      in (Eithers.bind (Eithers.mapList (\tc -> generateTestCaseWithCodec g namespaces codec depth tc) cases_) (\testCaseLinesRaw ->
+        let testCaseLines = Lists.map (\lines_ -> Lists.map (\line -> Strings.cat2 indent line) lines_) testCaseLinesRaw
             testCasesStr = Strings.intercalate "\n" (Lists.concat testCaseLines)
         in (Eithers.map (\subgroupsStr -> Strings.cat [
           testCasesStr,
           (Logic.ifElse (Logic.or (Equality.equal testCasesStr "") (Equality.equal subgroupsStr "")) "" "\n"),
-          subgroupsStr]) (Eithers.map (\blocks -> Strings.intercalate "\n" blocks) (Eithers.mapList (\subgroup ->  
+          subgroupsStr]) (Eithers.map (\blocks -> Strings.intercalate "\n" blocks) (Eithers.mapList (\subgroup ->
           let groupName_ = Testing.testGroupName subgroup
           in (Eithers.map (\content -> Strings.cat [
             indent,
@@ -146,17 +146,17 @@ generateTestGroupHierarchy g namespaces codec depth testGroup =
 -- | Generate a single test case using a TestCodec
 generateTestCaseWithCodec :: Graph.Graph -> Module.Namespaces Ast.ModuleName -> Testing.TestCodec -> Int -> Testing.TestCaseWithMetadata -> Either String [String]
 generateTestCaseWithCodec g namespaces codec depth tcm =
-     
-      let name_ = Testing.testCaseWithMetadataName tcm 
+
+      let name_ = Testing.testCaseWithMetadataName tcm
           tcase = Testing.testCaseWithMetadataCase tcm
       in case tcase of
-        Testing.TestCaseDelegatedEvaluation v0 ->  
-          let input_ = Testing.delegatedEvaluationTestCaseInput v0 
+        Testing.TestCaseDelegatedEvaluation v0 ->
+          let input_ = Testing.delegatedEvaluationTestCaseInput v0
               output_ = Testing.delegatedEvaluationTestCaseOutput v0
               formattedName = Testing.testCodecFormatTestName codec name_
               continuationIndent = Math.add (Math.mul depth 2) 4
-          in (Eithers.bind (Testing.testCodecEncodeTerm codec input_ g) (\inputCode -> Eithers.bind (Testing.testCodecEncodeTerm codec output_ g) (\outputCode -> Eithers.bind (generateTypeAnnotationFor g namespaces input_ output_) (\typeAnnotation ->  
-            let indentedInputCode = indentContinuationLines continuationIndent inputCode 
+          in (Eithers.bind (Testing.testCodecEncodeTerm codec input_ g) (\inputCode -> Eithers.bind (Testing.testCodecEncodeTerm codec output_ g) (\outputCode -> Eithers.bind (generateTypeAnnotationFor g namespaces input_ output_) (\typeAnnotation ->
+            let indentedInputCode = indentContinuationLines continuationIndent inputCode
                 indentedOutputCode = indentContinuationLines continuationIndent outputCode
                 finalOutputCode = Maybes.maybe indentedOutputCode (\anno -> Strings.cat2 indentedOutputCode anno) typeAnnotation
             in (Right [
@@ -182,8 +182,8 @@ indentContinuationLines n s =
 -- | Generate a type annotation for polymorphic output values
 generateTypeAnnotationFor :: Graph.Graph -> Module.Namespaces Ast.ModuleName -> Core.Term -> Core.Term -> Either String (Maybe String)
 generateTypeAnnotationFor g namespaces inputTerm outputTerm =
-    Logic.ifElse (Logic.not (containsTriviallyPolymorphic outputTerm)) (Right Nothing) (Maybes.maybe (Right Nothing) (\result ->  
-      let typeScheme = Pairs.second result 
+    Logic.ifElse (Logic.not (containsTriviallyPolymorphic outputTerm)) (Right Nothing) (Maybes.maybe (Right Nothing) (\result ->
+      let typeScheme = Pairs.second result
           typ = Core.typeSchemeType typeScheme
           schemaVars = Sets.fromList (Maps.keys (Graph.graphSchemaTypes g))
           freeVars = Sets.toList (Sets.difference (Rewriting.freeVariablesInType typ) schemaVars)
@@ -191,8 +191,8 @@ generateTypeAnnotationFor g namespaces inputTerm outputTerm =
                   case (Rewriting.deannotateTerm outputTerm) of
                     Core.TermEither _ -> True
                     _ -> False
-      in (Logic.ifElse (Logic.or isEither (Logic.not (Lists.null freeVars))) ( 
-        let int32Type = Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32) 
+      in (Logic.ifElse (Logic.or isEither (Logic.not (Lists.null freeVars))) (
+        let int32Type = Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)
             subst = Typing.TypeSubst (Maps.fromList (Lists.map (\v -> (v, int32Type)) freeVars))
             groundedType = Substitution.substInType subst typ
         in (Eithers.map (\typeStr -> Just (Strings.cat2 " :: " typeStr)) (typeToHaskell namespaces groundedType g))) (Right Nothing))) (tryInferTypeOf g inputTerm))
@@ -220,8 +220,8 @@ containsTriviallyPolymorphic term =
 -- | Build the complete test module using a TestCodec
 buildTestModuleWithCodec :: Testing.TestCodec -> Module.Module -> Testing.TestGroup -> String -> t0 -> String
 buildTestModuleWithCodec codec testModule testGroup testBody namespaces =
-     
-      let ns_ = Module.moduleNamespace testModule 
+
+      let ns_ = Module.moduleNamespace testModule
           specNs = Module.Namespace (Strings.cat2 (Module.unNamespace ns_) "Spec")
           moduleNameString = Testing.testCodecFormatModuleName codec specNs
           groupName_ = Testing.testGroupName testGroup
@@ -269,8 +269,8 @@ buildTestModuleWithCodec codec testModule testGroup testBody namespaces =
 -- | Generate a complete test file using a TestCodec
 generateTestFileWithCodec :: Testing.TestCodec -> Module.Module -> Testing.TestGroup -> Module.Namespaces Ast.ModuleName -> Graph.Graph -> Either String (String, String)
 generateTestFileWithCodec codec testModule testGroup namespaces g =
-    Eithers.map (\testBody ->  
-      let testModuleContent = buildTestModuleWithCodec codec testModule testGroup testBody namespaces 
+    Eithers.map (\testBody ->
+      let testModuleContent = buildTestModuleWithCodec codec testModule testGroup testBody namespaces
           ext = Module.unFileExtension (Testing.testCodecFileExtension codec)
           ns_ = Module.moduleNamespace testModule
           specNs = Module.Namespace (Strings.cat2 (Module.unNamespace ns_) "Spec")
@@ -290,8 +290,8 @@ collectNames graf names t =
 -- | Add namespaces from a set of names to existing namespaces
 addNamespacesToNamespaces :: Module.Namespaces Ast.ModuleName -> S.Set Core.Name -> Module.Namespaces Ast.ModuleName
 addNamespacesToNamespaces ns0 names =
-     
-      let newNamespaces = Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList names))) 
+
+      let newNamespaces = Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList names)))
           toModuleName =
                   \namespace -> Ast.ModuleName (Formatting.capitalize (Lists.last (Strings.splitOn "." (Module.unNamespace namespace))))
           newMappings = Maps.fromList (Lists.map (\ns_ -> (ns_, (toModuleName ns_))) (Sets.toList newNamespaces))
@@ -307,8 +307,8 @@ generateHaskellTestFile testModule testGroup g =
 -- | Build namespaces for a test group including encoded term references
 buildNamespacesForTestGroup :: Module.Module -> Testing.TestGroup -> Graph.Graph -> Either String (Module.Namespaces Ast.ModuleName)
 buildNamespacesForTestGroup mod tgroup graph_ =
-     
-      let testCases_ = collectTestCases tgroup 
+
+      let testCases_ = collectTestCases tgroup
           testTerms = Lists.concat (Lists.map extractTestTerms testCases_)
           testBindings =
                   Lists.map (\term -> Core.Binding {
@@ -322,7 +322,7 @@ buildNamespacesForTestGroup mod tgroup graph_ =
                     Module.moduleTermDependencies = (Module.moduleTermDependencies mod),
                     Module.moduleTypeDependencies = (Module.moduleTypeDependencies mod),
                     Module.moduleDescription = (Module.moduleDescription mod)}
-      in (Eithers.bind (Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyContext graph_)) (\baseNamespaces ->  
+      in (Eithers.bind (Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyContext graph_)) (\baseNamespaces ->
         let encodedNames = Sets.unions (Lists.map (\t -> extractEncodedTermVariableNames graph_ t) testTerms)
         in (Right (addNamespacesToNamespaces baseNamespaces encodedNames))))
 

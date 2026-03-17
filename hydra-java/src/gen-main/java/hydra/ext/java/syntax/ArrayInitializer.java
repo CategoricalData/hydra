@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class ArrayInitializer implements Serializable, Comparable<ArrayInitializer> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ArrayInitializer");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.VariableInitializer>> value;
-  
+
   public ArrayInitializer (hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.VariableInitializer>> value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ArrayInitializer)) {
@@ -25,12 +25,12 @@ public class ArrayInitializer implements Serializable, Comparable<ArrayInitializ
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ArrayInitializer other) {

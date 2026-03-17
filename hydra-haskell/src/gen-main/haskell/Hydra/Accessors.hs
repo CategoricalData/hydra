@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | An edge in an accessor graph, connecting two nodes via a path
-data AccessorEdge = 
+data AccessorEdge =
   AccessorEdge {
     -- | The source node of the edge
     accessorEdgeSource :: AccessorNode,
@@ -32,7 +32,7 @@ _AccessorEdge_path = Core.Name "path"
 _AccessorEdge_target = Core.Name "target"
 
 -- | A graph of accessor nodes and edges, representing term access patterns
-data AccessorGraph = 
+data AccessorGraph =
   AccessorGraph {
     -- | All nodes in the graph
     accessorGraphNodes :: [AccessorNode],
@@ -47,7 +47,7 @@ _AccessorGraph_nodes = Core.Name "nodes"
 _AccessorGraph_edges = Core.Name "edges"
 
 -- | A node in an accessor graph, representing a term or subterm
-data AccessorNode = 
+data AccessorNode =
   AccessorNode {
     -- | The qualified name of the term
     accessorNodeName :: Core.Name,
@@ -66,7 +66,7 @@ _AccessorNode_label = Core.Name "label"
 _AccessorNode_id = Core.Name "id"
 
 -- | A sequence of term accessors forming a path through a term
-newtype AccessorPath = 
+newtype AccessorPath =
   AccessorPath {
     unAccessorPath :: [TermAccessor]}
   deriving (Eq, Ord, Read, Show)
@@ -74,7 +74,7 @@ newtype AccessorPath =
 _AccessorPath = Core.Name "hydra.accessors.AccessorPath"
 
 -- | A function which maps from a term to a particular immediate subterm
-data TermAccessor = 
+data TermAccessor =
   -- | Access the body of an annotated term
   TermAccessorAnnotatedBody  |
   -- | Access the function of an application term
@@ -114,7 +114,7 @@ data TermAccessor =
   -- | Access the term inside a union injection
   TermAccessorInjectionTerm  |
   -- | Access the term inside a wrapped term
-  TermAccessorWrappedTerm 
+  TermAccessorWrappedTerm
   deriving (Eq, Ord, Read, Show)
 
 _TermAccessor = Core.Name "hydra.accessors.TermAccessor"

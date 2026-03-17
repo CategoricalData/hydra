@@ -9,15 +9,15 @@ import java.io.Serializable;
  */
 public class EdgePropertyFeatures implements Serializable, Comparable<EdgePropertyFeatures> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.EdgePropertyFeatures");
-  
+
   public static final hydra.core.Name PROPERTY_FEATURES = new hydra.core.Name("propertyFeatures");
-  
+
   public final hydra.ext.org.apache.tinkerpop.features.PropertyFeatures propertyFeatures;
-  
+
   public EdgePropertyFeatures (hydra.ext.org.apache.tinkerpop.features.PropertyFeatures propertyFeatures) {
     this.propertyFeatures = propertyFeatures;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof EdgePropertyFeatures)) {
@@ -28,12 +28,12 @@ public class EdgePropertyFeatures implements Serializable, Comparable<EdgeProper
       this.propertyFeatures,
       o.propertyFeatures);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(propertyFeatures);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(EdgePropertyFeatures other) {

@@ -6,52 +6,52 @@ import java.io.Serializable;
 
 public abstract class SingleTarget implements Serializable, Comparable<SingleTarget> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.SingleTarget");
-  
+
   public static final hydra.core.Name SUBSCRIPT_ATTRIBUTE_TARGET = new hydra.core.Name("subscriptAttributeTarget");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name PARENS = new hydra.core.Name("parens");
-  
+
   private SingleTarget () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(SubscriptAttributeTarget instance) ;
-    
+
     R visit(Name instance) ;
-    
+
     R visit(Parens instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(SingleTarget instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(SubscriptAttributeTarget instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Name instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Parens instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class SubscriptAttributeTarget extends hydra.ext.python.syntax.SingleTarget implements Serializable {
     public final hydra.ext.python.syntax.SingleSubscriptAttributeTarget value;
-    
+
     public SubscriptAttributeTarget (hydra.ext.python.syntax.SingleSubscriptAttributeTarget value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof SubscriptAttributeTarget)) {
@@ -62,12 +62,12 @@ public abstract class SingleTarget implements Serializable, Comparable<SingleTar
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SingleTarget other) {
@@ -78,20 +78,20 @@ public abstract class SingleTarget implements Serializable, Comparable<SingleTar
       SubscriptAttributeTarget o = (SubscriptAttributeTarget) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Name extends hydra.ext.python.syntax.SingleTarget implements Serializable {
     public final hydra.ext.python.syntax.Name value;
-    
+
     public Name (hydra.ext.python.syntax.Name value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Name)) {
@@ -102,12 +102,12 @@ public abstract class SingleTarget implements Serializable, Comparable<SingleTar
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SingleTarget other) {
@@ -118,20 +118,20 @@ public abstract class SingleTarget implements Serializable, Comparable<SingleTar
       Name o = (Name) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Parens extends hydra.ext.python.syntax.SingleTarget implements Serializable {
     public final hydra.ext.python.syntax.SingleTarget value;
-    
+
     public Parens (hydra.ext.python.syntax.SingleTarget value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Parens)) {
@@ -142,12 +142,12 @@ public abstract class SingleTarget implements Serializable, Comparable<SingleTar
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SingleTarget other) {
@@ -158,7 +158,7 @@ public abstract class SingleTarget implements Serializable, Comparable<SingleTar
       Parens o = (Parens) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

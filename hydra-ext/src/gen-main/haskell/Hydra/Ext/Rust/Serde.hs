@@ -42,8 +42,8 @@ itemToExpr item =
 -- | Serialize an item with optional doc comments and visibility
 itemWithCommentsToExpr :: Syntax.ItemWithComments -> Ast.Expr
 itemWithCommentsToExpr iwc =
-     
-      let doc = Syntax.itemWithCommentsDoc iwc 
+
+      let doc = Syntax.itemWithCommentsDoc iwc
           vis = Syntax.itemWithCommentsVisibility iwc
           item = Syntax.itemWithCommentsItem iwc
           docPart = Maybes.maybe [] (\d -> [
@@ -60,8 +60,8 @@ itemWithCommentsToExpr iwc =
 -- | Serialize a use declaration
 useDeclarationToExpr :: Syntax.UseDeclaration -> Ast.Expr
 useDeclarationToExpr use =
-     
-      let pub = Syntax.useDeclarationPublic use 
+
+      let pub = Syntax.useDeclarationPublic use
           tree = Syntax.useDeclarationTree use
           pubKw = Logic.ifElse pub (Just (Serialization.cst "pub")) Nothing
       in (Serialization.spaceSep (Maybes.cat [
@@ -75,16 +75,16 @@ useTreeToExpr :: Syntax.UseTree -> Ast.Expr
 useTreeToExpr tree =
     case tree of
       Syntax.UseTreePath v0 -> Serialization.cst (Strings.intercalate "::" (Syntax.usePathSegments v0))
-      Syntax.UseTreeRename v0 ->  
-        let path = Syntax.useRenamePath v0 
+      Syntax.UseTreeRename v0 ->
+        let path = Syntax.useRenamePath v0
             alias = Syntax.useRenameAlias v0
         in (Serialization.spaceSep [
           Serialization.cst (Strings.intercalate "::" path),
           (Serialization.cst "as"),
           (Serialization.cst alias)])
       Syntax.UseTreeGlob v0 -> Serialization.cst (Strings.cat2 (Strings.intercalate "::" v0) "::*")
-      Syntax.UseTreeGroup v0 ->  
-        let prefix = Syntax.useGroupPrefix v0 
+      Syntax.UseTreeGroup v0 ->
+        let prefix = Syntax.useGroupPrefix v0
             trees = Syntax.useGroupTrees v0
             prefixStr = Logic.ifElse (Lists.null prefix) "" (Strings.cat2 (Strings.intercalate "::" prefix) "::")
         in (Serialization.cst (Strings.cat [
@@ -96,8 +96,8 @@ useTreeToExpr tree =
 -- | Serialize a struct definition
 structDefToExpr :: Syntax.StructDef -> Ast.Expr
 structDefToExpr s =
-     
-      let name = Syntax.structDefName s 
+
+      let name = Syntax.structDefName s
           generics = Syntax.structDefGenerics s
           whereC = Syntax.structDefWhereClause s
           body = Syntax.structDefBody s
@@ -135,8 +135,8 @@ structBodyToExpr body =
 -- | Serialize a struct field
 structFieldToExpr :: Syntax.StructField -> Ast.Expr
 structFieldToExpr field =
-     
-      let name = Syntax.structFieldName field 
+
+      let name = Syntax.structFieldName field
           typ = Syntax.structFieldType field
           pub = Syntax.structFieldPublic field
           docC = Syntax.structFieldDoc field
@@ -154,8 +154,8 @@ structFieldToExpr field =
 -- | Serialize an enum definition
 enumDefToExpr :: Syntax.EnumDef -> Ast.Expr
 enumDefToExpr e =
-     
-      let name = Syntax.enumDefName e 
+
+      let name = Syntax.enumDefName e
           generics = Syntax.enumDefGenerics e
           whereC = Syntax.enumDefWhereClause e
           variants = Syntax.enumDefVariants e
@@ -184,8 +184,8 @@ enumDefToExpr e =
 -- | Serialize an enum variant
 enumVariantToExpr :: Syntax.EnumVariant -> Ast.Expr
 enumVariantToExpr v =
-     
-      let name = Syntax.enumVariantName v 
+
+      let name = Syntax.enumVariantName v
           body = Syntax.enumVariantBody v
           docC = Syntax.enumVariantDoc v
           docPart = Maybes.maybe [] (\d -> [
@@ -208,8 +208,8 @@ enumVariantBodyToExpr body =
 -- | Serialize a function definition
 fnDefToExpr :: Syntax.FnDef -> Ast.Expr
 fnDefToExpr f =
-     
-      let name = Syntax.fnDefName f 
+
+      let name = Syntax.fnDefName f
           generics = Syntax.fnDefGenerics f
           whereC = Syntax.fnDefWhereClause f
           params = Syntax.fnDefParams f
@@ -254,8 +254,8 @@ fnDefToExpr f =
 -- | Serialize a function parameter
 fnParamToExpr :: Syntax.FnParam -> Ast.Expr
 fnParamToExpr param =
-     
-      let pat = Syntax.fnParamPattern param 
+
+      let pat = Syntax.fnParamPattern param
           typ = Syntax.fnParamType param
       in (Serialization.spaceSep [
         Serialization.cst (Strings.cat2 (Serialization.printExpr (patternToExpr pat)) ":"),
@@ -274,8 +274,8 @@ methodParamToExpr param =
 -- | Serialize a type alias
 typeAliasToExpr :: Syntax.TypeAlias -> Ast.Expr
 typeAliasToExpr ta =
-     
-      let name = Syntax.typeAliasName ta 
+
+      let name = Syntax.typeAliasName ta
           generics = Syntax.typeAliasGenerics ta
           typ = Syntax.typeAliasType ta
           docC = Syntax.typeAliasDoc ta
@@ -295,8 +295,8 @@ typeAliasToExpr ta =
 -- | Serialize a const definition
 constDefToExpr :: Syntax.ConstDef -> Ast.Expr
 constDefToExpr c =
-     
-      let name = Syntax.constDefName c 
+
+      let name = Syntax.constDefName c
           typ = Syntax.constDefType c
           val = Syntax.constDefValue c
       in (Serialization.spaceSep [
@@ -310,8 +310,8 @@ constDefToExpr c =
 -- | Serialize a static definition
 staticDefToExpr :: Syntax.StaticDef -> Ast.Expr
 staticDefToExpr s =
-     
-      let name = Syntax.staticDefName s 
+
+      let name = Syntax.staticDefName s
           typ = Syntax.staticDefType s
           val = Syntax.staticDefValue s
           mut = Syntax.staticDefMutable s
@@ -328,8 +328,8 @@ staticDefToExpr s =
 -- | Serialize a module definition
 modDefToExpr :: Syntax.ModDef -> Ast.Expr
 modDefToExpr m =
-     
-      let name = Syntax.modDefName m 
+
+      let name = Syntax.modDefName m
           body = Syntax.modDefBody m
       in (Maybes.maybe (Serialization.spaceSep [
         Serialization.cst "mod",
@@ -342,8 +342,8 @@ modDefToExpr m =
 -- | Serialize an impl block
 implBlockToExpr :: Syntax.ImplBlock -> Ast.Expr
 implBlockToExpr i =
-     
-      let generics = Syntax.implBlockGenerics i 
+
+      let generics = Syntax.implBlockGenerics i
           whereC = Syntax.implBlockWhereClause i
           trait = Syntax.implBlockTrait i
           selfType = Syntax.implBlockSelfType i
@@ -377,8 +377,8 @@ implItemToExpr item =
 -- | Serialize an impl method
 implMethodToExpr :: Syntax.ImplMethod -> Ast.Expr
 implMethodToExpr m =
-     
-      let name = Syntax.implMethodName m 
+
+      let name = Syntax.implMethodName m
           generics = Syntax.implMethodGenerics m
           whereC = Syntax.implMethodWhereClause m
           params = Syntax.implMethodParams m
@@ -415,8 +415,8 @@ implMethodToExpr m =
 -- | Serialize a trait definition
 traitDefToExpr :: Syntax.TraitDef -> Ast.Expr
 traitDefToExpr t =
-     
-      let name = Syntax.traitDefName t 
+
+      let name = Syntax.traitDefName t
           generics = Syntax.traitDefGenerics t
           whereC = Syntax.traitDefWhereClause t
           supers = Syntax.traitDefSuperTraits t
@@ -459,8 +459,8 @@ traitItemToExpr item =
 -- | Serialize a trait method
 traitMethodToExpr :: Syntax.TraitMethod -> Ast.Expr
 traitMethodToExpr m =
-     
-      let name = Syntax.traitMethodName m 
+
+      let name = Syntax.traitMethodName m
           generics = Syntax.traitMethodGenerics m
           params = Syntax.traitMethodParams m
           retType = Syntax.traitMethodReturnType m
@@ -487,8 +487,8 @@ traitMethodToExpr m =
 -- | Serialize a trait associated type
 traitTypeToExpr :: Syntax.TraitType -> Ast.Expr
 traitTypeToExpr t =
-     
-      let name = Syntax.traitTypeName t 
+
+      let name = Syntax.traitTypeName t
           bounds = Syntax.traitTypeBounds t
           def = Syntax.traitTypeDefault t
           boundsPart =
@@ -509,8 +509,8 @@ traitTypeToExpr t =
 -- | Serialize a trait associated constant
 traitConstToExpr :: Syntax.TraitConst -> Ast.Expr
 traitConstToExpr c =
-     
-      let name = Syntax.traitConstName c 
+
+      let name = Syntax.traitConstName c
           typ = Syntax.traitConstType c
           def = Syntax.traitConstDefault c
           defPart =
@@ -527,8 +527,8 @@ traitConstToExpr c =
 -- | Serialize a generic parameter
 genericParamToExpr :: Syntax.GenericParam -> Ast.Expr
 genericParamToExpr gp =
-     
-      let name = Syntax.genericParamName gp 
+
+      let name = Syntax.genericParamName gp
           bounds = Syntax.genericParamBounds gp
       in (Logic.ifElse (Lists.null bounds) (Serialization.cst name) (Serialization.spaceSep [
         Serialization.cst (Strings.cat2 name ":"),
@@ -549,11 +549,11 @@ typeParamBoundToExpr bound =
 -- | Serialize a where clause
 whereClauseToExpr :: Syntax.WhereClause -> Ast.Expr
 whereClauseToExpr wc =
-     
-      let preds = Syntax.whereClausePredicates wc 
+
+      let preds = Syntax.whereClausePredicates wc
           predExprs =
-                  Lists.map (\p ->  
-                    let typ = Syntax.wherePredicateType p 
+                  Lists.map (\p ->
+                    let typ = Syntax.wherePredicateType p
                         bounds = Syntax.wherePredicateBounds p
                     in (Serialization.spaceSep [
                       typeToExpr typ,
@@ -571,8 +571,8 @@ typeToExpr typ =
       Syntax.TypeReference v0 -> referenceTypeToExpr v0
       Syntax.TypeSlice v0 -> Serialization.bracketList Serialization.inlineStyle [
         typeToExpr v0]
-      Syntax.TypeArray v0 ->  
-        let elem = Syntax.arrayTypeElement v0 
+      Syntax.TypeArray v0 ->
+        let elem = Syntax.arrayTypeElement v0
             len = Syntax.arrayTypeLength v0
         in (Serialization.cst (Strings.cat [
           "[",
@@ -581,8 +581,8 @@ typeToExpr typ =
           (Serialization.printExpr (expressionToExpr len)),
           "]"]))
       Syntax.TypeTuple v0 -> Serialization.parenList False (Lists.map typeToExpr v0)
-      Syntax.TypeFnPointer v0 ->  
-        let params = Syntax.fnPointerTypeParams v0 
+      Syntax.TypeFnPointer v0 ->
+        let params = Syntax.fnPointerTypeParams v0
             ret = Syntax.fnPointerTypeReturnType v0
         in (Serialization.spaceSep [
           Serialization.cst "fn",
@@ -598,8 +598,8 @@ typeToExpr typ =
       Syntax.TypeInferred -> Serialization.cst "_"
       Syntax.TypeUnit -> Serialization.cst "()"
       Syntax.TypeNever -> Serialization.cst "!"
-      Syntax.TypeRawPointer v0 ->  
-        let mut = Syntax.rawPointerTypeMutable v0 
+      Syntax.TypeRawPointer v0 ->
+        let mut = Syntax.rawPointerTypeMutable v0
             t = Syntax.rawPointerTypeType v0
             kw = Logic.ifElse mut "*mut" "*const"
         in (Serialization.spaceSep [
@@ -610,8 +610,8 @@ typeToExpr typ =
 -- | Serialize a type path
 typePathToExpr :: Syntax.TypePath -> Ast.Expr
 typePathToExpr tp =
-     
-      let global = Syntax.typePathGlobal tp 
+
+      let global = Syntax.typePathGlobal tp
           segs = Syntax.typePathSegments tp
           prefix = Logic.ifElse global "::" ""
           segStrs = Lists.map (\s -> Serialization.printExpr (pathSegmentToExpr s)) segs
@@ -620,8 +620,8 @@ typePathToExpr tp =
 -- | Serialize a path segment
 pathSegmentToExpr :: Syntax.PathSegment -> Ast.Expr
 pathSegmentToExpr seg =
-     
-      let name = Syntax.pathSegmentName seg 
+
+      let name = Syntax.pathSegmentName seg
           args = Syntax.pathSegmentArguments seg
       in (Serialization.spaceSep (Maybes.cat [
         Just (Serialization.cst name),
@@ -632,11 +632,11 @@ genericArgumentsToExpr :: Syntax.GenericArguments -> Maybe Ast.Expr
 genericArgumentsToExpr args =
     case args of
       Syntax.GenericArgumentsNone -> Nothing
-      Syntax.GenericArgumentsAngleBracketed v0 ->  
+      Syntax.GenericArgumentsAngleBracketed v0 ->
         let args = Syntax.angleBracketedArgsArgs v0
         in (Just (Serialization.angleBracesList Serialization.inlineStyle (Lists.map genericArgToExpr args)))
-      Syntax.GenericArgumentsParenthesized v0 ->  
-        let inputs = Syntax.parenthesizedArgsInputs v0 
+      Syntax.GenericArgumentsParenthesized v0 ->
+        let inputs = Syntax.parenthesizedArgsInputs v0
             output = Syntax.parenthesizedArgsOutput v0
             inputPart = Serialization.parenList False (Lists.map typeToExpr inputs)
             outputPart =
@@ -654,8 +654,8 @@ genericArgToExpr arg =
       Syntax.GenericArgType v0 -> typeToExpr v0
       Syntax.GenericArgLifetime v0 -> Serialization.cst (Strings.cat2 "'" (Syntax.lifetimeName v0))
       Syntax.GenericArgConst v0 -> expressionToExpr v0
-      Syntax.GenericArgBinding v0 ->  
-        let name = Syntax.typeBindingName v0 
+      Syntax.GenericArgBinding v0 ->
+        let name = Syntax.typeBindingName v0
             typ = Syntax.typeBindingType v0
         in (Serialization.spaceSep [
           Serialization.cst name,
@@ -665,8 +665,8 @@ genericArgToExpr arg =
 -- | Serialize a reference type
 referenceTypeToExpr :: Syntax.ReferenceType -> Ast.Expr
 referenceTypeToExpr rt =
-     
-      let lt = Syntax.referenceTypeLifetime rt 
+
+      let lt = Syntax.referenceTypeLifetime rt
           mut = Syntax.referenceTypeMutable rt
           t = Syntax.referenceTypeType rt
           ltPart = Maybes.maybe "" (\l -> Strings.cat2 "'" (Strings.cat2 (Syntax.lifetimeName l) " ")) lt
@@ -722,8 +722,8 @@ expressionToExpr expr =
 -- | Serialize an expression path
 exprPathToExpr :: Syntax.ExprPath -> Ast.Expr
 exprPathToExpr ep =
-     
-      let global = Syntax.exprPathGlobal ep 
+
+      let global = Syntax.exprPathGlobal ep
           segs = Syntax.exprPathSegments ep
           prefix = Logic.ifElse global "::" ""
           segStrs = Lists.map (\s -> Serialization.printExpr (pathSegmentToExpr s)) segs
@@ -732,8 +732,8 @@ exprPathToExpr ep =
 -- | Serialize a function call expression
 callExprToExpr :: Syntax.CallExpr -> Ast.Expr
 callExprToExpr c =
-     
-      let func = Syntax.callExprFunction c 
+
+      let func = Syntax.callExprFunction c
           args = Syntax.callExprArgs c
       in (Serialization.spaceSep [
         expressionToExpr func,
@@ -742,8 +742,8 @@ callExprToExpr c =
 -- | Serialize a method call expression
 methodCallExprToExpr :: Syntax.MethodCallExpr -> Ast.Expr
 methodCallExprToExpr m =
-     
-      let recv = Syntax.methodCallExprReceiver m 
+
+      let recv = Syntax.methodCallExprReceiver m
           method = Syntax.methodCallExprMethod m
           turbo = Syntax.methodCallExprTurbofish m
           args = Syntax.methodCallExprArgs m
@@ -764,8 +764,8 @@ methodCallExprToExpr m =
 -- | Serialize a field access expression
 fieldAccessExprToExpr :: Syntax.FieldAccessExpr -> Ast.Expr
 fieldAccessExprToExpr f =
-     
-      let obj = Syntax.fieldAccessExprObject f 
+
+      let obj = Syntax.fieldAccessExprObject f
           field = Syntax.fieldAccessExprField f
       in (Serialization.cst (Strings.cat [
         Serialization.printExpr (expressionToExpr obj),
@@ -775,8 +775,8 @@ fieldAccessExprToExpr f =
 -- | Serialize a tuple index expression
 tupleIndexExprToExpr :: Syntax.TupleIndexExpr -> Ast.Expr
 tupleIndexExprToExpr t =
-     
-      let tuple = Syntax.tupleIndexExprTuple t 
+
+      let tuple = Syntax.tupleIndexExprTuple t
           idx = Syntax.tupleIndexExprIndex t
       in (Serialization.cst (Strings.cat [
         Serialization.printExpr (expressionToExpr tuple),
@@ -786,8 +786,8 @@ tupleIndexExprToExpr t =
 -- | Serialize a closure expression
 closureExprToExpr :: Syntax.ClosureExpr -> Ast.Expr
 closureExprToExpr c =
-     
-      let move = Syntax.closureExprMove c 
+
+      let move = Syntax.closureExprMove c
           params = Syntax.closureExprParams c
           retType = Syntax.closureExprReturnType c
           body = Syntax.closureExprBody c
@@ -810,8 +810,8 @@ closureExprToExpr c =
 -- | Serialize a closure parameter to string
 closureParamToStr :: Syntax.ClosureParam -> String
 closureParamToStr cp =
-     
-      let pat = Syntax.closureParamPattern cp 
+
+      let pat = Syntax.closureParamPattern cp
           typ = Syntax.closureParamType cp
           patStr = Serialization.printExpr (patternToExpr pat)
       in (Maybes.maybe patStr (\t -> Strings.cat [
@@ -822,15 +822,15 @@ closureParamToStr cp =
 -- | Serialize an if expression
 ifExprToExpr :: Syntax.IfExpr -> Ast.Expr
 ifExprToExpr i =
-     
-      let cond = Syntax.ifExprCondition i 
+
+      let cond = Syntax.ifExprCondition i
           thenB = Syntax.ifExprThenBlock i
           elseB = Syntax.ifExprElseBranch i
           condExpr =
                   case cond of
                     Syntax.IfConditionBool v0 -> expressionToExpr v0
-                    Syntax.IfConditionLet v0 ->  
-                      let pat = Syntax.letConditionPattern v0 
+                    Syntax.IfConditionLet v0 ->
+                      let pat = Syntax.letConditionPattern v0
                           expr = Syntax.letConditionExpr v0
                       in (Serialization.spaceSep [
                         Serialization.cst "let",
@@ -850,8 +850,8 @@ ifExprToExpr i =
 -- | Serialize a match expression
 matchExprToExpr :: Syntax.MatchExpr -> Ast.Expr
 matchExprToExpr m =
-     
-      let scrut = Syntax.matchExprScrutinee m 
+
+      let scrut = Syntax.matchExprScrutinee m
           arms = Syntax.matchExprArms m
       in (Serialization.spaceSep [
         Serialization.cst "match",
@@ -861,8 +861,8 @@ matchExprToExpr m =
 -- | Serialize a match arm
 matchArmToExpr :: Syntax.MatchArm -> Ast.Expr
 matchArmToExpr arm =
-     
-      let pat = Syntax.matchArmPattern arm 
+
+      let pat = Syntax.matchArmPattern arm
           guard = Syntax.matchArmGuard arm
           body = Syntax.matchArmBody arm
           guardPart =
@@ -879,8 +879,8 @@ matchArmToExpr arm =
 -- | Serialize a loop expression
 loopExprToExpr :: Syntax.LoopExpr -> Ast.Expr
 loopExprToExpr l =
-     
-      let label = Syntax.loopExprLabel l 
+
+      let label = Syntax.loopExprLabel l
           body = Syntax.loopExprBody l
           labelPart = Maybes.maybe Nothing (\lbl -> Just (Serialization.cst (Strings.cat2 "'" (Strings.cat2 lbl ":")))) label
       in (Serialization.spaceSep (Maybes.cat [
@@ -891,16 +891,16 @@ loopExprToExpr l =
 -- | Serialize a while expression
 whileExprToExpr :: Syntax.WhileExpr -> Ast.Expr
 whileExprToExpr w =
-     
-      let label = Syntax.whileExprLabel w 
+
+      let label = Syntax.whileExprLabel w
           cond = Syntax.whileExprCondition w
           body = Syntax.whileExprBody w
           labelPart = Maybes.maybe Nothing (\lbl -> Just (Serialization.cst (Strings.cat2 "'" (Strings.cat2 lbl ":")))) label
           condExpr =
                   case cond of
                     Syntax.IfConditionBool v0 -> expressionToExpr v0
-                    Syntax.IfConditionLet v0 ->  
-                      let pat = Syntax.letConditionPattern v0 
+                    Syntax.IfConditionLet v0 ->
+                      let pat = Syntax.letConditionPattern v0
                           expr = Syntax.letConditionExpr v0
                       in (Serialization.spaceSep [
                         Serialization.cst "let",
@@ -916,8 +916,8 @@ whileExprToExpr w =
 -- | Serialize a for expression
 forExprToExpr :: Syntax.ForExpr -> Ast.Expr
 forExprToExpr f =
-     
-      let label = Syntax.forExprLabel f 
+
+      let label = Syntax.forExprLabel f
           pat = Syntax.forExprPattern f
           iter = Syntax.forExprIter f
           body = Syntax.forExprBody f
@@ -933,8 +933,8 @@ forExprToExpr f =
 -- | Serialize a binary expression
 binaryExprToExpr :: Syntax.BinaryExpr -> Ast.Expr
 binaryExprToExpr b =
-     
-      let left = Syntax.binaryExprLeft b 
+
+      let left = Syntax.binaryExprLeft b
           op = Syntax.binaryExprOp b
           right = Syntax.binaryExprRight b
       in (Serialization.spaceSep [
@@ -968,8 +968,8 @@ binaryOpToExpr op =
 -- | Serialize a unary expression
 unaryExprToExpr :: Syntax.UnaryExpr -> Ast.Expr
 unaryExprToExpr u =
-     
-      let op = Syntax.unaryExprOp u 
+
+      let op = Syntax.unaryExprOp u
           operand = Syntax.unaryExprOperand u
           opStr =
                   case op of
@@ -980,8 +980,8 @@ unaryExprToExpr u =
 -- | Serialize a reference expression
 refExprToExpr :: Syntax.RefExpr -> Ast.Expr
 refExprToExpr r =
-     
-      let mut = Syntax.refExprMutable r 
+
+      let mut = Syntax.refExprMutable r
           expr = Syntax.refExprExpr r
           prefix = Logic.ifElse mut "&mut " "&"
       in (Serialization.cst (Strings.cat2 prefix (Serialization.printExpr (expressionToExpr expr))))
@@ -989,8 +989,8 @@ refExprToExpr r =
 -- | Serialize a struct literal expression
 structExprToExpr :: Syntax.StructExpr -> Ast.Expr
 structExprToExpr s =
-     
-      let path = Syntax.structExprPath s 
+
+      let path = Syntax.structExprPath s
           fields = Syntax.structExprFields s
           rest = Syntax.structExprRest s
           fieldExprs = Lists.map fieldValueToExpr fields
@@ -1007,8 +1007,8 @@ structExprToExpr s =
 -- | Serialize a field-value pair
 fieldValueToExpr :: Syntax.FieldValue -> Ast.Expr
 fieldValueToExpr fv =
-     
-      let name = Syntax.fieldValueName fv 
+
+      let name = Syntax.fieldValueName fv
           val = Syntax.fieldValueValue fv
       in (Maybes.maybe (Serialization.cst name) (\v -> Serialization.spaceSep [
         Serialization.cst (Strings.cat2 name ":"),
@@ -1019,8 +1019,8 @@ arrayExprToExpr :: Syntax.ArrayExpr -> Ast.Expr
 arrayExprToExpr a =
     case a of
       Syntax.ArrayExprElements v0 -> Serialization.bracketList Serialization.halfBlockStyle (Lists.map expressionToExpr v0)
-      Syntax.ArrayExprRepeat v0 ->  
-        let elem = Syntax.arrayRepeatElement v0 
+      Syntax.ArrayExprRepeat v0 ->
+        let elem = Syntax.arrayRepeatElement v0
             len = Syntax.arrayRepeatLength v0
         in (Serialization.cst (Strings.cat [
           "[",
@@ -1032,8 +1032,8 @@ arrayExprToExpr a =
 -- | Serialize an index expression
 indexExprToExpr :: Syntax.IndexExpr -> Ast.Expr
 indexExprToExpr i =
-     
-      let obj = Syntax.indexExprObject i 
+
+      let obj = Syntax.indexExprObject i
           idx = Syntax.indexExprIndex i
       in (Serialization.cst (Strings.cat [
         Serialization.printExpr (expressionToExpr obj),
@@ -1044,8 +1044,8 @@ indexExprToExpr i =
 -- | Serialize a range expression
 rangeExprToExpr :: Syntax.RangeExpr -> Ast.Expr
 rangeExprToExpr r =
-     
-      let from = Syntax.rangeExprFrom r 
+
+      let from = Syntax.rangeExprFrom r
           to = Syntax.rangeExprTo r
           incl = Syntax.rangeExprInclusive r
           fromStr = Maybes.maybe "" (\f -> Serialization.printExpr (expressionToExpr f)) from
@@ -1059,8 +1059,8 @@ rangeExprToExpr r =
 -- | Serialize a cast expression
 castExprToExpr :: Syntax.CastExpr -> Ast.Expr
 castExprToExpr c =
-     
-      let expr = Syntax.castExprExpr c 
+
+      let expr = Syntax.castExprExpr c
           typ = Syntax.castExprType c
       in (Serialization.spaceSep [
         expressionToExpr expr,
@@ -1070,8 +1070,8 @@ castExprToExpr c =
 -- | Serialize a type ascription expression
 typeAscriptionExprToExpr :: Syntax.TypeAscriptionExpr -> Ast.Expr
 typeAscriptionExprToExpr t =
-     
-      let expr = Syntax.typeAscriptionExprExpr t 
+
+      let expr = Syntax.typeAscriptionExprExpr t
           typ = Syntax.typeAscriptionExprType t
       in (Serialization.spaceSep [
         expressionToExpr expr,
@@ -1081,8 +1081,8 @@ typeAscriptionExprToExpr t =
 -- | Serialize an assignment expression
 assignExprToExpr :: Syntax.AssignExpr -> Ast.Expr
 assignExprToExpr a =
-     
-      let target = Syntax.assignExprTarget a 
+
+      let target = Syntax.assignExprTarget a
           val = Syntax.assignExprValue a
       in (Serialization.spaceSep [
         expressionToExpr target,
@@ -1092,8 +1092,8 @@ assignExprToExpr a =
 -- | Serialize a compound assignment expression
 compoundAssignExprToExpr :: Syntax.CompoundAssignExpr -> Ast.Expr
 compoundAssignExprToExpr c =
-     
-      let target = Syntax.compoundAssignExprTarget c 
+
+      let target = Syntax.compoundAssignExprTarget c
           op = Syntax.compoundAssignExprOp c
           val = Syntax.compoundAssignExprValue c
           opStr =
@@ -1116,8 +1116,8 @@ compoundAssignExprToExpr c =
 -- | Serialize a macro invocation
 macroInvocationToExpr :: Syntax.MacroInvocation -> Ast.Expr
 macroInvocationToExpr m =
-     
-      let path = Syntax.macroInvocationPath m 
+
+      let path = Syntax.macroInvocationPath m
           delim = Syntax.macroInvocationDelimiter m
           tokens = Syntax.macroInvocationTokens m
           pathStr = Strings.intercalate "::" path
@@ -1152,8 +1152,8 @@ statementToExpr stmt =
 -- | Serialize a let statement
 letStatementToExpr :: Syntax.LetStatement -> Ast.Expr
 letStatementToExpr l =
-     
-      let pat = Syntax.letStatementPattern l 
+
+      let pat = Syntax.letStatementPattern l
           mut = Syntax.letStatementMutable l
           typ = Syntax.letStatementType l
           init = Syntax.letStatementInit l
@@ -1177,8 +1177,8 @@ letStatementToExpr l =
 -- | Serialize a block
 blockToExpr :: Syntax.Block -> Ast.Expr
 blockToExpr b =
-     
-      let stmts = Syntax.blockStatements b 
+
+      let stmts = Syntax.blockStatements b
           expr = Syntax.blockExpression b
           stmtExprs = Lists.map statementToExpr stmts
           exprPart = Maybes.maybe [] (\e -> [
@@ -1207,8 +1207,8 @@ patternToExpr pat =
 -- | Serialize an identifier pattern
 identifierPatternToExpr :: Syntax.IdentifierPattern -> Ast.Expr
 identifierPatternToExpr ip =
-     
-      let name = Syntax.identifierPatternName ip 
+
+      let name = Syntax.identifierPatternName ip
           mut = Syntax.identifierPatternMutable ip
           atPat = Syntax.identifierPatternAtPattern ip
           mutKw = Logic.ifElse mut (Just (Serialization.cst "mut")) Nothing
@@ -1224,8 +1224,8 @@ identifierPatternToExpr ip =
 -- | Serialize a reference pattern
 refPatternToExpr :: Syntax.RefPattern -> Ast.Expr
 refPatternToExpr rp =
-     
-      let mut = Syntax.refPatternMutable rp 
+
+      let mut = Syntax.refPatternMutable rp
           pat = Syntax.refPatternPattern rp
           prefix = Logic.ifElse mut "&mut " "&"
       in (Serialization.cst (Strings.cat2 prefix (Serialization.printExpr (patternToExpr pat))))
@@ -1233,8 +1233,8 @@ refPatternToExpr rp =
 -- | Serialize a struct pattern
 structPatternToExpr :: Syntax.StructPattern -> Ast.Expr
 structPatternToExpr sp =
-     
-      let path = Syntax.structPatternPath sp 
+
+      let path = Syntax.structPatternPath sp
           fields = Syntax.structPatternFields sp
           rest = Syntax.structPatternRest sp
           fieldExprs = Lists.map fieldPatternToExpr fields
@@ -1248,8 +1248,8 @@ structPatternToExpr sp =
 -- | Serialize a field pattern
 fieldPatternToExpr :: Syntax.FieldPattern -> Ast.Expr
 fieldPatternToExpr fp =
-     
-      let name = Syntax.fieldPatternName fp 
+
+      let name = Syntax.fieldPatternName fp
           pat = Syntax.fieldPatternPattern fp
       in (Maybes.maybe (Serialization.cst name) (\p -> Serialization.spaceSep [
         Serialization.cst (Strings.cat2 name ":"),
@@ -1258,8 +1258,8 @@ fieldPatternToExpr fp =
 -- | Serialize a tuple struct pattern
 tupleStructPatternToExpr :: Syntax.TupleStructPattern -> Ast.Expr
 tupleStructPatternToExpr tsp =
-     
-      let path = Syntax.tupleStructPatternPath tsp 
+
+      let path = Syntax.tupleStructPatternPath tsp
           elems = Syntax.tupleStructPatternElements tsp
       in (Serialization.spaceSep [
         exprPathToExpr path,
@@ -1268,8 +1268,8 @@ tupleStructPatternToExpr tsp =
 -- | Serialize a range pattern
 rangePatternToExpr :: Syntax.RangePattern -> Ast.Expr
 rangePatternToExpr rp =
-     
-      let from = Syntax.rangePatternFrom rp 
+
+      let from = Syntax.rangePatternFrom rp
           to = Syntax.rangePatternTo rp
           incl = Syntax.rangePatternInclusive rp
           fromStr = Maybes.maybe "" (\p -> Serialization.printExpr (patternToExpr p)) from
@@ -1305,8 +1305,8 @@ literalToExpr lit =
 -- | Serialize an integer literal
 integerLiteralToExpr :: Syntax.IntegerLiteral -> Ast.Expr
 integerLiteralToExpr il =
-     
-      let val = Syntax.integerLiteralValue il 
+
+      let val = Syntax.integerLiteralValue il
           suf = Syntax.integerLiteralSuffix il
           valStr = Literals.showBigint val
           sufStr = Maybes.maybe "" (\s -> s) suf
@@ -1315,8 +1315,8 @@ integerLiteralToExpr il =
 -- | Serialize a float literal
 floatLiteralToExpr :: Syntax.FloatLiteral -> Ast.Expr
 floatLiteralToExpr fl =
-     
-      let val = Syntax.floatLiteralValue fl 
+
+      let val = Syntax.floatLiteralValue fl
           suf = Syntax.floatLiteralSuffix fl
           valStr = Literals.showFloat64 val
           sufStr = Maybes.maybe "" (\s -> s) suf
@@ -1337,8 +1337,8 @@ visibilityToExpr vis =
 -- | Serialize an attribute
 attributeToExpr :: Syntax.Attribute -> Ast.Expr
 attributeToExpr attr =
-     
-      let inner = Syntax.attributeInner attr 
+
+      let inner = Syntax.attributeInner attr
           path = Syntax.attributePath attr
           tokens = Syntax.attributeTokens attr
           prefix = Logic.ifElse inner "#![" "#["

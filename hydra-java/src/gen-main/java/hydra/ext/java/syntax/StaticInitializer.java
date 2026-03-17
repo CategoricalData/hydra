@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class StaticInitializer implements Serializable, Comparable<StaticInitializer> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.StaticInitializer");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.ext.java.syntax.Block value;
-  
+
   public StaticInitializer (hydra.ext.java.syntax.Block value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof StaticInitializer)) {
@@ -25,12 +25,12 @@ public class StaticInitializer implements Serializable, Comparable<StaticInitial
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StaticInitializer other) {

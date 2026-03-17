@@ -22,7 +22,7 @@ import qualified Data.Set as S
 -- | Interpreter-friendly applicative apply for List terms.
 apply :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 apply cx g funsTerm argsTerm =
-    Eithers.bind (Core_.list cx g funsTerm) (\funs -> Eithers.bind (Core_.list cx g argsTerm) (\arguments ->  
+    Eithers.bind (Core_.list cx g funsTerm) (\funs -> Eithers.bind (Core_.list cx g argsTerm) (\arguments ->
       let applyOne =
               \f -> Lists.map (\arg -> Core.TermApplication (Core.Application {
                 Core.applicationFunction = f,
@@ -103,14 +103,14 @@ map cx g funTerm listTerm =
 -- | Interpreter-friendly partition for List terms.
 partition :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 partition cx g predTerm listTerm =
-    Eithers.bind (Core_.list cx g listTerm) (\elements ->  
-      let initialState = Core.TermPair (Core.TermList [], (Core.TermList [])) 
+    Eithers.bind (Core_.list cx g listTerm) (\elements ->
+      let initialState = Core.TermPair (Core.TermList [], (Core.TermList []))
           finalState =
-                  Lists.foldl (\acc -> \el ->  
+                  Lists.foldl (\acc -> \el ->
                     let yeses =
                             Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
-                              Core.applicationArgument = acc}) 
+                              Core.applicationArgument = acc})
                         nos =
                                 Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
@@ -139,7 +139,7 @@ partition cx g predTerm listTerm =
 -- | Interpreter-friendly sortOn for List terms.
 sortOn :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 sortOn cx g projTerm listTerm =
-    Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Lists.foldl (\sorted -> \x ->  
+    Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Lists.foldl (\sorted -> \x ->
       let splitResult =
               Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -156,7 +156,7 @@ sortOn cx g projTerm listTerm =
                       Core.applicationArgument = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = projTerm,
                         Core.applicationArgument = x}))}))})))})),
-                Core.applicationArgument = sorted}) 
+                Core.applicationArgument = sorted})
           before =
                   Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
@@ -178,15 +178,15 @@ sortOn cx g projTerm listTerm =
 -- | Interpreter-friendly span for List terms.
 span :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 span cx g predTerm listTerm =
-    Eithers.bind (Core_.list cx g listTerm) (\elements ->  
+    Eithers.bind (Core_.list cx g listTerm) (\elements ->
       let initialState =
-              Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean True), (Core.TermList [])), (Core.TermList [])) 
+              Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean True), (Core.TermList [])), (Core.TermList []))
           finalState =
-                  Lists.foldl (\acc -> \el ->  
+                  Lists.foldl (\acc -> \el ->
                     let takingLeft =
                             Core.TermApplication (Core.Application {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.first"))),
-                              Core.applicationArgument = acc}) 
+                              Core.applicationArgument = acc})
                         right =
                                 Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
@@ -233,8 +233,8 @@ span cx g predTerm listTerm =
 -- | Interpreter-friendly zipWith for List terms.
 zipWith :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
 zipWith cx g funTerm listTerm1 listTerm2 =
-    Eithers.bind (Core_.list cx g listTerm1) (\elements1 -> Eithers.bind (Core_.list cx g listTerm2) (\elements2 -> Right (Core.TermList (Lists.map (\p ->  
-      let a = Pairs.first p 
+    Eithers.bind (Core_.list cx g listTerm1) (\elements1 -> Eithers.bind (Core_.list cx g listTerm2) (\elements2 -> Right (Core.TermList (Lists.map (\p ->
+      let a = Pairs.first p
           b = Pairs.second p
       in (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {

@@ -53,7 +53,7 @@ labelAttr lab =
 -- | Create DOT label attributes with a node style
 labelAttrs :: String -> String -> Dot.AttrList
 labelAttrs style lab =
-     
+
       let styleAttrs =
               Logic.ifElse (Equality.equal style nodeStyleSimple) [] (Logic.ifElse (Equality.equal style nodeStyleElement) [
                 Dot.EqualityPair {
@@ -118,7 +118,7 @@ toNodeOrSubgraph i = Dot.NodeOrSubgraphNode (toNodeId i)
 -- | Compute a label and node style for a term
 termLabel :: Bool -> M.Map Module.Namespace String -> Core.Term -> (String, String)
 termLabel compact namespaces term =
-     
+
       let simpleLabel = \lab -> (lab, nodeStyleSimple)
       in case term of
         Core.TermAnnotated _ -> simpleLabel "@{}"
@@ -181,8 +181,8 @@ termLabel compact namespaces term =
 -- | Convert a term to accessor-style DOT statements
 termToAccessorDotStmts :: M.Map Module.Namespace String -> Core.Term -> [Dot.Stmt]
 termToAccessorDotStmts namespaces term =
-     
-      let accessorGraph = Accessors_.termToAccessorGraph namespaces term 
+
+      let accessorGraph = Accessors_.termToAccessorGraph namespaces term
           nodes = Accessors.accessorGraphNodes accessorGraph
           edges = Accessors.accessorGraphEdges accessorGraph
           nodeStmt =
@@ -192,8 +192,8 @@ termToAccessorDotStmts namespaces term =
                       [
                         labelAttr (Accessors.accessorNodeLabel node)]]))})
           edgeStmt =
-                  \edge ->  
-                    let lab1 = Accessors.accessorNodeId (Accessors.accessorEdgeSource edge) 
+                  \edge ->
+                    let lab1 = Accessors.accessorNodeId (Accessors.accessorEdgeSource edge)
                         lab2 = Accessors.accessorNodeId (Accessors.accessorEdgeTarget edge)
                         pathAccessors = Accessors.unAccessorPath (Accessors.accessorEdgePath edge)
                         showPath = Strings.intercalate "/" (Maybes.cat (Lists.map Accessors_.termAccessor pathAccessors))
@@ -214,10 +214,10 @@ termToAccessorDotGraph term =
 -- | Convert a term to full DOT statements showing term structure
 termToDotStmts :: M.Map Module.Namespace String -> Core.Term -> [Dot.Stmt]
 termToDotStmts namespaces term =
-     
+
       let encode =
-              \mlabstyle -> \isElement -> \ids -> \mparent -> \stmtsVisited -> \accessorTerm ->  
-                let accessor = Pairs.first accessorTerm 
+              \mlabstyle -> \isElement -> \ids -> \mparent -> \stmtsVisited -> \accessorTerm ->
+                let accessor = Pairs.first accessorTerm
                     currentTerm = Pairs.second accessorTerm
                     stmts = Pairs.first stmtsVisited
                     visited = Pairs.second stmtsVisited
@@ -225,8 +225,8 @@ termToDotStmts namespaces term =
                     rawLabel = Pairs.first termLS
                     termNodeStyle = Pairs.second termLS
                     labelOf =
-                            \vis -> \t ->  
-                              let tls = termLabel True namespaces t 
+                            \vis -> \t ->
+                              let tls = termLabel True namespaces t
                                   l = Pairs.first tls
                                   s = Pairs.second tls
                               in (Names.uniqueLabel vis l, s)
@@ -260,8 +260,8 @@ termToDotStmts namespaces term =
                             Lists.foldl (encode Nothing False ids (Just selfId)) (selfStmts, selfVisited) (Rewriting.subtermsWithAccessors currentTerm)
                 in case currentTerm of
                   Core.TermFunction v0 -> case v0 of
-                    Core.FunctionLambda v1 ->  
-                      let v = Core.lambdaParameter v1 
+                    Core.FunctionLambda v1 ->
+                      let v = Core.lambdaParameter v1
                           body = Core.lambdaBody v1
                           vstr = Core.unName v
                           varLabel = Names.uniqueLabel selfVisited vstr
@@ -284,12 +284,12 @@ termToDotStmts namespaces term =
                           varNodeStmt,
                           varEdgeStmt]], visited1) (Accessors.TermAccessorLambdaBody, body))
                     _ -> dflt
-                  Core.TermLet v0 ->  
-                    let bindings = Core.letBindings v0 
+                  Core.TermLet v0 ->
+                    let bindings = Core.letBindings v0
                         env = Core.letBody v0
                         addBindingIds =
-                                \idsVis -> \binding ->  
-                                  let curIds = Pairs.first idsVis 
+                                \idsVis -> \binding ->
+                                  let curIds = Pairs.first idsVis
                                       curVis = Pairs.second idsVis
                                       bname = Core.bindingName binding
                                       bterm = Core.bindingTerm binding
@@ -299,8 +299,8 @@ termToDotStmts namespaces term =
                         idsVis1 = Lists.foldl addBindingIds (ids, visited) bindings
                         ids1 = Pairs.first idsVis1
                         addBindingTerm =
-                                \stVis -> \binding ->  
-                                  let bname = Core.bindingName binding 
+                                \stVis -> \binding ->
+                                  let bname = Core.bindingName binding
                                       bterm = Core.bindingTerm binding
                                       blab = Dot.unId (Maybes.fromMaybe (Dot.Id "?") (Maps.lookup bname ids1))
                                   in (encode (Just (blab, nodeStyleElement)) True ids1 (Just selfId) stVis (Accessors.TermAccessorLetBinding bname, bterm))

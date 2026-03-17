@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class CaseExpression implements Serializable, Comparable<CaseExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.CaseExpression");
-  
+
   public static final hydra.core.Name CASE = new hydra.core.Name("case");
-  
+
   public static final hydra.core.Name ALTERNATIVES = new hydra.core.Name("alternatives");
-  
+
   /**
    * The expression being matched
    */
   public final hydra.ext.haskell.ast.Expression case_;
-  
+
   /**
    * The pattern-matching alternatives
    */
   public final hydra.util.ConsList<hydra.ext.haskell.ast.Alternative> alternatives;
-  
+
   public CaseExpression (hydra.ext.haskell.ast.Expression case_, hydra.util.ConsList<hydra.ext.haskell.ast.Alternative> alternatives) {
     this.case_ = case_;
     this.alternatives = alternatives;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof CaseExpression)) {
@@ -41,12 +41,12 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
       this.alternatives,
       o.alternatives);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(case_) + 3 * java.util.Objects.hashCode(alternatives);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(CaseExpression other) {
@@ -57,11 +57,11 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
     }
     return ((Comparable) alternatives).compareTo(other.alternatives);
   }
-  
+
   public CaseExpression withCase(hydra.ext.haskell.ast.Expression case_) {
     return new CaseExpression(case_, alternatives);
   }
-  
+
   public CaseExpression withAlternatives(hydra.util.ConsList<hydra.ext.haskell.ast.Alternative> alternatives) {
     return new CaseExpression(case_, alternatives);
   }

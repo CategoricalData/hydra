@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | An execution context for tracing and diagnostics, threaded through function calls
-data Context = 
+data Context =
   Context {
     -- | A stack of context labels describing the current execution path
     contextTrace :: [String],
@@ -32,7 +32,7 @@ _Context_messages = Core.Name "messages"
 _Context_other = Core.Name "other"
 
 -- | A particular domain object (such as an error) together with an execution context
-data InContext e = 
+data InContext e =
   InContext {
     -- | A domain object; typically an error
     inContextObject :: e,

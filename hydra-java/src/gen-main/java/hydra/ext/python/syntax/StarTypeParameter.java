@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class StarTypeParameter implements Serializable, Comparable<StarTypeParameter> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.StarTypeParameter");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name DEFAULT = new hydra.core.Name("default");
-  
+
   public final hydra.ext.python.syntax.Name name;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.StarExpression> default_;
-  
+
   public StarTypeParameter (hydra.ext.python.syntax.Name name, hydra.util.Maybe<hydra.ext.python.syntax.StarExpression> default_) {
     this.name = name;
     this.default_ = default_;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof StarTypeParameter)) {
@@ -32,12 +32,12 @@ public class StarTypeParameter implements Serializable, Comparable<StarTypeParam
       this.default_,
       o.default_);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(default_);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StarTypeParameter other) {
@@ -48,11 +48,11 @@ public class StarTypeParameter implements Serializable, Comparable<StarTypeParam
     }
     return ((Comparable) default_).compareTo(other.default_);
   }
-  
+
   public StarTypeParameter withName(hydra.ext.python.syntax.Name name) {
     return new StarTypeParameter(name, default_);
   }
-  
+
   public StarTypeParameter withDefault(hydra.util.Maybe<hydra.ext.python.syntax.StarExpression> default_) {
     return new StarTypeParameter(name, default_);
   }

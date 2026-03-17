@@ -13,7 +13,7 @@ public interface Transform {
       hydra.lib.pairs.Second.apply(acc),
       hydra.lib.pairs.Second.apply(p)))));
   }
-  
+
   static hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> decodeCell(hydra.tabular.ColumnType colType, hydra.util.Maybe<String> mvalue) {
     String cname = (colType).name.value;
     hydra.core.Type typ = (colType).type;
@@ -30,7 +30,7 @@ public interface Transform {
             "Unsupported type for column ",
             cname)));
         }
-        
+
         @Override
         public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.Type.Literal lt) {
           return (lt).value.accept(new hydra.core.LiteralType.PartialVisitor<>() {
@@ -40,7 +40,7 @@ public interface Transform {
                 "Unsupported literal type for column ",
                 cname)));
             }
-            
+
             @Override
             public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.LiteralType.Boolean_ ignored) {
               return hydra.lib.maybes.Maybe.applyLazy(
@@ -48,7 +48,7 @@ public interface Transform {
                 (java.util.function.Function<Boolean, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (parsed -> hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(parsed))))),
                 hydra.lib.literals.ReadBoolean.apply(value));
             }
-            
+
             @Override
             public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.LiteralType.Float_ ft) {
               return (ft).value.accept(new hydra.core.FloatType.PartialVisitor<>() {
@@ -58,7 +58,7 @@ public interface Transform {
                     "Unsupported float type for column ",
                     cname)));
                 }
-                
+
                 @Override
                 public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.FloatType.Bigfloat ignored) {
                   return hydra.lib.maybes.Maybe.applyLazy(
@@ -66,7 +66,7 @@ public interface Transform {
                     (java.util.function.Function<java.math.BigDecimal, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (parsed -> hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Bigfloat(parsed)))))),
                     hydra.lib.literals.ReadBigfloat.apply(value));
                 }
-                
+
                 @Override
                 public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.FloatType.Float32 ignored) {
                   return hydra.lib.maybes.Maybe.applyLazy(
@@ -74,7 +74,7 @@ public interface Transform {
                     (java.util.function.Function<Float, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (parsed -> hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float32(parsed)))))),
                     hydra.lib.literals.ReadFloat32.apply(value));
                 }
-                
+
                 @Override
                 public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.FloatType.Float64 ignored) {
                   return hydra.lib.maybes.Maybe.applyLazy(
@@ -84,7 +84,7 @@ public interface Transform {
                 }
               });
             }
-            
+
             @Override
             public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.LiteralType.Integer_ it) {
               return (it).value.accept(new hydra.core.IntegerType.PartialVisitor<>() {
@@ -94,7 +94,7 @@ public interface Transform {
                     "Unsupported integer type for column ",
                     cname)));
                 }
-                
+
                 @Override
                 public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.IntegerType.Int32 ignored) {
                   return hydra.lib.maybes.Maybe.applyLazy(
@@ -102,7 +102,7 @@ public interface Transform {
                     (java.util.function.Function<Integer, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (parsed -> hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(parsed)))))),
                     hydra.lib.literals.ReadInt32.apply(value));
                 }
-                
+
                 @Override
                 public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.IntegerType.Int64 ignored) {
                   return hydra.lib.maybes.Maybe.applyLazy(
@@ -112,7 +112,7 @@ public interface Transform {
                 }
               });
             }
-            
+
             @Override
             public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.LiteralType.String_ ignored) {
               return hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_(value))));
@@ -126,7 +126,7 @@ public interface Transform {
       decodeValue,
       mvalue);
   }
-  
+
   static hydra.util.Either<String, hydra.tabular.DataRow<hydra.core.Term>> decodeRow(hydra.util.ConsList<hydra.tabular.ColumnType> colTypes, hydra.tabular.DataRow<String> row) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.util.Maybe<String>>> cells = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.tabular.DataRow<String>, hydra.util.ConsList<hydra.util.Maybe<String>>>) (wrapped -> (wrapped).value)).apply(row));
     return hydra.lib.eithers.Map.apply(
@@ -143,7 +143,7 @@ public interface Transform {
           colTypes,
           cells.get())));
   }
-  
+
   static hydra.util.Either<String, hydra.tabular.Table<hydra.core.Term>> decodeTable(hydra.tabular.TableType tableType, hydra.tabular.Table<String> table) {
     hydra.util.ConsList<hydra.tabular.ColumnType> colTypes = (tableType).columns;
     hydra.util.Lazy<hydra.util.Maybe<hydra.tabular.HeaderRow>> header = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.tabular.Table<String>, hydra.util.Maybe<hydra.tabular.HeaderRow>>) (projected -> projected.header)).apply(table));
@@ -156,35 +156,35 @@ public interface Transform {
           row)),
         rows.get()));
   }
-  
+
   static <T0> Boolean elementIsEdge(hydra.pg.model.Element<T0> el) {
     return ((java.util.function.Function<hydra.pg.model.Element, Boolean>) (v1 -> ((java.util.function.Function<hydra.pg.model.Element<T0>, Boolean>) ((java.util.function.Function<hydra.pg.model.Element<T0>, Boolean>) (u -> (u).accept(new hydra.pg.model.Element.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.pg.model.Element<T0> instance) {
         return false;
       }
-      
+
       @Override
       public Boolean visit(hydra.pg.model.Element.Edge<T0> ignored) {
         return true;
       }
     })))).apply(v1))).apply(el);
   }
-  
+
   static <T0> Boolean elementIsVertex(hydra.pg.model.Element<T0> el) {
     return ((java.util.function.Function<hydra.pg.model.Element, Boolean>) (v1 -> ((java.util.function.Function<hydra.pg.model.Element<T0>, Boolean>) ((java.util.function.Function<hydra.pg.model.Element<T0>, Boolean>) (u -> (u).accept(new hydra.pg.model.Element.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.pg.model.Element<T0> instance) {
         return false;
       }
-      
+
       @Override
       public Boolean visit(hydra.pg.model.Element.Vertex<T0> ignored) {
         return true;
       }
     })))).apply(v1))).apply(el);
   }
-  
+
   static hydra.util.Either<String, hydra.util.PersistentMap<String, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>>> elementSpecsByTable(hydra.pg.model.LazyGraph<hydra.core.Term> graph) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>> edges = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.LazyGraph<hydra.core.Term>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>) (projected -> projected.edges)).apply(graph));
     hydra.util.Lazy<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>> vertices = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.LazyGraph<hydra.core.Term>, hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>>) (projected -> projected.vertices)).apply(graph));
@@ -207,7 +207,7 @@ public interface Transform {
           hydra.demos.genpg.transform.Transform.elementSpecsByTable_vertexMap(vertexPairs),
           edgePairs))))));
   }
-  
+
   static <T0, T1, T2> hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> elementSpecsByTable_addVertex(hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> m, hydra.util.Pair<T0, T1> p) {
     hydra.util.Lazy<T0> table = new hydra.util.Lazy<>(() -> hydra.demos.genpg.transform.Transform.<T0, T1>elementSpecsByTable_table2(p));
     hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> current = new hydra.util.Lazy<>(() -> hydra.demos.genpg.transform.Transform.<T1, T2>elementSpecsByTable_current2(hydra.demos.genpg.transform.Transform.<T0, T1, T2>elementSpecsByTable_existing2(
@@ -220,7 +220,7 @@ public interface Transform {
         hydra.lib.pairs.First.apply(current.get())), hydra.lib.pairs.Second.apply(current.get())))),
       m);
   }
-  
+
   static <T0, T1, T2> hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> elementSpecsByTable_addEdge(hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> m, hydra.util.Pair<T0, T2> p) {
     hydra.util.Lazy<T0> table = new hydra.util.Lazy<>(() -> hydra.demos.genpg.transform.Transform.<T0, T2>elementSpecsByTable_table(p));
     hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> current = new hydra.util.Lazy<>(() -> hydra.demos.genpg.transform.Transform.<T1, T2>elementSpecsByTable_current(hydra.demos.genpg.transform.Transform.<T0, T1, T2>elementSpecsByTable_existing(
@@ -233,7 +233,7 @@ public interface Transform {
         hydra.lib.pairs.Second.apply(current.get()))))),
       m);
   }
-  
+
   static <T0> hydra.util.PersistentMap<String, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<T0>>> elementSpecsByTable_vertexMap(hydra.util.ConsList<hydra.util.Pair<String, hydra.pg.model.Vertex<hydra.core.Term>>> vertexPairs) {
     return hydra.lib.lists.Foldl.apply(
       p0 -> p1 -> hydra.demos.genpg.transform.Transform.<String, hydra.pg.model.Vertex<hydra.core.Term>, T0>elementSpecsByTable_addVertex(
@@ -242,47 +242,47 @@ public interface Transform {
       (hydra.util.PersistentMap<String, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<T0>>>) ((hydra.util.PersistentMap<String, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<T0>>>) (hydra.lib.maps.Empty.<String, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<T0>>>apply())),
       vertexPairs);
   }
-  
+
   static <T0, T2> T0 elementSpecsByTable_table(hydra.util.Pair<T0, T2> p) {
     return hydra.lib.pairs.First.apply(p);
   }
-  
+
   static <T0, T2> T2 elementSpecsByTable_e(hydra.util.Pair<T0, T2> p) {
     return hydra.lib.pairs.Second.apply(p);
   }
-  
+
   static <T0, T1, T2> hydra.util.Maybe<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> elementSpecsByTable_existing(hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> m, T0 table) {
     return hydra.lib.maps.Lookup.apply(
       table,
       m);
   }
-  
+
   static <T1, T2> hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>> elementSpecsByTable_current(hydra.util.Maybe<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> existing) {
     return hydra.lib.maybes.FromMaybe.applyLazy(
       () -> (hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) ((hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) (new hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty()), (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>empty())))),
       existing);
   }
-  
+
   static <T0, T1> T0 elementSpecsByTable_table2(hydra.util.Pair<T0, T1> p) {
     return hydra.lib.pairs.First.apply(p);
   }
-  
+
   static <T0, T1> T1 elementSpecsByTable_v(hydra.util.Pair<T0, T1> p) {
     return hydra.lib.pairs.Second.apply(p);
   }
-  
+
   static <T0, T1, T2> hydra.util.Maybe<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> elementSpecsByTable_existing2(hydra.util.PersistentMap<T0, hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> m, T0 table) {
     return hydra.lib.maps.Lookup.apply(
       table,
       m);
   }
-  
+
   static <T1, T2> hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>> elementSpecsByTable_current2(hydra.util.Maybe<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> existing) {
     return hydra.lib.maybes.FromMaybe.applyLazy(
       () -> (hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) ((hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) (new hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty()), (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>empty())))),
       existing);
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>> evaluateEdge(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.model.Edge<hydra.core.Term> edgeSpec, hydra.core.Term record) {
     hydra.util.Lazy<hydra.core.Term> idSpec = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Edge<hydra.core.Term>, hydra.core.Term>) (projected -> projected.id)).apply(edgeSpec));
     hydra.util.Lazy<hydra.core.Term> inSpec = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Edge<hydra.core.Term>, hydra.core.Term>) (projected -> projected.in)).apply(edgeSpec));
@@ -331,7 +331,7 @@ public interface Transform {
                 (java.util.function.Function<hydra.core.Term, hydra.pg.model.Edge<hydra.core.Term>>) (inId -> (hydra.pg.model.Edge<hydra.core.Term>) (new hydra.pg.model.Edge<hydra.core.Term>(label.get(), id, outId, inId, props))),
                 mInId))))))))))));
   }
-  
+
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<T0, hydra.core.Term>> evaluateProperties(hydra.context.Context cx, hydra.graph.Graph g, hydra.util.PersistentMap<T0, hydra.core.Term> specs, hydra.core.Term record) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.util.ConsList<hydra.util.Maybe<hydra.util.Pair<T0, hydra.core.Term>>>, hydra.util.PersistentMap<T0, hydra.core.Term>>) (pairs -> hydra.lib.maps.FromList.apply(hydra.lib.maybes.Cat.apply(pairs))),
@@ -350,7 +350,7 @@ public interface Transform {
         }),
         hydra.lib.maps.ToList.apply(specs)));
   }
-  
+
   static <T1, T2> hydra.util.Either<T2, hydra.util.Maybe<hydra.util.Pair<T1, hydra.core.Term>>> evaluateProperties_extractMaybe(T1 k, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -361,11 +361,11 @@ public interface Transform {
       }
     });
   }
-  
+
   static <T0> T0 evaluateProperties_k(hydra.util.Pair<T0, hydra.core.Term> pair) {
     return hydra.lib.pairs.First.apply(pair);
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>> evaluateVertex(hydra.context.Context cx, hydra.graph.Graph g, hydra.pg.model.Vertex<hydra.core.Term> vertexSpec, hydra.core.Term record) {
     hydra.util.Lazy<hydra.core.Term> idSpec = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Vertex<hydra.core.Term>, hydra.core.Term>) (projected -> projected.id)).apply(vertexSpec));
     hydra.util.Lazy<hydra.pg.model.VertexLabel> label = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Vertex<hydra.core.Term>, hydra.pg.model.VertexLabel>) (projected -> projected.label)).apply(vertexSpec));
@@ -392,7 +392,7 @@ public interface Transform {
           (java.util.function.Function<hydra.core.Term, hydra.pg.model.Vertex<hydra.core.Term>>) (id -> (hydra.pg.model.Vertex<hydra.core.Term>) (new hydra.pg.model.Vertex<hydra.core.Term>(label.get(), id, props))),
           mId))))));
   }
-  
+
   static hydra.util.PersistentSet<String> findTablesInTerm(hydra.core.Term term) {
     return hydra.rewriting.Rewriting.foldOverTerm(
       new hydra.coders.TraversalOrder.Pre(),
@@ -401,7 +401,7 @@ public interface Transform {
         public hydra.util.PersistentSet<String> otherwise(hydra.core.Term instance) {
           return names;
         }
-        
+
         @Override
         public hydra.util.PersistentSet<String> visit(hydra.core.Term.Function f) {
           return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
@@ -409,7 +409,7 @@ public interface Transform {
             public hydra.util.PersistentSet<String> otherwise(hydra.core.Function instance) {
               return names;
             }
-            
+
             @Override
             public hydra.util.PersistentSet<String> visit(hydra.core.Function.Elimination e) {
               return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
@@ -417,7 +417,7 @@ public interface Transform {
                 public hydra.util.PersistentSet<String> otherwise(hydra.core.Elimination instance) {
                   return names;
                 }
-                
+
                 @Override
                 public hydra.util.PersistentSet<String> visit(hydra.core.Elimination.Record proj) {
                   return hydra.lib.sets.Insert.apply(
@@ -432,30 +432,30 @@ public interface Transform {
       (hydra.util.PersistentSet<String>) (hydra.lib.sets.Empty.<String>apply()),
       term);
   }
-  
+
   static hydra.util.PersistentSet<String> findTablesInTerms(hydra.util.ConsList<hydra.core.Term> terms) {
     return hydra.lib.sets.Unions.apply(hydra.lib.lists.Map.apply(
       hydra.demos.genpg.transform.Transform::findTablesInTerm,
       terms));
   }
-  
+
   static <T0> Boolean listAny(java.util.function.Function<T0, Boolean> pred, hydra.util.ConsList<T0> xs) {
     return hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.lists.Filter.apply(
       pred,
       xs)));
   }
-  
+
   static <T0> hydra.pg.model.LazyGraph<T0> makeLazyGraph(hydra.util.ConsList<hydra.pg.model.Vertex<T0>> vertices, hydra.util.ConsList<hydra.pg.model.Edge<T0>> edges) {
     return (hydra.pg.model.LazyGraph<T0>) (new hydra.pg.model.LazyGraph<T0>(vertices, edges));
   }
-  
+
   static hydra.util.Maybe<String> normalizeField(String s) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.strings.Null.apply(s),
       () -> (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
       () -> hydra.util.Maybe.just(s));
   }
-  
+
   static hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.util.Maybe<String>>, String>, Boolean> parseCsvChar(hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.util.Maybe<String>>, String>, Boolean> state, Integer c) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.util.Maybe<String>>> acc = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.First.apply(state)));
     hydra.util.Lazy<String> field = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(state)));
@@ -486,7 +486,7 @@ public interface Transform {
           field.get(),
           hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(c)))))), inQuotes.get())))));
   }
-  
+
   static hydra.util.Either<String, hydra.util.ConsList<hydra.util.Maybe<String>>> parseCsvLine(String line) {
     hydra.util.ConsList<Integer> chars = hydra.lib.strings.ToList.apply(line);
     hydra.util.Lazy<hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.util.Maybe<String>>, String>, Boolean>> finalState = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
@@ -505,11 +505,11 @@ public interface Transform {
         hydra.demos.genpg.transform.Transform.normalizeField(field.get()),
         acc.get()))));
   }
-  
+
   static <T0> hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<T0>, String>, Boolean> parseCsvLine_initState() {
     return (hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<T0>, String>, Boolean>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<T0>, String>, Boolean>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<T0>, String>, Boolean>((hydra.util.Pair<hydra.util.ConsList<T0>, String>) ((hydra.util.Pair<hydra.util.ConsList<T0>, String>) (new hydra.util.Pair<hydra.util.ConsList<T0>, String>((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()), ""))), false)));
   }
-  
+
   static hydra.util.Either<String, hydra.util.Maybe<hydra.util.ConsList<hydra.util.Maybe<String>>>> parseSingleLine(String line) {
     String trimmed = hydra.demos.genpg.transform.Transform.stripWhitespace(line);
     return hydra.lib.logic.IfElse.lazy(
@@ -519,7 +519,7 @@ public interface Transform {
         (java.util.function.Function<hydra.util.ConsList<hydra.util.Maybe<String>>, hydra.util.Maybe<hydra.util.ConsList<hydra.util.Maybe<String>>>>) (x -> hydra.util.Maybe.just(x)),
         hydra.demos.genpg.transform.Transform.parseCsvLine(trimmed)));
   }
-  
+
   static hydra.util.Either<String, hydra.tabular.Table<String>> parseTableLines(Boolean hasHeader, hydra.util.ConsList<String> rawLines) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
@@ -548,7 +548,7 @@ public interface Transform {
             rows.get())))));
       }));
   }
-  
+
   static String stripWhitespace(String s) {
     hydra.util.ConsList<Integer> chars = hydra.lib.strings.ToList.apply(s);
     java.util.function.Function<Integer, Boolean> isSpaceChar = (java.util.function.Function<Integer, Boolean>) (c -> hydra.lib.chars.IsSpace.apply(c));
@@ -560,7 +560,7 @@ public interface Transform {
       hydra.lib.lists.Reverse.apply(trimLeft.get()))));
     return hydra.lib.strings.FromList.apply(trimRight.get());
   }
-  
+
   static hydra.util.Either<String, String> tableForEdge(hydra.pg.model.Edge<hydra.core.Term> edge) {
     hydra.util.Lazy<hydra.core.Term> id = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Edge<hydra.core.Term>, hydra.core.Term>) (projected -> projected.id)).apply(edge));
     hydra.util.Lazy<hydra.core.Term> inId = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Edge<hydra.core.Term>, hydra.core.Term>) (projected -> projected.in)).apply(edge));
@@ -583,7 +583,7 @@ public interface Transform {
         label.get().value,
         " edges has wrong number of tables"))));
   }
-  
+
   static hydra.util.Either<String, String> tableForVertex(hydra.pg.model.Vertex<hydra.core.Term> vertex) {
     hydra.util.Lazy<hydra.core.Term> id = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Vertex<hydra.core.Term>, hydra.core.Term>) (projected -> projected.id)).apply(vertex));
     hydra.util.Lazy<hydra.pg.model.VertexLabel> label = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Vertex<hydra.core.Term>, hydra.pg.model.VertexLabel>) (projected -> projected.label)).apply(vertex));
@@ -601,13 +601,13 @@ public interface Transform {
         label.get().value,
         " vertices has wrong number of tables"))));
   }
-  
+
   static hydra.util.PersistentMap<hydra.relational.RelationName, hydra.tabular.TableType> tableTypesByName(hydra.util.ConsList<hydra.tabular.TableType> tableTypes) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.tabular.TableType, hydra.util.Pair<hydra.relational.RelationName, hydra.tabular.TableType>>) (t -> (hydra.util.Pair<hydra.relational.RelationName, hydra.tabular.TableType>) ((hydra.util.Pair<hydra.relational.RelationName, hydra.tabular.TableType>) (new hydra.util.Pair<hydra.relational.RelationName, hydra.tabular.TableType>((t).name, t)))),
       tableTypes));
   }
-  
+
   static hydra.core.Term termRowToRecord(hydra.tabular.TableType tableType, hydra.tabular.DataRow<hydra.core.Term> row) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.util.Maybe<hydra.core.Term>>> cells = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.tabular.DataRow<hydra.core.Term>, hydra.util.ConsList<hydra.util.Maybe<hydra.core.Term>>>) (wrapped -> (wrapped).value)).apply(row));
     hydra.util.ConsList<hydra.tabular.ColumnType> colTypes = (tableType).columns;
@@ -620,7 +620,7 @@ public interface Transform {
       colTypes,
       cells.get())));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>> transformRecord(hydra.context.Context cx, hydra.graph.Graph g, hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>> vspecs, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>> especs, hydra.core.Term record) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
@@ -640,7 +640,7 @@ public interface Transform {
           especs),
         (java.util.function.Function<hydra.util.ConsList<hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>>>) (mEdges -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>>right((hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>(hydra.lib.maybes.Cat.apply(mVertices), hydra.lib.maybes.Cat.apply(mEdges)))))))));
   }
-  
+
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>> transformTableRows(hydra.context.Context cx, hydra.graph.Graph g, hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>> vspecs, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>> especs, hydra.tabular.TableType tableType, hydra.util.ConsList<hydra.tabular.DataRow<hydra.core.Term>> rows) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>>) (pairs -> hydra.lib.lists.Foldl.apply(

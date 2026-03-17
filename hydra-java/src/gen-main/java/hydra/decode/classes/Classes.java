@@ -14,7 +14,7 @@ public interface Classes {
         public hydra.util.Either<hydra.error.DecodingError, hydra.classes.TypeClass> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.classes.TypeClass>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.classes.TypeClass> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;

@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class Library implements Serializable, Comparable<Library> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.module.Library");
-  
+
   public static final hydra.core.Name NAMESPACE = new hydra.core.Name("namespace");
-  
+
   public static final hydra.core.Name PREFIX = new hydra.core.Name("prefix");
-  
+
   public static final hydra.core.Name PRIMITIVES = new hydra.core.Name("primitives");
-  
+
   /**
    * A common prefix for all primitive function names in the library
    */
   public final hydra.module.Namespace namespace;
-  
+
   /**
    * A preferred namespace prefix for function names in the library
    */
   public final String prefix;
-  
+
   /**
    * The primitives defined in this library
    */
   public final hydra.util.ConsList<hydra.graph.Primitive> primitives;
-  
+
   public Library (hydra.module.Namespace namespace, String prefix, hydra.util.ConsList<hydra.graph.Primitive> primitives) {
     this.namespace = namespace;
     this.prefix = prefix;
     this.primitives = primitives;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Library)) {
@@ -51,12 +51,12 @@ public class Library implements Serializable, Comparable<Library> {
       this.primitives,
       o.primitives);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(namespace) + 3 * java.util.Objects.hashCode(prefix) + 5 * java.util.Objects.hashCode(primitives);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Library other) {
@@ -71,15 +71,15 @@ public class Library implements Serializable, Comparable<Library> {
     }
     return ((Comparable) primitives).compareTo(other.primitives);
   }
-  
+
   public Library withNamespace(hydra.module.Namespace namespace) {
     return new Library(namespace, prefix, primitives);
   }
-  
+
   public Library withPrefix(String prefix) {
     return new Library(namespace, prefix, primitives);
   }
-  
+
   public Library withPrimitives(hydra.util.ConsList<hydra.graph.Primitive> primitives) {
     return new Library(namespace, prefix, primitives);
   }

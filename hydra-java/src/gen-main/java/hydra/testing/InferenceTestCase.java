@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class InferenceTestCase implements Serializable, Comparable<InferenceTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.InferenceTestCase");
-  
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
-  
+
   public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
-  
+
   /**
    * The term to infer
    */
   public final hydra.core.Term input;
-  
+
   /**
    * The expected type scheme
    */
   public final hydra.core.TypeScheme output;
-  
+
   public InferenceTestCase (hydra.core.Term input, hydra.core.TypeScheme output) {
     this.input = input;
     this.output = output;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof InferenceTestCase)) {
@@ -41,12 +41,12 @@ public class InferenceTestCase implements Serializable, Comparable<InferenceTest
       this.output,
       o.output);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(output);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InferenceTestCase other) {
@@ -57,11 +57,11 @@ public class InferenceTestCase implements Serializable, Comparable<InferenceTest
     }
     return ((Comparable) output).compareTo(other.output);
   }
-  
+
   public InferenceTestCase withInput(hydra.core.Term input) {
     return new InferenceTestCase(input, output);
   }
-  
+
   public InferenceTestCase withOutput(hydra.core.TypeScheme output) {
     return new InferenceTestCase(input, output);
   }

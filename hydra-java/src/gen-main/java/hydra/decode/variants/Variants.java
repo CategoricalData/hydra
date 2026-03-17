@@ -14,7 +14,7 @@ public interface Variants {
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.variants.EliminationVariant>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;
@@ -51,7 +51,7 @@ public interface Variants {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant> functionVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.FunctionVariant>left(new hydra.error.DecodingError(err))),
@@ -60,7 +60,7 @@ public interface Variants {
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.variants.FunctionVariant>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;
@@ -97,7 +97,7 @@ public interface Variants {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant> literalVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.LiteralVariant>left(new hydra.error.DecodingError(err))),
@@ -106,7 +106,7 @@ public interface Variants {
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.variants.LiteralVariant>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;
@@ -153,7 +153,7 @@ public interface Variants {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant> termVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TermVariant>left(new hydra.error.DecodingError(err))),
@@ -162,7 +162,7 @@ public interface Variants {
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TermVariant>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;
@@ -274,7 +274,7 @@ public interface Variants {
         cx,
         raw));
   }
-  
+
   static hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant> typeVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TypeVariant>left(new hydra.error.DecodingError(err))),
@@ -283,7 +283,7 @@ public interface Variants {
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TypeVariant>left(new hydra.error.DecodingError("expected union"));
         }
-        
+
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant> visit(hydra.core.Term.Union inj) {
           hydra.core.Field field = (inj).value.field;

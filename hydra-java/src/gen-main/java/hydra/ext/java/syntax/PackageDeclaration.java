@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class PackageDeclaration implements Serializable, Comparable<PackageDeclaration> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.PackageDeclaration");
-  
+
   public static final hydra.core.Name MODIFIERS = new hydra.core.Name("modifiers");
-  
+
   public static final hydra.core.Name IDENTIFIERS = new hydra.core.Name("identifiers");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.PackageModifier> modifiers;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.Identifier> identifiers;
-  
+
   public PackageDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.PackageModifier> modifiers, hydra.util.ConsList<hydra.ext.java.syntax.Identifier> identifiers) {
     this.modifiers = modifiers;
     this.identifiers = identifiers;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof PackageDeclaration)) {
@@ -32,12 +32,12 @@ public class PackageDeclaration implements Serializable, Comparable<PackageDecla
       this.identifiers,
       o.identifiers);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(modifiers) + 3 * java.util.Objects.hashCode(identifiers);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PackageDeclaration other) {
@@ -48,11 +48,11 @@ public class PackageDeclaration implements Serializable, Comparable<PackageDecla
     }
     return ((Comparable) identifiers).compareTo(other.identifiers);
   }
-  
+
   public PackageDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.PackageModifier> modifiers) {
     return new PackageDeclaration(modifiers, identifiers);
   }
-  
+
   public PackageDeclaration withIdentifiers(hydra.util.ConsList<hydra.ext.java.syntax.Identifier> identifiers) {
     return new PackageDeclaration(modifiers, identifiers);
   }

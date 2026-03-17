@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class SwitchBlock_Pair implements Serializable, Comparable<SwitchBlock_Pair> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.SwitchBlock_Pair");
-  
+
   public static final hydra.core.Name STATEMENTS = new hydra.core.Name("statements");
-  
+
   public static final hydra.core.Name LABELS = new hydra.core.Name("labels");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.SwitchBlockStatementGroup> statements;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.SwitchLabel> labels;
-  
+
   public SwitchBlock_Pair (hydra.util.ConsList<hydra.ext.java.syntax.SwitchBlockStatementGroup> statements, hydra.util.ConsList<hydra.ext.java.syntax.SwitchLabel> labels) {
     this.statements = statements;
     this.labels = labels;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof SwitchBlock_Pair)) {
@@ -32,12 +32,12 @@ public class SwitchBlock_Pair implements Serializable, Comparable<SwitchBlock_Pa
       this.labels,
       o.labels);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(statements) + 3 * java.util.Objects.hashCode(labels);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SwitchBlock_Pair other) {
@@ -48,11 +48,11 @@ public class SwitchBlock_Pair implements Serializable, Comparable<SwitchBlock_Pa
     }
     return ((Comparable) labels).compareTo(other.labels);
   }
-  
+
   public SwitchBlock_Pair withStatements(hydra.util.ConsList<hydra.ext.java.syntax.SwitchBlockStatementGroup> statements) {
     return new SwitchBlock_Pair(statements, labels);
   }
-  
+
   public SwitchBlock_Pair withLabels(hydra.util.ConsList<hydra.ext.java.syntax.SwitchLabel> labels) {
     return new SwitchBlock_Pair(statements, labels);
   }

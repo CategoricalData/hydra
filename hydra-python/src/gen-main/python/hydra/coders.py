@@ -20,11 +20,11 @@ V = TypeVar("V")
 @dataclass(frozen=True)
 class AdapterContext:
     r"""An evaluation context together with a source language and a target language."""
-    
+
     graph: Annotated[hydra.graph.Graph, "The underlying graph of elements and primitives"]
     language: Annotated[Language, "The language being encoded or decoded"]
     adapters: Annotated[FrozenDict[hydra.core.Name, hydra.util.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]], "A map of type names to adapters for those types"]
-    
+
     TYPE_ = hydra.core.Name("hydra.coders.AdapterContext")
     GRAPH = hydra.core.Name("graph")
     LANGUAGE = hydra.core.Name("language")
@@ -32,9 +32,9 @@ class AdapterContext:
 
 class CoderDirection(Enum):
     r"""Indicates either the 'out' or the 'in' direction of a coder."""
-    
+
     ENCODE = hydra.core.Name("encode")
-    
+
     DECODE = hydra.core.Name("decode")
 
 CoderDirection.TYPE_ = hydra.core.Name("hydra.coders.CoderDirection")
@@ -42,10 +42,10 @@ CoderDirection.TYPE_ = hydra.core.Name("hydra.coders.CoderDirection")
 @dataclass(frozen=True)
 class Language:
     r"""A named language together with language-specific constraints."""
-    
+
     name: Annotated[LanguageName, "The unique name of the language"]
     constraints: Annotated[LanguageConstraints, "The constraints which characterize the language"]
-    
+
     TYPE_ = hydra.core.Name("hydra.coders.Language")
     NAME = hydra.core.Name("name")
     CONSTRAINTS = hydra.core.Name("constraints")
@@ -53,7 +53,7 @@ class Language:
 @dataclass(frozen=True)
 class LanguageConstraints:
     r"""A set of constraints on valid type and term expressions, characterizing a language."""
-    
+
     elimination_variants: Annotated[frozenset[hydra.variants.EliminationVariant], "All supported elimination variants"]
     literal_variants: Annotated[frozenset[hydra.variants.LiteralVariant], "All supported literal variants"]
     float_types: Annotated[frozenset[hydra.core.FloatType], "All supported float types"]
@@ -62,7 +62,7 @@ class LanguageConstraints:
     term_variants: Annotated[frozenset[hydra.variants.TermVariant], "All supported term variants"]
     type_variants: Annotated[frozenset[hydra.variants.TypeVariant], "All supported type variants"]
     types: Annotated[Callable[[hydra.core.Type], bool], "A logical set of types, as a predicate which tests a type for inclusion"]
-    
+
     TYPE_ = hydra.core.Name("hydra.coders.LanguageConstraints")
     ELIMINATION_VARIANTS = hydra.core.Name("eliminationVariants")
     LITERAL_VARIANTS = hydra.core.Name("literalVariants")
@@ -83,10 +83,10 @@ SymmetricAdapter: TypeAlias = "hydra.util.Adapter[T, T, V, V]"
 
 class TraversalOrder(Enum):
     r"""Specifies either a pre-order or post-order traversal."""
-    
+
     PRE = hydra.core.Name("pre")
     r"""Pre-order traversal"""
-    
+
     POST = hydra.core.Name("post")
     r"""Post-order traversal"""
 

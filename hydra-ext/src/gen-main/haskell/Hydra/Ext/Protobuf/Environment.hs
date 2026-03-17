@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A reference to a structural type (Either or Pair) with its component types
-data StructuralTypeRef = 
+data StructuralTypeRef =
   -- | An Either type with left and right component types
   StructuralTypeRefEither (Core.Type, Core.Type) |
   -- | A Pair type with first and second component types

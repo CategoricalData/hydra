@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class MethodInvocation_Complex implements Serializable, Comparable<MethodInvocation_Complex> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodInvocation_Complex");
-  
+
   public static final hydra.core.Name VARIANT = new hydra.core.Name("variant");
-  
+
   public static final hydra.core.Name TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public final hydra.ext.java.syntax.MethodInvocation_Variant variant;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
-  
+
   public final hydra.ext.java.syntax.Identifier identifier;
-  
+
   public MethodInvocation_Complex (hydra.ext.java.syntax.MethodInvocation_Variant variant, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
     this.variant = variant;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MethodInvocation_Complex)) {
@@ -39,12 +39,12 @@ public class MethodInvocation_Complex implements Serializable, Comparable<Method
       this.identifier,
       o.identifier);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(variant) + 3 * java.util.Objects.hashCode(typeArguments) + 5 * java.util.Objects.hashCode(identifier);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MethodInvocation_Complex other) {
@@ -59,15 +59,15 @@ public class MethodInvocation_Complex implements Serializable, Comparable<Method
     }
     return ((Comparable) identifier).compareTo(other.identifier);
   }
-  
+
   public MethodInvocation_Complex withVariant(hydra.ext.java.syntax.MethodInvocation_Variant variant) {
     return new MethodInvocation_Complex(variant, typeArguments, identifier);
   }
-  
+
   public MethodInvocation_Complex withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodInvocation_Complex(variant, typeArguments, identifier);
   }
-  
+
   public MethodInvocation_Complex withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new MethodInvocation_Complex(variant, typeArguments, identifier);
   }

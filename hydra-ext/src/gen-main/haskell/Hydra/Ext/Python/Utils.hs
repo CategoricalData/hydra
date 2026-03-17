@@ -257,7 +257,7 @@ assignmentStatement name expr = assignment name (pyExpressionToPyAnnotatedRhs ex
 -- | Create a dotted assignment statement: obj.attr = expr
 dottedAssignmentStatement :: Syntax.Name -> Syntax.Name -> Syntax.Expression -> Syntax.Statement
 dottedAssignmentStatement obj attr expr =
-     
+
       let target =
               Syntax.StarTargetUnstarred (Syntax.TargetWithStarAtomProject (Syntax.TPrimaryAndName {
                 Syntax.tPrimaryAndNamePrimary = (Syntax.TPrimaryAtom (Syntax.AtomName obj)),
@@ -284,7 +284,7 @@ castTo pytype pyexpr =
 -- | Project a field from an expression
 projectFromExpression :: Syntax.Expression -> Syntax.Name -> Syntax.Expression
 projectFromExpression exp name =
-     
+
       let prim = Syntax.PrimarySimple (Syntax.AtomGroup (Syntax.GroupExpression (Syntax.NamedExpressionSimple exp)))
       in (pyPrimaryToPyExpression (Syntax.PrimaryCompound (Syntax.PrimaryWithRhs {
         Syntax.primaryWithRhsPrimary = prim,
@@ -346,8 +346,8 @@ pyList exprs = Syntax.List (Lists.map pyExpressionToPyStarNamedExpression exprs)
 -- | Decode a Power to a Primary if possible
 decodePyPowerToPyPrimary :: Syntax.Power -> Maybe Syntax.Primary
 decodePyPowerToPyPrimary p =
-     
-      let lhs = Syntax.powerLhs p 
+
+      let lhs = Syntax.powerLhs p
           await = Syntax.awaitPrimaryAwait lhs
           prim = Syntax.awaitPrimaryPrimary lhs
       in (Logic.ifElse await Nothing (Just prim))
@@ -355,8 +355,8 @@ decodePyPowerToPyPrimary p =
 -- | Decode a Comparison to a Primary if possible
 decodePyComparisonToPyAwaitPrimary :: Syntax.Comparison -> Maybe Syntax.Primary
 decodePyComparisonToPyAwaitPrimary c =
-     
-      let rhs = Syntax.comparisonRhs c 
+
+      let rhs = Syntax.comparisonRhs c
           lhs = Syntax.comparisonLhs c
           orLhs = Syntax.bitwiseOrLhs lhs
           orRhs = Syntax.bitwiseOrRhs lhs
@@ -384,7 +384,7 @@ decodePyInversionToPyPrimary i =
 -- | Decode a Conjunction to a Primary if possible
 decodePyConjunctionToPyPrimary :: Syntax.Conjunction -> Maybe Syntax.Primary
 decodePyConjunctionToPyPrimary c =
-     
+
       let inversions = Syntax.unConjunction c
       in (Logic.ifElse (Equality.equal (Lists.length inversions) 1) (decodePyInversionToPyPrimary (Lists.head inversions)) Nothing)
 
@@ -392,7 +392,7 @@ decodePyConjunctionToPyPrimary c =
 decodePyExpressionToPyPrimary :: Syntax.Expression -> Maybe Syntax.Primary
 decodePyExpressionToPyPrimary e =
     case e of
-      Syntax.ExpressionSimple v0 ->  
+      Syntax.ExpressionSimple v0 ->
         let conjunctions = Syntax.unDisjunction v0
         in (Logic.ifElse (Equality.equal (Lists.length conjunctions) 1) (decodePyConjunctionToPyPrimary (Lists.head conjunctions)) Nothing)
       _ -> Nothing
@@ -421,9 +421,9 @@ pyBitwiseOrToPyExpression bor = pyConjunctionToPyExpression (pyBitwiseOrToPyConj
 -- | Create an indented block with optional comment
 indentedBlock :: Maybe String -> [[Syntax.Statement]] -> Syntax.Block
 indentedBlock mcomment stmts =
-     
+
       let commentGroup = Maybes.maybe [] (\s -> [
-            commentStatement s]) mcomment 
+            commentStatement s]) mcomment
           groups = Lists.filter (\g -> Logic.not (Lists.null g)) (Lists.cons commentGroup stmts)
       in (Logic.ifElse (Lists.null groups) (Syntax.BlockIndented [
         [
@@ -433,7 +433,7 @@ indentedBlock mcomment stmts =
 -- | Build an or-expression from multiple primaries
 orExpression :: [Syntax.Primary] -> Syntax.Expression
 orExpression prims =
-     
+
       let build =
               \prev -> \ps -> Logic.ifElse (Lists.null (Lists.tail ps)) (Syntax.BitwiseOr {
                 Syntax.bitwiseOrLhs = prev,
@@ -445,7 +445,7 @@ orExpression prims =
 -- | Generate a type alias statement using Python 3.10-compatible syntax: Name: TypeAlias = "TypeExpression"
 typeAliasStatement310 :: Syntax.Name -> t0 -> Maybe String -> Syntax.Expression -> Syntax.Statement
 typeAliasStatement310 name _tparams mcomment tyexpr =
-     
+
       let quotedExpr = doubleQuotedString (Serialization.printExpr (Serde.encodeExpression tyexpr))
       in (annotatedStatement mcomment (pyAssignmentToPyStatement (Syntax.AssignmentTyped (Syntax.TypedAssignment {
         Syntax.typedAssignmentLhs = (Syntax.SingleTargetName name),
@@ -492,8 +492,8 @@ getItemParams =
 -- | Generate a subscriptable union class for Python 3.10
 unionTypeClassStatements310 :: Syntax.Name -> Maybe String -> Syntax.Expression -> [Syntax.Statement] -> [Syntax.Statement]
 unionTypeClassStatements310 name mcomment tyexpr extraStmts =
-     
-      let nameStr = Syntax.unName name 
+
+      let nameStr = Syntax.unName name
           metaName = Syntax.Name (Strings.cat2 (Strings.cat2 "_" nameStr) "Meta")
           docString = Serialization.printExpr (Serde.encodeExpression tyexpr)
           returnObject =
@@ -564,7 +564,7 @@ unionTypeClassStatements310 name mcomment tyexpr extraStmts =
                         getItemMethod]])})
           docStmt = pyExpressionToPyStatement (tripleQuotedString docString)
           bodyGroups =
-                  Logic.ifElse (Lists.null extraStmts) ( 
+                  Logic.ifElse (Lists.null extraStmts) (
                     let passStmt = pySimpleStatementToPyStatement Syntax.SimpleStatementPass
                     in [
                       [
@@ -645,8 +645,8 @@ selfOtherParams =
 -- | Generate __slots__, __eq__, and __hash__ methods for unit-typed union variants
 unitVariantMethods :: Syntax.Name -> [Syntax.Statement]
 unitVariantMethods className =
-     
-      let classNameStr = Syntax.unName className 
+
+      let classNameStr = Syntax.unName className
           slotsStmt =
                   assignmentStatement (Syntax.Name "__slots__") (pyPrimaryToPyExpression (Syntax.PrimarySimple (Syntax.AtomTuple (Syntax.Tuple []))))
           returnIsinstance =
@@ -732,8 +732,8 @@ unitVariantMethods className =
 -- | Find all namespaces referenced by a list of definitions, plus the core namespace
 findNamespaces :: Module.Namespace -> [Module.Definition] -> Module.Namespaces Syntax.DottedName
 findNamespaces focusNs defs =
-     
-      let coreNs = Module.Namespace "hydra.core" 
+
+      let coreNs = Module.Namespace "hydra.core"
           namespaces = Schemas.namespacesForDefinitions Names.encodeNamespace focusNs defs
       in (Logic.ifElse (Equality.equal (Module.unNamespace (Pairs.first (Module.namespacesFocus namespaces))) (Module.unNamespace coreNs)) namespaces (Module.Namespaces {
         Module.namespacesFocus = (Module.namespacesFocus namespaces),

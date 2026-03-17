@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class MethodInvocation implements Serializable, Comparable<MethodInvocation> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodInvocation");
-  
+
   public static final hydra.core.Name HEADER = new hydra.core.Name("header");
-  
+
   public static final hydra.core.Name ARGUMENTS = new hydra.core.Name("arguments");
-  
+
   public final hydra.ext.java.syntax.MethodInvocation_Header header;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments;
-  
+
   public MethodInvocation (hydra.ext.java.syntax.MethodInvocation_Header header, hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments) {
     this.header = header;
     this.arguments = arguments;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MethodInvocation)) {
@@ -32,12 +32,12 @@ public class MethodInvocation implements Serializable, Comparable<MethodInvocati
       this.arguments,
       o.arguments);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(header) + 3 * java.util.Objects.hashCode(arguments);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MethodInvocation other) {
@@ -48,11 +48,11 @@ public class MethodInvocation implements Serializable, Comparable<MethodInvocati
     }
     return ((Comparable) arguments).compareTo(other.arguments);
   }
-  
+
   public MethodInvocation withHeader(hydra.ext.java.syntax.MethodInvocation_Header header) {
     return new MethodInvocation(header, arguments);
   }
-  
+
   public MethodInvocation withArguments(hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments) {
     return new MethodInvocation(header, arguments);
   }

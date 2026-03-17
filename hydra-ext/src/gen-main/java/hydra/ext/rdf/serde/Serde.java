@@ -54,13 +54,13 @@ public interface Serde {
       () -> "?",
       () -> hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(c)));
   }
-  
+
   static String escapeIriStr(String s) {
     return hydra.lib.strings.Cat.apply(hydra.lib.lists.Map.apply(
       hydra.ext.rdf.serde.Serde::escapeIriChar,
       hydra.lib.strings.ToList.apply(s)));
   }
-  
+
   static String escapeLiteralChar(Integer c) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Gte.apply(
@@ -89,42 +89,42 @@ public interface Serde {
               () -> "\\r",
               () -> hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(c)))))));
   }
-  
+
   static String escapeLiteralString(String s) {
     return hydra.lib.strings.Cat.apply(hydra.lib.lists.Map.apply(
       hydra.ext.rdf.serde.Serde::escapeLiteralChar,
       hydra.lib.strings.ToList.apply(s)));
   }
-  
+
   static String rdfGraphToNtriples(hydra.ext.org.w3.rdf.syntax.Graph g) {
     return hydra.serialization.Serialization.printExpr(hydra.ext.rdf.serde.Serde.writeGraph(g));
   }
-  
+
   static hydra.ast.Expr writeBlankNode(hydra.ext.org.w3.rdf.syntax.BlankNode bnode) {
     return hydra.serialization.Serialization.noSep(hydra.util.ConsList.of(
       hydra.serialization.Serialization.cst("_:"),
       hydra.serialization.Serialization.cst((bnode).value)));
   }
-  
+
   static hydra.ast.Expr writeGraph(hydra.ext.org.w3.rdf.syntax.Graph g) {
     return hydra.serialization.Serialization.newlineSep(hydra.lib.lists.Map.apply(
       hydra.ext.rdf.serde.Serde::writeTriple,
       hydra.lib.sets.ToList.apply((g).value)));
   }
-  
+
   static hydra.ast.Expr writeIri(hydra.ext.org.w3.rdf.syntax.Iri iri) {
     return hydra.serialization.Serialization.noSep(hydra.util.ConsList.of(
       hydra.serialization.Serialization.cst("<"),
       hydra.serialization.Serialization.cst(hydra.ext.rdf.serde.Serde.escapeIriStr((iri).value)),
       hydra.serialization.Serialization.cst(">")));
   }
-  
+
   static hydra.ast.Expr writeLanguageTag(hydra.ext.org.w3.rdf.syntax.LanguageTag lang) {
     return hydra.serialization.Serialization.noSep(hydra.util.ConsList.of(
       hydra.serialization.Serialization.cst("@"),
       hydra.serialization.Serialization.cst((lang).value)));
   }
-  
+
   static hydra.ast.Expr writeLiteral(hydra.ext.org.w3.rdf.syntax.Literal lit) {
     hydra.ext.org.w3.rdf.syntax.Iri dt = (lit).datatypeIri;
     hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag> lang = (lit).languageTag;
@@ -143,40 +143,40 @@ public interface Serde {
       lexExpr,
       suffix.get()));
   }
-  
+
   static hydra.ast.Expr writeNode(hydra.ext.org.w3.rdf.syntax.Node n) {
     return (n).accept(new hydra.ext.org.w3.rdf.syntax.Node.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.ext.org.w3.rdf.syntax.Node.Iri iri) {
         return hydra.ext.rdf.serde.Serde.writeIri((iri).value);
       }
-      
+
       @Override
       public hydra.ast.Expr visit(hydra.ext.org.w3.rdf.syntax.Node.Bnode bnode) {
         return hydra.ext.rdf.serde.Serde.writeBlankNode((bnode).value);
       }
-      
+
       @Override
       public hydra.ast.Expr visit(hydra.ext.org.w3.rdf.syntax.Node.Literal lit) {
         return hydra.ext.rdf.serde.Serde.writeLiteral((lit).value);
       }
     });
   }
-  
+
   static hydra.ast.Expr writeResource(hydra.ext.org.w3.rdf.syntax.Resource r) {
     return (r).accept(new hydra.ext.org.w3.rdf.syntax.Resource.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.ext.org.w3.rdf.syntax.Resource.Iri iri) {
         return hydra.ext.rdf.serde.Serde.writeIri((iri).value);
       }
-      
+
       @Override
       public hydra.ast.Expr visit(hydra.ext.org.w3.rdf.syntax.Resource.Bnode bnode) {
         return hydra.ext.rdf.serde.Serde.writeBlankNode((bnode).value);
       }
     });
   }
-  
+
   static hydra.ast.Expr writeTriple(hydra.ext.org.w3.rdf.syntax.Triple t) {
     hydra.ext.org.w3.rdf.syntax.Node obj = (t).object;
     hydra.ext.org.w3.rdf.syntax.Iri pred = (t).predicate;

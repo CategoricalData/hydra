@@ -143,8 +143,8 @@ nameToIri name = Syntax.Iri (Strings.cat2 "urn:" (Core.unName name))
 -- | Generate the next blank node and an updated context
 nextBlankNode :: Context.Context -> (Syntax.Resource, Context.Context)
 nextBlankNode cx =
-     
-      let result = Annotations.nextCount key_rdfBlankNodeCounter cx 
+
+      let result = Annotations.nextCount key_rdfBlankNodeCounter cx
           count = Pairs.first result
           cx_ = Pairs.second result
       in (Syntax.ResourceBnode (Syntax.BlankNode (Strings.cat2 "b" (Literals.showInt32 count))), cx_)
@@ -152,8 +152,8 @@ nextBlankNode cx =
 -- | Construct a property IRI from a record name and field name
 propertyIri :: Core.Name -> Core.Name -> Syntax.Iri
 propertyIri rname fname =
-     
-      let qualName = Names.qualifyName rname 
+
+      let qualName = Names.qualifyName rname
           gname = Module.qualifiedNameNamespace qualName
           local_ = Module.qualifiedNameLocal qualName
       in (Syntax.Iri (Strings.cat [

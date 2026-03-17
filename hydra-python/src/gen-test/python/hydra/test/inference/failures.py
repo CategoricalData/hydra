@@ -64,5 +64,5 @@ def unification_failure_tests() -> hydra.testing.TestGroup:
 @lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
     r"""Expected failure tests."""
-    
+
     return hydra.testing.TestGroup("Expected failures", Nothing(), (undefined_variable_tests(), unification_failure_tests(), invalid_application_tests(), self_application_tests(), arity_mismatch_tests(), recursive_type_tests(), occur_check_tests(), type_constructor_misuse_tests(), polymorphism_violation_tests(), let_binding_mismatch_tests(), constraint_solver_edge_case_tests(), primitive_type_error_tests(), complex_constraint_failure_tests()), ())

@@ -26,8 +26,8 @@ exprDefinition def =
 -- | Convert a GraphQL description to a triple-quoted comment
 exprDescription :: Syntax.Description -> Ast.Expr
 exprDescription desc =
-     
-      let delim = Serialization.cst "\"\"\"" 
+
+      let delim = Serialization.cst "\"\"\""
           text = Syntax.unStringValue (Syntax.unDescription desc)
       in (Serialization.newlineSep [
         delim,
@@ -41,8 +41,8 @@ exprDocument d = Serialization.doubleNewlineSep (Lists.map exprDefinition (Synta
 -- | Convert a GraphQL enum type definition to an expression
 exprEnumTypeDefinition :: Syntax.EnumTypeDefinition -> Ast.Expr
 exprEnumTypeDefinition def =
-     
-      let desc = Syntax.enumTypeDefinitionDescription def 
+
+      let desc = Syntax.enumTypeDefinitionDescription def
           name = Syntax.enumTypeDefinitionName def
           values = Syntax.enumTypeDefinitionEnumValuesDefinition def
           valuesExpr = Maybes.maybe [] (\vs -> Lists.map exprEnumValueDefinition (Syntax.unEnumValuesDefinition vs)) values
@@ -58,16 +58,16 @@ exprEnumValue ev = exprName (Syntax.unEnumValue ev)
 -- | Convert a GraphQL enum value definition to an expression
 exprEnumValueDefinition :: Syntax.EnumValueDefinition -> Ast.Expr
 exprEnumValueDefinition def =
-     
-      let desc = Syntax.enumValueDefinitionDescription def 
+
+      let desc = Syntax.enumValueDefinitionDescription def
           ev = Syntax.enumValueDefinitionEnumValue def
       in (withDescription desc (exprEnumValue ev))
 
 -- | Convert a GraphQL field definition to an expression
 exprFieldDefinition :: Syntax.FieldDefinition -> Ast.Expr
 exprFieldDefinition def =
-     
-      let desc = Syntax.fieldDefinitionDescription def 
+
+      let desc = Syntax.fieldDefinitionDescription def
           name = Syntax.fieldDefinitionName def
           typ = Syntax.fieldDefinitionType def
           namePart =
@@ -98,7 +98,7 @@ exprNamedType nt = exprName (Syntax.unNamedType nt)
 -- | Convert a GraphQL non-null type to an expression
 exprNonNullType :: Syntax.NonNullType -> Ast.Expr
 exprNonNullType nnt =
-     
+
       let typeExpr =
               case nnt of
                 Syntax.NonNullTypeNamed v0 -> exprNamedType v0
@@ -110,8 +110,8 @@ exprNonNullType nnt =
 -- | Convert a GraphQL object type definition to an expression
 exprObjectTypeDefinition :: Syntax.ObjectTypeDefinition -> Ast.Expr
 exprObjectTypeDefinition def =
-     
-      let desc = Syntax.objectTypeDefinitionDescription def 
+
+      let desc = Syntax.objectTypeDefinitionDescription def
           name = Syntax.objectTypeDefinitionName def
           fields = Syntax.objectTypeDefinitionFieldsDefinition def
           fieldsExpr = Maybes.maybe [] (\fs -> Lists.map exprFieldDefinition (Syntax.unFieldsDefinition fs)) fields

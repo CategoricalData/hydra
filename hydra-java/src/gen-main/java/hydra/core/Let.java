@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class Let implements Serializable, Comparable<Let> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Let");
-  
+
   public static final hydra.core.Name BINDINGS = new hydra.core.Name("bindings");
-  
+
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
-  
+
   /**
    * The list of variable bindings
    */
   public final hydra.util.ConsList<hydra.core.Binding> bindings;
-  
+
   /**
    * The body term in which the variables are bound
    */
   public final hydra.core.Term body;
-  
+
   public Let (hydra.util.ConsList<hydra.core.Binding> bindings, hydra.core.Term body) {
     this.bindings = bindings;
     this.body = body;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Let)) {
@@ -41,12 +41,12 @@ public class Let implements Serializable, Comparable<Let> {
       this.body,
       o.body);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(bindings) + 3 * java.util.Objects.hashCode(body);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Let other) {
@@ -57,11 +57,11 @@ public class Let implements Serializable, Comparable<Let> {
     }
     return ((Comparable) body).compareTo(other.body);
   }
-  
+
   public Let withBindings(hydra.util.ConsList<hydra.core.Binding> bindings) {
     return new Let(bindings, body);
   }
-  
+
   public Let withBody(hydra.core.Term body) {
     return new Let(bindings, body);
   }

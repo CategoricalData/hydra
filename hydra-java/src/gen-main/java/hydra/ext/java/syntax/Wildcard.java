@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class Wildcard implements Serializable, Comparable<Wildcard> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.Wildcard");
-  
+
   public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
-  
+
   public static final hydra.core.Name WILDCARD = new hydra.core.Name("wildcard");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
-  
+
   public final hydra.util.Maybe<hydra.ext.java.syntax.WildcardBounds> wildcard;
-  
+
   public Wildcard (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.util.Maybe<hydra.ext.java.syntax.WildcardBounds> wildcard) {
     this.annotations = annotations;
     this.wildcard = wildcard;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Wildcard)) {
@@ -32,12 +32,12 @@ public class Wildcard implements Serializable, Comparable<Wildcard> {
       this.wildcard,
       o.wildcard);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(wildcard);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Wildcard other) {
@@ -48,11 +48,11 @@ public class Wildcard implements Serializable, Comparable<Wildcard> {
     }
     return ((Comparable) wildcard).compareTo(other.wildcard);
   }
-  
+
   public Wildcard withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     return new Wildcard(annotations, wildcard);
   }
-  
+
   public Wildcard withWildcard(hydra.util.Maybe<hydra.ext.java.syntax.WildcardBounds> wildcard) {
     return new Wildcard(annotations, wildcard);
   }

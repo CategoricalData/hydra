@@ -2,7 +2,7 @@
 
 -- | A model derived from TinkerPop's Graph.Features. See
 -- |   https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html
--- | 
+-- |
 -- | An interface that represents the capabilities of a Graph implementation.
 -- | By default all methods of features return true and it is up to implementers to disable feature they don't support.
 -- | Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations.
@@ -19,7 +19,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Base interface for features that relate to supporting different data types.
-data DataTypeFeatures = 
+data DataTypeFeatures =
   DataTypeFeatures {
     -- | Supports setting of an array of boolean values.
     dataTypeFeaturesSupportsBooleanArrayValues :: Bool,
@@ -98,7 +98,7 @@ _DataTypeFeatures_supportsStringValues = Core.Name "supportsStringValues"
 _DataTypeFeatures_supportsUniformListValues = Core.Name "supportsUniformListValues"
 
 -- | Features that are related to Edge operations.
-data EdgeFeatures = 
+data EdgeFeatures =
   EdgeFeatures {
     edgeFeaturesElementFeatures :: ElementFeatures,
     edgeFeaturesProperties :: EdgePropertyFeatures,
@@ -123,7 +123,7 @@ _EdgeFeatures_supportsRemoveEdges = Core.Name "supportsRemoveEdges"
 _EdgeFeatures_supportsUpsert = Core.Name "supportsUpsert"
 
 -- | Features that are related to Edge Property objects.
-data EdgePropertyFeatures = 
+data EdgePropertyFeatures =
   EdgePropertyFeatures {
     edgePropertyFeaturesPropertyFeatures :: PropertyFeatures}
   deriving (Eq, Ord, Read, Show)
@@ -133,7 +133,7 @@ _EdgePropertyFeatures = Core.Name "hydra.ext.org.apache.tinkerpop.features.EdgeP
 _EdgePropertyFeatures_propertyFeatures = Core.Name "propertyFeatures"
 
 -- | Features that are related to Element objects.
-data ElementFeatures = 
+data ElementFeatures =
   ElementFeatures {
     -- | Determines if an Element allows properties to be added.
     elementFeaturesSupportsAddProperty :: Bool,
@@ -172,7 +172,7 @@ _ElementFeatures_supportsUserSuppliedIds = Core.Name "supportsUserSuppliedIds"
 _ElementFeatures_supportsUuidIds = Core.Name "supportsUuidIds"
 
 -- | Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features
-data ExtraFeatures a = 
+data ExtraFeatures a =
   ExtraFeatures {
     extraFeaturesSupportsMapKey :: (Core.Type -> Bool)}
 
@@ -181,9 +181,9 @@ _ExtraFeatures = Core.Name "hydra.ext.org.apache.tinkerpop.features.ExtraFeature
 _ExtraFeatures_supportsMapKey = Core.Name "supportsMapKey"
 
 -- | An interface that represents the capabilities of a Graph implementation. By default all methods of features return true and it is up to implementers to disable feature they don't support. Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations. For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().
--- | 
+-- |
 -- | As an additional notice to Graph Providers, feature methods will be used by the test suite to determine which tests will be ignored and which will be executed, therefore proper setting of these features is essential to maximizing the amount of testing performed by the suite. Further note, that these methods may be called by the TinkerPop core code to determine what operations may be appropriately executed which will have impact on features utilized by users.
-data Features = 
+data Features =
   Features {
     -- | Gets the features related to edge operation.
     featuresEdge :: EdgeFeatures,
@@ -202,7 +202,7 @@ _Features_graph = Core.Name "graph"
 _Features_vertex = Core.Name "vertex"
 
 -- | Features specific to a operations of a graph.
-data GraphFeatures = 
+data GraphFeatures =
   GraphFeatures {
     -- | Determines if the Graph implementation supports GraphComputer based processing.
     graphFeaturesSupportsComputer :: Bool,
@@ -241,7 +241,7 @@ _GraphFeatures_supportsTransactions = Core.Name "supportsTransactions"
 _GraphFeatures_variables = Core.Name "variables"
 
 -- | A base interface for Edge or Vertex Property features.
-data PropertyFeatures = 
+data PropertyFeatures =
   PropertyFeatures {
     propertyFeaturesDataTypeFeatures :: DataTypeFeatures,
     -- | Determines if an Element allows for the processing of at least one data type defined by the features.
@@ -255,7 +255,7 @@ _PropertyFeatures_dataTypeFeatures = Core.Name "dataTypeFeatures"
 _PropertyFeatures_supportsProperties = Core.Name "supportsProperties"
 
 -- | Features for Graph.Variables.
-data VariableFeatures = 
+data VariableFeatures =
   VariableFeatures {
     variableFeaturesDataTypeFeatures :: DataTypeFeatures,
     -- | If any of the features on Graph.Features.VariableFeatures is true then this value must be true.
@@ -269,7 +269,7 @@ _VariableFeatures_dataTypeFeatures = Core.Name "dataTypeFeatures"
 _VariableFeatures_supportsVariables = Core.Name "supportsVariables"
 
 -- | Features that are related to Vertex operations.
-data VertexFeatures = 
+data VertexFeatures =
   VertexFeatures {
     vertexFeaturesElementFeatures :: ElementFeatures,
     vertexFeaturesProperties :: VertexPropertyFeatures,
@@ -306,7 +306,7 @@ _VertexFeatures_supportsRemoveVertices = Core.Name "supportsRemoveVertices"
 _VertexFeatures_supportsUpsert = Core.Name "supportsUpsert"
 
 -- | Features that are related to Vertex Property objects.
-data VertexPropertyFeatures = 
+data VertexPropertyFeatures =
   VertexPropertyFeatures {
     vertexPropertyFeaturesDataTypeFeatures :: DataTypeFeatures,
     vertexPropertyFeaturesPropertyFeatures :: PropertyFeatures,

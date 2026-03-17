@@ -6,25 +6,25 @@ import java.io.Serializable;
 
 public class MethodReference_ReferenceType implements Serializable, Comparable<MethodReference_ReferenceType> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodReference_ReferenceType");
-  
+
   public static final hydra.core.Name REFERENCE_TYPE = new hydra.core.Name("referenceType");
-  
+
   public static final hydra.core.Name TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
-  
+
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
-  
+
   public final hydra.ext.java.syntax.ReferenceType referenceType;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
-  
+
   public final hydra.ext.java.syntax.Identifier identifier;
-  
+
   public MethodReference_ReferenceType (hydra.ext.java.syntax.ReferenceType referenceType, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
     this.referenceType = referenceType;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MethodReference_ReferenceType)) {
@@ -39,12 +39,12 @@ public class MethodReference_ReferenceType implements Serializable, Comparable<M
       this.identifier,
       o.identifier);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(referenceType) + 3 * java.util.Objects.hashCode(typeArguments) + 5 * java.util.Objects.hashCode(identifier);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MethodReference_ReferenceType other) {
@@ -59,15 +59,15 @@ public class MethodReference_ReferenceType implements Serializable, Comparable<M
     }
     return ((Comparable) identifier).compareTo(other.identifier);
   }
-  
+
   public MethodReference_ReferenceType withReferenceType(hydra.ext.java.syntax.ReferenceType referenceType) {
     return new MethodReference_ReferenceType(referenceType, typeArguments, identifier);
   }
-  
+
   public MethodReference_ReferenceType withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_ReferenceType(referenceType, typeArguments, identifier);
   }
-  
+
   public MethodReference_ReferenceType withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new MethodReference_ReferenceType(referenceType, typeArguments, identifier);
   }

@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class GraphPattern implements Serializable, Comparable<GraphPattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.GraphPattern");
-  
+
   public static final hydra.core.Name GRAPH = new hydra.core.Name("graph");
-  
+
   public static final hydra.core.Name PATTERNS = new hydra.core.Name("patterns");
-  
+
   /**
    * The name of the component graph
    */
   public final hydra.core.Name graph;
-  
+
   /**
    * The patterns to match within the subgraph
    */
   public final hydra.util.ConsList<hydra.query.Pattern> patterns;
-  
+
   public GraphPattern (hydra.core.Name graph, hydra.util.ConsList<hydra.query.Pattern> patterns) {
     this.graph = graph;
     this.patterns = patterns;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof GraphPattern)) {
@@ -41,12 +41,12 @@ public class GraphPattern implements Serializable, Comparable<GraphPattern> {
       this.patterns,
       o.patterns);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(graph) + 3 * java.util.Objects.hashCode(patterns);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(GraphPattern other) {
@@ -57,11 +57,11 @@ public class GraphPattern implements Serializable, Comparable<GraphPattern> {
     }
     return ((Comparable) patterns).compareTo(other.patterns);
   }
-  
+
   public GraphPattern withGraph(hydra.core.Name graph) {
     return new GraphPattern(graph, patterns);
   }
-  
+
   public GraphPattern withPatterns(hydra.util.ConsList<hydra.query.Pattern> patterns) {
     return new GraphPattern(graph, patterns);
   }

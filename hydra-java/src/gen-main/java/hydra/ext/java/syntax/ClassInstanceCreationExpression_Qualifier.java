@@ -6,44 +6,44 @@ import java.io.Serializable;
 
 public abstract class ClassInstanceCreationExpression_Qualifier implements Serializable, Comparable<ClassInstanceCreationExpression_Qualifier> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier");
-  
+
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
-  
+
   public static final hydra.core.Name PRIMARY = new hydra.core.Name("primary");
-  
+
   private ClassInstanceCreationExpression_Qualifier () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Expression instance) ;
-    
+
     R visit(Primary instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ClassInstanceCreationExpression_Qualifier instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Expression instance) {
       return otherwise(instance);
     }
-    
+
     default R visit(Primary instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Expression extends hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier implements Serializable {
     public final hydra.ext.java.syntax.ExpressionName value;
-    
+
     public Expression (hydra.ext.java.syntax.ExpressionName value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Expression)) {
@@ -54,12 +54,12 @@ public abstract class ClassInstanceCreationExpression_Qualifier implements Seria
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassInstanceCreationExpression_Qualifier other) {
@@ -70,20 +70,20 @@ public abstract class ClassInstanceCreationExpression_Qualifier implements Seria
       Expression o = (Expression) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-  
+
   public static final class Primary extends hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier implements Serializable {
     public final hydra.ext.java.syntax.Primary value;
-    
+
     public Primary (hydra.ext.java.syntax.Primary value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Primary)) {
@@ -94,12 +94,12 @@ public abstract class ClassInstanceCreationExpression_Qualifier implements Seria
         this.value,
         o.value);
     }
-    
+
     @Override
     public int hashCode() {
       return 2 * java.util.Objects.hashCode(value);
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassInstanceCreationExpression_Qualifier other) {
@@ -110,7 +110,7 @@ public abstract class ClassInstanceCreationExpression_Qualifier implements Seria
       Primary o = (Primary) other;
       return ((Comparable) value).compareTo(o.value);
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

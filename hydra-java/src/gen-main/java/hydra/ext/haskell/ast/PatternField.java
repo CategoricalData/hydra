@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class PatternField implements Serializable, Comparable<PatternField> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.PatternField");
-  
+
   public static final hydra.core.Name NAME = new hydra.core.Name("name");
-  
+
   public static final hydra.core.Name PATTERN = new hydra.core.Name("pattern");
-  
+
   /**
    * The field name
    */
   public final hydra.ext.haskell.ast.Name name;
-  
+
   /**
    * The field pattern
    */
   public final hydra.ext.haskell.ast.Pattern pattern;
-  
+
   public PatternField (hydra.ext.haskell.ast.Name name, hydra.ext.haskell.ast.Pattern pattern) {
     this.name = name;
     this.pattern = pattern;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof PatternField)) {
@@ -41,12 +41,12 @@ public class PatternField implements Serializable, Comparable<PatternField> {
       this.pattern,
       o.pattern);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(pattern);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PatternField other) {
@@ -57,11 +57,11 @@ public class PatternField implements Serializable, Comparable<PatternField> {
     }
     return ((Comparable) pattern).compareTo(other.pattern);
   }
-  
+
   public PatternField withName(hydra.ext.haskell.ast.Name name) {
     return new PatternField(name, pattern);
   }
-  
+
   public PatternField withPattern(hydra.ext.haskell.ast.Pattern pattern) {
     return new PatternField(name, pattern);
   }

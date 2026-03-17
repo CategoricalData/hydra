@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class ModularCompilationUnit implements Serializable, Comparable<ModularCompilationUnit> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ModularCompilationUnit");
-  
+
   public static final hydra.core.Name IMPORTS = new hydra.core.Name("imports");
-  
+
   public static final hydra.core.Name MODULE = new hydra.core.Name("module");
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.ImportDeclaration> imports;
-  
+
   public final hydra.ext.java.syntax.ModuleDeclaration module;
-  
+
   public ModularCompilationUnit (hydra.util.ConsList<hydra.ext.java.syntax.ImportDeclaration> imports, hydra.ext.java.syntax.ModuleDeclaration module) {
     this.imports = imports;
     this.module = module;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof ModularCompilationUnit)) {
@@ -32,12 +32,12 @@ public class ModularCompilationUnit implements Serializable, Comparable<ModularC
       this.module,
       o.module);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(imports) + 3 * java.util.Objects.hashCode(module);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ModularCompilationUnit other) {
@@ -48,11 +48,11 @@ public class ModularCompilationUnit implements Serializable, Comparable<ModularC
     }
     return ((Comparable) module).compareTo(other.module);
   }
-  
+
   public ModularCompilationUnit withImports(hydra.util.ConsList<hydra.ext.java.syntax.ImportDeclaration> imports) {
     return new ModularCompilationUnit(imports, module);
   }
-  
+
   public ModularCompilationUnit withModule(hydra.ext.java.syntax.ModuleDeclaration module) {
     return new ModularCompilationUnit(imports, module);
   }

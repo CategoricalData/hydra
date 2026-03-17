@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class PrimitiveTypeWithAnnotations implements Serializable, Comparable<PrimitiveTypeWithAnnotations> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.PrimitiveTypeWithAnnotations");
-  
+
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
-  
+
   public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
-  
+
   public final hydra.ext.java.syntax.PrimitiveType type;
-  
+
   public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
-  
+
   public PrimitiveTypeWithAnnotations (hydra.ext.java.syntax.PrimitiveType type, hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     this.type = type;
     this.annotations = annotations;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof PrimitiveTypeWithAnnotations)) {
@@ -32,12 +32,12 @@ public class PrimitiveTypeWithAnnotations implements Serializable, Comparable<Pr
       this.annotations,
       o.annotations);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(type) + 3 * java.util.Objects.hashCode(annotations);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PrimitiveTypeWithAnnotations other) {
@@ -48,11 +48,11 @@ public class PrimitiveTypeWithAnnotations implements Serializable, Comparable<Pr
     }
     return ((Comparable) annotations).compareTo(other.annotations);
   }
-  
+
   public PrimitiveTypeWithAnnotations withType(hydra.ext.java.syntax.PrimitiveType type) {
     return new PrimitiveTypeWithAnnotations(type, annotations);
   }
-  
+
   public PrimitiveTypeWithAnnotations withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     return new PrimitiveTypeWithAnnotations(type, annotations);
   }

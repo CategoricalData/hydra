@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class SlashWithDefault implements Serializable, Comparable<SlashWithDefault> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.SlashWithDefault");
-  
+
   public static final hydra.core.Name PARAM_NO_DEFAULT = new hydra.core.Name("paramNoDefault");
-  
+
   public static final hydra.core.Name PARAM_WITH_DEFAULT = new hydra.core.Name("paramWithDefault");
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault;
-  
+
   public final hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
-  
+
   public SlashWithDefault (hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault, hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
     this.paramNoDefault = paramNoDefault;
     this.paramWithDefault = paramWithDefault;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof SlashWithDefault)) {
@@ -32,12 +32,12 @@ public class SlashWithDefault implements Serializable, Comparable<SlashWithDefau
       this.paramWithDefault,
       o.paramWithDefault);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(paramNoDefault) + 3 * java.util.Objects.hashCode(paramWithDefault);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SlashWithDefault other) {
@@ -48,11 +48,11 @@ public class SlashWithDefault implements Serializable, Comparable<SlashWithDefau
     }
     return ((Comparable) paramWithDefault).compareTo(other.paramWithDefault);
   }
-  
+
   public SlashWithDefault withParamNoDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault) {
     return new SlashWithDefault(paramNoDefault, paramWithDefault);
   }
-  
+
   public SlashWithDefault withParamWithDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
     return new SlashWithDefault(paramNoDefault, paramWithDefault);
   }

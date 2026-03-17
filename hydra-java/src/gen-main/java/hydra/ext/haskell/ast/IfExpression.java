@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class IfExpression implements Serializable, Comparable<IfExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.IfExpression");
-  
+
   public static final hydra.core.Name CONDITION = new hydra.core.Name("condition");
-  
+
   public static final hydra.core.Name THEN = new hydra.core.Name("then");
-  
+
   public static final hydra.core.Name ELSE = new hydra.core.Name("else");
-  
+
   /**
    * The condition expression
    */
   public final hydra.ext.haskell.ast.Expression condition;
-  
+
   /**
    * The 'then' branch
    */
   public final hydra.ext.haskell.ast.Expression then;
-  
+
   /**
    * The 'else' branch
    */
   public final hydra.ext.haskell.ast.Expression else_;
-  
+
   public IfExpression (hydra.ext.haskell.ast.Expression condition, hydra.ext.haskell.ast.Expression then, hydra.ext.haskell.ast.Expression else_) {
     this.condition = condition;
     this.then = then;
     this.else_ = else_;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof IfExpression)) {
@@ -51,12 +51,12 @@ public class IfExpression implements Serializable, Comparable<IfExpression> {
       this.else_,
       o.else_);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(condition) + 3 * java.util.Objects.hashCode(then) + 5 * java.util.Objects.hashCode(else_);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(IfExpression other) {
@@ -71,15 +71,15 @@ public class IfExpression implements Serializable, Comparable<IfExpression> {
     }
     return ((Comparable) else_).compareTo(other.else_);
   }
-  
+
   public IfExpression withCondition(hydra.ext.haskell.ast.Expression condition) {
     return new IfExpression(condition, then, else_);
   }
-  
+
   public IfExpression withThen(hydra.ext.haskell.ast.Expression then) {
     return new IfExpression(condition, then, else_);
   }
-  
+
   public IfExpression withElse(hydra.ext.haskell.ast.Expression else_) {
     return new IfExpression(condition, then, else_);
   }

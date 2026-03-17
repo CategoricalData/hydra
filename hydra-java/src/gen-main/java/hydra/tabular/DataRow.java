@@ -9,15 +9,15 @@ import java.io.Serializable;
  */
 public class DataRow<V> implements Serializable, Comparable<DataRow<V>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.tabular.DataRow");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.util.ConsList<hydra.util.Maybe<V>> value;
-  
+
   public DataRow (hydra.util.ConsList<hydra.util.Maybe<V>> value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof DataRow)) {
@@ -28,12 +28,12 @@ public class DataRow<V> implements Serializable, Comparable<DataRow<V>> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DataRow other) {

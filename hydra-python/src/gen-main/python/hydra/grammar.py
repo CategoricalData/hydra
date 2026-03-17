@@ -27,10 +27,10 @@ Label.TYPE_ = hydra.core.Name("hydra.grammar.Label")
 @dataclass(frozen=True)
 class LabeledPattern:
     r"""A pattern together with a name (label)."""
-    
+
     label: Annotated[Label, "The label for the pattern"]
     pattern: Annotated[Pattern, "The pattern being labeled"]
-    
+
     TYPE_ = hydra.core.Name("hydra.grammar.LabeledPattern")
     LABEL = hydra.core.Name("label")
     PATTERN = hydra.core.Name("pattern")
@@ -49,7 +49,7 @@ class PatternLabeled(Node["LabeledPattern"]):
 
 class PatternNil:
     r"""An empty pattern"""
-    
+
     __slots__ = ()
     def __eq__(self, other):
         return isinstance(other, PatternNil)
@@ -81,7 +81,7 @@ class _PatternMeta(type):
 # A pattern which matches valid expressions in the language.
 class Pattern(metaclass=_PatternMeta):
     r"""PatternAlternatives | PatternConstant | PatternIgnored | PatternLabeled | PatternNil | PatternNonterminal | PatternOption | PatternPlus | PatternRegex | PatternSequence | PatternStar"""
-    
+
     TYPE_ = hydra.core.Name("hydra.grammar.Pattern")
     ALTERNATIVES = hydra.core.Name("alternatives")
     CONSTANT = hydra.core.Name("constant")
@@ -98,10 +98,10 @@ class Pattern(metaclass=_PatternMeta):
 @dataclass(frozen=True)
 class Production:
     r"""A BNF production."""
-    
+
     symbol: Annotated[Symbol, "The nonterminal symbol being defined"]
     pattern: Annotated[Pattern, "The pattern which defines the symbol"]
-    
+
     TYPE_ = hydra.core.Name("hydra.grammar.Production")
     SYMBOL = hydra.core.Name("symbol")
     PATTERN = hydra.core.Name("pattern")

@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 public class SectionExpression implements Serializable, Comparable<SectionExpression> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.SectionExpression");
-  
+
   public static final hydra.core.Name OPERATOR = new hydra.core.Name("operator");
-  
+
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
-  
+
   /**
    * The operator
    */
   public final hydra.ext.haskell.ast.Operator operator;
-  
+
   /**
    * The operand
    */
   public final hydra.ext.haskell.ast.Expression expression;
-  
+
   public SectionExpression (hydra.ext.haskell.ast.Operator operator, hydra.ext.haskell.ast.Expression expression) {
     this.operator = operator;
     this.expression = expression;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof SectionExpression)) {
@@ -41,12 +41,12 @@ public class SectionExpression implements Serializable, Comparable<SectionExpres
       this.expression,
       o.expression);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(operator) + 3 * java.util.Objects.hashCode(expression);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SectionExpression other) {
@@ -57,11 +57,11 @@ public class SectionExpression implements Serializable, Comparable<SectionExpres
     }
     return ((Comparable) expression).compareTo(other.expression);
   }
-  
+
   public SectionExpression withOperator(hydra.ext.haskell.ast.Operator operator) {
     return new SectionExpression(operator, expression);
   }
-  
+
   public SectionExpression withExpression(hydra.ext.haskell.ast.Expression expression) {
     return new SectionExpression(operator, expression);
   }

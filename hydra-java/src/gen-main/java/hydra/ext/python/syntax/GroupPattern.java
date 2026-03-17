@@ -6,15 +6,15 @@ import java.io.Serializable;
 
 public class GroupPattern implements Serializable, Comparable<GroupPattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.GroupPattern");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.ext.python.syntax.Pattern value;
-  
+
   public GroupPattern (hydra.ext.python.syntax.Pattern value) {
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof GroupPattern)) {
@@ -25,12 +25,12 @@ public class GroupPattern implements Serializable, Comparable<GroupPattern> {
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(GroupPattern other) {

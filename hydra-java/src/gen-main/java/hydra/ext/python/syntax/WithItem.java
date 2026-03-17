@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class WithItem implements Serializable, Comparable<WithItem> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.WithItem");
-  
+
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
-  
+
   public static final hydra.core.Name AS = new hydra.core.Name("as");
-  
+
   public final hydra.ext.python.syntax.Expression expression;
-  
+
   public final hydra.util.Maybe<hydra.ext.python.syntax.StarTarget> as;
-  
+
   public WithItem (hydra.ext.python.syntax.Expression expression, hydra.util.Maybe<hydra.ext.python.syntax.StarTarget> as) {
     this.expression = expression;
     this.as = as;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof WithItem)) {
@@ -32,12 +32,12 @@ public class WithItem implements Serializable, Comparable<WithItem> {
       this.as,
       o.as);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(expression) + 3 * java.util.Objects.hashCode(as);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(WithItem other) {
@@ -48,11 +48,11 @@ public class WithItem implements Serializable, Comparable<WithItem> {
     }
     return ((Comparable) as).compareTo(other.as);
   }
-  
+
   public WithItem withExpression(hydra.ext.python.syntax.Expression expression) {
     return new WithItem(expression, as);
   }
-  
+
   public WithItem withAs(hydra.util.Maybe<hydra.ext.python.syntax.StarTarget> as) {
     return new WithItem(expression, as);
   }
