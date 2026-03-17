@@ -1,0 +1,27 @@
+(require 'cl-lib)
+
+(require 'hydra.coders)
+
+(require 'hydra.core)
+
+(require 'hydra.error)
+
+(require 'hydra.extract.helpers)
+
+(require 'hydra.lexical)
+
+(require 'hydra.lib.eithers)
+
+(require 'hydra.lib.maps)
+
+(require 'hydra.lib.maybes)
+
+(require 'hydra.lib.strings)
+
+(defvar hydra_decode_coders_coder_direction (lambda (cx) (lambda (raw) (((hydra_lib_eithers_either (lambda (err) (list :left err))) (lambda (stripped) ((lambda (match_target) ((lambda (match_value) (cond ((equal (car match_target) :union) ((lambda (inj) (let* ((field ((lambda (v) (hydra_core_injection-field v)) inj)) (fname ((lambda (v) (hydra_core_field-name v)) field)) (fterm ((lambda (v) (hydra_core_field-term v)) field)) (tname ((lambda (v) (hydra_core_injection-type_name v)) inj)) (variant_map (hydra_lib_maps_from_list (list (list "encode" (lambda (input) ((hydra_lib_eithers_map (lambda (t_) (list :encode t_))) ((hydra_extract_helpers_decode_unit cx) input)))) (list "decode" (lambda (input) ((hydra_lib_eithers_map (lambda (t_) (list :decode t_))) ((hydra_extract_helpers_decode_unit cx) input)))))))) (((hydra_lib_maybes_maybe (list :left (hydra_lib_strings_cat (list "no such field " ((lambda (v) v) fname) " in union type " ((lambda (v) v) tname))))) (lambda (f) (f fterm))) ((hydra_lib_maps_lookup fname) variant_map)))) match_value)) (t (list :left "expected union of type hydra.coders.CoderDirection")))) (cadr match_target))) stripped))) ((hydra_lexical_strip_and_dereference_term_either cx) raw)))))
+
+(defvar hydra_decode_coders_language_name (lambda (cx) (lambda (raw) (((hydra_lib_eithers_either (lambda (err) (list :left err))) (lambda (stripped) ((lambda (match_target) ((lambda (match_value) (cond ((equal (car match_target) :wrap) ((lambda (wrapped_term) ((hydra_lib_eithers_map (lambda (b) b)) (((lambda (cx) (lambda (raw) (((hydra_lib_eithers_either (lambda (err) (list :left err))) (lambda (stripped) ((lambda (match_target) ((lambda (match_value) (cond ((equal (car match_target) :literal) ((lambda (v) ((lambda (match_target) ((lambda (match_value) (cond ((equal (car match_target) :string) ((lambda (s) (list :right s)) match_value)) (t (list :left "expected string literal")))) (cadr match_target))) v)) match_value)) (t (list :left "expected literal")))) (cadr match_target))) stripped))) ((hydra_lexical_strip_and_dereference_term_either cx) raw)))) cx) ((lambda (v) (hydra_core_wrapped_term-body v)) wrapped_term)))) match_value)) (t (list :left "expected wrapped type hydra.coders.LanguageName")))) (cadr match_target))) stripped))) ((hydra_lexical_strip_and_dereference_term_either cx) raw)))))
+
+(defvar hydra_decode_coders_traversal_order (lambda (cx) (lambda (raw) (((hydra_lib_eithers_either (lambda (err) (list :left err))) (lambda (stripped) ((lambda (match_target) ((lambda (match_value) (cond ((equal (car match_target) :union) ((lambda (inj) (let* ((field ((lambda (v) (hydra_core_injection-field v)) inj)) (fname ((lambda (v) (hydra_core_field-name v)) field)) (fterm ((lambda (v) (hydra_core_field-term v)) field)) (tname ((lambda (v) (hydra_core_injection-type_name v)) inj)) (variant_map (hydra_lib_maps_from_list (list (list "pre" (lambda (input) ((hydra_lib_eithers_map (lambda (t_) (list :pre t_))) ((hydra_extract_helpers_decode_unit cx) input)))) (list "post" (lambda (input) ((hydra_lib_eithers_map (lambda (t_) (list :post t_))) ((hydra_extract_helpers_decode_unit cx) input)))))))) (((hydra_lib_maybes_maybe (list :left (hydra_lib_strings_cat (list "no such field " ((lambda (v) v) fname) " in union type " ((lambda (v) v) tname))))) (lambda (f) (f fterm))) ((hydra_lib_maps_lookup fname) variant_map)))) match_value)) (t (list :left "expected union of type hydra.coders.TraversalOrder")))) (cadr match_target))) stripped))) ((hydra_lexical_strip_and_dereference_term_either cx) raw)))))
+
+(provide 'hydra.decode.coders)
