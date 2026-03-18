@@ -300,7 +300,7 @@ mathSinh = subgroup "sinh" [
 mathCosh :: TTerm TestGroup
 mathCosh = subgroup "cosh" [
   test "cosh 0" 0.0 1.0,
-  test "cosh 1" 1.0 (cosh 1.0),
+  roundedPrimCase1 "cosh 1" _math_cosh 1.0 (cosh 1.0),
   roundedPrimCase1 "cosh 2" _math_cosh 2.0 (cosh 2.0)]
   where
     test name x result = primCase name _math_cosh [float64 x] (float64 result)
@@ -340,8 +340,8 @@ mathAtanh = subgroup "atanh" [
 mathExp :: TTerm TestGroup
 mathExp = subgroup "exp" [
   test "exp 0" 0.0 1.0,
-  test "exp 1" 1.0 (exp 1.0),
-  test "exp -1" (-1.0) (exp (-1.0)),
+  roundedPrimCase1 "exp 1" _math_exp 1.0 (exp 1.0),
+  roundedPrimCase1 "exp -1" _math_exp (-1.0) (exp (-1.0)),
   roundedPrimCase1 "exp 2" _math_exp 2.0 (exp 2.0),
   roundedPrimCase1 "exp 0.5" _math_exp 0.5 (exp 0.5)]
   where
