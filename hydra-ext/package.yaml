@@ -69,9 +69,11 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/generate-lisp
+      - ../hydra-haskell/src/gen-test/haskell
     ghc-options: [-rtsopts]
     dependencies:
       - hydra-ext
+      - hspec                      >= 2.11.0 && < 2.12
 
   bootstrap-from-json:
     main: Main.hs

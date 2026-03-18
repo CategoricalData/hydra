@@ -1,8 +1,12 @@
 module Main where
 
 import Hydra.Ext.Generation
-import Hydra.Kernel (Module)
+import Hydra.Generation (createTestGroupLookup)
+import Hydra.Kernel (Module, moduleNamespace)
 import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
+import qualified Hydra.Sources.Test.TestSuite as TestSuite
+import qualified Hydra.Test.TestSuite as GenTests
+import Hydra.Ext.Lisp.TestCodecIo
 import System.Directory (createDirectoryIfMissing, copyFile, listDirectory, doesFileExist)
 import System.FilePath ((</>), takeExtension)
 
@@ -81,6 +85,28 @@ main = do
   let totalMain = n1 + e1 + length scmFiles + nSchemeStubs + n2 + e2 + n3 + e3 + n4 + e4
   let totalTest = t1 + t2 + t3 + t4
   putStrLn $ "Total: " ++ show totalMain ++ " main files, " ++ show totalTest ++ " test files"
+
+  -- Generation tests
+  let testNamespaces = map moduleNamespace TestSuite.testSuiteModules
+  let lookupFn = createTestGroupLookup testNamespaces GenTests.allTests
+
+  putStrLn ""
+  putStrLn "Generating generation tests..."
+  g1 <- generateClojureGenerationTests
+    (clojureTestDir </> "generation") TestSuite.testSuiteModules lookupFn
+  putStrLn $ "  Clojure generation tests: " ++ if g1 then "OK" else "FAILED"
+
+  g2 <- generateSchemeGenerationTests
+    (schemeTestDir </> "generation") TestSuite.testSuiteModules lookupFn
+  putStrLn $ "  Scheme generation tests: " ++ if g2 then "OK" else "FAILED"
+
+  g3 <- generateCommonLispGenerationTests
+    (commonLispTestDir </> "generation") TestSuite.testSuiteModules lookupFn
+  putStrLn $ "  Common Lisp generation tests: " ++ if g3 then "OK" else "FAILED"
+
+  g4 <- generateEmacsLispGenerationTests
+    (emacsLispTestDir </> "generation") TestSuite.testSuiteModules lookupFn
+  putStrLn $ "  Emacs Lisp generation tests: " ++ if g4 then "OK" else "FAILED"
 
 writeStubs :: [FilePath] -> IO Int
 writeStubs paths = do
