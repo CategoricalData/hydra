@@ -216,7 +216,8 @@ generateDslModules = generateCoderModulesIO Dsls.dslModule "DSL"
 writeDslHaskell :: FilePath -> [Module] -> [Module] -> IO ()
 writeDslHaskell basePath universeModules typeModules = do
     dslMods <- generateDslModules universeModules typeModules
-    let withCoreDeps = fmap addCoreDep dslMods
+    let nonEmpty = filter (not . null . moduleElements) dslMods
+    let withCoreDeps = fmap addCoreDep nonEmpty
     _ <- generateSources moduleToHaskell haskellLanguage False False False False basePath universeModules withCoreDeps
     return ()
   where
@@ -263,15 +264,17 @@ writeModulesJson doInfer basePath universeMods mods = do
 writeDslJson :: FilePath -> [Module] -> [Module] -> IO ()
 writeDslJson basePath universeModules typeModules = do
     dslMods <- generateDslModules universeModules typeModules
-    writeModulesJson False basePath universeModules dslMods
+    let nonEmpty = filter (not . null . moduleElements) dslMods
+    writeModulesJson False basePath universeModules nonEmpty
 
 -- | Write a manifest.json listing module namespaces for kernelModules, mainModules, and testModules.
 -- This allows Java and Python hosts to load the correct set of modules without directory scanning.
 writeManifestJson :: FilePath -> IO ()
 writeManifestJson basePath = do
     dslMods <- generateDslModules Sources.mainModules Sources.kernelTypesModules
+    let nonEmptyDsls = filter (not . null . moduleElements) dslMods
     let jsonVal = Json.ValueObject $ M.fromList [
-            ("dslModules", namespacesJson dslMods),
+            ("dslModules", namespacesJson nonEmptyDsls),
             ("evalLibModules", namespacesJson EvalLib.evalLibModules),
             ("kernelModules", namespacesJson Sources.kernelModules),
             ("mainModules", namespacesJson Sources.mainModules),

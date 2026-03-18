@@ -80,7 +80,7 @@ stack build hydra-ext:exe:bootstrap-from-json
 echo ""
 echo "Step 2/5: Generating Java main modules and tests from JSON..."
 echo ""
-stack exec bootstrap-from-json -- --target java --include-coders --include-tests --include-gentests $RTS_FLAGS
+stack exec bootstrap-from-json -- --target java --include-coders --include-dsls --include-tests --include-gentests $RTS_FLAGS
 
 echo ""
 echo "Step 3/5: Generating ext Java demo modules from JSON..."

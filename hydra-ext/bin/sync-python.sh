@@ -66,7 +66,7 @@ stack build hydra-ext:exe:bootstrap-from-json
 echo ""
 echo "Step 2/4: Generating Python main modules and tests from JSON..."
 echo ""
-stack exec bootstrap-from-json -- --target python --include-coders --include-tests --include-gentests $RTS_FLAGS
+stack exec bootstrap-from-json -- --target python --include-coders --include-dsls --include-tests --include-gentests $RTS_FLAGS
 
 echo ""
 echo "Step 3/4: Generating ext Python demo modules from JSON..."

@@ -1827,7 +1827,7 @@ encodeTermInternal env anns tyapps term cx g0 =
       in case term of
         Core.TermAnnotated v0 -> encodeTermInternal env (Lists.cons (Core.annotatedTermAnnotation v0) anns) tyapps (Core.annotatedTermBody v0) cx g
         Core.TermApplication v0 -> encodeApplication env v0 cx g
-        Core.TermEither v0 -> Eithers.bind (takeTypeArgs "either" 2 tyapps cx g) (\targs ->
+        Core.TermEither v0 -> Eithers.bind (Logic.ifElse (Lists.null tyapps) (Right Nothing) (Eithers.bind (takeTypeArgs "either" 2 tyapps cx g) (\ta -> Right (Just ta)))) (\mtargs ->
           let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
           in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
             Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
@@ -1840,9 +1840,11 @@ encodeTermInternal env anns tyapps term cx g0 =
                         \branchType -> \t1 ->
                           let annotated = Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ branchType)) t1
                           in (encodeTermInternal env anns [] annotated cx g)
-            in (Eithers.either (\term1 -> Eithers.bind (Maybes.cases branchTypes (encode term1) (\bt -> encodeWithType (Pairs.first bt) term1)) (\expr -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "left") targs [
-              expr])))) (\term1 -> Eithers.bind (Maybes.cases branchTypes (encode term1) (\bt -> encodeWithType (Pairs.second bt) term1)) (\expr -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "right") targs [
-              expr])))) v0))))
+                eitherCall =
+                        \methodName -> \expr -> Maybes.cases mtargs (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier methodName) [
+                          expr])) (\targs -> Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier methodName) targs [
+                          expr]))
+            in (Eithers.either (\term1 -> Eithers.bind (Maybes.cases branchTypes (encode term1) (\bt -> encodeWithType (Pairs.first bt) term1)) (\expr -> Right (eitherCall "left" expr))) (\term1 -> Eithers.bind (Maybes.cases branchTypes (encode term1) (\bt -> encodeWithType (Pairs.second bt) term1)) (\expr -> Right (eitherCall "right" expr))) v0))))
         Core.TermFunction v0 ->
           let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
           in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
@@ -1876,15 +1878,15 @@ encodeTermInternal env anns tyapps term cx g0 =
                     castExpr =
                             Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression supplierRt (Utils.javaExpressionToJavaUnaryExpression nullaryLambda))
                 in (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocation (Just (Right (Utils.javaExpressionToJavaPrimary castExpr))) (Syntax.Identifier "get") [])))))))))))))
-        Core.TermList v0 -> Logic.ifElse (Lists.null v0) (Eithers.bind (takeTypeArgs "list" 1 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.ConsList") (Syntax.Identifier "empty") targs [])))) (Eithers.bind (Eithers.mapList encode v0) (\jels -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.ConsList") (Syntax.Identifier "of") jels))))
+        Core.TermList v0 -> Logic.ifElse (Lists.null v0) (Logic.ifElse (Lists.null tyapps) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.ConsList") (Syntax.Identifier "empty") []))) (Eithers.bind (takeTypeArgs "list" 1 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.ConsList") (Syntax.Identifier "empty") targs []))))) (Eithers.bind (Eithers.mapList encode v0) (\jels -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.ConsList") (Syntax.Identifier "of") jels))))
         Core.TermLiteral v0 -> Right (encodeLiteral v0)
-        Core.TermMap v0 -> Logic.ifElse (Maps.null v0) (Eithers.bind (takeTypeArgs "map" 2 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.PersistentMap") (Syntax.Identifier "empty") targs [])))) (Eithers.bind (Eithers.mapList encode (Maps.keys v0)) (\jkeys -> Eithers.bind (Eithers.mapList encode (Maps.elems v0)) (\jvals ->
+        Core.TermMap v0 -> Logic.ifElse (Maps.null v0) (Logic.ifElse (Lists.null tyapps) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.PersistentMap") (Syntax.Identifier "empty") []))) (Eithers.bind (takeTypeArgs "map" 2 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.PersistentMap") (Syntax.Identifier "empty") targs []))))) (Eithers.bind (Eithers.mapList encode (Maps.keys v0)) (\jkeys -> Eithers.bind (Eithers.mapList encode (Maps.elems v0)) (\jvals ->
           let pairExprs =
                   Lists.map (\kv -> Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.PersistentMap") (Syntax.Identifier "entry") [
                     Pairs.first kv,
                     (Pairs.second kv)])) (Lists.zip jkeys jvals)
           in (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.PersistentMap") (Syntax.Identifier "ofEntries") pairExprs))))))
-        Core.TermMaybe v0 -> Maybes.cases v0 (Eithers.bind (takeTypeArgs "maybe" 1 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Maybe") (Syntax.Identifier "nothing") targs [])))) (\term1 -> Eithers.bind (encode term1) (\expr -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.Maybe") (Syntax.Identifier "just") [
+        Core.TermMaybe v0 -> Maybes.cases v0 (Logic.ifElse (Lists.null tyapps) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.Maybe") (Syntax.Identifier "nothing") []))) (Eithers.bind (takeTypeArgs "maybe" 1 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Maybe") (Syntax.Identifier "nothing") targs []))))) (\term1 -> Eithers.bind (encode term1) (\expr -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.Maybe") (Syntax.Identifier "just") [
           expr]))))
         Core.TermPair v0 -> Eithers.bind (encode (Pairs.first v0)) (\jterm1 -> Eithers.bind (encode (Pairs.second v0)) (\jterm2 -> Eithers.bind (Logic.ifElse (Lists.null tyapps) (Right Nothing) (Eithers.bind (Eithers.mapList (\jt -> Utils.javaTypeToJavaReferenceType jt cx) tyapps) (\rts -> Right (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) rts)))))) (\mtargs -> Right (Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "hydra.util.Pair") mtargs) [
           jterm1,
@@ -1922,7 +1924,7 @@ encodeTermInternal env anns tyapps term cx g0 =
                   Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mtyp -> Maybes.cases mtyp (Right Nothing) (\annTyp ->
                   let typeArgs = extractTypeApplicationArgs (Rewriting.deannotateType annTyp)
                   in (Logic.ifElse (Lists.null typeArgs) (Right Nothing) (Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Utils.javaTypeToJavaReferenceType jt cx)) typeArgs) (\jTypeArgs -> Right (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) jTypeArgs))))))))))) (\mtargs -> Right (Utils.javaConstructorCall (Utils.javaConstructorName consId mtargs) fieldExprs Nothing)))))))
-        Core.TermSet v0 -> Logic.ifElse (Sets.null v0) (Eithers.bind (takeTypeArgs "set" 1 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.PersistentSet") (Syntax.Identifier "empty") targs [])))) (
+        Core.TermSet v0 -> Logic.ifElse (Sets.null v0) (Logic.ifElse (Lists.null tyapps) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.PersistentSet") (Syntax.Identifier "empty") []))) (Eithers.bind (takeTypeArgs "set" 1 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.PersistentSet") (Syntax.Identifier "empty") targs []))))) (
           let slist = Sets.toList v0
           in (Eithers.bind (Eithers.mapList encode slist) (\jels -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.PersistentSet") (Syntax.Identifier "of") jels)))))
         Core.TermTypeLambda v0 -> withTypeLambda env v0 (\env2 ->
