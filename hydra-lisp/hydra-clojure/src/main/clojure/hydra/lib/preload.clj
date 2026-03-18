@@ -13,11 +13,15 @@
 
 (defn globalize-ns-vars!
   "Intern all public vars from the given namespace into clojure.core,
-   making them available in all namespaces without explicit requires."
+   making them available in all namespaces without explicit requires.
+   Globalizes both hydra_ prefixed vars and -> constructors."
   [ns-sym]
   (when-let [the-ns (find-ns ns-sym)]
     (doseq [[sym var] (ns-publics the-ns)]
-      (when (.startsWith (name sym) "hydra_")
+      (when (and (.isBound var)
+                 (or (.startsWith (name sym) "hydra_")
+                     (.startsWith (name sym) "->hydra_")
+                     (.startsWith (name sym) "make-hydra_")))
         (intern 'clojure.core sym (deref var))))))
 
 (defn globalize-all-lib-vars!

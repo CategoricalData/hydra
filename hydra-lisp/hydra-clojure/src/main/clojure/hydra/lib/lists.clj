@@ -66,7 +66,7 @@
 
 ;; init :: [a] -> [a]  (all but last)
 (def hydra_lib_lists_init
-  (fn [xs] (butlast xs)))
+  (fn [xs] (or (butlast xs) ())))
 
 ;; intercalate :: [a] -> [[a]] -> [a]
 (def hydra_lib_lists_intercalate
