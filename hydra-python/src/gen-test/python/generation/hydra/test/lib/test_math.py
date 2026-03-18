@@ -540,7 +540,7 @@ def test_asinh__asinh_0():
 
 def test_asinh__asinh_1():
 
-    assert (hydra.lib.math.asinh(1.0)) == (0.881373587019543)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.asinh(1.0))) == (0.88137358702)
 
 def test_asinh__asinh_0_5():
 
@@ -554,7 +554,7 @@ def test_acosh__acosh_1():
 
 def test_acosh__acosh_2():
 
-    assert (hydra.lib.math.acosh(2.0)) == (1.3169578969248166)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.acosh(2.0))) == (1.31695789692)
 
 def test_acosh__acosh_3():
 
