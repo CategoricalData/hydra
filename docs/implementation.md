@@ -292,9 +292,12 @@ The DSL system provides multiple levels of abstraction for different use cases.
 ### DSL module locations
 
 ```
-hydra-haskell/src/main/haskell/Hydra/Dsl/     # Core DSLs (34 files)
+hydra-haskell/src/main/haskell/Hydra/Dsl/         # Hand-written base DSLs
+hydra-haskell/src/main/haskell/Hydra/Dsl/Meta/     # Hand-written meta DSL wrappers
 hydra-haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/ # Library DSLs (13 files)
-hydra-ext/src/main/haskell/Hydra/Ext/Dsl/     # Extension DSLs
+hydra-haskell/src/gen-main/haskell/Hydra/Dsl/      # Generated DSLs (from hydra.dsls)
+hydra-ext/src/main/haskell/Hydra/Ext/Dsl/          # Extension DSLs (hand-written helpers)
+hydra-ext/src/gen-main/haskell/Hydra/Dsl/Ext/      # Generated extension DSLs
 ```
 
 **See also:** [DSL guide](dsl-guide.md) - Comprehensive guide with examples and operator reference
@@ -351,42 +354,47 @@ buildAddFunction =
 
 **Use Case:** Code generators, meta-programs, self-modifying code
 
-### Core DSL modules
+### Generated DSL modules
 
-#### Base Infrastructure
-- **Common.hs** - Type class instances and utilities
-- **Phantoms.hs** - Phantom-typed term construction DSL
-- **PhantomLiterals.hs** - Literal handling with phantom types
-- **TBase.hs** - Base for term-encoded DSLs
+The `hydra.dsls` module (`Sources/Kernel/Terms/Dsls.hs`) automatically generates
+phantom-typed DSL functions from any Hydra type module. For each type definition, it
+produces:
 
-#### Term Construction
+- **Record constructors** — one function taking all fields as `TTerm` arguments
+- **Field accessors** — one function per field, returning the field value
+- **Field updaters** — `withXxx` functions that return a modified copy of the record
+- **Union injectors** — one function per variant (unit variants produce nullary values)
+- **Wrap/unwrap** — for newtype wrappers
+
+Generated modules live in `src/gen-main/haskell/Hydra/Dsl/` (e.g., `Hydra.Dsl.Core`,
+`Hydra.Dsl.Coders`, `Hydra.Dsl.Ast`). They are also generated into Java and Python
+as part of the sync pipeline.
+
+### Hand-written DSL modules
+
+#### Base infrastructure (in `Hydra/Dsl/`)
 - **Terms.hs** - Plain DSL for terms (`apply`, `lambda`, `record`, `inject`)
-- **Meta/Terms.hs** - Phantom-typed term-encoded terms
-
-#### Type Construction
 - **Types.hs** - Plain DSL for types (operators `-->`, `@@`)
-- **Meta/Types.hs** - Phantom-typed term-encoded types
 - **ShorthandTypes.hs** - Convenient aliases (`tInt32`, `tString`, `tList`)
-
-#### High-Level Construction
-- **Core.hs** - High-level constructors for core concepts
-- **Variants.hs** - Metadata variants and introspection
 - **Bootstrap.hs** - Bootstrapping utilities
-
-#### Structure Definition
-- **Module.hs** - Module, binding, namespace definition
-- **Grammars.hs** - Grammar and syntax definitions
 - **Annotations.hs** - Annotation handling
-
-#### Utilities
+- **Grammars.hs** - Grammar and syntax definitions
 - **Literals.hs**, **LiteralTypes.hs** - Literal handling
-- **Accessors.hs** - Path and accessor operations
-- **Graph.hs** - Graph construction
-- **Coders.hs** - Encoder/decoder definitions
-- **Compute.hs** - Computation and flow handling
-- **Testing.hs** - Test utilities
-- **Topology.hs** - Topological operations
-- **Ast.hs**, **Tabular.hs** - Data format handling
+
+#### Meta DSL wrappers (in `Hydra/Dsl/Meta/`)
+
+These modules re-export the corresponding generated DSL module and add non-standard
+helpers such as `AsTerm`-flexible overrides, expression conversion pipelines, and
+compatibility shims.
+
+- **Meta/Core.hs** - Wraps `Hydra.Dsl.Core`; adds `AsTerm` overrides for `binding`, `injection`, `typeVariable`; helpers like `equalName_`, `false`
+- **Meta/Context.hs** - Wraps `Hydra.Dsl.Context`; adds `withContext`, `pushTrace`, `failInContext`
+- **Meta/Graph.hs** - Wraps `Hydra.Dsl.Graph`; adds graph construction helpers
+- **Meta/Phantoms.hs** - Phantom-typed term construction (`TTerm a`), operators (`@@`, `~>`, `<~`)
+- **Meta/Terms.hs** - Phantom-typed term-encoded terms
+- **Meta/Types.hs** - Phantom-typed term-encoded types
+- **Meta/Variants.hs** - Wraps `Hydra.Dsl.Variants`; metadata variants and introspection
+- **Meta/Testing.hs** - Wraps `Hydra.Dsl.Testing`; test convenience helpers
 
 ### Library DSLs
 

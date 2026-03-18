@@ -68,8 +68,9 @@ The import block for a term-level source module is large but follows a consisten
 
 1. **Unqualified core imports** — `Hydra.Kernel`, `Hydra.Sources.Libraries`, `Hydra.Dsl.Meta.Phantoms`, `Hydra.Dsl.Meta.Lib.Strings`
 2. **Qualified DSL imports** — `Hydra.Dsl.*` modules (Bootstrap, Annotations, Grammars, LiteralTypes, Literals, Types, Terms, etc.)
-3. **Qualified meta DSL imports** — `Hydra.Dsl.Meta.*` modules (Accessors, Ast, Base, Coders, Compute, Core, Graph, Json, Module, Terms, Types, Variants, etc.)
-4. **Qualified library DSL imports** — `Hydra.Dsl.Meta.Lib.*` (Chars, Eithers, Equality, Lists, Literals, Logic, Maps, Math, Maybes, Pairs, Sets)
+3. **Qualified generated DSL imports** — `Hydra.Dsl.*` modules auto-generated from type definitions (Coders, Module, Ast, Error, Util, etc.). These provide constructors, accessors, and updaters for all Hydra types.
+4. **Qualified meta DSL imports** — `Hydra.Dsl.Meta.*` wrapper modules (Core, Context, Graph, Base, Terms, Types, Variants, etc.). These re-export the generated DSLs and add custom helpers such as AsTerm-flexible overrides and expression conversion utilities.
+5. **Qualified library DSL imports** — `Hydra.Dsl.Meta.Lib.*` (Chars, Eithers, Equality, Lists, Literals, Logic, Maps, Math, Maybes, Pairs, Sets)
 5. **Qualified kernel sources imports** — `Hydra.Sources.Kernel.Terms.*` modules for calling other promoted functions (Reduction, Rewriting, Inference, etc.)
 6. **Standard Haskell imports** — `Prelude hiding ((++))`, `Data.List as L`, `Data.Map as M`, `Data.Set as S`
 7. **Domain-specific imports** — generated phantom types for the types your module uses (e.g., `Hydra.Ext.Haskell.Ast as H`)

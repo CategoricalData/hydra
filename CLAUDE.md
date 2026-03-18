@@ -141,6 +141,11 @@ Hydra-Haskell (source of truth)
   |     Java     -> hydra-java/src/gen-main/java/       (via hydra-ext)
   |     Python   -> hydra-python/src/gen-main/python/    (via hydra-ext)
   |
+  |-- DSL generation (hydra.dsls) produces phantom-typed DSL modules:
+  |     Haskell  -> hydra-haskell/src/gen-main/haskell/Hydra/Dsl/
+  |     Java     -> hydra-java/src/gen-main/java/hydra/dsl/
+  |     Python   -> hydra-python/src/gen-main/python/hydra/dsl/
+  |
   |-- Native primitives implemented per-language:
         Haskell  -> hydra-haskell/src/main/haskell/Hydra/Lib/
         Java     -> hydra-java/src/main/java/hydra/lib/
@@ -189,7 +194,9 @@ to the individual demo READMEs.
 
 | Purpose | Path |
 |---------|------|
-| DSL syntax definitions | `hydra-haskell/src/main/haskell/Hydra/Dsl/` |
+| Hand-written DSL helpers | `hydra-haskell/src/main/haskell/Hydra/Dsl/Meta/` |
+| Generated DSL modules | `hydra-haskell/src/gen-main/haskell/Hydra/Dsl/` |
+| DSL generator source | `hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Dsls.hs` |
 | Kernel type definitions | `hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/` |
 | Kernel term operations | `hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/` |
 | Native primitives | `hydra-haskell/src/main/haskell/Hydra/Lib/` |
@@ -372,11 +379,20 @@ import Hydra.Dsl.ShorthandTypes  -- unqualified: string, int32, list, etc.
 -- Term modules (phantom-typed):
 import Hydra.Dsl.Meta.Phantoms
 
+-- Generated DSL modules (constructors, accessors, updaters for Hydra types):
+import qualified Hydra.Dsl.Core as Gen          -- or via Hydra.Dsl.Meta.Core
+import qualified Hydra.Dsl.Coders as Coders
+import qualified Hydra.Dsl.Module as Module
+
+-- Meta-level DSL wrappers (re-export generated + add custom helpers):
+import qualified Hydra.Dsl.Meta.Core as Core    -- preferred over Hydra.Dsl.Core directly
+import qualified Hydra.Dsl.Meta.Context as Ctx
+import qualified Hydra.Dsl.Meta.Graph as Graph
+
 -- Library DSLs:
 import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 import qualified Hydra.Dsl.Meta.Lib.Math as Math
-import qualified Hydra.Dsl.Meta.Lib.Flows as Flows
 import qualified Hydra.Dsl.Meta.Lib.Maybes as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
 ```
@@ -473,9 +489,13 @@ source files.
 3. **Missing entries in `Meta.hs` enums** (`TermVariant`/`TypeVariant`) cause
    cryptic "No such field: X" errors during code generation.
 
-4. **Two DSL levels**: Term-level (`Hydra.Dsl.Terms` creating `Term` values) vs.
+4. **Three DSL levels**: Term-level (`Hydra.Dsl.Terms` creating `Term` values),
    meta-level (`Hydra.Dsl.Meta.Phantoms` creating `TTerm a` phantom-typed values
-   for modules). Mixing them is a common source of errors.
+   for modules), and generated DSL (`Hydra.Dsl.*` modules with type-specific
+   constructors/accessors/updaters). The generated DSL functions construct `TTerm`
+   values using Haskell data constructors directly (not via `inject`/`record`/
+   `project`). Meta-level wrappers in `Hydra.Dsl.Meta.*` re-export generated
+   functions and add custom helpers. Mixing DSL levels is a common source of errors.
 
 5. **Python naming**: Trailing underscores on Python reserved words: `T.list_()`,
    `Terms.lambda_()`, `Terms.list_()`. Uses `FrozenDict` instead of regular dicts.
@@ -501,7 +521,20 @@ source files.
     failures. Implement it using `hydra.dsl.Terms` helpers to construct
     term-level results.
 
-11. **Floating-point test portability**: Transcendental math functions (`sin`,
+11. **Generated DSL modules and core type changes**: The generated DSL modules
+    in `src/gen-main/haskell/Hydra/Dsl/` reference kernel types directly. When
+    core types are added, removed, or restructured (e.g., eliminating `RowType`),
+    these generated files must be manually patched to compile before the
+    generator can regenerate them. This is the same bootstrap problem as item 2,
+    but applies to DSL files as well as kernel files. The `hydra.dsls` source
+    module (`Sources/Kernel/Terms/Dsls.hs`) must also be updated to match.
+
+12. **Generated DSL `withXxx` argument order**: Generated DSL updater functions
+    (e.g., `fieldWithTerm`) use the convention `(original, newValue) -> updated`.
+    Hand-written DSL modules sometimes used the opposite order. When replacing
+    hand-written DSLs with generated ones, verify argument order at all call sites.
+
+13. **Floating-point test portability**: Transcendental math functions (`sin`,
     `exp`, `atanh`, etc.) can produce results that differ by 1 ULP across
     platforms due to different `libm` implementations — even within GHC. When
     adding float64 test cases for these functions, use `roundedPrimCase1` /
