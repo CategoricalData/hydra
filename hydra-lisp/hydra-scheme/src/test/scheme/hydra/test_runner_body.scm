@@ -303,17 +303,7 @@
 
 (define (show-term t)
   (guard (exn (#t #f))
-    (if (and (pair? t) (eq? (car t) 'annotated))
-        (let* ((at (cadr t))
-               (body (hydra_core_annotated_term-body at))
-               (ann (hydra_core_annotated_term-annotation at))
-               (body-str (hydra_show_core_term body))
-               (ann-str (if (and (pair? ann) (eq? (car ann) 'map))
-                            (hydra_show_core_term ann)
-                            "{}")))
-          (string-append "inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body="
-                         (show-term body) ", annotation=" ann-str "}}"))
-        (hydra_show_core_term t))))
+    (hydra_show_core_term t)))
 
 (define (show-type t)
   (guard (exn (#t #f))
