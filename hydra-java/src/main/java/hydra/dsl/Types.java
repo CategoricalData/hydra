@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static hydra.dsl.Core.name;
+import static hydra.dsl.Terms.name;
 
 /**
  * A domain-specific language for constructing Hydra types in Java.
