@@ -29,21 +29,6 @@ PASSED=${PASSED:-0}
 FAILED=${FAILED:-0}
 SKIPPED=${SKIPPED:-0}
 
-# Write benchmark JSON if requested
-if [ -n "${HYDRA_BENCHMARK_OUTPUT:-}" ]; then
-    ELAPSED_MS=$(python3 -c "print(round(($END_SEC - $START_SEC) * 1000, 1))")
-    cat > "$HYDRA_BENCHMARK_OUTPUT" <<EOF
-{
-  "groups": [],
-  "summary": {
-    "totalPassed": ${PASSED},
-    "totalFailed": ${FAILED},
-    "totalSkipped": ${SKIPPED},
-    "totalTimeMs": ${ELAPSED_MS}
-  }
-}
-EOF
-    echo "Benchmark output: $HYDRA_BENCHMARK_OUTPUT"
-fi
+# Benchmark JSON is written by the Emacs Lisp test runner when HYDRA_BENCHMARK_OUTPUT is set
 
 exit $EXIT_CODE

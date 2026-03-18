@@ -1554,22 +1554,95 @@
               ((eq? case-type 'delegated_evaluation)    (list 0 0 1))
               (else                                     (list 0 0 1))))))))
 
-(define (run-test-group path group)
+;; Benchmark helpers
+
+(define (benchmark-to-json b)
+  "Convert a benchmark alist to a JSON string."
+  (let* ((path (cdr (assq 'path b)))
+         (passed (cdr (assq 'passed b)))
+         (failed (cdr (assq 'failed b)))
+         (skipped (cdr (assq 'skipped b)))
+         (total-ms (cdr (assq 'totalTimeMs b)))
+         (subs (cdr (assq 'subgroups b)))
+         (sub-json (if (null? subs) ""
+                       (string-append ", \"subgroups\": ["
+                         (let loop ((rest subs) (acc ""))
+                           (if (null? rest) acc
+                               (loop (cdr rest)
+                                     (if (string=? acc "")
+                                         (benchmark-to-json (car rest))
+                                         (string-append acc ", " (benchmark-to-json (car rest)))))))
+                         "]"))))
+    (string-append "{\"path\": \"" path "\""
+                   ", \"passed\": " (number->string passed)
+                   ", \"failed\": " (number->string failed)
+                   ", \"skipped\": " (number->string skipped)
+                   ", \"totalTimeMs\": " (number->string total-ms)
+                   sub-json
+                   "}")))
+
+(define (write-benchmark-json benchmark total-ms)
+  "Write benchmark JSON to HYDRA_BENCHMARK_OUTPUT if set."
+  (let ((output-path (get-environment-variable "HYDRA_BENCHMARK_OUTPUT")))
+    (when output-path
+      (let* ((top-groups (cdr (assq 'subgroups benchmark)))
+             (json-groups
+               (let loop ((rest top-groups) (acc ""))
+                 (if (null? rest) acc
+                     (loop (cdr rest)
+                           (if (string=? acc "")
+                               (string-append "    " (benchmark-to-json (car rest)))
+                               (string-append acc ",\n" "    " (benchmark-to-json (car rest))))))))
+             (passed (cdr (assq 'passed benchmark)))
+             (failed (cdr (assq 'failed benchmark)))
+             (skipped (cdr (assq 'skipped benchmark)))
+             (json (string-append "{\n  \"groups\": [\n"
+                                  json-groups
+                                  "\n  ],\n  \"summary\": {\n"
+                                  "    \"totalPassed\": " (number->string passed) ",\n"
+                                  "    \"totalFailed\": " (number->string failed) ",\n"
+                                  "    \"totalSkipped\": " (number->string skipped) ",\n"
+                                  "    \"totalTimeMs\": " (number->string (inexact->exact (round total-ms))) "\n"
+                                  "  }\n}")))
+        (let ((port (open-output-file output-path)))
+          (display json port)
+          (close-output-port port))
+        (display (string-append "Benchmark output: " output-path "\n"))))))
+
+(define (run-test-group path group . rest)
+  "Run a test group. Returns (list pass fail skip benchmark).
+   benchmark is an alist with path, passed, failed, skipped, totalTimeMs, subgroups."
+  (let ((bench-prefix (if (null? rest) "" (car rest))))
   (guard (exn (#t
                (let* ((gname (hydra_testing_test_group-name group))
                       (full (if (string=? path "") gname
                                 (string-append path " > " gname))))
                  (display (string-append "GROUP FAIL: " full "\n"))
                  (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
-                 (list 0 1 0))))
+                 (list 0 1 0 #f))))
     (let* ((gname (hydra_testing_test_group-name group))
            (full (if (string=? path "") gname (string-append path " > " gname)))
-           (sub-results (map (lambda (sg) (run-test-group full sg))
+           (bench-path (if (string=? bench-prefix "") gname (string-append bench-prefix "/" gname)))
+           (t0 (current-jiffy))
+           (sub-results (map (lambda (sg) (run-test-group full sg bench-path))
                              (hydra_testing_test_group-subgroups group)))
            (case-results (map (lambda (tc) (run-test-case full tc))
                               (hydra_testing_test_group-cases group)))
-           (all (append sub-results case-results)))
-      (list (apply + (map car all))
-            (apply + (map cadr all))
-            (apply + (map caddr all))))))
+           (elapsed-ms (* 1000.0 (/ (- (current-jiffy) t0) jiffies-per-second)))
+           (pass (+ (apply + (map car sub-results))
+                    (apply + (map car case-results))))
+           (fail (+ (apply + (map cadr sub-results))
+                    (apply + (map cadr case-results))))
+           (skip (+ (apply + (map caddr sub-results))
+                    (apply + (map caddr case-results))))
+           (sub-benchmarks (filter (lambda (x) x)
+                                   (map (lambda (r) (if (>= (length r) 4) (list-ref r 3) #f))
+                                        sub-results)))
+           (benchmark (list (cons 'path bench-path)
+                            (cons 'passed pass)
+                            (cons 'failed fail)
+                            (cons 'skipped skip)
+                            (cons 'totalTimeMs (inexact->exact (round elapsed-ms)))
+                            (cons 'subgroups sub-benchmarks))))
+      (list pass fail skip benchmark)))))
 

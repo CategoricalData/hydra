@@ -942,28 +942,77 @@
      (message "  EXCEPTION: %S" err)
      (list 0 1 0))))
 
-(defun hydra-run-test-group (path group)
-  (condition-case err
-      (let* ((gname (cdr (assq :name group)))
-             (full (if (equal path "") gname (format "%s > %s" path gname)))
-             (pass 0) (fail 0) (skip 0))
-        ;; Iterate subgroups (not mapcar — saves stack)
-        (dolist (sg (cdr (assq :subgroups group)))
-          (let ((r (hydra-run-test-group full sg)))
-            (setq pass (+ pass (car r)))
-            (setq fail (+ fail (cadr r)))
-            (setq skip (+ skip (caddr r)))))
-        ;; Iterate cases
-        (dolist (tc (cdr (assq :cases group)))
-          (let ((r (hydra-run-test-case full tc)))
-            (setq pass (+ pass (car r)))
-            (setq fail (+ fail (cadr r)))
-            (setq skip (+ skip (caddr r)))))
-        (list pass fail skip))
-    (error
-     (message "GROUP FAIL: %s > %s" path (cdr (assq :name group)))
-     (message "  EXCEPTION: %S" err)
-     (list 0 1 0))))
+(defun hydra-run-test-group (path group &optional bench-prefix)
+  "Run a test group. Returns (list pass fail skip benchmark).
+   benchmark is an alist with :path, :passed, :failed, :skipped, :total-time-ms, :subgroups."
+  (let ((bench-prefix (or bench-prefix "")))
+    (condition-case err
+        (let* ((gname (cdr (assq :name group)))
+               (full (if (equal path "") gname (format "%s > %s" path gname)))
+               (bench-path (if (equal bench-prefix "") gname (format "%s/%s" bench-prefix gname)))
+               (t0 (float-time))
+               (pass 0) (fail 0) (skip 0)
+               (sub-benchmarks nil))
+          ;; Iterate subgroups (not mapcar -- saves stack)
+          (dolist (sg (cdr (assq :subgroups group)))
+            (let ((r (hydra-run-test-group full sg bench-path)))
+              (setq pass (+ pass (car r)))
+              (setq fail (+ fail (cadr r)))
+              (setq skip (+ skip (caddr r)))
+              (when (and (>= (length r) 4) (nth 3 r))
+                (push (nth 3 r) sub-benchmarks))))
+          ;; Iterate cases
+          (dolist (tc (cdr (assq :cases group)))
+            (let ((r (hydra-run-test-case full tc)))
+              (setq pass (+ pass (car r)))
+              (setq fail (+ fail (cadr r)))
+              (setq skip (+ skip (caddr r)))))
+          (let* ((elapsed-ms (* 1000.0 (- (float-time) t0)))
+                 (benchmark (list (cons :path bench-path)
+                                  (cons :passed pass)
+                                  (cons :failed fail)
+                                  (cons :skipped skip)
+                                  (cons :total-time-ms (round elapsed-ms))
+                                  (cons :subgroups (nreverse sub-benchmarks)))))
+            (list pass fail skip benchmark)))
+      (error
+       (message "GROUP FAIL: %s > %s" path (cdr (assq :name group)))
+       (message "  EXCEPTION: %S" err)
+       (list 0 1 0 nil)))))
+
+;; ============================================================================
+;; Benchmark helpers
+;; ============================================================================
+
+(defun hydra-benchmark-to-json (b)
+  "Convert a benchmark alist to a JSON string."
+  (let* ((path (cdr (assq :path b)))
+         (passed (cdr (assq :passed b)))
+         (failed (cdr (assq :failed b)))
+         (skipped (cdr (assq :skipped b)))
+         (total-ms (cdr (assq :total-time-ms b)))
+         (subs (cdr (assq :subgroups b)))
+         (sub-json (if (null subs) ""
+                     (format ", \"subgroups\": [%s]"
+                             (mapconcat #'hydra-benchmark-to-json subs ", ")))))
+    (format "{\"path\": \"%s\", \"passed\": %d, \"failed\": %d, \"skipped\": %d, \"totalTimeMs\": %d%s}"
+            path passed failed skipped total-ms sub-json)))
+
+(defun hydra-write-benchmark-json (benchmark total-ms)
+  "Write benchmark JSON to HYDRA_BENCHMARK_OUTPUT if set."
+  (let ((output-path (getenv "HYDRA_BENCHMARK_OUTPUT")))
+    (when output-path
+      (let* ((top-groups (cdr (assq :subgroups benchmark)))
+             (json-groups (mapconcat (lambda (g) (concat "    " (hydra-benchmark-to-json g)))
+                                     top-groups ",\n"))
+             (passed (cdr (assq :passed benchmark)))
+             (failed (cdr (assq :failed benchmark)))
+             (skipped (cdr (assq :skipped benchmark)))
+             (json (format "{\n  \"groups\": [\n%s\n  ],\n  \"summary\": {\n    \"totalPassed\": %d,\n    \"totalFailed\": %d,\n    \"totalSkipped\": %d,\n    \"totalTimeMs\": %d\n  }\n}"
+                           json-groups passed failed skipped (round total-ms))))
+        (with-temp-file output-path
+          (insert json))
+        (message "Benchmark output: %s" output-path)))))
 
 ;; ============================================================================
 ;; Main entry point
@@ -972,13 +1021,25 @@
 (defun hydra-run-tests ()
   "Run the Hydra test suite."
   (hydra-ensure-test-graph)
-  (let* ((suite hydra_test_test_suite_all_tests)
+  (let* ((t0 (float-time))
+         (suite hydra_test_test_suite_all_tests)
          (result (hydra-run-test-group "" suite))
          (pass (car result))
          (fail (cadr result))
-         (skip (caddr result)))
+         (skip (caddr result))
+         (benchmark (nth 3 result))
+         (total-ms (* 1000.0 (- (float-time) t0))))
     (message "\nResults: %d passed, %d failed, %d skipped" pass fail skip)
     (message "Total:   %d" (+ pass fail skip))
+    (when benchmark
+      (hydra-write-benchmark-json
+       (list (cons :path (cdr (assq :path benchmark)))
+             (cons :passed pass)
+             (cons :failed fail)
+             (cons :skipped skip)
+             (cons :total-time-ms (cdr (assq :total-time-ms benchmark)))
+             (cons :subgroups (cdr (assq :subgroups benchmark))))
+       total-ms))
     (when (> fail 0)
       (kill-emacs 1))))
 
