@@ -11,6 +11,7 @@
           hydra_lib_lists_filter
           hydra_lib_lists_find
           hydra_lib_lists_foldl
+          hydra_lib_lists_foldr
           hydra_lib_lists_head
           hydra_lib_lists_init
           hydra_lib_lists_intercalate
@@ -172,6 +173,16 @@
               (if (null? rest)
                   acc
                   (loop ((f acc) (car rest)) (cdr rest))))))))
+
+    ;; foldr :: (a -> b -> b) -> b -> [a] -> b
+    (define hydra_lib_lists_foldr
+      (lambda (f)
+        (lambda (init)
+          (lambda (xs)
+            (let loop ((rest (reverse xs)) (acc init))
+              (if (null? rest)
+                  acc
+                  (loop (cdr rest) ((f (car rest)) acc))))))))
 
     ;; head :: [a] -> a
     (define hydra_lib_lists_head
