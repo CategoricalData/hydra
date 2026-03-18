@@ -199,12 +199,12 @@ world	tab")))
 
 (defun test-optional-reduction-negnothing-is-a-value ()
 
-  (assert (equal nil nil)))
+  (assert (equal (list :nothing) (list :nothing))))
 
 (defun test-optional-reduction-negjust-literal-is-a-value ()
 
-  (assert (equal 42 42)))
+  (assert (equal (list :just 42) (list :just 42))))
 
 (defun test-optional-reduction-negjust-with-reducible-content ()
 
-  (assert (equal 42 ((cl:lambda (x) x) 42))))
+  (assert (equal (list :just 42) (list :just ((cl:lambda (x) x) 42)))))

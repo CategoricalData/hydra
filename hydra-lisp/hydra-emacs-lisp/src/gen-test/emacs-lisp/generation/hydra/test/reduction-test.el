@@ -199,12 +199,12 @@
 
 (ert-deftest test-optional-reduction-negnothing-is-a-value ()
 
-  (should (equal nil nil)))
+  (should (equal (list :nothing) (list :nothing))))
 
 (ert-deftest test-optional-reduction-negjust-literal-is-a-value ()
 
-  (should (equal 42 42)))
+  (should (equal (list :just 42) (list :just 42))))
 
 (ert-deftest test-optional-reduction-negjust-with-reducible-content ()
 
-  (should (equal 42 ((lambda (x) x) 42))))
+  (should (equal (list :just 42) (list :just ((lambda (x) x) 42)))))

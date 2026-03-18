@@ -199,12 +199,12 @@
 
 (define (test-optional-reduction-negnothing-is-a-value)
 
-  (assert (equal? nil nil)))
+  (assert (equal? (list :nothing) (list :nothing))))
 
 (define (test-optional-reduction-negjust-literal-is-a-value)
 
-  (assert (equal? 42 42)))
+  (assert (equal? (list :just 42) (list :just 42))))
 
 (define (test-optional-reduction-negjust-with-reducible-content)
 
-  (assert (equal? 42 ((lambda (x) x) 42))))
+  (assert (equal? (list :just 42) (list :just ((lambda (x) x) 42)))))

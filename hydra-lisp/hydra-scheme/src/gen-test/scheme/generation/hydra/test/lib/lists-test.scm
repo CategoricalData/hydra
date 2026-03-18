@@ -235,23 +235,23 @@
 
 (define (test-find-negfind-existing-element)
 
-  (assert (equal? 4 ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 3))) (list 1 2 4 5)))))
+  (assert (equal? (list :just 4) ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 3))) (list 1 2 4 5)))))
 
 (define (test-find-negfind-first-matching)
 
-  (assert (equal? 1 ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 0))) (list 1 2 3)))))
+  (assert (equal? (list :just 1) ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 0))) (list 1 2 3)))))
 
 (define (test-find-negfind-no-match)
 
-  (assert (equal? nil ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 10))) (list 1 2 3)))))
+  (assert (equal? (list :nothing) ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 10))) (list 1 2 3)))))
 
 (define (test-find-negfind-in-empty-list)
 
-  (assert (equal? nil ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 0))) (list )))))
+  (assert (equal? (list :nothing) ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 0))) (list )))))
 
 (define (test-find-negfind-single-element)
 
-  (assert (equal? 42 ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_equal x) 42))) (list 42)))))
+  (assert (equal? (list :just 42) ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_equal x) 42))) (list 42)))))
 
 ;; foldl
 
@@ -597,23 +597,23 @@
 
 (define (test-safehead-negnon-negempty-int-list)
 
-  (assert (equal? 1 (hydra_lib_lists_safe_head (list 1 2 3)))))
+  (assert (equal? (list :just 1) (hydra_lib_lists_safe_head (list 1 2 3)))))
 
 (define (test-safehead-negempty-int-list)
 
-  (assert (equal? nil (hydra_lib_lists_safe_head (list )))))
+  (assert (equal? (list :nothing) (hydra_lib_lists_safe_head (list )))))
 
 (define (test-safehead-negsingle-element)
 
-  (assert (equal? 42 (hydra_lib_lists_safe_head (list 42)))))
+  (assert (equal? (list :just 42) (hydra_lib_lists_safe_head (list 42)))))
 
 (define (test-safehead-negnon-negempty-string-list)
 
-  (assert (equal? "hello" (hydra_lib_lists_safe_head (list "hello" "world")))))
+  (assert (equal? (list :just "hello") (hydra_lib_lists_safe_head (list "hello" "world")))))
 
 (define (test-safehead-negempty-string-list)
 
-  (assert (equal? nil (hydra_lib_lists_safe_head (list )))))
+  (assert (equal? (list :nothing) (hydra_lib_lists_safe_head (list )))))
 
 ;; singleton
 

@@ -764,37 +764,37 @@
 
 (deftest test-readint8-negpositive
 
-  (is (= 42
+  (is (= (list :just 42)
 
          (hydra_lib_literals_read_int8 "42"))))
 
 (deftest test-readint8-negnegative
 
-  (is (= -42
+  (is (= (list :just -42)
 
          (hydra_lib_literals_read_int8 "-42"))))
 
 (deftest test-readint8-negmax-value
 
-  (is (= 127
+  (is (= (list :just 127)
 
          (hydra_lib_literals_read_int8 "127"))))
 
 (deftest test-readint8-negmin-value
 
-  (is (= -128
+  (is (= (list :just -128)
 
          (hydra_lib_literals_read_int8 "-128"))))
 
 (deftest test-readint8-neginvalid
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_int8 "abc"))))
 
 (deftest test-readint8-negoverflow
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_int8 "128"))))
 
@@ -802,19 +802,19 @@
 
 (deftest test-readint16-negpositive
 
-  (is (= 1000
+  (is (= (list :just 1000)
 
          (hydra_lib_literals_read_int16 "1000"))))
 
 (deftest test-readint16-negnegative
 
-  (is (= -1000
+  (is (= (list :just -1000)
 
          (hydra_lib_literals_read_int16 "-1000"))))
 
 (deftest test-readint16-neginvalid
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_int16 "abc"))))
 
@@ -822,19 +822,19 @@
 
 (deftest test-readint32-negpositive
 
-  (is (= 42
+  (is (= (list :just 42)
 
          (hydra_lib_literals_read_int32 "42"))))
 
 (deftest test-readint32-negnegative
 
-  (is (= -42
+  (is (= (list :just -42)
 
          (hydra_lib_literals_read_int32 "-42"))))
 
 (deftest test-readint32-neginvalid
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_int32 "abc"))))
 
@@ -842,19 +842,19 @@
 
 (deftest test-readint64-negpositive
 
-  (is (= 1000000
+  (is (= (list :just 1000000)
 
          (hydra_lib_literals_read_int64 "1000000"))))
 
 (deftest test-readint64-negnegative
 
-  (is (= -1000000
+  (is (= (list :just -1000000)
 
          (hydra_lib_literals_read_int64 "-1000000"))))
 
 (deftest test-readint64-neginvalid
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_int64 "abc"))))
 
@@ -862,31 +862,31 @@
 
 (deftest test-readuint8-negzero
 
-  (is (= 0
+  (is (= (list :just 0)
 
          (hydra_lib_literals_read_uint8 "0"))))
 
 (deftest test-readuint8-negtypical
 
-  (is (= 100
+  (is (= (list :just 100)
 
          (hydra_lib_literals_read_uint8 "100"))))
 
 (deftest test-readuint8-negmax-value
 
-  (is (= 255
+  (is (= (list :just 255)
 
          (hydra_lib_literals_read_uint8 "255"))))
 
 (deftest test-readuint8-neginvalid
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_uint8 "abc"))))
 
 (deftest test-readuint8-negnegative
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_uint8 "-1"))))
 
@@ -894,25 +894,25 @@
 
 (deftest test-readuint16-negzero
 
-  (is (= 0
+  (is (= (list :just 0)
 
          (hydra_lib_literals_read_uint16 "0"))))
 
 (deftest test-readuint16-negtypical
 
-  (is (= 1000
+  (is (= (list :just 1000)
 
          (hydra_lib_literals_read_uint16 "1000"))))
 
 (deftest test-readuint16-neginvalid
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_uint16 "abc"))))
 
 (deftest test-readuint16-negnegative
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_uint16 "-1"))))
 
@@ -920,25 +920,25 @@
 
 (deftest test-readuint32-negzero
 
-  (is (= 0
+  (is (= (list :just 0)
 
          (hydra_lib_literals_read_uint32 "0"))))
 
 (deftest test-readuint32-negtypical
 
-  (is (= 100000
+  (is (= (list :just 100000)
 
          (hydra_lib_literals_read_uint32 "100000"))))
 
 (deftest test-readuint32-neginvalid
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_uint32 "abc"))))
 
 (deftest test-readuint32-negnegative
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_uint32 "-1"))))
 
@@ -946,25 +946,25 @@
 
 (deftest test-readuint64-negzero
 
-  (is (= 0
+  (is (= (list :just 0)
 
          (hydra_lib_literals_read_uint64 "0"))))
 
 (deftest test-readuint64-negtypical
 
-  (is (= 1000000
+  (is (= (list :just 1000000)
 
          (hydra_lib_literals_read_uint64 "1000000"))))
 
 (deftest test-readuint64-neginvalid
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_uint64 "abc"))))
 
 (deftest test-readuint64-negnegative
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_uint64 "-1"))))
 
@@ -972,31 +972,31 @@
 
 (deftest test-readbigint-negpositive
 
-  (is (= 42
+  (is (= (list :just 42)
 
          (hydra_lib_literals_read_bigint "42"))))
 
 (deftest test-readbigint-negnegative
 
-  (is (= -42
+  (is (= (list :just -42)
 
          (hydra_lib_literals_read_bigint "-42"))))
 
 (deftest test-readbigint-negzero
 
-  (is (= 0
+  (is (= (list :just 0)
 
          (hydra_lib_literals_read_bigint "0"))))
 
 (deftest test-readbigint-neglarge
 
-  (is (= 123456789012345678901234567890
+  (is (= (list :just 123456789012345678901234567890)
 
          (hydra_lib_literals_read_bigint "123456789012345678901234567890"))))
 
 (deftest test-readbigint-neginvalid
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_bigint "abc"))))
 
@@ -1004,19 +1004,19 @@
 
 (deftest test-readfloat32-negpositive
 
-  (is (= 3.140000104904175
+  (is (= (list :just 3.140000104904175)
 
          (hydra_lib_literals_read_float32 "3.14"))))
 
 (deftest test-readfloat32-negnegative
 
-  (is (= -2.5
+  (is (= (list :just -2.5)
 
          (hydra_lib_literals_read_float32 "-2.5"))))
 
 (deftest test-readfloat32-neginvalid
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_float32 "abc"))))
 
@@ -1024,19 +1024,19 @@
 
 (deftest test-readfloat64-negpositive
 
-  (is (= 3.14159
+  (is (= (list :just 3.14159)
 
          (hydra_lib_literals_read_float64 "3.14159"))))
 
 (deftest test-readfloat64-negnegative
 
-  (is (= -2.71828
+  (is (= (list :just -2.71828)
 
          (hydra_lib_literals_read_float64 "-2.71828"))))
 
 (deftest test-readfloat64-neginvalid
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_float64 "abc"))))
 
@@ -1044,13 +1044,13 @@
 
 (deftest test-readbigfloat-negpositive
 
-  (is (= 3.14
+  (is (= (list :just 3.14)
 
          (hydra_lib_literals_read_bigfloat "3.14"))))
 
 (deftest test-readbigfloat-neginvalid
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_bigfloat "abc"))))
 
@@ -1058,19 +1058,19 @@
 
 (deftest test-readboolean-negtrue
 
-  (is (= true
+  (is (= (list :just true)
 
          (hydra_lib_literals_read_boolean "true"))))
 
 (deftest test-readboolean-negfalse
 
-  (is (= false
+  (is (= (list :just false)
 
          (hydra_lib_literals_read_boolean "false"))))
 
 (deftest test-readboolean-neginvalid
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_boolean "yes"))))
 
@@ -1078,19 +1078,19 @@
 
 (deftest test-readstring-negquoted-string
 
-  (is (= "hello"
+  (is (= (list :just "hello")
 
          (hydra_lib_literals_read_string "\"hello\""))))
 
 (deftest test-readstring-negempty-quoted
 
-  (is (= ""
+  (is (= (list :just "")
 
          (hydra_lib_literals_read_string "\"\""))))
 
 (deftest test-readstring-negunquoted
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_literals_read_string "hello"))))
 

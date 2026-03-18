@@ -535,233 +535,233 @@
 
 (ert-deftest test-readint8-negpositive ()
 
-  (should (equal 42 (hydra_lib_literals_read_int8 "42"))))
+  (should (equal (list :just 42) (hydra_lib_literals_read_int8 "42"))))
 
 (ert-deftest test-readint8-negnegative ()
 
-  (should (equal -42 (hydra_lib_literals_read_int8 "-42"))))
+  (should (equal (list :just -42) (hydra_lib_literals_read_int8 "-42"))))
 
 (ert-deftest test-readint8-negmax-value ()
 
-  (should (equal 127 (hydra_lib_literals_read_int8 "127"))))
+  (should (equal (list :just 127) (hydra_lib_literals_read_int8 "127"))))
 
 (ert-deftest test-readint8-negmin-value ()
 
-  (should (equal -128 (hydra_lib_literals_read_int8 "-128"))))
+  (should (equal (list :just -128) (hydra_lib_literals_read_int8 "-128"))))
 
 (ert-deftest test-readint8-neginvalid ()
 
-  (should (equal nil (hydra_lib_literals_read_int8 "abc"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_int8 "abc"))))
 
 (ert-deftest test-readint8-negoverflow ()
 
-  (should (equal nil (hydra_lib_literals_read_int8 "128"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_int8 "128"))))
 
 ;; readInt16
 
 (ert-deftest test-readint16-negpositive ()
 
-  (should (equal 1000 (hydra_lib_literals_read_int16 "1000"))))
+  (should (equal (list :just 1000) (hydra_lib_literals_read_int16 "1000"))))
 
 (ert-deftest test-readint16-negnegative ()
 
-  (should (equal -1000 (hydra_lib_literals_read_int16 "-1000"))))
+  (should (equal (list :just -1000) (hydra_lib_literals_read_int16 "-1000"))))
 
 (ert-deftest test-readint16-neginvalid ()
 
-  (should (equal nil (hydra_lib_literals_read_int16 "abc"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_int16 "abc"))))
 
 ;; readInt32
 
 (ert-deftest test-readint32-negpositive ()
 
-  (should (equal 42 (hydra_lib_literals_read_int32 "42"))))
+  (should (equal (list :just 42) (hydra_lib_literals_read_int32 "42"))))
 
 (ert-deftest test-readint32-negnegative ()
 
-  (should (equal -42 (hydra_lib_literals_read_int32 "-42"))))
+  (should (equal (list :just -42) (hydra_lib_literals_read_int32 "-42"))))
 
 (ert-deftest test-readint32-neginvalid ()
 
-  (should (equal nil (hydra_lib_literals_read_int32 "abc"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_int32 "abc"))))
 
 ;; readInt64
 
 (ert-deftest test-readint64-negpositive ()
 
-  (should (equal 1000000 (hydra_lib_literals_read_int64 "1000000"))))
+  (should (equal (list :just 1000000) (hydra_lib_literals_read_int64 "1000000"))))
 
 (ert-deftest test-readint64-negnegative ()
 
-  (should (equal -1000000 (hydra_lib_literals_read_int64 "-1000000"))))
+  (should (equal (list :just -1000000) (hydra_lib_literals_read_int64 "-1000000"))))
 
 (ert-deftest test-readint64-neginvalid ()
 
-  (should (equal nil (hydra_lib_literals_read_int64 "abc"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_int64 "abc"))))
 
 ;; readUint8
 
 (ert-deftest test-readuint8-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_read_uint8 "0"))))
+  (should (equal (list :just 0) (hydra_lib_literals_read_uint8 "0"))))
 
 (ert-deftest test-readuint8-negtypical ()
 
-  (should (equal 100 (hydra_lib_literals_read_uint8 "100"))))
+  (should (equal (list :just 100) (hydra_lib_literals_read_uint8 "100"))))
 
 (ert-deftest test-readuint8-negmax-value ()
 
-  (should (equal 255 (hydra_lib_literals_read_uint8 "255"))))
+  (should (equal (list :just 255) (hydra_lib_literals_read_uint8 "255"))))
 
 (ert-deftest test-readuint8-neginvalid ()
 
-  (should (equal nil (hydra_lib_literals_read_uint8 "abc"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_uint8 "abc"))))
 
 (ert-deftest test-readuint8-negnegative ()
 
-  (should (equal nil (hydra_lib_literals_read_uint8 "-1"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_uint8 "-1"))))
 
 ;; readUint16
 
 (ert-deftest test-readuint16-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_read_uint16 "0"))))
+  (should (equal (list :just 0) (hydra_lib_literals_read_uint16 "0"))))
 
 (ert-deftest test-readuint16-negtypical ()
 
-  (should (equal 1000 (hydra_lib_literals_read_uint16 "1000"))))
+  (should (equal (list :just 1000) (hydra_lib_literals_read_uint16 "1000"))))
 
 (ert-deftest test-readuint16-neginvalid ()
 
-  (should (equal nil (hydra_lib_literals_read_uint16 "abc"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_uint16 "abc"))))
 
 (ert-deftest test-readuint16-negnegative ()
 
-  (should (equal nil (hydra_lib_literals_read_uint16 "-1"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_uint16 "-1"))))
 
 ;; readUint32
 
 (ert-deftest test-readuint32-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_read_uint32 "0"))))
+  (should (equal (list :just 0) (hydra_lib_literals_read_uint32 "0"))))
 
 (ert-deftest test-readuint32-negtypical ()
 
-  (should (equal 100000 (hydra_lib_literals_read_uint32 "100000"))))
+  (should (equal (list :just 100000) (hydra_lib_literals_read_uint32 "100000"))))
 
 (ert-deftest test-readuint32-neginvalid ()
 
-  (should (equal nil (hydra_lib_literals_read_uint32 "abc"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_uint32 "abc"))))
 
 (ert-deftest test-readuint32-negnegative ()
 
-  (should (equal nil (hydra_lib_literals_read_uint32 "-1"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_uint32 "-1"))))
 
 ;; readUint64
 
 (ert-deftest test-readuint64-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_read_uint64 "0"))))
+  (should (equal (list :just 0) (hydra_lib_literals_read_uint64 "0"))))
 
 (ert-deftest test-readuint64-negtypical ()
 
-  (should (equal 1000000 (hydra_lib_literals_read_uint64 "1000000"))))
+  (should (equal (list :just 1000000) (hydra_lib_literals_read_uint64 "1000000"))))
 
 (ert-deftest test-readuint64-neginvalid ()
 
-  (should (equal nil (hydra_lib_literals_read_uint64 "abc"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_uint64 "abc"))))
 
 (ert-deftest test-readuint64-negnegative ()
 
-  (should (equal nil (hydra_lib_literals_read_uint64 "-1"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_uint64 "-1"))))
 
 ;; readBigint
 
 (ert-deftest test-readbigint-negpositive ()
 
-  (should (equal 42 (hydra_lib_literals_read_bigint "42"))))
+  (should (equal (list :just 42) (hydra_lib_literals_read_bigint "42"))))
 
 (ert-deftest test-readbigint-negnegative ()
 
-  (should (equal -42 (hydra_lib_literals_read_bigint "-42"))))
+  (should (equal (list :just -42) (hydra_lib_literals_read_bigint "-42"))))
 
 (ert-deftest test-readbigint-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_read_bigint "0"))))
+  (should (equal (list :just 0) (hydra_lib_literals_read_bigint "0"))))
 
 (ert-deftest test-readbigint-neglarge ()
 
-  (should (equal 123456789012345678901234567890 (hydra_lib_literals_read_bigint "123456789012345678901234567890"))))
+  (should (equal (list :just 123456789012345678901234567890) (hydra_lib_literals_read_bigint "123456789012345678901234567890"))))
 
 (ert-deftest test-readbigint-neginvalid ()
 
-  (should (equal nil (hydra_lib_literals_read_bigint "abc"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_bigint "abc"))))
 
 ;; readFloat32
 
 (ert-deftest test-readfloat32-negpositive ()
 
-  (should (equal 3.140000104904175 (hydra_lib_literals_read_float32 "3.14"))))
+  (should (equal (list :just 3.140000104904175) (hydra_lib_literals_read_float32 "3.14"))))
 
 (ert-deftest test-readfloat32-negnegative ()
 
-  (should (equal -2.5 (hydra_lib_literals_read_float32 "-2.5"))))
+  (should (equal (list :just -2.5) (hydra_lib_literals_read_float32 "-2.5"))))
 
 (ert-deftest test-readfloat32-neginvalid ()
 
-  (should (equal nil (hydra_lib_literals_read_float32 "abc"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_float32 "abc"))))
 
 ;; readFloat64
 
 (ert-deftest test-readfloat64-negpositive ()
 
-  (should (equal 3.14159 (hydra_lib_literals_read_float64 "3.14159"))))
+  (should (equal (list :just 3.14159) (hydra_lib_literals_read_float64 "3.14159"))))
 
 (ert-deftest test-readfloat64-negnegative ()
 
-  (should (equal -2.71828 (hydra_lib_literals_read_float64 "-2.71828"))))
+  (should (equal (list :just -2.71828) (hydra_lib_literals_read_float64 "-2.71828"))))
 
 (ert-deftest test-readfloat64-neginvalid ()
 
-  (should (equal nil (hydra_lib_literals_read_float64 "abc"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_float64 "abc"))))
 
 ;; readBigfloat
 
 (ert-deftest test-readbigfloat-negpositive ()
 
-  (should (equal 3.14 (hydra_lib_literals_read_bigfloat "3.14"))))
+  (should (equal (list :just 3.14) (hydra_lib_literals_read_bigfloat "3.14"))))
 
 (ert-deftest test-readbigfloat-neginvalid ()
 
-  (should (equal nil (hydra_lib_literals_read_bigfloat "abc"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_bigfloat "abc"))))
 
 ;; readBoolean
 
 (ert-deftest test-readboolean-negtrue ()
 
-  (should (equal t (hydra_lib_literals_read_boolean "true"))))
+  (should (equal (list :just t) (hydra_lib_literals_read_boolean "true"))))
 
 (ert-deftest test-readboolean-negfalse ()
 
-  (should (equal nil (hydra_lib_literals_read_boolean "false"))))
+  (should (equal (list :just nil) (hydra_lib_literals_read_boolean "false"))))
 
 (ert-deftest test-readboolean-neginvalid ()
 
-  (should (equal nil (hydra_lib_literals_read_boolean "yes"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_boolean "yes"))))
 
 ;; readString
 
 (ert-deftest test-readstring-negquoted-string ()
 
-  (should (equal "hello" (hydra_lib_literals_read_string "\"hello\""))))
+  (should (equal (list :just "hello") (hydra_lib_literals_read_string "\"hello\""))))
 
 (ert-deftest test-readstring-negempty-quoted ()
 
-  (should (equal "" (hydra_lib_literals_read_string "\"\""))))
+  (should (equal (list :just "") (hydra_lib_literals_read_string "\"\""))))
 
 (ert-deftest test-readstring-negunquoted ()
 
-  (should (equal nil (hydra_lib_literals_read_string "hello"))))
+  (should (equal (list :nothing) (hydra_lib_literals_read_string "hello"))))
 
 ;; stringToBinary
 

@@ -184,19 +184,19 @@
 
 (deftest test-lookup-negfind-existing-key
 
-  (is (= "b"
+  (is (= (list :just "b")
 
          ((hydra_lib_maps_lookup 2) (list (list 1 "a") (list 2 "b"))))))
 
 (deftest test-lookup-negkey-not-found
 
-  (is (= nil
+  (is (= (list :nothing)
 
          ((hydra_lib_maps_lookup 3) (list (list 1 "a") (list 2 "b"))))))
 
 (deftest test-lookup-neglookup-in-empty
 
-  (is (= nil
+  (is (= (list :nothing)
 
          ((hydra_lib_maps_lookup 1) ()))))
 

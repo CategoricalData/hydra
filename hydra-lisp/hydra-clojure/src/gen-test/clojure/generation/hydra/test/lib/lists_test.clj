@@ -338,31 +338,31 @@
 
 (deftest test-find-negfind-existing-element
 
-  (is (= 4
+  (is (= (list :just 4)
 
          ((hydra_lib_lists_find (fn [x] ((hydra_lib_equality_gt x) 3))) (list 1 2 4 5)))))
 
 (deftest test-find-negfind-first-matching
 
-  (is (= 1
+  (is (= (list :just 1)
 
          ((hydra_lib_lists_find (fn [x] ((hydra_lib_equality_gt x) 0))) (list 1 2 3)))))
 
 (deftest test-find-negfind-no-match
 
-  (is (= nil
+  (is (= (list :nothing)
 
          ((hydra_lib_lists_find (fn [x] ((hydra_lib_equality_gt x) 10))) (list 1 2 3)))))
 
 (deftest test-find-negfind-in-empty-list
 
-  (is (= nil
+  (is (= (list :nothing)
 
          ((hydra_lib_lists_find (fn [x] ((hydra_lib_equality_gt x) 0))) (list )))))
 
 (deftest test-find-negfind-single-element
 
-  (is (= 42
+  (is (= (list :just 42)
 
          ((hydra_lib_lists_find (fn [x] ((hydra_lib_equality_equal x) 42))) (list 42)))))
 
@@ -864,31 +864,31 @@
 
 (deftest test-safehead-negnon-negempty-int-list
 
-  (is (= 1
+  (is (= (list :just 1)
 
          (hydra_lib_lists_safe_head (list 1 2 3)))))
 
 (deftest test-safehead-negempty-int-list
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_lists_safe_head (list )))))
 
 (deftest test-safehead-negsingle-element
 
-  (is (= 42
+  (is (= (list :just 42)
 
          (hydra_lib_lists_safe_head (list 42)))))
 
 (deftest test-safehead-negnon-negempty-string-list
 
-  (is (= "hello"
+  (is (= (list :just "hello")
 
          (hydra_lib_lists_safe_head (list "hello" "world")))))
 
 (deftest test-safehead-negempty-string-list
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (hydra_lib_lists_safe_head (list )))))
 
