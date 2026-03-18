@@ -1255,21 +1255,69 @@
         (format t "  EXCEPTION: ~A~%" e)
         (list 0 1 0)))))
 
-(defun run-test-group (path group)
+;; Benchmark helpers
+
+(defun benchmark-to-json (b)
+  "Convert a benchmark alist to a JSON string."
+  (let* ((path (cdr (assoc :path b)))
+         (passed (cdr (assoc :passed b)))
+         (failed (cdr (assoc :failed b)))
+         (skipped (cdr (assoc :skipped b)))
+         (total-ms (cdr (assoc :total-time-ms b)))
+         (subs (cdr (assoc :subgroups b)))
+         (sub-json (if (null subs) ""
+                       (format nil ", \"subgroups\": [~{~A~^, ~}]"
+                               (mapcar #'benchmark-to-json subs)))))
+    (format nil "{\"path\": \"~A\", \"passed\": ~A, \"failed\": ~A, \"skipped\": ~A, \"totalTimeMs\": ~A~A}"
+            path passed failed skipped total-ms sub-json)))
+
+(defun write-benchmark-json (benchmark total-ms)
+  "Write benchmark JSON to HYDRA_BENCHMARK_OUTPUT if set."
+  (let ((output-path #+sbcl (sb-ext:posix-getenv "HYDRA_BENCHMARK_OUTPUT")
+                     #+ccl (ccl:getenv "HYDRA_BENCHMARK_OUTPUT")
+                     #-(or sbcl ccl) nil))
+    (when output-path
+      (let* ((top-groups (cdr (assoc :subgroups benchmark)))
+             (json-groups (format nil "~{    ~A~^,~%~}" (mapcar #'benchmark-to-json top-groups)))
+             (passed (cdr (assoc :passed benchmark)))
+             (failed (cdr (assoc :failed benchmark)))
+             (skipped (cdr (assoc :skipped benchmark)))
+             (json (format nil "{~%  \"groups\": [~%~A~%  ],~%  \"summary\": {~%    \"totalPassed\": ~A,~%    \"totalFailed\": ~A,~%    \"totalSkipped\": ~A,~%    \"totalTimeMs\": ~A~%  }~%}"
+                           json-groups passed failed skipped (round total-ms))))
+        (with-open-file (out output-path :direction :output :if-exists :supersede)
+          (write-string json out))
+        (format t "Benchmark output: ~A~%" output-path)))))
+
+(defun run-test-group (path group &optional (bench-prefix ""))
+  "Run a test group. Returns (list pass fail skip benchmark).
+   benchmark is an alist with :path, :passed, :failed, :skipped, :total-time-ms, :subgroups."
   (handler-case
       (let* ((gname (cdr (assoc :name group)))
              (full (if (string= path "") gname (format nil "~A > ~A" path gname)))
-             (sub-results (mapcar (lambda (sg) (run-test-group full sg))
+             (bench-path (if (string= bench-prefix "") gname (format nil "~A/~A" bench-prefix gname)))
+             (t0 (get-internal-real-time))
+             (sub-results (mapcar (lambda (sg) (run-test-group full sg bench-path))
                                   (cdr (assoc :subgroups group))))
              (case-results (mapcar (lambda (tc) (run-test-case full tc))
                                    (cdr (assoc :cases group))))
-             (all (append sub-results case-results)))
-        (list (reduce #'+ all :key #'first :initial-value 0)
-              (reduce #'+ all :key #'second :initial-value 0)
-              (reduce #'+ all :key #'third :initial-value 0)))
+             (elapsed-ms (* 1000.0 (/ (- (get-internal-real-time) t0) internal-time-units-per-second)))
+             (pass (+ (reduce #'+ sub-results :key #'first :initial-value 0)
+                      (reduce #'+ case-results :key #'first :initial-value 0)))
+             (fail (+ (reduce #'+ sub-results :key #'second :initial-value 0)
+                      (reduce #'+ case-results :key #'second :initial-value 0)))
+             (skip (+ (reduce #'+ sub-results :key #'third :initial-value 0)
+                      (reduce #'+ case-results :key #'third :initial-value 0)))
+             (sub-benchmarks (remove nil (mapcar #'fourth sub-results)))
+             (benchmark (list (cons :path bench-path)
+                              (cons :passed pass)
+                              (cons :failed fail)
+                              (cons :skipped skip)
+                              (cons :total-time-ms (round elapsed-ms))
+                              (cons :subgroups sub-benchmarks))))
+        (list pass fail skip benchmark))
     (error (e)
       (let* ((gname (cdr (assoc :name group)))
              (full (if (string= path "") gname (format nil "~A > ~A" path gname))))
         (format t "GROUP FAIL: ~A~%" full)
         (format t "  EXCEPTION: ~A~%" e)
-        (list 0 1 0)))))
+        (list 0 1 0 nil)))))
