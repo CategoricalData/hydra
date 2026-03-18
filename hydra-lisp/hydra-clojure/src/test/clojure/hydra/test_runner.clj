@@ -1299,20 +1299,66 @@
         (println (str "  EXCEPTION: " (.getMessage e)))
         [0 1 0]))))
 
-(defn run-test-group [path group]
+(defn run-test-group
+  "Run a test group. Returns [pass fail skip benchmark].
+   benchmark is {:path :passed :failed :skipped :totalTimeMs :subgroups}."
+  ([path group] (run-test-group path "" group))
+  ([path bench-prefix group]
   (try
-    (let [gname (:name group) full (if (= path "") gname (str path " > " gname))
-          sub-results (mapv #(run-test-group full %) (:subgroups group))
+    (let [gname (:name group)
+          full (if (= path "") gname (str path " > " gname))
+          bench-path (if (= bench-prefix "") gname (str bench-prefix "/" gname))
+          t0 (System/nanoTime)
+          sub-results (mapv #(run-test-group full bench-path %) (:subgroups group))
           case-results (mapv #(run-test-case full %) (:cases group))
-          all (concat sub-results case-results)]
-      [(reduce + (map first all))
-       (reduce + (map second all))
-       (reduce + (map #(nth % 2) all))])
+          elapsed-ms (/ (- (System/nanoTime) t0) 1e6)
+          pass (+ (reduce + 0 (map first sub-results)) (reduce + 0 (map first case-results)))
+          fail (+ (reduce + 0 (map second sub-results)) (reduce + 0 (map second case-results)))
+          skip (+ (reduce + 0 (map #(nth % 2) sub-results)) (reduce + 0 (map #(nth % 2) case-results)))
+          sub-benchmarks (mapv #(nth % 3) sub-results)
+          benchmark {:path bench-path
+                     :passed pass :failed fail :skipped skip
+                     :totalTimeMs (Math/round elapsed-ms)
+                     :subgroups (vec (filter some? sub-benchmarks))}]
+      [pass fail skip benchmark])
     (catch Throwable e
       (let [gname (:name group) full (if (= path "") gname (str path " > " gname))]
         (println (str "GROUP FAIL: " full))
         (println (str "  EXCEPTION: " (.getMessage e)))
-        [0 1 0]))))
+        [0 1 0 nil])))))
+
+(defn- benchmark-to-json
+  "Convert a benchmark map to a JSON string."
+  [b]
+  (let [subs (:subgroups b [])
+        sub-json (when (seq subs)
+                   (str ", \"subgroups\": ["
+                        (clojure.string/join ", " (map benchmark-to-json subs))
+                        "]"))]
+    (str "{\"path\": \"" (:path b) "\""
+         ", \"passed\": " (:passed b 0)
+         ", \"failed\": " (:failed b 0)
+         ", \"skipped\": " (:skipped b 0)
+         ", \"totalTimeMs\": " (:totalTimeMs b 0)
+         (or sub-json "")
+         "}")))
+
+(defn- write-benchmark-json
+  "Write benchmark results to HYDRA_BENCHMARK_OUTPUT if set."
+  [benchmark total-ms]
+  (when-let [output-path (System/getenv "HYDRA_BENCHMARK_OUTPUT")]
+    (let [top-groups (:subgroups benchmark)
+          json-groups (mapv (fn [g] (str "    " (benchmark-to-json g))) top-groups)
+          json (str "{\n  \"groups\": [\n"
+                    (clojure.string/join ",\n" json-groups)
+                    "\n  ],\n  \"summary\": {\n"
+                    "    \"totalPassed\": " (:passed benchmark) ",\n"
+                    "    \"totalFailed\": " (:failed benchmark) ",\n"
+                    "    \"totalSkipped\": " (:skipped benchmark) ",\n"
+                    "    \"totalTimeMs\": " (Math/round total-ms) "\n"
+                    "  }\n}")]
+      (spit output-path json)
+      (println (str "Benchmark output: " output-path)))))
 
 (defn -main [& _args]
   ;; Load hand-written libraries and globalize their vars so generated code can find them
@@ -1342,11 +1388,14 @@
   ;; Build the test graph now that all namespaces are loaded
   (ensure-test-graph!)
   ;; Run test suite
-  (let [suite (deref (ns-resolve 'hydra.test.testSuite 'hydra_test_test_suite_all_tests))
-        [pass fail skip] (run-test-group "" suite)]
+  (let [t0 (System/nanoTime)
+        suite (deref (ns-resolve 'hydra.test.testSuite 'hydra_test_test_suite_all_tests))
+        [pass fail skip benchmark] (run-test-group "" suite)
+        total-ms (/ (- (System/nanoTime) t0) 1e6)]
     (println)
     (println "========================================")
     (println (str "Pass: " pass))
     (println (str "Fail: " fail))
     (println (str "Skip: " skip))
+    (write-benchmark-json (assoc benchmark :passed pass :failed fail :skipped skip) total-ms)
     (System/exit (if (> fail 0) 1 0))))
