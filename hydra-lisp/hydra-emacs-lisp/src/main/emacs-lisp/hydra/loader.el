@@ -310,8 +310,7 @@
    For further performance, pre-compile .el files with native-compile
    (see README).
 "
-  (let ((compiled 0) (skipped 0)
-        (byte-compile-warnings nil))
+  (let ((compiled 0) (skipped 0))
     (mapatoms
      (lambda (sym)
        (let ((name (symbol-name sym)))
