@@ -159,12 +159,12 @@
 
 (ert-deftest test-mapmaybe-negjust-succeeds ()
 
-  (should (equal (list :right 10) ((hydra_lib_eithers_map_maybe (lambda (x) (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) 5))))
+  (should (equal (list :right (list :just 10)) ((hydra_lib_eithers_map_maybe (lambda (x) (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) (list :just 5)))))
 
 (ert-deftest test-mapmaybe-negjust-fails ()
 
-  (should (equal (list :left "zero") ((hydra_lib_eithers_map_maybe (lambda (x) (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) 0))))
+  (should (equal (list :left "zero") ((hydra_lib_eithers_map_maybe (lambda (x) (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) (list :just 0)))))
 
 (ert-deftest test-mapmaybe-negnothing ()
 
-  (should (equal (list :right nil) ((hydra_lib_eithers_map_maybe (lambda (x) (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) nil))))
+  (should (equal (list :right (list :nothing)) ((hydra_lib_eithers_map_maybe (lambda (x) (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) (list :nothing)))))

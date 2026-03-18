@@ -224,18 +224,18 @@
 
 (deftest test-mapmaybe-negjust-succeeds
 
-  (is (= (list :right 10)
+  (is (= (list :right (list :just 10))
 
-         ((hydra_lib_eithers_map_maybe (fn [x] (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) 5))))
+         ((hydra_lib_eithers_map_maybe (fn [x] (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) (list :just 5)))))
 
 (deftest test-mapmaybe-negjust-fails
 
   (is (= (list :left "zero")
 
-         ((hydra_lib_eithers_map_maybe (fn [x] (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) 0))))
+         ((hydra_lib_eithers_map_maybe (fn [x] (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) (list :just 0)))))
 
 (deftest test-mapmaybe-negnothing
 
-  (is (= (list :right nil)
+  (is (= (list :right (list :nothing))
 
-         ((hydra_lib_eithers_map_maybe (fn [x] (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) nil))))
+         ((hydra_lib_eithers_map_maybe (fn [x] (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) (list :nothing)))))

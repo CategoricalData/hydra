@@ -131,15 +131,15 @@
 
 (ert-deftest test-lookup-negfind-existing-key ()
 
-  (should (equal "b" ((hydra_lib_maps_lookup 2) (list (list 1 "a") (list 2 "b"))))))
+  (should (equal (list :just "b") ((hydra_lib_maps_lookup 2) (list (list 1 "a") (list 2 "b"))))))
 
 (ert-deftest test-lookup-negkey-not-found ()
 
-  (should (equal nil ((hydra_lib_maps_lookup 3) (list (list 1 "a") (list 2 "b"))))))
+  (should (equal (list :nothing) ((hydra_lib_maps_lookup 3) (list (list 1 "a") (list 2 "b"))))))
 
 (ert-deftest test-lookup-neglookup-in-empty ()
 
-  (should (equal nil ((hydra_lib_maps_lookup 1) ()))))
+  (should (equal (list :nothing) ((hydra_lib_maps_lookup 1) ()))))
 
 ;; map
 

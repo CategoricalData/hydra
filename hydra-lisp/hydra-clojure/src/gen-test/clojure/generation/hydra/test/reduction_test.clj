@@ -290,18 +290,18 @@
 
 (deftest test-optional-reduction-negnothing-is-a-value
 
-  (is (= nil
+  (is (= (list :nothing)
 
-         nil)))
+         (list :nothing))))
 
 (deftest test-optional-reduction-negjust-literal-is-a-value
 
-  (is (= 42
+  (is (= (list :just 42)
 
-         42)))
+         (list :just 42))))
 
 (deftest test-optional-reduction-negjust-with-reducible-content
 
-  (is (= 42
+  (is (= (list :just 42)
 
-         ((fn [x] x) 42))))
+         (list :just ((fn [x] x) 42)))))

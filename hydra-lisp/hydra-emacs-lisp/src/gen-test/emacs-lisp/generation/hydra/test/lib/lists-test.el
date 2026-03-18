@@ -235,23 +235,23 @@
 
 (ert-deftest test-find-negfind-existing-element ()
 
-  (should (equal 4 ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 3))) (list 1 2 4 5)))))
+  (should (equal (list :just 4) ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 3))) (list 1 2 4 5)))))
 
 (ert-deftest test-find-negfind-first-matching ()
 
-  (should (equal 1 ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 0))) (list 1 2 3)))))
+  (should (equal (list :just 1) ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 0))) (list 1 2 3)))))
 
 (ert-deftest test-find-negfind-no-match ()
 
-  (should (equal nil ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 10))) (list 1 2 3)))))
+  (should (equal (list :nothing) ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 10))) (list 1 2 3)))))
 
 (ert-deftest test-find-negfind-in-empty-list ()
 
-  (should (equal nil ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 0))) (list )))))
+  (should (equal (list :nothing) ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_gt x) 0))) (list )))))
 
 (ert-deftest test-find-negfind-single-element ()
 
-  (should (equal 42 ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_equal x) 42))) (list 42)))))
+  (should (equal (list :just 42) ((hydra_lib_lists_find (lambda (x) ((hydra_lib_equality_equal x) 42))) (list 42)))))
 
 ;; foldl
 
@@ -597,23 +597,23 @@
 
 (ert-deftest test-safehead-negnon-negempty-int-list ()
 
-  (should (equal 1 (hydra_lib_lists_safe_head (list 1 2 3)))))
+  (should (equal (list :just 1) (hydra_lib_lists_safe_head (list 1 2 3)))))
 
 (ert-deftest test-safehead-negempty-int-list ()
 
-  (should (equal nil (hydra_lib_lists_safe_head (list )))))
+  (should (equal (list :nothing) (hydra_lib_lists_safe_head (list )))))
 
 (ert-deftest test-safehead-negsingle-element ()
 
-  (should (equal 42 (hydra_lib_lists_safe_head (list 42)))))
+  (should (equal (list :just 42) (hydra_lib_lists_safe_head (list 42)))))
 
 (ert-deftest test-safehead-negnon-negempty-string-list ()
 
-  (should (equal "hello" (hydra_lib_lists_safe_head (list "hello" "world")))))
+  (should (equal (list :just "hello") (hydra_lib_lists_safe_head (list "hello" "world")))))
 
 (ert-deftest test-safehead-negempty-string-list ()
 
-  (should (equal nil (hydra_lib_lists_safe_head (list )))))
+  (should (equal (list :nothing) (hydra_lib_lists_safe_head (list )))))
 
 ;; singleton
 

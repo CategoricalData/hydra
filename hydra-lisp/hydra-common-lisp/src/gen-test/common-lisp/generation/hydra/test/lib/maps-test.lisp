@@ -129,15 +129,15 @@
 
 (defun test-lookup-negfind-existing-key ()
 
-  (assert (equal "b" ((hydra_lib_maps_lookup 2) (list (list 1 "a") (list 2 "b"))))))
+  (assert (equal (list :just "b") ((hydra_lib_maps_lookup 2) (list (list 1 "a") (list 2 "b"))))))
 
 (defun test-lookup-negkey-not-found ()
 
-  (assert (equal nil ((hydra_lib_maps_lookup 3) (list (list 1 "a") (list 2 "b"))))))
+  (assert (equal (list :nothing) ((hydra_lib_maps_lookup 3) (list (list 1 "a") (list 2 "b"))))))
 
 (defun test-lookup-neglookup-in-empty ()
 
-  (assert (equal nil ((hydra_lib_maps_lookup 1) ()))))
+  (assert (equal (list :nothing) ((hydra_lib_maps_lookup 1) ()))))
 
 ;; map
 

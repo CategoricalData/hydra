@@ -8,35 +8,35 @@
 
 (deftest test-apply-negboth-just
 
-  (is (= 8
+  (is (= (list :just 8)
 
-         ((hydra_lib_maybes_apply (hydra_lib_math_add 3)) 5))))
+         ((hydra_lib_maybes_apply (list :just (hydra_lib_math_add 3))) (list :just 5)))))
 
 (deftest test-apply-negnothing-function
 
-  (is (= nil
+  (is (= (list :nothing)
 
-         ((hydra_lib_maybes_apply nil) 5))))
+         ((hydra_lib_maybes_apply (list :nothing)) (list :just 5)))))
 
 (deftest test-apply-negnothing-value
 
-  (is (= nil
+  (is (= (list :nothing)
 
-         ((hydra_lib_maybes_apply (hydra_lib_math_add 3)) nil))))
+         ((hydra_lib_maybes_apply (list :just (hydra_lib_math_add 3))) (list :nothing)))))
 
 ;; bind
 
 (deftest test-bind-negjust-to-just
 
-  (is (= 10
+  (is (= (list :just 10)
 
-         ((hydra_lib_maybes_bind 5) (fn [x] ((hydra_lib_math_mul x) 2))))))
+         ((hydra_lib_maybes_bind (list :just 5)) (fn [x] ((hydra_lib_math_mul x) 2))))))
 
 (deftest test-bind-negnothing-to-nothing
 
-  (is (= nil
+  (is (= (list :nothing)
 
-         ((hydra_lib_maybes_bind nil) (fn [x] ((hydra_lib_math_mul x) 2))))))
+         ((hydra_lib_maybes_bind (list :nothing)) (fn [x] ((hydra_lib_math_mul x) 2))))))
 
 ;; cases
 
@@ -44,13 +44,13 @@
 
   (is (= 10
 
-         (((hydra_lib_maybes_cases 5) 0) (fn [x] ((hydra_lib_math_mul x) 2))))))
+         (((hydra_lib_maybes_cases (list :just 5)) 0) (fn [x] ((hydra_lib_math_mul x) 2))))))
 
 (deftest test-cases-negnothing-returns-default
 
   (is (= 99
 
-         (((hydra_lib_maybes_cases nil) 99) (fn [x] ((hydra_lib_math_mul x) 2))))))
+         (((hydra_lib_maybes_cases (list :nothing)) 99) (fn [x] ((hydra_lib_math_mul x) 2))))))
 
 ;; cat
 
@@ -58,19 +58,19 @@
 
   (is (= (list 1 2)
 
-         (hydra_lib_maybes_cat (list 1 nil 2)))))
+         (hydra_lib_maybes_cat (list (list :just 1) (list :nothing) (list :just 2))))))
 
 (deftest test-cat-negall-justs
 
   (is (= (list 1 2)
 
-         (hydra_lib_maybes_cat (list 1 2)))))
+         (hydra_lib_maybes_cat (list (list :just 1) (list :just 2))))))
 
 (deftest test-cat-negall-nothings
 
   (is (= (list )
 
-         (hydra_lib_maybes_cat (list nil nil)))))
+         (hydra_lib_maybes_cat (list (list :nothing) (list :nothing))))))
 
 (deftest test-cat-negempty-list
 
@@ -82,19 +82,19 @@
 
 (deftest test-compose-negboth-succeed
 
-  (is (= 12
+  (is (= (list :just 12)
 
          (((hydra_lib_maybes_compose (fn [x] (if ((hydra_lib_equality_lte x) 5) ((hydra_lib_math_add x) 1) nil))) (fn [y] (if ((hydra_lib_equality_gte y) 5) ((hydra_lib_math_mul y) 2) nil))) 5))))
 
 (deftest test-compose-negfirst-fails
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (((hydra_lib_maybes_compose (fn [x] (if ((hydra_lib_equality_lte x) 5) ((hydra_lib_math_add x) 1) nil))) (fn [y] (if ((hydra_lib_equality_gte y) 5) ((hydra_lib_math_mul y) 2) nil))) 10))))
 
 (deftest test-compose-negsecond-fails
 
-  (is (= nil
+  (is (= (list :nothing)
 
          (((hydra_lib_maybes_compose (fn [x] (if ((hydra_lib_equality_lte x) 5) ((hydra_lib_math_add x) 1) nil))) (fn [y] (if ((hydra_lib_equality_gte y) 5) ((hydra_lib_math_mul y) 2) nil))) 3))))
 
@@ -104,7 +104,7 @@
 
   (is (= 42
 
-         (hydra_lib_maybes_from_just 42))))
+         (hydra_lib_maybes_from_just (list :just 42)))))
 
 ;; fromMaybe
 
@@ -112,13 +112,13 @@
 
   (is (= 42
 
-         ((hydra_lib_maybes_from_maybe 0) 42))))
+         ((hydra_lib_maybes_from_maybe 0) (list :just 42)))))
 
 (deftest test-frommaybe-negnothing-with-default
 
   (is (= 99
 
-         ((hydra_lib_maybes_from_maybe 99) nil))))
+         ((hydra_lib_maybes_from_maybe 99) (list :nothing)))))
 
 ;; isJust
 
@@ -126,13 +126,13 @@
 
   (is (= true
 
-         (hydra_lib_maybes_is_just 42))))
+         (hydra_lib_maybes_is_just (list :just 42)))))
 
 (deftest test-isjust-negnothing
 
   (is (= false
 
-         (hydra_lib_maybes_is_just nil))))
+         (hydra_lib_maybes_is_just (list :nothing)))))
 
 ;; isNothing
 
@@ -140,27 +140,27 @@
 
   (is (= false
 
-         (hydra_lib_maybes_is_nothing 42))))
+         (hydra_lib_maybes_is_nothing (list :just 42)))))
 
 (deftest test-isnothing-negnothing
 
   (is (= true
 
-         (hydra_lib_maybes_is_nothing nil))))
+         (hydra_lib_maybes_is_nothing (list :nothing)))))
 
 ;; map
 
 (deftest test-map-negmaps-just-value
 
-  (is (= 10
+  (is (= (list :just 10)
 
-         ((hydra_lib_maybes_map (fn [x] ((hydra_lib_math_mul x) 2))) 5))))
+         ((hydra_lib_maybes_map (fn [x] ((hydra_lib_math_mul x) 2))) (list :just 5)))))
 
 (deftest test-map-negnothing-unchanged
 
-  (is (= nil
+  (is (= (list :nothing)
 
-         ((hydra_lib_maybes_map (fn [x] ((hydra_lib_math_mul x) 2))) nil))))
+         ((hydra_lib_maybes_map (fn [x] ((hydra_lib_math_mul x) 2))) (list :nothing)))))
 
 ;; mapMaybe
 
@@ -188,25 +188,25 @@
 
   (is (= 10
 
-         (((hydra_lib_maybes_maybe 0) (fn [x] ((hydra_lib_math_mul x) 2))) 5))))
+         (((hydra_lib_maybes_maybe 0) (fn [x] ((hydra_lib_math_mul x) 2))) (list :just 5)))))
 
 (deftest test-maybe-negnothing-returns-default
 
   (is (= 99
 
-         (((hydra_lib_maybes_maybe 99) (fn [x] ((hydra_lib_math_mul x) 2))) nil))))
+         (((hydra_lib_maybes_maybe 99) (fn [x] ((hydra_lib_math_mul x) 2))) (list :nothing)))))
 
 ;; pure
 
 (deftest test-pure-negwraps-integer
 
-  (is (= 42
+  (is (= (list :just 42)
 
          (hydra_lib_maybes_pure 42))))
 
 (deftest test-pure-negwraps-string
 
-  (is (= "hello"
+  (is (= (list :just "hello")
 
          (hydra_lib_maybes_pure "hello"))))
 
@@ -216,10 +216,10 @@
 
   (is (= (list 42)
 
-         (hydra_lib_maybes_to_list 42))))
+         (hydra_lib_maybes_to_list (list :just 42)))))
 
 (deftest test-tolist-negnothing
 
   (is (= (list )
 
-         (hydra_lib_maybes_to_list nil))))
+         (hydra_lib_maybes_to_list (list :nothing)))))

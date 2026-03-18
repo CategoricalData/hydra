@@ -534,233 +534,233 @@
 
 (defun test-readint8-negpositive ()
 
-  (assert (equal 42 (hydra_lib_literals_read_int8 "42"))))
+  (assert (equal (list :just 42) (hydra_lib_literals_read_int8 "42"))))
 
 (defun test-readint8-negnegative ()
 
-  (assert (equal -42 (hydra_lib_literals_read_int8 "-42"))))
+  (assert (equal (list :just -42) (hydra_lib_literals_read_int8 "-42"))))
 
 (defun test-readint8-negmax-value ()
 
-  (assert (equal 127 (hydra_lib_literals_read_int8 "127"))))
+  (assert (equal (list :just 127) (hydra_lib_literals_read_int8 "127"))))
 
 (defun test-readint8-negmin-value ()
 
-  (assert (equal -128 (hydra_lib_literals_read_int8 "-128"))))
+  (assert (equal (list :just -128) (hydra_lib_literals_read_int8 "-128"))))
 
 (defun test-readint8-neginvalid ()
 
-  (assert (equal nil (hydra_lib_literals_read_int8 "abc"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_int8 "abc"))))
 
 (defun test-readint8-negoverflow ()
 
-  (assert (equal nil (hydra_lib_literals_read_int8 "128"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_int8 "128"))))
 
 ;; readInt16
 
 (defun test-readint16-negpositive ()
 
-  (assert (equal 1000 (hydra_lib_literals_read_int16 "1000"))))
+  (assert (equal (list :just 1000) (hydra_lib_literals_read_int16 "1000"))))
 
 (defun test-readint16-negnegative ()
 
-  (assert (equal -1000 (hydra_lib_literals_read_int16 "-1000"))))
+  (assert (equal (list :just -1000) (hydra_lib_literals_read_int16 "-1000"))))
 
 (defun test-readint16-neginvalid ()
 
-  (assert (equal nil (hydra_lib_literals_read_int16 "abc"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_int16 "abc"))))
 
 ;; readInt32
 
 (defun test-readint32-negpositive ()
 
-  (assert (equal 42 (hydra_lib_literals_read_int32 "42"))))
+  (assert (equal (list :just 42) (hydra_lib_literals_read_int32 "42"))))
 
 (defun test-readint32-negnegative ()
 
-  (assert (equal -42 (hydra_lib_literals_read_int32 "-42"))))
+  (assert (equal (list :just -42) (hydra_lib_literals_read_int32 "-42"))))
 
 (defun test-readint32-neginvalid ()
 
-  (assert (equal nil (hydra_lib_literals_read_int32 "abc"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_int32 "abc"))))
 
 ;; readInt64
 
 (defun test-readint64-negpositive ()
 
-  (assert (equal 1000000 (hydra_lib_literals_read_int64 "1000000"))))
+  (assert (equal (list :just 1000000) (hydra_lib_literals_read_int64 "1000000"))))
 
 (defun test-readint64-negnegative ()
 
-  (assert (equal -1000000 (hydra_lib_literals_read_int64 "-1000000"))))
+  (assert (equal (list :just -1000000) (hydra_lib_literals_read_int64 "-1000000"))))
 
 (defun test-readint64-neginvalid ()
 
-  (assert (equal nil (hydra_lib_literals_read_int64 "abc"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_int64 "abc"))))
 
 ;; readUint8
 
 (defun test-readuint8-negzero ()
 
-  (assert (equal 0 (hydra_lib_literals_read_uint8 "0"))))
+  (assert (equal (list :just 0) (hydra_lib_literals_read_uint8 "0"))))
 
 (defun test-readuint8-negtypical ()
 
-  (assert (equal 100 (hydra_lib_literals_read_uint8 "100"))))
+  (assert (equal (list :just 100) (hydra_lib_literals_read_uint8 "100"))))
 
 (defun test-readuint8-negmax-value ()
 
-  (assert (equal 255 (hydra_lib_literals_read_uint8 "255"))))
+  (assert (equal (list :just 255) (hydra_lib_literals_read_uint8 "255"))))
 
 (defun test-readuint8-neginvalid ()
 
-  (assert (equal nil (hydra_lib_literals_read_uint8 "abc"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_uint8 "abc"))))
 
 (defun test-readuint8-negnegative ()
 
-  (assert (equal nil (hydra_lib_literals_read_uint8 "-1"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_uint8 "-1"))))
 
 ;; readUint16
 
 (defun test-readuint16-negzero ()
 
-  (assert (equal 0 (hydra_lib_literals_read_uint16 "0"))))
+  (assert (equal (list :just 0) (hydra_lib_literals_read_uint16 "0"))))
 
 (defun test-readuint16-negtypical ()
 
-  (assert (equal 1000 (hydra_lib_literals_read_uint16 "1000"))))
+  (assert (equal (list :just 1000) (hydra_lib_literals_read_uint16 "1000"))))
 
 (defun test-readuint16-neginvalid ()
 
-  (assert (equal nil (hydra_lib_literals_read_uint16 "abc"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_uint16 "abc"))))
 
 (defun test-readuint16-negnegative ()
 
-  (assert (equal nil (hydra_lib_literals_read_uint16 "-1"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_uint16 "-1"))))
 
 ;; readUint32
 
 (defun test-readuint32-negzero ()
 
-  (assert (equal 0 (hydra_lib_literals_read_uint32 "0"))))
+  (assert (equal (list :just 0) (hydra_lib_literals_read_uint32 "0"))))
 
 (defun test-readuint32-negtypical ()
 
-  (assert (equal 100000 (hydra_lib_literals_read_uint32 "100000"))))
+  (assert (equal (list :just 100000) (hydra_lib_literals_read_uint32 "100000"))))
 
 (defun test-readuint32-neginvalid ()
 
-  (assert (equal nil (hydra_lib_literals_read_uint32 "abc"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_uint32 "abc"))))
 
 (defun test-readuint32-negnegative ()
 
-  (assert (equal nil (hydra_lib_literals_read_uint32 "-1"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_uint32 "-1"))))
 
 ;; readUint64
 
 (defun test-readuint64-negzero ()
 
-  (assert (equal 0 (hydra_lib_literals_read_uint64 "0"))))
+  (assert (equal (list :just 0) (hydra_lib_literals_read_uint64 "0"))))
 
 (defun test-readuint64-negtypical ()
 
-  (assert (equal 1000000 (hydra_lib_literals_read_uint64 "1000000"))))
+  (assert (equal (list :just 1000000) (hydra_lib_literals_read_uint64 "1000000"))))
 
 (defun test-readuint64-neginvalid ()
 
-  (assert (equal nil (hydra_lib_literals_read_uint64 "abc"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_uint64 "abc"))))
 
 (defun test-readuint64-negnegative ()
 
-  (assert (equal nil (hydra_lib_literals_read_uint64 "-1"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_uint64 "-1"))))
 
 ;; readBigint
 
 (defun test-readbigint-negpositive ()
 
-  (assert (equal 42 (hydra_lib_literals_read_bigint "42"))))
+  (assert (equal (list :just 42) (hydra_lib_literals_read_bigint "42"))))
 
 (defun test-readbigint-negnegative ()
 
-  (assert (equal -42 (hydra_lib_literals_read_bigint "-42"))))
+  (assert (equal (list :just -42) (hydra_lib_literals_read_bigint "-42"))))
 
 (defun test-readbigint-negzero ()
 
-  (assert (equal 0 (hydra_lib_literals_read_bigint "0"))))
+  (assert (equal (list :just 0) (hydra_lib_literals_read_bigint "0"))))
 
 (defun test-readbigint-neglarge ()
 
-  (assert (equal 123456789012345678901234567890 (hydra_lib_literals_read_bigint "123456789012345678901234567890"))))
+  (assert (equal (list :just 123456789012345678901234567890) (hydra_lib_literals_read_bigint "123456789012345678901234567890"))))
 
 (defun test-readbigint-neginvalid ()
 
-  (assert (equal nil (hydra_lib_literals_read_bigint "abc"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_bigint "abc"))))
 
 ;; readFloat32
 
 (defun test-readfloat32-negpositive ()
 
-  (assert (equal 3.140000104904175 (hydra_lib_literals_read_float32 "3.14"))))
+  (assert (equal (list :just 3.140000104904175) (hydra_lib_literals_read_float32 "3.14"))))
 
 (defun test-readfloat32-negnegative ()
 
-  (assert (equal -2.5 (hydra_lib_literals_read_float32 "-2.5"))))
+  (assert (equal (list :just -2.5) (hydra_lib_literals_read_float32 "-2.5"))))
 
 (defun test-readfloat32-neginvalid ()
 
-  (assert (equal nil (hydra_lib_literals_read_float32 "abc"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_float32 "abc"))))
 
 ;; readFloat64
 
 (defun test-readfloat64-negpositive ()
 
-  (assert (equal 3.14159 (hydra_lib_literals_read_float64 "3.14159"))))
+  (assert (equal (list :just 3.14159) (hydra_lib_literals_read_float64 "3.14159"))))
 
 (defun test-readfloat64-negnegative ()
 
-  (assert (equal -2.71828 (hydra_lib_literals_read_float64 "-2.71828"))))
+  (assert (equal (list :just -2.71828) (hydra_lib_literals_read_float64 "-2.71828"))))
 
 (defun test-readfloat64-neginvalid ()
 
-  (assert (equal nil (hydra_lib_literals_read_float64 "abc"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_float64 "abc"))))
 
 ;; readBigfloat
 
 (defun test-readbigfloat-negpositive ()
 
-  (assert (equal 3.14 (hydra_lib_literals_read_bigfloat "3.14"))))
+  (assert (equal (list :just 3.14) (hydra_lib_literals_read_bigfloat "3.14"))))
 
 (defun test-readbigfloat-neginvalid ()
 
-  (assert (equal nil (hydra_lib_literals_read_bigfloat "abc"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_bigfloat "abc"))))
 
 ;; readBoolean
 
 (defun test-readboolean-negtrue ()
 
-  (assert (equal cl:t (hydra_lib_literals_read_boolean "true"))))
+  (assert (equal (list :just cl:t) (hydra_lib_literals_read_boolean "true"))))
 
 (defun test-readboolean-negfalse ()
 
-  (assert (equal cl:nil (hydra_lib_literals_read_boolean "false"))))
+  (assert (equal (list :just cl:nil) (hydra_lib_literals_read_boolean "false"))))
 
 (defun test-readboolean-neginvalid ()
 
-  (assert (equal nil (hydra_lib_literals_read_boolean "yes"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_boolean "yes"))))
 
 ;; readString
 
 (defun test-readstring-negquoted-string ()
 
-  (assert (equal "hello" (hydra_lib_literals_read_string "\"hello\""))))
+  (assert (equal (list :just "hello") (hydra_lib_literals_read_string "\"hello\""))))
 
 (defun test-readstring-negempty-quoted ()
 
-  (assert (equal "" (hydra_lib_literals_read_string "\"\""))))
+  (assert (equal (list :just "") (hydra_lib_literals_read_string "\"\""))))
 
 (defun test-readstring-negunquoted ()
 
-  (assert (equal nil (hydra_lib_literals_read_string "hello"))))
+  (assert (equal (list :nothing) (hydra_lib_literals_read_string "hello"))))
 
 ;; stringToBinary
 

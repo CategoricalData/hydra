@@ -7,49 +7,49 @@
 
 (ert-deftest test-apply-negboth-just ()
 
-  (should (equal 8 ((hydra_lib_maybes_apply (hydra_lib_math_add 3)) 5))))
+  (should (equal (list :just 8) ((hydra_lib_maybes_apply (list :just (hydra_lib_math_add 3))) (list :just 5)))))
 
 (ert-deftest test-apply-negnothing-function ()
 
-  (should (equal nil ((hydra_lib_maybes_apply nil) 5))))
+  (should (equal (list :nothing) ((hydra_lib_maybes_apply (list :nothing)) (list :just 5)))))
 
 (ert-deftest test-apply-negnothing-value ()
 
-  (should (equal nil ((hydra_lib_maybes_apply (hydra_lib_math_add 3)) nil))))
+  (should (equal (list :nothing) ((hydra_lib_maybes_apply (list :just (hydra_lib_math_add 3))) (list :nothing)))))
 
 ;; bind
 
 (ert-deftest test-bind-negjust-to-just ()
 
-  (should (equal 10 ((hydra_lib_maybes_bind 5) (lambda (x) ((hydra_lib_math_mul x) 2))))))
+  (should (equal (list :just 10) ((hydra_lib_maybes_bind (list :just 5)) (lambda (x) ((hydra_lib_math_mul x) 2))))))
 
 (ert-deftest test-bind-negnothing-to-nothing ()
 
-  (should (equal nil ((hydra_lib_maybes_bind nil) (lambda (x) ((hydra_lib_math_mul x) 2))))))
+  (should (equal (list :nothing) ((hydra_lib_maybes_bind (list :nothing)) (lambda (x) ((hydra_lib_math_mul x) 2))))))
 
 ;; cases
 
 (ert-deftest test-cases-negjust-applies-function ()
 
-  (should (equal 10 (((hydra_lib_maybes_cases 5) 0) (lambda (x) ((hydra_lib_math_mul x) 2))))))
+  (should (equal 10 (((hydra_lib_maybes_cases (list :just 5)) 0) (lambda (x) ((hydra_lib_math_mul x) 2))))))
 
 (ert-deftest test-cases-negnothing-returns-default ()
 
-  (should (equal 99 (((hydra_lib_maybes_cases nil) 99) (lambda (x) ((hydra_lib_math_mul x) 2))))))
+  (should (equal 99 (((hydra_lib_maybes_cases (list :nothing)) 99) (lambda (x) ((hydra_lib_math_mul x) 2))))))
 
 ;; cat
 
 (ert-deftest test-cat-negfilters-nothings ()
 
-  (should (equal (list 1 2) (hydra_lib_maybes_cat (list 1 nil 2)))))
+  (should (equal (list 1 2) (hydra_lib_maybes_cat (list (list :just 1) (list :nothing) (list :just 2))))))
 
 (ert-deftest test-cat-negall-justs ()
 
-  (should (equal (list 1 2) (hydra_lib_maybes_cat (list 1 2)))))
+  (should (equal (list 1 2) (hydra_lib_maybes_cat (list (list :just 1) (list :just 2))))))
 
 (ert-deftest test-cat-negall-nothings ()
 
-  (should (equal (list ) (hydra_lib_maybes_cat (list nil nil)))))
+  (should (equal (list ) (hydra_lib_maybes_cat (list (list :nothing) (list :nothing))))))
 
 (ert-deftest test-cat-negempty-list ()
 
@@ -59,61 +59,61 @@
 
 (ert-deftest test-compose-negboth-succeed ()
 
-  (should (equal 12 (((hydra_lib_maybes_compose (lambda (x) (if ((hydra_lib_equality_lte x) 5) ((hydra_lib_math_add x) 1) nil))) (lambda (y) (if ((hydra_lib_equality_gte y) 5) ((hydra_lib_math_mul y) 2) nil))) 5))))
+  (should (equal (list :just 12) (((hydra_lib_maybes_compose (lambda (x) (if ((hydra_lib_equality_lte x) 5) ((hydra_lib_math_add x) 1) nil))) (lambda (y) (if ((hydra_lib_equality_gte y) 5) ((hydra_lib_math_mul y) 2) nil))) 5))))
 
 (ert-deftest test-compose-negfirst-fails ()
 
-  (should (equal nil (((hydra_lib_maybes_compose (lambda (x) (if ((hydra_lib_equality_lte x) 5) ((hydra_lib_math_add x) 1) nil))) (lambda (y) (if ((hydra_lib_equality_gte y) 5) ((hydra_lib_math_mul y) 2) nil))) 10))))
+  (should (equal (list :nothing) (((hydra_lib_maybes_compose (lambda (x) (if ((hydra_lib_equality_lte x) 5) ((hydra_lib_math_add x) 1) nil))) (lambda (y) (if ((hydra_lib_equality_gte y) 5) ((hydra_lib_math_mul y) 2) nil))) 10))))
 
 (ert-deftest test-compose-negsecond-fails ()
 
-  (should (equal nil (((hydra_lib_maybes_compose (lambda (x) (if ((hydra_lib_equality_lte x) 5) ((hydra_lib_math_add x) 1) nil))) (lambda (y) (if ((hydra_lib_equality_gte y) 5) ((hydra_lib_math_mul y) 2) nil))) 3))))
+  (should (equal (list :nothing) (((hydra_lib_maybes_compose (lambda (x) (if ((hydra_lib_equality_lte x) 5) ((hydra_lib_math_add x) 1) nil))) (lambda (y) (if ((hydra_lib_equality_gte y) 5) ((hydra_lib_math_mul y) 2) nil))) 3))))
 
 ;; fromJust
 
 (ert-deftest test-fromjust-negextract-from-just ()
 
-  (should (equal 42 (hydra_lib_maybes_from_just 42))))
+  (should (equal 42 (hydra_lib_maybes_from_just (list :just 42)))))
 
 ;; fromMaybe
 
 (ert-deftest test-frommaybe-negjust-value ()
 
-  (should (equal 42 ((hydra_lib_maybes_from_maybe 0) 42))))
+  (should (equal 42 ((hydra_lib_maybes_from_maybe 0) (list :just 42)))))
 
 (ert-deftest test-frommaybe-negnothing-with-default ()
 
-  (should (equal 99 ((hydra_lib_maybes_from_maybe 99) nil))))
+  (should (equal 99 ((hydra_lib_maybes_from_maybe 99) (list :nothing)))))
 
 ;; isJust
 
 (ert-deftest test-isjust-negjust-value ()
 
-  (should (equal t (hydra_lib_maybes_is_just 42))))
+  (should (equal t (hydra_lib_maybes_is_just (list :just 42)))))
 
 (ert-deftest test-isjust-negnothing ()
 
-  (should (equal nil (hydra_lib_maybes_is_just nil))))
+  (should (equal nil (hydra_lib_maybes_is_just (list :nothing)))))
 
 ;; isNothing
 
 (ert-deftest test-isnothing-negjust-value ()
 
-  (should (equal nil (hydra_lib_maybes_is_nothing 42))))
+  (should (equal nil (hydra_lib_maybes_is_nothing (list :just 42)))))
 
 (ert-deftest test-isnothing-negnothing ()
 
-  (should (equal t (hydra_lib_maybes_is_nothing nil))))
+  (should (equal t (hydra_lib_maybes_is_nothing (list :nothing)))))
 
 ;; map
 
 (ert-deftest test-map-negmaps-just-value ()
 
-  (should (equal 10 ((hydra_lib_maybes_map (lambda (x) ((hydra_lib_math_mul x) 2))) 5))))
+  (should (equal (list :just 10) ((hydra_lib_maybes_map (lambda (x) ((hydra_lib_math_mul x) 2))) (list :just 5)))))
 
 (ert-deftest test-map-negnothing-unchanged ()
 
-  (should (equal nil ((hydra_lib_maybes_map (lambda (x) ((hydra_lib_math_mul x) 2))) nil))))
+  (should (equal (list :nothing) ((hydra_lib_maybes_map (lambda (x) ((hydra_lib_math_mul x) 2))) (list :nothing)))))
 
 ;; mapMaybe
 
@@ -133,28 +133,28 @@
 
 (ert-deftest test-maybe-negjust-value-applies-function ()
 
-  (should (equal 10 (((hydra_lib_maybes_maybe 0) (lambda (x) ((hydra_lib_math_mul x) 2))) 5))))
+  (should (equal 10 (((hydra_lib_maybes_maybe 0) (lambda (x) ((hydra_lib_math_mul x) 2))) (list :just 5)))))
 
 (ert-deftest test-maybe-negnothing-returns-default ()
 
-  (should (equal 99 (((hydra_lib_maybes_maybe 99) (lambda (x) ((hydra_lib_math_mul x) 2))) nil))))
+  (should (equal 99 (((hydra_lib_maybes_maybe 99) (lambda (x) ((hydra_lib_math_mul x) 2))) (list :nothing)))))
 
 ;; pure
 
 (ert-deftest test-pure-negwraps-integer ()
 
-  (should (equal 42 (hydra_lib_maybes_pure 42))))
+  (should (equal (list :just 42) (hydra_lib_maybes_pure 42))))
 
 (ert-deftest test-pure-negwraps-string ()
 
-  (should (equal "hello" (hydra_lib_maybes_pure "hello"))))
+  (should (equal (list :just "hello") (hydra_lib_maybes_pure "hello"))))
 
 ;; toList
 
 (ert-deftest test-tolist-negjust-value ()
 
-  (should (equal (list 42) (hydra_lib_maybes_to_list 42))))
+  (should (equal (list 42) (hydra_lib_maybes_to_list (list :just 42)))))
 
 (ert-deftest test-tolist-negnothing ()
 
-  (should (equal (list ) (hydra_lib_maybes_to_list nil))))
+  (should (equal (list ) (hydra_lib_maybes_to_list (list :nothing)))))
