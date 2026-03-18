@@ -16,7 +16,6 @@ import hydra.core
 import hydra.decode.core
 import hydra.encode.core
 import hydra.error
-import hydra.ext.haskell.operators
 import hydra.extract.core
 import hydra.extract.helpers
 import hydra.formatting

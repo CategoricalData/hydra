@@ -22,8 +22,8 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 import Hydra.Dsl.AsTerm
 import qualified Hydra.Dsl.Meta.Ast as Ast
+import qualified Hydra.Dsl.Meta.Lib.Math as Math
 import qualified Hydra.Sources.Kernel.Terms.Serialization as Serialization
-import qualified Hydra.Sources.Haskell.Operators as Operators
 
 import Hydra.Ast (Expr, Op, BlockStyle)
 
@@ -33,11 +33,18 @@ ns = Namespace "hydra.test.serialization"
 
 module_ :: Module
 module_ = Module ns elements
-    [Serialization.ns, Operators.ns]
+    [Serialization.ns]
     kernelTypesNamespaces
     (Just "Test cases for AST serialization")
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [
+      Phantoms.toBinding arrowOp,
+      Phantoms.toBinding gtOp,
+      Phantoms.toBinding plusOp,
+      Phantoms.toBinding multOp,
+      Phantoms.toBinding lambdaOp,
+      Phantoms.toBinding caseOp,
+      Phantoms.toBinding allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -80,14 +87,30 @@ bracketListExpr style exprs = Serialization.bracketList @@ asTerm style @@ list 
 inlineBlockStyle :: TBinding BlockStyle
 inlineBlockStyle = Serialization.inlineStyle
 
--- Reference to Haskell operators
-arrowOp, gtOp, plusOp, multOp, lambdaOp, caseOp :: TBinding Op
-arrowOp = Operators.arrowOp
-gtOp = Operators.gtOp
-plusOp = Operators.plusOp
-multOp = Operators.multOp
-lambdaOp = Operators.lambdaOp
-caseOp = Operators.caseOp
+-- Test operators defined locally to avoid a dependency on hydra.ext.haskell.operators
+arrowOp :: TBinding Op
+arrowOp = define "arrowOp" $
+  Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
+
+gtOp :: TBinding Op
+gtOp = define "gtOp" $
+  Serialization.op @@ string ">" @@ int32 4 @@ Ast.associativityNone
+
+plusOp :: TBinding Op
+plusOp = define "plusOp" $
+  Serialization.op @@ string "+" @@ int32 6 @@ Ast.associativityBoth
+
+multOp :: TBinding Op
+multOp = define "multOp" $
+  Serialization.op @@ string "*" @@ int32 7 @@ Ast.associativityBoth
+
+lambdaOp :: TBinding Op
+lambdaOp = define "lambdaOp" $
+  Serialization.op @@ string "->" @@ (Math.negate $ int32 1) @@ Ast.associativityRight
+
+caseOp :: TBinding Op
+caseOp = define "caseOp" $
+  Serialization.op @@ string "->" @@ int32 0 @@ Ast.associativityNone
 
 -- Helper for lambda expressions: \vars -> body
 -- lambdaExpr ["x", "y"] body = ifx lambdaOp (cst "\x y") body
