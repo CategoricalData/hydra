@@ -631,7 +631,27 @@ Throughout the session, update the branch plan document whenever you reach a
 milestone, change approach, or complete a significant step. This ensures continuity
 if the session is interrupted (e.g., by a power failure or context limit).
 
-### 5. Consult task-specific references as needed
+### 5. Commit workflow
+
+Make frequent checkpoint commits whenever the code reaches a stable state (tests
+pass, build succeeds). Prefix these with `WIP:`, e.g. `WIP: regenerate Lisp
+generation test files`. All commit messages must be short (120 characters or
+less) with no line breaks or multi-line bodies.
+
+When a task is completed or an important intermediate goal is reached, ask the
+user if they are ready to squash commits. When squashing:
+
+1. Soft-reset all WIP commits back to the base.
+2. Re-commit the changes as a smaller number of focused commits, grouping files
+   by topic. Commit the most important source changes first; save generated
+   files for last.
+3. The repository does not need to be in a consistent state between these
+   intermediate commits; the purpose is to create meaningful units for human
+   review.
+4. Use the same short, focused commit message style (120 characters, no line
+   breaks).
+
+### 6. Consult task-specific references as needed
 
 - If the task involves the kernel DSL, read the Hydra lexicon
   (`docs/hydra-lexicon.txt`) for the complete API surface.
