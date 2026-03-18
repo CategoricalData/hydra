@@ -10,15 +10,15 @@ import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
 import qualified Hydra.Dsl.Grammars                        as Grammars
 import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
 import qualified Hydra.Dsl.Literals                        as Literals
-import qualified Hydra.Dsl.Meta.Accessors                  as Accessors
-import qualified Hydra.Dsl.Meta.Ast                        as Ast
+import qualified Hydra.Dsl.Accessors                       as Accessors
+import qualified Hydra.Dsl.Ast                             as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
-import qualified Hydra.Dsl.Meta.Coders                     as Coders
-import qualified Hydra.Dsl.Meta.Compute                    as Compute
+import qualified Hydra.Dsl.Coders                          as Coders
+import qualified Hydra.Dsl.Util                            as Compute
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Meta.Grammar                    as Grammar
+import qualified Hydra.Dsl.Grammar                         as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
-import qualified Hydra.Dsl.Meta.Json                       as Json
+import qualified Hydra.Dsl.Json.Model                      as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
@@ -30,16 +30,16 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Meta.Module                     as Module
+import qualified Hydra.Dsl.Module                          as Module
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
-import qualified Hydra.Dsl.Meta.Topology                   as Topology
+import qualified Hydra.Dsl.Topology                        as Topology
 import qualified Hydra.Dsl.Meta.Types                      as MetaTypes
-import qualified Hydra.Dsl.Meta.Typing                     as Typing
-import qualified Hydra.Dsl.Meta.Util                       as Util
+import qualified Hydra.Dsl.Typing                          as Typing
+import qualified Hydra.Dsl.Util                            as Util
 import qualified Hydra.Dsl.Meta.Variants                   as Variants
 import qualified Hydra.Dsl.Prims                           as Prims
-import qualified Hydra.Dsl.Tabular                         as Tabular
+import qualified Hydra.Dsl.Meta.Tabular                    as Tabular
 import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Dsl.Tests                           as Tests
 import qualified Hydra.Dsl.Types                           as Types
@@ -196,8 +196,8 @@ lispLanguage = lispLanguageDefinition "lispLanguage" $
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $
     Coders.language
-      (Coders.languageName $ string "hydra.ext.lisp")
-      (Coders.languageConstraints
+      (Coders.languageName_ $ string "hydra.ext.lisp")
+      (Coders.languageConstraints_
         (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")
