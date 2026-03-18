@@ -15,638 +15,684 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-definitionTerm :: (Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Module.Definition)
-definitionTerm x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
-  Core.injectionTypeName = (Core.Name "hydra.module.Definition"),
-  Core.injectionField = Core.Field {
-    Core.fieldName = (Core.Name "term"),
-    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+definitionTerm :: Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Module.Definition
+definitionTerm x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.module.Definition"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "term"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-definitionType :: (Phantoms.TTerm Module.TypeDefinition -> Phantoms.TTerm Module.Definition)
-definitionType x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
-  Core.injectionTypeName = (Core.Name "hydra.module.Definition"),
-  Core.injectionField = Core.Field {
-    Core.fieldName = (Core.Name "type"),
-    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+definitionType :: Phantoms.TTerm Module.TypeDefinition -> Phantoms.TTerm Module.Definition
+definitionType x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.module.Definition"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "type"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-fileExtension :: (Phantoms.TTerm String -> Phantoms.TTerm Module.FileExtension)
-fileExtension x = (Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-  Core.wrappedTermTypeName = (Core.Name "hydra.module.FileExtension"),
-  Core.wrappedTermBody = (Phantoms.unTTerm x)})))
+fileExtension :: Phantoms.TTerm String -> Phantoms.TTerm Module.FileExtension
+fileExtension x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.module.FileExtension"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unFileExtension :: (Phantoms.TTerm Module.FileExtension -> Phantoms.TTerm String)
-unFileExtension x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.module.FileExtension")))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+unFileExtension :: Phantoms.TTerm Module.FileExtension -> Phantoms.TTerm String
+unFileExtension x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.module.FileExtension")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-library :: (Phantoms.TTerm Module.Namespace -> Phantoms.TTerm String -> Phantoms.TTerm [Graph.Primitive] -> Phantoms.TTerm Module.Library)
-library namespace prefix primitives = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.Library"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "namespace"),
-      Core.fieldTerm = (Phantoms.unTTerm namespace)},
-    Core.Field {
-      Core.fieldName = (Core.Name "prefix"),
-      Core.fieldTerm = (Phantoms.unTTerm prefix)},
-    Core.Field {
-      Core.fieldName = (Core.Name "primitives"),
-      Core.fieldTerm = (Phantoms.unTTerm primitives)}]})))
+library :: Phantoms.TTerm Module.Namespace -> Phantoms.TTerm String -> Phantoms.TTerm [Graph.Primitive] -> Phantoms.TTerm Module.Library
+library namespace prefix primitives =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.Library"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Phantoms.unTTerm namespace)},
+        Core.Field {
+          Core.fieldName = (Core.Name "prefix"),
+          Core.fieldTerm = (Phantoms.unTTerm prefix)},
+        Core.Field {
+          Core.fieldName = (Core.Name "primitives"),
+          Core.fieldTerm = (Phantoms.unTTerm primitives)}]}))
 
-libraryNamespace :: (Phantoms.TTerm Module.Library -> Phantoms.TTerm Module.Namespace)
-libraryNamespace x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.Library"),
-    Core.projectionField = (Core.Name "namespace")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+libraryNamespace :: Phantoms.TTerm Module.Library -> Phantoms.TTerm Module.Namespace
+libraryNamespace x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.Library"),
+        Core.projectionField = (Core.Name "namespace")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-libraryPrefix :: (Phantoms.TTerm Module.Library -> Phantoms.TTerm String)
-libraryPrefix x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.Library"),
-    Core.projectionField = (Core.Name "prefix")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+libraryPrefix :: Phantoms.TTerm Module.Library -> Phantoms.TTerm String
+libraryPrefix x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.Library"),
+        Core.projectionField = (Core.Name "prefix")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-libraryPrimitives :: (Phantoms.TTerm Module.Library -> Phantoms.TTerm [Graph.Primitive])
-libraryPrimitives x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.Library"),
-    Core.projectionField = (Core.Name "primitives")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+libraryPrimitives :: Phantoms.TTerm Module.Library -> Phantoms.TTerm [Graph.Primitive]
+libraryPrimitives x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.Library"),
+        Core.projectionField = (Core.Name "primitives")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-libraryWithNamespace :: (Phantoms.TTerm Module.Library -> Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Module.Library)
-libraryWithNamespace original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.Library"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "namespace"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)},
-    Core.Field {
-      Core.fieldName = (Core.Name "prefix"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Library"),
-          Core.projectionField = (Core.Name "prefix")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "primitives"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Library"),
-          Core.projectionField = (Core.Name "primitives")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+libraryWithNamespace :: Phantoms.TTerm Module.Library -> Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Module.Library
+libraryWithNamespace original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.Library"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "prefix"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Library"),
+              Core.projectionField = (Core.Name "prefix")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "primitives"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Library"),
+              Core.projectionField = (Core.Name "primitives")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-libraryWithPrefix :: (Phantoms.TTerm Module.Library -> Phantoms.TTerm String -> Phantoms.TTerm Module.Library)
-libraryWithPrefix original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.Library"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "namespace"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Library"),
-          Core.projectionField = (Core.Name "namespace")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "prefix"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)},
-    Core.Field {
-      Core.fieldName = (Core.Name "primitives"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Library"),
-          Core.projectionField = (Core.Name "primitives")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+libraryWithPrefix :: Phantoms.TTerm Module.Library -> Phantoms.TTerm String -> Phantoms.TTerm Module.Library
+libraryWithPrefix original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.Library"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Library"),
+              Core.projectionField = (Core.Name "namespace")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "prefix"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "primitives"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Library"),
+              Core.projectionField = (Core.Name "primitives")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-libraryWithPrimitives :: (Phantoms.TTerm Module.Library -> Phantoms.TTerm [Graph.Primitive] -> Phantoms.TTerm Module.Library)
-libraryWithPrimitives original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.Library"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "namespace"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Library"),
-          Core.projectionField = (Core.Name "namespace")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "prefix"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Library"),
-          Core.projectionField = (Core.Name "prefix")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "primitives"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+libraryWithPrimitives :: Phantoms.TTerm Module.Library -> Phantoms.TTerm [Graph.Primitive] -> Phantoms.TTerm Module.Library
+libraryWithPrimitives original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.Library"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Library"),
+              Core.projectionField = (Core.Name "namespace")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "prefix"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Library"),
+              Core.projectionField = (Core.Name "prefix")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "primitives"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-module_ :: (Phantoms.TTerm Module.Namespace -> Phantoms.TTerm [Core.Binding] -> Phantoms.TTerm [Module.Namespace] -> Phantoms.TTerm [Module.Namespace] -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Module.Module)
-module_ namespace elements termDependencies typeDependencies description = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.Module"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "namespace"),
-      Core.fieldTerm = (Phantoms.unTTerm namespace)},
-    Core.Field {
-      Core.fieldName = (Core.Name "elements"),
-      Core.fieldTerm = (Phantoms.unTTerm elements)},
-    Core.Field {
-      Core.fieldName = (Core.Name "termDependencies"),
-      Core.fieldTerm = (Phantoms.unTTerm termDependencies)},
-    Core.Field {
-      Core.fieldName = (Core.Name "typeDependencies"),
-      Core.fieldTerm = (Phantoms.unTTerm typeDependencies)},
-    Core.Field {
-      Core.fieldName = (Core.Name "description"),
-      Core.fieldTerm = (Phantoms.unTTerm description)}]})))
+module_ :: Phantoms.TTerm Module.Namespace -> Phantoms.TTerm [Core.Binding] -> Phantoms.TTerm [Module.Namespace] -> Phantoms.TTerm [Module.Namespace] -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Module.Module
+module_ namespace elements termDependencies typeDependencies description =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.Module"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Phantoms.unTTerm namespace)},
+        Core.Field {
+          Core.fieldName = (Core.Name "elements"),
+          Core.fieldTerm = (Phantoms.unTTerm elements)},
+        Core.Field {
+          Core.fieldName = (Core.Name "termDependencies"),
+          Core.fieldTerm = (Phantoms.unTTerm termDependencies)},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeDependencies"),
+          Core.fieldTerm = (Phantoms.unTTerm typeDependencies)},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Phantoms.unTTerm description)}]}))
 
-moduleNamespace :: (Phantoms.TTerm Module.Module -> Phantoms.TTerm Module.Namespace)
-moduleNamespace x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-    Core.projectionField = (Core.Name "namespace")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+moduleNamespace :: Phantoms.TTerm Module.Module -> Phantoms.TTerm Module.Namespace
+moduleNamespace x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+        Core.projectionField = (Core.Name "namespace")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-moduleElements :: (Phantoms.TTerm Module.Module -> Phantoms.TTerm [Core.Binding])
-moduleElements x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-    Core.projectionField = (Core.Name "elements")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+moduleElements :: Phantoms.TTerm Module.Module -> Phantoms.TTerm [Core.Binding]
+moduleElements x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+        Core.projectionField = (Core.Name "elements")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-moduleTermDependencies :: (Phantoms.TTerm Module.Module -> Phantoms.TTerm [Module.Namespace])
-moduleTermDependencies x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-    Core.projectionField = (Core.Name "termDependencies")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+moduleTermDependencies :: Phantoms.TTerm Module.Module -> Phantoms.TTerm [Module.Namespace]
+moduleTermDependencies x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+        Core.projectionField = (Core.Name "termDependencies")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-moduleTypeDependencies :: (Phantoms.TTerm Module.Module -> Phantoms.TTerm [Module.Namespace])
-moduleTypeDependencies x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-    Core.projectionField = (Core.Name "typeDependencies")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+moduleTypeDependencies :: Phantoms.TTerm Module.Module -> Phantoms.TTerm [Module.Namespace]
+moduleTypeDependencies x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+        Core.projectionField = (Core.Name "typeDependencies")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-moduleDescription :: (Phantoms.TTerm Module.Module -> Phantoms.TTerm (Maybe String))
-moduleDescription x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-    Core.projectionField = (Core.Name "description")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+moduleDescription :: Phantoms.TTerm Module.Module -> Phantoms.TTerm (Maybe String)
+moduleDescription x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+        Core.projectionField = (Core.Name "description")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-moduleWithNamespace :: (Phantoms.TTerm Module.Module -> Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Module.Module)
-moduleWithNamespace original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.Module"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "namespace"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)},
-    Core.Field {
-      Core.fieldName = (Core.Name "elements"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "elements")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "termDependencies"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "termDependencies")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "typeDependencies"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "typeDependencies")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "description"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "description")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+moduleWithNamespace :: Phantoms.TTerm Module.Module -> Phantoms.TTerm Module.Namespace -> Phantoms.TTerm Module.Module
+moduleWithNamespace original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.Module"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "elements"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "elements")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "termDependencies"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "termDependencies")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeDependencies"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "typeDependencies")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-moduleWithElements :: (Phantoms.TTerm Module.Module -> Phantoms.TTerm [Core.Binding] -> Phantoms.TTerm Module.Module)
-moduleWithElements original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.Module"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "namespace"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "namespace")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "elements"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)},
-    Core.Field {
-      Core.fieldName = (Core.Name "termDependencies"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "termDependencies")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "typeDependencies"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "typeDependencies")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "description"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "description")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+moduleWithElements :: Phantoms.TTerm Module.Module -> Phantoms.TTerm [Core.Binding] -> Phantoms.TTerm Module.Module
+moduleWithElements original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.Module"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "namespace")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "elements"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "termDependencies"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "termDependencies")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeDependencies"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "typeDependencies")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-moduleWithTermDependencies :: (Phantoms.TTerm Module.Module -> Phantoms.TTerm [Module.Namespace] -> Phantoms.TTerm Module.Module)
-moduleWithTermDependencies original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.Module"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "namespace"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "namespace")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "elements"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "elements")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "termDependencies"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)},
-    Core.Field {
-      Core.fieldName = (Core.Name "typeDependencies"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "typeDependencies")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "description"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "description")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+moduleWithTermDependencies :: Phantoms.TTerm Module.Module -> Phantoms.TTerm [Module.Namespace] -> Phantoms.TTerm Module.Module
+moduleWithTermDependencies original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.Module"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "namespace")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "elements"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "elements")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "termDependencies"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeDependencies"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "typeDependencies")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-moduleWithTypeDependencies :: (Phantoms.TTerm Module.Module -> Phantoms.TTerm [Module.Namespace] -> Phantoms.TTerm Module.Module)
-moduleWithTypeDependencies original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.Module"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "namespace"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "namespace")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "elements"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "elements")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "termDependencies"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "termDependencies")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "typeDependencies"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)},
-    Core.Field {
-      Core.fieldName = (Core.Name "description"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "description")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+moduleWithTypeDependencies :: Phantoms.TTerm Module.Module -> Phantoms.TTerm [Module.Namespace] -> Phantoms.TTerm Module.Module
+moduleWithTypeDependencies original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.Module"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "namespace")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "elements"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "elements")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "termDependencies"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "termDependencies")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeDependencies"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "description")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-moduleWithDescription :: (Phantoms.TTerm Module.Module -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Module.Module)
-moduleWithDescription original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.Module"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "namespace"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "namespace")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "elements"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "elements")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "termDependencies"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "termDependencies")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "typeDependencies"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Module"),
-          Core.projectionField = (Core.Name "typeDependencies")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "description"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+moduleWithDescription :: Phantoms.TTerm Module.Module -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Module.Module
+moduleWithDescription original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.Module"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "namespace")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "elements"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "elements")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "termDependencies"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "termDependencies")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeDependencies"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Module"),
+              Core.projectionField = (Core.Name "typeDependencies")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "description"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-namespace :: (Phantoms.TTerm String -> Phantoms.TTerm Module.Namespace)
-namespace x = (Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-  Core.wrappedTermTypeName = (Core.Name "hydra.module.Namespace"),
-  Core.wrappedTermBody = (Phantoms.unTTerm x)})))
+namespace :: Phantoms.TTerm String -> Phantoms.TTerm Module.Namespace
+namespace x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.module.Namespace"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-unNamespace :: (Phantoms.TTerm Module.Namespace -> Phantoms.TTerm String)
-unNamespace x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.module.Namespace")))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+unNamespace :: Phantoms.TTerm Module.Namespace -> Phantoms.TTerm String
+unNamespace x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.module.Namespace")))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-namespaces :: (Phantoms.TTerm (Module.Namespace, n) -> Phantoms.TTerm (M.Map Module.Namespace n) -> Phantoms.TTerm (Module.Namespaces n))
-namespaces focus mapping = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.Namespaces"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "focus"),
-      Core.fieldTerm = (Phantoms.unTTerm focus)},
-    Core.Field {
-      Core.fieldName = (Core.Name "mapping"),
-      Core.fieldTerm = (Phantoms.unTTerm mapping)}]})))
+namespaces :: Phantoms.TTerm (Module.Namespace, n) -> Phantoms.TTerm (M.Map Module.Namespace n) -> Phantoms.TTerm (Module.Namespaces n)
+namespaces focus mapping =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.Namespaces"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "focus"),
+          Core.fieldTerm = (Phantoms.unTTerm focus)},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapping"),
+          Core.fieldTerm = (Phantoms.unTTerm mapping)}]}))
 
-namespacesFocus :: (Phantoms.TTerm (Module.Namespaces n) -> Phantoms.TTerm (Module.Namespace, n))
-namespacesFocus x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.Namespaces"),
-    Core.projectionField = (Core.Name "focus")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+namespacesFocus :: Phantoms.TTerm (Module.Namespaces n) -> Phantoms.TTerm (Module.Namespace, n)
+namespacesFocus x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.Namespaces"),
+        Core.projectionField = (Core.Name "focus")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-namespacesMapping :: (Phantoms.TTerm (Module.Namespaces n) -> Phantoms.TTerm (M.Map Module.Namespace n))
-namespacesMapping x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.Namespaces"),
-    Core.projectionField = (Core.Name "mapping")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+namespacesMapping :: Phantoms.TTerm (Module.Namespaces n) -> Phantoms.TTerm (M.Map Module.Namespace n)
+namespacesMapping x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.Namespaces"),
+        Core.projectionField = (Core.Name "mapping")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-namespacesWithFocus :: (Phantoms.TTerm (Module.Namespaces n) -> Phantoms.TTerm (Module.Namespace, n) -> Phantoms.TTerm (Module.Namespaces n))
-namespacesWithFocus original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.Namespaces"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "focus"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)},
-    Core.Field {
-      Core.fieldName = (Core.Name "mapping"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Namespaces"),
-          Core.projectionField = (Core.Name "mapping")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+namespacesWithFocus :: Phantoms.TTerm (Module.Namespaces n) -> Phantoms.TTerm (Module.Namespace, n) -> Phantoms.TTerm (Module.Namespaces n)
+namespacesWithFocus original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.Namespaces"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "focus"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapping"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Namespaces"),
+              Core.projectionField = (Core.Name "mapping")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-namespacesWithMapping :: (Phantoms.TTerm (Module.Namespaces n) -> Phantoms.TTerm (M.Map Module.Namespace n) -> Phantoms.TTerm (Module.Namespaces n))
-namespacesWithMapping original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.Namespaces"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "focus"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.Namespaces"),
-          Core.projectionField = (Core.Name "focus")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "mapping"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+namespacesWithMapping :: Phantoms.TTerm (Module.Namespaces n) -> Phantoms.TTerm (M.Map Module.Namespace n) -> Phantoms.TTerm (Module.Namespaces n)
+namespacesWithMapping original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.Namespaces"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "focus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.Namespaces"),
+              Core.projectionField = (Core.Name "focus")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapping"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-qualifiedName :: (Phantoms.TTerm (Maybe Module.Namespace) -> Phantoms.TTerm String -> Phantoms.TTerm Module.QualifiedName)
-qualifiedName namespace local = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.QualifiedName"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "namespace"),
-      Core.fieldTerm = (Phantoms.unTTerm namespace)},
-    Core.Field {
-      Core.fieldName = (Core.Name "local"),
-      Core.fieldTerm = (Phantoms.unTTerm local)}]})))
+qualifiedName :: Phantoms.TTerm (Maybe Module.Namespace) -> Phantoms.TTerm String -> Phantoms.TTerm Module.QualifiedName
+qualifiedName namespace local =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.QualifiedName"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Phantoms.unTTerm namespace)},
+        Core.Field {
+          Core.fieldName = (Core.Name "local"),
+          Core.fieldTerm = (Phantoms.unTTerm local)}]}))
 
-qualifiedNameNamespace :: (Phantoms.TTerm Module.QualifiedName -> Phantoms.TTerm (Maybe Module.Namespace))
-qualifiedNameNamespace x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.QualifiedName"),
-    Core.projectionField = (Core.Name "namespace")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+qualifiedNameNamespace :: Phantoms.TTerm Module.QualifiedName -> Phantoms.TTerm (Maybe Module.Namespace)
+qualifiedNameNamespace x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.QualifiedName"),
+        Core.projectionField = (Core.Name "namespace")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-qualifiedNameLocal :: (Phantoms.TTerm Module.QualifiedName -> Phantoms.TTerm String)
-qualifiedNameLocal x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.QualifiedName"),
-    Core.projectionField = (Core.Name "local")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+qualifiedNameLocal :: Phantoms.TTerm Module.QualifiedName -> Phantoms.TTerm String
+qualifiedNameLocal x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.QualifiedName"),
+        Core.projectionField = (Core.Name "local")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-qualifiedNameWithNamespace :: (Phantoms.TTerm Module.QualifiedName -> Phantoms.TTerm (Maybe Module.Namespace) -> Phantoms.TTerm Module.QualifiedName)
-qualifiedNameWithNamespace original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.QualifiedName"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "namespace"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)},
-    Core.Field {
-      Core.fieldName = (Core.Name "local"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.QualifiedName"),
-          Core.projectionField = (Core.Name "local")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+qualifiedNameWithNamespace :: Phantoms.TTerm Module.QualifiedName -> Phantoms.TTerm (Maybe Module.Namespace) -> Phantoms.TTerm Module.QualifiedName
+qualifiedNameWithNamespace original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.QualifiedName"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "local"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.QualifiedName"),
+              Core.projectionField = (Core.Name "local")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-qualifiedNameWithLocal :: (Phantoms.TTerm Module.QualifiedName -> Phantoms.TTerm String -> Phantoms.TTerm Module.QualifiedName)
-qualifiedNameWithLocal original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.QualifiedName"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "namespace"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.QualifiedName"),
-          Core.projectionField = (Core.Name "namespace")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "local"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+qualifiedNameWithLocal :: Phantoms.TTerm Module.QualifiedName -> Phantoms.TTerm String -> Phantoms.TTerm Module.QualifiedName
+qualifiedNameWithLocal original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.QualifiedName"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.QualifiedName"),
+              Core.projectionField = (Core.Name "namespace")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "local"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-termDefinition :: (Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Module.TermDefinition)
-termDefinition name term type_ = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.TermDefinition"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "name"),
-      Core.fieldTerm = (Phantoms.unTTerm name)},
-    Core.Field {
-      Core.fieldName = (Core.Name "term"),
-      Core.fieldTerm = (Phantoms.unTTerm term)},
-    Core.Field {
-      Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (Phantoms.unTTerm type_)}]})))
+termDefinition :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Module.TermDefinition
+termDefinition name term type_ =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.TermDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Phantoms.unTTerm term)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
 
-termDefinitionName :: (Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Core.Name)
-termDefinitionName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
-    Core.projectionField = (Core.Name "name")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+termDefinitionName :: Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Core.Name
+termDefinitionName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
+        Core.projectionField = (Core.Name "name")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-termDefinitionTerm :: (Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Core.Term)
-termDefinitionTerm x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
-    Core.projectionField = (Core.Name "term")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+termDefinitionTerm :: Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Core.Term
+termDefinitionTerm x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
+        Core.projectionField = (Core.Name "term")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-termDefinitionType :: (Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Core.TypeScheme)
-termDefinitionType x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
-    Core.projectionField = (Core.Name "type")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+termDefinitionType :: Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Core.TypeScheme
+termDefinitionType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-termDefinitionWithName :: (Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Module.TermDefinition)
-termDefinitionWithName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.TermDefinition"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "name"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)},
-    Core.Field {
-      Core.fieldName = (Core.Name "term"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
-          Core.projectionField = (Core.Name "term")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
-          Core.projectionField = (Core.Name "type")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+termDefinitionWithName :: Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Module.TermDefinition
+termDefinitionWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.TermDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
+              Core.projectionField = (Core.Name "term")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-termDefinitionWithTerm :: (Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Module.TermDefinition)
-termDefinitionWithTerm original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.TermDefinition"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "name"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
-          Core.projectionField = (Core.Name "name")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "term"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)},
-    Core.Field {
-      Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
-          Core.projectionField = (Core.Name "type")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+termDefinitionWithTerm :: Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Module.TermDefinition
+termDefinitionWithTerm original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.TermDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-termDefinitionWithType :: (Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Module.TermDefinition)
-termDefinitionWithType original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.TermDefinition"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "name"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
-          Core.projectionField = (Core.Name "name")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "term"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
-          Core.projectionField = (Core.Name "term")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+termDefinitionWithType :: Phantoms.TTerm Module.TermDefinition -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Module.TermDefinition
+termDefinitionWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.TermDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.TermDefinition"),
+              Core.projectionField = (Core.Name "term")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-typeDefinition :: (Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Module.TypeDefinition)
-typeDefinition name type_ = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.TypeDefinition"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "name"),
-      Core.fieldTerm = (Phantoms.unTTerm name)},
-    Core.Field {
-      Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (Phantoms.unTTerm type_)}]})))
+typeDefinition :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Module.TypeDefinition
+typeDefinition name type_ =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.TypeDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
 
-typeDefinitionName :: (Phantoms.TTerm Module.TypeDefinition -> Phantoms.TTerm Core.Name)
-typeDefinitionName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.TypeDefinition"),
-    Core.projectionField = (Core.Name "name")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+typeDefinitionName :: Phantoms.TTerm Module.TypeDefinition -> Phantoms.TTerm Core.Name
+typeDefinitionName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.TypeDefinition"),
+        Core.projectionField = (Core.Name "name")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-typeDefinitionType :: (Phantoms.TTerm Module.TypeDefinition -> Phantoms.TTerm Core.Type)
-typeDefinitionType x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.module.TypeDefinition"),
-    Core.projectionField = (Core.Name "type")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+typeDefinitionType :: Phantoms.TTerm Module.TypeDefinition -> Phantoms.TTerm Core.Type
+typeDefinitionType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.module.TypeDefinition"),
+        Core.projectionField = (Core.Name "type")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-typeDefinitionWithName :: (Phantoms.TTerm Module.TypeDefinition -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Module.TypeDefinition)
-typeDefinitionWithName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.TypeDefinition"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "name"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)},
-    Core.Field {
-      Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.TypeDefinition"),
-          Core.projectionField = (Core.Name "type")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+typeDefinitionWithName :: Phantoms.TTerm Module.TypeDefinition -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Module.TypeDefinition
+typeDefinitionWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.TypeDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.TypeDefinition"),
+              Core.projectionField = (Core.Name "type")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-typeDefinitionWithType :: (Phantoms.TTerm Module.TypeDefinition -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Module.TypeDefinition)
-typeDefinitionWithType original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.module.TypeDefinition"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "name"),
-      Core.fieldTerm = (Core.TermApplication (Core.Application {
-        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-          Core.projectionTypeName = (Core.Name "hydra.module.TypeDefinition"),
-          Core.projectionField = (Core.Name "name")})))),
-        Core.applicationArgument = (Phantoms.unTTerm original)}))},
-    Core.Field {
-      Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+typeDefinitionWithType :: Phantoms.TTerm Module.TypeDefinition -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Module.TypeDefinition
+typeDefinitionWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.module.TypeDefinition"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.module.TypeDefinition"),
+              Core.projectionField = (Core.Name "name")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))

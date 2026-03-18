@@ -10,23 +10,23 @@ import java.io.Serializable;
 public class VectorFunctionFeatures implements Serializable, Comparable<VectorFunctionFeatures> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.features.VectorFunctionFeatures");
 
-  public static final hydra.core.Name VECTOR_SIMILARITY_COSINE = new hydra.core.Name("vector.similarity.cosine");
+  public static final hydra.core.Name VECTOR_SIMILARITY_COSINE = new hydra.core.Name("vectorSimilarityCosine");
 
-  public static final hydra.core.Name VECTOR_SIMILARITY_EUCLIDEAN = new hydra.core.Name("vector.similarity.euclidean");
+  public static final hydra.core.Name VECTOR_SIMILARITY_EUCLIDEAN = new hydra.core.Name("vectorSimilarityEuclidean");
 
   /**
    * The vector.similarity.cosine() function. Returns a FLOAT representing the similarity between the argument vectors based on their cosine.
    */
-  public final Boolean vector_similarity_cosine;
+  public final Boolean vectorSimilarityCosine;
 
   /**
    * The vector.similarity.euclidean() function. Returns a FLOAT representing the similarity between the argument vectors based on their Euclidean distance.
    */
-  public final Boolean vector_similarity_euclidean;
+  public final Boolean vectorSimilarityEuclidean;
 
-  public VectorFunctionFeatures (Boolean vector_similarity_cosine, Boolean vector_similarity_euclidean) {
-    this.vector_similarity_cosine = vector_similarity_cosine;
-    this.vector_similarity_euclidean = vector_similarity_euclidean;
+  public VectorFunctionFeatures (Boolean vectorSimilarityCosine, Boolean vectorSimilarityEuclidean) {
+    this.vectorSimilarityCosine = vectorSimilarityCosine;
+    this.vectorSimilarityEuclidean = vectorSimilarityEuclidean;
   }
 
   @Override
@@ -36,33 +36,33 @@ public class VectorFunctionFeatures implements Serializable, Comparable<VectorFu
     }
     VectorFunctionFeatures o = (VectorFunctionFeatures) other;
     return java.util.Objects.equals(
-      this.vector_similarity_cosine,
-      o.vector_similarity_cosine) && java.util.Objects.equals(
-      this.vector_similarity_euclidean,
-      o.vector_similarity_euclidean);
+      this.vectorSimilarityCosine,
+      o.vectorSimilarityCosine) && java.util.Objects.equals(
+      this.vectorSimilarityEuclidean,
+      o.vectorSimilarityEuclidean);
   }
 
   @Override
   public int hashCode() {
-    return 2 * java.util.Objects.hashCode(vector_similarity_cosine) + 3 * java.util.Objects.hashCode(vector_similarity_euclidean);
+    return 2 * java.util.Objects.hashCode(vectorSimilarityCosine) + 3 * java.util.Objects.hashCode(vectorSimilarityEuclidean);
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(VectorFunctionFeatures other) {
     int cmp = 0;
-    cmp = ((Comparable) vector_similarity_cosine).compareTo(other.vector_similarity_cosine);
+    cmp = ((Comparable) vectorSimilarityCosine).compareTo(other.vectorSimilarityCosine);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) vector_similarity_euclidean).compareTo(other.vector_similarity_euclidean);
+    return ((Comparable) vectorSimilarityEuclidean).compareTo(other.vectorSimilarityEuclidean);
   }
 
-  public VectorFunctionFeatures withVector_similarity_cosine(Boolean vector_similarity_cosine) {
-    return new VectorFunctionFeatures(vector_similarity_cosine, vector_similarity_euclidean);
+  public VectorFunctionFeatures withVectorSimilarityCosine(Boolean vectorSimilarityCosine) {
+    return new VectorFunctionFeatures(vectorSimilarityCosine, vectorSimilarityEuclidean);
   }
 
-  public VectorFunctionFeatures withVector_similarity_euclidean(Boolean vector_similarity_euclidean) {
-    return new VectorFunctionFeatures(vector_similarity_cosine, vector_similarity_euclidean);
+  public VectorFunctionFeatures withVectorSimilarityEuclidean(Boolean vectorSimilarityEuclidean) {
+    return new VectorFunctionFeatures(vectorSimilarityCosine, vectorSimilarityEuclidean);
   }
 }

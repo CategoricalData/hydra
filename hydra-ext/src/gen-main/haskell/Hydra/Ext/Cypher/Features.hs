@@ -353,46 +353,46 @@ _AggregateFunctionFeatures_sum = Core.Name "sum"
 data DatabaseFunctionFeatures =
   DatabaseFunctionFeatures {
     -- | The db.nameFromElementId() function. Resolves the database name from the given element id. Introduced in 5.12.
-    databaseFunctionFeaturesDb_nameFromElementId :: Bool}
+    databaseFunctionFeaturesDbNameFromElementId :: Bool}
   deriving (Eq, Ord, Read, Show)
 
 _DatabaseFunctionFeatures = Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures"
 
-_DatabaseFunctionFeatures_db_nameFromElementId = Core.Name "db.nameFromElementId"
+_DatabaseFunctionFeatures_dbNameFromElementId = Core.Name "dbNameFromElementId"
 
 -- | GenAI functions
 data GenAIFunctionFeatures =
   GenAIFunctionFeatures {
     -- | The genai.vector.encode() function. Encode a given resource as a vector using the named provider. Introduced in 5.17.
-    genAIFunctionFeaturesGenai_vector_encode :: Bool}
+    genAIFunctionFeaturesGenaiVectorEncode :: Bool}
   deriving (Eq, Ord, Read, Show)
 
 _GenAIFunctionFeatures = Core.Name "hydra.ext.cypher.features.GenAIFunctionFeatures"
 
-_GenAIFunctionFeatures_genai_vector_encode = Core.Name "genai.vector.encode"
+_GenAIFunctionFeatures_genaiVectorEncode = Core.Name "genaiVectorEncode"
 
 -- | Graph functions
 data GraphFunctionFeatures =
   GraphFunctionFeatures {
     -- | The graph.byElementId() function. Resolves the constituent graph to which a given element id belongs. Introduced in 5.13.
-    graphFunctionFeaturesGraph_byElementId :: Bool,
+    graphFunctionFeaturesGraphByElementId :: Bool,
     -- | The graph.byName() function. Resolves a constituent graph by name.
-    graphFunctionFeaturesGraph_byName :: Bool,
+    graphFunctionFeaturesGraphByName :: Bool,
     -- | The graph.names() function. Returns a list containing the names of all graphs in the current composite database.
-    graphFunctionFeaturesGraph_names :: Bool,
+    graphFunctionFeaturesGraphNames :: Bool,
     -- | The graph.propertiesByName() function. Returns a map containing the properties associated with the given graph.
-    graphFunctionFeaturesGraph_propertiesByName :: Bool}
+    graphFunctionFeaturesGraphPropertiesByName :: Bool}
   deriving (Eq, Ord, Read, Show)
 
 _GraphFunctionFeatures = Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"
 
-_GraphFunctionFeatures_graph_byElementId = Core.Name "graph.byElementId"
+_GraphFunctionFeatures_graphByElementId = Core.Name "graphByElementId"
 
-_GraphFunctionFeatures_graph_byName = Core.Name "graph.byName"
+_GraphFunctionFeatures_graphByName = Core.Name "graphByName"
 
-_GraphFunctionFeatures_graph_names = Core.Name "graph.names"
+_GraphFunctionFeatures_graphNames = Core.Name "graphNames"
 
-_GraphFunctionFeatures_graph_propertiesByName = Core.Name "graph.propertiesByName"
+_GraphFunctionFeatures_graphPropertiesByName = Core.Name "graphPropertiesByName"
 
 -- | List functions
 data ListFunctionFeatures =
@@ -656,20 +656,20 @@ _ScalarFunctionFeatures_valueType = Core.Name "valueType"
 data SpatialFunctionFeatures =
   SpatialFunctionFeatures {
     -- | The point.distance() function. Returns a FLOAT representing the geodesic distance between any two points in the same CRS.
-    spatialFunctionFeaturesPoint_distance :: Bool,
+    spatialFunctionFeaturesPointDistance :: Bool,
     -- | The point() function. Returns a 2D point object, given two coordinate values in the Cartesian coordinate system.; Returns a 3D point object, given three coordinate values in the Cartesian coordinate system.; Returns a 2D point object, given two coordinate values in the WGS 84 geographic coordinate system.; Returns a 3D point object, given three coordinate values in the WGS 84 geographic coordinate system.
     spatialFunctionFeaturesPoint :: Bool,
     -- | The point.withinBBox() function. Returns true if the provided point is within the bounding box defined by the two provided points, lowerLeft and upperRight.
-    spatialFunctionFeaturesPoint_withinBBox :: Bool}
+    spatialFunctionFeaturesPointWithinBBox :: Bool}
   deriving (Eq, Ord, Read, Show)
 
 _SpatialFunctionFeatures = Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"
 
-_SpatialFunctionFeatures_point_distance = Core.Name "point.distance"
+_SpatialFunctionFeatures_pointDistance = Core.Name "pointDistance"
 
 _SpatialFunctionFeatures_point = Core.Name "point"
 
-_SpatialFunctionFeatures_point_withinBBox = Core.Name "point.withinBBox"
+_SpatialFunctionFeatures_pointWithinBBox = Core.Name "pointWithinBBox"
 
 -- | String functions
 data StringFunctionFeatures =
@@ -752,26 +752,26 @@ data TemporalDurationFunctionFeatures =
     -- | The duration() function. Constructs a DURATION value.
     temporalDurationFunctionFeaturesDuration :: Bool,
     -- | The duration.between() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in logical units.
-    temporalDurationFunctionFeaturesDuration_between :: Bool,
+    temporalDurationFunctionFeaturesDurationBetween :: Bool,
     -- | The duration.inDays() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in days.
-    temporalDurationFunctionFeaturesDuration_inDays :: Bool,
+    temporalDurationFunctionFeaturesDurationInDays :: Bool,
     -- | The duration.inMonths() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in months.
-    temporalDurationFunctionFeaturesDuration_inMonths :: Bool,
+    temporalDurationFunctionFeaturesDurationInMonths :: Bool,
     -- | The duration.inSeconds() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in seconds.
-    temporalDurationFunctionFeaturesDuration_inSeconds :: Bool}
+    temporalDurationFunctionFeaturesDurationInSeconds :: Bool}
   deriving (Eq, Ord, Read, Show)
 
 _TemporalDurationFunctionFeatures = Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"
 
 _TemporalDurationFunctionFeatures_duration = Core.Name "duration"
 
-_TemporalDurationFunctionFeatures_duration_between = Core.Name "duration.between"
+_TemporalDurationFunctionFeatures_durationBetween = Core.Name "durationBetween"
 
-_TemporalDurationFunctionFeatures_duration_inDays = Core.Name "duration.inDays"
+_TemporalDurationFunctionFeatures_durationInDays = Core.Name "durationInDays"
 
-_TemporalDurationFunctionFeatures_duration_inMonths = Core.Name "duration.inMonths"
+_TemporalDurationFunctionFeatures_durationInMonths = Core.Name "durationInMonths"
 
-_TemporalDurationFunctionFeatures_duration_inSeconds = Core.Name "duration.inSeconds"
+_TemporalDurationFunctionFeatures_durationInSeconds = Core.Name "durationInSeconds"
 
 -- | Temporal instant functions
 data TemporalInstantFunctionFeatures =
@@ -779,114 +779,114 @@ data TemporalInstantFunctionFeatures =
     -- | The date() function. Creates a DATE instant.
     temporalInstantFunctionFeaturesDate :: Bool,
     -- | The date.realtime() function. Returns the current DATE instant using the realtime clock.
-    temporalInstantFunctionFeaturesDate_realtime :: Bool,
+    temporalInstantFunctionFeaturesDateRealtime :: Bool,
     -- | The date.statement() function. Returns the current DATE instant using the statement clock.
-    temporalInstantFunctionFeaturesDate_statement :: Bool,
+    temporalInstantFunctionFeaturesDateStatement :: Bool,
     -- | The date.transaction() function. Returns the current DATE instant using the transaction clock.
-    temporalInstantFunctionFeaturesDate_transaction :: Bool,
+    temporalInstantFunctionFeaturesDateTransaction :: Bool,
     -- | The date.truncate() function. Truncates the given temporal value to a DATE instant using the specified unit.
-    temporalInstantFunctionFeaturesDate_truncate :: Bool,
+    temporalInstantFunctionFeaturesDateTruncate :: Bool,
     -- | The datetime() function. Creates a ZONED DATETIME instant.
     temporalInstantFunctionFeaturesDatetime :: Bool,
     -- | The datetime.fromepoch() function. Creates a ZONED DATETIME given the seconds and nanoseconds since the start of the epoch.
-    temporalInstantFunctionFeaturesDatetime_fromepoch :: Bool,
+    temporalInstantFunctionFeaturesDatetimeFromepoch :: Bool,
     -- | The datetime.fromepochmillis() function. Creates a ZONED DATETIME given the milliseconds since the start of the epoch.
-    temporalInstantFunctionFeaturesDatetime_fromepochmillis :: Bool,
+    temporalInstantFunctionFeaturesDatetimeFromepochmillis :: Bool,
     -- | The datetime.realtime() function. Returns the current ZONED DATETIME instant using the realtime clock.
-    temporalInstantFunctionFeaturesDatetime_realtime :: Bool,
+    temporalInstantFunctionFeaturesDatetimeRealtime :: Bool,
     -- | The datetime.statement() function. Returns the current ZONED DATETIME instant using the statement clock.
-    temporalInstantFunctionFeaturesDatetime_statement :: Bool,
+    temporalInstantFunctionFeaturesDatetimeStatement :: Bool,
     -- | The datetime.transaction() function. Returns the current ZONED DATETIME instant using the transaction clock.
-    temporalInstantFunctionFeaturesDatetime_transaction :: Bool,
+    temporalInstantFunctionFeaturesDatetimeTransaction :: Bool,
     -- | The datetime.truncate() function. Truncates the given temporal value to a ZONED DATETIME instant using the specified unit.
-    temporalInstantFunctionFeaturesDatetime_truncate :: Bool,
+    temporalInstantFunctionFeaturesDatetimeTruncate :: Bool,
     -- | The localdatetime() function. Creates a LOCAL DATETIME instant.
     temporalInstantFunctionFeaturesLocaldatetime :: Bool,
     -- | The localdatetime.realtime() function. Returns the current LOCAL DATETIME instant using the realtime clock.
-    temporalInstantFunctionFeaturesLocaldatetime_realtime :: Bool,
+    temporalInstantFunctionFeaturesLocaldatetimeRealtime :: Bool,
     -- | The localdatetime.statement() function. Returns the current LOCAL DATETIME instant using the statement clock.
-    temporalInstantFunctionFeaturesLocaldatetime_statement :: Bool,
+    temporalInstantFunctionFeaturesLocaldatetimeStatement :: Bool,
     -- | The localdatetime.transaction() function. Returns the current LOCAL DATETIME instant using the transaction clock.
-    temporalInstantFunctionFeaturesLocaldatetime_transaction :: Bool,
+    temporalInstantFunctionFeaturesLocaldatetimeTransaction :: Bool,
     -- | The localdatetime.truncate() function. Truncates the given temporal value to a LOCAL DATETIME instant using the specified unit.
-    temporalInstantFunctionFeaturesLocaldatetime_truncate :: Bool,
+    temporalInstantFunctionFeaturesLocaldatetimeTruncate :: Bool,
     -- | The localtime() function. Creates a LOCAL TIME instant.
     temporalInstantFunctionFeaturesLocaltime :: Bool,
     -- | The localtime.realtime() function. Returns the current LOCAL TIME instant using the realtime clock.
-    temporalInstantFunctionFeaturesLocaltime_realtime :: Bool,
+    temporalInstantFunctionFeaturesLocaltimeRealtime :: Bool,
     -- | The localtime.statement() function. Returns the current LOCAL TIME instant using the statement clock.
-    temporalInstantFunctionFeaturesLocaltime_statement :: Bool,
+    temporalInstantFunctionFeaturesLocaltimeStatement :: Bool,
     -- | The localtime.transaction() function. Returns the current LOCAL TIME instant using the transaction clock.
-    temporalInstantFunctionFeaturesLocaltime_transaction :: Bool,
+    temporalInstantFunctionFeaturesLocaltimeTransaction :: Bool,
     -- | The localtime.truncate() function. Truncates the given temporal value to a LOCAL TIME instant using the specified unit.
-    temporalInstantFunctionFeaturesLocaltime_truncate :: Bool,
+    temporalInstantFunctionFeaturesLocaltimeTruncate :: Bool,
     -- | The time() function. Creates a ZONED TIME instant.
     temporalInstantFunctionFeaturesTime :: Bool,
     -- | The time.realtime() function. Returns the current ZONED TIME instant using the realtime clock.
-    temporalInstantFunctionFeaturesTime_realtime :: Bool,
+    temporalInstantFunctionFeaturesTimeRealtime :: Bool,
     -- | The time.statement() function. Returns the current ZONED TIME instant using the statement clock.
-    temporalInstantFunctionFeaturesTime_statement :: Bool,
+    temporalInstantFunctionFeaturesTimeStatement :: Bool,
     -- | The time.transaction() function. Returns the current ZONED TIME instant using the transaction clock.
-    temporalInstantFunctionFeaturesTime_transaction :: Bool,
+    temporalInstantFunctionFeaturesTimeTransaction :: Bool,
     -- | The time.truncate() function. Truncates the given temporal value to a ZONED TIME instant using the specified unit.
-    temporalInstantFunctionFeaturesTime_truncate :: Bool}
+    temporalInstantFunctionFeaturesTimeTruncate :: Bool}
   deriving (Eq, Ord, Read, Show)
 
 _TemporalInstantFunctionFeatures = Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"
 
 _TemporalInstantFunctionFeatures_date = Core.Name "date"
 
-_TemporalInstantFunctionFeatures_date_realtime = Core.Name "date.realtime"
+_TemporalInstantFunctionFeatures_dateRealtime = Core.Name "dateRealtime"
 
-_TemporalInstantFunctionFeatures_date_statement = Core.Name "date.statement"
+_TemporalInstantFunctionFeatures_dateStatement = Core.Name "dateStatement"
 
-_TemporalInstantFunctionFeatures_date_transaction = Core.Name "date.transaction"
+_TemporalInstantFunctionFeatures_dateTransaction = Core.Name "dateTransaction"
 
-_TemporalInstantFunctionFeatures_date_truncate = Core.Name "date.truncate"
+_TemporalInstantFunctionFeatures_dateTruncate = Core.Name "dateTruncate"
 
 _TemporalInstantFunctionFeatures_datetime = Core.Name "datetime"
 
-_TemporalInstantFunctionFeatures_datetime_fromepoch = Core.Name "datetime.fromepoch"
+_TemporalInstantFunctionFeatures_datetimeFromepoch = Core.Name "datetimeFromepoch"
 
-_TemporalInstantFunctionFeatures_datetime_fromepochmillis = Core.Name "datetime.fromepochmillis"
+_TemporalInstantFunctionFeatures_datetimeFromepochmillis = Core.Name "datetimeFromepochmillis"
 
-_TemporalInstantFunctionFeatures_datetime_realtime = Core.Name "datetime.realtime"
+_TemporalInstantFunctionFeatures_datetimeRealtime = Core.Name "datetimeRealtime"
 
-_TemporalInstantFunctionFeatures_datetime_statement = Core.Name "datetime.statement"
+_TemporalInstantFunctionFeatures_datetimeStatement = Core.Name "datetimeStatement"
 
-_TemporalInstantFunctionFeatures_datetime_transaction = Core.Name "datetime.transaction"
+_TemporalInstantFunctionFeatures_datetimeTransaction = Core.Name "datetimeTransaction"
 
-_TemporalInstantFunctionFeatures_datetime_truncate = Core.Name "datetime.truncate"
+_TemporalInstantFunctionFeatures_datetimeTruncate = Core.Name "datetimeTruncate"
 
 _TemporalInstantFunctionFeatures_localdatetime = Core.Name "localdatetime"
 
-_TemporalInstantFunctionFeatures_localdatetime_realtime = Core.Name "localdatetime.realtime"
+_TemporalInstantFunctionFeatures_localdatetimeRealtime = Core.Name "localdatetimeRealtime"
 
-_TemporalInstantFunctionFeatures_localdatetime_statement = Core.Name "localdatetime.statement"
+_TemporalInstantFunctionFeatures_localdatetimeStatement = Core.Name "localdatetimeStatement"
 
-_TemporalInstantFunctionFeatures_localdatetime_transaction = Core.Name "localdatetime.transaction"
+_TemporalInstantFunctionFeatures_localdatetimeTransaction = Core.Name "localdatetimeTransaction"
 
-_TemporalInstantFunctionFeatures_localdatetime_truncate = Core.Name "localdatetime.truncate"
+_TemporalInstantFunctionFeatures_localdatetimeTruncate = Core.Name "localdatetimeTruncate"
 
 _TemporalInstantFunctionFeatures_localtime = Core.Name "localtime"
 
-_TemporalInstantFunctionFeatures_localtime_realtime = Core.Name "localtime.realtime"
+_TemporalInstantFunctionFeatures_localtimeRealtime = Core.Name "localtimeRealtime"
 
-_TemporalInstantFunctionFeatures_localtime_statement = Core.Name "localtime.statement"
+_TemporalInstantFunctionFeatures_localtimeStatement = Core.Name "localtimeStatement"
 
-_TemporalInstantFunctionFeatures_localtime_transaction = Core.Name "localtime.transaction"
+_TemporalInstantFunctionFeatures_localtimeTransaction = Core.Name "localtimeTransaction"
 
-_TemporalInstantFunctionFeatures_localtime_truncate = Core.Name "localtime.truncate"
+_TemporalInstantFunctionFeatures_localtimeTruncate = Core.Name "localtimeTruncate"
 
 _TemporalInstantFunctionFeatures_time = Core.Name "time"
 
-_TemporalInstantFunctionFeatures_time_realtime = Core.Name "time.realtime"
+_TemporalInstantFunctionFeatures_timeRealtime = Core.Name "timeRealtime"
 
-_TemporalInstantFunctionFeatures_time_statement = Core.Name "time.statement"
+_TemporalInstantFunctionFeatures_timeStatement = Core.Name "timeStatement"
 
-_TemporalInstantFunctionFeatures_time_transaction = Core.Name "time.transaction"
+_TemporalInstantFunctionFeatures_timeTransaction = Core.Name "timeTransaction"
 
-_TemporalInstantFunctionFeatures_time_truncate = Core.Name "time.truncate"
+_TemporalInstantFunctionFeatures_timeTruncate = Core.Name "timeTruncate"
 
 -- | Trigonometric functions
 data TrigonometricFunctionFeatures =
@@ -947,16 +947,16 @@ _TrigonometricFunctionFeatures_tan = Core.Name "tan"
 data VectorFunctionFeatures =
   VectorFunctionFeatures {
     -- | The vector.similarity.cosine() function. Returns a FLOAT representing the similarity between the argument vectors based on their cosine.
-    vectorFunctionFeaturesVector_similarity_cosine :: Bool,
+    vectorFunctionFeaturesVectorSimilarityCosine :: Bool,
     -- | The vector.similarity.euclidean() function. Returns a FLOAT representing the similarity between the argument vectors based on their Euclidean distance.
-    vectorFunctionFeaturesVector_similarity_euclidean :: Bool}
+    vectorFunctionFeaturesVectorSimilarityEuclidean :: Bool}
   deriving (Eq, Ord, Read, Show)
 
 _VectorFunctionFeatures = Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"
 
-_VectorFunctionFeatures_vector_similarity_cosine = Core.Name "vector.similarity.cosine"
+_VectorFunctionFeatures_vectorSimilarityCosine = Core.Name "vectorSimilarityCosine"
 
-_VectorFunctionFeatures_vector_similarity_euclidean = Core.Name "vector.similarity.euclidean"
+_VectorFunctionFeatures_vectorSimilarityEuclidean = Core.Name "vectorSimilarityEuclidean"
 
 -- | List functionality
 data ListFeatures =

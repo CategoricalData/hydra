@@ -205,34 +205,34 @@ class AggregateFunctionFeatures:
 class DatabaseFunctionFeatures:
     r"""Database functions."""
 
-    name_from_element_id: Annotated[bool, "The db.nameFromElementId() function. Resolves the database name from the given element id. Introduced in 5.12."]
+    db_name_from_element_id: Annotated[bool, "The db.nameFromElementId() function. Resolves the database name from the given element id. Introduced in 5.12."]
 
     TYPE_ = hydra.core.Name("hydra.ext.cypher.features.DatabaseFunctionFeatures")
-    DB.NAME_FROM_ELEMENT_ID = hydra.core.Name("db.nameFromElementId")
+    DB_NAME_FROM_ELEMENT_ID = hydra.core.Name("dbNameFromElementId")
 
 @dataclass(frozen=True)
 class GenAIFunctionFeatures:
     r"""GenAI functions."""
 
-    encode: Annotated[bool, "The genai.vector.encode() function. Encode a given resource as a vector using the named provider. Introduced in 5.17."]
+    genai_vector_encode: Annotated[bool, "The genai.vector.encode() function. Encode a given resource as a vector using the named provider. Introduced in 5.17."]
 
     TYPE_ = hydra.core.Name("hydra.ext.cypher.features.GenAIFunctionFeatures")
-    GENAI.VECTOR.ENCODE = hydra.core.Name("genai.vector.encode")
+    GENAI_VECTOR_ENCODE = hydra.core.Name("genaiVectorEncode")
 
 @dataclass(frozen=True)
 class GraphFunctionFeatures:
     r"""Graph functions."""
 
-    by_element_id: Annotated[bool, "The graph.byElementId() function. Resolves the constituent graph to which a given element id belongs. Introduced in 5.13."]
-    by_name: Annotated[bool, "The graph.byName() function. Resolves a constituent graph by name."]
-    names: Annotated[bool, "The graph.names() function. Returns a list containing the names of all graphs in the current composite database."]
-    properties_by_name: Annotated[bool, "The graph.propertiesByName() function. Returns a map containing the properties associated with the given graph."]
+    graph_by_element_id: Annotated[bool, "The graph.byElementId() function. Resolves the constituent graph to which a given element id belongs. Introduced in 5.13."]
+    graph_by_name: Annotated[bool, "The graph.byName() function. Resolves a constituent graph by name."]
+    graph_names: Annotated[bool, "The graph.names() function. Returns a list containing the names of all graphs in the current composite database."]
+    graph_properties_by_name: Annotated[bool, "The graph.propertiesByName() function. Returns a map containing the properties associated with the given graph."]
 
     TYPE_ = hydra.core.Name("hydra.ext.cypher.features.GraphFunctionFeatures")
-    GRAPH.BY_ELEMENT_ID = hydra.core.Name("graph.byElementId")
-    GRAPH.BY_NAME = hydra.core.Name("graph.byName")
-    GRAPH.NAMES = hydra.core.Name("graph.names")
-    GRAPH.PROPERTIES_BY_NAME = hydra.core.Name("graph.propertiesByName")
+    GRAPH_BY_ELEMENT_ID = hydra.core.Name("graphByElementId")
+    GRAPH_BY_NAME = hydra.core.Name("graphByName")
+    GRAPH_NAMES = hydra.core.Name("graphNames")
+    GRAPH_PROPERTIES_BY_NAME = hydra.core.Name("graphPropertiesByName")
 
 @dataclass(frozen=True)
 class ListFunctionFeatures:
@@ -388,14 +388,14 @@ class ScalarFunctionFeatures:
 class SpatialFunctionFeatures:
     r"""Spatial functions."""
 
-    distance: Annotated[bool, "The point.distance() function. Returns a FLOAT representing the geodesic distance between any two points in the same CRS."]
+    point_distance: Annotated[bool, "The point.distance() function. Returns a FLOAT representing the geodesic distance between any two points in the same CRS."]
     point: Annotated[bool, "The point() function. Returns a 2D point object, given two coordinate values in the Cartesian coordinate system.; Returns a 3D point object, given three coordinate values in the Cartesian coordinate system.; Returns a 2D point object, given two coordinate values in the WGS 84 geographic coordinate system.; Returns a 3D point object, given three coordinate values in the WGS 84 geographic coordinate system."]
-    within_b_box: Annotated[bool, "The point.withinBBox() function. Returns true if the provided point is within the bounding box defined by the two provided points, lowerLeft and upperRight."]
+    point_within_b_box: Annotated[bool, "The point.withinBBox() function. Returns true if the provided point is within the bounding box defined by the two provided points, lowerLeft and upperRight."]
 
     TYPE_ = hydra.core.Name("hydra.ext.cypher.features.SpatialFunctionFeatures")
-    POINT.DISTANCE = hydra.core.Name("point.distance")
+    POINT_DISTANCE = hydra.core.Name("pointDistance")
     POINT = hydra.core.Name("point")
-    POINT.WITHIN_B_BOX = hydra.core.Name("point.withinBBox")
+    POINT_WITHIN_B_BOX = hydra.core.Name("pointWithinBBox")
 
 @dataclass(frozen=True)
 class StringFunctionFeatures:
@@ -443,78 +443,78 @@ class TemporalDurationFunctionFeatures:
     r"""Temporal duration functions."""
 
     duration: Annotated[bool, "The duration() function. Constructs a DURATION value."]
-    between: Annotated[bool, "The duration.between() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in logical units."]
-    in_days: Annotated[bool, "The duration.inDays() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in days."]
-    in_months: Annotated[bool, "The duration.inMonths() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in months."]
-    in_seconds: Annotated[bool, "The duration.inSeconds() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in seconds."]
+    duration_between: Annotated[bool, "The duration.between() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in logical units."]
+    duration_in_days: Annotated[bool, "The duration.inDays() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in days."]
+    duration_in_months: Annotated[bool, "The duration.inMonths() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in months."]
+    duration_in_seconds: Annotated[bool, "The duration.inSeconds() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in seconds."]
 
     TYPE_ = hydra.core.Name("hydra.ext.cypher.features.TemporalDurationFunctionFeatures")
     DURATION = hydra.core.Name("duration")
-    DURATION.BETWEEN = hydra.core.Name("duration.between")
-    DURATION.IN_DAYS = hydra.core.Name("duration.inDays")
-    DURATION.IN_MONTHS = hydra.core.Name("duration.inMonths")
-    DURATION.IN_SECONDS = hydra.core.Name("duration.inSeconds")
+    DURATION_BETWEEN = hydra.core.Name("durationBetween")
+    DURATION_IN_DAYS = hydra.core.Name("durationInDays")
+    DURATION_IN_MONTHS = hydra.core.Name("durationInMonths")
+    DURATION_IN_SECONDS = hydra.core.Name("durationInSeconds")
 
 @dataclass(frozen=True)
 class TemporalInstantFunctionFeatures:
     r"""Temporal instant functions."""
 
     date: Annotated[bool, "The date() function. Creates a DATE instant."]
-    realtime: Annotated[bool, "The date.realtime() function. Returns the current DATE instant using the realtime clock."]
-    statement: Annotated[bool, "The date.statement() function. Returns the current DATE instant using the statement clock."]
-    transaction: Annotated[bool, "The date.transaction() function. Returns the current DATE instant using the transaction clock."]
-    truncate: Annotated[bool, "The date.truncate() function. Truncates the given temporal value to a DATE instant using the specified unit."]
+    date_realtime: Annotated[bool, "The date.realtime() function. Returns the current DATE instant using the realtime clock."]
+    date_statement: Annotated[bool, "The date.statement() function. Returns the current DATE instant using the statement clock."]
+    date_transaction: Annotated[bool, "The date.transaction() function. Returns the current DATE instant using the transaction clock."]
+    date_truncate: Annotated[bool, "The date.truncate() function. Truncates the given temporal value to a DATE instant using the specified unit."]
     datetime: Annotated[bool, "The datetime() function. Creates a ZONED DATETIME instant."]
-    fromepoch: Annotated[bool, "The datetime.fromepoch() function. Creates a ZONED DATETIME given the seconds and nanoseconds since the start of the epoch."]
-    fromepochmillis: Annotated[bool, "The datetime.fromepochmillis() function. Creates a ZONED DATETIME given the milliseconds since the start of the epoch."]
-    realtime: Annotated[bool, "The datetime.realtime() function. Returns the current ZONED DATETIME instant using the realtime clock."]
-    statement: Annotated[bool, "The datetime.statement() function. Returns the current ZONED DATETIME instant using the statement clock."]
-    transaction: Annotated[bool, "The datetime.transaction() function. Returns the current ZONED DATETIME instant using the transaction clock."]
-    truncate: Annotated[bool, "The datetime.truncate() function. Truncates the given temporal value to a ZONED DATETIME instant using the specified unit."]
+    datetime_fromepoch: Annotated[bool, "The datetime.fromepoch() function. Creates a ZONED DATETIME given the seconds and nanoseconds since the start of the epoch."]
+    datetime_fromepochmillis: Annotated[bool, "The datetime.fromepochmillis() function. Creates a ZONED DATETIME given the milliseconds since the start of the epoch."]
+    datetime_realtime: Annotated[bool, "The datetime.realtime() function. Returns the current ZONED DATETIME instant using the realtime clock."]
+    datetime_statement: Annotated[bool, "The datetime.statement() function. Returns the current ZONED DATETIME instant using the statement clock."]
+    datetime_transaction: Annotated[bool, "The datetime.transaction() function. Returns the current ZONED DATETIME instant using the transaction clock."]
+    datetime_truncate: Annotated[bool, "The datetime.truncate() function. Truncates the given temporal value to a ZONED DATETIME instant using the specified unit."]
     localdatetime: Annotated[bool, "The localdatetime() function. Creates a LOCAL DATETIME instant."]
-    realtime: Annotated[bool, "The localdatetime.realtime() function. Returns the current LOCAL DATETIME instant using the realtime clock."]
-    statement: Annotated[bool, "The localdatetime.statement() function. Returns the current LOCAL DATETIME instant using the statement clock."]
-    transaction: Annotated[bool, "The localdatetime.transaction() function. Returns the current LOCAL DATETIME instant using the transaction clock."]
-    truncate: Annotated[bool, "The localdatetime.truncate() function. Truncates the given temporal value to a LOCAL DATETIME instant using the specified unit."]
+    localdatetime_realtime: Annotated[bool, "The localdatetime.realtime() function. Returns the current LOCAL DATETIME instant using the realtime clock."]
+    localdatetime_statement: Annotated[bool, "The localdatetime.statement() function. Returns the current LOCAL DATETIME instant using the statement clock."]
+    localdatetime_transaction: Annotated[bool, "The localdatetime.transaction() function. Returns the current LOCAL DATETIME instant using the transaction clock."]
+    localdatetime_truncate: Annotated[bool, "The localdatetime.truncate() function. Truncates the given temporal value to a LOCAL DATETIME instant using the specified unit."]
     localtime: Annotated[bool, "The localtime() function. Creates a LOCAL TIME instant."]
-    realtime: Annotated[bool, "The localtime.realtime() function. Returns the current LOCAL TIME instant using the realtime clock."]
-    statement: Annotated[bool, "The localtime.statement() function. Returns the current LOCAL TIME instant using the statement clock."]
-    transaction: Annotated[bool, "The localtime.transaction() function. Returns the current LOCAL TIME instant using the transaction clock."]
-    truncate: Annotated[bool, "The localtime.truncate() function. Truncates the given temporal value to a LOCAL TIME instant using the specified unit."]
+    localtime_realtime: Annotated[bool, "The localtime.realtime() function. Returns the current LOCAL TIME instant using the realtime clock."]
+    localtime_statement: Annotated[bool, "The localtime.statement() function. Returns the current LOCAL TIME instant using the statement clock."]
+    localtime_transaction: Annotated[bool, "The localtime.transaction() function. Returns the current LOCAL TIME instant using the transaction clock."]
+    localtime_truncate: Annotated[bool, "The localtime.truncate() function. Truncates the given temporal value to a LOCAL TIME instant using the specified unit."]
     time: Annotated[bool, "The time() function. Creates a ZONED TIME instant."]
-    realtime: Annotated[bool, "The time.realtime() function. Returns the current ZONED TIME instant using the realtime clock."]
-    statement: Annotated[bool, "The time.statement() function. Returns the current ZONED TIME instant using the statement clock."]
-    transaction: Annotated[bool, "The time.transaction() function. Returns the current ZONED TIME instant using the transaction clock."]
-    truncate: Annotated[bool, "The time.truncate() function. Truncates the given temporal value to a ZONED TIME instant using the specified unit."]
+    time_realtime: Annotated[bool, "The time.realtime() function. Returns the current ZONED TIME instant using the realtime clock."]
+    time_statement: Annotated[bool, "The time.statement() function. Returns the current ZONED TIME instant using the statement clock."]
+    time_transaction: Annotated[bool, "The time.transaction() function. Returns the current ZONED TIME instant using the transaction clock."]
+    time_truncate: Annotated[bool, "The time.truncate() function. Truncates the given temporal value to a ZONED TIME instant using the specified unit."]
 
     TYPE_ = hydra.core.Name("hydra.ext.cypher.features.TemporalInstantFunctionFeatures")
     DATE = hydra.core.Name("date")
-    DATE.REALTIME = hydra.core.Name("date.realtime")
-    DATE.STATEMENT = hydra.core.Name("date.statement")
-    DATE.TRANSACTION = hydra.core.Name("date.transaction")
-    DATE.TRUNCATE = hydra.core.Name("date.truncate")
+    DATE_REALTIME = hydra.core.Name("dateRealtime")
+    DATE_STATEMENT = hydra.core.Name("dateStatement")
+    DATE_TRANSACTION = hydra.core.Name("dateTransaction")
+    DATE_TRUNCATE = hydra.core.Name("dateTruncate")
     DATETIME = hydra.core.Name("datetime")
-    DATETIME.FROMEPOCH = hydra.core.Name("datetime.fromepoch")
-    DATETIME.FROMEPOCHMILLIS = hydra.core.Name("datetime.fromepochmillis")
-    DATETIME.REALTIME = hydra.core.Name("datetime.realtime")
-    DATETIME.STATEMENT = hydra.core.Name("datetime.statement")
-    DATETIME.TRANSACTION = hydra.core.Name("datetime.transaction")
-    DATETIME.TRUNCATE = hydra.core.Name("datetime.truncate")
+    DATETIME_FROMEPOCH = hydra.core.Name("datetimeFromepoch")
+    DATETIME_FROMEPOCHMILLIS = hydra.core.Name("datetimeFromepochmillis")
+    DATETIME_REALTIME = hydra.core.Name("datetimeRealtime")
+    DATETIME_STATEMENT = hydra.core.Name("datetimeStatement")
+    DATETIME_TRANSACTION = hydra.core.Name("datetimeTransaction")
+    DATETIME_TRUNCATE = hydra.core.Name("datetimeTruncate")
     LOCALDATETIME = hydra.core.Name("localdatetime")
-    LOCALDATETIME.REALTIME = hydra.core.Name("localdatetime.realtime")
-    LOCALDATETIME.STATEMENT = hydra.core.Name("localdatetime.statement")
-    LOCALDATETIME.TRANSACTION = hydra.core.Name("localdatetime.transaction")
-    LOCALDATETIME.TRUNCATE = hydra.core.Name("localdatetime.truncate")
+    LOCALDATETIME_REALTIME = hydra.core.Name("localdatetimeRealtime")
+    LOCALDATETIME_STATEMENT = hydra.core.Name("localdatetimeStatement")
+    LOCALDATETIME_TRANSACTION = hydra.core.Name("localdatetimeTransaction")
+    LOCALDATETIME_TRUNCATE = hydra.core.Name("localdatetimeTruncate")
     LOCALTIME = hydra.core.Name("localtime")
-    LOCALTIME.REALTIME = hydra.core.Name("localtime.realtime")
-    LOCALTIME.STATEMENT = hydra.core.Name("localtime.statement")
-    LOCALTIME.TRANSACTION = hydra.core.Name("localtime.transaction")
-    LOCALTIME.TRUNCATE = hydra.core.Name("localtime.truncate")
+    LOCALTIME_REALTIME = hydra.core.Name("localtimeRealtime")
+    LOCALTIME_STATEMENT = hydra.core.Name("localtimeStatement")
+    LOCALTIME_TRANSACTION = hydra.core.Name("localtimeTransaction")
+    LOCALTIME_TRUNCATE = hydra.core.Name("localtimeTruncate")
     TIME = hydra.core.Name("time")
-    TIME.REALTIME = hydra.core.Name("time.realtime")
-    TIME.STATEMENT = hydra.core.Name("time.statement")
-    TIME.TRANSACTION = hydra.core.Name("time.transaction")
-    TIME.TRUNCATE = hydra.core.Name("time.truncate")
+    TIME_REALTIME = hydra.core.Name("timeRealtime")
+    TIME_STATEMENT = hydra.core.Name("timeStatement")
+    TIME_TRANSACTION = hydra.core.Name("timeTransaction")
+    TIME_TRUNCATE = hydra.core.Name("timeTruncate")
 
 @dataclass(frozen=True)
 class TrigonometricFunctionFeatures:
@@ -551,12 +551,12 @@ class TrigonometricFunctionFeatures:
 class VectorFunctionFeatures:
     r"""Vector functions."""
 
-    cosine: Annotated[bool, "The vector.similarity.cosine() function. Returns a FLOAT representing the similarity between the argument vectors based on their cosine."]
-    euclidean: Annotated[bool, "The vector.similarity.euclidean() function. Returns a FLOAT representing the similarity between the argument vectors based on their Euclidean distance."]
+    vector_similarity_cosine: Annotated[bool, "The vector.similarity.cosine() function. Returns a FLOAT representing the similarity between the argument vectors based on their cosine."]
+    vector_similarity_euclidean: Annotated[bool, "The vector.similarity.euclidean() function. Returns a FLOAT representing the similarity between the argument vectors based on their Euclidean distance."]
 
     TYPE_ = hydra.core.Name("hydra.ext.cypher.features.VectorFunctionFeatures")
-    VECTOR.SIMILARITY.COSINE = hydra.core.Name("vector.similarity.cosine")
-    VECTOR.SIMILARITY.EUCLIDEAN = hydra.core.Name("vector.similarity.euclidean")
+    VECTOR_SIMILARITY_COSINE = hydra.core.Name("vectorSimilarityCosine")
+    VECTOR_SIMILARITY_EUCLIDEAN = hydra.core.Name("vectorSimilarityEuclidean")
 
 @dataclass(frozen=True)
 class ListFeatures:

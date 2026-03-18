@@ -10,15 +10,15 @@ import java.io.Serializable;
 public class DatabaseFunctionFeatures implements Serializable, Comparable<DatabaseFunctionFeatures> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.features.DatabaseFunctionFeatures");
 
-  public static final hydra.core.Name DB_NAME_FROM_ELEMENT_ID = new hydra.core.Name("db.nameFromElementId");
+  public static final hydra.core.Name DB_NAME_FROM_ELEMENT_ID = new hydra.core.Name("dbNameFromElementId");
 
   /**
    * The db.nameFromElementId() function. Resolves the database name from the given element id. Introduced in 5.12.
    */
-  public final Boolean db_nameFromElementId;
+  public final Boolean dbNameFromElementId;
 
-  public DatabaseFunctionFeatures (Boolean db_nameFromElementId) {
-    this.db_nameFromElementId = db_nameFromElementId;
+  public DatabaseFunctionFeatures (Boolean dbNameFromElementId) {
+    this.dbNameFromElementId = dbNameFromElementId;
   }
 
   @Override
@@ -28,18 +28,18 @@ public class DatabaseFunctionFeatures implements Serializable, Comparable<Databa
     }
     DatabaseFunctionFeatures o = (DatabaseFunctionFeatures) other;
     return java.util.Objects.equals(
-      this.db_nameFromElementId,
-      o.db_nameFromElementId);
+      this.dbNameFromElementId,
+      o.dbNameFromElementId);
   }
 
   @Override
   public int hashCode() {
-    return 2 * java.util.Objects.hashCode(db_nameFromElementId);
+    return 2 * java.util.Objects.hashCode(dbNameFromElementId);
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DatabaseFunctionFeatures other) {
-    return ((Comparable) db_nameFromElementId).compareTo(other.db_nameFromElementId);
+    return ((Comparable) dbNameFromElementId).compareTo(other.dbNameFromElementId);
   }
 }

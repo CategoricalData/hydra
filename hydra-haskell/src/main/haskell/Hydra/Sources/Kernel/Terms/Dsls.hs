@@ -281,11 +281,10 @@ dslElementName = define "dslElementName" $
 --   \body -> \annotation -> TermRecord (Record "hydra.core.AnnotatedTerm" [Field "body" body, ...])
 -- When code-generated into Haskell, this becomes:
 --   annotatedTerm body annotation = Core.TermRecord (Core.Record { ... })
-generateRecordConstructor :: TBinding (Type -> Name -> RowType -> [Binding])
+generateRecordConstructor :: TBinding (Type -> Name -> [FieldType] -> [Binding])
 generateRecordConstructor = define "generateRecordConstructor" $
   doc "Generate a record constructor function" $
-  "origType" ~> "typeName" ~> "rt" ~>
-  "fieldTypes" <~ (Core.rowTypeFields $ var "rt") $
+  "origType" ~> "typeName" ~> "fieldTypes" ~>
   -- Build deep fields and record using helpers
   "dFields" <~ (Lists.map
     ("ft" ~> deepField (Core.fieldTypeName (var "ft"))
@@ -437,17 +436,16 @@ isUnitType_ = "t" ~> cases _Type (Rewriting.deannotateType @@ var "t") (Just Pha
 -- For a wrapped type like "Name" wrapping String, produces:
 --   name :: String -> Name      (constructor/wrap)
 --   unName :: Name -> String    (unwrap)
-generateWrappedTypeAccessors :: TBinding (Type -> Name -> WrappedType -> [Binding])
+generateWrappedTypeAccessors :: TBinding (Type -> Name -> Type -> [Binding])
 generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
   doc "Generate wrap/unwrap accessors for a wrapped type" $
-  "origType" ~> "typeName" ~> "wt" ~>
+  "origType" ~> "typeName" ~> "innerType" ~>
   "localName" <~ (Names.localNameOf @@ var "typeName") $
   -- Wrap function: decapitalized type name
   "wrapName" <~ (dslElementName @@ var "typeName" @@ (Formatting.decapitalize @@ var "localName")) $
   -- Unwrap function: "un" + type local name
   "unwrapLocalName" <~ (Strings.cat $ list [string "un", var "localName"]) $
   "unwrapName" <~ (dslElementName @@ var "typeName" @@ var "unwrapLocalName") $
-  "innerType" <~ (Core.wrappedTypeBody (var "wt")) $
   "wrapperType" <~ (nominalResultType @@ var "typeName" @@ var "origType") $
   -- Wrap: \(x :: TTerm<InnerType>) -> WrappedTerm typeName x
   "wrapDomain" <~ (wrapInTTerm (var "innerType")) $
@@ -484,16 +482,16 @@ generateBindingsForType = define "generateBindingsForType" $
     "rawType" ~>
     "typ" <~ (Rewriting.deannotateTypeParameters @@ (Rewriting.deannotateType @@ var "rawType")) $
     right (cases _Type (var "typ") (Just $ list ([] :: [TTerm Binding])) [
-      _Type_record>>: "rt" ~>
+      _Type_record>>: "fts" ~>
         Lists.concat $ list [
-          generateRecordConstructor @@ var "rawType" @@ var "typeName" @@ var "rt",
-          Lists.map (generateRecordAccessor @@ var "rawType" @@ var "typeName") (Core.rowTypeFields (var "rt")),
-          Lists.map (generateRecordWithUpdater @@ var "rawType" @@ var "typeName" @@ Core.rowTypeFields (var "rt"))
-            (Core.rowTypeFields (var "rt"))],
-      _Type_union>>: "rt" ~>
-        Lists.map (generateUnionInjector @@ var "rawType" @@ var "typeName") (Core.rowTypeFields (var "rt")),
-      _Type_wrap>>: "wt" ~>
-        generateWrappedTypeAccessors @@ var "rawType" @@ var "typeName" @@ var "wt"]))
+          generateRecordConstructor @@ var "rawType" @@ var "typeName" @@ var "fts",
+          Lists.map (generateRecordAccessor @@ var "rawType" @@ var "typeName") (var "fts"),
+          Lists.map (generateRecordWithUpdater @@ var "rawType" @@ var "typeName" @@ var "fts")
+            (var "fts")],
+      _Type_union>>: "fts" ~>
+        Lists.map (generateUnionInjector @@ var "rawType" @@ var "typeName") (var "fts"),
+      _Type_wrap>>: "innerType" ~>
+        generateWrappedTypeAccessors @@ var "rawType" @@ var "typeName" @@ var "innerType"]))
 
 -- | Deduplicate bindings by appending "_" suffixes to duplicate names.
 -- Later bindings get suffixes; earlier ones keep their name.
