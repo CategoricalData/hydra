@@ -5,8 +5,7 @@ import hydra.core.Term;
 import hydra.core.Type;
 import org.junit.jupiter.api.Test;
 
-import static hydra.dsl.Core.fieldName;
-import static hydra.dsl.Core.name;
+import static hydra.dsl.Terms.name;
 import static hydra.dsl.Types.annot;
 import static hydra.dsl.Types.field;
 import static hydra.dsl.Types.float32;
@@ -50,10 +49,10 @@ public class TypesTest {
     @Test
     public void constructedTypesAreAsExpected() {
         assertTrue(latLonType instanceof Type.Record);
-        assertEquals(fieldName("lat"), ((Type.Record) latLonType).value.get(0).name);
+        assertEquals(name("lat"), ((Type.Record) latLonType).value.get(0).name);
 
         assertTrue(locationType instanceof Type.Union);
-        assertEquals(fieldName("latlon"), ((Type.Union) locationType).value.get(1).name);
+        assertEquals(name("latlon"), ((Type.Union) locationType).value.get(1).name);
 
         assertTrue(stringToIntType instanceof Type.Function);
         assertEquals(string(), ((Type.Function) stringToIntType).value.domain);

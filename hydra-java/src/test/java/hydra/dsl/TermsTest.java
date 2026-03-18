@@ -7,8 +7,7 @@ import hydra.dsl.prims.Strings;
 import hydra.core.Name;
 import org.junit.jupiter.api.Test;
 
-import static hydra.dsl.Core.fieldName;
-import static hydra.dsl.Core.name;
+import static hydra.dsl.Terms.name;
 import static hydra.dsl.Terms.annot;
 import static hydra.dsl.Terms.apply;
 import static hydra.dsl.Terms.field;
@@ -94,7 +93,7 @@ public class TermsTest {
 
         assertTrue(bayAreaLocation instanceof Term.Union);
         assertEquals(name("Location"), ((Term.Union) bayAreaLocation).value.typeName);
-        assertEquals(fieldName("latlon"), ((Term.Union) bayAreaLocation).value.field.name);
+        assertEquals(name("latlon"), ((Term.Union) bayAreaLocation).value.field.name);
 
         assertTrue(Strings.length() instanceof Term.Function);
         assertTrue(((Term.Function) Strings.length()).value instanceof Function.Primitive);
@@ -113,7 +112,7 @@ public class TermsTest {
         assertEquals(name("LatLon"),
                 ((Elimination.Record) ((Function.Elimination) ((Term.Function) longitude).value).value)
                         .value.typeName);
-        assertEquals(fieldName("lon"),
+        assertEquals(name("lon"),
                 ((Elimination.Record) ((Function.Elimination) ((Term.Function) longitude).value).value)
                         .value.field);
 

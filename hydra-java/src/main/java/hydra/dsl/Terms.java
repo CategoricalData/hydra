@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static hydra.dsl.Core.name;
 import static hydra.dsl.Literals.uint64;
 
 /**
@@ -46,6 +45,16 @@ import static hydra.dsl.Literals.uint64;
  */
 public interface Terms {
     String IGNORED_VARIABLE = "_";
+
+    /**
+     * Create a Name from a string.
+     *
+     * @param name the string name
+     * @return a Name instance
+     */
+    static Name name(final String name) {
+        return new Name(name);
+    }
 
     // ===== Term annotations =====
 
