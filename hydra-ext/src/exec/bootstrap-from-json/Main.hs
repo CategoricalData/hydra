@@ -86,6 +86,7 @@ data Options = Options
   { optTarget          :: String
   , optOutput          :: Maybe FilePath
   , optIncludeCoders   :: Bool
+  , optIncludeDsls     :: Bool
   , optIncludeTests    :: Bool
   , optIncludeGenTests :: Bool
   , optKernelOnly      :: Bool
@@ -100,6 +101,7 @@ defaultOptions = Options
   { optTarget          = ""
   , optOutput          = Nothing
   , optIncludeCoders   = False
+  , optIncludeDsls     = False
   , optIncludeTests    = False
   , optIncludeGenTests = False
   , optKernelOnly      = False
@@ -118,6 +120,7 @@ parseArgs = go defaultOptions
     go opts ("--target" : t : rest) = go (opts { optTarget = t }) rest
     go opts ("--output" : o : rest) = go (opts { optOutput = Just o }) rest
     go opts ("--include-coders" : rest) = go (opts { optIncludeCoders = True }) rest
+    go opts ("--include-dsls" : rest) = go (opts { optIncludeDsls = True }) rest
     go opts ("--include-tests" : rest) = go (opts { optIncludeTests = True }) rest
     go opts ("--include-gentests" : rest) = go (opts { optIncludeGenTests = True }) rest
     go opts ("--kernel-only" : rest) = go (opts { optKernelOnly = True }) rest
@@ -135,6 +138,7 @@ usage = unlines
   , "Options:"
   , "  --output <dir>         Output base directory"
   , "  --include-coders       Also generate ext coder modules (Java/Python coders)"
+  , "  --include-dsls         Also generate DSL modules"
   , "  --include-tests        Also generate kernel test modules"
   , "  --include-gentests     Also generate generation tests"
   , "  --kernel-only          Only generate kernel modules (exclude hydra.ext.*)"
@@ -185,6 +189,7 @@ main = do
   putStrLn $ "  Target:            " ++ targetCap
   putStrLn $ "  Output:            " ++ outBase
   putStrLn $ "  Include coders:    " ++ show (optIncludeCoders opts)
+  putStrLn $ "  Include DSLs:      " ++ show (optIncludeDsls opts)
   putStrLn $ "  Include tests:     " ++ show (optIncludeTests opts)
   putStrLn $ "  Include gen tests: " ++ show (optIncludeGenTests opts)
   putStrLn ""
@@ -222,8 +227,22 @@ main = do
       putStrLn ""
       return []
 
+  -- Step 2b: Optionally load DSL modules from kernel JSON
+  dslMods <- if optIncludeDsls opts
+    then do
+      putStrLn "Step 2b: Loading DSL modules from kernel JSON..."
+      dslNamespaces <- readManifestField kernelJsonDir "dslModules"
+      loadStart3 <- getCurrentTime
+      mods <- loadModulesFromJson False kernelJsonDir kernelModules dslNamespaces
+      loadEnd3 <- getCurrentTime
+      putStrLn $ "  Loaded " ++ show (length mods) ++ " DSL modules."
+      putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd3 loadStart3)
+      putStrLn ""
+      return mods
+    else return []
+
   -- Apply filters
-  let allMods = mainMods ++ coderMods
+  let allMods = mainMods ++ coderMods ++ dslMods
   let filtered1 = if optKernelOnly opts
         then Prelude.filter (\m -> let ns = unNamespace (moduleNamespace m)
               in not (isPrefixOf "hydra.ext." ns) && not (isPrefixOf "hydra.json.yaml." ns)) allMods

@@ -1,7 +1,7 @@
 module Main where
 
-import Hydra.Generation (writeModulesJson)
-import Hydra.Sources.All (mainModules)
+import Hydra.Generation (writeModulesJson, writeDslJson)
+import Hydra.Sources.All (mainModules, kernelTypesModules)
 import Hydra.Sources.Eval.Lib.All (evalLibModules)
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
@@ -22,7 +22,14 @@ main = do
                     putStrLn $ "Error: " ++ show (e :: SomeException)
                     return False)
 
-  if result
+  putStrLn ""
+  putStrLn "Generating DSL modules to JSON..."
+  dslResult <- catch (writeDslJson outputDir mainModules kernelTypesModules >> return True)
+                     (\e -> do
+                       putStrLn $ "Error generating DSL JSON: " ++ show (e :: SomeException)
+                       return False)
+
+  if result && dslResult
     then do
       putStrLn ""
       putStrLn "=== Done! ==="
