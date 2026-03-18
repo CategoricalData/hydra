@@ -14,25 +14,28 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-sourceContext :: (Phantoms.TTerm String -> Phantoms.TTerm SourceContext.SourceContext)
-sourceContext fileName = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.ext.protobuf.sourceContext.SourceContext"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "fileName"),
-      Core.fieldTerm = (Phantoms.unTTerm fileName)}]})))
+sourceContext :: Phantoms.TTerm String -> Phantoms.TTerm SourceContext.SourceContext
+sourceContext fileName =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.protobuf.sourceContext.SourceContext"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "fileName"),
+          Core.fieldTerm = (Phantoms.unTTerm fileName)}]}))
 
-sourceContextFileName :: (Phantoms.TTerm SourceContext.SourceContext -> Phantoms.TTerm String)
-sourceContextFileName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
-  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-    Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.sourceContext.SourceContext"),
-    Core.projectionField = (Core.Name "fileName")})))),
-  Core.applicationArgument = (Phantoms.unTTerm x)})))
+sourceContextFileName :: Phantoms.TTerm SourceContext.SourceContext -> Phantoms.TTerm String
+sourceContextFileName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.ext.protobuf.sourceContext.SourceContext"),
+        Core.projectionField = (Core.Name "fileName")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-sourceContextWithFileName :: (Phantoms.TTerm SourceContext.SourceContext -> Phantoms.TTerm String -> Phantoms.TTerm SourceContext.SourceContext)
-sourceContextWithFileName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.ext.protobuf.sourceContext.SourceContext"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "fileName"),
-      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+sourceContextWithFileName :: Phantoms.TTerm SourceContext.SourceContext -> Phantoms.TTerm String -> Phantoms.TTerm SourceContext.SourceContext
+sourceContextWithFileName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.ext.protobuf.sourceContext.SourceContext"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "fileName"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))

@@ -12,13 +12,13 @@ public class TemporalDurationFunctionFeatures implements Serializable, Comparabl
 
   public static final hydra.core.Name DURATION = new hydra.core.Name("duration");
 
-  public static final hydra.core.Name DURATION_BETWEEN = new hydra.core.Name("duration.between");
+  public static final hydra.core.Name DURATION_BETWEEN = new hydra.core.Name("durationBetween");
 
-  public static final hydra.core.Name DURATION_IN_DAYS = new hydra.core.Name("duration.inDays");
+  public static final hydra.core.Name DURATION_IN_DAYS = new hydra.core.Name("durationInDays");
 
-  public static final hydra.core.Name DURATION_IN_MONTHS = new hydra.core.Name("duration.inMonths");
+  public static final hydra.core.Name DURATION_IN_MONTHS = new hydra.core.Name("durationInMonths");
 
-  public static final hydra.core.Name DURATION_IN_SECONDS = new hydra.core.Name("duration.inSeconds");
+  public static final hydra.core.Name DURATION_IN_SECONDS = new hydra.core.Name("durationInSeconds");
 
   /**
    * The duration() function. Constructs a DURATION value.
@@ -28,29 +28,29 @@ public class TemporalDurationFunctionFeatures implements Serializable, Comparabl
   /**
    * The duration.between() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in logical units.
    */
-  public final Boolean duration_between;
+  public final Boolean durationBetween;
 
   /**
    * The duration.inDays() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in days.
    */
-  public final Boolean duration_inDays;
+  public final Boolean durationInDays;
 
   /**
    * The duration.inMonths() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in months.
    */
-  public final Boolean duration_inMonths;
+  public final Boolean durationInMonths;
 
   /**
    * The duration.inSeconds() function. Computes the DURATION between the from instant (inclusive) and the to instant (exclusive) in seconds.
    */
-  public final Boolean duration_inSeconds;
+  public final Boolean durationInSeconds;
 
-  public TemporalDurationFunctionFeatures (Boolean duration, Boolean duration_between, Boolean duration_inDays, Boolean duration_inMonths, Boolean duration_inSeconds) {
+  public TemporalDurationFunctionFeatures (Boolean duration, Boolean durationBetween, Boolean durationInDays, Boolean durationInMonths, Boolean durationInSeconds) {
     this.duration = duration;
-    this.duration_between = duration_between;
-    this.duration_inDays = duration_inDays;
-    this.duration_inMonths = duration_inMonths;
-    this.duration_inSeconds = duration_inSeconds;
+    this.durationBetween = durationBetween;
+    this.durationInDays = durationInDays;
+    this.durationInMonths = durationInMonths;
+    this.durationInSeconds = durationInSeconds;
   }
 
   @Override
@@ -62,19 +62,19 @@ public class TemporalDurationFunctionFeatures implements Serializable, Comparabl
     return java.util.Objects.equals(
       this.duration,
       o.duration) && java.util.Objects.equals(
-      this.duration_between,
-      o.duration_between) && java.util.Objects.equals(
-      this.duration_inDays,
-      o.duration_inDays) && java.util.Objects.equals(
-      this.duration_inMonths,
-      o.duration_inMonths) && java.util.Objects.equals(
-      this.duration_inSeconds,
-      o.duration_inSeconds);
+      this.durationBetween,
+      o.durationBetween) && java.util.Objects.equals(
+      this.durationInDays,
+      o.durationInDays) && java.util.Objects.equals(
+      this.durationInMonths,
+      o.durationInMonths) && java.util.Objects.equals(
+      this.durationInSeconds,
+      o.durationInSeconds);
   }
 
   @Override
   public int hashCode() {
-    return 2 * java.util.Objects.hashCode(duration) + 3 * java.util.Objects.hashCode(duration_between) + 5 * java.util.Objects.hashCode(duration_inDays) + 7 * java.util.Objects.hashCode(duration_inMonths) + 11 * java.util.Objects.hashCode(duration_inSeconds);
+    return 2 * java.util.Objects.hashCode(duration) + 3 * java.util.Objects.hashCode(durationBetween) + 5 * java.util.Objects.hashCode(durationInDays) + 7 * java.util.Objects.hashCode(durationInMonths) + 11 * java.util.Objects.hashCode(durationInSeconds);
   }
 
   @Override
@@ -85,38 +85,38 @@ public class TemporalDurationFunctionFeatures implements Serializable, Comparabl
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) duration_between).compareTo(other.duration_between);
+    cmp = ((Comparable) durationBetween).compareTo(other.durationBetween);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) duration_inDays).compareTo(other.duration_inDays);
+    cmp = ((Comparable) durationInDays).compareTo(other.durationInDays);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) duration_inMonths).compareTo(other.duration_inMonths);
+    cmp = ((Comparable) durationInMonths).compareTo(other.durationInMonths);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) duration_inSeconds).compareTo(other.duration_inSeconds);
+    return ((Comparable) durationInSeconds).compareTo(other.durationInSeconds);
   }
 
   public TemporalDurationFunctionFeatures withDuration(Boolean duration) {
-    return new TemporalDurationFunctionFeatures(duration, duration_between, duration_inDays, duration_inMonths, duration_inSeconds);
+    return new TemporalDurationFunctionFeatures(duration, durationBetween, durationInDays, durationInMonths, durationInSeconds);
   }
 
-  public TemporalDurationFunctionFeatures withDuration_between(Boolean duration_between) {
-    return new TemporalDurationFunctionFeatures(duration, duration_between, duration_inDays, duration_inMonths, duration_inSeconds);
+  public TemporalDurationFunctionFeatures withDurationBetween(Boolean durationBetween) {
+    return new TemporalDurationFunctionFeatures(duration, durationBetween, durationInDays, durationInMonths, durationInSeconds);
   }
 
-  public TemporalDurationFunctionFeatures withDuration_inDays(Boolean duration_inDays) {
-    return new TemporalDurationFunctionFeatures(duration, duration_between, duration_inDays, duration_inMonths, duration_inSeconds);
+  public TemporalDurationFunctionFeatures withDurationInDays(Boolean durationInDays) {
+    return new TemporalDurationFunctionFeatures(duration, durationBetween, durationInDays, durationInMonths, durationInSeconds);
   }
 
-  public TemporalDurationFunctionFeatures withDuration_inMonths(Boolean duration_inMonths) {
-    return new TemporalDurationFunctionFeatures(duration, duration_between, duration_inDays, duration_inMonths, duration_inSeconds);
+  public TemporalDurationFunctionFeatures withDurationInMonths(Boolean durationInMonths) {
+    return new TemporalDurationFunctionFeatures(duration, durationBetween, durationInDays, durationInMonths, durationInSeconds);
   }
 
-  public TemporalDurationFunctionFeatures withDuration_inSeconds(Boolean duration_inSeconds) {
-    return new TemporalDurationFunctionFeatures(duration, duration_between, duration_inDays, duration_inMonths, duration_inSeconds);
+  public TemporalDurationFunctionFeatures withDurationInSeconds(Boolean durationInSeconds) {
+    return new TemporalDurationFunctionFeatures(duration, durationBetween, durationInDays, durationInMonths, durationInSeconds);
   }
 }

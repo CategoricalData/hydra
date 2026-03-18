@@ -14,16 +14,18 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-structuralTypeRefEither :: (Phantoms.TTerm (Core.Type, Core.Type) -> Phantoms.TTerm Environment.StructuralTypeRef)
-structuralTypeRefEither x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
-  Core.injectionTypeName = (Core.Name "hydra.ext.protobuf.environment.StructuralTypeRef"),
-  Core.injectionField = Core.Field {
-    Core.fieldName = (Core.Name "either"),
-    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+structuralTypeRefEither :: Phantoms.TTerm (Core.Type, Core.Type) -> Phantoms.TTerm Environment.StructuralTypeRef
+structuralTypeRefEither x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.protobuf.environment.StructuralTypeRef"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "either"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-structuralTypeRefPair :: (Phantoms.TTerm (Core.Type, Core.Type) -> Phantoms.TTerm Environment.StructuralTypeRef)
-structuralTypeRefPair x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
-  Core.injectionTypeName = (Core.Name "hydra.ext.protobuf.environment.StructuralTypeRef"),
-  Core.injectionField = Core.Field {
-    Core.fieldName = (Core.Name "pair"),
-    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+structuralTypeRefPair :: Phantoms.TTerm (Core.Type, Core.Type) -> Phantoms.TTerm Environment.StructuralTypeRef
+structuralTypeRefPair x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.ext.protobuf.environment.StructuralTypeRef"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "pair"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))

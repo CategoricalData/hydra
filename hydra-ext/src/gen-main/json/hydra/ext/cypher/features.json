@@ -4135,7 +4135,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "db.nameFromElementId"}},
+                                              "body": {"literal": {"string": "dbNameFromElementId"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -4237,7 +4237,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "genai.vector.encode"}},
+                                              "body": {"literal": {"string": "genaiVectorEncode"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -4337,7 +4337,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "graph.byElementId"}},
+                                              "body": {"literal": {"string": "graphByElementId"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -4391,7 +4391,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "graph.byName"}},
+                                              "body": {"literal": {"string": "graphByName"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -4445,7 +4445,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "graph.names"}},
+                                              "body": {"literal": {"string": "graphNames"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -4499,7 +4499,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "graph.propertiesByName"}},
+                                              "body": {"literal": {"string": "graphPropertiesByName"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -7794,7 +7794,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "point.distance"}},
+                                              "body": {"literal": {"string": "pointDistance"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -7902,7 +7902,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "point.withinBBox"}},
+                                              "body": {"literal": {"string": "pointWithinBBox"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9023,7 +9023,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "duration.between"}},
+                                              "body": {"literal": {"string": "durationBetween"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9077,7 +9077,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "duration.inDays"}},
+                                              "body": {"literal": {"string": "durationInDays"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9131,7 +9131,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "duration.inMonths"}},
+                                              "body": {"literal": {"string": "durationInMonths"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9185,7 +9185,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "duration.inSeconds"}},
+                                              "body": {"literal": {"string": "durationInSeconds"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9340,7 +9340,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "date.realtime"}},
+                                              "body": {"literal": {"string": "dateRealtime"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9394,7 +9394,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "date.statement"}},
+                                              "body": {"literal": {"string": "dateStatement"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9448,7 +9448,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "date.transaction"}},
+                                              "body": {"literal": {"string": "dateTransaction"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9502,7 +9502,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "date.truncate"}},
+                                              "body": {"literal": {"string": "dateTruncate"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9610,7 +9610,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "datetime.fromepoch"}},
+                                              "body": {"literal": {"string": "datetimeFromepoch"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9664,7 +9664,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "datetime.fromepochmillis"}},
+                                              "body": {"literal": {"string": "datetimeFromepochmillis"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9718,7 +9718,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "datetime.realtime"}},
+                                              "body": {"literal": {"string": "datetimeRealtime"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9772,7 +9772,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "datetime.statement"}},
+                                              "body": {"literal": {"string": "datetimeStatement"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9826,7 +9826,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "datetime.transaction"}},
+                                              "body": {"literal": {"string": "datetimeTransaction"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9880,7 +9880,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "datetime.truncate"}},
+                                              "body": {"literal": {"string": "datetimeTruncate"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -9988,7 +9988,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "localdatetime.realtime"}},
+                                              "body": {"literal": {"string": "localdatetimeRealtime"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -10042,7 +10042,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "localdatetime.statement"}},
+                                              "body": {"literal": {"string": "localdatetimeStatement"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -10096,7 +10096,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "localdatetime.transaction"}},
+                                              "body": {"literal": {"string": "localdatetimeTransaction"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -10150,7 +10150,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "localdatetime.truncate"}},
+                                              "body": {"literal": {"string": "localdatetimeTruncate"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -10257,7 +10257,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "localtime.realtime"}},
+                                              "body": {"literal": {"string": "localtimeRealtime"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -10311,7 +10311,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "localtime.statement"}},
+                                              "body": {"literal": {"string": "localtimeStatement"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -10365,7 +10365,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "localtime.transaction"}},
+                                              "body": {"literal": {"string": "localtimeTransaction"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -10419,7 +10419,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "localtime.truncate"}},
+                                              "body": {"literal": {"string": "localtimeTruncate"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -10526,7 +10526,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "time.realtime"}},
+                                              "body": {"literal": {"string": "timeRealtime"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -10580,7 +10580,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "time.statement"}},
+                                              "body": {"literal": {"string": "timeStatement"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -10634,7 +10634,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "time.transaction"}},
+                                              "body": {"literal": {"string": "timeTransaction"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -10688,7 +10688,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "time.truncate"}},
+                                              "body": {"literal": {"string": "timeTruncate"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -11477,7 +11477,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "vector.similarity.cosine"}},
+                                              "body": {"literal": {"string": "vectorSimilarityCosine"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -11531,7 +11531,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "vector.similarity.euclidean"}},
+                                              "body": {"literal": {"string": "vectorSimilarityEuclidean"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",

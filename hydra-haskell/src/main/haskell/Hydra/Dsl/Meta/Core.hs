@@ -13,7 +13,7 @@ module Hydra.Dsl.Meta.Core (
 import Hydra.Kernel
 import Hydra.Dsl.AsTerm
 import Hydra.Dsl.Meta.Phantoms (nameLift, var, (~>))
-import Hydra.Dsl.Core hiding (binding, injection, rowType, typeVariable, wrappedType)
+import Hydra.Dsl.Core hiding (binding, injection, typeVariable)
 import qualified Hydra.Dsl.Core as Gen
 
 -- For helpers
@@ -34,14 +34,8 @@ binding n t ts = Gen.binding n (asTerm t) ts
 injection :: AsTerm t Name => t -> TTerm Field -> TTerm Injection
 injection n f = Gen.injection (asTerm n) f
 
-rowType :: AsTerm t Name => t -> TTerm [FieldType] -> TTerm RowType
-rowType n fs = Gen.rowType (asTerm n) fs
-
 typeVariable :: AsTerm t Name => t -> TTerm Type
 typeVariable n = Gen.typeVariable (asTerm n)
-
-wrappedType :: AsTerm t Name => t -> TTerm Type -> TTerm WrappedType
-wrappedType n t = Gen.wrappedType (asTerm n) t
 
 
 -- | Non-standard helpers (used in kernel source modules)

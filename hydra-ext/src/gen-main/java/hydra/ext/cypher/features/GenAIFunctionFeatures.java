@@ -10,15 +10,15 @@ import java.io.Serializable;
 public class GenAIFunctionFeatures implements Serializable, Comparable<GenAIFunctionFeatures> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.cypher.features.GenAIFunctionFeatures");
 
-  public static final hydra.core.Name GENAI_VECTOR_ENCODE = new hydra.core.Name("genai.vector.encode");
+  public static final hydra.core.Name GENAI_VECTOR_ENCODE = new hydra.core.Name("genaiVectorEncode");
 
   /**
    * The genai.vector.encode() function. Encode a given resource as a vector using the named provider. Introduced in 5.17.
    */
-  public final Boolean genai_vector_encode;
+  public final Boolean genaiVectorEncode;
 
-  public GenAIFunctionFeatures (Boolean genai_vector_encode) {
-    this.genai_vector_encode = genai_vector_encode;
+  public GenAIFunctionFeatures (Boolean genaiVectorEncode) {
+    this.genaiVectorEncode = genaiVectorEncode;
   }
 
   @Override
@@ -28,18 +28,18 @@ public class GenAIFunctionFeatures implements Serializable, Comparable<GenAIFunc
     }
     GenAIFunctionFeatures o = (GenAIFunctionFeatures) other;
     return java.util.Objects.equals(
-      this.genai_vector_encode,
-      o.genai_vector_encode);
+      this.genaiVectorEncode,
+      o.genaiVectorEncode);
   }
 
   @Override
   public int hashCode() {
-    return 2 * java.util.Objects.hashCode(genai_vector_encode);
+    return 2 * java.util.Objects.hashCode(genaiVectorEncode);
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(GenAIFunctionFeatures other) {
-    return ((Comparable) genai_vector_encode).compareTo(other.genai_vector_encode);
+    return ((Comparable) genaiVectorEncode).compareTo(other.genaiVectorEncode);
   }
 }
