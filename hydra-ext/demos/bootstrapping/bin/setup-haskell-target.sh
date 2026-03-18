@@ -61,6 +61,22 @@ for src_dir in Decode Encode; do
         echo "    Copied Hydra/Sources/$src_dir from baseline"
     fi
 done
+# Copy generated DSL modules (Hydra.Dsl.Core, Hydra.Dsl.Graph, etc.) imported by
+# hand-written Hydra.Dsl.Meta.* modules
+if [ -d "$HS_BASELINE/Hydra/Dsl" ]; then
+    mkdir -p "$HS_GEN/Hydra"
+    rm -rf "$HS_GEN/Hydra/Dsl"
+    cp -r "$HS_BASELINE/Hydra/Dsl" "$HS_GEN/Hydra/"
+    echo "    Copied Hydra/Dsl from baseline"
+fi
+# Copy Hydra.Dsls (DSL source generator module). It is generated separately from
+# mainModules due to stack overflow issues, so it won't be produced by the bootstrap
+# code generator. It is imported by hand-written Generation.hs.
+if [ -f "$HS_BASELINE/Hydra/Dsls.hs" ]; then
+    mkdir -p "$HS_GEN/Hydra"
+    cp "$HS_BASELINE/Hydra/Dsls.hs" "$HS_GEN/Hydra/"
+    echo "    Copied Hydra/Dsls.hs from baseline"
+fi
 
 # Kernel test suite runner and its dependencies
 echo "  Copying kernel test suite runner..."
