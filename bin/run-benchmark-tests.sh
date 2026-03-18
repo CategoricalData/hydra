@@ -181,6 +181,23 @@ run_lang() {
             ;;
     esac
     echo "  -> $outfile"
+
+    # Inject metadata into benchmark JSON if not already present (Lisp test runners don't include it)
+    if [ -f "$outfile" ] && ! grep -q '"metadata"' "$outfile" 2>/dev/null; then
+        local ts branch commit msg
+        ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        branch=$(cd "$REPO_ROOT" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+        commit=$(cd "$REPO_ROOT" && git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+        msg=$(cd "$REPO_ROOT" && git log -1 --format=%s 2>/dev/null || echo "")
+        python3 -c "
+import json, sys
+with open('$outfile') as f: d = json.load(f)
+d['metadata'] = {'timestamp': '$ts', 'language': '$lang', 'branch': '$branch', 'commit': '$commit', 'commitMessage': '''$msg'''}
+# Rewrite with metadata first
+out = {'metadata': d['metadata'], 'groups': d['groups'], 'summary': d['summary']}
+with open('$outfile', 'w') as f: json.dump(out, f, indent=2)
+"
+    fi
     echo
 }
 
