@@ -5,7 +5,7 @@
 module Hydra.Test.Serialization where
 
 import qualified Hydra.Ast as Ast
-import qualified Hydra.Ext.Haskell.Operators as Operators
+import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -14,6 +14,24 @@ import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+
+arrowOp :: Ast.Op
+arrowOp = Serialization.op "->" (Math.negate 1) Ast.AssociativityRight
+
+gtOp :: Ast.Op
+gtOp = Serialization.op ">" 4 Ast.AssociativityNone
+
+plusOp :: Ast.Op
+plusOp = Serialization.op "+" 6 Ast.AssociativityBoth
+
+multOp :: Ast.Op
+multOp = Serialization.op "*" 7 Ast.AssociativityBoth
+
+lambdaOp :: Ast.Op
+lambdaOp = Serialization.op "->" (Math.negate 1) Ast.AssociativityRight
+
+caseOp :: Ast.Op
+caseOp = Serialization.op "->" 0 Ast.AssociativityNone
 
 -- | Test cases for AST serialization
 allTests :: Testing.TestGroup
@@ -30,7 +48,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "right-associative operator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseSerialization (Testing.SerializationTestCase {
-                Testing.serializationTestCaseInput = (Serialization.ifx Operators.arrowOp (Serialization.ifx Operators.arrowOp (Serialization.cst "a") (Serialization.cst "b")) (Serialization.ifx Operators.arrowOp (Serialization.cst "c") (Serialization.cst "d"))),
+                Testing.serializationTestCaseInput = (Serialization.ifx arrowOp (Serialization.ifx arrowOp (Serialization.cst "a") (Serialization.cst "b")) (Serialization.ifx arrowOp (Serialization.cst "c") (Serialization.cst "d"))),
                 Testing.serializationTestCaseOutput = "(a -> b) -> c -> d"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
@@ -50,9 +68,9 @@ allTests =
                   Ast.opPrecedence = (Ast.Precedence 0),
                   Ast.opAssociativity = Ast.AssociativityNone}) (Serialization.spaceSep [
                   Serialization.cst "case",
-                  (Serialization.ifx Operators.gtOp (Serialization.cst "x") (Serialization.num 42))]) (Serialization.newlineSep [
-                  Serialization.ifx Operators.caseOp (Serialization.cst "False") (Serialization.cst "Big"),
-                  (Serialization.ifx Operators.caseOp (Serialization.cst "True") (Serialization.cst "Small"))])),
+                  (Serialization.ifx gtOp (Serialization.cst "x") (Serialization.num 42))]) (Serialization.newlineSep [
+                  Serialization.ifx caseOp (Serialization.cst "False") (Serialization.cst "Big"),
+                  (Serialization.ifx caseOp (Serialization.cst "True") (Serialization.cst "Small"))])),
                 Testing.serializationTestCaseOutput = "case x > 42 of\n  False -> Big\n  True -> Small"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
@@ -67,8 +85,8 @@ allTests =
                   Ast.opPrecedence = (Ast.Precedence 0),
                   Ast.opAssociativity = Ast.AssociativityNone}) (Serialization.spaceSep [
                   Serialization.cst "case",
-                  (Serialization.ifx Operators.gtOp (Serialization.cst "x") (Serialization.num 42))]) (Serialization.newlineSep [
-                  Serialization.ifx Operators.caseOp (Serialization.cst "True") (Serialization.ifx (Ast.Op {
+                  (Serialization.ifx gtOp (Serialization.cst "x") (Serialization.num 42))]) (Serialization.newlineSep [
+                  Serialization.ifx caseOp (Serialization.cst "True") (Serialization.ifx (Ast.Op {
                     Ast.opSymbol = (Ast.Symbol "of"),
                     Ast.opPadding = Ast.Padding {
                       Ast.paddingLeft = Ast.WsSpace,
@@ -76,10 +94,10 @@ allTests =
                     Ast.opPrecedence = (Ast.Precedence 0),
                     Ast.opAssociativity = Ast.AssociativityNone}) (Serialization.spaceSep [
                     Serialization.cst "case",
-                    (Serialization.ifx Operators.gtOp (Serialization.cst "x") (Serialization.num 100))]) (Serialization.newlineSep [
-                    Serialization.ifx Operators.caseOp (Serialization.cst "True") (Serialization.cst "ReallyBig"),
-                    (Serialization.ifx Operators.caseOp (Serialization.cst "False") (Serialization.cst "Big"))])),
-                  (Serialization.ifx Operators.caseOp (Serialization.cst "False") (Serialization.cst "Small"))])),
+                    (Serialization.ifx gtOp (Serialization.cst "x") (Serialization.num 100))]) (Serialization.newlineSep [
+                    Serialization.ifx caseOp (Serialization.cst "True") (Serialization.cst "ReallyBig"),
+                    (Serialization.ifx caseOp (Serialization.cst "False") (Serialization.cst "Big"))])),
+                  (Serialization.ifx caseOp (Serialization.cst "False") (Serialization.cst "Small"))])),
                 Testing.serializationTestCaseOutput = "case x > 42 of\n  True -> case x > 100 of\n    True -> ReallyBig\n    False -> Big\n  False -> Small"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
@@ -91,7 +109,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "simple lambda",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseSerialization (Testing.SerializationTestCase {
-                Testing.serializationTestCaseInput = (Serialization.ifx Operators.lambdaOp (Serialization.cst "\\x y") (Serialization.ifx Operators.plusOp (Serialization.cst "x") (Serialization.cst "y"))),
+                Testing.serializationTestCaseInput = (Serialization.ifx lambdaOp (Serialization.cst "\\x y") (Serialization.ifx plusOp (Serialization.cst "x") (Serialization.cst "y"))),
                 Testing.serializationTestCaseOutput = "\\x y -> x + y"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
@@ -134,7 +152,7 @@ allTests =
                 Testing.serializationTestCaseInput = (Serialization.bracketList Serialization.inlineStyle [
                   Serialization.bracketList Serialization.inlineStyle [
                     Serialization.num 1,
-                    (Serialization.ifx Operators.multOp (Serialization.ifx Operators.plusOp (Serialization.num 2) (Serialization.num 3)) (Serialization.ifx Operators.plusOp (Serialization.num 1) (Serialization.num 10)))],
+                    (Serialization.ifx multOp (Serialization.ifx plusOp (Serialization.num 2) (Serialization.num 3)) (Serialization.ifx plusOp (Serialization.num 1) (Serialization.num 10)))],
                   (Serialization.num 2)]),
                 Testing.serializationTestCaseOutput = "[[1, (2 + 3) * (1 + 10)], 2]"})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -147,28 +165,28 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "operators with different precedence - no parens needed",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseSerialization (Testing.SerializationTestCase {
-                Testing.serializationTestCaseInput = (Serialization.ifx Operators.plusOp (Serialization.ifx Operators.multOp (Serialization.num 2) (Serialization.num 3)) (Serialization.ifx Operators.multOp (Serialization.num 1) (Serialization.num 10))),
+                Testing.serializationTestCaseInput = (Serialization.ifx plusOp (Serialization.ifx multOp (Serialization.num 2) (Serialization.num 3)) (Serialization.ifx multOp (Serialization.num 1) (Serialization.num 10))),
                 Testing.serializationTestCaseOutput = "2 * 3 + 1 * 10"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "operators with different precedence - parens needed",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseSerialization (Testing.SerializationTestCase {
-                Testing.serializationTestCaseInput = (Serialization.ifx Operators.multOp (Serialization.ifx Operators.plusOp (Serialization.num 2) (Serialization.num 3)) (Serialization.ifx Operators.plusOp (Serialization.num 1) (Serialization.num 10))),
+                Testing.serializationTestCaseInput = (Serialization.ifx multOp (Serialization.ifx plusOp (Serialization.num 2) (Serialization.num 3)) (Serialization.ifx plusOp (Serialization.num 1) (Serialization.num 10))),
                 Testing.serializationTestCaseOutput = "(2 + 3) * (1 + 10)"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "associative operator left nesting",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseSerialization (Testing.SerializationTestCase {
-                Testing.serializationTestCaseInput = (Serialization.ifx Operators.multOp (Serialization.cst "x") (Serialization.ifx Operators.multOp (Serialization.cst "y") (Serialization.cst "z"))),
+                Testing.serializationTestCaseInput = (Serialization.ifx multOp (Serialization.cst "x") (Serialization.ifx multOp (Serialization.cst "y") (Serialization.cst "z"))),
                 Testing.serializationTestCaseOutput = "x * y * z"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "associative operator right nesting",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseSerialization (Testing.SerializationTestCase {
-                Testing.serializationTestCaseInput = (Serialization.ifx Operators.multOp (Serialization.ifx Operators.multOp (Serialization.cst "x") (Serialization.cst "y")) (Serialization.cst "z")),
+                Testing.serializationTestCaseInput = (Serialization.ifx multOp (Serialization.ifx multOp (Serialization.cst "x") (Serialization.cst "y")) (Serialization.cst "z")),
                 Testing.serializationTestCaseOutput = "x * y * z"})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
