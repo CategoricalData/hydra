@@ -159,6 +159,14 @@ Writing such a coder is one of the most challenging development tasks in Hydra, 
 * The coder only needs to be unidirectional; for programming language coders, we are usually not interested in mapping native programs in the target language back into Hydra Core.
 * There will usually be a helper object, e.g. called "namespaces" or "aliases", which is passed into each function that deals with qualified names.
 * The greater the semantic distance between Hydra Core and the target language, the larger and more complex the coder will need to be. For example, Haskell is very close to Hydra Core, so the Haskell coder is about 600 lines of code. Java is more remote, and requires more than 1500 lines of code.
+* When targeting a language family with shared syntax but different conventions, consider a single
+  coder parameterized by dialect rather than separate coders. The dialect parameter controls naming
+  conventions (e.g. `car` vs `first`), constructor syntax (e.g. `make-` vs `->`), module
+  declarations, and other dialect-specific details, while the core type/term mapping remains shared.
+  This approach was used for the four Lisp dialects (Clojure, Scheme, Common Lisp, Emacs Lisp).
+* Strict/eager target languages expose ordering issues that lazy Haskell hides. Watch for: `let`
+  bindings referencing variables not yet bound, recursive `let` causing infinite loops, and
+  `if-else` evaluating both branches.
 
 ### Where to place your coder
 
@@ -274,6 +282,10 @@ At a bare minimum, all of the primitives which are referenced in the Hydra kerne
 **Important**: Simply having implementation files is not enough — each primitive must also be *registered* in a central registry (e.g. `Libraries.java` in Java) so it can be looked up by name at runtime.
 Periodically compare your registry against the authoritative list in [Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs) to catch any missing registrations.
 
+When auto-detecting type variables from primitive type schemes, be aware that type variable names
+containing dots (e.g. `hydra.util.Comparison`) are nominal type references, not universally
+quantified type parameters. Exclude qualified names to avoid incorrect generalization.
+
 ### Primitive infrastructure
 
 In addition to the implementations themselves, you need supporting infrastructure:
@@ -327,6 +339,11 @@ The common test suite gives rise to two kinds of tests:
 
 In other words, kernel tests exercise Hydra-as-interpreter, while generation tests exercise
 Hydra-as-compiler. Both are generated to `src/gen-test/` and both need a hand-written test runner.
+
+Test runners should produce structured benchmark JSON with per-group timing data (not just aggregate
+pass/fail counts) so results appear in the benchmark dashboard. Each group needs `path`,
+`totalTimeMs`, `passed`, `failed`, `skipped`, and `subgroups`. The JSON must include a `metadata`
+object with `language`, `commit`, `branch`, `timestamp`, and `commitMessage`.
 
 **Passing all test cases in the common test suite (both kernel and generation tests) is the criterion
 for a complete Hydra implementation.**
