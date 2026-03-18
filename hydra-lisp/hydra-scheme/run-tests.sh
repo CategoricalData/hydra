@@ -15,7 +15,7 @@ cd "$SCRIPT_DIR"
 
 # Detect Scheme implementation
 if command -v guile > /dev/null 2>&1; then
-    SCHEME_CMD="guile --fresh-auto-compile -L src/gen-main/scheme -L src/gen-test/scheme -L src/main/scheme -s run-tests.scm"
+    SCHEME_CMD="guile -L src/gen-main/scheme -L src/gen-test/scheme -L src/main/scheme -s run-tests.scm"
 elif command -v chibi-scheme > /dev/null 2>&1; then
     SCHEME_CMD="chibi-scheme -I src/gen-main/scheme -I src/gen-test/scheme -I src/main/scheme run-tests.scm"
 else
@@ -25,9 +25,9 @@ fi
 
 START_SEC=$(python3 -c 'import time; print(time.monotonic())')
 
-# Run tests, capturing output while displaying it
+# Run tests, capturing stdout while letting stderr (Guile compilation messages) pass through
 EXIT_CODE=0
-OUTPUT=$($SCHEME_CMD 2>&1 | tee /dev/stderr) || EXIT_CODE=$?
+OUTPUT=$($SCHEME_CMD 2>/dev/null | tee /dev/stderr) || EXIT_CODE=$?
 
 END_SEC=$(python3 -c 'import time; print(time.monotonic())')
 
