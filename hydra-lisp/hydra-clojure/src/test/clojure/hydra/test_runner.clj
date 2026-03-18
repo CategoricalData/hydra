@@ -1349,4 +1349,4 @@
     (println (str "Pass: " pass))
     (println (str "Fail: " fail))
     (println (str "Skip: " skip))
-    (when (> fail 0) (System/exit 1))))
+    (System/exit (if (> fail 0) 1 0))))
