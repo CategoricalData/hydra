@@ -402,14 +402,22 @@ project (ref TestTypes.testTypePersonNameDef) (Core.name "firstName")
 project (Core.name "Person") (Core.name "firstName")
 ```
 
-### 2. Consistent Naming
+### 2. Keep the Common Test Suite Language-Agnostic
+
+The common test suite (`hydra.test.*`) must not depend on any `hydra.ext.*` module.
+Every test runner — Haskell, Java, Python, and future implementations — must be able
+to run the common tests without shipping language-specific extension modules. If a
+test needs data values that happen to exist in an extension module (e.g., operator
+definitions), define them locally in the test module instead of importing them.
+
+### 3. Consistent Naming
 
 - Test modules: `Hydra.Sources.Test.CategoryName`
 - Root binding: Always `allTestsDef`
 - Helper function: Always `define`
 - Namespace: `hydra.test.categoryName` (camelCase)
 
-### 3. Use Meta-Level Functions for Structure
+### 4. Use Meta-Level Functions for Structure
 
 When constructing test groups, always use the meta-level DSL:
 
@@ -421,7 +429,7 @@ Testing.testGroup (Phantoms.string "name") Phantoms.nothing (Phantoms.list subgr
 Testing.testGroup "name" nothing (list subgroups) (list [])  -- Wrong DSL level
 ```
 
-### 4. Document Your Tests
+### 5. Document Your Tests
 
 Add documentation to test groups:
 
@@ -432,7 +440,7 @@ allTestsDef = define "allTests" $
   Testing.testGroup (Phantoms.string "name") ...
 ```
 
-### 5. Organize by Functionality
+### 6. Organize by Functionality
 
 Group tests by the functionality they validate, not by implementation details:
 - ✓ Fundamentals, Algebraic Types, Nominal Types
