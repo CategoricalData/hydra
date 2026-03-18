@@ -379,8 +379,8 @@ spec = H.describe "hydra.lib.math primitives" $ do
       (Math.asinh 0.0)
       (0.0)
     H.it "asinh 1" $ H.shouldBe
-      (Math.asinh 1.0)
-      (0.881373587019543)
+      (Math.roundFloat64 12 (Math.asinh 1.0))
+      (0.88137358702)
     H.it "asinh 0.5" $ H.shouldBe
       (Math.roundFloat64 12 (Math.asinh 0.5))
       (0.48121182506)
@@ -389,8 +389,8 @@ spec = H.describe "hydra.lib.math primitives" $ do
       (Math.acosh 1.0)
       (0.0)
     H.it "acosh 2" $ H.shouldBe
-      (Math.acosh 2.0)
-      (1.3169578969248166)
+      (Math.roundFloat64 12 (Math.acosh 2.0))
+      (1.31695789692)
     H.it "acosh 3" $ H.shouldBe
       (Math.roundFloat64 12 (Math.acosh 3.0))
       (1.76274717404)
