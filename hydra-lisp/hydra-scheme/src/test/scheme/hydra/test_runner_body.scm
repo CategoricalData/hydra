@@ -1628,7 +1628,7 @@
                              (hydra_testing_test_group-subgroups group)))
            (case-results (map (lambda (tc) (run-test-case full tc))
                               (hydra_testing_test_group-cases group)))
-           (elapsed-ms (* 1000.0 (/ (- (current-jiffy) t0) jiffies-per-second)))
+           (elapsed-ms (* 1000.0 (/ (- (current-jiffy) t0) (jiffies-per-second))))
            (pass (+ (apply + (map car sub-results))
                     (apply + (map car case-results))))
            (fail (+ (apply + (map cadr sub-results))
