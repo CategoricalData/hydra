@@ -259,11 +259,19 @@ writeModulesJson doInfer basePath universeMods mods = do
   mods' <- if doInfer then inferModulesIO universeMods mods else return mods
   mapM_ (writeModuleJson basePath) mods'
 
+-- | Write DSL modules to JSON files.
+writeDslJson :: FilePath -> [Module] -> [Module] -> IO ()
+writeDslJson basePath universeModules typeModules = do
+    dslMods <- generateDslModules universeModules typeModules
+    writeModulesJson False basePath universeModules dslMods
+
 -- | Write a manifest.json listing module namespaces for kernelModules, mainModules, and testModules.
 -- This allows Java and Python hosts to load the correct set of modules without directory scanning.
 writeManifestJson :: FilePath -> IO ()
 writeManifestJson basePath = do
+    dslMods <- generateDslModules Sources.mainModules Sources.kernelTypesModules
     let jsonVal = Json.ValueObject $ M.fromList [
+            ("dslModules", namespacesJson dslMods),
             ("evalLibModules", namespacesJson EvalLib.evalLibModules),
             ("kernelModules", namespacesJson Sources.kernelModules),
             ("mainModules", namespacesJson Sources.mainModules),
