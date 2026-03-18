@@ -17,7 +17,7 @@ START_SEC=$(python3 -c 'import time; print(time.monotonic())')
 
 # Run tests, capturing output while displaying it
 EXIT_CODE=0
-OUTPUT=$(emacs --batch --load run-tests.el 2>&1 | tee /dev/stderr) || EXIT_CODE=$?
+OUTPUT=$(emacs --batch --load run-tests.el 2>/dev/null | tee /dev/stderr) || EXIT_CODE=$?
 
 END_SEC=$(python3 -c 'import time; print(time.monotonic())')
 

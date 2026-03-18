@@ -319,7 +319,9 @@
   "Load a generated Lisp file, skipping invalid directives.
    Uses multi-pass approach to handle forward references: tries each form,
    then retries failed ones up to 3 times (handles _NAME constants defined after
-   the types that use them, and other ordering dependencies)."
+   the types that use them, and other ordering dependencies).
+   Suppresses style-warnings from generated code (unused variables, etc.)."
+  (handler-bind ((style-warning #'muffle-warning))
   (with-open-file (in path :direction :input)
     (let ((*package* (find-package :cl-user))
           (*readtable* (copy-readtable))
@@ -351,7 +353,7 @@
                 (push form still-failed))))
           (setf failed-forms (nreverse still-failed))
           ;; Set function bindings for newly defined HYDRA_ variables
-          (hydra-set-function-bindings))))))
+          (hydra-set-function-bindings)))))))
 
 (defun collect-lisp-files (dir &optional prefix)
   "Collect all .lisp files from DIR recursively, returning relative paths."
