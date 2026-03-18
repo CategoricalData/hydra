@@ -1423,7 +1423,7 @@
                               (display "  JSON roundtrip term mismatch\n")
                               (display (string-append "  Expected: " (or (show-term tc-term) "(?)") "\n"))
                               (display (string-append "  Actual:   " (or (show-term decoded) "(?)") "\n"))
-                              (list 0 1 0)))))))))))))
+                              (list 0 1 0))))))))))))
 
 (define (run-json-roundtrip-test path tc)
   (guard (exn (#t
