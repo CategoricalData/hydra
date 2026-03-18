@@ -308,8 +308,10 @@
 (defun hydra-byte-compile-all ()
   "Byte-compile all hydra_* function values for ~20-90x speedup.
    For further performance, pre-compile .el files with native-compile
-   (see README)."
-  (let ((compiled 0) (skipped 0))
+   (see README).
+"
+  (let ((compiled 0) (skipped 0)
+        (byte-compile-warnings nil))
     (mapatoms
      (lambda (sym)
        (let ((name (symbol-name sym)))
