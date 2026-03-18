@@ -212,14 +212,48 @@ myFunction = TermFunction $ FunctionLambda $
 
 **When to use**: Rarely - only when you need direct access to the AST
 
+### 5. Generated DSL modules
+
+**Modules**: `Hydra.Dsl.Core`, `Hydra.Dsl.Coders`, `Hydra.Dsl.Ast`, etc.
+
+**Purpose**: Auto-generated phantom-typed constructors, accessors, and updaters for all Hydra types.
+These are produced by the `hydra.dsls` module from type definitions.
+
+**Example**:
+```haskell
+import qualified Hydra.Dsl.Core as Core
+
+-- Record constructor (all fields as TTerm arguments)
+myAnnotatedTerm :: TTerm AnnotatedTerm
+myAnnotatedTerm = Core.annotatedTerm myBody myAnnotation
+
+-- Field accessor
+getBody :: TTerm AnnotatedTerm -> TTerm Term
+getBody = Core.annotatedTermBody
+
+-- Field updater (original, newValue -> updated)
+withNewBody :: TTerm AnnotatedTerm -> TTerm Term -> TTerm AnnotatedTerm
+withNewBody = Core.annotatedTermWithBody
+```
+
+**When to use**: When working with Hydra types in the phantom-typed DSL. These modules
+provide the standard constructors and accessors. Hand-written `Hydra.Dsl.Meta.*` wrapper
+modules re-export these and add custom helpers; prefer importing via the wrapper
+(e.g., `Hydra.Dsl.Meta.Core`) when one exists.
+
+Generated DSL modules are available in all three languages (Haskell, Java, Python)
+and are kept in sync by the `sync-all` pipeline. In Java, they appear as static methods
+in classes under `hydra.dsl.*`; in Python, as functions in `hydra.dsl.*` modules.
+
 ## When to use each variant
 
 | Scenario | Recommended DSLs | Why |
 |----------|----------------|-----|
 | Defining types (e.g., kernel type modules) | Direct Types DSL | Direct construction of `Type` instances |
 | Defining terms with type checking | Phantom-typed DSL | Ensures terms compose correctly |
-| Writing Hydra kernel sources | Meta DSLs (Terms or Types) | Used throughout `Hydra/Sources/` |
+| Writing Hydra kernel sources | Meta DSLs + Generated DSLs | Used throughout `Hydra/Sources/`; generated DSLs provide constructors/accessors |
 | Code generation and metaprogramming | Meta DSLs | "Code as data" approach |
+| Working with Hydra types (records, unions) | Generated DSL modules | Type-safe constructors, accessors, updaters |
 | Runtime AST manipulation | Generated code | Direct access to data structures |
 
 **Rule of thumb**:
