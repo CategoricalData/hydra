@@ -453,6 +453,55 @@ public class Generation {
     }
 
     /**
+     * Generate source files for a Lisp dialect (Clojure, Scheme, Common Lisp, or Emacs Lisp).
+     */
+    public static void writeLispDialect(String basePath, String dialectName, String fileExt,
+                                         List<Module> universe, List<Module> mods) {
+        hydra.ext.lisp.syntax.Dialect dialect;
+        hydra.util.CaseConvention caseConv;
+        switch (dialectName) {
+            case "clojure":
+                dialect = new hydra.ext.lisp.syntax.Dialect.Clojure();
+                caseConv = new hydra.util.CaseConvention.Camel();
+                break;
+            case "scheme":
+                dialect = new hydra.ext.lisp.syntax.Dialect.Scheme();
+                caseConv = new hydra.util.CaseConvention.LowerSnake();
+                break;
+            case "commonLisp":
+                dialect = new hydra.ext.lisp.syntax.Dialect.CommonLisp();
+                caseConv = new hydra.util.CaseConvention.LowerSnake();
+                break;
+            case "emacsLisp":
+                dialect = new hydra.ext.lisp.syntax.Dialect.EmacsLisp();
+                caseConv = new hydra.util.CaseConvention.LowerSnake();
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown Lisp dialect: " + dialectName);
+        }
+
+        final hydra.ext.lisp.syntax.Dialect d = dialect;
+        final hydra.util.CaseConvention cc = caseConv;
+        generateSources(
+                mod -> defs -> cx -> g -> {
+                    hydra.util.Either result = hydra.ext.lisp.coder.Coder.moduleToLisp(d, mod, defs, cx, g);
+                    if (result instanceof hydra.util.Either.Left) {
+                        return result;
+                    }
+                    hydra.ext.lisp.syntax.Program program = (hydra.ext.lisp.syntax.Program) ((hydra.util.Either.Right) result).value;
+                    String code = hydra.serialization.Serialization.printExpr(
+                            hydra.serialization.Serialization.parenthesize(
+                                    hydra.ext.lisp.serde.Serde.programToExpr(program)));
+                    String filePath = hydra.names.Names.namespaceToFilePath(
+                            cc, new hydra.module.FileExtension(fileExt), mod.namespace);
+                    return new hydra.util.Either.Right(PersistentMap.<String, String>empty().insert(filePath, code));
+                },
+                hydra.ext.lisp.language.Language.lispLanguage(),
+                true, false, false, false,
+                basePath, universe, mods);
+    }
+
+    /**
      * Convert a namespace to a file path.
      */
     public static String namespaceToPath(Namespace ns) {
