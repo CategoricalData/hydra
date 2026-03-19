@@ -89,14 +89,14 @@
   (lambda (f)
     (lambda (m)
       (if (or (null m) (and (consp m) (eq (first m) :nothing)))
-          (list :right nil)
+          (list :right (list :nothing))
           (let* ((val (if (and (consp m) (eq (first m) :just))
                          (second m)
                          m))
                  (result (funcall f val)))
             (if (eq (either-tag result) :left)
                 result
-                (list :right (either-val result))))))))
+                (list :right (list :just (either-val result)))))))))
 
 ;; map_set :: (a -> Either e b) -> Set a -> Either e (Set b)
 (defvar hydra_lib_eithers_map_set

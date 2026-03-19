@@ -196,13 +196,16 @@
             (/ (round (* fx factor)) factor))))))
 
 ;; roundFloat32 :: Int -> Float -> Float
+;; Round to n significant digits, then snap to IEEE 754 float32 precision
 (defvar hydra_lib_math_round_float32
   (lambda (n)
     (lambda (x)
-      (if (= x 0.0) (float 0.0)
+      (if (= x 0.0) 0.0d0
           (let* ((fx (float x 1.0d0))
-                 (factor (expt 10.0d0 (- n 1 (floor (log (abs fx) 10))))))
-            (float (/ (round (* fx factor)) factor)))))))
+                 (factor (expt 10.0d0 (- n 1 (floor (log (abs fx) 10)))))
+                 (rounded (float (/ (round (* fx factor)) factor) 1.0d0)))
+            ;; Snap to float32 precision by round-tripping through single-float
+            (float (float rounded 1.0f0) 1.0d0))))))
 
 ;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
 (defvar hydra_lib_math_round_bigfloat hydra_lib_math_round_float64)

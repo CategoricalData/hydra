@@ -120,8 +120,8 @@
 ;; to_list :: Maybe a -> [a]
 (defvar hydra_lib_maybes_to_list
   (lambda (m)
-    (if (hydra--maybe-nothing-p m)
+    (if (maybe-nothing-p m)
         nil
-      (list (hydra--maybe-value m)))))
+      (list (maybe-value m)))))
 
 (provide 'hydra.lib.maybes)

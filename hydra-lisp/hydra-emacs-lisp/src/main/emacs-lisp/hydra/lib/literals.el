@@ -263,17 +263,48 @@
     (haskell-show-float (float x))))
 
 (defun round-to-float32 (x)
-  "Approximate float32 precision by rounding to 7 significant digits."
+  "Snap a double to IEEE 754 float32 precision (24-bit mantissa)."
   (if (= x 0.0) 0.0
-    (let* ((digits 7)
-           (magnitude (floor (log (abs x) 10.0)))
-           (factor (expt 10.0 (- digits magnitude 1))))
-      (/ (round (* x factor)) factor))))
+    (let* ((sign (if (< x 0) -1.0 1.0))
+           (ax (abs x))
+           (e (floor (log ax 2.0)))
+           (scale (expt 2.0 (- 23 e)))
+           (mantissa (round (* ax scale))))
+      (* sign (/ mantissa scale)))))
+
+(defun haskell-show-float32 (x)
+  "Format a float32 value with minimum digits for unique representation."
+  (let ((f32 (round-to-float32 (float x))))
+    (cond
+      ((= f32 0.0) "0.0")
+      ((and (/= f32 0.0)
+            (or (< (abs f32) 0.1) (>= (abs f32) 1.0e7)))
+       ;; Scientific notation
+       (let* ((exp-val (floor (log (abs f32) 10.0)))
+              (mantissa (/ f32 (expt 10.0 exp-val)))
+              (adj-exp (if (>= (abs mantissa) 10.0) (1+ exp-val) exp-val))
+              (adj-mantissa (if (>= (abs mantissa) 10.0) (/ mantissa 10.0) mantissa))
+              (sign (if (< f32 0) "-" "")))
+         ;; Find minimum digits for mantissa
+         (cl-loop for n from 1 to 9
+                  for rounded = (/ (round (* (abs adj-mantissa) (expt 10.0 (1- n)))) (expt 10.0 (1- n)))
+                  when (= (round-to-float32 (* rounded (expt 10.0 adj-exp)))
+                          (round-to-float32 (* (abs adj-mantissa) (expt 10.0 adj-exp))))
+                  return (format "%s%se%d" sign (haskell-show-float-simple (* 1.0 rounded)) adj-exp)
+                  finally return (format "%s%se%d" sign (haskell-show-float-simple (abs adj-mantissa)) adj-exp))))
+      (t
+       ;; Normal range: find minimum digits
+       (cl-loop for n from 1 to 9
+                for factor = (expt 10.0 n)
+                for rounded = (/ (round (* f32 factor)) factor)
+                when (= (round-to-float32 rounded) (round-to-float32 f32))
+                return (haskell-show-float-simple (* 1.0 rounded))
+                finally return (haskell-show-float-simple f32))))))
 
 ;; show_float32 :: Float -> String
 (defvar hydra_lib_literals_show_float32
   (lambda (x)
-    (haskell-show-float (round-to-float32 (float x)))))
+    (haskell-show-float32 x)))
 
 ;; show_float64 :: Double -> String
 (defvar hydra_lib_literals_show_float64

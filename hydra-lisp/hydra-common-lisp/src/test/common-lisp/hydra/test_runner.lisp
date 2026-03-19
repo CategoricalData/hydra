@@ -182,7 +182,11 @@
 (defun ann-maybe-value (val)
   (cond
     ((and (consp val) (eq (first val) :just)) (second val))
-    ((and (consp val) (eq (first val) :maybe)) (second val))
+    ((and (consp val) (eq (first val) :maybe))
+     (let ((body (second val)))
+       (if (and (consp body) (eq (first body) :just))
+           (second body)
+           body)))
     (t val)))
 
 (defun deep-equal-p (a b)

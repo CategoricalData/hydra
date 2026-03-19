@@ -272,8 +272,8 @@
         (lambda (cx)
           (lambda (mv)
             (cond
-              ((null? mv) (list 'right (list 'maybe (list 'nothing '()))))
-              ((and (pair? mv) (eq? (car mv) 'nothing)) (list 'right (list 'maybe (list 'nothing '()))))
+              ((null? mv) (list 'right (list 'maybe (list 'nothing))))
+              ((and (pair? mv) (eq? (car mv) 'nothing)) (list 'right (list 'maybe (list 'nothing))))
               ((and (pair? mv) (eq? (car mv) 'just))
                (let ((r (((hydra_graph_term_coder-decode el-coder) cx) (cadr mv))))
                  (if (eq? (car r) 'left) r (list 'right (list 'maybe (cadr r))))))
