@@ -127,10 +127,31 @@
    "hydra.hoisting"
    "hydra.checking" "hydra.unification" "hydra.inference"
    "hydra.serialization" "hydra.coderUtils"
+   ;; Encode/decode (needed by codeGeneration)
+   "hydra.encode.accessors" "hydra.encode.context" "hydra.encode.ast"
+   "hydra.encode.classes" "hydra.encode.coders" "hydra.encode.grammar"
+   "hydra.encode.module" "hydra.encode.phantoms" "hydra.encode.query"
+   "hydra.encode.relational" "hydra.encode.tabular" "hydra.encode.testing"
+   "hydra.encode.typing" "hydra.encode.topology" "hydra.encode.util"
+   "hydra.encode.variants" "hydra.encode.parsing" "hydra.encode.json.model"
+   "hydra.decode.accessors" "hydra.decode.context" "hydra.decode.ast"
+   "hydra.decode.classes" "hydra.decode.coders" "hydra.decode.grammar"
+   "hydra.decode.module" "hydra.decode.phantoms" "hydra.decode.query"
+   "hydra.decode.relational" "hydra.decode.tabular" "hydra.decode.testing"
+   "hydra.decode.typing" "hydra.decode.topology" "hydra.decode.util"
+   "hydra.decode.variants" "hydra.decode.parsing" "hydra.decode.json.model"
+   "hydra.decoding" "hydra.encoding"
    ;; Reduction
    "hydra.reduction"
    ;; JSON
    "hydra.json.bootstrap"
+   "hydra.json.decode" "hydra.json.encode"
+   "hydra.json.parser" "hydra.json.writer"
+   "hydra.ext.org.json.decoding"
+   "hydra.adapt"
+   "hydra.templates" "hydra.grammars" "hydra.parsers"
+   "hydra.json.yaml.decode" "hydra.json.yaml.encode"
+   "hydra.ext.org.yaml.model"
    "hydra.codeGeneration"])
 
 (def ^:private gen-test-load-order
@@ -191,6 +212,55 @@
         ;; Also create in clojure.core for cross-module access
         (when (.startsWith (name sym) "hydra_")
           (intern 'clojure.core sym))))))
+
+(declare ^:private contains-free-symbol?)
+
+(defn- fix-forward-ref-let
+  "Transform native (let [...] body) forms where a binding references a later binding.
+   Detects forward references between function bindings and uses atoms for letrec semantics."
+  [form]
+  (cond
+    (vector? form) (mapv fix-forward-ref-let form)
+    (not (sequential? form)) form
+    :else
+    (let [form (apply list (map fix-forward-ref-let form))]
+      ;; Check for (let [bindings...] body) with forward references
+      (if (and (= (first form) 'let)
+               (>= (count form) 3)
+               (vector? (second form))
+               (>= (count (second form)) 4))  ;; at least 2 bindings (4 elements)
+        (let [binding-vec (second form)
+              body (nth form 2)
+              pairs (partition 2 binding-vec)
+              syms (mapv first pairs)
+              vals (mapv second pairs)
+              ;; Check if any value references a later-defined symbol
+              has-forward-ref (some (fn [i]
+                                     (let [val (nth vals i)]
+                                       (some (fn [j]
+                                               (contains-free-symbol? (nth syms j) val))
+                                             (range (inc i) (count syms)))))
+                                   (range (count syms)))
+              ;; Only transform if ALL values are functions
+              all-fns (every? (fn [v] (and (sequential? v) (= (first v) 'fn))) vals)]
+          (if (and has-forward-ref all-fns)
+            ;; Use atoms with typed proxies for mutually-recursive functions.
+            ;; Each proxy matches the exact param count of the fn for fast dispatch.
+            (let [ref-syms (mapv #(symbol (str (name %) "__ref")) syms)
+                  atom-decls (vec (mapcat (fn [rs] [rs (list 'atom nil)]) ref-syms))
+                  proxy-decls (vec (mapcat (fn [sym val rs]
+                                            ;; Handle both (fn [params] body) and (fn name [params] body)
+                                            (let [params (if (vector? (second val))
+                                                           (second val)
+                                                           (nth val 2))]
+                                              [sym (list 'fn params
+                                                         (cons (list 'deref rs) params))]))
+                                          syms vals ref-syms))
+                  resets (map (fn [rs val] (list 'reset! rs val)) ref-syms vals)]
+              (list 'let (vec (concat atom-decls proxy-decls))
+                    (cons 'do (concat resets [body]))))
+            form))
+        form))))
 
 (defn- contains-free-symbol?
   "Check if a form contains a free reference to the given symbol.
@@ -309,10 +379,11 @@
                       (let [form (try (read rdr false ::eof) (catch Exception _ ::eof))]
                         (if (= form ::eof) acc
                             (recur (conj acc form)))))))
-          ;; Filter out ns declarations, desugar if_else, then fix self-referencing let bindings
+          ;; Filter out ns declarations, desugar if_else, then fix self/forward-referencing let bindings
           eval-forms (->> forms
                          (filterv #(not (and (sequential? %) (= (first %) 'ns))))
                          (mapv desugar-if-else)
+                         (mapv fix-forward-ref-let)
                          (mapv fix-self-ref-let))]
       ;; Multi-pass evaluation (retry failed forms up to 5 times)
       (binding [*ns* the-ns]
