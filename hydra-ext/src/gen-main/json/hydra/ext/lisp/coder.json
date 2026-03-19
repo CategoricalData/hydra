@@ -2519,26 +2519,69 @@
                                                                         "lambda": {
                                                                           "body": {
                                                                             "application": {
-                                                                              "argument": {"variable": "val"},
+                                                                              "argument": {
+                                                                                "function": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "either": {
+                                                                                                "@right": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "list": [
+                                                                                                        {
+                                                                                                          "application": {
+                                                                                                            "argument": {"literal": {"string": "just"}},
+                                                                                                            "function": {"variable": "hydra.ext.lisp.coder.lispKeyword"}}},
+                                                                                                        {"variable": "sval"}]},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"literal": {"string": "list"}},
+                                                                                                            "function": {"variable": "hydra.ext.lisp.coder.lispVar"}}},
+                                                                                                        "function": {"variable": "hydra.ext.lisp.coder.lispApp"}}}}}}},
+                                                                                            "type": {"variable": "t2"}}},
+                                                                                        "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
+                                                                                    "domain": [{"variable": "hydra.ext.lisp.syntax.Expression"}],
+                                                                                    "parameter": "sval"}}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "g"},
-                                                                                  "function": {
+                                                                                  "argument": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "cx"},
+                                                                                      "argument": {"variable": "val"},
                                                                                       "function": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "dialect"},
+                                                                                          "argument": {"variable": "g"},
                                                                                           "function": {
-                                                                                            "typeApplication": {
-                                                                                              "body": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "cx"},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "dialect"},
+                                                                                                  "function": {
                                                                                                     "typeApplication": {
-                                                                                                      "body": {"variable": "hydra.ext.lisp.coder.encodeTerm"},
-                                                                                                      "type": {"variable": "t0"}}},
-                                                                                                  "type": {"variable": "t1"}}},
-                                                                                              "type": {"variable": "t2"}}}}}}}}}}},
+                                                                                                      "body": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {"variable": "hydra.ext.lisp.coder.encodeTerm"},
+                                                                                                              "type": {"variable": "t0"}}},
+                                                                                                          "type": {"variable": "t1"}}},
+                                                                                                      "type": {"variable": "t2"}}}}}}}}}}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                              "type": {"variable": "t2"}}},
+                                                                                          "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
+                                                                                      "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}}}}}},
                                                                           "domain": [{"variable": "hydra.core.Term"}],
                                                                           "parameter": "val"}}},
                                                                     "function": {
@@ -2548,7 +2591,22 @@
                                                                             "body": {
                                                                               "typeApplication": {
                                                                                 "body": {
-                                                                                  "either": {"@right": {"variable": "hydra.ext.lisp.coder.lispNilExpr"}}},
+                                                                                  "either": {
+                                                                                    "@right": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "list": [
+                                                                                            {
+                                                                                              "application": {
+                                                                                                "argument": {"literal": {"string": "nothing"}},
+                                                                                                "function": {"variable": "hydra.ext.lisp.coder.lispKeyword"}}}]},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"literal": {"string": "list"}},
+                                                                                                "function": {"variable": "hydra.ext.lisp.coder.lispVar"}}},
+                                                                                            "function": {"variable": "hydra.ext.lisp.coder.lispApp"}}}}}}},
                                                                                 "type": {"variable": "t2"}}},
                                                                             "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
                                                                         "function": {

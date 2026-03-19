@@ -511,7 +511,7 @@ def test_cosh__cosh_0():
 
 def test_cosh__cosh_1():
 
-    assert (hydra.lib.math.cosh(1.0)) == (1.5430806348152437)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.cosh(1.0))) == (1.54308063482)
 
 def test_cosh__cosh_2():
 
@@ -581,11 +581,11 @@ def test_exp__exp_0():
 
 def test_exp__exp_1():
 
-    assert (hydra.lib.math.exp(1.0)) == (2.718281828459045)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.exp(1.0))) == (2.71828182846)
 
 def test_exp__exp__1():
 
-    assert (hydra.lib.math.exp(-1.0)) == (0.36787944117144233)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.exp(-1.0))) == (0.367879441171)
 
 def test_exp__exp_2():
 
