@@ -23,6 +23,7 @@ import qualified Hydra.Inference as Inference
 
 import qualified Data.Map as M
 import qualified Data.List as L
+import qualified Data.ByteString as B
 import qualified Data.Set as S
 import Data.Char (toLower, isAlphaNum, isUpper)
 
@@ -37,26 +38,33 @@ termToLisp dialect term _g = encodeForRuntime term
       Left _ -> Left "Lisp encoding failed"
       Right expr -> Right $ printExpr $ parenthesize $ expressionToExpr dialect expr
 
+    -- Keyword prefix: Scheme uses 'name (quoted symbol), all others use :name (keyword)
+    kw s = case dialect of
+      Syntax.DialectScheme -> "'" ++ s
+      _                   -> ":" ++ s
+
     encodeForRuntime t = case t of
-      -- Maybe: (list :just val) or (list :nothing)
-      -- Matches the hand-written lib representation
-      TermMaybe Nothing -> Right "(list :nothing)"
+      -- Maybe: (list kw:just val) or (list kw:nothing)
+      TermMaybe Nothing -> Right $ "(list " ++ kw "nothing" ++ ")"
       TermMaybe (Just v) -> do
         vs <- encodeForRuntime v
-        Right $ "(list :just " ++ vs ++ ")"
+        Right $ "(list " ++ kw "just" ++ " " ++ vs ++ ")"
 
-      -- Maps: alist ((k1 v1) (k2 v2) ...)
-      TermMap m | M.null m -> Right "()"
+      -- Maps: alist. Clojure uses (list k v), others use (cons k v)
+      TermMap m | M.null m -> Right "(list)"
       TermMap m -> do
         let entries = M.toAscList m
+            pairFmt = case dialect of
+              Syntax.DialectClojure -> \ks vs -> "(list " ++ ks ++ " " ++ vs ++ ")"
+              _                    -> \ks vs -> "(cons " ++ ks ++ " " ++ vs ++ ")"
         pairs <- mapM (\(k, v) -> do
           ks <- encodeForRuntime k
           vs <- encodeForRuntime v
-          Right $ "(list " ++ ks ++ " " ++ vs ++ ")") entries
+          Right $ pairFmt ks vs) entries
         Right $ "(list " ++ L.intercalate " " pairs ++ ")"
 
       -- Sets: sorted list
-      TermSet s | S.null s -> Right "()"
+      TermSet s | S.null s -> Right "(list)"
       TermSet s -> do
         let elems = L.sort $ S.toList s
         strs <- mapM encodeForRuntime elems
@@ -74,7 +82,10 @@ termToLisp dialect term _g = encodeForRuntime term
         | otherwise -> do
             bs <- encodeForRuntime body
             annStr <- encodeAnnotationMap ann
-            Right $ "(list :annotated (->hydra_core_annotated_term " ++ bs ++ " " ++ annStr ++ "))"
+            let ctorPrefix = case dialect of
+                  Syntax.DialectClojure -> "->"
+                  _                    -> "make-"
+            Right $ "(list " ++ kw "annotated" ++ " (" ++ ctorPrefix ++ "hydra_core_annotated_term " ++ bs ++ " " ++ annStr ++ "))"
 
       -- Lists: encode each element
       TermList ts -> do
@@ -86,53 +97,69 @@ termToLisp dialect term _g = encodeForRuntime term
       TermTypeLambda (TypeLambda _ body) -> encodeForRuntime body
 
       -- Applications: recurse into function and argument
+      -- EL needs funcall for calling returned lambdas
       TermApplication (Application f a) -> do
         fs <- encodeForRuntime f
         as <- encodeForRuntime a
-        Right $ "(" ++ fs ++ " " ++ as ++ ")"
+        case dialect of
+          Syntax.DialectEmacsLisp -> Right $ "(funcall " ++ fs ++ " " ++ as ++ ")"
+          _                      -> Right $ "(" ++ fs ++ " " ++ as ++ ")"
 
       -- Functions: use the coder (lambdas, primitives, etc.)
       TermFunction _ -> encode t
 
-      -- Unions: encode the field value as (list :field_name value)
+      -- Unions: encode the field value as (list kw:field_name value)
       TermUnion (Injection _tn (Field fn_ ft)) -> do
         fts <- encodeForRuntime ft
         let fieldName = toSnakeCase (unName fn_)
-        Right $ "(list :" ++ fieldName ++ " " ++ fts ++ ")"
+        Right $ "(list " ++ kw fieldName ++ " " ++ fts ++ ")"
 
       -- Records: encode constructor call with runtime-encoded field values
       TermRecord (Record tn fields) -> do
         fieldStrs <- mapM (\(Field _fn ft) -> encodeForRuntime ft) fields
-        let ctorName = "->" ++ toSnakeCase (map (\c -> if c == '.' then '_' else c) (unName tn))
+        let rawName = toSnakeCase (map (\c -> if c == '.' then '_' else c) (unName tn))
+            ctorPrefix = case dialect of
+              Syntax.DialectClojure -> "->"
+              _                    -> "make-"
+            ctorName = ctorPrefix ++ rawName
         Right $ "(" ++ ctorName ++ " " ++ L.intercalate " " fieldStrs ++ ")"
 
       -- Wraps: recurse into body
       TermWrap (WrappedTerm _ body) -> encodeForRuntime body
 
-      -- Eithers: encode as (list :left val) or (list :right val)
+      -- Eithers: encode as (list kw:left val) or (list kw:right val)
       TermEither (Left l) -> do
         ls <- encodeForRuntime l
-        Right $ "(list :left " ++ ls ++ ")"
+        Right $ "(list " ++ kw "left" ++ " " ++ ls ++ ")"
       TermEither (Right r) -> do
         rs <- encodeForRuntime r
-        Right $ "(list :right " ++ rs ++ ")"
+        Right $ "(list " ++ kw "right" ++ " " ++ rs ++ ")"
 
       -- Let bindings
       TermLet (Let bindings body) -> do
         -- Simplify: just encode the body (let bindings are already evaluated in delegated tests)
         encodeForRuntime body
 
+      -- Binary literals: encode as list of bytes (lib functions return lists, not vectors)
+      TermLiteral (LiteralBinary bs) ->
+        let bytes = L.map (show . fromEnum) (B.unpack bs)
+        in if null bytes then Right "(list)"
+           else Right $ "(list " ++ L.intercalate " " bytes ++ ")"
+
       -- For everything else (literals, variables, unit, etc.), use the coder
       _ -> encode t
 
     encodeAnnotationMap :: M.Map Name Term -> Either String String
     encodeAnnotationMap ann
-      | M.null ann = Right "()"
+      | M.null ann = Right "(list)"
       | otherwise = do
           let entries = M.toAscList ann
+              pairFmt = case dialect of
+                Syntax.DialectClojure -> \k vs -> "(list \"" ++ k ++ "\" " ++ vs ++ ")"
+                _                    -> \k vs -> "(cons \"" ++ k ++ "\" " ++ vs ++ ")"
           pairs <- mapM (\(Name k, v) -> do
             vs <- encodeForRuntime v
-            Right $ "(list \"" ++ k ++ "\" " ++ vs ++ ")") entries
+            Right $ pairFmt k vs) entries
           Right $ "(list " ++ L.intercalate " " pairs ++ ")"
 
 -- | Convert a Hydra type to a Lisp type expression string (always returns a comment)
@@ -334,8 +361,10 @@ generateLispTestCase dialect g codec groupPath (TestCaseWithMetadata name tcase 
 -- | Generate test file for a dialect
 generateTestFileWithLispCodec :: Syntax.Dialect -> TestCodec -> Module -> TestGroup -> Graph -> Either String (FilePath, String)
 generateTestFileWithLispCodec dialect codec testModule testGroup g = do
-  -- Generate test hierarchy
-  testBody <- generateLispTestGroupHierarchy dialect g codec [] testGroup
+  -- Generate test hierarchy. Seed group path with module name to avoid cross-module name collisions.
+  let Namespace ns0 = moduleNamespace testModule
+      moduleSuffix = L.last (Strings.splitOn "." ns0)
+  testBody <- generateLispTestGroupHierarchy dialect g codec [moduleSuffix] testGroup
 
   -- Build the complete test module
   let testModuleContent = buildLispTestModule dialect codec testModule testGroup testBody
@@ -394,7 +423,7 @@ buildLispTestModule dialect codec testModule testGroup testBody = case dialect o
       ] ++ testBody ++ "\n"
 
     emacsLispModule = unlines [
-        ";;; " ++ warningAutoGeneratedFile,
+        ";;; " ++ warningAutoGeneratedFile ++ " -*- lexical-binding: t; coding: utf-8 -*-",
         ";;; " ++ groupName,
         "",
         "(require 'ert)",

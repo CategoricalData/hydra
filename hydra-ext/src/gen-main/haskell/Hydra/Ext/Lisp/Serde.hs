@@ -473,10 +473,18 @@ expressionToExpr d expr =
 applicationToExpr :: Syntax.Dialect -> Syntax.Application -> Ast.Expr
 applicationToExpr d app =
 
-      let fun = expressionToExpr d (Syntax.applicationFunction app)
+      let funExpr = Syntax.applicationFunction app
+          fun = expressionToExpr d funExpr
           args = Lists.map (expressionToExpr d) (Syntax.applicationArguments app)
-      in (Serialization.parens (Serialization.spaceSep (Lists.concat2 [
-        fun] args)))
+          needsFuncall = case d of
+            Syntax.DialectEmacsLisp -> case funExpr of
+              Syntax.ExpressionVariable _ -> False
+              _ -> True
+            _ -> False
+          allParts = if needsFuncall
+            then Lists.concat2 [Serialization.cst "funcall", fun] args
+            else Lists.concat2 [fun] args
+      in (Serialization.parens (Serialization.spaceSep allParts))
 
 lambdaToExpr :: Syntax.Dialect -> Syntax.Lambda -> Ast.Expr
 lambdaToExpr d lam =

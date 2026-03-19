@@ -649,12 +649,22 @@ sExpressionToExpr = define "sExpressionToExpr" $
         Serialization.parens @@ (Serialization.spaceSep @@ Lists.map sExpressionToExpr (var "elems"))]
 
 -- | Serialize a function application: (f arg1 arg2 ...)
+--   For Emacs Lisp: (funcall f arg1 arg2 ...) when f is not a simple variable
 applicationToExpr :: TBinding (L.Dialect -> L.Application -> Expr)
 applicationToExpr = define "applicationToExpr" $
   lambda "d" $ lambda "app" $ lets [
-    "fun">: expressionToExpr @@ var "d" @@ (project L._Application L._Application_function @@ var "app"),
-    "args">: Lists.map (expressionToExpr @@ var "d") (project L._Application L._Application_arguments @@ var "app")] $
-    Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat2 (list [var "fun"]) (var "args"))
+    "funExpr">: project L._Application L._Application_function @@ var "app",
+    "fun">: expressionToExpr @@ var "d" @@ var "funExpr",
+    "args">: Lists.map (expressionToExpr @@ var "d") (project L._Application L._Application_arguments @@ var "app"),
+    "needsFuncall">: cases L._Dialect (var "d") (Just $ boolean False)
+      [L._Dialect_emacsLisp>>: lambda "u" $
+        -- In Emacs Lisp, funcall is needed when the function is not a simple variable
+        cases L._Expression (var "funExpr") (Just $ boolean True)
+          [L._Expression_variable>>: lambda "s" $ boolean False]],
+    "allParts">: Logic.ifElse (var "needsFuncall")
+      (Lists.concat2 (list [Serialization.cst @@ string "funcall", var "fun"]) (var "args"))
+      (Lists.concat2 (list [var "fun"]) (var "args"))] $
+    Serialization.parens @@ (Serialization.spaceSep @@ var "allParts")
 
 -- | Serialize a lambda expression
 lambdaToExpr :: TBinding (L.Dialect -> L.Lambda -> Expr)
