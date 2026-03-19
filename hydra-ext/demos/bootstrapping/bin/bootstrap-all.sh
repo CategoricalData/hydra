@@ -1,8 +1,8 @@
 #!/bin/bash
 # Run all bootstrapping paths and compare output against baselines.
 #
-# This script demonstrates 9 bootstrapping paths:
-#   3 host languages (Haskell, Java, Python) × 3 target languages (Haskell, Java, Python)
+# This script demonstrates bootstrapping paths:
+#   host languages (Haskell, Java, Python) × target languages (Haskell, Java, Python, Clojure, Scheme, Common Lisp, Emacs Lisp)
 #
 # Each path: loads Hydra modules from language-independent JSON, generates code
 # for a target language, builds, runs tests, and compares the output against
@@ -83,7 +83,7 @@ case "$HOSTS" in
     all) HOSTS="haskell,java,python" ;;
 esac
 case "$TARGETS" in
-    all) TARGETS="haskell,java,python" ;;
+    all) TARGETS="haskell,java,python,clojure,scheme,common-lisp,emacs-lisp" ;;
 esac
 
 IFS=',' read -ra HOST_LIST <<< "$HOSTS"
@@ -97,12 +97,24 @@ IFS=',' read -ra TARGET_LIST <<< "$TARGETS"
 NEED_STACK=false
 NEED_JAVA=false
 NEED_PYTHON=false
+NEED_CLOJURE=false
+NEED_SCHEME=false
+NEED_SBCL=false
+NEED_EMACS=false
 for lang in "${HOST_LIST[@]}" "${TARGET_LIST[@]}"; do
     case "$lang" in
-        haskell) NEED_STACK=true ;;
-        java)    NEED_JAVA=true ;;
-        python)  NEED_PYTHON=true ;;
+        haskell)     NEED_STACK=true ;;
+        java)        NEED_JAVA=true ;;
+        python)      NEED_PYTHON=true ;;
+        clojure)     NEED_CLOJURE=true ;;
+        scheme)      NEED_SCHEME=true ;;
+        common-lisp) NEED_SBCL=true ;;
+        emacs-lisp)  NEED_EMACS=true ;;
     esac
+done
+# All hosts need Stack (to build the Haskell-based bootstrap-from-json generator)
+for lang in "${HOST_LIST[@]}"; do
+    NEED_STACK=true
 done
 
 ENV_ERRORS=()
@@ -197,6 +209,34 @@ if $NEED_PYTHON; then
     done
 fi
 
+# --- Clojure CLI (for Clojure target) ---
+if $NEED_CLOJURE; then
+    if ! command -v clojure > /dev/null 2>&1; then
+        ENV_ERRORS+=("clojure CLI is not installed. Install from https://clojure.org/guides/install")
+    fi
+fi
+
+# --- Scheme (for Scheme target) ---
+if $NEED_SCHEME; then
+    if ! command -v guile > /dev/null 2>&1 && ! command -v chibi-scheme > /dev/null 2>&1; then
+        ENV_ERRORS+=("No Scheme implementation found. Install guile or chibi-scheme.")
+    fi
+fi
+
+# --- SBCL (for Common Lisp target) ---
+if $NEED_SBCL; then
+    if ! command -v sbcl > /dev/null 2>&1; then
+        ENV_ERRORS+=("sbcl is not installed. Install from https://www.sbcl.org/")
+    fi
+fi
+
+# --- Emacs (for Emacs Lisp target) ---
+if $NEED_EMACS; then
+    if ! command -v emacs > /dev/null 2>&1; then
+        ENV_ERRORS+=("emacs is not installed. Install Emacs 28+.")
+    fi
+fi
+
 # Report results.
 if [ ${#ENV_ERRORS[@]} -gt 0 ]; then
     echo "Environment check FAILED:"
@@ -224,17 +264,25 @@ fi
 
 baseline_dir_for_target() {
     case "$1" in
-        haskell) echo "hydra-haskell" ;;
-        java)    echo "hydra-java" ;;
-        python)  echo "hydra-python" ;;
+        haskell)     echo "hydra-haskell" ;;
+        java)        echo "hydra-java" ;;
+        python)      echo "hydra-python" ;;
+        clojure)     echo "hydra-lisp/hydra-clojure" ;;
+        scheme)      echo "hydra-lisp/hydra-scheme" ;;
+        common-lisp) echo "hydra-lisp/hydra-common-lisp" ;;
+        emacs-lisp)  echo "hydra-lisp/hydra-emacs-lisp" ;;
     esac
 }
 
 ext_for_target() {
     case "$1" in
-        haskell) echo ".hs" ;;
-        java)    echo ".java" ;;
-        python)  echo ".py" ;;
+        haskell)     echo ".hs" ;;
+        java)        echo ".java" ;;
+        python)      echo ".py" ;;
+        clojure)     echo ".clj" ;;
+        scheme)      echo ".scm" ;;
+        common-lisp) echo ".lisp" ;;
+        emacs-lisp)  echo ".el" ;;
     esac
 }
 
@@ -344,9 +392,13 @@ compare_output() {
         local rel="${f#$demo_dir/}"
         local lang_dir
         case "$target" in
-            haskell) lang_dir="haskell" ;;
-            java)    lang_dir="java" ;;
-            python)  lang_dir="python" ;;
+            haskell)     lang_dir="haskell" ;;
+            java)        lang_dir="java" ;;
+            python)      lang_dir="python" ;;
+            clojure)     lang_dir="clojure" ;;
+            scheme)      lang_dir="scheme" ;;
+            common-lisp) lang_dir="common-lisp" ;;
+            emacs-lisp)  lang_dir="emacs-lisp" ;;
         esac
         local mod_path="${rel#src/gen-main/${lang_dir}/}"
         local ref="$baseline_dir/${lang_dir}/$mod_path"
@@ -495,6 +547,30 @@ run_tests_for_path() {
                 else
                     HYDRA_BENCHMARK_OUTPUT="$bench_file" pytest src/test/ 2>&1
                 fi
+                test_exit=$?
+                ;;
+            clojure)
+                cd "$demo_dir"
+                HYDRA_BENCHMARK_OUTPUT="$bench_file" clojure -M -m run-tests 2>&1
+                test_exit=$?
+                ;;
+            scheme)
+                cd "$demo_dir"
+                if command -v guile > /dev/null 2>&1; then
+                    HYDRA_BENCHMARK_OUTPUT="$bench_file" guile -L src/gen-main/scheme -L src/gen-test/scheme -L src/main/scheme -s run-tests.scm 2>&1
+                else
+                    HYDRA_BENCHMARK_OUTPUT="$bench_file" chibi-scheme -I src/gen-main/scheme -I src/gen-test/scheme -I src/main/scheme run-tests.scm 2>&1
+                fi
+                test_exit=$?
+                ;;
+            common-lisp)
+                cd "$demo_dir"
+                HYDRA_BENCHMARK_OUTPUT="$bench_file" sbcl --noinform --non-interactive --no-userinit --load src/test/common-lisp/run-tests.lisp 2>&1
+                test_exit=$?
+                ;;
+            emacs-lisp)
+                cd "$demo_dir"
+                HYDRA_BENCHMARK_OUTPUT="$bench_file" emacs --batch --load run-tests.el 2>&1
                 test_exit=$?
                 ;;
         esac
@@ -664,6 +740,30 @@ ENDJSON
                                 else
                                     HYDRA_BENCHMARK_OUTPUT="$extra_bench" pytest src/test/ 2>&1
                                 fi
+                                test_exit=$?
+                                ;;
+                            clojure)
+                                cd "$demo_dir"
+                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" clojure -M -m run-tests 2>&1
+                                test_exit=$?
+                                ;;
+                            scheme)
+                                cd "$demo_dir"
+                                if command -v guile > /dev/null 2>&1; then
+                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" guile -L src/gen-main/scheme -L src/gen-test/scheme -L src/main/scheme -s run-tests.scm 2>&1
+                                else
+                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" chibi-scheme -I src/gen-main/scheme -I src/gen-test/scheme -I src/main/scheme run-tests.scm 2>&1
+                                fi
+                                test_exit=$?
+                                ;;
+                            common-lisp)
+                                cd "$demo_dir"
+                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" sbcl --noinform --non-interactive --no-userinit --load src/test/common-lisp/run-tests.lisp 2>&1
+                                test_exit=$?
+                                ;;
+                            emacs-lisp)
+                                cd "$demo_dir"
+                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" emacs --batch --load run-tests.el 2>&1
                                 test_exit=$?
                                 ;;
                         esac
