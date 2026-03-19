@@ -224,7 +224,20 @@
             (/ (fround (* fx factor)) factor))))))
 
 ;; roundFloat32 :: Int -> Float -> Float
-(defvar hydra_lib_math_round_float32 hydra_lib_math_round_float64)
+;; Rounds to N significant digits, then snaps through IEEE float32
+(defun snap-to-float32 (x)
+  "Snap a double to IEEE 754 float32 precision (24-bit mantissa)."
+  (if (= x 0.0) 0.0
+    (let* ((sign (if (< x 0) -1.0 1.0))
+           (ax (abs x))
+           (e (floor (log ax 2.0)))
+           (scale (expt 2.0 (- 23 e)))
+           (mantissa (round (* ax scale))))
+      (* sign (/ mantissa scale)))))
+(defvar hydra_lib_math_round_float32
+  (lambda (n)
+    (lambda (x)
+      (snap-to-float32 (funcall (funcall hydra_lib_math_round_float64 n) x)))))
 
 ;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
 (defvar hydra_lib_math_round_bigfloat hydra_lib_math_round_float64)

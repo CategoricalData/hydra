@@ -117,7 +117,7 @@
       (lambda (f)
         (lambda (m)
           (if (or (null? m) (and (pair? m) (eq? (car m) 'nothing)))
-              (list 'right (list 'nothing '()))
+              (list 'right (list 'nothing))
               (let ((val (if (and (pair? m) (or (eq? (car m) 'just) (eq? (car m) 'maybe)))
                              (cadr m) m)))
                 (let ((result (f val)))
