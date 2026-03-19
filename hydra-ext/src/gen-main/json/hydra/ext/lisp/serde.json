@@ -4333,16 +4333,24 @@
                     "let": {
                       "bindings": [
                         {
+                          "name": "funExpr",
+                          "term": {
+                            "application": {
+                              "argument": {"variable": "app"},
+                              "function": {
+                                "function": {
+                                  "elimination": {
+                                    "record": {"field": "function", "typeName": "hydra.ext.lisp.syntax.Application"}}}}}},
+                          "type": [
+                            {
+                              "constraints": null,
+                              "type": {"variable": "hydra.ext.lisp.syntax.Expression"},
+                              "variables": []}]},
+                        {
                           "name": "fun",
                           "term": {
                             "application": {
-                              "argument": {
-                                "application": {
-                                  "argument": {"variable": "app"},
-                                  "function": {
-                                    "function": {
-                                      "elimination": {
-                                        "record": {"field": "function", "typeName": "hydra.ext.lisp.syntax.Application"}}}}}},
+                              "argument": {"variable": "funExpr"},
                               "function": {
                                 "application": {
                                   "argument": {"variable": "d"},
@@ -4382,10 +4390,52 @@
                             {
                               "constraints": null,
                               "type": {"list": {"variable": "hydra.ast.Expr"}},
-                              "variables": []}]}],
-                      "body": {
-                        "application": {
-                          "argument": {
+                              "variables": []}]},
+                        {
+                          "name": "needsFuncall",
+                          "term": {
+                            "application": {
+                              "argument": {"variable": "d"},
+                              "function": {
+                                "function": {
+                                  "elimination": {
+                                    "union": {
+                                      "cases": [
+                                        {
+                                          "name": "emacsLisp",
+                                          "term": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {"variable": "funExpr"},
+                                                    "function": {
+                                                      "function": {
+                                                        "elimination": {
+                                                          "union": {
+                                                            "cases": [
+                                                              {
+                                                                "name": "variable",
+                                                                "term": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {"literal": {"boolean": false}},
+                                                                      "domain": [{"variable": "hydra.ext.lisp.syntax.VariableReference"}],
+                                                                      "parameter": "s"}}}}],
+                                                            "default": [{"literal": {"boolean": true}}],
+                                                            "typeName": "hydra.ext.lisp.syntax.Expression"}}}}}},
+                                                "domain": [{"unit": {}}],
+                                                "parameter": "u"}}}}],
+                                      "default": [{"literal": {"boolean": false}}],
+                                      "typeName": "hydra.ext.lisp.syntax.Dialect"}}}}}},
+                          "type": [
+                            {
+                              "constraints": null,
+                              "type": {"literal": {"boolean": {}}},
+                              "variables": []}]},
+                        {
+                          "name": "allParts",
+                          "term": {
                             "application": {
                               "argument": {
                                 "application": {
@@ -4397,6 +4447,41 @@
                                         "typeApplication": {
                                           "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
                                           "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "args"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "list": [
+                                              {
+                                                "application": {
+                                                  "argument": {"literal": {"string": "funcall"}},
+                                                  "function": {"variable": "hydra.serialization.cst"}}},
+                                              {"variable": "fun"}]},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                              "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "needsFuncall"},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                          "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}},
+                          "type": [
+                            {
+                              "constraints": null,
+                              "type": {"list": {"variable": "hydra.ast.Expr"}},
+                              "variables": []}]}],
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "application": {
+                              "argument": {"variable": "allParts"},
                               "function": {"variable": "hydra.serialization.spaceSep"}}},
                           "function": {"variable": "hydra.serialization.parens"}}}}},
                   "domain": [{"variable": "hydra.ext.lisp.syntax.Application"}],

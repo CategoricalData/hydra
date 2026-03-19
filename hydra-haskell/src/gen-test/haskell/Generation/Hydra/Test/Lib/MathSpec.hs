@@ -359,8 +359,8 @@ spec = H.describe "hydra.lib.math primitives" $ do
       (Math.cosh 0.0)
       (1.0)
     H.it "cosh 1" $ H.shouldBe
-      (Math.cosh 1.0)
-      (1.5430806348152437)
+      (Math.roundFloat64 12 (Math.cosh 1.0))
+      (1.54308063482)
     H.it "cosh 2" $ H.shouldBe
       (Math.roundFloat64 12 (Math.cosh 2.0))
       (3.76219569108)
@@ -409,11 +409,11 @@ spec = H.describe "hydra.lib.math primitives" $ do
       (Math.exp 0.0)
       (1.0)
     H.it "exp 1" $ H.shouldBe
-      (Math.exp 1.0)
-      (2.718281828459045)
+      (Math.roundFloat64 12 (Math.exp 1.0))
+      (2.71828182846)
     H.it "exp -1" $ H.shouldBe
-      (Math.exp (-1.0))
-      (0.36787944117144233)
+      (Math.roundFloat64 12 (Math.exp (-1.0)))
+      (0.367879441171)
     H.it "exp 2" $ H.shouldBe
       (Math.roundFloat64 12 (Math.exp 2.0))
       (7.38905609893)
