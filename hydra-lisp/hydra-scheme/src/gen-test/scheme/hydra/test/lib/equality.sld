@@ -1,1 +1,0 @@
-equality.scm

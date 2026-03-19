@@ -5,176 +5,176 @@
 
 ;; empty
 
-(define (test-empty-negempty-set)
+(define (test-sets-negempty-negempty-set)
 
-  (assert (equal? () hydra_lib_sets_empty)))
+  (assert (equal? (list) hydra_lib_sets_empty)))
 
 ;; singleton
 
-(define (test-singleton-negsingle-element)
+(define (test-sets-negsingleton-negsingle-element)
 
   (assert (equal? (list 42) (hydra_lib_sets_singleton 42))))
 
 ;; fromList
 
-(define (test-fromlist-negcreate-from-list)
+(define (test-sets-negfromlist-negcreate-from-list)
 
   (assert (equal? (list 1 2 3) (hydra_lib_sets_from_list (list 1 2 3)))))
 
-(define (test-fromlist-negduplicates-removed)
+(define (test-sets-negfromlist-negduplicates-removed)
 
   (assert (equal? (list 1 2 3) (hydra_lib_sets_from_list (list 1 2 1 3)))))
 
-(define (test-fromlist-negempty-list)
+(define (test-sets-negfromlist-negempty-list)
 
-  (assert (equal? () (hydra_lib_sets_from_list (list )))))
+  (assert (equal? (list) (hydra_lib_sets_from_list (list )))))
 
 ;; toList
 
-(define (test-tolist-negconvert-to-list)
+(define (test-sets-negtolist-negconvert-to-list)
 
   (assert (equal? (list 1 2 3) (hydra_lib_sets_to_list (list 1 2 3)))))
 
-(define (test-tolist-negunsorted-input)
+(define (test-sets-negtolist-negunsorted-input)
 
   (assert (equal? (list 1 2 3) (hydra_lib_sets_to_list (list 1 2 3)))))
 
-(define (test-tolist-negempty-set)
+(define (test-sets-negtolist-negempty-set)
 
-  (assert (equal? (list ) (hydra_lib_sets_to_list ()))))
+  (assert (equal? (list ) (hydra_lib_sets_to_list (list)))))
 
 ;; insert
 
-(define (test-insert-neginsert-new-element)
+(define (test-sets-neginsert-neginsert-new-element)
 
   (assert (equal? (list 1 2 3 4) ((hydra_lib_sets_insert 4) (list 1 2 3)))))
 
-(define (test-insert-neginsert-existing-element)
+(define (test-sets-neginsert-neginsert-existing-element)
 
   (assert (equal? (list 1 2 3) ((hydra_lib_sets_insert 2) (list 1 2 3)))))
 
-(define (test-insert-neginsert-into-empty)
+(define (test-sets-neginsert-neginsert-into-empty)
 
-  (assert (equal? (list 1) ((hydra_lib_sets_insert 1) ()))))
+  (assert (equal? (list 1) ((hydra_lib_sets_insert 1) (list)))))
 
 ;; delete
 
-(define (test-delete-negdelete-existing)
+(define (test-sets-negdelete-negdelete-existing)
 
   (assert (equal? (list 1 3) ((hydra_lib_sets_delete 2) (list 1 2 3)))))
 
-(define (test-delete-negdelete-non-negexisting)
+(define (test-sets-negdelete-negdelete-non-negexisting)
 
   (assert (equal? (list 1 2 3) ((hydra_lib_sets_delete 4) (list 1 2 3)))))
 
-(define (test-delete-negdelete-from-empty)
+(define (test-sets-negdelete-negdelete-from-empty)
 
-  (assert (equal? () ((hydra_lib_sets_delete 1) ()))))
+  (assert (equal? (list) ((hydra_lib_sets_delete 1) (list)))))
 
 ;; member
 
-(define (test-member-negelement-exists)
+(define (test-sets-negmember-negelement-exists)
 
   (assert (equal? #t ((hydra_lib_sets_member 2) (list 1 2 3)))))
 
-(define (test-member-negelement-missing)
+(define (test-sets-negmember-negelement-missing)
 
   (assert (equal? #f ((hydra_lib_sets_member 4) (list 1 2 3)))))
 
-(define (test-member-negempty-set)
+(define (test-sets-negmember-negempty-set)
 
-  (assert (equal? #f ((hydra_lib_sets_member 1) ()))))
+  (assert (equal? #f ((hydra_lib_sets_member 1) (list)))))
 
 ;; size
 
-(define (test-size-negthree-elements)
+(define (test-sets-negsize-negthree-elements)
 
   (assert (equal? 3 (hydra_lib_sets_size (list 1 2 3)))))
 
-(define (test-size-negsingle-element)
+(define (test-sets-negsize-negsingle-element)
 
   (assert (equal? 1 (hydra_lib_sets_size (list 42)))))
 
-(define (test-size-negempty-set)
+(define (test-sets-negsize-negempty-set)
 
-  (assert (equal? 0 (hydra_lib_sets_size ()))))
+  (assert (equal? 0 (hydra_lib_sets_size (list)))))
 
 ;; null
 
-(define (test-null-negempty-set)
+(define (test-sets-negnull-negempty-set)
 
-  (assert (equal? #t (hydra_lib_sets_null ()))))
+  (assert (equal? #t (hydra_lib_sets_null (list)))))
 
-(define (test-null-negnon-negempty-set)
+(define (test-sets-negnull-negnon-negempty-set)
 
   (assert (equal? #f (hydra_lib_sets_null (list 1 2)))))
 
 ;; union
 
-(define (test-union-negunion-two-sets)
+(define (test-sets-negunion-negunion-two-sets)
 
   (assert (equal? (list 1 2 3) ((hydra_lib_sets_union (list 1 2)) (list 2 3)))))
 
-(define (test-union-negunion-with-empty)
+(define (test-sets-negunion-negunion-with-empty)
 
-  (assert (equal? (list 1 2) ((hydra_lib_sets_union (list 1 2)) ()))))
+  (assert (equal? (list 1 2) ((hydra_lib_sets_union (list 1 2)) (list)))))
 
-(define (test-union-negempty-with-non-negempty)
+(define (test-sets-negunion-negempty-with-non-negempty)
 
-  (assert (equal? (list 1 2) ((hydra_lib_sets_union ()) (list 1 2)))))
+  (assert (equal? (list 1 2) ((hydra_lib_sets_union (list)) (list 1 2)))))
 
 ;; unions
 
-(define (test-unions-negunion-of-multiple-sets)
+(define (test-sets-negunions-negunion-of-multiple-sets)
 
   (assert (equal? (list 1 2 3 4) (hydra_lib_sets_unions (list (list 1 2) (list 2 3) (list 3 4))))))
 
-(define (test-unions-negunion-with-empty-sets)
+(define (test-sets-negunions-negunion-with-empty-sets)
 
-  (assert (equal? (list 1 2 3) (hydra_lib_sets_unions (list (list 1 2) () (list 3))))))
+  (assert (equal? (list 1 2 3) (hydra_lib_sets_unions (list (list 1 2) (list) (list 3))))))
 
-(define (test-unions-negempty-list-of-sets)
+(define (test-sets-negunions-negempty-list-of-sets)
 
-  (assert (equal? () (hydra_lib_sets_unions (list )))))
+  (assert (equal? (list) (hydra_lib_sets_unions (list )))))
 
-(define (test-unions-negsingle-set)
+(define (test-sets-negunions-negsingle-set)
 
   (assert (equal? (list 1 2 3) (hydra_lib_sets_unions (list (list 1 2 3))))))
 
 ;; intersection
 
-(define (test-intersection-negcommon-elements)
+(define (test-sets-negintersection-negcommon-elements)
 
   (assert (equal? (list 2 3) ((hydra_lib_sets_intersection (list 1 2 3)) (list 2 3 4)))))
 
-(define (test-intersection-negno-common-elements)
+(define (test-sets-negintersection-negno-common-elements)
 
-  (assert (equal? () ((hydra_lib_sets_intersection (list 1 2)) (list 3 4)))))
+  (assert (equal? (list) ((hydra_lib_sets_intersection (list 1 2)) (list 3 4)))))
 
-(define (test-intersection-negintersection-with-empty)
+(define (test-sets-negintersection-negintersection-with-empty)
 
-  (assert (equal? () ((hydra_lib_sets_intersection (list 1 2)) ()))))
+  (assert (equal? (list) ((hydra_lib_sets_intersection (list 1 2)) (list)))))
 
 ;; difference
 
-(define (test-difference-negremove-elements)
+(define (test-sets-negdifference-negremove-elements)
 
   (assert (equal? (list 1 3) ((hydra_lib_sets_difference (list 1 2 3)) (list 2 4)))))
 
-(define (test-difference-negno-overlap)
+(define (test-sets-negdifference-negno-overlap)
 
   (assert (equal? (list 1 2) ((hydra_lib_sets_difference (list 1 2)) (list 3 4)))))
 
-(define (test-difference-negdifference-with-empty)
+(define (test-sets-negdifference-negdifference-with-empty)
 
-  (assert (equal? (list 1 2) ((hydra_lib_sets_difference (list 1 2)) ()))))
+  (assert (equal? (list 1 2) ((hydra_lib_sets_difference (list 1 2)) (list)))))
 
 ;; map
 
-(define (test-map-negmap-function)
+(define (test-sets-negmap-negmap-function)
 
   (assert (equal? (list 2 4 6) ((hydra_lib_sets_map (lambda (x) ((hydra_lib_math_mul x) 2))) (list 1 2 3)))))
 
-(define (test-map-negmap-on-empty)
+(define (test-sets-negmap-negmap-on-empty)
 
-  (assert (equal? () ((hydra_lib_sets_map (lambda (x) ((hydra_lib_math_mul x) 2))) ()))))
+  (assert (equal? (list) ((hydra_lib_sets_map (lambda (x) ((hydra_lib_math_mul x) 2))) (list)))))

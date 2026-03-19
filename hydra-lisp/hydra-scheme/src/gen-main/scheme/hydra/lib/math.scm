@@ -1,6 +1,7 @@
 (define-library (hydra lib math)
   (import (scheme base)
-          (scheme inexact))
+          (scheme inexact)
+          (scheme bytevector))
   (export hydra_lib_math_abs
           hydra_lib_math_acos
           hydra_lib_math_acosh
@@ -215,7 +216,11 @@
                 (/ (inexact (round (* x factor))) factor))))))
 
     ;; roundFloat32 :: Int -> Float -> Float
-    (define hydra_lib_math_round_float32 hydra_lib_math_round_float64)
+    ;; Rounds to N significant digits, then snaps through IEEE float32
+    (define hydra_lib_math_round_float32
+      (lambda (n)
+        (lambda (x)
+          (snap-to-float32 ((hydra_lib_math_round_float64 n) x)))))
 
     ;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
     (define hydra_lib_math_round_bigfloat hydra_lib_math_round_float64)

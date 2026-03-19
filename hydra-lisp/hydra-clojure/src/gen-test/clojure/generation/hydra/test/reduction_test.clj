@@ -6,19 +6,19 @@
 
 ;; beta reduction
 
-(deftest test-beta-reduction-negidentity-function-applied-to-literal
+(deftest test-reduction-negbeta-reduction-negidentity-function-applied-to-literal
 
   (is (= 42
 
          ((fn [x] x) 42))))
 
-(deftest test-beta-reduction-negconstant-function
+(deftest test-reduction-negbeta-reduction-negconstant-function
 
   (is (= 1
 
          ((fn [x] 1) 42))))
 
-(deftest test-beta-reduction-negnested-application
+(deftest test-reduction-negbeta-reduction-negnested-application
 
   (is (= 1
 
@@ -26,97 +26,97 @@
 
 ;; monomorphic primitives
 
-(deftest test-monomorphic-primitives-negtoupper-on-lowercase
+(deftest test-reduction-negmonomorphic-primitives-negtoupper-on-lowercase
 
   (is (= "HELLO"
 
          (hydra_lib_strings_to_upper "hello"))))
 
-(deftest test-monomorphic-primitives-negtoupper-on-mixed-case
+(deftest test-reduction-negmonomorphic-primitives-negtoupper-on-mixed-case
 
   (is (= "HELLO WORLD"
 
          (hydra_lib_strings_to_upper "Hello World"))))
 
-(deftest test-monomorphic-primitives-negtoupper-on-empty-string
+(deftest test-reduction-negmonomorphic-primitives-negtoupper-on-empty-string
 
   (is (= ""
 
          (hydra_lib_strings_to_upper ""))))
 
-(deftest test-monomorphic-primitives-negtolower-on-uppercase
+(deftest test-reduction-negmonomorphic-primitives-negtolower-on-uppercase
 
   (is (= "hello"
 
          (hydra_lib_strings_to_lower "HELLO"))))
 
-(deftest test-monomorphic-primitives-negstring-length
+(deftest test-reduction-negmonomorphic-primitives-negstring-length
 
   (is (= 5
 
          (hydra_lib_strings_length "hello"))))
 
-(deftest test-monomorphic-primitives-negstring-length-of-empty
+(deftest test-reduction-negmonomorphic-primitives-negstring-length-of-empty
 
   (is (= 0
 
          (hydra_lib_strings_length ""))))
 
-(deftest test-monomorphic-primitives-negadd-two-positive-integers
+(deftest test-reduction-negmonomorphic-primitives-negadd-two-positive-integers
 
   (is (= 8
 
          ((hydra_lib_math_add 3) 5))))
 
-(deftest test-monomorphic-primitives-negadd-negative-and-positive
+(deftest test-reduction-negmonomorphic-primitives-negadd-negative-and-positive
 
   (is (= -7
 
          ((hydra_lib_math_add -10) 3))))
 
-(deftest test-monomorphic-primitives-negadd-with-zero
+(deftest test-reduction-negmonomorphic-primitives-negadd-with-zero
 
   (is (= 42
 
          ((hydra_lib_math_add 0) 42))))
 
-(deftest test-monomorphic-primitives-negsubtract-integers
+(deftest test-reduction-negmonomorphic-primitives-negsubtract-integers
 
   (is (= 7
 
          ((hydra_lib_math_sub 10) 3))))
 
-(deftest test-monomorphic-primitives-negmultiply-integers
+(deftest test-reduction-negmonomorphic-primitives-negmultiply-integers
 
   (is (= 42
 
          ((hydra_lib_math_mul 6) 7))))
 
-(deftest test-monomorphic-primitives-negmultiply-by-zero
+(deftest test-reduction-negmonomorphic-primitives-negmultiply-by-zero
 
   (is (= 0
 
          ((hydra_lib_math_mul 100) 0))))
 
-(deftest test-monomorphic-primitives-negdivide-integers
+(deftest test-reduction-negmonomorphic-primitives-negdivide-integers
 
   (is (= 5
 
          ((hydra_lib_math_div 20) 4))))
 
-(deftest test-monomorphic-primitives-negmodulo
+(deftest test-reduction-negmonomorphic-primitives-negmodulo
 
   (is (= 2
 
          ((hydra_lib_math_mod 17) 5))))
 
-(deftest test-monomorphic-primitives-negspliton-basic
+(deftest test-reduction-negmonomorphic-primitives-negspliton-basic
 
   (is (= (list "a" "b" "c")
 
          ((hydra_lib_strings_split_on ",") "a,b,c"))))
 
-(deftest test-monomorphic-primitives-negcat2-strings
+(deftest test-reduction-negmonomorphic-primitives-negcat2-strings
 
   (is (= "helloworld"
 
@@ -124,67 +124,67 @@
 
 ;; polymorphic primitives
 
-(deftest test-polymorphic-primitives-neglength-of-integer-list
+(deftest test-reduction-negpolymorphic-primitives-neglength-of-integer-list
 
   (is (= 3
 
          (hydra_lib_lists_length (list 1 2 3)))))
 
-(deftest test-polymorphic-primitives-neglength-of-string-list
+(deftest test-reduction-negpolymorphic-primitives-neglength-of-string-list
 
   (is (= 2
 
          (hydra_lib_lists_length (list "a" "b")))))
 
-(deftest test-polymorphic-primitives-neglength-of-empty-list
+(deftest test-reduction-negpolymorphic-primitives-neglength-of-empty-list
 
   (is (= 0
 
          (hydra_lib_lists_length (list )))))
 
-(deftest test-polymorphic-primitives-neglength-of-single-element-list
+(deftest test-reduction-negpolymorphic-primitives-neglength-of-single-element-list
 
   (is (= 1
 
          (hydra_lib_lists_length (list true)))))
 
-(deftest test-polymorphic-primitives-neghead-of-integer-list
+(deftest test-reduction-negpolymorphic-primitives-neghead-of-integer-list
 
   (is (= 10
 
          (hydra_lib_lists_head (list 10 20 30)))))
 
-(deftest test-polymorphic-primitives-neghead-of-string-list
+(deftest test-reduction-negpolymorphic-primitives-neghead-of-string-list
 
   (is (= "first"
 
          (hydra_lib_lists_head (list "first" "second")))))
 
-(deftest test-polymorphic-primitives-neglast-of-integer-list
+(deftest test-reduction-negpolymorphic-primitives-neglast-of-integer-list
 
   (is (= 30
 
          (hydra_lib_lists_last (list 10 20 30)))))
 
-(deftest test-polymorphic-primitives-negconcat-two-integer-lists
+(deftest test-reduction-negpolymorphic-primitives-negconcat-two-integer-lists
 
   (is (= (list 1 2 3 4)
 
          ((hydra_lib_lists_concat2 (list 1 2)) (list 3 4)))))
 
-(deftest test-polymorphic-primitives-negconcat-with-empty-list
+(deftest test-reduction-negpolymorphic-primitives-negconcat-with-empty-list
 
   (is (= (list 1 2)
 
          ((hydra_lib_lists_concat2 (list )) (list 1 2)))))
 
-(deftest test-polymorphic-primitives-negreverse-integer-list
+(deftest test-reduction-negpolymorphic-primitives-negreverse-integer-list
 
   (is (= (list 3 2 1)
 
          (hydra_lib_lists_reverse (list 1 2 3)))))
 
-(deftest test-polymorphic-primitives-negreverse-empty-list
+(deftest test-reduction-negpolymorphic-primitives-negreverse-empty-list
 
   (is (= (list )
 
@@ -192,7 +192,7 @@
 
 ;; nullary primitives
 
-(deftest test-nullary-primitives-negempty-set-has-size-zero
+(deftest test-reduction-negnullary-primitives-negempty-set-has-size-zero
 
   (is (= 0
 
@@ -200,67 +200,67 @@
 
 ;; literals as values
 
-(deftest test-literals-as-values-neginteger-literal-is-a-value
+(deftest test-reduction-negliterals-as-values-neginteger-literal-is-a-value
 
   (is (= 42
 
          42)))
 
-(deftest test-literals-as-values-negnegative-integer-literal
+(deftest test-reduction-negliterals-as-values-negnegative-integer-literal
 
   (is (= -17
 
          -17)))
 
-(deftest test-literals-as-values-negzero-integer-literal
+(deftest test-reduction-negliterals-as-values-negzero-integer-literal
 
   (is (= 0
 
          0)))
 
-(deftest test-literals-as-values-negstring-literal-is-a-value
+(deftest test-reduction-negliterals-as-values-negstring-literal-is-a-value
 
   (is (= "hello"
 
          "hello")))
 
-(deftest test-literals-as-values-negempty-string-literal
+(deftest test-reduction-negliterals-as-values-negempty-string-literal
 
   (is (= ""
 
          "")))
 
-(deftest test-literals-as-values-negstring-with-special-characters
+(deftest test-reduction-negliterals-as-values-negstring-with-special-characters
 
   (is (= "hello\nworld\ttab"
 
          "hello\nworld\ttab")))
 
-(deftest test-literals-as-values-negboolean-true-is-a-value
+(deftest test-reduction-negliterals-as-values-negboolean-true-is-a-value
 
   (is (= true
 
          true)))
 
-(deftest test-literals-as-values-negboolean-false-is-a-value
+(deftest test-reduction-negliterals-as-values-negboolean-false-is-a-value
 
   (is (= false
 
          false)))
 
-(deftest test-literals-as-values-negfloat-literal-is-a-value
+(deftest test-reduction-negliterals-as-values-negfloat-literal-is-a-value
 
   (is (= 3.14
 
          3.14)))
 
-(deftest test-literals-as-values-negnegative-float-literal
+(deftest test-reduction-negliterals-as-values-negnegative-float-literal
 
   (is (= -2.718
 
          -2.718)))
 
-(deftest test-literals-as-values-negzero-float-literal
+(deftest test-reduction-negliterals-as-values-negzero-float-literal
 
   (is (= 0.0
 
@@ -268,19 +268,19 @@
 
 ;; list reduction
 
-(deftest test-list-reduction-negempty-list-is-a-value
+(deftest test-reduction-neglist-reduction-negempty-list-is-a-value
 
   (is (= (list )
 
          (list ))))
 
-(deftest test-list-reduction-neglist-of-literals-is-a-value
+(deftest test-reduction-neglist-reduction-neglist-of-literals-is-a-value
 
   (is (= (list 1 2 3)
 
          (list 1 2 3))))
 
-(deftest test-list-reduction-neglist-with-reducible-element
+(deftest test-reduction-neglist-reduction-neglist-with-reducible-element
 
   (is (= (list 42)
 
@@ -288,19 +288,19 @@
 
 ;; optional reduction
 
-(deftest test-optional-reduction-negnothing-is-a-value
+(deftest test-reduction-negoptional-reduction-negnothing-is-a-value
 
   (is (= (list :nothing)
 
          (list :nothing))))
 
-(deftest test-optional-reduction-negjust-literal-is-a-value
+(deftest test-reduction-negoptional-reduction-negjust-literal-is-a-value
 
   (is (= (list :just 42)
 
          (list :just 42))))
 
-(deftest test-optional-reduction-negjust-with-reducible-content
+(deftest test-reduction-negoptional-reduction-negjust-with-reducible-content
 
   (is (= (list :just 42)
 

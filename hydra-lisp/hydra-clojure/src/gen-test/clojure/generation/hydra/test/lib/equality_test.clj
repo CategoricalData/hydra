@@ -6,19 +6,19 @@
 
 ;; compare
 
-(deftest test-compare-negless-than
+(deftest test-equality-negcompare-negless-than
 
   (is (= (list :less_than nil)
 
          ((hydra_lib_equality_compare 3) 5))))
 
-(deftest test-compare-negequal
+(deftest test-equality-negcompare-negequal
 
   (is (= (list :equal_to nil)
 
          ((hydra_lib_equality_compare 5) 5))))
 
-(deftest test-compare-neggreater-than
+(deftest test-equality-negcompare-neggreater-than
 
   (is (= (list :greater_than nil)
 
@@ -26,13 +26,13 @@
 
 ;; equal
 
-(deftest test-equal-negequal-integers
+(deftest test-equality-negequal-negequal-integers
 
   (is (= true
 
          ((hydra_lib_equality_equal 5) 5))))
 
-(deftest test-equal-negunequal-integers
+(deftest test-equality-negequal-negunequal-integers
 
   (is (= false
 
@@ -40,19 +40,19 @@
 
 ;; gt
 
-(deftest test-gt-neggreater
+(deftest test-equality-neggt-neggreater
 
   (is (= true
 
          ((hydra_lib_equality_gt 5) 3))))
 
-(deftest test-gt-negequal
+(deftest test-equality-neggt-negequal
 
   (is (= false
 
          ((hydra_lib_equality_gt 5) 5))))
 
-(deftest test-gt-negless
+(deftest test-equality-neggt-negless
 
   (is (= false
 
@@ -60,19 +60,19 @@
 
 ;; gte
 
-(deftest test-gte-neggreater
+(deftest test-equality-neggte-neggreater
 
   (is (= true
 
          ((hydra_lib_equality_gte 5) 3))))
 
-(deftest test-gte-negequal
+(deftest test-equality-neggte-negequal
 
   (is (= true
 
          ((hydra_lib_equality_gte 5) 5))))
 
-(deftest test-gte-negless
+(deftest test-equality-neggte-negless
 
   (is (= false
 
@@ -80,7 +80,7 @@
 
 ;; identity
 
-(deftest test-identity-neginteger
+(deftest test-equality-negidentity-neginteger
 
   (is (= 42
 
@@ -88,19 +88,19 @@
 
 ;; lt
 
-(deftest test-lt-negless
+(deftest test-equality-neglt-negless
 
   (is (= true
 
          ((hydra_lib_equality_lt 3) 5))))
 
-(deftest test-lt-negequal
+(deftest test-equality-neglt-negequal
 
   (is (= false
 
          ((hydra_lib_equality_lt 5) 5))))
 
-(deftest test-lt-neggreater
+(deftest test-equality-neglt-neggreater
 
   (is (= false
 
@@ -108,19 +108,19 @@
 
 ;; lte
 
-(deftest test-lte-negless
+(deftest test-equality-neglte-negless
 
   (is (= true
 
          ((hydra_lib_equality_lte 3) 5))))
 
-(deftest test-lte-negequal
+(deftest test-equality-neglte-negequal
 
   (is (= true
 
          ((hydra_lib_equality_lte 5) 5))))
 
-(deftest test-lte-neggreater
+(deftest test-equality-neglte-neggreater
 
   (is (= false
 
@@ -128,19 +128,19 @@
 
 ;; max
 
-(deftest test-max-negfirst-greater
+(deftest test-equality-negmax-negfirst-greater
 
   (is (= 5
 
          ((hydra_lib_equality_max 5) 3))))
 
-(deftest test-max-negsecond-greater
+(deftest test-equality-negmax-negsecond-greater
 
   (is (= 5
 
          ((hydra_lib_equality_max 3) 5))))
 
-(deftest test-max-negequal
+(deftest test-equality-negmax-negequal
 
   (is (= 5
 
@@ -148,19 +148,19 @@
 
 ;; min
 
-(deftest test-min-negfirst-less
+(deftest test-equality-negmin-negfirst-less
 
   (is (= 3
 
          ((hydra_lib_equality_min 3) 5))))
 
-(deftest test-min-negsecond-less
+(deftest test-equality-negmin-negsecond-less
 
   (is (= 3
 
          ((hydra_lib_equality_min 5) 3))))
 
-(deftest test-min-negequal
+(deftest test-equality-negmin-negequal
 
   (is (= 5
 
@@ -168,31 +168,31 @@
 
 ;; compare strings
 
-(deftest test-compare-strings-negless-than-lexicographic
+(deftest test-equality-negcompare-strings-negless-than-lexicographic
 
   (is (= (list :less_than nil)
 
          ((hydra_lib_equality_compare "apple") "banana"))))
 
-(deftest test-compare-strings-negequal
+(deftest test-equality-negcompare-strings-negequal
 
   (is (= (list :equal_to nil)
 
          ((hydra_lib_equality_compare "hello") "hello"))))
 
-(deftest test-compare-strings-neggreater-than-lexicographic
+(deftest test-equality-negcompare-strings-neggreater-than-lexicographic
 
   (is (= (list :greater_than nil)
 
          ((hydra_lib_equality_compare "zebra") "apple"))))
 
-(deftest test-compare-strings-negempty-vs-non-negempty
+(deftest test-equality-negcompare-strings-negempty-vs-non-negempty
 
   (is (= (list :less_than nil)
 
          ((hydra_lib_equality_compare "") "a"))))
 
-(deftest test-compare-strings-negprefix-vs-longer
+(deftest test-equality-negcompare-strings-negprefix-vs-longer
 
   (is (= (list :less_than nil)
 
@@ -200,19 +200,19 @@
 
 ;; lt strings
 
-(deftest test-lt-strings-negless-lexicographic
+(deftest test-equality-neglt-strings-negless-lexicographic
 
   (is (= true
 
          ((hydra_lib_equality_lt "apple") "banana"))))
 
-(deftest test-lt-strings-negequal
+(deftest test-equality-neglt-strings-negequal
 
   (is (= false
 
          ((hydra_lib_equality_lt "hello") "hello"))))
 
-(deftest test-lt-strings-neggreater
+(deftest test-equality-neglt-strings-neggreater
 
   (is (= false
 
@@ -220,19 +220,19 @@
 
 ;; gt strings
 
-(deftest test-gt-strings-neggreater-lexicographic
+(deftest test-equality-neggt-strings-neggreater-lexicographic
 
   (is (= true
 
          ((hydra_lib_equality_gt "zebra") "apple"))))
 
-(deftest test-gt-strings-negequal
+(deftest test-equality-neggt-strings-negequal
 
   (is (= false
 
          ((hydra_lib_equality_gt "hello") "hello"))))
 
-(deftest test-gt-strings-negless
+(deftest test-equality-neggt-strings-negless
 
   (is (= false
 
@@ -240,19 +240,19 @@
 
 ;; max strings
 
-(deftest test-max-strings-negfirst-greater
+(deftest test-equality-negmax-strings-negfirst-greater
 
   (is (= "zebra"
 
          ((hydra_lib_equality_max "zebra") "apple"))))
 
-(deftest test-max-strings-negsecond-greater
+(deftest test-equality-negmax-strings-negsecond-greater
 
   (is (= "zebra"
 
          ((hydra_lib_equality_max "apple") "zebra"))))
 
-(deftest test-max-strings-negequal
+(deftest test-equality-negmax-strings-negequal
 
   (is (= "hello"
 
@@ -260,19 +260,19 @@
 
 ;; min strings
 
-(deftest test-min-strings-negfirst-less
+(deftest test-equality-negmin-strings-negfirst-less
 
   (is (= "apple"
 
          ((hydra_lib_equality_min "apple") "zebra"))))
 
-(deftest test-min-strings-negsecond-less
+(deftest test-equality-negmin-strings-negsecond-less
 
   (is (= "apple"
 
          ((hydra_lib_equality_min "zebra") "apple"))))
 
-(deftest test-min-strings-negequal
+(deftest test-equality-negmin-strings-negequal
 
   (is (= "hello"
 
@@ -280,25 +280,25 @@
 
 ;; compare floats
 
-(deftest test-compare-floats-negless-than
+(deftest test-equality-negcompare-floats-negless-than
 
   (is (= (list :less_than nil)
 
          ((hydra_lib_equality_compare 1.5) 2.5))))
 
-(deftest test-compare-floats-negequal
+(deftest test-equality-negcompare-floats-negequal
 
   (is (= (list :equal_to nil)
 
          ((hydra_lib_equality_compare 3.14) 3.14))))
 
-(deftest test-compare-floats-neggreater-than
+(deftest test-equality-negcompare-floats-neggreater-than
 
   (is (= (list :greater_than nil)
 
          ((hydra_lib_equality_compare 5.0) 3.0))))
 
-(deftest test-compare-floats-negnegative-vs-positive
+(deftest test-equality-negcompare-floats-negnegative-vs-positive
 
   (is (= (list :less_than nil)
 
@@ -306,19 +306,19 @@
 
 ;; lt floats
 
-(deftest test-lt-floats-negless
+(deftest test-equality-neglt-floats-negless
 
   (is (= true
 
          ((hydra_lib_equality_lt 1.5) 2.5))))
 
-(deftest test-lt-floats-negequal
+(deftest test-equality-neglt-floats-negequal
 
   (is (= false
 
          ((hydra_lib_equality_lt 3.14) 3.14))))
 
-(deftest test-lt-floats-neggreater
+(deftest test-equality-neglt-floats-neggreater
 
   (is (= false
 
@@ -326,19 +326,19 @@
 
 ;; gt floats
 
-(deftest test-gt-floats-neggreater
+(deftest test-equality-neggt-floats-neggreater
 
   (is (= true
 
          ((hydra_lib_equality_gt 5.0) 3.0))))
 
-(deftest test-gt-floats-negequal
+(deftest test-equality-neggt-floats-negequal
 
   (is (= false
 
          ((hydra_lib_equality_gt 3.14) 3.14))))
 
-(deftest test-gt-floats-negless
+(deftest test-equality-neggt-floats-negless
 
   (is (= false
 

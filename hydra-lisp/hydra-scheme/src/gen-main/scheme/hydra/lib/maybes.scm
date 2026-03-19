@@ -18,7 +18,7 @@
           maybe-value)
   (begin
 
-    ;; Maybe representation: (list 'just val) or (list 'nothing '())
+    ;; Maybe representation: (list 'just val) or (list 'nothing)
     ;; Also handles: bare value for Just, '() for Nothing, (maybe val)/(maybe '())
 
     (define (maybe-nothing? m)
@@ -36,9 +36,9 @@
       (lambda (mf)
         (lambda (mx)
           (if (maybe-nothing? mf)
-              (list 'nothing '())
+              (list 'nothing)
               (if (maybe-nothing? mx)
-                  (list 'nothing '())
+                  (list 'nothing)
                   (list 'just ((maybe-value mf) (maybe-value mx))))))))
 
     ;; bind :: Maybe a -> (a -> Maybe b) -> Maybe b
@@ -46,7 +46,7 @@
       (lambda (m)
         (lambda (f)
           (if (maybe-nothing? m)
-              (list 'nothing '())
+              (list 'nothing)
               (f (maybe-value m))))))
 
     ;; cases :: Maybe a -> b -> (a -> b) -> b
@@ -75,7 +75,7 @@
           (lambda (x)
             (let ((result (g x)))
               (if (maybe-nothing? result)
-                  (list 'nothing '())
+                  (list 'nothing)
                   (f (maybe-value result))))))))
 
     ;; from_just :: Maybe a -> a
@@ -108,7 +108,7 @@
       (lambda (f)
         (lambda (m)
           (if (maybe-nothing? m)
-              (list 'nothing '())
+              (list 'nothing)
               (list 'just (f (maybe-value m)))))))
 
     ;; map_maybe :: (a -> Maybe b) -> [a] -> [b]

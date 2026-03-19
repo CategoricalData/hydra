@@ -94,7 +94,7 @@
             (let* ((existing (alist-lookup k m))
                    (old-maybe (if existing
                                   (list 'just (cdr existing))
-                                  (list 'nothing '())))
+                                  (list 'nothing)))
                    (new-maybe (f old-maybe)))
               (if (alter-is-nothing? new-maybe)
                   (alist-delete k m)
@@ -190,7 +190,7 @@
           (let ((entry (alist-lookup k m)))
             (if entry
                 (list 'just (cdr entry))
-                (list 'nothing '()))))))
+                (list 'nothing))))))
 
     ;; map :: (v1 -> v2) -> Map k v1 -> Map k v2
     (define hydra_lib_maps_map
