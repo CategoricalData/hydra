@@ -85,8 +85,11 @@
                (catch Exception _ (list :nothing)))))
 
 (def hydra_lib_literals_read_uint64
-  (fn [s] (try (let [n (Long/parseLong s)]
-                 (if (>= n 0) (list :just n) (list :nothing)))
+  (fn [s] (try (let [n (BigInteger. ^String s)]
+                 (if (and (>= (.signum n) 0)
+                          (<= (.compareTo n (BigInteger. "18446744073709551615")) 0))
+                   (list :just (.longValue n))
+                   (list :nothing)))
                (catch Exception _ (list :nothing)))))
 
 ;; Haskell-compatible float formatting
