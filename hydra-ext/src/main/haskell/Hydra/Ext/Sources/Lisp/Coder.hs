@@ -486,9 +486,15 @@ encodeTerm = def "encodeTerm" $
 
      _Term_maybe>>: lambda "mt" $
        Maybes.cases (var "mt")
-         (right (asTerm lispNilExpr))
+         -- Nothing -> (list :nothing)
+         (right (lispApp @@ (lispVar @@ string "list") @@ list [
+           lispKeyword @@ string "nothing"]))
+         -- Just val -> (list :just encodedVal)
          (lambda "val" $
-           encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "val"),
+           "sval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "val") $
+             right (lispApp @@ (lispVar @@ string "list") @@ list [
+               lispKeyword @@ string "just",
+               var "sval"])),
 
      _Term_pair>>: lambda "p" $
        "f" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Pairs.first (var "p")) $

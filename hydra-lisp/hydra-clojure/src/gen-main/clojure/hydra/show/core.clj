@@ -42,4 +42,4 @@
 
 (def hydra_show_core_list (fn [f] (fn [xs] (let [element_strs ((hydra_lib_lists_map f) xs)] (hydra_lib_strings_cat (list "[" ((hydra_lib_strings_intercalate ", ") element_strs) "]"))))))
 
-(def hydra_show_core_read_term (fn [s] (list :literal (list :string s))))
+(def hydra_show_core_read_term (fn [s] (list :just (list :literal (list :string s)))))

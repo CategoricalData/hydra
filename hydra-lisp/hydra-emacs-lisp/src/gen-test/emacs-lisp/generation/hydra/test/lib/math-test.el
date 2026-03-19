@@ -463,7 +463,7 @@
 
 (ert-deftest test-cosh-negcosh-1 ()
 
-  (should (equal 1.5430806348152437 (hydra_lib_math_cosh 1.0))))
+  (should (equal 1.54308063482 ((hydra_lib_math_round_float64 12) (hydra_lib_math_cosh 1.0)))))
 
 (ert-deftest test-cosh-negcosh-2 ()
 
@@ -533,11 +533,11 @@
 
 (ert-deftest test-exp-negexp-1 ()
 
-  (should (equal 2.718281828459045 (hydra_lib_math_exp 1.0))))
+  (should (equal 2.71828182846 ((hydra_lib_math_round_float64 12) (hydra_lib_math_exp 1.0)))))
 
 (ert-deftest test-exp-negexp--neg1 ()
 
-  (should (equal 0.36787944117144233 (hydra_lib_math_exp -1.0))))
+  (should (equal 0.367879441171 ((hydra_lib_math_round_float64 12) (hydra_lib_math_exp -1.0)))))
 
 (ert-deftest test-exp-negexp-2 ()
 

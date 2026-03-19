@@ -17,7 +17,7 @@
 (define hydra_parsers_many (lambda (p) ((hydra_parsers_alt (hydra_parsers_some p)) (hydra_parsers_pure (list)))))
 (define hydra_parsers_some (lambda (p) ((hydra_parsers_bind p) (lambda (x) ((hydra_parsers_bind (hydra_parsers_many p)) (lambda (xs) (hydra_parsers_pure ((hydra_lib_lists_cons x) xs))))))))
 (define hydra_parsers_map (lambda (f) (lambda (pa) (let ((parse (lambda (input) ((lambda (match_target) ((lambda (match_value) (cond ((equal? (car match_target) 'success) ((lambda (s) (list 'success (make-hydra_parsing_parse_success (f ((lambda (v) (hydra_parsing_parse_success-value v)) s)) ((lambda (v) (hydra_parsing_parse_success-remainder v)) s)))) match_value)) ((equal? (car match_target) 'failure) ((lambda (e) (list 'failure e)) match_value)))) (cadr match_target))) (((lambda (v) v) pa) input))))) parse))))
-(define hydra_parsers_optional (lambda (p) ((hydra_parsers_alt ((hydra_parsers_map hydra_lib_maybes_pure) p)) (hydra_parsers_pure '()))))
+(define hydra_parsers_optional (lambda (p) ((hydra_parsers_alt ((hydra_parsers_map hydra_lib_maybes_pure) p)) (hydra_parsers_pure (list 'nothing)))))
 (define hydra_parsers_run_parser (lambda (p) (lambda (input) (((lambda (v) v) p) input))))
 (define hydra_parsers_sep_by1 (lambda (p) (lambda (sep) ((hydra_parsers_bind p) (lambda (x) ((hydra_parsers_bind (hydra_parsers_many ((hydra_parsers_bind sep) (lambda (_) p)))) (lambda (xs) (hydra_parsers_pure ((hydra_lib_lists_cons x) xs)))))))))
 (define hydra_parsers_sep_by (lambda (p) (lambda (sep) ((hydra_parsers_alt ((hydra_parsers_sep_by1 p) sep)) (hydra_parsers_pure (list))))))

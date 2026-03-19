@@ -80,7 +80,11 @@
 (defn- maybe-value [val]
   (cond
     (and (sequential? val) (= (first val) :just)) (second val)
-    (and (sequential? val) (= (first val) :maybe)) (second val)
+    (and (sequential? val) (= (first val) :maybe))
+      (let [body (second val)]
+        (cond
+          (and (sequential? body) (= (first body) :just)) (second body)
+          :else body))
     :else val))
 
 (defn- deep-equal?

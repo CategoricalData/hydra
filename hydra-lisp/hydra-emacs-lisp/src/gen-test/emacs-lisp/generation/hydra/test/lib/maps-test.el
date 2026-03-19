@@ -7,15 +7,15 @@
 
 (ert-deftest test-alter-neginsert-new-key ()
 
-  (should (equal (list (list 1 "a") (list 2 "b") (list 3 "new")) (((hydra_lib_maps_alter (lambda (opt) "new")) 3) (list (list 1 "a") (list 2 "b"))))))
+  (should (equal (list (list 1 "a") (list 2 "b") (list 3 "new")) (((hydra_lib_maps_alter (lambda (opt) (list :just "new"))) 3) (list (list 1 "a") (list 2 "b"))))))
 
 (ert-deftest test-alter-negupdate-existing-key ()
 
-  (should (equal (list (list 1 "a") (list 2 "updated")) (((hydra_lib_maps_alter (lambda (opt) "updated")) 2) (list (list 1 "a") (list 2 "b"))))))
+  (should (equal (list (list 1 "a") (list 2 "updated")) (((hydra_lib_maps_alter (lambda (opt) (list :just "updated"))) 2) (list (list 1 "a") (list 2 "b"))))))
 
 (ert-deftest test-alter-negdelete-key ()
 
-  (should (equal (list (list 1 "a")) (((hydra_lib_maps_alter (lambda (opt) nil)) 2) (list (list 1 "a") (list 2 "b"))))))
+  (should (equal (list (list 1 "a")) (((hydra_lib_maps_alter (lambda (opt) (list :nothing))) 2) (list (list 1 "a") (list 2 "b"))))))
 
 ;; bimap
 

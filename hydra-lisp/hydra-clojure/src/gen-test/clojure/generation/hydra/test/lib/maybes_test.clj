@@ -30,13 +30,13 @@
 
   (is (= (list :just 10)
 
-         ((hydra_lib_maybes_bind (list :just 5)) (fn [x] ((hydra_lib_math_mul x) 2))))))
+         ((hydra_lib_maybes_bind (list :just 5)) (fn [x] (list :just ((hydra_lib_math_mul x) 2)))))))
 
 (deftest test-bind-negnothing-to-nothing
 
   (is (= (list :nothing)
 
-         ((hydra_lib_maybes_bind (list :nothing)) (fn [x] ((hydra_lib_math_mul x) 2))))))
+         ((hydra_lib_maybes_bind (list :nothing)) (fn [x] (list :just ((hydra_lib_math_mul x) 2)))))))
 
 ;; cases
 
@@ -84,19 +84,19 @@
 
   (is (= (list :just 12)
 
-         (((hydra_lib_maybes_compose (fn [x] (if ((hydra_lib_equality_lte x) 5) ((hydra_lib_math_add x) 1) nil))) (fn [y] (if ((hydra_lib_equality_gte y) 5) ((hydra_lib_math_mul y) 2) nil))) 5))))
+         (((hydra_lib_maybes_compose (fn [x] (if ((hydra_lib_equality_lte x) 5) (list :just ((hydra_lib_math_add x) 1)) (list :nothing)))) (fn [y] (if ((hydra_lib_equality_gte y) 5) (list :just ((hydra_lib_math_mul y) 2)) (list :nothing)))) 5))))
 
 (deftest test-compose-negfirst-fails
 
   (is (= (list :nothing)
 
-         (((hydra_lib_maybes_compose (fn [x] (if ((hydra_lib_equality_lte x) 5) ((hydra_lib_math_add x) 1) nil))) (fn [y] (if ((hydra_lib_equality_gte y) 5) ((hydra_lib_math_mul y) 2) nil))) 10))))
+         (((hydra_lib_maybes_compose (fn [x] (if ((hydra_lib_equality_lte x) 5) (list :just ((hydra_lib_math_add x) 1)) (list :nothing)))) (fn [y] (if ((hydra_lib_equality_gte y) 5) (list :just ((hydra_lib_math_mul y) 2)) (list :nothing)))) 10))))
 
 (deftest test-compose-negsecond-fails
 
   (is (= (list :nothing)
 
-         (((hydra_lib_maybes_compose (fn [x] (if ((hydra_lib_equality_lte x) 5) ((hydra_lib_math_add x) 1) nil))) (fn [y] (if ((hydra_lib_equality_gte y) 5) ((hydra_lib_math_mul y) 2) nil))) 3))))
+         (((hydra_lib_maybes_compose (fn [x] (if ((hydra_lib_equality_lte x) 5) (list :just ((hydra_lib_math_add x) 1)) (list :nothing)))) (fn [y] (if ((hydra_lib_equality_gte y) 5) (list :just ((hydra_lib_math_mul y) 2)) (list :nothing)))) 3))))
 
 ;; fromJust
 
@@ -168,19 +168,19 @@
 
   (is (= (list 6 8 10)
 
-         ((hydra_lib_maybes_map_maybe (fn [x] (if ((hydra_lib_equality_gt x) 2) ((hydra_lib_math_mul x) 2) nil))) (list 1 2 3 4 5)))))
+         ((hydra_lib_maybes_map_maybe (fn [x] (if ((hydra_lib_equality_gt x) 2) (list :just ((hydra_lib_math_mul x) 2)) (list :nothing)))) (list 1 2 3 4 5)))))
 
 (deftest test-mapmaybe-negempty-result
 
   (is (= (list )
 
-         ((hydra_lib_maybes_map_maybe (fn [x] (if ((hydra_lib_equality_gt x) 2) ((hydra_lib_math_mul x) 2) nil))) (list 1 2)))))
+         ((hydra_lib_maybes_map_maybe (fn [x] (if ((hydra_lib_equality_gt x) 2) (list :just ((hydra_lib_math_mul x) 2)) (list :nothing)))) (list 1 2)))))
 
 (deftest test-mapmaybe-negempty-input
 
   (is (= (list )
 
-         ((hydra_lib_maybes_map_maybe (fn [x] (if ((hydra_lib_equality_gt x) 2) ((hydra_lib_math_mul x) 2) nil))) (list )))))
+         ((hydra_lib_maybes_map_maybe (fn [x] (if ((hydra_lib_equality_gt x) 2) (list :just ((hydra_lib_math_mul x) 2)) (list :nothing)))) (list )))))
 
 ;; maybe
 

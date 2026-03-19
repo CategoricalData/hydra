@@ -34,7 +34,7 @@
 
 (def hydra_parsers_map (fn [f] (fn [pa] (let [parse (fn [input] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :success) ((fn [s] (list :success (->hydra_parsing_parse_success (f ((fn [v] (:value v)) s)) ((fn [v] (:remainder v)) s)))) match_value) (= (first match_target) :failure) ((fn [e] (list :failure e)) match_value))) (second match_target))) (((fn [v] v) pa) input)))] parse))))
 
-(def hydra_parsers_optional (fn [p] ((hydra_parsers_alt ((hydra_parsers_map hydra_lib_maybes_pure) p)) (hydra_parsers_pure nil))))
+(def hydra_parsers_optional (fn [p] ((hydra_parsers_alt ((hydra_parsers_map hydra_lib_maybes_pure) p)) (hydra_parsers_pure (list :nothing)))))
 
 (def hydra_parsers_run_parser (fn [p] (fn [input] (((fn [v] v) p) input))))
 

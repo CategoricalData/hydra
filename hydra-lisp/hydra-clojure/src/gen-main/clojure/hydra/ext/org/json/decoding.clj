@@ -8,7 +8,7 @@
 
 (def hydra_ext_org_json_decoding_decode_boolean (fn [match_target] ((fn [match_value] (cond (= (first match_target) :boolean) ((fn [b] (list :right b)) match_value) :else (list :left "expected a boolean"))) (second match_target))))
 
-(def hydra_ext_org_json_decoding_decode_optional_field (fn [decode_value] (fn [name] (fn [m] (((hydra_lib_maybes_maybe (list :right nil)) (fn [v] ((hydra_lib_eithers_map (fn [x] x)) (decode_value v)))) ((hydra_lib_maps_lookup name) m))))))
+(def hydra_ext_org_json_decoding_decode_optional_field (fn [decode_value] (fn [name] (fn [m] (((hydra_lib_maybes_maybe (list :right (list :nothing))) (fn [v] ((hydra_lib_eithers_map (fn [x] (list :just x))) (decode_value v)))) ((hydra_lib_maps_lookup name) m))))))
 
 (def hydra_ext_org_json_decoding_decode_field (fn [decode_value] (fn [name] (fn [m] ((hydra_lib_eithers_bind (((hydra_ext_org_json_decoding_decode_optional_field decode_value) name) m)) ((hydra_lib_maybes_maybe (list :left ((hydra_lib_strings_cat2 "missing field: ") name))) (fn [f] (list :right f))))))))
 
