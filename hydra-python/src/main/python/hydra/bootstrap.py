@@ -27,6 +27,7 @@ from hydra.generation import (
     write_haskell,
     write_java,
     write_python,
+    write_lisp_dialect,
 )
 
 
@@ -61,7 +62,9 @@ def main():
 
     parser = argparse.ArgumentParser(
         description="Bootstrap Hydra code generation from JSON modules")
-    parser.add_argument("--target", required=True, choices=["haskell", "java", "python"],
+    parser.add_argument("--target", required=True,
+                        choices=["haskell", "java", "python",
+                                 "clojure", "scheme", "common-lisp", "emacs-lisp"],
                         help="Target language for code generation")
     parser.add_argument("--json-dir", required=True,
                         help="Directory containing JSON module files")
@@ -166,16 +169,29 @@ def main():
 
     step_start = time.time()
 
+    _lisp_dialects = {
+        "clojure": ("clojure", "clj"),
+        "scheme": ("scheme", "scm"),
+        "common-lisp": ("common_lisp", "lisp"),
+        "emacs-lisp": ("emacs_lisp", "el"),
+    }
+
     if args.target == "haskell":
         write_haskell(os.path.join(out_main, "haskell"), all_main_mods, mods_to_generate)
     elif args.target == "java":
         write_java(os.path.join(out_main, "java"), all_main_mods, mods_to_generate)
     elif args.target == "python":
         write_python(os.path.join(out_main, "python"), all_main_mods, mods_to_generate)
+    elif args.target in _lisp_dialects:
+        dialect_name, _ext = _lisp_dialects[args.target]
+        write_lisp_dialect(os.path.join(out_main, args.target), dialect_name, _ext,
+                           all_main_mods, mods_to_generate)
 
     step_time = time.time() - step_start
 
-    ext = {"java": ".java", "python": ".py", "haskell": ".hs"}[args.target]
+    ext = {"java": ".java", "python": ".py", "haskell": ".hs",
+           "clojure": ".clj", "scheme": ".scm", "common-lisp": ".lisp",
+           "emacs-lisp": ".el"}[args.target]
     main_file_count = _count_files(os.path.join(out_dir, "src/gen-main"), ext)
 
     print(f"  Generated {main_file_count} files.", flush=True)
@@ -221,6 +237,10 @@ def main():
                         write_java(os.path.join(out_main_sub, "java"), all_universe, ext_mods_for_tests)
                     elif args.target == "python":
                         write_python(os.path.join(out_main_sub, "python"), all_universe, ext_mods_for_tests)
+                    elif args.target in _lisp_dialects:
+                        d, e = _lisp_dialects[args.target]
+                        write_lisp_dialect(os.path.join(out_main_sub, args.target), d, e,
+                                           all_universe, ext_mods_for_tests)
                     print(flush=True)
 
         print(f"Mapping test modules to {target_cap}...", flush=True)
@@ -237,6 +257,10 @@ def main():
             write_java(os.path.join(out_test, "java"), all_universe, test_mods)
         elif args.target == "python":
             write_python(os.path.join(out_test, "python"), all_universe, test_mods)
+        elif args.target in _lisp_dialects:
+            d, e = _lisp_dialects[args.target]
+            write_lisp_dialect(os.path.join(out_test, args.target), d, e,
+                               all_universe, test_mods)
 
         step_time = time.time() - step_start
         test_file_count = _count_files(os.path.join(out_dir, "src/gen-test"), ext)

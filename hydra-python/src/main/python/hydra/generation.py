@@ -263,3 +263,40 @@ def write_haskell(base_path, universe, mods):
         module_to_haskell, haskell_language(),
         False, False, False, False,
         base_path, universe, mods)
+
+
+def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
+    """Generate source files for a Lisp dialect (Clojure, Scheme, Common Lisp, or Emacs Lisp)."""
+    from hydra.ext.lisp.coder import module_to_lisp
+    from hydra.ext.lisp.language import lisp_language
+    from hydra.ext.lisp.serde import program_to_expr
+    from hydra.ext.lisp.syntax import Dialect
+    from hydra.serialization import print_expr, parenthesize
+    from hydra.names import namespace_to_file_path
+    from hydra.module import FileExtension, Namespace
+    from hydra.util import CaseConvention
+
+    dialect_map = {
+        "clojure": Dialect.CLOJURE,
+        "scheme": Dialect.SCHEME,
+        "common_lisp": Dialect.COMMON_LISP,
+        "emacs_lisp": Dialect.EMACS_LISP,
+    }
+    dialect = dialect_map[dialect_name]
+
+    case_conv = CaseConvention.CAMEL if dialect_name == "clojure" else CaseConvention.LOWER_SNAKE
+
+    def lisp_coder(mod, defs, cx, g):
+        result = module_to_lisp(dialect, mod, defs, cx, g)
+        match result:
+            case Left():
+                return result
+            case Right(value=program):
+                code = print_expr(parenthesize(program_to_expr(program)))
+                file_path = namespace_to_file_path(case_conv, FileExtension(ext), mod.namespace)
+                return Right(FrozenDict({file_path: code}))
+
+    generate_sources(
+        lisp_coder, lisp_language(),
+        False, False, False, False,
+        base_path, universe, mods)

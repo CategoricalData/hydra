@@ -206,6 +206,18 @@ public class Bootstrap {
             case "python":
                 Generation.writePython(outMain + "/python", allMainMods, modsToGenerate);
                 break;
+            case "clojure":
+                Generation.writeLispDialect(outMain + "/clojure", "clojure", "clj", allMainMods, modsToGenerate);
+                break;
+            case "scheme":
+                Generation.writeLispDialect(outMain + "/scheme", "scheme", "scm", allMainMods, modsToGenerate);
+                break;
+            case "common-lisp":
+                Generation.writeLispDialect(outMain + "/common-lisp", "commonLisp", "lisp", allMainMods, modsToGenerate);
+                break;
+            case "emacs-lisp":
+                Generation.writeLispDialect(outMain + "/emacs-lisp", "emacsLisp", "el", allMainMods, modsToGenerate);
+                break;
             default:
                 System.out.println("Unknown target: " + target);
                 System.exit(1);
@@ -213,7 +225,11 @@ public class Bootstrap {
 
         stepTime = System.currentTimeMillis() - stepStart;
 
-        String ext = target.equals("java") ? ".java" : target.equals("python") ? ".py" : ".hs";
+        java.util.Map<String, String> extMap = new java.util.HashMap<>();
+        extMap.put("haskell", ".hs"); extMap.put("java", ".java"); extMap.put("python", ".py");
+        extMap.put("clojure", ".clj"); extMap.put("scheme", ".scm");
+        extMap.put("common-lisp", ".lisp"); extMap.put("emacs-lisp", ".el");
+        String ext = extMap.getOrDefault(target, "");
         long mainFileCount = 0;
         try {
             mainFileCount = Files.walk(Paths.get(outMain))
@@ -270,6 +286,18 @@ public class Bootstrap {
                         break;
                     case "python":
                         Generation.writePython(outTest + "/python", allUniverse, testMods);
+                        break;
+                    case "clojure":
+                        Generation.writeLispDialect(outTest + "/clojure", "clojure", "clj", allUniverse, testMods);
+                        break;
+                    case "scheme":
+                        Generation.writeLispDialect(outTest + "/scheme", "scheme", "scm", allUniverse, testMods);
+                        break;
+                    case "common-lisp":
+                        Generation.writeLispDialect(outTest + "/common-lisp", "commonLisp", "lisp", allUniverse, testMods);
+                        break;
+                    case "emacs-lisp":
+                        Generation.writeLispDialect(outTest + "/emacs-lisp", "emacsLisp", "el", allUniverse, testMods);
                         break;
                 }
             } catch (Exception e) {
