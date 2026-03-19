@@ -22,9 +22,9 @@
 
 (defvar hydra_extract_json_opt (lambda (fname) (lambda (m) ((hydra_lib_maps_lookup fname) m))))
 
-(defvar hydra_extract_json_opt_array (lambda (fname) (lambda (m) (((hydra_lib_maybes_maybe (list :right nil)) (lambda (a) ((hydra_lib_eithers_map (lambda (x) x)) (hydra_extract_json_expect_array a)))) ((hydra_extract_json_opt fname) m)))))
+(defvar hydra_extract_json_opt_array (lambda (fname) (lambda (m) (((hydra_lib_maybes_maybe (list :right (list :nothing))) (lambda (a) ((hydra_lib_eithers_map (lambda (x) (list :just x))) (hydra_extract_json_expect_array a)))) ((hydra_extract_json_opt fname) m)))))
 
-(defvar hydra_extract_json_opt_string (lambda (fname) (lambda (m) (((hydra_lib_maybes_maybe (list :right nil)) (lambda (s) ((hydra_lib_eithers_map (lambda (x) x)) (hydra_extract_json_expect_string s)))) ((hydra_extract_json_opt fname) m)))))
+(defvar hydra_extract_json_opt_string (lambda (fname) (lambda (m) (((hydra_lib_maybes_maybe (list :right (list :nothing))) (lambda (s) ((hydra_lib_eithers_map (lambda (x) (list :just x))) (hydra_extract_json_expect_string s)))) ((hydra_extract_json_opt fname) m)))))
 
 (defvar hydra_extract_json_require (lambda (fname) (lambda (m) (((hydra_lib_maybes_maybe (list :left (hydra_lib_strings_cat (list "required attribute " (hydra_extract_json_show_value fname) " not found")))) (lambda (value) (list :right value))) ((hydra_lib_maps_lookup fname) m)))))
 

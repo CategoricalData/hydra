@@ -34,7 +34,7 @@
 
 (cl:defvar hydra_parsers_map (cl:lambda (f) (cl:lambda (pa) (let ((parse (cl:lambda (input) ((cl:lambda (match_target) ((cl:lambda (match_value) (cond ((equal (car match_target) :success) ((cl:lambda (s) (list :success (make-hydra_parsing_parse_success (f ((cl:lambda (v) (hydra_parsing_parse_success-value v)) s)) ((cl:lambda (v) (hydra_parsing_parse_success-remainder v)) s)))) match_value)) ((equal (car match_target) :failure) ((cl:lambda (e) (list :failure e)) match_value)))) (cadr match_target))) (((cl:lambda (v) v) pa) input))))) parse))))
 
-(cl:defvar hydra_parsers_optional (cl:lambda (p) ((hydra_parsers_alt ((hydra_parsers_map hydra_lib_maybes_pure) p)) (hydra_parsers_pure cl:nil))))
+(cl:defvar hydra_parsers_optional (cl:lambda (p) ((hydra_parsers_alt ((hydra_parsers_map hydra_lib_maybes_pure) p)) (hydra_parsers_pure (list :nothing)))))
 
 (cl:defvar hydra_parsers_run_parser (cl:lambda (p) (cl:lambda (input) (((cl:lambda (v) v) p) input))))
 

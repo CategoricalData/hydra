@@ -10,19 +10,19 @@
 
   (is (= (list (list 1 "a") (list 2 "b") (list 3 "new"))
 
-         (((hydra_lib_maps_alter (fn [opt] "new")) 3) (list (list 1 "a") (list 2 "b"))))))
+         (((hydra_lib_maps_alter (fn [opt] (list :just "new"))) 3) (list (list 1 "a") (list 2 "b"))))))
 
 (deftest test-alter-negupdate-existing-key
 
   (is (= (list (list 1 "a") (list 2 "updated"))
 
-         (((hydra_lib_maps_alter (fn [opt] "updated")) 2) (list (list 1 "a") (list 2 "b"))))))
+         (((hydra_lib_maps_alter (fn [opt] (list :just "updated"))) 2) (list (list 1 "a") (list 2 "b"))))))
 
 (deftest test-alter-negdelete-key
 
   (is (= (list (list 1 "a"))
 
-         (((hydra_lib_maps_alter (fn [opt] nil)) 2) (list (list 1 "a") (list 2 "b"))))))
+         (((hydra_lib_maps_alter (fn [opt] (list :nothing))) 2) (list (list 1 "a") (list 2 "b"))))))
 
 ;; bimap
 

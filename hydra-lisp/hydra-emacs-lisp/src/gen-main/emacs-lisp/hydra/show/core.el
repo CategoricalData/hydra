@@ -58,6 +58,6 @@
 
 (defvar hydra_show_core_list (lambda (f) (lambda (xs) (let ((element_strs ((hydra_lib_lists_map f) xs))) (hydra_lib_strings_cat (list "[" ((hydra_lib_strings_intercalate ", ") element_strs) "]"))))))
 
-(defvar hydra_show_core_read_term (lambda (s) (list :literal (list :string s))))
+(defvar hydra_show_core_read_term (lambda (s) (list :just (list :literal (list :string s)))))
 
 (provide 'hydra.show.core)

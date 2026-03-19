@@ -22,7 +22,7 @@
 
 (require 'hydra.util)
 
-(defvar hydra_names_qualify_name (lambda (name) (let ((parts (hydra_lib_lists_reverse ((hydra_lib_strings_split_on ".") ((lambda (v) v) name))))) (if ((hydra_lib_equality_equal 1) (hydra_lib_lists_length parts)) (make-hydra_module_qualified_name nil ((lambda (v) v) name)) (make-hydra_module_qualified_name ((hydra_lib_strings_intercalate ".") (hydra_lib_lists_reverse (hydra_lib_lists_tail parts))) (hydra_lib_lists_head parts))))))
+(defvar hydra_names_qualify_name (lambda (name) (let ((parts (hydra_lib_lists_reverse ((hydra_lib_strings_split_on ".") ((lambda (v) v) name))))) (if ((hydra_lib_equality_equal 1) (hydra_lib_lists_length parts)) (make-hydra_module_qualified_name (list :nothing) ((lambda (v) v) name)) (make-hydra_module_qualified_name (list :just ((hydra_lib_strings_intercalate ".") (hydra_lib_lists_reverse (hydra_lib_lists_tail parts)))) (hydra_lib_lists_head parts))))))
 
 (defvar hydra_names_compact_name (lambda (namespaces) (lambda (name) (let* ((qual_name (hydra_names_qualify_name name)) (local ((lambda (v) (hydra_module_qualified_name-local v)) qual_name)) (mns ((lambda (v) (hydra_module_qualified_name-namespace v)) qual_name))) (((hydra_lib_maybes_maybe ((lambda (v) v) name)) (lambda (ns_) (((hydra_lib_maybes_maybe local) (lambda (pre) (hydra_lib_strings_cat (list pre ":" local)))) ((hydra_lib_maps_lookup ns_) namespaces)))) mns)))))
 

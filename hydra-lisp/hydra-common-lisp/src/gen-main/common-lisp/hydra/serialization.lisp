@@ -28,11 +28,11 @@
 
 (cl:defvar hydra_serialization_double_space "  ")
 
-(cl:defvar hydra_serialization_half_block_style (make-hydra_ast_block_style hydra_serialization_double_space cl:t cl:nil))
+(cl:defvar hydra_serialization_half_block_style (make-hydra_ast_block_style (list :just hydra_serialization_double_space) cl:t cl:nil))
 
-(cl:defvar hydra_serialization_inline_style (make-hydra_ast_block_style cl:nil cl:nil cl:nil))
+(cl:defvar hydra_serialization_inline_style (make-hydra_ast_block_style (list :nothing) cl:nil cl:nil))
 
-(cl:defvar hydra_serialization_braces_list_adaptive (cl:lambda (els) (let ((inline_list (((hydra_serialization_curly_braces_list cl:nil) hydra_serialization_inline_style) els))) (if ((hydra_lib_equality_gt (hydra_serialization_expression_length inline_list)) 70) (((hydra_serialization_curly_braces_list cl:nil) hydra_serialization_half_block_style) els) inline_list))))
+(cl:defvar hydra_serialization_braces_list_adaptive (cl:lambda (els) (let ((inline_list (((hydra_serialization_curly_braces_list (list :nothing)) hydra_serialization_inline_style) els))) (if ((hydra_lib_equality_gt (hydra_serialization_expression_length inline_list)) 70) (((hydra_serialization_curly_braces_list (list :nothing)) hydra_serialization_half_block_style) els) inline_list))))
 
 (cl:defvar hydra_serialization_square_brackets (make-hydra_ast_brackets "[" "]"))
 
@@ -40,7 +40,7 @@
 
 (cl:defvar hydra_serialization_bracket_list_adaptive (cl:lambda (els) (let ((inline_list ((hydra_serialization_bracket_list hydra_serialization_inline_style) els))) (if ((hydra_lib_equality_gt (hydra_serialization_expression_length inline_list)) 70) ((hydra_serialization_bracket_list hydra_serialization_half_block_style) els) inline_list))))
 
-(cl:defvar hydra_serialization_curly_block (cl:lambda (style) (cl:lambda (e) (((hydra_serialization_curly_braces_list cl:nil) style) (cl:list e)))))
+(cl:defvar hydra_serialization_curly_block (cl:lambda (style) (cl:lambda (e) (((hydra_serialization_curly_braces_list (list :nothing)) style) (cl:list e)))))
 
 (cl:defvar hydra_serialization_custom_indent (cl:lambda (idt) (cl:lambda (s) (hydra_lib_strings_cat ((hydra_lib_lists_intersperse "
 ") ((hydra_lib_lists_map (cl:lambda (line) ((hydra_lib_strings_cat2 idt) line))) (hydra_lib_strings_lines s)))))))
@@ -55,7 +55,7 @@
 
 (cl:defvar hydra_serialization_double_newline_sep (hydra_serialization_sep (make-hydra_ast_op (hydra_serialization_sym "") (make-hydra_ast_padding (list :break cl:nil) (list :break cl:nil)) 0 (list :none cl:nil))))
 
-(cl:defvar hydra_serialization_full_block_style (make-hydra_ast_block_style hydra_serialization_double_space cl:t cl:t))
+(cl:defvar hydra_serialization_full_block_style (make-hydra_ast_block_style (list :just hydra_serialization_double_space) cl:t cl:t))
 
 (cl:defvar hydra_serialization_indent (hydra_serialization_custom_indent hydra_serialization_double_space))
 
