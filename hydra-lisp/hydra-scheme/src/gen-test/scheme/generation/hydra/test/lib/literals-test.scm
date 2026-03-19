@@ -5,780 +5,780 @@
 
 ;; bigintToInt8
 
-(define (test-biginttoint8-negpositive)
+(define (test-literals-negbiginttoint8-negpositive)
 
   (assert (equal? 42 (hydra_lib_literals_bigint_to_int8 42))))
 
-(define (test-biginttoint8-negnegative)
+(define (test-literals-negbiginttoint8-negnegative)
 
   (assert (equal? -42 (hydra_lib_literals_bigint_to_int8 -42))))
 
 ;; bigintToInt16
 
-(define (test-biginttoint16-negpositive)
+(define (test-literals-negbiginttoint16-negpositive)
 
   (assert (equal? 1000 (hydra_lib_literals_bigint_to_int16 1000))))
 
-(define (test-biginttoint16-negnegative)
+(define (test-literals-negbiginttoint16-negnegative)
 
   (assert (equal? -1000 (hydra_lib_literals_bigint_to_int16 -1000))))
 
 ;; bigintToInt32
 
-(define (test-biginttoint32-negpositive)
+(define (test-literals-negbiginttoint32-negpositive)
 
   (assert (equal? 42 (hydra_lib_literals_bigint_to_int32 42))))
 
-(define (test-biginttoint32-negnegative)
+(define (test-literals-negbiginttoint32-negnegative)
 
   (assert (equal? -42 (hydra_lib_literals_bigint_to_int32 -42))))
 
-(define (test-biginttoint32-negzero)
+(define (test-literals-negbiginttoint32-negzero)
 
   (assert (equal? 0 (hydra_lib_literals_bigint_to_int32 0))))
 
 ;; bigintToInt64
 
-(define (test-biginttoint64-negpositive)
+(define (test-literals-negbiginttoint64-negpositive)
 
   (assert (equal? 1000000 (hydra_lib_literals_bigint_to_int64 1000000))))
 
-(define (test-biginttoint64-negnegative)
+(define (test-literals-negbiginttoint64-negnegative)
 
   (assert (equal? -1000000 (hydra_lib_literals_bigint_to_int64 -1000000))))
 
 ;; bigintToUint8
 
-(define (test-biginttouint8-negzero)
+(define (test-literals-negbiginttouint8-negzero)
 
   (assert (equal? 0 (hydra_lib_literals_bigint_to_uint8 0))))
 
-(define (test-biginttouint8-negtypical-value)
+(define (test-literals-negbiginttouint8-negtypical-value)
 
   (assert (equal? 100 (hydra_lib_literals_bigint_to_uint8 100))))
 
 ;; bigintToUint16
 
-(define (test-biginttouint16-negzero)
+(define (test-literals-negbiginttouint16-negzero)
 
   (assert (equal? 0 (hydra_lib_literals_bigint_to_uint16 0))))
 
-(define (test-biginttouint16-negtypical-value)
+(define (test-literals-negbiginttouint16-negtypical-value)
 
   (assert (equal? 1000 (hydra_lib_literals_bigint_to_uint16 1000))))
 
 ;; bigintToUint32
 
-(define (test-biginttouint32-negzero)
+(define (test-literals-negbiginttouint32-negzero)
 
   (assert (equal? 0 (hydra_lib_literals_bigint_to_uint32 0))))
 
-(define (test-biginttouint32-negtypical-value)
+(define (test-literals-negbiginttouint32-negtypical-value)
 
   (assert (equal? 100000 (hydra_lib_literals_bigint_to_uint32 100000))))
 
 ;; bigintToUint64
 
-(define (test-biginttouint64-negzero)
+(define (test-literals-negbiginttouint64-negzero)
 
   (assert (equal? 0 (hydra_lib_literals_bigint_to_uint64 0))))
 
-(define (test-biginttouint64-negtypical-value)
+(define (test-literals-negbiginttouint64-negtypical-value)
 
   (assert (equal? 1000000 (hydra_lib_literals_bigint_to_uint64 1000000))))
 
 ;; int8ToBigint
 
-(define (test-int8tobigint-negpositive)
+(define (test-literals-negint8tobigint-negpositive)
 
   (assert (equal? 42 (hydra_lib_literals_int8_to_bigint 42))))
 
-(define (test-int8tobigint-negnegative)
+(define (test-literals-negint8tobigint-negnegative)
 
   (assert (equal? -42 (hydra_lib_literals_int8_to_bigint -42))))
 
-(define (test-int8tobigint-negmax-value)
+(define (test-literals-negint8tobigint-negmax-value)
 
   (assert (equal? 127 (hydra_lib_literals_int8_to_bigint 127))))
 
-(define (test-int8tobigint-negmin-value)
+(define (test-literals-negint8tobigint-negmin-value)
 
   (assert (equal? -128 (hydra_lib_literals_int8_to_bigint -128))))
 
 ;; int16ToBigint
 
-(define (test-int16tobigint-negpositive)
+(define (test-literals-negint16tobigint-negpositive)
 
   (assert (equal? 1000 (hydra_lib_literals_int16_to_bigint 1000))))
 
-(define (test-int16tobigint-negnegative)
+(define (test-literals-negint16tobigint-negnegative)
 
   (assert (equal? -1000 (hydra_lib_literals_int16_to_bigint -1000))))
 
 ;; int32ToBigint
 
-(define (test-int32tobigint-negpositive)
+(define (test-literals-negint32tobigint-negpositive)
 
   (assert (equal? 42 (hydra_lib_literals_int32_to_bigint 42))))
 
-(define (test-int32tobigint-negnegative)
+(define (test-literals-negint32tobigint-negnegative)
 
   (assert (equal? -42 (hydra_lib_literals_int32_to_bigint -42))))
 
-(define (test-int32tobigint-negzero)
+(define (test-literals-negint32tobigint-negzero)
 
   (assert (equal? 0 (hydra_lib_literals_int32_to_bigint 0))))
 
 ;; int64ToBigint
 
-(define (test-int64tobigint-negpositive)
+(define (test-literals-negint64tobigint-negpositive)
 
   (assert (equal? 1000000 (hydra_lib_literals_int64_to_bigint 1000000))))
 
-(define (test-int64tobigint-negnegative)
+(define (test-literals-negint64tobigint-negnegative)
 
   (assert (equal? -1000000 (hydra_lib_literals_int64_to_bigint -1000000))))
 
 ;; uint8ToBigint
 
-(define (test-uint8tobigint-negzero)
+(define (test-literals-neguint8tobigint-negzero)
 
   (assert (equal? 0 (hydra_lib_literals_uint8_to_bigint 0))))
 
-(define (test-uint8tobigint-negmax-value)
+(define (test-literals-neguint8tobigint-negmax-value)
 
   (assert (equal? 255 (hydra_lib_literals_uint8_to_bigint 255))))
 
 ;; uint16ToBigint
 
-(define (test-uint16tobigint-negzero)
+(define (test-literals-neguint16tobigint-negzero)
 
   (assert (equal? 0 (hydra_lib_literals_uint16_to_bigint 0))))
 
-(define (test-uint16tobigint-negtypical-value)
+(define (test-literals-neguint16tobigint-negtypical-value)
 
   (assert (equal? 1000 (hydra_lib_literals_uint16_to_bigint 1000))))
 
 ;; uint32ToBigint
 
-(define (test-uint32tobigint-negzero)
+(define (test-literals-neguint32tobigint-negzero)
 
   (assert (equal? 0 (hydra_lib_literals_uint32_to_bigint 0))))
 
-(define (test-uint32tobigint-negtypical-value)
+(define (test-literals-neguint32tobigint-negtypical-value)
 
   (assert (equal? 100000 (hydra_lib_literals_uint32_to_bigint 100000))))
 
 ;; uint64ToBigint
 
-(define (test-uint64tobigint-negzero)
+(define (test-literals-neguint64tobigint-negzero)
 
   (assert (equal? 0 (hydra_lib_literals_uint64_to_bigint 0))))
 
-(define (test-uint64tobigint-negtypical-value)
+(define (test-literals-neguint64tobigint-negtypical-value)
 
   (assert (equal? 1000000 (hydra_lib_literals_uint64_to_bigint 1000000))))
 
 ;; float32ToBigfloat
 
-(define (test-float32tobigfloat-negpositive)
+(define (test-literals-negfloat32tobigfloat-negpositive)
 
   (assert (equal? 2.5 (hydra_lib_literals_float32_to_bigfloat 2.5))))
 
-(define (test-float32tobigfloat-negnegative)
+(define (test-literals-negfloat32tobigfloat-negnegative)
 
   (assert (equal? -2.5 (hydra_lib_literals_float32_to_bigfloat -2.5))))
 
-(define (test-float32tobigfloat-negzero)
+(define (test-literals-negfloat32tobigfloat-negzero)
 
   (assert (equal? 0.0 (hydra_lib_literals_float32_to_bigfloat 0.0))))
 
 ;; float64ToBigfloat
 
-(define (test-float64tobigfloat-negpositive)
+(define (test-literals-negfloat64tobigfloat-negpositive)
 
   (assert (equal? 3.14159 (hydra_lib_literals_float64_to_bigfloat 3.14159))))
 
-(define (test-float64tobigfloat-negnegative)
+(define (test-literals-negfloat64tobigfloat-negnegative)
 
   (assert (equal? -2.71828 (hydra_lib_literals_float64_to_bigfloat -2.71828))))
 
-(define (test-float64tobigfloat-negzero)
+(define (test-literals-negfloat64tobigfloat-negzero)
 
   (assert (equal? 0.0 (hydra_lib_literals_float64_to_bigfloat 0.0))))
 
 ;; bigfloatToFloat32
 
-(define (test-bigfloattofloat32-negpositive)
+(define (test-literals-negbigfloattofloat32-negpositive)
 
   (assert (equal? 3.140000104904175 (hydra_lib_literals_bigfloat_to_float32 3.14))))
 
-(define (test-bigfloattofloat32-negnegative)
+(define (test-literals-negbigfloattofloat32-negnegative)
 
   (assert (equal? -2.5 (hydra_lib_literals_bigfloat_to_float32 -2.5))))
 
-(define (test-bigfloattofloat32-negzero)
+(define (test-literals-negbigfloattofloat32-negzero)
 
   (assert (equal? 0.0 (hydra_lib_literals_bigfloat_to_float32 0.0))))
 
 ;; bigfloatToFloat64
 
-(define (test-bigfloattofloat64-negpositive)
+(define (test-literals-negbigfloattofloat64-negpositive)
 
   (assert (equal? 3.14159 (hydra_lib_literals_bigfloat_to_float64 3.14159))))
 
-(define (test-bigfloattofloat64-negnegative)
+(define (test-literals-negbigfloattofloat64-negnegative)
 
   (assert (equal? -2.71828 (hydra_lib_literals_bigfloat_to_float64 -2.71828))))
 
-(define (test-bigfloattofloat64-negzero)
+(define (test-literals-negbigfloattofloat64-negzero)
 
   (assert (equal? 0.0 (hydra_lib_literals_bigfloat_to_float64 0.0))))
 
 ;; bigintToBigfloat
 
-(define (test-biginttobigfloat-negpositive)
+(define (test-literals-negbiginttobigfloat-negpositive)
 
   (assert (equal? 42.0 (hydra_lib_literals_bigint_to_bigfloat 42))))
 
-(define (test-biginttobigfloat-negnegative)
+(define (test-literals-negbiginttobigfloat-negnegative)
 
   (assert (equal? -42.0 (hydra_lib_literals_bigint_to_bigfloat -42))))
 
-(define (test-biginttobigfloat-negzero)
+(define (test-literals-negbiginttobigfloat-negzero)
 
   (assert (equal? 0.0 (hydra_lib_literals_bigint_to_bigfloat 0))))
 
 ;; bigfloatToBigint
 
-(define (test-bigfloattobigint-negpositive)
+(define (test-literals-negbigfloattobigint-negpositive)
 
   (assert (equal? 43 (hydra_lib_literals_bigfloat_to_bigint 42.7))))
 
-(define (test-bigfloattobigint-negnegative)
+(define (test-literals-negbigfloattobigint-negnegative)
 
   (assert (equal? -43 (hydra_lib_literals_bigfloat_to_bigint -42.7))))
 
-(define (test-bigfloattobigint-negzero)
+(define (test-literals-negbigfloattobigint-negzero)
 
   (assert (equal? 0 (hydra_lib_literals_bigfloat_to_bigint 0.0))))
 
-(define (test-bigfloattobigint-neground-down)
+(define (test-literals-negbigfloattobigint-neground-down)
 
   (assert (equal? 42 (hydra_lib_literals_bigfloat_to_bigint 42.3))))
 
-(define (test-bigfloattobigint-neghalf-even-up)
+(define (test-literals-negbigfloattobigint-neghalf-even-up)
 
   (assert (equal? 42 (hydra_lib_literals_bigfloat_to_bigint 42.5))))
 
-(define (test-bigfloattobigint-neghalf-even-down)
+(define (test-literals-negbigfloattobigint-neghalf-even-down)
 
   (assert (equal? 44 (hydra_lib_literals_bigfloat_to_bigint 43.5))))
 
 ;; showInt8
 
-(define (test-showint8-negpositive)
+(define (test-literals-negshowint8-negpositive)
 
   (assert (equal? "42" (hydra_lib_literals_show_int8 42))))
 
-(define (test-showint8-negnegative)
+(define (test-literals-negshowint8-negnegative)
 
   (assert (equal? "-42" (hydra_lib_literals_show_int8 -42))))
 
 ;; showInt16
 
-(define (test-showint16-negpositive)
+(define (test-literals-negshowint16-negpositive)
 
   (assert (equal? "1000" (hydra_lib_literals_show_int16 1000))))
 
-(define (test-showint16-negnegative)
+(define (test-literals-negshowint16-negnegative)
 
   (assert (equal? "-1000" (hydra_lib_literals_show_int16 -1000))))
 
 ;; showInt32
 
-(define (test-showint32-negpositive)
+(define (test-literals-negshowint32-negpositive)
 
   (assert (equal? "42" (hydra_lib_literals_show_int32 42))))
 
-(define (test-showint32-negnegative)
+(define (test-literals-negshowint32-negnegative)
 
   (assert (equal? "-42" (hydra_lib_literals_show_int32 -42))))
 
-(define (test-showint32-negzero)
+(define (test-literals-negshowint32-negzero)
 
   (assert (equal? "0" (hydra_lib_literals_show_int32 0))))
 
 ;; showInt64
 
-(define (test-showint64-negpositive)
+(define (test-literals-negshowint64-negpositive)
 
   (assert (equal? "1000000" (hydra_lib_literals_show_int64 1000000))))
 
-(define (test-showint64-negnegative)
+(define (test-literals-negshowint64-negnegative)
 
   (assert (equal? "-1000000" (hydra_lib_literals_show_int64 -1000000))))
 
 ;; showUint8
 
-(define (test-showuint8-negzero)
+(define (test-literals-negshowuint8-negzero)
 
   (assert (equal? "0" (hydra_lib_literals_show_uint8 0))))
 
-(define (test-showuint8-negmax-value)
+(define (test-literals-negshowuint8-negmax-value)
 
   (assert (equal? "255" (hydra_lib_literals_show_uint8 255))))
 
 ;; showUint16
 
-(define (test-showuint16-negzero)
+(define (test-literals-negshowuint16-negzero)
 
   (assert (equal? "0" (hydra_lib_literals_show_uint16 0))))
 
-(define (test-showuint16-negtypical-value)
+(define (test-literals-negshowuint16-negtypical-value)
 
   (assert (equal? "1000" (hydra_lib_literals_show_uint16 1000))))
 
 ;; showUint32
 
-(define (test-showuint32-negzero)
+(define (test-literals-negshowuint32-negzero)
 
   (assert (equal? "0" (hydra_lib_literals_show_uint32 0))))
 
-(define (test-showuint32-negtypical-value)
+(define (test-literals-negshowuint32-negtypical-value)
 
   (assert (equal? "100000" (hydra_lib_literals_show_uint32 100000))))
 
 ;; showUint64
 
-(define (test-showuint64-negzero)
+(define (test-literals-negshowuint64-negzero)
 
   (assert (equal? "0" (hydra_lib_literals_show_uint64 0))))
 
-(define (test-showuint64-negtypical-value)
+(define (test-literals-negshowuint64-negtypical-value)
 
   (assert (equal? "1000000" (hydra_lib_literals_show_uint64 1000000))))
 
 ;; showBigint
 
-(define (test-showbigint-negpositive)
+(define (test-literals-negshowbigint-negpositive)
 
   (assert (equal? "42" (hydra_lib_literals_show_bigint 42))))
 
-(define (test-showbigint-negnegative)
+(define (test-literals-negshowbigint-negnegative)
 
   (assert (equal? "-42" (hydra_lib_literals_show_bigint -42))))
 
-(define (test-showbigint-negzero)
+(define (test-literals-negshowbigint-negzero)
 
   (assert (equal? "0" (hydra_lib_literals_show_bigint 0))))
 
 ;; showFloat32
 
-(define (test-showfloat32-negpositive)
+(define (test-literals-negshowfloat32-negpositive)
 
   (assert (equal? "3.14" (hydra_lib_literals_show_float32 3.140000104904175))))
 
-(define (test-showfloat32-negnegative)
+(define (test-literals-negshowfloat32-negnegative)
 
   (assert (equal? "-2.5" (hydra_lib_literals_show_float32 -2.5))))
 
-(define (test-showfloat32-negzero)
+(define (test-literals-negshowfloat32-negzero)
 
   (assert (equal? "0.0" (hydra_lib_literals_show_float32 0.0))))
 
-(define (test-showfloat32-negsmall-positive)
+(define (test-literals-negshowfloat32-negsmall-positive)
 
   (assert (equal? "5.0e-2" (hydra_lib_literals_show_float32 5.000000074505806e-2))))
 
-(define (test-showfloat32-negsmall-positive-2)
+(define (test-literals-negshowfloat32-negsmall-positive-2)
 
   (assert (equal? "3.0e-2" (hydra_lib_literals_show_float32 2.9999999329447746e-2))))
 
-(define (test-showfloat32-negvery-small)
+(define (test-literals-negshowfloat32-negvery-small)
 
   (assert (equal? "1.0e-3" (hydra_lib_literals_show_float32 1.0000000474974513e-3))))
 
-(define (test-showfloat32-negnormal-decimal)
+(define (test-literals-negshowfloat32-negnormal-decimal)
 
   (assert (equal? "0.1" (hydra_lib_literals_show_float32 0.10000000149011612))))
 
 ;; showFloat64
 
-(define (test-showfloat64-negpositive)
+(define (test-literals-negshowfloat64-negpositive)
 
   (assert (equal? "3.14159" (hydra_lib_literals_show_float64 3.14159))))
 
-(define (test-showfloat64-negzero)
+(define (test-literals-negshowfloat64-negzero)
 
   (assert (equal? "0.0" (hydra_lib_literals_show_float64 0.0))))
 
-(define (test-showfloat64-negsmall-positive)
+(define (test-literals-negshowfloat64-negsmall-positive)
 
   (assert (equal? "5.0e-2" (hydra_lib_literals_show_float64 5.0e-2))))
 
-(define (test-showfloat64-negsmall-positive-2)
+(define (test-literals-negshowfloat64-negsmall-positive-2)
 
   (assert (equal? "3.0e-2" (hydra_lib_literals_show_float64 3.0e-2))))
 
-(define (test-showfloat64-negvery-small)
+(define (test-literals-negshowfloat64-negvery-small)
 
   (assert (equal? "1.0e-3" (hydra_lib_literals_show_float64 1.0e-3))))
 
-(define (test-showfloat64-negnormal-decimal)
+(define (test-literals-negshowfloat64-negnormal-decimal)
 
   (assert (equal? "0.1" (hydra_lib_literals_show_float64 0.1))))
 
 ;; showBigfloat
 
-(define (test-showbigfloat-negpositive)
+(define (test-literals-negshowbigfloat-negpositive)
 
   (assert (equal? "3.14" (hydra_lib_literals_show_bigfloat 3.14))))
 
-(define (test-showbigfloat-negzero)
+(define (test-literals-negshowbigfloat-negzero)
 
   (assert (equal? "0.0" (hydra_lib_literals_show_bigfloat 0.0))))
 
-(define (test-showbigfloat-negsmall-positive)
+(define (test-literals-negshowbigfloat-negsmall-positive)
 
   (assert (equal? "5.0e-2" (hydra_lib_literals_show_bigfloat 5.0e-2))))
 
-(define (test-showbigfloat-negsmall-positive-2)
+(define (test-literals-negshowbigfloat-negsmall-positive-2)
 
   (assert (equal? "3.0e-2" (hydra_lib_literals_show_bigfloat 3.0e-2))))
 
-(define (test-showbigfloat-negvery-small)
+(define (test-literals-negshowbigfloat-negvery-small)
 
   (assert (equal? "1.0e-3" (hydra_lib_literals_show_bigfloat 1.0e-3))))
 
-(define (test-showbigfloat-negnormal-decimal)
+(define (test-literals-negshowbigfloat-negnormal-decimal)
 
   (assert (equal? "0.1" (hydra_lib_literals_show_bigfloat 0.1))))
 
 ;; showBoolean
 
-(define (test-showboolean-negtrue)
+(define (test-literals-negshowboolean-negtrue)
 
   (assert (equal? "true" (hydra_lib_literals_show_boolean #t))))
 
-(define (test-showboolean-negfalse)
+(define (test-literals-negshowboolean-negfalse)
 
   (assert (equal? "false" (hydra_lib_literals_show_boolean #f))))
 
 ;; showString
 
-(define (test-showstring-negsimple)
+(define (test-literals-negshowstring-negsimple)
 
   (assert (equal? "\"hello\"" (hydra_lib_literals_show_string "hello"))))
 
-(define (test-showstring-negempty)
+(define (test-literals-negshowstring-negempty)
 
   (assert (equal? "\"\"" (hydra_lib_literals_show_string ""))))
 
-(define (test-showstring-neglatin-accented)
+(define (test-literals-negshowstring-neglatin-accented)
 
   (assert (equal? "\"caf\\233\"" (hydra_lib_literals_show_string "café"))))
 
-(define (test-showstring-neggreek-lambda)
+(define (test-literals-negshowstring-neggreek-lambda)
 
   (assert (equal? "\"\\955\"" (hydra_lib_literals_show_string "λ"))))
 
-(define (test-showstring-negmixed-ascii-and-non-negascii)
+(define (test-literals-negshowstring-negmixed-ascii-and-non-negascii)
 
   (assert (equal? "\"A\\233B\"" (hydra_lib_literals_show_string "AéB"))))
 
-(define (test-showstring-negtab)
+(define (test-literals-negshowstring-negtab)
 
   (assert (equal? "\"\\t\"" (hydra_lib_literals_show_string "\t"))))
 
-(define (test-showstring-negnewline)
+(define (test-literals-negshowstring-negnewline)
 
   (assert (equal? "\"\\n\"" (hydra_lib_literals_show_string "\n"))))
 
-(define (test-showstring-negcarriage-return)
+(define (test-literals-negshowstring-negcarriage-return)
 
   (assert (equal? "\"\\r\"" (hydra_lib_literals_show_string "\r"))))
 
-(define (test-showstring-negbackslash)
+(define (test-literals-negshowstring-negbackslash)
 
   (assert (equal? "\"\\\\\"" (hydra_lib_literals_show_string "\\"))))
 
-(define (test-showstring-negdouble-quote)
+(define (test-literals-negshowstring-negdouble-quote)
 
   (assert (equal? "\"\\\"\"" (hydra_lib_literals_show_string "\""))))
 
-(define (test-showstring-negnull)
+(define (test-literals-negshowstring-negnull)
 
   (assert (equal? "\"\\NUL\"" (hydra_lib_literals_show_string " "))))
 
-(define (test-showstring-negbell)
+(define (test-literals-negshowstring-negbell)
 
   (assert (equal? "\"\\a\"" (hydra_lib_literals_show_string ""))))
 
-(define (test-showstring-negbackspace)
+(define (test-literals-negshowstring-negbackspace)
 
   (assert (equal? "\"\\b\"" (hydra_lib_literals_show_string ""))))
 
-(define (test-showstring-negform-feed)
+(define (test-literals-negshowstring-negform-feed)
 
   (assert (equal? "\"\\f\"" (hydra_lib_literals_show_string ""))))
 
-(define (test-showstring-negvertical-tab)
+(define (test-literals-negshowstring-negvertical-tab)
 
   (assert (equal? "\"\\v\"" (hydra_lib_literals_show_string ""))))
 
-(define (test-showstring-negdelete)
+(define (test-literals-negshowstring-negdelete)
 
   (assert (equal? "\"\\DEL\"" (hydra_lib_literals_show_string ""))))
 
 ;; readInt8
 
-(define (test-readint8-negpositive)
+(define (test-literals-negreadint8-negpositive)
 
-  (assert (equal? (list :just 42) (hydra_lib_literals_read_int8 "42"))))
+  (assert (equal? (list 'just 42) (hydra_lib_literals_read_int8 "42"))))
 
-(define (test-readint8-negnegative)
+(define (test-literals-negreadint8-negnegative)
 
-  (assert (equal? (list :just -42) (hydra_lib_literals_read_int8 "-42"))))
+  (assert (equal? (list 'just -42) (hydra_lib_literals_read_int8 "-42"))))
 
-(define (test-readint8-negmax-value)
+(define (test-literals-negreadint8-negmax-value)
 
-  (assert (equal? (list :just 127) (hydra_lib_literals_read_int8 "127"))))
+  (assert (equal? (list 'just 127) (hydra_lib_literals_read_int8 "127"))))
 
-(define (test-readint8-negmin-value)
+(define (test-literals-negreadint8-negmin-value)
 
-  (assert (equal? (list :just -128) (hydra_lib_literals_read_int8 "-128"))))
+  (assert (equal? (list 'just -128) (hydra_lib_literals_read_int8 "-128"))))
 
-(define (test-readint8-neginvalid)
+(define (test-literals-negreadint8-neginvalid)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_int8 "abc"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_int8 "abc"))))
 
-(define (test-readint8-negoverflow)
+(define (test-literals-negreadint8-negoverflow)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_int8 "128"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_int8 "128"))))
 
 ;; readInt16
 
-(define (test-readint16-negpositive)
+(define (test-literals-negreadint16-negpositive)
 
-  (assert (equal? (list :just 1000) (hydra_lib_literals_read_int16 "1000"))))
+  (assert (equal? (list 'just 1000) (hydra_lib_literals_read_int16 "1000"))))
 
-(define (test-readint16-negnegative)
+(define (test-literals-negreadint16-negnegative)
 
-  (assert (equal? (list :just -1000) (hydra_lib_literals_read_int16 "-1000"))))
+  (assert (equal? (list 'just -1000) (hydra_lib_literals_read_int16 "-1000"))))
 
-(define (test-readint16-neginvalid)
+(define (test-literals-negreadint16-neginvalid)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_int16 "abc"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_int16 "abc"))))
 
 ;; readInt32
 
-(define (test-readint32-negpositive)
+(define (test-literals-negreadint32-negpositive)
 
-  (assert (equal? (list :just 42) (hydra_lib_literals_read_int32 "42"))))
+  (assert (equal? (list 'just 42) (hydra_lib_literals_read_int32 "42"))))
 
-(define (test-readint32-negnegative)
+(define (test-literals-negreadint32-negnegative)
 
-  (assert (equal? (list :just -42) (hydra_lib_literals_read_int32 "-42"))))
+  (assert (equal? (list 'just -42) (hydra_lib_literals_read_int32 "-42"))))
 
-(define (test-readint32-neginvalid)
+(define (test-literals-negreadint32-neginvalid)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_int32 "abc"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_int32 "abc"))))
 
 ;; readInt64
 
-(define (test-readint64-negpositive)
+(define (test-literals-negreadint64-negpositive)
 
-  (assert (equal? (list :just 1000000) (hydra_lib_literals_read_int64 "1000000"))))
+  (assert (equal? (list 'just 1000000) (hydra_lib_literals_read_int64 "1000000"))))
 
-(define (test-readint64-negnegative)
+(define (test-literals-negreadint64-negnegative)
 
-  (assert (equal? (list :just -1000000) (hydra_lib_literals_read_int64 "-1000000"))))
+  (assert (equal? (list 'just -1000000) (hydra_lib_literals_read_int64 "-1000000"))))
 
-(define (test-readint64-neginvalid)
+(define (test-literals-negreadint64-neginvalid)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_int64 "abc"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_int64 "abc"))))
 
 ;; readUint8
 
-(define (test-readuint8-negzero)
+(define (test-literals-negreaduint8-negzero)
 
-  (assert (equal? (list :just 0) (hydra_lib_literals_read_uint8 "0"))))
+  (assert (equal? (list 'just 0) (hydra_lib_literals_read_uint8 "0"))))
 
-(define (test-readuint8-negtypical)
+(define (test-literals-negreaduint8-negtypical)
 
-  (assert (equal? (list :just 100) (hydra_lib_literals_read_uint8 "100"))))
+  (assert (equal? (list 'just 100) (hydra_lib_literals_read_uint8 "100"))))
 
-(define (test-readuint8-negmax-value)
+(define (test-literals-negreaduint8-negmax-value)
 
-  (assert (equal? (list :just 255) (hydra_lib_literals_read_uint8 "255"))))
+  (assert (equal? (list 'just 255) (hydra_lib_literals_read_uint8 "255"))))
 
-(define (test-readuint8-neginvalid)
+(define (test-literals-negreaduint8-neginvalid)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_uint8 "abc"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_uint8 "abc"))))
 
-(define (test-readuint8-negnegative)
+(define (test-literals-negreaduint8-negnegative)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_uint8 "-1"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_uint8 "-1"))))
 
 ;; readUint16
 
-(define (test-readuint16-negzero)
+(define (test-literals-negreaduint16-negzero)
 
-  (assert (equal? (list :just 0) (hydra_lib_literals_read_uint16 "0"))))
+  (assert (equal? (list 'just 0) (hydra_lib_literals_read_uint16 "0"))))
 
-(define (test-readuint16-negtypical)
+(define (test-literals-negreaduint16-negtypical)
 
-  (assert (equal? (list :just 1000) (hydra_lib_literals_read_uint16 "1000"))))
+  (assert (equal? (list 'just 1000) (hydra_lib_literals_read_uint16 "1000"))))
 
-(define (test-readuint16-neginvalid)
+(define (test-literals-negreaduint16-neginvalid)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_uint16 "abc"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_uint16 "abc"))))
 
-(define (test-readuint16-negnegative)
+(define (test-literals-negreaduint16-negnegative)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_uint16 "-1"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_uint16 "-1"))))
 
 ;; readUint32
 
-(define (test-readuint32-negzero)
+(define (test-literals-negreaduint32-negzero)
 
-  (assert (equal? (list :just 0) (hydra_lib_literals_read_uint32 "0"))))
+  (assert (equal? (list 'just 0) (hydra_lib_literals_read_uint32 "0"))))
 
-(define (test-readuint32-negtypical)
+(define (test-literals-negreaduint32-negtypical)
 
-  (assert (equal? (list :just 100000) (hydra_lib_literals_read_uint32 "100000"))))
+  (assert (equal? (list 'just 100000) (hydra_lib_literals_read_uint32 "100000"))))
 
-(define (test-readuint32-neginvalid)
+(define (test-literals-negreaduint32-neginvalid)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_uint32 "abc"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_uint32 "abc"))))
 
-(define (test-readuint32-negnegative)
+(define (test-literals-negreaduint32-negnegative)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_uint32 "-1"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_uint32 "-1"))))
 
 ;; readUint64
 
-(define (test-readuint64-negzero)
+(define (test-literals-negreaduint64-negzero)
 
-  (assert (equal? (list :just 0) (hydra_lib_literals_read_uint64 "0"))))
+  (assert (equal? (list 'just 0) (hydra_lib_literals_read_uint64 "0"))))
 
-(define (test-readuint64-negtypical)
+(define (test-literals-negreaduint64-negtypical)
 
-  (assert (equal? (list :just 1000000) (hydra_lib_literals_read_uint64 "1000000"))))
+  (assert (equal? (list 'just 1000000) (hydra_lib_literals_read_uint64 "1000000"))))
 
-(define (test-readuint64-neginvalid)
+(define (test-literals-negreaduint64-neginvalid)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_uint64 "abc"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_uint64 "abc"))))
 
-(define (test-readuint64-negnegative)
+(define (test-literals-negreaduint64-negnegative)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_uint64 "-1"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_uint64 "-1"))))
 
 ;; readBigint
 
-(define (test-readbigint-negpositive)
+(define (test-literals-negreadbigint-negpositive)
 
-  (assert (equal? (list :just 42) (hydra_lib_literals_read_bigint "42"))))
+  (assert (equal? (list 'just 42) (hydra_lib_literals_read_bigint "42"))))
 
-(define (test-readbigint-negnegative)
+(define (test-literals-negreadbigint-negnegative)
 
-  (assert (equal? (list :just -42) (hydra_lib_literals_read_bigint "-42"))))
+  (assert (equal? (list 'just -42) (hydra_lib_literals_read_bigint "-42"))))
 
-(define (test-readbigint-negzero)
+(define (test-literals-negreadbigint-negzero)
 
-  (assert (equal? (list :just 0) (hydra_lib_literals_read_bigint "0"))))
+  (assert (equal? (list 'just 0) (hydra_lib_literals_read_bigint "0"))))
 
-(define (test-readbigint-neglarge)
+(define (test-literals-negreadbigint-neglarge)
 
-  (assert (equal? (list :just 123456789012345678901234567890) (hydra_lib_literals_read_bigint "123456789012345678901234567890"))))
+  (assert (equal? (list 'just 123456789012345678901234567890) (hydra_lib_literals_read_bigint "123456789012345678901234567890"))))
 
-(define (test-readbigint-neginvalid)
+(define (test-literals-negreadbigint-neginvalid)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_bigint "abc"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_bigint "abc"))))
 
 ;; readFloat32
 
-(define (test-readfloat32-negpositive)
+(define (test-literals-negreadfloat32-negpositive)
 
-  (assert (equal? (list :just 3.140000104904175) (hydra_lib_literals_read_float32 "3.14"))))
+  (assert (equal? (list 'just 3.140000104904175) (hydra_lib_literals_read_float32 "3.14"))))
 
-(define (test-readfloat32-negnegative)
+(define (test-literals-negreadfloat32-negnegative)
 
-  (assert (equal? (list :just -2.5) (hydra_lib_literals_read_float32 "-2.5"))))
+  (assert (equal? (list 'just -2.5) (hydra_lib_literals_read_float32 "-2.5"))))
 
-(define (test-readfloat32-neginvalid)
+(define (test-literals-negreadfloat32-neginvalid)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_float32 "abc"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_float32 "abc"))))
 
 ;; readFloat64
 
-(define (test-readfloat64-negpositive)
+(define (test-literals-negreadfloat64-negpositive)
 
-  (assert (equal? (list :just 3.14159) (hydra_lib_literals_read_float64 "3.14159"))))
+  (assert (equal? (list 'just 3.14159) (hydra_lib_literals_read_float64 "3.14159"))))
 
-(define (test-readfloat64-negnegative)
+(define (test-literals-negreadfloat64-negnegative)
 
-  (assert (equal? (list :just -2.71828) (hydra_lib_literals_read_float64 "-2.71828"))))
+  (assert (equal? (list 'just -2.71828) (hydra_lib_literals_read_float64 "-2.71828"))))
 
-(define (test-readfloat64-neginvalid)
+(define (test-literals-negreadfloat64-neginvalid)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_float64 "abc"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_float64 "abc"))))
 
 ;; readBigfloat
 
-(define (test-readbigfloat-negpositive)
+(define (test-literals-negreadbigfloat-negpositive)
 
-  (assert (equal? (list :just 3.14) (hydra_lib_literals_read_bigfloat "3.14"))))
+  (assert (equal? (list 'just 3.14) (hydra_lib_literals_read_bigfloat "3.14"))))
 
-(define (test-readbigfloat-neginvalid)
+(define (test-literals-negreadbigfloat-neginvalid)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_bigfloat "abc"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_bigfloat "abc"))))
 
 ;; readBoolean
 
-(define (test-readboolean-negtrue)
+(define (test-literals-negreadboolean-negtrue)
 
-  (assert (equal? (list :just #t) (hydra_lib_literals_read_boolean "true"))))
+  (assert (equal? (list 'just #t) (hydra_lib_literals_read_boolean "true"))))
 
-(define (test-readboolean-negfalse)
+(define (test-literals-negreadboolean-negfalse)
 
-  (assert (equal? (list :just #f) (hydra_lib_literals_read_boolean "false"))))
+  (assert (equal? (list 'just #f) (hydra_lib_literals_read_boolean "false"))))
 
-(define (test-readboolean-neginvalid)
+(define (test-literals-negreadboolean-neginvalid)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_boolean "yes"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_boolean "yes"))))
 
 ;; readString
 
-(define (test-readstring-negquoted-string)
+(define (test-literals-negreadstring-negquoted-string)
 
-  (assert (equal? (list :just "hello") (hydra_lib_literals_read_string "\"hello\""))))
+  (assert (equal? (list 'just "hello") (hydra_lib_literals_read_string "\"hello\""))))
 
-(define (test-readstring-negempty-quoted)
+(define (test-literals-negreadstring-negempty-quoted)
 
-  (assert (equal? (list :just "") (hydra_lib_literals_read_string "\"\""))))
+  (assert (equal? (list 'just "") (hydra_lib_literals_read_string "\"\""))))
 
-(define (test-readstring-negunquoted)
+(define (test-literals-negreadstring-negunquoted)
 
-  (assert (equal? (list :nothing) (hydra_lib_literals_read_string "hello"))))
+  (assert (equal? (list 'nothing) (hydra_lib_literals_read_string "hello"))))
 
 ;; stringToBinary
 
-(define (test-stringtobinary-negsimple-base64)
+(define (test-literals-negstringtobinary-negsimple-base64)
 
-  (assert (equal? #(104 101 108 108 111) (hydra_lib_literals_string_to_binary "aGVsbG8="))))
+  (assert (equal? (list 104 101 108 108 111) (hydra_lib_literals_string_to_binary "aGVsbG8="))))
 
-(define (test-stringtobinary-negempty-string)
+(define (test-literals-negstringtobinary-negempty-string)
 
-  (assert (equal? #() (hydra_lib_literals_string_to_binary ""))))
+  (assert (equal? (list) (hydra_lib_literals_string_to_binary ""))))
 
 ;; binaryToString
 
-(define (test-binarytostring-negsimple-binary)
+(define (test-literals-negbinarytostring-negsimple-binary)
 
-  (assert (equal? "aGVsbG8=" (hydra_lib_literals_binary_to_string #(104 101 108 108 111)))))
+  (assert (equal? "aGVsbG8=" (hydra_lib_literals_binary_to_string (list 104 101 108 108 111)))))
 
-(define (test-binarytostring-negempty-binary)
+(define (test-literals-negbinarytostring-negempty-binary)
 
-  (assert (equal? "" (hydra_lib_literals_binary_to_string #()))))
+  (assert (equal? "" (hydra_lib_literals_binary_to_string (list)))))

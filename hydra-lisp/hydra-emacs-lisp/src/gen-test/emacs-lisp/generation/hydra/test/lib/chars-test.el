@@ -1,96 +1,96 @@
-;;; Note: this is an automatically generated file. Do not edit.
+;;; Note: this is an automatically generated file. Do not edit. -*- lexical-binding: t; coding: utf-8 -*-
 ;;; hydra.lib.chars primitives
 
 (require 'ert)
 
 ;; isAlphaNum
 
-(ert-deftest test-isalphanum-negletter ()
+(ert-deftest test-chars-negisalphanum-negletter ()
 
-  (should (equal t (hydra_lib_chars_is_alpha_num 97))))
+  (should (equal t (funcall hydra_lib_chars_is_alpha_num 97))))
 
-(ert-deftest test-isalphanum-negdigit ()
+(ert-deftest test-chars-negisalphanum-negdigit ()
 
-  (should (equal t (hydra_lib_chars_is_alpha_num 53))))
+  (should (equal t (funcall hydra_lib_chars_is_alpha_num 53))))
 
-(ert-deftest test-isalphanum-negspace ()
+(ert-deftest test-chars-negisalphanum-negspace ()
 
-  (should (equal nil (hydra_lib_chars_is_alpha_num 32))))
+  (should (equal nil (funcall hydra_lib_chars_is_alpha_num 32))))
 
-(ert-deftest test-isalphanum-negpunctuation ()
+(ert-deftest test-chars-negisalphanum-negpunctuation ()
 
-  (should (equal nil (hydra_lib_chars_is_alpha_num 46))))
+  (should (equal nil (funcall hydra_lib_chars_is_alpha_num 46))))
 
 ;; isLower
 
-(ert-deftest test-islower-neglowercase ()
+(ert-deftest test-chars-negislower-neglowercase ()
 
-  (should (equal t (hydra_lib_chars_is_lower 97))))
+  (should (equal t (funcall hydra_lib_chars_is_lower 97))))
 
-(ert-deftest test-islower-neguppercase ()
+(ert-deftest test-chars-negislower-neguppercase ()
 
-  (should (equal nil (hydra_lib_chars_is_lower 65))))
+  (should (equal nil (funcall hydra_lib_chars_is_lower 65))))
 
-(ert-deftest test-islower-negdigit ()
+(ert-deftest test-chars-negislower-negdigit ()
 
-  (should (equal nil (hydra_lib_chars_is_lower 53))))
+  (should (equal nil (funcall hydra_lib_chars_is_lower 53))))
 
 ;; isSpace
 
-(ert-deftest test-isspace-negspace ()
+(ert-deftest test-chars-negisspace-negspace ()
 
-  (should (equal t (hydra_lib_chars_is_space 32))))
+  (should (equal t (funcall hydra_lib_chars_is_space 32))))
 
-(ert-deftest test-isspace-negtab ()
+(ert-deftest test-chars-negisspace-negtab ()
 
-  (should (equal t (hydra_lib_chars_is_space 9))))
+  (should (equal t (funcall hydra_lib_chars_is_space 9))))
 
-(ert-deftest test-isspace-negnewline ()
+(ert-deftest test-chars-negisspace-negnewline ()
 
-  (should (equal t (hydra_lib_chars_is_space 10))))
+  (should (equal t (funcall hydra_lib_chars_is_space 10))))
 
-(ert-deftest test-isspace-negletter ()
+(ert-deftest test-chars-negisspace-negletter ()
 
-  (should (equal nil (hydra_lib_chars_is_space 97))))
+  (should (equal nil (funcall hydra_lib_chars_is_space 97))))
 
 ;; isUpper
 
-(ert-deftest test-isupper-neguppercase ()
+(ert-deftest test-chars-negisupper-neguppercase ()
 
-  (should (equal t (hydra_lib_chars_is_upper 65))))
+  (should (equal t (funcall hydra_lib_chars_is_upper 65))))
 
-(ert-deftest test-isupper-neglowercase ()
+(ert-deftest test-chars-negisupper-neglowercase ()
 
-  (should (equal nil (hydra_lib_chars_is_upper 97))))
+  (should (equal nil (funcall hydra_lib_chars_is_upper 97))))
 
-(ert-deftest test-isupper-negdigit ()
+(ert-deftest test-chars-negisupper-negdigit ()
 
-  (should (equal nil (hydra_lib_chars_is_upper 53))))
+  (should (equal nil (funcall hydra_lib_chars_is_upper 53))))
 
 ;; toLower
 
-(ert-deftest test-tolower-neguppercase ()
+(ert-deftest test-chars-negtolower-neguppercase ()
 
-  (should (equal 97 (hydra_lib_chars_to_lower 65))))
+  (should (equal 97 (funcall hydra_lib_chars_to_lower 65))))
 
-(ert-deftest test-tolower-neglowercase ()
+(ert-deftest test-chars-negtolower-neglowercase ()
 
-  (should (equal 97 (hydra_lib_chars_to_lower 97))))
+  (should (equal 97 (funcall hydra_lib_chars_to_lower 97))))
 
-(ert-deftest test-tolower-negdigit ()
+(ert-deftest test-chars-negtolower-negdigit ()
 
-  (should (equal 53 (hydra_lib_chars_to_lower 53))))
+  (should (equal 53 (funcall hydra_lib_chars_to_lower 53))))
 
 ;; toUpper
 
-(ert-deftest test-toupper-neglowercase ()
+(ert-deftest test-chars-negtoupper-neglowercase ()
 
-  (should (equal 65 (hydra_lib_chars_to_upper 97))))
+  (should (equal 65 (funcall hydra_lib_chars_to_upper 97))))
 
-(ert-deftest test-toupper-neguppercase ()
+(ert-deftest test-chars-negtoupper-neguppercase ()
 
-  (should (equal 65 (hydra_lib_chars_to_upper 65))))
+  (should (equal 65 (funcall hydra_lib_chars_to_upper 65))))
 
-(ert-deftest test-toupper-negdigit ()
+(ert-deftest test-chars-negtoupper-negdigit ()
 
-  (should (equal 53 (hydra_lib_chars_to_upper 53))))
+  (should (equal 53 (funcall hydra_lib_chars_to_upper 53))))

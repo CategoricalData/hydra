@@ -1,784 +1,784 @@
-;;; Note: this is an automatically generated file. Do not edit.
+;;; Note: this is an automatically generated file. Do not edit. -*- lexical-binding: t; coding: utf-8 -*-
 ;;; hydra.lib.literals primitives
 
 (require 'ert)
 
 ;; bigintToInt8
 
-(ert-deftest test-biginttoint8-negpositive ()
+(ert-deftest test-literals-negbiginttoint8-negpositive ()
 
-  (should (equal 42 (hydra_lib_literals_bigint_to_int8 42))))
+  (should (equal 42 (funcall hydra_lib_literals_bigint_to_int8 42))))
 
-(ert-deftest test-biginttoint8-negnegative ()
+(ert-deftest test-literals-negbiginttoint8-negnegative ()
 
-  (should (equal -42 (hydra_lib_literals_bigint_to_int8 -42))))
+  (should (equal -42 (funcall hydra_lib_literals_bigint_to_int8 -42))))
 
 ;; bigintToInt16
 
-(ert-deftest test-biginttoint16-negpositive ()
+(ert-deftest test-literals-negbiginttoint16-negpositive ()
 
-  (should (equal 1000 (hydra_lib_literals_bigint_to_int16 1000))))
+  (should (equal 1000 (funcall hydra_lib_literals_bigint_to_int16 1000))))
 
-(ert-deftest test-biginttoint16-negnegative ()
+(ert-deftest test-literals-negbiginttoint16-negnegative ()
 
-  (should (equal -1000 (hydra_lib_literals_bigint_to_int16 -1000))))
+  (should (equal -1000 (funcall hydra_lib_literals_bigint_to_int16 -1000))))
 
 ;; bigintToInt32
 
-(ert-deftest test-biginttoint32-negpositive ()
+(ert-deftest test-literals-negbiginttoint32-negpositive ()
 
-  (should (equal 42 (hydra_lib_literals_bigint_to_int32 42))))
+  (should (equal 42 (funcall hydra_lib_literals_bigint_to_int32 42))))
 
-(ert-deftest test-biginttoint32-negnegative ()
+(ert-deftest test-literals-negbiginttoint32-negnegative ()
 
-  (should (equal -42 (hydra_lib_literals_bigint_to_int32 -42))))
+  (should (equal -42 (funcall hydra_lib_literals_bigint_to_int32 -42))))
 
-(ert-deftest test-biginttoint32-negzero ()
+(ert-deftest test-literals-negbiginttoint32-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_bigint_to_int32 0))))
+  (should (equal 0 (funcall hydra_lib_literals_bigint_to_int32 0))))
 
 ;; bigintToInt64
 
-(ert-deftest test-biginttoint64-negpositive ()
+(ert-deftest test-literals-negbiginttoint64-negpositive ()
 
-  (should (equal 1000000 (hydra_lib_literals_bigint_to_int64 1000000))))
+  (should (equal 1000000 (funcall hydra_lib_literals_bigint_to_int64 1000000))))
 
-(ert-deftest test-biginttoint64-negnegative ()
+(ert-deftest test-literals-negbiginttoint64-negnegative ()
 
-  (should (equal -1000000 (hydra_lib_literals_bigint_to_int64 -1000000))))
+  (should (equal -1000000 (funcall hydra_lib_literals_bigint_to_int64 -1000000))))
 
 ;; bigintToUint8
 
-(ert-deftest test-biginttouint8-negzero ()
+(ert-deftest test-literals-negbiginttouint8-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_bigint_to_uint8 0))))
+  (should (equal 0 (funcall hydra_lib_literals_bigint_to_uint8 0))))
 
-(ert-deftest test-biginttouint8-negtypical-value ()
+(ert-deftest test-literals-negbiginttouint8-negtypical-value ()
 
-  (should (equal 100 (hydra_lib_literals_bigint_to_uint8 100))))
+  (should (equal 100 (funcall hydra_lib_literals_bigint_to_uint8 100))))
 
 ;; bigintToUint16
 
-(ert-deftest test-biginttouint16-negzero ()
+(ert-deftest test-literals-negbiginttouint16-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_bigint_to_uint16 0))))
+  (should (equal 0 (funcall hydra_lib_literals_bigint_to_uint16 0))))
 
-(ert-deftest test-biginttouint16-negtypical-value ()
+(ert-deftest test-literals-negbiginttouint16-negtypical-value ()
 
-  (should (equal 1000 (hydra_lib_literals_bigint_to_uint16 1000))))
+  (should (equal 1000 (funcall hydra_lib_literals_bigint_to_uint16 1000))))
 
 ;; bigintToUint32
 
-(ert-deftest test-biginttouint32-negzero ()
+(ert-deftest test-literals-negbiginttouint32-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_bigint_to_uint32 0))))
+  (should (equal 0 (funcall hydra_lib_literals_bigint_to_uint32 0))))
 
-(ert-deftest test-biginttouint32-negtypical-value ()
+(ert-deftest test-literals-negbiginttouint32-negtypical-value ()
 
-  (should (equal 100000 (hydra_lib_literals_bigint_to_uint32 100000))))
+  (should (equal 100000 (funcall hydra_lib_literals_bigint_to_uint32 100000))))
 
 ;; bigintToUint64
 
-(ert-deftest test-biginttouint64-negzero ()
+(ert-deftest test-literals-negbiginttouint64-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_bigint_to_uint64 0))))
+  (should (equal 0 (funcall hydra_lib_literals_bigint_to_uint64 0))))
 
-(ert-deftest test-biginttouint64-negtypical-value ()
+(ert-deftest test-literals-negbiginttouint64-negtypical-value ()
 
-  (should (equal 1000000 (hydra_lib_literals_bigint_to_uint64 1000000))))
+  (should (equal 1000000 (funcall hydra_lib_literals_bigint_to_uint64 1000000))))
 
 ;; int8ToBigint
 
-(ert-deftest test-int8tobigint-negpositive ()
+(ert-deftest test-literals-negint8tobigint-negpositive ()
 
-  (should (equal 42 (hydra_lib_literals_int8_to_bigint 42))))
+  (should (equal 42 (funcall hydra_lib_literals_int8_to_bigint 42))))
 
-(ert-deftest test-int8tobigint-negnegative ()
+(ert-deftest test-literals-negint8tobigint-negnegative ()
 
-  (should (equal -42 (hydra_lib_literals_int8_to_bigint -42))))
+  (should (equal -42 (funcall hydra_lib_literals_int8_to_bigint -42))))
 
-(ert-deftest test-int8tobigint-negmax-value ()
+(ert-deftest test-literals-negint8tobigint-negmax-value ()
 
-  (should (equal 127 (hydra_lib_literals_int8_to_bigint 127))))
+  (should (equal 127 (funcall hydra_lib_literals_int8_to_bigint 127))))
 
-(ert-deftest test-int8tobigint-negmin-value ()
+(ert-deftest test-literals-negint8tobigint-negmin-value ()
 
-  (should (equal -128 (hydra_lib_literals_int8_to_bigint -128))))
+  (should (equal -128 (funcall hydra_lib_literals_int8_to_bigint -128))))
 
 ;; int16ToBigint
 
-(ert-deftest test-int16tobigint-negpositive ()
+(ert-deftest test-literals-negint16tobigint-negpositive ()
 
-  (should (equal 1000 (hydra_lib_literals_int16_to_bigint 1000))))
+  (should (equal 1000 (funcall hydra_lib_literals_int16_to_bigint 1000))))
 
-(ert-deftest test-int16tobigint-negnegative ()
+(ert-deftest test-literals-negint16tobigint-negnegative ()
 
-  (should (equal -1000 (hydra_lib_literals_int16_to_bigint -1000))))
+  (should (equal -1000 (funcall hydra_lib_literals_int16_to_bigint -1000))))
 
 ;; int32ToBigint
 
-(ert-deftest test-int32tobigint-negpositive ()
+(ert-deftest test-literals-negint32tobigint-negpositive ()
 
-  (should (equal 42 (hydra_lib_literals_int32_to_bigint 42))))
+  (should (equal 42 (funcall hydra_lib_literals_int32_to_bigint 42))))
 
-(ert-deftest test-int32tobigint-negnegative ()
+(ert-deftest test-literals-negint32tobigint-negnegative ()
 
-  (should (equal -42 (hydra_lib_literals_int32_to_bigint -42))))
+  (should (equal -42 (funcall hydra_lib_literals_int32_to_bigint -42))))
 
-(ert-deftest test-int32tobigint-negzero ()
+(ert-deftest test-literals-negint32tobigint-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_int32_to_bigint 0))))
+  (should (equal 0 (funcall hydra_lib_literals_int32_to_bigint 0))))
 
 ;; int64ToBigint
 
-(ert-deftest test-int64tobigint-negpositive ()
+(ert-deftest test-literals-negint64tobigint-negpositive ()
 
-  (should (equal 1000000 (hydra_lib_literals_int64_to_bigint 1000000))))
+  (should (equal 1000000 (funcall hydra_lib_literals_int64_to_bigint 1000000))))
 
-(ert-deftest test-int64tobigint-negnegative ()
+(ert-deftest test-literals-negint64tobigint-negnegative ()
 
-  (should (equal -1000000 (hydra_lib_literals_int64_to_bigint -1000000))))
+  (should (equal -1000000 (funcall hydra_lib_literals_int64_to_bigint -1000000))))
 
 ;; uint8ToBigint
 
-(ert-deftest test-uint8tobigint-negzero ()
+(ert-deftest test-literals-neguint8tobigint-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_uint8_to_bigint 0))))
+  (should (equal 0 (funcall hydra_lib_literals_uint8_to_bigint 0))))
 
-(ert-deftest test-uint8tobigint-negmax-value ()
+(ert-deftest test-literals-neguint8tobigint-negmax-value ()
 
-  (should (equal 255 (hydra_lib_literals_uint8_to_bigint 255))))
+  (should (equal 255 (funcall hydra_lib_literals_uint8_to_bigint 255))))
 
 ;; uint16ToBigint
 
-(ert-deftest test-uint16tobigint-negzero ()
+(ert-deftest test-literals-neguint16tobigint-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_uint16_to_bigint 0))))
+  (should (equal 0 (funcall hydra_lib_literals_uint16_to_bigint 0))))
 
-(ert-deftest test-uint16tobigint-negtypical-value ()
+(ert-deftest test-literals-neguint16tobigint-negtypical-value ()
 
-  (should (equal 1000 (hydra_lib_literals_uint16_to_bigint 1000))))
+  (should (equal 1000 (funcall hydra_lib_literals_uint16_to_bigint 1000))))
 
 ;; uint32ToBigint
 
-(ert-deftest test-uint32tobigint-negzero ()
+(ert-deftest test-literals-neguint32tobigint-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_uint32_to_bigint 0))))
+  (should (equal 0 (funcall hydra_lib_literals_uint32_to_bigint 0))))
 
-(ert-deftest test-uint32tobigint-negtypical-value ()
+(ert-deftest test-literals-neguint32tobigint-negtypical-value ()
 
-  (should (equal 100000 (hydra_lib_literals_uint32_to_bigint 100000))))
+  (should (equal 100000 (funcall hydra_lib_literals_uint32_to_bigint 100000))))
 
 ;; uint64ToBigint
 
-(ert-deftest test-uint64tobigint-negzero ()
+(ert-deftest test-literals-neguint64tobigint-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_uint64_to_bigint 0))))
+  (should (equal 0 (funcall hydra_lib_literals_uint64_to_bigint 0))))
 
-(ert-deftest test-uint64tobigint-negtypical-value ()
+(ert-deftest test-literals-neguint64tobigint-negtypical-value ()
 
-  (should (equal 1000000 (hydra_lib_literals_uint64_to_bigint 1000000))))
+  (should (equal 1000000 (funcall hydra_lib_literals_uint64_to_bigint 1000000))))
 
 ;; float32ToBigfloat
 
-(ert-deftest test-float32tobigfloat-negpositive ()
+(ert-deftest test-literals-negfloat32tobigfloat-negpositive ()
 
-  (should (equal 2.5 (hydra_lib_literals_float32_to_bigfloat 2.5))))
+  (should (equal 2.5 (funcall hydra_lib_literals_float32_to_bigfloat 2.5))))
 
-(ert-deftest test-float32tobigfloat-negnegative ()
+(ert-deftest test-literals-negfloat32tobigfloat-negnegative ()
 
-  (should (equal -2.5 (hydra_lib_literals_float32_to_bigfloat -2.5))))
+  (should (equal -2.5 (funcall hydra_lib_literals_float32_to_bigfloat -2.5))))
 
-(ert-deftest test-float32tobigfloat-negzero ()
+(ert-deftest test-literals-negfloat32tobigfloat-negzero ()
 
-  (should (equal 0.0 (hydra_lib_literals_float32_to_bigfloat 0.0))))
+  (should (equal 0.0 (funcall hydra_lib_literals_float32_to_bigfloat 0.0))))
 
 ;; float64ToBigfloat
 
-(ert-deftest test-float64tobigfloat-negpositive ()
+(ert-deftest test-literals-negfloat64tobigfloat-negpositive ()
 
-  (should (equal 3.14159 (hydra_lib_literals_float64_to_bigfloat 3.14159))))
+  (should (equal 3.14159 (funcall hydra_lib_literals_float64_to_bigfloat 3.14159))))
 
-(ert-deftest test-float64tobigfloat-negnegative ()
+(ert-deftest test-literals-negfloat64tobigfloat-negnegative ()
 
-  (should (equal -2.71828 (hydra_lib_literals_float64_to_bigfloat -2.71828))))
+  (should (equal -2.71828 (funcall hydra_lib_literals_float64_to_bigfloat -2.71828))))
 
-(ert-deftest test-float64tobigfloat-negzero ()
+(ert-deftest test-literals-negfloat64tobigfloat-negzero ()
 
-  (should (equal 0.0 (hydra_lib_literals_float64_to_bigfloat 0.0))))
+  (should (equal 0.0 (funcall hydra_lib_literals_float64_to_bigfloat 0.0))))
 
 ;; bigfloatToFloat32
 
-(ert-deftest test-bigfloattofloat32-negpositive ()
+(ert-deftest test-literals-negbigfloattofloat32-negpositive ()
 
-  (should (equal 3.140000104904175 (hydra_lib_literals_bigfloat_to_float32 3.14))))
+  (should (equal 3.140000104904175 (funcall hydra_lib_literals_bigfloat_to_float32 3.14))))
 
-(ert-deftest test-bigfloattofloat32-negnegative ()
+(ert-deftest test-literals-negbigfloattofloat32-negnegative ()
 
-  (should (equal -2.5 (hydra_lib_literals_bigfloat_to_float32 -2.5))))
+  (should (equal -2.5 (funcall hydra_lib_literals_bigfloat_to_float32 -2.5))))
 
-(ert-deftest test-bigfloattofloat32-negzero ()
+(ert-deftest test-literals-negbigfloattofloat32-negzero ()
 
-  (should (equal 0.0 (hydra_lib_literals_bigfloat_to_float32 0.0))))
+  (should (equal 0.0 (funcall hydra_lib_literals_bigfloat_to_float32 0.0))))
 
 ;; bigfloatToFloat64
 
-(ert-deftest test-bigfloattofloat64-negpositive ()
+(ert-deftest test-literals-negbigfloattofloat64-negpositive ()
 
-  (should (equal 3.14159 (hydra_lib_literals_bigfloat_to_float64 3.14159))))
+  (should (equal 3.14159 (funcall hydra_lib_literals_bigfloat_to_float64 3.14159))))
 
-(ert-deftest test-bigfloattofloat64-negnegative ()
+(ert-deftest test-literals-negbigfloattofloat64-negnegative ()
 
-  (should (equal -2.71828 (hydra_lib_literals_bigfloat_to_float64 -2.71828))))
+  (should (equal -2.71828 (funcall hydra_lib_literals_bigfloat_to_float64 -2.71828))))
 
-(ert-deftest test-bigfloattofloat64-negzero ()
+(ert-deftest test-literals-negbigfloattofloat64-negzero ()
 
-  (should (equal 0.0 (hydra_lib_literals_bigfloat_to_float64 0.0))))
+  (should (equal 0.0 (funcall hydra_lib_literals_bigfloat_to_float64 0.0))))
 
 ;; bigintToBigfloat
 
-(ert-deftest test-biginttobigfloat-negpositive ()
+(ert-deftest test-literals-negbiginttobigfloat-negpositive ()
 
-  (should (equal 42.0 (hydra_lib_literals_bigint_to_bigfloat 42))))
+  (should (equal 42.0 (funcall hydra_lib_literals_bigint_to_bigfloat 42))))
 
-(ert-deftest test-biginttobigfloat-negnegative ()
+(ert-deftest test-literals-negbiginttobigfloat-negnegative ()
 
-  (should (equal -42.0 (hydra_lib_literals_bigint_to_bigfloat -42))))
+  (should (equal -42.0 (funcall hydra_lib_literals_bigint_to_bigfloat -42))))
 
-(ert-deftest test-biginttobigfloat-negzero ()
+(ert-deftest test-literals-negbiginttobigfloat-negzero ()
 
-  (should (equal 0.0 (hydra_lib_literals_bigint_to_bigfloat 0))))
+  (should (equal 0.0 (funcall hydra_lib_literals_bigint_to_bigfloat 0))))
 
 ;; bigfloatToBigint
 
-(ert-deftest test-bigfloattobigint-negpositive ()
+(ert-deftest test-literals-negbigfloattobigint-negpositive ()
 
-  (should (equal 43 (hydra_lib_literals_bigfloat_to_bigint 42.7))))
+  (should (equal 43 (funcall hydra_lib_literals_bigfloat_to_bigint 42.7))))
 
-(ert-deftest test-bigfloattobigint-negnegative ()
+(ert-deftest test-literals-negbigfloattobigint-negnegative ()
 
-  (should (equal -43 (hydra_lib_literals_bigfloat_to_bigint -42.7))))
+  (should (equal -43 (funcall hydra_lib_literals_bigfloat_to_bigint -42.7))))
 
-(ert-deftest test-bigfloattobigint-negzero ()
+(ert-deftest test-literals-negbigfloattobigint-negzero ()
 
-  (should (equal 0 (hydra_lib_literals_bigfloat_to_bigint 0.0))))
+  (should (equal 0 (funcall hydra_lib_literals_bigfloat_to_bigint 0.0))))
 
-(ert-deftest test-bigfloattobigint-neground-down ()
+(ert-deftest test-literals-negbigfloattobigint-neground-down ()
 
-  (should (equal 42 (hydra_lib_literals_bigfloat_to_bigint 42.3))))
+  (should (equal 42 (funcall hydra_lib_literals_bigfloat_to_bigint 42.3))))
 
-(ert-deftest test-bigfloattobigint-neghalf-even-up ()
+(ert-deftest test-literals-negbigfloattobigint-neghalf-even-up ()
 
-  (should (equal 42 (hydra_lib_literals_bigfloat_to_bigint 42.5))))
+  (should (equal 42 (funcall hydra_lib_literals_bigfloat_to_bigint 42.5))))
 
-(ert-deftest test-bigfloattobigint-neghalf-even-down ()
+(ert-deftest test-literals-negbigfloattobigint-neghalf-even-down ()
 
-  (should (equal 44 (hydra_lib_literals_bigfloat_to_bigint 43.5))))
+  (should (equal 44 (funcall hydra_lib_literals_bigfloat_to_bigint 43.5))))
 
 ;; showInt8
 
-(ert-deftest test-showint8-negpositive ()
+(ert-deftest test-literals-negshowint8-negpositive ()
 
-  (should (equal "42" (hydra_lib_literals_show_int8 42))))
+  (should (equal "42" (funcall hydra_lib_literals_show_int8 42))))
 
-(ert-deftest test-showint8-negnegative ()
+(ert-deftest test-literals-negshowint8-negnegative ()
 
-  (should (equal "-42" (hydra_lib_literals_show_int8 -42))))
+  (should (equal "-42" (funcall hydra_lib_literals_show_int8 -42))))
 
 ;; showInt16
 
-(ert-deftest test-showint16-negpositive ()
+(ert-deftest test-literals-negshowint16-negpositive ()
 
-  (should (equal "1000" (hydra_lib_literals_show_int16 1000))))
+  (should (equal "1000" (funcall hydra_lib_literals_show_int16 1000))))
 
-(ert-deftest test-showint16-negnegative ()
+(ert-deftest test-literals-negshowint16-negnegative ()
 
-  (should (equal "-1000" (hydra_lib_literals_show_int16 -1000))))
+  (should (equal "-1000" (funcall hydra_lib_literals_show_int16 -1000))))
 
 ;; showInt32
 
-(ert-deftest test-showint32-negpositive ()
+(ert-deftest test-literals-negshowint32-negpositive ()
 
-  (should (equal "42" (hydra_lib_literals_show_int32 42))))
+  (should (equal "42" (funcall hydra_lib_literals_show_int32 42))))
 
-(ert-deftest test-showint32-negnegative ()
+(ert-deftest test-literals-negshowint32-negnegative ()
 
-  (should (equal "-42" (hydra_lib_literals_show_int32 -42))))
+  (should (equal "-42" (funcall hydra_lib_literals_show_int32 -42))))
 
-(ert-deftest test-showint32-negzero ()
+(ert-deftest test-literals-negshowint32-negzero ()
 
-  (should (equal "0" (hydra_lib_literals_show_int32 0))))
+  (should (equal "0" (funcall hydra_lib_literals_show_int32 0))))
 
 ;; showInt64
 
-(ert-deftest test-showint64-negpositive ()
+(ert-deftest test-literals-negshowint64-negpositive ()
 
-  (should (equal "1000000" (hydra_lib_literals_show_int64 1000000))))
+  (should (equal "1000000" (funcall hydra_lib_literals_show_int64 1000000))))
 
-(ert-deftest test-showint64-negnegative ()
+(ert-deftest test-literals-negshowint64-negnegative ()
 
-  (should (equal "-1000000" (hydra_lib_literals_show_int64 -1000000))))
+  (should (equal "-1000000" (funcall hydra_lib_literals_show_int64 -1000000))))
 
 ;; showUint8
 
-(ert-deftest test-showuint8-negzero ()
+(ert-deftest test-literals-negshowuint8-negzero ()
 
-  (should (equal "0" (hydra_lib_literals_show_uint8 0))))
+  (should (equal "0" (funcall hydra_lib_literals_show_uint8 0))))
 
-(ert-deftest test-showuint8-negmax-value ()
+(ert-deftest test-literals-negshowuint8-negmax-value ()
 
-  (should (equal "255" (hydra_lib_literals_show_uint8 255))))
+  (should (equal "255" (funcall hydra_lib_literals_show_uint8 255))))
 
 ;; showUint16
 
-(ert-deftest test-showuint16-negzero ()
+(ert-deftest test-literals-negshowuint16-negzero ()
 
-  (should (equal "0" (hydra_lib_literals_show_uint16 0))))
+  (should (equal "0" (funcall hydra_lib_literals_show_uint16 0))))
 
-(ert-deftest test-showuint16-negtypical-value ()
+(ert-deftest test-literals-negshowuint16-negtypical-value ()
 
-  (should (equal "1000" (hydra_lib_literals_show_uint16 1000))))
+  (should (equal "1000" (funcall hydra_lib_literals_show_uint16 1000))))
 
 ;; showUint32
 
-(ert-deftest test-showuint32-negzero ()
+(ert-deftest test-literals-negshowuint32-negzero ()
 
-  (should (equal "0" (hydra_lib_literals_show_uint32 0))))
+  (should (equal "0" (funcall hydra_lib_literals_show_uint32 0))))
 
-(ert-deftest test-showuint32-negtypical-value ()
+(ert-deftest test-literals-negshowuint32-negtypical-value ()
 
-  (should (equal "100000" (hydra_lib_literals_show_uint32 100000))))
+  (should (equal "100000" (funcall hydra_lib_literals_show_uint32 100000))))
 
 ;; showUint64
 
-(ert-deftest test-showuint64-negzero ()
+(ert-deftest test-literals-negshowuint64-negzero ()
 
-  (should (equal "0" (hydra_lib_literals_show_uint64 0))))
+  (should (equal "0" (funcall hydra_lib_literals_show_uint64 0))))
 
-(ert-deftest test-showuint64-negtypical-value ()
+(ert-deftest test-literals-negshowuint64-negtypical-value ()
 
-  (should (equal "1000000" (hydra_lib_literals_show_uint64 1000000))))
+  (should (equal "1000000" (funcall hydra_lib_literals_show_uint64 1000000))))
 
 ;; showBigint
 
-(ert-deftest test-showbigint-negpositive ()
+(ert-deftest test-literals-negshowbigint-negpositive ()
 
-  (should (equal "42" (hydra_lib_literals_show_bigint 42))))
+  (should (equal "42" (funcall hydra_lib_literals_show_bigint 42))))
 
-(ert-deftest test-showbigint-negnegative ()
+(ert-deftest test-literals-negshowbigint-negnegative ()
 
-  (should (equal "-42" (hydra_lib_literals_show_bigint -42))))
+  (should (equal "-42" (funcall hydra_lib_literals_show_bigint -42))))
 
-(ert-deftest test-showbigint-negzero ()
+(ert-deftest test-literals-negshowbigint-negzero ()
 
-  (should (equal "0" (hydra_lib_literals_show_bigint 0))))
+  (should (equal "0" (funcall hydra_lib_literals_show_bigint 0))))
 
 ;; showFloat32
 
-(ert-deftest test-showfloat32-negpositive ()
+(ert-deftest test-literals-negshowfloat32-negpositive ()
 
-  (should (equal "3.14" (hydra_lib_literals_show_float32 3.140000104904175))))
+  (should (equal "3.14" (funcall hydra_lib_literals_show_float32 3.140000104904175))))
 
-(ert-deftest test-showfloat32-negnegative ()
+(ert-deftest test-literals-negshowfloat32-negnegative ()
 
-  (should (equal "-2.5" (hydra_lib_literals_show_float32 -2.5))))
+  (should (equal "-2.5" (funcall hydra_lib_literals_show_float32 -2.5))))
 
-(ert-deftest test-showfloat32-negzero ()
+(ert-deftest test-literals-negshowfloat32-negzero ()
 
-  (should (equal "0.0" (hydra_lib_literals_show_float32 0.0))))
+  (should (equal "0.0" (funcall hydra_lib_literals_show_float32 0.0))))
 
-(ert-deftest test-showfloat32-negsmall-positive ()
+(ert-deftest test-literals-negshowfloat32-negsmall-positive ()
 
-  (should (equal "5.0e-2" (hydra_lib_literals_show_float32 5.000000074505806e-2))))
+  (should (equal "5.0e-2" (funcall hydra_lib_literals_show_float32 5.000000074505806e-2))))
 
-(ert-deftest test-showfloat32-negsmall-positive-2 ()
+(ert-deftest test-literals-negshowfloat32-negsmall-positive-2 ()
 
-  (should (equal "3.0e-2" (hydra_lib_literals_show_float32 2.9999999329447746e-2))))
+  (should (equal "3.0e-2" (funcall hydra_lib_literals_show_float32 2.9999999329447746e-2))))
 
-(ert-deftest test-showfloat32-negvery-small ()
+(ert-deftest test-literals-negshowfloat32-negvery-small ()
 
-  (should (equal "1.0e-3" (hydra_lib_literals_show_float32 1.0000000474974513e-3))))
+  (should (equal "1.0e-3" (funcall hydra_lib_literals_show_float32 1.0000000474974513e-3))))
 
-(ert-deftest test-showfloat32-negnormal-decimal ()
+(ert-deftest test-literals-negshowfloat32-negnormal-decimal ()
 
-  (should (equal "0.1" (hydra_lib_literals_show_float32 0.10000000149011612))))
+  (should (equal "0.1" (funcall hydra_lib_literals_show_float32 0.10000000149011612))))
 
 ;; showFloat64
 
-(ert-deftest test-showfloat64-negpositive ()
+(ert-deftest test-literals-negshowfloat64-negpositive ()
 
-  (should (equal "3.14159" (hydra_lib_literals_show_float64 3.14159))))
+  (should (equal "3.14159" (funcall hydra_lib_literals_show_float64 3.14159))))
 
-(ert-deftest test-showfloat64-negzero ()
+(ert-deftest test-literals-negshowfloat64-negzero ()
 
-  (should (equal "0.0" (hydra_lib_literals_show_float64 0.0))))
+  (should (equal "0.0" (funcall hydra_lib_literals_show_float64 0.0))))
 
-(ert-deftest test-showfloat64-negsmall-positive ()
+(ert-deftest test-literals-negshowfloat64-negsmall-positive ()
 
-  (should (equal "5.0e-2" (hydra_lib_literals_show_float64 5.0e-2))))
+  (should (equal "5.0e-2" (funcall hydra_lib_literals_show_float64 5.0e-2))))
 
-(ert-deftest test-showfloat64-negsmall-positive-2 ()
+(ert-deftest test-literals-negshowfloat64-negsmall-positive-2 ()
 
-  (should (equal "3.0e-2" (hydra_lib_literals_show_float64 3.0e-2))))
+  (should (equal "3.0e-2" (funcall hydra_lib_literals_show_float64 3.0e-2))))
 
-(ert-deftest test-showfloat64-negvery-small ()
+(ert-deftest test-literals-negshowfloat64-negvery-small ()
 
-  (should (equal "1.0e-3" (hydra_lib_literals_show_float64 1.0e-3))))
+  (should (equal "1.0e-3" (funcall hydra_lib_literals_show_float64 1.0e-3))))
 
-(ert-deftest test-showfloat64-negnormal-decimal ()
+(ert-deftest test-literals-negshowfloat64-negnormal-decimal ()
 
-  (should (equal "0.1" (hydra_lib_literals_show_float64 0.1))))
+  (should (equal "0.1" (funcall hydra_lib_literals_show_float64 0.1))))
 
 ;; showBigfloat
 
-(ert-deftest test-showbigfloat-negpositive ()
+(ert-deftest test-literals-negshowbigfloat-negpositive ()
 
-  (should (equal "3.14" (hydra_lib_literals_show_bigfloat 3.14))))
+  (should (equal "3.14" (funcall hydra_lib_literals_show_bigfloat 3.14))))
 
-(ert-deftest test-showbigfloat-negzero ()
+(ert-deftest test-literals-negshowbigfloat-negzero ()
 
-  (should (equal "0.0" (hydra_lib_literals_show_bigfloat 0.0))))
+  (should (equal "0.0" (funcall hydra_lib_literals_show_bigfloat 0.0))))
 
-(ert-deftest test-showbigfloat-negsmall-positive ()
+(ert-deftest test-literals-negshowbigfloat-negsmall-positive ()
 
-  (should (equal "5.0e-2" (hydra_lib_literals_show_bigfloat 5.0e-2))))
+  (should (equal "5.0e-2" (funcall hydra_lib_literals_show_bigfloat 5.0e-2))))
 
-(ert-deftest test-showbigfloat-negsmall-positive-2 ()
+(ert-deftest test-literals-negshowbigfloat-negsmall-positive-2 ()
 
-  (should (equal "3.0e-2" (hydra_lib_literals_show_bigfloat 3.0e-2))))
+  (should (equal "3.0e-2" (funcall hydra_lib_literals_show_bigfloat 3.0e-2))))
 
-(ert-deftest test-showbigfloat-negvery-small ()
+(ert-deftest test-literals-negshowbigfloat-negvery-small ()
 
-  (should (equal "1.0e-3" (hydra_lib_literals_show_bigfloat 1.0e-3))))
+  (should (equal "1.0e-3" (funcall hydra_lib_literals_show_bigfloat 1.0e-3))))
 
-(ert-deftest test-showbigfloat-negnormal-decimal ()
+(ert-deftest test-literals-negshowbigfloat-negnormal-decimal ()
 
-  (should (equal "0.1" (hydra_lib_literals_show_bigfloat 0.1))))
+  (should (equal "0.1" (funcall hydra_lib_literals_show_bigfloat 0.1))))
 
 ;; showBoolean
 
-(ert-deftest test-showboolean-negtrue ()
+(ert-deftest test-literals-negshowboolean-negtrue ()
 
-  (should (equal "true" (hydra_lib_literals_show_boolean t))))
+  (should (equal "true" (funcall hydra_lib_literals_show_boolean t))))
 
-(ert-deftest test-showboolean-negfalse ()
+(ert-deftest test-literals-negshowboolean-negfalse ()
 
-  (should (equal "false" (hydra_lib_literals_show_boolean nil))))
+  (should (equal "false" (funcall hydra_lib_literals_show_boolean nil))))
 
 ;; showString
 
-(ert-deftest test-showstring-negsimple ()
+(ert-deftest test-literals-negshowstring-negsimple ()
 
-  (should (equal "\"hello\"" (hydra_lib_literals_show_string "hello"))))
+  (should (equal "\"hello\"" (funcall hydra_lib_literals_show_string "hello"))))
 
-(ert-deftest test-showstring-negempty ()
+(ert-deftest test-literals-negshowstring-negempty ()
 
-  (should (equal "\"\"" (hydra_lib_literals_show_string ""))))
+  (should (equal "\"\"" (funcall hydra_lib_literals_show_string ""))))
 
-(ert-deftest test-showstring-neglatin-accented ()
+(ert-deftest test-literals-negshowstring-neglatin-accented ()
 
-  (should (equal "\"caf\\233\"" (hydra_lib_literals_show_string "café"))))
+  (should (equal "\"caf\\233\"" (funcall hydra_lib_literals_show_string "café"))))
 
-(ert-deftest test-showstring-neggreek-lambda ()
+(ert-deftest test-literals-negshowstring-neggreek-lambda ()
 
-  (should (equal "\"\\955\"" (hydra_lib_literals_show_string "λ"))))
+  (should (equal "\"\\955\"" (funcall hydra_lib_literals_show_string "λ"))))
 
-(ert-deftest test-showstring-negmixed-ascii-and-non-negascii ()
+(ert-deftest test-literals-negshowstring-negmixed-ascii-and-non-negascii ()
 
-  (should (equal "\"A\\233B\"" (hydra_lib_literals_show_string "AéB"))))
+  (should (equal "\"A\\233B\"" (funcall hydra_lib_literals_show_string "AéB"))))
 
-(ert-deftest test-showstring-negtab ()
+(ert-deftest test-literals-negshowstring-negtab ()
 
-  (should (equal "\"\\t\"" (hydra_lib_literals_show_string "\t"))))
+  (should (equal "\"\\t\"" (funcall hydra_lib_literals_show_string "\t"))))
 
-(ert-deftest test-showstring-negnewline ()
+(ert-deftest test-literals-negshowstring-negnewline ()
 
-  (should (equal "\"\\n\"" (hydra_lib_literals_show_string "\n"))))
+  (should (equal "\"\\n\"" (funcall hydra_lib_literals_show_string "\n"))))
 
-(ert-deftest test-showstring-negcarriage-return ()
+(ert-deftest test-literals-negshowstring-negcarriage-return ()
 
-  (should (equal "\"\\r\"" (hydra_lib_literals_show_string "\r"))))
+  (should (equal "\"\\r\"" (funcall hydra_lib_literals_show_string "\r"))))
 
-(ert-deftest test-showstring-negbackslash ()
+(ert-deftest test-literals-negshowstring-negbackslash ()
 
-  (should (equal "\"\\\\\"" (hydra_lib_literals_show_string "\\"))))
+  (should (equal "\"\\\\\"" (funcall hydra_lib_literals_show_string "\\"))))
 
-(ert-deftest test-showstring-negdouble-quote ()
+(ert-deftest test-literals-negshowstring-negdouble-quote ()
 
-  (should (equal "\"\\\"\"" (hydra_lib_literals_show_string "\""))))
+  (should (equal "\"\\\"\"" (funcall hydra_lib_literals_show_string "\""))))
 
-(ert-deftest test-showstring-negnull ()
+(ert-deftest test-literals-negshowstring-negnull ()
 
-  (should (equal "\"\\NUL\"" (hydra_lib_literals_show_string " "))))
+  (should (equal "\"\\NUL\"" (funcall hydra_lib_literals_show_string " "))))
 
-(ert-deftest test-showstring-negbell ()
+(ert-deftest test-literals-negshowstring-negbell ()
 
-  (should (equal "\"\\a\"" (hydra_lib_literals_show_string ""))))
+  (should (equal "\"\\a\"" (funcall hydra_lib_literals_show_string ""))))
 
-(ert-deftest test-showstring-negbackspace ()
+(ert-deftest test-literals-negshowstring-negbackspace ()
 
-  (should (equal "\"\\b\"" (hydra_lib_literals_show_string ""))))
+  (should (equal "\"\\b\"" (funcall hydra_lib_literals_show_string ""))))
 
-(ert-deftest test-showstring-negform-feed ()
+(ert-deftest test-literals-negshowstring-negform-feed ()
 
-  (should (equal "\"\\f\"" (hydra_lib_literals_show_string ""))))
+  (should (equal "\"\\f\"" (funcall hydra_lib_literals_show_string ""))))
 
-(ert-deftest test-showstring-negvertical-tab ()
+(ert-deftest test-literals-negshowstring-negvertical-tab ()
 
-  (should (equal "\"\\v\"" (hydra_lib_literals_show_string ""))))
+  (should (equal "\"\\v\"" (funcall hydra_lib_literals_show_string ""))))
 
-(ert-deftest test-showstring-negdelete ()
+(ert-deftest test-literals-negshowstring-negdelete ()
 
-  (should (equal "\"\\DEL\"" (hydra_lib_literals_show_string ""))))
+  (should (equal "\"\\DEL\"" (funcall hydra_lib_literals_show_string ""))))
 
 ;; readInt8
 
-(ert-deftest test-readint8-negpositive ()
+(ert-deftest test-literals-negreadint8-negpositive ()
 
-  (should (equal (list :just 42) (hydra_lib_literals_read_int8 "42"))))
+  (should (equal (list :just 42) (funcall hydra_lib_literals_read_int8 "42"))))
 
-(ert-deftest test-readint8-negnegative ()
+(ert-deftest test-literals-negreadint8-negnegative ()
 
-  (should (equal (list :just -42) (hydra_lib_literals_read_int8 "-42"))))
+  (should (equal (list :just -42) (funcall hydra_lib_literals_read_int8 "-42"))))
 
-(ert-deftest test-readint8-negmax-value ()
+(ert-deftest test-literals-negreadint8-negmax-value ()
 
-  (should (equal (list :just 127) (hydra_lib_literals_read_int8 "127"))))
+  (should (equal (list :just 127) (funcall hydra_lib_literals_read_int8 "127"))))
 
-(ert-deftest test-readint8-negmin-value ()
+(ert-deftest test-literals-negreadint8-negmin-value ()
 
-  (should (equal (list :just -128) (hydra_lib_literals_read_int8 "-128"))))
+  (should (equal (list :just -128) (funcall hydra_lib_literals_read_int8 "-128"))))
 
-(ert-deftest test-readint8-neginvalid ()
+(ert-deftest test-literals-negreadint8-neginvalid ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_int8 "abc"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_int8 "abc"))))
 
-(ert-deftest test-readint8-negoverflow ()
+(ert-deftest test-literals-negreadint8-negoverflow ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_int8 "128"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_int8 "128"))))
 
 ;; readInt16
 
-(ert-deftest test-readint16-negpositive ()
+(ert-deftest test-literals-negreadint16-negpositive ()
 
-  (should (equal (list :just 1000) (hydra_lib_literals_read_int16 "1000"))))
+  (should (equal (list :just 1000) (funcall hydra_lib_literals_read_int16 "1000"))))
 
-(ert-deftest test-readint16-negnegative ()
+(ert-deftest test-literals-negreadint16-negnegative ()
 
-  (should (equal (list :just -1000) (hydra_lib_literals_read_int16 "-1000"))))
+  (should (equal (list :just -1000) (funcall hydra_lib_literals_read_int16 "-1000"))))
 
-(ert-deftest test-readint16-neginvalid ()
+(ert-deftest test-literals-negreadint16-neginvalid ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_int16 "abc"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_int16 "abc"))))
 
 ;; readInt32
 
-(ert-deftest test-readint32-negpositive ()
+(ert-deftest test-literals-negreadint32-negpositive ()
 
-  (should (equal (list :just 42) (hydra_lib_literals_read_int32 "42"))))
+  (should (equal (list :just 42) (funcall hydra_lib_literals_read_int32 "42"))))
 
-(ert-deftest test-readint32-negnegative ()
+(ert-deftest test-literals-negreadint32-negnegative ()
 
-  (should (equal (list :just -42) (hydra_lib_literals_read_int32 "-42"))))
+  (should (equal (list :just -42) (funcall hydra_lib_literals_read_int32 "-42"))))
 
-(ert-deftest test-readint32-neginvalid ()
+(ert-deftest test-literals-negreadint32-neginvalid ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_int32 "abc"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_int32 "abc"))))
 
 ;; readInt64
 
-(ert-deftest test-readint64-negpositive ()
+(ert-deftest test-literals-negreadint64-negpositive ()
 
-  (should (equal (list :just 1000000) (hydra_lib_literals_read_int64 "1000000"))))
+  (should (equal (list :just 1000000) (funcall hydra_lib_literals_read_int64 "1000000"))))
 
-(ert-deftest test-readint64-negnegative ()
+(ert-deftest test-literals-negreadint64-negnegative ()
 
-  (should (equal (list :just -1000000) (hydra_lib_literals_read_int64 "-1000000"))))
+  (should (equal (list :just -1000000) (funcall hydra_lib_literals_read_int64 "-1000000"))))
 
-(ert-deftest test-readint64-neginvalid ()
+(ert-deftest test-literals-negreadint64-neginvalid ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_int64 "abc"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_int64 "abc"))))
 
 ;; readUint8
 
-(ert-deftest test-readuint8-negzero ()
+(ert-deftest test-literals-negreaduint8-negzero ()
 
-  (should (equal (list :just 0) (hydra_lib_literals_read_uint8 "0"))))
+  (should (equal (list :just 0) (funcall hydra_lib_literals_read_uint8 "0"))))
 
-(ert-deftest test-readuint8-negtypical ()
+(ert-deftest test-literals-negreaduint8-negtypical ()
 
-  (should (equal (list :just 100) (hydra_lib_literals_read_uint8 "100"))))
+  (should (equal (list :just 100) (funcall hydra_lib_literals_read_uint8 "100"))))
 
-(ert-deftest test-readuint8-negmax-value ()
+(ert-deftest test-literals-negreaduint8-negmax-value ()
 
-  (should (equal (list :just 255) (hydra_lib_literals_read_uint8 "255"))))
+  (should (equal (list :just 255) (funcall hydra_lib_literals_read_uint8 "255"))))
 
-(ert-deftest test-readuint8-neginvalid ()
+(ert-deftest test-literals-negreaduint8-neginvalid ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_uint8 "abc"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_uint8 "abc"))))
 
-(ert-deftest test-readuint8-negnegative ()
+(ert-deftest test-literals-negreaduint8-negnegative ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_uint8 "-1"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_uint8 "-1"))))
 
 ;; readUint16
 
-(ert-deftest test-readuint16-negzero ()
+(ert-deftest test-literals-negreaduint16-negzero ()
 
-  (should (equal (list :just 0) (hydra_lib_literals_read_uint16 "0"))))
+  (should (equal (list :just 0) (funcall hydra_lib_literals_read_uint16 "0"))))
 
-(ert-deftest test-readuint16-negtypical ()
+(ert-deftest test-literals-negreaduint16-negtypical ()
 
-  (should (equal (list :just 1000) (hydra_lib_literals_read_uint16 "1000"))))
+  (should (equal (list :just 1000) (funcall hydra_lib_literals_read_uint16 "1000"))))
 
-(ert-deftest test-readuint16-neginvalid ()
+(ert-deftest test-literals-negreaduint16-neginvalid ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_uint16 "abc"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_uint16 "abc"))))
 
-(ert-deftest test-readuint16-negnegative ()
+(ert-deftest test-literals-negreaduint16-negnegative ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_uint16 "-1"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_uint16 "-1"))))
 
 ;; readUint32
 
-(ert-deftest test-readuint32-negzero ()
+(ert-deftest test-literals-negreaduint32-negzero ()
 
-  (should (equal (list :just 0) (hydra_lib_literals_read_uint32 "0"))))
+  (should (equal (list :just 0) (funcall hydra_lib_literals_read_uint32 "0"))))
 
-(ert-deftest test-readuint32-negtypical ()
+(ert-deftest test-literals-negreaduint32-negtypical ()
 
-  (should (equal (list :just 100000) (hydra_lib_literals_read_uint32 "100000"))))
+  (should (equal (list :just 100000) (funcall hydra_lib_literals_read_uint32 "100000"))))
 
-(ert-deftest test-readuint32-neginvalid ()
+(ert-deftest test-literals-negreaduint32-neginvalid ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_uint32 "abc"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_uint32 "abc"))))
 
-(ert-deftest test-readuint32-negnegative ()
+(ert-deftest test-literals-negreaduint32-negnegative ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_uint32 "-1"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_uint32 "-1"))))
 
 ;; readUint64
 
-(ert-deftest test-readuint64-negzero ()
+(ert-deftest test-literals-negreaduint64-negzero ()
 
-  (should (equal (list :just 0) (hydra_lib_literals_read_uint64 "0"))))
+  (should (equal (list :just 0) (funcall hydra_lib_literals_read_uint64 "0"))))
 
-(ert-deftest test-readuint64-negtypical ()
+(ert-deftest test-literals-negreaduint64-negtypical ()
 
-  (should (equal (list :just 1000000) (hydra_lib_literals_read_uint64 "1000000"))))
+  (should (equal (list :just 1000000) (funcall hydra_lib_literals_read_uint64 "1000000"))))
 
-(ert-deftest test-readuint64-neginvalid ()
+(ert-deftest test-literals-negreaduint64-neginvalid ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_uint64 "abc"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_uint64 "abc"))))
 
-(ert-deftest test-readuint64-negnegative ()
+(ert-deftest test-literals-negreaduint64-negnegative ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_uint64 "-1"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_uint64 "-1"))))
 
 ;; readBigint
 
-(ert-deftest test-readbigint-negpositive ()
+(ert-deftest test-literals-negreadbigint-negpositive ()
 
-  (should (equal (list :just 42) (hydra_lib_literals_read_bigint "42"))))
+  (should (equal (list :just 42) (funcall hydra_lib_literals_read_bigint "42"))))
 
-(ert-deftest test-readbigint-negnegative ()
+(ert-deftest test-literals-negreadbigint-negnegative ()
 
-  (should (equal (list :just -42) (hydra_lib_literals_read_bigint "-42"))))
+  (should (equal (list :just -42) (funcall hydra_lib_literals_read_bigint "-42"))))
 
-(ert-deftest test-readbigint-negzero ()
+(ert-deftest test-literals-negreadbigint-negzero ()
 
-  (should (equal (list :just 0) (hydra_lib_literals_read_bigint "0"))))
+  (should (equal (list :just 0) (funcall hydra_lib_literals_read_bigint "0"))))
 
-(ert-deftest test-readbigint-neglarge ()
+(ert-deftest test-literals-negreadbigint-neglarge ()
 
-  (should (equal (list :just 123456789012345678901234567890) (hydra_lib_literals_read_bigint "123456789012345678901234567890"))))
+  (should (equal (list :just 123456789012345678901234567890) (funcall hydra_lib_literals_read_bigint "123456789012345678901234567890"))))
 
-(ert-deftest test-readbigint-neginvalid ()
+(ert-deftest test-literals-negreadbigint-neginvalid ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_bigint "abc"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_bigint "abc"))))
 
 ;; readFloat32
 
-(ert-deftest test-readfloat32-negpositive ()
+(ert-deftest test-literals-negreadfloat32-negpositive ()
 
-  (should (equal (list :just 3.140000104904175) (hydra_lib_literals_read_float32 "3.14"))))
+  (should (equal (list :just 3.140000104904175) (funcall hydra_lib_literals_read_float32 "3.14"))))
 
-(ert-deftest test-readfloat32-negnegative ()
+(ert-deftest test-literals-negreadfloat32-negnegative ()
 
-  (should (equal (list :just -2.5) (hydra_lib_literals_read_float32 "-2.5"))))
+  (should (equal (list :just -2.5) (funcall hydra_lib_literals_read_float32 "-2.5"))))
 
-(ert-deftest test-readfloat32-neginvalid ()
+(ert-deftest test-literals-negreadfloat32-neginvalid ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_float32 "abc"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_float32 "abc"))))
 
 ;; readFloat64
 
-(ert-deftest test-readfloat64-negpositive ()
+(ert-deftest test-literals-negreadfloat64-negpositive ()
 
-  (should (equal (list :just 3.14159) (hydra_lib_literals_read_float64 "3.14159"))))
+  (should (equal (list :just 3.14159) (funcall hydra_lib_literals_read_float64 "3.14159"))))
 
-(ert-deftest test-readfloat64-negnegative ()
+(ert-deftest test-literals-negreadfloat64-negnegative ()
 
-  (should (equal (list :just -2.71828) (hydra_lib_literals_read_float64 "-2.71828"))))
+  (should (equal (list :just -2.71828) (funcall hydra_lib_literals_read_float64 "-2.71828"))))
 
-(ert-deftest test-readfloat64-neginvalid ()
+(ert-deftest test-literals-negreadfloat64-neginvalid ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_float64 "abc"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_float64 "abc"))))
 
 ;; readBigfloat
 
-(ert-deftest test-readbigfloat-negpositive ()
+(ert-deftest test-literals-negreadbigfloat-negpositive ()
 
-  (should (equal (list :just 3.14) (hydra_lib_literals_read_bigfloat "3.14"))))
+  (should (equal (list :just 3.14) (funcall hydra_lib_literals_read_bigfloat "3.14"))))
 
-(ert-deftest test-readbigfloat-neginvalid ()
+(ert-deftest test-literals-negreadbigfloat-neginvalid ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_bigfloat "abc"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_bigfloat "abc"))))
 
 ;; readBoolean
 
-(ert-deftest test-readboolean-negtrue ()
+(ert-deftest test-literals-negreadboolean-negtrue ()
 
-  (should (equal (list :just t) (hydra_lib_literals_read_boolean "true"))))
+  (should (equal (list :just t) (funcall hydra_lib_literals_read_boolean "true"))))
 
-(ert-deftest test-readboolean-negfalse ()
+(ert-deftest test-literals-negreadboolean-negfalse ()
 
-  (should (equal (list :just nil) (hydra_lib_literals_read_boolean "false"))))
+  (should (equal (list :just nil) (funcall hydra_lib_literals_read_boolean "false"))))
 
-(ert-deftest test-readboolean-neginvalid ()
+(ert-deftest test-literals-negreadboolean-neginvalid ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_boolean "yes"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_boolean "yes"))))
 
 ;; readString
 
-(ert-deftest test-readstring-negquoted-string ()
+(ert-deftest test-literals-negreadstring-negquoted-string ()
 
-  (should (equal (list :just "hello") (hydra_lib_literals_read_string "\"hello\""))))
+  (should (equal (list :just "hello") (funcall hydra_lib_literals_read_string "\"hello\""))))
 
-(ert-deftest test-readstring-negempty-quoted ()
+(ert-deftest test-literals-negreadstring-negempty-quoted ()
 
-  (should (equal (list :just "") (hydra_lib_literals_read_string "\"\""))))
+  (should (equal (list :just "") (funcall hydra_lib_literals_read_string "\"\""))))
 
-(ert-deftest test-readstring-negunquoted ()
+(ert-deftest test-literals-negreadstring-negunquoted ()
 
-  (should (equal (list :nothing) (hydra_lib_literals_read_string "hello"))))
+  (should (equal (list :nothing) (funcall hydra_lib_literals_read_string "hello"))))
 
 ;; stringToBinary
 
-(ert-deftest test-stringtobinary-negsimple-base64 ()
+(ert-deftest test-literals-negstringtobinary-negsimple-base64 ()
 
-  (should (equal [104 101 108 108 111] (hydra_lib_literals_string_to_binary "aGVsbG8="))))
+  (should (equal (list 104 101 108 108 111) (funcall hydra_lib_literals_string_to_binary "aGVsbG8="))))
 
-(ert-deftest test-stringtobinary-negempty-string ()
+(ert-deftest test-literals-negstringtobinary-negempty-string ()
 
-  (should (equal [] (hydra_lib_literals_string_to_binary ""))))
+  (should (equal (list) (funcall hydra_lib_literals_string_to_binary ""))))
 
 ;; binaryToString
 
-(ert-deftest test-binarytostring-negsimple-binary ()
+(ert-deftest test-literals-negbinarytostring-negsimple-binary ()
 
-  (should (equal "aGVsbG8=" (hydra_lib_literals_binary_to_string [104 101 108 108 111]))))
+  (should (equal "aGVsbG8=" (funcall hydra_lib_literals_binary_to_string (list 104 101 108 108 111)))))
 
-(ert-deftest test-binarytostring-negempty-binary ()
+(ert-deftest test-literals-negbinarytostring-negempty-binary ()
 
-  (should (equal "" (hydra_lib_literals_binary_to_string []))))
+  (should (equal "" (funcall hydra_lib_literals_binary_to_string (list)))))

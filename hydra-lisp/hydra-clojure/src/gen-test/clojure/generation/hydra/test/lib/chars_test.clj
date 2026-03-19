@@ -6,25 +6,25 @@
 
 ;; isAlphaNum
 
-(deftest test-isalphanum-negletter
+(deftest test-chars-negisalphanum-negletter
 
   (is (= true
 
          (hydra_lib_chars_is_alpha_num 97))))
 
-(deftest test-isalphanum-negdigit
+(deftest test-chars-negisalphanum-negdigit
 
   (is (= true
 
          (hydra_lib_chars_is_alpha_num 53))))
 
-(deftest test-isalphanum-negspace
+(deftest test-chars-negisalphanum-negspace
 
   (is (= false
 
          (hydra_lib_chars_is_alpha_num 32))))
 
-(deftest test-isalphanum-negpunctuation
+(deftest test-chars-negisalphanum-negpunctuation
 
   (is (= false
 
@@ -32,19 +32,19 @@
 
 ;; isLower
 
-(deftest test-islower-neglowercase
+(deftest test-chars-negislower-neglowercase
 
   (is (= true
 
          (hydra_lib_chars_is_lower 97))))
 
-(deftest test-islower-neguppercase
+(deftest test-chars-negislower-neguppercase
 
   (is (= false
 
          (hydra_lib_chars_is_lower 65))))
 
-(deftest test-islower-negdigit
+(deftest test-chars-negislower-negdigit
 
   (is (= false
 
@@ -52,25 +52,25 @@
 
 ;; isSpace
 
-(deftest test-isspace-negspace
+(deftest test-chars-negisspace-negspace
 
   (is (= true
 
          (hydra_lib_chars_is_space 32))))
 
-(deftest test-isspace-negtab
+(deftest test-chars-negisspace-negtab
 
   (is (= true
 
          (hydra_lib_chars_is_space 9))))
 
-(deftest test-isspace-negnewline
+(deftest test-chars-negisspace-negnewline
 
   (is (= true
 
          (hydra_lib_chars_is_space 10))))
 
-(deftest test-isspace-negletter
+(deftest test-chars-negisspace-negletter
 
   (is (= false
 
@@ -78,19 +78,19 @@
 
 ;; isUpper
 
-(deftest test-isupper-neguppercase
+(deftest test-chars-negisupper-neguppercase
 
   (is (= true
 
          (hydra_lib_chars_is_upper 65))))
 
-(deftest test-isupper-neglowercase
+(deftest test-chars-negisupper-neglowercase
 
   (is (= false
 
          (hydra_lib_chars_is_upper 97))))
 
-(deftest test-isupper-negdigit
+(deftest test-chars-negisupper-negdigit
 
   (is (= false
 
@@ -98,19 +98,19 @@
 
 ;; toLower
 
-(deftest test-tolower-neguppercase
+(deftest test-chars-negtolower-neguppercase
 
   (is (= 97
 
          (hydra_lib_chars_to_lower 65))))
 
-(deftest test-tolower-neglowercase
+(deftest test-chars-negtolower-neglowercase
 
   (is (= 97
 
          (hydra_lib_chars_to_lower 97))))
 
-(deftest test-tolower-negdigit
+(deftest test-chars-negtolower-negdigit
 
   (is (= 53
 
@@ -118,19 +118,19 @@
 
 ;; toUpper
 
-(deftest test-toupper-neglowercase
+(deftest test-chars-negtoupper-neglowercase
 
   (is (= 65
 
          (hydra_lib_chars_to_upper 97))))
 
-(deftest test-toupper-neguppercase
+(deftest test-chars-negtoupper-neguppercase
 
   (is (= 65
 
          (hydra_lib_chars_to_upper 65))))
 
-(deftest test-toupper-negdigit
+(deftest test-chars-negtoupper-negdigit
 
   (is (= 53
 

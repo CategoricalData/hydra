@@ -6,19 +6,19 @@
 
 ;; abs
 
-(deftest test-abs-negpositive
+(deftest test-math-negabs-negpositive
 
   (is (= 5
 
          (hydra_lib_math_abs 5))))
 
-(deftest test-abs-negnegative
+(deftest test-math-negabs-negnegative
 
   (is (= 5
 
          (hydra_lib_math_abs -5))))
 
-(deftest test-abs-negzero
+(deftest test-math-negabs-negzero
 
   (is (= 0
 
@@ -26,25 +26,25 @@
 
 ;; add
 
-(deftest test-add-negpositive-numbers
+(deftest test-math-negadd-negpositive-numbers
 
   (is (= 8
 
          ((hydra_lib_math_add 3) 5))))
 
-(deftest test-add-negnegative-numbers
+(deftest test-math-negadd-negnegative-numbers
 
   (is (= -8
 
          ((hydra_lib_math_add -3) -5))))
 
-(deftest test-add-negmixed-sign
+(deftest test-math-negadd-negmixed-sign
 
   (is (= 7
 
          ((hydra_lib_math_add 10) -3))))
 
-(deftest test-add-negwith-zero
+(deftest test-math-negadd-negwith-zero
 
   (is (= 42
 
@@ -52,25 +52,25 @@
 
 ;; div
 
-(deftest test-div-negexact-division
+(deftest test-math-negdiv-negexact-division
 
   (is (= 5
 
          ((hydra_lib_math_div 10) 2))))
 
-(deftest test-div-negtruncates-toward-negative-infinity
+(deftest test-math-negdiv-negtruncates-toward-negative-infinity
 
   (is (= 3
 
          ((hydra_lib_math_div 10) 3))))
 
-(deftest test-div-negnegative-dividend
+(deftest test-math-negdiv-negnegative-dividend
 
   (is (= -4
 
          ((hydra_lib_math_div -10) 3))))
 
-(deftest test-div-negnegative-divisor
+(deftest test-math-negdiv-negnegative-divisor
 
   (is (= -4
 
@@ -78,31 +78,31 @@
 
 ;; even
 
-(deftest test-even-negeven-positive
+(deftest test-math-negeven-negeven-positive
 
   (is (= true
 
          (hydra_lib_math_even 4))))
 
-(deftest test-even-negodd-positive
+(deftest test-math-negeven-negodd-positive
 
   (is (= false
 
          (hydra_lib_math_even 5))))
 
-(deftest test-even-negeven-negative
+(deftest test-math-negeven-negeven-negative
 
   (is (= true
 
          (hydra_lib_math_even -4))))
 
-(deftest test-even-negodd-negative
+(deftest test-math-negeven-negodd-negative
 
   (is (= false
 
          (hydra_lib_math_even -5))))
 
-(deftest test-even-negzero
+(deftest test-math-negeven-negzero
 
   (is (= true
 
@@ -110,37 +110,37 @@
 
 ;; max
 
-(deftest test-max-negfirst-is-larger
+(deftest test-math-negmax-negfirst-is-larger
 
   (is (= 10
 
          ((hydra_lib_math_max 10) 5))))
 
-(deftest test-max-negsecond-is-larger
+(deftest test-math-negmax-negsecond-is-larger
 
   (is (= 10
 
          ((hydra_lib_math_max 5) 10))))
 
-(deftest test-max-negequal-values
+(deftest test-math-negmax-negequal-values
 
   (is (= 7
 
          ((hydra_lib_math_max 7) 7))))
 
-(deftest test-max-negnegative-numbers
+(deftest test-math-negmax-negnegative-numbers
 
   (is (= -3
 
          ((hydra_lib_math_max -3) -5))))
 
-(deftest test-max-negmixed-sign
+(deftest test-math-negmax-negmixed-sign
 
   (is (= 5
 
          ((hydra_lib_math_max -5) 5))))
 
-(deftest test-max-negwith-zero
+(deftest test-math-negmax-negwith-zero
 
   (is (= 42
 
@@ -148,37 +148,37 @@
 
 ;; min
 
-(deftest test-min-negfirst-is-smaller
+(deftest test-math-negmin-negfirst-is-smaller
 
   (is (= 5
 
          ((hydra_lib_math_min 5) 10))))
 
-(deftest test-min-negsecond-is-smaller
+(deftest test-math-negmin-negsecond-is-smaller
 
   (is (= 5
 
          ((hydra_lib_math_min 10) 5))))
 
-(deftest test-min-negequal-values
+(deftest test-math-negmin-negequal-values
 
   (is (= 7
 
          ((hydra_lib_math_min 7) 7))))
 
-(deftest test-min-negnegative-numbers
+(deftest test-math-negmin-negnegative-numbers
 
   (is (= -5
 
          ((hydra_lib_math_min -3) -5))))
 
-(deftest test-min-negmixed-sign
+(deftest test-math-negmin-negmixed-sign
 
   (is (= -5
 
          ((hydra_lib_math_min -5) 5))))
 
-(deftest test-min-negwith-zero
+(deftest test-math-negmin-negwith-zero
 
   (is (= 0
 
@@ -186,25 +186,25 @@
 
 ;; mod
 
-(deftest test-mod-negbasic-modulo
+(deftest test-math-negmod-negbasic-modulo
 
   (is (= 1
 
          ((hydra_lib_math_mod 10) 3))))
 
-(deftest test-mod-negexact-division
+(deftest test-math-negmod-negexact-division
 
   (is (= 0
 
          ((hydra_lib_math_mod 10) 2))))
 
-(deftest test-mod-negnegative-dividend
+(deftest test-math-negmod-negnegative-dividend
 
   (is (= 2
 
          ((hydra_lib_math_mod -10) 3))))
 
-(deftest test-mod-negnegative-divisor
+(deftest test-math-negmod-negnegative-divisor
 
   (is (= -2
 
@@ -212,31 +212,31 @@
 
 ;; mul
 
-(deftest test-mul-negpositive-numbers
+(deftest test-math-negmul-negpositive-numbers
 
   (is (= 15
 
          ((hydra_lib_math_mul 3) 5))))
 
-(deftest test-mul-negnegative-numbers
+(deftest test-math-negmul-negnegative-numbers
 
   (is (= 15
 
          ((hydra_lib_math_mul -3) -5))))
 
-(deftest test-mul-negmixed-sign
+(deftest test-math-negmul-negmixed-sign
 
   (is (= -15
 
          ((hydra_lib_math_mul 3) -5))))
 
-(deftest test-mul-negwith-zero
+(deftest test-math-negmul-negwith-zero
 
   (is (= 0
 
          ((hydra_lib_math_mul 42) 0))))
 
-(deftest test-mul-negwith-one
+(deftest test-math-negmul-negwith-one
 
   (is (= 42
 
@@ -244,19 +244,19 @@
 
 ;; negate
 
-(deftest test-negate-negpositive
+(deftest test-math-negnegate-negpositive
 
   (is (= -5
 
          (hydra_lib_math_negate 5))))
 
-(deftest test-negate-negnegative
+(deftest test-math-negnegate-negnegative
 
   (is (= 5
 
          (hydra_lib_math_negate -5))))
 
-(deftest test-negate-negzero
+(deftest test-math-negnegate-negzero
 
   (is (= 0
 
@@ -264,31 +264,31 @@
 
 ;; odd
 
-(deftest test-odd-negodd-positive
+(deftest test-math-negodd-negodd-positive
 
   (is (= true
 
          (hydra_lib_math_odd 5))))
 
-(deftest test-odd-negeven-positive
+(deftest test-math-negodd-negeven-positive
 
   (is (= false
 
          (hydra_lib_math_odd 4))))
 
-(deftest test-odd-negodd-negative
+(deftest test-math-negodd-negodd-negative
 
   (is (= true
 
          (hydra_lib_math_odd -5))))
 
-(deftest test-odd-negeven-negative
+(deftest test-math-negodd-negeven-negative
 
   (is (= false
 
          (hydra_lib_math_odd -4))))
 
-(deftest test-odd-negzero
+(deftest test-math-negodd-negzero
 
   (is (= false
 
@@ -296,19 +296,19 @@
 
 ;; pred
 
-(deftest test-pred-negpositive
+(deftest test-math-negpred-negpositive
 
   (is (= 4
 
          (hydra_lib_math_pred 5))))
 
-(deftest test-pred-negzero
+(deftest test-math-negpred-negzero
 
   (is (= -1
 
          (hydra_lib_math_pred 0))))
 
-(deftest test-pred-negnegative
+(deftest test-math-negpred-negnegative
 
   (is (= -6
 
@@ -316,25 +316,25 @@
 
 ;; range
 
-(deftest test-range-negascending-range
+(deftest test-math-negrange-negascending-range
 
   (is (= (list 1 2 3 4 5)
 
          ((hydra_lib_math_range 1) 5))))
 
-(deftest test-range-negsingle-element
+(deftest test-math-negrange-negsingle-element
 
   (is (= (list 5)
 
          ((hydra_lib_math_range 5) 5))))
 
-(deftest test-range-negtwo-elements
+(deftest test-math-negrange-negtwo-elements
 
   (is (= (list 3 4)
 
          ((hydra_lib_math_range 3) 4))))
 
-(deftest test-range-negnegative-start
+(deftest test-math-negrange-negnegative-start
 
   (is (= (list -2 -1 0 1 2)
 
@@ -342,25 +342,25 @@
 
 ;; rem
 
-(deftest test-rem-negbasic-remainder
+(deftest test-math-negrem-negbasic-remainder
 
   (is (= 1
 
          ((hydra_lib_math_rem 10) 3))))
 
-(deftest test-rem-negexact-division
+(deftest test-math-negrem-negexact-division
 
   (is (= 0
 
          ((hydra_lib_math_rem 10) 2))))
 
-(deftest test-rem-negnegative-dividend
+(deftest test-math-negrem-negnegative-dividend
 
   (is (= -1
 
          ((hydra_lib_math_rem -10) 3))))
 
-(deftest test-rem-negnegative-divisor
+(deftest test-math-negrem-negnegative-divisor
 
   (is (= 1
 
@@ -368,19 +368,19 @@
 
 ;; signum
 
-(deftest test-signum-negpositive
+(deftest test-math-negsignum-negpositive
 
   (is (= 1
 
          (hydra_lib_math_signum 5))))
 
-(deftest test-signum-negnegative
+(deftest test-math-negsignum-negnegative
 
   (is (= -1
 
          (hydra_lib_math_signum -5))))
 
-(deftest test-signum-negzero
+(deftest test-math-negsignum-negzero
 
   (is (= 0
 
@@ -388,25 +388,25 @@
 
 ;; sub
 
-(deftest test-sub-negpositive-numbers
+(deftest test-math-negsub-negpositive-numbers
 
   (is (= 7
 
          ((hydra_lib_math_sub 10) 3))))
 
-(deftest test-sub-negnegative-numbers
+(deftest test-math-negsub-negnegative-numbers
 
   (is (= -7
 
          ((hydra_lib_math_sub -10) -3))))
 
-(deftest test-sub-negmixed-sign
+(deftest test-math-negsub-negmixed-sign
 
   (is (= 13
 
          ((hydra_lib_math_sub 10) -3))))
 
-(deftest test-sub-negwith-zero
+(deftest test-math-negsub-negwith-zero
 
   (is (= 42
 
@@ -414,19 +414,19 @@
 
 ;; succ
 
-(deftest test-succ-negpositive
+(deftest test-math-negsucc-negpositive
 
   (is (= 6
 
          (hydra_lib_math_succ 5))))
 
-(deftest test-succ-negzero
+(deftest test-math-negsucc-negzero
 
   (is (= 1
 
          (hydra_lib_math_succ 0))))
 
-(deftest test-succ-negnegative
+(deftest test-math-negsucc-negnegative
 
   (is (= -4
 
@@ -434,7 +434,7 @@
 
 ;; e
 
-(deftest test-e-negeuler-s-number
+(deftest test-math-nege-negeuler-s-number
 
   (is (= 2.718281828459045
 
@@ -442,7 +442,7 @@
 
 ;; pi
 
-(deftest test-pi-negpi-constant
+(deftest test-math-negpi-negpi-constant
 
   (is (= 3.141592653589793
 
@@ -450,31 +450,31 @@
 
 ;; sin
 
-(deftest test-sin-negsin-0
+(deftest test-math-negsin-negsin-0
 
   (is (= 0.0
 
          (hydra_lib_math_sin 0.0))))
 
-(deftest test-sin-negsin-pi-div2
+(deftest test-math-negsin-negsin-pi-div2
 
   (is (= 1.0
 
          (hydra_lib_math_sin 1.5707963267948966))))
 
-(deftest test-sin-negsin-pi
+(deftest test-math-negsin-negsin-pi
 
   (is (= 1.2246467991473532e-16
 
          (hydra_lib_math_sin 3.141592653589793))))
 
-(deftest test-sin-negsin-1
+(deftest test-math-negsin-negsin-1
 
   (is (= 0.841470984808
 
          ((hydra_lib_math_round_float64 12) (hydra_lib_math_sin 1.0)))))
 
-(deftest test-sin-negsin-0-dot5
+(deftest test-math-negsin-negsin-0-dot5
 
   (is (= 0.479425538604
 
@@ -482,31 +482,31 @@
 
 ;; cos
 
-(deftest test-cos-negcos-0
+(deftest test-math-negcos-negcos-0
 
   (is (= 1.0
 
          (hydra_lib_math_cos 0.0))))
 
-(deftest test-cos-negcos-pi-div2
+(deftest test-math-negcos-negcos-pi-div2
 
   (is (= 6.123233995736766e-17
 
          (hydra_lib_math_cos 1.5707963267948966))))
 
-(deftest test-cos-negcos-pi
+(deftest test-math-negcos-negcos-pi
 
   (is (= -1.0
 
          (hydra_lib_math_cos 3.141592653589793))))
 
-(deftest test-cos-negcos-1
+(deftest test-math-negcos-negcos-1
 
   (is (= 0.540302305868
 
          ((hydra_lib_math_round_float64 12) (hydra_lib_math_cos 1.0)))))
 
-(deftest test-cos-negcos-0-dot5
+(deftest test-math-negcos-negcos-0-dot5
 
   (is (= 0.87758256189
 
@@ -514,25 +514,25 @@
 
 ;; tan
 
-(deftest test-tan-negtan-0
+(deftest test-math-negtan-negtan-0
 
   (is (= 0.0
 
          (hydra_lib_math_tan 0.0))))
 
-(deftest test-tan-negtan-pi-div4
+(deftest test-math-negtan-negtan-pi-div4
 
   (is (= 0.9999999999999999
 
          (hydra_lib_math_tan 0.7853981633974483))))
 
-(deftest test-tan-negtan-1
+(deftest test-math-negtan-negtan-1
 
   (is (= 1.55740772465
 
          ((hydra_lib_math_round_float64 12) (hydra_lib_math_tan 1.0)))))
 
-(deftest test-tan-negtan-0-dot5
+(deftest test-math-negtan-negtan-0-dot5
 
   (is (= 0.546302489844
 
@@ -540,25 +540,25 @@
 
 ;; asin
 
-(deftest test-asin-negasin-0
+(deftest test-math-negasin-negasin-0
 
   (is (= 0.0
 
          (hydra_lib_math_asin 0.0))))
 
-(deftest test-asin-negasin-1
+(deftest test-math-negasin-negasin-1
 
   (is (= 1.5707963267948966
 
          (hydra_lib_math_asin 1.0))))
 
-(deftest test-asin-negasin--neg1
+(deftest test-math-negasin-negasin--neg1
 
   (is (= -1.5707963267948966
 
          (hydra_lib_math_asin -1.0))))
 
-(deftest test-asin-negasin-0-dot5
+(deftest test-math-negasin-negasin-0-dot5
 
   (is (= 0.523598775598
 
@@ -566,25 +566,25 @@
 
 ;; acos
 
-(deftest test-acos-negacos-1
+(deftest test-math-negacos-negacos-1
 
   (is (= 0.0
 
          (hydra_lib_math_acos 1.0))))
 
-(deftest test-acos-negacos-0
+(deftest test-math-negacos-negacos-0
 
   (is (= 1.5707963267948966
 
          (hydra_lib_math_acos 0.0))))
 
-(deftest test-acos-negacos--neg1
+(deftest test-math-negacos-negacos--neg1
 
   (is (= 3.141592653589793
 
          (hydra_lib_math_acos -1.0))))
 
-(deftest test-acos-negacos-0-dot5
+(deftest test-math-negacos-negacos-0-dot5
 
   (is (= 1.0471975512
 
@@ -592,19 +592,19 @@
 
 ;; atan
 
-(deftest test-atan-negatan-0
+(deftest test-math-negatan-negatan-0
 
   (is (= 0.0
 
          (hydra_lib_math_atan 0.0))))
 
-(deftest test-atan-negatan-1
+(deftest test-math-negatan-negatan-1
 
   (is (= 0.7853981633974483
 
          (hydra_lib_math_atan 1.0))))
 
-(deftest test-atan-negatan-0-dot5
+(deftest test-math-negatan-negatan-0-dot5
 
   (is (= 0.463647609001
 
@@ -612,25 +612,25 @@
 
 ;; atan2
 
-(deftest test-atan2-negatan2-1-1
+(deftest test-math-negatan2-negatan2-1-1
 
   (is (= 0.7853981633974483
 
          ((hydra_lib_math_atan2 1.0) 1.0))))
 
-(deftest test-atan2-negatan2-1-0
+(deftest test-math-negatan2-negatan2-1-0
 
   (is (= 1.5707963267948966
 
          ((hydra_lib_math_atan2 1.0) 0.0))))
 
-(deftest test-atan2-negatan2-0-1
+(deftest test-math-negatan2-negatan2-0-1
 
   (is (= 0.0
 
          ((hydra_lib_math_atan2 0.0) 1.0))))
 
-(deftest test-atan2-negatan2-3-4
+(deftest test-math-negatan2-negatan2-3-4
 
   (is (= 0.643501108793
 
@@ -638,19 +638,19 @@
 
 ;; sinh
 
-(deftest test-sinh-negsinh-0
+(deftest test-math-negsinh-negsinh-0
 
   (is (= 0.0
 
          (hydra_lib_math_sinh 0.0))))
 
-(deftest test-sinh-negsinh-1
+(deftest test-math-negsinh-negsinh-1
 
   (is (= 1.1752011936438014
 
          (hydra_lib_math_sinh 1.0))))
 
-(deftest test-sinh-negsinh-2
+(deftest test-math-negsinh-negsinh-2
 
   (is (= 3.62686040785
 
@@ -658,19 +658,19 @@
 
 ;; cosh
 
-(deftest test-cosh-negcosh-0
+(deftest test-math-negcosh-negcosh-0
 
   (is (= 1.0
 
          (hydra_lib_math_cosh 0.0))))
 
-(deftest test-cosh-negcosh-1
+(deftest test-math-negcosh-negcosh-1
 
   (is (= 1.54308063482
 
          ((hydra_lib_math_round_float64 12) (hydra_lib_math_cosh 1.0)))))
 
-(deftest test-cosh-negcosh-2
+(deftest test-math-negcosh-negcosh-2
 
   (is (= 3.76219569108
 
@@ -678,19 +678,19 @@
 
 ;; tanh
 
-(deftest test-tanh-negtanh-0
+(deftest test-math-negtanh-negtanh-0
 
   (is (= 0.0
 
          (hydra_lib_math_tanh 0.0))))
 
-(deftest test-tanh-negtanh-1
+(deftest test-math-negtanh-negtanh-1
 
   (is (= 0.7615941559557649
 
          (hydra_lib_math_tanh 1.0))))
 
-(deftest test-tanh-negtanh-0-dot5
+(deftest test-math-negtanh-negtanh-0-dot5
 
   (is (= 0.46211715726
 
@@ -698,19 +698,19 @@
 
 ;; asinh
 
-(deftest test-asinh-negasinh-0
+(deftest test-math-negasinh-negasinh-0
 
   (is (= 0.0
 
          (hydra_lib_math_asinh 0.0))))
 
-(deftest test-asinh-negasinh-1
+(deftest test-math-negasinh-negasinh-1
 
   (is (= 0.88137358702
 
          ((hydra_lib_math_round_float64 12) (hydra_lib_math_asinh 1.0)))))
 
-(deftest test-asinh-negasinh-0-dot5
+(deftest test-math-negasinh-negasinh-0-dot5
 
   (is (= 0.48121182506
 
@@ -718,19 +718,19 @@
 
 ;; acosh
 
-(deftest test-acosh-negacosh-1
+(deftest test-math-negacosh-negacosh-1
 
   (is (= 0.0
 
          (hydra_lib_math_acosh 1.0))))
 
-(deftest test-acosh-negacosh-2
+(deftest test-math-negacosh-negacosh-2
 
   (is (= 1.31695789692
 
          ((hydra_lib_math_round_float64 12) (hydra_lib_math_acosh 2.0)))))
 
-(deftest test-acosh-negacosh-3
+(deftest test-math-negacosh-negacosh-3
 
   (is (= 1.76274717404
 
@@ -738,19 +738,19 @@
 
 ;; atanh
 
-(deftest test-atanh-negatanh-0
+(deftest test-math-negatanh-negatanh-0
 
   (is (= 0.0
 
          (hydra_lib_math_atanh 0.0))))
 
-(deftest test-atanh-negatanh-0-dot5
+(deftest test-math-negatanh-negatanh-0-dot5
 
   (is (= 0.549306144334
 
          ((hydra_lib_math_round_float64 12) (hydra_lib_math_atanh 0.5)))))
 
-(deftest test-atanh-negatanh-0-dot1
+(deftest test-math-negatanh-negatanh-0-dot1
 
   (is (= 0.100335347731
 
@@ -758,31 +758,31 @@
 
 ;; exp
 
-(deftest test-exp-negexp-0
+(deftest test-math-negexp-negexp-0
 
   (is (= 1.0
 
          (hydra_lib_math_exp 0.0))))
 
-(deftest test-exp-negexp-1
+(deftest test-math-negexp-negexp-1
 
   (is (= 2.71828182846
 
          ((hydra_lib_math_round_float64 12) (hydra_lib_math_exp 1.0)))))
 
-(deftest test-exp-negexp--neg1
+(deftest test-math-negexp-negexp--neg1
 
   (is (= 0.367879441171
 
          ((hydra_lib_math_round_float64 12) (hydra_lib_math_exp -1.0)))))
 
-(deftest test-exp-negexp-2
+(deftest test-math-negexp-negexp-2
 
   (is (= 7.38905609893
 
          ((hydra_lib_math_round_float64 12) (hydra_lib_math_exp 2.0)))))
 
-(deftest test-exp-negexp-0-dot5
+(deftest test-math-negexp-negexp-0-dot5
 
   (is (= 1.6487212707
 
@@ -790,25 +790,25 @@
 
 ;; log
 
-(deftest test-log-neglog-1
+(deftest test-math-neglog-neglog-1
 
   (is (= 0.0
 
          (hydra_lib_math_log 1.0))))
 
-(deftest test-log-neglog-e
+(deftest test-math-neglog-neglog-e
 
   (is (= 1.0
 
          (hydra_lib_math_log 2.718281828459045))))
 
-(deftest test-log-neglog-2
+(deftest test-math-neglog-neglog-2
 
   (is (= 0.69314718056
 
          ((hydra_lib_math_round_float64 12) (hydra_lib_math_log 2.0)))))
 
-(deftest test-log-neglog-10
+(deftest test-math-neglog-neglog-10
 
   (is (= 2.30258509299
 
@@ -816,31 +816,31 @@
 
 ;; logBase
 
-(deftest test-logbase-neglog10-1
+(deftest test-math-neglogbase-neglog10-1
 
   (is (= 0.0
 
          ((hydra_lib_math_log_base 10.0) 1.0))))
 
-(deftest test-logbase-neglog10-10
+(deftest test-math-neglogbase-neglog10-10
 
   (is (= 1.0
 
          ((hydra_lib_math_log_base 10.0) 10.0))))
 
-(deftest test-logbase-neglog10-100
+(deftest test-math-neglogbase-neglog10-100
 
   (is (= 2.0
 
          ((hydra_lib_math_log_base 10.0) 100.0))))
 
-(deftest test-logbase-neglog2-8
+(deftest test-math-neglogbase-neglog2-8
 
   (is (= 3.0
 
          ((hydra_lib_math_log_base 2.0) 8.0))))
 
-(deftest test-logbase-neglog2-10
+(deftest test-math-neglogbase-neglog2-10
 
   (is (= 3.32192809489
 
@@ -848,25 +848,25 @@
 
 ;; pow
 
-(deftest test-pow-neg2-3
+(deftest test-math-negpow-neg2-3
 
   (is (= 8.0
 
          ((hydra_lib_math_pow 2.0) 3.0))))
 
-(deftest test-pow-neg10-0
+(deftest test-math-negpow-neg10-0
 
   (is (= 1.0
 
          ((hydra_lib_math_pow 10.0) 0.0))))
 
-(deftest test-pow-neg2--neg1
+(deftest test-math-negpow-neg2--neg1
 
   (is (= 0.5
 
          ((hydra_lib_math_pow 2.0) -1.0))))
 
-(deftest test-pow-neg2-0-dot5
+(deftest test-math-negpow-neg2-0-dot5
 
   (is (= 1.41421356237
 
@@ -874,31 +874,31 @@
 
 ;; sqrt
 
-(deftest test-sqrt-negsqrt-4
+(deftest test-math-negsqrt-negsqrt-4
 
   (is (= 2.0
 
          (hydra_lib_math_sqrt 4.0))))
 
-(deftest test-sqrt-negsqrt-9
+(deftest test-math-negsqrt-negsqrt-9
 
   (is (= 3.0
 
          (hydra_lib_math_sqrt 9.0))))
 
-(deftest test-sqrt-negsqrt-2
+(deftest test-math-negsqrt-negsqrt-2
 
   (is (= 1.4142135623730951
 
          (hydra_lib_math_sqrt 2.0))))
 
-(deftest test-sqrt-negsqrt-0
+(deftest test-math-negsqrt-negsqrt-0
 
   (is (= 0.0
 
          (hydra_lib_math_sqrt 0.0))))
 
-(deftest test-sqrt-negsqrt-3
+(deftest test-math-negsqrt-negsqrt-3
 
   (is (= 1.73205080757
 
@@ -906,25 +906,25 @@
 
 ;; ceiling
 
-(deftest test-ceiling-negceiling-3-dot2
+(deftest test-math-negceiling-negceiling-3-dot2
 
   (is (= 4
 
          (hydra_lib_math_ceiling 3.2))))
 
-(deftest test-ceiling-negceiling-3-dot0
+(deftest test-math-negceiling-negceiling-3-dot0
 
   (is (= 3
 
          (hydra_lib_math_ceiling 3.0))))
 
-(deftest test-ceiling-negceiling--neg3-dot2
+(deftest test-math-negceiling-negceiling--neg3-dot2
 
   (is (= -3
 
          (hydra_lib_math_ceiling -3.2))))
 
-(deftest test-ceiling-negceiling--neg3-dot0
+(deftest test-math-negceiling-negceiling--neg3-dot0
 
   (is (= -3
 
@@ -932,25 +932,25 @@
 
 ;; floor
 
-(deftest test-floor-negfloor-3-dot8
+(deftest test-math-negfloor-negfloor-3-dot8
 
   (is (= 3
 
          (hydra_lib_math_floor 3.8))))
 
-(deftest test-floor-negfloor-3-dot0
+(deftest test-math-negfloor-negfloor-3-dot0
 
   (is (= 3
 
          (hydra_lib_math_floor 3.0))))
 
-(deftest test-floor-negfloor--neg3-dot2
+(deftest test-math-negfloor-negfloor--neg3-dot2
 
   (is (= -4
 
          (hydra_lib_math_floor -3.2))))
 
-(deftest test-floor-negfloor--neg3-dot0
+(deftest test-math-negfloor-negfloor--neg3-dot0
 
   (is (= -3
 
@@ -958,31 +958,31 @@
 
 ;; round
 
-(deftest test-round-neground-3-dot4
+(deftest test-math-neground-neground-3-dot4
 
   (is (= 3
 
          (hydra_lib_math_round 3.4))))
 
-(deftest test-round-neground-3-dot5
+(deftest test-math-neground-neground-3-dot5
 
   (is (= 4
 
          (hydra_lib_math_round 3.5))))
 
-(deftest test-round-neground-3-dot6
+(deftest test-math-neground-neground-3-dot6
 
   (is (= 4
 
          (hydra_lib_math_round 3.6))))
 
-(deftest test-round-neground--neg3-dot4
+(deftest test-math-neground-neground--neg3-dot4
 
   (is (= -3
 
          (hydra_lib_math_round -3.4))))
 
-(deftest test-round-neground--neg3-dot5
+(deftest test-math-neground-neground--neg3-dot5
 
   (is (= -4
 
@@ -990,31 +990,31 @@
 
 ;; roundBigfloat
 
-(deftest test-roundbigfloat-negzero
+(deftest test-math-negroundbigfloat-negzero
 
   (is (= 0.0
 
          ((hydra_lib_math_round_bigfloat 5) 0.0))))
 
-(deftest test-roundbigfloat-neground-pi-to-4-digits
+(deftest test-math-negroundbigfloat-neground-pi-to-4-digits
 
   (is (= 3.142
 
          ((hydra_lib_math_round_bigfloat 4) 3.141592653589793))))
 
-(deftest test-roundbigfloat-neground-1234-dot5-to-3-digits
+(deftest test-math-negroundbigfloat-neground-1234-dot5-to-3-digits
 
   (is (= 1230.0
 
          ((hydra_lib_math_round_bigfloat 3) 1234.5))))
 
-(deftest test-roundbigfloat-neground-0-dot001234-to-2-digits
+(deftest test-math-negroundbigfloat-neground-0-dot001234-to-2-digits
 
   (is (= 1.2e-3
 
          ((hydra_lib_math_round_bigfloat 2) 1.234e-3))))
 
-(deftest test-roundbigfloat-negnegative
+(deftest test-math-negroundbigfloat-negnegative
 
   (is (= -1230.0
 
@@ -1022,25 +1022,25 @@
 
 ;; roundFloat32
 
-(deftest test-roundfloat32-negzero
+(deftest test-math-negroundfloat32-negzero
 
   (is (= 0.0
 
          ((hydra_lib_math_round_float32 5) 0.0))))
 
-(deftest test-roundfloat32-neground-pi-to-4-digits
+(deftest test-math-negroundfloat32-neground-pi-to-4-digits
 
   (is (= 3.1419999599456787
 
          ((hydra_lib_math_round_float32 4) 3.1415927410125732))))
 
-(deftest test-roundfloat32-neground-1234-dot5-to-3-digits
+(deftest test-math-negroundfloat32-neground-1234-dot5-to-3-digits
 
   (is (= 1230.0
 
          ((hydra_lib_math_round_float32 3) 1234.5))))
 
-(deftest test-roundfloat32-negnegative
+(deftest test-math-negroundfloat32-negnegative
 
   (is (= -1230.0
 
@@ -1048,43 +1048,43 @@
 
 ;; roundFloat64
 
-(deftest test-roundfloat64-negzero
+(deftest test-math-negroundfloat64-negzero
 
   (is (= 0.0
 
          ((hydra_lib_math_round_float64 5) 0.0))))
 
-(deftest test-roundfloat64-neground-pi-to-4-digits
+(deftest test-math-negroundfloat64-neground-pi-to-4-digits
 
   (is (= 3.142
 
          ((hydra_lib_math_round_float64 4) 3.141592653589793))))
 
-(deftest test-roundfloat64-neground-pi-to-10-digits
+(deftest test-math-negroundfloat64-neground-pi-to-10-digits
 
   (is (= 3.141592654
 
          ((hydra_lib_math_round_float64 10) 3.141592653589793))))
 
-(deftest test-roundfloat64-neground-1234-dot5-to-3-digits
+(deftest test-math-negroundfloat64-neground-1234-dot5-to-3-digits
 
   (is (= 1230.0
 
          ((hydra_lib_math_round_float64 3) 1234.5))))
 
-(deftest test-roundfloat64-neground-0-dot001234-to-2-digits
+(deftest test-math-negroundfloat64-neground-0-dot001234-to-2-digits
 
   (is (= 1.2e-3
 
          ((hydra_lib_math_round_float64 2) 1.234e-3))))
 
-(deftest test-roundfloat64-negnegative
+(deftest test-math-negroundfloat64-negnegative
 
   (is (= -1230.0
 
          ((hydra_lib_math_round_float64 3) -1234.5))))
 
-(deftest test-roundfloat64-neground-1-digit
+(deftest test-math-negroundfloat64-neground-1-digit
 
   (is (= 10.0
 
@@ -1092,25 +1092,25 @@
 
 ;; truncate
 
-(deftest test-truncate-negtruncate-3-dot8
+(deftest test-math-negtruncate-negtruncate-3-dot8
 
   (is (= 3
 
          (hydra_lib_math_truncate 3.8))))
 
-(deftest test-truncate-negtruncate-3-dot2
+(deftest test-math-negtruncate-negtruncate-3-dot2
 
   (is (= 3
 
          (hydra_lib_math_truncate 3.2))))
 
-(deftest test-truncate-negtruncate--neg3-dot8
+(deftest test-math-negtruncate-negtruncate--neg3-dot8
 
   (is (= -3
 
          (hydra_lib_math_truncate -3.8))))
 
-(deftest test-truncate-negtruncate--neg3-dot2
+(deftest test-math-negtruncate-negtruncate--neg3-dot2
 
   (is (= -3
 

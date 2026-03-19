@@ -160,7 +160,7 @@
         (lambda (xs)
           (let loop ((rest xs))
             (cond
-              ((null? rest) (list 'nothing '()))
+              ((null? rest) (list 'nothing))
               ((pred (car rest)) (list 'just (car rest)))
               (else (loop (cdr rest))))))))
 
@@ -279,7 +279,7 @@
     (define hydra_lib_lists_safe_head
       (lambda (xs)
         (if (null? xs)
-            (list 'nothing '())
+            (list 'nothing)
             (list 'just (car xs)))))
 
     ;; singleton :: a -> [a]

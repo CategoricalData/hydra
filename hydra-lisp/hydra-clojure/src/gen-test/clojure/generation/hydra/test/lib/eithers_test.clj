@@ -6,19 +6,19 @@
 
 ;; bind
 
-(deftest test-bind-negbind-right-with-success
+(deftest test-eithers-negbind-negbind-right-with-success
 
   (is (= (list :right 2)
 
          ((hydra_lib_eithers_bind (list :right "ab")) (fn [s] (if (hydra_lib_strings_null s) (list :left 0) (list :right (hydra_lib_strings_length s))))))))
 
-(deftest test-bind-negbind-right-with-failure
+(deftest test-eithers-negbind-negbind-right-with-failure
 
   (is (= (list :left 0)
 
          ((hydra_lib_eithers_bind (list :right "")) (fn [s] (if (hydra_lib_strings_null s) (list :left 0) (list :right (hydra_lib_strings_length s))))))))
 
-(deftest test-bind-negbind-left-returns-left-unchanged
+(deftest test-eithers-negbind-negbind-left-returns-left-unchanged
 
   (is (= (list :left 42)
 
@@ -26,13 +26,13 @@
 
 ;; bimap
 
-(deftest test-bimap-negmap-left-value
+(deftest test-eithers-negbimap-negmap-left-value
 
   (is (= (list :left 10)
 
          (((hydra_lib_eithers_bimap (fn [x] ((hydra_lib_math_mul x) 2))) (fn [s] (hydra_lib_strings_length s))) (list :left 5)))))
 
-(deftest test-bimap-negmap-right-value
+(deftest test-eithers-negbimap-negmap-right-value
 
   (is (= (list :right 2)
 
@@ -40,13 +40,13 @@
 
 ;; isLeft
 
-(deftest test-isleft-negleft-value
+(deftest test-eithers-negisleft-negleft-value
 
   (is (= true
 
          (hydra_lib_eithers_is_left (list :left 42)))))
 
-(deftest test-isleft-negright-value
+(deftest test-eithers-negisleft-negright-value
 
   (is (= false
 
@@ -54,13 +54,13 @@
 
 ;; isRight
 
-(deftest test-isright-negright-value
+(deftest test-eithers-negisright-negright-value
 
   (is (= true
 
          (hydra_lib_eithers_is_right (list :right "test")))))
 
-(deftest test-isright-negleft-value
+(deftest test-eithers-negisright-negleft-value
 
   (is (= false
 
@@ -68,13 +68,13 @@
 
 ;; fromLeft
 
-(deftest test-fromleft-negextract-left
+(deftest test-eithers-negfromleft-negextract-left
 
   (is (= 42
 
          ((hydra_lib_eithers_from_left 99) (list :left 42)))))
 
-(deftest test-fromleft-neguse-default-for-right
+(deftest test-eithers-negfromleft-neguse-default-for-right
 
   (is (= 99
 
@@ -82,13 +82,13 @@
 
 ;; fromRight
 
-(deftest test-fromright-negextract-right
+(deftest test-eithers-negfromright-negextract-right
 
   (is (= "test"
 
          ((hydra_lib_eithers_from_right "default") (list :right "test")))))
 
-(deftest test-fromright-neguse-default-for-left
+(deftest test-eithers-negfromright-neguse-default-for-left
 
   (is (= "default"
 
@@ -96,13 +96,13 @@
 
 ;; either
 
-(deftest test-either-negapply-left-function
+(deftest test-eithers-negeither-negapply-left-function
 
   (is (= 10
 
          (((hydra_lib_eithers_either (fn [x] ((hydra_lib_math_mul x) 2))) (fn [s] (hydra_lib_strings_length s))) (list :left 5)))))
 
-(deftest test-either-negapply-right-function
+(deftest test-eithers-negeither-negapply-right-function
 
   (is (= 2
 
@@ -110,25 +110,25 @@
 
 ;; lefts
 
-(deftest test-lefts-negfilter-left-values
+(deftest test-eithers-neglefts-negfilter-left-values
 
   (is (= (list 1 2)
 
          (hydra_lib_eithers_lefts (list (list :left 1) (list :right "a") (list :left 2) (list :right "b"))))))
 
-(deftest test-lefts-negall-lefts
+(deftest test-eithers-neglefts-negall-lefts
 
   (is (= (list 1 2)
 
          (hydra_lib_eithers_lefts (list (list :left 1) (list :left 2))))))
 
-(deftest test-lefts-negall-rights
+(deftest test-eithers-neglefts-negall-rights
 
   (is (= (list )
 
          (hydra_lib_eithers_lefts (list (list :right "a") (list :right "b"))))))
 
-(deftest test-lefts-negempty-list
+(deftest test-eithers-neglefts-negempty-list
 
   (is (= (list )
 
@@ -136,25 +136,25 @@
 
 ;; rights
 
-(deftest test-rights-negfilter-right-values
+(deftest test-eithers-negrights-negfilter-right-values
 
   (is (= (list "a" "b")
 
          (hydra_lib_eithers_rights (list (list :left 1) (list :right "a") (list :left 2) (list :right "b"))))))
 
-(deftest test-rights-negall-rights
+(deftest test-eithers-negrights-negall-rights
 
   (is (= (list "a" "b")
 
          (hydra_lib_eithers_rights (list (list :right "a") (list :right "b"))))))
 
-(deftest test-rights-negall-lefts
+(deftest test-eithers-negrights-negall-lefts
 
   (is (= (list )
 
          (hydra_lib_eithers_rights (list (list :left 1) (list :left 2))))))
 
-(deftest test-rights-negempty-list
+(deftest test-eithers-negrights-negempty-list
 
   (is (= (list )
 
@@ -162,25 +162,25 @@
 
 ;; partitionEithers
 
-(deftest test-partitioneithers-negpartition-mixed
+(deftest test-eithers-negpartitioneithers-negpartition-mixed
 
   (is (= (list (list 1 2) (list "a" "b"))
 
          (hydra_lib_eithers_partition_eithers (list (list :left 1) (list :right "a") (list :left 2) (list :right "b"))))))
 
-(deftest test-partitioneithers-negall-lefts
+(deftest test-eithers-negpartitioneithers-negall-lefts
 
   (is (= (list (list 1 2) (list ))
 
          (hydra_lib_eithers_partition_eithers (list (list :left 1) (list :left 2))))))
 
-(deftest test-partitioneithers-negall-rights
+(deftest test-eithers-negpartitioneithers-negall-rights
 
   (is (= (list (list ) (list "a" "b"))
 
          (hydra_lib_eithers_partition_eithers (list (list :right "a") (list :right "b"))))))
 
-(deftest test-partitioneithers-negempty-list
+(deftest test-eithers-negpartitioneithers-negempty-list
 
   (is (= (list (list ) (list ))
 
@@ -188,13 +188,13 @@
 
 ;; map
 
-(deftest test-map-negmap-right-value
+(deftest test-eithers-negmap-negmap-right-value
 
   (is (= (list :right 10)
 
          ((hydra_lib_eithers_map (fn [x] ((hydra_lib_math_mul x) 2))) (list :right 5)))))
 
-(deftest test-map-negpreserve-left
+(deftest test-eithers-negmap-negpreserve-left
 
   (is (= (list :left 99)
 
@@ -202,19 +202,19 @@
 
 ;; mapList
 
-(deftest test-maplist-negall-succeed
+(deftest test-eithers-negmaplist-negall-succeed
 
   (is (= (list :right (list 2 4 6))
 
          ((hydra_lib_eithers_map_list (fn [x] (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) (list 1 2 3)))))
 
-(deftest test-maplist-negfirst-fails
+(deftest test-eithers-negmaplist-negfirst-fails
 
   (is (= (list :left "zero")
 
          ((hydra_lib_eithers_map_list (fn [x] (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) (list 1 0 3)))))
 
-(deftest test-maplist-negempty-list
+(deftest test-eithers-negmaplist-negempty-list
 
   (is (= (list :right (list ))
 
@@ -222,19 +222,19 @@
 
 ;; mapMaybe
 
-(deftest test-mapmaybe-negjust-succeeds
+(deftest test-eithers-negmapmaybe-negjust-succeeds
 
   (is (= (list :right (list :just 10))
 
          ((hydra_lib_eithers_map_maybe (fn [x] (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) (list :just 5)))))
 
-(deftest test-mapmaybe-negjust-fails
+(deftest test-eithers-negmapmaybe-negjust-fails
 
   (is (= (list :left "zero")
 
          ((hydra_lib_eithers_map_maybe (fn [x] (if ((hydra_lib_equality_equal x) 0) (list :left "zero") (list :right ((hydra_lib_math_mul x) 2))))) (list :just 0)))))
 
-(deftest test-mapmaybe-negnothing
+(deftest test-eithers-negmapmaybe-negnothing
 
   (is (= (list :right (list :nothing))
 

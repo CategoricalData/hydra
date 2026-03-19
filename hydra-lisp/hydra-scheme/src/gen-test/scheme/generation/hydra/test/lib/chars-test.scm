@@ -5,92 +5,92 @@
 
 ;; isAlphaNum
 
-(define (test-isalphanum-negletter)
+(define (test-chars-negisalphanum-negletter)
 
   (assert (equal? #t (hydra_lib_chars_is_alpha_num 97))))
 
-(define (test-isalphanum-negdigit)
+(define (test-chars-negisalphanum-negdigit)
 
   (assert (equal? #t (hydra_lib_chars_is_alpha_num 53))))
 
-(define (test-isalphanum-negspace)
+(define (test-chars-negisalphanum-negspace)
 
   (assert (equal? #f (hydra_lib_chars_is_alpha_num 32))))
 
-(define (test-isalphanum-negpunctuation)
+(define (test-chars-negisalphanum-negpunctuation)
 
   (assert (equal? #f (hydra_lib_chars_is_alpha_num 46))))
 
 ;; isLower
 
-(define (test-islower-neglowercase)
+(define (test-chars-negislower-neglowercase)
 
   (assert (equal? #t (hydra_lib_chars_is_lower 97))))
 
-(define (test-islower-neguppercase)
+(define (test-chars-negislower-neguppercase)
 
   (assert (equal? #f (hydra_lib_chars_is_lower 65))))
 
-(define (test-islower-negdigit)
+(define (test-chars-negislower-negdigit)
 
   (assert (equal? #f (hydra_lib_chars_is_lower 53))))
 
 ;; isSpace
 
-(define (test-isspace-negspace)
+(define (test-chars-negisspace-negspace)
 
   (assert (equal? #t (hydra_lib_chars_is_space 32))))
 
-(define (test-isspace-negtab)
+(define (test-chars-negisspace-negtab)
 
   (assert (equal? #t (hydra_lib_chars_is_space 9))))
 
-(define (test-isspace-negnewline)
+(define (test-chars-negisspace-negnewline)
 
   (assert (equal? #t (hydra_lib_chars_is_space 10))))
 
-(define (test-isspace-negletter)
+(define (test-chars-negisspace-negletter)
 
   (assert (equal? #f (hydra_lib_chars_is_space 97))))
 
 ;; isUpper
 
-(define (test-isupper-neguppercase)
+(define (test-chars-negisupper-neguppercase)
 
   (assert (equal? #t (hydra_lib_chars_is_upper 65))))
 
-(define (test-isupper-neglowercase)
+(define (test-chars-negisupper-neglowercase)
 
   (assert (equal? #f (hydra_lib_chars_is_upper 97))))
 
-(define (test-isupper-negdigit)
+(define (test-chars-negisupper-negdigit)
 
   (assert (equal? #f (hydra_lib_chars_is_upper 53))))
 
 ;; toLower
 
-(define (test-tolower-neguppercase)
+(define (test-chars-negtolower-neguppercase)
 
   (assert (equal? 97 (hydra_lib_chars_to_lower 65))))
 
-(define (test-tolower-neglowercase)
+(define (test-chars-negtolower-neglowercase)
 
   (assert (equal? 97 (hydra_lib_chars_to_lower 97))))
 
-(define (test-tolower-negdigit)
+(define (test-chars-negtolower-negdigit)
 
   (assert (equal? 53 (hydra_lib_chars_to_lower 53))))
 
 ;; toUpper
 
-(define (test-toupper-neglowercase)
+(define (test-chars-negtoupper-neglowercase)
 
   (assert (equal? 65 (hydra_lib_chars_to_upper 97))))
 
-(define (test-toupper-neguppercase)
+(define (test-chars-negtoupper-neguppercase)
 
   (assert (equal? 65 (hydra_lib_chars_to_upper 65))))
 
-(define (test-toupper-negdigit)
+(define (test-chars-negtoupper-negdigit)
 
   (assert (equal? 53 (hydra_lib_chars_to_upper 53))))
