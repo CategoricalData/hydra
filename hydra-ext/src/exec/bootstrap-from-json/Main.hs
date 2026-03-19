@@ -13,7 +13,7 @@
 --   hydra-ext/src/gen-main/json/      — ext coder modules (Java/Python coders)
 --
 -- Usage:
---   bootstrap-from-json --target <haskell|java|python> [OPTIONS]
+--   bootstrap-from-json --target <haskell|java|python|clojure|scheme|common-lisp|emacs-lisp> [OPTIONS]
 --
 -- Options:
 --   --output <dir>         Output base directory (default: repo target dir)
@@ -38,6 +38,8 @@ import Hydra.Ext.Java.Coder (moduleToJava)
 import Hydra.Ext.Java.Language (javaLanguage)
 import Hydra.Ext.Python.Coder (moduleToPython)
 import Hydra.Ext.Python.Language (pythonLanguage)
+import Hydra.Ext.Lisp.Language (lispLanguage)
+import qualified Hydra.Ext.Lisp.Syntax as LispSyntax
 import Hydra.Generation (TestGenerator, generateGenerationTestSuite, createTestGroupLookup)
 import Hydra.Ext.Haskell.TestCodecIo (haskellTestGenerator)
 import Hydra.Ext.Java.TestCodecIo (javaTestGenerator)
@@ -133,7 +135,7 @@ parseArgs = go defaultOptions
 
 usage :: String
 usage = unlines
-  [ "Usage: bootstrap-from-json --target <haskell|java|python> [OPTIONS]"
+  [ "Usage: bootstrap-from-json --target <haskell|java|python|clojure|scheme|common-lisp|emacs-lisp> [OPTIONS]"
   , ""
   , "Options:"
   , "  --output <dir>         Output base directory"
@@ -163,14 +165,26 @@ main = do
     Right o -> return o
 
   let target = optTarget opts
-  let ext = case target of { "haskell" -> ".hs"; "java" -> ".java"; "python" -> ".py"; _ -> "" }
+  let ext = case target of
+        "haskell"     -> ".hs"
+        "java"        -> ".java"
+        "python"      -> ".py"
+        "clojure"     -> ".clj"
+        "scheme"      -> ".scm"
+        "common-lisp" -> ".lisp"
+        "emacs-lisp"  -> ".el"
+        _             -> ""
 
   -- Determine output directories
   let defaultOutput = case target of
-        "haskell" -> "/tmp/hydra-bootstrapping-demo/haskell-to-haskell"
-        "java"    -> "../hydra-java"
-        "python"  -> "../hydra-python"
-        _         -> "/tmp/hydra-bootstrapping-demo/haskell-to-" ++ target
+        "haskell"     -> "/tmp/hydra-bootstrapping-demo/haskell-to-haskell"
+        "java"        -> "../hydra-java"
+        "python"      -> "../hydra-python"
+        "clojure"     -> "../hydra-lisp/hydra-clojure"
+        "scheme"      -> "../hydra-lisp/hydra-scheme"
+        "common-lisp" -> "../hydra-lisp/hydra-common-lisp"
+        "emacs-lisp"  -> "../hydra-lisp/hydra-emacs-lisp"
+        _             -> "/tmp/hydra-bootstrapping-demo/haskell-to-" ++ target
   let outBase = maybe defaultOutput id (optOutput opts)
   let outMain = outBase FP.</> ("src/gen-main/" ++ target)
   let outTest = outBase FP.</> ("src/gen-test/" ++ target)
@@ -180,7 +194,15 @@ main = do
   let testJsonDir   = "../hydra-haskell/src/gen-test/json"
   let extJsonDir    = maybe "src/gen-main/json" id (optExtJsonDir opts)
 
-  let targetCap = case target of { "haskell" -> "Haskell"; "java" -> "Java"; "python" -> "Python"; t -> t }
+  let targetCap = case target of
+        "haskell"     -> "Haskell"
+        "java"        -> "Java"
+        "python"      -> "Python"
+        "clojure"     -> "Clojure"
+        "scheme"      -> "Scheme"
+        "common-lisp" -> "Common Lisp"
+        "emacs-lisp"  -> "Emacs Lisp"
+        t             -> t
 
   putStrLn "=========================================="
   putStrLn $ "Mapping JSON to " ++ targetCap
@@ -280,10 +302,23 @@ main = do
   putStrLn $ "Step " ++ stepNum ++ ": Mapping " ++ show (length modsToGenerate) ++ " modules to " ++ targetCap ++ "..."
 
   genStart <- getCurrentTime
+  let lispDialectAndExt = case target of
+        "clojure"     -> Just (LispSyntax.DialectClojure,    "clj")
+        "scheme"      -> Just (LispSyntax.DialectScheme,     "scm")
+        "common-lisp" -> Just (LispSyntax.DialectCommonLisp, "lisp")
+        "emacs-lisp"  -> Just (LispSyntax.DialectEmacsLisp,  "el")
+        _             -> Nothing
+
+  let lispGenerator = case lispDialectAndExt of
+        Just (dialect, lispExt) -> Just (moduleToLispDialect dialect lispExt)
+        Nothing -> Nothing
+
   mainFileCount <- case target of
     "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allModsFinal modsToGenerate
     "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outMain allModsFinal modsToGenerate
     "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allModsFinal modsToGenerate
+    _ | Just gen <- lispGenerator ->
+          generateSources gen lispLanguage True False False False outMain allModsFinal modsToGenerate
     _ -> do
       putStrLn $ "Unknown target: " ++ target
       exitFailure
@@ -318,6 +353,7 @@ main = do
             "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allUniverse extModsForTests >> return ()
             "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outMain allUniverse extModsForTests >> return ()
             "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allUniverse extModsForTests >> return ()
+            _ | Just gen <- lispGenerator -> generateSources gen lispLanguage True False False False outMain allUniverse extModsForTests >> return ()
             _ -> return ()
           putStrLn ""
 
@@ -328,6 +364,7 @@ main = do
         "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outTest allUniverse testMods
         "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outTest allUniverse testMods
         "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outTest allUniverse testMods
+        _ | Just gen <- lispGenerator -> generateSources gen lispLanguage True False False False outTest allUniverse testMods
         _ -> return 0
       testEnd <- getCurrentTime
 

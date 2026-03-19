@@ -140,10 +140,10 @@ import qualified Hydra.Sources.Encode.Pg.Model                 as EncodePgModel
 import qualified Data.List as L
 
 
--- | Coder modules for the three bootstrap-relevant languages: Haskell, Java, and Python.
+-- | Coder modules for the bootstrap-relevant languages: Haskell, Java, Python, and Lisp.
 --   Each list includes the coder itself plus its dependencies (helpers, names, serde, syntax, utils, language).
 hydraBootstrapCoderModules :: [Module]
-hydraBootstrapCoderModules = haskellModules ++ javaModules ++ pythonModules
+hydraBootstrapCoderModules = haskellModules ++ javaModules ++ pythonModules ++ lispModules
 
 -- | Essential hydra-ext modules: the Java and Python coder families.
 hydraExtEssentialModules :: [Module]
