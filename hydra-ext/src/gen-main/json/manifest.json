@@ -22,7 +22,11 @@
     "hydra.ext.python.syntax",
     "hydra.ext.python.utils",
     "hydra.ext.python.coder",
-    "hydra.ext.python.testCodec"],
+    "hydra.ext.python.testCodec",
+    "hydra.ext.lisp.coder",
+    "hydra.ext.lisp.language",
+    "hydra.ext.lisp.serde",
+    "hydra.ext.lisp.syntax"],
   "hydraExtDemoModules": [
     "hydra.ext.cypher.features",
     "hydra.decode.pg.mapping",
