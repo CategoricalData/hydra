@@ -101,7 +101,11 @@
 (defun hydra--maybe-value (val)
   (cond
    ((and (consp val) (eq (car val) :just)) (cadr val))
-   ((and (consp val) (eq (car val) :maybe)) (cadr val))
+   ((and (consp val) (eq (car val) :maybe))
+    (let ((body (cadr val)))
+      (if (and (consp body) (eq (car body) :just))
+          (cadr body)
+        body)))
    (t val)))
 
 (defun hydra--set-annotation (key val m)
@@ -239,15 +243,28 @@
          (found (cdr (cl-assoc key anns :test #'equal))))
     (list :right (if found (list :maybe (hydra--term-to-meta found)) (list :maybe nil)))))
 
+(defun hydra--unwrap-maybe-string (d)
+  "Extract the string from a Maybe String in various encodings.
+   Handles: (:just \"s\"), (:maybe (:just \"s\")),
+            (:just (:literal (:string \"s\"))), etc."
+  (when (not (hydra--maybe-nothing-p d))
+    (let ((inner (hydra--maybe-value d)))
+      ;; If inner is itself a :just wrapper, unwrap again
+      (when (and (consp inner) (eq (car inner) :just))
+        (setq inner (cadr inner)))
+      (cond
+       ;; Plain string
+       ((stringp inner) inner)
+       ;; (:literal (:string "s"))
+       ((and (consp inner) (eq (car inner) :literal)
+             (consp (cadr inner)) (eq (car (cadr inner)) :string))
+        (cadr (cadr inner)))
+       (t (format "%S" inner))))))
+
 (defun hydra--prim-set-term-description (_cx _g args)
   (let* ((d (car args)) (term (cadr args))
-         (term-val (unless (hydra--maybe-nothing-p d)
-                     (let* ((inner (hydra--maybe-value d))
-                            (s (if (and (consp inner) (eq (car inner) :literal)
-                                        (consp (cadr inner)) (eq (car (cadr inner)) :string))
-                                   (cadr (cadr inner))
-                                 (format "%S" inner))))
-                       (list :literal (list :string s)))))
+         (s (hydra--unwrap-maybe-string d))
+         (term-val (when s (list :literal (list :string s))))
          (desc-key (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name"
                                  (list :literal (list :string "description")))))
          (maybe-val (if term-val (list :maybe term-val) (list :maybe (list :nothing)))))

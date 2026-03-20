@@ -85,7 +85,11 @@
     (define (alter-get-value m)
       (cond
         ((and (pair? m) (eq? (car m) 'just)) (cadr m))
-        ((and (pair? m) (eq? (car m) 'maybe)) (cadr m))
+        ((and (pair? m) (eq? (car m) 'maybe))
+         (let ((body (cadr m)))
+           (if (and (pair? body) (eq? (car body) 'just))
+               (cadr body)
+               body)))
         (else m)))
     (define hydra_lib_maps_alter
       (lambda (f)
