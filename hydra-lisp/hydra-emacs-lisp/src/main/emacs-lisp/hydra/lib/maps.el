@@ -30,7 +30,11 @@
 (defun alter-get-value (m)
   (cond
     ((and (consp m) (eq (car m) :just)) (cadr m))
-    ((and (consp m) (eq (car m) :maybe)) (cadr m))
+    ((and (consp m) (eq (car m) :maybe))
+     (let ((body (cadr m)))
+       (if (and (consp body) (eq (car body) :just))
+           (cadr body)
+         body)))
     (t m)))
 
 (defvar hydra_lib_maps_alter
