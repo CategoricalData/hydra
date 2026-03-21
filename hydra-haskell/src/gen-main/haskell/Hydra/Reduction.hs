@@ -187,14 +187,14 @@ etaExpandTermNew tx0 term0 =
                     Core.TypeFunction v0 -> Lists.cons (Just (Core.functionTypeDomain v0)) (domainTypes (Math.sub n 1) (Just (Core.functionTypeCodomain v0)))
                     Core.TypeAnnotated v0 -> domainTypes n (Just (Core.annotatedTypeBody v0))
                     Core.TypeApplication v0 -> domainTypes n (Just (Core.applicationTypeFunction v0))
-                    Core.TypeForall v0 -> domainTypes n (Just (Core.forallTypeBody v0))
+                    Core.TypeForall _ -> Lists.map (\_ -> Nothing) (Math.range 1 n)
                     _ -> Lists.map (\_ -> Nothing) (Math.range 1 n)) mt)
           peelFunctionDomains =
                   \mtyp -> \n -> Logic.ifElse (Equality.lte n 0) mtyp (Maybes.maybe Nothing (\typ -> case typ of
                     Core.TypeFunction v0 -> peelFunctionDomains (Just (Core.functionTypeCodomain v0)) (Math.sub n 1)
                     Core.TypeAnnotated v0 -> peelFunctionDomains (Just (Core.annotatedTypeBody v0)) n
                     Core.TypeApplication v0 -> peelFunctionDomains (Just (Core.applicationTypeFunction v0)) n
-                    Core.TypeForall v0 -> peelFunctionDomains (Just (Core.forallTypeBody v0)) n
+                    Core.TypeForall _ -> Nothing
                     _ -> Nothing) mtyp)
           expand =
                   \alwaysPad -> \args -> \arity -> \headTyp -> \head ->
@@ -235,7 +235,7 @@ etaExpandTermNew tx0 term0 =
                                 \tx2 -> \trm2 -> case trm2 of
                                   Core.TermAnnotated v0 -> termHeadType tx2 (Core.annotatedTermBody v0)
                                   Core.TermFunction v0 -> case v0 of
-                                    Core.FunctionPrimitive v1 -> Maybes.map (\ts2 -> Core.typeSchemeType ts2) (Maps.lookup v1 primTypes)
+                                    Core.FunctionPrimitive v1 -> Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v1 primTypes)
                                     _ -> Nothing
                                   Core.TermLet v0 -> termHeadType (Rewriting.extendGraphForLet (\_ -> \_ -> Nothing) tx2 v0) (Core.letBody v0)
                                   Core.TermTypeLambda v0 -> termHeadType (Rewriting.extendGraphForTypeLambda tx2 v0) (Core.typeLambdaBody v0)
