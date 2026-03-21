@@ -788,8 +788,6 @@ def encode_application(cx: hydra.context.Context, env: hydra.ext.python.helpers.
     @lru_cache(1)
     def g() -> hydra.graph.Graph:
         return python_environment_get_graph(env)
-    tc = env.graph
-    skip_casts = env.skip_casts
     @lru_cache(1)
     def term() -> hydra.core.Term:
         return cast(hydra.core.Term, hydra.core.TermApplication(app))
@@ -803,11 +801,11 @@ def encode_application(cx: hydra.context.Context, env: hydra.ext.python.helpers.
     def args() -> frozenlist[hydra.core.Term]:
         return hydra.lib.pairs.second(gathered())
     @lru_cache(1)
-    def term_arity() -> int:
+    def known_arity() -> int:
         return term_arity_with_primitives(g(), fun())
     @lru_cache(1)
     def arity() -> int:
-        return hydra.lib.eithers.from_right(term_arity(), hydra.lib.eithers.map((lambda _r: hydra.arity.type_arity(hydra.lib.pairs.first(_r))), hydra.checking.type_of(cx, tc, (), fun())))
+        return hydra.lib.math.max(known_arity(), hydra.lib.lists.length(args()))
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda t: encode_term_inline(cx, env, False, t)), args()), (lambda pargs: (hargs := hydra.lib.lists.take(arity(), pargs), rargs := hydra.lib.lists.drop(arity(), pargs), hydra.lib.eithers.bind(encode_application_inner(cx, env, fun(), hargs, rargs), (lambda result: (lhs := hydra.lib.pairs.first(result), remaining_rargs := hydra.lib.pairs.second(result), pyapp := hydra.lib.lists.foldl((lambda t, a: hydra.ext.python.utils.function_call(hydra.ext.python.utils.py_expression_to_py_primary(t), (a,))), lhs, remaining_rargs), Right(pyapp))[3])))[2]))
 
 def encode_application_inner(cx: hydra.context.Context, env: hydra.ext.python.helpers.PythonEnvironment, fun: hydra.core.Term, hargs: frozenlist[hydra.ext.python.syntax.Expression], rargs: frozenlist[hydra.ext.python.syntax.Expression]):

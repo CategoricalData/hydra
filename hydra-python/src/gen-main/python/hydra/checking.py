@@ -180,7 +180,7 @@ def type_of_primitive(cx: hydra.context.Context, tx: hydra.graph.Graph, type_arg
 
     @lru_cache(1)
     def raw_ts() -> Maybe[hydra.core.TypeScheme]:
-        return hydra.lib.maps.lookup(name, hydra.lib.maps.from_list(hydra.lib.lists.map((lambda _gpt_p: (_gpt_p.name, _gpt_p.type)), hydra.lib.maps.elems(tx.primitives))))
+        return hydra.lib.maybes.map((lambda _p: _p.type), hydra.lib.maps.lookup(name, tx.primitives))
     return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorUndefinedTerm(hydra.error.UndefinedTermError(name))), cx))), (lambda ts_raw: (inst_result := hydra.schemas.instantiate_type_scheme(cx, ts_raw), ts := hydra.lib.pairs.first(inst_result), cx2 := hydra.lib.pairs.second(inst_result), t := hydra.rewriting.type_scheme_to_f_type(ts), hydra.lib.eithers.bind(apply_type_arguments_to_type(cx2, tx, type_args, t), (lambda applied: Right((applied, cx2)))))[4]), raw_ts())
 
 def type_of_projection(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenlist[hydra.core.Type], p: hydra.core.Projection) -> Either[hydra.context.InContext[hydra.error.Error], tuple[hydra.core.Type, hydra.context.Context]]:

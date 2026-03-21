@@ -258,13 +258,32 @@ def and_expression_to_expr(d: hydra.ext.lisp.syntax.Dialect, and_expr: hydra.ext
     return hydra.serialization.parens(hydra.serialization.space_sep(hydra.lib.lists.concat2((hydra.serialization.cst("and"),), hydra.lib.lists.map((lambda v1: expression_to_expr(d, v1)), and_expr.expressions))))
 
 def application_to_expr(d: hydra.ext.lisp.syntax.Dialect, app: hydra.ext.lisp.syntax.Application) -> hydra.ast.Expr:
+    fun_expr = app.function
     @lru_cache(1)
     def fun() -> hydra.ast.Expr:
-        return expression_to_expr(d, app.function)
+        return expression_to_expr(d, fun_expr)
     @lru_cache(1)
     def args() -> frozenlist[hydra.ast.Expr]:
         return hydra.lib.lists.map((lambda v1: expression_to_expr(d, v1)), app.arguments)
-    return hydra.serialization.parens(hydra.serialization.space_sep(hydra.lib.lists.concat2((fun(),), args())))
+    @lru_cache(1)
+    def needs_funcall():
+        def _hoist_needs_funcall_1(v1):
+            match v1:
+                case hydra.ext.lisp.syntax.ExpressionVariable():
+                    return False
+
+                case _:
+                    return True
+        match d:
+            case hydra.ext.lisp.syntax.Dialect.EMACS_LISP:
+                return _hoist_needs_funcall_1(fun_expr)
+
+            case _:
+                return False
+    @lru_cache(1)
+    def all_parts() -> frozenlist[hydra.ast.Expr]:
+        return hydra.lib.logic.if_else(needs_funcall(), (lambda : hydra.lib.lists.concat2((hydra.serialization.cst("funcall"), fun()), args())), (lambda : hydra.lib.lists.concat2((fun(),), args())))
+    return hydra.serialization.parens(hydra.serialization.space_sep(all_parts()))
 
 def case_expression_to_expr(d: hydra.ext.lisp.syntax.Dialect, case_expr: hydra.ext.lisp.syntax.CaseExpression) -> hydra.ast.Expr:
     @lru_cache(1)

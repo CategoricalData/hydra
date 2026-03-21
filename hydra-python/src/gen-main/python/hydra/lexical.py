@@ -210,7 +210,7 @@ def require_primitive(cx: hydra.context.Context, graph: hydra.graph.Graph, name:
 def require_primitive_type(cx: hydra.context.Context, tx: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.TypeScheme]:
     @lru_cache(1)
     def mts() -> Maybe[hydra.core.TypeScheme]:
-        return hydra.lib.maps.lookup(name, hydra.lib.maps.from_list(hydra.lib.lists.map((lambda _gpt_p: (_gpt_p.name, _gpt_p.type)), hydra.lib.maps.elems(tx.primitives))))
+        return hydra.lib.maybes.map((lambda _p: _p.type), hydra.lib.maps.lookup(name, tx.primitives))
     return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("no such primitive function: ", name.value)))), cx))), (lambda ts: Right(ts)), mts())
 
 def resolve_term(graph: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra.core.Term]:
