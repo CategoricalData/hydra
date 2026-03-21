@@ -165,15 +165,19 @@ scalaEscapeName = def "scalaEscapeName" $
     "sanitized2">: Logic.ifElse (Equality.equal (var "sanitized") (string "_"))
       (string "_x")
       (var "sanitized"),
+    -- Rename toString to toString_ (conflicts with Any.toString in case class fields)
+    "sanitized3">: Logic.ifElse (Equality.equal (var "sanitized2") (string "toString"))
+      (string "toString_")
+      (var "sanitized2"),
     "needsBackticks">: Logic.or
-      (Sets.member (var "sanitized2") (asTerm scalaReservedWordsRef))
+      (Sets.member (var "sanitized3") (asTerm scalaReservedWordsRef))
       -- Names ending in _ cause lexer ambiguity with _: type ascription
       (Logic.and
-        (Equality.gt (Strings.length (var "sanitized2")) (int32 0))
-        (Equality.equal (Strings.charAt (Math.sub (Strings.length (var "sanitized2")) (int32 1)) (var "sanitized2")) (int32 95)))] $
+        (Equality.gt (Strings.length (var "sanitized3")) (int32 0))
+        (Equality.equal (Strings.charAt (Math.sub (Strings.length (var "sanitized3")) (int32 1)) (var "sanitized3")) (int32 95)))] $
     Logic.ifElse (var "needsBackticks")
-      (Strings.cat (list [string "`", var "sanitized2", string "`"]))
-      (var "sanitized2")
+      (Strings.cat (list [string "`", var "sanitized3", string "`"]))
+      (var "sanitized3")
 
 scalaReservedWordsRef :: TBinding (S.Set String)
 scalaReservedWordsRef = def "scalaReservedWords" $
@@ -266,7 +270,7 @@ sprim = def "sprim" $
   doc "Create a Scala primitive reference from a Hydra name" $
   lambda "name" $ lets [
     "qname">: Names.qualifyName @@ var "name",
-    "prefix">: Lists.last (Strings.splitOn (string ".") (Module.unNamespace (Maybes.fromJust (Module.qualifiedNameNamespace $ var "qname")))),
+    "prefix">: Module.unNamespace (Maybes.fromJust (Module.qualifiedNameNamespace $ var "qname")),
     "local">: scalaEscapeName @@ (Module.qualifiedNameLocal $ var "qname")] $
     sname @@ (var "prefix" ++ string "." ++ var "local")
 

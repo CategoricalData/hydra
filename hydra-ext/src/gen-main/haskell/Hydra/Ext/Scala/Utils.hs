@@ -49,12 +49,13 @@ scalaEscapeName s =
 
       let sanitized = Strings.fromList (Lists.map (\c -> Logic.ifElse (Equality.equal c 39) 95 c) (Strings.toList s))
           sanitized2 = Logic.ifElse (Equality.equal sanitized "_") "_x" sanitized
+          sanitized3 = Logic.ifElse (Equality.equal sanitized2 "toString") "toString_" sanitized2
           needsBackticks =
-                  Logic.or (Sets.member sanitized2 scalaReservedWords) (Logic.and (Equality.gt (Strings.length sanitized2) 0) (Equality.equal (Strings.charAt (Math.sub (Strings.length sanitized2) 1) sanitized2) 95))
+                  Logic.or (Sets.member sanitized3 scalaReservedWords) (Logic.and (Equality.gt (Strings.length sanitized3) 0) (Equality.equal (Strings.charAt (Math.sub (Strings.length sanitized3) 1) sanitized3) 95))
       in (Logic.ifElse needsBackticks (Strings.cat [
         "`",
-        sanitized2,
-        "`"]) sanitized2)
+        sanitized3,
+        "`"]) sanitized3)
 
 -- | Apply a Scala data expression to a list of arguments
 sapply :: Meta.Data -> [Meta.Data] -> Meta.Data
@@ -92,7 +93,7 @@ sprim :: Core.Name -> Meta.Data
 sprim name =
 
       let qname = Names.qualifyName name
-          prefix = Lists.last (Strings.splitOn "." (Module.unNamespace (Maybes.fromJust (Module.qualifiedNameNamespace qname))))
+          prefix = Module.unNamespace (Maybes.fromJust (Module.qualifiedNameNamespace qname))
           local = scalaEscapeName (Module.qualifiedNameLocal qname)
       in (sname (Strings.cat2 (Strings.cat2 prefix ".") local))
 

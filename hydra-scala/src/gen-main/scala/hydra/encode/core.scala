@@ -16,13 +16,13 @@ import hydra.lib.sets
 
 def annotatedTerm(x: hydra.core.AnnotatedTerm): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.AnnotatedTerm", Seq(hydra.core.Field("body", hydra.encode.core.term(x.body)),
-     hydra.core.Field("annotation", hydra.core.Term.map(maps.bimap[hydra.core.Name, hydra.core.Term, hydra.core.Term,
-     hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.term)(x.annotation))))))
+     hydra.core.Field("annotation", hydra.core.Term.map(hydra.lib.maps.bimap[hydra.core.Name, hydra.core.Term,
+     hydra.core.Term, hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.term)(x.annotation))))))
 
 def annotatedType(x: hydra.core.AnnotatedType): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.AnnotatedType", Seq(hydra.core.Field("body", hydra.encode.core.`type`(x.body)),
-     hydra.core.Field("annotation", hydra.core.Term.map(maps.bimap[hydra.core.Name, hydra.core.Term, hydra.core.Term,
-     hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.term)(x.annotation))))))
+     hydra.core.Field("annotation", hydra.core.Term.map(hydra.lib.maps.bimap[hydra.core.Name, hydra.core.Term,
+     hydra.core.Term, hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.term)(x.annotation))))))
 
 def application(x: hydra.core.Application): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.Application", Seq(hydra.core.Field("function",
@@ -34,13 +34,13 @@ def applicationType(x: hydra.core.ApplicationType): hydra.core.Term =
 
 def binding(x: hydra.core.Binding): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.Binding", Seq(hydra.core.Field("name", hydra.encode.core.name(x.name)),
-     hydra.core.Field("term", hydra.encode.core.term(x.term)), hydra.core.Field("type", hydra.core.Term.maybe(maybes.map[hydra.core.TypeScheme,
+     hydra.core.Field("term", hydra.encode.core.term(x.term)), hydra.core.Field("type", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.core.TypeScheme,
      hydra.core.Term](hydra.encode.core.typeScheme)(x.`type`))))))
 
 def caseStatement(x: hydra.core.CaseStatement): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.CaseStatement", Seq(hydra.core.Field("typeName",
-     hydra.encode.core.name(x.typeName)), hydra.core.Field("default", hydra.core.Term.maybe(maybes.map[hydra.core.Term,
-     hydra.core.Term](hydra.encode.core.term)(x.default))), hydra.core.Field("cases", hydra.core.Term.list(lists.map[hydra.core.Field,
+     hydra.encode.core.name(x.typeName)), hydra.core.Field("default", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.core.Term,
+     hydra.core.Term](hydra.encode.core.term)(x.default))), hydra.core.Field("cases", hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Field,
      hydra.core.Term](hydra.encode.core.field)(x.cases))))))
 
 def eitherType(x: hydra.core.EitherType): hydra.core.Term =
@@ -139,11 +139,11 @@ def integerValue(v1: hydra.core.IntegerValue): hydra.core.Term =
 
 def lambda(x: hydra.core.Lambda): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.Lambda", Seq(hydra.core.Field("parameter", hydra.encode.core.name(x.parameter)),
-     hydra.core.Field("domain", hydra.core.Term.maybe(maybes.map[hydra.core.Type, hydra.core.Term](hydra.encode.core.`type`)(x.domain))),
+     hydra.core.Field("domain", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.core.Type, hydra.core.Term](hydra.encode.core.`type`)(x.domain))),
      hydra.core.Field("body", hydra.encode.core.term(x.body)))))
 
 def let(x: hydra.core.Let): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.core.Let", Seq(hydra.core.Field("bindings", hydra.core.Term.list(lists.map[hydra.core.Binding,
+  hydra.core.Term.record(hydra.core.Record("hydra.core.Let", Seq(hydra.core.Field("bindings", hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Binding,
      hydra.core.Term](hydra.encode.core.binding)(x.bindings))), hydra.core.Field("body", hydra.encode.core.term(x.body)))))
 
 def literal(v1: hydra.core.Literal): hydra.core.Term =
@@ -183,7 +183,7 @@ def projection(x: hydra.core.Projection): hydra.core.Term =
 
 def record(x: hydra.core.Record): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.Record", Seq(hydra.core.Field("typeName", hydra.encode.core.name(x.typeName)),
-     hydra.core.Field("fields", hydra.core.Term.list(lists.map[hydra.core.Field, hydra.core.Term](hydra.encode.core.field)(x.fields))))))
+     hydra.core.Field("fields", hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Field, hydra.core.Term](hydra.encode.core.field)(x.fields))))))
 
 def term(v1: hydra.core.Term): hydra.core.Term =
   v1 match
@@ -192,28 +192,28 @@ def term(v1: hydra.core.Term): hydra.core.Term =
   case hydra.core.Term.application(v_Term_application_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("application", hydra.encode.core.application(v_Term_application_y))))
   case hydra.core.Term.either(v_Term_either_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
-     hydra.core.Field("either", hydra.core.Term.either(eithers.bimap[hydra.core.Term, hydra.core.Term,
+     hydra.core.Field("either", hydra.core.Term.either(hydra.lib.eithers.bimap[hydra.core.Term, hydra.core.Term,
      hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(hydra.encode.core.term)(v_Term_either_y)))))
   case hydra.core.Term.function(v_Term_function_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("function", hydra.encode.core.function(v_Term_function_y))))
   case hydra.core.Term.let(v_Term_let_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("let", hydra.encode.core.let(v_Term_let_y))))
   case hydra.core.Term.list(v_Term_list_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
-     hydra.core.Field("list", hydra.core.Term.list(lists.map[hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(v_Term_list_y)))))
+     hydra.core.Field("list", hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(v_Term_list_y)))))
   case hydra.core.Term.literal(v_Term_literal_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("literal", hydra.encode.core.literal(v_Term_literal_y))))
   case hydra.core.Term.map(v_Term_map_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
-     hydra.core.Field("map", hydra.core.Term.map(maps.bimap[hydra.core.Term, hydra.core.Term, hydra.core.Term,
-     hydra.core.Term](hydra.encode.core.term)(hydra.encode.core.term)(v_Term_map_y)))))
+     hydra.core.Field("map", hydra.core.Term.map(hydra.lib.maps.bimap[hydra.core.Term, hydra.core.Term,
+     hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(hydra.encode.core.term)(v_Term_map_y)))))
   case hydra.core.Term.maybe(v_Term_maybe_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
-     hydra.core.Field("maybe", hydra.core.Term.maybe(maybes.map[hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(v_Term_maybe_y)))))
+     hydra.core.Field("maybe", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(v_Term_maybe_y)))))
   case hydra.core.Term.pair(v_Term_pair_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
-     hydra.core.Field("pair", hydra.core.Term.pair(pairs.bimap[hydra.core.Term, hydra.core.Term, hydra.core.Term,
-     hydra.core.Term](hydra.encode.core.term)(hydra.encode.core.term)(v_Term_pair_y)))))
+     hydra.core.Field("pair", hydra.core.Term.pair(hydra.lib.pairs.bimap[hydra.core.Term, hydra.core.Term,
+     hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(hydra.encode.core.term)(v_Term_pair_y)))))
   case hydra.core.Term.record(v_Term_record_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("record", hydra.encode.core.record(v_Term_record_y))))
   case hydra.core.Term.set(v_Term_set_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
-     hydra.core.Field("set", hydra.core.Term.set(sets.map[hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(v_Term_set_y)))))
+     hydra.core.Field("set", hydra.core.Term.set(hydra.lib.sets.map[hydra.core.Term, hydra.core.Term](hydra.encode.core.term)(v_Term_set_y)))))
   case hydra.core.Term.typeApplication(v_Term_typeApplication_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
      hydra.core.Field("typeApplication", hydra.encode.core.typeApplicationTerm(v_Term_typeApplication_y))))
   case hydra.core.Term.typeLambda(v_Term_typeLambda_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Term",
@@ -249,11 +249,11 @@ def `type`(v1: hydra.core.Type): hydra.core.Term =
   case hydra.core.Type.pair(v_Type_pair_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("pair", hydra.encode.core.pairType(v_Type_pair_y))))
   case hydra.core.Type.record(v_Type_record_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
-     hydra.core.Field("record", hydra.core.Term.list(lists.map[hydra.core.FieldType, hydra.core.Term](hydra.encode.core.fieldType)(v_Type_record_y)))))
+     hydra.core.Field("record", hydra.core.Term.list(hydra.lib.lists.map[hydra.core.FieldType, hydra.core.Term](hydra.encode.core.fieldType)(v_Type_record_y)))))
   case hydra.core.Type.set(v_Type_set_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("set", hydra.encode.core.`type`(v_Type_set_y))))
   case hydra.core.Type.union(v_Type_union_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
-     hydra.core.Field("union", hydra.core.Term.list(lists.map[hydra.core.FieldType, hydra.core.Term](hydra.encode.core.fieldType)(v_Type_union_y)))))
+     hydra.core.Field("union", hydra.core.Term.list(hydra.lib.lists.map[hydra.core.FieldType, hydra.core.Term](hydra.encode.core.fieldType)(v_Type_union_y)))))
   case hydra.core.Type.unit => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type", hydra.core.Field("unit", hydra.core.Term.unit)))
   case hydra.core.Type.variable(v_Type_variable_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("variable", hydra.encode.core.name(v_Type_variable_y))))
@@ -270,14 +270,15 @@ def typeLambda(x: hydra.core.TypeLambda): hydra.core.Term =
 
 def typeScheme(x: hydra.core.TypeScheme): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.TypeScheme", Seq(hydra.core.Field("variables",
-     hydra.core.Term.list(lists.map[hydra.core.Name, hydra.core.Term](hydra.encode.core.name)(x.variables))),
-     hydra.core.Field("type", hydra.encode.core.`type`(x.`type`)), hydra.core.Field("constraints", hydra.core.Term.maybe(maybes.map[Map[hydra.core.Name,
+     hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Name, hydra.core.Term](hydra.encode.core.name)(x.variables))),
+     hydra.core.Field("type", hydra.encode.core.`type`(x.`type`)), hydra.core.Field("constraints", hydra.core.Term.maybe(hydra.lib.maybes.map[Map[hydra.core.Name,
      hydra.core.TypeVariableMetadata], hydra.core.Term]((m: Map[hydra.core.Name, hydra.core.TypeVariableMetadata]) =>
-  hydra.core.Term.map(maps.bimap[hydra.core.Name, hydra.core.Term, hydra.core.TypeVariableMetadata, hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.typeVariableMetadata)(m)))(x.constraints))))))
+  hydra.core.Term.map(hydra.lib.maps.bimap[hydra.core.Name, hydra.core.Term, hydra.core.TypeVariableMetadata,
+     hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.typeVariableMetadata)(m)))(x.constraints))))))
 
 def typeVariableMetadata(x: hydra.core.TypeVariableMetadata): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.TypeVariableMetadata", Seq(hydra.core.Field("classes",
-     hydra.core.Term.set(sets.map[hydra.core.Name, hydra.core.Term](hydra.encode.core.name)(x.classes))))))
+     hydra.core.Term.set(hydra.lib.sets.map[hydra.core.Name, hydra.core.Term](hydra.encode.core.name)(x.classes))))))
 
 def wrappedTerm(x: hydra.core.WrappedTerm): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.core.WrappedTerm", Seq(hydra.core.Field("typeName",

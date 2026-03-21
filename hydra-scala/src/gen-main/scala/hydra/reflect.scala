@@ -96,9 +96,9 @@ def literalTypeVariant(v1: hydra.core.LiteralType): hydra.variants.LiteralVarian
   case hydra.core.LiteralType.integer(v_LiteralType_integer__) => hydra.variants.LiteralVariant.integer
   case hydra.core.LiteralType.string => hydra.variants.LiteralVariant.string
 
-val literalTypes: Seq[hydra.core.LiteralType] = lists.concat[hydra.core.LiteralType](Seq(Seq(hydra.core.LiteralType.binary,
-   hydra.core.LiteralType.boolean), lists.map[hydra.core.FloatType, hydra.core.LiteralType]((x: hydra.core.FloatType) => hydra.core.LiteralType.float(x))(hydra.reflect.floatTypes),
-   lists.map[hydra.core.IntegerType, hydra.core.LiteralType]((x: hydra.core.IntegerType) => hydra.core.LiteralType.integer(x))(hydra.reflect.integerTypes),
+val literalTypes: Seq[hydra.core.LiteralType] = hydra.lib.lists.concat[hydra.core.LiteralType](Seq(Seq(hydra.core.LiteralType.binary,
+   hydra.core.LiteralType.boolean), hydra.lib.lists.map[hydra.core.FloatType, hydra.core.LiteralType]((x: hydra.core.FloatType) => hydra.core.LiteralType.float(x))(hydra.reflect.floatTypes),
+   hydra.lib.lists.map[hydra.core.IntegerType, hydra.core.LiteralType]((x: hydra.core.IntegerType) => hydra.core.LiteralType.integer(x))(hydra.reflect.integerTypes),
    Seq(hydra.core.LiteralType.string)))
 
 def literalVariant(`arg_`: hydra.core.Literal): hydra.variants.LiteralVariant = hydra.reflect.literalTypeVariant(hydra.reflect.literalType(`arg_`))
