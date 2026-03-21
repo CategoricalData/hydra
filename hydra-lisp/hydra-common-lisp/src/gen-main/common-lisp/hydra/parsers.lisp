@@ -6,7 +6,7 @@
 
 (cl:defvar hydra_parsers_alt (cl:lambda (p1) (cl:lambda (p2) (let ((parse (cl:lambda (input) ((cl:lambda (match_target) ((cl:lambda (match_value) (cond ((equal (car match_target) :success) ((cl:lambda (s) (list :success s)) match_value)) ((equal (car match_target) :failure) ((cl:lambda (e) (if ((hydra_lib_equality_equal ((cl:lambda (v) (hydra_parsing_parse_error-remainder v)) e)) input) (((cl:lambda (v) v) p2) input) (list :failure e))) match_value)))) (cadr match_target))) (((cl:lambda (v) v) p1) input))))) parse))))
 
-(cl:defvar hydra_parsers_satisfy (cl:lambda (pred) (let ((parse (cl:lambda (input) (let ((codes (hydra_lib_strings_to_list input))) (((hydra_lib_maybes_maybe (list :failure (make-hydra_parsing_parse_error "unexpected end of input" input))) (cl:lambda (c) (let ((rest (hydra_lib_strings_from_list ((hydra_lib_lists_drop 1) codes)))) (if (pred c) (list :success (make-hydra_parsing_parse_success c rest)) (list :failure (make-hydra_parsing_parse_error "character did not satisfy predicate" input)))))) (hydra_lib_lists_safe_head codes)))))) parse)))
+(cl:defvar hydra_parsers_satisfy (cl:lambda (pred) (let ((parse (cl:lambda (input) (let ((codes (hydra_lib_strings_to_list input))) (((hydra_lib_maybes_maybe (cl:lambda () (list :failure (make-hydra_parsing_parse_error "unexpected end of input" input)))) (cl:lambda (c) (let ((rest (hydra_lib_strings_from_list ((hydra_lib_lists_drop 1) codes)))) (if (pred c) (list :success (make-hydra_parsing_parse_success c rest)) (list :failure (make-hydra_parsing_parse_error "character did not satisfy predicate" input)))))) (hydra_lib_lists_safe_head codes)))))) parse)))
 
 (cl:defvar hydra_parsers_any_char (hydra_parsers_satisfy (cl:lambda (_) cl:t)))
 

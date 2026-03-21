@@ -30,9 +30,9 @@
 
 (def hydra_ext_python_utils_py_name_to_py_primary (fn [name] (list :simple (list :name name))))
 
-(def hydra_ext_python_utils_annotated_expression (fn [mcomment] (fn [expr] (((hydra_lib_maybes_maybe expr) (fn [c] (hydra_ext_python_utils_py_primary_to_py_expression ((hydra_ext_python_utils_primary_with_expression_slices (hydra_ext_python_utils_py_name_to_py_primary "Annotated")) (list expr (hydra_ext_python_utils_double_quoted_string c)))))) mcomment))))
+(def hydra_ext_python_utils_annotated_expression (fn [mcomment] (fn [expr] (((hydra_lib_maybes_maybe (fn [] expr)) (fn [c] (hydra_ext_python_utils_py_primary_to_py_expression ((hydra_ext_python_utils_primary_with_expression_slices (hydra_ext_python_utils_py_name_to_py_primary "Annotated")) (list expr (hydra_ext_python_utils_double_quoted_string c)))))) mcomment))))
 
-(def hydra_ext_python_utils_annotated_statement (fn [mcomment] (fn [stmt] (((hydra_lib_maybes_maybe stmt) (fn [c] (list :annotated (->hydra_ext_python_syntax_annotated_statement c stmt)))) mcomment))))
+(def hydra_ext_python_utils_annotated_statement (fn [mcomment] (fn [stmt] (((hydra_lib_maybes_maybe (fn [] stmt)) (fn [c] (list :annotated (->hydra_ext_python_syntax_annotated_statement c stmt)))) mcomment))))
 
 (def hydra_ext_python_utils_py_simple_statement_to_py_statement (fn [s] (list :simple (list s))))
 
@@ -76,7 +76,7 @@
 
 (def hydra_ext_python_utils_get_item_params (list :param_no_default (->hydra_ext_python_syntax_param_no_default_parameters (list (->hydra_ext_python_syntax_param_no_default (->hydra_ext_python_syntax_param "cls" (list :nothing)) (list :nothing)) (->hydra_ext_python_syntax_param_no_default (->hydra_ext_python_syntax_param "item" (list :nothing)) (list :nothing))) (list) (list :nothing))))
 
-(def hydra_ext_python_utils_indented_block (fn [mcomment] (fn [stmts] (let [comment_group (((hydra_lib_maybes_maybe (list)) (fn [s] (list (hydra_ext_python_utils_comment_statement s)))) mcomment) groups ((hydra_lib_lists_filter (fn [g] (hydra_lib_logic_not (hydra_lib_lists_null g)))) ((hydra_lib_lists_cons comment_group) stmts))] (if (hydra_lib_lists_null groups) (list :indented (list (list (list :simple (list (hydra_ext_python_utils_py_expression_to_py_simple_statement (hydra_ext_python_utils_py_atom_to_py_expression (list :ellipsis nil)))))))) (list :indented groups))))))
+(def hydra_ext_python_utils_indented_block (fn [mcomment] (fn [stmts] (let [comment_group (((hydra_lib_maybes_maybe (fn [] (list))) (fn [s] (list (hydra_ext_python_utils_comment_statement s)))) mcomment) groups ((hydra_lib_lists_filter (fn [g] (hydra_lib_logic_not (hydra_lib_lists_null g)))) ((hydra_lib_lists_cons comment_group) stmts))] (if (hydra_lib_lists_null groups) (list :indented (list (list (list :simple (list (hydra_ext_python_utils_py_expression_to_py_simple_statement (hydra_ext_python_utils_py_atom_to_py_expression (list :ellipsis nil)))))))) (list :indented groups))))))
 
 (def hydra_ext_python_utils_primary_and_params (fn [prim] (fn [params] (hydra_ext_python_utils_py_primary_to_py_expression ((hydra_ext_python_utils_primary_with_expression_slices prim) params)))))
 
@@ -100,7 +100,7 @@
 
 (def hydra_ext_python_utils_py_expression_to_disjunction (fn [e] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :simple) ((fn [disj] disj) match_value) :else (list (hydra_ext_python_utils_py_primary_to_py_conjunction (list :simple (list :group (list :expression (list :simple e)))))))) (second match_target))) e)))
 
-(def hydra_ext_python_utils_py_expression_to_py_primary (fn [e] (((hydra_lib_maybes_maybe (list :simple (list :group (list :expression (list :simple e))))) (fn [prim] prim)) (hydra_ext_python_utils_decode_py_expression_to_py_primary e))))
+(def hydra_ext_python_utils_py_expression_to_py_primary (fn [e] (((hydra_lib_maybes_maybe (fn [] (list :simple (list :group (list :expression (list :simple e)))))) (fn [prim] prim)) (hydra_ext_python_utils_decode_py_expression_to_py_primary e))))
 
 (def hydra_ext_python_utils_py_expression_to_py_star_named_expression (fn [expr] (list :simple (list :simple expr))))
 

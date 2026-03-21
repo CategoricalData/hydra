@@ -20,6 +20,6 @@
 
 (def hydra_extract_helpers_decode_wrapped (fn [body_decoder] (fn [g] (fn [term] ((hydra_lib_eithers_bind (((hydra_lib_eithers_bimap (fn [x] x)) (fn [x] x)) ((hydra_lexical_strip_and_dereference_term_either g) term))) (fn [stripped] ((fn [match_target] ((fn [match_value] (cond (= (first match_target) :wrap) ((fn [wt] ((body_decoder g) ((fn [v] (:body v)) wt))) match_value) :else (list :left "expected wrapped value"))) (second match_target))) stripped)))))))
 
-(def hydra_extract_helpers_require_field (fn [field_name] (fn [decoder] (fn [field_map] (fn [g] (((hydra_lib_maybes_maybe (list :left (hydra_lib_strings_cat (list "missing field " field_name " in record")))) (fn [field_term] ((decoder g) field_term))) ((hydra_lib_maps_lookup field_name) field_map)))))))
+(def hydra_extract_helpers_require_field (fn [field_name] (fn [decoder] (fn [field_map] (fn [g] (((hydra_lib_maybes_maybe (fn [] (list :left (hydra_lib_strings_cat (list "missing field " field_name " in record"))))) (fn [field_term] ((decoder g) field_term))) ((hydra_lib_maps_lookup field_name) field_map)))))))
 
 (def hydra_extract_helpers_to_field_map (fn [record] (hydra_lib_maps_from_list ((hydra_lib_lists_map (fn [f] (list ((fn [v] (:name v)) f) ((fn [v] (:term v)) f)))) ((fn [v] (:fields v)) record)))))

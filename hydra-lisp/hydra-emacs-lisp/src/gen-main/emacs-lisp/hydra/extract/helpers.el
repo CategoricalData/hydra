@@ -36,7 +36,7 @@
 
 (defvar hydra_extract_helpers_decode_wrapped (lambda (body_decoder) (lambda (g) (lambda (term) (funcall (hydra_lib_eithers_bind (funcall (funcall (hydra_lib_eithers_bimap (lambda (x) x)) (lambda (x) x)) (funcall (hydra_lexical_strip_and_dereference_term_either g) term))) (lambda (stripped) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :wrap) (funcall (lambda (wt) (funcall (body_decoder g) (funcall (lambda (v) (hydra_core_wrapped_term-body v)) wt))) match_value)) (t (list :left "expected wrapped value")))) (cadr match_target))) stripped)))))))
 
-(defvar hydra_extract_helpers_require_field (lambda (field_name) (lambda (decoder) (lambda (field_map) (lambda (g) (funcall (funcall (hydra_lib_maybes_maybe (list :left (hydra_lib_strings_cat (list "missing field " field_name " in record")))) (lambda (field_term) (funcall (decoder g) field_term))) (funcall (hydra_lib_maps_lookup field_name) field_map)))))))
+(defvar hydra_extract_helpers_require_field (lambda (field_name) (lambda (decoder) (lambda (field_map) (lambda (g) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :left (hydra_lib_strings_cat (list "missing field " field_name " in record"))))) (lambda (field_term) (funcall (decoder g) field_term))) (funcall (hydra_lib_maps_lookup field_name) field_map)))))))
 
 (defvar hydra_extract_helpers_to_field_map (lambda (record) (hydra_lib_maps_from_list (funcall (hydra_lib_lists_map (lambda (f) (list (funcall (lambda (v) (hydra_core_field-name v)) f) (funcall (lambda (v) (hydra_core_field-term v)) f)))) (funcall (lambda (v) (hydra_core_record-fields v)) record)))))
 
