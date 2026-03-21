@@ -5,7 +5,7 @@ This recipe explains how to extend Hydra's common test suite with new test cases
 ## Background
 
 Hydra's [common test suite](../../wiki/Testing.md#common-test-suite) is designed to run identically in all language
-implementations (Haskell, Java, Python).
+implementations (Haskell, Java, Python, Clojure).
 Tests are written in Hydra's term-encoded DSL in [hydra-haskell/src/main/haskell/Hydra/Sources/Test/][sources-test]
 and code-generated into each target language.
 

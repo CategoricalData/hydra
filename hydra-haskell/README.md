@@ -26,7 +26,7 @@ Hydra-Haskell uses the **src/main vs src/gen-main** separation pattern (see [Cod
   - Generation tests created using language-specific test generators
   - See [Testing](#test) section for details
 
-Haskell serves as the **bootstrapping implementation** - the DSL sources here generate code for Java, Python, and other languages.
+Haskell serves as the **bootstrapping implementation** - the DSL sources here generate code for Java, Python, Clojure, and other languages.
 
 ## Documentation
 

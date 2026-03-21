@@ -2,9 +2,9 @@
 
 This demo demonstrates Hydra's self-hosting capability by regenerating all
 generated code from a language-independent JSON representation. Each of Hydra's
-three complete implementations (Haskell, Java, Python) can independently load
+four complete implementations (Haskell, Java, Python, Clojure) can independently load
 Hydra modules from JSON and generate code for any target language, producing a
-3×3 matrix of bootstrapping paths — all of which produce functionally equivalent
+matrix of bootstrapping paths — all of which produce functionally equivalent
 output that passes the common test suite.
 
 ## Overview

@@ -1,16 +1,17 @@
 # Creating a new Hydra implementation
 
-Hydra currently has three complete implementations:
+Hydra currently has four complete implementations:
 [Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell),
-[Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java), and
-[Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python).
-All three implement the entire [Hydra Kernel](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Kernel.hs),
+[Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java),
+[Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python), and
+[Hydra-Clojure](https://github.com/CategoricalData/hydra/tree/main/hydra-lisp/hydra-clojure).
+All four implement the entire [Hydra Kernel](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Kernel.hs),
 support the full [Hydra standard library](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Lib),
 and pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
-The three implementations are mutually self-hosting: each can load Hydra modules from a
-language-independent JSON representation and regenerate code for any of the three target languages
+The four implementations are mutually self-hosting: each can load Hydra modules from a
+language-independent JSON representation and regenerate code for any of the target languages
 (see the [bootstrapping demo](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/demos/bootstrapping)).
-Hydra-Haskell serves as the source of truth for the kernel, but the generated code in all three
+Hydra-Haskell serves as the source of truth for the kernel, but the generated code in all four
 languages is semantically equivalent.
 
 The following is a guide to creating a Hydra implementation in a new host language, like [Scala](https://github.com/CategoricalData/hydra/tree/main/hydra-scala) or [C#](https://github.com/CategoricalData/hydra/issues/139).
@@ -281,6 +282,42 @@ At a bare minimum, all of the primitives which are referenced in the Hydra kerne
 
 **Important**: Simply having implementation files is not enough — each primitive must also be *registered* in a central registry (e.g. `Libraries.java` in Java) so it can be looked up by name at runtime.
 Periodically compare your registry against the authoritative list in [Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs) to catch any missing registrations.
+
+### Lazy evaluation and thunking
+
+Hydra's kernel is written in Haskell, which evaluates expressions lazily.
+In an eager (strict) language, certain primitives must accept **thunks** (zero-argument functions)
+for arguments that should not be evaluated unconditionally.
+Without thunking, both branches of a conditional are evaluated before the condition is checked,
+turning O(1) short-circuit operations into O(n) full traversals — or worse, causing non-termination
+for recursive code that relies on short-circuiting.
+
+The following primitives require thunking in eager languages:
+
+| Primitive | Which arguments are lazy | Why |
+|-----------|--------------------------|-----|
+| `hydra.lib.logic.ifElse` | both `then` and `else` branches | Only the chosen branch should be evaluated |
+| `hydra.lib.maybes.maybe` | the `nothing`-case default value | Only evaluated when the Maybe is Nothing |
+| `hydra.lib.maybes.fromMaybe` | the default value | Only evaluated when the Maybe is Nothing |
+| `hydra.lib.maybes.fromJustOr` | the default value | Only evaluated when the Maybe is Nothing |
+| `hydra.lib.eithers.fromLeft` | the default value | Only evaluated when the Either is Right |
+| `hydra.lib.eithers.fromRight` | the default value | Only evaluated when the Either is Left |
+
+The implementation strategy varies by language:
+
+- **Java**: Provides `Supplier<T>` overloads (e.g. `IfElse.lazy(boolean, Supplier<X>, Supplier<X>)`)
+  alongside the eager versions. The generated Java coder wraps lazy arguments in `() -> expr`.
+- **Python**: Uses `callable()` checks at runtime — if an argument is a zero-argument callable,
+  it is called only when needed; otherwise it is used as-is. The generated Python coder wraps lazy
+  arguments in `lambda: expr`.
+- **Clojure**: Clojure's `if` special form is already lazy, so `ifElse` can map to native `if`.
+  For other primitives, the implementation should check `(fn? x)` and call the thunk when needed,
+  similar to Python's approach.
+
+If your host language is eager by default (which includes most languages other than Haskell),
+you **must** implement this thunking strategy. Omitting it will cause severe performance degradation
+and potentially incorrect evaluation of recursive kernel functions like `freeVariablesInTerm`,
+`rewriteTerm`, and `foldOverTerm`.
 
 When auto-detecting type variables from primitive type schemes, be aware that type variable names
 containing dots (e.g. `hydra.util.Comparison`) are nominal type references, not universally

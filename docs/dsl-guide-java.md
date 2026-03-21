@@ -2,7 +2,7 @@
 
 This guide explains Hydra's domain-specific language (DSL) utilities for constructing types and terms in Java.
 
-**Note**: Hydra provides DSLs in all three implementation languages (Haskell, Java, and Python).
+**Note**: Hydra provides DSLs in all four implementation languages (Haskell, Java, Python, and Clojure).
 This guide focuses on the Java DSLs.
 For the comprehensive Haskell DSL guide (including kernel development context), see [DSL Guide (Haskell)](dsl-guide.md).
 For the Python DSLs, see [DSL Guide (Python)](dsl-guide-python.md).
