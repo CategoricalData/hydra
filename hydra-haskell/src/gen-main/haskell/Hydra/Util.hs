@@ -6,7 +6,7 @@ module Hydra.Util where
 
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -72,9 +72,9 @@ _CaseConvention_upperSnake = Core.Name "upperSnake"
 data Coder v1 v2 =
   Coder {
     -- | A function which encodes source values as target values in a given context
-    coderEncode :: (Context.Context -> v1 -> Either (Context.InContext Error.Error) v2),
+    coderEncode :: (Context.Context -> v1 -> Either (Context.InContext Errors.Error) v2),
     -- | A function which decodes target values as source values in a given context
-    coderDecode :: (Context.Context -> v2 -> Either (Context.InContext Error.Error) v1)}
+    coderDecode :: (Context.Context -> v2 -> Either (Context.InContext Errors.Error) v1)}
 
 _Coder = Core.Name "hydra.util.Coder"
 

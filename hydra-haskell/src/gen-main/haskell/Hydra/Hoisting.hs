@@ -261,12 +261,12 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                           hoistedBindingsFinal,
                           bindingsSoFarFinal], finalUsedNames), finalTerm)
                       _ -> ((Lists.concat2 previouslyFinishedBindings bindingsSoFar, alreadyUsedNames), newTerm)
-          cx1 = Schemas.extendGraphForLet (\c -> \b -> Nothing) cx0 let0
+          cx1 = Rewriting.extendGraphForLet (\c -> \b -> Nothing) cx0 let0
           forActiveBinding =
                   \b ->
                     let prefix = Strings.cat2 (Core.unName (Core.bindingName b)) "_"
                         init = ([], (Sets.singleton (Core.bindingName b)))
-                        resultPair = rewriteAndFoldTermWithTypeContext (rewrite prefix) cx1 init (Core.bindingTerm b)
+                        resultPair = Rewriting.rewriteAndFoldTermWithGraph (rewrite prefix) cx1 init (Core.bindingTerm b)
                         resultBindings = Pairs.first (Pairs.first resultPair)
                         resultTerm = Pairs.second resultPair
                     in (Lists.cons (Core.Binding {
@@ -343,7 +343,7 @@ hoistSubterms shouldHoist cx0 term0 =
                                                   Core.bindingTerm = wrappedTerm,
                                                   Core.bindingType = Nothing}
                                     in ((Math.add newCounter 1, (Lists.cons newBinding newBindings)), reference)) (newAcc, processedTerm))
-                    result = rewriteAndFoldTermWithTypeContextAndPath collectAndReplace cx (counter, []) subterm
+                    result = Rewriting.rewriteAndFoldTermWithGraphAndPath collectAndReplace cx (counter, []) subterm
                     finalAcc = Pairs.first result
                     transformedSubterm = Pairs.second result
                     finalCounter = Pairs.first finalAcc
@@ -390,7 +390,7 @@ hoistSubterms shouldHoist cx0 term0 =
                         Core.TermLet v1 -> processLetTerm cx newCounter path v1
                         _ -> (newCounter, recursedTerm)
                     _ -> recurse counter term
-      in (Pairs.second (rewriteAndFoldTermWithTypeContextAndPath rewrite cx0 1 term0))
+      in (Pairs.second (Rewriting.rewriteAndFoldTermWithGraphAndPath rewrite cx0 1 term0))
 
 isApplicationFunction :: Accessors.TermAccessor -> Bool
 isApplicationFunction acc =
@@ -438,82 +438,6 @@ normalizePathForHoisting path =
                     rest = Lists.tail (Lists.tail remaining)
                 in (Logic.ifElse (Logic.and (isApplicationFunction first) (isLambdaBody second)) (Lists.cons Accessors.TermAccessorLetBody (go rest)) (Lists.cons first (go (Lists.tail remaining)))))
       in (go path)
-
--- | Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms. Combines the features of rewriteAndFoldTerm and rewriteTermWithTypeContext. The user function f receives a recurse function that handles subterm traversal and Graph management.
-rewriteAndFoldTermWithTypeContext :: ((t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)
-rewriteAndFoldTermWithTypeContext f cx0 val0 term0 =
-
-      let wrapper =
-              \lowLevelRecurse -> \valAndCx -> \term ->
-                let val = Pairs.first valAndCx
-                    cx = Pairs.second valAndCx
-                    cx1 =
-                            case term of
-                              Core.TermFunction v0 -> case v0 of
-                                Core.FunctionLambda v1 -> Schemas.extendGraphForLambda cx v1
-                                _ -> cx
-                              Core.TermLet v0 -> Schemas.extendGraphForLet (\_ -> \_ -> Nothing) cx v0
-                              Core.TermTypeLambda v0 -> Schemas.extendGraphForTypeLambda cx v0
-                              _ -> cx
-                    recurseForUser =
-                            \newVal -> \subterm ->
-                              let result = lowLevelRecurse (newVal, cx1) subterm
-                              in (Pairs.first (Pairs.first result), (Pairs.second result))
-                    fResult = f recurseForUser cx1 val term
-                in ((Pairs.first fResult, cx), (Pairs.second fResult))
-          result = Rewriting.rewriteAndFoldTerm wrapper (val0, cx0) term0
-      in (Pairs.first (Pairs.first result), (Pairs.second result))
-
--- | Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of TermAccessors representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas.
-rewriteAndFoldTermWithTypeContextAndPath :: ((t0 -> Core.Term -> (t0, Core.Term)) -> [Accessors.TermAccessor] -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)
-rewriteAndFoldTermWithTypeContextAndPath f cx0 val0 term0 =
-
-      let wrapper =
-              \recurse -> \path -> \cxAndVal -> \term ->
-                let cx = Pairs.first cxAndVal
-                    val = Pairs.second cxAndVal
-                    cx1 =
-                            case term of
-                              Core.TermFunction v0 -> case v0 of
-                                Core.FunctionLambda v1 -> Schemas.extendGraphForLambda cx v1
-                                _ -> cx
-                              Core.TermLet v0 -> Schemas.extendGraphForLet (\_ -> \_ -> Nothing) cx v0
-                              Core.TermTypeLambda v0 -> Schemas.extendGraphForTypeLambda cx v0
-                              _ -> cx
-                    recurseForUser =
-                            \valIn -> \termIn ->
-                              let result = recurse path (cx1, valIn) termIn
-                              in (Pairs.second (Pairs.first result), (Pairs.second result))
-                    fResult = f recurseForUser path cx1 val term
-                in ((cx, (Pairs.first fResult)), (Pairs.second fResult))
-          result = Rewriting.rewriteAndFoldTermWithPath wrapper (cx0, val0) term0
-      in (Pairs.second (Pairs.first result), (Pairs.second result))
-
--- | Rewrite a term with the help of a type context which is updated as we descend into subterms
-rewriteTermWithTypeContext :: ((Core.Term -> t0) -> Graph.Graph -> Core.Term -> t0) -> Graph.Graph -> Core.Term -> t0
-rewriteTermWithTypeContext f cx0 term0 =
-
-      let f2 =
-              \recurse -> \cx -> \term ->
-                let recurse1 = \term -> recurse cx term
-                in case term of
-                  Core.TermFunction v0 -> case v0 of
-                    Core.FunctionLambda v1 ->
-                      let cx1 = Schemas.extendGraphForLambda cx v1
-                          recurse2 = \term -> recurse cx1 term
-                      in (f recurse2 cx1 term)
-                    _ -> f recurse1 cx term
-                  Core.TermLet v0 ->
-                    let cx1 = Schemas.extendGraphForLet (\_ -> \_ -> Nothing) cx v0
-                        recurse2 = \term -> recurse cx1 term
-                    in (f recurse2 cx1 term)
-                  Core.TermTypeLambda v0 ->
-                    let cx1 = Schemas.extendGraphForTypeLambda cx v0
-                        recurse2 = \term -> recurse cx1 term
-                    in (f recurse2 cx1 term)
-                  _ -> f recurse1 cx term
-          rewrite = \cx -> \term -> f2 rewrite cx term
-      in (rewrite cx0 term0)
 
 -- | Predicate that always returns True, for hoisting all bindings unconditionally.
 shouldHoistAll :: t0 -> t1 -> Bool

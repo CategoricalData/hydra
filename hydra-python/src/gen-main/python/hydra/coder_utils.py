@@ -27,14 +27,13 @@ import hydra.lib.strings
 import hydra.module
 import hydra.names
 import hydra.rewriting
-import hydra.schemas
 import hydra.typing
 import hydra.util
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 
-def type_of_term(cx: hydra.context.Context, g: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]:
+def type_of_term(cx: hydra.context.Context, g: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type]:
     r"""Check the type of a term."""
 
     return hydra.lib.eithers.map((lambda x1: hydra.lib.pairs.first(x1)), hydra.checking.type_of(cx, g, (), term))
@@ -53,7 +52,7 @@ def analyze_function_term_with_gather(cx: hydra.context.Context, for_binding: Ca
         def _hoist_hydra_coder_utils_analyze_function_term_with_gather_1(arg_mode, args, bindings, cx, doms, for_binding, g_env, get_t_c, set_t_c, t, tapps, tparams, v1):
             match v1:
                 case hydra.core.FunctionLambda(value=lam):
-                    return hydra.lib.logic.if_else(arg_mode, (lambda : (v := lam.parameter, (dom := hydra.lib.maybes.maybe((lambda : cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("_")))), (lambda x_: x_), lam.domain), (body := lam.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_lambda(get_t_c(g_env), lam), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, arg_mode, new_env, tparams, hydra.lib.lists.cons(v, args), bindings, hydra.lib.lists.cons(dom, doms), tapps, body))[1])[1])[1])[1]), (lambda : analyze_function_term_with_finish(cx, get_t_c, g_env, tparams, args, bindings, doms, tapps, t)))
+                    return hydra.lib.logic.if_else(arg_mode, (lambda : (v := lam.parameter, (dom := hydra.lib.maybes.maybe((lambda : cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("_")))), (lambda x_: x_), lam.domain), (body := lam.body, (new_env := set_t_c(hydra.rewriting.extend_graph_for_lambda(get_t_c(g_env), lam), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, arg_mode, new_env, tparams, hydra.lib.lists.cons(v, args), bindings, hydra.lib.lists.cons(dom, doms), tapps, body))[1])[1])[1])[1]), (lambda : analyze_function_term_with_finish(cx, get_t_c, g_env, tparams, args, bindings, doms, tapps, t)))
 
                 case _:
                     return analyze_function_term_with_finish(cx, get_t_c, g_env, tparams, args, bindings, doms, tapps, t)
@@ -62,13 +61,13 @@ def analyze_function_term_with_gather(cx: hydra.context.Context, for_binding: Ca
                 return _hoist_hydra_coder_utils_analyze_function_term_with_gather_1(arg_mode, args, bindings, cx, doms, for_binding, g_env, get_t_c, set_t_c, t, tapps, tparams, f)
 
             case hydra.core.TermLet(value=lt):
-                return (new_bindings := lt.bindings, (body := lt.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_let(for_binding, get_t_c(g_env), lt), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, False, new_env, tparams, args, hydra.lib.lists.concat2(bindings, new_bindings), doms, tapps, body))[1])[1])[1]
+                return (new_bindings := lt.bindings, (body := lt.body, (new_env := set_t_c(hydra.rewriting.extend_graph_for_let(for_binding, get_t_c(g_env), lt), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, False, new_env, tparams, args, hydra.lib.lists.concat2(bindings, new_bindings), doms, tapps, body))[1])[1])[1]
 
             case hydra.core.TermTypeApplication(value=ta):
                 return (ta_body := ta.body, (typ := ta.type, analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, arg_mode, g_env, tparams, args, bindings, doms, hydra.lib.lists.cons(typ, tapps), ta_body))[1])[1]
 
             case hydra.core.TermTypeLambda(value=tl):
-                return (tvar := tl.parameter, (tl_body := tl.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_type_lambda(get_t_c(g_env), tl), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, arg_mode, new_env, hydra.lib.lists.cons(tvar, tparams), args, bindings, doms, tapps, tl_body))[1])[1])[1]
+                return (tvar := tl.parameter, (tl_body := tl.body, (new_env := set_t_c(hydra.rewriting.extend_graph_for_type_lambda(get_t_c(g_env), tl), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, arg_mode, new_env, hydra.lib.lists.cons(tvar, tparams), args, bindings, doms, tapps, tl_body))[1])[1])[1]
 
             case _:
                 return analyze_function_term_with_finish(cx, get_t_c, g_env, tparams, args, bindings, doms, tapps, t)
@@ -122,12 +121,12 @@ def analyze_function_term(cx: hydra.context.Context, get_t_c: Callable[[T0], hyd
 
     return analyze_function_term_with(cx, (lambda x1, x2: binding_metadata(x1, x2)), get_t_c, set_t_c, env, term)
 
-def comments_from_element(cx: hydra.context.Context, g: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[str]]:
+def comments_from_element(cx: hydra.context.Context, g: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[str]]:
     r"""Extract comments/description from a Binding."""
 
     return hydra.annotations.get_term_description(cx, g, b.term)
 
-def comments_from_field_type(cx: hydra.context.Context, g: hydra.graph.Graph, ft: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[str]]:
+def comments_from_field_type(cx: hydra.context.Context, g: hydra.graph.Graph, ft: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[str]]:
     r"""Extract comments/description from a FieldType."""
 
     return hydra.annotations.get_type_description(cx, g, ft.type)

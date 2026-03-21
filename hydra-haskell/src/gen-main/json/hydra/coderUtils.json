@@ -2801,7 +2801,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.Error"},
+                              "argument": {"variable": "hydra.errors.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"maybe": {"literal": {"string": {}}}}}},
                       "domain": {"variable": "hydra.core.Binding"}}},
@@ -2860,7 +2860,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.Error"},
+                              "argument": {"variable": "hydra.errors.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"maybe": {"literal": {"string": {}}}}}},
                       "domain": {"variable": "hydra.core.FieldType"}}},
@@ -2923,7 +2923,7 @@
                                             "type": {"variable": "hydra.core.Type"}}},
                                         "type": {
                                           "application": {
-                                            "argument": {"variable": "hydra.error.Error"},
+                                            "argument": {"variable": "hydra.errors.Error"},
                                             "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                             "domain": [{"variable": "hydra.core.Term"}],
                             "parameter": "term"}}},
@@ -2944,7 +2944,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.Error"},
+                              "argument": {"variable": "hydra.errors.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"variable": "hydra.core.Type"}}},
                       "domain": {"variable": "hydra.core.Term"}}},
@@ -3386,7 +3386,7 @@
                                                                                                   "domain": [
                                                                                                     {
                                                                                                       "application": {
-                                                                                                        "argument": {"variable": "hydra.error.Error"},
+                                                                                                        "argument": {"variable": "hydra.errors.Error"},
                                                                                                         "function": {"variable": "hydra.context.InContext"}}}],
                                                                                                   "parameter": "_"}}},
                                                                                             "function": {
@@ -3398,7 +3398,7 @@
                                                                                                         "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
                                                                                                         "type": {
                                                                                                           "application": {
-                                                                                                            "argument": {"variable": "hydra.error.Error"},
+                                                                                                            "argument": {"variable": "hydra.errors.Error"},
                                                                                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                     "type": {"variable": "hydra.core.Type"}}},
                                                                                                 "type": {"maybe": {"variable": "hydra.core.Type"}}}}}}}}}},
@@ -3721,7 +3721,7 @@
                                                                                                                                                                             "application": {
                                                                                                                                                                               "argument": {
                                                                                                                                                                                 "application": {"argument": {"variable": "gEnv"}, "function": {"variable": "getTC"}}},
-                                                                                                                                                                              "function": {"variable": "hydra.schemas.extendGraphForLambda"}}}}},
+                                                                                                                                                                              "function": {"variable": "hydra.rewriting.extendGraphForLambda"}}}}},
                                                                                                                                                                       "function": {"variable": "setTC"}}}}},
                                                                                                                                                               "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
                                                                                                                                                           "body": {
@@ -3895,7 +3895,7 @@
                                                                                                                                             "function": {
                                                                                                                                               "application": {
                                                                                                                                                 "argument": {"variable": "forBinding"},
-                                                                                                                                                "function": {"variable": "hydra.schemas.extendGraphForLet"}}}}}}},
+                                                                                                                                                "function": {"variable": "hydra.rewriting.extendGraphForLet"}}}}}}},
                                                                                                                                     "function": {"variable": "setTC"}}}}},
                                                                                                                             "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
                                                                                                                         "body": {
@@ -4100,7 +4100,7 @@
                                                                                                                                           "application": {
                                                                                                                                             "argument": {
                                                                                                                                               "application": {"argument": {"variable": "gEnv"}, "function": {"variable": "getTC"}}},
-                                                                                                                                            "function": {"variable": "hydra.schemas.extendGraphForTypeLambda"}}}}},
+                                                                                                                                            "function": {"variable": "hydra.rewriting.extendGraphForTypeLambda"}}}}},
                                                                                                                                     "function": {"variable": "setTC"}}}}},
                                                                                                                             "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
                                                                                                                         "body": {
@@ -4312,7 +4312,10 @@
     "hydra.coders",
     "hydra.context",
     "hydra.core",
-    "hydra.error",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.module",
+    "hydra.errors",
     "hydra.grammar",
     "hydra.graph",
     "hydra.json.model",

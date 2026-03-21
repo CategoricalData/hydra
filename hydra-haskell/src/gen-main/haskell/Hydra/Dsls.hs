@@ -8,7 +8,7 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -57,10 +57,10 @@ dslElementName typeName localName =
         localName])))
 
 -- | Transform a type module into a DSL module
-dslModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Error.Error) (Maybe Module.Module)
+dslModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) (Maybe Module.Module)
 dslModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError (Context.inContextObject ic)))),
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError (Context.inContextObject ic)))),
       Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\dslBindings -> Right (Just (Module.Module {
       Module.moduleNamespace = (dslNamespace (Module.moduleNamespace mod)),
       Module.moduleElements = (deduplicateBindings (Lists.concat dslBindings)),
@@ -89,7 +89,7 @@ filterTypeBindings cx graph bindings =
     Eithers.map Maybes.cat (Eithers.mapList (isDslEligibleBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
 
 -- | Generate all DSL bindings for a type binding
-generateBindingsForType :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.DecodingError) [Core.Binding]
+generateBindingsForType :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.DecodingError) [Core.Binding]
 generateBindingsForType cx graph b =
 
       let typeName = Core.bindingName b

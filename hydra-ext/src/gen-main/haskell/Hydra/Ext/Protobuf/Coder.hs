@@ -11,7 +11,7 @@ import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Ext.Protobuf.Environment as Environment
 import qualified Hydra.Ext.Protobuf.Language as Language
 import qualified Hydra.Ext.Protobuf.Proto3 as Proto3
@@ -36,7 +36,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as Core___
-import qualified Hydra.Show.Error as Error_
+import qualified Hydra.Show.Errors as Errors_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -47,13 +47,13 @@ import qualified Data.Set as S
 key_proto_field_index :: Core.Name
 key_proto_field_index = Core.Name "proto_field_index"
 
-err :: Context.Context -> String -> Either (Context.InContext Error.Error) t0
+err :: Context.Context -> String -> Either (Context.InContext Errors.Error) t0
 err cx msg =
     Left (Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError msg)),
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError msg)),
       Context.inContextContext = cx})
 
-unexpectedE :: Context.Context -> String -> String -> Either (Context.InContext Error.Error) t0
+unexpectedE :: Context.Context -> String -> String -> Either (Context.InContext Errors.Error) t0
 unexpectedE cx expected found =
     err cx (Strings.cat [
       "Expected ",
@@ -61,10 +61,10 @@ unexpectedE cx expected found =
       ", found: ",
       found])
 
-fromEitherString :: Context.Context -> Either String t0 -> Either (Context.InContext Error.Error) t0
+fromEitherString :: Context.Context -> Either String t0 -> Either (Context.InContext Errors.Error) t0
 fromEitherString cx e =
     Eithers.bimap (\msg -> Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError msg)),
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError msg)),
       Context.inContextContext = cx}) (\a -> a) e
 
 -- | Generate a message name for a structural type reference
@@ -112,7 +112,7 @@ structuralTypeName localNs ref =
           (typeSuffix (Pairs.second v0))]))
 
 -- | Generate a helper message definition for a structural type
-generateStructuralTypeMessage :: Context.Context -> t0 -> Module.Namespace -> Environment.StructuralTypeRef -> Either (Context.InContext Error.Error) (Proto3.Definition, Context.Context)
+generateStructuralTypeMessage :: Context.Context -> t0 -> Module.Namespace -> Environment.StructuralTypeRef -> Either (Context.InContext Errors.Error) (Proto3.Definition, Context.Context)
 generateStructuralTypeMessage cx g localNs ref =
 
       let cx1 = Annotations.resetCount key_proto_field_index cx
@@ -161,7 +161,7 @@ generateStructuralTypeMessage cx g localNs ref =
                 Proto3.messageDefinitionOptions = []}), cx4))))))
 
 -- | Encode a simple type for helper message fields
-encodeSimpleTypeForHelper :: Context.Context -> Module.Namespace -> Core.Type -> Either (Context.InContext Error.Error) Proto3.SimpleType
+encodeSimpleTypeForHelper :: Context.Context -> Module.Namespace -> Core.Type -> Either (Context.InContext Errors.Error) Proto3.SimpleType
 encodeSimpleTypeForHelper cx localNs typ =
 
       let forNominal = \name -> Right (Proto3.SimpleTypeReference (encodeTypeReference localNs name))
@@ -189,7 +189,7 @@ collectStructuralTypes_collectFromType typ =
         _ -> acc) Sets.empty typ
 
 -- | Convert a Hydra module to Protocol Buffers v3 source files
-moduleToProtobuf :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (M.Map String String)
+moduleToProtobuf :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
 moduleToProtobuf mod defs cx g =
 
       let ns_ = Module.moduleNamespace mod
@@ -207,7 +207,7 @@ javaPackageOptionName :: String
 javaPackageOptionName = "java_package"
 
 -- | Construct a Protobuf file from a Hydra module and its type definitions
-constructModule :: Context.Context -> Graph.Graph -> Module.Module -> [Module.TypeDefinition] -> Either (Context.InContext Error.Error) Proto3.ProtoFile
+constructModule :: Context.Context -> Graph.Graph -> Module.Module -> [Module.TypeDefinition] -> Either (Context.InContext Errors.Error) Proto3.ProtoFile
 constructModule cx g mod typeDefs =
 
       let ns_ = Module.moduleNamespace mod
@@ -294,7 +294,7 @@ encodeDefinition cx g localNs name typ =
                     Core.FieldType {
                       Core.fieldTypeName = (Core.Name "value"),
                       Core.fieldTypeType = t}]
-          toEitherString = \result -> Eithers.bimap (\ic -> Error_.error (Context.inContextObject ic)) (\a -> a) result
+          toEitherString = \result -> Eithers.bimap (\ic -> Errors_.error (Context.inContextObject ic)) (\a -> a) result
           encode =
                   \cx0 -> \options -> \t -> case (simplifyType t) of
                     Core.TypeRecord v0 -> Eithers.map (\md -> Proto3.DefinitionMessage md) (toEitherString (encodeRecordType cx0 g localNs options name v0))
@@ -303,7 +303,7 @@ encodeDefinition cx g localNs name typ =
       in (Eithers.bind (toEitherString (findOptions cx g typ)) (\options -> encode cx2 options typ))
 
 -- | Encode a Hydra union type as a Protobuf enum definition
-encodeEnumDefinition :: Context.Context -> Graph.Graph -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Error.Error) Proto3.EnumDefinition
+encodeEnumDefinition :: Context.Context -> Graph.Graph -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Errors.Error) Proto3.EnumDefinition
 encodeEnumDefinition cx g options tname fts =
 
       let unspecifiedField =
@@ -342,7 +342,7 @@ encodeFieldName preserve name =
     Proto3.FieldName (Logic.ifElse preserve (Core.unName name) (Formatting.convertCaseCamelToLowerSnake (Core.unName name)))
 
 -- | Encode a Hydra field type as a Protobuf field
-encodeFieldType :: Context.Context -> Graph.Graph -> Module.Namespace -> Core.FieldType -> Either (Context.InContext Error.Error) (Proto3.Field, Context.Context)
+encodeFieldType :: Context.Context -> Graph.Graph -> Module.Namespace -> Core.FieldType -> Either (Context.InContext Errors.Error) (Proto3.Field, Context.Context)
 encodeFieldType cx g localNs ft =
 
       let fname = Core.fieldTypeName ft
@@ -378,7 +378,7 @@ encodeFieldType cx g localNs ft =
                       Core.TypeVariable v0 -> Logic.ifElse noms (forNominal v0) (Eithers.bind (Lexical.requireElement cx0 g0 v0) (\el ->
                         let term = Core.bindingTerm el
                         in (Eithers.bind (Eithers.bimap (\de -> Context.InContext {
-                          Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError de))),
+                          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError de))),
                           Context.inContextContext = cx0}) (\t -> t) (Core_.type_ g0 term)) (\resolvedTyp -> encodeSimpleType_ cx0 g0 ns0 noms resolvedTyp))))
                       _ -> unexpectedE cx0 "simple type" (Core___.type_ (Rewriting.removeTypeAnnotations typ))
       in (Eithers.bind (findOptions cx g ftype) (\options -> Eithers.bind (encodeType_ cx g localNs ftype) (\ft_ ->
@@ -393,7 +393,7 @@ encodeFieldType cx g localNs ft =
           Proto3.fieldOptions = options}, cx1))))))
 
 -- | Encode a Hydra record type as a Protobuf message definition
-encodeRecordType :: Context.Context -> Graph.Graph -> Module.Namespace -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Error.Error) Proto3.MessageDefinition
+encodeRecordType :: Context.Context -> Graph.Graph -> Module.Namespace -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Errors.Error) Proto3.MessageDefinition
 encodeRecordType cx g localNs options tname fts =
     Eithers.bind (mapAccumResult (\cx_ -> \f -> encodeFieldType cx_ g localNs f) cx fts) (\result ->
       let pfields = Pairs.first result
@@ -403,7 +403,7 @@ encodeRecordType cx g localNs options tname fts =
         Proto3.messageDefinitionOptions = options})))
 
 -- | Encode a Hydra literal type as a Protobuf scalar type
-encodeScalarType :: Context.Context -> Core.LiteralType -> Either (Context.InContext Error.Error) Proto3.ScalarType
+encodeScalarType :: Context.Context -> Core.LiteralType -> Either (Context.InContext Errors.Error) Proto3.ScalarType
 encodeScalarType cx lt =
     case lt of
       Core.LiteralTypeBinary -> Right Proto3.ScalarTypeBytes
@@ -422,7 +422,7 @@ encodeScalarType cx lt =
       _ -> unexpectedE cx "supported literal type" (Core___.literalType lt)
 
 -- | Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars)
-encodeScalarTypeWrapped :: Context.Context -> Core.LiteralType -> Either (Context.InContext Error.Error) Proto3.SimpleType
+encodeScalarTypeWrapped :: Context.Context -> Core.LiteralType -> Either (Context.InContext Errors.Error) Proto3.SimpleType
 encodeScalarTypeWrapped cx lt =
 
       let toType =
@@ -474,7 +474,7 @@ flattenType typ =
       _ -> recurse t) typ
 
 -- | Find Protobuf options for a type (description and deprecated)
-findOptions :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.Error) [Proto3.Option]
+findOptions :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Errors.Error) [Proto3.Option]
 findOptions cx g typ =
     Eithers.bind (Annotations.getTypeDescription cx g typ) (\mdesc -> Eithers.bind (readBooleanAnnotation cx g Constants.key_deprecated typ) (\bdep ->
       let mdescAnn =
@@ -515,7 +515,7 @@ namespaceToPackageName ns_ =
     Proto3.PackageName (Strings.intercalate "." (Lists.map (\s -> Formatting.convertCaseCamelToLowerSnake s) (Lists.init (Strings.splitOn "." (Module.unNamespace ns_)))))
 
 -- | Read a boolean annotation from a type
-readBooleanAnnotation :: Context.Context -> Graph.Graph -> Core.Name -> Core.Type -> Either (Context.InContext Error.Error) Bool
+readBooleanAnnotation :: Context.Context -> Graph.Graph -> Core.Name -> Core.Type -> Either (Context.InContext Errors.Error) Bool
 readBooleanAnnotation cx g key typ =
     Maybes.maybe (Right False) (\term -> Core__.boolean cx g term) (Maps.lookup key (Annotations.typeAnnotationInternal typ))
 

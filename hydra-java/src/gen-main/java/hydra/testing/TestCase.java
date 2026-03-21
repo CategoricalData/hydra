@@ -86,6 +86,8 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
 
   public static final hydra.core.Name UNSHADOW_VARIABLES = new hydra.core.Name("unshadowVariables");
 
+  public static final hydra.core.Name VALIDATE_CORE_TERM = new hydra.core.Name("validateCoreTerm");
+
   private TestCase () {
 
   }
@@ -168,6 +170,8 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     R visit(JoinTypes instance) ;
 
     R visit(UnshadowVariables instance) ;
+
+    R visit(ValidateCoreTerm instance) ;
   }
 
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -324,6 +328,10 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     }
 
     default R visit(UnshadowVariables instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(ValidateCoreTerm instance) {
       return otherwise(instance);
     }
   }
@@ -1953,6 +1961,49 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         return tagCmp;
       }
       UnshadowVariables o = (UnshadowVariables) other;
+      return ((Comparable) value).compareTo(o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
+   * A core term validation test
+   */
+  public static final class ValidateCoreTerm extends hydra.testing.TestCase implements Serializable {
+    public final hydra.testing.ValidateCoreTermTestCase value;
+
+    public ValidateCoreTerm (hydra.testing.ValidateCoreTermTestCase value) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof ValidateCoreTerm)) {
+        return false;
+      }
+      ValidateCoreTerm o = (ValidateCoreTerm) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TestCase other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      ValidateCoreTerm o = (ValidateCoreTerm) other;
       return ((Comparable) value).compareTo(o.value);
     }
 

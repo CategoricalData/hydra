@@ -273,16 +273,16 @@ public class Generation {
             @Override
             public Module visit(Either.Right<String, hydra.core.Term> instance) {
                 hydra.core.Term term = instance.value;
-                Either<hydra.error.DecodingError, Module> modResult =
+                Either<hydra.errors.DecodingError, Module> modResult =
                     hydra.decode.module.Module.module(bsGraph, term);
-                return modResult.accept(new Either.Visitor<hydra.error.DecodingError, Module, Module>() {
+                return modResult.accept(new Either.Visitor<hydra.errors.DecodingError, Module, Module>() {
                     @Override
-                    public Module visit(Either.Left<hydra.error.DecodingError, Module> left) {
+                    public Module visit(Either.Left<hydra.errors.DecodingError, Module> left) {
                         throw new RuntimeException("Module decode error: " + left.value.value);
                     }
 
                     @Override
-                    public Module visit(Either.Right<hydra.error.DecodingError, Module> right) {
+                    public Module visit(Either.Right<hydra.errors.DecodingError, Module> right) {
                         Module mod = right.value;
                         return stripTypeSchemes
                             ? CodeGeneration.stripModuleTypeSchemes(mod)
@@ -381,7 +381,7 @@ public class Generation {
      * Generate source files and write them to disk.
      */
     public static void generateSources(
-            Function<Module, Function<ConsList<Definition>, Function<hydra.context.Context, Function<Graph, Either<hydra.context.InContext<hydra.error.Error_>, PersistentMap<String, String>>>>>> coder,
+            Function<Module, Function<ConsList<Definition>, Function<hydra.context.Context, Function<Graph, Either<hydra.context.InContext<hydra.errors.Error_>, PersistentMap<String, String>>>>>> coder,
             hydra.coders.Language language,
             boolean doInfer,
             boolean doExpand,
@@ -393,16 +393,16 @@ public class Generation {
         Graph bsGraph = bootstrapGraph();
         hydra.context.Context cx = new hydra.context.Context(
                 ConsList.empty(), ConsList.empty(), PersistentMap.empty());
-        Either<hydra.context.InContext<hydra.error.Error_>, ConsList<Pair<String, String>>> result =
+        Either<hydra.context.InContext<hydra.errors.Error_>, ConsList<Pair<String, String>>> result =
                 CodeGeneration.generateSourceFiles(coder, language,
                         doInfer, doExpand, doHoistCase, doHoistPoly,
                         bsGraph, ConsList.fromList(universe), ConsList.fromList(modulesToGenerate), cx);
         ConsList<Pair<String, String>> files;
         if (result.isLeft()) {
-            hydra.context.InContext<hydra.error.Error_> err = ((Either.Left<hydra.context.InContext<hydra.error.Error_>, ConsList<Pair<String, String>>>) result).value;
-            throw new RuntimeException("Code generation failed: " + hydra.show.error.Error_.error(err.object));
+            hydra.context.InContext<hydra.errors.Error_> err = ((Either.Left<hydra.context.InContext<hydra.errors.Error_>, ConsList<Pair<String, String>>>) result).value;
+            throw new RuntimeException("Code generation failed: " + hydra.show.errors.Errors.error(err.object));
         }
-        files = ((Either.Right<hydra.context.InContext<hydra.error.Error_>, ConsList<Pair<String, String>>>) result).value;
+        files = ((Either.Right<hydra.context.InContext<hydra.errors.Error_>, ConsList<Pair<String, String>>>) result).value;
         for (Pair<String, String> pair : files) {
             String filePath = basePath + File.separator + pair.first;
             String content = pair.second;

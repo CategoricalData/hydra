@@ -123,9 +123,9 @@ public class TestSuiteRunner {
             String detail = "";
             if (leftVal instanceof hydra.context.InContext) {
                 Object obj = ((hydra.context.InContext<?>) leftVal).object;
-                if (obj instanceof hydra.error.Error_) {
-                    detail = ": " + hydra.show.error.Error_.error((hydra.error.Error_) obj);
-                } else if (obj instanceof hydra.error.UnificationError) {
+                if (obj instanceof hydra.errors.Error_) {
+                    detail = ": " + hydra.show.errors.Errors.error((hydra.errors.Error_) obj);
+                } else if (obj instanceof hydra.errors.UnificationError) {
                     detail = ": " + obj;
                 } else {
                     detail = ": " + obj;
@@ -362,13 +362,13 @@ public class TestSuiteRunner {
                                 apply(
                                     match("hydra.core.Term", Maybe.just(
                                         left(record("hydra.context.InContext",
-                                            field("object", inject("hydra.error.Error", field("other", wrap("hydra.error.OtherError", string("Expected string literal"))))),
+                                            field("object", inject("hydra.errors.Error", field("other", wrap("hydra.errors.OtherError", string("Expected string literal"))))),
                                             field("context", var("cx"))))),
                                         field("literal", lambda("lit",
                                             apply(
                                                 match("hydra.core.Literal", Maybe.just(
                                                     left(record("hydra.context.InContext",
-                                                        field("object", inject("hydra.error.Error", field("other", wrap("hydra.error.OtherError", string("Expected string literal"))))),
+                                                        field("object", inject("hydra.errors.Error", field("other", wrap("hydra.errors.OtherError", string("Expected string literal"))))),
                                                         field("context", var("cx"))))),
                                                     field("string", lambda("s", right(just(var("s")))))),
                                                 var("lit"))))),
@@ -497,10 +497,10 @@ public class TestSuiteRunner {
         Graph graph = getTestGraph();
         String suffix = " (" + name + ")";
 
-        hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Term> reduced =
+        hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, Term> reduced =
             hydra.reduction.Reduction.reduceTerm(emptyContext(), graph, eager, input);
         if (reduced.isRight()) {
-            Term result = ((hydra.util.Either.Right<hydra.context.InContext<hydra.error.Error_>, Term>) reduced).value;
+            Term result = ((hydra.util.Either.Right<hydra.context.InContext<hydra.errors.Error_>, Term>) reduced).value;
             if (!result.equals(output)) {
                 assertEquals(hydra.show.core.Core.term(output),
                     hydra.show.core.Core.term(result),
@@ -509,9 +509,9 @@ public class TestSuiteRunner {
                     "Original term does not reduce to expected term" + suffix);
             }
         } else {
-            hydra.context.InContext<hydra.error.Error_> err =
-                ((hydra.util.Either.Left<hydra.context.InContext<hydra.error.Error_>, Term>) reduced).value;
-            fail("Reduction failed: " + hydra.show.error.Error_.error(err.object) + suffix);
+            hydra.context.InContext<hydra.errors.Error_> err =
+                ((hydra.util.Either.Left<hydra.context.InContext<hydra.errors.Error_>, Term>) reduced).value;
+            fail("Reduction failed: " + hydra.show.errors.Errors.error(err.object) + suffix);
         }
     }
 
@@ -643,13 +643,13 @@ public class TestSuiteRunner {
                 EtaExpansionTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
-                    hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Term> result =
+                    hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, Term> result =
                         hydra.reduction.Reduction.etaExpandTypedTerm(emptyContext(), graph, tc.input);
                     assertTrue(result.isRight(),
                         "Eta expansion failed: " + (result.isLeft()
-                            ? hydra.show.error.Error_.error(((hydra.util.Either.Left<hydra.context.InContext<hydra.error.Error_>, Term>) result).value.object)
+                            ? hydra.show.errors.Errors.error(((hydra.util.Either.Left<hydra.context.InContext<hydra.errors.Error_>, Term>) result).value.object)
                             : ""));
-                    assertEquals(tc.output, ((hydra.util.Either.Right<hydra.context.InContext<hydra.error.Error_>, Term>) result).value);
+                    assertEquals(tc.output, ((hydra.util.Either.Right<hydra.context.InContext<hydra.errors.Error_>, Term>) result).value);
                 });
             }
 
@@ -658,7 +658,7 @@ public class TestSuiteRunner {
                 EvaluationTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
-                    hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Term> reduced;
+                    hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, Term> reduced;
                     try {
                         reduced = hydra.reduction.Reduction.reduceTerm(emptyContext(), graph, true, tc.input);
                     } catch (Exception e) {
@@ -669,9 +669,9 @@ public class TestSuiteRunner {
                         "Evaluation failed for input: " + hydra.show.core.Core.term(tc.input)
                         + "\nExpected: " + hydra.show.core.Core.term(tc.output)
                         + "\nError: " + (reduced.isLeft()
-                            ? hydra.show.error.Error_.error(((hydra.util.Either.Left<hydra.context.InContext<hydra.error.Error_>, Term>) reduced).value.object)
+                            ? hydra.show.errors.Errors.error(((hydra.util.Either.Left<hydra.context.InContext<hydra.errors.Error_>, Term>) reduced).value.object)
                             : ""));
-                    Term result = ((hydra.util.Either.Right<hydra.context.InContext<hydra.error.Error_>, Term>) reduced).value;
+                    Term result = ((hydra.util.Either.Right<hydra.context.InContext<hydra.errors.Error_>, Term>) reduced).value;
                     if (!termsEqual(tc.output, result)) {
                         String expectedStr = hydra.show.core.Core.term(tc.output);
                         String actualStr = hydra.show.core.Core.term(result);
@@ -1088,6 +1088,14 @@ public class TestSuiteRunner {
                     assertEquals(hydra.show.core.Core.term(tc.output),
                         hydra.show.core.Core.term(hydra.rewriting.Rewriting.unshadowVariables(tc.input))));
             }
+
+            @Override
+            public DynamicTest visit(TestCase.ValidateCoreTerm instance) {
+                ValidateCoreTermTestCase tc = instance.value;
+                return withTimeout(name, () ->
+                    assertEquals(tc.output,
+                        hydra.validate.core.Core.term(hydra.lexical.Lexical.emptyGraph(), tc.input)));
+            }
         });
     }
 
@@ -1285,7 +1293,7 @@ public class TestSuiteRunner {
         Name coderName = new Name("hydra.util.Coder");
         Name contextName = new Name("hydra.context.Context");
         Name inContextName = new Name("hydra.context.InContext");
-        Name errorName = new Name("hydra.error.Error");
+        Name errorName = new Name("hydra.errors.Error");
         // InContext Error = Application(InContext, Error)
         Type inContextError = new Type.Application(new ApplicationType(
             new Type.Variable(inContextName),
@@ -1330,7 +1338,7 @@ public class TestSuiteRunner {
                     new FieldType(new Name("context"), new Type.Variable(contextName)))))));
 
         // Error: union type with multiple error variants
-        Name otherErrorName = new Name("hydra.error.OtherError");
+        Name otherErrorName = new Name("hydra.errors.OtherError");
         types.put(otherErrorName,
             new Type.Wrap(
                 new Type.Literal(new LiteralType.String_())));

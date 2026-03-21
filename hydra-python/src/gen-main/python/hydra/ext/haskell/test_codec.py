@@ -36,7 +36,7 @@ import hydra.names
 import hydra.rewriting
 import hydra.schemas
 import hydra.serialization
-import hydra.show.error
+import hydra.show.errors
 import hydra.substitution
 import hydra.testing
 import hydra.typing
@@ -95,7 +95,7 @@ def build_namespaces_for_test_group(mod: hydra.module.Module, tgroup: hydra.test
     def test_bindings() -> frozenlist[hydra.core.Binding]:
         return hydra.lib.lists.map((lambda term: hydra.core.Binding(hydra.core.Name("_test_"), term, Nothing())), test_terms())
     temp_module = hydra.module.Module(mod.namespace, test_bindings(), mod.term_dependencies, mod.type_dependencies, mod.description)
-    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda a: a), hydra.ext.haskell.utils.namespaces_for_module(temp_module, hydra.lexical.empty_context(), graph_)), (lambda base_namespaces: (encoded_names := hydra.lib.sets.unions(hydra.lib.lists.map((lambda t: extract_encoded_term_variable_names(graph_, t)), test_terms())), Right(add_namespaces_to_namespaces(base_namespaces, encoded_names)))[1]))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda a: a), hydra.ext.haskell.utils.namespaces_for_module(temp_module, hydra.lexical.empty_context(), graph_)), (lambda base_namespaces: (encoded_names := hydra.lib.sets.unions(hydra.lib.lists.map((lambda t: extract_encoded_term_variable_names(graph_, t)), test_terms())), Right(add_namespaces_to_namespaces(base_namespaces, encoded_names)))[1]))
 
 def build_test_module_with_codec(codec: hydra.testing.TestCodec, test_module: hydra.module.Module, test_group: hydra.testing.TestGroup, test_body: str, namespaces: T0) -> str:
     r"""Build the complete test module using a TestCodec."""
@@ -172,7 +172,7 @@ def try_infer_type_of(g: hydra.graph.Graph, term: hydra.core.Term) -> Maybe[tupl
 def type_to_haskell(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], typ: hydra.core.Type, g: T0) -> Either[str, str]:
     r"""Convert a Hydra type to a Haskell type expression string."""
 
-    return hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda arg_: hydra.serialization.print_expr(hydra.serialization.parenthesize(hydra.ext.haskell.serde.type_to_expr(arg_)))), hydra.ext.haskell.coder.encode_type(namespaces, typ, hydra.lexical.empty_context(), g))
+    return hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda arg_: hydra.serialization.print_expr(hydra.serialization.parenthesize(hydra.ext.haskell.serde.type_to_expr(arg_)))), hydra.ext.haskell.coder.encode_type(namespaces, typ, hydra.lexical.empty_context(), g))
 
 def generate_type_annotation_for(g: hydra.graph.Graph, namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], input_term: hydra.core.Term, output_term: hydra.core.Term) -> Either[str, Maybe[str]]:
     r"""Generate a type annotation for polymorphic output values."""
@@ -239,7 +239,7 @@ def namespace_to_module_name(ns_: hydra.module.Namespace) -> str:
 def term_to_haskell(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], term: hydra.core.Term, g: hydra.graph.Graph) -> Either[str, str]:
     r"""Convert a Hydra term to a Haskell expression string."""
 
-    return hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda arg_: hydra.serialization.print_expr(hydra.serialization.parenthesize(hydra.ext.haskell.serde.expression_to_expr(arg_)))), hydra.ext.haskell.coder.encode_term(0, namespaces, term, hydra.lexical.empty_context(), g))
+    return hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda arg_: hydra.serialization.print_expr(hydra.serialization.parenthesize(hydra.ext.haskell.serde.expression_to_expr(arg_)))), hydra.ext.haskell.coder.encode_term(0, namespaces, term, hydra.lexical.empty_context(), g))
 
 def haskell_test_codec(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName]) -> hydra.testing.TestCodec:
     r"""Create a Haskell TestCodec that uses the real Haskell coder."""

@@ -12,7 +12,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Decode.Module as Module
 import qualified Hydra.Encode.Module as Module_
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Json.Decode as Decode
@@ -34,7 +34,7 @@ import qualified Hydra.Module as Module__
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core__
-import qualified Hydra.Show.Error as Error_
+import qualified Hydra.Show.Errors as Errors_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -110,7 +110,7 @@ modulesToGraph bsGraph universeModules modules =
       in (Lexical.elementsToGraph bsGraph schemaTypes dataElements)
 
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs.
-generateSourceFiles :: Ord t0 => ((Module__.Module -> [Module__.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Bool -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Context.Context -> Either (Context.InContext Error.Error) [(t0, t1)])
+generateSourceFiles :: Ord t0 => ((Module__.Module -> [Module__.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Bool -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Context.Context -> Either (Context.InContext Errors.Error) [(t0, t1)])
 generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bsGraph universeModules modsToGenerate cx =
 
       let namespaceMap =
@@ -134,7 +134,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
         let nameLists =
                 Lists.map (\m -> Lists.map (\e -> Core.bindingName e) (Lists.filter (\e -> Annotations.isNativeType e) (Module__.moduleElements m))) typeModulesToGenerate
         in (Eithers.bind (Eithers.bimap (\s -> Context.InContext {
-          Context.inContextObject = (Error.ErrorOther (Error.OtherError s)),
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError s)),
           Context.inContextContext = cx}) (\r -> r) (Adapt.schemaGraphToDefinitions constraints schemaGraph nameLists cx)) (\schemaResult ->
           let defLists = Pairs.second schemaResult
               schemaGraphWithTypes =
@@ -153,7 +153,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
             in (Eithers.map (\m -> Maps.toList m) (printDefinitions mod (Lists.map (\d -> Module__.DefinitionType d) defs) cx schemaGraphWithTypes))) (Lists.zip typeModulesToGenerate defLists))))))) (\schemaFiles -> Eithers.bind (Logic.ifElse (Lists.null termModulesToGenerate) (Right []) (
         let namespaces = Lists.map (\m -> Module__.moduleNamespace m) termModulesToGenerate
         in (Eithers.bind (Eithers.bimap (\s -> Context.InContext {
-          Context.inContextObject = (Error.ErrorOther (Error.OtherError s)),
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError s)),
           Context.inContextContext = cx}) (\r -> r) (Adapt.dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataElements dataGraph namespaces cx)) (\dataResult ->
           let g1 = Pairs.first dataResult
               defLists = Pairs.second dataResult
@@ -188,7 +188,7 @@ formatPrimitive prim =
       in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
 
 -- | Format a type binding for the lexicon
-formatTypeBinding :: Graph.Graph -> Core.Binding -> Either Error.DecodingError String
+formatTypeBinding :: Graph.Graph -> Core.Binding -> Either Errors.DecodingError String
 formatTypeBinding graph binding =
     Eithers.bind (Core_.type_ graph (Core.bindingTerm binding)) (\typ -> Right (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " (Core.unName (Core.bindingName binding))) " = ") (Core__.type_ typ)))
 
@@ -219,7 +219,7 @@ moduleToSourceModule m =
         Module__.moduleDescription = (Just (Strings.cat2 "Source module for " (Module__.unNamespace (Module__.moduleNamespace m))))}
 
 -- | Generate the lexicon content from a graph
-generateLexicon :: Graph.Graph -> Either Error.DecodingError String
+generateLexicon :: Graph.Graph -> Either Errors.DecodingError String
 generateLexicon graph =
 
       let bindings = Lexical.graphToBindings graph
@@ -243,7 +243,7 @@ moduleToJson m =
       in (Eithers.map (\json -> Writer.printJson json) (Encode.toJson term))
 
 -- | Perform type inference on modules and reconstruct with inferred types
-inferModules :: Context.Context -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Either (Context.InContext Error.Error) [Module__.Module]
+inferModules :: Context.Context -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Either (Context.InContext Errors.Error) [Module__.Module]
 inferModules cx bsGraph universeMods targetMods =
 
       let g0 = modulesToGraph bsGraph universeMods universeMods
@@ -289,9 +289,9 @@ inferAndGenerateLexicon cx bsGraph kernelModules =
       let g0 = modulesToGraph bsGraph kernelModules kernelModules
           dataElements =
                   Lists.filter (\e -> Logic.not (Annotations.isNativeType e)) (Lists.concat (Lists.map (\m -> Module__.moduleElements m) kernelModules))
-      in (Eithers.bind (Eithers.bimap (\ic -> Error_.error (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx dataElements g0)) (\inferResultWithCx ->
+      in (Eithers.bind (Eithers.bimap (\ic -> Errors_.error (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx dataElements g0)) (\inferResultWithCx ->
         let g1 = Pairs.first (Pairs.first inferResultWithCx)
-        in (Eithers.bimap Error.unDecodingError (\x -> x) (generateLexicon g1))))
+        in (Eithers.bimap Errors.unDecodingError (\x -> x) (generateLexicon g1))))
 
 -- | Escape unescaped control characters inside JSON string literals
 escapeControlCharsInJson :: [Int] -> [Int]
@@ -320,4 +320,4 @@ decodeModuleFromJson bsGraph universeModules doStripTypeSchemes jsonVal =
       let graph = modulesToGraph bsGraph universeModules universeModules
           schemaMap = buildSchemaMap graph
           modType = Core.TypeVariable (Core.Name "hydra.module.Module")
-      in (Eithers.either (\err -> Left err) (\term -> Eithers.either (\decErr -> Left (Error.unDecodingError decErr)) (\mod -> Right (Logic.ifElse doStripTypeSchemes (stripModuleTypeSchemes mod) mod)) (Module.module_ graph term)) (Decode.fromJson schemaMap (Core.Name "hydra.module.Module") modType jsonVal))
+      in (Eithers.either (\err -> Left err) (\term -> Eithers.either (\decErr -> Left (Errors.unDecodingError decErr)) (\mod -> Right (Logic.ifElse doStripTypeSchemes (stripModuleTypeSchemes mod) mod)) (Module.module_ graph term)) (Decode.fromJson schemaMap (Core.Name "hydra.module.Module") modType jsonVal))

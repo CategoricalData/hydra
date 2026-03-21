@@ -6,7 +6,7 @@ module Hydra.Eval.Lib.Pairs where
 
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core_
@@ -18,7 +18,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Interpreter-friendly bimap for Pair terms.
-bimap :: Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+bimap :: Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 bimap cx g firstFun secondFun pairTerm =
     case pairTerm of
       Core.TermPair v0 ->
@@ -30,5 +30,5 @@ bimap cx g firstFun secondFun pairTerm =
           Core.applicationFunction = secondFun,
           Core.applicationArgument = snd})))))
       _ -> Left (Context.InContext {
-        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "pair value") " but found ") (Core_.term pairTerm)))),
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "pair value") " but found ") (Core_.term pairTerm)))),
         Context.inContextContext = cx})

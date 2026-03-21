@@ -24,7 +24,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Serialization as Serialization
-import qualified Hydra.Show.Error as Error
+import qualified Hydra.Show.Errors as Errors
 import qualified Hydra.Test.Utils as Utils
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Util as Util
@@ -38,7 +38,7 @@ import qualified Data.Set as S
 -- | Convert a Hydra term to a Java expression string
 termToJava :: Core.Term -> Graph.Graph -> Either String String
 termToJava term g =
-    Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.writeExpression arg_)) (Coder.encodeTerm (Helpers.JavaEnvironment {
+    Eithers.bimap (\ic -> Errors.error (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.writeExpression arg_)) (Coder.encodeTerm (Helpers.JavaEnvironment {
       Helpers.javaEnvironmentAliases = Helpers.Aliases {
         Helpers.aliasesCurrentNamespace = (Module.Namespace "test"),
         Helpers.aliasesPackages = Maps.empty,

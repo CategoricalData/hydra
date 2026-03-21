@@ -7,7 +7,7 @@ module Hydra.Adapt where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Hoisting as Hoisting
 import qualified Hydra.Inference as Inference
@@ -30,7 +30,7 @@ import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core_
-import qualified Hydra.Show.Error as Error_
+import qualified Hydra.Show.Errors as Errors_
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -67,7 +67,7 @@ adaptDataGraph constraints doExpand els0 cx graph0 =
           prims0 = Graph.graphPrimitives graph0
           schemaTypes0 = Graph.graphSchemaTypes graph0
           schemaBindings = Schemas.typesToElements (Maps.map (\ts -> Rewriting.typeSchemeToFType ts) schemaTypes0)
-      in (Eithers.bind (Logic.ifElse (Maps.null schemaTypes0) (Right Maps.empty) (Eithers.bind (Eithers.bimap (\ic -> Error.unDecodingError (Context.inContextObject ic)) (\x -> x) (Schemas.graphAsTypes cx graph0 schemaBindings)) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 -> Right (Maps.map (\t -> Schemas.typeToTypeScheme t) tmap1))))) (\schemaResult ->
+      in (Eithers.bind (Logic.ifElse (Maps.null schemaTypes0) (Right Maps.empty) (Eithers.bind (Eithers.bimap (\ic -> Errors.unDecodingError (Context.inContextObject ic)) (\x -> x) (Schemas.graphAsTypes cx graph0 schemaBindings)) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 -> Right (Maps.map (\t -> Schemas.typeToTypeScheme t) tmap1))))) (\schemaResult ->
         let adaptedSchemaTypes = schemaResult
             gterm0 =
                     Core.TermLet (Core.Let {
@@ -347,7 +347,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                       Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
           bins0 = originalBindings
           bins1 = Logic.ifElse doHoistCaseStatements (hoistCases bins0) bins0
-      in (Eithers.bind (Logic.ifElse doInfer (Eithers.map (\result -> Pairs.second (Pairs.first result)) (Eithers.bimap (\ic -> Error_.error (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx bins1 (rebuildGraph bins1)))) (checkBindingsTyped "after case hoisting" bins1)) (\bins2 -> Eithers.bind (Logic.ifElse doHoistPolymorphicLetBindings (checkBindingsTyped "after let hoisting" (hoistPoly bins2)) (Right bins2)) (\bins3 -> Eithers.bind (adaptDataGraph constraints doExpand bins3 cx (rebuildGraph bins3)) (\adaptResult ->
+      in (Eithers.bind (Logic.ifElse doInfer (Eithers.map (\result -> Pairs.second (Pairs.first result)) (Eithers.bimap (\ic -> Errors_.error (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx bins1 (rebuildGraph bins1)))) (checkBindingsTyped "after case hoisting" bins1)) (\bins2 -> Eithers.bind (Logic.ifElse doHoistPolymorphicLetBindings (checkBindingsTyped "after let hoisting" (hoistPoly bins2)) (Right bins2)) (\bins3 -> Eithers.bind (adaptDataGraph constraints doExpand bins3 cx (rebuildGraph bins3)) (\adaptResult ->
         let adapted = Pairs.first adaptResult
             adaptedBindings = Pairs.second adaptResult
         in (Eithers.bind (checkBindingsTyped "after adaptation" adaptedBindings) (\bins4 ->
@@ -495,7 +495,7 @@ schemaGraphToDefinitions :: Coders.LanguageConstraints -> Graph.Graph -> [[Core.
 schemaGraphToDefinitions constraints graph nameLists cx =
 
       let litmap = adaptLiteralTypesMap constraints
-      in (Eithers.bind (Eithers.bimap (\ic -> Error.unDecodingError (Context.inContextObject ic)) (\x -> x) (Schemas.graphAsTypes cx graph (Lexical.graphToBindings graph))) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->
+      in (Eithers.bind (Eithers.bimap (\ic -> Errors.unDecodingError (Context.inContextObject ic)) (\x -> x) (Schemas.graphAsTypes cx graph (Lexical.graphToBindings graph))) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->
         let toDef =
                 \pair -> Module.TypeDefinition {
                   Module.typeDefinitionName = (Pairs.first pair),
@@ -514,7 +514,7 @@ simpleLanguageAdapter lang cx g typ =
         Util.adapterTarget = adaptedType,
         Util.adapterCoder = Util.Coder {
           Util.coderEncode = (\cx -> \term -> Eithers.bimap (\_s -> Context.InContext {
-            Context.inContextObject = (Error.ErrorOther (Error.OtherError _s)),
+            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError _s)),
             Context.inContextContext = cx}) (\_x -> _x) (adaptTerm constraints litmap cx g term)),
           Util.coderDecode = (\cx -> \term -> Right term)}})))
 
@@ -548,7 +548,7 @@ termAlternatives cx graph term =
                       in Core.Field {
                         Core.fieldName = fname,
                         Core.fieldTerm = (Core.TermMaybe (Logic.ifElse (Equality.equal ftname fname) (Just fterm) Nothing))}
-        in (Eithers.bind (Eithers.bimap (\ic -> Error_.error (Context.inContextObject ic)) (\x -> x) (Schemas.requireUnionType cx graph tname)) (\rt -> Right [
+        in (Eithers.bind (Eithers.bimap (\ic -> Errors_.error (Context.inContextObject ic)) (\x -> x) (Schemas.requireUnionType cx graph tname)) (\rt -> Right [
           Core.TermRecord (Core.Record {
             Core.recordTypeName = tname,
             Core.recordFields = (Lists.map forFieldType rt)})]))

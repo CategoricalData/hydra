@@ -450,6 +450,11 @@ public interface Testing {
       public hydra.core.Term visit(hydra.testing.TestCase.UnshadowVariables y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("unshadowVariables"), hydra.encode.testing.Testing.unshadowVariablesTestCase((y).value))));
       }
+
+      @Override
+      public hydra.core.Term visit(hydra.testing.TestCase.ValidateCoreTerm y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("validateCoreTerm"), hydra.encode.testing.Testing.validateCoreTermTestCase((y).value))));
+      }
     });
   }
 
@@ -625,5 +630,13 @@ public interface Testing {
           hydra.encode.typing.Typing::typeConstraint,
           xs))),
         (x).expected))))));
+  }
+
+  static hydra.core.Term validateCoreTermTestCase(hydra.testing.ValidateCoreTermTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.core.Core.term((x).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
+        hydra.encode.error.core.Core::invalidTermError,
+        (x).output))))));
   }
 }

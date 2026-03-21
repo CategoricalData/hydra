@@ -640,6 +640,9 @@ def test_case_unify_types(x: hydra.phantoms.TTerm[hydra.testing.UnifyTypesTestCa
 def test_case_unshadow_variables(x: hydra.phantoms.TTerm[hydra.testing.UnshadowVariablesTestCase]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("unshadowVariables"), x.value)))))
 
+def test_case_validate_core_term(x: hydra.phantoms.TTerm[hydra.testing.ValidateCoreTermTestCase]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("validateCoreTerm"), x.value)))))
+
 def test_case_variable_occurs_in_type(x: hydra.phantoms.TTerm[hydra.testing.VariableOccursInTypeTestCase]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("variableOccursInType"), x.value)))))
 
@@ -929,6 +932,21 @@ def unshadow_variables_test_case_with_input(original: hydra.phantoms.TTerm[hydra
 
 def unshadow_variables_test_case_with_output(original: hydra.phantoms.TTerm[hydra.testing.UnshadowVariablesTestCase], new_val: hydra.phantoms.TTerm[hydra.core.Term]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.UnshadowVariablesTestCase"), (hydra.core.Field(hydra.core.Name("input"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.testing.UnshadowVariablesTestCase"), hydra.core.Name("input")))))))), original.value)))), hydra.core.Field(hydra.core.Name("output"), new_val.value))))))
+
+def validate_core_term_test_case(input: hydra.phantoms.TTerm[hydra.core.Term], output: hydra.phantoms.TTerm[Maybe[hydra.error.core.InvalidTermError]]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), (hydra.core.Field(hydra.core.Name("input"), input.value), hydra.core.Field(hydra.core.Name("output"), output.value))))))
+
+def validate_core_term_test_case_input(x: hydra.phantoms.TTerm[hydra.testing.ValidateCoreTermTestCase]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), hydra.core.Name("input")))))))), x.value))))
+
+def validate_core_term_test_case_output(x: hydra.phantoms.TTerm[hydra.testing.ValidateCoreTermTestCase]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), hydra.core.Name("output")))))))), x.value))))
+
+def validate_core_term_test_case_with_input(original: hydra.phantoms.TTerm[hydra.testing.ValidateCoreTermTestCase], new_val: hydra.phantoms.TTerm[hydra.core.Term]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), (hydra.core.Field(hydra.core.Name("input"), new_val.value), hydra.core.Field(hydra.core.Name("output"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), hydra.core.Name("output")))))))), original.value)))))))))
+
+def validate_core_term_test_case_with_output(original: hydra.phantoms.TTerm[hydra.testing.ValidateCoreTermTestCase], new_val: hydra.phantoms.TTerm[Maybe[hydra.error.core.InvalidTermError]]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), (hydra.core.Field(hydra.core.Name("input"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), hydra.core.Name("input")))))))), original.value)))), hydra.core.Field(hydra.core.Name("output"), new_val.value))))))
 
 def variable_occurs_in_type_test_case(variable: hydra.phantoms.TTerm[hydra.core.Name], type: hydra.phantoms.TTerm[hydra.core.Type], expected: hydra.phantoms.TTerm[bool]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.VariableOccursInTypeTestCase"), (hydra.core.Field(hydra.core.Name("variable"), variable.value), hydra.core.Field(hydra.core.Name("type"), type.value), hydra.core.Field(hydra.core.Name("expected"), expected.value))))))

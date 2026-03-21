@@ -84,57 +84,6 @@ def count_var_occurrences(name: hydra.core.Name, term: hydra.core.Term) -> int:
         case _:
             return child_count()
 
-def rewrite_and_fold_term_with_type_context(f: Callable[[
-  Callable[[T0, hydra.core.Term], tuple[T0, hydra.core.Term]],
-  hydra.graph.Graph,
-  T0,
-  hydra.core.Term], tuple[T0, hydra.core.Term]], cx0: hydra.graph.Graph, val0: T0, term0: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
-    r"""Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms. Combines the features of rewriteAndFoldTerm and rewriteTermWithTypeContext. The user function f receives a recurse function that handles subterm traversal and Graph management."""
-
-    def wrapper(low_level_recurse: Callable[[tuple[T0, hydra.graph.Graph], hydra.core.Term], tuple[tuple[T0, T1], hydra.core.Term]], val_and_cx: tuple[T0, hydra.graph.Graph], term: hydra.core.Term) -> tuple[tuple[T0, hydra.graph.Graph], hydra.core.Term]:
-        @lru_cache(1)
-        def val() -> T0:
-            return hydra.lib.pairs.first(val_and_cx)
-        @lru_cache(1)
-        def cx() -> hydra.graph.Graph:
-            return hydra.lib.pairs.second(val_and_cx)
-        @lru_cache(1)
-        def cx1():
-            def _hoist_cx1_1(v1):
-                match v1:
-                    case hydra.core.FunctionLambda(value=l):
-                        return hydra.schemas.extend_graph_for_lambda(cx(), l)
-
-                    case _:
-                        return cx()
-            def _hoist_cx1_2(v1):
-                match v1:
-                    case hydra.core.TermFunction(value=fun):
-                        return _hoist_cx1_1(fun)
-
-                    case hydra.core.TermLet(value=l):
-                        return hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), cx(), l)
-
-                    case hydra.core.TermTypeLambda(value=tl):
-                        return hydra.schemas.extend_graph_for_type_lambda(cx(), tl)
-
-                    case _:
-                        return cx()
-            return _hoist_cx1_2(term)
-        def recurse_for_user(new_val: T0, subterm: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
-            @lru_cache(1)
-            def result() -> tuple[tuple[T0, T1], hydra.core.Term]:
-                return low_level_recurse((new_val, cx1()), subterm)
-            return (hydra.lib.pairs.first(hydra.lib.pairs.first(result())), hydra.lib.pairs.second(result()))
-        @lru_cache(1)
-        def f_result() -> tuple[T0, hydra.core.Term]:
-            return f((lambda x1, x2: recurse_for_user(x1, x2)), cx1(), val(), term)
-        return ((hydra.lib.pairs.first(f_result()), cx()), hydra.lib.pairs.second(f_result()))
-    @lru_cache(1)
-    def result() -> tuple[tuple[T0, hydra.graph.Graph], hydra.core.Term]:
-        return hydra.rewriting.rewrite_and_fold_term((lambda x1, x2, x3: wrapper(x1, x2, x3)), (val0, cx0), term0)
-    return (hydra.lib.pairs.first(hydra.lib.pairs.first(result())), hydra.lib.pairs.second(result()))
-
 def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Binding], bool], should_hoist_binding: Callable[[hydra.graph.Graph, hydra.core.Binding], bool], cx0: hydra.graph.Graph, let0: hydra.core.Let) -> hydra.core.Let:
     r"""Transform a let-term by pulling let bindings to the top level. The isParentBinding predicate applies to top-level bindings and determines whether their subterm bindings are eligible for hoisting. The shouldHoistBinding predicate takes the Graph and a subterm binding, and returns True if the binding should be hoisted. This is useful for targets like Java that cannot have polymorphic definitions in arbitrary positions. The Graph provides information about type variables and lambda variables in scope. If a hoisted binding captures let-bound or lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. If a hoisted binding captures type variables from an enclosing type lambda scope, those type variables are added to the binding's type scheme, and references are replaced with type applications. Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first."""
 
@@ -352,7 +301,7 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
         return _hoist_body_1(new_term())
     @lru_cache(1)
     def cx1() -> hydra.graph.Graph:
-        return hydra.schemas.extend_graph_for_let((lambda c, b: Nothing()), cx0, let0)
+        return hydra.rewriting.extend_graph_for_let((lambda c, b: Nothing()), cx0, let0)
     def for_active_binding(b: hydra.core.Binding) -> frozenlist[hydra.core.Binding]:
         @lru_cache(1)
         def prefix() -> str:
@@ -362,7 +311,7 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
             return ((), hydra.lib.sets.singleton(b.name))
         @lru_cache(1)
         def result_pair() -> tuple[tuple[frozenlist[hydra.core.Binding], frozenset[hydra.core.Name]], hydra.core.Term]:
-            return rewrite_and_fold_term_with_type_context((lambda v1, v2, v3, v4: rewrite(prefix(), v1, v2, v3, v4)), cx1(), init(), b.term)
+            return hydra.rewriting.rewrite_and_fold_term_with_graph((lambda v1, v2, v3, v4: rewrite(prefix(), v1, v2, v3, v4)), cx1(), init(), b.term)
         @lru_cache(1)
         def result_bindings() -> frozenlist[hydra.core.Binding]:
             return hydra.lib.pairs.first(hydra.lib.pairs.first(result_pair()))
@@ -387,61 +336,6 @@ def hoist_all_let_bindings(let0: hydra.core.Let) -> hydra.core.Let:
         return hydra.graph.Graph(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty())
     return hoist_let_bindings_with_predicate((lambda _: True), (lambda x1, x2: should_hoist_all(x1, x2)), empty_cx(), let0)
 
-def rewrite_and_fold_term_with_type_context_and_path(f: Callable[[
-  Callable[[T0, hydra.core.Term], tuple[T0, hydra.core.Term]],
-  frozenlist[hydra.accessors.TermAccessor],
-  hydra.graph.Graph,
-  T0,
-  hydra.core.Term], tuple[T0, hydra.core.Term]], cx0: hydra.graph.Graph, val0: T0, term0: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
-    r"""Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of TermAccessors representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas."""
-
-    def wrapper(recurse: Callable[[
-      frozenlist[hydra.accessors.TermAccessor],
-      tuple[hydra.graph.Graph, T0],
-      hydra.core.Term], tuple[tuple[T1, T0], hydra.core.Term]], path: frozenlist[hydra.accessors.TermAccessor], cx_and_val: tuple[hydra.graph.Graph, T0], term: hydra.core.Term) -> tuple[tuple[hydra.graph.Graph, T0], hydra.core.Term]:
-        @lru_cache(1)
-        def cx() -> hydra.graph.Graph:
-            return hydra.lib.pairs.first(cx_and_val)
-        @lru_cache(1)
-        def val() -> T0:
-            return hydra.lib.pairs.second(cx_and_val)
-        @lru_cache(1)
-        def cx1():
-            def _hoist_cx1_1(v1):
-                match v1:
-                    case hydra.core.FunctionLambda(value=l):
-                        return hydra.schemas.extend_graph_for_lambda(cx(), l)
-
-                    case _:
-                        return cx()
-            def _hoist_cx1_2(v1):
-                match v1:
-                    case hydra.core.TermFunction(value=fun):
-                        return _hoist_cx1_1(fun)
-
-                    case hydra.core.TermLet(value=l):
-                        return hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), cx(), l)
-
-                    case hydra.core.TermTypeLambda(value=tl):
-                        return hydra.schemas.extend_graph_for_type_lambda(cx(), tl)
-
-                    case _:
-                        return cx()
-            return _hoist_cx1_2(term)
-        def recurse_for_user(val_in: T0, term_in: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
-            @lru_cache(1)
-            def result() -> tuple[tuple[T1, T0], hydra.core.Term]:
-                return recurse(path, (cx1(), val_in), term_in)
-            return (hydra.lib.pairs.second(hydra.lib.pairs.first(result())), hydra.lib.pairs.second(result()))
-        @lru_cache(1)
-        def f_result() -> tuple[T0, hydra.core.Term]:
-            return f((lambda x1, x2: recurse_for_user(x1, x2)), path, cx1(), val(), term)
-        return ((cx(), hydra.lib.pairs.first(f_result())), hydra.lib.pairs.second(f_result()))
-    @lru_cache(1)
-    def result() -> tuple[tuple[hydra.graph.Graph, T0], hydra.core.Term]:
-        return hydra.rewriting.rewrite_and_fold_term_with_path((lambda x1, x2, x3, x4: wrapper(x1, x2, x3, x4)), (cx0, val0), term0)
-    return (hydra.lib.pairs.second(hydra.lib.pairs.first(result())), hydra.lib.pairs.second(result()))
-
 def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.TermAccessor], hydra.core.Term]], bool], cx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.core.Term:
     r"""Hoist subterms into local let bindings based on a path-aware predicate. The predicate receives a pair of (path, term) where path is the list of TermAccessors from the root to the current term, and returns True if the term should be hoisted. For each let term found, the immediate subterms (binding values and body) are processed: matching subterms within each immediate subterm are collected and hoisted into a local let that wraps that immediate subterm. If a hoisted term contains free variables that are lambda-bound at an enclosing scope, the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables."""
 
@@ -465,7 +359,7 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
                     return (result := recurse(acc, term), (new_acc := hydra.lib.pairs.first(result), (processed_term := hydra.lib.pairs.second(result), (new_counter := hydra.lib.pairs.first(new_acc), (new_bindings := hydra.lib.pairs.second(new_acc), (full_path := hydra.lib.lists.concat2(path_prefix, path), hydra.lib.logic.if_else(should_hoist((full_path, processed_term)), (lambda : (binding_name := hydra.core.Name(hydra.lib.strings.cat(("_hoist_", name_prefix, "_", hydra.lib.literals.show_int32(new_counter)))), (all_lambda_vars := cx_inner.lambda_variables, (new_lambda_vars := hydra.lib.sets.difference(all_lambda_vars, baseline_lambda_vars), (free_vars := hydra.rewriting.free_variables_in_term(processed_term), (captured_vars := hydra.lib.sets.to_list(hydra.lib.sets.intersection(new_lambda_vars, free_vars)), (type_map := hydra.lib.maps.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), cx_inner.bound_types), (wrapped_term := hydra.lib.lists.foldl((lambda body, var_name: cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(var_name, hydra.lib.maps.lookup(var_name, type_map), body)))))), processed_term, hydra.lib.lists.reverse(captured_vars)), (reference := hydra.lib.lists.foldl((lambda fn, var_name: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fn, cast(hydra.core.Term, hydra.core.TermVariable(var_name)))))), cast(hydra.core.Term, hydra.core.TermVariable(binding_name)), captured_vars), (new_binding := hydra.core.Binding(binding_name, wrapped_term, Nothing()), ((hydra.lib.math.add(new_counter, 1), hydra.lib.lists.cons(new_binding, new_bindings)), reference))[1])[1])[1])[1])[1])[1])[1])[1])[1]), (lambda : (new_acc, processed_term))))[1])[1])[1])[1])[1])[1]
         @lru_cache(1)
         def result() -> tuple[tuple[int, frozenlist[hydra.core.Binding]], hydra.core.Term]:
-            return rewrite_and_fold_term_with_type_context_and_path((lambda x1, x2, x3, x4, x5: collect_and_replace(x1, x2, x3, x4, x5)), cx, (counter, ()), subterm)
+            return hydra.rewriting.rewrite_and_fold_term_with_graph_and_path((lambda x1, x2, x3, x4, x5: collect_and_replace(x1, x2, x3, x4, x5)), cx, (counter, ()), subterm)
         @lru_cache(1)
         def final_acc() -> tuple[int, frozenlist[hydra.core.Binding]]:
             return hydra.lib.pairs.first(result())
@@ -536,7 +430,7 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
 
             case _:
                 return recurse(counter, term)
-    return hydra.lib.pairs.second(rewrite_and_fold_term_with_type_context_and_path((lambda x1, x2, x3, x4, x5: rewrite(x1, x2, x3, x4, x5)), cx0, 1, term0))
+    return hydra.lib.pairs.second(hydra.rewriting.rewrite_and_fold_term_with_graph_and_path((lambda x1, x2, x3, x4, x5: rewrite(x1, x2, x3, x4, x5)), cx0, 1, term0))
 
 def is_elimination_union(f: hydra.core.Function):
     def _hoist_hydra_hoisting_is_elimination_union_1(v1):
@@ -682,47 +576,3 @@ def normalize_path_for_hoisting(path: frozenlist[hydra.accessors.TermAccessor]) 
     def go(remaining: frozenlist[hydra.accessors.TermAccessor]) -> frozenlist[hydra.accessors.TermAccessor]:
         return hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.lists.null(remaining), hydra.lib.lists.null(hydra.lib.lists.tail(remaining))), (lambda : remaining), (lambda : (first := hydra.lib.lists.head(remaining), (second := hydra.lib.lists.head(hydra.lib.lists.tail(remaining)), (rest := hydra.lib.lists.tail(hydra.lib.lists.tail(remaining)), hydra.lib.logic.if_else(hydra.lib.logic.and_(is_application_function(first), is_lambda_body(second)), (lambda : hydra.lib.lists.cons(cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()), go(rest))), (lambda : hydra.lib.lists.cons(first, go(hydra.lib.lists.tail(remaining))))))[1])[1])[1]))
     return go(path)
-
-def rewrite_term_with_type_context(f: Callable[[Callable[[hydra.core.Term], T0], hydra.graph.Graph, hydra.core.Term], T0], cx0: hydra.graph.Graph, term0: hydra.core.Term) -> T0:
-    r"""Rewrite a term with the help of a type context which is updated as we descend into subterms."""
-
-    def f2(recurse: Callable[[hydra.graph.Graph, hydra.core.Term], T0], cx: hydra.graph.Graph, term: hydra.core.Term):
-        def recurse1(term2: hydra.core.Term) -> T0:
-            return recurse(cx, term2)
-        def _hoist_body_1(v1):
-            match v1:
-                case hydra.core.FunctionLambda(value=l):
-                    @lru_cache(1)
-                    def cx1() -> hydra.graph.Graph:
-                        return hydra.schemas.extend_graph_for_lambda(cx, l)
-                    def recurse2(term2: hydra.core.Term) -> T0:
-                        return recurse(cx1(), term2)
-                    return f((lambda x1: recurse2(x1)), cx1(), term)
-
-                case _:
-                    return f((lambda x1: recurse1(x1)), cx, term)
-        match term:
-            case hydra.core.TermFunction(value=fun):
-                return _hoist_body_1(fun)
-
-            case hydra.core.TermLet(value=l):
-                @lru_cache(1)
-                def cx1() -> hydra.graph.Graph:
-                    return hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), cx, l)
-                def recurse2(term2: hydra.core.Term) -> T0:
-                    return recurse(cx1(), term2)
-                return f((lambda x1: recurse2(x1)), cx1(), term)
-
-            case hydra.core.TermTypeLambda(value=tl):
-                @lru_cache(1)
-                def cx1() -> hydra.graph.Graph:
-                    return hydra.schemas.extend_graph_for_type_lambda(cx, tl)
-                def recurse2(term2: hydra.core.Term) -> T0:
-                    return recurse(cx1(), term2)
-                return f((lambda x1: recurse2(x1)), cx1(), term)
-
-            case _:
-                return f((lambda x1: recurse1(x1)), cx, term)
-    def rewrite(cx: hydra.graph.Graph, term: hydra.core.Term) -> T0:
-        return f2((lambda x1, x2: rewrite(x1, x2)), cx, term)
-    return rewrite(cx0, term0)

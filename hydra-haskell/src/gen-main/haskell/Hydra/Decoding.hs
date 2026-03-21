@@ -8,7 +8,7 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Helpers as Helpers
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
@@ -83,7 +83,7 @@ collectTypeVariablesFromType typ =
       _ -> []
 
 -- | Transform a type binding into a decoder binding
-decodeBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.DecodingError) Core.Binding
+decodeBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.DecodingError) Core.Binding
 decodeBinding cx graph b =
     Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
       Context.inContextObject = _wc_e,
@@ -147,7 +147,7 @@ decodeLiteralType lt =
                   Core.lambdaParameter = (Core.Name "err"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                    Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                     Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "stripped"),
@@ -156,7 +156,7 @@ decodeLiteralType lt =
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
@@ -168,7 +168,7 @@ decodeLiteralType lt =
                             Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                               Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                               Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                 Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected binary literal"))}))))),
                               Core.caseStatementCases = [
                                 Core.Field {
@@ -198,7 +198,7 @@ decodeLiteralType lt =
                   Core.lambdaParameter = (Core.Name "err"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                    Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                     Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "stripped"),
@@ -207,7 +207,7 @@ decodeLiteralType lt =
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
@@ -219,7 +219,7 @@ decodeLiteralType lt =
                             Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                               Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                               Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                 Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected boolean literal"))}))))),
                               Core.caseStatementCases = [
                                 Core.Field {
@@ -250,7 +250,7 @@ decodeLiteralType lt =
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
@@ -259,7 +259,7 @@ decodeLiteralType lt =
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                       Core.caseStatementCases = [
                         Core.Field {
@@ -271,7 +271,7 @@ decodeLiteralType lt =
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                                 Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                  Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                     "expected ",
                                     "bigfloat",
@@ -282,7 +282,7 @@ decodeLiteralType lt =
                                     Core.fieldTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                       Core.caseStatementTypeName = (Core.Name "hydra.core.FloatValue"),
                                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                           "expected ",
                                           "bigfloat",
@@ -315,7 +315,7 @@ decodeLiteralType lt =
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
@@ -324,7 +324,7 @@ decodeLiteralType lt =
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                       Core.caseStatementCases = [
                         Core.Field {
@@ -336,7 +336,7 @@ decodeLiteralType lt =
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                                 Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                  Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                     "expected ",
                                     "float32",
@@ -347,7 +347,7 @@ decodeLiteralType lt =
                                     Core.fieldTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                       Core.caseStatementTypeName = (Core.Name "hydra.core.FloatValue"),
                                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                           "expected ",
                                           "float32",
@@ -380,7 +380,7 @@ decodeLiteralType lt =
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
@@ -389,7 +389,7 @@ decodeLiteralType lt =
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                       Core.caseStatementCases = [
                         Core.Field {
@@ -401,7 +401,7 @@ decodeLiteralType lt =
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                                 Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                  Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                     "expected ",
                                     "float64",
@@ -412,7 +412,7 @@ decodeLiteralType lt =
                                     Core.fieldTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                       Core.caseStatementTypeName = (Core.Name "hydra.core.FloatValue"),
                                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                           "expected ",
                                           "float64",
@@ -446,7 +446,7 @@ decodeLiteralType lt =
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
@@ -455,7 +455,7 @@ decodeLiteralType lt =
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                       Core.caseStatementCases = [
                         Core.Field {
@@ -467,7 +467,7 @@ decodeLiteralType lt =
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                                 Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                  Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                     "expected ",
                                     "bigint",
@@ -478,7 +478,7 @@ decodeLiteralType lt =
                                     Core.fieldTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                       Core.caseStatementTypeName = (Core.Name "hydra.core.IntegerValue"),
                                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                           "expected ",
                                           "bigint",
@@ -511,7 +511,7 @@ decodeLiteralType lt =
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
@@ -520,7 +520,7 @@ decodeLiteralType lt =
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                       Core.caseStatementCases = [
                         Core.Field {
@@ -532,7 +532,7 @@ decodeLiteralType lt =
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                                 Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                  Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                     "expected ",
                                     "int8",
@@ -543,7 +543,7 @@ decodeLiteralType lt =
                                     Core.fieldTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                       Core.caseStatementTypeName = (Core.Name "hydra.core.IntegerValue"),
                                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                           "expected ",
                                           "int8",
@@ -576,7 +576,7 @@ decodeLiteralType lt =
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
@@ -585,7 +585,7 @@ decodeLiteralType lt =
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                       Core.caseStatementCases = [
                         Core.Field {
@@ -597,7 +597,7 @@ decodeLiteralType lt =
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                                 Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                  Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                     "expected ",
                                     "int16",
@@ -608,7 +608,7 @@ decodeLiteralType lt =
                                     Core.fieldTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                       Core.caseStatementTypeName = (Core.Name "hydra.core.IntegerValue"),
                                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                           "expected ",
                                           "int16",
@@ -641,7 +641,7 @@ decodeLiteralType lt =
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
@@ -650,7 +650,7 @@ decodeLiteralType lt =
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                       Core.caseStatementCases = [
                         Core.Field {
@@ -662,7 +662,7 @@ decodeLiteralType lt =
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                                 Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                  Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                     "expected ",
                                     "int32",
@@ -673,7 +673,7 @@ decodeLiteralType lt =
                                     Core.fieldTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                       Core.caseStatementTypeName = (Core.Name "hydra.core.IntegerValue"),
                                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                           "expected ",
                                           "int32",
@@ -706,7 +706,7 @@ decodeLiteralType lt =
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
@@ -715,7 +715,7 @@ decodeLiteralType lt =
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                       Core.caseStatementCases = [
                         Core.Field {
@@ -727,7 +727,7 @@ decodeLiteralType lt =
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                                 Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                  Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                     "expected ",
                                     "int64",
@@ -738,7 +738,7 @@ decodeLiteralType lt =
                                     Core.fieldTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                       Core.caseStatementTypeName = (Core.Name "hydra.core.IntegerValue"),
                                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                           "expected ",
                                           "int64",
@@ -771,7 +771,7 @@ decodeLiteralType lt =
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
@@ -780,7 +780,7 @@ decodeLiteralType lt =
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                       Core.caseStatementCases = [
                         Core.Field {
@@ -792,7 +792,7 @@ decodeLiteralType lt =
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                                 Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                  Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                     "expected ",
                                     "uint8",
@@ -803,7 +803,7 @@ decodeLiteralType lt =
                                     Core.fieldTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                       Core.caseStatementTypeName = (Core.Name "hydra.core.IntegerValue"),
                                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                           "expected ",
                                           "uint8",
@@ -836,7 +836,7 @@ decodeLiteralType lt =
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
@@ -845,7 +845,7 @@ decodeLiteralType lt =
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                       Core.caseStatementCases = [
                         Core.Field {
@@ -857,7 +857,7 @@ decodeLiteralType lt =
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                                 Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                  Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                     "expected ",
                                     "uint16",
@@ -868,7 +868,7 @@ decodeLiteralType lt =
                                     Core.fieldTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                       Core.caseStatementTypeName = (Core.Name "hydra.core.IntegerValue"),
                                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                           "expected ",
                                           "uint16",
@@ -901,7 +901,7 @@ decodeLiteralType lt =
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
@@ -910,7 +910,7 @@ decodeLiteralType lt =
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                       Core.caseStatementCases = [
                         Core.Field {
@@ -922,7 +922,7 @@ decodeLiteralType lt =
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                                 Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                  Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                     "expected ",
                                     "uint32",
@@ -933,7 +933,7 @@ decodeLiteralType lt =
                                     Core.fieldTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                       Core.caseStatementTypeName = (Core.Name "hydra.core.IntegerValue"),
                                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                           "expected ",
                                           "uint32",
@@ -966,7 +966,7 @@ decodeLiteralType lt =
                     Core.lambdaParameter = (Core.Name "err"),
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "stripped"),
@@ -975,7 +975,7 @@ decodeLiteralType lt =
                     Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                       Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                       Core.caseStatementCases = [
                         Core.Field {
@@ -987,7 +987,7 @@ decodeLiteralType lt =
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                 Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                                 Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                  Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                     "expected ",
                                     "uint64",
@@ -998,7 +998,7 @@ decodeLiteralType lt =
                                     Core.fieldTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                                       Core.caseStatementTypeName = (Core.Name "hydra.core.IntegerValue"),
                                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                        Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                        Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                         Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                                           "expected ",
                                           "uint64",
@@ -1031,7 +1031,7 @@ decodeLiteralType lt =
                   Core.lambdaParameter = (Core.Name "err"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                    Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                     Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "stripped"),
@@ -1040,7 +1040,7 @@ decodeLiteralType lt =
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected literal"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
@@ -1052,7 +1052,7 @@ decodeLiteralType lt =
                             Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                               Core.caseStatementTypeName = (Core.Name "hydra.core.Literal"),
                               Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                 Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected string literal"))}))))),
                               Core.caseStatementCases = [
                                 Core.Field {
@@ -1091,10 +1091,10 @@ decodeMaybeType elemType =
         Core.applicationArgument = elemDecoder}))
 
 -- | Transform a type module into a decoder module
-decodeModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Error.Error) (Maybe Module.Module)
+decodeModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) (Maybe Module.Module)
 decodeModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError (Context.inContextObject ic)))),
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError (Context.inContextObject ic)))),
       Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
       let decodedTypeDeps = Lists.map decodeNamespace (Module.moduleTypeDependencies mod)
           decodedTermDeps = Lists.map decodeNamespace (Module.moduleTermDependencies mod)
@@ -1183,7 +1183,7 @@ decodeRecordTypeImpl tname rt =
                   Core.lambdaParameter = (Core.Name "err"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                    Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                     Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "stripped"),
@@ -1192,7 +1192,7 @@ decodeRecordTypeImpl tname rt =
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
@@ -1257,7 +1257,7 @@ decodeType typ =
           Core.lambdaParameter = (Core.Name "t"),
           Core.lambdaDomain = Nothing,
           Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-            Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+            Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "unsupported type variant"))}))))})))}))
 
 -- | Generate a decoder term for a Type, with element name for nominal types
@@ -1291,7 +1291,7 @@ decodeTypeNamed ename typ =
           Core.lambdaParameter = (Core.Name "t"),
           Core.lambdaDomain = Nothing,
           Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-            Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+            Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "unsupported type variant"))}))))})))}))
 
 -- | Generate a decoder for the unit type
@@ -1342,7 +1342,7 @@ decodeUnionTypeNamed ename rt =
                   Core.lambdaParameter = (Core.Name "err"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                    Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                     Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "stripped"),
@@ -1351,7 +1351,7 @@ decodeUnionTypeNamed ename rt =
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
@@ -1396,7 +1396,7 @@ decodeUnionTypeNamed ename rt =
                                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.maybe"))),
                                   Core.applicationArgument = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                                    Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                                    Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                                     Core.wrappedTermBody = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.strings.cat"))),
                                       Core.applicationArgument = (Core.TermList [
@@ -1446,7 +1446,7 @@ decodeWrappedTypeNamed ename wt =
                   Core.lambdaParameter = (Core.Name "err"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                    Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                     Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
               Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "stripped"),
@@ -1455,7 +1455,7 @@ decodeWrappedTypeNamed ename wt =
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+                      Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                       Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected wrapped type"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
@@ -1574,7 +1574,7 @@ decoderType typ =
                     Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
                       Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                        Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.error.DecodingError")),
+                        Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                         Core.eitherTypeRight = resultType}))}))})
       in (prependForallDecoders baseType typ)
 
@@ -1589,7 +1589,7 @@ decoderTypeNamed ename typ =
                     Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
                       Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                        Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.error.DecodingError")),
+                        Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                         Core.eitherTypeRight = resultType}))}))})
       in (prependForallDecoders baseType typ)
 
@@ -1624,12 +1624,12 @@ decoderTypeSchemeNamed ename typ =
         Core.typeSchemeConstraints = constraints}
 
 -- | Filter bindings to only decodable type definitions
-filterTypeBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.Error) [Core.Binding]
+filterTypeBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Errors.Error) [Core.Binding]
 filterTypeBindings cx graph bindings =
     Eithers.map Maybes.cat (Eithers.mapList (isDecodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
 
 -- | Check if a binding is decodable (serializable type)
-isDecodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.Error) (Maybe Core.Binding)
+isDecodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) (Maybe Core.Binding)
 isDecodableBinding cx graph b =
     Eithers.bind (Schemas.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing))
 
@@ -1644,7 +1644,7 @@ prependForallDecoders baseType typ =
           Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
             Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
             Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-              Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.error.DecodingError")),
+              Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
               Core.eitherTypeRight = (Core.TypeVariable (Core.forallTypeParameter v0))}))}))})),
         Core.functionTypeCodomain = (prependForallDecoders baseType (Core.forallTypeBody v0))})
       _ -> baseType

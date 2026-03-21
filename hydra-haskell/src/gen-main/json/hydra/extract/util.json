@@ -58,14 +58,14 @@
                                                                                           "application": {
                                                                                             "argument": {"literal": {"string": "expected comparison but found "}},
                                                                                             "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                                    "typeName": "hydra.error.OtherError"}}},
-                                                                              "typeName": "hydra.error.Error"}}},
+                                                                                    "typeName": "hydra.errors.OtherError"}}},
+                                                                              "typeName": "hydra.errors.Error"}}},
                                                                         {"name": "context", "term": {"variable": "cx"}}],
                                                                       "typeName": "hydra.context.InContext"}},
-                                                                  "type": {"variable": "hydra.error.Error"}}}}},
+                                                                  "type": {"variable": "hydra.errors.Error"}}}}},
                                                           "type": {
                                                             "application": {
-                                                              "argument": {"variable": "hydra.error.Error"},
+                                                              "argument": {"variable": "hydra.errors.Error"},
                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                       "type": {"variable": "hydra.util.Comparison"}}},
                                                   "function": {
@@ -82,7 +82,7 @@
                                                                       "typeName": "hydra.util.Comparison"}}}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                  "argument": {"variable": "hydra.errors.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.util.Comparison"}}},
                                                       "function": {
@@ -107,7 +107,7 @@
                                                                 "either": {
                                                                   "left": {
                                                                     "application": {
-                                                                      "argument": {"variable": "hydra.error.Error"},
+                                                                      "argument": {"variable": "hydra.errors.Error"},
                                                                       "function": {"variable": "hydra.context.InContext"}}},
                                                                   "right": {"variable": "hydra.util.Comparison"}}}}}}}}}}},
                                               "function": {
@@ -124,7 +124,7 @@
                                                                   "typeName": "hydra.util.Comparison"}}}},
                                                           "type": {
                                                             "application": {
-                                                              "argument": {"variable": "hydra.error.Error"},
+                                                              "argument": {"variable": "hydra.errors.Error"},
                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                       "type": {"variable": "hydra.util.Comparison"}}},
                                                   "function": {
@@ -149,7 +149,7 @@
                                                             "either": {
                                                               "left": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                  "argument": {"variable": "hydra.errors.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}},
                                                               "right": {"variable": "hydra.util.Comparison"}}}}}}}}}}},
                                           "function": {
@@ -166,7 +166,7 @@
                                                               "typeName": "hydra.util.Comparison"}}}},
                                                       "type": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.error.Error"},
+                                                          "argument": {"variable": "hydra.errors.Error"},
                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                   "type": {"variable": "hydra.util.Comparison"}}},
                                               "function": {
@@ -191,7 +191,7 @@
                                                         "either": {
                                                           "left": {
                                                             "application": {
-                                                              "argument": {"variable": "hydra.error.Error"},
+                                                              "argument": {"variable": "hydra.errors.Error"},
                                                               "function": {"variable": "hydra.context.InContext"}}},
                                                           "right": {"variable": "hydra.util.Comparison"}}}}}}}}}}},
                                       "domain": [{"variable": "hydra.core.Name"}],
@@ -223,7 +223,7 @@
                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                 "type": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.error.Error"},
+                                                    "argument": {"variable": "hydra.errors.Error"},
                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                             "type": {"variable": "hydra.core.Name"}}},
                                         "type": {"variable": "hydra.util.Comparison"}}}}}}},
@@ -246,7 +246,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.Error"},
+                              "argument": {"variable": "hydra.errors.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"variable": "hydra.util.Comparison"}}},
                       "domain": {"variable": "hydra.core.Term"}}},
@@ -254,7 +254,7 @@
               "domain": {"variable": "hydra.context.Context"}}},
           "variables": []}]}],
   "namespace": "hydra.extract.util",
-  "termDependencies": ["hydra.extract.core", "hydra.show.error"],
+  "termDependencies": ["hydra.extract.core", "hydra.show.errors"],
   "typeDependencies": [
     "hydra.accessors",
     "hydra.ast",
@@ -262,7 +262,10 @@
     "hydra.coders",
     "hydra.context",
     "hydra.core",
-    "hydra.error",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.module",
+    "hydra.errors",
     "hydra.grammar",
     "hydra.graph",
     "hydra.json.model",

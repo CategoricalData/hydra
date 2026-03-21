@@ -1067,7 +1067,7 @@
                                                                             "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                                     "type": {
                                                                       "application": {
-                                                                        "argument": {"variable": "hydra.error.Error"},
+                                                                        "argument": {"variable": "hydra.errors.Error"},
                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                 "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                             "domain": [{"literal": {"binary": {}}}],
@@ -1089,7 +1089,7 @@
                                                                             "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                                     "type": {
                                                                       "application": {
-                                                                        "argument": {"variable": "hydra.error.Error"},
+                                                                        "argument": {"variable": "hydra.errors.Error"},
                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                 "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                             "domain": [{"literal": {"boolean": {}}}],
@@ -1132,7 +1132,7 @@
                                                                                                   "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                                                           "type": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                                              "argument": {"variable": "hydra.errors.Error"},
                                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                       "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                                                   "domain": [{"literal": {"float": {"bigfloat": {}}}}],
@@ -1159,7 +1159,7 @@
                                                                                                   "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                                                           "type": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                                              "argument": {"variable": "hydra.errors.Error"},
                                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                       "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                                                   "domain": [{"literal": {"float": {"float32": {}}}}],
@@ -1186,7 +1186,7 @@
                                                                                                   "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                                                           "type": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                                              "argument": {"variable": "hydra.errors.Error"},
                                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                       "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                                                   "domain": [{"literal": {"float": {"float64": {}}}}],
@@ -1212,16 +1212,16 @@
                                                                                                         "term": {
                                                                                                           "wrap": {
                                                                                                             "body": {"literal": {"string": "unsupported float type"}},
-                                                                                                            "typeName": "hydra.error.OtherError"}}},
-                                                                                                      "typeName": "hydra.error.Error"}}},
+                                                                                                            "typeName": "hydra.errors.OtherError"}}},
+                                                                                                      "typeName": "hydra.errors.Error"}}},
                                                                                                 {
                                                                                                   "name": "context",
                                                                                                   "term": {"variable": "hydra.lexical.emptyContext"}}],
                                                                                               "typeName": "hydra.context.InContext"}},
-                                                                                          "type": {"variable": "hydra.error.Error"}}}}},
+                                                                                          "type": {"variable": "hydra.errors.Error"}}}}},
                                                                                   "type": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.error.Error"},
+                                                                                      "argument": {"variable": "hydra.errors.Error"},
                                                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                                                               "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}],
                                                                         "typeName": "hydra.core.FloatValue"}}}}}},
@@ -1257,7 +1257,7 @@
                                                                                                   "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                                                           "type": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                                              "argument": {"variable": "hydra.errors.Error"},
                                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                       "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                                                   "domain": [{"literal": {"integer": {"bigint": {}}}}],
@@ -1279,7 +1279,7 @@
                                                                                                   "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                                                           "type": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                                              "argument": {"variable": "hydra.errors.Error"},
                                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                       "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                                                   "domain": [{"literal": {"integer": {"int32": {}}}}],
@@ -1301,7 +1301,7 @@
                                                                                                   "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                                                           "type": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                                              "argument": {"variable": "hydra.errors.Error"},
                                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                       "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                                                   "domain": [{"literal": {"integer": {"int64": {}}}}],
@@ -1327,16 +1327,16 @@
                                                                                                         "term": {
                                                                                                           "wrap": {
                                                                                                             "body": {"literal": {"string": "unsupported integer type"}},
-                                                                                                            "typeName": "hydra.error.OtherError"}}},
-                                                                                                      "typeName": "hydra.error.Error"}}},
+                                                                                                            "typeName": "hydra.errors.OtherError"}}},
+                                                                                                      "typeName": "hydra.errors.Error"}}},
                                                                                                 {
                                                                                                   "name": "context",
                                                                                                   "term": {"variable": "hydra.lexical.emptyContext"}}],
                                                                                               "typeName": "hydra.context.InContext"}},
-                                                                                          "type": {"variable": "hydra.error.Error"}}}}},
+                                                                                          "type": {"variable": "hydra.errors.Error"}}}}},
                                                                                   "type": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.error.Error"},
+                                                                                      "argument": {"variable": "hydra.errors.Error"},
                                                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                                                               "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}],
                                                                         "typeName": "hydra.core.IntegerValue"}}}}}},
@@ -1359,7 +1359,7 @@
                                                                             "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                                                     "type": {
                                                                       "application": {
-                                                                        "argument": {"variable": "hydra.error.Error"},
+                                                                        "argument": {"variable": "hydra.errors.Error"},
                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                 "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                             "domain": [{"literal": {"string": {}}}],
@@ -1386,16 +1386,16 @@
                                                                                     "wrap": {
                                                                                       "body": {
                                                                                         "literal": {"string": "unsupported literal type for GraphSON encoding"}},
-                                                                                      "typeName": "hydra.error.OtherError"}}},
-                                                                                "typeName": "hydra.error.Error"}}},
+                                                                                      "typeName": "hydra.errors.OtherError"}}},
+                                                                                "typeName": "hydra.errors.Error"}}},
                                                                           {
                                                                             "name": "context",
                                                                             "term": {"variable": "hydra.lexical.emptyContext"}}],
                                                                         "typeName": "hydra.context.InContext"}},
-                                                                    "type": {"variable": "hydra.error.Error"}}}}},
+                                                                    "type": {"variable": "hydra.errors.Error"}}}}},
                                                             "type": {
                                                               "application": {
-                                                                "argument": {"variable": "hydra.error.Error"},
+                                                                "argument": {"variable": "hydra.errors.Error"},
                                                                 "function": {"variable": "hydra.context.InContext"}}}}},
                                                         "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}],
                                                   "typeName": "hydra.core.Literal"}}}}}},
@@ -1418,7 +1418,7 @@
                                                       "typeName": "hydra.pg.graphson.syntax.Value"}}}},
                                               "type": {
                                                 "application": {
-                                                  "argument": {"variable": "hydra.error.Error"},
+                                                  "argument": {"variable": "hydra.errors.Error"},
                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                           "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                       "domain": [{"unit": {}}],
@@ -1445,16 +1445,16 @@
                                                               "wrap": {
                                                                 "body": {
                                                                   "literal": {"string": "unsupported term variant for GraphSON encoding"}},
-                                                                "typeName": "hydra.error.OtherError"}}},
-                                                          "typeName": "hydra.error.Error"}}},
+                                                                "typeName": "hydra.errors.OtherError"}}},
+                                                          "typeName": "hydra.errors.Error"}}},
                                                     {
                                                       "name": "context",
                                                       "term": {"variable": "hydra.lexical.emptyContext"}}],
                                                   "typeName": "hydra.context.InContext"}},
-                                              "type": {"variable": "hydra.error.Error"}}}}},
+                                              "type": {"variable": "hydra.errors.Error"}}}}},
                                       "type": {
                                         "application": {
-                                          "argument": {"variable": "hydra.error.Error"},
+                                          "argument": {"variable": "hydra.errors.Error"},
                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                   "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}],
                             "typeName": "hydra.core.Term"}}}}}},
@@ -1469,7 +1469,7 @@
                 "either": {
                   "left": {
                     "application": {
-                      "argument": {"variable": "hydra.error.Error"},
+                      "argument": {"variable": "hydra.errors.Error"},
                       "function": {"variable": "hydra.context.InContext"}}},
                   "right": {"variable": "hydra.pg.graphson.syntax.Value"}}},
               "domain": {"variable": "hydra.core.Term"}}},
@@ -1581,7 +1581,10 @@
     "hydra.coders",
     "hydra.context",
     "hydra.core",
-    "hydra.error",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.module",
+    "hydra.errors",
     "hydra.grammar",
     "hydra.graph",
     "hydra.json.model",

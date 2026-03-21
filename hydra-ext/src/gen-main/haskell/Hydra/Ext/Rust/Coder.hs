@@ -6,7 +6,7 @@ module Hydra.Ext.Rust.Coder where
 
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Ext.Rust.Language as Language
 import qualified Hydra.Ext.Rust.Serde as Serde
 import qualified Hydra.Ext.Rust.Syntax as Syntax
@@ -198,7 +198,7 @@ encodeLiteral lit =
           Syntax.integerLiteralValue = v1,
           Syntax.integerLiteralSuffix = Nothing}))
 
-encodeType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Error.Error) Syntax.Type
+encodeType :: Context.Context -> t0 -> Core.Type -> Either (Context.InContext Errors.Error) Syntax.Type
 encodeType cx g t =
 
       let typ = Rewriting.deannotateType t
@@ -226,18 +226,18 @@ encodeType cx g t =
                     dom],
                   Syntax.parenthesizedArgsOutput = (Just cod)}))}]})]))))
         Core.TypeRecord _ -> Left (Context.InContext {
-          Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous record type")),
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous record type")),
           Context.inContextContext = cx})
         Core.TypeUnion _ -> Left (Context.InContext {
-          Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous union type")),
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous union type")),
           Context.inContextContext = cx})
         Core.TypeWrap _ -> Left (Context.InContext {
-          Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous wrap type")),
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous wrap type")),
           Context.inContextContext = cx})
         Core.TypeVariable v0 -> Right (rustPath (Formatting.capitalize (Core.unName v0)))
         Core.TypeForall v0 -> encodeType cx g (Core.forallTypeBody v0)
 
-encodeTerm :: Context.Context -> t0 -> Core.Term -> Either (Context.InContext Error.Error) Syntax.Expression
+encodeTerm :: Context.Context -> t0 -> Core.Term -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeTerm cx g term =
     case term of
       Core.TermAnnotated v0 -> encodeTerm cx g (Core.annotatedTermBody v0)
@@ -303,10 +303,10 @@ encodeTerm cx g term =
         in (Eithers.bind (encodeTerm cx g (Core.wrappedTermBody v0)) (\inner -> Right (rustCall (rustExprPath tname) [
           inner])))
       _ -> Left (Context.InContext {
-        Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected term variant")),
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected term variant")),
         Context.inContextContext = cx})
 
-encodeFunction :: Context.Context -> t0 -> Core.Function -> Either (Context.InContext Error.Error) Syntax.Expression
+encodeFunction :: Context.Context -> t0 -> Core.Function -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeFunction cx g fun =
     case fun of
       Core.FunctionLambda v0 ->
@@ -316,7 +316,7 @@ encodeFunction cx g fun =
       Core.FunctionPrimitive v0 -> Right (rustExprPath (Core.unName v0))
       Core.FunctionElimination v0 -> encodeElimination cx g v0 Nothing
 
-encodeElimination :: Context.Context -> t0 -> Core.Elimination -> Maybe Core.Term -> Either (Context.InContext Error.Error) Syntax.Expression
+encodeElimination :: Context.Context -> t0 -> Core.Elimination -> Maybe Core.Term -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeElimination cx g elim marg =
     case elim of
       Core.EliminationRecord v0 ->
@@ -369,7 +369,7 @@ encodeElimination cx g elim marg =
         Syntax.tupleIndexExprTuple = sarg,
         Syntax.tupleIndexExprIndex = 0}))))
 
-encodeStructField :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Error.Error) Syntax.StructField
+encodeStructField :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.StructField
 encodeStructField cx g ft =
 
       let fname = Core.unName (Core.fieldTypeName ft)
@@ -380,7 +380,7 @@ encodeStructField cx g ft =
         Syntax.structFieldPublic = True,
         Syntax.structFieldDoc = Nothing})))
 
-encodeEnumVariant :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Error.Error) Syntax.EnumVariant
+encodeEnumVariant :: Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.EnumVariant
 encodeEnumVariant cx g ft =
 
       let fname = Core.unName (Core.fieldTypeName ft)
@@ -405,7 +405,7 @@ encodeEnumVariant cx g ft =
             sftyp]),
           Syntax.enumVariantDoc = Nothing}))))
 
-encodeTypeDefinition :: Context.Context -> t0 -> Module.TypeDefinition -> Either (Context.InContext Error.Error) Syntax.ItemWithComments
+encodeTypeDefinition :: Context.Context -> t0 -> Module.TypeDefinition -> Either (Context.InContext Errors.Error) Syntax.ItemWithComments
 encodeTypeDefinition cx g tdef =
 
       let name = Module.typeDefinitionName tdef
@@ -456,7 +456,7 @@ encodeTypeDefinition cx g tdef =
         Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
         Syntax.itemWithCommentsItem = item})))
 
-encodeTermDefinition :: Context.Context -> t0 -> Module.TermDefinition -> Either (Context.InContext Error.Error) Syntax.ItemWithComments
+encodeTermDefinition :: Context.Context -> t0 -> Module.TermDefinition -> Either (Context.InContext Errors.Error) Syntax.ItemWithComments
 encodeTermDefinition cx g tdef =
 
       let name = Module.termDefinitionName tdef
@@ -482,7 +482,7 @@ encodeTermDefinition cx g tdef =
           Syntax.fnDefUnsafe = False,
           Syntax.fnDefDoc = Nothing}))}))))
 
-moduleToRust :: Module.Module -> [Module.Definition] -> Context.Context -> t0 -> Either (Context.InContext Error.Error) (M.Map String String)
+moduleToRust :: Module.Module -> [Module.Definition] -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) (M.Map String String)
 moduleToRust mod defs cx g =
 
       let partitioned = Schemas.partitionDefinitions defs

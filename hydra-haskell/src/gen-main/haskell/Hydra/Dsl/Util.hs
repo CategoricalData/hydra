@@ -6,7 +6,7 @@ module Hydra.Dsl.Util where
 
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -278,7 +278,7 @@ caseConventionUpperSnake =
         Core.fieldName = (Core.Name "upperSnake"),
         Core.fieldTerm = Core.TermUnit}}))
 
-coder :: Phantoms.TTerm (Context.Context -> v1 -> Either (Context.InContext Error.Error) v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either (Context.InContext Error.Error) v1) -> Phantoms.TTerm (Util.Coder v1 v2)
+coder :: Phantoms.TTerm (Context.Context -> v1 -> Either (Context.InContext Errors.Error) v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either (Context.InContext Errors.Error) v1) -> Phantoms.TTerm (Util.Coder v1 v2)
 coder encode decode =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.util.Coder"),
@@ -290,7 +290,7 @@ coder encode decode =
           Core.fieldName = (Core.Name "decode"),
           Core.fieldTerm = (Phantoms.unTTerm decode)}]}))
 
-coderEncode :: Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v1 -> Either (Context.InContext Error.Error) v2)
+coderEncode :: Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v1 -> Either (Context.InContext Errors.Error) v2)
 coderEncode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -298,7 +298,7 @@ coderEncode x =
         Core.projectionField = (Core.Name "encode")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-coderDecode :: Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either (Context.InContext Error.Error) v1)
+coderDecode :: Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either (Context.InContext Errors.Error) v1)
 coderDecode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -306,7 +306,7 @@ coderDecode x =
         Core.projectionField = (Core.Name "decode")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-coderWithEncode :: Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v1 -> Either (Context.InContext Error.Error) v2) -> Phantoms.TTerm (Util.Coder v1 v2)
+coderWithEncode :: Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v1 -> Either (Context.InContext Errors.Error) v2) -> Phantoms.TTerm (Util.Coder v1 v2)
 coderWithEncode original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.util.Coder"),
@@ -322,7 +322,7 @@ coderWithEncode original newVal =
               Core.projectionField = (Core.Name "decode")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-coderWithDecode :: Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either (Context.InContext Error.Error) v1) -> Phantoms.TTerm (Util.Coder v1 v2)
+coderWithDecode :: Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either (Context.InContext Errors.Error) v1) -> Phantoms.TTerm (Util.Coder v1 v2)
 coderWithDecode original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.util.Coder"),

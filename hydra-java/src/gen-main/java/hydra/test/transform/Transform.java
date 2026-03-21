@@ -73,6 +73,11 @@ public interface Transform {
         hydra.util.ConsList<hydra.util.ConsList<Integer>> expected = (scccase).value.expected;
         return hydra.util.Maybe.just(new hydra.testing.TestCaseWithMetadata(name_, new hydra.testing.TestCase.DelegatedEvaluation(new hydra.testing.DelegatedEvaluationTestCase(hydra.test.transform.Transform.buildTopologicalSortSCCCall(adjList), hydra.test.transform.Transform.encodeListList(expected))), desc, tags_));
       }
+
+      @Override
+      public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.ValidateCoreTerm ignored) {
+        return hydra.util.Maybe.just(tcm);
+      }
     });
   }
 

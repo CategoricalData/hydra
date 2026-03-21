@@ -6,7 +6,7 @@ module Hydra.Ext.Avro.Coder where
 
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Ext.Avro.Environment as Environment
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Schema
 import qualified Hydra.Extract.Core as Core_
@@ -49,7 +49,7 @@ emptyAvroEnvironment =
       Environment.avroEnvironmentElements = Maps.empty}
 
 -- | Create an adapter between Avro schemas and Hydra types/terms
-avroHydraAdapter :: Context.Context -> Schema.Schema -> Environment.AvroEnvironment -> Either (Context.InContext Error.Error) (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term, Environment.AvroEnvironment)
+avroHydraAdapter :: Context.Context -> Schema.Schema -> Environment.AvroEnvironment -> Either (Context.InContext Errors.Error) (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term, Environment.AvroEnvironment)
 avroHydraAdapter cx schema env0 =
 
       let simpleAdapter =
@@ -323,7 +323,7 @@ avroHydraAdapter cx schema env0 =
               Util.adapterCoder = (Util.adapterCoder ad)}, env1)))))))
 
 -- | Thread AvroEnvironment through preparing multiple fields
-prepareFields :: Context.Context -> Environment.AvroEnvironment -> [Schema.Field] -> Either (Context.InContext Error.Error) (M.Map String (Schema.Field, (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term)), Environment.AvroEnvironment)
+prepareFields :: Context.Context -> Environment.AvroEnvironment -> [Schema.Field] -> Either (Context.InContext Errors.Error) (M.Map String (Schema.Field, (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term)), Environment.AvroEnvironment)
 prepareFields cx env fields =
     Lists.foldl (\acc -> \f -> Eithers.bind acc (\accPair ->
       let m = Pairs.first accPair
@@ -336,7 +336,7 @@ prepareFields cx env fields =
         in (Right (Maps.insert k v m, env2)))))) (Right (Maps.empty, env)) fields
 
 -- | Prepare a single field, producing an adapter and updated environment
-prepareField :: Context.Context -> Environment.AvroEnvironment -> Schema.Field -> Either (Context.InContext Error.Error) ((String, (Schema.Field, (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term))), Environment.AvroEnvironment)
+prepareField :: Context.Context -> Environment.AvroEnvironment -> Schema.Field -> Either (Context.InContext Errors.Error) ((String, (Schema.Field, (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term))), Environment.AvroEnvironment)
 prepareField cx env f =
 
       let manns = fieldAnnotationsToCore f
@@ -393,7 +393,7 @@ annotateAdapter ann ad =
       Util.adapterCoder = (Util.adapterCoder ad)}) ann
 
 -- | Find the primary key field among a list of Avro fields
-findAvroPrimaryKeyField :: Context.Context -> Environment.AvroQualifiedName -> [Schema.Field] -> Either (Context.InContext Error.Error) (Maybe Environment.AvroPrimaryKey)
+findAvroPrimaryKeyField :: Context.Context -> Environment.AvroQualifiedName -> [Schema.Field] -> Either (Context.InContext Errors.Error) (Maybe Environment.AvroPrimaryKey)
 findAvroPrimaryKeyField cx qname avroFields =
 
       let keys = Maybes.cat (Lists.map (\f -> primaryKeyE cx f) avroFields)
@@ -444,7 +444,7 @@ getAvroHydraAdapter :: Environment.AvroQualifiedName -> Environment.AvroEnvironm
 getAvroHydraAdapter qname env = Maps.lookup qname (Environment.avroEnvironmentNamedAdapters env)
 
 -- | Extract a foreign key annotation from a field, if present
-foreignKeyE :: Context.Context -> Schema.Field -> Either (Context.InContext Error.Error) (Maybe Environment.AvroForeignKey)
+foreignKeyE :: Context.Context -> Schema.Field -> Either (Context.InContext Errors.Error) (Maybe Environment.AvroForeignKey)
 foreignKeyE cx f =
     Maybes.maybe (Right Nothing) (\v -> Eithers.bind (expectObjectE cx v) (\m -> Eithers.bind (Eithers.map (\s -> Core.Name s) (requireStringE cx "type" m)) (\tname -> Eithers.bind (optStringE cx "pattern" m) (\pattern_ ->
       let constr = Maybes.maybe (\s -> Core.Name s) (\pat -> patternToNameConstructor pat) pattern_
@@ -516,7 +516,7 @@ rewriteAvroSchemaM f schema =
       in (f fsub schema)
 
 -- | Convert a JSON value to a string, supporting booleans, strings, and numbers
-jsonToStringE :: Context.Context -> Model.Value -> Either (Context.InContext Error.Error) String
+jsonToStringE :: Context.Context -> Model.Value -> Either (Context.InContext Errors.Error) String
 jsonToStringE cx v =
     case v of
       Model.ValueBoolean v0 -> Right (Logic.ifElse v0 "true" "false")
@@ -533,7 +533,7 @@ showQname qname =
       in (Strings.cat2 (Maybes.maybe "" (\ns -> Strings.cat2 ns ".") mns) local)
 
 -- | Parse a string into a term of the expected type
-stringToTermE :: Context.Context -> Core.Type -> String -> Either (Context.InContext Error.Error) Core.Term
+stringToTermE :: Context.Context -> Core.Type -> String -> Either (Context.InContext Errors.Error) Core.Term
 stringToTermE cx typ s =
 
       let readErr = err cx "failed to read value"
@@ -556,7 +556,7 @@ stringToTermE cx typ s =
         _ -> unexpectedE cx "literal type" "other"
 
 -- | Convert a literal term to its string representation
-termToStringE :: Context.Context -> Core.Term -> Either (Context.InContext Error.Error) String
+termToStringE :: Context.Context -> Core.Term -> Either (Context.InContext Errors.Error) String
 termToStringE cx term =
     case (Rewriting.deannotateTerm term) of
       Core.TermLiteral v0 -> case v0 of
@@ -577,14 +577,14 @@ termToStringE cx term =
       _ -> unexpectedE cx "literal value" "other"
 
 -- | Construct an error result with a message in context
-err :: Context.Context -> String -> Either (Context.InContext Error.Error) t0
+err :: Context.Context -> String -> Either (Context.InContext Errors.Error) t0
 err cx msg =
     Left (Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError msg)),
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError msg)),
       Context.inContextContext = cx})
 
 -- | Construct an error for unexpected values
-unexpectedE :: Context.Context -> String -> String -> Either (Context.InContext Error.Error) t0
+unexpectedE :: Context.Context -> String -> String -> Either (Context.InContext Errors.Error) t0
 unexpectedE cx expected found =
     err cx (Strings.cat [
       "Expected ",
@@ -611,7 +611,7 @@ expectStringE cx value =
       Model.ValueString v0 -> Right v0
 
 -- | Look up a required string attribute in a JSON object map
-requireStringE :: Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Error.Error) String
+requireStringE :: Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Errors.Error) String
 requireStringE cx fname m =
     Maybes.maybe (err cx (Strings.cat [
       "required attribute ",

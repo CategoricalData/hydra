@@ -11,7 +11,7 @@ from hydra.dsl.python import Either, Node
 from typing import Annotated, Generic, TypeAlias, TypeVar, cast
 import hydra.context
 import hydra.core
-import hydra.error
+import hydra.errors
 
 T1 = TypeVar("T1")
 T2 = TypeVar("T2")
@@ -61,8 +61,8 @@ CaseConvention.TYPE_ = hydra.core.Name("hydra.util.CaseConvention")
 class Coder(Generic[V1, V2]):
     r"""An encoder and decoder; a bidirectional transformation between two types."""
 
-    encode: Annotated[Callable[[hydra.context.Context, V1], Either[hydra.context.InContext[hydra.error.Error], V2]], "A function which encodes source values as target values in a given context"]
-    decode: Annotated[Callable[[hydra.context.Context, V2], Either[hydra.context.InContext[hydra.error.Error], V1]], "A function which decodes target values as source values in a given context"]
+    encode: Annotated[Callable[[hydra.context.Context, V1], Either[hydra.context.InContext[hydra.errors.Error], V2]], "A function which encodes source values as target values in a given context"]
+    decode: Annotated[Callable[[hydra.context.Context, V2], Either[hydra.context.InContext[hydra.errors.Error], V1]], "A function which decodes target values as source values in a given context"]
 
     TYPE_ = hydra.core.Name("hydra.util.Coder")
     ENCODE = hydra.core.Name("encode")

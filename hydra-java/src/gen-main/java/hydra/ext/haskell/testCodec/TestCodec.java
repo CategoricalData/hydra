@@ -8,7 +8,7 @@ package hydra.ext.haskell.testCodec;
 public interface TestCodec {
   static hydra.util.Either<String, String> termToHaskell(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Term term, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bimap.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
+      (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ic -> hydra.show.errors.Errors.error(((java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.errors.Error_>) (projected -> projected.object)).apply(ic))),
       (java.util.function.Function<hydra.ext.haskell.ast.Expression, String>) (arg_ -> hydra.serialization.Serialization.printExpr(hydra.serialization.Serialization.parenthesize(hydra.ext.haskell.serde.Serde.expressionToExpr(arg_)))),
       hydra.ext.haskell.coder.Coder.encodeTerm(
         0,
@@ -20,7 +20,7 @@ public interface TestCodec {
 
   static <T0> hydra.util.Either<String, String> typeToHaskell(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Type typ, T0 g) {
     return hydra.lib.eithers.Bimap.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
+      (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ic -> hydra.show.errors.Errors.error(((java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.errors.Error_>) (projected -> projected.object)).apply(ic))),
       (java.util.function.Function<hydra.ext.haskell.ast.Type, String>) (arg_ -> hydra.serialization.Serialization.printExpr(hydra.serialization.Serialization.parenthesize(hydra.ext.haskell.serde.Serde.typeToExpr(arg_)))),
       hydra.ext.haskell.coder.Coder.<T0>encodeType(
         namespaces,
@@ -306,7 +306,7 @@ public interface TestCodec {
 
   static hydra.util.Maybe<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>> tryInferTypeOf(hydra.graph.Graph g, hydra.core.Term term) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>>) (ignored -> (hydra.util.Maybe<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>nothing())),
+      (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>>) (ignored -> (hydra.util.Maybe<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>nothing())),
       (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>>) (result -> hydra.util.Maybe.just(hydra.lib.pairs.First.apply(result))),
       hydra.inference.Inference.inferTypeOf(
         hydra.lexical.Lexical.emptyContext(),
@@ -515,7 +515,7 @@ public interface TestCodec {
     return hydra.lib.logic.IfElse.lazy(
       hydra.schemas.Schemas.isEncodedTerm(hydra.rewriting.Rewriting.deannotateTerm(t)),
       () -> hydra.lib.eithers.Either.apply(
-        (java.util.function.Function<hydra.error.DecodingError, hydra.util.PersistentSet<hydra.core.Name>>) (ignored -> names),
+        (java.util.function.Function<hydra.errors.DecodingError, hydra.util.PersistentSet<hydra.core.Name>>) (ignored -> names),
         (java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>) (decodedTerm -> hydra.lib.sets.Union.apply(
           names,
           hydra.rewriting.Rewriting.termDependencyNames(
@@ -524,7 +524,7 @@ public interface TestCodec {
             true,
             decodedTerm))),
         hydra.lib.eithers.Bimap.apply(
-          (java.util.function.Function<hydra.error.DecodingError, hydra.error.DecodingError>) (_e -> _e),
+          (java.util.function.Function<hydra.errors.DecodingError, hydra.errors.DecodingError>) (_e -> _e),
           (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (_a -> _a),
           hydra.decode.core.Core.term(
             graf,
@@ -572,7 +572,7 @@ public interface TestCodec {
     hydra.module.Module tempModule = new hydra.module.Module((mod).namespace, testBindings.get(), (mod).termDependencies, (mod).typeDependencies, (mod).description);
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.Bimap.apply(
-        (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
+        (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ic -> hydra.show.errors.Errors.error(((java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.errors.Error_>) (projected -> projected.object)).apply(ic))),
         (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>) (a -> a),
         hydra.ext.haskell.utils.Utils.namespacesForModule(
           tempModule,

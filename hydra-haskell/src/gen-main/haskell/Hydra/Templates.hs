@@ -7,7 +7,7 @@ module Hydra.Templates where
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Logic as Logic
@@ -24,7 +24,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Decode a list of type-encoding bindings into a map of named types
-graphToSchema :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.DecodingError) (M.Map Core.Name Core.Type)
+graphToSchema :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Errors.DecodingError) (M.Map Core.Name Core.Type)
 graphToSchema cx graph els =
 
       let toPair =
@@ -36,13 +36,13 @@ graphToSchema cx graph els =
       in (Eithers.bind (Eithers.mapList toPair els) (\pairs -> Right (Maps.fromList pairs)))
 
 -- | Given a graph schema and a nonrecursive type, instantiate it with default values. If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals. The name parameter provides the element name for nominal type construction.
-instantiateTemplate :: Context.Context -> Bool -> M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Either (Context.InContext Error.Error) Core.Term
+instantiateTemplate :: Context.Context -> Bool -> M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Either (Context.InContext Errors.Error) Core.Term
 instantiateTemplate cx minimal schema tname t =
 
       let inst = \tn -> instantiateTemplate cx minimal schema tn
           noPoly =
                   Left (Context.InContext {
-                    Context.inContextObject = (Error.ErrorOther (Error.OtherError "Polymorphic and function types are not currently supported")),
+                    Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "Polymorphic and function types are not currently supported")),
                     Context.inContextContext = cx})
           forFloat =
                   \ft -> case ft of
@@ -91,7 +91,7 @@ instantiateTemplate cx minimal schema tname t =
         Core.TypeSet v0 -> Logic.ifElse minimal (Right (Core.TermSet Sets.empty)) (Eithers.bind (inst tname v0) (\e -> Right (Core.TermSet (Sets.fromList [
           e]))))
         Core.TypeVariable v0 -> Maybes.maybe (Left (Context.InContext {
-          Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "Type variable " (Strings.cat2 (Core__.term (Core.TermVariable v0)) " not found in schema")))),
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Type variable " (Strings.cat2 (Core__.term (Core.TermVariable v0)) " not found in schema")))),
           Context.inContextContext = cx})) (inst v0) (Maps.lookup v0 schema)
         Core.TypeWrap v0 -> Eithers.bind (inst tname v0) (\e -> Right (Core.TermWrap (Core.WrappedTerm {
           Core.wrappedTermTypeName = tname,

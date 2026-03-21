@@ -27,7 +27,7 @@ import hydra.lib.strings
 import hydra.module
 import hydra.rewriting
 import hydra.serialization
-import hydra.show.error
+import hydra.show.errors
 import hydra.test.utils
 import hydra.testing
 import hydra.util
@@ -169,7 +169,7 @@ def namespace_to_java_class_name(ns_: hydra.module.Namespace) -> str:
 def term_to_java(term: hydra.core.Term, g: hydra.graph.Graph) -> Either[str, str]:
     r"""Convert a Hydra term to a Java expression string."""
 
-    return hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda arg_: hydra.serialization.print_expr(hydra.serialization.parenthesize(hydra.ext.java.serde.write_expression(arg_)))), hydra.ext.java.coder.encode_term(hydra.ext.java.helpers.JavaEnvironment(hydra.ext.java.helpers.Aliases(hydra.module.Namespace("test"), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), Nothing(), hydra.lib.sets.empty()), g), term, hydra.lexical.empty_context(), g))
+    return hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda arg_: hydra.serialization.print_expr(hydra.serialization.parenthesize(hydra.ext.java.serde.write_expression(arg_)))), hydra.ext.java.coder.encode_term(hydra.ext.java.helpers.JavaEnvironment(hydra.ext.java.helpers.Aliases(hydra.module.Namespace("test"), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), Nothing(), hydra.lib.sets.empty()), g), term, hydra.lexical.empty_context(), g))
 
 def type_to_java(_t: T0, _g: T1) -> Either[T2, str]:
     r"""Convert a Hydra type to a Java type expression string (placeholder returning Object)."""

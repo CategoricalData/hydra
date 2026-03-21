@@ -416,7 +416,7 @@ module_ =
       Module.moduleTermDependencies = [
         Module.Namespace "hydra.encode.context",
         (Module.Namespace "hydra.encode.core"),
-        (Module.Namespace "hydra.encode.error")],
+        (Module.Namespace "hydra.encode.errors")],
       Module.moduleTypeDependencies = [
         Module.Namespace "hydra.util"],
       Module.moduleDescription = (Just "Term encoders for hydra.util")}

@@ -1285,7 +1285,7 @@ public interface Coder {
       public hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit(hydra.core.Term.Function fun) {
         return (fun).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
-          public hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise(hydra.core.Function instance) {
+          public hydra.util.Either<hydra.ext.lisp.syntax.TopLevelFormWithComments, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise(hydra.core.Function instance) {
             return hydra.lib.eithers.Bind.apply(
               hydra.ext.lisp.coder.Coder.<T0, T1, T2>encodeTerm(
                 dialect,
@@ -1296,7 +1296,7 @@ public interface Coder {
           }
 
           @Override
-          public hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit(hydra.core.Function.Lambda lam) {
+          public hydra.util.Either<hydra.ext.lisp.syntax.TopLevelFormWithComments, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit(hydra.core.Function.Lambda lam) {
             return hydra.lib.eithers.Bind.apply(
               hydra.ext.lisp.coder.Coder.<T0, T1, T2>encodeTerm(
                 dialect,

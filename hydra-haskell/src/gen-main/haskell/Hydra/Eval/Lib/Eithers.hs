@@ -6,7 +6,7 @@ module Hydra.Eval.Lib.Eithers where
 
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -23,18 +23,18 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Interpreter-friendly bind for Either terms.
-bind :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+bind :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 bind cx g eitherTerm funTerm =
     case eitherTerm of
       Core.TermEither v0 -> Right (Eithers.either (\val -> Core.TermEither (Left val)) (\val -> Core.TermApplication (Core.Application {
         Core.applicationFunction = funTerm,
         Core.applicationArgument = val})) v0)
       _ -> Left (Context.InContext {
-        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
         Context.inContextContext = cx})
 
 -- | Interpreter-friendly bimap for Either terms.
-bimap :: Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+bimap :: Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 bimap cx g leftFun rightFun eitherTerm =
     case eitherTerm of
       Core.TermEither v0 -> Right (Eithers.either (\val -> Core.TermEither (Left (Core.TermApplication (Core.Application {
@@ -43,11 +43,11 @@ bimap cx g leftFun rightFun eitherTerm =
         Core.applicationFunction = rightFun,
         Core.applicationArgument = val})))) v0)
       _ -> Left (Context.InContext {
-        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
         Context.inContextContext = cx})
 
 -- | Interpreter-friendly case analysis for Either terms.
-either :: Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+either :: Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 either cx g leftFun rightFun eitherTerm =
     case eitherTerm of
       Core.TermEither v0 -> Right (Eithers.either (\val -> Core.TermApplication (Core.Application {
@@ -56,11 +56,11 @@ either cx g leftFun rightFun eitherTerm =
         Core.applicationFunction = rightFun,
         Core.applicationArgument = val})) v0)
       _ -> Left (Context.InContext {
-        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
         Context.inContextContext = cx})
 
 -- | Interpreter-friendly foldl for Either.
-foldl :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+foldl :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 foldl cx g funTerm initTerm listTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -81,18 +81,18 @@ foldl cx g funTerm initTerm listTerm =
       Core.applicationArgument = acc})) (Core.TermEither (Right initTerm)) elements))
 
 -- | Interpreter-friendly map for Either terms.
-map :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+map :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 map cx g rightFun eitherTerm =
     case eitherTerm of
       Core.TermEither v0 -> Right (Eithers.either (\val -> Core.TermEither (Left val)) (\val -> Core.TermEither (Right (Core.TermApplication (Core.Application {
         Core.applicationFunction = rightFun,
         Core.applicationArgument = val})))) v0)
       _ -> Left (Context.InContext {
-        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core__.term eitherTerm)))),
         Context.inContextContext = cx})
 
 -- | Interpreter-friendly mapList for Either (traverse).
-mapList :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+mapList :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 mapList cx g funTerm listTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -127,7 +127,7 @@ mapList cx g funTerm listTerm =
         Core.applicationArgument = el}))})) (Core.TermEither (Right (Core.TermList []))) (Lists.reverse elements)))
 
 -- | Interpreter-friendly mapMaybe for Either (traverse over Maybe).
-mapMaybe :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+mapMaybe :: Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 mapMaybe cx g funTerm maybeTerm =
     case maybeTerm of
       Core.TermMaybe v0 -> Right (Maybes.maybe (Core.TermEither (Right (Core.TermMaybe Nothing))) (\val -> Core.TermApplication (Core.Application {
@@ -146,11 +146,11 @@ mapMaybe cx g funTerm maybeTerm =
           Core.applicationFunction = funTerm,
           Core.applicationArgument = val}))})) v0)
       _ -> Left (Context.InContext {
-        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "maybe value") " but found ") (Core__.term maybeTerm)))),
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "maybe value") " but found ") (Core__.term maybeTerm)))),
         Context.inContextContext = cx})
 
 -- | Interpreter-friendly mapSet for Either (traverse over Set).
-mapSet :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+mapSet :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 mapSet cx g funTerm setTerm =
     Eithers.bind (Core_.set cx g setTerm) (\elements -> Right (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {

@@ -125,6 +125,9 @@ def transform_test_case(tcm: hydra.testing.TestCaseWithMetadata) -> Maybe[hydra.
             expected = scccase.expected
             return Just(hydra.testing.TestCaseWithMetadata(name_, cast(hydra.testing.TestCase, hydra.testing.TestCaseDelegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(build_topological_sort_s_c_c_call(adj_list), encode_list_list(expected)))), desc, tags_))
 
+        case hydra.testing.TestCaseValidateCoreTerm():
+            return Just(tcm)
+
         case _:
             return Nothing()
 
