@@ -181,8 +181,11 @@ def eta_expand_term(graph: hydra.graph.Graph, term: hydra.core.Term) -> hydra.co
 def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.core.Term:
     r"""Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the Graph to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the Graph through nested scopes."""
 
+    @lru_cache(1)
+    def prim_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
+        return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda _gpt_p: (_gpt_p.name, _gpt_p.type)), hydra.lib.maps.elems(tx0.primitives)))
     def term_arity_with_context(tx: hydra.graph.Graph, term: hydra.core.Term):
-        def _hoist_term_arity_with_context_1(tx, v1):
+        def _hoist_term_arity_with_context_1(v1):
             match v1:
                 case hydra.core.FunctionElimination():
                     return 1
@@ -191,7 +194,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                     return 0
 
                 case hydra.core.FunctionPrimitive(value=name):
-                    return hydra.lib.maybes.maybe((lambda : 0), (lambda x1: hydra.arity.type_scheme_arity(x1)), hydra.lib.maps.lookup(name, hydra.lib.maps.from_list(hydra.lib.lists.map((lambda _gpt_p: (_gpt_p.name, _gpt_p.type)), hydra.lib.maps.elems(tx.primitives)))))
+                    return hydra.lib.maybes.maybe((lambda : 0), (lambda x1: hydra.arity.type_scheme_arity(x1)), hydra.lib.maps.lookup(name, prim_types()))
 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
@@ -203,7 +206,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                 return hydra.lib.math.sub(term_arity_with_context(tx, app.function), 1)
 
             case hydra.core.TermFunction(value=f):
-                return _hoist_term_arity_with_context_1(tx, f)
+                return _hoist_term_arity_with_context_1(f)
 
             case hydra.core.TermLet(value=l):
                 return term_arity_with_context(hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), tx, l), l.body)
@@ -270,10 +273,10 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
         def recurse(tx1: hydra.graph.Graph, term1: hydra.core.Term) -> hydra.core.Term:
             return rewrite_with_args((), tx1, term1)
         def term_head_type(tx2: hydra.graph.Graph, trm2: hydra.core.Term):
-            def _hoist_term_head_type_1(tx2, v1):
+            def _hoist_term_head_type_1(v1):
                 match v1:
                     case hydra.core.FunctionPrimitive(value=pn2):
-                        return hydra.lib.maybes.map((lambda ts2: ts2.type), hydra.lib.maps.lookup(pn2, hydra.lib.maps.from_list(hydra.lib.lists.map((lambda _gpt_p: (_gpt_p.name, _gpt_p.type)), hydra.lib.maps.elems(tx2.primitives)))))
+                        return hydra.lib.maybes.map((lambda ts2: ts2.type), hydra.lib.maps.lookup(pn2, prim_types()))
 
                     case _:
                         return Nothing()
@@ -289,7 +292,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                     return term_head_type(tx2, at2.body)
 
                 case hydra.core.TermFunction(value=f2):
-                    return _hoist_term_head_type_1(tx2, f2)
+                    return _hoist_term_head_type_1(f2)
 
                 case hydra.core.TermLet(value=l2):
                     return term_head_type(hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), tx2, l2), l2.body)
@@ -398,7 +401,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                         return term_arity_with_context(tx, term)
                     @lru_cache(1)
                     def prim_type() -> Maybe[hydra.core.Type]:
-                        return hydra.lib.maybes.map((lambda ts: ts.type), hydra.lib.maps.lookup(pn, hydra.lib.maps.from_list(hydra.lib.lists.map((lambda _gpt_p: (_gpt_p.name, _gpt_p.type)), hydra.lib.maps.elems(tx.primitives)))))
+                        return hydra.lib.maybes.map((lambda ts: ts.type), hydra.lib.maps.lookup(pn, prim_types()))
                     return expand(False, args, arty(), prim_type(), term)
 
                 case _:

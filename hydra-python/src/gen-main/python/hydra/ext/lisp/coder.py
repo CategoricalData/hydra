@@ -203,10 +203,18 @@ def is_primitive_ref(prim_name: str, term: hydra.core.Term):
             case _:
                 return False
 
+def wrap_in_thunk(expr: hydra.ext.lisp.syntax.Expression) -> hydra.ext.lisp.syntax.Expression:
+    return cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionLambda(hydra.ext.lisp.syntax.Lambda(Nothing(), (), Nothing(), (expr,))))
+
 def encode_application(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, raw_fun: hydra.core.Term, raw_arg: hydra.core.Term):
     @lru_cache(1)
     def d_fun() -> hydra.core.Term:
         return hydra.rewriting.deannotate_term(raw_fun)
+    @lru_cache(1)
+    def normal() -> Either[hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression]:
+        return hydra.lib.eithers.bind(encode_term(dialect, cx, g, raw_fun), (lambda fun: hydra.lib.eithers.bind(encode_term(dialect, cx, g, raw_arg), (lambda arg: Right(lisp_app(fun, (arg,)))))))
+    def enc(t: hydra.core.Term) -> Either[T2, hydra.ext.lisp.syntax.Expression]:
+        return encode_term(dialect, cx, g, t)
     match d_fun():
         case hydra.core.TermApplication(value=app2):
             mid_fun = app2.function
@@ -214,6 +222,9 @@ def encode_application(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, ra
             @lru_cache(1)
             def d_mid_fun() -> hydra.core.Term:
                 return hydra.rewriting.deannotate_term(mid_fun)
+            @lru_cache(1)
+            def is_lazy2() -> bool:
+                return hydra.lib.logic.or_(is_primitive_ref("hydra.lib.eithers.fromLeft", d_mid_fun()), hydra.lib.logic.or_(is_primitive_ref("hydra.lib.eithers.fromRight", d_mid_fun()), is_primitive_ref("hydra.lib.maybes.fromMaybe", d_mid_fun())))
             def _hoist_body_1(v1):
                 match v1:
                     case hydra.core.TermApplication(value=app3):
@@ -222,17 +233,14 @@ def encode_application(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, ra
                         @lru_cache(1)
                         def d_inner_fun() -> hydra.core.Term:
                             return hydra.rewriting.deannotate_term(inner_fun)
-                        @lru_cache(1)
-                        def is_if_else() -> bool:
-                            return is_primitive_ref("hydra.lib.logic.ifElse", d_inner_fun())
-                        return hydra.lib.logic.if_else(is_if_else(), (lambda : hydra.lib.eithers.bind(encode_term(dialect, cx, g, inner_arg), (lambda cond_expr: hydra.lib.eithers.bind(encode_term(dialect, cx, g, mid_arg), (lambda then_expr: hydra.lib.eithers.bind(encode_term(dialect, cx, g, raw_arg), (lambda else_expr: Right(cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionIf(hydra.ext.lisp.syntax.IfExpression(cond_expr, then_expr, Just(else_expr)))))))))))), (lambda : hydra.lib.eithers.bind(encode_term(dialect, cx, g, raw_fun), (lambda fun: hydra.lib.eithers.bind(encode_term(dialect, cx, g, raw_arg), (lambda arg: Right(lisp_app(fun, (arg,)))))))))
+                        return hydra.lib.logic.if_else(is_primitive_ref("hydra.lib.logic.ifElse", d_inner_fun()), (lambda : hydra.lib.eithers.bind(enc(inner_arg), (lambda e_c: hydra.lib.eithers.bind(enc(mid_arg), (lambda e_t: hydra.lib.eithers.bind(enc(raw_arg), (lambda e_e: Right(cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionIf(hydra.ext.lisp.syntax.IfExpression(e_c, e_t, Just(e_e)))))))))))), (lambda : hydra.lib.logic.if_else(is_primitive_ref("hydra.lib.maybes.maybe", d_inner_fun()), (lambda : hydra.lib.eithers.bind(enc(inner_fun), (lambda e_p: hydra.lib.eithers.bind(enc(inner_arg), (lambda e_def: hydra.lib.eithers.bind(enc(mid_arg), (lambda e_f: hydra.lib.eithers.bind(enc(raw_arg), (lambda e_m: Right(lisp_app(lisp_app(lisp_app(e_p, (wrap_in_thunk(e_def),)), (e_f,)), (e_m,)))))))))))), (lambda : hydra.lib.logic.if_else(is_primitive_ref("hydra.lib.maybes.cases", d_inner_fun()), (lambda : hydra.lib.eithers.bind(enc(inner_fun), (lambda e_p: hydra.lib.eithers.bind(enc(inner_arg), (lambda e_m: hydra.lib.eithers.bind(enc(mid_arg), (lambda e_n: hydra.lib.eithers.bind(enc(raw_arg), (lambda e_j: Right(lisp_app(lisp_app(lisp_app(e_p, (e_m,)), (wrap_in_thunk(e_n),)), (e_j,)))))))))))), (lambda : normal()))))))
 
                     case _:
-                        return hydra.lib.eithers.bind(encode_term(dialect, cx, g, raw_fun), (lambda fun: hydra.lib.eithers.bind(encode_term(dialect, cx, g, raw_arg), (lambda arg: Right(lisp_app(fun, (arg,)))))))
-            return _hoist_body_1(d_mid_fun())
+                        return normal()
+            return hydra.lib.logic.if_else(is_lazy2(), (lambda : hydra.lib.eithers.bind(enc(mid_fun), (lambda e_prim: hydra.lib.eithers.bind(enc(mid_arg), (lambda e_def: hydra.lib.eithers.bind(enc(raw_arg), (lambda e_arg: Right(lisp_app(lisp_app(e_prim, (wrap_in_thunk(e_def),)), (e_arg,)))))))))), (lambda : _hoist_body_1(d_mid_fun())))
 
         case _:
-            return hydra.lib.eithers.bind(encode_term(dialect, cx, g, raw_fun), (lambda fun: hydra.lib.eithers.bind(encode_term(dialect, cx, g, raw_arg), (lambda arg: Right(lisp_app(fun, (arg,)))))))
+            return normal()
 
 def encode_elimination(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, elim: hydra.core.Elimination, marg: Maybe[hydra.core.Term]) -> Either[T2, hydra.ext.lisp.syntax.Expression]:
     match elim:
@@ -513,6 +521,15 @@ def encode_type_definition(cx: T0, g: T1, tdef: hydra.module.TypeDefinition) -> 
     def dtyp() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
     return encode_type_body(lname(), typ, dtyp())
+
+def is_cases_primitive(name: hydra.core.Name) -> bool:
+    return hydra.lib.equality.equal(name, hydra.core.Name("hydra.lib.maybes.cases"))
+
+def is_lazy2_arg_primitive(name: hydra.core.Name) -> bool:
+    return hydra.lib.logic.or_(hydra.lib.equality.equal(name, hydra.core.Name("hydra.lib.eithers.fromLeft")), hydra.lib.logic.or_(hydra.lib.equality.equal(name, hydra.core.Name("hydra.lib.eithers.fromRight")), hydra.lib.equality.equal(name, hydra.core.Name("hydra.lib.maybes.fromMaybe"))))
+
+def is_lazy3_arg_primitive(name: hydra.core.Name) -> bool:
+    return hydra.lib.equality.equal(name, hydra.core.Name("hydra.lib.maybes.maybe"))
 
 def lisp_lit_expr(lit: hydra.ext.lisp.syntax.Literal) -> hydra.ext.lisp.syntax.Expression:
     return cast(hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.ExpressionLiteral(lit))

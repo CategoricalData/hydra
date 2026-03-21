@@ -645,8 +645,7 @@ def free_type_variables_in_term(term0: hydra.core.Term) -> frozenset[hydra.core.
 def free_variables_in_term(term: hydra.core.Term):
     r"""Find the free variables (i.e. variables not bound by a lambda or let) in a term."""
 
-    @lru_cache(1)
-    def dflt_vars() -> frozenset[hydra.core.Name]:
+    def dflt_vars(_: T0) -> frozenset[hydra.core.Name]:
         return hydra.lib.lists.foldl((lambda s, t: hydra.lib.sets.union(s, free_variables_in_term(t))), hydra.lib.sets.empty(), subterms(term))
     def _hoist_body_1(v1):
         match v1:
@@ -654,19 +653,19 @@ def free_variables_in_term(term: hydra.core.Term):
                 return hydra.lib.sets.delete(l.parameter, free_variables_in_term(l.body))
 
             case _:
-                return dflt_vars()
+                return dflt_vars(None)
     match term:
         case hydra.core.TermFunction(value=_match_value):
             return _hoist_body_1(_match_value)
 
         case hydra.core.TermLet(value=l):
-            return hydra.lib.sets.difference(dflt_vars(), hydra.lib.sets.from_list(hydra.lib.lists.map((lambda v1: v1.name), l.bindings)))
+            return hydra.lib.sets.difference(dflt_vars(None), hydra.lib.sets.from_list(hydra.lib.lists.map((lambda v1: v1.name), l.bindings)))
 
         case hydra.core.TermVariable(value=v):
             return hydra.lib.sets.singleton(v)
 
         case _:
-            return dflt_vars()
+            return dflt_vars(None)
 
 def free_variables_in_type_ordered(typ: hydra.core.Type) -> frozenlist[hydra.core.Name]:
     r"""Find the free variables in a type in deterministic left-to-right order."""
