@@ -1,14 +1,13 @@
 package hydra
 
-import hydra.core.{Binding, Name, Term, TypeScheme}
+import hydra.core.*
 import hydra.graph.{Graph, Primitive}
 import hydra.json.model.Value
-import hydra.module.{Definition, Module, Namespace}
+import hydra.module.{Module, Namespace, Definition}
 
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
-import scala.jdk.CollectionConverters.*
 
 /**
  * I/O wrapper for Hydra code generation in Scala.
@@ -18,9 +17,7 @@ object Generation:
 
   /** Create an empty graph with standard primitives (the bootstrap graph). */
   def bootstrapGraph(): Graph =
-    val primitives: Map[Name, Primitive] = hydra.lib.Libraries.standardPrimitives.map { prim =>
-      prim.name -> prim.toNative
-    }.toMap
+    val primitives: Map[String, Primitive] = hydra.lib.Libraries.standardPrimitives()
     Graph(
       boundTerms = Map.empty,
       boundTypes = Map.empty,
@@ -37,71 +34,73 @@ object Generation:
     SimpleJsonParser(content).parseValue()
 
   /**
-   * Create the schema map used for type-directed JSON decoding.
-   * This is the subset of kernel types needed to decode modules from JSON.
+   * Build a schema map for type-directed JSON decoding from the bootstrap type map.
+   * Converts System F types (with foralls and annotations) to plain types for JSON decoding.
    */
-  def bootstrapSchemaMap(): Map[Name, hydra.core.Type] =
-    hydra.schemas.Schemas.bootstrapSchemaMap
+  def bootstrapSchemaMap(): Map[String, Type] =
+    hydra.json.bootstrap.typesByName.map { (name, typ) =>
+      val ts = hydra.rewriting.fTypeToTypeScheme(typ)
+      name -> hydra.rewriting.deannotateTypeRecursive(ts.`type`)
+    }
+
+  /**
+   * Decode a single module from a JSON value.
+   */
+  def decodeModuleFromJson(bsGraph: Graph, schemaMap: Map[String, Type], jsonVal: Value): Module =
+    val modName: String = "hydra.module.Module"
+    val modType: Type = Type.variable(modName)
+    hydra.json.decode.fromJson(schemaMap)(modName)(modType)(jsonVal) match
+      case Left(err) => throw new RuntimeException(s"JSON decode error: $err")
+      case Right(term) =>
+        hydra.decode.module.module(bsGraph)(term) match
+          case Left(err) => throw new RuntimeException(s"Module decode error: $err")
+          case Right(mod) => mod
 
   /**
    * Load modules from a JSON directory using type-directed decoding.
    */
-  def loadModulesFromJson(
-      failOnError: Boolean,
-      jsonDir: String,
-      schemaMap: Map[Name, hydra.core.Type],
-      namespaces: Seq[Namespace]): Seq[Module] =
+  def loadModulesFromJson(jsonDir: String, schemaMap: Map[String, Type],
+      namespaces: Seq[String]): Seq[Module] =
+    val bsGraph = bootstrapGraph()
     namespaces.flatMap { ns =>
       val filePath = jsonDir + File.separator +
-        ns.value.replace('.', File.separatorChar) + ".json"
+        hydra.codeGeneration.namespaceToPath(ns) + ".json"
       val file = new File(filePath)
-      if (!file.exists()) {
-        if (failOnError) throw new RuntimeException(s"JSON file not found: $filePath")
-        else { System.err.println(s"  Warning: skipping missing module: ${ns.value}"); Seq.empty }
-      } else {
-        try {
+      if !file.exists() then
+        System.err.println(s"  Warning: skipping missing module: $ns")
+        Seq.empty
+      else
+        try
           val jsonValue = parseJsonFile(filePath)
-          hydra.json.bootstrap.JsonBootstrap.decodeModule(schemaMap)(jsonValue) match {
-            case Right(mod) => Seq(mod)
-            case Left(err) =>
-              if (failOnError) throw new RuntimeException(s"Failed to decode ${ns.value}: $err")
-              else { System.err.println(s"  Warning: failed to decode ${ns.value}: $err"); Seq.empty }
-          }
-        } catch {
+          val mod = decodeModuleFromJson(bsGraph, schemaMap, jsonValue)
+          println(s"  Loaded: $ns")
+          Seq(mod)
+        catch
           case e: Exception =>
-            if (failOnError) throw e
-            else { System.err.println(s"  Warning: error loading ${ns.value}: ${e.getMessage}"); Seq.empty }
-        }
-      }
+            System.err.println(s"  Warning: error loading $ns: ${e.getMessage}")
+            Seq.empty
     }
 
   /** Read namespace list from a JSON manifest file. */
-  def readManifestField(jsonDir: String, fieldName: String): Seq[Namespace] =
+  def readManifestField(jsonDir: String, fieldName: String): Seq[String] =
     val manifestPath = jsonDir + File.separator + "manifest.json"
     val manifestJson = parseJsonFile(manifestPath)
-    manifestJson match {
+    manifestJson match
       case Value.`object`(m) =>
-        m.get(fieldName) match {
+        m.get(fieldName) match
           case Some(Value.array(items)) =>
-            items.collect { case Value.string(s) => Namespace(s) }
+            items.collect { case Value.string(s) => s }
           case _ => throw new RuntimeException(s"manifest field '$fieldName' not found or not an array")
-        }
       case _ => throw new RuntimeException("manifest.json is not an object")
-    }
 
   /** Filter to kernel-only modules (exclude hydra.ext.*) */
   def filterKernelModules(mods: Seq[Module]): Seq[Module] =
-    mods.filter(m => !m.namespace.value.startsWith("hydra.ext."))
+    mods.filter(m => !m.namespace.startsWith("hydra.ext."))
 
-  /** Filter to type-only modules */
-  def filterTypeModules(mods: Seq[Module]): Seq[Module] =
-    mods.filter(m => hydra.annotations.Annotations.isNativeType(m.elements.headOption.getOrElse(
-      return Seq.empty)))
-    mods // TODO: proper type module detection
-
-  /** Generate source files and write them to disk. */
+  /** Generate source files and write them to disk. Returns number of files written. */
   def generateSources(
-      coder: Module => Seq[Definition] => hydra.context.Context => Graph => Either[hydra.context.InContext[hydra.error.Error], Map[String, String]],
+      coder: Module => Seq[Definition] => hydra.context.Context => Graph =>
+        Either[hydra.context.InContext[hydra.error.Error], Map[String, String]],
       language: hydra.coders.Language,
       doInfer: Boolean,
       doExpand: Boolean,
@@ -112,43 +111,41 @@ object Generation:
       modsToGenerate: Seq[Module]): Int =
     val cx = hydra.context.Context(Seq.empty, Seq.empty, Map.empty)
     val bsGraph = bootstrapGraph()
-    hydra.codeGeneration.CodeGeneration.generateSourceFiles(
+    hydra.codeGeneration.generateSourceFiles(
       coder)(language)(doInfer)(doExpand)(doHoistCaseStatements)(doHoistPolymorphicLetBindings)(
-      bsGraph)(universe)(modsToGenerate)(cx) match {
+      bsGraph)(universe)(modsToGenerate)(cx) match
       case Left(ic) =>
         throw new RuntimeException(s"Code generation failed: ${ic.`object`}")
       case Right(pairs) =>
         var count = 0
-        for ((filePath, content) <- pairs) {
+        for (filePath, content) <- pairs do
           val fullPath = Paths.get(basePath, filePath)
           Files.createDirectories(fullPath.getParent)
           Files.write(fullPath, content.getBytes(StandardCharsets.UTF_8))
           count += 1
-        }
         count
-    }
 
   /** Generate Java source files from modules. */
   def writeJava(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
     generateSources(
-      mod => defs => cx => g => hydra.ext.java.coder.Coder.moduleToJava(mod)(defs)(cx)(g),
-      hydra.ext.java.language.Language.javaLanguage,
+      mod => defs => cx => g => hydra.ext.java.coder.moduleToJava(mod)(defs)(cx)(g),
+      hydra.ext.java.language.javaLanguage,
       doInfer = false, doExpand = true, doHoistCaseStatements = false, doHoistPolymorphicLetBindings = true,
       basePath, universe, mods)
 
   /** Generate Python source files from modules. */
   def writePython(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
     generateSources(
-      mod => defs => cx => g => hydra.ext.python.coder.Coder.moduleToPython(mod)(defs)(cx)(g),
-      hydra.ext.python.language.Language.pythonLanguage,
+      mod => defs => cx => g => hydra.ext.python.coder.moduleToPython(mod)(defs)(cx)(g),
+      hydra.ext.python.language.pythonLanguage,
       doInfer = false, doExpand = true, doHoistCaseStatements = true, doHoistPolymorphicLetBindings = false,
       basePath, universe, mods)
 
   /** Generate Haskell source files from modules. */
   def writeHaskell(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
     generateSources(
-      mod => defs => cx => g => hydra.ext.haskell.coder.Coder.moduleToHaskell(mod)(defs)(cx)(g),
-      hydra.ext.haskell.language.Language.haskellLanguage,
+      mod => defs => cx => g => hydra.ext.haskell.coder.moduleToHaskell(mod)(defs)(cx)(g),
+      hydra.ext.haskell.language.haskellLanguage,
       doInfer = false, doExpand = false, doHoistCaseStatements = false, doHoistPolymorphicLetBindings = false,
       basePath, universe, mods)
 
@@ -214,7 +211,7 @@ object Generation:
       else throw new RuntimeException(s"Expected boolean at position $pos")
 
     private def parseNull(): Value =
-      if input.startsWith("null", pos) then { pos += 4; Value.array(Seq.empty) } // null -> empty array
+      if input.startsWith("null", pos) then { pos += 4; Value.array(Seq.empty) }
       else throw new RuntimeException(s"Expected null at position $pos")
 
     private def parseNumber(): Value =
@@ -228,8 +225,7 @@ object Generation:
         pos += 1
         if pos < input.length && (input.charAt(pos) == '+' || input.charAt(pos) == '-') then pos += 1
         while pos < input.length && input.charAt(pos).isDigit do pos += 1
-      val numStr = input.substring(start, pos)
-      Value.number(BigDecimal(numStr))
+      Value.number(BigDecimal(input.substring(start, pos)))
 
     private def parseRawString(): String =
       expect('"')
@@ -252,7 +248,7 @@ object Generation:
               pos += 1
               val hex = input.substring(pos, pos + 4)
               sb.append(Integer.parseInt(hex, 16).toChar)
-              pos += 3 // will be incremented below
+              pos += 3
             case other => sb.append(other)
         else sb.append(c)
         pos += 1
@@ -262,7 +258,7 @@ object Generation:
     private def expect(c: Char): Unit =
       skipWhitespace()
       if pos >= input.length || input.charAt(pos) != c then
-        throw new RuntimeException(s"Expected '$c' at position $pos")
+        throw new RuntimeException(s"Expected '$c' at position $pos, got '${if pos < input.length then input.charAt(pos) else "EOF"}'")
       pos += 1
 
     private def skipWhitespace(): Unit =

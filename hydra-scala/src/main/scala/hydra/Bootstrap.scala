@@ -1,0 +1,158 @@
+package hydra
+
+import java.io.File
+
+/**
+ * Bootstrapping entry point: loads Hydra modules from JSON and generates
+ * code for a target language. Demonstrates that Scala can independently
+ * regenerate Hydra from a language-independent JSON representation.
+ *
+ * Usage:
+ *   scala hydra.Bootstrap --target <haskell|java|python> --json-dir <path> [OPTIONS]
+ *
+ * Options:
+ *   --output <dir>         Output base directory (default: /tmp/hydra-bootstrapping-demo)
+ *   --include-coders       Also load and generate ext coder modules
+ *   --include-tests        Also load and generate kernel test modules
+ *   --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)
+ *   --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
+ *   --types-only           Only generate type-defining modules
+ */
+@main def bootstrap(args: String*): Unit =
+  var target: Option[String] = None
+  var jsonDir: Option[String] = None
+  var extJsonDir: Option[String] = None
+  var outBase = "/tmp/hydra-bootstrapping-demo"
+  var includeCoders = false
+  var includeTests = false
+  var typesOnly = false
+  var kernelOnly = false
+
+  var i = 0
+  while i < args.length do
+    args(i) match
+      case "--target" => i += 1; target = Some(args(i))
+      case "--json-dir" => i += 1; jsonDir = Some(args(i))
+      case "--ext-json-dir" => i += 1; extJsonDir = Some(args(i))
+      case "--output" => i += 1; outBase = args(i)
+      case "--include-coders" => includeCoders = true
+      case "--include-tests" => includeTests = true
+      case "--types-only" => typesOnly = true
+      case "--kernel-only" => kernelOnly = true
+      case other => System.err.println(s"Unknown option: $other")
+    i += 1
+
+  if target.isEmpty || jsonDir.isEmpty then
+    println("Usage: scala hydra.Bootstrap --target <haskell|java|python> --json-dir <path> [OPTIONS]")
+    println()
+    println("Options:")
+    println("  --output <dir>         Output base directory")
+    println("  --include-coders       Also load and generate ext coder modules")
+    println("  --include-tests        Also load and generate kernel test modules")
+    println("  --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)")
+    println("  --kernel-only          Only generate kernel modules (exclude hydra.ext.*)")
+    println("  --types-only           Only generate type-defining modules")
+    System.exit(1)
+
+  if includeCoders && extJsonDir.isEmpty then
+    println("Error: --include-coders requires --ext-json-dir")
+    System.exit(1)
+
+  val tgt = target.get
+  val jDir = jsonDir.get
+  val targetCap = tgt.capitalize
+  val outDir = outBase + File.separator + "scala-to-" + tgt
+
+  println("==========================================")
+  println(s"Mapping JSON to $targetCap (via Scala host)")
+  println("==========================================")
+  println(s"  Host language:   Scala")
+  println(s"  Target language: $targetCap")
+  println(s"  JSON directory:  $jDir")
+  println(s"  Output:          $outDir")
+  println(s"  Include coders:  $includeCoders")
+  println(s"  Include tests:   $includeTests")
+  if typesOnly then println("  Filter:          types only")
+  if kernelOnly then println("  Filter:          kernel only")
+  println("==========================================")
+  println()
+
+  val totalStart = System.currentTimeMillis()
+
+  // Step 1: Build schema map
+  println("Step 1: Building schema map...")
+  var stepStart = System.currentTimeMillis()
+  val schemaMap = Generation.bootstrapSchemaMap()
+  println(s"  Schema map has ${schemaMap.size} types.")
+  println(s"  Time: ${Generation.formatTime(System.currentTimeMillis() - stepStart)}")
+  println()
+
+  // Step 2: Load main + eval lib modules from JSON
+  println("Step 2: Loading main modules from JSON...")
+  println(s"  Source: $jDir")
+  stepStart = System.currentTimeMillis()
+  val mainNamespaces = Generation.readManifestField(jDir, "mainModules")
+  val evalLibNamespaces = Generation.readManifestField(jDir, "evalLibModules")
+  val allKernelNamespaces = mainNamespaces ++ evalLibNamespaces
+  val mainMods = Generation.loadModulesFromJson(jDir, schemaMap, allKernelNamespaces)
+  var stepTime = System.currentTimeMillis() - stepStart
+  val totalBindings = mainMods.map(_.elements.size).sum
+  println(s"  Loaded ${mainMods.size} modules ($totalBindings bindings).")
+  println(s"  Time: ${Generation.formatTime(stepTime)}")
+  println()
+
+  // Step 3: Optionally load ext coder modules
+  var coderMods: Seq[hydra.module.Module] = Seq.empty
+  if includeCoders then
+    println("Step 3: Loading hydra-ext coder modules from JSON...")
+    val coderNamespaces = Generation.readManifestField(extJsonDir.get, "hydraBootstrapCoderModules")
+    val kernelNsSet = allKernelNamespaces.toSet
+    val extCoderNamespaces = coderNamespaces.filterNot(kernelNsSet.contains)
+    stepStart = System.currentTimeMillis()
+    coderMods = Generation.loadModulesFromJson(extJsonDir.get, schemaMap, extCoderNamespaces)
+    stepTime = System.currentTimeMillis() - stepStart
+    println(s"  Loaded ${coderMods.size} modules.")
+    println(s"  Time: ${Generation.formatTime(stepTime)}")
+    println()
+  else
+    println("Step 3: Skipping ext coder modules")
+    println()
+
+  var allMainMods = mainMods ++ coderMods
+
+  // Apply filters
+  var modsToGenerate = allMainMods
+  if kernelOnly then
+    val before = modsToGenerate.size
+    modsToGenerate = Generation.filterKernelModules(modsToGenerate)
+    allMainMods = Generation.filterKernelModules(allMainMods)
+    println(s"Filtering to kernel modules... $before -> ${modsToGenerate.size}")
+    println()
+
+  // Generate main modules
+  val outMain = outDir + File.separator + "src/gen-main"
+  println(s"Mapping ${modsToGenerate.size} modules to $targetCap...")
+  println(s"  Universe: ${allMainMods.size} modules")
+  println(s"  Output: $outMain")
+  println()
+
+  stepStart = System.currentTimeMillis()
+
+  val fileCount = tgt match
+    case "haskell" => Generation.writeHaskell(outMain + "/haskell", allMainMods, modsToGenerate)
+    case "java" => Generation.writeJava(outMain + "/java", allMainMods, modsToGenerate)
+    case "python" => Generation.writePython(outMain + "/python", allMainMods, modsToGenerate)
+    case other =>
+      println(s"Unknown target: $other")
+      System.exit(1)
+      0
+
+  stepTime = System.currentTimeMillis() - stepStart
+  println(s"  Generated $fileCount files.")
+  println(s"  Time: ${Generation.formatTime(stepTime)}")
+  println()
+
+  val totalTime = System.currentTimeMillis() - totalStart
+  println("==========================================")
+  println(s"Bootstrap complete! Total time: ${Generation.formatTime(totalTime)}")
+  println("==========================================")
