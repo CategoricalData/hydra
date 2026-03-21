@@ -420,18 +420,21 @@ freeVariablesInTerm :: TBinding (Term -> S.Set Name)
 freeVariablesInTerm = define "freeVariablesInTerm" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a term" $
   "term" ~>
-  "dfltVars" <~ Lists.foldl ("s" ~> "t" ~> Sets.union (var "s") (freeVariablesInTerm @@ var "t"))
+  -- Note: the subterm fold is wrapped in a lambda (dfltVars) rather than precomputed in a let binding,
+  -- because in eager languages a let-bound default would be evaluated unconditionally, even for
+  -- Variable/Lambda/Let cases where it is not needed. This avoids redundant traversal.
+  "dfltVars" <~ ("_" ~> Lists.foldl ("s" ~> "t" ~> Sets.union (var "s") (freeVariablesInTerm @@ var "t"))
     Sets.empty
-    (subterms @@ var "term") $
+    (subterms @@ var "term")) $
   cases _Term (var "term")
-    (Just $ var "dfltVars") [
-    _Term_function>>: match _Function (Just $ var "dfltVars") [
+    (Just $ var "dfltVars" @@ unit) [
+    _Term_function>>: match _Function (Just $ var "dfltVars" @@ unit) [
       _Function_lambda>>: "l" ~> Sets.delete
         (Core.lambdaParameter $ var "l")
         (freeVariablesInTerm @@ (Core.lambdaBody $ var "l"))],
-    _Term_let>>: "l" ~> (Sets.difference
-      (var "dfltVars")
-      (Sets.fromList (Lists.map (unaryFunction Core.bindingName) (Core.letBindings $ var "l")))),
+    _Term_let>>: "l" ~> Sets.difference
+      (var "dfltVars" @@ unit)
+      (Sets.fromList (Lists.map (unaryFunction Core.bindingName) (Core.letBindings $ var "l"))),
     _Term_variable>>: "v" ~> Sets.singleton $ var "v"]
 
 --freeVariablesInTermOpt :: TBinding (Term -> S.Set Name)
