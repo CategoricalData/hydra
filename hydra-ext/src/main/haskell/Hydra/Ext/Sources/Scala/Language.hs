@@ -106,6 +106,7 @@ scalaLanguage = scalaLanguageDefinition "scalaLanguage" $
     Variants.literalVariantInteger,
     Variants.literalVariantString],
   "floatTypes">: Sets.fromList $ list [
+    Core.floatTypeBigfloat,
     Core.floatTypeFloat32,
     Core.floatTypeFloat64],
   "functionVariants">: Sets.fromList $ list [
@@ -114,14 +115,19 @@ scalaLanguage = scalaLanguageDefinition "scalaLanguage" $
     Variants.functionVariantPrimitive],
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeBigint,
+    Core.integerTypeInt8,
     Core.integerTypeInt16,
     Core.integerTypeInt32,
     Core.integerTypeInt64,
-    Core.integerTypeUint8],
+    Core.integerTypeUint8,
+    Core.integerTypeUint16,
+    Core.integerTypeUint32,
+    Core.integerTypeUint64],
   "termVariants">: Sets.fromList $ list [
     Variants.termVariantApplication,
     Variants.termVariantEither,
     Variants.termVariantFunction,
+    Variants.termVariantLet,
     Variants.termVariantList,
     Variants.termVariantLiteral,
     Variants.termVariantMap,
@@ -130,10 +136,12 @@ scalaLanguage = scalaLanguageDefinition "scalaLanguage" $
     Variants.termVariantRecord,
     Variants.termVariantSet,
     Variants.termVariantUnion,
+    Variants.termVariantUnit,
     Variants.termVariantVariable,
     Variants.termVariantWrap],
   "typeVariants">: Sets.fromList $ list [
     Variants.typeVariantAnnotated,
+    Variants.typeVariantApplication,
     Variants.typeVariantEither,
     Variants.typeVariantFunction,
     Variants.typeVariantList,
@@ -167,9 +175,9 @@ scalaReservedWords = scalaLanguageDefinition "scalaReservedWords" $
   "keywords">:
     doc "Scala keywords" $
     list $ string <$> [
-      "abstract", "case", "catch", "class", "def", "do", "else", "extends", "false", "final", "finally", "for",
-      "forSome", "if", "implicit", "import", "lazy", "match", "new", "null", "object", "override", "package", "private",
-      "protected", "return", "sealed", "super", "this", "throw", "trait", "true", "try", "type", "val", "var", "while",
+      "abstract", "case", "catch", "class", "def", "do", "else", "end", "enum", "export", "extends", "false", "final", "finally", "for",
+      "forSome", "given", "if", "implicit", "import", "lazy", "match", "new", "null", "object", "override", "package", "private",
+      "protected", "return", "sealed", "super", "then", "this", "throw", "trait", "true", "try", "type", "val", "var", "while",
       "with", "yield"],
   "classNames">:
     doc "Classes in the Scala Standard Library 2.13.8" $
