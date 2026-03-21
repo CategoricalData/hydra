@@ -2,12 +2,45 @@
 
 (defn generic-compare [a b]
   (cond
-    (= a b) 0
+    (identical? a b) 0
+    (nil? a) (if (nil? b) 0 -1)
+    (nil? b) 1
     (and (number? a) (number? b)) (compare a b)
     (and (string? a) (string? b)) (compare a b)
-    (and (char? a) (char? b)) (compare (int a) (int b))
     (and (keyword? a) (keyword? b)) (compare a b)
     (and (boolean? a) (boolean? b)) (compare a b)
+    (and (char? a) (char? b)) (compare (int a) (int b))
+    ;; Records (defrecord instances): compare by type name first, then fields
+    (instance? clojure.lang.IRecord a)
+    (if (instance? clojure.lang.IRecord b)
+      (let [ta (type a) tb (type b)]
+        (if (= ta tb)
+          ;; Same record type: compare field values in key order
+          (let [ka (sort (keys a)) ;; record keys are always the same for same type
+                ]
+            (loop [ks (seq ka)]
+              (if (nil? ks) 0
+                (let [k (first ks)
+                      c (generic-compare (get a k) (get b k))]
+                  (if (not= c 0) c (recur (next ks)))))))
+          (compare (str ta) (str tb))))
+      (compare (str (type a)) (str (type b))))
+    (map? a)
+    (if (map? b)
+      (let [ca (count a) cb (count b)]
+        (if (not= ca cb)
+          (compare ca cb)
+          (loop [ra (seq a) rb (seq b)]
+            (cond
+              (nil? ra) 0
+              :else
+              (let [ea (first ra) eb (first rb)
+                    ck (generic-compare (key ea) (key eb))]
+                (if (not= ck 0) ck
+                  (let [cv (generic-compare (val ea) (val eb))]
+                    (if (not= cv 0) cv
+                      (recur (next ra) (next rb))))))))))
+      (compare (str (type a)) (str (type b))))
     (and (sequential? a) (sequential? b))
     (let [len-a (count a) len-b (count b)]
       (if (not= len-a len-b)
@@ -16,9 +49,6 @@
           (if (nil? ra) 0
               (let [c (generic-compare (clojure.core/first ra) (clojure.core/first rb))]
                 (if (not= c 0) c (recur (next ra) (next rb))))))))
-    (and (nil? a) (nil? b)) 0
-    (nil? a) -1
-    (nil? b) 1
     :else (compare (pr-str a) (pr-str b))))
 
 ;; compare :: a -> a -> Comparison

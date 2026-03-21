@@ -1,61 +1,53 @@
 (ns hydra.lib.sets
   (:require [hydra.lib.equality :refer [generic-compare]]))
 
-;; Sets are sorted lists with no duplicates
+;; Sets are Clojure hash sets for O(1) amortized insert/lookup/delete.
+;; toList produces a sorted output (via generic-compare) for determinism.
 
-(defn set-insert [x s]
-  (cond
-    (empty? s) (list x)
-    (= (generic-compare x (first s)) 0) s
-    (< (generic-compare x (first s)) 0) (cons x s)
-    :else (cons (first s) (set-insert x (rest s)))))
-
-(defn set-member? [x s]
-  (cond
-    (empty? s) false
-    (= x (first s)) true
-    :else (recur x (rest s))))
+(defn- to-hash-set
+  "Ensure we have a hash set."
+  [coll]
+  (if (set? coll) coll (set coll)))
 
 ;; delete :: a -> Set a -> Set a
 (def hydra_lib_sets_delete
-  (fn [x] (fn [s] (remove #(= x %) s))))
+  (fn [x] (fn [s] (disj (to-hash-set s) x))))
 
 ;; difference :: Set a -> Set a -> Set a
 (def hydra_lib_sets_difference
   (fn [s1] (fn [s2]
-    (filter (fn [x] (not (set-member? x s2))) s1))))
+    (let [s2-set (to-hash-set s2)]
+      (reduce (fn [acc x] (if (contains? s2-set x) (disj acc x) acc))
+              (to-hash-set s1)
+              s1)))))
 
 ;; empty :: Set a
-(def hydra_lib_sets_empty ())
+(def hydra_lib_sets_empty #{})
 
 ;; from_list :: [a] -> Set a
 (def hydra_lib_sets_from_list
-  (fn [xs]
-    (loop [rest_ (seq xs) acc ()]
-      (if (nil? rest_)
-        acc
-        (recur (next rest_) (set-insert (first rest_) acc))))))
+  (fn [xs] (set xs)))
 
 ;; insert :: a -> Set a -> Set a
 (def hydra_lib_sets_insert
-  (fn [x] (fn [s] (set-insert x s))))
+  (fn [x] (fn [s] (conj (to-hash-set s) x))))
 
 ;; intersection :: Set a -> Set a -> Set a
 (def hydra_lib_sets_intersection
   (fn [s1] (fn [s2]
-    (filter (fn [x] (set-member? x s2)) s1))))
+    (let [s2-set (to-hash-set s2)]
+      (reduce (fn [acc x] (if (contains? s2-set x) acc (disj acc x)))
+              (to-hash-set s1)
+              s1)))))
 
 ;; map :: (a -> b) -> Set a -> Set b
 (def hydra_lib_sets_map
   (fn [f] (fn [s]
-    (loop [rest_ (seq s) acc ()]
-      (if (nil? rest_)
-        acc
-        (recur (next rest_) (set-insert (f (first rest_)) acc)))))))
+    (set (map f s)))))
 
 ;; member :: a -> Set a -> Bool
 (def hydra_lib_sets_member
-  (fn [x] (fn [s] (set-member? x s))))
+  (fn [x] (fn [s] (contains? (to-hash-set s) x))))
 
 ;; null :: Set a -> Bool
 (def hydra_lib_sets_null
@@ -67,24 +59,21 @@
 
 ;; singleton :: a -> Set a
 (def hydra_lib_sets_singleton
-  (fn [x] (list x)))
+  (fn [x] #{x}))
 
 ;; to_list :: Set a -> [a]
+;; Sort for deterministic output
 (def hydra_lib_sets_to_list
-  (fn [s] s))
+  (fn [s] (sort generic-compare (seq s))))
 
 ;; union :: Set a -> Set a -> Set a
 (def hydra_lib_sets_union
   (fn [s1] (fn [s2]
-    (loop [rest_ (seq s2) acc s1]
-      (if (nil? rest_)
-        acc
-        (recur (next rest_) (set-insert (first rest_) acc)))))))
+    (into (to-hash-set s1) s2))))
 
 ;; unions :: [Set a] -> Set a
 (def hydra_lib_sets_unions
   (fn [ss]
-    (loop [rest_ (seq ss) acc ()]
-      (if (nil? rest_)
-        acc
-        (recur (next rest_) ((hydra_lib_sets_union acc) (first rest_)))))))
+    (reduce (fn [acc s] (into acc s))
+            #{}
+            ss)))

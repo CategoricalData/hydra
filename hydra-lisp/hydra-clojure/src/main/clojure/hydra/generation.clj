@@ -120,6 +120,8 @@
   (let [bs-graph (bootstrap-graph)
         cx (empty-context)
         t0 (System/currentTimeMillis)
+        _ (println (str "  [gen] Starting generate_source_files at " (java.time.Instant/now)))
+        _ (flush)
         result (((((((((((r 'hydra_code_generation_generate_source_files)
                           coder) language) do-infer) do-expand) do-hoist-case) do-hoist-poly)
                      bs-graph) universe) modules-to-generate) cx)

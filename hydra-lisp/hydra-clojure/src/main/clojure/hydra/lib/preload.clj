@@ -442,11 +442,31 @@
           the-ns (or (find-ns ns-sym) (create-ns ns-sym))]
       (refer-clojure-into-ns! the-ns))))
 
+(defn install-performance-patches!
+  "Install memoized versions of expensive generated functions.
+   Must be called after load-gen-main! has globalized the generated vars.
+   Addresses eager evaluation overhead in functions like freeVariablesInTerm
+   which are called repeatedly on the same terms during code generation."
+  []
+  ;; Placeholder for future performance patches.
+  ;; Note: Python coder reorderDefs override must be installed after coder loading.
+  ;; See install-coder-performance-patches! below.
+  nil)
+
+(defn install-coder-performance-patches!
+  "Placeholder for future coder-level performance patches.
+   Called after coder modules are loaded. Currently a no-op since laziness
+   is handled by thunking in the Lisp coder and by wrapping dfltVars in
+   freeVariablesInTerm as a lambda in the kernel DSL source."
+  []
+  nil)
+
 (defn load-gen-main!
   "Load generated main modules in dependency order, globalizing after each."
   []
   (doseq [ns-name gen-main-load-order]
-    (require-and-globalize! ns-name)))
+    (require-and-globalize! ns-name))
+  (install-performance-patches!))
 
 (defn load-gen-test!
   "Load generated test modules in dependency order, globalizing after each."
