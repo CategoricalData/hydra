@@ -41,6 +41,14 @@ executables:
     dependencies:
       - hydra-ext
 
+  update-scala:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-scala
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+
   update-ext-sources:
     main: Main.hs
     source-dirs:

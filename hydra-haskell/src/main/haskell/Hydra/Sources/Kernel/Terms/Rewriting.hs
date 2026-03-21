@@ -46,6 +46,7 @@ import Hydra.Kernel hiding (
   rewriteTypeM,
   simplifyTerm,
   substituteTypeVariables,
+  substituteTypeVariablesInTerm,
   substituteVariable,
   substituteVariables,
   subterms,
@@ -188,6 +189,7 @@ module_ = Module ns elements
      toBinding rewriteTypeM,
      toBinding simplifyTerm,
      toBinding substituteTypeVariables,
+     toBinding substituteTypeVariablesInTerm,
      toBinding substituteVariable,
      toBinding substituteVariables,
      toBinding stripTypeLambdas,
@@ -1821,6 +1823,42 @@ substituteTypeVariables = define "substituteTypeVariables" $
     _Type_variable>>: "n" ~>
       Core.typeVariable $ Maybes.fromMaybe (var "n") $ Maps.lookup (var "n") (var "subst")]) $
   rewriteType @@ var "replace" @@ var "typ"
+
+substituteTypeVariablesInTerm :: TBinding (M.Map Name Name -> Term -> Term)
+substituteTypeVariablesInTerm = define "substituteTypeVariablesInTerm" $
+  doc "Substitute type variables throughout a term, including in type annotations, type applications, lambda domains, and type schemes" $
+  "subst" ~> "term" ~>
+  "st" <~ substituteTypeVariables @@ var "subst" $
+  "stOpt" <~ ("mt" ~> Maybes.map (var "st") (var "mt")) $
+  "stScheme" <~ ("ts" ~> Core.typeScheme (Core.typeSchemeVariables $ var "ts") (var "st" @@ (Core.typeSchemeType $ var "ts")) (Core.typeSchemeConstraints $ var "ts")) $
+  "stSchemeOpt" <~ ("mts" ~> Maybes.map (var "stScheme") (var "mts")) $
+  "replace" <~ ("recurse" ~> "t" ~>
+    cases _Term (var "t")
+      (Just $ var "recurse" @@ var "t") [
+      _Term_function>>: match _Function
+        (Just $ var "recurse" @@ var "t") [
+        _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambda
+          (Core.lambdaParameter $ var "l")
+          (var "stOpt" @@ (Core.lambdaDomain $ var "l"))
+          (var "recurse" @@ (Core.lambdaBody $ var "l"))],
+      _Term_let>>: "lt" ~>
+        "mapBinding" <~ ("b" ~> Core.binding
+          (Core.bindingName $ var "b")
+          (var "recurse" @@ (Core.bindingTerm $ var "b"))
+          (var "stSchemeOpt" @@ (Core.bindingType $ var "b"))) $
+        Core.termLet $ Core.let_
+          (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
+          (var "recurse" @@ (Core.letBody $ var "lt")),
+      _Term_typeApplication>>: "tt" ~> Core.termTypeApplication $ Core.typeApplicationTerm
+        (var "recurse" @@ (Core.typeApplicationTermBody $ var "tt"))
+        (var "st" @@ (Core.typeApplicationTermType $ var "tt")),
+      _Term_typeLambda>>: "tl" ~> Core.termTypeLambda $ Core.typeLambda
+        (Maybes.fromMaybe (Core.typeLambdaParameter $ var "tl") (Maps.lookup (Core.typeLambdaParameter $ var "tl") (var "subst")))
+        (var "recurse" @@ (Core.typeLambdaBody $ var "tl")),
+      _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
+        (var "recurse" @@ (Core.annotatedTermBody $ var "at"))
+        (Core.annotatedTermAnnotation $ var "at")]) $
+  rewriteTerm @@ var "replace" @@ var "term"
 
 substituteVariable :: TBinding (Name -> Name -> Term -> Term)
 substituteVariable = define "substituteVariable" $
