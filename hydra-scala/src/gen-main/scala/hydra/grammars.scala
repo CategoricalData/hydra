@@ -24,52 +24,50 @@ import hydra.lib.pairs
 
 import hydra.lib.strings
 
-def childName(lname: scala.Predef.String)(n: scala.Predef.String): scala.Predef.String = hydra.lib.strings.cat(Seq(lname, "_", hydra.formatting.capitalize(n)))
+def childName(lname: scala.Predef.String)(n: scala.Predef.String): scala.Predef.String = strings.cat(Seq(lname, "_", hydra.formatting.capitalize(n)))
 
 def findNames(pats: Seq[hydra.grammar.Pattern]): Seq[scala.Predef.String] =
   {
   def nextName(acc: Tuple2[Seq[scala.Predef.String], Map[scala.Predef.String, Int]])(pat: hydra.grammar.Pattern): Tuple2[Seq[scala.Predef.String],
      Map[scala.Predef.String, Int]] =
     {
-    val names: Seq[scala.Predef.String] = hydra.lib.pairs.first[Seq[scala.Predef.String], Map[scala.Predef.String, Int]](acc)
-    val nameMap: Map[scala.Predef.String, Int] = hydra.lib.pairs.second[Seq[scala.Predef.String], Map[scala.Predef.String, Int]](acc)
+    val names: Seq[scala.Predef.String] = pairs.first[Seq[scala.Predef.String], Map[scala.Predef.String, Int]](acc)
+    val nameMap: Map[scala.Predef.String, Int] = pairs.second[Seq[scala.Predef.String], Map[scala.Predef.String, Int]](acc)
     val rn: scala.Predef.String = hydra.grammars.rawName(pat)
-    val nameAndIndex: Tuple2[scala.Predef.String, Int] = hydra.lib.maybes.maybe[Tuple2[scala.Predef.String, Int], Int](Tuple2(rn, 1))((i: Int) =>
-      Tuple2(hydra.lib.strings.cat2(rn)(hydra.lib.literals.showInt32(hydra.lib.math.add(i)(1))), hydra.lib.math.add(i)(1)))(hydra.lib.maps.lookup[scala.Predef.String,
-         Int](rn)(nameMap))
-    val nn: scala.Predef.String = hydra.lib.pairs.first[scala.Predef.String, Int](nameAndIndex)
-    val ni: Int = hydra.lib.pairs.second[scala.Predef.String, Int](nameAndIndex)
-    Tuple2(hydra.lib.lists.cons[scala.Predef.String](nn)(names), hydra.lib.maps.insert[scala.Predef.String, Int](rn)(ni)(nameMap))
+    val nameAndIndex: Tuple2[scala.Predef.String, Int] = maybes.maybe[Tuple2[scala.Predef.String, Int], Int](Tuple2(rn, 1))((i: Int) =>
+      Tuple2(strings.cat2(rn)(literals.showInt32(math.add(i)(1))), math.add(i)(1)))(maps.lookup[scala.Predef.String, Int](rn)(nameMap))
+    val nn: scala.Predef.String = pairs.first[scala.Predef.String, Int](nameAndIndex)
+    val ni: Int = pairs.second[scala.Predef.String, Int](nameAndIndex)
+    Tuple2(lists.cons[scala.Predef.String](nn)(names), maps.insert[scala.Predef.String, Int](rn)(ni)(nameMap))
   }
-  hydra.lib.lists.reverse[scala.Predef.String](hydra.lib.pairs.first[Seq[scala.Predef.String], Map[scala.Predef.String,
-     Int]](hydra.lib.lists.foldl[Tuple2[Seq[scala.Predef.String], Map[scala.Predef.String, Int]], hydra.grammar.Pattern](nextName)(Tuple2(Seq(),
-     hydra.lib.maps.empty[scala.Predef.String, Int]))(pats)))
+  lists.reverse[scala.Predef.String](pairs.first[Seq[scala.Predef.String], Map[scala.Predef.String, Int]](lists.foldl[Tuple2[Seq[scala.Predef.String],
+     Map[scala.Predef.String, Int]], hydra.grammar.Pattern](nextName)(Tuple2(Seq(), maps.empty[scala.Predef.String,
+     Int]))(pats)))
 }
 
 def grammarToModule(ns: hydra.module.Namespace)(grammar: hydra.grammar.Grammar)(desc: Option[scala.Predef.String]): hydra.module.Module =
   {
-  val prodPairs: Seq[Tuple2[scala.Predef.String, hydra.grammar.Pattern]] = hydra.lib.lists.map[hydra.grammar.Production,
+  val prodPairs: Seq[Tuple2[scala.Predef.String, hydra.grammar.Pattern]] = lists.map[hydra.grammar.Production,
      Tuple2[scala.Predef.String, hydra.grammar.Pattern]]((prod: hydra.grammar.Production) => Tuple2(prod.symbol,
      (prod.pattern)))(grammar)
-  val capitalizedNames: Seq[scala.Predef.String] = hydra.lib.lists.map[Tuple2[scala.Predef.String, hydra.grammar.Pattern],
+  val capitalizedNames: Seq[scala.Predef.String] = lists.map[Tuple2[scala.Predef.String, hydra.grammar.Pattern],
      scala.Predef.String]((pair: Tuple2[scala.Predef.String, hydra.grammar.Pattern]) =>
-    hydra.formatting.capitalize(hydra.lib.pairs.first[scala.Predef.String, hydra.grammar.Pattern](pair)))(prodPairs)
-  val patterns: Seq[hydra.grammar.Pattern] = hydra.lib.lists.map[Tuple2[scala.Predef.String, hydra.grammar.Pattern],
+    hydra.formatting.capitalize(pairs.first[scala.Predef.String, hydra.grammar.Pattern](pair)))(prodPairs)
+  val patterns: Seq[hydra.grammar.Pattern] = lists.map[Tuple2[scala.Predef.String, hydra.grammar.Pattern],
      hydra.grammar.Pattern]((pair: Tuple2[scala.Predef.String, hydra.grammar.Pattern]) =>
-    hydra.lib.pairs.second[scala.Predef.String, hydra.grammar.Pattern](pair))(prodPairs)
-  val elementPairs: Seq[Tuple2[scala.Predef.String, hydra.core.Type]] = hydra.lib.lists.concat[Tuple2[scala.Predef.String,
-     hydra.core.Type]](hydra.lib.lists.zipWith[scala.Predef.String, hydra.grammar.Pattern, Seq[Tuple2[scala.Predef.String,
+    pairs.second[scala.Predef.String, hydra.grammar.Pattern](pair))(prodPairs)
+  val elementPairs: Seq[Tuple2[scala.Predef.String, hydra.core.Type]] = lists.concat[Tuple2[scala.Predef.String,
+     hydra.core.Type]](lists.zipWith[scala.Predef.String, hydra.grammar.Pattern, Seq[Tuple2[scala.Predef.String,
      hydra.core.Type]]]((v1: scala.Predef.String) =>
     (v2: hydra.grammar.Pattern) => hydra.grammars.makeElements(false)(ns)(v1)(v2))(capitalizedNames)(patterns))
-  val elements: Seq[hydra.core.Binding] = hydra.lib.lists.map[Tuple2[scala.Predef.String, hydra.core.Type],
-     hydra.core.Binding]((pair: Tuple2[scala.Predef.String, hydra.core.Type]) =>
+  val elements: Seq[hydra.core.Binding] = lists.map[Tuple2[scala.Predef.String, hydra.core.Type], hydra.core.Binding]((pair: Tuple2[scala.Predef.String,
+     hydra.core.Type]) =>
     {
-    val lname: scala.Predef.String = hydra.lib.pairs.first[scala.Predef.String, hydra.core.Type](pair)
+    val lname: scala.Predef.String = pairs.first[scala.Predef.String, hydra.core.Type](pair)
     {
       val elName: hydra.core.Name = hydra.grammars.toName(ns)(lname)
       {
-        val typ: hydra.core.Type = hydra.grammars.replacePlaceholders(elName)(hydra.grammars.wrapType(hydra.lib.pairs.second[scala.Predef.String,
-           hydra.core.Type](pair)))
+        val typ: hydra.core.Type = hydra.grammars.replacePlaceholders(elName)(hydra.grammars.wrapType(pairs.second[scala.Predef.String, hydra.core.Type](pair)))
         hydra.annotations.typeElement(elName)(typ)
       }
     }
@@ -91,29 +89,29 @@ def isNontrivial(isRecord: Boolean)(pats: Seq[hydra.grammar.Pattern]): Boolean =
     p match
     case hydra.grammar.Pattern.labeled(v_Pattern_labeled__) => true
     case _ => false
-  hydra.lib.logic.ifElse[Boolean](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.grammar.Pattern](minPats))(1))(isLabeled(hydra.lib.lists.head[hydra.grammar.Pattern](minPats)))(true)
+  logic.ifElse[Boolean](equality.equal[Int](lists.length[hydra.grammar.Pattern](minPats))(1))(isLabeled(lists.head[hydra.grammar.Pattern](minPats)))(true)
 }
 
 def makeElements(omitTrivial: Boolean)(ns: hydra.module.Namespace)(lname: scala.Predef.String)(pat: hydra.grammar.Pattern): Seq[Tuple2[scala.Predef.String,
    hydra.core.Type]] =
   {
-  val trivial: Seq[Tuple2[scala.Predef.String, hydra.core.Type]] = hydra.lib.logic.ifElse[Seq[Tuple2[scala.Predef.String,
+  val trivial: Seq[Tuple2[scala.Predef.String, hydra.core.Type]] = logic.ifElse[Seq[Tuple2[scala.Predef.String,
      hydra.core.Type]]](omitTrivial)(Seq())(Seq(Tuple2(lname, hydra.core.Type.unit)))
   def descend[T0](n: scala.Predef.String)(f: (Seq[Tuple2[scala.Predef.String, hydra.core.Type]] => T0))(p: hydra.grammar.Pattern): T0 =
     {
     val cpairs: Seq[Tuple2[scala.Predef.String, hydra.core.Type]] = hydra.grammars.makeElements(false)(ns)(hydra.grammars.childName(lname)(n))(p)
-    f(hydra.lib.logic.ifElse[Seq[Tuple2[scala.Predef.String, hydra.core.Type]]](hydra.grammars.isComplex(p))(hydra.lib.lists.cons[Tuple2[scala.Predef.String,
-       hydra.core.Type]](Tuple2(lname, hydra.core.Type.variable(hydra.grammars.toName(ns)(hydra.lib.pairs.first[scala.Predef.String,
-       hydra.core.Type](hydra.lib.lists.head[Tuple2[scala.Predef.String, hydra.core.Type]](cpairs))))))(cpairs))(hydra.lib.logic.ifElse[Seq[Tuple2[scala.Predef.String,
-       hydra.core.Type]]](hydra.lib.lists.`null`[Tuple2[scala.Predef.String, hydra.core.Type]](cpairs))(Seq(Tuple2(lname,
-       hydra.core.Type.unit)))(hydra.lib.lists.cons[Tuple2[scala.Predef.String, hydra.core.Type]](Tuple2(lname,
-       hydra.lib.pairs.second[scala.Predef.String, hydra.core.Type](hydra.lib.lists.head[Tuple2[scala.Predef.String,
-       hydra.core.Type]](cpairs))))(hydra.lib.lists.tail[Tuple2[scala.Predef.String, hydra.core.Type]](cpairs)))))
+    f(logic.ifElse[Seq[Tuple2[scala.Predef.String, hydra.core.Type]]](hydra.grammars.isComplex(p))(lists.cons[Tuple2[scala.Predef.String,
+       hydra.core.Type]](Tuple2(lname, hydra.core.Type.variable(hydra.grammars.toName(ns)(pairs.first[scala.Predef.String,
+       hydra.core.Type](lists.head[Tuple2[scala.Predef.String, hydra.core.Type]](cpairs))))))(cpairs))(logic.ifElse[Seq[Tuple2[scala.Predef.String,
+       hydra.core.Type]]](lists.`null`[Tuple2[scala.Predef.String, hydra.core.Type]](cpairs))(Seq(Tuple2(lname,
+       hydra.core.Type.unit)))(lists.cons[Tuple2[scala.Predef.String, hydra.core.Type]](Tuple2(lname,
+       pairs.second[scala.Predef.String, hydra.core.Type](lists.head[Tuple2[scala.Predef.String, hydra.core.Type]](cpairs))))(lists.tail[Tuple2[scala.Predef.String,
+       hydra.core.Type]](cpairs)))))
   }
   def mod(n: scala.Predef.String)(f: (hydra.core.Type => hydra.core.Type))(p: hydra.grammar.Pattern): Seq[Tuple2[scala.Predef.String, hydra.core.Type]] =
     descend(n)((pairs: Seq[Tuple2[scala.Predef.String, hydra.core.Type]]) =>
-    hydra.lib.lists.cons[Tuple2[scala.Predef.String, hydra.core.Type]](Tuple2(lname, f(hydra.lib.pairs.second[scala.Predef.String,
-       hydra.core.Type](hydra.lib.lists.head[Tuple2[scala.Predef.String, hydra.core.Type]](pairs)))))(hydra.lib.lists.tail[Tuple2[scala.Predef.String,
+    lists.cons[Tuple2[scala.Predef.String, hydra.core.Type]](Tuple2(lname, f(pairs.second[scala.Predef.String,
+       hydra.core.Type](lists.head[Tuple2[scala.Predef.String, hydra.core.Type]](pairs)))))(lists.tail[Tuple2[scala.Predef.String,
        hydra.core.Type]](pairs)))(p)
   def forPat(pat2: hydra.grammar.Pattern): Seq[Tuple2[scala.Predef.String, hydra.core.Type]] =
     pat2 match
@@ -135,19 +133,19 @@ def makeElements(omitTrivial: Boolean)(ns: hydra.module.Namespace)(lname: scala.
     val fieldNames: Seq[scala.Predef.String] = hydra.grammars.findNames(minPats)
     def toField(n: scala.Predef.String)(p: hydra.grammar.Pattern): Tuple2[hydra.core.FieldType, Seq[Tuple2[scala.Predef.String, hydra.core.Type]]] =
       descend(n)((pairs: Seq[Tuple2[scala.Predef.String, hydra.core.Type]]) =>
-      Tuple2(hydra.core.FieldType(n, hydra.lib.pairs.second[scala.Predef.String, hydra.core.Type](hydra.lib.lists.head[Tuple2[scala.Predef.String,
-         hydra.core.Type]](pairs))), hydra.lib.lists.tail[Tuple2[scala.Predef.String, hydra.core.Type]](pairs)))(p)
-    val fieldPairs: Seq[Tuple2[hydra.core.FieldType, Seq[Tuple2[scala.Predef.String, hydra.core.Type]]]] = hydra.lib.lists.zipWith[scala.Predef.String,
+      Tuple2(hydra.core.FieldType(n, pairs.second[scala.Predef.String, hydra.core.Type](lists.head[Tuple2[scala.Predef.String,
+         hydra.core.Type]](pairs))), lists.tail[Tuple2[scala.Predef.String, hydra.core.Type]](pairs)))(p)
+    val fieldPairs: Seq[Tuple2[hydra.core.FieldType, Seq[Tuple2[scala.Predef.String, hydra.core.Type]]]] = lists.zipWith[scala.Predef.String,
        hydra.grammar.Pattern, Tuple2[hydra.core.FieldType, Seq[Tuple2[scala.Predef.String, hydra.core.Type]]]](toField)(fieldNames)(minPats)
-    val fields: Seq[hydra.core.FieldType] = hydra.lib.lists.map[Tuple2[hydra.core.FieldType, Seq[Tuple2[scala.Predef.String,
-       hydra.core.Type]]], hydra.core.FieldType](hydra.lib.pairs.first[hydra.core.FieldType, Seq[Tuple2[scala.Predef.String,
+    val fields: Seq[hydra.core.FieldType] = lists.map[Tuple2[hydra.core.FieldType, Seq[Tuple2[scala.Predef.String,
+       hydra.core.Type]]], hydra.core.FieldType](pairs.first[hydra.core.FieldType, Seq[Tuple2[scala.Predef.String,
        hydra.core.Type]]])(fieldPairs)
-    val els: Seq[Tuple2[scala.Predef.String, hydra.core.Type]] = hydra.lib.lists.concat[Tuple2[scala.Predef.String,
-       hydra.core.Type]](hydra.lib.lists.map[Tuple2[hydra.core.FieldType, Seq[Tuple2[scala.Predef.String,
-       hydra.core.Type]]], Seq[Tuple2[scala.Predef.String, hydra.core.Type]]](hydra.lib.pairs.second[hydra.core.FieldType,
-       Seq[Tuple2[scala.Predef.String, hydra.core.Type]]])(fieldPairs))
-    hydra.lib.logic.ifElse[Seq[Tuple2[scala.Predef.String, hydra.core.Type]]](hydra.grammars.isNontrivial(isRecord)(pats))(hydra.lib.lists.cons[Tuple2[scala.Predef.String,
-       hydra.core.Type]](Tuple2(lname, construct(fields)))(els))(forPat(hydra.lib.lists.head[hydra.grammar.Pattern](minPats)))
+    val els: Seq[Tuple2[scala.Predef.String, hydra.core.Type]] = lists.concat[Tuple2[scala.Predef.String,
+       hydra.core.Type]](lists.map[Tuple2[hydra.core.FieldType, Seq[Tuple2[scala.Predef.String, hydra.core.Type]]],
+       Seq[Tuple2[scala.Predef.String, hydra.core.Type]]](pairs.second[hydra.core.FieldType, Seq[Tuple2[scala.Predef.String,
+       hydra.core.Type]]])(fieldPairs))
+    logic.ifElse[Seq[Tuple2[scala.Predef.String, hydra.core.Type]]](hydra.grammars.isNontrivial(isRecord)(pats))(lists.cons[Tuple2[scala.Predef.String,
+       hydra.core.Type]](Tuple2(lname, construct(fields)))(els))(forPat(lists.head[hydra.grammar.Pattern](minPats)))
   }
   forPat(pat)
 }
@@ -161,10 +159,10 @@ def rawName(pat: hydra.grammar.Pattern): scala.Predef.String =
   case hydra.grammar.Pattern.nil => "none"
   case hydra.grammar.Pattern.nonterminal(v_Pattern_nonterminal_s) => hydra.formatting.capitalize(v_Pattern_nonterminal_s)
   case hydra.grammar.Pattern.option(v_Pattern_option_p) => hydra.formatting.capitalize(hydra.grammars.rawName(v_Pattern_option_p))
-  case hydra.grammar.Pattern.plus(v_Pattern_plus_p) => hydra.lib.strings.cat2("listOf")(hydra.formatting.capitalize(hydra.grammars.rawName(v_Pattern_plus_p)))
+  case hydra.grammar.Pattern.plus(v_Pattern_plus_p) => strings.cat2("listOf")(hydra.formatting.capitalize(hydra.grammars.rawName(v_Pattern_plus_p)))
   case hydra.grammar.Pattern.regex(v_Pattern_regex__) => "regex"
   case hydra.grammar.Pattern.sequence(v_Pattern_sequence__) => "sequence"
-  case hydra.grammar.Pattern.star(v_Pattern_star_p) => hydra.lib.strings.cat2("listOf")(hydra.formatting.capitalize(hydra.grammars.rawName(v_Pattern_star_p)))
+  case hydra.grammar.Pattern.star(v_Pattern_star_p) => strings.cat2("listOf")(hydra.formatting.capitalize(hydra.grammars.rawName(v_Pattern_star_p)))
 
 def replacePlaceholders[T0, T1](elName: T0)(typ: T1): T1 = typ
 
@@ -174,7 +172,7 @@ def simplify(isRecord: Boolean)(pats: Seq[hydra.grammar.Pattern]): Seq[hydra.gra
     p match
     case hydra.grammar.Pattern.constant(v_Pattern_constant__) => true
     case _ => false
-  hydra.lib.logic.ifElse[Seq[hydra.grammar.Pattern]](isRecord)(hydra.lib.lists.filter[hydra.grammar.Pattern]((p: hydra.grammar.Pattern) => hydra.lib.logic.not(isConstant(p)))(pats))(pats)
+  logic.ifElse[Seq[hydra.grammar.Pattern]](isRecord)(lists.filter[hydra.grammar.Pattern]((p: hydra.grammar.Pattern) => logic.not(isConstant(p)))(pats))(pats)
 }
 
 def toName(ns: hydra.module.Namespace)(local: scala.Predef.String): hydra.core.Name = hydra.names.unqualifyName(hydra.module.QualifiedName(Some(ns), local))

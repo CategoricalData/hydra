@@ -26,11 +26,11 @@ def transformToCompiledTests(tg: hydra.testing.TestGroup): Option[hydra.testing.
   val desc: Option[scala.Predef.String] = (tg.description)
   val subgroups: Seq[hydra.testing.TestGroup] = (tg.subgroups)
   val `cases_`: Seq[hydra.testing.TestCaseWithMetadata] = (tg.cases)
-  val transformedCases: Seq[hydra.testing.TestCaseWithMetadata] = hydra.lib.maybes.cat[hydra.testing.TestCaseWithMetadata](hydra.lib.lists.map[hydra.testing.TestCaseWithMetadata,
+  val transformedCases: Seq[hydra.testing.TestCaseWithMetadata] = maybes.cat[hydra.testing.TestCaseWithMetadata](lists.map[hydra.testing.TestCaseWithMetadata,
      Option[hydra.testing.TestCaseWithMetadata]]((tc: hydra.testing.TestCaseWithMetadata) => hydra.test.transform.transformTestCase(tc))(`cases_`))
-  val transformedSubgroups: Seq[hydra.testing.TestGroup] = hydra.lib.maybes.cat[hydra.testing.TestGroup](hydra.lib.lists.map[hydra.testing.TestGroup,
+  val transformedSubgroups: Seq[hydra.testing.TestGroup] = maybes.cat[hydra.testing.TestGroup](lists.map[hydra.testing.TestGroup,
      Option[hydra.testing.TestGroup]]((sg: hydra.testing.TestGroup) => hydra.test.transform.transformToCompiledTests(sg))(subgroups))
-  hydra.lib.logic.ifElse[Option[hydra.testing.TestGroup]](hydra.lib.logic.and(hydra.lib.lists.`null`[hydra.testing.TestCaseWithMetadata](transformedCases))(hydra.lib.lists.`null`[hydra.testing.TestGroup](transformedSubgroups)))(None)(Some(hydra.testing.TestGroup(`name_`,
+  logic.ifElse[Option[hydra.testing.TestGroup]](logic.and(lists.`null`[hydra.testing.TestCaseWithMetadata](transformedCases))(lists.`null`[hydra.testing.TestGroup](transformedSubgroups)))(None)(Some(hydra.testing.TestGroup(`name_`,
      desc, transformedSubgroups, transformedCases)))
 }
 
@@ -83,13 +83,13 @@ def encodeCaseConvention(conv: hydra.util.CaseConvention): hydra.core.Term =
   case hydra.util.CaseConvention.camel => "camel"
   case hydra.util.CaseConvention.pascal => "pascal", hydra.core.Term.unit)))
 
-def addGenerationPrefix(`ns_`: hydra.module.Namespace): hydra.module.Namespace = hydra.lib.strings.cat2("generation.")(`ns_`)
+def addGenerationPrefix(`ns_`: hydra.module.Namespace): hydra.module.Namespace = strings.cat2("generation.")(`ns_`)
 
 def transformModule(m: hydra.module.Module): hydra.module.Module =
   hydra.module.Module(hydra.test.transform.addGenerationPrefix(m.namespace), (m.elements), (m.termDependencies), (m.typeDependencies), (m.description))
 
 def collectTestCases(tg: hydra.testing.TestGroup): Seq[hydra.testing.TestCaseWithMetadata] =
-  hydra.lib.lists.concat2[hydra.testing.TestCaseWithMetadata](tg.cases)(hydra.lib.lists.concat[hydra.testing.TestCaseWithMetadata](hydra.lib.lists.map[hydra.testing.TestGroup,
+  lists.concat2[hydra.testing.TestCaseWithMetadata](tg.cases)(lists.concat[hydra.testing.TestCaseWithMetadata](lists.map[hydra.testing.TestGroup,
      Seq[hydra.testing.TestCaseWithMetadata]]((sg: hydra.testing.TestGroup) => hydra.test.transform.collectTestCases(sg))(tg.subgroups)))
 
 def buildTopologicalSortCall(adjList: Seq[Tuple2[Int, Seq[Int]]]): hydra.core.Term =
@@ -101,19 +101,18 @@ def buildTopologicalSortSCCCall(adjList: Seq[Tuple2[Int, Seq[Int]]]): hydra.core
      hydra.test.transform.encodeAdjacencyList(adjList)))
 
 def encodeAdjacencyList(pairs: Seq[Tuple2[Int, Seq[Int]]]): hydra.core.Term =
-  hydra.core.Term.list(hydra.lib.lists.map[Tuple2[Int, Seq[Int]], hydra.core.Term]((p: Tuple2[Int, Seq[Int]]) =>
-  hydra.core.Term.pair(Tuple2(hydra.test.transform.encodeInt(hydra.lib.pairs.first[Int, Seq[Int]](p)),
-     hydra.core.Term.list(hydra.lib.lists.map[Int, hydra.core.Term]((d: Int) => hydra.test.transform.encodeInt(d))(hydra.lib.pairs.second[Int,
-     Seq[Int]](p))))))(pairs))
+  hydra.core.Term.list(lists.map[Tuple2[Int, Seq[Int]], hydra.core.Term]((p: Tuple2[Int, Seq[Int]]) =>
+  hydra.core.Term.pair(Tuple2(hydra.test.transform.encodeInt(pairs.first[Int, Seq[Int]](p)), hydra.core.Term.list(lists.map[Int,
+     hydra.core.Term]((d: Int) => hydra.test.transform.encodeInt(d))(pairs.second[Int, Seq[Int]](p))))))(pairs))
 
 def encodeInt(n: Int): hydra.core.Term =
   hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(n)))
 
 def encodeEitherListList(e: Either[Seq[Seq[Int]], Seq[Int]]): hydra.core.Term =
-  hydra.core.Term.either(hydra.lib.eithers.bimap[Seq[Seq[Int]], Seq[Int], hydra.core.Term, hydra.core.Term]((cycles: Seq[Seq[Int]]) => hydra.test.transform.encodeListList(cycles))((sorted: Seq[Int]) => hydra.test.transform.encodeIntList(sorted))(e))
+  hydra.core.Term.either(eithers.bimap[Seq[Seq[Int]], Seq[Int], hydra.core.Term, hydra.core.Term]((cycles: Seq[Seq[Int]]) => hydra.test.transform.encodeListList(cycles))((sorted: Seq[Int]) => hydra.test.transform.encodeIntList(sorted))(e))
 
 def encodeListList(lists: Seq[Seq[Int]]): hydra.core.Term =
-  hydra.core.Term.list(hydra.lib.lists.map[Seq[Int], hydra.core.Term]((l: Seq[Int]) => hydra.test.transform.encodeIntList(l))(lists))
+  hydra.core.Term.list(lists.map[Seq[Int], hydra.core.Term]((l: Seq[Int]) => hydra.test.transform.encodeIntList(l))(lists))
 
 def encodeIntList(ints: Seq[Int]): hydra.core.Term =
-  hydra.core.Term.list(hydra.lib.lists.map[Int, hydra.core.Term]((n: Int) => hydra.test.transform.encodeInt(n))(ints))
+  hydra.core.Term.list(lists.map[Int, hydra.core.Term]((n: Int) => hydra.test.transform.encodeInt(n))(ints))

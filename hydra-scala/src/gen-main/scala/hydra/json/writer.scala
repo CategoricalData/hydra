@@ -26,20 +26,20 @@ def jsonString(s: scala.Predef.String): scala.Predef.String =
   {
   def hexEscape(c: Int): scala.Predef.String =
     {
-    val hi: scala.Predef.String = hydra.lib.strings.fromList(hydra.lib.lists.pure[Int](hydra.lib.strings.charAt(hydra.lib.math.div(c)(16))("0123456789abcdef")))
-    val lo: scala.Predef.String = hydra.lib.strings.fromList(hydra.lib.lists.pure[Int](hydra.lib.strings.charAt(hydra.lib.math.mod(c)(16))("0123456789abcdef")))
-    hydra.lib.strings.cat2(hydra.lib.strings.cat2("\\u00")(hi))(lo)
+    val hi: scala.Predef.String = strings.fromList(lists.pure[Int](strings.charAt(math.div(c)(16))("0123456789abcdef")))
+    val lo: scala.Predef.String = strings.fromList(lists.pure[Int](strings.charAt(math.mod(c)(16))("0123456789abcdef")))
+    strings.cat2(strings.cat2("\\u00")(hi))(lo)
   }
   def escape(c: Int): scala.Predef.String =
-    hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(34))("\\\"")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(92))("\\\\")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(8))("\\b")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(12))("\\f")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(10))("\\n")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(13))("\\r")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[Int](c)(9))("\\t")(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.lt[Int](c)(32))(hexEscape(c))(hydra.lib.strings.fromList(hydra.lib.lists.pure[Int](c))))))))))
-  val escaped: scala.Predef.String = hydra.lib.strings.cat(hydra.lib.lists.map[Int, scala.Predef.String](escape)(hydra.lib.strings.toList(s)))
-  hydra.lib.strings.cat2(hydra.lib.strings.cat2("\"")(escaped))("\"")
+    logic.ifElse[scala.Predef.String](equality.equal[Int](c)(34))("\\\"")(logic.ifElse[scala.Predef.String](equality.equal[Int](c)(92))("\\\\")(logic.ifElse[scala.Predef.String](equality.equal[Int](c)(8))("\\b")(logic.ifElse[scala.Predef.String](equality.equal[Int](c)(12))("\\f")(logic.ifElse[scala.Predef.String](equality.equal[Int](c)(10))("\\n")(logic.ifElse[scala.Predef.String](equality.equal[Int](c)(13))("\\r")(logic.ifElse[scala.Predef.String](equality.equal[Int](c)(9))("\\t")(logic.ifElse[scala.Predef.String](equality.lt[Int](c)(32))(hexEscape(c))(strings.fromList(lists.pure[Int](c))))))))))
+  val escaped: scala.Predef.String = strings.cat(lists.map[Int, scala.Predef.String](escape)(strings.toList(s)))
+  strings.cat2(strings.cat2("\"")(escaped))("\"")
 }
 
 def keyValueToExpr(pair: Tuple2[scala.Predef.String, hydra.json.model.Value]): hydra.ast.Expr =
   {
-  val key: scala.Predef.String = hydra.lib.pairs.first[scala.Predef.String, hydra.json.model.Value](pair)
-  val value: hydra.json.model.Value = hydra.lib.pairs.second[scala.Predef.String, hydra.json.model.Value](pair)
+  val key: scala.Predef.String = pairs.first[scala.Predef.String, hydra.json.model.Value](pair)
+  val value: hydra.json.model.Value = pairs.second[scala.Predef.String, hydra.json.model.Value](pair)
   hydra.serialization.ifx(hydra.json.writer.colonOp)(hydra.serialization.cst(hydra.json.writer.jsonString(key)))(hydra.json.writer.valueToExpr(value))
 }
 
@@ -47,15 +47,15 @@ def printJson(value: hydra.json.model.Value): scala.Predef.String = hydra.serial
 
 def valueToExpr(value: hydra.json.model.Value): hydra.ast.Expr =
   value match
-  case hydra.json.model.Value.array(v_Value_array_arr) => hydra.serialization.bracketListAdaptive(hydra.lib.lists.map[hydra.json.model.Value,
+  case hydra.json.model.Value.array(v_Value_array_arr) => hydra.serialization.bracketListAdaptive(lists.map[hydra.json.model.Value,
      hydra.ast.Expr](hydra.json.writer.valueToExpr)(v_Value_array_arr))
-  case hydra.json.model.Value.boolean(v_Value_boolean_b) => hydra.serialization.cst(hydra.lib.logic.ifElse[scala.Predef.String](v_Value_boolean_b)("true")("false"))
+  case hydra.json.model.Value.boolean(v_Value_boolean_b) => hydra.serialization.cst(logic.ifElse[scala.Predef.String](v_Value_boolean_b)("true")("false"))
   case hydra.json.model.Value.`null` => hydra.serialization.cst("null")
   case hydra.json.model.Value.number(v_Value_number_n) => {
-    val rounded: BigInt = hydra.lib.literals.bigfloatToBigint(v_Value_number_n)
-    hydra.serialization.cst(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[BigDecimal](v_Value_number_n)(hydra.lib.literals.bigintToBigfloat(rounded)))(hydra.lib.literals.showBigint(rounded))(hydra.lib.literals.showBigfloat(v_Value_number_n)))
+    val rounded: BigInt = literals.bigfloatToBigint(v_Value_number_n)
+    hydra.serialization.cst(logic.ifElse[scala.Predef.String](equality.equal[BigDecimal](v_Value_number_n)(literals.bigintToBigfloat(rounded)))(literals.showBigint(rounded))(literals.showBigfloat(v_Value_number_n)))
   }
-  case hydra.json.model.Value.`object`(v_Value_object_obj) => hydra.serialization.bracesListAdaptive(hydra.lib.lists.map[Tuple2[scala.Predef.String,
-     hydra.json.model.Value], hydra.ast.Expr](hydra.json.writer.keyValueToExpr)(hydra.lib.maps.toList[scala.Predef.String,
+  case hydra.json.model.Value.`object`(v_Value_object_obj) => hydra.serialization.bracesListAdaptive(lists.map[Tuple2[scala.Predef.String,
+     hydra.json.model.Value], hydra.ast.Expr](hydra.json.writer.keyValueToExpr)(maps.toList[scala.Predef.String,
      hydra.json.model.Value](v_Value_object_obj)))
   case hydra.json.model.Value.string(v_Value_string_s) => hydra.serialization.cst(hydra.json.writer.jsonString(v_Value_string_s))

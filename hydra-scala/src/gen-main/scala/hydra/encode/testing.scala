@@ -70,7 +70,7 @@ def foldOverTermTestCase(x: hydra.testing.FoldOverTermTestCase): hydra.core.Term
 
 def freeVariablesTestCase(x: hydra.testing.FreeVariablesTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.FreeVariablesTestCase", Seq(hydra.core.Field("input",
-     hydra.encode.core.term(x.input)), hydra.core.Field("output", hydra.core.Term.set(hydra.lib.sets.map[hydra.core.Name,
+     hydra.encode.core.term(x.input)), hydra.core.Field("output", hydra.core.Term.set(sets.map[hydra.core.Name,
      hydra.core.Term](hydra.encode.core.name)(x.output))))))
 
 def hoistPredicate(v1: hydra.testing.HoistPredicate): hydra.core.Term =
@@ -138,12 +138,12 @@ def inferenceTestCase(x: hydra.testing.InferenceTestCase): hydra.core.Term =
 def jsonDecodeTestCase(x: hydra.testing.JsonDecodeTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.JsonDecodeTestCase", Seq(hydra.core.Field("type",
      hydra.encode.core.`type`(x.`type`)), hydra.core.Field("json", hydra.encode.json.model.value(x.json)),
-     hydra.core.Field("expected", hydra.core.Term.either(hydra.lib.eithers.bimap[scala.Predef.String,
-     hydra.core.Term, hydra.core.Term, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(hydra.encode.core.term)(x.expected))))))
+     hydra.core.Field("expected", hydra.core.Term.either(eithers.bimap[scala.Predef.String, hydra.core.Term,
+     hydra.core.Term, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(hydra.encode.core.term)(x.expected))))))
 
 def jsonEncodeTestCase(x: hydra.testing.JsonEncodeTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.JsonEncodeTestCase", Seq(hydra.core.Field("term",
-     hydra.encode.core.term(x.term)), hydra.core.Field("expected", hydra.core.Term.either(hydra.lib.eithers.bimap[scala.Predef.String,
+     hydra.encode.core.term(x.term)), hydra.core.Field("expected", hydra.core.Term.either(eithers.bimap[scala.Predef.String,
      hydra.json.model.Value, hydra.core.Term, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(hydra.encode.json.model.value)(x.expected))))))
 
 def jsonParserTestCase(v1: hydra.testing.ParserTestCase[hydra.json.model.Value]): hydra.core.Term = hydra.encode.testing.parserTestCase(hydra.encode.json.model.value)(v1)
@@ -247,15 +247,14 @@ def testCase(v1: hydra.testing.TestCase): hydra.core.Term =
 def testCaseWithMetadata(x: hydra.testing.TestCaseWithMetadata): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.TestCaseWithMetadata", Seq(hydra.core.Field("name",
      hydra.core.Term.literal(hydra.core.Literal.string(x.name))), hydra.core.Field("case", hydra.encode.testing.testCase(x.`case`)),
-     hydra.core.Field("description", hydra.core.Term.maybe(hydra.lib.maybes.map[scala.Predef.String, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(x.description))),
-     hydra.core.Field("tags", hydra.core.Term.list(hydra.lib.lists.map[hydra.testing.Tag, hydra.core.Term](hydra.encode.testing.tag)(x.tags))))))
+     hydra.core.Field("description", hydra.core.Term.maybe(maybes.map[scala.Predef.String, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(x.description))),
+     hydra.core.Field("tags", hydra.core.Term.list(lists.map[hydra.testing.Tag, hydra.core.Term](hydra.encode.testing.tag)(x.tags))))))
 
 def testGroup(x: hydra.testing.TestGroup): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.TestGroup", Seq(hydra.core.Field("name", hydra.core.Term.literal(hydra.core.Literal.string(x.name))),
-     hydra.core.Field("description", hydra.core.Term.maybe(hydra.lib.maybes.map[scala.Predef.String, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(x.description))),
-     hydra.core.Field("subgroups", hydra.core.Term.list(hydra.lib.lists.map[hydra.testing.TestGroup, hydra.core.Term](hydra.encode.testing.testGroup)(x.subgroups))),
-     hydra.core.Field("cases", hydra.core.Term.list(hydra.lib.lists.map[hydra.testing.TestCaseWithMetadata,
-     hydra.core.Term](hydra.encode.testing.testCaseWithMetadata)(x.cases))))))
+     hydra.core.Field("description", hydra.core.Term.maybe(maybes.map[scala.Predef.String, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(x.description))),
+     hydra.core.Field("subgroups", hydra.core.Term.list(lists.map[hydra.testing.TestGroup, hydra.core.Term](hydra.encode.testing.testGroup)(x.subgroups))),
+     hydra.core.Field("cases", hydra.core.Term.list(lists.map[hydra.testing.TestCaseWithMetadata, hydra.core.Term](hydra.encode.testing.testCaseWithMetadata)(x.cases))))))
 
 def typeCheckingTestCase(x: hydra.testing.TypeCheckingTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.TypeCheckingTestCase", Seq(hydra.core.Field("input",
@@ -267,40 +266,38 @@ def typeCheckingFailureTestCase(x: hydra.testing.TypeCheckingFailureTestCase): h
 
 def topologicalSortBindingsTestCase(x: hydra.testing.TopologicalSortBindingsTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.TopologicalSortBindingsTestCase", Seq(hydra.core.Field("bindings",
-     hydra.core.Term.list(hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.Term], hydra.core.Term]((p: Tuple2[hydra.core.Name,
+     hydra.core.Term.list(lists.map[Tuple2[hydra.core.Name, hydra.core.Term], hydra.core.Term]((p: Tuple2[hydra.core.Name,
      hydra.core.Term]) =>
-  hydra.core.Term.pair(hydra.lib.pairs.bimap[hydra.core.Name, hydra.core.Term, hydra.core.Term, hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.term)(p)))(x.bindings))),
-     hydra.core.Field("expected", hydra.core.Term.list(hydra.lib.lists.map[Seq[Tuple2[hydra.core.Name,
-     hydra.core.Term]], hydra.core.Term]((xs2: Seq[Tuple2[hydra.core.Name, hydra.core.Term]]) =>
-  hydra.core.Term.list(hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.Term], hydra.core.Term]((p: Tuple2[hydra.core.Name, hydra.core.Term]) =>
-  hydra.core.Term.pair(hydra.lib.pairs.bimap[hydra.core.Name, hydra.core.Term, hydra.core.Term, hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.term)(p)))(xs2)))(x.expected))))))
+  hydra.core.Term.pair(pairs.bimap[hydra.core.Name, hydra.core.Term, hydra.core.Term, hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.term)(p)))(x.bindings))),
+     hydra.core.Field("expected", hydra.core.Term.list(lists.map[Seq[Tuple2[hydra.core.Name, hydra.core.Term]],
+     hydra.core.Term]((xs2: Seq[Tuple2[hydra.core.Name, hydra.core.Term]]) =>
+  hydra.core.Term.list(lists.map[Tuple2[hydra.core.Name, hydra.core.Term], hydra.core.Term]((p: Tuple2[hydra.core.Name, hydra.core.Term]) =>
+  hydra.core.Term.pair(pairs.bimap[hydra.core.Name, hydra.core.Term, hydra.core.Term, hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.term)(p)))(xs2)))(x.expected))))))
 
 def topologicalSortTestCase(x: hydra.testing.TopologicalSortTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.TopologicalSortTestCase", Seq(hydra.core.Field("adjacencyList",
-     hydra.core.Term.list(hydra.lib.lists.map[Tuple2[Int, Seq[Int]], hydra.core.Term]((p: Tuple2[Int,
-     Seq[Int]]) =>
-  hydra.core.Term.pair(hydra.lib.pairs.bimap[Int, Seq[Int], hydra.core.Term, hydra.core.Term]((x2: Int) =>
+     hydra.core.Term.list(lists.map[Tuple2[Int, Seq[Int]], hydra.core.Term]((p: Tuple2[Int, Seq[Int]]) =>
+  hydra.core.Term.pair(pairs.bimap[Int, Seq[Int], hydra.core.Term, hydra.core.Term]((x2: Int) =>
   hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(x2))))((xs2: Seq[Int]) =>
-  hydra.core.Term.list(hydra.lib.lists.map[Int, hydra.core.Term]((x2: Int) =>
+  hydra.core.Term.list(lists.map[Int, hydra.core.Term]((x2: Int) =>
   hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(x2))))(xs2)))(p)))(x.adjacencyList))),
-     hydra.core.Field("expected", hydra.core.Term.either(hydra.lib.eithers.bimap[Seq[Seq[Int]], Seq[Int],
-     hydra.core.Term, hydra.core.Term]((xs: Seq[Seq[Int]]) =>
-  hydra.core.Term.list(hydra.lib.lists.map[Seq[Int], hydra.core.Term]((xs2: Seq[Int]) =>
-  hydra.core.Term.list(hydra.lib.lists.map[Int, hydra.core.Term]((x2: Int) =>
+     hydra.core.Field("expected", hydra.core.Term.either(eithers.bimap[Seq[Seq[Int]], Seq[Int], hydra.core.Term,
+     hydra.core.Term]((xs: Seq[Seq[Int]]) =>
+  hydra.core.Term.list(lists.map[Seq[Int], hydra.core.Term]((xs2: Seq[Int]) =>
+  hydra.core.Term.list(lists.map[Int, hydra.core.Term]((x2: Int) =>
   hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(x2))))(xs2)))(xs)))((xs: Seq[Int]) =>
-  hydra.core.Term.list(hydra.lib.lists.map[Int, hydra.core.Term]((x2: Int) =>
+  hydra.core.Term.list(lists.map[Int, hydra.core.Term]((x2: Int) =>
   hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(x2))))(xs)))(x.expected))))))
 
 def topologicalSortSCCTestCase(x: hydra.testing.TopologicalSortSCCTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.TopologicalSortSCCTestCase", Seq(hydra.core.Field("adjacencyList",
-     hydra.core.Term.list(hydra.lib.lists.map[Tuple2[Int, Seq[Int]], hydra.core.Term]((p: Tuple2[Int,
-     Seq[Int]]) =>
-  hydra.core.Term.pair(hydra.lib.pairs.bimap[Int, Seq[Int], hydra.core.Term, hydra.core.Term]((x2: Int) =>
+     hydra.core.Term.list(lists.map[Tuple2[Int, Seq[Int]], hydra.core.Term]((p: Tuple2[Int, Seq[Int]]) =>
+  hydra.core.Term.pair(pairs.bimap[Int, Seq[Int], hydra.core.Term, hydra.core.Term]((x2: Int) =>
   hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(x2))))((xs2: Seq[Int]) =>
-  hydra.core.Term.list(hydra.lib.lists.map[Int, hydra.core.Term]((x2: Int) =>
+  hydra.core.Term.list(lists.map[Int, hydra.core.Term]((x2: Int) =>
   hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(x2))))(xs2)))(p)))(x.adjacencyList))),
-     hydra.core.Field("expected", hydra.core.Term.list(hydra.lib.lists.map[Seq[Int], hydra.core.Term]((xs2: Seq[Int]) =>
-  hydra.core.Term.list(hydra.lib.lists.map[Int, hydra.core.Term]((x2: Int) =>
+     hydra.core.Field("expected", hydra.core.Term.list(lists.map[Seq[Int], hydra.core.Term]((xs2: Seq[Int]) =>
+  hydra.core.Term.list(lists.map[Int, hydra.core.Term]((x2: Int) =>
   hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(x2))))(xs2)))(x.expected))))))
 
 def serializationTestCase(x: hydra.testing.SerializationTestCase): hydra.core.Term =
@@ -325,9 +322,9 @@ def writerTestCase[T0](a: (T0 => hydra.core.Term))(x: hydra.testing.WriterTestCa
 
 def substInTypeTestCase(x: hydra.testing.SubstInTypeTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.SubstInTypeTestCase", Seq(hydra.core.Field("substitution",
-     hydra.core.Term.list(hydra.lib.lists.map[Tuple2[hydra.core.Name, hydra.core.Type], hydra.core.Term]((p: Tuple2[hydra.core.Name,
+     hydra.core.Term.list(lists.map[Tuple2[hydra.core.Name, hydra.core.Type], hydra.core.Term]((p: Tuple2[hydra.core.Name,
      hydra.core.Type]) =>
-  hydra.core.Term.pair(hydra.lib.pairs.bimap[hydra.core.Name, hydra.core.Type, hydra.core.Term, hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.`type`)(p)))(x.substitution))),
+  hydra.core.Term.pair(pairs.bimap[hydra.core.Name, hydra.core.Type, hydra.core.Term, hydra.core.Term](hydra.encode.core.name)(hydra.encode.core.`type`)(p)))(x.substitution))),
      hydra.core.Field("input", hydra.encode.core.`type`(x.input)), hydra.core.Field("output", hydra.encode.core.`type`(x.output)))))
 
 def variableOccursInTypeTestCase(x: hydra.testing.VariableOccursInTypeTestCase): hydra.core.Term =
@@ -341,14 +338,14 @@ def unshadowVariablesTestCase(x: hydra.testing.UnshadowVariablesTestCase): hydra
 
 def unifyTypesTestCase(x: hydra.testing.UnifyTypesTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.UnifyTypesTestCase", Seq(hydra.core.Field("schemaTypes",
-     hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Name, hydra.core.Term](hydra.encode.core.name)(x.schemaTypes))),
+     hydra.core.Term.list(lists.map[hydra.core.Name, hydra.core.Term](hydra.encode.core.name)(x.schemaTypes))),
      hydra.core.Field("left", hydra.encode.core.`type`(x.left)), hydra.core.Field("right", hydra.encode.core.`type`(x.right)),
-     hydra.core.Field("expected", hydra.core.Term.either(hydra.lib.eithers.bimap[scala.Predef.String,
-     hydra.typing.TypeSubst, hydra.core.Term, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(hydra.encode.typing.typeSubst)(x.expected))))))
+     hydra.core.Field("expected", hydra.core.Term.either(eithers.bimap[scala.Predef.String, hydra.typing.TypeSubst,
+     hydra.core.Term, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(hydra.encode.typing.typeSubst)(x.expected))))))
 
 def joinTypesTestCase(x: hydra.testing.JoinTypesTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.JoinTypesTestCase", Seq(hydra.core.Field("left",
      hydra.encode.core.`type`(x.left)), hydra.core.Field("right", hydra.encode.core.`type`(x.right)),
-     hydra.core.Field("expected", hydra.core.Term.either(hydra.lib.eithers.bimap[Unit, Seq[hydra.typing.TypeConstraint],
+     hydra.core.Field("expected", hydra.core.Term.either(eithers.bimap[Unit, Seq[hydra.typing.TypeConstraint],
      hydra.core.Term, hydra.core.Term]((_x: Unit) => hydra.core.Term.unit)((xs: Seq[hydra.typing.TypeConstraint]) =>
-  hydra.core.Term.list(hydra.lib.lists.map[hydra.typing.TypeConstraint, hydra.core.Term](hydra.encode.typing.typeConstraint)(xs)))(x.expected))))))
+  hydra.core.Term.list(lists.map[hydra.typing.TypeConstraint, hydra.core.Term](hydra.encode.typing.typeConstraint)(xs)))(x.expected))))))

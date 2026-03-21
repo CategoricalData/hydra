@@ -35,7 +35,7 @@ val visitorName: scala.Predef.String = "Visitor"
 val visitorReturnParameter: scala.Predef.String = "R"
 
 def javaPackageName(parts: Seq[scala.Predef.String]): hydra.ext.java.syntax.PackageName =
-  hydra.lib.lists.map[scala.Predef.String, hydra.ext.java.syntax.Identifier]((p: scala.Predef.String) => p)(parts)
+  lists.map[scala.Predef.String, hydra.ext.java.syntax.Identifier]((p: scala.Predef.String) => p)(parts)
 
 val hydraCorePackageName: Option[hydra.ext.java.syntax.PackageName] = Some(hydra.ext.java.names.javaPackageName(Seq("hydra", "core")))
 
