@@ -721,7 +721,10 @@ typeOfPrimitive :: TBinding (Context -> Graph -> [Type] -> Name -> Prelude.Eithe
 typeOfPrimitive = define "typeOfPrimitive" $
   doc "Reconstruct the type of a primitive function (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "name" ~>
-  "rawTs" <~ Maps.lookup (var "name") (Graph.graphPrimitiveTypes $ var "tx") $
+  -- Look up the primitive directly in the graph's primitives map and extract its type.
+  -- This avoids reconstructing a Map Name TypeScheme on every call (O(p) per call).
+  "rawTs" <~ Maybes.map ("_p" ~> Graph.primitiveType (var "_p"))
+    (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx")) $
   Maybes.maybe
     (Ctx.failInContext (Error.errorUndefinedTerm $ Error.undefinedTermError (var "name")) (var "cx"))
     ("tsRaw" ~>

@@ -224,6 +224,9 @@ etaExpandTermNew = define "etaExpandTermNew" $
     <> " This version properly tracks the Graph through nested scopes.") $
   "tx0" ~> "term0" ~>
 
+  -- Pre-compute primitive types map once (primitives don't change during recursion)
+  "primTypes" <~ (Graph.graphPrimitiveTypes $ var "tx0") $
+
   -- termArityWithContext: compute arity of a term using Graph for lookups
   "termArityWithContext" <~ ("tx" ~> "term" ~>
     cases _Term (var "term")
@@ -236,7 +239,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
         _Function_elimination>>: constant $ int32 1,
         _Function_lambda>>: constant $ int32 0,
         _Function_primitive>>: "name" ~>
-          optCases (Maps.lookup (var "name") (Graph.graphPrimitiveTypes $ var "tx"))
+          optCases (Maps.lookup (var "name") (var "primTypes"))
             (int32 0) Arity.typeSchemeArity],
       _Term_let>>: "l" ~>
         var "termArityWithContext"
@@ -353,7 +356,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
         _Term_function>>: "f2" ~> cases _Function (var "f2") (Just nothing) [
           _Function_primitive>>: "pn2" ~>
             Maybes.map ("ts2" ~> Core.typeSchemeType $ var "ts2")
-              (Maps.lookup (var "pn2") (Graph.graphPrimitiveTypes $ var "tx2"))],
+              (Maps.lookup (var "pn2") (var "primTypes"))],
         _Term_let>>: "l2" ~>
           var "termHeadType"
             @@ (Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "tx2" @@ var "l2")
@@ -454,7 +457,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
           -- Don't expand if bare; look up primitive type for lambda domain annotations
           "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "term" $
           "primType" <~ Maybes.map ("ts" ~> Core.typeSchemeType $ var "ts")
-            (Maps.lookup (var "pn") (Graph.graphPrimitiveTypes $ var "tx")) $
+            (Maps.lookup (var "pn") (var "primTypes")) $
           var "expand" @@ false @@ var "args" @@ var "arty" @@ var "primType" @@ var "term"],
 
       -- Let: extend context for bindings and body

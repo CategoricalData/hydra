@@ -350,9 +350,9 @@ requirePrimitive = define "requirePrimitive" $
 requirePrimitiveType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) TypeScheme)
 requirePrimitiveType = define "requirePrimitiveType" $
   "cx" ~> "tx" ~> "name" ~>
-  "mts" <~ Maps.lookup
-    (var "name" )
-    (Graph.graphPrimitiveTypes $ var "tx") $
+  -- Look up the primitive directly and extract its type, avoiding O(p) map reconstruction.
+  "mts" <~ Maybes.map ("_p" ~> Graph.primitiveType (var "_p"))
+    (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx")) $
   optCases (var "mts")
     (Ctx.failInContext (Error.errorOther $ Error.otherError ((string "no such primitive function: ") ++ (Core.unName (var "name")))) (var "cx"))
     ("ts" ~> right $ var "ts")
