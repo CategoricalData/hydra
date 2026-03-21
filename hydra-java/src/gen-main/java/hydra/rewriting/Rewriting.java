@@ -422,16 +422,14 @@ public interface Rewriting {
   }
 
   static hydra.util.PersistentSet<hydra.core.Name> freeVariablesInTerm(hydra.core.Term term) {
-    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> dfltVars = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>>) (s -> (java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>) (t -> hydra.lib.sets.Union.apply(
-        s,
-        hydra.rewriting.Rewriting.freeVariablesInTerm(t)))),
-      (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
-      hydra.rewriting.Rewriting.subterms(term)));
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> otherwise(hydra.core.Term instance) {
-        return dfltVars.get();
+        return hydra.rewriting.Rewriting.freeVariablesInTerm_dfltVars(
+          hydra.rewriting.Rewriting::freeVariablesInTerm,
+          hydra.rewriting.Rewriting::subterms,
+          term,
+          null);
       }
 
       @Override
@@ -439,7 +437,11 @@ public interface Rewriting {
         return (v1).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public hydra.util.PersistentSet<hydra.core.Name> otherwise(hydra.core.Function instance) {
-            return dfltVars.get();
+            return hydra.rewriting.Rewriting.freeVariablesInTerm_dfltVars(
+              hydra.rewriting.Rewriting::freeVariablesInTerm,
+              hydra.rewriting.Rewriting::subterms,
+              term,
+              null);
           }
 
           @Override
@@ -454,7 +456,11 @@ public interface Rewriting {
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Term.Let l) {
         return hydra.lib.sets.Difference.apply(
-          dfltVars.get(),
+          hydra.rewriting.Rewriting.freeVariablesInTerm_dfltVars(
+            hydra.rewriting.Rewriting::freeVariablesInTerm,
+            hydra.rewriting.Rewriting::subterms,
+            term,
+            null),
           hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
             projected -> projected.name,
             (l).value.bindings)));
@@ -465,6 +471,15 @@ public interface Rewriting {
         return hydra.lib.sets.Singleton.apply((v).value);
       }
     });
+  }
+
+  static <T0> hydra.util.PersistentSet<hydra.core.Name> freeVariablesInTerm_dfltVars(java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>> hydra_rewriting_freeVariablesInTerm2, java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>> hydra_rewriting_subterms2, hydra.core.Term term, T0 ignored) {
+    return hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>>) (s -> (java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>) (t -> hydra.lib.sets.Union.apply(
+        s,
+        (hydra_rewriting_freeVariablesInTerm2).apply(t)))),
+      (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
+      (hydra_rewriting_subterms2).apply(term));
   }
 
   static hydra.util.PersistentSet<hydra.core.Name> freeVariablesInType(hydra.core.Type typ) {

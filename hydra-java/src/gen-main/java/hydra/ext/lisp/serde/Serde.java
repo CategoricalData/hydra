@@ -1010,12 +1010,42 @@ public interface Serde {
         d,
         v1)),
       (app).arguments));
+    hydra.ext.lisp.syntax.Expression funExpr = (app).function;
     hydra.ast.Expr fun = hydra.ext.lisp.serde.Serde.expressionToExpr(
       d,
-      (app).function);
-    return hydra.serialization.Serialization.parens(hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Concat2.apply(
-      hydra.util.ConsList.of(fun),
-      args.get())));
+      funExpr);
+    Boolean needsFuncall = (d).accept(new hydra.ext.lisp.syntax.Dialect.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.ext.lisp.syntax.Dialect instance) {
+        return false;
+      }
+
+      @Override
+      public Boolean visit(hydra.ext.lisp.syntax.Dialect.EmacsLisp u) {
+        return (funExpr).accept(new hydra.ext.lisp.syntax.Expression.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.ext.lisp.syntax.Expression instance) {
+            return true;
+          }
+
+          @Override
+          public Boolean visit(hydra.ext.lisp.syntax.Expression.Variable s) {
+            return false;
+          }
+        });
+      }
+    });
+    hydra.util.Lazy<hydra.util.ConsList<hydra.ast.Expr>> allParts = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+      needsFuncall,
+      () -> hydra.lib.lists.Concat2.apply(
+        hydra.util.ConsList.of(
+          hydra.serialization.Serialization.cst("funcall"),
+          fun),
+        args.get()),
+      () -> hydra.lib.lists.Concat2.apply(
+        hydra.util.ConsList.of(fun),
+        args.get())));
+    return hydra.serialization.Serialization.parens(hydra.serialization.Serialization.spaceSep(allParts.get()));
   }
 
   static hydra.ast.Expr lambdaToExpr(hydra.ext.lisp.syntax.Dialect d, hydra.ext.lisp.syntax.Lambda lam) {

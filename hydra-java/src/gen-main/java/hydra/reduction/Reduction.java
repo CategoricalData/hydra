@@ -426,6 +426,9 @@ public interface Reduction {
         })).get(),
         () -> applied.get());
     })))));
+    hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>> primTypes = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.graph.Primitive, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
+      hydra.lib.maps.Elems.apply((tx0).primitives))));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, Integer>>> termArityWithContext = new java.util.concurrent.atomic.AtomicReference<>();
     termArityWithContext.set((java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, Integer>>) (tx -> (java.util.function.Function<hydra.core.Term, Integer>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -465,9 +468,7 @@ public interface Reduction {
               hydra.arity.Arity::typeSchemeArity,
               hydra.lib.maps.Lookup.apply(
                 (name).value,
-                hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-                  (java.util.function.Function<hydra.graph.Primitive, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
-                  hydra.lib.maps.Elems.apply((tx).primitives)))));
+                primTypes.get()));
           }
         });
       }
@@ -532,9 +533,7 @@ public interface Reduction {
                 (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts2 -> (ts2).type),
                 hydra.lib.maps.Lookup.apply(
                   (pn2).value,
-                  hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-                    (java.util.function.Function<hydra.graph.Primitive, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
-                    hydra.lib.maps.Elems.apply((tx2).primitives)))));
+                  primTypes.get()));
             }
           });
         }
@@ -698,9 +697,7 @@ public interface Reduction {
                 (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts -> (ts).type),
                 hydra.lib.maps.Lookup.apply(
                   (pn).value,
-                  hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-                    (java.util.function.Function<hydra.graph.Primitive, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
-                    hydra.lib.maps.Elems.apply((tx).primitives))))));
+                  primTypes.get())));
               return (expand).apply(false).apply(args).apply(arty).apply(primType.get()).apply(term);
             }
           });
