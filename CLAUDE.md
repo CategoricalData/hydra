@@ -11,8 +11,8 @@ It explores an isomorphism between typed lambda calculus and labeled hypergraphs
 **programs are graphs, and graphs are programs.**
 
 Hydra is self-hosting: the kernel is defined in Haskell-based DSLs and code-generated
-into Haskell, Java, and Python. All three implementations are complete and pass the
-common test suite. Version: **0.13.0** (as of 2026-02-05).
+into Haskell, Java, Python, and Clojure. All four implementations are complete and pass
+the common test suite. Version: **0.13.0** (as of 2026-02-05).
 
 Key use cases: graph construction (TinkerPop, RDF, SHACL, GQL), data integration
 (coders for Protobuf, Avro, JSON, YAML, GraphQL, PDL, CSV/TSV, RDF), and
@@ -28,6 +28,7 @@ hydra/
   hydra-haskell/    # Bootstrap implementation (Haskell). Source of truth.
   hydra-java/       # Complete Java implementation
   hydra-python/     # Complete Python implementation
+  hydra-lisp/       # Complete Clojure implementation (+ experimental Scheme, Common Lisp, Emacs Lisp)
   hydra-ext/        # Code generators, coders, demos, tools (Haskell)
   hydra-scala/      # Experimental Scala implementation
   hydra-rust/       # Early-stage Rust
@@ -140,6 +141,7 @@ Hydra-Haskell (source of truth)
   |     Haskell  -> hydra-haskell/src/gen-main/haskell/
   |     Java     -> hydra-java/src/gen-main/java/       (via hydra-ext)
   |     Python   -> hydra-python/src/gen-main/python/    (via hydra-ext)
+  |     Clojure  -> hydra-lisp/hydra-clojure/src/gen-main/clojure/ (via hydra-ext)
   |
   |-- DSL generation (hydra.dsls) produces phantom-typed DSL modules:
   |     Haskell  -> hydra-haskell/src/gen-main/haskell/Hydra/Dsl/
@@ -150,6 +152,7 @@ Hydra-Haskell (source of truth)
         Haskell  -> hydra-haskell/src/main/haskell/Hydra/Lib/
         Java     -> hydra-java/src/main/java/hydra/lib/
         Python   -> hydra-python/src/main/python/hydra/lib/
+        Clojure  -> hydra-lisp/hydra-clojure/src/main/clojure/hydra/lib/
 ```
 
 ### Core types

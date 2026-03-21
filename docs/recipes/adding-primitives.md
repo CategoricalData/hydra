@@ -5,7 +5,7 @@ A step-by-step guide for adding new primitive functions and constants to Hydra's
 ## Prerequisites
 
 - Familiarity with Hydra's type system (see [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts))
-- Understanding of the target language implementations (Haskell, Java, Python)
+- Understanding of the target language implementations (Haskell, Java, Python, Clojure)
 - Knowledge of which library the primitive belongs to (e.g. `hydra.lib.strings`, `hydra.lib.math`)
 
 **Important:** Every new primitive must include test cases in the common test suite. Tests ensure consistent behavior across all language implementations and catch regressions. Adding a primitive without tests is incomplete work.

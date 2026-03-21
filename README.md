@@ -7,8 +7,9 @@ in Hydra, programs are graphs, and graphs are programs.
 Hydra has the ability to translate its own kernel into several other languages, including
 Haskell ([Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)),
 Java ([Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java)),
-and Python ([Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python)).
-All three implementations are complete and pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
+Python ([Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python)),
+and Clojure ([Hydra-Clojure](https://github.com/CategoricalData/hydra/tree/main/hydra-lisp/hydra-clojure)).
+All four implementations are complete and pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
 Hydra is used for data modeling, validation, and transforms at Microsoft,
 while its closed-source predecessor [Dragon](https://www.uber.com/blog/dragon-schema-integration-at-uber-scale/) was used
 for data integration and graph construction at Uber.
@@ -42,7 +43,7 @@ and we think it will be very useful in heterogeneous environments like TinkerPop
 -- validation, query steps, user-defined functions, etc. -- to be manifested identically in more than one programming language.
 
 If any of the above sounds interesting, feel free to ask questions or get involved via the [LambdaGraph Discord](https://bit.ly/lg-discord) server.
-We are preparing for the 1.0 release, with all three core implementations (Haskell, Java, Python) now complete.
+We are preparing for the 1.0 release, with all four core implementations (Haskell, Java, Python, Clojure) now complete.
 Near-term goals include integrating with [Apache TinkerPop](https://tinkerpop.apache.org),
 expanding language support, and growing the community.
 There is a recent [demo video](https://drive.google.com/file/d/1p2R6WWc1cW02eb7O8l-4cV1htDb84Y43/view) you can check out,

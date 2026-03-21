@@ -3,7 +3,7 @@
 This directory contains a Python implementation of Hydra.
 
 Hydra is a type-aware data transformation toolkit which aims to be highly flexible and portable.
-It has its roots in graph databases and type theory, and provides APIs in Haskell, Java, and Python.
+It has its roots in graph databases and type theory, and provides APIs in Haskell, Java, Python, and Clojure.
 See the main Hydra [README](https://github.com/CategoricalData/hydra) for more details.
 
 ## Getting Started

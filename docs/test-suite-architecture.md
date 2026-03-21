@@ -4,7 +4,7 @@ This document explains the architecture of Hydra's common test suite, including 
 
 ## Overview
 
-Hydra's test suite is designed to ensure parity across all Hydra language implementations (Haskell, Java, Python). The test suite uses the same module-based code generation approach as the main Hydra kernel, allowing tests to be written once in Haskell and automatically translated to other languages.
+Hydra's test suite is designed to ensure parity across all Hydra language implementations (Haskell, Java, Python, Clojure). The test suite uses the same module-based code generation approach as the main Hydra kernel, allowing tests to be written once in Haskell and automatically translated to other languages.
 
 ## Key Concepts
 

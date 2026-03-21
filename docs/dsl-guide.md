@@ -2,7 +2,7 @@
 
 This guide explains Hydra's domain-specific languages (DSLs) for constructing types and terms in Haskell.
 
-**Note**: Hydra provides DSLs in all three implementation languages (Haskell, Java, and Python).
+**Note**: Hydra provides DSLs in all four implementation languages (Haskell, Java, Python, and Clojure).
 This guide focuses on the Haskell DSLs.
 Haskell is Hydra's bootstrapping language—the Hydra kernel itself is written in Haskell—so this guide is
 particularly intended for Hydra developers working on the kernel or extending Hydra's core functionality.

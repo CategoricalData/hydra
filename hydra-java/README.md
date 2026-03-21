@@ -4,7 +4,7 @@ This directory contains a **complete Java implementation** of Hydra.
 Hydra-Java passes all tests in the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing), ensuring identical behavior with Hydra-Haskell and Hydra-Python.
 
 Hydra is a type-aware data transformation toolkit which aims to be highly flexible and portable.
-It has its roots in graph databases and type theory, and provides APIs in Haskell, Java, and Python.
+It has its roots in graph databases and type theory, and provides APIs in Haskell, Java, Python, and Clojure.
 See the main Hydra [README](https://github.com/CategoricalData/hydra) for more details.
 
 JavaDocs for Hydra-Java can be found [here](https://categoricaldata.github.io/hydra/hydra-java/javadoc),
