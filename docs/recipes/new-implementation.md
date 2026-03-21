@@ -319,6 +319,36 @@ you **must** implement this thunking strategy. Omitting it will cause severe per
 and potentially incorrect evaluation of recursive kernel functions like `freeVariablesInTerm`,
 `rewriteTerm`, and `foldOverTerm`.
 
+### Eager `let` bindings in the kernel
+
+Beyond primitive thunking, Haskell's lazy `let` bindings can cause performance issues when
+translated to eager languages. If a kernel function computes a default value in a `let` binding
+but only uses it in some branches of a case expression, the default is evaluated unconditionally
+in eager languages. For example, `freeVariablesInTerm` originally computed a `dfltVars` fold over
+all subterms in a `let`, then used it only in the default case — meaning the expensive fold ran
+even for `Variable` nodes where the result is trivially a singleton set. The fix was to wrap the
+default computation in a lambda (`_ -> ...`) in the kernel DSL source, making it lazy in all
+languages. If you encounter unexpected performance degradation in kernel functions, check for
+eagerly-evaluated `let` bindings that are only used in some code paths.
+
+### Data structure performance
+
+The kernel uses maps and sets extensively (`Graph.primitives`, `Graph.schemaTypes`, free variable
+sets, etc.). A naive implementation using association lists or sorted linked lists will cause O(n)
+per lookup/insert, leading to O(n^2) or worse behavior in code generation. Use hash-based or
+tree-based collections with O(1) or O(log n) amortized operations. Clojure's experience showed
+that switching from sorted-list maps/sets to native hash maps/sets reduced module loading time
+from 55 seconds to 5 seconds.
+
+### Coder-side thunk wrapping
+
+Making primitives thunk-aware (step 7) is necessary but not sufficient. The **coder** must also
+generate thunk wrappers at call sites — wrapping the lazy argument in a zero-argument function
+before passing it to the primitive. Without this, the argument is still evaluated eagerly before
+being passed. See `wrapLazyArguments` in the Python coder and `wrapInThunk`/`encodeApplication`
+in the Lisp coder for examples. The coder must detect specific primitive names (e.g.
+`hydra.lib.maybes.fromMaybe`) in application chains and wrap the appropriate positional argument.
+
 When auto-detecting type variables from primitive type schemes, be aware that type variable names
 containing dots (e.g. `hydra.util.Comparison`) are nominal type references, not universally
 quantified type parameters. Exclude qualified names to avoid incorrect generalization.
