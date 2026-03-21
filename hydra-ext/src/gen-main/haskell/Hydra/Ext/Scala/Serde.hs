@@ -69,24 +69,35 @@ writeDefn def =
             paramss = Meta.defn_DefParamss v0
             scod = Meta.defn_DefDecltpe v0
             body = Meta.defn_DefBody v0
-            params = Lists.head paramss
             tparamsExpr =
                     Logic.ifElse (Lists.null tparams) Nothing (Maybes.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map writeType_Param tparams)))
             scodExpr =
                     Maybes.map (\t -> Serialization.spaceSep [
                       Serialization.cst ":",
                       (writeType t)]) scod
+            paramssExprs = Lists.map (\ps -> Serialization.parenList False (Lists.map writeData_Param ps)) paramss
             nameAndParams =
-                    Serialization.noSep (Maybes.cat [
-                      Maybes.pure (writeData_Name name),
-                      tparamsExpr,
-                      (Maybes.pure (Serialization.parenList False (Lists.map writeData_Param params))),
-                      scodExpr])
-        in (Serialization.spaceSep [
-          Serialization.cst "def",
-          nameAndParams,
-          (Serialization.cst "="),
-          (writeTerm body)])
+                    Serialization.noSep (Maybes.cat (Lists.concat [
+                      [
+                        Maybes.pure (writeData_Name name)],
+                      [
+                        tparamsExpr],
+                      (Lists.map (\pe -> Maybes.pure pe) paramssExprs),
+                      [
+                        scodExpr]]))
+            bodyExpr = writeTerm body
+            defSig =
+                    Serialization.spaceSep [
+                      Serialization.cst "def",
+                      nameAndParams,
+                      (Serialization.cst "=")]
+            bodyLen = Serialization.expressionLength bodyExpr
+        in (Logic.ifElse (Equality.gt bodyLen 80) (Serialization.noSep [
+          defSig,
+          (Serialization.cst "\n  "),
+          bodyExpr]) (Serialization.spaceSep [
+          defSig,
+          bodyExpr]))
       Meta.DefnType v0 ->
         let name = Meta.defn_TypeName v0
             tparams = Meta.defn_TypeTparams v0
@@ -213,8 +224,13 @@ writeImporter imp =
 writeLit :: Meta.Lit -> Ast.Expr
 writeLit lit =
     case lit of
-      Meta.LitInt v0 -> Serialization.cst (Literals.showInt32 v0)
       Meta.LitBoolean v0 -> Serialization.cst (Logic.ifElse v0 "true" "false")
+      Meta.LitByte v0 -> Serialization.cst (Strings.cat2 (Literals.showInt8 v0) ".toByte")
+      Meta.LitShort v0 -> Serialization.cst (Strings.cat2 (Literals.showInt16 v0) ".toShort")
+      Meta.LitInt v0 -> Serialization.cst (Literals.showInt32 v0)
+      Meta.LitLong v0 -> Serialization.cst (Strings.cat2 (Literals.showInt64 v0) "L")
+      Meta.LitFloat v0 -> Serialization.cst (Strings.cat2 (Literals.showFloat32 v0) "f")
+      Meta.LitDouble v0 -> Serialization.cst (Literals.showFloat64 v0)
       Meta.LitUnit -> Serialization.cst "()"
       Meta.LitString v0 -> Serialization.cst (Literals.showString v0)
       _ -> Serialization.cst "TODO:literal"
@@ -232,10 +248,11 @@ writePat pat =
       Meta.PatExtract v0 ->
         let fun = Meta.pat_ExtractFun v0
             args = Meta.pat_ExtractArgs v0
-        in (Serialization.noSep [
+        in (Logic.ifElse (Lists.null args) (writeTerm fun) (Serialization.noSep [
           writeTerm fun,
-          (Serialization.parenList False (Lists.map writePat args))])
+          (Serialization.parenList False (Lists.map writePat args))]))
       Meta.PatVar v0 -> writeData_Name (Meta.pat_VarName v0)
+      Meta.PatWildcard -> Serialization.cst "_"
 
 -- | Convert a package to an expression
 writePkg :: Meta.Pkg -> Ast.Expr
@@ -256,6 +273,7 @@ writePkg pkg =
 writeStat :: Meta.Stat -> Ast.Expr
 writeStat stat =
     case stat of
+      Meta.StatTerm v0 -> writeTerm v0
       Meta.StatDefn v0 -> writeDefn v0
       Meta.StatImportExport v0 -> writeImportExportStat v0
 
@@ -271,13 +289,22 @@ writeTerm term =
         in (Serialization.noSep [
           writeTerm fun,
           (Serialization.parenList False (Lists.map writeTerm args))])
-      Meta.DataAssign _ -> Serialization.cst ">ASSIGN"
+      Meta.DataAssign v0 ->
+        let lhs = Meta.data_AssignLhs v0
+            rhs = Meta.data_AssignRhs v0
+        in (Serialization.spaceSep [
+          writeTerm lhs,
+          (Serialization.cst "->"),
+          (writeTerm rhs)])
       Meta.DataTuple v0 -> Serialization.parenList False (Lists.map writeTerm (Meta.data_TupleArgs v0))
       Meta.DataMatch v0 ->
         let expr = Meta.data_MatchExpr v0
             mCases = Meta.data_MatchCases v0
         in (Serialization.ifx matchOp (writeTerm expr) (Serialization.newlineSep (Lists.map writeCase mCases)))
       Meta.DataFunctionData v0 -> writeData_FunctionData v0
+      Meta.DataBlock v0 ->
+        let stats = Meta.data_BlockStats v0
+        in (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map writeStat stats)))
 
 -- | Convert function data to an expression
 writeData_FunctionData :: Meta.Data_FunctionData -> Ast.Expr
@@ -286,10 +313,15 @@ writeData_FunctionData ft =
       Meta.Data_FunctionDataFunction v0 ->
         let params = Meta.data_FunctionParams v0
             body = Meta.data_FunctionBody v0
-        in (Serialization.spaceSep [
+            bodyExpr = writeTerm body
+            bodyLen = Serialization.expressionLength bodyExpr
+        in (Logic.ifElse (Equality.gt bodyLen 60) (Serialization.noSep [
+          Serialization.parenList False (Lists.map writeData_Param params),
+          (Serialization.cst " =>\n  "),
+          bodyExpr]) (Serialization.spaceSep [
           Serialization.parenList False (Lists.map writeData_Param params),
           (Serialization.cst "=>"),
-          (writeTerm body)])
+          bodyExpr]))
 
 -- | Convert a data name to an expression
 writeData_Name :: Meta.Data_Name -> Ast.Expr

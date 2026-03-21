@@ -44,6 +44,7 @@ scalaLanguage =
           Variants.LiteralVariantString]
     floatTypes =
         Sets.fromList [
+          Core.FloatTypeBigfloat,
           Core.FloatTypeFloat32,
           Core.FloatTypeFloat64]
     functionVariants =
@@ -54,15 +55,20 @@ scalaLanguage =
     integerTypes =
         Sets.fromList [
           Core.IntegerTypeBigint,
+          Core.IntegerTypeInt8,
           Core.IntegerTypeInt16,
           Core.IntegerTypeInt32,
           Core.IntegerTypeInt64,
-          Core.IntegerTypeUint8]
+          Core.IntegerTypeUint8,
+          Core.IntegerTypeUint16,
+          Core.IntegerTypeUint32,
+          Core.IntegerTypeUint64]
     termVariants =
         Sets.fromList [
           Variants.TermVariantApplication,
           Variants.TermVariantEither,
           Variants.TermVariantFunction,
+          Variants.TermVariantLet,
           Variants.TermVariantList,
           Variants.TermVariantLiteral,
           Variants.TermVariantMap,
@@ -71,11 +77,13 @@ scalaLanguage =
           Variants.TermVariantRecord,
           Variants.TermVariantSet,
           Variants.TermVariantUnion,
+          Variants.TermVariantUnit,
           Variants.TermVariantVariable,
           Variants.TermVariantWrap]
     typeVariants =
         Sets.fromList [
           Variants.TypeVariantAnnotated,
+          Variants.TypeVariantApplication,
           Variants.TypeVariantEither,
           Variants.TypeVariantFunction,
           Variants.TypeVariantList,
@@ -109,12 +117,16 @@ scalaReservedWords =
           "def",
           "do",
           "else",
+          "end",
+          "enum",
+          "export",
           "extends",
           "false",
           "final",
           "finally",
           "for",
           "forSome",
+          "given",
           "if",
           "implicit",
           "import",
@@ -130,6 +142,7 @@ scalaReservedWords =
           "return",
           "sealed",
           "super",
+          "then",
           "this",
           "throw",
           "trait",
