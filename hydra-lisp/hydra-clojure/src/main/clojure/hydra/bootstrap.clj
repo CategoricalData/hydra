@@ -91,6 +91,7 @@
           ["hydra.ext.python.syntax" "hydra.ext.python.language" "hydra.ext.python.names"
            "hydra.ext.python.helpers" "hydra.ext.python.utils"
            "hydra.ext.python.serde" "hydra.ext.python.coder"])
+        (preload/install-coder-performance-patches!)
         {:coder @(rc 'hydra_ext_python_coder_module_to_python)
          :language @(rc 'hydra_ext_python_language_python_language)
          :flags [false true true false]

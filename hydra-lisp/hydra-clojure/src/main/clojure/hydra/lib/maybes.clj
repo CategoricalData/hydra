@@ -40,10 +40,11 @@
       (maybe-value m))))
 
 ;; from_maybe :: a -> Maybe a -> a
+;; Thunk-aware: if def_ is a zero-arg fn, only called when Maybe is Nothing
 (def hydra_lib_maybes_from_maybe
   (fn [def_] (fn [m]
     (if (maybe-nothing? m)
-      def_
+      (if (fn? def_) (def_) def_)
       (maybe-value m)))))
 
 ;; is_just :: Maybe a -> Bool
@@ -78,10 +79,11 @@
             (recur (next rest_) acc))))))))
 
 ;; maybe :: b -> (a -> b) -> Maybe a -> b
+;; Thunk-aware: if def_ is a zero-arg fn, only called when Maybe is Nothing
 (def hydra_lib_maybes_maybe
   (fn [def_] (fn [f] (fn [m]
     (if (maybe-nothing? m)
-      def_
+      (if (fn? def_) (def_) def_)
       (f (maybe-value m)))))))
 
 ;; apply :: Maybe (a -> b) -> Maybe a -> Maybe b
@@ -94,10 +96,11 @@
         (list :just ((maybe-value mf) (maybe-value ma))))))))
 
 ;; cases :: Maybe a -> b -> (a -> b) -> b
+;; Thunk-aware: if nothing-val is a zero-arg fn, only called when Maybe is Nothing
 (def hydra_lib_maybes_cases
   (fn [m] (fn [nothing-val] (fn [just-fn]
     (if (maybe-nothing? m)
-      nothing-val
+      (if (fn? nothing-val) (nothing-val) nothing-val)
       (just-fn (maybe-value m)))))))
 
 ;; compose :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c

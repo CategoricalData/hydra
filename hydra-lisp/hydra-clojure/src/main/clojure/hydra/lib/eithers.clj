@@ -83,14 +83,20 @@
             (recur (next rest_) (second result))))))))))
 
 ;; from_left :: a -> Either a b -> a
+;; Thunk-aware: if def_ is a zero-arg fn, only called when Either is Right
 (def hydra_lib_eithers_from_left
   (fn [def_] (fn [e]
-    (if (= (first e) :left) (second e) def_))))
+    (if (= (first e) :left)
+      (second e)
+      (if (fn? def_) (def_) def_)))))
 
 ;; from_right :: b -> Either a b -> b
+;; Thunk-aware: if def_ is a zero-arg fn, only called when Either is Left
 (def hydra_lib_eithers_from_right
   (fn [def_] (fn [e]
-    (if (= (first e) :right) (second e) def_))))
+    (if (= (first e) :right)
+      (second e)
+      (if (fn? def_) (def_) def_)))))
 
 ;; is_left :: Either a b -> Bool
 (def hydra_lib_eithers_is_left
