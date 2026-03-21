@@ -273,8 +273,11 @@ etaExpandTermNew = define "etaExpandTermNew" $
               var "domainTypes" @@ var "n" @@ just (Core.annotatedTypeBody $ var "at"),
             _Type_application>>: "atyp" ~>
               var "domainTypes" @@ var "n" @@ just (Core.applicationTypeFunction $ var "atyp"),
-            _Type_forall>>: "ft" ~>
-              var "domainTypes" @@ var "n" @@ just (Core.forallTypeBody $ var "ft")]))) $
+            -- For forall types, we cannot use the body's domain types directly because the
+            -- forall-bound variable would become free in the lambda domain. Return Nothing
+            -- for all remaining positions, letting downstream code infer the types.
+            _Type_forall>>: constant $
+              Lists.map (constant nothing) (Math.range (int32 1) (var "n"))]))) $
 
   -- peelFunctionDomains: given a Maybe Type and a count, peel n function type domains.
   -- Returns the remaining type after stripping n arrow domains.
@@ -293,8 +296,9 @@ etaExpandTermNew = define "etaExpandTermNew" $
               var "peelFunctionDomains" @@ just (Core.annotatedTypeBody $ var "at") @@ var "n",
             _Type_application>>: "atyp" ~>
               var "peelFunctionDomains" @@ just (Core.applicationTypeFunction $ var "atyp") @@ var "n",
-            _Type_forall>>: "ft" ~>
-              var "peelFunctionDomains" @@ just (Core.forallTypeBody $ var "ft") @@ var "n"]))) $
+            -- For forall types, we cannot safely peel through the body because forall-bound
+            -- variables would become free in the result. Return Nothing.
+            _Type_forall>>: constant nothing]))) $
 
   -- expand: apply args to head and pad with lambdas if needed
   -- alwaysPad: if true, pad even when args is empty (for eliminations)
@@ -355,7 +359,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
           var "termHeadType" @@ var "tx2" @@ Core.annotatedTermBody (var "at2"),
         _Term_function>>: "f2" ~> cases _Function (var "f2") (Just nothing) [
           _Function_primitive>>: "pn2" ~>
-            Maybes.map ("ts2" ~> Core.typeSchemeType $ var "ts2")
+            Maybes.map Rewriting.typeSchemeToFType
               (Maps.lookup (var "pn2") (var "primTypes"))],
         _Term_let>>: "l2" ~>
           var "termHeadType"
