@@ -44,7 +44,7 @@
 
 (def hydra_ext_java_utils_import_aliases_for_module (fn [mod] (->hydra_ext_java_helpers_aliases ((fn [v] (:namespace v)) mod) hydra_lib_maps_empty hydra_lib_sets_empty hydra_lib_sets_empty hydra_lib_sets_empty hydra_lib_sets_empty hydra_lib_sets_empty hydra_lib_maps_empty hydra_lib_sets_empty hydra_lib_maps_empty hydra_lib_sets_empty (list :nothing) hydra_lib_sets_empty)))
 
-(def hydra_ext_java_utils_java_method_body (fn [mstmts] (((hydra_lib_maybes_cases mstmts) (list :none nil)) (fn [stmts] (list :block stmts)))))
+(def hydra_ext_java_utils_java_method_body (fn [mstmts] (((hydra_lib_maybes_cases mstmts) (fn [] (list :none nil))) (fn [stmts] (list :block stmts)))))
 
 (def hydra_ext_java_utils_java_method_header (fn [tparams] (fn [method_name] (fn [params] (fn [result] (->hydra_ext_java_syntax_method_header tparams result (->hydra_ext_java_syntax_method_declarator method_name (list :nothing) params) (list :nothing)))))))
 
@@ -54,7 +54,7 @@
 
 (def hydra_ext_java_utils_java_primary_to_java_expression (fn [p] (list :assignment (list :conditional (list :simple (list (list (list (list (list (list :unary (list :simple (list :unary (list :unary (list :unary (list :other (list :postfix (list :primary p))))))))))))))))))
 
-(def hydra_ext_java_utils_java_array_creation (fn [prim_type] (fn [minit] (let [init_ (((hydra_lib_maybes_cases minit) (list)) (fn [i] i))] (hydra_ext_java_utils_java_primary_to_java_expression (list :array_creation (list :primitive_array (->hydra_ext_java_syntax_array_creation_expression_primitive_array prim_type (list) init_))))))))
+(def hydra_ext_java_utils_java_array_creation (fn [prim_type] (fn [minit] (let [init_ (((hydra_lib_maybes_cases minit) (fn [] (list))) (fn [i] i))] (hydra_ext_java_utils_java_primary_to_java_expression (list :array_creation (list :primitive_array (->hydra_ext_java_syntax_array_creation_expression_primitive_array prim_type (list) init_))))))))
 
 (def hydra_ext_java_utils_java_array_initializer (fn [exprs] (list ((hydra_lib_lists_map (fn [e] (list :expression e))) exprs))))
 
@@ -84,13 +84,13 @@
 
 (def hydra_ext_java_utils_java_type_identifier (fn [s] s))
 
-(def hydra_ext_java_utils_name_to_qualified_java_name (fn [aliases] (fn [qualify] (fn [name] (fn [mlocal] (let [qn (hydra_names_qualify_name name) ns_ ((fn [v] (:namespace v)) qn) alias (((hydra_lib_maybes_cases ns_) (list :nothing)) (fn [n] (list :just (((hydra_lib_maybes_cases ((hydra_lib_maps_lookup n) ((fn [v] (:packages v)) aliases))) (hydra_ext_java_names_java_package_name ((hydra_lib_strings_split_on ".") ((fn [v] v) n)))) (fn [id] id))))) local ((fn [v] (:local v)) qn) jid (hydra_ext_java_utils_java_type_identifier (((hydra_lib_maybes_cases mlocal) (hydra_ext_java_utils_sanitize_java_name local)) (fn [l] ((hydra_lib_strings_cat2 ((hydra_lib_strings_cat2 (hydra_ext_java_utils_sanitize_java_name local)) ".")) (hydra_ext_java_utils_sanitize_java_name l))))) pkg (if qualify (((hydra_lib_maybes_cases alias) (list :none nil)) (fn [p] (list :package p))) (list :none nil))] (list jid pkg)))))))
+(def hydra_ext_java_utils_name_to_qualified_java_name (fn [aliases] (fn [qualify] (fn [name] (fn [mlocal] (let [qn (hydra_names_qualify_name name) ns_ ((fn [v] (:namespace v)) qn) alias (((hydra_lib_maybes_cases ns_) (fn [] (list :nothing))) (fn [n] (list :just (((hydra_lib_maybes_cases ((hydra_lib_maps_lookup n) ((fn [v] (:packages v)) aliases))) (fn [] (hydra_ext_java_names_java_package_name ((hydra_lib_strings_split_on ".") ((fn [v] v) n))))) (fn [id] id))))) local ((fn [v] (:local v)) qn) jid (hydra_ext_java_utils_java_type_identifier (((hydra_lib_maybes_cases mlocal) (fn [] (hydra_ext_java_utils_sanitize_java_name local))) (fn [l] ((hydra_lib_strings_cat2 ((hydra_lib_strings_cat2 (hydra_ext_java_utils_sanitize_java_name local)) ".")) (hydra_ext_java_utils_sanitize_java_name l))))) pkg (if qualify (((hydra_lib_maybes_cases alias) (fn [] (list :none nil))) (fn [p] (list :package p))) (list :none nil))] (list jid pkg)))))))
 
 (def hydra_ext_java_utils_name_to_java_class_type (fn [aliases] (fn [qualify] (fn [args] (fn [name] (fn [mlocal] (let [result ((((hydra_ext_java_utils_name_to_qualified_java_name aliases) qualify) name) mlocal) id (hydra_lib_pairs_first result) pkg (hydra_lib_pairs_second result)] (->hydra_ext_java_syntax_class_type (list) pkg id args))))))))
 
 (def hydra_ext_java_utils_java_class_declaration (fn [aliases] (fn [tparams] (fn [el_name] (fn [mods] (fn [supname] (fn [impls] (fn [body_decls] (let [extends_ ((hydra_lib_maybes_map (fn [n] (((((hydra_ext_java_utils_name_to_java_class_type aliases) true) (list)) n) (list :nothing)))) supname)] (list :normal (->hydra_ext_java_syntax_normal_class_declaration mods (hydra_ext_java_utils_java_decl_name el_name) tparams extends_ impls body_decls)))))))))))
 
-(def hydra_ext_java_utils_java_class_type (fn [args] (fn [pkg] (fn [id] (let [qual (((hydra_lib_maybes_cases pkg) (list :none nil)) (fn [p] (list :package p))) targs ((hydra_lib_lists_map (fn [rt] (list :reference rt))) args)] (->hydra_ext_java_syntax_class_type (list) qual (hydra_ext_java_utils_java_type_identifier id) targs))))))
+(def hydra_ext_java_utils_java_class_type (fn [args] (fn [pkg] (fn [id] (let [qual (((hydra_lib_maybes_cases pkg) (fn [] (list :none nil))) (fn [p] (list :package p))) targs ((hydra_lib_lists_map (fn [rt] (list :reference rt))) args)] (->hydra_ext_java_syntax_class_type (list) qual (hydra_ext_java_utils_java_type_identifier id) targs))))))
 
 (def hydra_ext_java_utils_java_class_type_to_java_type (fn [ct] (list :reference (list :class_or_interface (list :class ct)))))
 
@@ -228,19 +228,19 @@
 
 (def hydra_ext_java_utils_java_unary_expression_to_java_relational_expression (fn [ue] (list :simple (list :unary (list :unary (list :unary ue))))))
 
-(def hydra_ext_java_utils_lookup_java_var_name (fn [aliases] (fn [name] (((hydra_lib_maybes_cases ((hydra_lib_maps_lookup name) ((fn [v] (:var_renames v)) aliases))) name) (fn [renamed] renamed)))))
+(def hydra_ext_java_utils_lookup_java_var_name (fn [aliases] (fn [name] (((hydra_lib_maybes_cases ((hydra_lib_maps_lookup name) ((fn [v] (:var_renames v)) aliases))) (fn [] name)) (fn [renamed] renamed)))))
 
 (def hydra_ext_java_utils_make_constructor (fn [aliases] (fn [el_name] (fn [private] (fn [params] (fn [stmts] (let [body (->hydra_ext_java_syntax_constructor_body (list :nothing) stmts) nm (((hydra_ext_java_utils_name_to_java_type_identifier aliases) false) el_name) cons (->hydra_ext_java_syntax_constructor_declarator (list) nm (list :nothing) params) mods (list (if private (list :private nil) (list :public nil)))] (list :constructor_declaration (->hydra_ext_java_syntax_constructor_declaration mods cons (list :nothing) body)))))))))
 
 (def hydra_ext_java_utils_method_declaration (fn [mods] (fn [tparams] (fn [anns] (fn [method_name] (fn [params] (fn [result] (fn [stmts] (hydra_ext_java_utils_java_method_declaration_to_java_class_body_declaration (->hydra_ext_java_syntax_method_declaration anns mods ((((hydra_ext_java_utils_java_method_header tparams) method_name) params) result) (hydra_ext_java_utils_java_method_body stmts)))))))))))
 
-(def hydra_ext_java_utils_method_invocation (fn [lhs] (fn [method_name] (fn [args] (let [header (((hydra_lib_maybes_cases lhs) (list :simple method_name)) (fn [either] (list :complex (->hydra_ext_java_syntax_method_invocation_complex (((hydra_lib_eithers_either (fn [en] (list :expression en))) (fn [p] (list :primary p))) either) (list) method_name))))] (->hydra_ext_java_syntax_method_invocation header args))))))
+(def hydra_ext_java_utils_method_invocation (fn [lhs] (fn [method_name] (fn [args] (let [header (((hydra_lib_maybes_cases lhs) (fn [] (list :simple method_name))) (fn [either] (list :complex (->hydra_ext_java_syntax_method_invocation_complex (((hydra_lib_eithers_either (fn [en] (list :expression en))) (fn [p] (list :primary p))) either) (list) method_name))))] (->hydra_ext_java_syntax_method_invocation header args))))))
 
 (def hydra_ext_java_utils_method_invocation_static (fn [self] (fn [method_name] (fn [args] (((hydra_ext_java_utils_method_invocation (list :just (list :left (hydra_ext_java_utils_java_identifier_to_java_expression_name self)))) method_name) args)))))
 
 (def hydra_ext_java_utils_method_invocation_static_with_type_args (fn [self] (fn [method_name] (fn [targs] (fn [args] (let [header (list :complex (->hydra_ext_java_syntax_method_invocation_complex (list :expression (hydra_ext_java_utils_java_identifier_to_java_expression_name self)) targs method_name))] (->hydra_ext_java_syntax_method_invocation header args)))))))
 
-(def hydra_ext_java_utils_name_to_java_name (fn [aliases] (fn [name] (let [qn (hydra_names_qualify_name name) local ((fn [v] (:local v)) qn) ns_ ((fn [v] (:namespace v)) qn)] (if (hydra_ext_java_utils_is_escaped ((fn [v] v) name)) (hydra_ext_java_utils_sanitize_java_name local) (((hydra_lib_maybes_cases ns_) local) (fn [gname] (let [parts (((hydra_lib_maybes_cases ((hydra_lib_maps_lookup gname) ((fn [v] (:packages v)) aliases))) ((hydra_lib_strings_split_on ".") ((fn [v] v) gname))) (fn [pkg_name] ((hydra_lib_lists_map (fn [i] ((fn [v] v) i))) ((fn [v] v) pkg_name)))) all_parts ((hydra_lib_lists_concat2 parts) (list (hydra_ext_java_utils_sanitize_java_name local)))] ((hydra_lib_strings_intercalate ".") all_parts)))))))))
+(def hydra_ext_java_utils_name_to_java_name (fn [aliases] (fn [name] (let [qn (hydra_names_qualify_name name) local ((fn [v] (:local v)) qn) ns_ ((fn [v] (:namespace v)) qn)] (if (hydra_ext_java_utils_is_escaped ((fn [v] v) name)) (hydra_ext_java_utils_sanitize_java_name local) (((hydra_lib_maybes_cases ns_) (fn [] local)) (fn [gname] (let [parts (((hydra_lib_maybes_cases ((hydra_lib_maps_lookup gname) ((fn [v] (:packages v)) aliases))) (fn [] ((hydra_lib_strings_split_on ".") ((fn [v] v) gname)))) (fn [pkg_name] ((hydra_lib_lists_map (fn [i] ((fn [v] v) i))) ((fn [v] v) pkg_name)))) all_parts ((hydra_lib_lists_concat2 parts) (list (hydra_ext_java_utils_sanitize_java_name local)))] ((hydra_lib_strings_intercalate ".") all_parts)))))))))
 
 (def hydra_ext_java_utils_name_to_java_reference_type (fn [aliases] (fn [qualify] (fn [args] (fn [name] (fn [mlocal] (list :class_or_interface (list :class (((((hydra_ext_java_utils_name_to_java_class_type aliases) qualify) args) name) mlocal)))))))))
 

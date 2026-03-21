@@ -14,7 +14,7 @@
 
 (defvar hydra_ext_org_json_decoding_decode_boolean (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :boolean) (funcall (lambda (b) (list :right b)) match_value)) (t (list :left "expected a boolean")))) (cadr match_target))))
 
-(defvar hydra_ext_org_json_decoding_decode_optional_field (lambda (decode_value) (lambda (name) (lambda (m) (funcall (funcall (hydra_lib_maybes_maybe (list :right (list :nothing))) (lambda (v) (funcall (hydra_lib_eithers_map (lambda (x) (list :just x))) (decode_value v)))) (funcall (hydra_lib_maps_lookup name) m))))))
+(defvar hydra_ext_org_json_decoding_decode_optional_field (lambda (decode_value) (lambda (name) (lambda (m) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :right (list :nothing)))) (lambda (v) (funcall (hydra_lib_eithers_map (lambda (x) (list :just x))) (decode_value v)))) (funcall (hydra_lib_maps_lookup name) m))))))
 
 (defvar hydra_ext_org_json_decoding_decode_field (lambda (decode_value) (lambda (name) (lambda (m) (funcall (hydra_lib_eithers_bind (funcall (funcall (hydra_ext_org_json_decoding_decode_optional_field decode_value) name) m)) (funcall (hydra_lib_maybes_maybe (list :left (funcall (hydra_lib_strings_cat2 "missing field: ") name))) (lambda (f) (list :right f))))))))
 

@@ -22,11 +22,11 @@
 
 (defvar hydra_extract_json_opt (lambda (fname) (lambda (m) (funcall (hydra_lib_maps_lookup fname) m))))
 
-(defvar hydra_extract_json_opt_array (lambda (fname) (lambda (m) (funcall (funcall (hydra_lib_maybes_maybe (list :right (list :nothing))) (lambda (a) (funcall (hydra_lib_eithers_map (lambda (x) (list :just x))) (hydra_extract_json_expect_array a)))) (funcall (hydra_extract_json_opt fname) m)))))
+(defvar hydra_extract_json_opt_array (lambda (fname) (lambda (m) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :right (list :nothing)))) (lambda (a) (funcall (hydra_lib_eithers_map (lambda (x) (list :just x))) (hydra_extract_json_expect_array a)))) (funcall (hydra_extract_json_opt fname) m)))))
 
-(defvar hydra_extract_json_opt_string (lambda (fname) (lambda (m) (funcall (funcall (hydra_lib_maybes_maybe (list :right (list :nothing))) (lambda (s) (funcall (hydra_lib_eithers_map (lambda (x) (list :just x))) (hydra_extract_json_expect_string s)))) (funcall (hydra_extract_json_opt fname) m)))))
+(defvar hydra_extract_json_opt_string (lambda (fname) (lambda (m) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :right (list :nothing)))) (lambda (s) (funcall (hydra_lib_eithers_map (lambda (x) (list :just x))) (hydra_extract_json_expect_string s)))) (funcall (hydra_extract_json_opt fname) m)))))
 
-(defvar hydra_extract_json_require (lambda (fname) (lambda (m) (funcall (funcall (hydra_lib_maybes_maybe (list :left (hydra_lib_strings_cat (list "required attribute " (hydra_extract_json_show_value fname) " not found")))) (lambda (value) (list :right value))) (funcall (hydra_lib_maps_lookup fname) m)))))
+(defvar hydra_extract_json_require (lambda (fname) (lambda (m) (funcall (funcall (hydra_lib_maybes_maybe (lambda () (list :left (hydra_lib_strings_cat (list "required attribute " (hydra_extract_json_show_value fname) " not found"))))) (lambda (value) (list :right value))) (funcall (hydra_lib_maps_lookup fname) m)))))
 
 (defvar hydra_extract_json_require_array (lambda (fname) (lambda (m) (funcall (hydra_lib_eithers_bind (funcall (hydra_extract_json_require fname) m)) hydra_extract_json_expect_array))))
 

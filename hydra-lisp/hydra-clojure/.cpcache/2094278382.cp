@@ -1,1 +1,0 @@
-test:src/gen-main/clojure:src/main/clojure:src/gen-test/clojure:src/test/clojure:/Users/josh/.m2/repository/org/clojure/clojure/1.12.4/clojure-1.12.4.jar:/Users/josh/.m2/repository/org/clojure/core.specs.alpha/0.4.74/core.specs.alpha-0.4.74.jar:/Users/josh/.m2/repository/org/clojure/spec.alpha/0.5.238/spec.alpha-0.5.238.jar
