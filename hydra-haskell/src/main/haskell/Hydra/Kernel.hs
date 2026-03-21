@@ -27,7 +27,9 @@ module Hydra.Kernel (
   module Hydra.Constants,
   module Hydra.Context,
   module Hydra.Core,
-  module Hydra.Error,
+  module Hydra.Error.Checking,
+  module Hydra.Error.Core,
+  module Hydra.Errors,
   module Hydra.Languages,
   module Hydra.Formatting,
   module Hydra.Graph,
@@ -67,7 +69,9 @@ import Hydra.Coders
 import Hydra.Constants
 import Hydra.Context
 import Hydra.Core
-import Hydra.Error
+import Hydra.Error.Checking
+import Hydra.Error.Core
+import Hydra.Errors
 import Hydra.Languages
 import Hydra.Formatting
 import Hydra.Graph

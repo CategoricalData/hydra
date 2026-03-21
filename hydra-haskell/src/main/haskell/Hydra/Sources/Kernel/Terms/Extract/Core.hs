@@ -56,12 +56,12 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Dsl.Meta.Context      as Ctx
-import qualified Hydra.Dsl.Error        as Error
+import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Error as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 
 formatError :: TTerm (InContext Error -> String)
 formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")

@@ -40,7 +40,8 @@ import Hydra.Dsl.Testing hiding (
   topologicalSortTestCase, typeReductionTestCase,
   typeRewriterReplaceStringWithInt32, unifyTypesTestCase,
   unshadowVariablesTestCase, variableOccursInTypeTestCase, writerTestCase, unTag,
-  testCaseTypeChecking, typeCheckingTestCase)
+  testCaseTypeChecking, testCaseValidateCoreTerm, typeCheckingTestCase,
+  validateCoreTermTestCase)
 import Hydra.Kernel
 import Hydra.Ast (Expr)
 import Hydra.Json.Model (Value)
@@ -797,4 +798,20 @@ unshadowVariablesTestCase input output = Phantoms.record _UnshadowVariablesTestC
 unshadowCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 unshadowCase cname input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseUnshadowVariables $ unshadowVariablesTestCase input output)
+  nothing noTags
+
+-- | Inject a ValidateCoreTermTestCase into TestCase
+testCaseValidateCoreTerm :: TTerm ValidateCoreTermTestCase -> TTerm TestCase
+testCaseValidateCoreTerm = inject _TestCase _TestCase_validateCoreTerm
+
+-- | Construct a ValidateCoreTermTestCase
+validateCoreTermTestCase :: TTerm Term -> TTerm (Maybe InvalidTermError) -> TTerm ValidateCoreTermTestCase
+validateCoreTermTestCase input output = Phantoms.record _ValidateCoreTermTestCase [
+  _ValidateCoreTermTestCase_input>>: input,
+  _ValidateCoreTermTestCase_output>>: output]
+
+-- | Convenience function for creating validation test cases
+validateCoreTermCase :: String -> TTerm Term -> TTerm (Maybe InvalidTermError) -> TTerm TestCaseWithMetadata
+validateCoreTermCase cname input expected = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseValidateCoreTerm $ validateCoreTermTestCase input expected)
   nothing noTags

@@ -19,7 +19,7 @@ import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Error                      as Error
+import qualified Hydra.Dsl.Errors                     as Error
 import qualified Hydra.Dsl.Grammar                    as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
@@ -154,7 +154,10 @@ transformTestCase = define "transformTestCase" $
           (Testing.testCaseDelegatedEvaluation $ Testing.delegatedEvaluationTestCase
             (buildTopologicalSortSCCCall @@ var "adjList")
             (encodeListList @@ var "expected"))
-          (var "desc") (var "tags_")]
+          (var "desc") (var "tags_"),
+
+      _TestCase_validateCoreTerm>>: lambda "_" $
+        just (var "tcm")]
 
 
 -- | Build a Term representing a convertCase function call
@@ -285,3 +288,4 @@ encodeIntList = define "encodeIntList" $
   doc "Encode [Int] as a Term" $
   lambda "ints" $
     Core.termList (Lists.map (lambda "n" $ encodeInt @@ var "n") (var "ints"))
+

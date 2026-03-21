@@ -17,7 +17,7 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 import qualified Hydra.Sources.Kernel.Types.Context as Context
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Hydra.Sources.Kernel.Types.Error as Error
+import qualified Hydra.Sources.Kernel.Types.Errors as Error
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Kernel.Types.Module as Module
 import qualified Hydra.Sources.Kernel.Types.Util as Util

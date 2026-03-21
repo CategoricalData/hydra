@@ -59,6 +59,8 @@ import qualified Hydra.Sources.Test.Serialization as Serialization
 import qualified Hydra.Sources.Test.Sorting as Sorting
 import qualified Hydra.Sources.Test.Substitution as Substitution
 import qualified Hydra.Sources.Test.Unification as Unification
+import qualified Hydra.Sources.Test.Validate.All as ValidateAll
+import qualified Hydra.Sources.Test.Validate.Core as ValidateCore
 
 
 ns :: Namespace
@@ -111,7 +113,8 @@ otherPairs = [
   (Serialization.ns, Serialization.allTests),
   (Sorting.ns, Sorting.allTests),
   (Substitution.ns, Substitution.allTests),
-  (Unification.ns, Unification.allTests)]
+  (Unification.ns, Unification.allTests),
+  (ValidateAll.ns, ValidateAll.allTests)]
 
 testPairs :: [(Namespace, TBinding TestGroup)]
 testPairs = libPairs ++ otherPairs
@@ -139,4 +142,6 @@ testSuiteModules =
    InferenceAlgebraicTypes.module_, InferenceAlgorithmW.module_, InferenceClasses.module_, InferenceFailures.module_,
    InferenceFundamentals.module_, InferenceKernelExamples.module_, InferenceNominalTypes.module_,
    -- Substitution and unification tests
-   Substitution.module_, Unification.module_]
+   Substitution.module_, Unification.module_,
+   -- Validation tests
+   ValidateAll.module_, ValidateCore.module_]

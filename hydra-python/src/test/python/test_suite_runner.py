@@ -149,7 +149,7 @@ def _load_bootstrap_type_schemes() -> FrozenDict:
     from hydra.rewriting import f_type_to_type_scheme
 
     result = {}
-    for name, typ in types_by_name().items():
+    for name, typ in types_by_name.items():
         result[name] = f_type_to_type_scheme(typ)
     return FrozenDict(result)
 

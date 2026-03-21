@@ -15,6 +15,7 @@ import qualified Hydra.Sources.Json.Model as JsonModel
 import qualified Hydra.Sources.Kernel.Types.Module as Module
 import qualified Hydra.Sources.Kernel.Types.Parsing as Parsing
 import qualified Hydra.Sources.Kernel.Types.Typing as Typing
+import qualified Hydra.Sources.Kernel.Types.Error.Core as ErrorsCore
 import qualified Hydra.Sources.Kernel.Types.Util as Util
 
 
@@ -25,7 +26,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Ast.ns, Coders.ns, Graph.ns, JsonModel.ns, Module.ns, Parsing.ns, Typing.ns, Util.ns] [Core.ns] $
+module_ = Module ns elements [Ast.ns, Coders.ns, ErrorsCore.ns, Graph.ns, JsonModel.ns, Module.ns, Parsing.ns, Typing.ns, Util.ns] [Core.ns] $
     Just "A model for unit testing"
   where
     elements = [
@@ -79,7 +80,8 @@ module_ = Module ns elements [Ast.ns, Coders.ns, Graph.ns, JsonModel.ns, Module.
       variableOccursInTypeTestCase,
       unshadowVariablesTestCase,
       unifyTypesTestCase,
-      joinTypesTestCase]
+      joinTypesTestCase,
+      validateCoreTermTestCase]
 
 alphaConversionTestCase :: Binding
 alphaConversionTestCase = define "AlphaConversionTestCase" $
@@ -622,7 +624,10 @@ testCase = define "TestCase" $
       joinTypesTestCase,
     "unshadowVariables">:
       doc "An unshadow variables test"
-      unshadowVariablesTestCase]
+      unshadowVariablesTestCase,
+    "validateCoreTerm">:
+      doc "A core term validation test"
+      validateCoreTermTestCase]
 
 testCaseWithMetadata :: Binding
 testCaseWithMetadata = define "TestCaseWithMetadata" $
@@ -847,3 +852,14 @@ unshadowVariablesTestCase = define "UnshadowVariablesTestCase" $
     "output">:
       doc "The expected term after unshadowing"
       Core.term]
+
+validateCoreTermTestCase :: Binding
+validateCoreTermTestCase = define "ValidateCoreTermTestCase" $
+  doc "A test case which validates a term and compares the result with an expected Maybe InvalidTermError" $
+  T.record [
+    "input">:
+      doc "The term to validate"
+      Core.term,
+    "output">:
+      doc "The expected validation result (Nothing if valid, Just error if invalid)"
+      (T.optional ErrorsCore.invalidTermError)]

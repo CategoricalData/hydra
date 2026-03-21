@@ -8,7 +8,7 @@ import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Context as Context
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Hydra.Sources.Kernel.Types.Error as Error
+import qualified Hydra.Sources.Kernel.Types.Errors as Error
 
 
 ns :: Namespace

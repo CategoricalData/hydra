@@ -20,8 +20,8 @@ import qualified Hydra.Context as Context
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Dsls as Dsls
 import qualified Hydra.Encoding as Encoding
-import qualified Hydra.Error as Error
-import qualified Hydra.Show.Error as ShowError
+import qualified Hydra.Errors as Error
+import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Eval.Lib.All as EvalLib
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes

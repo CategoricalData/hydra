@@ -9,9 +9,6 @@ import Hydra.Kernel hiding (
   dereferenceType,
   elementAsTypeApplicationTerm,
   elementsWithDependencies,
-  extendGraphForLambda,
-  extendGraphForLet,
-  extendGraphForTypeLambda,
   fTypeIsPolymorphic,
   fieldMap,
   fieldTypeMap,
@@ -99,7 +96,7 @@ import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Meta.Context      as Ctx
-import qualified Hydra.Dsl.Error        as Error
+import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -118,7 +115,7 @@ import qualified Hydra.Sources.Kernel.Terms.Names        as Names
 import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Error   as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Show.Errors  as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Sorting      as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
@@ -148,9 +145,6 @@ module_ = Module ns elements
       toBinding dereferenceType,
       toBinding elementAsTypeApplicationTerm,
       toBinding elementsWithDependencies,
-      toBinding extendGraphForLambda,
-      toBinding extendGraphForLet,
-      toBinding extendGraphForTypeLambda,
       toBinding fieldMap,
       toBinding fieldTypeMap,
       toBinding fieldTypes,
@@ -286,84 +280,6 @@ elementsWithDependencies = define "elementsWithDependencies" $
     (Lists.map (unaryFunction Core.bindingName) (var "original"))
     (Lists.concat (Lists.map (var "depNames") (var "original")))) $
   Eithers.mapList ("name" ~> Lexical.requireElement @@ var "cx" @@ var "graph" @@ var "name") (var "allDepNames")
-
-extendGraphForLambda :: TBinding (Graph -> Lambda -> Graph)
-extendGraphForLambda = define "extendGraphForLambda" $
-  doc "Extend a graph by descending into a lambda body" $
-  "g" ~> "lam" ~>
-  "var" <~ Core.lambdaParameter (var "lam") $
-  Graph.graph
-    (Graph.graphBoundTerms $ var "g")
-    (optCases (Core.lambdaDomain $ var "lam")
-      (Graph.graphBoundTypes $ var "g")
-      ("dom" ~> Maps.insert (var "var") (Rewriting.fTypeToTypeScheme @@ var "dom") $ Graph.graphBoundTypes $ var "g"))
-    (Graph.graphClassConstraints $ var "g")
-    (Sets.insert (var "var") $ Graph.graphLambdaVariables $ var "g")
-    (Maps.delete (var "var") $ Graph.graphMetadata $ var "g")
-    (Graph.graphPrimitives $ var "g")
-    (Graph.graphSchemaTypes $ var "g")
-    (Graph.graphTypeVariables $ var "g")
-
-extendGraphForLet :: TBinding ((Graph -> Binding -> Maybe Term) -> Graph -> Let -> Graph)
-extendGraphForLet = define "extendGraphForLet" $
-  doc "Extend a graph by descending into a let body" $
-  "forBinding" ~> "g" ~> "letrec" ~>
-  "bindings" <~ Core.letBindings (var "letrec") $
-  -- Pre-extend graph with sibling bindings so forBinding can resolve them
-  "g2" <~ (Lexical.extendGraphWithBindings @@ var "bindings" @@ var "g") $
-  Graph.graph
-    -- Add all binding terms
-    (Maps.union
-      (Maps.fromList $ Lists.map ("b" ~> pair (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")) (var "bindings"))
-      (Graph.graphBoundTerms $ var "g"))
-    -- Add typed binding type schemes; untyped bindings are not added, so outer types are shadowed by union precedence
-    (Maps.union
-      (Maps.fromList $ Maybes.cat $ Lists.map
-        ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (var "ts"))
-          (Core.bindingType $ var "b"))
-        (var "bindings"))
-      (Graph.graphBoundTypes $ var "g"))
-    (Graph.graphClassConstraints $ var "g")
-    -- Remove all binding names from lambda variables; they are shadowed
-    (Lists.foldl ("s" ~> "b" ~> Sets.delete (Core.bindingName $ var "b") (var "s"))
-      (Graph.graphLambdaVariables $ var "g")
-      (var "bindings"))
-    -- Update metadata per binding, accumulating a full graph so each binding sees earlier siblings' metadata
-    (Graph.graphMetadata $ Lists.foldl
-      ("gAcc" ~> "b" ~>
-        "m" <~ (Graph.graphMetadata $ var "gAcc") $
-        "newMeta" <~ (optCases (var "forBinding" @@ var "gAcc" @@ var "b")
-          (Maps.delete (Core.bindingName $ var "b") (var "m"))
-          ("t" ~> Maps.insert (Core.bindingName $ var "b") (var "t") (var "m"))) $
-        Graph.graph
-          (Graph.graphBoundTerms $ var "gAcc")
-          (Graph.graphBoundTypes $ var "gAcc")
-          (Graph.graphClassConstraints $ var "gAcc")
-          (Graph.graphLambdaVariables $ var "gAcc")
-          (var "newMeta")
-          (Graph.graphPrimitives $ var "gAcc")
-          (Graph.graphSchemaTypes $ var "gAcc")
-          (Graph.graphTypeVariables $ var "gAcc"))
-      (var "g2")
-      (var "bindings"))
-    (Graph.graphPrimitives $ var "g")
-    (Graph.graphSchemaTypes $ var "g")
-    (Graph.graphTypeVariables $ var "g")
-
-extendGraphForTypeLambda :: TBinding (Graph -> TypeLambda -> Graph)
-extendGraphForTypeLambda = define "extendGraphForTypeLambda" $
-  doc "Extend a graph by descending into a type lambda body" $
-  "g" ~> "tlam" ~>
-  "name" <~ Core.typeLambdaParameter (var "tlam") $
-  Graph.graph
-    (Graph.graphBoundTerms $ var "g")
-    (Graph.graphBoundTypes $ var "g")
-    (Graph.graphClassConstraints $ var "g")
-    (Graph.graphLambdaVariables $ var "g")
-    (Graph.graphMetadata $ var "g")
-    (Graph.graphPrimitives $ var "g")
-    (Graph.graphSchemaTypes $ var "g")
-    (Sets.insert (var "name") $ Graph.graphTypeVariables $ var "g")
 
 fieldMap :: TBinding ([Field] -> M.Map Name Term)
 fieldMap = define "fieldMap" $
@@ -901,19 +817,19 @@ withLambdaContext :: TBinding ((e -> Graph) -> (Graph -> e -> f) -> e -> Lambda 
 withLambdaContext = define "withLambdaContext" $
   doc "Execute a computation in the context of a lambda body, extending the type context with the lambda parameter" $
   "getContext" ~> "setContext" ~> "env" ~> "lam" ~> "body" ~>
-  "newContext" <~ extendGraphForLambda @@ (var "getContext" @@ var "env") @@ var "lam" $
+  "newContext" <~ Rewriting.extendGraphForLambda @@ (var "getContext" @@ var "env") @@ var "lam" $
   var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")
 
 withLetContext :: TBinding ((e -> Graph) -> (Graph -> e -> f) -> (Graph -> Binding -> Maybe Term) -> e -> Let -> (f -> a) -> a)
 withLetContext = define "withLetContext" $
   doc "Execute a computation in the context of a let body, extending the type context with the let bindings" $
   "getContext" ~> "setContext" ~> "forBinding" ~> "env" ~> "letrec" ~> "body" ~>
-  "newContext" <~ extendGraphForLet @@ var "forBinding" @@ (var "getContext" @@ var "env") @@ var "letrec" $
+  "newContext" <~ Rewriting.extendGraphForLet @@ var "forBinding" @@ (var "getContext" @@ var "env") @@ var "letrec" $
   var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")
 
 withTypeLambdaContext :: TBinding ((e -> Graph) -> (Graph -> e -> f) -> e -> TypeLambda -> (f -> a) -> a)
 withTypeLambdaContext = define "withTypeLambdaContext" $
   doc "Execute a computation in the context of a type lambda body, extending the type context with the type parameter" $
   "getContext" ~> "setContext" ~> "env" ~> "tlam" ~> "body" ~>
-  "newContext" <~ extendGraphForTypeLambda @@ (var "getContext" @@ var "env") @@ var "tlam" $
+  "newContext" <~ Rewriting.extendGraphForTypeLambda @@ (var "getContext" @@ var "env") @@ var "tlam" $
   var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")

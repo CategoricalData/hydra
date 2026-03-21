@@ -2,7 +2,7 @@
 module Hydra.Sources.Kernel.Terms.Lexical where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceElement, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyContext, emptyGraph, extendGraphWithBindings, fieldsOf, getField, graphToBindings, lookupElement, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireElement, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither)
+import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceElement, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyContext, emptyGraph, fieldsOf, getField, graphToBindings, lookupElement, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireElement, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -46,7 +46,7 @@ import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Util         as Util
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import qualified Hydra.Dsl.Meta.Context      as Ctx
-import qualified Hydra.Dsl.Error        as Error
+import qualified Hydra.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -58,7 +58,7 @@ import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Error as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 
 
 ns :: Namespace
@@ -82,7 +82,6 @@ module_ = Module ns elements
       toBinding elementsToGraph,
       toBinding emptyContext,
       toBinding emptyGraph,
-      toBinding extendGraphWithBindings,
       toBinding graphToBindings,
       toBinding fieldsOf,
       toBinding getField,
@@ -199,26 +198,6 @@ emptyGraph :: TBinding Graph
 emptyGraph = define "emptyGraph" $
   doc "An empty graph; no elements, no primitives, no schema." $
   Graph.emptyGraph
-
-extendGraphWithBindings :: TBinding ([Binding] -> Graph -> Graph)
-extendGraphWithBindings = define "extendGraphWithBindings" $
-  doc "Add bindings to an existing graph" $
-  "bindings" ~> "g" ~>
-  -- Merge new binding terms/types into existing graph
-  "newTerms" <~ Maps.fromList (Lists.map ("b" ~>
-    pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "bindings")) $
-  "newTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
-    Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
-      (Core.bindingType (var "b"))) (var "bindings"))) $
-  Graph.graph
-    (Maps.union (var "newTerms") (Graph.graphBoundTerms (var "g")))
-    (Maps.union (var "newTypes") (Graph.graphBoundTypes (var "g")))
-    (Graph.graphClassConstraints (var "g"))
-    (Graph.graphLambdaVariables (var "g"))
-    (Graph.graphMetadata (var "g"))
-    (Graph.graphPrimitives (var "g"))
-    (Graph.graphSchemaTypes (var "g"))
-    (Graph.graphTypeVariables (var "g"))
 
 graphToBindings :: TBinding (Graph -> [Binding])
 graphToBindings = define "graphToBindings" $

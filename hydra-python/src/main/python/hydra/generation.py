@@ -45,7 +45,7 @@ def bootstrap_schema_map():
     from hydra.json.bootstrap import types_by_name
 
     result = {}
-    for name, typ in types_by_name().items():
+    for name, typ in types_by_name.items():
         ts = f_type_to_type_scheme(typ)
         result[name] = deannotate_type_recursive(ts.type)
     return FrozenDict(result)
