@@ -314,8 +314,12 @@ public interface Reduction {
           }
 
           @Override
-          public hydra.util.ConsList<hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Forall ft) {
-            return domainTypes.get().apply(n).apply(hydra.util.Maybe.just((ft).value.body));
+          public hydra.util.ConsList<hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Forall ignored) {
+            return hydra.lib.lists.Map.apply(
+              (java.util.function.Function<Integer, hydra.util.Maybe<hydra.core.Type>>) (_2 -> (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
+              hydra.lib.math.Range.apply(
+                1,
+                n));
           }
         })),
         mt)))));
@@ -351,8 +355,8 @@ public interface Reduction {
           }
 
           @Override
-          public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Type.Forall ft) {
-            return peelFunctionDomains.get().apply(hydra.util.Maybe.just((ft).value.body)).apply(n);
+          public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Type.Forall ignored) {
+            return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
           }
         })),
         mtyp)))));
@@ -530,7 +534,7 @@ public interface Reduction {
             @Override
             public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Function.Primitive pn2) {
               return hydra.lib.maybes.Map.apply(
-                (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts2 -> (ts2).type),
+                hydra.rewriting.Rewriting::typeSchemeToFType,
                 hydra.lib.maps.Lookup.apply(
                   (pn2).value,
                   primTypes.get()));

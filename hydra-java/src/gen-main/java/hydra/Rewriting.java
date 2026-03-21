@@ -3879,6 +3879,70 @@ public interface Rewriting {
       typ);
   }
 
+  static hydra.core.Term substituteTypeVariablesInTerm(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> subst, hydra.core.Term term) {
+    java.util.function.Function<hydra.core.Type, hydra.core.Type> st = (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (v1 -> hydra.rewriting.Rewriting.substituteTypeVariables(
+      subst,
+      v1));
+    java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, hydra.util.Maybe<hydra.core.Type>> stOpt = (java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, hydra.util.Maybe<hydra.core.Type>>) (mt -> hydra.lib.maybes.Map.apply(
+      st,
+      mt));
+    java.util.function.Function<hydra.core.TypeScheme, hydra.core.TypeScheme> stScheme = (java.util.function.Function<hydra.core.TypeScheme, hydra.core.TypeScheme>) (ts -> new hydra.core.TypeScheme((ts).variables, (st).apply((ts).type), (ts).constraints));
+    java.util.function.Function<hydra.util.Maybe<hydra.core.TypeScheme>, hydra.util.Maybe<hydra.core.TypeScheme>> stSchemeOpt = (java.util.function.Function<hydra.util.Maybe<hydra.core.TypeScheme>, hydra.util.Maybe<hydra.core.TypeScheme>>) (mts -> hydra.lib.maybes.Map.apply(
+      stScheme,
+      mts));
+    java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>> replace = (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (recurse -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> (t).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.core.Term otherwise(hydra.core.Term instance) {
+        return (recurse).apply(t);
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Function v1) {
+        return (v1).value.accept(new hydra.core.Function.PartialVisitor<>() {
+          @Override
+          public hydra.core.Term otherwise(hydra.core.Function instance) {
+            return (recurse).apply(t);
+          }
+
+          @Override
+          public hydra.core.Term visit(hydra.core.Function.Lambda l) {
+            return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (stOpt).apply((l).value.domain), (recurse).apply((l).value.body))));
+          }
+        });
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Let lt) {
+        java.util.function.Function<hydra.core.Binding, hydra.core.Binding> mapBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, (recurse).apply((b).term), (stSchemeOpt).apply((b).type)));
+        return new hydra.core.Term.Let(new hydra.core.Let(hydra.lib.lists.Map.apply(
+          mapBinding,
+          (lt).value.bindings), (recurse).apply((lt).value.body)));
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.TypeApplication tt) {
+        return new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm((recurse).apply((tt).value.body), (st).apply((tt).value.type)));
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.TypeLambda tl) {
+        return new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> (tl).value.parameter,
+          hydra.lib.maps.Lookup.apply(
+            (tl).value.parameter,
+            subst)), (recurse).apply((tl).value.body)));
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Annotated at) {
+        return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((recurse).apply((at).value.body), (at).value.annotation));
+      }
+    })));
+    return hydra.rewriting.Rewriting.rewriteTerm(
+      replace,
+      term);
+  }
+
   static hydra.core.Term substituteVariable(hydra.core.Name from, hydra.core.Name to, hydra.core.Term term) {
     java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>> replace = (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (recurse -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term2 -> (term2).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
