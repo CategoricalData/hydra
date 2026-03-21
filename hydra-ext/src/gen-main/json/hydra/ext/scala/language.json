@@ -78,6 +78,10 @@
                         "list": [
                           {
                             "union": {
+                              "field": {"name": "bigfloat", "term": {"unit": {}}},
+                              "typeName": "hydra.core.FloatType"}},
+                          {
+                            "union": {
                               "field": {"name": "float32", "term": {"unit": {}}},
                               "typeName": "hydra.core.FloatType"}},
                           {
@@ -132,6 +136,10 @@
                               "typeName": "hydra.core.IntegerType"}},
                           {
                             "union": {
+                              "field": {"name": "int8", "term": {"unit": {}}},
+                              "typeName": "hydra.core.IntegerType"}},
+                          {
+                            "union": {
                               "field": {"name": "int16", "term": {"unit": {}}},
                               "typeName": "hydra.core.IntegerType"}},
                           {
@@ -145,6 +153,18 @@
                           {
                             "union": {
                               "field": {"name": "uint8", "term": {"unit": {}}},
+                              "typeName": "hydra.core.IntegerType"}},
+                          {
+                            "union": {
+                              "field": {"name": "uint16", "term": {"unit": {}}},
+                              "typeName": "hydra.core.IntegerType"}},
+                          {
+                            "union": {
+                              "field": {"name": "uint32", "term": {"unit": {}}},
+                              "typeName": "hydra.core.IntegerType"}},
+                          {
+                            "union": {
+                              "field": {"name": "uint64", "term": {"unit": {}}},
                               "typeName": "hydra.core.IntegerType"}}]},
                       "function": {
                         "typeApplication": {
@@ -172,6 +192,10 @@
                           {
                             "union": {
                               "field": {"name": "function", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "let", "term": {"unit": {}}},
                               "typeName": "hydra.variants.TermVariant"}},
                           {
                             "union": {
@@ -207,6 +231,10 @@
                               "typeName": "hydra.variants.TermVariant"}},
                           {
                             "union": {
+                              "field": {"name": "unit", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
                               "field": {"name": "variable", "term": {"unit": {}}},
                               "typeName": "hydra.variants.TermVariant"}},
                           {
@@ -231,6 +259,10 @@
                           {
                             "union": {
                               "field": {"name": "annotated", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "application", "term": {"unit": {}}},
                               "typeName": "hydra.variants.TypeVariant"}},
                           {
                             "union": {
@@ -380,12 +412,16 @@
                           {"literal": {"string": "def"}},
                           {"literal": {"string": "do"}},
                           {"literal": {"string": "else"}},
+                          {"literal": {"string": "end"}},
+                          {"literal": {"string": "enum"}},
+                          {"literal": {"string": "export"}},
                           {"literal": {"string": "extends"}},
                           {"literal": {"string": "false"}},
                           {"literal": {"string": "final"}},
                           {"literal": {"string": "finally"}},
                           {"literal": {"string": "for"}},
                           {"literal": {"string": "forSome"}},
+                          {"literal": {"string": "given"}},
                           {"literal": {"string": "if"}},
                           {"literal": {"string": "implicit"}},
                           {"literal": {"string": "import"}},
@@ -401,6 +437,7 @@
                           {"literal": {"string": "return"}},
                           {"literal": {"string": "sealed"}},
                           {"literal": {"string": "super"}},
+                          {"literal": {"string": "then"}},
                           {"literal": {"string": "this"}},
                           {"literal": {"string": "throw"}},
                           {"literal": {"string": "trait"}},

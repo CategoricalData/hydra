@@ -92,7 +92,7 @@ sprim :: Core.Name -> Meta.Data
 sprim name =
 
       let qname = Names.qualifyName name
-          prefix = Module.unNamespace (Maybes.fromJust (Module.qualifiedNameNamespace qname))
+          prefix = Lists.last (Strings.splitOn "." (Module.unNamespace (Maybes.fromJust (Module.qualifiedNameNamespace qname))))
           local = scalaEscapeName (Module.qualifiedNameLocal qname)
       in (sname (Strings.cat2 (Strings.cat2 prefix ".") local))
 
