@@ -533,8 +533,7 @@ typeOfPair cx tx typeArgs p =
 typeOfPrimitive :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Name -> Either (Context.InContext Error.Error) (Core.Type, Context.Context)
 typeOfPrimitive cx tx typeArgs name =
 
-      let rawTs =
-              Maps.lookup name (Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx))))
+      let rawTs = Maybes.map (\_p -> Graph.primitiveType _p) (Maps.lookup name (Graph.graphPrimitives tx))
       in (Maybes.maybe (Left (Context.InContext {
         Context.inContextObject = (Error.ErrorUndefinedTerm (Error.UndefinedTermError {
           Error.undefinedTermErrorName = name})),

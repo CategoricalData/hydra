@@ -164,7 +164,8 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                         Module__.moduleTermDependencies = (Module__.moduleTermDependencies m),
                         Module__.moduleTypeDependencies = (Module__.moduleTypeDependencies m),
                         Module__.moduleDescription = (Module__.moduleDescription m)}
-              refreshedMods = Lists.map (\m -> refreshModule (Lexical.graphToBindings g1) m) termModulesToGenerate
+              allBindings = Lexical.graphToBindings g1
+              refreshedMods = Lists.map (\m -> refreshModule allBindings m) termModulesToGenerate
           in (Eithers.map (\xs -> Lists.concat xs) (Eithers.mapList (\p ->
             let mod = Pairs.first p
                 defs = Pairs.second p

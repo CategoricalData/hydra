@@ -167,19 +167,21 @@ etaExpandTerm graph term =
 etaExpandTermNew :: Graph.Graph -> Core.Term -> Core.Term
 etaExpandTermNew tx0 term0 =
 
-      let termArityWithContext =
-              \tx -> \term -> case term of
-                Core.TermAnnotated v0 -> termArityWithContext tx (Core.annotatedTermBody v0)
-                Core.TermApplication v0 -> Math.sub (termArityWithContext tx (Core.applicationFunction v0)) 1
-                Core.TermFunction v0 -> case v0 of
-                  Core.FunctionElimination _ -> 1
-                  Core.FunctionLambda _ -> 0
-                  Core.FunctionPrimitive v1 -> Maybes.maybe 0 Arity.typeSchemeArity (Maps.lookup v1 (Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx)))))
-                Core.TermLet v0 -> termArityWithContext (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v0) (Core.letBody v0)
-                Core.TermTypeLambda v0 -> termArityWithContext (Schemas.extendGraphForTypeLambda tx v0) (Core.typeLambdaBody v0)
-                Core.TermTypeApplication v0 -> termArityWithContext tx (Core.typeApplicationTermBody v0)
-                Core.TermVariable v0 -> Maybes.maybe 0 Arity.typeArity (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx)))
-                _ -> 0
+      let primTypes =
+              Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx0)))
+          termArityWithContext =
+                  \tx -> \term -> case term of
+                    Core.TermAnnotated v0 -> termArityWithContext tx (Core.annotatedTermBody v0)
+                    Core.TermApplication v0 -> Math.sub (termArityWithContext tx (Core.applicationFunction v0)) 1
+                    Core.TermFunction v0 -> case v0 of
+                      Core.FunctionElimination _ -> 1
+                      Core.FunctionLambda _ -> 0
+                      Core.FunctionPrimitive v1 -> Maybes.maybe 0 Arity.typeSchemeArity (Maps.lookup v1 primTypes)
+                    Core.TermLet v0 -> termArityWithContext (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v0) (Core.letBody v0)
+                    Core.TermTypeLambda v0 -> termArityWithContext (Schemas.extendGraphForTypeLambda tx v0) (Core.typeLambdaBody v0)
+                    Core.TermTypeApplication v0 -> termArityWithContext tx (Core.typeApplicationTermBody v0)
+                    Core.TermVariable v0 -> Maybes.maybe 0 Arity.typeArity (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx)))
+                    _ -> 0
           domainTypes =
                   \n -> \mt -> Logic.ifElse (Equality.lte n 0) [] (Maybes.maybe (Lists.map (\_ -> Nothing) (Math.range 1 n)) (\typ -> case typ of
                     Core.TypeFunction v0 -> Lists.cons (Just (Core.functionTypeDomain v0)) (domainTypes (Math.sub n 1) (Just (Core.functionTypeCodomain v0)))
@@ -233,7 +235,7 @@ etaExpandTermNew tx0 term0 =
                                 \tx2 -> \trm2 -> case trm2 of
                                   Core.TermAnnotated v0 -> termHeadType tx2 (Core.annotatedTermBody v0)
                                   Core.TermFunction v0 -> case v0 of
-                                    Core.FunctionPrimitive v1 -> Maybes.map (\ts2 -> Core.typeSchemeType ts2) (Maps.lookup v1 (Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx2)))))
+                                    Core.FunctionPrimitive v1 -> Maybes.map (\ts2 -> Core.typeSchemeType ts2) (Maps.lookup v1 primTypes)
                                     _ -> Nothing
                                   Core.TermLet v0 -> termHeadType (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx2 v0) (Core.letBody v0)
                                   Core.TermTypeLambda v0 -> termHeadType (Schemas.extendGraphForTypeLambda tx2 v0) (Core.typeLambdaBody v0)
@@ -306,8 +308,7 @@ etaExpandTermNew tx0 term0 =
                           in (expand False args arty Nothing result)
                         Core.FunctionPrimitive v1 ->
                           let arty = termArityWithContext tx term
-                              primType =
-                                      Maybes.map (\ts -> Core.typeSchemeType ts) (Maps.lookup v1 (Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx)))))
+                              primType = Maybes.map (\ts -> Core.typeSchemeType ts) (Maps.lookup v1 primTypes)
                           in (expand False args arty primType term)
                       Core.TermLet v0 ->
                         let tx1 = Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v0

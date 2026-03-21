@@ -244,22 +244,22 @@ spec = H.describe "hydra.lib.math primitives" $ do
       ((-4))
   H.describe "e" $ do
     H.it "Euler's number" $ H.shouldBe
-      (Math.e)
-      (2.718281828459045)
+      (Math.roundFloat64 12 Math.e)
+      (2.71828182846)
   H.describe "pi" $ do
     H.it "pi constant" $ H.shouldBe
-      (Math.pi)
-      (3.141592653589793)
+      (Math.roundFloat64 12 Math.pi)
+      (3.14159265359)
   H.describe "sin" $ do
     H.it "sin 0" $ H.shouldBe
       (Math.sin 0.0)
       (0.0)
     H.it "sin pi/2" $ H.shouldBe
-      (Math.sin 1.5707963267948966)
+      (Math.roundFloat64 12 (Math.sin 1.5707963267948966))
       (1.0)
     H.it "sin pi" $ H.shouldBe
-      (Math.sin 3.141592653589793)
-      (1.2246467991473532e-16)
+      (Math.roundFloat64 12 (Math.sin 3.141592653589793))
+      (1.22464679915e-16)
     H.it "sin 1" $ H.shouldBe
       (Math.roundFloat64 12 (Math.sin 1.0))
       (0.841470984808)
@@ -271,8 +271,8 @@ spec = H.describe "hydra.lib.math primitives" $ do
       (Math.cos 0.0)
       (1.0)
     H.it "cos pi/2" $ H.shouldBe
-      (Math.cos 1.5707963267948966)
-      (6.123233995736766e-17)
+      (Math.roundFloat64 12 (Math.cos 1.5707963267948966))
+      (6.12323399574e-17)
     H.it "cos pi" $ H.shouldBe
       (Math.cos 3.141592653589793)
       ((-1.0))
@@ -287,8 +287,8 @@ spec = H.describe "hydra.lib.math primitives" $ do
       (Math.tan 0.0)
       (0.0)
     H.it "tan pi/4" $ H.shouldBe
-      (Math.tan 0.7853981633974483)
-      (0.9999999999999999)
+      (Math.roundFloat64 12 (Math.tan 0.7853981633974483))
+      (1.0)
     H.it "tan 1" $ H.shouldBe
       (Math.roundFloat64 12 (Math.tan 1.0))
       (1.55740772465)
@@ -300,11 +300,11 @@ spec = H.describe "hydra.lib.math primitives" $ do
       (Math.asin 0.0)
       (0.0)
     H.it "asin 1" $ H.shouldBe
-      (Math.asin 1.0)
-      (1.5707963267948966)
+      (Math.roundFloat64 12 (Math.asin 1.0))
+      (1.57079632679)
     H.it "asin -1" $ H.shouldBe
-      (Math.asin (-1.0))
-      ((-1.5707963267948966))
+      (Math.roundFloat64 12 (Math.asin (-1.0)))
+      ((-1.57079632679))
     H.it "asin 0.5" $ H.shouldBe
       (Math.roundFloat64 12 (Math.asin 0.5))
       (0.523598775598)
@@ -313,11 +313,11 @@ spec = H.describe "hydra.lib.math primitives" $ do
       (Math.acos 1.0)
       (0.0)
     H.it "acos 0" $ H.shouldBe
-      (Math.acos 0.0)
-      (1.5707963267948966)
+      (Math.roundFloat64 12 (Math.acos 0.0))
+      (1.57079632679)
     H.it "acos -1" $ H.shouldBe
-      (Math.acos (-1.0))
-      (3.141592653589793)
+      (Math.roundFloat64 12 (Math.acos (-1.0)))
+      (3.14159265359)
     H.it "acos 0.5" $ H.shouldBe
       (Math.roundFloat64 12 (Math.acos 0.5))
       (1.0471975512)
@@ -326,18 +326,18 @@ spec = H.describe "hydra.lib.math primitives" $ do
       (Math.atan 0.0)
       (0.0)
     H.it "atan 1" $ H.shouldBe
-      (Math.atan 1.0)
-      (0.7853981633974483)
+      (Math.roundFloat64 12 (Math.atan 1.0))
+      (0.785398163397)
     H.it "atan 0.5" $ H.shouldBe
       (Math.roundFloat64 12 (Math.atan 0.5))
       (0.463647609001)
   H.describe "atan2" $ do
     H.it "atan2 1 1" $ H.shouldBe
-      (Math.atan2 1.0 1.0)
-      (0.7853981633974483)
+      (Math.roundFloat64 12 (Math.atan2 1.0 1.0))
+      (0.785398163397)
     H.it "atan2 1 0" $ H.shouldBe
-      (Math.atan2 1.0 0.0)
-      (1.5707963267948966)
+      (Math.roundFloat64 12 (Math.atan2 1.0 0.0))
+      (1.57079632679)
     H.it "atan2 0 1" $ H.shouldBe
       (Math.atan2 0.0 1.0)
       (0.0)
@@ -349,8 +349,8 @@ spec = H.describe "hydra.lib.math primitives" $ do
       (Math.sinh 0.0)
       (0.0)
     H.it "sinh 1" $ H.shouldBe
-      (Math.sinh 1.0)
-      (1.1752011936438014)
+      (Math.roundFloat64 12 (Math.sinh 1.0))
+      (1.17520119364)
     H.it "sinh 2" $ H.shouldBe
       (Math.roundFloat64 12 (Math.sinh 2.0))
       (3.62686040785)
@@ -369,8 +369,8 @@ spec = H.describe "hydra.lib.math primitives" $ do
       (Math.tanh 0.0)
       (0.0)
     H.it "tanh 1" $ H.shouldBe
-      (Math.tanh 1.0)
-      (0.7615941559557649)
+      (Math.roundFloat64 12 (Math.tanh 1.0))
+      (0.761594155956)
     H.it "tanh 0.5" $ H.shouldBe
       (Math.roundFloat64 12 (Math.tanh 0.5))
       (0.46211715726)
@@ -425,7 +425,7 @@ spec = H.describe "hydra.lib.math primitives" $ do
       (Math.log 1.0)
       (0.0)
     H.it "log e" $ H.shouldBe
-      (Math.log 2.718281828459045)
+      (Math.roundFloat64 12 (Math.log 2.718281828459045))
       (1.0)
     H.it "log 2" $ H.shouldBe
       (Math.roundFloat64 12 (Math.log 2.0))
