@@ -2309,17 +2309,16 @@ encodeApplication = def "encodeApplication" $
   doc "Encode a function application to a Python expression" $
   "cx" ~> "env" ~> "app" ~>
     "g" <~ (pythonEnvironmentGetGraph @@ var "env") $
-    "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env") $
-    "skipCasts" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "env") $
     "term" <~ (Core.termApplication $ var "app") $
     "gathered" <~ (CoderUtils.gatherArgs @@ var "term" @@ list ([] :: [TTerm Term])) $
     "fun" <~ (Pairs.first $ var "gathered") $
     "args" <~ (Pairs.second $ var "gathered") $
-    -- Try to get arity from type; fall back to term-based arity
-    "termArity" <~ (termArityWithPrimitives @@ var "g" @@ var "fun") $
-    "arity" <~ (Eithers.fromRight (var "termArity") $
-      Eithers.map ("_r" ~> Arity.typeArity @@ Pairs.first (var "_r"))
-        (Checking.typeOf @@ var "cx" @@ var "tc" @@ (Phantoms.list ([] :: [TTerm Type])) @@ var "fun")) $
+    -- Use term-based arity, but ensure it is at least the number of gathered args.
+    -- This prevents curried application when termArityWithPrimitives returns 0 for
+    -- local variables (lambda parameters) not found in the graph. Since the Python coder
+    -- generates uncurried lambdas, all applications must also be uncurried.
+    "knownArity" <~ (termArityWithPrimitives @@ var "g" @@ var "fun") $
+    "arity" <~ (Math.max (var "knownArity") (Lists.length (var "args"))) $
     "pargs" <<~ (Eithers.mapList ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") (var "args")) $
     "hargs" <~ (Lists.take (var "arity") (var "pargs")) $
     "rargs" <~ (Lists.drop (var "arity") (var "pargs")) $

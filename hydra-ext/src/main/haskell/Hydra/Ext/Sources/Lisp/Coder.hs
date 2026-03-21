@@ -86,6 +86,10 @@ module_ = Module ns elements
       toBinding encodeLetAsLambdaApp,
       toBinding encodeLetAsNative,
       toBinding isPrimitiveRef,
+      toBinding wrapInThunk,
+      toBinding isLazy2ArgPrimitive,
+      toBinding isLazy3ArgPrimitive,
+      toBinding isCasesPrimitive,
       toBinding encodeApplication,
       toBinding encodeElimination,
       toBinding encodeFieldDef,
@@ -808,51 +812,112 @@ isPrimitiveRef = def "isPrimitiveRef" $
         isPrimitiveRef @@ var "primName" @@ Core.typeLambdaBody (var "tl")]
 
 -- =============================================================================
--- Application encoding (with ifElse detection)
+-- Application encoding (with ifElse and lazy primitive detection)
 -- =============================================================================
 
--- | Encode a function application, detecting the ifElse pattern.
+-- | Wrap an expression in a zero-argument lambda for lazy evaluation.
+-- Produces (fn [] expr) in Clojure, (lambda () expr) in Scheme, etc.
+wrapInThunk :: TBinding (L.Expression -> L.Expression)
+wrapInThunk = def "wrapInThunk" $
+  "expr" ~>
+    inject L._Expression L._Expression_lambda $
+      record L._Lambda [
+        L._Lambda_name>>: nothing,
+        L._Lambda_params>>: list ([] :: [TTerm L.Symbol]),
+        L._Lambda_restParam>>: nothing,
+        L._Lambda_body>>: list [var "expr"]]
+
+-- | Check if a name is a 2-arg lazy primitive (default value is arg 1, i.e. the first applied arg).
+-- These primitives take a default value that should only be evaluated when needed.
+isLazy2ArgPrimitive :: TBinding (Name -> Bool)
+isLazy2ArgPrimitive = def "isLazy2ArgPrimitive" $
+  "name" ~>
+    Logic.or
+      (Equality.equal (var "name") (Core.name $ string "hydra.lib.eithers.fromLeft"))
+      (Logic.or
+        (Equality.equal (var "name") (Core.name $ string "hydra.lib.eithers.fromRight"))
+        (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.fromMaybe")))
+
+-- | Check if a name is a 3-arg lazy primitive where arg 1 (the first applied arg) should be thunked.
+isLazy3ArgPrimitive :: TBinding (Name -> Bool)
+isLazy3ArgPrimitive = def "isLazy3ArgPrimitive" $
+  "name" ~>
+    Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.maybe")
+
+-- | Check if a name is maybes.cases (3 args, arg 2 is lazy).
+isCasesPrimitive :: TBinding (Name -> Bool)
+isCasesPrimitive = def "isCasesPrimitive" $
+  "name" ~>
+    Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.cases")
+
+-- | Encode a function application, detecting ifElse and other lazy primitives.
 -- Transforms (((hydra.lib.logic.ifElse C) T) E) into native (if C T E).
+-- For other lazy primitives, wraps the appropriate argument in a thunk.
 encodeApplication :: TBinding (L.Dialect -> Context -> Graph -> Term -> Term -> Either (InContext Error) L.Expression)
 encodeApplication = def "encodeApplication" $
   "dialect" ~> "cx" ~> "g" ~> lambda "rawFun" $ lambda "rawArg" $
     "dFun" <~ (Rewriting.deannotateTerm @@ var "rawFun") $
-    -- Check for the 3-deep application pattern: App(App(Prim("hydra.lib.logic.ifElse"), C), T)
-    -- At this level, rawFun = App(App(Prim(ifElse), C), T), rawArg = E
-    cases _Term (var "dFun") (Just $
-      -- Not an application — encode normally
-      "fun" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawFun") $
+    -- Helper: encode a normal (non-special) application
+    "normal" <~
+      ("fun" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawFun") $
       "arg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawArg") $
-        right (lispApp @@ var "fun" @@ list [var "arg"]))
+        right (lispApp @@ var "fun" @@ list [var "arg"])) $
+    -- Helper: encode a term
+    "enc" <~ (lambda "t" $ encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "t") $
+    cases _Term (var "dFun") (Just $ var "normal")
     [_Term_application>>: lambda "app2" $
        "midFun" <~ Core.applicationFunction (var "app2") $
        "midArg" <~ Core.applicationArgument (var "app2") $
        "dMidFun" <~ (Rewriting.deannotateTerm @@ var "midFun") $
-       cases _Term (var "dMidFun") (Just $
-         -- Middle is not an application — encode normally
-         "fun" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawFun") $
-         "arg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawArg") $
-           right (lispApp @@ var "fun" @@ list [var "arg"]))
-       [_Term_application>>: lambda "app3" $
-          "innerFun" <~ Core.applicationFunction (var "app3") $
-          "innerArg" <~ Core.applicationArgument (var "app3") $
-          "dInnerFun" <~ (Rewriting.deannotateTerm @@ var "innerFun") $
-          -- Check if innerFun is Prim("hydra.lib.logic.ifElse")
-          "isIfElse" <~ (isPrimitiveRef @@ string "hydra.lib.logic.ifElse" @@ var "dInnerFun") $
-          Logic.ifElse (var "isIfElse")
-            -- Emit native if: innerArg=C, midArg=T, rawArg=E
-            ("condExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "innerArg") $
-            "thenExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "midArg") $
-            "elseExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawArg") $
-              right (inject L._Expression L._Expression_if $
-                record L._IfExpression [
-                  L._IfExpression_condition>>: var "condExpr",
-                  L._IfExpression_then>>: var "thenExpr",
-                  L._IfExpression_else>>: just (var "elseExpr")]))
-            -- Not ifElse — encode normally
-            ("fun" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawFun") $
-            "arg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawArg") $
-              right (lispApp @@ var "fun" @@ list [var "arg"]))]]
+       -- 2-deep: dFun = App(midFun, midArg), applied to rawArg
+       -- Check if midFun is a 2-arg lazy primitive
+       "isLazy2" <~ Logic.or (isPrimitiveRef @@ string "hydra.lib.eithers.fromLeft" @@ var "dMidFun")
+                      (Logic.or (isPrimitiveRef @@ string "hydra.lib.eithers.fromRight" @@ var "dMidFun")
+                                (isPrimitiveRef @@ string "hydra.lib.maybes.fromMaybe" @@ var "dMidFun")) $
+       Logic.ifElse (var "isLazy2")
+         -- 2-arg lazy primitive: ((prim defVal) arg2) — wrap defVal in thunk
+         ("ePrim" <<~ (var "enc" @@ var "midFun") $
+         "eDef" <<~ (var "enc" @@ var "midArg") $
+         "eArg" <<~ (var "enc" @@ var "rawArg") $
+           right (lispApp @@ (lispApp @@ var "ePrim" @@ list [wrapInThunk @@ var "eDef"])
+                          @@ list [var "eArg"]))
+         -- Not a 2-arg lazy primitive — check for 3-deep patterns
+         (cases _Term (var "dMidFun") (Just $ var "normal")
+         [_Term_application>>: lambda "app3" $
+            "innerFun" <~ Core.applicationFunction (var "app3") $
+            "innerArg" <~ Core.applicationArgument (var "app3") $
+            "dInnerFun" <~ (Rewriting.deannotateTerm @@ var "innerFun") $
+            -- 3-deep: ifElse, maybe, or cases
+            Logic.ifElse (isPrimitiveRef @@ string "hydra.lib.logic.ifElse" @@ var "dInnerFun")
+              -- ifElse: (((ifElse C) T) E) -> native (if C T E)
+              ("eC" <<~ (var "enc" @@ var "innerArg") $
+              "eT" <<~ (var "enc" @@ var "midArg") $
+              "eE" <<~ (var "enc" @@ var "rawArg") $
+                right (inject L._Expression L._Expression_if $
+                  record L._IfExpression [
+                    L._IfExpression_condition>>: var "eC",
+                    L._IfExpression_then>>: var "eT",
+                    L._IfExpression_else>>: just (var "eE")]))
+              (Logic.ifElse (isPrimitiveRef @@ string "hydra.lib.maybes.maybe" @@ var "dInnerFun")
+                -- maybe: (((maybe defVal) f) m) — wrap defVal in thunk
+                ("eP" <<~ (var "enc" @@ var "innerFun") $
+                "eDef" <<~ (var "enc" @@ var "innerArg") $
+                "eF" <<~ (var "enc" @@ var "midArg") $
+                "eM" <<~ (var "enc" @@ var "rawArg") $
+                  right (lispApp @@ (lispApp @@ (lispApp @@ var "eP" @@ list [wrapInThunk @@ var "eDef"])
+                                             @@ list [var "eF"])
+                                 @@ list [var "eM"]))
+                (Logic.ifElse (isPrimitiveRef @@ string "hydra.lib.maybes.cases" @@ var "dInnerFun")
+                  -- cases: (((cases m) nothingVal) justFn) — wrap nothingVal in thunk
+                  ("eP" <<~ (var "enc" @@ var "innerFun") $
+                  "eM" <<~ (var "enc" @@ var "innerArg") $
+                  "eN" <<~ (var "enc" @@ var "midArg") $
+                  "eJ" <<~ (var "enc" @@ var "rawArg") $
+                    right (lispApp @@ (lispApp @@ (lispApp @@ var "eP" @@ list [var "eM"])
+                                               @@ list [wrapInThunk @@ var "eN"])
+                                   @@ list [var "eJ"]))
+                  -- Not a special primitive — encode normally
+                  (var "normal")))])]
 
 -- =============================================================================
 -- Record field encoding (for type definitions)
