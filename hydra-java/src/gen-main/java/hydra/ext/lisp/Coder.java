@@ -958,7 +958,7 @@ public interface Coder {
         hydra.core.Term midArg = (app2).value.argument;
         return (dMidFun).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
-          public hydra.util.Either<hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression> otherwise(hydra.core.Term instance) {
+          public hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> otherwise(hydra.core.Term instance) {
             return hydra.lib.eithers.Bind.apply(
               hydra.ext.lisp.coder.Coder.<T0, T1, T2>encodeTerm(
                 dialect,
@@ -977,7 +977,7 @@ public interface Coder {
           }
 
           @Override
-          public hydra.util.Either<hydra.ext.lisp.syntax.Expression, hydra.ext.lisp.syntax.Expression> visit(hydra.core.Term.Application app3) {
+          public hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> visit(hydra.core.Term.Application app3) {
             hydra.core.Term innerFun = (app3).value.function;
             hydra.core.Term dInnerFun = hydra.rewriting.Rewriting.deannotateTerm(innerFun);
             hydra.core.Term innerArg = (app3).value.argument;
@@ -1210,7 +1210,7 @@ public interface Coder {
       public hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit(hydra.core.Term.Function fun) {
         return (fun).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
-          public hydra.util.Either<hydra.ext.lisp.syntax.TopLevelFormWithComments, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise(hydra.core.Function instance) {
+          public hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise(hydra.core.Function instance) {
             return hydra.lib.eithers.Bind.apply(
               hydra.ext.lisp.coder.Coder.<T0, T1, T2>encodeTerm(
                 dialect,
@@ -1221,7 +1221,7 @@ public interface Coder {
           }
 
           @Override
-          public hydra.util.Either<hydra.ext.lisp.syntax.TopLevelFormWithComments, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit(hydra.core.Function.Lambda lam) {
+          public hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit(hydra.core.Function.Lambda lam) {
             return hydra.lib.eithers.Bind.apply(
               hydra.ext.lisp.coder.Coder.<T0, T1, T2>encodeTerm(
                 dialect,
