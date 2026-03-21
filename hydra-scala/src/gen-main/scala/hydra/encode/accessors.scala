@@ -13,8 +13,9 @@ def accessorEdge(x: hydra.accessors.AccessorEdge): hydra.core.Term =
 
 def accessorGraph(x: hydra.accessors.AccessorGraph): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.accessors.AccessorGraph", Seq(hydra.core.Field("nodes",
-     hydra.core.Term.list(lists.map[hydra.accessors.AccessorNode, hydra.core.Term](hydra.encode.accessors.accessorNode)(x.nodes))),
-     hydra.core.Field("edges", hydra.core.Term.list(lists.map[hydra.accessors.AccessorEdge, hydra.core.Term](hydra.encode.accessors.accessorEdge)(x.edges))))))
+     hydra.core.Term.list(hydra.lib.lists.map[hydra.accessors.AccessorNode, hydra.core.Term](hydra.encode.accessors.accessorNode)(x.nodes))),
+     hydra.core.Field("edges", hydra.core.Term.list(hydra.lib.lists.map[hydra.accessors.AccessorEdge,
+     hydra.core.Term](hydra.encode.accessors.accessorEdge)(x.edges))))))
 
 def accessorNode(x: hydra.accessors.AccessorNode): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.accessors.AccessorNode", Seq(hydra.core.Field("name",
@@ -22,7 +23,7 @@ def accessorNode(x: hydra.accessors.AccessorNode): hydra.core.Term =
      hydra.core.Field("id", hydra.core.Term.literal(hydra.core.Literal.string(x.id))))))
 
 def accessorPath(x: hydra.accessors.AccessorPath): hydra.core.Term =
-  hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.accessors.AccessorPath", hydra.core.Term.list(lists.map[hydra.accessors.TermAccessor,
+  hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.accessors.AccessorPath", hydra.core.Term.list(hydra.lib.lists.map[hydra.accessors.TermAccessor,
      hydra.core.Term](hydra.encode.accessors.termAccessor)(x))))
 
 def termAccessor(v1: hydra.accessors.TermAccessor): hydra.core.Term =

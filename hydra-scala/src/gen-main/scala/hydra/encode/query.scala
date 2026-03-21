@@ -25,12 +25,12 @@ def comparisonConstraint(v1: hydra.query.ComparisonConstraint): hydra.core.Term 
 
 def edge(x: hydra.query.Edge): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.query.Edge", Seq(hydra.core.Field("type", hydra.encode.core.name(x.`type`)),
-     hydra.core.Field("out", hydra.core.Term.maybe(maybes.map[hydra.core.Name, hydra.core.Term](hydra.encode.core.name)(x.out))),
-     hydra.core.Field("in", hydra.core.Term.maybe(maybes.map[hydra.core.Name, hydra.core.Term](hydra.encode.core.name)(x.in))))))
+     hydra.core.Field("out", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.core.Name, hydra.core.Term](hydra.encode.core.name)(x.out))),
+     hydra.core.Field("in", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.core.Name, hydra.core.Term](hydra.encode.core.name)(x.in))))))
 
 def graphPattern(x: hydra.query.GraphPattern): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.query.GraphPattern", Seq(hydra.core.Field("graph", hydra.encode.core.name(x.graph)),
-     hydra.core.Field("patterns", hydra.core.Term.list(lists.map[hydra.query.Pattern, hydra.core.Term](hydra.encode.query.pattern)(x.patterns))))))
+     hydra.core.Field("patterns", hydra.core.Term.list(hydra.lib.lists.map[hydra.query.Pattern, hydra.core.Term](hydra.encode.query.pattern)(x.patterns))))))
 
 def node(v1: hydra.query.Node): hydra.core.Term =
   v1 match
@@ -60,9 +60,9 @@ def pattern(v1: hydra.query.Pattern): hydra.core.Term =
   case hydra.query.Pattern.negation(v_Pattern_negation_y) => hydra.core.Term.union(hydra.core.Injection("hydra.query.Pattern",
      hydra.core.Field("negation", hydra.encode.query.pattern(v_Pattern_negation_y))))
   case hydra.query.Pattern.conjunction(v_Pattern_conjunction_y) => hydra.core.Term.union(hydra.core.Injection("hydra.query.Pattern",
-     hydra.core.Field("conjunction", hydra.core.Term.list(lists.map[hydra.query.Pattern, hydra.core.Term](hydra.encode.query.pattern)(v_Pattern_conjunction_y)))))
+     hydra.core.Field("conjunction", hydra.core.Term.list(hydra.lib.lists.map[hydra.query.Pattern, hydra.core.Term](hydra.encode.query.pattern)(v_Pattern_conjunction_y)))))
   case hydra.query.Pattern.disjunction(v_Pattern_disjunction_y) => hydra.core.Term.union(hydra.core.Injection("hydra.query.Pattern",
-     hydra.core.Field("disjunction", hydra.core.Term.list(lists.map[hydra.query.Pattern, hydra.core.Term](hydra.encode.query.pattern)(v_Pattern_disjunction_y)))))
+     hydra.core.Field("disjunction", hydra.core.Term.list(hydra.lib.lists.map[hydra.query.Pattern, hydra.core.Term](hydra.encode.query.pattern)(v_Pattern_disjunction_y)))))
   case hydra.query.Pattern.graph(v_Pattern_graph_y) => hydra.core.Term.union(hydra.core.Injection("hydra.query.Pattern",
      hydra.core.Field("graph", hydra.encode.query.graphPattern(v_Pattern_graph_y))))
 
@@ -71,8 +71,8 @@ def patternImplication(x: hydra.query.PatternImplication): hydra.core.Term =
      hydra.encode.query.pattern(x.antecedent)), hydra.core.Field("consequent", hydra.encode.query.pattern(x.consequent)))))
 
 def query(x: hydra.query.Query): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.query.Query", Seq(hydra.core.Field("variables", hydra.core.Term.list(lists.map[hydra.query.Variable,
-     hydra.core.Term](hydra.encode.query.variable)(x.variables))), hydra.core.Field("patterns", hydra.core.Term.list(lists.map[hydra.query.Pattern,
+  hydra.core.Term.record(hydra.core.Record("hydra.query.Query", Seq(hydra.core.Field("variables", hydra.core.Term.list(hydra.lib.lists.map[hydra.query.Variable,
+     hydra.core.Term](hydra.encode.query.variable)(x.variables))), hydra.core.Field("patterns", hydra.core.Term.list(hydra.lib.lists.map[hydra.query.Pattern,
      hydra.core.Term](hydra.encode.query.pattern)(x.patterns))))))
 
 def range(x: hydra.query.Range): hydra.core.Term =

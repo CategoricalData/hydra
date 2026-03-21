@@ -79,7 +79,7 @@ def pyExpressionToPyStarNamedExpression(expr: hydra.ext.python.syntax.Expression
   hydra.ext.python.syntax.StarNamedExpression.simple(hydra.ext.python.syntax.NamedExpression.simple(expr))
 
 def pyExpressionsToPyArgs(exprs: Seq[hydra.ext.python.syntax.Expression]): hydra.ext.python.syntax.Args =
-  hydra.ext.python.syntax.Args(lists.map[hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.PosArg]((e: hydra.ext.python.syntax.Expression) => hydra.ext.python.syntax.PosArg.expression(e))(exprs),
+  hydra.ext.python.syntax.Args(hydra.lib.lists.map[hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.PosArg]((e: hydra.ext.python.syntax.Expression) => hydra.ext.python.syntax.PosArg.expression(e))(exprs),
      Seq(), Seq())
 
 def pyNameToPyStarTarget(name: hydra.ext.python.syntax.Name): hydra.ext.python.syntax.StarTarget =
@@ -107,9 +107,9 @@ def primaryWithSlices(prim: hydra.ext.python.syntax.Primary)(first: hydra.ext.py
   hydra.ext.python.utils.primaryWithRhs(prim)(hydra.ext.python.syntax.PrimaryRhs.slices(hydra.ext.python.syntax.Slices(first, rest)))
 
 def primaryWithExpressionSlices(prim: hydra.ext.python.syntax.Primary)(exprs: Seq[hydra.ext.python.syntax.Expression]): hydra.ext.python.syntax.Primary =
-  hydra.ext.python.utils.primaryWithSlices(prim)(hydra.ext.python.utils.pyExpressionToPySlice(lists.head[hydra.ext.python.syntax.Expression](exprs)))(lists.map[hydra.ext.python.syntax.Expression,
+  hydra.ext.python.utils.primaryWithSlices(prim)(hydra.ext.python.utils.pyExpressionToPySlice(hydra.lib.lists.head[hydra.ext.python.syntax.Expression](exprs)))(hydra.lib.lists.map[hydra.ext.python.syntax.Expression,
      hydra.ext.python.syntax.SliceOrStarredExpression]((e: hydra.ext.python.syntax.Expression) =>
-  hydra.ext.python.syntax.SliceOrStarredExpression.slice(hydra.ext.python.utils.pyExpressionToPySlice(e)))(lists.tail[hydra.ext.python.syntax.Expression](exprs)))
+  hydra.ext.python.syntax.SliceOrStarredExpression.slice(hydra.ext.python.utils.pyExpressionToPySlice(e)))(hydra.lib.lists.tail[hydra.ext.python.syntax.Expression](exprs)))
 
 def functionCall(func: hydra.ext.python.syntax.Primary)(args: Seq[hydra.ext.python.syntax.Expression]): hydra.ext.python.syntax.Expression =
   hydra.ext.python.utils.pyPrimaryToPyExpression(hydra.ext.python.utils.primaryWithRhs(func)(hydra.ext.python.syntax.PrimaryRhs.call(hydra.ext.python.utils.pyExpressionsToPyArgs(args))))
@@ -161,11 +161,11 @@ def projectFromExpression(exp: hydra.ext.python.syntax.Expression)(name: hydra.e
 }
 
 def annotatedStatement(mcomment: Option[scala.Predef.String])(stmt: hydra.ext.python.syntax.Statement): hydra.ext.python.syntax.Statement =
-  maybes.maybe[hydra.ext.python.syntax.Statement, scala.Predef.String](stmt)((c: scala.Predef.String) =>
+  hydra.lib.maybes.maybe[hydra.ext.python.syntax.Statement, scala.Predef.String](stmt)((c: scala.Predef.String) =>
   hydra.ext.python.syntax.Statement.annotated(hydra.ext.python.syntax.AnnotatedStatement(c, stmt)))(mcomment)
 
 def annotatedExpression(mcomment: Option[scala.Predef.String])(expr: hydra.ext.python.syntax.Expression): hydra.ext.python.syntax.Expression =
-  maybes.maybe[hydra.ext.python.syntax.Expression, scala.Predef.String](expr)((c: scala.Predef.String) =>
+  hydra.lib.maybes.maybe[hydra.ext.python.syntax.Expression, scala.Predef.String](expr)((c: scala.Predef.String) =>
   hydra.ext.python.utils.pyPrimaryToPyExpression(hydra.ext.python.utils.primaryWithExpressionSlices(hydra.ext.python.utils.pyNameToPyPrimary("Annotated"))(Seq(expr,
      hydra.ext.python.utils.doubleQuotedString(c)))))(mcomment)
 
@@ -189,14 +189,14 @@ def typeAliasStatement(name: hydra.ext.python.syntax.Name)(tparams: Seq[hydra.ex
      tparams, tyexpr))))
 
 def pyList(exprs: Seq[hydra.ext.python.syntax.Expression]): hydra.ext.python.syntax.List =
-  lists.map[hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.StarNamedExpression](hydra.ext.python.utils.pyExpressionToPyStarNamedExpression)(exprs)
+  hydra.lib.lists.map[hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.StarNamedExpression](hydra.ext.python.utils.pyExpressionToPyStarNamedExpression)(exprs)
 
 def decodePyPowerToPyPrimary(p: hydra.ext.python.syntax.Power): Option[hydra.ext.python.syntax.Primary] =
   {
   val lhs: hydra.ext.python.syntax.AwaitPrimary = (p.lhs)
   val await: Boolean = (lhs.await)
   val prim: hydra.ext.python.syntax.Primary = (lhs.primary)
-  logic.ifElse[Option[hydra.ext.python.syntax.Primary]](await)(None)(Some(prim))
+  hydra.lib.logic.ifElse[Option[hydra.ext.python.syntax.Primary]](await)(None)(Some(prim))
 }
 
 def decodePyComparisonToPyAwaitPrimary(c: hydra.ext.python.syntax.Comparison): Option[hydra.ext.python.syntax.Primary] =
@@ -215,7 +215,7 @@ def decodePyComparisonToPyAwaitPrimary(c: hydra.ext.python.syntax.Comparison): O
   val sumRhs: hydra.ext.python.syntax.Term = (shiftRhs.rhs)
   val termLhs: Option[hydra.ext.python.syntax.TermLhs] = (sumRhs.lhs)
   val termRhs: hydra.ext.python.syntax.Factor = (sumRhs.rhs)
-  logic.ifElse[Option[hydra.ext.python.syntax.Primary]](logic.not(lists.`null`[hydra.ext.python.syntax.CompareOpBitwiseOrPair](rhs)))(None)(logic.ifElse[Option[hydra.ext.python.syntax.Primary]](maybes.isJust[hydra.ext.python.syntax.BitwiseOr](orLhs))(None)(logic.ifElse[Option[hydra.ext.python.syntax.Primary]](maybes.isJust[hydra.ext.python.syntax.BitwiseXor](xorLhs))(None)(logic.ifElse[Option[hydra.ext.python.syntax.Primary]](maybes.isJust[hydra.ext.python.syntax.BitwiseAnd](andLhs))(None)(logic.ifElse[Option[hydra.ext.python.syntax.Primary]](maybes.isJust[hydra.ext.python.syntax.ShiftLhs](shiftLhs))(None)(logic.ifElse[Option[hydra.ext.python.syntax.Primary]](maybes.isJust[hydra.ext.python.syntax.SumLhs](sumLhs))(None)(logic.ifElse[Option[hydra.ext.python.syntax.Primary]](maybes.isJust[hydra.ext.python.syntax.TermLhs](termLhs))(None)(termRhs match
+  hydra.lib.logic.ifElse[Option[hydra.ext.python.syntax.Primary]](hydra.lib.logic.not(hydra.lib.lists.`null`[hydra.ext.python.syntax.CompareOpBitwiseOrPair](rhs)))(None)(hydra.lib.logic.ifElse[Option[hydra.ext.python.syntax.Primary]](hydra.lib.maybes.isJust[hydra.ext.python.syntax.BitwiseOr](orLhs))(None)(hydra.lib.logic.ifElse[Option[hydra.ext.python.syntax.Primary]](hydra.lib.maybes.isJust[hydra.ext.python.syntax.BitwiseXor](xorLhs))(None)(hydra.lib.logic.ifElse[Option[hydra.ext.python.syntax.Primary]](hydra.lib.maybes.isJust[hydra.ext.python.syntax.BitwiseAnd](andLhs))(None)(hydra.lib.logic.ifElse[Option[hydra.ext.python.syntax.Primary]](hydra.lib.maybes.isJust[hydra.ext.python.syntax.ShiftLhs](shiftLhs))(None)(hydra.lib.logic.ifElse[Option[hydra.ext.python.syntax.Primary]](hydra.lib.maybes.isJust[hydra.ext.python.syntax.SumLhs](sumLhs))(None)(hydra.lib.logic.ifElse[Option[hydra.ext.python.syntax.Primary]](hydra.lib.maybes.isJust[hydra.ext.python.syntax.TermLhs](termLhs))(None)(termRhs match
     case hydra.ext.python.syntax.Factor.simple(v_Factor_simple_power) => hydra.ext.python.utils.decodePyPowerToPyPrimary(v_Factor_simple_power)
     case _ => None)))))))
 }
@@ -228,19 +228,19 @@ def decodePyInversionToPyPrimary(i: hydra.ext.python.syntax.Inversion): Option[h
 def decodePyConjunctionToPyPrimary(c: hydra.ext.python.syntax.Conjunction): Option[hydra.ext.python.syntax.Primary] =
   {
   val inversions: Seq[hydra.ext.python.syntax.Inversion] = c
-  logic.ifElse[Option[hydra.ext.python.syntax.Primary]](equality.equal[Int](lists.length[hydra.ext.python.syntax.Inversion](inversions))(1))(hydra.ext.python.utils.decodePyInversionToPyPrimary(lists.head[hydra.ext.python.syntax.Inversion](inversions)))(None)
+  hydra.lib.logic.ifElse[Option[hydra.ext.python.syntax.Primary]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.ext.python.syntax.Inversion](inversions))(1))(hydra.ext.python.utils.decodePyInversionToPyPrimary(hydra.lib.lists.head[hydra.ext.python.syntax.Inversion](inversions)))(None)
 }
 
 def decodePyExpressionToPyPrimary(e: hydra.ext.python.syntax.Expression): Option[hydra.ext.python.syntax.Primary] =
   e match
   case hydra.ext.python.syntax.Expression.simple(v_Expression_simple_disj) => {
     val conjunctions: Seq[hydra.ext.python.syntax.Conjunction] = v_Expression_simple_disj
-    logic.ifElse[Option[hydra.ext.python.syntax.Primary]](equality.equal[Int](lists.length[hydra.ext.python.syntax.Conjunction](conjunctions))(1))(hydra.ext.python.utils.decodePyConjunctionToPyPrimary(lists.head[hydra.ext.python.syntax.Conjunction](conjunctions)))(None)
+    hydra.lib.logic.ifElse[Option[hydra.ext.python.syntax.Primary]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.ext.python.syntax.Conjunction](conjunctions))(1))(hydra.ext.python.utils.decodePyConjunctionToPyPrimary(hydra.lib.lists.head[hydra.ext.python.syntax.Conjunction](conjunctions)))(None)
   }
   case _ => None
 
 def pyExpressionToPyPrimary(e: hydra.ext.python.syntax.Expression): hydra.ext.python.syntax.Primary =
-  maybes.maybe[hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.Primary](hydra.ext.python.syntax.Primary.simple(hydra.ext.python.syntax.Atom.group(hydra.ext.python.syntax.Group.expression(hydra.ext.python.syntax.NamedExpression.simple(e)))))((prim: hydra.ext.python.syntax.Primary) => prim)(hydra.ext.python.utils.decodePyExpressionToPyPrimary(e))
+  hydra.lib.maybes.maybe[hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.Primary](hydra.ext.python.syntax.Primary.simple(hydra.ext.python.syntax.Atom.group(hydra.ext.python.syntax.Group.expression(hydra.ext.python.syntax.NamedExpression.simple(e)))))((prim: hydra.ext.python.syntax.Primary) => prim)(hydra.ext.python.utils.decodePyExpressionToPyPrimary(e))
 
 def pyExpressionToDisjunction(e: hydra.ext.python.syntax.Expression): hydra.ext.python.syntax.Disjunction =
   e match
@@ -255,19 +255,19 @@ def pyBitwiseOrToPyExpression(bor: hydra.ext.python.syntax.BitwiseOr): hydra.ext
 
 def indentedBlock(mcomment: Option[scala.Predef.String])(stmts: Seq[Seq[hydra.ext.python.syntax.Statement]]): hydra.ext.python.syntax.Block =
   {
-  val commentGroup: Seq[hydra.ext.python.syntax.Statement] = maybes.maybe[Seq[hydra.ext.python.syntax.Statement],
+  val commentGroup: Seq[hydra.ext.python.syntax.Statement] = hydra.lib.maybes.maybe[Seq[hydra.ext.python.syntax.Statement],
      scala.Predef.String](Seq())((s: scala.Predef.String) => Seq(hydra.ext.python.utils.commentStatement(s)))(mcomment)
-  val groups: Seq[Seq[hydra.ext.python.syntax.Statement]] = lists.filter[Seq[hydra.ext.python.syntax.Statement]]((g: Seq[hydra.ext.python.syntax.Statement]) =>
-    logic.not(lists.`null`[hydra.ext.python.syntax.Statement](g)))(lists.cons[Seq[hydra.ext.python.syntax.Statement]](commentGroup)(stmts))
-  logic.ifElse[hydra.ext.python.syntax.Block](lists.`null`[Seq[hydra.ext.python.syntax.Statement]](groups))(hydra.ext.python.syntax.Block.indented(Seq(Seq(hydra.ext.python.syntax.Statement.simple(Seq(hydra.ext.python.utils.pyExpressionToPySimpleStatement(hydra.ext.python.utils.pyAtomToPyExpression(hydra.ext.python.syntax.Atom.ellipsis))))))))(hydra.ext.python.syntax.Block.indented(groups))
+  val groups: Seq[Seq[hydra.ext.python.syntax.Statement]] = hydra.lib.lists.filter[Seq[hydra.ext.python.syntax.Statement]]((g: Seq[hydra.ext.python.syntax.Statement]) =>
+    hydra.lib.logic.not(hydra.lib.lists.`null`[hydra.ext.python.syntax.Statement](g)))(hydra.lib.lists.cons[Seq[hydra.ext.python.syntax.Statement]](commentGroup)(stmts))
+  hydra.lib.logic.ifElse[hydra.ext.python.syntax.Block](hydra.lib.lists.`null`[Seq[hydra.ext.python.syntax.Statement]](groups))(hydra.ext.python.syntax.Block.indented(Seq(Seq(hydra.ext.python.syntax.Statement.simple(Seq(hydra.ext.python.utils.pyExpressionToPySimpleStatement(hydra.ext.python.utils.pyAtomToPyExpression(hydra.ext.python.syntax.Atom.ellipsis))))))))(hydra.ext.python.syntax.Block.indented(groups))
 }
 
 def orExpression(prims: Seq[hydra.ext.python.syntax.Primary]): hydra.ext.python.syntax.Expression =
   {
   def build(prev: Option[hydra.ext.python.syntax.BitwiseOr])(ps: Seq[hydra.ext.python.syntax.Primary]): hydra.ext.python.syntax.BitwiseOr =
-    logic.ifElse[hydra.ext.python.syntax.BitwiseOr](lists.`null`[hydra.ext.python.syntax.Primary](lists.tail[hydra.ext.python.syntax.Primary](ps)))(hydra.ext.python.syntax.BitwiseOr(prev,
-       hydra.ext.python.utils.pyPrimaryToPyBitwiseXor(lists.head[hydra.ext.python.syntax.Primary](ps))))(build(Some(hydra.ext.python.syntax.BitwiseOr(prev,
-       hydra.ext.python.utils.pyPrimaryToPyBitwiseXor(lists.head[hydra.ext.python.syntax.Primary](ps)))))(lists.tail[hydra.ext.python.syntax.Primary](ps)))
+    hydra.lib.logic.ifElse[hydra.ext.python.syntax.BitwiseOr](hydra.lib.lists.`null`[hydra.ext.python.syntax.Primary](hydra.lib.lists.tail[hydra.ext.python.syntax.Primary](ps)))(hydra.ext.python.syntax.BitwiseOr(prev,
+       hydra.ext.python.utils.pyPrimaryToPyBitwiseXor(hydra.lib.lists.head[hydra.ext.python.syntax.Primary](ps))))(build(Some(hydra.ext.python.syntax.BitwiseOr(prev,
+       hydra.ext.python.utils.pyPrimaryToPyBitwiseXor(hydra.lib.lists.head[hydra.ext.python.syntax.Primary](ps)))))(hydra.lib.lists.tail[hydra.ext.python.syntax.Primary](ps)))
   hydra.ext.python.utils.pyBitwiseOrToPyExpression(build(None)(prims))
 }
 
@@ -289,7 +289,7 @@ val getItemParams: hydra.ext.python.syntax.Parameters = hydra.ext.python.syntax.
 def unionTypeClassStatements310(name: hydra.ext.python.syntax.Name)(mcomment: Option[scala.Predef.String])(tyexpr: hydra.ext.python.syntax.Expression)(extraStmts: Seq[hydra.ext.python.syntax.Statement]): Seq[hydra.ext.python.syntax.Statement] =
   {
   val nameStr: scala.Predef.String = name
-  val metaName: hydra.ext.python.syntax.Name = strings.cat2(strings.cat2("_")(nameStr))("Meta")
+  val metaName: hydra.ext.python.syntax.Name = hydra.lib.strings.cat2(hydra.lib.strings.cat2("_")(nameStr))("Meta")
   val docString: scala.Predef.String = hydra.serialization.printExpr(hydra.ext.python.serde.encodeExpression(tyexpr))
   val returnObject: hydra.ext.python.syntax.Statement = hydra.ext.python.utils.pySimpleStatementToPyStatement(hydra.ext.python.syntax.SimpleStatement.`return`(Seq(hydra.ext.python.syntax.StarExpression.simple(hydra.ext.python.syntax.Expression.simple(Seq(Seq(hydra.ext.python.syntax.Inversion.simple(hydra.ext.python.syntax.Comparison(hydra.ext.python.syntax.BitwiseOr(None,
      hydra.ext.python.syntax.BitwiseXor(None, hydra.ext.python.syntax.BitwiseAnd(None, hydra.ext.python.syntax.ShiftExpression(None,
@@ -306,7 +306,7 @@ def unionTypeClassStatements310(name: hydra.ext.python.syntax.Name)(mcomment: Op
      hydra.ext.python.syntax.Primary.simple(hydra.ext.python.syntax.Atom.name("type"))), None)))))))),
      Seq())))))))), hydra.ext.python.utils.indentedBlock(None)(Seq(Seq(getItemMethod)))))
   val docStmt: hydra.ext.python.syntax.Statement = hydra.ext.python.utils.pyExpressionToPyStatement(hydra.ext.python.utils.tripleQuotedString(docString))
-  val bodyGroups: Seq[Seq[hydra.ext.python.syntax.Statement]] = logic.ifElse[Seq[Seq[hydra.ext.python.syntax.Statement]]](lists.`null`[hydra.ext.python.syntax.Statement](extraStmts))({
+  val bodyGroups: Seq[Seq[hydra.ext.python.syntax.Statement]] = hydra.lib.logic.ifElse[Seq[Seq[hydra.ext.python.syntax.Statement]]](hydra.lib.lists.`null`[hydra.ext.python.syntax.Statement](extraStmts))({
     val passStmt: hydra.ext.python.syntax.Statement = hydra.ext.python.utils.pySimpleStatementToPyStatement(hydra.ext.python.syntax.SimpleStatement.pass)
     Seq(Seq(docStmt), Seq(passStmt))
   })(Seq(Seq(docStmt), extraStmts))
@@ -355,7 +355,7 @@ def findNamespaces(focusNs: hydra.module.Namespace)(defs: Seq[hydra.module.Defin
   {
   val coreNs: hydra.module.Namespace = "hydra.core"
   val namespaces: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName] = hydra.schemas.namespacesForDefinitions(hydra.ext.python.names.encodeNamespace)(focusNs)(defs)
-  logic.ifElse[hydra.module.Namespaces[hydra.ext.python.syntax.DottedName]](equality.equal[scala.Predef.String](pairs.first[hydra.module.Namespace,
+  hydra.lib.logic.ifElse[hydra.module.Namespaces[hydra.ext.python.syntax.DottedName]](hydra.lib.equality.equal[scala.Predef.String](hydra.lib.pairs.first[hydra.module.Namespace,
      hydra.ext.python.syntax.DottedName](namespaces.focus))(coreNs))(namespaces)(hydra.module.Namespaces(namespaces.focus,
-     maps.insert[hydra.module.Namespace, hydra.ext.python.syntax.DottedName](coreNs)(hydra.ext.python.names.encodeNamespace(coreNs))(namespaces.mapping)))
+     hydra.lib.maps.insert[hydra.module.Namespace, hydra.ext.python.syntax.DottedName](coreNs)(hydra.ext.python.names.encodeNamespace(coreNs))(namespaces.mapping)))
 }

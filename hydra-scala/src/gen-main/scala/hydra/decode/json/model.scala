@@ -15,27 +15,27 @@ import hydra.lib.maybes
 import hydra.lib.strings
 
 def value(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error.DecodingError, hydra.json.model.Value] =
-  eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.error.DecodingError, hydra.json.model.Value]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
+  hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.error.DecodingError, hydra.json.model.Value]]((err: scala.Predef.String) => Left(err))((stripped: hydra.core.Term) =>
   stripped match
   case hydra.core.Term.union(v_Term_union_inj) => {
     val field: hydra.core.Field = (v_Term_union_inj.field)
     val fname: hydra.core.Name = (field.name)
     val fterm: hydra.core.Term = (field.term)
-    val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.error.DecodingError, hydra.json.model.Value])] = maps.fromList[hydra.core.Name,
+    val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.error.DecodingError, hydra.json.model.Value])] = hydra.lib.maps.fromList[hydra.core.Name,
        (hydra.core.Term) => Either[hydra.error.DecodingError, hydra.json.model.Value]](Seq(Tuple2("array",
        (input: hydra.core.Term) =>
-      eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value, hydra.error.DecodingError]((t: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(t))(hydra.extract.helpers.decodeList(hydra.decode.json.model.value)(cx)(input))),
+      hydra.lib.eithers.map[Seq[hydra.json.model.Value], hydra.json.model.Value, hydra.error.DecodingError]((t: Seq[hydra.json.model.Value]) => hydra.json.model.Value.array(t))(hydra.extract.helpers.decodeList(hydra.decode.json.model.value)(cx)(input))),
          Tuple2("boolean", (input: hydra.core.Term) =>
-      eithers.map[Boolean, hydra.json.model.Value, hydra.error.DecodingError]((t: Boolean) => hydra.json.model.Value.boolean(t))(eithers.either[scala.Predef.String,
+      hydra.lib.eithers.map[Boolean, hydra.json.model.Value, hydra.error.DecodingError]((t: Boolean) => hydra.json.model.Value.boolean(t))(hydra.lib.eithers.either[scala.Predef.String,
          hydra.core.Term, Either[hydra.error.DecodingError, Boolean]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(v_Literal_boolean_b)
         case _ => Left("expected boolean literal")
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx)(input)))), Tuple2("null", (input: hydra.core.Term) =>
-      eithers.map[Unit, hydra.json.model.Value, hydra.error.DecodingError]((t: Unit) => hydra.json.model.Value.`null`)(hydra.extract.helpers.decodeUnit(cx)(input))),
+      hydra.lib.eithers.map[Unit, hydra.json.model.Value, hydra.error.DecodingError]((t: Unit) => hydra.json.model.Value.`null`)(hydra.extract.helpers.decodeUnit(cx)(input))),
          Tuple2("number", (input: hydra.core.Term) =>
-      eithers.map[BigDecimal, hydra.json.model.Value, hydra.error.DecodingError]((t: BigDecimal) => hydra.json.model.Value.number(t))(eithers.either[scala.Predef.String,
+      hydra.lib.eithers.map[BigDecimal, hydra.json.model.Value, hydra.error.DecodingError]((t: BigDecimal) => hydra.json.model.Value.number(t))(hydra.lib.eithers.either[scala.Predef.String,
          hydra.core.Term, Either[hydra.error.DecodingError, BigDecimal]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
@@ -44,26 +44,27 @@ def value(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.error.Decod
           case _ => Left("expected bigfloat value")
         case _ => Left("expected bigfloat literal")
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx)(input)))), Tuple2("object", (input: hydra.core.Term) =>
-      eithers.map[Map[scala.Predef.String, hydra.json.model.Value], hydra.json.model.Value, hydra.error.DecodingError]((t: Map[scala.Predef.String,
-         hydra.json.model.Value]) => hydra.json.model.Value.`object`(t))(hydra.extract.helpers.decodeMap((cx2: hydra.graph.Graph) =>
+      hydra.lib.eithers.map[Map[scala.Predef.String, hydra.json.model.Value], hydra.json.model.Value,
+         hydra.error.DecodingError]((t: Map[scala.Predef.String, hydra.json.model.Value]) => hydra.json.model.Value.`object`(t))(hydra.extract.helpers.decodeMap((cx2: hydra.graph.Graph) =>
       (raw2: hydra.core.Term) =>
-      eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.error.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.error.DecodingError,
+         scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
         case _ => Left("expected string literal")
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(hydra.decode.json.model.value)(cx)(input))),
          Tuple2("string", (input: hydra.core.Term) =>
-      eithers.map[scala.Predef.String, hydra.json.model.Value, hydra.error.DecodingError]((t: scala.Predef.String) => hydra.json.model.Value.string(t))(eithers.either[scala.Predef.String,
+      hydra.lib.eithers.map[scala.Predef.String, hydra.json.model.Value, hydra.error.DecodingError]((t: scala.Predef.String) => hydra.json.model.Value.string(t))(hydra.lib.eithers.either[scala.Predef.String,
          hydra.core.Term, Either[hydra.error.DecodingError, scala.Predef.String]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
         case _ => Left("expected string literal")
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx)(input))))))
-    maybes.maybe[Either[hydra.error.DecodingError, hydra.json.model.Value], (hydra.core.Term) => Either[hydra.error.DecodingError,
-       hydra.json.model.Value]](Left(strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.error.DecodingError,
-       hydra.json.model.Value])) => f(fterm))(maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.error.DecodingError,
+    hydra.lib.maybes.maybe[Either[hydra.error.DecodingError, hydra.json.model.Value], (hydra.core.Term) => Either[hydra.error.DecodingError,
+       hydra.json.model.Value]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.error.DecodingError,
+       hydra.json.model.Value])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.error.DecodingError,
        hydra.json.model.Value]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))

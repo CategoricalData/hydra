@@ -43,7 +43,7 @@ enum EvaluationStyle :
    case `lazy` extends EvaluationStyle
 
 case class CaseConversionTestCase(fromConvention: hydra.util.CaseConvention, toConvention: hydra.util.CaseConvention,
-   fromString: scala.Predef.String, toString: scala.Predef.String)
+   fromString: scala.Predef.String, `toString_`: scala.Predef.String)
 
 case class DelegatedEvaluationTestCase(input: hydra.core.Term, output: hydra.core.Term)
 
