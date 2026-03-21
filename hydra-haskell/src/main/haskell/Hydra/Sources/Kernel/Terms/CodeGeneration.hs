@@ -314,7 +314,8 @@ generateSourceFiles = define "generateSourceFiles" $
           (Module.moduleTermDependencies $ var "m")
           (Module.moduleTypeDependencies $ var "m")
           (Module.moduleDescription $ var "m")) $
-      "refreshedMods" <~ Lists.map ("m" ~> var "refreshModule" @@ (Lexical.graphToBindings @@ var "g1") @@ var "m") (var "termModulesToGenerate") $
+      "allBindings" <~ Lexical.graphToBindings @@ var "g1" $
+      "refreshedMods" <~ Lists.map ("m" ~> var "refreshModule" @@ var "allBindings" @@ var "m") (var "termModulesToGenerate") $
       Eithers.map ("xs" ~> Lists.concat (var "xs")) $
         Eithers.mapList ("p" ~>
           "mod" <~ Pairs.first (var "p") $
