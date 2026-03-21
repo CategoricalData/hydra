@@ -27,6 +27,7 @@ import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Hoisting as Hoisting
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Unification as Unification
+import qualified Hydra.Validate.Core as ValidateCore
 
 import qualified Control.Exception
 import qualified Control.Monad as CM
@@ -180,6 +181,10 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
       H.it "unshadow variables" $ H.shouldBe
         (ShowCore.term $ Rewriting.unshadowVariables input)
         (ShowCore.term output)
+    TestCaseValidateCoreTerm (ValidateCoreTermTestCase input output) ->
+      H.it "validate core term" $ H.shouldBe
+        (ValidateCore.term emptyGraph input)
+        output
 
 runTestCase :: String -> TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
 runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _) =

@@ -14,7 +14,7 @@ import Hydra.Dsl.Terms
 import qualified Hydra.Sources.Kernel.Types.Coders as TypeCoders
 import qualified Hydra.Sources.Kernel.Types.Context as TypeContext
 import qualified Hydra.Sources.Kernel.Types.Core as TypeCore
-import qualified Hydra.Sources.Kernel.Types.Error as TypeError
+import qualified Hydra.Sources.Kernel.Types.Errors as TypeError
 import qualified Hydra.Sources.Kernel.Types.Util as TypeUtil
 import qualified Hydra.Sources.Kernel.Terms.Annotations as TermAnnotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as TermConstants

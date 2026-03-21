@@ -11,7 +11,7 @@ import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Error
 
 import Hydra.TestData
 import Hydra.TestUtils

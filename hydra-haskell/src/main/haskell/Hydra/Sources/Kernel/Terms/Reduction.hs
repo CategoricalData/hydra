@@ -47,7 +47,7 @@ import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Util         as Util
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import qualified Hydra.Dsl.Meta.Context      as Ctx
-import qualified Hydra.Dsl.Error        as Error
+import qualified Hydra.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -66,7 +66,7 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Error as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 
 
@@ -243,11 +243,11 @@ etaExpandTermNew = define "etaExpandTermNew" $
             (int32 0) Arity.typeSchemeArity],
       _Term_let>>: "l" ~>
         var "termArityWithContext"
-          @@ (Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l")
+          @@ (Rewriting.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l")
           @@ Core.letBody (var "l"),
       _Term_typeLambda>>: "tl" ~>
         var "termArityWithContext"
-          @@ (Schemas.extendGraphForTypeLambda @@ var "tx" @@ var "tl")
+          @@ (Rewriting.extendGraphForTypeLambda @@ var "tx" @@ var "tl")
           @@ Core.typeLambdaBody (var "tl"),
       _Term_typeApplication>>: "tat" ~>
         var "termArityWithContext" @@ var "tx" @@ Core.typeApplicationTermBody (var "tat"),
@@ -359,11 +359,11 @@ etaExpandTermNew = define "etaExpandTermNew" $
               (Maps.lookup (var "pn2") (var "primTypes"))],
         _Term_let>>: "l2" ~>
           var "termHeadType"
-            @@ (Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "tx2" @@ var "l2")
+            @@ (Rewriting.extendGraphForLet @@ constant (constant nothing) @@ var "tx2" @@ var "l2")
             @@ Core.letBody (var "l2"),
         _Term_typeLambda>>: "tl2" ~>
           var "termHeadType"
-            @@ (Schemas.extendGraphForTypeLambda @@ var "tx2" @@ var "tl2")
+            @@ (Rewriting.extendGraphForTypeLambda @@ var "tx2" @@ var "tl2")
             @@ Core.typeLambdaBody (var "tl2"),
         _Term_typeApplication>>: "tat2" ~>
           -- Get the head type of the body, then substitute forall parameter with the type argument
@@ -446,7 +446,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
                 Core.typeUnit] $
           var "expand" @@ var "padElim" @@ var "args" @@ (int32 1) @@ var "elimHeadType" @@ var "elimTerm",
         _Function_lambda>>: "lm" ~>
-          "tx1" <~ Schemas.extendGraphForLambda @@ var "tx" @@ var "lm" $
+          "tx1" <~ Rewriting.extendGraphForLambda @@ var "tx" @@ var "lm" $
           "body" <~ var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.lambdaBody (var "lm") $
           "result" <~ Core.termFunction (Core.functionLambda $
             Core.lambda (Core.lambdaParameter $ var "lm") (Core.lambdaDomain $ var "lm") (var "body")) $
@@ -462,7 +462,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
 
       -- Let: extend context for bindings and body
       _Term_let>>: "lt" ~>
-        "tx1" <~ Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "lt" $
+        "tx1" <~ Rewriting.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "lt" $
         "mapBinding" <~ ("b" ~> Core.binding
           (Core.bindingName $ var "b")
           (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.bindingTerm (var "b"))
@@ -507,7 +507,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
 
       -- TypeLambda: extend context for body
       _Term_typeLambda>>: "tl" ~>
-        "tx1" <~ Schemas.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
+        "tx1" <~ Rewriting.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
         "result" <~ Core.termTypeLambda (Core.typeLambda
           (Core.typeLambdaParameter $ var "tl")
           (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.typeLambdaBody (var "tl"))) $
@@ -604,7 +604,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         Nothing [
         _Function_elimination>>: constant $ right $ int32 1,
         _Function_lambda>>: "l" ~>
-          "txl" <~ Schemas.extendGraphForLambda @@ var "tx" @@ var "l" $
+          "txl" <~ Rewriting.extendGraphForLambda @@ var "tx" @@ var "l" $
           var "arityOf" @@ var "txl" @@ Core.lambdaBody (var "l"),
         _Function_primitive>>: "name" ~>
           Eithers.map
@@ -618,11 +618,11 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         -- like identity where (id x) has the same arity as x.
         _Term_function>>: "f" ~> var "forFunction" @@ var "tx" @@ var "f",
         _Term_let>>: "l" ~>
-          "txl" <~ Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
+          "txl" <~ Rewriting.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
           var "arityOf" @@ var "txl" @@ Core.letBody (var "l"),
         _Term_typeApplication>>: "tat" ~> var "arityOf" @@ var "tx" @@ Core.typeApplicationTermBody (var "tat"),
         _Term_typeLambda>>: "tl" ~>
-          "txt" <~ Schemas.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
+          "txt" <~ Rewriting.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
           var "arityOf" @@ var "txt" @@ Core.typeLambdaBody (var "tl"),
         _Term_variable>>: "name" ~> optCases (Maybes.map (Rewriting.typeSchemeToFType) $ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx"))
           -- Variable not in graphBoundTypes; use typeOf with CURRENT context and variable term as fallback
@@ -696,17 +696,17 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         (Just $ var "recurseOrForce" @@ var "term") [
         _Function_elimination>>: "elm" ~> var "forElimination" @@ var "elm",
         _Function_lambda>>: "l" ~>
-          "txl" <~ Schemas.extendGraphForLambda @@ var "tx" @@ var "l" $
+          "txl" <~ Rewriting.extendGraphForLambda @@ var "tx" @@ var "l" $
            Eithers.map (var "unwind") (var "recurse" @@ var "txl" @@ var "term")],
       _Term_let>>: "l" ~>
-        "txlt" <~ Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
+        "txlt" <~ Rewriting.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
         var "recurse" @@ var "txlt" @@ var "term",
       _Term_typeApplication>>: "tat" ~> var "rewrite" @@ var "topLevel" @@ var "forced"
         @@ (Lists.cons (Core.typeApplicationTermType $ var "tat") (var "typeArgs"))
         @@ var "recurse" @@ var "tx"
         @@ Core.typeApplicationTermBody (var "tat"),
       _Term_typeLambda>>: "tl" ~>
-        "txt" <~ Schemas.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
+        "txt" <~ Rewriting.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
         var "recurse" @@ var "txt" @@ var "term"]) $
   Rewriting.rewriteTermWithContextM @@ (var "rewrite" @@ true @@ false @@ list ([] :: [TTerm Type])) @@ var "tx0" @@ var "term0"
 

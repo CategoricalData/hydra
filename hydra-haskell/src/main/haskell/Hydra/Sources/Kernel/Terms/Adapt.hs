@@ -17,7 +17,7 @@ import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
-import qualified Hydra.Dsl.Error        as Error
+import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Dsl.Grammar      as Grammar
 import qualified Hydra.Dsl.Grammars          as Grammars
 import qualified Hydra.Dsl.Meta.Graph        as Graph
@@ -53,7 +53,7 @@ import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Util         as Util
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import qualified Hydra.Dsl.Meta.Context      as Ctx
-import qualified Hydra.Dsl.Error        as Error
+import qualified Hydra.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -73,7 +73,7 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Rewriting   as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas     as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core   as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Error  as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph  as ShowGraph
 
 

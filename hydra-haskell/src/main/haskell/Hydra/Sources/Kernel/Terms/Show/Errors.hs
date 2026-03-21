@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Kernel.Terms.Show.Error where
+module Hydra.Sources.Kernel.Terms.Show.Errors where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
@@ -56,25 +56,24 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error.Core as ShowErrorCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Meta as ShowMeta
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 
 ns :: Namespace
-ns = Namespace "hydra.show.error"
+ns = Namespace "hydra.show.errors"
 
 module_ :: Module
 module_ = Module ns elements
-    [ShowCore.ns, ShowMeta.ns, ShowTyping.ns, Formatting.ns]
+    [ShowCore.ns, ShowErrorCore.ns, ShowMeta.ns, ShowTyping.ns, Formatting.ns]
     kernelTypesNamespaces $
     Just "String representations of hydra.error types"
   where
    elements = [
      toBinding checkingError,
      toBinding decodingError,
-     toBinding duplicateBindingError,
-     toBinding duplicateFieldError,
      toBinding error_,
      toBinding incorrectUnificationError,
      toBinding notAForallTypeError,
@@ -83,12 +82,7 @@ module_ = Module ns elements
      toBinding typeArityMismatchError,
      toBinding typeMismatchError,
      toBinding unboundTypeVariablesError,
-     toBinding undefinedFieldError,
-     toBinding undefinedTermError,
-     toBinding undefinedTypeError,
      toBinding unequalTypesError,
-     toBinding unexpectedTermVariantError,
-     toBinding unexpectedTypeVariantError,
      toBinding unificationError,
      toBinding unsupportedTermVariantError,
      toBinding untypedLambdaError,
@@ -117,34 +111,20 @@ decodingError = define "decodingError" $
   doc "Show a decoding error as a string" $
   "de" ~> Strings.cat2 (string "decoding error: ") (unwrap _DecodingError @@ var "de")
 
-duplicateBindingError :: TBinding (DuplicateBindingError -> String)
-duplicateBindingError = define "duplicateBindingError" $
-  doc "Show a duplicate binding error as a string" $
-  "e" ~> Strings.cat2
-    (string "duplicate binding: ")
-    (Core.unName $ project _DuplicateBindingError _DuplicateBindingError_name @@ var "e")
-
-duplicateFieldError :: TBinding (DuplicateFieldError -> String)
-duplicateFieldError = define "duplicateFieldError" $
-  doc "Show a duplicate field error as a string" $
-  "e" ~> Strings.cat2
-    (string "duplicate field: ")
-    (Core.unName $ project _DuplicateFieldError _DuplicateFieldError_name @@ var "e")
-
 error_ :: TBinding (Error -> String)
 error_ = define "error" $
   doc "Show an error as a string" $
   "e" ~> cases _Error (var "e") Nothing [
     _Error_checking>>: checkingError,
     _Error_decoding>>: decodingError,
-    _Error_duplicateBinding>>: duplicateBindingError,
-    _Error_duplicateField>>: duplicateFieldError,
+    _Error_duplicateBinding>>: ShowErrorCore.duplicateBindingError,
+    _Error_duplicateField>>: ShowErrorCore.duplicateFieldError,
     _Error_other>>: otherError,
-    _Error_undefinedField>>: undefinedFieldError,
-    _Error_undefinedTerm>>: undefinedTermError,
-    _Error_undefinedType>>: undefinedTypeError,
-    _Error_unexpectedTermVariant>>: unexpectedTermVariantError,
-    _Error_unexpectedTypeVariant>>: unexpectedTypeVariantError,
+    _Error_undefinedField>>: ShowErrorCore.undefinedFieldError,
+    _Error_undefinedTerm>>: ShowErrorCore.undefinedTermError,
+    _Error_undefinedType>>: ShowErrorCore.undefinedTypeError,
+    _Error_unexpectedTermVariant>>: ShowErrorCore.unexpectedTermVariantError,
+    _Error_unexpectedTypeVariant>>: ShowErrorCore.unexpectedTypeVariantError,
     _Error_unification>>: unificationError]
 
 incorrectUnificationError :: TBinding (IncorrectUnificationError -> String)
@@ -222,35 +202,6 @@ unboundTypeVariablesError = define "unboundTypeVariablesError" $
     string "} in type ",
     ShowCore.type_ @@ var "typ"]
 
-undefinedFieldError :: TBinding (UndefinedFieldError -> String)
-undefinedFieldError = define "undefinedFieldError" $
-  doc "Show an undefined field error as a string" $
-  "e" ~>
-  "fname" <~ project _UndefinedFieldError _UndefinedFieldError_fieldName @@ var "e" $
-  "tname" <~ project _UndefinedFieldError _UndefinedFieldError_typeName @@ var "e" $
-  Strings.cat $ list [
-    string "no such field \"",
-    Core.unName $ var "fname",
-    string "\" in type \"",
-    Core.unName $ var "tname",
-    string "\""]
-
-undefinedTermError :: TBinding (UndefinedTermError -> String)
-undefinedTermError = define "undefinedTermError" $
-  doc "Show an undefined term error as a string" $
-  "e" ~>
-  Strings.cat2
-    (string "undefined term: ")
-    (Core.unName $ project _UndefinedTermError _UndefinedTermError_name @@ var "e")
-
-undefinedTypeError :: TBinding (UndefinedTypeError -> String)
-undefinedTypeError = define "undefinedTypeError" $
-  doc "Show an undefined type error as a string" $
-  "e" ~>
-  Strings.cat2
-    (string "undefined type: ")
-    (Core.unName $ project _UndefinedTypeError _UndefinedTypeError_name @@ var "e")
-
 unequalTypesError :: TBinding (UnequalTypesError -> String)
 unequalTypesError = define "unequalTypesError" $
   doc "Show an unequal types error as a string" $
@@ -262,30 +213,6 @@ unequalTypesError = define "unequalTypesError" $
     Formatting.showList @@ ShowCore.type_ @@ var "types",
     string " in ",
     var "desc"]
-
-unexpectedTermVariantError :: TBinding (UnexpectedTermVariantError -> String)
-unexpectedTermVariantError = define "unexpectedTermVariantError" $
-  doc "Show an unexpected term variant error as a string" $
-  "e" ~>
-  "expected" <~ project _UnexpectedTermVariantError _UnexpectedTermVariantError_expectedVariant @@ var "e" $
-  "actual" <~ project _UnexpectedTermVariantError _UnexpectedTermVariantError_actualTerm @@ var "e" $
-  Strings.cat $ list [
-    string "expected ",
-    ShowMeta.termVariant @@ var "expected",
-    string " term but found ",
-    ShowCore.term @@ var "actual"]
-
-unexpectedTypeVariantError :: TBinding (UnexpectedTypeVariantError -> String)
-unexpectedTypeVariantError = define "unexpectedTypeVariantError" $
-  doc "Show an unexpected type variant error as a string" $
-  "e" ~>
-  "expected" <~ project _UnexpectedTypeVariantError _UnexpectedTypeVariantError_expectedVariant @@ var "e" $
-  "actual" <~ project _UnexpectedTypeVariantError _UnexpectedTypeVariantError_actualType @@ var "e" $
-  Strings.cat $ list [
-    string "expected ",
-    ShowMeta.typeVariant @@ var "expected",
-    string " type but found ",
-    ShowCore.type_ @@ var "actual"]
 
 unificationError :: TBinding (UnificationError -> String)
 unificationError = define "unificationError" $

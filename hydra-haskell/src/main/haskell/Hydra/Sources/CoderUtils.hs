@@ -27,7 +27,7 @@ import qualified Hydra.Dsl.Bootstrap     as Bootstrap
 import qualified Hydra.Dsl.Coders        as Coders
 import qualified Hydra.Dsl.Util       as Util
 import qualified Hydra.Dsl.Meta.Core          as Core
-import qualified Hydra.Dsl.Error         as Error
+import qualified Hydra.Dsl.Errors        as Error
 import qualified Hydra.Dsl.Grammar       as Grammar
 import qualified Hydra.Dsl.Grammars      as Grammars
 import qualified Hydra.Dsl.Meta.Graph         as Graph
@@ -632,7 +632,7 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
             ("v" <~ Core.lambdaParameter (var "lam") $
              "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
              "body" <~ Core.lambdaBody (var "lam") $
-             "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
+             "newEnv" <~ (var "setTC" @@ (Rewriting.extendGraphForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
              analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
                @@ var "argMode" @@ var "newEnv"
                @@ var "tparams"
@@ -645,7 +645,7 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
     _Term_let>>: "lt" ~>
       "newBindings" <~ Core.letBindings (var "lt") $
       "body" <~ Core.letBody (var "lt") $
-      "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
+      "newEnv" <~ (var "setTC" @@ (Rewriting.extendGraphForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
       analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ boolean False @@ var "newEnv"
         @@ var "tparams"
@@ -668,7 +668,7 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
     _Term_typeLambda>>: "tl" ~>
       "tvar" <~ Core.typeLambdaParameter (var "tl") $
       "tlBody" <~ Core.typeLambdaBody (var "tl") $
-      "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
+      "newEnv" <~ (var "setTC" @@ (Rewriting.extendGraphForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
       analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ var "argMode" @@ var "newEnv"
         @@ (Lists.cons (var "tvar") (var "tparams"))

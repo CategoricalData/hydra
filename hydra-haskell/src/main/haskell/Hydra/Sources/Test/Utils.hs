@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Error                      as Error
+import qualified Hydra.Dsl.Errors                     as Error
 import qualified Hydra.Dsl.Grammar                    as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
@@ -72,7 +72,7 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Accessors as ShowAccessors
-import qualified Hydra.Sources.Kernel.Terms.Show.Error     as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Show.Errors    as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
 import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta

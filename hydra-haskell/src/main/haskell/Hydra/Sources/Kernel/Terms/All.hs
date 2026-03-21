@@ -33,7 +33,8 @@ import qualified Hydra.Sources.Kernel.Terms.Schemas         as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Accessors  as ShowAccessors
 import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Error      as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Show.Errors      as ShowErrors
+import qualified Hydra.Sources.Kernel.Terms.Show.Error.Core as ShowErrorCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph      as ShowGraph
 import qualified Hydra.Sources.Kernel.Terms.Show.Meta       as ShowMeta
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing     as ShowTyping
@@ -42,6 +43,7 @@ import qualified Hydra.Sources.Kernel.Terms.Sorting         as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution    as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Templates       as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
+import qualified Hydra.Sources.Kernel.Terms.Validate.Core  as ValidateCore
 
 -- Secondary, generated decoding modules
 import qualified Hydra.Sources.Decode.Accessors     as DecodeAccessors
@@ -50,6 +52,9 @@ import qualified Hydra.Sources.Decode.Classes       as DecodeClasses
 import qualified Hydra.Sources.Decode.Coders        as DecodeCoders
 import qualified Hydra.Sources.Decode.Context       as DecodeContext
 import qualified Hydra.Sources.Decode.Core          as DecodeCore
+import qualified Hydra.Sources.Decode.Errors         as DecodeErrors
+import qualified Hydra.Sources.Decode.Error.Checking as DecodeErrorChecking
+import qualified Hydra.Sources.Decode.Error.Core   as DecodeErrorCore
 import qualified Hydra.Sources.Decode.Grammar       as DecodeGrammar
 import qualified Hydra.Sources.Decode.Json.Model    as DecodeJson
 import qualified Hydra.Sources.Decode.Module        as DecodeModule
@@ -71,6 +76,9 @@ import qualified Hydra.Sources.Encode.Classes       as EncodeClasses
 import qualified Hydra.Sources.Encode.Coders        as EncodeCoders
 import qualified Hydra.Sources.Encode.Context       as EncodeContext
 import qualified Hydra.Sources.Encode.Core          as EncodeCore
+import qualified Hydra.Sources.Encode.Errors         as EncodeErrors
+import qualified Hydra.Sources.Encode.Error.Checking as EncodeErrorChecking
+import qualified Hydra.Sources.Encode.Error.Core   as EncodeErrorCore
 import qualified Hydra.Sources.Encode.Grammar       as EncodeGrammar
 import qualified Hydra.Sources.Encode.Json.Model    as EncodeJson
 import qualified Hydra.Sources.Encode.Module        as EncodeModule
@@ -121,7 +129,8 @@ kernelPrimaryTermsModules = [
   Serialization.module_,
   ShowAccessors.module_,
   ShowCore.module_,
-  ShowError.module_,
+  ShowErrors.module_,
+  ShowErrorCore.module_,
   ShowGraph.module_,
   ShowMeta.module_,
   ShowTyping.module_,
@@ -129,7 +138,8 @@ kernelPrimaryTermsModules = [
   Sorting.module_,
   Substitution.module_,
   Templates.module_,
-  Unification.module_]
+  Unification.module_,
+  ValidateCore.module_]
 
 kernelDecodingModules :: [Module]
 kernelDecodingModules = [
@@ -139,6 +149,9 @@ kernelDecodingModules = [
   DecodeCoders.module_,
   DecodeContext.module_,
   DecodeCore.module_,
+  DecodeErrors.module_,
+  DecodeErrorChecking.module_,
+  DecodeErrorCore.module_,
   DecodeGrammar.module_,
   DecodeJson.module_,
   DecodeModule.module_,
@@ -161,6 +174,9 @@ kernelEncodingModules = [
   EncodeCoders.module_,
   EncodeContext.module_,
   EncodeCore.module_,
+  EncodeErrors.module_,
+  EncodeErrorChecking.module_,
+  EncodeErrorCore.module_,
   EncodeGrammar.module_,
   EncodeJson.module_,
   EncodeModule.module_,

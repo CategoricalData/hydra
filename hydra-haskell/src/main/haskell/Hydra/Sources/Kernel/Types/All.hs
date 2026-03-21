@@ -9,7 +9,10 @@ import qualified Hydra.Sources.Kernel.Types.Classes     as Classes
 import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
 import qualified Hydra.Sources.Kernel.Types.Context     as Context
 import qualified Hydra.Sources.Kernel.Types.Core        as Core
-import qualified Hydra.Sources.Kernel.Types.Error       as Error
+import qualified Hydra.Sources.Kernel.Types.Error.Checking as ErrorChecking
+import qualified Hydra.Sources.Kernel.Types.Error.Core     as ErrorCore
+import qualified Hydra.Sources.Kernel.Types.Error.Module   as ErrorModule
+import qualified Hydra.Sources.Kernel.Types.Errors      as Errors
 import qualified Hydra.Sources.Kernel.Types.Grammar     as Grammar
 import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
 import qualified Hydra.Sources.Json.Model               as JsonModel
@@ -34,7 +37,10 @@ kernelTypesModules = [
   Coders.module_,
   Context.module_,
   Core.module_,
-  Error.module_,
+  ErrorChecking.module_,
+  ErrorCore.module_,
+  ErrorModule.module_,
+  Errors.module_,
   Grammar.module_,
   Graph.module_,
   JsonModel.module_,

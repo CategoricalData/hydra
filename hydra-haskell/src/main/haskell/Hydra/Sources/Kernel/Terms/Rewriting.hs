@@ -59,6 +59,14 @@ import Hydra.Kernel hiding (
   typeDependencyNames,
   typeNamesInType,
   typeSchemeToFType,
+  extendGraphForLambda,
+  extendGraphForLet,
+  extendGraphForTypeLambda,
+  extendGraphWithBindings,
+  foldTermWithGraphAndPath,
+  rewriteAndFoldTermWithGraph,
+  rewriteAndFoldTermWithGraphAndPath,
+  rewriteTermWithGraph,
   unshadowVariables)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Accessors    as Accessors
@@ -128,6 +136,10 @@ module_ = Module ns elements
   where
    elements = [
      toBinding applyInsideTypeLambdasAndAnnotations,
+     toBinding extendGraphForLambda,
+     toBinding extendGraphForLet,
+     toBinding extendGraphForTypeLambda,
+     toBinding extendGraphWithBindings,
      toBinding deannotateAndDetypeTerm,
      toBinding deannotateTerm,
      toBinding deannotateType,
@@ -138,6 +150,7 @@ module_ = Module ns elements
      toBinding flattenLetTerms,
      toBinding foldOverTerm,
      toBinding foldOverType,
+     toBinding foldTermWithGraphAndPath,
      toBinding fTypeToTypeScheme,
      toBinding freeTypeVariablesInTerm,
      toBinding freeVariablesInTerm,
@@ -163,10 +176,13 @@ module_ = Module ns elements
      toBinding replaceTypedefs,
 --     toBinding rewrite,
      toBinding rewriteAndFoldTerm,
+     toBinding rewriteAndFoldTermWithGraph,
+     toBinding rewriteAndFoldTermWithGraphAndPath,
      toBinding rewriteAndFoldTermWithPath,
      toBinding rewriteTerm,
      toBinding rewriteTermM,
      toBinding rewriteTermWithContext,
+     toBinding rewriteTermWithGraph,
      toBinding rewriteTermWithContextM,
      toBinding rewriteType,
      toBinding rewriteTypeM,
@@ -2137,3 +2153,193 @@ typeSchemeToFType = define "typeSchemeToFType" $
     ("t" ~> "v" ~> Core.typeForall $ Core.forallType (var "v") (var "t"))
     (var "body")
     (Lists.reverse $ var "vars")
+
+extendGraphForLambda :: TBinding (Graph -> Lambda -> Graph)
+extendGraphForLambda = define "extendGraphForLambda" $
+  doc "Extend a graph by descending into a lambda body" $
+  "g" ~> "lam" ~>
+  "var" <~ Core.lambdaParameter (var "lam") $
+  Graph.graph
+    (Graph.graphBoundTerms $ var "g")
+    (optCases (Core.lambdaDomain $ var "lam")
+      (Graph.graphBoundTypes $ var "g")
+      ("dom" ~> Maps.insert (var "var") (fTypeToTypeScheme @@ var "dom") $ Graph.graphBoundTypes $ var "g"))
+    (Graph.graphClassConstraints $ var "g")
+    (Sets.insert (var "var") $ Graph.graphLambdaVariables $ var "g")
+    (Maps.delete (var "var") $ Graph.graphMetadata $ var "g")
+    (Graph.graphPrimitives $ var "g")
+    (Graph.graphSchemaTypes $ var "g")
+    (Graph.graphTypeVariables $ var "g")
+
+extendGraphForLet :: TBinding ((Graph -> Binding -> Maybe Term) -> Graph -> Let -> Graph)
+extendGraphForLet = define "extendGraphForLet" $
+  doc "Extend a graph by descending into a let body" $
+  "forBinding" ~> "g" ~> "letrec" ~>
+  "bindings" <~ Core.letBindings (var "letrec") $
+  -- Pre-extend graph with sibling bindings so forBinding can resolve them
+  "g2" <~ (extendGraphWithBindings @@ var "bindings" @@ var "g") $
+  Graph.graph
+    -- Add all binding terms
+    (Maps.union
+      (Maps.fromList $ Lists.map ("b" ~> pair (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")) (var "bindings"))
+      (Graph.graphBoundTerms $ var "g"))
+    -- Add typed binding type schemes; untyped bindings are not added, so outer types are shadowed by union precedence
+    (Maps.union
+      (Maps.fromList $ Maybes.cat $ Lists.map
+        ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (var "ts"))
+          (Core.bindingType $ var "b"))
+        (var "bindings"))
+      (Graph.graphBoundTypes $ var "g"))
+    (Graph.graphClassConstraints $ var "g")
+    -- Remove all binding names from lambda variables; they are shadowed
+    (Lists.foldl ("s" ~> "b" ~> Sets.delete (Core.bindingName $ var "b") (var "s"))
+      (Graph.graphLambdaVariables $ var "g")
+      (var "bindings"))
+    -- Update metadata per binding, accumulating a full graph so each binding sees earlier siblings' metadata
+    (Graph.graphMetadata $ Lists.foldl
+      ("gAcc" ~> "b" ~>
+        "m" <~ (Graph.graphMetadata $ var "gAcc") $
+        "newMeta" <~ (optCases (var "forBinding" @@ var "gAcc" @@ var "b")
+          (Maps.delete (Core.bindingName $ var "b") (var "m"))
+          ("t" ~> Maps.insert (Core.bindingName $ var "b") (var "t") (var "m"))) $
+        Graph.graph
+          (Graph.graphBoundTerms $ var "gAcc")
+          (Graph.graphBoundTypes $ var "gAcc")
+          (Graph.graphClassConstraints $ var "gAcc")
+          (Graph.graphLambdaVariables $ var "gAcc")
+          (var "newMeta")
+          (Graph.graphPrimitives $ var "gAcc")
+          (Graph.graphSchemaTypes $ var "gAcc")
+          (Graph.graphTypeVariables $ var "gAcc"))
+      (var "g2")
+      (var "bindings"))
+    (Graph.graphPrimitives $ var "g")
+    (Graph.graphSchemaTypes $ var "g")
+    (Graph.graphTypeVariables $ var "g")
+
+extendGraphForTypeLambda :: TBinding (Graph -> TypeLambda -> Graph)
+extendGraphForTypeLambda = define "extendGraphForTypeLambda" $
+  doc "Extend a graph by descending into a type lambda body" $
+  "g" ~> "tlam" ~>
+  "name" <~ Core.typeLambdaParameter (var "tlam") $
+  Graph.graph
+    (Graph.graphBoundTerms $ var "g")
+    (Graph.graphBoundTypes $ var "g")
+    (Graph.graphClassConstraints $ var "g")
+    (Graph.graphLambdaVariables $ var "g")
+    (Graph.graphMetadata $ var "g")
+    (Graph.graphPrimitives $ var "g")
+    (Graph.graphSchemaTypes $ var "g")
+    (Sets.insert (var "name") $ Graph.graphTypeVariables $ var "g")
+
+extendGraphWithBindings :: TBinding ([Binding] -> Graph -> Graph)
+extendGraphWithBindings = define "extendGraphWithBindings" $
+  doc "Add bindings to an existing graph" $
+  "bindings" ~> "g" ~>
+  -- Merge new binding terms/types into existing graph
+  "newTerms" <~ Maps.fromList (Lists.map ("b" ~>
+    pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "bindings")) $
+  "newTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
+    Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
+      (Core.bindingType (var "b"))) (var "bindings"))) $
+  Graph.graph
+    (Maps.union (var "newTerms") (Graph.graphBoundTerms (var "g")))
+    (Maps.union (var "newTypes") (Graph.graphBoundTypes (var "g")))
+    (Graph.graphClassConstraints (var "g"))
+    (Graph.graphLambdaVariables (var "g"))
+    (Graph.graphMetadata (var "g"))
+    (Graph.graphPrimitives (var "g"))
+    (Graph.graphSchemaTypes (var "g"))
+    (Graph.graphTypeVariables (var "g"))
+
+rewriteAndFoldTermWithGraph :: TBinding (((a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithGraph = define "rewriteAndFoldTermWithGraph" $
+  doc ("Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms."
+    <> " Combines the features of rewriteAndFoldTerm and rewriteTermWithGraph."
+    <> " The user function f receives a recurse function that handles subterm traversal and Graph management.") $
+  "f" ~> "cx0" ~> "val0" ~> "term0" ~>
+  "wrapper" <~ ("lowLevelRecurse" ~> "valAndCx" ~> "term" ~>
+    "val" <~ Pairs.first (var "valAndCx") $
+    "cx" <~ Pairs.second (var "valAndCx") $
+    "cx1" <~ (cases _Term (var "term")
+      (Just $ var "cx") [
+      _Term_function>>: "fun" ~> cases _Function (var "fun")
+        (Just $ var "cx") [
+        _Function_lambda>>: "l" ~> extendGraphForLambda @@ var "cx" @@ var "l"],
+      _Term_let>>: "l" ~> extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
+      _Term_typeLambda>>: "tl" ~> extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
+    "recurseForUser" <~ ("newVal" ~> "subterm" ~>
+      "result" <~ var "lowLevelRecurse" @@ pair (var "newVal") (var "cx1") @@ var "subterm" $
+      pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")) $
+    "fResult" <~ var "f" @@ var "recurseForUser" @@ var "cx1" @@ var "val" @@ var "term" $
+    pair (pair (Pairs.first $ var "fResult") (var "cx")) (Pairs.second $ var "fResult")) $
+  "result" <~ rewriteAndFoldTerm @@ var "wrapper" @@ pair (var "val0") (var "cx0") @@ var "term0" $
+  pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")
+
+rewriteAndFoldTermWithGraphAndPath :: TBinding (
+  ((a -> Term -> (a, Term)) -> [TermAccessor] -> Graph -> a -> Term -> (a, Term))
+  -> Graph -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithGraphAndPath = define "rewriteAndFoldTermWithGraphAndPath" $
+  doc ("Rewrite a term while folding to produce a value, with both Graph and accessor path tracked."
+    <> " The path is a list of TermAccessors representing the position from the root to the current term."
+    <> " Combines the features of rewriteAndFoldTermWithPath and Graph tracking."
+    <> " The Graph is automatically updated when descending into lambdas, lets, and type lambdas.") $
+  "f" ~> "cx0" ~> "val0" ~> "term0" ~>
+  "wrapper" <~ ("recurse" ~> "path" ~> "cxAndVal" ~> "term" ~>
+    "cx" <~ Pairs.first (var "cxAndVal") $
+    "val" <~ Pairs.second (var "cxAndVal") $
+    "cx1" <~ (cases _Term (var "term")
+      (Just $ var "cx") [
+      _Term_function>>: "fun" ~> cases _Function (var "fun")
+        (Just $ var "cx") [
+        _Function_lambda>>: "l" ~> extendGraphForLambda @@ var "cx" @@ var "l"],
+      _Term_let>>: "l" ~> extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
+      _Term_typeLambda>>: "tl" ~> extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
+    "recurseForUser" <~ ("valIn" ~> "termIn" ~>
+      "result" <~ var "recurse" @@ var "path" @@ pair (var "cx1") (var "valIn") @@ var "termIn" $
+      pair (Pairs.second $ Pairs.first $ var "result") (Pairs.second $ var "result")) $
+    "fResult" <~ var "f" @@ var "recurseForUser" @@ var "path" @@ var "cx1" @@ var "val" @@ var "term" $
+    pair (pair (var "cx") (Pairs.first $ var "fResult")) (Pairs.second $ var "fResult")) $
+  "result" <~ rewriteAndFoldTermWithPath @@ var "wrapper" @@ pair (var "cx0") (var "val0") @@ var "term0" $
+  pair (Pairs.second $ Pairs.first $ var "result") (Pairs.second $ var "result")
+
+rewriteTermWithGraph :: TBinding (((Term -> Term) -> Graph -> Term -> Term) -> Graph -> Term -> Term)
+rewriteTermWithGraph = define "rewriteTermWithGraph" $
+  doc "Rewrite a term with the help of a Graph which is updated as we descend into subterms" $
+  "f" ~> "cx0" ~> "term0" ~>
+  "f2" <~ ("recurse" ~> "cx" ~> "term" ~>
+    "recurse1" <~ ("term" ~> var "recurse" @@ var "cx" @@ var "term") $
+    cases _Term (var "term") (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
+      _Term_function>>: "fun" ~> cases _Function (var "fun")
+        (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
+        _Function_lambda>>: "l" ~>
+          "cx1" <~ extendGraphForLambda @@ var "cx" @@ var "l" $
+          "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
+          var "f" @@ var "recurse2" @@ var "cx1" @@ var "term"],
+      _Term_let>>: "l" ~>
+        "cx1" <~ extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l" $
+        "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
+        var "f" @@ var "recurse2" @@ var "cx1" @@ var "term",
+      _Term_typeLambda>>: "tl" ~>
+        "cx1" <~ extendGraphForTypeLambda @@ var "cx" @@ var "tl" $
+        "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
+        var "f" @@ var "recurse2" @@ var "cx1" @@ var "term"]) $
+  "rewrite" <~ ("cx" ~> "term" ~> var "f2" @@ (var "rewrite") @@ var "cx" @@ var "term") $
+  var "rewrite" @@ var "cx0" @@ var "term0"
+
+foldTermWithGraphAndPath :: TBinding (
+  ((a -> Term -> a) -> [TermAccessor] -> Graph -> a -> Term -> a)
+  -> Graph -> a -> Term -> a)
+foldTermWithGraphAndPath = define "foldTermWithGraphAndPath" $
+  doc ("Fold over a term to produce a value, with both Graph and accessor path tracked."
+    <> " Like rewriteAndFoldTermWithGraphAndPath, but only folds without rewriting."
+    <> " The Graph is automatically updated when descending into lambdas, lets, and type lambdas.") $
+  "f" ~> "cx0" ~> "val0" ~> "term0" ~>
+  -- Wrap the user's fold function to also return the original term unchanged
+  "wrapper" <~ ("recurse" ~> "path" ~> "cx" ~> "val" ~> "term" ~>
+    "recurseForUser" <~ ("valIn" ~> "subterm" ~>
+      "r" <~ var "recurse" @@ var "valIn" @@ var "subterm" $
+      Pairs.first $ var "r") $
+    pair (var "f" @@ var "recurseForUser" @@ var "path" @@ var "cx" @@ var "val" @@ var "term") (var "term")) $
+  "result" <~ rewriteAndFoldTermWithGraphAndPath @@ var "wrapper" @@ var "cx0" @@ var "val0" @@ var "term0" $
+  Pairs.first $ var "result"

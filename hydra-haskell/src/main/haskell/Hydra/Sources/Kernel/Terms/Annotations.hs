@@ -54,7 +54,7 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Error        as Error
+import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -69,7 +69,7 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Error   as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Show.Errors  as ShowError
 import qualified Hydra.Sources.Decode.Core            as DecodeCore
 import qualified Hydra.Sources.Encode.Core            as EncodeCore
 import Hydra.Encoding (encodeBindingName)

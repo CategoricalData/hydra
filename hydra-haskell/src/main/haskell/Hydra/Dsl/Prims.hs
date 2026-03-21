@@ -11,7 +11,7 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Context as Context
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Error
 import qualified Hydra.Extract.Util as ExtractUtil
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types

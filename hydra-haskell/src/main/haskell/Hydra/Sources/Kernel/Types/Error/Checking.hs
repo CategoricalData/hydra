@@ -1,46 +1,34 @@
-module Hydra.Sources.Kernel.Types.Error where
+module Hydra.Sources.Kernel.Types.Error.Checking where
 
 import           Hydra.Kernel
 import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:))
 import qualified Hydra.Dsl.Types as T
-import qualified Hydra.Sources.Kernel.Types.Context as Context
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 
 
 ns :: Namespace
-ns = Namespace "hydra.error"
+ns = Namespace "hydra.error.checking"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Context.ns, Core.ns, Typing.ns, Variants.ns] [Context.ns, Core.ns, Typing.ns, Variants.ns] $
-    Just "Error types specific to the Hydra kernel"
+module_ = Module ns elements [Core.ns, Typing.ns, Variants.ns] [Core.ns, Typing.ns, Variants.ns] $
+    Just "Error types for type checking"
   where
     elements = [
       checkingError,
-      decodingError,
-      duplicateBindingError,
-      duplicateFieldError,
-      error_,
       incorrectUnificationError,
       notAForallTypeError,
       notAFunctionTypeError,
-      otherError,
       typeArityMismatchError,
       typeMismatchError,
       unboundTypeVariablesError,
-      undefinedFieldError,
-      undefinedTermError,
-      undefinedTypeError,
       unequalTypesError,
-      unexpectedTermVariantError,
-      unexpectedTypeVariantError,
-      unificationError,
       unsupportedTermVariantError,
       untypedLambdaError,
       untypedLetBindingError]
@@ -80,65 +68,6 @@ checkingError = define "CheckingError" $
       doc "A let binding without a type annotation" $
       untypedLetBindingError]
 
-decodingError :: Binding
-decodingError = define "DecodingError" $
-  doc "An error that occurred during decoding of a term" $
-  T.wrap T.string
-
-duplicateBindingError :: Binding
-duplicateBindingError = define "DuplicateBindingError" $
-  doc "A duplicate binding name in a let expression" $
-  T.record [
-    "name">:
-      doc "The duplicated binding name" $
-      Core.name]
-
-duplicateFieldError :: Binding
-duplicateFieldError = define "DuplicateFieldError" $
-  doc "A duplicate field name in a record or union type" $
-  T.record [
-    "name">:
-      doc "The duplicated field name" $
-      Core.name]
-
-error_ :: Binding
-error_ = define "Error" $
-  doc "An error of any kind, with kernel errors particularly differentiated" $
-  T.union [
-    "checking">:
-      doc "A type checking error" $
-      checkingError,
-    "decoding">:
-      doc "An error that occurred during decoding of a term" $
-      decodingError,
-    "duplicateBinding">:
-      doc "A duplicate binding name error" $
-      duplicateBindingError,
-    "duplicateField">:
-      doc "A duplicate field name error" $
-      duplicateFieldError,
-    "other">:
-      doc "Any other error" $
-      otherError,
-    "undefinedField">:
-      doc "A reference to an undefined field" $
-      undefinedFieldError,
-    "undefinedTerm">:
-      doc "A reference to an undefined term" $
-      undefinedTermError,
-    "undefinedType">:
-      doc "A reference to an undefined type" $
-      undefinedTypeError,
-    "unexpectedTermVariant">:
-      doc "An unexpected term variant" $
-      unexpectedTermVariantError,
-    "unexpectedTypeVariant">:
-      doc "An unexpected type variant" $
-      unexpectedTypeVariantError,
-    "unification">:
-      doc "A type unification error" $
-      unificationError]
-
 incorrectUnificationError :: Binding
 incorrectUnificationError = define "IncorrectUnificationError" $
   doc "A post-unification consistency check failure" $
@@ -165,11 +94,6 @@ notAFunctionTypeError = define "NotAFunctionTypeError" $
     "type">:
       doc "The actual type encountered" $
       Core.type_]
-
-otherError :: Binding
-otherError = define "OtherError" $
-  doc "Any other error" $
-  T.wrap T.string
 
 typeArityMismatchError :: Binding
 typeArityMismatchError = define "TypeArityMismatchError" $
@@ -210,33 +134,6 @@ unboundTypeVariablesError = define "UnboundTypeVariablesError" $
       doc "The type containing the unbound variables" $
       Core.type_]
 
-undefinedFieldError :: Binding
-undefinedFieldError = define "UndefinedFieldError" $
-  doc "A reference to a field that does not exist in the given type" $
-  T.record [
-    "fieldName">:
-      doc "The name of the undefined field" $
-      Core.name,
-    "typeName">:
-      doc "The name of the type in which the field was expected" $
-      Core.name]
-
-undefinedTermError :: Binding
-undefinedTermError = define "UndefinedTermError" $
-  doc "A reference to a term (element, binding, or primitive) that is not defined" $
-  T.record [
-    "name">:
-      doc "The name of the undefined term" $
-      Core.name]
-
-undefinedTypeError :: Binding
-undefinedTypeError = define "UndefinedTypeError" $
-  doc "A reference to a type or type variable that is not defined" $
-  T.record [
-    "name">:
-      doc "The name of the undefined type" $
-      Core.name]
-
 unequalTypesError :: Binding
 unequalTypesError = define "UnequalTypesError" $
   doc "Multiple types that should all be equal but are not" $
@@ -246,42 +143,6 @@ unequalTypesError = define "UnequalTypesError" $
       T.list Core.type_,
     "description">:
       doc "A description of the context in which the types were expected to be equal" $
-      T.string]
-
-unexpectedTermVariantError :: Binding
-unexpectedTermVariantError = define "UnexpectedTermVariantError" $
-  doc "An unexpected term variant was encountered" $
-  T.record [
-    "expectedVariant">:
-      doc "The expected term variant" $
-      Variants.termVariant,
-    "actualTerm">:
-      doc "The actual term that was encountered" $
-      Core.term]
-
-unexpectedTypeVariantError :: Binding
-unexpectedTypeVariantError = define "UnexpectedTypeVariantError" $
-  doc "An unexpected type variant was encountered" $
-  T.record [
-    "expectedVariant">:
-      doc "The expected type variant" $
-      Variants.typeVariant,
-    "actualType">:
-      doc "The actual type that was encountered" $
-      Core.type_]
-
-unificationError :: Binding
-unificationError = define "UnificationError" $
-  doc "An error that occurred during type unification" $
-  T.record [
-    "leftType">:
-      doc "The left-hand type in the unification" $
-      Core.type_,
-    "rightType">:
-      doc "The right-hand type in the unification" $
-      Core.type_,
-    "message">:
-      doc "A human-readable error message" $
       T.string]
 
 unsupportedTermVariantError :: Binding

@@ -40,7 +40,7 @@ import qualified Hydra.Dsl.Typing                     as Typing
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Dsl.Meta.Variants                   as Variants
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
-import qualified Hydra.Dsl.Error                      as Error
+import qualified Hydra.Dsl.Errors                     as Error
 import qualified Hydra.Dsl.Prims                           as Prims
 import qualified Hydra.Dsl.Meta.Tabular                         as Tabular
 import qualified Hydra.Dsl.Terms                           as Terms
@@ -91,7 +91,7 @@ import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
 import qualified Hydra.Sources.Haskell.Ast as HaskellAst
 import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
 import qualified Hydra.Sources.Haskell.Utils as HaskellUtils
-import qualified Hydra.Sources.Kernel.Terms.Show.Error as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 
 
 formatError :: TTerm (InContext Error -> String)

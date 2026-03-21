@@ -23,7 +23,7 @@ import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (
   literalType, record, term, type_, typeScheme, wrap)
 import qualified Hydra.Dsl.Terms             as Terms
 import qualified Hydra.Dsl.Meta.Context      as Ctx
-import qualified Hydra.Dsl.Error        as Error
+import qualified Hydra.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting

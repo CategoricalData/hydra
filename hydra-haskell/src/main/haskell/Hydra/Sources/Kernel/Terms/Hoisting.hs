@@ -8,7 +8,6 @@ import Hydra.Kernel hiding (
   hoistAllLetBindings, hoistCaseStatements, hoistCaseStatementsInGraph, hoistLetBindingsWithContext, hoistLetBindingsWithPredicate, hoistPolymorphicLetBindings, hoistSubterms,
   isApplicationFunction, isEliminationUnion, isLambdaBody, isUnionElimination, isUnionEliminationApplication,
   normalizePathForHoisting,
-  rewriteAndFoldTermWithTypeContext, rewriteAndFoldTermWithTypeContextAndPath, rewriteTermWithTypeContext,
   shouldHoistAll, shouldHoistCaseStatement, shouldHoistPolymorphic, updateHoistState)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Accessors    as Accessors
@@ -97,9 +96,6 @@ module_ = Module ns elements
      toBinding isUnionElimination,
      toBinding isUnionEliminationApplication,
      toBinding normalizePathForHoisting,
-     toBinding rewriteAndFoldTermWithTypeContext,
-     toBinding rewriteAndFoldTermWithTypeContextAndPath,
-     toBinding rewriteTermWithTypeContext,
      toBinding shouldHoistAll,
      toBinding shouldHoistCaseStatement,
      toBinding shouldHoistPolymorphic,
@@ -455,7 +451,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
             (Lists.concat $ list [var "previouslyFinishedBindings", var "hoistedBindingsFinal", var "bindingsSoFarFinal"])
             (var "finalUsedNames"))
           (var "finalTerm")]) $
-  "cx1" <~ Schemas.extendGraphForLet @@ ("c" ~> "b" ~> nothing) @@ var "cx0" @@ var "let0" $
+  "cx1" <~ Rewriting.extendGraphForLet @@ ("c" ~> "b" ~> nothing) @@ var "cx0" @@ var "let0" $
   -- Each binding becomes a list of bindings: the original one with substitutions in its body,
   -- as well as hoisted bindings from any level. The hoisted bindings share the original binding's namespace.
   -- Since each top-level binding has exclusive access to its hoisted bindings, it can be processed individually.
@@ -464,7 +460,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     -- bindings are unique.
     "prefix" <~ (Strings.cat2 (Core.unName (Core.bindingName $ var "b")) (string "_")) $
     "init" <~ pair (list ([] :: [TTerm Binding])) (Sets.singleton $ Core.bindingName $ var "b") $
-    "resultPair" <~ rewriteAndFoldTermWithTypeContext
+    "resultPair" <~ Rewriting.rewriteAndFoldTermWithGraph
       @@ (var "rewrite" @@ var "prefix") @@ var "cx1" @@ var "init" @@ (Core.bindingTerm $ var "b") $
     "resultBindings" <~ Pairs.first (Pairs.first (var "resultPair")) $
     "resultTerm" <~ Pairs.second (var "resultPair") $
@@ -736,7 +732,7 @@ hoistSubterms = define "hoistSubterms" $
 
   -- Process a single immediate subterm: find all hoistable subterms, extract them, wrap in local let
   -- Returns (newCounter, transformedSubterm)
-  -- Uses rewriteAndFoldTermWithTypeContextAndPath to track paths and graph context
+  -- Uses Rewriting.rewriteAndFoldTermWithGraphAndPath to track paths and graph context
   -- The accumulator is (counter, [Binding])
   -- The namePrefix parameter is used to create stable hoisted binding names (e.g., the parent binding's name)
   -- The pathPrefix parameter provides the path context from enclosing scopes, allowing
@@ -812,7 +808,7 @@ hoistSubterms = define "hoistSubterms" $
          _Term_typeLambda>>: constant $ pair (var "acc") (var "term")]) $
     -- Run the collection/replacement pass using the path-aware rewriter
     -- Initial acc is (counter, []) - counter and empty list of bindings
-    "result" <~ rewriteAndFoldTermWithTypeContextAndPath
+    "result" <~ Rewriting.rewriteAndFoldTermWithGraphAndPath
       @@ var "collectAndReplace"
       @@ var "cx"
       @@ pair (var "counter") (list ([] :: [TTerm Binding]))
@@ -864,7 +860,7 @@ hoistSubterms = define "hoistSubterms" $
     pair (var "counter") (Core.termLet (Core.let_ (var "newBindings") (var "newBody")))) $
 
   -- Main rewrite: find let terms and process them
-  -- Uses rewriteAndFoldTermWithTypeContextAndPath so we have the path context.
+  -- Uses Rewriting.rewriteAndFoldTermWithGraphAndPath so we have the path context.
   -- The path is passed to processLetTerm, which forwards it as pathPrefix to
   -- processImmediateSubterm, so inner collectAndReplace knows the full context
   -- (e.g., that it's inside a case branch of an applied case).
@@ -880,123 +876,5 @@ hoistSubterms = define "hoistSubterms" $
           (Just $ pair (var "newCounter") (var "recursedTerm")) [
           _Term_let>>: "lt2" ~> var "processLetTerm" @@ var "cx" @@ var "newCounter" @@ var "path" @@ var "lt2"]]) $
 
-  Pairs.second $ rewriteAndFoldTermWithTypeContextAndPath @@ var "rewrite" @@ var "cx0" @@ int32 1 @@ var "term0"
+  Pairs.second $ Rewriting.rewriteAndFoldTermWithGraphAndPath @@ var "rewrite" @@ var "cx0" @@ int32 1 @@ var "term0"
 
-rewriteAndFoldTermWithTypeContext :: TBinding (((a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term))
-rewriteAndFoldTermWithTypeContext = define "rewriteAndFoldTermWithTypeContext" $
-  doc ("Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms."
-    <> " Combines the features of rewriteAndFoldTerm and rewriteTermWithTypeContext."
-    <> " The user function f receives a recurse function that handles subterm traversal and Graph management.") $
-  "f" ~> "cx0" ~> "val0" ~> "term0" ~>
-  -- wrapper is the function we pass to rewriteAndFoldTerm
-  -- Combined state is (val, cx). The low-level recurse handles term structure traversal.
-  "wrapper" <~ ("lowLevelRecurse" ~> "valAndCx" ~> "term" ~>
-    "val" <~ Pairs.first (var "valAndCx") $
-    "cx" <~ Pairs.second (var "valAndCx") $
-    -- Determine updated context based on the current term
-    "cx1" <~ (cases _Term (var "term")
-      (Just $ var "cx") [
-      _Term_function>>: "fun" ~> cases _Function (var "fun")
-        (Just $ var "cx") [
-        _Function_lambda>>: "l" ~> Schemas.extendGraphForLambda @@ var "cx" @@ var "l"],
-      _Term_let>>: "l" ~> Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
-      _Term_typeLambda>>: "tl" ~> Schemas.extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
-    -- Create a recurse function for the user that unwraps/wraps the combined state
-    "recurseForUser" <~ ("newVal" ~> "subterm" ~>
-      -- Call low-level recurse with combined state (newVal, cx1)
-      -- Note: cx1 is the context for subterms of the current term
-      "result" <~ var "lowLevelRecurse" @@ pair (var "newVal") (var "cx1") @@ var "subterm" $
-      -- Return just (val', term') to the user
-      pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")) $
-    -- Call the user's function with the context-aware recurse
-    "fResult" <~ var "f" @@ var "recurseForUser" @@ var "cx1" @@ var "val" @@ var "term" $
-    -- Combine the result with cx (original context, not cx1) so sibling terms don't inherit each other's extensions
-    pair (pair (Pairs.first $ var "fResult") (var "cx")) (Pairs.second $ var "fResult")) $
-  -- Use rewriteAndFoldTerm to handle the actual traversal, with (val, cx) as combined state
-  "result" <~ Rewriting.rewriteAndFoldTerm @@ var "wrapper" @@ pair (var "val0") (var "cx0") @@ var "term0" $
-  -- Extract just the val part of the result
-  pair (Pairs.first $ Pairs.first $ var "result") (Pairs.second $ var "result")
-
--- | The most general-purpose term rewriting function, combining:
---   - Folding to produce a value (like rewriteAndFoldTerm)
---   - Graph tracking (like rewriteTermWithTypeContext)
---   - Path tracking via TermAccessors (like rewriteAndFoldTermWithPath)
---
--- This function wraps rewriteAndFoldTermWithPath, automatically managing
--- Graph updates as the traversal descends into lambdas, lets, and type lambdas.
---
--- The user function receives:
---   - A recurse function: a -> Term -> (a, Term) - called by framework during traversal
---   - The current path (list of TermAccessors from root to current position)
---   - The current Graph (updated for the current position)
---   - The current accumulated value
---   - The current term
--- And returns (newVal, newTerm)
-rewriteAndFoldTermWithTypeContextAndPath :: TBinding (
-  ((a -> Term -> (a, Term)) -> [TermAccessor] -> Graph -> a -> Term -> (a, Term))
-  -> Graph -> a -> Term -> (a, Term))
-rewriteAndFoldTermWithTypeContextAndPath = define "rewriteAndFoldTermWithTypeContextAndPath" $
-  doc ("Rewrite a term while folding to produce a value, with both Graph and accessor path tracked."
-    <> " The path is a list of TermAccessors representing the position from the root to the current term."
-    <> " Combines the features of rewriteAndFoldTermWithPath and Graph tracking."
-    <> " The Graph is automatically updated when descending into lambdas, lets, and type lambdas.") $
-  "f" ~> "cx0" ~> "val0" ~> "term0" ~>
-  -- Combined state is (Graph, a). We wrap rewriteAndFoldTermWithPath.
-  -- The wrapper function receives recurse, path, (cx, val), term and returns ((cx, val), term)
-  "wrapper" <~ ("recurse" ~> "path" ~> "cxAndVal" ~> "term" ~>
-    "cx" <~ Pairs.first (var "cxAndVal") $
-    "val" <~ Pairs.second (var "cxAndVal") $
-    -- Determine updated context based on the current term
-    "cx1" <~ (cases _Term (var "term")
-      (Just $ var "cx") [
-      _Term_function>>: "fun" ~> cases _Function (var "fun")
-        (Just $ var "cx") [
-        _Function_lambda>>: "l" ~> Schemas.extendGraphForLambda @@ var "cx" @@ var "l"],
-      _Term_let>>: "l" ~> Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
-      _Term_typeLambda>>: "tl" ~> Schemas.extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
-    -- Create a recurse function for the user that uses the combined state
-    -- Note: the user's recurse takes just (val, term) but the framework's recurse
-    -- takes (path, val, term). We pass the current path through.
-    "recurseForUser" <~ ("valIn" ~> "termIn" ~>
-      -- Call the framework recurse with path and combined state (cx1, valIn)
-      -- Note: cx1 is the context for subterms of the current term
-      "result" <~ var "recurse" @@ var "path" @@ pair (var "cx1") (var "valIn") @@ var "termIn" $
-      -- Return just (val', term') to the user - discard the context from result
-      pair (Pairs.second $ Pairs.first $ var "result") (Pairs.second $ var "result")) $
-    -- Call the user's function with the updated context and user-facing recurse
-    "fResult" <~ var "f" @@ var "recurseForUser" @@ var "path" @@ var "cx1" @@ var "val" @@ var "term" $
-    -- Return with combined state: ((cx, val'), term')
-    -- Note: we return the original cx, not cx1, because cx1 is for subterms
-    pair (pair (var "cx") (Pairs.first $ var "fResult")) (Pairs.second $ var "fResult")) $
-  -- Use rewriteAndFoldTermWithPath with combined state (cx0, val0)
-  "result" <~ Rewriting.rewriteAndFoldTermWithPath @@ var "wrapper" @@ pair (var "cx0") (var "val0") @@ var "term0" $
-  -- Extract just the val part of the result
-  pair (Pairs.second $ Pairs.first $ var "result") (Pairs.second $ var "result")
-
-rewriteTermWithTypeContext :: TBinding (((Term -> Term) -> Graph -> Term -> Term) -> Graph -> Term -> Term)
-rewriteTermWithTypeContext = define "rewriteTermWithTypeContext" $
-  doc "Rewrite a term with the help of a type context which is updated as we descend into subterms" $
-  "f" ~> "cx0" ~> "term0" ~>
-  -- f2 wraps f to handle Graph updates for lambda/let/typeLambda
-  "f2" <~ ("recurse" ~> "cx" ~> "term" ~>
-    -- recurse1 is what the user sees: it takes just term and handles cx internally
-    "recurse1" <~ ("term" ~> var "recurse" @@ var "cx" @@ var "term") $
-    -- Determine updated context based on term type, then call user's f
-    cases _Term (var "term") (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
-      _Term_function>>: "fun" ~> cases _Function (var "fun")
-        (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
-        _Function_lambda>>: "l" ~>
-          "cx1" <~ Schemas.extendGraphForLambda @@ var "cx" @@ var "l" $
-          "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
-          var "f" @@ var "recurse2" @@ var "cx1" @@ var "term"],
-      _Term_let>>: "l" ~>
-        "cx1" <~ Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l" $
-        "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
-        var "f" @@ var "recurse2" @@ var "cx1" @@ var "term",
-      _Term_typeLambda>>: "tl" ~>
-        "cx1" <~ Schemas.extendGraphForTypeLambda @@ var "cx" @@ var "tl" $
-        "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
-        var "f" @@ var "recurse2" @@ var "cx1" @@ var "term"]) $
-  -- Local fixpoint that threads context through
-  "rewrite" <~ ("cx" ~> "term" ~> var "f2" @@ (var "rewrite") @@ var "cx" @@ var "term") $
-  var "rewrite" @@ var "cx0" @@ var "term0"

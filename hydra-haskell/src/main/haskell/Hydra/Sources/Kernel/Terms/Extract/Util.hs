@@ -54,9 +54,9 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Dsl.Meta.Context      as Ctx
-import qualified Hydra.Dsl.Error        as Error
+import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Error as ShowError
+import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 
 
 ns :: Namespace
