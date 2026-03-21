@@ -92,13 +92,14 @@ done
 
 # Expand special target names
 case "$TARGETS" in
-    all) TARGETS="hydra,java,python,clojure,common-lisp,emacs-lisp,scheme" ;;
+    all) TARGETS="hydra,java,python,scala,clojure,common-lisp,emacs-lisp,scheme" ;;
 esac
 
 # Parse targets into flags
 TARGET_HYDRA=false
 TARGET_JAVA=false
 TARGET_PYTHON=false
+TARGET_SCALA=false
 LISP_DIALECTS=()
 
 IFS=',' read -ra TARGET_LIST <<< "$TARGETS"
@@ -107,6 +108,7 @@ for t in "${TARGET_LIST[@]}"; do
         hydra)       TARGET_HYDRA=true ;;
         java)        TARGET_JAVA=true ;;
         python)      TARGET_PYTHON=true ;;
+        scala)       TARGET_SCALA=true ;;
         lisp)        LISP_DIALECTS+=(clojure common-lisp emacs-lisp scheme) ;;
         clojure)     LISP_DIALECTS+=(clojure) ;;
         common-lisp) LISP_DIALECTS+=(common-lisp) ;;
@@ -114,7 +116,7 @@ for t in "${TARGET_LIST[@]}"; do
         scheme)      LISP_DIALECTS+=(scheme) ;;
         *)
             echo "Error: Unknown target '$t'"
-            echo "Valid targets: hydra, java, python, lisp, clojure, common-lisp, emacs-lisp, scheme, all"
+            echo "Valid targets: hydra, java, python, scala, lisp, clojure, common-lisp, emacs-lisp, scheme, all"
             exit 1
             ;;
     esac
@@ -132,7 +134,7 @@ fi
 
 # Phase 2 (ext) is needed if any target depends on it
 NEED_EXT=false
-if $TARGET_HYDRA || $TARGET_JAVA || $TARGET_PYTHON || $HAS_LISP; then
+if $TARGET_HYDRA || $TARGET_JAVA || $TARGET_PYTHON || $TARGET_SCALA || $HAS_LISP; then
     NEED_EXT=true
 fi
 
@@ -189,6 +191,7 @@ if $TARGET_HYDRA; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
 if $NEED_EXT; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
 if $TARGET_JAVA; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
 if $TARGET_PYTHON; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
+if $TARGET_SCALA; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
 if $HAS_LISP; then TOTAL_PHASES=$((TOTAL_PHASES + 1)); fi
 CURRENT_PHASE=0
 
@@ -341,6 +344,23 @@ if $TARGET_PYTHON; then
     echo ""
 
     "$HYDRA_EXT_DIR/bin/sync-python.sh" $QUICK_FLAG
+
+    echo ""
+fi
+
+# ──────────────────────────────────────────────────
+# Phase: Sync Scala
+# ──────────────────────────────────────────────────
+
+if $TARGET_SCALA; then
+    CURRENT_PHASE=$((CURRENT_PHASE + 1))
+
+    echo "============================================"
+    echo "Phase ${CURRENT_PHASE}/${TOTAL_PHASES}: Synchronizing Scala"
+    echo "============================================"
+    echo ""
+
+    "$HYDRA_EXT_DIR/bin/sync-scala.sh" $QUICK_FLAG
 
     echo ""
 fi
