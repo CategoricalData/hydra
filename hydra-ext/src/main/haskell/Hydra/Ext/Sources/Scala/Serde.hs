@@ -164,23 +164,31 @@ writeDefn = define "writeDefn" $
         "paramss">: project Scala._Defn_Def Scala._Defn_Def_paramss @@ var "dd",
         "scod">: project Scala._Defn_Def Scala._Defn_Def_decltpe @@ var "dd",
         "body">: project Scala._Defn_Def Scala._Defn_Def_body @@ var "dd",
-        "params">: Lists.head (var "paramss"),
         "tparamsExpr">: Logic.ifElse (Lists.null (var "tparams"))
           nothing
           (Maybes.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map writeType_Param (var "tparams")))),
         "scodExpr">: Maybes.map
           (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string ":", writeType @@ var "t"])
           (var "scod"),
-        "nameAndParams">: Serialization.noSep @@ (Maybes.cat $ list [
-          Maybes.pure (writeData_Name @@ var "name"),
-          var "tparamsExpr",
-          Maybes.pure (Serialization.parenList @@ false @@ (Lists.map writeData_Param (var "params"))),
-          var "scodExpr"])] $
-        Serialization.spaceSep @@ list [
+        -- Render each parameter list in its own parens (for curried defs)
+        "paramssExprs">: Lists.map
+          ("ps" ~> Serialization.parenList @@ false @@ (Lists.map writeData_Param (var "ps")))
+          (var "paramss"),
+        "nameAndParams">: Serialization.noSep @@ (Maybes.cat $ Lists.concat (list [
+          list [Maybes.pure (writeData_Name @@ var "name")],
+          list [var "tparamsExpr"],
+          Lists.map ("pe" ~> Maybes.pure (var "pe")) (var "paramssExprs"),
+          list [var "scodExpr"]]))] $
+        "bodyExpr" <~ (writeTerm @@ var "body") $
+        "defSig" <~ (Serialization.spaceSep @@ list [
           Serialization.cst @@ string "def",
           var "nameAndParams",
-          Serialization.cst @@ string "=",
-          writeTerm @@ var "body"],
+          Serialization.cst @@ string "="]) $
+        "bodyLen" <~ (Serialization.expressionLength @@ var "bodyExpr") $
+        -- For long def bodies, put body on indented new line
+        Logic.ifElse (Equality.gt (var "bodyLen") (int32 80))
+          (Serialization.noSep @@ list [var "defSig", Serialization.cst @@ string "\n  ", var "bodyExpr"])
+          (Serialization.spaceSep @@ list [var "defSig", var "bodyExpr"]),
 
       Scala._Defn_type>>: lambda "dt" $ lets [
         "name">: project Scala._Defn_Type Scala._Defn_Type_name @@ var "dt",
@@ -319,8 +327,13 @@ writeLit = define "writeLit" $
   doc "Convert a literal to an expression" $
   lambda "lit" $
     cases Scala._Lit (var "lit") (Just $ Serialization.cst @@ string "TODO:literal") [
-      Scala._Lit_int>>: lambda "i" $ Serialization.cst @@ (Literals.showInt32 (var "i")),
       Scala._Lit_boolean>>: lambda "b" $ Serialization.cst @@ (Logic.ifElse (var "b") (string "true") (string "false")),
+      Scala._Lit_byte>>: lambda "i" $ Serialization.cst @@ (Strings.cat2 (Literals.showInt8 (var "i")) (string ".toByte")),
+      Scala._Lit_short>>: lambda "i" $ Serialization.cst @@ (Strings.cat2 (Literals.showInt16 (var "i")) (string ".toShort")),
+      Scala._Lit_int>>: lambda "i" $ Serialization.cst @@ (Literals.showInt32 (var "i")),
+      Scala._Lit_long>>: lambda "i" $ Serialization.cst @@ (Strings.cat2 (Literals.showInt64 (var "i")) (string "L")),
+      Scala._Lit_float>>: lambda "f" $ Serialization.cst @@ (Strings.cat2 (Literals.showFloat32 (var "f")) (string "f")),
+      Scala._Lit_double>>: lambda "f" $ Serialization.cst @@ (Literals.showFloat64 (var "f")),
       Scala._Lit_unit>>: constant $ Serialization.cst @@ string "()",
       Scala._Lit_string>>: lambda "s" $ Serialization.cst @@ (Literals.showString (var "s"))]
 
@@ -339,11 +352,15 @@ writePat = define "writePat" $
       Scala._Pat_extract>>: lambda "pe" $ lets [
         "fun">: project Scala._Pat_Extract Scala._Pat_Extract_fun @@ var "pe",
         "args">: project Scala._Pat_Extract Scala._Pat_Extract_args @@ var "pe"] $
-        Serialization.noSep @@ list [
-          writeTerm @@ var "fun",
-          Serialization.parenList @@ false @@ (Lists.map writePat (var "args"))],
+        -- Omit parens for nullary patterns (unit-typed enum cases)
+        Logic.ifElse (Lists.null (var "args"))
+          (writeTerm @@ var "fun")
+          (Serialization.noSep @@ list [
+            writeTerm @@ var "fun",
+            Serialization.parenList @@ false @@ (Lists.map writePat (var "args"))]),
       Scala._Pat_var>>: lambda "pv" $
-        writeData_Name @@ (project Scala._Pat_Var Scala._Pat_Var_name @@ var "pv")]
+        writeData_Name @@ (project Scala._Pat_Var Scala._Pat_Var_name @@ var "pv"),
+      Scala._Pat_wildcard>>: constant (Serialization.cst @@ string "_")]
 
 writePkg :: TBinding (Scala.Pkg -> Expr)
 writePkg = define "writePkg" $
@@ -361,6 +378,7 @@ writeStat = define "writeStat" $
   doc "Convert a statement to an expression" $
   lambda "stat" $
     cases Scala._Stat (var "stat") Nothing [
+      Scala._Stat_term>>: lambda "t" $ writeTerm @@ var "t",
       Scala._Stat_defn>>: lambda "def" $ writeDefn @@ var "def",
       Scala._Stat_importExport>>: lambda "ie" $ writeImportExportStat @@ var "ie"]
 
@@ -377,7 +395,10 @@ writeTerm = define "writeTerm" $
         Serialization.noSep @@ list [
           writeTerm @@ var "fun",
           Serialization.parenList @@ false @@ (Lists.map writeTerm (var "args"))],
-      Scala._Data_assign>>: constant $ Serialization.cst @@ string ">ASSIGN",
+      Scala._Data_assign>>: lambda "a" $ lets [
+        "lhs">: project Scala._Data_Assign Scala._Data_Assign_lhs @@ var "a",
+        "rhs">: project Scala._Data_Assign Scala._Data_Assign_rhs @@ var "a"] $
+        Serialization.spaceSep @@ list [writeTerm @@ var "lhs", Serialization.cst @@ string "->", writeTerm @@ var "rhs"],
       Scala._Data_tuple>>: lambda "tup" $
         Serialization.parenList @@ false @@ (Lists.map writeTerm (project Scala._Data_Tuple Scala._Data_Tuple_args @@ var "tup")),
       Scala._Data_match>>: lambda "m" $ lets [
@@ -385,7 +406,10 @@ writeTerm = define "writeTerm" $
         "mCases">: project Scala._Data_Match Scala._Data_Match_cases @@ var "m"] $
         Serialization.ifx @@ matchOp @@ (writeTerm @@ var "expr") @@
           (Serialization.newlineSep @@ (Lists.map writeCase (var "mCases"))),
-      Scala._Data_functionData>>: lambda "ft" $ writeData_FunctionData @@ var "ft"]
+      Scala._Data_functionData>>: lambda "ft" $ writeData_FunctionData @@ var "ft",
+      Scala._Data_block>>: lambda "blk" $ lets [
+        "stats">: project Scala._Data_Block Scala._Data_Block_stats @@ var "blk"] $
+        Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (Serialization.newlineSep @@ (Lists.map writeStat (var "stats")))]
 
 writeData_FunctionData :: TBinding (Scala.Data_FunctionData -> Expr)
 writeData_FunctionData = define "writeData_FunctionData" $
@@ -394,11 +418,19 @@ writeData_FunctionData = define "writeData_FunctionData" $
     cases Scala._Data_FunctionData (var "ft") Nothing [
       Scala._Data_FunctionData_function>>: lambda "f" $ lets [
         "params">: project Scala._Data_Function Scala._Data_Function_params @@ var "f",
-        "body">: project Scala._Data_Function Scala._Data_Function_body @@ var "f"] $
-        Serialization.spaceSep @@ list [
-          Serialization.parenList @@ false @@ (Lists.map writeData_Param (var "params")),
-          Serialization.cst @@ string "=>",
-          writeTerm @@ var "body"]]
+        "body">: project Scala._Data_Function Scala._Data_Function_body @@ var "f",
+        "bodyExpr">: writeTerm @@ var "body",
+        "bodyLen">: Serialization.expressionLength @@ var "bodyExpr"] $
+        -- For long lambda bodies (>60 chars), put body on indented new line
+        Logic.ifElse (Equality.gt (var "bodyLen") (int32 60))
+          (Serialization.noSep @@ list [
+            Serialization.parenList @@ false @@ (Lists.map writeData_Param (var "params")),
+            Serialization.cst @@ string " =>\n  ",
+            var "bodyExpr"])
+          (Serialization.spaceSep @@ list [
+            Serialization.parenList @@ false @@ (Lists.map writeData_Param (var "params")),
+            Serialization.cst @@ string "=>",
+            var "bodyExpr"])]
 
 writeData_Name :: TBinding (Scala.Data_Name -> Expr)
 writeData_Name = define "writeData_Name" $

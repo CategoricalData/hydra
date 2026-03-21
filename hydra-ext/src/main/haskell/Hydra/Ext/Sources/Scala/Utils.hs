@@ -29,6 +29,7 @@ import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Module                     as Module
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
@@ -107,11 +108,14 @@ module_ = Module ns elements
       toBinding nameOfType,
       toBinding qualifyUnionFieldName,
       toBinding scalaTypeName,
+      toBinding scalaEscapeName,
       toBinding sapply,
       toBinding sassign,
       toBinding slambda,
       toBinding sname,
       toBinding sprim,
+      toBinding sapplyTypes,
+      toBinding typeToString,
       toBinding stapply,
       toBinding stapply1,
       toBinding stapply2,
@@ -138,7 +142,7 @@ qualifyUnionFieldName = def "qualifyUnionFieldName" $
       (var "dlft")
       ("n" ~> (scalaTypeName @@ true @@ var "n") ++ string ".")
       (var "sname")
-    ++ (Core.unName $ var "fname")
+    ++ (scalaEscapeName @@ (Core.unName $ var "fname"))
 
 scalaTypeName :: TBinding (Bool -> Name -> String)
 scalaTypeName = def "scalaTypeName" $
@@ -149,10 +153,71 @@ scalaTypeName = def "scalaTypeName" $
       (Core.unName $ var "name")
       (Names.localNameOf @@ var "name")
 
+scalaEscapeName :: TBinding (String -> String)
+scalaEscapeName = def "scalaEscapeName" $
+  doc "Sanitize a name for Scala: escape reserved words, replace invalid characters" $
+  lambda "s" $ lets [
+    -- Replace apostrophes with underscores (Scala doesn't allow ' in identifiers)
+    "sanitized">: Strings.fromList (Lists.map
+      ("c" ~> Logic.ifElse (Equality.equal (var "c") (int32 39)) (int32 95) (var "c"))
+      (Strings.toList (var "s"))),
+    -- Replace lone underscore with _x (Scala _ is a wildcard, can't be used as param name)
+    "sanitized2">: Logic.ifElse (Equality.equal (var "sanitized") (string "_"))
+      (string "_x")
+      (var "sanitized"),
+    "needsBackticks">: Logic.or
+      (Sets.member (var "sanitized2") (asTerm scalaReservedWordsRef))
+      -- Names ending in _ cause lexer ambiguity with _: type ascription
+      (Logic.and
+        (Equality.gt (Strings.length (var "sanitized2")) (int32 0))
+        (Equality.equal (Strings.charAt (Math.sub (Strings.length (var "sanitized2")) (int32 1)) (var "sanitized2")) (int32 95)))] $
+    Logic.ifElse (var "needsBackticks")
+      (Strings.cat (list [string "`", var "sanitized2", string "`"]))
+      (var "sanitized2")
+
 scalaReservedWordsRef :: TBinding (S.Set String)
 scalaReservedWordsRef = def "scalaReservedWords" $
   doc "Reference to scalaReservedWords from the language module" $
   TTerm $ TermVariable $ Name "hydra.ext.scala.language.scalaReservedWords"
+
+sapplyTypes :: TBinding (Scala.Data -> [Scala.Type] -> Scala.Data)
+sapplyTypes = def "sapplyTypes" $
+  doc "Apply explicit type parameters to a Scala expression (e.g. f[A, B])" $
+  lambda "fun" $ lambda "typeArgs" $ lets [
+    -- Convert each Scala type to its string representation
+    "typeToStr">: ("t" ~> asTerm typeToString @@ var "t"),
+    "typeStrings">: Lists.map (var "typeToStr") (var "typeArgs"),
+    "typeArgStr">: Strings.cat (list [string "[", Strings.intercalate (string ", ") (var "typeStrings"), string "]"])] $
+    -- Combine function with type args: extract name from fun, append type args
+    cases _Data (var "fun")
+      (Just $ var "fun") -- If not a name ref, can't add type args
+      [_Data_ref>>: ("ref" ~> cases _Data_Ref (var "ref")
+        (Just $ var "fun")
+        [_Data_Ref_name>>: ("dn" ~> lets [
+          "nameStr">: project _Data_Name _Data_Name_value @@ var "dn",
+          "rawName">: unwrap Scala._PredefString @@ var "nameStr"] $
+          sname @@ (var "rawName" ++ var "typeArgStr"))])]
+
+typeToString :: TBinding (Scala.Type -> String)
+typeToString = def "typeToString" $
+  doc "Convert a Scala type to its string representation" $
+  lambda "t" $
+    cases Scala._Type (var "t")
+      (Just $ string "Any") [
+      Scala._Type_ref>>: ("tr" ~> cases Scala._Type_Ref (var "tr")
+        (Just $ string "Any")
+        [Scala._Type_Ref_name>>: ("tn" ~> project Scala._Type_Name Scala._Type_Name_value @@ var "tn")]),
+      Scala._Type_var>>: ("tv" ~> project Scala._Type_Name Scala._Type_Name_value @@ (project Scala._Type_Var Scala._Type_Var_name @@ var "tv")),
+      Scala._Type_functionType>>: ("ft" ~> cases Scala._Type_FunctionType (var "ft")
+        (Just $ string "Any") [
+        Scala._Type_FunctionType_function>>: ("fn" ~> lets [
+          "params">: Lists.map (asTerm typeToString) (project Scala._Type_Function Scala._Type_Function_params @@ var "fn"),
+          "res">: asTerm typeToString @@ (project Scala._Type_Function Scala._Type_Function_res @@ var "fn")] $
+          Strings.cat (list [string "(", Strings.intercalate (string ", ") (var "params"), string ") => ", var "res"]))]),
+      Scala._Type_apply>>: ("ta" ~> lets [
+        "base">: asTerm typeToString @@ (project Scala._Type_Apply Scala._Type_Apply_tpe @@ var "ta"),
+        "argStrs">: Lists.map (asTerm typeToString) (project Scala._Type_Apply Scala._Type_Apply_args @@ var "ta")] $
+        Strings.cat (list [var "base", string "[", Strings.intercalate (string ", ") (var "argStrs"), string "]"]))]
 
 sapply :: TBinding (Scala.Data -> [Scala.Data] -> Scala.Data)
 sapply = def "sapply" $
@@ -202,7 +267,7 @@ sprim = def "sprim" $
   lambda "name" $ lets [
     "qname">: Names.qualifyName @@ var "name",
     "prefix">: Lists.last (Strings.splitOn (string ".") (Module.unNamespace (Maybes.fromJust (Module.qualifiedNameNamespace $ var "qname")))),
-    "local">: Module.qualifiedNameLocal $ var "qname"] $
+    "local">: scalaEscapeName @@ (Module.qualifiedNameLocal $ var "qname")] $
     sname @@ (var "prefix" ++ string "." ++ var "local")
 
 stapply :: TBinding (Scala.Type -> [Scala.Type] -> Scala.Type)
@@ -228,9 +293,9 @@ stapply2 = def "stapply2" $
 
 stparam :: TBinding (Name -> Scala.Type_Param)
 stparam = def "stparam" $
-  doc "Create a Scala type parameter from a Hydra name" $
+  doc "Create a Scala type parameter from a Hydra name, capitalizing to avoid collision with value params" $
   lambda "name" $ lets [
-    "v">: Core.unName $ var "name"] $
+    "v">: Formatting.capitalize @@ (Core.unName $ var "name")] $
     record _Type_Param [
       _Type_Param_mods>>: list ([] :: [TTerm Scala.Mod]),
       _Type_Param_name>>: inject Scala._Name Scala._Name_value (var "v"),
