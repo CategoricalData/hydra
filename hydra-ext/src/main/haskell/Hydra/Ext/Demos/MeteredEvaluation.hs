@@ -4,7 +4,7 @@
 module Hydra.Ext.Demos.MeteredEvaluation (demoMeteredEvaluation) where
 
 import Hydra.Kernel
-import qualified Hydra.Show.Error as ShowError
+import qualified Hydra.Show.Errors as ShowError
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Meta.Lib.Lists as Lists

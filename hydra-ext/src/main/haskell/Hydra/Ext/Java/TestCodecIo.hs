@@ -6,7 +6,7 @@ module Hydra.Ext.Java.TestCodecIo (
 ) where
 
 import Hydra.Kernel hiding (map)
-import qualified Hydra.Show.Error as ShowError
+import qualified Hydra.Show.Errors as ShowError
 import Hydra.Testing
 import Hydra.Coders (LanguageName(..))
 import Hydra.Test.Transform (collectTestCases)

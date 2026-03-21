@@ -1,7 +1,7 @@
 module Hydra.Ext.Demos.GenPG.Transform where
 
 import Hydra.Kernel
-import qualified Hydra.Show.Error as ShowError
+import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Pg.Model as Pg
 import Hydra.Ext.Dsl.Pg.Mappings
 import Hydra.Lib.Literals

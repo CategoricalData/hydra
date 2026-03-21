@@ -88,7 +88,7 @@ import qualified Hydra.Ext.Sources.Graphql.Syntax as GraphqlSyntax
 import qualified Hydra.Ext.Sources.Graphql.Language as GraphqlLanguage
 import qualified Hydra.Ext.Sources.Graphql.Serde as GraphqlSerde
 import qualified Hydra.Dsl.Meta.Context as Ctx
-import qualified Hydra.Dsl.Error as Error
+import qualified Hydra.Dsl.Errors as Error
 import qualified Hydra.Sources.CoderUtils as CoderUtils
 
 

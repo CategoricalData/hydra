@@ -84,7 +84,7 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
-import qualified Hydra.Dsl.Error                      as Error
+import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json.Model as JM
 import qualified Hydra.Ext.Sources.Avro.Schema as AvroSchema
