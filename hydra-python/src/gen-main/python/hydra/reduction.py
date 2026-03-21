@@ -234,8 +234,8 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                 case hydra.core.TypeApplication(value=atyp):
                     return domain_types(n, Just(atyp.function))
 
-                case hydra.core.TypeForall(value=ft):
-                    return domain_types(n, Just(ft.body))
+                case hydra.core.TypeForall():
+                    return hydra.lib.lists.map((lambda _2: Nothing()), hydra.lib.math.range_(1, n))
 
                 case _:
                     return hydra.lib.lists.map((lambda _: Nothing()), hydra.lib.math.range_(1, n))
@@ -252,8 +252,8 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                 case hydra.core.TypeApplication(value=atyp):
                     return peel_function_domains(Just(atyp.function), n)
 
-                case hydra.core.TypeForall(value=ft):
-                    return peel_function_domains(Just(ft.body), n)
+                case hydra.core.TypeForall():
+                    return Nothing()
 
                 case _:
                     return Nothing()
@@ -276,7 +276,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
             def _hoist_term_head_type_1(v1):
                 match v1:
                     case hydra.core.FunctionPrimitive(value=pn2):
-                        return hydra.lib.maybes.map((lambda ts2: ts2.type), hydra.lib.maps.lookup(pn2, prim_types()))
+                        return hydra.lib.maybes.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(pn2, prim_types()))
 
                     case _:
                         return Nothing()

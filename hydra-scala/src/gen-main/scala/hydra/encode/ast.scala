@@ -16,7 +16,7 @@ def associativity(v1: hydra.ast.Associativity): hydra.core.Term =
   case hydra.ast.Associativity.both => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("both", hydra.core.Term.unit)))
 
 def blockStyle(x: hydra.ast.BlockStyle): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.ast.BlockStyle", Seq(hydra.core.Field("indent", hydra.core.Term.maybe(hydra.lib.maybes.map[scala.Predef.String,
+  hydra.core.Term.record(hydra.core.Record("hydra.ast.BlockStyle", Seq(hydra.core.Field("indent", hydra.core.Term.maybe(maybes.map[scala.Predef.String,
      hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(x.indent))),
      hydra.core.Field("newlineBeforeContent", hydra.core.Term.literal(hydra.core.Literal.boolean(x.newlineBeforeContent))),
      hydra.core.Field("newlineAfterContent", hydra.core.Term.literal(hydra.core.Literal.boolean(x.newlineAfterContent))))))
@@ -71,7 +71,7 @@ def precedence(x: hydra.ast.Precedence): hydra.core.Term =
 
 def seqExpr(x: hydra.ast.SeqExpr): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.ast.SeqExpr", Seq(hydra.core.Field("op", hydra.encode.ast.op(x.op)),
-     hydra.core.Field("elements", hydra.core.Term.list(hydra.lib.lists.map[hydra.ast.Expr, hydra.core.Term](hydra.encode.ast.expr)(x.elements))))))
+     hydra.core.Field("elements", hydra.core.Term.list(lists.map[hydra.ast.Expr, hydra.core.Term](hydra.encode.ast.expr)(x.elements))))))
 
 def symbol(x: hydra.ast.Symbol): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.ast.Symbol", hydra.core.Term.literal(hydra.core.Literal.string(x))))

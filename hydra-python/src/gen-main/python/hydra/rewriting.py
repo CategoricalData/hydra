@@ -32,7 +32,6 @@ T3 = TypeVar("T3")
 T4 = TypeVar("T4")
 T5 = TypeVar("T5")
 T6 = TypeVar("T6")
-X = TypeVar("X")
 
 def apply_inside_type_lambdas_and_annotations(f: Callable[[hydra.core.Term], hydra.core.Term], term0: hydra.core.Term) -> hydra.core.Term:
     r"""Apply a term-level function inside any leading type lambdas."""
@@ -2092,6 +2091,47 @@ def substitute_type_variables(subst: FrozenDict[hydra.core.Name, hydra.core.Name
             case _:
                 return recurse(typ2)
     return rewrite_type((lambda x1, x2: replace(x1, x2)), typ)
+
+def substitute_type_variables_in_term(subst: FrozenDict[hydra.core.Name, hydra.core.Name], term: hydra.core.Term) -> hydra.core.Term:
+    r"""Substitute type variables throughout a term, including in type annotations, type applications, lambda domains, and type schemes."""
+
+    def st(v1: hydra.core.Type) -> hydra.core.Type:
+        return substitute_type_variables(subst, v1)
+    def st_opt(mt: Maybe[hydra.core.Type]) -> Maybe[hydra.core.Type]:
+        return hydra.lib.maybes.map((lambda x1: st(x1)), mt)
+    def st_scheme(ts: hydra.core.TypeScheme) -> hydra.core.TypeScheme:
+        return hydra.core.TypeScheme(ts.variables, st(ts.type), ts.constraints)
+    def st_scheme_opt(mts: Maybe[hydra.core.TypeScheme]) -> Maybe[hydra.core.TypeScheme]:
+        return hydra.lib.maybes.map((lambda x1: st_scheme(x1)), mts)
+    def replace(recurse: Callable[[hydra.core.Term], hydra.core.Term], t: hydra.core.Term):
+        def _hoist_replace_1(recurse, t, v1):
+            match v1:
+                case hydra.core.FunctionLambda(value=l):
+                    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, st_opt(l.domain), recurse(l.body))))))
+
+                case _:
+                    return recurse(t)
+        match t:
+            case hydra.core.TermFunction(value=_match_value):
+                return _hoist_replace_1(recurse, t, _match_value)
+
+            case hydra.core.TermLet(value=lt):
+                def map_binding(b: hydra.core.Binding) -> hydra.core.Binding:
+                    return hydra.core.Binding(b.name, recurse(b.term), st_scheme_opt(b.type))
+                return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map((lambda x1: map_binding(x1)), lt.bindings), recurse(lt.body))))
+
+            case hydra.core.TermTypeApplication(value=tt):
+                return cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(recurse(tt.body), st(tt.type))))
+
+            case hydra.core.TermTypeLambda(value=tl):
+                return cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(hydra.lib.maybes.from_maybe((lambda : tl.parameter), hydra.lib.maps.lookup(tl.parameter, subst)), recurse(tl.body))))
+
+            case hydra.core.TermAnnotated(value=at):
+                return cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(recurse(at.body), at.annotation)))
+
+            case _:
+                return recurse(t)
+    return rewrite_term((lambda x1, x2: replace(x1, x2)), term)
 
 def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[tuple[hydra.accessors.TermAccessor, hydra.core.Term]]:
     r"""Find the children of a given term."""

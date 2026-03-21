@@ -12,7 +12,7 @@ val appOp: hydra.ast.Op = hydra.ast.Op("", hydra.ast.Padding(hydra.ast.Ws.none, 
 
 val applyOp: hydra.ast.Op = hydra.serialization.op("$")(0)(hydra.ast.Associativity.right)
 
-val arrowOp: hydra.ast.Op = hydra.serialization.op("->")(hydra.lib.math.negate(1))(hydra.ast.Associativity.right)
+val arrowOp: hydra.ast.Op = hydra.serialization.op("->")(math.negate(1))(hydra.ast.Associativity.right)
 
 val assertOp: hydra.ast.Op = hydra.serialization.op("=>")(0)(hydra.ast.Associativity.none)
 
@@ -46,7 +46,7 @@ val gteOp: hydra.ast.Op = hydra.serialization.op(">=")(4)(hydra.ast.Associativit
 
 val indexOp: hydra.ast.Op = hydra.serialization.op("!!")(9)(hydra.ast.Associativity.left)
 
-val lambdaOp: hydra.ast.Op = hydra.serialization.op("->")(hydra.lib.math.negate(1))(hydra.ast.Associativity.right)
+val lambdaOp: hydra.ast.Op = hydra.serialization.op("->")(math.negate(1))(hydra.ast.Associativity.right)
 
 val ltOp: hydra.ast.Op = hydra.serialization.op("<")(4)(hydra.ast.Associativity.none)
 

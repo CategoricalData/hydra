@@ -10,7 +10,7 @@ def constant(x: hydra.grammar.Constant): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.grammar.Constant", hydra.core.Term.literal(hydra.core.Literal.string(x))))
 
 def grammar(x: hydra.grammar.Grammar): hydra.core.Term =
-  hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.grammar.Grammar", hydra.core.Term.list(hydra.lib.lists.map[hydra.grammar.Production,
+  hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.grammar.Grammar", hydra.core.Term.list(lists.map[hydra.grammar.Production,
      hydra.core.Term](hydra.encode.grammar.production)(x))))
 
 def label(x: hydra.grammar.Label): hydra.core.Term =
@@ -23,8 +23,7 @@ def labeledPattern(x: hydra.grammar.LabeledPattern): hydra.core.Term =
 def pattern(v1: hydra.grammar.Pattern): hydra.core.Term =
   v1 match
   case hydra.grammar.Pattern.alternatives(v_Pattern_alternatives_y) => hydra.core.Term.union(hydra.core.Injection("hydra.grammar.Pattern",
-     hydra.core.Field("alternatives", hydra.core.Term.list(hydra.lib.lists.map[hydra.grammar.Pattern,
-     hydra.core.Term](hydra.encode.grammar.pattern)(v_Pattern_alternatives_y)))))
+     hydra.core.Field("alternatives", hydra.core.Term.list(lists.map[hydra.grammar.Pattern, hydra.core.Term](hydra.encode.grammar.pattern)(v_Pattern_alternatives_y)))))
   case hydra.grammar.Pattern.constant(v_Pattern_constant_y) => hydra.core.Term.union(hydra.core.Injection("hydra.grammar.Pattern",
      hydra.core.Field("constant", hydra.encode.grammar.constant(v_Pattern_constant_y))))
   case hydra.grammar.Pattern.ignored(v_Pattern_ignored_y) => hydra.core.Term.union(hydra.core.Injection("hydra.grammar.Pattern",
@@ -41,7 +40,7 @@ def pattern(v1: hydra.grammar.Pattern): hydra.core.Term =
   case hydra.grammar.Pattern.regex(v_Pattern_regex_y) => hydra.core.Term.union(hydra.core.Injection("hydra.grammar.Pattern",
      hydra.core.Field("regex", hydra.encode.grammar.regex(v_Pattern_regex_y))))
   case hydra.grammar.Pattern.sequence(v_Pattern_sequence_y) => hydra.core.Term.union(hydra.core.Injection("hydra.grammar.Pattern",
-     hydra.core.Field("sequence", hydra.core.Term.list(hydra.lib.lists.map[hydra.grammar.Pattern, hydra.core.Term](hydra.encode.grammar.pattern)(v_Pattern_sequence_y)))))
+     hydra.core.Field("sequence", hydra.core.Term.list(lists.map[hydra.grammar.Pattern, hydra.core.Term](hydra.encode.grammar.pattern)(v_Pattern_sequence_y)))))
   case hydra.grammar.Pattern.star(v_Pattern_star_y) => hydra.core.Term.union(hydra.core.Injection("hydra.grammar.Pattern",
      hydra.core.Field("star", hydra.encode.grammar.pattern(v_Pattern_star_y))))
 
