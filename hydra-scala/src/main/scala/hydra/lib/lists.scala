@@ -19,15 +19,15 @@ object lists:
     else
       val (same, rest) = xs.span(_ == xs.head)
       same +: group(rest)
-  def head[A](xs: Seq[A]): A = xs.head
-  def init[A](xs: Seq[A]): Seq[A] = xs.init
+  def head[A](xs: Seq[A]): A = if xs.isEmpty then null.asInstanceOf[A] else xs.head
+  def init[A](xs: Seq[A]): Seq[A] = if xs.isEmpty then Seq.empty else xs.init
   def intercalate[A](sep: Seq[A])(xss: Seq[Seq[A]]): Seq[A] =
     if xss.isEmpty then Seq.empty
     else xss.reduceLeft((a, b) => a ++ sep ++ b)
   def intersperse[A](sep: A)(xs: Seq[A]): Seq[A] =
     if xs.isEmpty then Seq.empty
     else xs.flatMap(x => Seq(sep, x)).tail
-  def last[A](xs: Seq[A]): A = xs.last
+  def last[A](xs: Seq[A]): A = if xs.isEmpty then null.asInstanceOf[A] else xs.last
   def length[A](xs: Seq[A]): Int = xs.length
   def map[A, B](f: A => B)(xs: Seq[A]): Seq[B] = xs.map(f)
   def nub[A](xs: Seq[A]): Seq[A] = xs.distinct
@@ -45,7 +45,7 @@ object lists:
     if ord != null then xs.sortBy(f)(using ord)
     else xs.sortWith((a, b) => equality.lt(f(a))(f(b)))
   def span[A](p: A => Boolean)(xs: Seq[A]): (Seq[A], Seq[A]) = xs.span(p)
-  def tail[A](xs: Seq[A]): Seq[A] = xs.tail
+  def tail[A](xs: Seq[A]): Seq[A] = if xs.isEmpty then Seq.empty else xs.tail
   def take[A](n: Int)(xs: Seq[A]): Seq[A] = xs.take(n)
   def transpose[A](xss: Seq[Seq[A]]): Seq[Seq[A]] = xss.transpose
   def zip[A, B](xs: Seq[A])(ys: Seq[B]): Seq[(A, B)] = xs.zip(ys)
