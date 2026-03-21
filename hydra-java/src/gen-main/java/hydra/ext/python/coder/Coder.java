@@ -3326,21 +3326,13 @@ public interface Coder {
       (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())));
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered.get()));
     hydra.util.Lazy<hydra.core.Term> fun = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered.get()));
-    hydra.graph.Graph tc = (env).graph;
     hydra.graph.Graph g = hydra.ext.python.coder.Coder.pythonEnvironmentGetGraph(env);
-    Integer termArity = hydra.ext.python.coder.Coder.termArityWithPrimitives(
+    Integer knownArity = hydra.ext.python.coder.Coder.termArityWithPrimitives(
       g,
       fun.get());
-    hydra.util.Lazy<Integer> arity = new hydra.util.Lazy<>(() -> hydra.lib.eithers.FromRight.applyLazy(
-      () -> termArity,
-      hydra.lib.eithers.Map.apply(
-        (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, Integer>) (_r -> hydra.arity.Arity.typeArity(hydra.lib.pairs.First.apply(_r))),
-        hydra.checking.Checking.typeOf(
-          cx,
-          tc,
-          (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
-          fun.get()))));
-    Boolean skipCasts = (env).skipCasts;
+    hydra.util.Lazy<Integer> arity = new hydra.util.Lazy<>(() -> hydra.lib.math.Max.apply(
+      knownArity,
+      hydra.lib.lists.Length.apply(args.get())));
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
         (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.python.syntax.Expression>>) (t -> hydra.ext.python.coder.Coder.encodeTermInline(

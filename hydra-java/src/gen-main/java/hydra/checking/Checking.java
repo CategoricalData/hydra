@@ -1104,11 +1104,11 @@ public interface Checking {
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>> typeOfPrimitive(hydra.context.Context cx, hydra.graph.Graph tx, hydra.util.ConsList<hydra.core.Type> typeArgs, hydra.core.Name name) {
-    hydra.util.Lazy<hydra.util.Maybe<hydra.core.TypeScheme>> rawTs = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
-      name,
-      hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.graph.Primitive, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
-        hydra.lib.maps.Elems.apply((tx).primitives)))));
+    hydra.util.Lazy<hydra.util.Maybe<hydra.core.TypeScheme>> rawTs = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
+      (java.util.function.Function<hydra.graph.Primitive, hydra.core.TypeScheme>) (_p -> (_p).type),
+      hydra.lib.maps.Lookup.apply(
+        name,
+        (tx).primitives)));
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.UndefinedTerm(new hydra.error.UndefinedTermError(name)), cx))),
       (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (tsRaw -> {

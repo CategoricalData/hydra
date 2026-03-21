@@ -936,9 +936,11 @@ public class MathTest {
 
         assertEquals(
 
-            2.718281828459045,
+            2.71828182846,
 
-            hydra.lib.math.E.apply(),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.E.apply()),
 
             1e-15);
 
@@ -952,9 +954,11 @@ public class MathTest {
 
         assertEquals(
 
-            3.141592653589793,
+            3.14159265359,
 
-            hydra.lib.math.Pi.apply(),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Pi.apply()),
 
             1e-15);
 
@@ -984,7 +988,9 @@ public class MathTest {
 
             1.0,
 
-            hydra.lib.math.Sin.apply(1.5707963267948966),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Sin.apply(1.5707963267948966)),
 
             1e-15);
 
@@ -996,9 +1002,11 @@ public class MathTest {
 
         assertEquals(
 
-            1.2246467991473532e-16,
+            1.22464679915e-16,
 
-            hydra.lib.math.Sin.apply(3.141592653589793),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Sin.apply(3.141592653589793)),
 
             1e-15);
 
@@ -1058,9 +1066,11 @@ public class MathTest {
 
         assertEquals(
 
-            6.123233995736766e-17,
+            6.12323399574e-17,
 
-            hydra.lib.math.Cos.apply(1.5707963267948966),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Cos.apply(1.5707963267948966)),
 
             1e-15);
 
@@ -1134,9 +1144,11 @@ public class MathTest {
 
         assertEquals(
 
-            0.9999999999999999,
+            1.0,
 
-            hydra.lib.math.Tan.apply(0.7853981633974483),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Tan.apply(0.7853981633974483)),
 
             1e-15);
 
@@ -1196,9 +1208,11 @@ public class MathTest {
 
         assertEquals(
 
-            1.5707963267948966,
+            1.57079632679,
 
-            hydra.lib.math.Asin.apply(1.0),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Asin.apply(1.0)),
 
             1e-15);
 
@@ -1210,9 +1224,11 @@ public class MathTest {
 
         assertEquals(
 
-            -1.5707963267948966,
+            -1.57079632679,
 
-            hydra.lib.math.Asin.apply(-1.0),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Asin.apply(-1.0)),
 
             1e-15);
 
@@ -1256,9 +1272,11 @@ public class MathTest {
 
         assertEquals(
 
-            1.5707963267948966,
+            1.57079632679,
 
-            hydra.lib.math.Acos.apply(0.0),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Acos.apply(0.0)),
 
             1e-15);
 
@@ -1270,9 +1288,11 @@ public class MathTest {
 
         assertEquals(
 
-            3.141592653589793,
+            3.14159265359,
 
-            hydra.lib.math.Acos.apply(-1.0),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Acos.apply(-1.0)),
 
             1e-15);
 
@@ -1316,9 +1336,11 @@ public class MathTest {
 
         assertEquals(
 
-            0.7853981633974483,
+            0.785398163397,
 
-            hydra.lib.math.Atan.apply(1.0),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Atan.apply(1.0)),
 
             1e-15);
 
@@ -1348,11 +1370,13 @@ public class MathTest {
 
         assertEquals(
 
-            0.7853981633974483,
+            0.785398163397,
 
-            hydra.lib.math.Atan2.apply(
-  1.0,
-  1.0),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Atan2.apply(
+    1.0,
+    1.0)),
 
             1e-15);
 
@@ -1364,11 +1388,13 @@ public class MathTest {
 
         assertEquals(
 
-            1.5707963267948966,
+            1.57079632679,
 
-            hydra.lib.math.Atan2.apply(
-  1.0,
-  0.0),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Atan2.apply(
+    1.0,
+    0.0)),
 
             1e-15);
 
@@ -1430,9 +1456,11 @@ public class MathTest {
 
         assertEquals(
 
-            1.1752011936438014,
+            1.17520119364,
 
-            hydra.lib.math.Sinh.apply(1.0),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Sinh.apply(1.0)),
 
             1e-15);
 
@@ -1524,9 +1552,11 @@ public class MathTest {
 
         assertEquals(
 
-            0.7615941559557649,
+            0.761594155956,
 
-            hydra.lib.math.Tanh.apply(1.0),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Tanh.apply(1.0)),
 
             1e-15);
 
@@ -1796,7 +1826,9 @@ public class MathTest {
 
             1.0,
 
-            hydra.lib.math.Log.apply(2.718281828459045),
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Log.apply(2.718281828459045)),
 
             1e-15);
 

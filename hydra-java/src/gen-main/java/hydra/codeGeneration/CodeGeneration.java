@@ -240,8 +240,9 @@ public interface CodeGeneration {
                   namespaces.get(),
                   cx)),
               (java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<T0, T1>>>>) (dataResult -> {
-                hydra.util.Lazy<hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>> defLists = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(dataResult));
                 hydra.util.Lazy<hydra.graph.Graph> g1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(dataResult));
+                hydra.util.ConsList<hydra.core.Binding> allBindings = hydra.lexical.Lexical.graphToBindings(g1.get());
+                hydra.util.Lazy<hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>> defLists = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(dataResult));
                 java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, java.util.function.Function<hydra.module.Module, hydra.module.Module>> refreshModule = (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, java.util.function.Function<hydra.module.Module, hydra.module.Module>>) (els -> (java.util.function.Function<hydra.module.Module, hydra.module.Module>) (m -> new hydra.module.Module((m).namespace, hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
                   (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Binding>>) (e -> hydra.lib.lists.Find.apply(
                     (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
@@ -250,7 +251,7 @@ public interface CodeGeneration {
                     els)),
                   (m).elements)), (m).termDependencies, (m).typeDependencies, (m).description)));
                 hydra.util.Lazy<hydra.util.ConsList<hydra.module.Module>> refreshedMods = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-                  (java.util.function.Function<hydra.module.Module, hydra.module.Module>) (m -> (refreshModule).apply(hydra.lexical.Lexical.graphToBindings(g1.get())).apply(m)),
+                  (java.util.function.Function<hydra.module.Module, hydra.module.Module>) (m -> (refreshModule).apply(allBindings).apply(m)),
                   termModulesToGenerate.get()));
                 return hydra.lib.eithers.Map.apply(
                   (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<hydra.util.Pair<T0, T1>>>, hydra.util.ConsList<hydra.util.Pair<T0, T1>>>) (xs -> hydra.lib.lists.Concat.apply(xs)),
