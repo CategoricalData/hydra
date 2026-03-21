@@ -1,7 +1,7 @@
 module Hydra.Ext.Demos.GenPG.Demo where
 
 import Hydra.Kernel
-import qualified Hydra.Show.Error as ShowError
+import qualified Hydra.Show.Errors as ShowError
 import Hydra.Ext.Demos.GenPG.Examples.Sales.DatabaseSchema
 import Hydra.Ext.Demos.GenPG.Examples.Sales.GraphSchema
 import Hydra.Ext.Demos.GenPG.Examples.Sales.Mapping

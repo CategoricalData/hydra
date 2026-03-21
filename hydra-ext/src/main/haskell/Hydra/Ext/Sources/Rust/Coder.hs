@@ -20,7 +20,7 @@ import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Error                      as Error
+import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Module                     as Module
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting

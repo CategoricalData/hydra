@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Error                      as Error
+import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Grammar                    as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
@@ -854,7 +854,7 @@ extendEnvWithLambdaParams = def "extendEnvWithLambdaParams" $
         _Term_function>>: "f" ~>
           cases _Function (var "f") (Just $ var "e") [
             _Function_lambda>>: "lam" ~>
-              "newTc" <~ (Schemas.extendGraphForLambda @@
+              "newTc" <~ (Rewriting.extendGraphForLambda @@
                 (pythonEnvironmentGetGraph @@ var "e") @@ var "lam") $
               "newEnv" <~ (pythonEnvironmentSetGraph @@ var "newTc" @@ var "e") $
               var "go" @@ var "newEnv" @@ (Core.lambdaBody $ var "lam")]]) $
@@ -1168,7 +1168,7 @@ encodeCaseBlock = def "encodeCaseBlock" $
     -- Extend the Graph with the lambda parameter
     -- to prevent the code generator from reducing it away
     "env2" <~ (pythonEnvironmentSetGraph
-      @@ (Schemas.extendGraphForLambda @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "effectiveLambda")
+      @@ (Rewriting.extendGraphForLambda @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "effectiveLambda")
       @@ var "env") $
     -- Deconflict the variant name in case it collides with a type name
     "pyVariantName" <~ (deconflictVariantName @@ true @@ var "env2" @@ var "tname" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env2")) $

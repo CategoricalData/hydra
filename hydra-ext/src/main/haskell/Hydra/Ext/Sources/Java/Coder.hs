@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
-import qualified Hydra.Dsl.Error                      as Error
+import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Module                     as Module
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
@@ -4582,7 +4582,7 @@ bindingsToStatements = def "bindingsToStatements" $
     "flatBindings" <~ (dedupBindings @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_inScopeJavaVars @@ var "aliases")
       @@ (flattenBindings @@ var "bindings")) $
     -- Extend Graph with flattened bindings
-    "gExtended" <~ (Schemas.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "g"
+    "gExtended" <~ (Rewriting.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "g"
       @@ record _Let [
         _Let_bindings>>: var "flatBindings",
         _Let_body>>: inject _Term _Term_variable (wrap _Name (string "dummy"))]) $

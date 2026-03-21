@@ -42,7 +42,7 @@ g.E()
 module Hydra.Ext.Tools.Analysis.Dependencies where
 
 import Hydra.Kernel
-import qualified Hydra.Show.Error as ShowError
+import qualified Hydra.Show.Errors as ShowError
 import Hydra.Generation
 import Hydra.Sources.Kernel.Terms.All
 import Hydra.Sources.Libraries
@@ -54,7 +54,7 @@ import qualified Hydra.Show.Meta as ShowMeta
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Error
 import Hydra.Pg.Utils (propertyGraphElements)
 import Hydra.Pg.Graphson.Utils
 
