@@ -7,6 +7,7 @@ module Hydra.Rewriting where
 import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -38,6 +39,80 @@ applyInsideTypeLambdasAndAnnotations f term0 =
         Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
         Core.typeLambdaBody = (applyInsideTypeLambdasAndAnnotations f (Core.typeLambdaBody v0))})
       _ -> f term0
+
+-- | Extend a graph by descending into a lambda body
+extendGraphForLambda :: Graph.Graph -> Core.Lambda -> Graph.Graph
+extendGraphForLambda g lam =
+
+      let var = Core.lambdaParameter lam
+      in Graph.Graph {
+        Graph.graphBoundTerms = (Graph.graphBoundTerms g),
+        Graph.graphBoundTypes = (Maybes.maybe (Graph.graphBoundTypes g) (\dom -> Maps.insert var (fTypeToTypeScheme dom) (Graph.graphBoundTypes g)) (Core.lambdaDomain lam)),
+        Graph.graphClassConstraints = (Graph.graphClassConstraints g),
+        Graph.graphLambdaVariables = (Sets.insert var (Graph.graphLambdaVariables g)),
+        Graph.graphMetadata = (Maps.delete var (Graph.graphMetadata g)),
+        Graph.graphPrimitives = (Graph.graphPrimitives g),
+        Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
+        Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
+
+-- | Extend a graph by descending into a let body
+extendGraphForLet :: (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> Graph.Graph -> Core.Let -> Graph.Graph
+extendGraphForLet forBinding g letrec =
+
+      let bindings = Core.letBindings letrec
+          g2 = extendGraphWithBindings bindings g
+      in Graph.Graph {
+        Graph.graphBoundTerms = (Maps.union (Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) bindings)) (Graph.graphBoundTerms g)),
+        Graph.graphBoundTypes = (Maps.union (Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) bindings))) (Graph.graphBoundTypes g)),
+        Graph.graphClassConstraints = (Graph.graphClassConstraints g),
+        Graph.graphLambdaVariables = (Lists.foldl (\s -> \b -> Sets.delete (Core.bindingName b) s) (Graph.graphLambdaVariables g) bindings),
+        Graph.graphMetadata = (Graph.graphMetadata (Lists.foldl (\gAcc -> \b ->
+          let m = Graph.graphMetadata gAcc
+              newMeta = Maybes.maybe (Maps.delete (Core.bindingName b) m) (\t -> Maps.insert (Core.bindingName b) t m) (forBinding gAcc b)
+          in Graph.Graph {
+            Graph.graphBoundTerms = (Graph.graphBoundTerms gAcc),
+            Graph.graphBoundTypes = (Graph.graphBoundTypes gAcc),
+            Graph.graphClassConstraints = (Graph.graphClassConstraints gAcc),
+            Graph.graphLambdaVariables = (Graph.graphLambdaVariables gAcc),
+            Graph.graphMetadata = newMeta,
+            Graph.graphPrimitives = (Graph.graphPrimitives gAcc),
+            Graph.graphSchemaTypes = (Graph.graphSchemaTypes gAcc),
+            Graph.graphTypeVariables = (Graph.graphTypeVariables gAcc)}) g2 bindings)),
+        Graph.graphPrimitives = (Graph.graphPrimitives g),
+        Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
+        Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
+
+-- | Extend a graph by descending into a type lambda body
+extendGraphForTypeLambda :: Graph.Graph -> Core.TypeLambda -> Graph.Graph
+extendGraphForTypeLambda g tlam =
+
+      let name = Core.typeLambdaParameter tlam
+      in Graph.Graph {
+        Graph.graphBoundTerms = (Graph.graphBoundTerms g),
+        Graph.graphBoundTypes = (Graph.graphBoundTypes g),
+        Graph.graphClassConstraints = (Graph.graphClassConstraints g),
+        Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
+        Graph.graphMetadata = (Graph.graphMetadata g),
+        Graph.graphPrimitives = (Graph.graphPrimitives g),
+        Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
+        Graph.graphTypeVariables = (Sets.insert name (Graph.graphTypeVariables g))}
+
+-- | Add bindings to an existing graph
+extendGraphWithBindings :: [Core.Binding] -> Graph.Graph -> Graph.Graph
+extendGraphWithBindings bindings g =
+
+      let newTerms = Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) bindings)
+          newTypes =
+                  Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) bindings))
+      in Graph.Graph {
+        Graph.graphBoundTerms = (Maps.union newTerms (Graph.graphBoundTerms g)),
+        Graph.graphBoundTypes = (Maps.union newTypes (Graph.graphBoundTypes g)),
+        Graph.graphClassConstraints = (Graph.graphClassConstraints g),
+        Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
+        Graph.graphMetadata = (Graph.graphMetadata g),
+        Graph.graphPrimitives = (Graph.graphPrimitives g),
+        Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
+        Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
 
 -- | Strip type annotations from the top levels of a term
 deannotateAndDetypeTerm :: Core.Term -> Core.Term
@@ -194,6 +269,20 @@ foldOverType order fld b0 typ =
     case order of
       Coders.TraversalOrderPre -> Lists.foldl (foldOverType order fld) (fld b0 typ) (subtypes typ)
       Coders.TraversalOrderPost -> fld (Lists.foldl (foldOverType order fld) b0 (subtypes typ)) typ
+
+-- | Fold over a term to produce a value, with both Graph and accessor path tracked. Like rewriteAndFoldTermWithGraphAndPath, but only folds without rewriting. The Graph is automatically updated when descending into lambdas, lets, and type lambdas.
+foldTermWithGraphAndPath :: ((t0 -> Core.Term -> t0) -> [Accessors.TermAccessor] -> Graph.Graph -> t0 -> Core.Term -> t0) -> Graph.Graph -> t0 -> Core.Term -> t0
+foldTermWithGraphAndPath f cx0 val0 term0 =
+
+      let wrapper =
+              \recurse -> \path -> \cx -> \val -> \term ->
+                let recurseForUser =
+                        \valIn -> \subterm ->
+                          let r = recurse valIn subterm
+                          in (Pairs.first r)
+                in (f recurseForUser path cx val term, term)
+          result = rewriteAndFoldTermWithGraphAndPath wrapper cx0 val0 term0
+      in (Pairs.first result)
 
 -- | Convert a forall type to a type scheme
 fTypeToTypeScheme :: Core.Type -> Core.TypeScheme
@@ -712,6 +801,56 @@ rewriteAndFoldTerm f term0 =
           recurse = f (fsub recurse)
       in (recurse term0)
 
+-- | Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms. Combines the features of rewriteAndFoldTerm and rewriteTermWithGraph. The user function f receives a recurse function that handles subterm traversal and Graph management.
+rewriteAndFoldTermWithGraph :: ((t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)
+rewriteAndFoldTermWithGraph f cx0 val0 term0 =
+
+      let wrapper =
+              \lowLevelRecurse -> \valAndCx -> \term ->
+                let val = Pairs.first valAndCx
+                    cx = Pairs.second valAndCx
+                    cx1 =
+                            case term of
+                              Core.TermFunction v0 -> case v0 of
+                                Core.FunctionLambda v1 -> extendGraphForLambda cx v1
+                                _ -> cx
+                              Core.TermLet v0 -> extendGraphForLet (\_ -> \_ -> Nothing) cx v0
+                              Core.TermTypeLambda v0 -> extendGraphForTypeLambda cx v0
+                              _ -> cx
+                    recurseForUser =
+                            \newVal -> \subterm ->
+                              let result = lowLevelRecurse (newVal, cx1) subterm
+                              in (Pairs.first (Pairs.first result), (Pairs.second result))
+                    fResult = f recurseForUser cx1 val term
+                in ((Pairs.first fResult, cx), (Pairs.second fResult))
+          result = rewriteAndFoldTerm wrapper (val0, cx0) term0
+      in (Pairs.first (Pairs.first result), (Pairs.second result))
+
+-- | Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of TermAccessors representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas.
+rewriteAndFoldTermWithGraphAndPath :: ((t0 -> Core.Term -> (t0, Core.Term)) -> [Accessors.TermAccessor] -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)
+rewriteAndFoldTermWithGraphAndPath f cx0 val0 term0 =
+
+      let wrapper =
+              \recurse -> \path -> \cxAndVal -> \term ->
+                let cx = Pairs.first cxAndVal
+                    val = Pairs.second cxAndVal
+                    cx1 =
+                            case term of
+                              Core.TermFunction v0 -> case v0 of
+                                Core.FunctionLambda v1 -> extendGraphForLambda cx v1
+                                _ -> cx
+                              Core.TermLet v0 -> extendGraphForLet (\_ -> \_ -> Nothing) cx v0
+                              Core.TermTypeLambda v0 -> extendGraphForTypeLambda cx v0
+                              _ -> cx
+                    recurseForUser =
+                            \valIn -> \termIn ->
+                              let result = recurse path (cx1, valIn) termIn
+                              in (Pairs.second (Pairs.first result), (Pairs.second result))
+                    fResult = f recurseForUser path cx1 val term
+                in ((cx, (Pairs.first fResult)), (Pairs.second fResult))
+          result = rewriteAndFoldTermWithPath wrapper (cx0, val0) term0
+      in (Pairs.second (Pairs.first result), (Pairs.second result))
+
 -- | Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of TermAccessors from root to current position.
 rewriteAndFoldTermWithPath :: (([Accessors.TermAccessor] -> t0 -> Core.Term -> (t0, Core.Term)) -> [Accessors.TermAccessor] -> t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term)
 rewriteAndFoldTermWithPath f term0 =
@@ -1127,6 +1266,32 @@ rewriteTermWithContext f cx0 term0 =
                     Core.wrappedTermTypeName = (Core.wrappedTermTypeName v0),
                     Core.wrappedTermBody = (recurse (Core.wrappedTermBody v0))})
           rewrite = \cx -> \term -> f (forSubterms rewrite) cx term
+      in (rewrite cx0 term0)
+
+-- | Rewrite a term with the help of a Graph which is updated as we descend into subterms
+rewriteTermWithGraph :: ((Core.Term -> t0) -> Graph.Graph -> Core.Term -> t0) -> Graph.Graph -> Core.Term -> t0
+rewriteTermWithGraph f cx0 term0 =
+
+      let f2 =
+              \recurse -> \cx -> \term ->
+                let recurse1 = \term -> recurse cx term
+                in case term of
+                  Core.TermFunction v0 -> case v0 of
+                    Core.FunctionLambda v1 ->
+                      let cx1 = extendGraphForLambda cx v1
+                          recurse2 = \term -> recurse cx1 term
+                      in (f recurse2 cx1 term)
+                    _ -> f recurse1 cx term
+                  Core.TermLet v0 ->
+                    let cx1 = extendGraphForLet (\_ -> \_ -> Nothing) cx v0
+                        recurse2 = \term -> recurse cx1 term
+                    in (f recurse2 cx1 term)
+                  Core.TermTypeLambda v0 ->
+                    let cx1 = extendGraphForTypeLambda cx v0
+                        recurse2 = \term -> recurse cx1 term
+                    in (f recurse2 cx1 term)
+                  _ -> f recurse1 cx term
+          rewrite = \cx -> \term -> f2 rewrite cx term
       in (rewrite cx0 term0)
 
 -- | Either-based variant of rewriteTermWithContextM which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting

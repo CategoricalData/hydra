@@ -11,6 +11,7 @@ import hydra.core
 import hydra.encode.ast
 import hydra.encode.coders
 import hydra.encode.core
+import hydra.encode.error.core
 import hydra.encode.json.model
 import hydra.encode.parsing
 import hydra.encode.typing
@@ -205,6 +206,9 @@ def unify_types_test_case(x: hydra.testing.UnifyTypesTestCase) -> hydra.core.Ter
 def unshadow_variables_test_case(x: hydra.testing.UnshadowVariablesTestCase) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.UnshadowVariablesTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.term(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.core.term(x.output))))))
 
+def validate_core_term_test_case(x: hydra.testing.ValidateCoreTermTestCase) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.term(x.input)), hydra.core.Field(hydra.core.Name("output"), cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map((lambda x1: hydra.encode.error.core.invalid_term_error(x1)), x.output))))))))
+
 def variable_occurs_in_type_test_case(x: hydra.testing.VariableOccursInTypeTestCase) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.VariableOccursInTypeTestCase"), (hydra.core.Field(hydra.core.Name("variable"), hydra.encode.core.name(x.variable)), hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("expected"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(x.expected)))))))))
 
@@ -323,6 +327,9 @@ def test_case(v1: hydra.testing.TestCase) -> hydra.core.Term:
 
         case hydra.testing.TestCaseUnshadowVariables(value=y38):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("unshadowVariables"), unshadow_variables_test_case(y38)))))
+
+        case hydra.testing.TestCaseValidateCoreTerm(value=y39):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("validateCoreTerm"), validate_core_term_test_case(y39)))))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")

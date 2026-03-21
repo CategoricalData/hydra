@@ -1,0 +1,661 @@
+{
+  "description": ["Validation functions for core terms"],
+  "elements": [
+    {
+      "name": "hydra.validate.core.checkDuplicateBindings",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Check for duplicate binding names in a list of bindings"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "names",
+                              "term": {
+                                "application": {
+                                  "argument": {"variable": "bindings"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "function": {
+                                          "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                              "type": {"variable": "hydra.core.Binding"}}},
+                                          "type": {"variable": "hydra.core.Name"}}}}}}},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {"list": {"variable": "hydra.core.Name"}},
+                                  "variables": []}]}],
+                          "body": {
+                            "let": {
+                              "bindings": [
+                                {
+                                  "name": "dup",
+                                  "term": {
+                                    "application": {
+                                      "argument": {"variable": "names"},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"variable": "hydra.validate.core.findDuplicate"},
+                                          "type": {"variable": "hydra.core.Name"}}}}},
+                                  "type": [
+                                    {
+                                      "constraints": null,
+                                      "type": {"maybe": {"variable": "hydra.core.Name"}},
+                                      "variables": []}]}],
+                              "body": {
+                                "application": {
+                                  "argument": {"variable": "dup"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "duplicateBinding",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {"name": "location", "term": {"variable": "path"}},
+                                                        {"name": "name", "term": {"variable": "name"}}],
+                                                      "typeName": "hydra.error.core.DuplicateBindingError"}}},
+                                                "typeName": "hydra.error.core.InvalidTermError"}},
+                                            "domain": [{"variable": "hydra.core.Name"}],
+                                            "parameter": "name"}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                              "type": {"variable": "hydra.core.Name"}}},
+                                          "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}},
+                      "domain": [{"list": {"variable": "hydra.core.Binding"}}],
+                      "parameter": "bindings"}}},
+                "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                "parameter": "path"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}},
+                  "domain": {"list": {"variable": "hydra.core.Binding"}}}},
+              "domain": {"variable": "hydra.accessors.AccessorPath"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.validate.core.checkDuplicateFields",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Check for duplicate field names in a list of fields"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "let": {
+                          "bindings": [
+                            {
+                              "name": "dup",
+                              "term": {
+                                "application": {
+                                  "argument": {"variable": "names"},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {"variable": "hydra.validate.core.findDuplicate"},
+                                      "type": {"variable": "hydra.core.Name"}}}}},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {"maybe": {"variable": "hydra.core.Name"}},
+                                  "variables": []}]}],
+                          "body": {
+                            "application": {
+                              "argument": {"variable": "dup"},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "union": {
+                                            "field": {
+                                              "name": "duplicateField",
+                                              "term": {
+                                                "record": {
+                                                  "fields": [
+                                                    {"name": "location", "term": {"variable": "path"}},
+                                                    {"name": "name", "term": {"variable": "name"}}],
+                                                  "typeName": "hydra.error.core.DuplicateFieldError"}}},
+                                            "typeName": "hydra.error.core.InvalidTermError"}},
+                                        "domain": [{"variable": "hydra.core.Name"}],
+                                        "parameter": "name"}}},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                          "type": {"variable": "hydra.core.Name"}}},
+                                      "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}},
+                      "domain": [{"list": {"variable": "hydra.core.Name"}}],
+                      "parameter": "names"}}},
+                "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                "parameter": "path"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}},
+                  "domain": {"list": {"variable": "hydra.core.Name"}}}},
+              "domain": {"variable": "hydra.accessors.AccessorPath"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.validate.core.checkTerm",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Check a single term node for duplicate bindings or fields"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {"variable": "term"},
+                          "function": {
+                            "function": {
+                              "elimination": {
+                                "union": {
+                                  "cases": [
+                                    {
+                                      "name": "let",
+                                      "term": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "lt"},
+                                                    "function": {
+                                                      "function": {
+                                                        "elimination": {"record": {"field": "bindings", "typeName": "hydra.core.Let"}}}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "path"},
+                                                    "function": {"variable": "hydra.validate.core.checkDuplicateBindings"}}}}},
+                                            "domain": [{"variable": "hydra.core.Let"}],
+                                            "parameter": "lt"}}}},
+                                    {
+                                      "name": "record",
+                                      "term": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "rec"},
+                                                        "function": {
+                                                          "function": {
+                                                            "elimination": {"record": {"field": "fields", "typeName": "hydra.core.Record"}}}}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "function": {
+                                                            "elimination": {"record": {"field": "name", "typeName": "hydra.core.Field"}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                "type": {"variable": "hydra.core.Field"}}},
+                                                            "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "path"},
+                                                    "function": {"variable": "hydra.validate.core.checkDuplicateFields"}}}}},
+                                            "domain": [{"variable": "hydra.core.Record"}],
+                                            "parameter": "rec"}}}}],
+                                  "default": [
+                                    {
+                                      "typeApplication": {
+                                        "body": {"maybe": null},
+                                        "type": {"variable": "hydra.error.core.InvalidTermError"}}}],
+                                  "typeName": "hydra.core.Term"}}}}}},
+                      "domain": [{"variable": "hydra.core.Term"}],
+                      "parameter": "term"}}},
+                "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                "parameter": "path"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.accessors.AccessorPath"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.validate.core.findDuplicate",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "Find the first duplicate name in a list"}}}],
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "result",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "names"},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "pair": {
+                                                "@first": {
+                                                  "typeApplication": {
+                                                    "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                    "type": {"variable": "t0"}}},
+                                                "@second": {
+                                                  "typeApplication": {"body": {"maybe": null}, "type": {"variable": "t0"}}}}},
+                                            "type": {"set": {"variable": "t0"}}}},
+                                        "type": {"maybe": {"variable": "t0"}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "seen",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "acc"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                        "type": {"set": {"variable": "t0"}}}},
+                                                                    "type": {"maybe": {"variable": "t0"}}}}}},
+                                                            "type": [
+                                                              {
+                                                                "constraints": null,
+                                                                "type": {"set": {"variable": "t0"}},
+                                                                "variables": []}]}],
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "dup",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "acc"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                            "type": {"set": {"variable": "t0"}}}},
+                                                                        "type": {"maybe": {"variable": "t0"}}}}}},
+                                                                "type": [
+                                                                  {
+                                                                    "constraints": null,
+                                                                    "type": {"maybe": {"variable": "t0"}},
+                                                                    "variables": []}]}],
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {"variable": "acc"},
+                                                                      "domain": [{"variable": "t0"}],
+                                                                      "parameter": "_"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "pair": {
+                                                                                    "@first": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "seen"},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "name"},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"function": {"primitive": "hydra.lib.sets.insert"}},
+                                                                                                "type": {"variable": "t0"}}}}}}},
+                                                                                    "@second": {
+                                                                                      "typeApplication": {"body": {"maybe": null}, "type": {"variable": "t0"}}}}},
+                                                                                "type": {"set": {"variable": "t0"}}}},
+                                                                            "type": {"maybe": {"variable": "t0"}}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "pair": {
+                                                                                        "@first": {"variable": "seen"},
+                                                                                        "@second": {"maybe": [{"variable": "name"}]}}},
+                                                                                    "type": {"set": {"variable": "t0"}}}},
+                                                                                "type": {"maybe": {"variable": "t0"}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "seen"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "name"},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"function": {"primitive": "hydra.lib.sets.member"}},
+                                                                                            "type": {"variable": "t0"}}}}}}},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                    "type": {
+                                                                                      "pair": {
+                                                                                        "first": {"set": {"variable": "t0"}},
+                                                                                        "second": {"maybe": {"variable": "t0"}}}}}}}}}}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "dup"},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"function": {"primitive": "hydra.lib.maybes.cases"}},
+                                                                                "type": {"variable": "t0"}}},
+                                                                            "type": {
+                                                                              "pair": {
+                                                                                "first": {"set": {"variable": "t0"}},
+                                                                                "second": {"maybe": {"variable": "t0"}}}}}}}}}}}}}}}},
+                                                    "domain": [{"variable": "t0"}],
+                                                    "parameter": "name"}}},
+                                              "domain": [
+                                                {
+                                                  "pair": {
+                                                    "first": {"set": {"variable": "t0"}},
+                                                    "second": {"maybe": {"variable": "t0"}}}}],
+                                              "parameter": "acc"}}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                "type": {
+                                                  "pair": {
+                                                    "first": {"set": {"variable": "t0"}},
+                                                    "second": {"maybe": {"variable": "t0"}}}}}},
+                                            "type": {"variable": "t0"}}}}}}}}},
+                            "type": [
+                              {
+                                "constraints": null,
+                                "type": {
+                                  "pair": {
+                                    "first": {"set": {"variable": "t0"}},
+                                    "second": {"maybe": {"variable": "t0"}}}},
+                                "variables": []}]}],
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "result"},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                    "type": {"set": {"variable": "t0"}}}},
+                                "type": {"maybe": {"variable": "t0"}}}}}}}},
+                    "domain": [{"list": {"variable": "t0"}}],
+                    "parameter": "names"}}}}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
+          "type": {
+            "function": {
+              "codomain": {"maybe": {"variable": "t0"}},
+              "domain": {"list": {"variable": "t0"}}}},
+          "variables": ["t0"]}]},
+    {
+      "name": "hydra.validate.core.term",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Validate a term, returning the first error found or nothing if valid"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {"variable": "t"},
+                          "function": {
+                            "application": {
+                              "argument": {
+                                "typeApplication": {
+                                  "body": {"maybe": null},
+                                  "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                              "function": {
+                                "application": {
+                                  "argument": {"variable": "g"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "function": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "function": {
+                                                                            "lambda": {
+                                                                              "body": {"variable": "acc"},
+                                                                              "domain": [{"variable": "hydra.error.core.InvalidTermError"}],
+                                                                              "parameter": "_"}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "let": {
+                                                                                "bindings": [
+                                                                                  {
+                                                                                    "name": "checkResult",
+                                                                                    "term": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "trm"},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "wrap": {
+                                                                                                "body": {"variable": "path"},
+                                                                                                "typeName": "hydra.accessors.AccessorPath"}},
+                                                                                            "function": {"variable": "hydra.validate.core.checkTerm"}}}}},
+                                                                                    "type": [
+                                                                                      {
+                                                                                        "constraints": null,
+                                                                                        "type": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}},
+                                                                                        "variables": []}]}],
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {"maybe": [{"variable": "err"}]},
+                                                                                          "domain": [{"variable": "hydra.error.core.InvalidTermError"}],
+                                                                                          "parameter": "err"}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "trm"},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"maybe": null},
+                                                                                                    "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                                                                                                "function": {"variable": "recurse"}}}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "checkResult"},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"function": {"primitive": "hydra.lib.maybes.cases"}},
+                                                                                                    "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                                                                                                "type": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "acc"},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"function": {"primitive": "hydra.lib.maybes.cases"}},
+                                                                                        "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                                                                                    "type": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
+                                                                    "domain": [{"variable": "hydra.core.Term"}],
+                                                                    "parameter": "trm"}}},
+                                                              "domain": [{"maybe": {"variable": "hydra.error.core.InvalidTermError"}}],
+                                                              "parameter": "acc"}}},
+                                                        "domain": [{"variable": "hydra.graph.Graph"}],
+                                                        "parameter": "cx"}}},
+                                                  "domain": [{"list": {"variable": "hydra.accessors.TermAccessor"}}],
+                                                  "parameter": "path"}}},
+                                            "domain": [
+                                              {
+                                                "function": {
+                                                  "codomain": {
+                                                    "function": {
+                                                      "codomain": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}},
+                                                      "domain": {"variable": "hydra.core.Term"}}},
+                                                  "domain": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}}}}],
+                                            "parameter": "recurse"}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"variable": "hydra.rewriting.foldTermWithGraphAndPath"},
+                                          "type": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}}},
+                      "domain": [{"variable": "hydra.core.Term"}],
+                      "parameter": "t"}}},
+                "domain": [{"variable": "hydra.graph.Graph"}],
+                "parameter": "g"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
+          "variables": []}]}],
+  "namespace": "hydra.validate.core",
+  "termDependencies": ["hydra.rewriting"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.context",
+    "hydra.core",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.module",
+    "hydra.errors",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants"]}

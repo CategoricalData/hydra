@@ -33,7 +33,7 @@ import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
-import qualified Hydra.Show.Error as Error
+import qualified Hydra.Show.Errors as Errors
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Typing as Typing
@@ -48,12 +48,12 @@ import qualified Data.Set as S
 -- | Convert a Hydra term to a Haskell expression string
 termToHaskell :: Module.Namespaces Ast.ModuleName -> Core.Term -> Graph.Graph -> Either String String
 termToHaskell namespaces term g =
-    Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.expressionToExpr arg_)) (Coder.encodeTerm 0 namespaces term Lexical.emptyContext g)
+    Eithers.bimap (\ic -> Errors.error (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.expressionToExpr arg_)) (Coder.encodeTerm 0 namespaces term Lexical.emptyContext g)
 
 -- | Convert a Hydra type to a Haskell type expression string
 typeToHaskell :: Module.Namespaces Ast.ModuleName -> Core.Type -> t0 -> Either String String
 typeToHaskell namespaces typ g =
-    Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.typeToExpr arg_)) (Coder.encodeType namespaces typ Lexical.emptyContext g)
+    Eithers.bimap (\ic -> Errors.error (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.typeToExpr arg_)) (Coder.encodeType namespaces typ Lexical.emptyContext g)
 
 -- | Create a Haskell TestCodec that uses the real Haskell coder
 haskellTestCodec :: Module.Namespaces Ast.ModuleName -> Testing.TestCodec
@@ -322,7 +322,7 @@ buildNamespacesForTestGroup mod tgroup graph_ =
                     Module.moduleTermDependencies = (Module.moduleTermDependencies mod),
                     Module.moduleTypeDependencies = (Module.moduleTypeDependencies mod),
                     Module.moduleDescription = (Module.moduleDescription mod)}
-      in (Eithers.bind (Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyContext graph_)) (\baseNamespaces ->
+      in (Eithers.bind (Eithers.bimap (\ic -> Errors.error (Context.inContextObject ic)) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyContext graph_)) (\baseNamespaces ->
         let encodedNames = Sets.unions (Lists.map (\t -> extractEncodedTermVariableNames graph_ t) testTerms)
         in (Right (addNamespacesToNamespaces baseNamespaces encodedNames))))
 

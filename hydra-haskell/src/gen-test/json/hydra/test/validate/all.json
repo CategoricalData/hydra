@@ -1,0 +1,61 @@
+{
+  "description": ["Hydra's validation test suite"],
+  "elements": [
+    {
+      "name": "hydra.test.validate.all.allTests",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "The group of all validation tests"}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {"name": "name", "term": {"literal": {"string": "validation"}}},
+                {
+                  "name": "description",
+                  "term": {
+                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                {
+                  "name": "subgroups",
+                  "term": {"list": [{"variable": "hydra.test.validate.core.allTests"}]}},
+                {
+                  "name": "cases",
+                  "term": {
+                    "typeApplication": {
+                      "body": {"list": []},
+                      "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+              "typeName": "hydra.testing.TestGroup"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.testing.TestGroup"},
+          "variables": []}]}],
+  "namespace": "hydra.test.validate.all",
+  "termDependencies": ["hydra.test.validate.core"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.context",
+    "hydra.core",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.module",
+    "hydra.errors",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants"]}

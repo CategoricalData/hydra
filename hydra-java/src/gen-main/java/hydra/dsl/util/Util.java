@@ -104,27 +104,27 @@ public interface Util {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.util.CaseConvention"), new hydra.core.Field(new hydra.core.Name("upperSnake"), new hydra.core.Term.Unit()))));
   }
 
-  static <V1, V2> hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> coder(hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<V1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, V2>>>> encode, hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<V2, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, V1>>>> decode) {
+  static <V1, V2> hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> coder(hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<V1, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, V2>>>> encode, hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<V2, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, V1>>>> decode) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.util.Coder"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("encode"), (encode).value),
       new hydra.core.Field(new hydra.core.Name("decode"), (decode).value)))));
   }
 
-  static <V1, V2> hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<V1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, V2>>>> coderEncode(hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> x) {
+  static <V1, V2> hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<V1, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, V2>>>> coderEncode(hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.util.Coder"), new hydra.core.Name("encode"))))), (x).value)));
   }
 
-  static <V1, V2> hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<V2, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, V1>>>> coderDecode(hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> x) {
+  static <V1, V2> hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<V2, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, V1>>>> coderDecode(hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.util.Coder"), new hydra.core.Name("decode"))))), (x).value)));
   }
 
-  static <V1, V2> hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> coderWithEncode(hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> original, hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<V1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, V2>>>> newVal) {
+  static <V1, V2> hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> coderWithEncode(hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> original, hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<V1, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, V2>>>> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.util.Coder"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("encode"), (newVal).value),
       new hydra.core.Field(new hydra.core.Name("decode"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.util.Coder"), new hydra.core.Name("decode"))))), (original).value)))))));
   }
 
-  static <V1, V2> hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> coderWithDecode(hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> original, hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<V2, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, V1>>>> newVal) {
+  static <V1, V2> hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> coderWithDecode(hydra.phantoms.TTerm<hydra.util.Coder<V1, V2>> original, hydra.phantoms.TTerm<java.util.function.Function<hydra.context.Context, java.util.function.Function<V2, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, V1>>>> newVal) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.util.Coder"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("encode"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.util.Coder"), new hydra.core.Name("encode"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("decode"), (newVal).value)))));

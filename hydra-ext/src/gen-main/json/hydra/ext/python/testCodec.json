@@ -202,12 +202,12 @@
                                                                           "body": {
                                                                             "function": {
                                                                               "elimination": {"record": {"field": "object", "typeName": "hydra.context.InContext"}}}},
-                                                                          "type": {"variable": "hydra.error.Error"}}}}},
-                                                                  "function": {"variable": "hydra.show.error.error"}}},
+                                                                          "type": {"variable": "hydra.errors.Error"}}}}},
+                                                                  "function": {"variable": "hydra.show.errors.error"}}},
                                                               "domain": [
                                                                 {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.error.Error"},
+                                                                    "argument": {"variable": "hydra.errors.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}],
                                                               "parameter": "ic"}}},
                                                         "function": {
@@ -221,7 +221,7 @@
                                                                         "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
                                                                         "type": {
                                                                           "application": {
-                                                                            "argument": {"variable": "hydra.error.Error"},
+                                                                            "argument": {"variable": "hydra.errors.Error"},
                                                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                                                     "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
                                                                 "type": {"literal": {"string": {}}}}},
@@ -408,7 +408,7 @@
                                             "body": {"variable": "hydra.ext.python.coder.encodeType"},
                                             "type": {
                                               "application": {
-                                                "argument": {"variable": "hydra.error.Error"},
+                                                "argument": {"variable": "hydra.errors.Error"},
                                                 "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                 "function": {
                                   "application": {
@@ -439,12 +439,12 @@
                                                           "body": {
                                                             "function": {
                                                               "elimination": {"record": {"field": "object", "typeName": "hydra.context.InContext"}}}},
-                                                          "type": {"variable": "hydra.error.Error"}}}}},
-                                                  "function": {"variable": "hydra.show.error.error"}}},
+                                                          "type": {"variable": "hydra.errors.Error"}}}}},
+                                                  "function": {"variable": "hydra.show.errors.error"}}},
                                               "domain": [
                                                 {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.error.Error"},
+                                                    "argument": {"variable": "hydra.errors.Error"},
                                                     "function": {"variable": "hydra.context.InContext"}}}],
                                               "parameter": "ic"}}},
                                         "function": {
@@ -458,7 +458,7 @@
                                                         "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
                                                         "type": {
                                                           "application": {
-                                                            "argument": {"variable": "hydra.error.Error"},
+                                                            "argument": {"variable": "hydra.errors.Error"},
                                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                                     "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
                                                 "type": {"literal": {"string": {}}}}},
@@ -2424,7 +2424,7 @@
     "hydra.constants",
     "hydra.rewriting",
     "hydra.lexical",
-    "hydra.show.error"],
+    "hydra.show.errors"],
   "typeDependencies": [
     "hydra.ext.python.helpers",
     "hydra.ext.python.syntax",
@@ -2434,7 +2434,10 @@
     "hydra.coders",
     "hydra.context",
     "hydra.core",
-    "hydra.error",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.module",
+    "hydra.errors",
     "hydra.grammar",
     "hydra.graph",
     "hydra.json.model",

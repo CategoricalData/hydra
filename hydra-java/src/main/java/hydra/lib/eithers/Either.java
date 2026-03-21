@@ -16,7 +16,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.var;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.Error_;
+import hydra.errors.Error_;
 
 /**
  * Eliminate an Either value by applying one of two functions.

@@ -16,8 +16,8 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.Error_;
-import hydra.error.OtherError;
+import hydra.errors.Error_;
+import hydra.errors.OtherError;
 import hydra.util.Either;
 
 

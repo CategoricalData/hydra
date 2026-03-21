@@ -8,7 +8,7 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -29,7 +29,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Transform a type binding into an encoder binding
-encodeBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.DecodingError) Core.Binding
+encodeBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.DecodingError) Core.Binding
 encodeBinding cx graph b =
     Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
       Context.inContextObject = _wc_e,
@@ -451,10 +451,10 @@ encodePairType pt =
             Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}}))}))
 
 -- | Transform a type module into an encoder module
-encodeModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Error.Error) (Maybe Module.Module)
+encodeModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) (Maybe Module.Module)
 encodeModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError (Context.inContextObject ic)))),
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError (Context.inContextObject ic)))),
       Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Module.Module {
       Module.moduleNamespace = (encodeNamespace (Module.moduleNamespace mod)),
       Module.moduleElements = encodedBindings,
@@ -653,12 +653,12 @@ encodeWrappedTypeNamed ename wt =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))
 
 -- | Filter bindings to only encodable type definitions
-filterTypeBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.Error) [Core.Binding]
+filterTypeBindings :: Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Errors.Error) [Core.Binding]
 filterTypeBindings cx graph bindings =
     Eithers.map Maybes.cat (Eithers.mapList (isEncodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
 
 -- | Check if a binding is encodable (serializable type)
-isEncodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.Error) (Maybe Core.Binding)
+isEncodableBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) (Maybe Core.Binding)
 isEncodableBinding cx graph b =
     Eithers.bind (Schemas.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing))
 

@@ -9,7 +9,7 @@ import qualified Hydra.Checking as Checking
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as Core_
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core__
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
@@ -26,7 +26,7 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
-import qualified Hydra.Show.Error as Error_
+import qualified Hydra.Show.Errors as Errors_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -39,7 +39,7 @@ alphaConvert :: Core.Name -> Core.Name -> Core.Term -> Core.Term
 alphaConvert vold vnew term = Rewriting.replaceFreeTermVariable vold (Core.TermVariable vnew) term
 
 -- | Eagerly beta-reduce a type by substituting type arguments into type lambdas
-betaReduceType :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.Error) Core.Type
+betaReduceType :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Errors.Error) Core.Type
 betaReduceType cx graph typ =
 
       let reduceApp =
@@ -177,8 +177,8 @@ etaExpandTermNew tx0 term0 =
                       Core.FunctionElimination _ -> 1
                       Core.FunctionLambda _ -> 0
                       Core.FunctionPrimitive v1 -> Maybes.maybe 0 Arity.typeSchemeArity (Maps.lookup v1 primTypes)
-                    Core.TermLet v0 -> termArityWithContext (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v0) (Core.letBody v0)
-                    Core.TermTypeLambda v0 -> termArityWithContext (Schemas.extendGraphForTypeLambda tx v0) (Core.typeLambdaBody v0)
+                    Core.TermLet v0 -> termArityWithContext (Rewriting.extendGraphForLet (\_ -> \_ -> Nothing) tx v0) (Core.letBody v0)
+                    Core.TermTypeLambda v0 -> termArityWithContext (Rewriting.extendGraphForTypeLambda tx v0) (Core.typeLambdaBody v0)
                     Core.TermTypeApplication v0 -> termArityWithContext tx (Core.typeApplicationTermBody v0)
                     Core.TermVariable v0 -> Maybes.maybe 0 Arity.typeArity (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx)))
                     _ -> 0
@@ -237,8 +237,8 @@ etaExpandTermNew tx0 term0 =
                                   Core.TermFunction v0 -> case v0 of
                                     Core.FunctionPrimitive v1 -> Maybes.map (\ts2 -> Core.typeSchemeType ts2) (Maps.lookup v1 primTypes)
                                     _ -> Nothing
-                                  Core.TermLet v0 -> termHeadType (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx2 v0) (Core.letBody v0)
-                                  Core.TermTypeLambda v0 -> termHeadType (Schemas.extendGraphForTypeLambda tx2 v0) (Core.typeLambdaBody v0)
+                                  Core.TermLet v0 -> termHeadType (Rewriting.extendGraphForLet (\_ -> \_ -> Nothing) tx2 v0) (Core.letBody v0)
+                                  Core.TermTypeLambda v0 -> termHeadType (Rewriting.extendGraphForTypeLambda tx2 v0) (Core.typeLambdaBody v0)
                                   Core.TermTypeApplication v0 -> Maybes.bind (termHeadType tx2 (Core.typeApplicationTermBody v0)) (\htyp2 -> case htyp2 of
                                     Core.TypeForall v1 -> Just (Rewriting.replaceFreeTypeVariable (Core.forallTypeParameter v1) (Core.typeApplicationTermType v0) (Core.forallTypeBody v1))
                                     _ -> Just htyp2)
@@ -297,7 +297,7 @@ etaExpandTermNew tx0 term0 =
                                         _ -> Nothing
                           in (expand padElim args 1 elimHeadType elimTerm)
                         Core.FunctionLambda v1 ->
-                          let tx1 = Schemas.extendGraphForLambda tx v1
+                          let tx1 = Rewriting.extendGraphForLambda tx v1
                               body = rewriteWithArgs [] tx1 (Core.lambdaBody v1)
                               result =
                                       Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -311,7 +311,7 @@ etaExpandTermNew tx0 term0 =
                               primType = Maybes.map (\ts -> Core.typeSchemeType ts) (Maps.lookup v1 primTypes)
                           in (expand False args arty primType term)
                       Core.TermLet v0 ->
-                        let tx1 = Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v0
+                        let tx1 = Rewriting.extendGraphForLet (\_ -> \_ -> Nothing) tx v0
                             mapBinding =
                                     \b -> Core.Binding {
                                       Core.bindingName = (Core.bindingName b),
@@ -335,7 +335,7 @@ etaExpandTermNew tx0 term0 =
                         Core.typeApplicationTermBody = (recurse tx (Core.typeApplicationTermBody v0)),
                         Core.typeApplicationTermType = (Core.typeApplicationTermType v0)}))
                       Core.TermTypeLambda v0 ->
-                        let tx1 = Schemas.extendGraphForTypeLambda tx v0
+                        let tx1 = Rewriting.extendGraphForTypeLambda tx v0
                             result =
                                     Core.TermTypeLambda (Core.TypeLambda {
                                       Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
@@ -370,7 +370,7 @@ etaExpansionArity graph term =
       _ -> 0
 
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added.
-etaExpandTypedTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+etaExpandTypedTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 etaExpandTypedTerm cx tx0 term0 =
 
       let rewrite =
@@ -401,18 +401,18 @@ etaExpandTypedTerm cx tx0 term0 =
                                           \tx -> \f -> case f of
                                             Core.FunctionElimination _ -> Right 1
                                             Core.FunctionLambda v0 ->
-                                              let txl = Schemas.extendGraphForLambda tx v0
+                                              let txl = Rewriting.extendGraphForLambda tx v0
                                               in (arityOf txl (Core.lambdaBody v0))
                                             Core.FunctionPrimitive v0 -> Eithers.map (\_ts -> Arity.typeSchemeArity _ts) (Lexical.requirePrimitiveType cx tx v0)
                               in case term of
                                 Core.TermAnnotated v0 -> arityOf tx (Core.annotatedTermBody v0)
                                 Core.TermFunction v0 -> forFunction tx v0
                                 Core.TermLet v0 ->
-                                  let txl = Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v0
+                                  let txl = Rewriting.extendGraphForLet (\_ -> \_ -> Nothing) tx v0
                                   in (arityOf txl (Core.letBody v0))
                                 Core.TermTypeApplication v0 -> arityOf tx (Core.typeApplicationTermBody v0)
                                 Core.TermTypeLambda v0 ->
-                                  let txt = Schemas.extendGraphForTypeLambda tx v0
+                                  let txt = Rewriting.extendGraphForTypeLambda tx v0
                                   in (arityOf txt (Core.typeLambdaBody v0))
                                 Core.TermVariable v0 -> Maybes.maybe (Eithers.map (\_tc -> Arity.typeArity (Pairs.first _tc)) (Checking.typeOf cx tx [] (Core.TermVariable v0))) (\t -> Right (Arity.typeArity t)) (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v0 (Graph.graphBoundTypes tx)))
                                 _ -> dflt
@@ -467,21 +467,21 @@ etaExpandTypedTerm cx tx0 term0 =
                   Core.TermFunction v0 -> case v0 of
                     Core.FunctionElimination v1 -> forElimination v1
                     Core.FunctionLambda v1 ->
-                      let txl = Schemas.extendGraphForLambda tx v1
+                      let txl = Rewriting.extendGraphForLambda tx v1
                       in (Eithers.map unwind (recurse txl term))
                     _ -> recurseOrForce term
                   Core.TermLet v0 ->
-                    let txlt = Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v0
+                    let txlt = Rewriting.extendGraphForLet (\_ -> \_ -> Nothing) tx v0
                     in (recurse txlt term)
                   Core.TermTypeApplication v0 -> rewrite topLevel forced (Lists.cons (Core.typeApplicationTermType v0) typeArgs) recurse tx (Core.typeApplicationTermBody v0)
                   Core.TermTypeLambda v0 ->
-                    let txt = Schemas.extendGraphForTypeLambda tx v0
+                    let txt = Rewriting.extendGraphForTypeLambda tx v0
                     in (recurse txt term)
                   _ -> recurseOrForce term
       in (Rewriting.rewriteTermWithContextM (rewrite True False []) tx0 term0)
 
 -- | A term evaluation function which is alternatively lazy or eager
-reduceTerm :: Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+reduceTerm :: Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 reduceTerm cx graph eager term =
 
       let reduce = \eager -> reduceTerm cx graph eager
@@ -504,14 +504,14 @@ reduceTerm cx graph eager term =
                     Core.applicationArgument = (Lists.head args)})) (Lists.tail args))
           mapErrorToString =
                   \ic -> Context.InContext {
-                    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error_.error (Context.inContextObject ic)))),
+                    Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors_.error (Context.inContextObject ic)))),
                     Context.inContextContext = (Context.inContextContext ic)}
           applyElimination =
                   \elm -> \reducedArg -> case elm of
                     Core.EliminationRecord v0 -> Eithers.bind (Core__.record cx (Core.projectionTypeName v0) graph (Rewriting.deannotateTerm reducedArg)) (\fields ->
                       let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField v0)) fields
                       in (Logic.ifElse (Lists.null matchingFields) (Left (Context.InContext {
-                        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
+                        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                           "no such field: ",
                           (Core.unName (Core.projectionField v0)),
                           " in ",
@@ -521,7 +521,7 @@ reduceTerm cx graph eager term =
                     Core.EliminationUnion v0 -> Eithers.bind (Core__.injection cx (Core.caseStatementTypeName v0) graph reducedArg) (\field ->
                       let matchingFields = Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases v0)
                       in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Left (Context.InContext {
-                        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
+                        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                           "no such field ",
                           (Core.unName (Core.fieldName field)),
                           " in ",

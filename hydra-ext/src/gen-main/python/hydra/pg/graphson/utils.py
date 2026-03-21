@@ -10,7 +10,7 @@ from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.context
 import hydra.core
-import hydra.error
+import hydra.errors
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.lists
@@ -74,7 +74,7 @@ def encode_term_value(term: hydra.core.Term):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueDouble(cast(hydra.pg.graphson.syntax.DoubleValue, hydra.pg.graphson.syntax.DoubleValueFinite(f)))))
 
             case _:
-                return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("unsupported float type"))), hydra.lexical.empty_context()))
+                return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported float type"))), hydra.lexical.empty_context()))
     def _hoist_hydra_pg_graphson_utils_encode_term_value_2(v1):
         match v1:
             case hydra.core.IntegerValueBigint(value=i):
@@ -87,7 +87,7 @@ def encode_term_value(term: hydra.core.Term):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueLong(i)))
 
             case _:
-                return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("unsupported integer type"))), hydra.lexical.empty_context()))
+                return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported integer type"))), hydra.lexical.empty_context()))
     def _hoist_hydra_pg_graphson_utils_encode_term_value_3(v1):
         match v1:
             case hydra.core.LiteralBinary(value=b):
@@ -106,7 +106,7 @@ def encode_term_value(term: hydra.core.Term):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueString(s)))
 
             case _:
-                return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("unsupported literal type for GraphSON encoding"))), hydra.lexical.empty_context()))
+                return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported literal type for GraphSON encoding"))), hydra.lexical.empty_context()))
     match hydra.rewriting.deannotate_term(term):
         case hydra.core.TermLiteral(value=lit):
             return _hoist_hydra_pg_graphson_utils_encode_term_value_3(lit)
@@ -115,7 +115,7 @@ def encode_term_value(term: hydra.core.Term):
             return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueNull()))
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("unsupported term variant for GraphSON encoding"))), hydra.lexical.empty_context()))
+            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported term variant for GraphSON encoding"))), hydra.lexical.empty_context()))
 
 def pg_elements_to_graphson(encode_value: Callable[[T0], Either[T1, hydra.pg.graphson.syntax.Value]], els: frozenlist[hydra.pg.model.Element[T0]]) -> Either[T1, frozenlist[hydra.json.model.Value]]:
     r"""Convert property graph elements to a list of GraphSON JSON values."""

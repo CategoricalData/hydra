@@ -10,7 +10,7 @@ import qualified Hydra.Checking as Checking
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -26,7 +26,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -252,15 +251,15 @@ unionTypeToRecordType rt =
       in (Lists.map makeOptional rt)
 
 -- | Extract comments/description from a Binding
-commentsFromElement :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.Error) (Maybe String)
+commentsFromElement :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) (Maybe String)
 commentsFromElement cx g b = Annotations.getTermDescription cx g (Core.bindingTerm b)
 
 -- | Extract comments/description from a FieldType
-commentsFromFieldType :: Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Error.Error) (Maybe String)
+commentsFromFieldType :: Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Errors.Error) (Maybe String)
 commentsFromFieldType cx g ft = Annotations.getTypeDescription cx g (Core.fieldTypeType ft)
 
 -- | Check the type of a term
-typeOfTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Core.Type
+typeOfTerm :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) Core.Type
 typeOfTerm cx g term = Eithers.map Pairs.first (Checking.typeOf cx g [] term)
 
 -- | Produces metadata for a binding if it is complex
@@ -301,13 +300,13 @@ analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode gEnv tparams ar
           let v = Core.lambdaParameter v1
               dom = Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v1)
               body = Core.lambdaBody v1
-              newEnv = setTC (Schemas.extendGraphForLambda (getTC gEnv) v1) gEnv
+              newEnv = setTC (Rewriting.extendGraphForLambda (getTC gEnv) v1) gEnv
           in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t)
         _ -> analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t
       Core.TermLet v0 ->
         let newBindings = Core.letBindings v0
             body = Core.letBody v0
-            newEnv = setTC (Schemas.extendGraphForLet forBinding (getTC gEnv) v0) gEnv
+            newEnv = setTC (Rewriting.extendGraphForLet forBinding (getTC gEnv) v0) gEnv
         in (analyzeFunctionTermWith_gather cx forBinding getTC setTC False newEnv tparams args (Lists.concat2 bindings newBindings) doms tapps body)
       Core.TermTypeApplication v0 ->
         let taBody = Core.typeApplicationTermBody v0
@@ -316,6 +315,6 @@ analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode gEnv tparams ar
       Core.TermTypeLambda v0 ->
         let tvar = Core.typeLambdaParameter v0
             tlBody = Core.typeLambdaBody v0
-            newEnv = setTC (Schemas.extendGraphForTypeLambda (getTC gEnv) v0) gEnv
+            newEnv = setTC (Rewriting.extendGraphForTypeLambda (getTC gEnv) v0) gEnv
         in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
       _ -> analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t

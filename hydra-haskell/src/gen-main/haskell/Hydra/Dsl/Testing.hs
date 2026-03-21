@@ -7,6 +7,7 @@ module Hydra.Dsl.Testing where
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Module as Module
@@ -3516,6 +3517,14 @@ testCaseUnshadowVariables x =
         Core.fieldName = (Core.Name "unshadowVariables"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
+testCaseValidateCoreTerm :: Phantoms.TTerm Testing.ValidateCoreTermTestCase -> Phantoms.TTerm Testing.TestCase
+testCaseValidateCoreTerm x =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "validateCoreTerm"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
 testCaseWithMetadata :: Phantoms.TTerm String -> Phantoms.TTerm Testing.TestCase -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm [Testing.Tag] -> Phantoms.TTerm Testing.TestCaseWithMetadata
 testCaseWithMetadata name case_ description tags =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -5022,4 +5031,64 @@ joinTypesTestCaseWithExpected original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expected"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+
+validateCoreTermTestCase :: Phantoms.TTerm Core.Term -> Phantoms.TTerm (Maybe Core_.InvalidTermError) -> Phantoms.TTerm Testing.ValidateCoreTermTestCase
+validateCoreTermTestCase input output =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.ValidateCoreTermTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Phantoms.unTTerm input)},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = (Phantoms.unTTerm output)}]}))
+
+validateCoreTermTestCaseInput :: Phantoms.TTerm Testing.ValidateCoreTermTestCase -> Phantoms.TTerm Core.Term
+validateCoreTermTestCaseInput x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.testing.ValidateCoreTermTestCase"),
+        Core.projectionField = (Core.Name "input")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+validateCoreTermTestCaseOutput :: Phantoms.TTerm Testing.ValidateCoreTermTestCase -> Phantoms.TTerm (Maybe Core_.InvalidTermError)
+validateCoreTermTestCaseOutput x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.testing.ValidateCoreTermTestCase"),
+        Core.projectionField = (Core.Name "output")})))),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+
+validateCoreTermTestCaseWithInput :: Phantoms.TTerm Testing.ValidateCoreTermTestCase -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Testing.ValidateCoreTermTestCase
+validateCoreTermTestCaseWithInput original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.ValidateCoreTermTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.testing.ValidateCoreTermTestCase"),
+              Core.projectionField = (Core.Name "output")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+
+validateCoreTermTestCaseWithOutput :: Phantoms.TTerm Testing.ValidateCoreTermTestCase -> Phantoms.TTerm (Maybe Core_.InvalidTermError) -> Phantoms.TTerm Testing.ValidateCoreTermTestCase
+validateCoreTermTestCaseWithOutput original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.ValidateCoreTermTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.testing.ValidateCoreTermTestCase"),
+              Core.projectionField = (Core.Name "input")})))),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))

@@ -9,7 +9,7 @@ from hydra.dsl.python import Either, Just, Left, Maybe, Nothing, Right, frozenli
 from typing import TypeVar, cast
 import hydra.context
 import hydra.core
-import hydra.error
+import hydra.errors
 import hydra.ext.java.helpers
 import hydra.ext.java.language
 import hydra.ext.java.names
@@ -60,7 +60,7 @@ def add_java_type_parameter(rt: hydra.ext.java.syntax.ReferenceType, t: hydra.ex
                 return Right(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(hydra.ext.java.syntax.ClassType(anns, qual, id, hydra.lib.lists.concat2(args, (cast(hydra.ext.java.syntax.TypeArgument, hydra.ext.java.syntax.TypeArgumentReference(rt)),))))))))))
 
             case hydra.ext.java.syntax.ClassOrInterfaceTypeInterface():
-                return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("expected a Java class type"))), cx))
+                return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("expected a Java class type"))), cx))
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
@@ -73,7 +73,7 @@ def add_java_type_parameter(rt: hydra.ext.java.syntax.ReferenceType, t: hydra.ex
                 return Right(java_type_variable_to_type(tv))
 
             case hydra.ext.java.syntax.ReferenceTypeArray():
-                return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("expected a Java class or interface type, or a variable"))), cx))
+                return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("expected a Java class or interface type, or a variable"))), cx))
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
@@ -82,7 +82,7 @@ def add_java_type_parameter(rt: hydra.ext.java.syntax.ReferenceType, t: hydra.ex
             return _hoist_hydra_ext_java_utils_add_java_type_parameter_2(cx, rt, rt1)
 
         case hydra.ext.java.syntax.TypePrimitive():
-            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("expected a reference type"))), cx))
+            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("expected a reference type"))), cx))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -477,13 +477,13 @@ def java_type_parameter(v: str) -> hydra.ext.java.syntax.TypeParameter:
 def java_type_to_java_formal_parameter(jt: hydra.ext.java.syntax.Type, fname: hydra.core.Name) -> hydra.ext.java.syntax.FormalParameter:
     return cast(hydra.ext.java.syntax.FormalParameter, hydra.ext.java.syntax.FormalParameterSimple(hydra.ext.java.syntax.FormalParameter_Simple((), hydra.ext.java.syntax.UnannType(jt), field_name_to_java_variable_declarator_id(fname))))
 
-def java_type_to_java_reference_type(t: hydra.ext.java.syntax.Type, cx: hydra.context.Context) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.java.syntax.ReferenceType]:
+def java_type_to_java_reference_type(t: hydra.ext.java.syntax.Type, cx: hydra.context.Context) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.ReferenceType]:
     match t:
         case hydra.ext.java.syntax.TypeReference(value=rt):
             return Right(rt)
 
         case hydra.ext.java.syntax.TypePrimitive():
-            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("expected a Java reference type"))), cx))
+            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("expected a Java reference type"))), cx))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -631,7 +631,7 @@ def to_java_array_type(t: hydra.ext.java.syntax.Type, cx: hydra.context.Context)
                 return Right(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeArray(hydra.ext.java.syntax.ArrayType(new_dims(), variant))))))
 
             case hydra.ext.java.syntax.ReferenceTypeVariable():
-                return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("don't know how to make Java reference type into array type"))), cx))
+                return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("don't know how to make Java reference type into array type"))), cx))
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
@@ -640,7 +640,7 @@ def to_java_array_type(t: hydra.ext.java.syntax.Type, cx: hydra.context.Context)
             return _hoist_hydra_ext_java_utils_to_java_array_type_1(cx, rt)
 
         case hydra.ext.java.syntax.TypePrimitive():
-            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("don't know how to make Java type into array type"))), cx))
+            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("don't know how to make Java type into array type"))), cx))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")

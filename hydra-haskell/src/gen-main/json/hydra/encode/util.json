@@ -495,5 +495,5 @@
               "domain": {"variable": "hydra.util.Precision"}}},
           "variables": []}]}],
   "namespace": "hydra.encode.util",
-  "termDependencies": ["hydra.encode.context", "hydra.encode.core", "hydra.encode.error"],
+  "termDependencies": ["hydra.encode.context", "hydra.encode.core", "hydra.encode.errors"],
   "typeDependencies": ["hydra.util"]}

@@ -65,7 +65,7 @@ case_convention_pascal = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.T
 
 case_convention_upper_snake = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.util.CaseConvention"), hydra.core.Field(hydra.core.Name("upperSnake"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
-def coder(encode: hydra.phantoms.TTerm[Callable[[hydra.context.Context, V1], Either[hydra.context.InContext[hydra.error.Error], V2]]], decode: hydra.phantoms.TTerm[Callable[[hydra.context.Context, V2], Either[hydra.context.InContext[hydra.error.Error], V1]]]) -> hydra.phantoms.TTerm:
+def coder(encode: hydra.phantoms.TTerm[Callable[[hydra.context.Context, V1], Either[hydra.context.InContext[hydra.errors.Error], V2]]], decode: hydra.phantoms.TTerm[Callable[[hydra.context.Context, V2], Either[hydra.context.InContext[hydra.errors.Error], V1]]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.util.Coder"), (hydra.core.Field(hydra.core.Name("encode"), encode.value), hydra.core.Field(hydra.core.Name("decode"), decode.value))))))
 
 def coder_decode(x: hydra.phantoms.TTerm[hydra.util.Coder[V1, V2]]) -> hydra.phantoms.TTerm:
@@ -74,10 +74,10 @@ def coder_decode(x: hydra.phantoms.TTerm[hydra.util.Coder[V1, V2]]) -> hydra.pha
 def coder_encode(x: hydra.phantoms.TTerm[hydra.util.Coder[V1, V2]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.util.Coder"), hydra.core.Name("encode")))))))), x.value))))
 
-def coder_with_decode(original: hydra.phantoms.TTerm[hydra.util.Coder[V1, V2]], new_val: hydra.phantoms.TTerm[Callable[[hydra.context.Context, V2], Either[hydra.context.InContext[hydra.error.Error], V1]]]) -> hydra.phantoms.TTerm:
+def coder_with_decode(original: hydra.phantoms.TTerm[hydra.util.Coder[V1, V2]], new_val: hydra.phantoms.TTerm[Callable[[hydra.context.Context, V2], Either[hydra.context.InContext[hydra.errors.Error], V1]]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.util.Coder"), (hydra.core.Field(hydra.core.Name("encode"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.util.Coder"), hydra.core.Name("encode")))))))), original.value)))), hydra.core.Field(hydra.core.Name("decode"), new_val.value))))))
 
-def coder_with_encode(original: hydra.phantoms.TTerm[hydra.util.Coder[V1, V2]], new_val: hydra.phantoms.TTerm[Callable[[hydra.context.Context, V1], Either[hydra.context.InContext[hydra.error.Error], V2]]]) -> hydra.phantoms.TTerm:
+def coder_with_encode(original: hydra.phantoms.TTerm[hydra.util.Coder[V1, V2]], new_val: hydra.phantoms.TTerm[Callable[[hydra.context.Context, V1], Either[hydra.context.InContext[hydra.errors.Error], V2]]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.util.Coder"), (hydra.core.Field(hydra.core.Name("encode"), new_val.value), hydra.core.Field(hydra.core.Name("decode"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.util.Coder"), hydra.core.Name("decode")))))))), original.value)))))))))
 
 comparison_equal_to = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.util.Comparison"), hydra.core.Field(hydra.core.Name("equalTo"), cast(hydra.core.Term, hydra.core.TermUnit()))))))

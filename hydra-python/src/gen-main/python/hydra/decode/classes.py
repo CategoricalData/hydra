@@ -9,7 +9,7 @@ from hydra.dsl.python import Either, Left
 from typing import cast
 import hydra.classes
 import hydra.core
-import hydra.error
+import hydra.errors
 import hydra.extract.helpers
 import hydra.lexical
 import hydra.lib.eithers
@@ -25,10 +25,10 @@ def type_class(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 fname = field.name
                 fterm = field.term
                 @lru_cache(1)
-                def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.error.DecodingError, hydra.classes.TypeClass]]]:
+                def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.classes.TypeClass]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("equality"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.classes.TypeClass.EQUALITY), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("ordering"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.classes.TypeClass.ORDERING), hydra.extract.helpers.decode_unit(cx, input))))))
-                return hydra.lib.maybes.maybe((lambda : Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
+                return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
             case _:
-                return Left(hydra.error.DecodingError("expected union"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_classes_type_class_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+                return Left(hydra.errors.DecodingError("expected union"))
+    return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_classes_type_class_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))

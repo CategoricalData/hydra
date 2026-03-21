@@ -6,11 +6,11 @@ package hydra.ext.shacl.coder;
  * SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions
  */
 public interface Coder {
-  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0> err(hydra.context.Context cx, String msg) {
-    return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(msg)), cx)));
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> err(hydra.context.Context cx, String msg) {
+    return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, T0>left((hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError(msg)), cx)));
   }
 
-  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0> unexpectedE(hydra.context.Context cx, String expected, String found) {
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, T0> unexpectedE(hydra.context.Context cx, String expected, String found) {
     return hydra.ext.shacl.coder.Coder.<T0>err(
       cx,
       hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
@@ -20,15 +20,15 @@ public interface Coder {
         found)));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>> shaclCoder(hydra.module.Module mod, hydra.context.Context cx, hydra.graph.Graph g) {
-    java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>>> toShape = (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>>>) (el -> hydra.lib.eithers.Bind.apply(
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>> shaclCoder(hydra.module.Module mod, hydra.context.Context cx, hydra.graph.Graph g) {
+    java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>>> toShape = (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>>>) (el -> hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.Bimap.apply(
-        (java.util.function.Function<hydra.error.DecodingError, hydra.context.InContext<hydra.error.Error_>>) (_de -> (hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError((_de).value)), cx))),
+        (java.util.function.Function<hydra.errors.DecodingError, hydra.context.InContext<hydra.errors.Error_>>) (_de -> (hydra.context.InContext<hydra.errors.Error_>) (new hydra.context.InContext<hydra.errors.Error_>(new hydra.errors.Error_.Other(new hydra.errors.OtherError((_de).value)), cx))),
         (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (_t -> _t),
         hydra.decode.core.Core.type(
           g,
           (el).term)),
-      (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>>>) (_typ -> hydra.lib.eithers.Map.apply(
+      (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>>>) (_typ -> hydra.lib.eithers.Map.apply(
         (java.util.function.Function<hydra.ext.org.w3.shacl.model.CommonProperties, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>>) (_cp -> (hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>) (new hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>(hydra.ext.shacl.coder.Coder.elementIri(el), new hydra.ext.org.w3.shacl.model.Shape.Node(new hydra.ext.org.w3.shacl.model.NodeShape(_cp))))),
         hydra.ext.shacl.coder.Coder.encodeType(
           (el).name,
@@ -56,7 +56,7 @@ public interface Coder {
     return hydra.ext.rdf.utils.Utils.nameToIri((el).name);
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>> encodeField(hydra.core.Name rname, hydra.ext.org.w3.rdf.syntax.Resource subject, hydra.core.Field field, hydra.context.Context cx, hydra.graph.Graph g) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>> encodeField(hydra.core.Name rname, hydra.ext.org.w3.rdf.syntax.Resource subject, hydra.core.Field field, hydra.context.Context cx, hydra.graph.Graph g) {
     hydra.util.Pair<hydra.ext.org.w3.rdf.syntax.Resource, hydra.context.Context> pair1 = hydra.ext.rdf.utils.Utils.nextBlankNode(cx);
     hydra.util.Lazy<hydra.context.Context> cx1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair1));
     hydra.util.Lazy<hydra.ext.org.w3.rdf.syntax.Resource> node = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair1));
@@ -66,10 +66,10 @@ public interface Coder {
         (field).term,
         cx1.get(),
         g),
-      (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>>) (_r1 -> {
+      (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>>) (_r1 -> {
         hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(_r1));
         hydra.util.Lazy<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>> descs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(_r1));
-        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>(hydra.lib.lists.Concat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>(hydra.lib.lists.Concat2.apply(
           hydra.ext.rdf.utils.Utils.triplesOf(descs.get()),
           hydra.ext.rdf.utils.Utils.forObjects(
             subject,
@@ -80,12 +80,12 @@ public interface Coder {
       }));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>> encodeFieldType(hydra.core.Name rname, hydra.util.Maybe<java.math.BigInteger> order, hydra.core.FieldType ft, hydra.context.Context cx) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>> encodeFieldType(hydra.core.Name rname, hydra.util.Maybe<java.math.BigInteger> order, hydra.core.FieldType ft, hydra.context.Context cx) {
     hydra.core.Name fname = (ft).name;
     hydra.ext.org.w3.rdf.syntax.Iri iri = hydra.ext.rdf.utils.Utils.propertyIri(
       rname,
       fname);
-    java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>> forTypeDefault = (java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>>) (mn -> (java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>) (mx -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>) (t -> hydra.lib.eithers.Map.apply(
+    java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>> forTypeDefault = (java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>>) (mn -> (java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>) (mx -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>) (t -> hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.ext.org.w3.shacl.model.CommonProperties, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>) (_cp -> {
         hydra.ext.org.w3.shacl.model.PropertyShape baseProp = hydra.ext.shacl.coder.Coder.property(iri);
         hydra.util.Lazy<hydra.util.Maybe<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint>> maxC = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
@@ -102,20 +102,20 @@ public interface Coder {
         rname,
         t,
         cx)))));
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>>> forType = new java.util.concurrent.atomic.AtomicReference<>();
-    forType.set((java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>>) (mn -> (java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>) (mx -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>) (t -> hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>>> forType = new java.util.concurrent.atomic.AtomicReference<>();
+    forType.set((java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>>) (mn -> (java.util.function.Function<hydra.util.Maybe<java.math.BigInteger>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>>) (mx -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>) (t -> hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>> otherwise(hydra.core.Type instance) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>> otherwise(hydra.core.Type instance) {
         return (forTypeDefault).apply(mn).apply(mx).apply(t);
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>> visit(hydra.core.Type.Maybe ot) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>> visit(hydra.core.Type.Maybe ot) {
         return forType.get().apply(hydra.util.Maybe.just(new java.math.BigInteger("0"))).apply(mx).apply((ot).value);
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>> visit(hydra.core.Type.Set st) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>> visit(hydra.core.Type.Set st) {
         return forType.get().apply(mn).apply((hydra.util.Maybe<java.math.BigInteger>) (hydra.util.Maybe.<java.math.BigInteger>nothing())).apply((st).value);
       }
     })))));
@@ -213,10 +213,10 @@ public interface Coder {
     });
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> encodeTerm(hydra.ext.org.w3.rdf.syntax.Resource subject, hydra.core.Term term, hydra.context.Context cx, hydra.graph.Graph g) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> encodeTerm(hydra.ext.org.w3.rdf.syntax.Resource subject, hydra.core.Term term, hydra.context.Context cx, hydra.graph.Graph g) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> otherwise(hydra.core.Term instance) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> otherwise(hydra.core.Term instance) {
         return hydra.ext.shacl.coder.Coder.unexpectedE(
           cx,
           "RDF-compatible term",
@@ -224,7 +224,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Annotated at) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Annotated at) {
         return hydra.ext.shacl.coder.Coder.encodeTerm(
           subject,
           (at).value.body,
@@ -233,7 +233,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.List terms) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.List terms) {
         return hydra.ext.shacl.coder.Coder.encodeList(
           subject,
           (terms).value,
@@ -242,21 +242,21 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Literal lit) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>(hydra.util.ConsList.of(new hydra.ext.org.w3.rdf.syntax.Description(new hydra.ext.org.w3.rdf.syntax.Node.Literal(hydra.ext.rdf.utils.Utils.encodeLiteral((lit).value)), new hydra.ext.org.w3.rdf.syntax.Graph((hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Triple>) (hydra.lib.sets.Empty.<hydra.ext.org.w3.rdf.syntax.Triple>apply())))), cx))));
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Literal lit) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>(hydra.util.ConsList.of(new hydra.ext.org.w3.rdf.syntax.Description(new hydra.ext.org.w3.rdf.syntax.Node.Literal(hydra.ext.rdf.utils.Utils.encodeLiteral((lit).value)), new hydra.ext.org.w3.rdf.syntax.Graph((hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Triple>) (hydra.lib.sets.Empty.<hydra.ext.org.w3.rdf.syntax.Triple>apply())))), cx))));
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Map m) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Map m) {
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>>, hydra.context.Context>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>) (_r -> (hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>(hydra.util.ConsList.of(new hydra.ext.org.w3.rdf.syntax.Description(hydra.ext.rdf.utils.Utils.resourceToNode(subject), new hydra.ext.org.w3.rdf.syntax.Graph(hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(hydra.lib.pairs.First.apply(_r)))))), hydra.lib.pairs.Second.apply(_r))))),
           hydra.ext.shacl.coder.Coder.foldAccumResult(
-            (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>>>) (_cx0 -> (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>>) (kv -> hydra.lib.eithers.Bind.apply(
+            (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>>>) (_cx0 -> (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>>) (kv -> hydra.lib.eithers.Bind.apply(
               hydra.extract.core.Core.string(
                 _cx0,
                 g,
                 hydra.rewriting.Rewriting.deannotateTerm(hydra.lib.pairs.First.apply(kv))),
-              (java.util.function.Function<String, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>>) (_ks -> {
+              (java.util.function.Function<String, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>>) (_ks -> {
                 hydra.util.Pair<hydra.ext.org.w3.rdf.syntax.Resource, hydra.context.Context> pair2 = hydra.ext.rdf.utils.Utils.nextBlankNode(_cx0);
                 hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair2));
                 hydra.util.Lazy<hydra.ext.org.w3.rdf.syntax.Resource> node2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair2));
@@ -278,7 +278,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Wrap wt) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Wrap wt) {
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>) (_dr -> {
             hydra.util.Lazy<hydra.context.Context> cx1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(_dr));
@@ -297,10 +297,10 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Maybe mterm) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Maybe mterm) {
         return hydra.lib.maybes.Maybe.applyLazy(
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>((hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>) (hydra.util.ConsList.<hydra.ext.org.w3.rdf.syntax.Description>empty()), cx)))),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>>) (_inner -> hydra.ext.shacl.coder.Coder.encodeTerm(
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>((hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>) (hydra.util.ConsList.<hydra.ext.org.w3.rdf.syntax.Description>empty()), cx)))),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>>) (_inner -> hydra.ext.shacl.coder.Coder.encodeTerm(
             subject,
             _inner,
             cx,
@@ -309,7 +309,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Record rec) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Record rec) {
         hydra.util.ConsList<hydra.core.Field> fields = (rec).value.fields;
         hydra.core.Name rname = (rec).value.typeName;
         return hydra.lib.eithers.Map.apply(
@@ -317,7 +317,7 @@ public interface Coder {
             rname,
             new hydra.ext.org.w3.rdf.syntax.Description(hydra.ext.rdf.utils.Utils.resourceToNode(subject), new hydra.ext.org.w3.rdf.syntax.Graph(hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(hydra.lib.pairs.First.apply(_r))))))), hydra.lib.pairs.Second.apply(_r))))),
           hydra.ext.shacl.coder.Coder.foldAccumResult(
-            (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>>>) (_cx0 -> (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>>) (field -> hydra.ext.shacl.coder.Coder.encodeField(
+            (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>>>) (_cx0 -> (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>, hydra.context.Context>>>) (field -> hydra.ext.shacl.coder.Coder.encodeField(
               rname,
               subject,
               field,
@@ -328,11 +328,11 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Set terms) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Set terms) {
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>>, hydra.context.Context>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>) (_r -> (hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>(hydra.lib.lists.Concat.apply(hydra.lib.pairs.First.apply(_r)), hydra.lib.pairs.Second.apply(_r))))),
           hydra.ext.shacl.coder.Coder.foldAccumResult(
-            (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>>>) (_cx0 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>>) (t -> {
+            (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>>>) (_cx0 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>>) (t -> {
               hydra.util.Pair<hydra.ext.org.w3.rdf.syntax.Resource, hydra.context.Context> pair3 = hydra.ext.rdf.utils.Utils.nextBlankNode(_cx0);
               hydra.util.Lazy<hydra.context.Context> cx3 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair3));
               hydra.util.Lazy<hydra.ext.org.w3.rdf.syntax.Resource> node3 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair3));
@@ -347,7 +347,7 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Union inj) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Union inj) {
         hydra.core.Field field = (inj).value.field;
         hydra.core.Name rname = (inj).value.typeName;
         return hydra.lib.eithers.Map.apply(
@@ -364,11 +364,11 @@ public interface Coder {
     });
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> encodeList(hydra.ext.org.w3.rdf.syntax.Resource subj, hydra.util.ConsList<hydra.core.Term> terms, hydra.context.Context cx0, hydra.graph.Graph g) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> encodeList(hydra.ext.org.w3.rdf.syntax.Resource subj, hydra.util.ConsList<hydra.core.Term> terms, hydra.context.Context cx0, hydra.graph.Graph g) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(terms),
-      () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>(hydra.util.ConsList.of(new hydra.ext.org.w3.rdf.syntax.Description(new hydra.ext.org.w3.rdf.syntax.Node.Iri(new hydra.ext.org.w3.rdf.syntax.Iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")), new hydra.ext.org.w3.rdf.syntax.Graph((hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Triple>) (hydra.lib.sets.Empty.<hydra.ext.org.w3.rdf.syntax.Triple>apply())))), cx0)))),
-      () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>>) (() -> {
+      () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>(hydra.util.ConsList.of(new hydra.ext.org.w3.rdf.syntax.Description(new hydra.ext.org.w3.rdf.syntax.Node.Iri(new hydra.ext.org.w3.rdf.syntax.Iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")), new hydra.ext.org.w3.rdf.syntax.Graph((hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Triple>) (hydra.lib.sets.Empty.<hydra.ext.org.w3.rdf.syntax.Triple>apply())))), cx0)))),
+      () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>>) (() -> {
         hydra.util.Pair<hydra.ext.org.w3.rdf.syntax.Resource, hydra.context.Context> pair1 = hydra.ext.rdf.utils.Utils.nextBlankNode(cx0);
         hydra.util.Lazy<hydra.context.Context> cx1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair1));
         hydra.util.Lazy<hydra.ext.org.w3.rdf.syntax.Resource> node1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair1));
@@ -378,7 +378,7 @@ public interface Coder {
             hydra.lib.lists.Head.apply(terms),
             cx1.get(),
             g),
-          (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>>) (_r1 -> {
+          (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>>) (_r1 -> {
             hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(_r1));
             hydra.util.Pair<hydra.ext.org.w3.rdf.syntax.Resource, hydra.context.Context> pair2 = hydra.ext.rdf.utils.Utils.nextBlankNode(cx2.get());
             hydra.util.Lazy<hydra.context.Context> cx3 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair2));
@@ -429,10 +429,10 @@ public interface Coder {
             hydra.lib.lists.Tail.apply(xs))))));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> encodeType(hydra.core.Name tname, hydra.core.Type typ, hydra.context.Context cx) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> encodeType(hydra.core.Name tname, hydra.core.Type typ, hydra.context.Context cx) {
     return hydra.rewriting.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> otherwise(hydra.core.Type instance) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> otherwise(hydra.core.Type instance) {
         return hydra.ext.shacl.coder.Coder.unexpectedE(
           cx,
           "type",
@@ -440,33 +440,33 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.List ignored) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.List ignored) {
         return hydra.ext.shacl.coder.Coder.encodeType_any(hydra.ext.shacl.coder.Coder::common);
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Literal lt) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties>right(hydra.ext.shacl.coder.Coder.encodeLiteralType((lt).value));
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Literal lt) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties>right(hydra.ext.shacl.coder.Coder.encodeLiteralType((lt).value));
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Map ignored) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Map ignored) {
         return hydra.ext.shacl.coder.Coder.encodeType_any(hydra.ext.shacl.coder.Coder::common);
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Wrap ignored) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Wrap ignored) {
         return hydra.ext.shacl.coder.Coder.encodeType_any(hydra.ext.shacl.coder.Coder::common);
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Record fts) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Record fts) {
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<hydra.util.ConsList<hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>, hydra.ext.org.w3.shacl.model.CommonProperties>) (_props -> hydra.ext.shacl.coder.Coder.common(hydra.util.ConsList.of(new hydra.ext.org.w3.shacl.model.CommonConstraint.Property(hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
             (java.util.function.Function<hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>, hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.PropertyShape>>) (_p -> (hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.PropertyShape>) (new hydra.ext.org.w3.shacl.model.Reference.Definition(_p))),
             _props)))))),
           hydra.lib.eithers.MapList.apply(
-            (java.util.function.Function<hydra.util.Pair<java.math.BigInteger, hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>) (_pair -> hydra.ext.shacl.coder.Coder.encodeFieldType(
+            (java.util.function.Function<hydra.util.Pair<java.math.BigInteger, hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>) (_pair -> hydra.ext.shacl.coder.Coder.encodeFieldType(
               tname,
               hydra.util.Maybe.just(hydra.lib.pairs.First.apply(_pair)),
               hydra.lib.pairs.Second.apply(_pair),
@@ -481,18 +481,18 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Set ignored) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Set ignored) {
         return hydra.ext.shacl.coder.Coder.encodeType_any(hydra.ext.shacl.coder.Coder::common);
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Union fts) {
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Union fts) {
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<hydra.util.ConsList<hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>, hydra.ext.org.w3.shacl.model.CommonProperties>) (_props -> hydra.ext.shacl.coder.Coder.common(hydra.util.ConsList.of(new hydra.ext.org.w3.shacl.model.CommonConstraint.Xone(hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
             (java.util.function.Function<hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>, hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>>) (_p -> (hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape>) (new hydra.ext.org.w3.shacl.model.Reference.Anonymous(hydra.ext.shacl.coder.Coder.node(hydra.util.ConsList.of(new hydra.ext.org.w3.shacl.model.CommonConstraint.Property(hydra.lib.sets.FromList.apply(hydra.util.ConsList.of((hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.PropertyShape>) (new hydra.ext.org.w3.shacl.model.Reference.Definition(_p)))))))))),
             _props)))))),
           hydra.lib.eithers.MapList.apply(
-            (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>) (_ft -> hydra.ext.shacl.coder.Coder.encodeFieldType(
+            (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.PropertyShape>>>) (_ft -> hydra.ext.shacl.coder.Coder.encodeFieldType(
               tname,
               (hydra.util.Maybe<java.math.BigInteger>) (hydra.util.Maybe.<java.math.BigInteger>nothing()),
               _ft,

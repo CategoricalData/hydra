@@ -89,6 +89,7 @@ transformTestCase tcm =
               Testing.delegatedEvaluationTestCaseOutput = (encodeListList expected)})),
             Testing.testCaseWithMetadataDescription = desc,
             Testing.testCaseWithMetadataTags = tags_}))
+        Testing.TestCaseValidateCoreTerm _ -> Just tcm
         _ -> Nothing
 
 -- | Build a Term representing a convertCase function call

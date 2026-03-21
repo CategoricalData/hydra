@@ -864,7 +864,7 @@
                                                                                                                                     "name": "variable",
                                                                                                                                     "term": {
                                                                                                                                       "wrap": {
-                                                                                                                                        "body": {"literal": {"string": "hydra.error.Error"}},
+                                                                                                                                        "body": {"literal": {"string": "hydra.errors.Error"}},
                                                                                                                                         "typeName": "hydra.core.Name"}}},
                                                                                                                                   "typeName": "hydra.core.Type"}}}],
                                                                                                                           "typeName": "hydra.core.ApplicationType"}}},
@@ -1141,7 +1141,7 @@
                                                                                                                                                   "name": "variable",
                                                                                                                                                   "term": {
                                                                                                                                                     "wrap": {
-                                                                                                                                                      "body": {"literal": {"string": "hydra.error.Error"}},
+                                                                                                                                                      "body": {"literal": {"string": "hydra.errors.Error"}},
                                                                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                                                                 "typeName": "hydra.core.Type"}}}],
                                                                                                                                         "typeName": "hydra.core.ApplicationType"}}},
@@ -1280,7 +1280,7 @@
                                                                                                                                     "name": "variable",
                                                                                                                                     "term": {
                                                                                                                                       "wrap": {
-                                                                                                                                        "body": {"literal": {"string": "hydra.error.Error"}},
+                                                                                                                                        "body": {"literal": {"string": "hydra.errors.Error"}},
                                                                                                                                         "typeName": "hydra.core.Name"}}},
                                                                                                                                   "typeName": "hydra.core.Type"}}}],
                                                                                                                           "typeName": "hydra.core.ApplicationType"}}},
@@ -1359,5 +1359,5 @@
           "type": {"variable": "hydra.core.Type"},
           "variables": []}]}],
   "namespace": "hydra.graph",
-  "termDependencies": ["hydra.context", "hydra.core", "hydra.error"],
-  "typeDependencies": ["hydra.context", "hydra.core", "hydra.error"]}
+  "termDependencies": ["hydra.context", "hydra.core", "hydra.errors"],
+  "typeDependencies": ["hydra.context", "hydra.core", "hydra.errors"]}

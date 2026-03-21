@@ -9,7 +9,7 @@ from hydra.dsl.python import Either, FrozenDict, Just, Left, Nothing, Right, fro
 from typing import TypeVar, cast
 import hydra.context
 import hydra.core
-import hydra.error
+import hydra.errors
 import hydra.lib.eithers
 import hydra.lib.lists
 import hydra.lib.maps
@@ -55,7 +55,7 @@ def aggregate_map(pairs: frozenlist[tuple[T0, T1]]) -> FrozenDict[T0, frozenlist
 def graphson_vertex_to_json_coder() -> hydra.util.Coder[hydra.pg.graphson.syntax.Vertex, hydra.json.model.Value]:
     r"""A coder that converts GraphSON vertices to JSON. Decoding is not supported."""
 
-    return hydra.util.Coder((lambda _cx, v: Right(hydra.pg.graphson.coder.vertex_to_json(v))), (lambda _cx, _: Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("decoding GraphSON JSON is currently unsupported"))), _cx))))
+    return hydra.util.Coder((lambda _cx, v: Right(hydra.pg.graphson.coder.vertex_to_json(v))), (lambda _cx, _: Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("decoding GraphSON JSON is currently unsupported"))), _cx))))
 
 def vertex_property_to_graphson(encode_value: Callable[[T0], Either[T1, hydra.pg.graphson.syntax.Value]], prop: tuple[hydra.pg.model.PropertyKey, T0]) -> Either[T1, tuple[hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.VertexPropertyValue]]:
     r"""Convert a property graph vertex property to a GraphSON vertex property."""

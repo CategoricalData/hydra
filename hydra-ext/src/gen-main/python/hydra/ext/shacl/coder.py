@@ -11,7 +11,7 @@ import hydra.annotations
 import hydra.context
 import hydra.core
 import hydra.decode.core
-import hydra.error
+import hydra.errors
 import hydra.ext.org.w3.rdf.syntax
 import hydra.ext.org.w3.shacl.model
 import hydra.ext.rdf.utils
@@ -55,12 +55,12 @@ def fold_accum_result(f: Callable[[T0, T1], Either[T2, tuple[T3, T0]]], cx: T0, 
 
     return hydra.lib.logic.if_else(hydra.lib.lists.null(xs), (lambda : Right(((), cx))), (lambda : hydra.lib.eithers.bind(f(cx, hydra.lib.lists.head(xs)), (lambda _r: hydra.lib.eithers.map((lambda _rest: (hydra.lib.lists.cons(hydra.lib.pairs.first(_r), hydra.lib.pairs.first(_rest)), hydra.lib.pairs.second(_rest))), fold_accum_result(f, hydra.lib.pairs.second(_r), hydra.lib.lists.tail(xs)))))))
 
-def err(cx: hydra.context.Context, msg: str) -> Either[hydra.context.InContext[hydra.error.Error], T0]:
+def err(cx: hydra.context.Context, msg: str) -> Either[hydra.context.InContext[hydra.errors.Error], T0]:
     r"""Construct an error result with a context and message."""
 
-    return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(msg))), cx))
+    return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(msg))), cx))
 
-def unexpected_e(cx: hydra.context.Context, expected: str, found: str) -> Either[hydra.context.InContext[hydra.error.Error], T0]:
+def unexpected_e(cx: hydra.context.Context, expected: str, found: str) -> Either[hydra.context.InContext[hydra.errors.Error], T0]:
     r"""Construct an error for unexpected input, given expected and found descriptions."""
 
     return err(cx, hydra.lib.strings.cat(("Expected ", expected, ", found: ", found)))
@@ -86,7 +86,7 @@ def with_type(name: hydra.core.Name, desc: hydra.ext.org.w3.rdf.syntax.Descripti
         return hydra.ext.org.w3.rdf.syntax.Triple(subj_res(), hydra.ext.rdf.utils.rdf_iri("type"), cast(hydra.ext.org.w3.rdf.syntax.Node_, hydra.ext.org.w3.rdf.syntax.NodeIri(hydra.ext.rdf.utils.name_to_iri(name))))
     return hydra.ext.org.w3.rdf.syntax.Description(subj, hydra.ext.org.w3.rdf.syntax.Graph(hydra.lib.sets.insert(triple(), triples)))
 
-def encode_field(rname: hydra.core.Name, subject: hydra.ext.org.w3.rdf.syntax.Resource, field: hydra.core.Field, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], tuple[frozenlist[hydra.ext.org.w3.rdf.syntax.Triple], hydra.context.Context]]:
+def encode_field(rname: hydra.core.Name, subject: hydra.ext.org.w3.rdf.syntax.Resource, field: hydra.core.Field, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.errors.Error], tuple[frozenlist[hydra.ext.org.w3.rdf.syntax.Triple], hydra.context.Context]]:
     r"""Encode a record field as RDF triples with a given subject."""
 
     @lru_cache(1)
@@ -100,12 +100,12 @@ def encode_field(rname: hydra.core.Name, subject: hydra.ext.org.w3.rdf.syntax.Re
         return hydra.lib.pairs.second(pair1())
     return hydra.lib.eithers.bind(encode_term(node(), field.term, cx1(), g), (lambda _r1: (descs := hydra.lib.pairs.first(_r1), cx2 := hydra.lib.pairs.second(_r1), Right((hydra.lib.lists.concat2(hydra.ext.rdf.utils.triples_of(descs), hydra.ext.rdf.utils.for_objects(subject, hydra.ext.rdf.utils.property_iri(rname, field.name), hydra.ext.rdf.utils.subjects_of(descs))), cx2)))[2]))
 
-def encode_list(subj: hydra.ext.org.w3.rdf.syntax.Resource, terms: frozenlist[hydra.core.Term], cx0: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], tuple[frozenlist[hydra.ext.org.w3.rdf.syntax.Description], hydra.context.Context]]:
+def encode_list(subj: hydra.ext.org.w3.rdf.syntax.Resource, terms: frozenlist[hydra.core.Term], cx0: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.errors.Error], tuple[frozenlist[hydra.ext.org.w3.rdf.syntax.Description], hydra.context.Context]]:
     r"""Encode a list of terms as RDF list structure."""
 
     return hydra.lib.logic.if_else(hydra.lib.lists.null(terms), (lambda : Right(((hydra.ext.org.w3.rdf.syntax.Description(cast(hydra.ext.org.w3.rdf.syntax.Node_, hydra.ext.org.w3.rdf.syntax.NodeIri(hydra.ext.org.w3.rdf.syntax.Iri("http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"))), hydra.ext.org.w3.rdf.syntax.Graph(hydra.lib.sets.empty())),), cx0))), (lambda : (pair1 := hydra.ext.rdf.utils.next_blank_node(cx0), node1 := hydra.lib.pairs.first(pair1), cx1 := hydra.lib.pairs.second(pair1), hydra.lib.eithers.bind(encode_term(node1, hydra.lib.lists.head(terms), cx1, g), (lambda _r1: (fdescs := hydra.lib.pairs.first(_r1), cx2 := hydra.lib.pairs.second(_r1), first_triples := hydra.lib.lists.concat2(hydra.ext.rdf.utils.triples_of(fdescs), hydra.ext.rdf.utils.for_objects(subj, hydra.ext.rdf.utils.rdf_iri("first"), hydra.ext.rdf.utils.subjects_of(fdescs))), pair2 := hydra.ext.rdf.utils.next_blank_node(cx2), next := hydra.lib.pairs.first(pair2), cx3 := hydra.lib.pairs.second(pair2), hydra.lib.eithers.map((lambda _r2: (rdescs := hydra.lib.pairs.first(_r2), cx4 := hydra.lib.pairs.second(_r2), rest_triples := hydra.lib.lists.concat2(hydra.ext.rdf.utils.triples_of(rdescs), hydra.ext.rdf.utils.for_objects(subj, hydra.ext.rdf.utils.rdf_iri("rest"), hydra.ext.rdf.utils.subjects_of(rdescs))), ((hydra.ext.org.w3.rdf.syntax.Description(hydra.ext.rdf.utils.resource_to_node(subj), hydra.ext.org.w3.rdf.syntax.Graph(hydra.lib.sets.from_list(hydra.lib.lists.concat2(first_triples, rest_triples)))),), cx4))[3]), encode_list(next, hydra.lib.lists.tail(terms), cx3, g)))[6])))[3]))
 
-def encode_term(subject: hydra.ext.org.w3.rdf.syntax.Resource, term: hydra.core.Term, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], tuple[frozenlist[hydra.ext.org.w3.rdf.syntax.Description], hydra.context.Context]]:
+def encode_term(subject: hydra.ext.org.w3.rdf.syntax.Resource, term: hydra.core.Term, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.errors.Error], tuple[frozenlist[hydra.ext.org.w3.rdf.syntax.Description], hydra.context.Context]]:
     r"""Encode a Hydra term as a list of RDF Descriptions."""
 
     match term:
@@ -221,7 +221,7 @@ def property(iri: hydra.ext.org.w3.rdf.syntax.Iri) -> hydra.ext.org.w3.shacl.mod
 
     return hydra.ext.org.w3.shacl.model.PropertyShape(default_common_properties(), hydra.lib.sets.empty(), Nothing(), hydra.ext.org.w3.rdf.syntax.LangStrings(hydra.lib.maps.empty()), hydra.ext.org.w3.rdf.syntax.LangStrings(hydra.lib.maps.empty()), Nothing(), iri)
 
-def encode_field_type(rname: hydra.core.Name, order: Maybe[int], ft: hydra.core.FieldType, cx: hydra.context.Context) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.org.w3.shacl.model.Definition[hydra.ext.org.w3.shacl.model.PropertyShape]]:
+def encode_field_type(rname: hydra.core.Name, order: Maybe[int], ft: hydra.core.FieldType, cx: hydra.context.Context) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.org.w3.shacl.model.Definition[hydra.ext.org.w3.shacl.model.PropertyShape]]:
     r"""Encode a FieldType as a SHACL property shape Definition."""
 
     fname = ft.name
@@ -229,7 +229,7 @@ def encode_field_type(rname: hydra.core.Name, order: Maybe[int], ft: hydra.core.
     @lru_cache(1)
     def iri() -> hydra.ext.org.w3.rdf.syntax.Iri:
         return hydra.ext.rdf.utils.property_iri(rname, fname)
-    def for_type(mn: Maybe[int], mx: Maybe[int], t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.org.w3.shacl.model.Definition[hydra.ext.org.w3.shacl.model.PropertyShape]]:
+    def for_type(mn: Maybe[int], mx: Maybe[int], t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.org.w3.shacl.model.Definition[hydra.ext.org.w3.shacl.model.PropertyShape]]:
         while True:
             match hydra.rewriting.deannotate_type(t):
                 case hydra.core.TypeMaybe(value=ot):
@@ -246,11 +246,11 @@ def encode_field_type(rname: hydra.core.Name, order: Maybe[int], ft: hydra.core.
 
                 case _:
                     return for_type_default(mn, mx, t)
-    def for_type_default(mn: Maybe[int], mx: Maybe[int], t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.org.w3.shacl.model.Definition[hydra.ext.org.w3.shacl.model.PropertyShape]]:
+    def for_type_default(mn: Maybe[int], mx: Maybe[int], t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.org.w3.shacl.model.Definition[hydra.ext.org.w3.shacl.model.PropertyShape]]:
         return hydra.lib.eithers.map((lambda _cp: (base_prop := property(iri()), min_c := hydra.lib.maybes.map((lambda _n: cast(hydra.ext.org.w3.shacl.model.PropertyShapeConstraint, hydra.ext.org.w3.shacl.model.PropertyShapeConstraintMinCount(_n))), mn), max_c := hydra.lib.maybes.map((lambda _n: cast(hydra.ext.org.w3.shacl.model.PropertyShapeConstraint, hydra.ext.org.w3.shacl.model.PropertyShapeConstraintMaxCount(_n))), mx), hydra.ext.org.w3.shacl.model.Definition(iri(), hydra.ext.org.w3.shacl.model.PropertyShape(_cp, hydra.lib.sets.from_list(hydra.lib.maybes.cat((min_c, max_c))), Nothing(), hydra.ext.org.w3.rdf.syntax.LangStrings(hydra.lib.maps.empty()), hydra.ext.org.w3.rdf.syntax.LangStrings(hydra.lib.maps.empty()), order, iri())))[3]), encode_type(rname, t, cx))
     return for_type(Just(1), Just(1), ftype)
 
-def encode_type(tname: hydra.core.Name, typ: hydra.core.Type, cx: hydra.context.Context) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.org.w3.shacl.model.CommonProperties]:
+def encode_type(tname: hydra.core.Name, typ: hydra.core.Type, cx: hydra.context.Context) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.org.w3.shacl.model.CommonProperties]:
     r"""Encode a Hydra type as SHACL CommonProperties."""
 
     @lru_cache(1)
@@ -281,12 +281,12 @@ def encode_type(tname: hydra.core.Name, typ: hydra.core.Type, cx: hydra.context.
         case _:
             return unexpected_e(cx, "type", "unsupported type variant")
 
-def shacl_coder(mod: hydra.module.Module, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], tuple[hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context]]:
+def shacl_coder(mod: hydra.module.Module, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.errors.Error], tuple[hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context]]:
     r"""Encode a module's type elements as a SHACL ShapesGraph."""
 
     @lru_cache(1)
     def type_els() -> frozenlist[hydra.core.Binding]:
         return hydra.lib.lists.filter((lambda x1: hydra.annotations.is_native_type(x1)), mod.elements)
-    def to_shape(el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.org.w3.shacl.model.Definition[hydra.ext.org.w3.shacl.model.Shape]]:
-        return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _de: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_de.value))), cx)), (lambda _t: _t), hydra.decode.core.type(g, el.term)), (lambda _typ: hydra.lib.eithers.map((lambda _cp: hydra.ext.org.w3.shacl.model.Definition(element_iri(el), cast(hydra.ext.org.w3.shacl.model.Shape, hydra.ext.org.w3.shacl.model.ShapeNode(hydra.ext.org.w3.shacl.model.NodeShape(_cp))))), encode_type(el.name, _typ, cx))))
+    def to_shape(el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.org.w3.shacl.model.Definition[hydra.ext.org.w3.shacl.model.Shape]]:
+        return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _de: hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(_de.value))), cx)), (lambda _t: _t), hydra.decode.core.type(g, el.term)), (lambda _typ: hydra.lib.eithers.map((lambda _cp: hydra.ext.org.w3.shacl.model.Definition(element_iri(el), cast(hydra.ext.org.w3.shacl.model.Shape, hydra.ext.org.w3.shacl.model.ShapeNode(hydra.ext.org.w3.shacl.model.NodeShape(_cp))))), encode_type(el.name, _typ, cx))))
     return hydra.lib.eithers.map((lambda _shapes: (hydra.ext.org.w3.shacl.model.ShapesGraph(hydra.lib.sets.from_list(_shapes)), cx)), hydra.lib.eithers.map_list((lambda x1: to_shape(x1)), type_els()))

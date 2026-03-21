@@ -12,7 +12,7 @@ import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Encode.Core as Core__
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Ext.Java.Helpers as Helpers
 import qualified Hydra.Ext.Java.Language as Language
 import qualified Hydra.Ext.Java.Names as Names
@@ -344,7 +344,7 @@ substituteTypeVarsWithTypes_go subst t =
         Core.forallTypeBody = (substituteTypeVarsWithTypes_go subst (Core.forallTypeBody v0))})
       _ -> t
 
-addComment :: Syntax.ClassBodyDeclaration -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassBodyDeclarationWithComments
+addComment :: Syntax.ClassBodyDeclaration -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
 addComment decl field cx g =
     Eithers.map (\c -> Syntax.ClassBodyDeclarationWithComments {
       Syntax.classBodyDeclarationWithCommentsValue = decl,
@@ -371,19 +371,19 @@ insertBranchVar name env =
           Helpers.aliasesThunkedVars = (Helpers.aliasesThunkedVars aliases)},
         Helpers.javaEnvironmentGraph = (Helpers.javaEnvironmentGraph env)}
 
-getCodomain :: M.Map Core.Name Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Core.Type
+getCodomain :: M.Map Core.Name Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Core.Type
 getCodomain ann cx g = Eithers.map (\ft -> Core.functionTypeCodomain ft) (getFunctionType ann cx g)
 
-getFunctionType :: M.Map Core.Name Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Core.FunctionType
+getFunctionType :: M.Map Core.Name Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Core.FunctionType
 getFunctionType ann cx g =
     Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
       Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g ann)) (\mt -> Maybes.cases mt (Left (Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError "type annotation is required for function and elimination terms in Java")),
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "type annotation is required for function and elimination terms in Java")),
       Context.inContextContext = cx})) (\t -> case t of
       Core.TypeFunction v0 -> Right v0
       _ -> Left (Context.InContext {
-        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "expected function type, got: " (Core___.type_ t)))),
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "expected function type, got: " (Core___.type_ t)))),
         Context.inContextContext = cx})))
 
 wrapLazyArguments :: Core.Name -> [Syntax.Expression] -> ([Syntax.Expression], (Maybe String))
@@ -548,13 +548,13 @@ classifyDataTerm_stripTypeLambdas t =
       Core.TermTypeLambda v0 -> classifyDataTerm_stripTypeLambdas (Core.typeLambdaBody v0)
       _ -> t
 
-classifyDataReference :: Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Helpers.JavaSymbolClass
+classifyDataReference :: Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Helpers.JavaSymbolClass
 classifyDataReference name cx g =
     Eithers.bind (Right (Lexical.dereferenceElement g name)) (\mel -> Maybes.cases mel (Right Helpers.JavaSymbolClassLocalVariable) (\el -> Maybes.cases (Core.bindingType el) (Left (Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "no type scheme for element " (Core.unName (Core.bindingName el))))),
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "no type scheme for element " (Core.unName (Core.bindingName el))))),
       Context.inContextContext = cx})) (\ts -> Right (classifyDataTerm ts (Core.bindingTerm el)))))
 
-encodeType :: Helpers.Aliases -> S.Set Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Type
+encodeType :: Helpers.Aliases -> S.Set Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Type
 encodeType aliases boundVars t cx g =
 
       let inScopeTypeParams = Helpers.aliasesInScopeTypeParams aliases
@@ -579,23 +579,23 @@ encodeType aliases boundVars t cx g =
           jsecond] Names.hydraUtilPackageName "Pair")))
         Core.TypeUnit -> Right (Utils.javaRefType [] Names.javaLangPackageName "Void")
         Core.TypeRecord v0 -> Logic.ifElse (Lists.null v0) (Right (Utils.javaRefType [] Names.javaLangPackageName "Void")) (Left (Context.InContext {
-          Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous record type")),
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous record type")),
           Context.inContextContext = cx}))
         Core.TypeMaybe v0 -> Eithers.bind (Eithers.bind (encodeType aliases boundVars v0 cx g) (\jt_ -> Utils.javaTypeToJavaReferenceType jt_ cx)) (\jot -> Right (Utils.javaRefType [
           jot] Names.hydraUtilPackageName "Maybe"))
         Core.TypeSet v0 -> Eithers.bind (Eithers.bind (encodeType aliases boundVars v0 cx g) (\jt_ -> Utils.javaTypeToJavaReferenceType jt_ cx)) (\jst -> Right (Utils.javaRefType [
           jst] Names.hydraUtilPackageName "PersistentSet"))
         Core.TypeUnion _ -> Left (Context.InContext {
-          Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous union type")),
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous union type")),
           Context.inContextContext = cx})
         Core.TypeVariable v0 ->
           let name = Maybes.fromMaybe v0 (Maps.lookup v0 typeVarSubst)
           in (Eithers.bind (encodeType_resolveIfTypedef aliases boundVars inScopeTypeParams name cx g) (\resolved -> Maybes.cases resolved (Right (Logic.ifElse (Logic.or (Sets.member name boundVars) (Sets.member name inScopeTypeParams)) (Syntax.TypeReference (Utils.javaTypeVariable (Core.unName name))) (Logic.ifElse (isLambdaBoundVariable name) (Syntax.TypeReference (Utils.javaTypeVariable (Core.unName name))) (Logic.ifElse (isUnresolvedInferenceVar name) (Syntax.TypeReference (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Utils.javaClassType [] Names.javaLangPackageName "Object")))) (Syntax.TypeReference (Utils.nameToJavaReferenceType aliases True [] name Nothing)))))) (\resolvedType -> encodeType aliases boundVars resolvedType cx g)))
         Core.TypeWrap _ -> Left (Context.InContext {
-          Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous wrap type")),
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous wrap type")),
           Context.inContextContext = cx})
         _ -> Left (Context.InContext {
-          Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "can't encode unsupported type in Java: " (Core___.type_ t)))),
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "can't encode unsupported type in Java: " (Core___.type_ t)))),
           Context.inContextContext = cx})
 
 encodeType_resolveIfTypedef :: t0 -> S.Set Core.Name -> S.Set Core.Name -> Core.Name -> t1 -> Graph.Graph -> Either t2 (Maybe Core.Type)
@@ -608,7 +608,7 @@ encodeType_resolveIfTypedef aliases boundVars inScopeTypeParams name cx g =
         Core.TypeWrap _ -> Right Nothing
         _ -> Right (Just (Core.typeSchemeType ts)))))))
 
-javaTypeArgumentsForNamedType :: Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) [Syntax.TypeArgument]
+javaTypeArgumentsForNamedType :: Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.TypeArgument]
 javaTypeArgumentsForNamedType tname cx g =
     Eithers.bind (Schemas.requireType cx g tname) (\typ -> Right (Lists.map (\tp_ -> Utils.typeParameterToTypeArgument tp_) (javaTypeParametersForType typ)))
 
@@ -653,11 +653,11 @@ encodeLiteral_encodeInteger i =
       Core.IntegerValueUint64 v0 -> Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "java.math.BigInteger") Nothing) [
         encodeLiteral (Core.LiteralString (Literals.showBigint (Literals.uint64ToBigint v0)))] Nothing
 
-fieldTypeToFormalParam :: Helpers.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.FormalParameter
+fieldTypeToFormalParam :: Helpers.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.FormalParameter
 fieldTypeToFormalParam aliases ft cx g =
     Eithers.bind (encodeType aliases Sets.empty (Core.fieldTypeType ft) cx g) (\jt -> Right (Utils.javaTypeToJavaFormalParameter jt (Core.fieldTypeName ft)))
 
-applyCastIfSafe :: Helpers.Aliases -> Core.Type -> Syntax.Expression -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression
+applyCastIfSafe :: Helpers.Aliases -> Core.Type -> Syntax.Expression -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 applyCastIfSafe aliases castType expr cx g =
 
       let trusted = Helpers.aliasesTrustedTypeVars aliases
@@ -668,7 +668,7 @@ applyCastIfSafe aliases castType expr cx g =
           isSafe = Logic.or (Sets.null trusted) (Logic.or (Sets.null javaTypeVars) (Sets.null (Sets.difference javaTypeVars trusted)))
       in (Logic.ifElse isSafe (Eithers.bind (encodeType aliases Sets.empty castType cx g) (\jtype -> Eithers.bind (Utils.javaTypeToJavaReferenceType jtype cx) (\rt -> Right (Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression rt (Utils.javaExpressionToJavaUnaryExpression expr)))))) (Right expr))
 
-encodeVariable :: Helpers.JavaEnvironment -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression
+encodeVariable :: Helpers.JavaEnvironment -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeVariable env name cx g =
 
       let aliases = Helpers.javaEnvironmentAliases env
@@ -701,7 +701,7 @@ encodeVariable_buildCurried :: [Core.Name] -> Syntax.Expression -> Syntax.Expres
 encodeVariable_buildCurried params inner =
     Logic.ifElse (Lists.null params) inner (Utils.javaLambda (Lists.head params) (encodeVariable_buildCurried (Lists.tail params) inner))
 
-encodeVariable_hoistedLambdaCase :: Helpers.Aliases -> Core.Name -> Int -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression
+encodeVariable_hoistedLambdaCase :: Helpers.Aliases -> Core.Name -> Int -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeVariable_hoistedLambdaCase aliases name arity cx g =
 
       let paramNames = Lists.map (\i -> Core.Name (Strings.cat2 "p" (Literals.showInt32 i))) (Math.range 0 (Math.sub arity 1))
@@ -713,7 +713,7 @@ encodeVariable_hoistedLambdaCase aliases name arity cx g =
         let typ = Core.typeSchemeType ts
         in (Eithers.bind (encodeType aliases Sets.empty typ cx g) (\jtype -> Eithers.bind (Utils.javaTypeToJavaReferenceType jtype cx) (\rt -> Right (Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression rt (Utils.javaExpressionToJavaUnaryExpression lam))))))))))
 
-encodeNullaryConstant :: Helpers.JavaEnvironment -> Core.Type -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression
+encodeNullaryConstant :: Helpers.JavaEnvironment -> Core.Type -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeNullaryConstant env typ fun cx g =
 
       let aliases = Helpers.javaEnvironmentAliases env
@@ -729,10 +729,10 @@ encodeNullaryConstant env typ fun cx g =
               methodName = Syntax.Identifier (Lists.last parts)
           in (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs className methodName targs [])))))
         _ -> Left (Context.InContext {
-          Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "unexpected " (Strings.cat2 "nullary function" (Strings.cat2 " in " (Core___.function fun)))))),
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected " (Strings.cat2 "nullary function" (Strings.cat2 " in " (Core___.function fun)))))),
           Context.inContextContext = cx})
 
-encodeNullaryConstant_typeArgsFromReturnType :: Helpers.Aliases -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) [Syntax.TypeArgument]
+encodeNullaryConstant_typeArgsFromReturnType :: Helpers.Aliases -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.TypeArgument]
 encodeNullaryConstant_typeArgsFromReturnType aliases t cx g =
     case (Rewriting.deannotateType t) of
       Core.TypeSet v0 -> Eithers.bind (encodeType aliases Sets.empty v0 cx g) (\jst -> Eithers.bind (Utils.javaTypeToJavaReferenceType jst cx) (\rt -> Right [
@@ -1215,7 +1215,7 @@ resolveTypeApps schemeVars fallbackTypeApps argSubst =
           fullSubst = Maps.union argSubst remainingSubst
       in (Lists.map (\v -> Maps.findWithDefault (Core.TypeVariable v) v fullSubst) schemeVars)
 
-correctTypeAppsWithArgs :: [Core.Name] -> [Core.Type] -> Core.Type -> [Core.Term] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) [Core.Type]
+correctTypeAppsWithArgs :: [Core.Name] -> [Core.Type] -> Core.Type -> [Core.Term] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Core.Type]
 correctTypeAppsWithArgs schemeVars fallbackTypeApps schemeType args cx g =
 
       let schemeVarSet = Sets.fromList schemeVars
@@ -1223,7 +1223,7 @@ correctTypeAppsWithArgs schemeVars fallbackTypeApps schemeType args cx g =
           peeled = peelDomainTypes (Lists.length args) schemeType
           schemeDoms = Pairs.first peeled
       in (Eithers.bind (Eithers.mapList (\arg -> Eithers.bimap (\_de -> Context.InContext {
-        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
         Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g (Annotations.termAnnotationInternal arg))) args) (\mArgTypes -> Logic.ifElse (Logic.not (Lists.null (Lists.filter (\m -> Maybes.isNothing m) mArgTypes))) (Right fallbackTypeApps) (
         let argTypes = Lists.bind mArgTypes (\m -> Maybes.cases m [] (\x -> Lists.pure x))
             irDoms = Lists.map (\d -> applySubstSimple irSubst d) schemeDoms
@@ -1231,7 +1231,7 @@ correctTypeAppsWithArgs schemeVars fallbackTypeApps schemeType args cx g =
                     Lists.null (Lists.filter (\p -> Logic.not (typesMatch (Rewriting.deannotateType (Pairs.first p)) (Rewriting.deannotateType (Pairs.second p)))) (Lists.zip irDoms argTypes))
         in (Logic.ifElse domsMatch (Right fallbackTypeApps) (Right (resolveTypeApps schemeVars fallbackTypeApps (buildArgSubst schemeVarSet schemeDoms argTypes)))))))
 
-correctTypeApps :: t0 -> Core.Name -> [Core.Term] -> [Core.Type] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) [Core.Type]
+correctTypeApps :: t0 -> Core.Name -> [Core.Term] -> [Core.Type] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Core.Type]
 correctTypeApps gr name args fallbackTypeApps cx g =
     Eithers.bind (Right (Lexical.dereferenceElement g name)) (\mel -> Maybes.cases mel (Right fallbackTypeApps) (\el -> Maybes.cases (Core.bindingType el) (Right fallbackTypeApps) (\ts ->
       let schemeType = Core.typeSchemeType ts
@@ -1567,7 +1567,7 @@ variantCompareToMethod aliases tparams parentName variantName fields =
       in (Utils.methodDeclaration mods [] anns Names.compareToMethodName [
         param] result (Just body))
 
-recordMemberVar :: Helpers.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassBodyDeclaration
+recordMemberVar :: Helpers.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclaration
 recordMemberVar aliases ft cx g =
 
       let mods =
@@ -1578,7 +1578,7 @@ recordMemberVar aliases ft cx g =
           ftype = Core.fieldTypeType ft
       in (Eithers.bind (encodeType aliases Sets.empty ftype cx g) (\jt -> Right (Utils.javaMemberField mods jt (Utils.fieldNameToJavaVariableDeclarator fname))))
 
-recordWithMethod :: Helpers.Aliases -> Core.Name -> [Core.FieldType] -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassBodyDeclaration
+recordWithMethod :: Helpers.Aliases -> Core.Name -> [Core.FieldType] -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclaration
 recordWithMethod aliases elName fields field cx g =
 
       let mods = [
@@ -1595,7 +1595,7 @@ recordWithMethod aliases elName fields field cx g =
         param] result (Just [
         returnStmt]))))
 
-recordConstructor :: Helpers.Aliases -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassBodyDeclaration
+recordConstructor :: Helpers.Aliases -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclaration
 recordConstructor aliases elName fields cx g =
 
       let assignStmts = Lists.map (\f -> Syntax.BlockStatementStatement (Utils.toAssignStmt (Core.fieldTypeName f))) fields
@@ -1748,7 +1748,7 @@ recordHashCodeMethod fields =
       in (Utils.methodDeclaration mods [] anns Names.hashCodeMethodName [] result (Just [
         returnSum]))
 
-constantDecl :: String -> Helpers.Aliases -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassBodyDeclarationWithComments
+constantDecl :: String -> Helpers.Aliases -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
 constantDecl javaName aliases name cx g =
 
       let mods =
@@ -1768,7 +1768,7 @@ constantDecl javaName aliases name cx g =
             var = Utils.javaVariableDeclarator (Syntax.Identifier javaName) (Just init)
         in (Right (noComment (Utils.javaMemberField mods jt var))))))
 
-constantDeclForFieldType :: Helpers.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassBodyDeclarationWithComments
+constantDeclForFieldType :: Helpers.Aliases -> Core.FieldType -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
 constantDeclForFieldType aliases ftyp cx g =
 
       let name = Core.fieldTypeName ftyp
@@ -1776,14 +1776,14 @@ constantDeclForFieldType aliases ftyp cx g =
                   Formatting.nonAlnumToUnderscores (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName name))
       in (constantDecl javaName aliases name cx g)
 
-constantDeclForTypeName :: Helpers.Aliases -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassBodyDeclarationWithComments
+constantDeclForTypeName :: Helpers.Aliases -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
 constantDeclForTypeName aliases name cx g = constantDecl "TYPE_" aliases name cx g
 
-declarationForRecordType :: Bool -> Bool -> Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassDeclaration
+declarationForRecordType :: Bool -> Bool -> Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassDeclaration
 declarationForRecordType isInner isSer aliases tparams elName fields cx g =
     declarationForRecordType_ isInner isSer aliases tparams elName Nothing fields cx g
 
-declarationForRecordType_ :: Bool -> Bool -> Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Maybe Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassDeclaration
+declarationForRecordType_ :: Bool -> Bool -> Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Maybe Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassDeclaration
 declarationForRecordType_ isInner isSer aliases tparams elName parentName fields cx g =
     Eithers.bind (Eithers.mapList (\f -> recordMemberVar aliases f cx g) fields) (\memberVars -> Eithers.bind (Eithers.mapList (\p -> addComment (Pairs.first p) (Pairs.second p) cx g) (Lists.zip memberVars fields)) (\memberVars_ -> Eithers.bind (Logic.ifElse (Equality.gt (Lists.length fields) 1) (Eithers.mapList (\f -> recordWithMethod aliases elName fields f cx g) fields) (Right [])) (\withMethods -> Eithers.bind (recordConstructor aliases elName fields cx g) (\cons -> Eithers.bind (Logic.ifElse isInner (Right []) (Eithers.bind (constantDeclForTypeName aliases elName cx g) (\d -> Eithers.bind (Eithers.mapList (\f -> constantDeclForFieldType aliases f cx g) fields) (\dfields -> Right (Lists.cons d dfields))))) (\tn ->
       let comparableMethods =
@@ -1798,10 +1798,10 @@ declarationForRecordType_ isInner isSer aliases tparams elName parentName fields
           ifaces = Logic.ifElse isInner (serializableTypes isSer) (interfaceTypes isSer aliases tparams elName)
       in (Right (Utils.javaClassDeclaration aliases tparams elName classModsPublic Nothing ifaces bodyDecls)))))))
 
-takeTypeArgs :: String -> Int -> [Syntax.Type] -> Context.Context -> t0 -> Either (Context.InContext Error.Error) [Syntax.TypeArgument]
+takeTypeArgs :: String -> Int -> [Syntax.Type] -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) [Syntax.TypeArgument]
 takeTypeArgs label n tyapps cx g =
     Logic.ifElse (Equality.lt (Lists.length tyapps) n) (Left (Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
         "needed type arguments for ",
         label,
         ", found too few"]))),
@@ -1815,10 +1815,10 @@ isFieldUnitType typeName fieldName cx g =
         Core.TypeUnion v0 -> Right (Maybes.cases (Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fieldName) v0) False (\ft -> Schemas.isUnitType (Rewriting.deannotateType (Core.fieldTypeType ft))))
         _ -> Right False))
 
-encodeTerm :: Helpers.JavaEnvironment -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression
+encodeTerm :: Helpers.JavaEnvironment -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeTerm env term cx g = encodeTermInternal env [] [] term cx g
 
-encodeTermInternal :: Helpers.JavaEnvironment -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression
+encodeTermInternal :: Helpers.JavaEnvironment -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeTermInternal env anns tyapps term cx g0 =
 
       let aliases = Helpers.javaEnvironmentAliases env
@@ -1830,7 +1830,7 @@ encodeTermInternal env anns tyapps term cx g0 =
         Core.TermEither v0 -> Eithers.bind (Logic.ifElse (Lists.null tyapps) (Right Nothing) (Eithers.bind (takeTypeArgs "either" 2 tyapps cx g) (\ta -> Right (Just ta)))) (\mtargs ->
           let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
           in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-            Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
+            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
             Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mEitherType ->
             let branchTypes =
                     Maybes.bind mEitherType (\etyp -> case (Rewriting.deannotateType etyp) of
@@ -1848,7 +1848,7 @@ encodeTermInternal env anns tyapps term cx g0 =
         Core.TermFunction v0 ->
           let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
           in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-            Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
+            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
             Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mt -> Eithers.bind (Maybes.cases mt (Maybes.cases (tryInferFunctionType v0) (CoderUtils.typeOfTerm cx g term) (\inferredType -> Right inferredType)) (\t -> Right t)) (\typ -> case (Rewriting.deannotateType typ) of
             Core.TypeFunction v1 -> encodeFunction env (Core.functionTypeDomain v1) (Core.functionTypeCodomain v1) v0 cx g
             _ -> encodeNullaryConstant env typ v0 cx g)))
@@ -1870,7 +1870,7 @@ encodeTermInternal env anns tyapps term cx g0 =
                   g2 = Helpers.javaEnvironmentGraph env2
                   aliases2 = Helpers.javaEnvironmentAliases env2
               in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-                Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
+                Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
                 Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mt -> Eithers.bind (Maybes.cases mt (CoderUtils.typeOfTerm cx g2 body) (\t -> Right t)) (\letType -> Eithers.bind (encodeType aliases2 Sets.empty letType cx g) (\jLetType -> Eithers.bind (Utils.javaTypeToJavaReferenceType jLetType cx) (\rt ->
                 let supplierRt =
                         Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Utils.javaClassType [
@@ -1901,7 +1901,7 @@ encodeTermInternal env anns tyapps term cx g0 =
                         _ -> Nothing)
               combinedAnnsRec = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
           in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-            Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
+            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
             Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnnsRec)) (\mAnnotType ->
             let mTypeSubst =
                     Maybes.bind mAnnotType (\annTyp -> Maybes.bind mRecordType (\recTyp ->
@@ -1920,7 +1920,7 @@ encodeTermInternal env anns tyapps term cx g0 =
               in (Eithers.bind (Logic.ifElse (Logic.not (Lists.null tyapps)) (Eithers.bind (Eithers.mapList (\jt -> Utils.javaTypeToJavaReferenceType jt cx) tyapps) (\rts -> Right (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) rts))))) (
                 let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
                 in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-                  Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
+                  Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
                   Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mtyp -> Maybes.cases mtyp (Right Nothing) (\annTyp ->
                   let typeArgs = extractTypeApplicationArgs (Rewriting.deannotateType annTyp)
                   in (Logic.ifElse (Lists.null typeArgs) (Right Nothing) (Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Utils.javaTypeToJavaReferenceType jt cx)) typeArgs) (\jTypeArgs -> Right (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) jTypeArgs))))))))))) (\mtargs -> Right (Utils.javaConstructorCall (Utils.javaConstructorName consId mtargs) fieldExprs Nothing)))))))
@@ -1930,7 +1930,7 @@ encodeTermInternal env anns tyapps term cx g0 =
         Core.TermTypeLambda v0 -> withTypeLambda env v0 (\env2 ->
           let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
           in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-            Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
+            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
             Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mtyp ->
             let annotatedBody =
                     Maybes.cases mtyp (Core.typeLambdaBody v0) (\t -> case t of
@@ -1960,7 +1960,7 @@ encodeTermInternal env anns tyapps term cx g0 =
           in (Eithers.bind (encodeType aliases Sets.empty atyp cx g) (\jatyp ->
             let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
             in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-              Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
+              Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
               Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mtyp -> Eithers.bind (Maybes.cases mtyp (CoderUtils.typeOfTerm cx g term) (\t -> Right t)) (\typ ->
               let collected0 = collectTypeApps0 body [
                     atyp]
@@ -2003,7 +2003,7 @@ applyJavaArg expr jarg =
     Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocation (Just (Right (Utils.javaExpressionToJavaPrimary expr))) (Syntax.Identifier Names.applyMethodName) [
       jarg])
 
-encodeApplication :: Helpers.JavaEnvironment -> Core.Application -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression
+encodeApplication :: Helpers.JavaEnvironment -> Core.Application -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeApplication env app cx g0 =
 
       let aliases = Helpers.javaEnvironmentAliases env
@@ -2013,7 +2013,7 @@ encodeApplication env app cx g0 =
           args = Pairs.first (Pairs.second gathered)
           typeApps = Pairs.second (Pairs.second gathered)
       in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
+        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
         Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g (Annotations.termAnnotationInternal fun))) (\mfunTyp -> Eithers.bind (Maybes.cases mfunTyp (CoderUtils.typeOfTerm cx g fun) (\t -> Right t)) (\funTyp ->
         let arity = Arity.typeArity funTyp
             deannotatedFun = Rewriting.deannotateTerm fun
@@ -2047,10 +2047,10 @@ encodeApplication env app cx g0 =
             in (Eithers.bind (Logic.ifElse (Lists.null filteredTypeApps) (Right []) (correctTypeApps g v0 hargs filteredTypeApps cx g)) (\safeTypeApps -> Eithers.bind (filterPhantomTypeArgs v0 safeTypeApps cx g) (\finalTypeApps -> Eithers.bind (functionCall env False v0 hargs finalTypeApps cx g) (\initialCall -> Eithers.foldl (\acc -> \h -> Eithers.bind (encodeTerm env h cx g) (\jarg -> Right (applyJavaArg acc jarg))) initialCall rargs))))))
           _ -> encodeApplication_fallback env aliases g typeApps (Core.applicationFunction app) (Core.applicationArgument app) cx g)))))
 
-encodeApplication_fallback :: Helpers.JavaEnvironment -> Helpers.Aliases -> Graph.Graph -> [Core.Type] -> Core.Term -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression
+encodeApplication_fallback :: Helpers.JavaEnvironment -> Helpers.Aliases -> Graph.Graph -> [Core.Type] -> Core.Term -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeApplication_fallback env aliases gr typeApps lhs rhs cx g =
     Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
+      Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
       Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g (Annotations.termAnnotationInternal lhs))) (\mt -> Eithers.bind (Maybes.cases mt (CoderUtils.typeOfTerm cx g lhs) (\typ -> Right typ)) (\t -> case (Rewriting.deannotateTypeParameters (Rewriting.deannotateType t)) of
       Core.TypeFunction v0 ->
         let dom = Core.functionTypeDomain v0
@@ -2058,13 +2058,13 @@ encodeApplication_fallback env aliases gr typeApps lhs rhs cx g =
         in case (Rewriting.deannotateTerm lhs) of
           Core.TermFunction v1 -> case v1 of
             Core.FunctionElimination v2 -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Eithers.bind (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType dom))) (Right dom) (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-              Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
+              Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
               Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g (Annotations.termAnnotationInternal rhs))) (\mrt -> Maybes.cases mrt (Eithers.bind (CoderUtils.typeOfTerm cx g rhs) (\rt -> Right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))) (\rt -> Right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))))) (\enrichedDom -> encodeElimination env (Just jarg) enrichedDom cod v2 cx g))
             _ -> Eithers.bind (encodeTerm env lhs cx g) (\jfun -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Right (applyJavaArg jfun jarg)))
           _ -> Eithers.bind (encodeTerm env lhs cx g) (\jfun -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Right (applyJavaArg jfun jarg)))
       _ -> Eithers.bind (encodeTerm env lhs cx g) (\jfun -> Eithers.bind (encodeTerm env rhs cx g) (\jarg -> Right (applyJavaArg jfun jarg)))))
 
-functionCall :: Helpers.JavaEnvironment -> Bool -> Core.Name -> [Core.Term] -> [Core.Type] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression
+functionCall :: Helpers.JavaEnvironment -> Bool -> Core.Name -> [Core.Term] -> [Core.Type] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 functionCall env isPrim name args typeApps cx g =
 
       let aliases = Helpers.javaEnvironmentAliases env
@@ -2106,7 +2106,7 @@ functionCall env isPrim name args typeApps cx g =
 buildCurriedLambda :: [Core.Name] -> Syntax.Expression -> Syntax.Expression
 buildCurriedLambda params inner = Lists.foldl (\acc -> \p -> Utils.javaLambda p acc) inner (Lists.reverse params)
 
-encodeFunction :: Helpers.JavaEnvironment -> Core.Type -> Core.Type -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression
+encodeFunction :: Helpers.JavaEnvironment -> Core.Type -> Core.Type -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeFunction env dom cod fun cx g =
 
       let aliases = Helpers.javaEnvironmentAliases env
@@ -2127,7 +2127,7 @@ encodeFunction env dom cod fun cx g =
                       Core.functionTypeDomain = dom,
                       Core.functionTypeCodomain = cod})) lam1 cx g)))
                 _ -> Left (Context.InContext {
-                  Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "expected function type for lambda body, but got: " (Core___.type_ cod)))),
+                  Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "expected function type for lambda body, but got: " (Core___.type_ cod)))),
                   Context.inContextContext = cx})
               _ -> Eithers.bind (analyzeJavaFunction env2 body cx g) (\fs ->
                 let bindings = Typing.functionStructureBindings fs
@@ -2211,13 +2211,13 @@ annotateBodyWithCod typ term =
             Core.applicationArgument = annotatedRhs})))
         _ -> setAnn term
 
-domTypeArgs :: Helpers.Aliases -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) [Syntax.TypeArgument]
+domTypeArgs :: Helpers.Aliases -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.TypeArgument]
 domTypeArgs aliases d cx g =
 
       let args = extractTypeApplicationArgs (Rewriting.deannotateType d)
       in (Logic.ifElse (Logic.not (Lists.null args)) (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Eithers.bind (Utils.javaTypeToJavaReferenceType jt cx) (\rt -> Right (Syntax.TypeArgumentReference rt)))) args) (Right (javaTypeArgumentsForType d)))
 
-otherwiseBranch :: Helpers.JavaEnvironment -> Helpers.Aliases -> Core.Type -> Core.Type -> Core.Name -> Syntax.Type -> [Syntax.TypeArgument] -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassBodyDeclarationWithComments
+otherwiseBranch :: Helpers.JavaEnvironment -> Helpers.Aliases -> Core.Type -> Core.Type -> Core.Name -> Syntax.Type -> [Syntax.TypeArgument] -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
 otherwiseBranch env aliases dom cod tname jcod targs d cx g =
 
       let jdom = Syntax.TypeReference (Utils.nameToJavaReferenceType aliases True targs tname Nothing)
@@ -2242,7 +2242,7 @@ otherwiseBranch env aliases dom cod tname jcod targs d cx g =
             in (Right (noComment (Utils.methodDeclaration mods [] anns Names.otherwiseMethodName [
               param] result (Just allStmts))))))))))
 
-visitBranch :: Helpers.JavaEnvironment -> Helpers.Aliases -> Core.Type -> Core.Name -> Syntax.Type -> [Syntax.TypeArgument] -> Core.Field -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassBodyDeclarationWithComments
+visitBranch :: Helpers.JavaEnvironment -> Helpers.Aliases -> Core.Type -> Core.Name -> Syntax.Type -> [Syntax.TypeArgument] -> Core.Field -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassBodyDeclarationWithComments
 visitBranch env aliases dom tname jcod targs field cx g =
 
       let jdom =
@@ -2273,13 +2273,13 @@ visitBranch env aliases dom tname jcod targs field cx g =
                   in (Right (noComment (Utils.methodDeclaration mods [] anns Names.visitMethodName [
                     param] result (Just allStmts)))))))))))
           _ -> Left (Context.InContext {
-            Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "visitBranch: field term is not a lambda: " (Core___.term (Core.fieldTerm field))))),
+            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "visitBranch: field term is not a lambda: " (Core___.term (Core.fieldTerm field))))),
             Context.inContextContext = cx})
         _ -> Left (Context.InContext {
-          Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "visitBranch: field term is not a lambda: " (Core___.term (Core.fieldTerm field))))),
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "visitBranch: field term is not a lambda: " (Core___.term (Core.fieldTerm field))))),
           Context.inContextContext = cx})
 
-encodeElimination :: Helpers.JavaEnvironment -> Maybe Syntax.Expression -> Core.Type -> Core.Type -> Core.Elimination -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression
+encodeElimination :: Helpers.JavaEnvironment -> Maybe Syntax.Expression -> Core.Type -> Core.Type -> Core.Elimination -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeElimination env marg dom cod elm cx g =
 
       let aliases = Helpers.javaEnvironmentAliases env
@@ -2330,10 +2330,10 @@ encodeElimination env marg dom cod elm cx g =
                 wArg = Utils.javaIdentifierToJavaExpression (Utils.variableToJavaIdentifier wVar)
             in (Utils.javaLambda wVar (withArg wArg))) (\jarg -> withArg jarg)))
         _ -> Left (Context.InContext {
-          Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "unexpected " (Strings.cat2 "elimination case" (Strings.cat2 " in " "encodeElimination"))))),
+          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected " (Strings.cat2 "elimination case" (Strings.cat2 " in " "encodeElimination"))))),
           Context.inContextContext = cx})
 
-toDeclInit :: Helpers.Aliases -> Graph.Graph -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Maybe Syntax.BlockStatement)
+toDeclInit :: Helpers.Aliases -> Graph.Graph -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Maybe Syntax.BlockStatement)
 toDeclInit aliasesExt gExt recursiveVars flatBindings name cx g =
     Logic.ifElse (Sets.member name recursiveVars) (
       let binding = Lists.head (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings)
@@ -2364,7 +2364,7 @@ toDeclInit aliasesExt gExt recursiveVars flatBindings name cx g =
                     rt] (Just pkg) "AtomicReference"
           in (Right (Just (Utils.variableDeclarationStatement aliasesExt artype id body))))))))) (Right Nothing)
 
-toDeclStatement :: Helpers.JavaEnvironment -> Helpers.Aliases -> Graph.Graph -> S.Set Core.Name -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.BlockStatement
+toDeclStatement :: Helpers.JavaEnvironment -> Helpers.Aliases -> Graph.Graph -> S.Set Core.Name -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.BlockStatement
 toDeclStatement envExt aliasesExt gExt recursiveVars thunkedVars flatBindings name cx g =
 
       let binding = Lists.head (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings)
@@ -2390,14 +2390,14 @@ toDeclStatement envExt aliasesExt gExt recursiveVars thunkedVars flatBindings na
                         supplierLambda] Nothing
           in (Right (Utils.variableDeclarationStatement aliasesExt lazyType id lazyExpr)))) (Right (Utils.variableDeclarationStatement aliasesExt jtype id rhs))))))))
 
-bindingsToStatements :: Helpers.JavaEnvironment -> [Core.Binding] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) ([Syntax.BlockStatement], Helpers.JavaEnvironment)
+bindingsToStatements :: Helpers.JavaEnvironment -> [Core.Binding] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) ([Syntax.BlockStatement], Helpers.JavaEnvironment)
 bindingsToStatements env bindings cx g0 =
 
       let aliases = Helpers.javaEnvironmentAliases env
           g = Helpers.javaEnvironmentGraph env
           flatBindings = dedupBindings (Helpers.aliasesInScopeJavaVars aliases) (flattenBindings bindings)
           gExtended =
-                  Schemas.extendGraphForLet CoderUtils.bindingMetadata g (Core.Let {
+                  Rewriting.extendGraphForLet CoderUtils.bindingMetadata g (Core.Let {
                     Core.letBindings = flatBindings,
                     Core.letBody = (Core.TermVariable (Core.Name "dummy"))})
           bindingVars = Sets.fromList (Lists.map (\b -> Core.bindingName b) flatBindings)
@@ -2442,7 +2442,7 @@ bindingsToStatements env bindings cx g0 =
                     Helpers.javaEnvironmentGraph = gExtended}
       in (Logic.ifElse (Lists.null bindings) (Right ([], envExtended)) (Eithers.bind (Eithers.mapList (\names -> Eithers.bind (Eithers.mapList (\n -> toDeclInit aliasesExtended gExtended recursiveVars flatBindings n cx g) names) (\inits -> Eithers.bind (Eithers.mapList (\n -> toDeclStatement envExtended aliasesExtended gExtended recursiveVars thunkedVars flatBindings n cx g) names) (\decls -> Right (Lists.concat2 (Maybes.cat inits) decls)))) sorted) (\groups -> Right (Lists.concat groups, envExtended))))
 
-toClassDecl :: Bool -> Bool -> Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassDeclaration
+toClassDecl :: Bool -> Bool -> Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassDeclaration
 toClassDecl isInner isSer aliases tparams elName t cx g =
 
       let wrap =
@@ -2465,7 +2465,7 @@ toClassDecl isInner isSer aliases tparams elName t cx g =
             Core.fieldTypeType = v0}] cx g
         _ -> wrap t
 
-declarationForUnionType :: Bool -> Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassDeclaration
+declarationForUnionType :: Bool -> Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.ClassDeclaration
 declarationForUnionType isSer aliases tparams elName fields cx g =
     Eithers.bind (Eithers.mapList (\ft ->
       let fname = Core.fieldTypeName ft
@@ -2589,7 +2589,7 @@ augmentVariantClass aliases tparams elName cd =
           Syntax.normalClassDeclarationBody = newBody}))
       _ -> cd
 
-encodeTypeDefinition :: Syntax.PackageDeclaration -> Helpers.Aliases -> Module.TypeDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Core.Name, Syntax.CompilationUnit)
+encodeTypeDefinition :: Syntax.PackageDeclaration -> Helpers.Aliases -> Module.TypeDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Core.Name, Syntax.CompilationUnit)
 encodeTypeDefinition pkg aliases tdef cx g =
 
       let name = Module.typeDefinitionName tdef
@@ -2628,13 +2628,13 @@ correctCastType innerBody typeArgs fallback cx g =
         Core.pairTypeSecond = (Lists.head (Lists.tail typeArgs))}))) (Right fallback)
       _ -> Right fallback
 
-typeAppFallbackCast :: Helpers.JavaEnvironment -> Helpers.Aliases -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Syntax.Type -> Core.Term -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression
+typeAppFallbackCast :: Helpers.JavaEnvironment -> Helpers.Aliases -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Syntax.Type -> Core.Term -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 typeAppFallbackCast env aliases anns tyapps jatyp body typ cx g =
 
       let annotatedBody = Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ typ)) body
       in (Eithers.bind (encodeTermInternal env anns (Lists.cons jatyp tyapps) annotatedBody cx g) (\jbody -> Eithers.bind (encodeType aliases Sets.empty typ cx g) (\jtype -> Eithers.bind (Utils.javaTypeToJavaReferenceType jtype cx) (\rt -> Right (Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression rt (Utils.javaExpressionToJavaUnaryExpression jbody)))))))
 
-typeAppNullaryOrHoisted :: Helpers.JavaEnvironment -> Helpers.Aliases -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Syntax.Type -> Core.Term -> Core.Type -> Core.Name -> Helpers.JavaSymbolClass -> [Core.Type] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression
+typeAppNullaryOrHoisted :: Helpers.JavaEnvironment -> Helpers.Aliases -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Syntax.Type -> Core.Term -> Core.Type -> Core.Name -> Helpers.JavaSymbolClass -> [Core.Type] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 typeAppNullaryOrHoisted env aliases anns tyapps jatyp body correctedTyp varName cls allTypeArgs cx g =
 
       let qn = Names_.qualifyName varName
@@ -2735,7 +2735,7 @@ propagateTypesInAppChain fixedCod resultType t =
             Core.applicationArgument = rhs})))
         _ -> Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ resultType)) t))
 
-encodeTermTCO :: Helpers.JavaEnvironment -> Core.Name -> [Core.Name] -> M.Map Core.Name Core.Name -> Int -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) [Syntax.BlockStatement]
+encodeTermTCO :: Helpers.JavaEnvironment -> Core.Name -> [Core.Name] -> M.Map Core.Name Core.Name -> Int -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.BlockStatement]
 encodeTermTCO env0 funcName paramNames tcoVarRenames tcoDepth term cx g =
 
       let aliases0 = Helpers.javaEnvironmentAliases env0
@@ -2846,10 +2846,10 @@ encodeTermTCO env0 funcName paramNames tcoVarRenames tcoDepth term cx g =
                                   Syntax.ifThenStatementExpression = condExpr,
                                   Syntax.ifThenStatementStatement = ifBody})))))))
                             _ -> Left (Context.InContext {
-                              Context.inContextObject = (Error.ErrorOther (Error.OtherError "TCO: case branch is not a lambda")),
+                              Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "TCO: case branch is not a lambda")),
                               Context.inContextContext = cx})
                           _ -> Left (Context.InContext {
-                            Context.inContextObject = (Error.ErrorOther (Error.OtherError "TCO: case branch is not a lambda")),
+                            Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "TCO: case branch is not a lambda")),
                             Context.inContextContext = cx})) cases_) (\ifBlocks -> Eithers.bind (Maybes.cases dflt (Right [
                         Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just jArg))]) (\d -> Eithers.bind (encodeTerm env d cx g) (\dExpr -> Right [
                         Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just dExpr))]))) (\defaultStmt -> Right (Lists.concat [
@@ -2865,7 +2865,7 @@ encodeTermTCO env0 funcName paramNames tcoVarRenames tcoDepth term cx g =
                 Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just expr))])) (Eithers.bind (encodeTerm env term cx g) (\expr -> Right [
             Syntax.BlockStatementStatement (Utils.javaReturnStatement (Just expr))])))))
 
-encodeTermDefinition :: Helpers.JavaEnvironment -> Module.TermDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.InterfaceMemberDeclaration
+encodeTermDefinition :: Helpers.JavaEnvironment -> Module.TermDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.InterfaceMemberDeclaration
 encodeTermDefinition env tdef cx g =
 
       let name = Module.termDefinitionName tdef
@@ -2964,7 +2964,7 @@ encodeTermDefinition env tdef cx g =
                   in (Right (Lists.concat2 bindingStmts [
                     returnSt]))))) (\methodBody -> Right (Utils.interfaceMethodDeclaration mods jparams jname jformalParams result (Just methodBody)))))))))))))))
 
-encodeDefinitions :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (M.Map Core.Name Syntax.CompilationUnit)
+encodeDefinitions :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map Core.Name Syntax.CompilationUnit)
 encodeDefinitions mod defs cx g =
 
       let aliases = Utils.importAliasesForModule mod
@@ -2983,7 +2983,7 @@ encodeDefinitions mod defs cx g =
       in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition pkg aliases td cx g) nonTypedefDefs) (\typeUnits -> Eithers.bind (Logic.ifElse (Lists.null termDefs) (Right []) (Eithers.bind (Eithers.mapList (\td -> encodeTermDefinition env td cx g) termDefs) (\dataMembers -> Right [
         constructElementsInterface mod dataMembers]))) (\termUnits -> Right (Maps.fromList (Lists.concat2 typeUnits termUnits)))))
 
-moduleToJava :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (M.Map String String)
+moduleToJava :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (M.Map String String)
 moduleToJava mod defs cx g =
     Eithers.bind (encodeDefinitions mod defs cx g) (\units -> Right (Maps.fromList (Lists.map (\entry ->
       let name = Pairs.first entry

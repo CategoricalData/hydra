@@ -1238,6 +1238,10 @@ public interface Testing {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("unshadowVariables"), (x).value))));
   }
 
+  static hydra.phantoms.TTerm<hydra.testing.TestCase> testCaseValidateCoreTerm(hydra.phantoms.TTerm<hydra.testing.ValidateCoreTermTestCase> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("validateCoreTerm"), (x).value))));
+  }
+
   static hydra.phantoms.TTerm<hydra.testing.TestCaseWithMetadata> testCaseWithMetadata(hydra.phantoms.TTerm<String> name, hydra.phantoms.TTerm<hydra.testing.TestCase> case_, hydra.phantoms.TTerm<hydra.util.Maybe<String>> description, hydra.phantoms.TTerm<hydra.util.ConsList<hydra.testing.Tag>> tags) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TestCaseWithMetadata"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("name"), (name).value),
@@ -1810,5 +1814,31 @@ public interface Testing {
       new hydra.core.Field(new hydra.core.Name("left"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.testing.JoinTypesTestCase"), new hydra.core.Name("left"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("right"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.testing.JoinTypesTestCase"), new hydra.core.Name("right"))))), (original).value))),
       new hydra.core.Field(new hydra.core.Name("expected"), (newVal).value)))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.testing.ValidateCoreTermTestCase> validateCoreTermTestCase(hydra.phantoms.TTerm<hydra.core.Term> input, hydra.phantoms.TTerm<hydra.util.Maybe<hydra.error.core.InvalidTermError>> output) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), (input).value),
+      new hydra.core.Field(new hydra.core.Name("output"), (output).value)))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.core.Term> validateCoreTermTestCaseInput(hydra.phantoms.TTerm<hydra.testing.ValidateCoreTermTestCase> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), new hydra.core.Name("input"))))), (x).value)));
+  }
+
+  static hydra.phantoms.TTerm<hydra.util.Maybe<hydra.error.core.InvalidTermError>> validateCoreTermTestCaseOutput(hydra.phantoms.TTerm<hydra.testing.ValidateCoreTermTestCase> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), new hydra.core.Name("output"))))), (x).value)));
+  }
+
+  static hydra.phantoms.TTerm<hydra.testing.ValidateCoreTermTestCase> validateCoreTermTestCaseWithInput(hydra.phantoms.TTerm<hydra.testing.ValidateCoreTermTestCase> original, hydra.phantoms.TTerm<hydra.core.Term> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), (newVal).value),
+      new hydra.core.Field(new hydra.core.Name("output"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), new hydra.core.Name("output"))))), (original).value)))))));
+  }
+
+  static hydra.phantoms.TTerm<hydra.testing.ValidateCoreTermTestCase> validateCoreTermTestCaseWithOutput(hydra.phantoms.TTerm<hydra.testing.ValidateCoreTermTestCase> original, hydra.phantoms.TTerm<hydra.util.Maybe<hydra.error.core.InvalidTermError>> newVal) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("input"), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection(new hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), new hydra.core.Name("input"))))), (original).value))),
+      new hydra.core.Field(new hydra.core.Name("output"), (newVal).value)))));
   }
 }

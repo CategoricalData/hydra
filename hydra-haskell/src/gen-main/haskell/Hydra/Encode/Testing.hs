@@ -8,6 +8,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Ast as Ast
 import qualified Hydra.Encode.Coders as Coders
 import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Error.Core as Core__
 import qualified Hydra.Encode.Json.Model as Model
 import qualified Hydra.Encode.Parsing as Parsing
 import qualified Hydra.Encode.Typing as Typing
@@ -617,6 +618,11 @@ testCase x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unshadowVariables"),
           Core.fieldTerm = (unshadowVariablesTestCase v0)}})
+      Testing.TestCaseValidateCoreTerm v0 -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "validateCoreTerm"),
+          Core.fieldTerm = (validateCoreTermTestCase v0)}})
 
 testCaseWithMetadata :: Testing.TestCaseWithMetadata -> Core.Term
 testCaseWithMetadata x =
@@ -848,3 +854,15 @@ joinTypesTestCase x =
         Core.Field {
           Core.fieldName = (Core.Name "expected"),
           Core.fieldTerm = ((\e -> Core.TermEither (Eithers.bimap (\_ -> Core.TermUnit) (\xs -> Core.TermList (Lists.map Typing.typeConstraint xs)) e)) (Testing.joinTypesTestCaseExpected x))}]})
+
+validateCoreTermTestCase :: Testing.ValidateCoreTermTestCase -> Core.Term
+validateCoreTermTestCase x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.ValidateCoreTermTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "input"),
+          Core.fieldTerm = (Core_.term (Testing.validateCoreTermTestCaseInput x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "output"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Core__.invalidTermError opt)) (Testing.validateCoreTermTestCaseOutput x))}]})

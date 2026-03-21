@@ -10,7 +10,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
-import qualified Hydra.Show.Error as Error
+import qualified Hydra.Show.Errors as Errors
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -58,4 +58,4 @@ inferTestCase g tcm =
 -- | Run type inference on a single term
 inferTerm :: Graph.Graph -> Core.Term -> Either String Core.Term
 inferTerm g term =
-    Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term)
+    Eithers.bimap (\ic -> Errors.error (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term)

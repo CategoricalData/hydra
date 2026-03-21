@@ -7,7 +7,7 @@ import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
-import hydra.error.Error_;
+import hydra.errors.Error_;
 import hydra.graph.Graph;
 import hydra.lib.PrimitiveType;
 import hydra.tools.PrimitiveFunction;

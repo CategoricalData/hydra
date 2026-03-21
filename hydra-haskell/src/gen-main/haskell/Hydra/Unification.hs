@@ -7,7 +7,7 @@ module Hydra.Unification where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -27,7 +27,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Join two types, producing a list of type constraints.The comment is used to provide context for the constraints.
-joinTypes :: Context.Context -> Core.Type -> Core.Type -> String -> Either (Context.InContext Error.UnificationError) [Typing.TypeConstraint]
+joinTypes :: Context.Context -> Core.Type -> Core.Type -> String -> Either (Context.InContext Errors.UnificationError) [Typing.TypeConstraint]
 joinTypes cx left right comment =
 
       let sleft = Rewriting.deannotateType left
@@ -39,10 +39,10 @@ joinTypes cx left right comment =
                     Typing.typeConstraintComment = (Strings.cat2 "join types; " comment)}
           cannotUnify =
                   Left (Context.InContext {
-                    Context.inContextObject = Error.UnificationError {
-                      Error.unificationErrorLeftType = sleft,
-                      Error.unificationErrorRightType = sright,
-                      Error.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 "cannot unify " (Core_.type_ sleft)) " with ") (Core_.type_ sright))},
+                    Context.inContextObject = Errors.UnificationError {
+                      Errors.unificationErrorLeftType = sleft,
+                      Errors.unificationErrorRightType = sright,
+                      Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 "cannot unify " (Core_.type_ sleft)) " with ") (Core_.type_ sright))},
                     Context.inContextContext = cx})
           assertEqual = Logic.ifElse (Equality.equal sleft sright) (Right []) cannotUnify
           joinList =
@@ -109,7 +109,7 @@ joinTypes cx left right comment =
 -- |   * Unify(∅) = I (the identity substitution x ↦ x)
 -- |   * Unify({(x, x)} ∪ E) = Unify(E)
 -- |   * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))
-unifyTypeConstraints :: Context.Context -> M.Map Core.Name t0 -> [Typing.TypeConstraint] -> Either (Context.InContext Error.UnificationError) Typing.TypeSubst
+unifyTypeConstraints :: Context.Context -> M.Map Core.Name t0 -> [Typing.TypeConstraint] -> Either (Context.InContext Errors.UnificationError) Typing.TypeSubst
 unifyTypeConstraints cx schemaTypes constraints =
 
       let withConstraint =
@@ -124,10 +124,10 @@ unifyTypeConstraints cx schemaTypes constraints =
                               in (Eithers.map withResult (unifyTypeConstraints cx schemaTypes (Substitution.substituteInConstraints subst rest)))
                     tryBinding =
                             \v -> \t -> Logic.ifElse (variableOccursInType v t) (Left (Context.InContext {
-                              Context.inContextObject = Error.UnificationError {
-                                Error.unificationErrorLeftType = sleft,
-                                Error.unificationErrorRightType = sright,
-                                Error.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Variable " (Core.unName v)) " appears free in type ") (Core_.type_ t)) " (") comment) ")")},
+                              Context.inContextObject = Errors.UnificationError {
+                                Errors.unificationErrorLeftType = sleft,
+                                Errors.unificationErrorRightType = sright,
+                                Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Variable " (Core.unName v)) " appears free in type ") (Core_.type_ t)) " (") comment) ")")},
                               Context.inContextContext = cx})) (bind v t)
                     noVars =
 
@@ -140,16 +140,16 @@ unifyTypeConstraints cx schemaTypes constraints =
                 in case sleft of
                   Core.TypeVariable v0 -> case sright of
                     Core.TypeVariable v1 -> Logic.ifElse (Equality.equal (Core.unName v0) (Core.unName v1)) (unifyTypeConstraints cx schemaTypes rest) (Logic.ifElse (Maybes.isJust (Maps.lookup v0 schemaTypes)) (Logic.ifElse (Maybes.isJust (Maps.lookup v1 schemaTypes)) (Left (Context.InContext {
-                      Context.inContextObject = Error.UnificationError {
-                        Error.unificationErrorLeftType = sleft,
-                        Error.unificationErrorRightType = sright,
-                        Error.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Attempted to unify schema names " (Core.unName v0)) " and ") (Core.unName v1)) " (") comment) ")")},
+                      Context.inContextObject = Errors.UnificationError {
+                        Errors.unificationErrorLeftType = sleft,
+                        Errors.unificationErrorRightType = sright,
+                        Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Attempted to unify schema names " (Core.unName v0)) " and ") (Core.unName v1)) " (") comment) ")")},
                       Context.inContextContext = cx})) (bind v1 sleft)) (bind v0 sright))
                     _ -> tryBinding v0 sright
                   _ -> dflt
       in (Logic.ifElse (Lists.null constraints) (Right Substitution.idTypeSubst) (withConstraint (Lists.head constraints) (Lists.tail constraints)))
 
-unifyTypeLists :: Context.Context -> M.Map Core.Name t0 -> [Core.Type] -> [Core.Type] -> String -> Either (Context.InContext Error.UnificationError) Typing.TypeSubst
+unifyTypeLists :: Context.Context -> M.Map Core.Name t0 -> [Core.Type] -> [Core.Type] -> String -> Either (Context.InContext Errors.UnificationError) Typing.TypeSubst
 unifyTypeLists cx schemaTypes l r comment =
 
       let toConstraint =
@@ -159,7 +159,7 @@ unifyTypeLists cx schemaTypes l r comment =
                 Typing.typeConstraintComment = comment}
       in (unifyTypeConstraints cx schemaTypes (Lists.zipWith toConstraint l r))
 
-unifyTypes :: Context.Context -> M.Map Core.Name t0 -> Core.Type -> Core.Type -> String -> Either (Context.InContext Error.UnificationError) Typing.TypeSubst
+unifyTypes :: Context.Context -> M.Map Core.Name t0 -> Core.Type -> Core.Type -> String -> Either (Context.InContext Errors.UnificationError) Typing.TypeSubst
 unifyTypes cx schemaTypes l r comment =
     unifyTypeConstraints cx schemaTypes [
       Typing.TypeConstraint {

@@ -29,7 +29,7 @@ import hydra.lib.sets
 import hydra.lib.strings
 import hydra.module
 import hydra.serialization
-import hydra.show.error
+import hydra.show.errors
 import hydra.test.utils
 import hydra.testing
 
@@ -136,12 +136,12 @@ python_test_group_template = "# {groupName}"
 def term_to_python_with_context(namespaces_: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName], graph0: hydra.graph.Graph, skip_casts: bool, term: hydra.core.Term, _g: T0) -> Either[str, str]:
     r"""Convert a Hydra term to a Python expression string with a pre-built graph context."""
 
-    return hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda arg_: hydra.serialization.print_expr(hydra.ext.python.serde.encode_expression(arg_))), hydra.ext.python.coder.encode_term_inline(hydra.lexical.empty_context(), hydra.ext.python.helpers.PythonEnvironment(namespaces_, ((), hydra.lib.maps.empty()), graph0, hydra.lib.sets.empty(), hydra.ext.python.utils.target_python_version, skip_casts, hydra.lib.sets.empty()), skip_casts, term))
+    return hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda arg_: hydra.serialization.print_expr(hydra.ext.python.serde.encode_expression(arg_))), hydra.ext.python.coder.encode_term_inline(hydra.lexical.empty_context(), hydra.ext.python.helpers.PythonEnvironment(namespaces_, ((), hydra.lib.maps.empty()), graph0, hydra.lib.sets.empty(), hydra.ext.python.utils.target_python_version, skip_casts, hydra.lib.sets.empty()), skip_casts, term))
 
 def type_to_python(namespaces_: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName], typ: hydra.core.Type, g: hydra.graph.Graph) -> Either[str, str]:
     r"""Convert a Hydra type to a Python type expression string."""
 
-    return hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda arg_: hydra.serialization.print_expr(hydra.ext.python.serde.encode_expression(arg_))), hydra.ext.python.coder.encode_type(hydra.ext.python.helpers.PythonEnvironment(namespaces_, ((), hydra.lib.maps.empty()), g, hydra.lib.sets.empty(), hydra.ext.python.utils.target_python_version, False, hydra.lib.sets.empty()), typ))
+    return hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda arg_: hydra.serialization.print_expr(hydra.ext.python.serde.encode_expression(arg_))), hydra.ext.python.coder.encode_type(hydra.ext.python.helpers.PythonEnvironment(namespaces_, ((), hydra.lib.maps.empty()), g, hydra.lib.sets.empty(), hydra.ext.python.utils.target_python_version, False, hydra.lib.sets.empty()), typ))
 
 def python_test_codec_with_context(namespaces_: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName], tcontext: hydra.graph.Graph) -> hydra.testing.TestCodec:
     r"""Create an efficient Python TestCodec with a pre-built Graph, skipping casts for performance."""

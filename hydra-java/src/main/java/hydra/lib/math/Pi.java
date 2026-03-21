@@ -14,7 +14,7 @@ import static hydra.dsl.Types.float64;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.Error_;
+import hydra.errors.Error_;
 import hydra.util.Either;
 
 

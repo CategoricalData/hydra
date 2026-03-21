@@ -6,7 +6,7 @@ module Hydra.Dsl.Graph where
 
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -574,7 +574,7 @@ graphWithTypeVariables original newVal =
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-primitive :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Error.Error) Core.Term) -> Phantoms.TTerm Graph.Primitive
+primitive :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Errors.Error) Core.Term) -> Phantoms.TTerm Graph.Primitive
 primitive name type_ implementation =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
@@ -605,7 +605,7 @@ primitiveType x =
         Core.projectionField = (Core.Name "type")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-primitiveImplementation :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Error.Error) Core.Term)
+primitiveImplementation :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Errors.Error) Core.Term)
 primitiveImplementation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -659,7 +659,7 @@ primitiveWithType original newVal =
               Core.projectionField = (Core.Name "implementation")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-primitiveWithImplementation :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Error.Error) Core.Term) -> Phantoms.TTerm Graph.Primitive
+primitiveWithImplementation :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Errors.Error) Core.Term) -> Phantoms.TTerm Graph.Primitive
 primitiveWithImplementation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
@@ -682,7 +682,7 @@ primitiveWithImplementation original newVal =
           Core.fieldName = (Core.Name "implementation"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-termCoder :: Phantoms.TTerm Core.Type -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Error.Error) Core.Term) -> Phantoms.TTerm (Graph.TermCoder a)
+termCoder :: Phantoms.TTerm Core.Type -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Errors.Error) Core.Term) -> Phantoms.TTerm (Graph.TermCoder a)
 termCoder type_ encode decode =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.TermCoder"),
@@ -705,7 +705,7 @@ termCoderType x =
         Core.projectionField = (Core.Name "type")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-termCoderEncode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) a)
+termCoderEncode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) a)
 termCoderEncode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -713,7 +713,7 @@ termCoderEncode x =
         Core.projectionField = (Core.Name "encode")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-termCoderDecode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Error.Error) Core.Term)
+termCoderDecode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Errors.Error) Core.Term)
 termCoderDecode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -744,7 +744,7 @@ termCoderWithType original newVal =
               Core.projectionField = (Core.Name "decode")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-termCoderWithEncode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) a) -> Phantoms.TTerm (Graph.TermCoder a)
+termCoderWithEncode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Errors.Error) a) -> Phantoms.TTerm (Graph.TermCoder a)
 termCoderWithEncode original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.TermCoder"),
@@ -767,7 +767,7 @@ termCoderWithEncode original newVal =
               Core.projectionField = (Core.Name "decode")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-termCoderWithDecode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Error.Error) Core.Term) -> Phantoms.TTerm (Graph.TermCoder a)
+termCoderWithDecode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Errors.Error) Core.Term) -> Phantoms.TTerm (Graph.TermCoder a)
 termCoderWithDecode original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.TermCoder"),

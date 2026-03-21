@@ -319,7 +319,7 @@
                                                                 "type": {"literal": {"string": {}}}}}}}}},
                                                     "type": {
                                                       "application": {
-                                                        "argument": {"variable": "hydra.error.Error"},
+                                                        "argument": {"variable": "hydra.errors.Error"},
                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                 "type": {
                                                   "map": {
@@ -364,7 +364,7 @@
                                                           "type": {"variable": "hydra.ext.org.graphql.syntax.TypeDefinition"}}},
                                                       "type": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.error.Error"},
+                                                          "argument": {"variable": "hydra.errors.Error"},
                                                           "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                           "function": {
                                             "typeApplication": {
@@ -375,7 +375,7 @@
                                                       "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                       "type": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.error.Error"},
+                                                          "argument": {"variable": "hydra.errors.Error"},
                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                   "type": {"list": {"variable": "hydra.ext.org.graphql.syntax.TypeDefinition"}}}},
                                               "type": {
@@ -405,7 +405,7 @@
                             "either": {
                               "left": {
                                 "application": {
-                                  "argument": {"variable": "hydra.error.Error"},
+                                  "argument": {"variable": "hydra.errors.Error"},
                                   "function": {"variable": "hydra.context.InContext"}}},
                               "right": {
                                 "map": {
@@ -485,7 +485,7 @@
                             "either": {
                               "left": {
                                 "application": {
-                                  "argument": {"variable": "hydra.error.Error"},
+                                  "argument": {"variable": "hydra.errors.Error"},
                                   "function": {"variable": "hydra.context.InContext"}}},
                               "right": {"variable": "hydra.ext.org.graphql.syntax.TypeDefinition"}}},
                           "domain": {"variable": "hydra.module.TypeDefinition"}}},
@@ -561,7 +561,7 @@
                                         "type": {"maybe": {"variable": "hydra.ext.org.graphql.syntax.Description"}}}},
                                     "type": {
                                       "application": {
-                                        "argument": {"variable": "hydra.error.Error"},
+                                        "argument": {"variable": "hydra.errors.Error"},
                                         "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                         "domain": [{"variable": "hydra.core.Type"}],
                         "parameter": "typ"}}},
@@ -582,7 +582,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.Error"},
+                              "argument": {"variable": "hydra.errors.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"maybe": {"variable": "hydra.ext.org.graphql.syntax.Description"}}}},
                       "domain": {"variable": "hydra.core.Type"}}},
@@ -635,7 +635,7 @@
                                                   "typeName": "hydra.ext.org.graphql.syntax.EnumValueDefinition"}}}},
                                           "type": {
                                             "application": {
-                                              "argument": {"variable": "hydra.error.Error"},
+                                              "argument": {"variable": "hydra.errors.Error"},
                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                       "type": {"variable": "hydra.ext.org.graphql.syntax.EnumValueDefinition"}}},
                                   "domain": [{"maybe": {"variable": "hydra.ext.org.graphql.syntax.Description"}}],
@@ -666,7 +666,7 @@
                                             "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                             "type": {
                                               "application": {
-                                                "argument": {"variable": "hydra.error.Error"},
+                                                "argument": {"variable": "hydra.errors.Error"},
                                                 "function": {"variable": "hydra.context.InContext"}}}}},
                                         "type": {"maybe": {"variable": "hydra.ext.org.graphql.syntax.Description"}}}},
                                     "type": {"variable": "hydra.ext.org.graphql.syntax.EnumValueDefinition"}}}}}}},
@@ -689,7 +689,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.Error"},
+                              "argument": {"variable": "hydra.errors.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"variable": "hydra.ext.org.graphql.syntax.EnumValueDefinition"}}},
                       "domain": {"variable": "hydra.core.FieldType"}}},
@@ -810,7 +810,7 @@
                                                                   "typeName": "hydra.ext.org.graphql.syntax.FieldDefinition"}}}},
                                                           "type": {
                                                             "application": {
-                                                              "argument": {"variable": "hydra.error.Error"},
+                                                              "argument": {"variable": "hydra.errors.Error"},
                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                       "type": {"variable": "hydra.ext.org.graphql.syntax.FieldDefinition"}}},
                                                   "domain": [{"maybe": {"variable": "hydra.ext.org.graphql.syntax.Description"}}],
@@ -841,7 +841,7 @@
                                                             "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                             "type": {
                                                               "application": {
-                                                                "argument": {"variable": "hydra.error.Error"},
+                                                                "argument": {"variable": "hydra.errors.Error"},
                                                                 "function": {"variable": "hydra.context.InContext"}}}}},
                                                         "type": {"maybe": {"variable": "hydra.ext.org.graphql.syntax.Description"}}}},
                                                     "type": {"variable": "hydra.ext.org.graphql.syntax.FieldDefinition"}}}}}}},
@@ -879,7 +879,7 @@
                                                   "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                   "type": {
                                                     "application": {
-                                                      "argument": {"variable": "hydra.error.Error"},
+                                                      "argument": {"variable": "hydra.errors.Error"},
                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                               "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                           "type": {"variable": "hydra.ext.org.graphql.syntax.FieldDefinition"}}}}}}},
@@ -910,7 +910,7 @@
                             "either": {
                               "left": {
                                 "application": {
-                                  "argument": {"variable": "hydra.error.Error"},
+                                  "argument": {"variable": "hydra.errors.Error"},
                                   "function": {"variable": "hydra.context.InContext"}}},
                               "right": {"variable": "hydra.ext.org.graphql.syntax.FieldDefinition"}}},
                           "domain": {"variable": "hydra.core.FieldType"}}},
@@ -957,7 +957,7 @@
                                                         "typeName": "hydra.ext.org.graphql.syntax.NamedType"}}}},
                                                 "type": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.error.Error"},
+                                                    "argument": {"variable": "hydra.errors.Error"},
                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                             "type": {"variable": "hydra.ext.org.graphql.syntax.NamedType"}}},
                                         "domain": [{"unit": {}}],
@@ -995,7 +995,7 @@
                                                                               "typeName": "hydra.ext.org.graphql.syntax.NamedType"}}}},
                                                                       "type": {
                                                                         "application": {
-                                                                          "argument": {"variable": "hydra.error.Error"},
+                                                                          "argument": {"variable": "hydra.errors.Error"},
                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                   "type": {"variable": "hydra.ext.org.graphql.syntax.NamedType"}}},
                                                               "domain": [{"unit": {}}],
@@ -1030,14 +1030,14 @@
                                                                                               "application": {
                                                                                                 "argument": {"literal": {"string": "Expected 64-bit float type, found: "}},
                                                                                                 "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                                        "typeName": "hydra.error.OtherError"}}},
-                                                                                  "typeName": "hydra.error.Error"}}},
+                                                                                        "typeName": "hydra.errors.OtherError"}}},
+                                                                                  "typeName": "hydra.errors.Error"}}},
                                                                             {"name": "context", "term": {"variable": "cx"}}],
                                                                           "typeName": "hydra.context.InContext"}},
-                                                                      "type": {"variable": "hydra.error.Error"}}}}},
+                                                                      "type": {"variable": "hydra.errors.Error"}}}}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                  "argument": {"variable": "hydra.errors.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.org.graphql.syntax.NamedType"}}}],
                                                     "typeName": "hydra.core.FloatType"}}}}}},
@@ -1076,7 +1076,7 @@
                                                                               "typeName": "hydra.ext.org.graphql.syntax.NamedType"}}}},
                                                                       "type": {
                                                                         "application": {
-                                                                          "argument": {"variable": "hydra.error.Error"},
+                                                                          "argument": {"variable": "hydra.errors.Error"},
                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                   "type": {"variable": "hydra.ext.org.graphql.syntax.NamedType"}}},
                                                               "domain": [{"unit": {}}],
@@ -1112,14 +1112,14 @@
                                                                                                 "argument": {
                                                                                                   "literal": {"string": "Expected 32-bit signed integer type, found: "}},
                                                                                                 "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                                        "typeName": "hydra.error.OtherError"}}},
-                                                                                  "typeName": "hydra.error.Error"}}},
+                                                                                        "typeName": "hydra.errors.OtherError"}}},
+                                                                                  "typeName": "hydra.errors.Error"}}},
                                                                             {"name": "context", "term": {"variable": "cx"}}],
                                                                           "typeName": "hydra.context.InContext"}},
-                                                                      "type": {"variable": "hydra.error.Error"}}}}},
+                                                                      "type": {"variable": "hydra.errors.Error"}}}}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                  "argument": {"variable": "hydra.errors.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.org.graphql.syntax.NamedType"}}}],
                                                     "typeName": "hydra.core.IntegerType"}}}}}},
@@ -1145,7 +1145,7 @@
                                                         "typeName": "hydra.ext.org.graphql.syntax.NamedType"}}}},
                                                 "type": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.error.Error"},
+                                                    "argument": {"variable": "hydra.errors.Error"},
                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                             "type": {"variable": "hydra.ext.org.graphql.syntax.NamedType"}}},
                                         "domain": [{"unit": {}}],
@@ -1181,14 +1181,14 @@
                                                                           "argument": {
                                                                             "literal": {"string": "Expected GraphQL-compatible literal type, found: "}},
                                                                           "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                  "typeName": "hydra.error.OtherError"}}},
-                                                            "typeName": "hydra.error.Error"}}},
+                                                                  "typeName": "hydra.errors.OtherError"}}},
+                                                            "typeName": "hydra.errors.Error"}}},
                                                       {"name": "context", "term": {"variable": "cx"}}],
                                                     "typeName": "hydra.context.InContext"}},
-                                                "type": {"variable": "hydra.error.Error"}}}}},
+                                                "type": {"variable": "hydra.errors.Error"}}}}},
                                         "type": {
                                           "application": {
-                                            "argument": {"variable": "hydra.error.Error"},
+                                            "argument": {"variable": "hydra.errors.Error"},
                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                     "type": {"variable": "hydra.ext.org.graphql.syntax.NamedType"}}}],
                               "typeName": "hydra.core.LiteralType"}}}}}},
@@ -1207,7 +1207,7 @@
                     "either": {
                       "left": {
                         "application": {
-                          "argument": {"variable": "hydra.error.Error"},
+                          "argument": {"variable": "hydra.errors.Error"},
                           "function": {"variable": "hydra.context.InContext"}}},
                       "right": {"variable": "hydra.ext.org.graphql.syntax.NamedType"}}},
                   "domain": {"variable": "hydra.core.LiteralType"}}},
@@ -1303,7 +1303,7 @@
                                                                                               "typeName": "hydra.ext.org.graphql.syntax.TypeDefinition"}}}},
                                                                                       "type": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "hydra.error.Error"},
+                                                                                          "argument": {"variable": "hydra.errors.Error"},
                                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                   "type": {"variable": "hydra.ext.org.graphql.syntax.TypeDefinition"}}},
                                                                               "domain": [{"maybe": {"variable": "hydra.ext.org.graphql.syntax.Description"}}],
@@ -1329,7 +1329,7 @@
                                                                                         "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                         "type": {
                                                                                           "application": {
-                                                                                            "argument": {"variable": "hydra.error.Error"},
+                                                                                            "argument": {"variable": "hydra.errors.Error"},
                                                                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                     "type": {"maybe": {"variable": "hydra.ext.org.graphql.syntax.Description"}}}},
                                                                                 "type": {"variable": "hydra.ext.org.graphql.syntax.TypeDefinition"}}}}}}},
@@ -1372,7 +1372,7 @@
                                                                                   "type": {"variable": "hydra.ext.org.graphql.syntax.FieldDefinition"}}},
                                                                               "type": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                                  "argument": {"variable": "hydra.errors.Error"},
                                                                                   "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -1383,7 +1383,7 @@
                                                                               "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                               "type": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                                  "argument": {"variable": "hydra.errors.Error"},
                                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                                           "type": {"list": {"variable": "hydra.ext.org.graphql.syntax.FieldDefinition"}}}},
                                                                       "type": {"variable": "hydra.ext.org.graphql.syntax.TypeDefinition"}}}}}}},
@@ -1445,7 +1445,7 @@
                                                                                               "typeName": "hydra.ext.org.graphql.syntax.TypeDefinition"}}}},
                                                                                       "type": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "hydra.error.Error"},
+                                                                                          "argument": {"variable": "hydra.errors.Error"},
                                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                   "type": {"variable": "hydra.ext.org.graphql.syntax.TypeDefinition"}}},
                                                                               "domain": [{"maybe": {"variable": "hydra.ext.org.graphql.syntax.Description"}}],
@@ -1471,7 +1471,7 @@
                                                                                         "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                         "type": {
                                                                                           "application": {
-                                                                                            "argument": {"variable": "hydra.error.Error"},
+                                                                                            "argument": {"variable": "hydra.errors.Error"},
                                                                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                     "type": {"maybe": {"variable": "hydra.ext.org.graphql.syntax.Description"}}}},
                                                                                 "type": {"variable": "hydra.ext.org.graphql.syntax.TypeDefinition"}}}}}}},
@@ -1512,7 +1512,7 @@
                                                                                   "type": {"variable": "hydra.ext.org.graphql.syntax.EnumValueDefinition"}}},
                                                                               "type": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                                  "argument": {"variable": "hydra.errors.Error"},
                                                                                   "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -1523,7 +1523,7 @@
                                                                               "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                               "type": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                                  "argument": {"variable": "hydra.errors.Error"},
                                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                                           "type": {
                                                                             "list": {"variable": "hydra.ext.org.graphql.syntax.EnumValueDefinition"}}}},
@@ -1972,14 +1972,14 @@
                                                                                           "application": {
                                                                                             "argument": {"literal": {"string": "Expected record or union type, found: "}},
                                                                                             "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                                    "typeName": "hydra.error.OtherError"}}},
-                                                                              "typeName": "hydra.error.Error"}}},
+                                                                                    "typeName": "hydra.errors.OtherError"}}},
+                                                                              "typeName": "hydra.errors.Error"}}},
                                                                         {"name": "context", "term": {"variable": "cx"}}],
                                                                       "typeName": "hydra.context.InContext"}},
-                                                                  "type": {"variable": "hydra.error.Error"}}}}},
+                                                                  "type": {"variable": "hydra.errors.Error"}}}}},
                                                           "type": {
                                                             "application": {
-                                                              "argument": {"variable": "hydra.error.Error"},
+                                                              "argument": {"variable": "hydra.errors.Error"},
                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                       "type": {"variable": "hydra.ext.org.graphql.syntax.TypeDefinition"}}}],
                                                 "typeName": "hydra.core.Type"}}}}}},
@@ -2014,7 +2014,7 @@
                                 "either": {
                                   "left": {
                                     "application": {
-                                      "argument": {"variable": "hydra.error.Error"},
+                                      "argument": {"variable": "hydra.errors.Error"},
                                       "function": {"variable": "hydra.context.InContext"}}},
                                   "right": {"variable": "hydra.ext.org.graphql.syntax.TypeDefinition"}}},
                               "domain": {"variable": "hydra.core.Type"}}},
@@ -2119,7 +2119,7 @@
                                                                                               "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                                                           "type": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                                              "argument": {"variable": "hydra.errors.Error"},
                                                                                               "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                                               "domain": [{"variable": "hydra.core.Type"}],
                                                                               "parameter": "et2"}}}},
@@ -2173,7 +2173,7 @@
                                                                                               "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                                                           "type": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                                              "argument": {"variable": "hydra.errors.Error"},
                                                                                               "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                                               "domain": [{"variable": "hydra.core.Type"}],
                                                                               "parameter": "st"}}}},
@@ -2232,7 +2232,7 @@
                                                                                               "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                                                           "type": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                                              "argument": {"variable": "hydra.errors.Error"},
                                                                                               "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                                               "domain": [{"variable": "hydra.core.MapType"}],
                                                                               "parameter": "mt"}}}},
@@ -2272,7 +2272,7 @@
                                                                                               "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                                                           "type": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                                              "argument": {"variable": "hydra.errors.Error"},
                                                                                               "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                                               "domain": [{"variable": "hydra.core.LiteralType"}],
                                                                               "parameter": "lt_"}}}},
@@ -2301,14 +2301,14 @@
                                                                                                             "term": {
                                                                                                               "wrap": {
                                                                                                                 "body": {"literal": {"string": "unexpected anonymous record type"}},
-                                                                                                                "typeName": "hydra.error.OtherError"}}},
-                                                                                                          "typeName": "hydra.error.Error"}}},
+                                                                                                                "typeName": "hydra.errors.OtherError"}}},
+                                                                                                          "typeName": "hydra.errors.Error"}}},
                                                                                                     {"name": "context", "term": {"variable": "cx"}}],
                                                                                                   "typeName": "hydra.context.InContext"}},
-                                                                                              "type": {"variable": "hydra.error.Error"}}}}},
+                                                                                              "type": {"variable": "hydra.errors.Error"}}}}},
                                                                                       "type": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "hydra.error.Error"},
+                                                                                          "argument": {"variable": "hydra.errors.Error"},
                                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                   "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                                               "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
@@ -2338,14 +2338,14 @@
                                                                                                             "term": {
                                                                                                               "wrap": {
                                                                                                                 "body": {"literal": {"string": "unexpected anonymous union type"}},
-                                                                                                                "typeName": "hydra.error.OtherError"}}},
-                                                                                                          "typeName": "hydra.error.Error"}}},
+                                                                                                                "typeName": "hydra.errors.OtherError"}}},
+                                                                                                          "typeName": "hydra.errors.Error"}}},
                                                                                                     {"name": "context", "term": {"variable": "cx"}}],
                                                                                                   "typeName": "hydra.context.InContext"}},
-                                                                                              "type": {"variable": "hydra.error.Error"}}}}},
+                                                                                              "type": {"variable": "hydra.errors.Error"}}}}},
                                                                                       "type": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "hydra.error.Error"},
+                                                                                          "argument": {"variable": "hydra.errors.Error"},
                                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                   "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                                               "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
@@ -2375,14 +2375,14 @@
                                                                                                             "term": {
                                                                                                               "wrap": {
                                                                                                                 "body": {"literal": {"string": "unexpected anonymous wrap type"}},
-                                                                                                                "typeName": "hydra.error.OtherError"}}},
-                                                                                                          "typeName": "hydra.error.Error"}}},
+                                                                                                                "typeName": "hydra.errors.OtherError"}}},
+                                                                                                          "typeName": "hydra.errors.Error"}}},
                                                                                                     {"name": "context", "term": {"variable": "cx"}}],
                                                                                                   "typeName": "hydra.context.InContext"}},
-                                                                                              "type": {"variable": "hydra.error.Error"}}}}},
+                                                                                              "type": {"variable": "hydra.errors.Error"}}}}},
                                                                                       "type": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "hydra.error.Error"},
+                                                                                          "argument": {"variable": "hydra.errors.Error"},
                                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                   "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                                               "domain": [{"variable": "hydra.core.Type"}],
@@ -2415,7 +2415,7 @@
                                                                                               "typeName": "hydra.ext.org.graphql.syntax.Type"}}}},
                                                                                       "type": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "hydra.error.Error"},
+                                                                                          "argument": {"variable": "hydra.errors.Error"},
                                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                   "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                                               "domain": [{"variable": "hydra.core.Name"}],
@@ -2450,14 +2450,14 @@
                                                                                                               "application": {
                                                                                                                 "argument": {"literal": {"string": "Expected GraphQL-compatible type, found: "}},
                                                                                                                 "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                                                        "typeName": "hydra.error.OtherError"}}},
-                                                                                                  "typeName": "hydra.error.Error"}}},
+                                                                                                        "typeName": "hydra.errors.OtherError"}}},
+                                                                                                  "typeName": "hydra.errors.Error"}}},
                                                                                             {"name": "context", "term": {"variable": "cx"}}],
                                                                                           "typeName": "hydra.context.InContext"}},
-                                                                                      "type": {"variable": "hydra.error.Error"}}}}},
+                                                                                      "type": {"variable": "hydra.errors.Error"}}}}},
                                                                               "type": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                                  "argument": {"variable": "hydra.errors.Error"},
                                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                                           "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}}],
                                                                     "typeName": "hydra.core.Type"}}}}}},
@@ -2518,7 +2518,7 @@
                                                                         "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                                     "type": {
                                                                       "application": {
-                                                                        "argument": {"variable": "hydra.error.Error"},
+                                                                        "argument": {"variable": "hydra.errors.Error"},
                                                                         "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Type"}],
                                                         "parameter": "et"}}}},
@@ -2577,7 +2577,7 @@
                                                                         "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                                     "type": {
                                                                       "application": {
-                                                                        "argument": {"variable": "hydra.error.Error"},
+                                                                        "argument": {"variable": "hydra.errors.Error"},
                                                                         "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Type"}],
                                                         "parameter": "st"}}}},
@@ -2641,7 +2641,7 @@
                                                                         "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                                     "type": {
                                                                       "application": {
-                                                                        "argument": {"variable": "hydra.error.Error"},
+                                                                        "argument": {"variable": "hydra.errors.Error"},
                                                                         "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.MapType"}],
                                                         "parameter": "mt"}}}},
@@ -2686,7 +2686,7 @@
                                                                         "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                                     "type": {
                                                                       "application": {
-                                                                        "argument": {"variable": "hydra.error.Error"},
+                                                                        "argument": {"variable": "hydra.errors.Error"},
                                                                         "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.LiteralType"}],
                                                         "parameter": "lt_"}}}},
@@ -2715,14 +2715,14 @@
                                                                                       "term": {
                                                                                         "wrap": {
                                                                                           "body": {"literal": {"string": "unexpected anonymous record type"}},
-                                                                                          "typeName": "hydra.error.OtherError"}}},
-                                                                                    "typeName": "hydra.error.Error"}}},
+                                                                                          "typeName": "hydra.errors.OtherError"}}},
+                                                                                    "typeName": "hydra.errors.Error"}}},
                                                                               {"name": "context", "term": {"variable": "cx"}}],
                                                                             "typeName": "hydra.context.InContext"}},
-                                                                        "type": {"variable": "hydra.error.Error"}}}}},
+                                                                        "type": {"variable": "hydra.errors.Error"}}}}},
                                                                 "type": {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.error.Error"},
+                                                                    "argument": {"variable": "hydra.errors.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                             "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                         "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
@@ -2752,14 +2752,14 @@
                                                                                       "term": {
                                                                                         "wrap": {
                                                                                           "body": {"literal": {"string": "unexpected anonymous union type"}},
-                                                                                          "typeName": "hydra.error.OtherError"}}},
-                                                                                    "typeName": "hydra.error.Error"}}},
+                                                                                          "typeName": "hydra.errors.OtherError"}}},
+                                                                                    "typeName": "hydra.errors.Error"}}},
                                                                               {"name": "context", "term": {"variable": "cx"}}],
                                                                             "typeName": "hydra.context.InContext"}},
-                                                                        "type": {"variable": "hydra.error.Error"}}}}},
+                                                                        "type": {"variable": "hydra.errors.Error"}}}}},
                                                                 "type": {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.error.Error"},
+                                                                    "argument": {"variable": "hydra.errors.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                             "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                         "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
@@ -2797,7 +2797,7 @@
                                                                         "typeName": "hydra.ext.org.graphql.syntax.Type"}}}},
                                                                 "type": {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.error.Error"},
+                                                                    "argument": {"variable": "hydra.errors.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                             "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                         "domain": [{"variable": "hydra.core.Name"}],
@@ -2827,14 +2827,14 @@
                                                                                       "term": {
                                                                                         "wrap": {
                                                                                           "body": {"literal": {"string": "unexpected anonymous wrap type"}},
-                                                                                          "typeName": "hydra.error.OtherError"}}},
-                                                                                    "typeName": "hydra.error.Error"}}},
+                                                                                          "typeName": "hydra.errors.OtherError"}}},
+                                                                                    "typeName": "hydra.errors.Error"}}},
                                                                               {"name": "context", "term": {"variable": "cx"}}],
                                                                             "typeName": "hydra.context.InContext"}},
-                                                                        "type": {"variable": "hydra.error.Error"}}}}},
+                                                                        "type": {"variable": "hydra.errors.Error"}}}}},
                                                                 "type": {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.error.Error"},
+                                                                    "argument": {"variable": "hydra.errors.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                             "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                                                         "domain": [{"variable": "hydra.core.Type"}],
@@ -2869,14 +2869,14 @@
                                                                                         "application": {
                                                                                           "argument": {"literal": {"string": "Expected GraphQL-compatible type, found: "}},
                                                                                           "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                                  "typeName": "hydra.error.OtherError"}}},
-                                                                            "typeName": "hydra.error.Error"}}},
+                                                                                  "typeName": "hydra.errors.OtherError"}}},
+                                                                            "typeName": "hydra.errors.Error"}}},
                                                                       {"name": "context", "term": {"variable": "cx"}}],
                                                                     "typeName": "hydra.context.InContext"}},
-                                                                "type": {"variable": "hydra.error.Error"}}}}},
+                                                                "type": {"variable": "hydra.errors.Error"}}}}},
                                                         "type": {
                                                           "application": {
-                                                            "argument": {"variable": "hydra.error.Error"},
+                                                            "argument": {"variable": "hydra.errors.Error"},
                                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                                     "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}}],
                                               "typeName": "hydra.core.Type"}}}}}},
@@ -2908,7 +2908,7 @@
                             "either": {
                               "left": {
                                 "application": {
-                                  "argument": {"variable": "hydra.error.Error"},
+                                  "argument": {"variable": "hydra.errors.Error"},
                                   "function": {"variable": "hydra.context.InContext"}}},
                               "right": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
                           "domain": {"variable": "hydra.core.Type"}}},
@@ -3104,7 +3104,10 @@
     "hydra.coders",
     "hydra.context",
     "hydra.core",
-    "hydra.error",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.module",
+    "hydra.errors",
     "hydra.grammar",
     "hydra.graph",
     "hydra.json.model",

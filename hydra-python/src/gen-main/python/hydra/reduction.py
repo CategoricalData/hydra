@@ -12,7 +12,7 @@ import hydra.checking
 import hydra.context
 import hydra.core
 import hydra.encode.core
-import hydra.error
+import hydra.errors
 import hydra.extract.core
 import hydra.graph
 import hydra.lexical
@@ -29,7 +29,7 @@ import hydra.lib.sets
 import hydra.lib.strings
 import hydra.rewriting
 import hydra.schemas
-import hydra.show.error
+import hydra.show.errors
 
 T0 = TypeVar("T0")
 
@@ -38,10 +38,10 @@ def alpha_convert(vold: hydra.core.Name, vnew: hydra.core.Name, term: hydra.core
 
     return hydra.rewriting.replace_free_term_variable(vold, cast(hydra.core.Term, hydra.core.TermVariable(vnew)), term)
 
-def beta_reduce_type(cx: hydra.context.Context, graph: hydra.graph.Graph, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]:
+def beta_reduce_type(cx: hydra.context.Context, graph: hydra.graph.Graph, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type]:
     r"""Eagerly beta-reduce a type by substituting type arguments into type lambdas."""
 
-    def reduce_app(app: hydra.core.ApplicationType) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]:
+    def reduce_app(app: hydra.core.ApplicationType) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type]:
         lhs = app.function
         rhs = app.argument
         match lhs:
@@ -56,7 +56,7 @@ def beta_reduce_type(cx: hydra.context.Context, graph: hydra.graph.Graph, typ: h
 
             case _:
                 raise TypeError("Unsupported Type")
-    def map_expr(recurse: Callable[[T0], Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]], t: T0) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]:
+    def map_expr(recurse: Callable[[T0], Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type]], t: T0) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type]:
         def find_app(r: hydra.core.Type):
             def _hoist_find_app_1(r, v1):
                 match v1:
@@ -209,10 +209,10 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                 return _hoist_term_arity_with_context_1(f)
 
             case hydra.core.TermLet(value=l):
-                return term_arity_with_context(hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), tx, l), l.body)
+                return term_arity_with_context(hydra.rewriting.extend_graph_for_let((lambda _, _2: Nothing()), tx, l), l.body)
 
             case hydra.core.TermTypeLambda(value=tl):
-                return term_arity_with_context(hydra.schemas.extend_graph_for_type_lambda(tx, tl), tl.body)
+                return term_arity_with_context(hydra.rewriting.extend_graph_for_type_lambda(tx, tl), tl.body)
 
             case hydra.core.TermTypeApplication(value=tat):
                 return term_arity_with_context(tx, tat.body)
@@ -295,10 +295,10 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                     return _hoist_term_head_type_1(f2)
 
                 case hydra.core.TermLet(value=l2):
-                    return term_head_type(hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), tx2, l2), l2.body)
+                    return term_head_type(hydra.rewriting.extend_graph_for_let((lambda _, _2: Nothing()), tx2, l2), l2.body)
 
                 case hydra.core.TermTypeLambda(value=tl2):
-                    return term_head_type(hydra.schemas.extend_graph_for_type_lambda(tx2, tl2), tl2.body)
+                    return term_head_type(hydra.rewriting.extend_graph_for_type_lambda(tx2, tl2), tl2.body)
 
                 case hydra.core.TermTypeApplication(value=tat2):
                     return hydra.lib.maybes.bind(term_head_type(tx2, tat2.body), (lambda htyp2: _hoist_term_head_type_2(htyp2, tat2, htyp2)))
@@ -383,7 +383,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                 case hydra.core.FunctionLambda(value=lm):
                     @lru_cache(1)
                     def tx1() -> hydra.graph.Graph:
-                        return hydra.schemas.extend_graph_for_lambda(tx, lm)
+                        return hydra.rewriting.extend_graph_for_lambda(tx, lm)
                     @lru_cache(1)
                     def body() -> hydra.core.Term:
                         return rewrite_with_args((), tx1(), lm.body)
@@ -425,7 +425,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
             case hydra.core.TermLet(value=lt):
                 @lru_cache(1)
                 def tx1() -> hydra.graph.Graph:
-                    return hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), tx, lt)
+                    return hydra.rewriting.extend_graph_for_let((lambda _, _2: Nothing()), tx, lt)
                 def map_binding(b: hydra.core.Binding) -> hydra.core.Binding:
                     return hydra.core.Binding(b.name, rewrite_with_args((), tx1(), b.term), b.type)
                 @lru_cache(1)
@@ -460,7 +460,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
             case hydra.core.TermTypeLambda(value=tl):
                 @lru_cache(1)
                 def tx1() -> hydra.graph.Graph:
-                    return hydra.schemas.extend_graph_for_type_lambda(tx, tl)
+                    return hydra.rewriting.extend_graph_for_type_lambda(tx, tl)
                 @lru_cache(1)
                 def result() -> hydra.core.Term:
                     return cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(tl.parameter, rewrite_with_args((), tx1(), tl.body))))
@@ -488,11 +488,11 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                 raise AssertionError("Unreachable: all variants handled")
     return contract_term(rewrite_with_args((), tx0, term0))
 
-def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, term0: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, term0: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added."""
 
-    def rewrite(top_level: bool, forced: bool, type_args: frozenlist[hydra.core.Type], recurse: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]], tx: hydra.graph.Graph, term: hydra.core.Term):
-        def rewrite_spine(term2: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+    def rewrite(top_level: bool, forced: bool, type_args: frozenlist[hydra.core.Type], recurse: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]], tx: hydra.graph.Graph, term: hydra.core.Term):
+        def rewrite_spine(term2: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
             match term2:
                 case hydra.core.TermAnnotated(value=at):
                     return hydra.lib.eithers.bind(rewrite_spine(at.body), (lambda body: (ann := at.annotation, Right(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(body, ann)))))[1]))
@@ -508,12 +508,12 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
 
                 case _:
                     return rewrite(False, False, (), recurse, tx, term2)
-        def arity_of(tx2: hydra.graph.Graph, term2: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], int]:
+        def arity_of(tx2: hydra.graph.Graph, term2: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], int]:
             while True:
                 @lru_cache(1)
-                def dflt() -> Either[hydra.context.InContext[hydra.error.Error], int]:
+                def dflt() -> Either[hydra.context.InContext[hydra.errors.Error], int]:
                     return hydra.lib.eithers.map((lambda _tc: hydra.arity.type_arity(hydra.lib.pairs.first(_tc))), hydra.checking.type_of(cx, tx2, (), term2))
-                def for_function(tx3: hydra.graph.Graph, f: hydra.core.Function) -> Either[hydra.context.InContext[hydra.error.Error], int]:
+                def for_function(tx3: hydra.graph.Graph, f: hydra.core.Function) -> Either[hydra.context.InContext[hydra.errors.Error], int]:
                     match f:
                         case hydra.core.FunctionElimination():
                             return Right(1)
@@ -521,7 +521,7 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
                         case hydra.core.FunctionLambda(value=l):
                             @lru_cache(1)
                             def txl() -> hydra.graph.Graph:
-                                return hydra.schemas.extend_graph_for_lambda(tx3, l)
+                                return hydra.rewriting.extend_graph_for_lambda(tx3, l)
                             return arity_of(txl(), l.body)
 
                         case hydra.core.FunctionPrimitive(value=name):
@@ -539,7 +539,7 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
                         return for_function(tx2, f)
 
                     case hydra.core.TermLet(value=l):
-                        return (txl := hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), tx2, l), arity_of(txl, l.body))[1]
+                        return (txl := hydra.rewriting.extend_graph_for_let((lambda _, _2: Nothing()), tx2, l), arity_of(txl, l.body))[1]
 
                     case hydra.core.TermTypeApplication(value=tat):
                         tx2 = tx2
@@ -547,7 +547,7 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
                         continue
 
                     case hydra.core.TermTypeLambda(value=tl):
-                        return (txt := hydra.schemas.extend_graph_for_type_lambda(tx2, tl), arity_of(txt, tl.body))[1]
+                        return (txt := hydra.rewriting.extend_graph_for_type_lambda(tx2, tl), arity_of(txt, tl.body))[1]
 
                     case hydra.core.TermVariable(value=name):
                         return hydra.lib.maybes.maybe((lambda : hydra.lib.eithers.map((lambda _tc: hydra.arity.type_arity(hydra.lib.pairs.first(_tc))), hydra.checking.type_of(cx, tx2, (), cast(hydra.core.Term, hydra.core.TermVariable(name))))), (lambda t: Right(hydra.arity.type_arity(t))), hydra.lib.maybes.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(name, tx2.bound_types)))
@@ -562,19 +562,19 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
             return pad(extra_variables(n), body)
         def unwind(term2: hydra.core.Term) -> hydra.core.Term:
             return hydra.lib.lists.foldl((lambda e, t: cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(e, t)))), term2, type_args)
-        def force_expansion(t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+        def force_expansion(t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
             return hydra.lib.eithers.bind(hydra.checking.type_of(cx, tx, (), t), (lambda typ_cx: (arity := hydra.arity.type_arity(hydra.lib.pairs.first(typ_cx)), Right(padn(arity, unwind(t))))[1]))
-        def recurse_or_force(term2: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+        def recurse_or_force(term2: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
             return hydra.lib.logic.if_else(forced, (lambda : force_expansion(term2)), (lambda : recurse(tx, unwind(term2))))
-        def for_case(f: hydra.core.Field) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Field]:
+        def for_case(f: hydra.core.Field) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Field]:
             return hydra.lib.eithers.bind(rewrite(False, True, (), recurse, tx, f.term), (lambda r: Right(hydra.core.Field(f.name, r))))
-        def for_case_statement(cs: hydra.core.CaseStatement) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+        def for_case_statement(cs: hydra.core.CaseStatement) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
             tname = cs.type_name
             dflt = cs.default
             cases = cs.cases
             return hydra.lib.eithers.bind(hydra.lib.eithers.map_maybe((lambda v1: rewrite(False, False, (), recurse, tx, v1)), dflt), (lambda rdflt: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: for_case(x1)), cases), (lambda rcases: Right(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(tname, rdflt, rcases))))))))))))
-        def for_elimination(elm: hydra.core.Elimination) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
-            def check_base(elm2: hydra.core.Elimination) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+        def for_elimination(elm: hydra.core.Elimination) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
+            def check_base(elm2: hydra.core.Elimination) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
                 match elm2:
                     case hydra.core.EliminationUnion(value=cs):
                         return for_case_statement(cs)
@@ -590,7 +590,7 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
                 case hydra.core.FunctionLambda(value=l):
                     @lru_cache(1)
                     def txl() -> hydra.graph.Graph:
-                        return hydra.schemas.extend_graph_for_lambda(tx, l)
+                        return hydra.rewriting.extend_graph_for_lambda(tx, l)
                     return hydra.lib.eithers.map((lambda x1: unwind(x1)), recurse(txl(), term))
 
                 case _:
@@ -607,7 +607,7 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
             case hydra.core.TermLet(value=l):
                 @lru_cache(1)
                 def txlt() -> hydra.graph.Graph:
-                    return hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), tx, l)
+                    return hydra.rewriting.extend_graph_for_let((lambda _, _2: Nothing()), tx, l)
                 return recurse(txlt(), term)
 
             case hydra.core.TermTypeApplication(value=tat):
@@ -616,7 +616,7 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
             case hydra.core.TermTypeLambda(value=tl):
                 @lru_cache(1)
                 def txt() -> hydra.graph.Graph:
-                    return hydra.schemas.extend_graph_for_type_lambda(tx, tl)
+                    return hydra.rewriting.extend_graph_for_type_lambda(tx, tl)
                 return recurse(txt(), term)
 
             case _:
@@ -669,10 +669,10 @@ def eta_reduce_term(term: hydra.core.Term):
         case _:
             return no_change
 
-def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""A term evaluation function which is alternatively lazy or eager."""
 
-    def reduce(eager2: bool, v1: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+    def reduce(eager2: bool, v1: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
         return reduce_term(cx, graph, eager2, v1)
     def do_recurse(eager2: bool, term2: hydra.core.Term) -> bool:
         def is_non_lambda(f: hydra.core.Function) -> bool:
@@ -694,19 +694,19 @@ def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool
                 case _:
                     return True
         return hydra.lib.logic.and_(eager2, is_non_lambda_term())
-    def reduce_arg(eager2: bool, arg: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+    def reduce_arg(eager2: bool, arg: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
         return hydra.lib.logic.if_else(eager2, (lambda : Right(arg)), (lambda : reduce(False, arg)))
     def apply_to_arguments(fun: hydra.core.Term, args: frozenlist[hydra.core.Term]) -> hydra.core.Term:
         return hydra.lib.logic.if_else(hydra.lib.lists.null(args), (lambda : fun), (lambda : apply_to_arguments(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun, hydra.lib.lists.head(args)))), hydra.lib.lists.tail(args))))
-    def map_error_to_string(ic: hydra.context.InContext[hydra.error.Error]) -> hydra.context.InContext[hydra.error.Error]:
-        return hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.show.error.error(ic.object)))), ic.context)
-    def apply_elimination(elm: hydra.core.Elimination, reduced_arg: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+    def map_error_to_string(ic: hydra.context.InContext[hydra.errors.Error]) -> hydra.context.InContext[hydra.errors.Error]:
+        return hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.show.errors.error(ic.object)))), ic.context)
+    def apply_elimination(elm: hydra.core.Elimination, reduced_arg: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
         match elm:
             case hydra.core.EliminationRecord(value=proj):
-                return hydra.lib.eithers.bind(hydra.extract.core.record(cx, proj.type_name, graph, hydra.rewriting.deannotate_term(reduced_arg)), (lambda fields: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, proj.field)), fields), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat(("no such field: ", proj.field.value, " in ", proj.type_name.value, " record"))))), cx))), (lambda : Right(hydra.lib.lists.head(matching_fields).term))))[1]))
+                return hydra.lib.eithers.bind(hydra.extract.core.record(cx, proj.type_name, graph, hydra.rewriting.deannotate_term(reduced_arg)), (lambda fields: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, proj.field)), fields), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), (lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat(("no such field: ", proj.field.value, " in ", proj.type_name.value, " record"))))), cx))), (lambda : Right(hydra.lib.lists.head(matching_fields).term))))[1]))
 
             case hydra.core.EliminationUnion(value=cs):
-                return hydra.lib.eithers.bind(hydra.extract.core.injection(cx, cs.type_name, graph, reduced_arg), (lambda field: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, field.name)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), (lambda : hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat(("no such field ", field.name.value, " in ", cs.type_name.value, " case statement"))))), cx))), (lambda x: Right(x)), cs.default)), (lambda : Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(hydra.lib.lists.head(matching_fields).term, field.term)))))))[1]))
+                return hydra.lib.eithers.bind(hydra.extract.core.injection(cx, cs.type_name, graph, reduced_arg), (lambda field: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, field.name)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), (lambda : hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat(("no such field ", field.name.value, " in ", cs.type_name.value, " case statement"))))), cx))), (lambda x: Right(x)), cs.default)), (lambda : Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(hydra.lib.lists.head(matching_fields).term, field.term)))))))[1]))
 
             case hydra.core.EliminationWrap(value=name):
                 return hydra.extract.core.wrap(cx, name, graph, reduced_arg)
@@ -717,7 +717,7 @@ def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool
         @lru_cache(1)
         def stripped() -> hydra.core.Term:
             return hydra.rewriting.deannotate_term(original)
-        def for_elimination(elm: hydra.core.Elimination, args2: frozenlist[hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+        def for_elimination(elm: hydra.core.Elimination, args2: frozenlist[hydra.core.Term]) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
             @lru_cache(1)
             def arg() -> hydra.core.Term:
                 return hydra.lib.lists.head(args2)
@@ -725,7 +725,7 @@ def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool
             def remaining_args() -> frozenlist[hydra.core.Term]:
                 return hydra.lib.lists.tail(args2)
             return hydra.lib.eithers.bind(reduce_arg(eager2, hydra.rewriting.deannotate_term(arg())), (lambda reduced_arg: hydra.lib.eithers.bind(hydra.lib.eithers.bind(apply_elimination(elm, reduced_arg), (lambda v1: reduce(eager2, v1))), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args())))))
-        def for_lambda(l: hydra.core.Lambda, args2: frozenlist[hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+        def for_lambda(l: hydra.core.Lambda, args2: frozenlist[hydra.core.Term]) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
             param = l.parameter
             body = l.body
             @lru_cache(1)
@@ -735,7 +735,7 @@ def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool
             def remaining_args() -> frozenlist[hydra.core.Term]:
                 return hydra.lib.lists.tail(args2)
             return hydra.lib.eithers.bind(reduce(eager2, hydra.rewriting.deannotate_term(arg())), (lambda reduced_arg: hydra.lib.eithers.bind(reduce(eager2, hydra.rewriting.replace_free_term_variable(param, reduced_arg, body)), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args())))))
-        def for_primitive(prim: hydra.graph.Primitive, arity: int, args2: frozenlist[hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+        def for_primitive(prim: hydra.graph.Primitive, arity: int, args2: frozenlist[hydra.core.Term]) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
             @lru_cache(1)
             def arg_list() -> frozenlist[hydra.core.Term]:
                 return hydra.lib.lists.take(arity, args2)
@@ -790,7 +790,7 @@ def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool
 
             case _:
                 return Right(apply_to_arguments(original, args))
-    def mapping(recurse: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]], mid: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+    def mapping(recurse: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]], mid: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
         return hydra.lib.eithers.bind(hydra.lib.logic.if_else(do_recurse(eager, mid), (lambda : recurse(mid)), (lambda : Right(mid))), (lambda inner: apply_if_nullary(eager, inner, ())))
     return hydra.rewriting.rewrite_term_m((lambda x1, x2: mapping(x1, x2)), term)
 

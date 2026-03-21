@@ -5,7 +5,7 @@
 module Hydra.Decode.Variants where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Helpers as Helpers
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
@@ -21,9 +21,9 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-eliminationVariant :: Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.EliminationVariant
+eliminationVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.EliminationVariant
 eliminationVariant cx raw =
-    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -33,15 +33,15 @@ eliminationVariant cx raw =
                       (Core.Name "record", (\input -> Eithers.map (\t -> Variants.EliminationVariantRecord) (Helpers.decodeUnit cx input))),
                       (Core.Name "union", (\input -> Eithers.map (\t -> Variants.EliminationVariantUnion) (Helpers.decodeUnit cx input))),
                       (Core.Name "wrap", (\input -> Eithers.map (\t -> Variants.EliminationVariantWrap) (Helpers.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
+        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Error.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-functionVariant :: Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.FunctionVariant
+functionVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.FunctionVariant
 functionVariant cx raw =
-    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -51,15 +51,15 @@ functionVariant cx raw =
                       (Core.Name "elimination", (\input -> Eithers.map (\t -> Variants.FunctionVariantElimination) (Helpers.decodeUnit cx input))),
                       (Core.Name "lambda", (\input -> Eithers.map (\t -> Variants.FunctionVariantLambda) (Helpers.decodeUnit cx input))),
                       (Core.Name "primitive", (\input -> Eithers.map (\t -> Variants.FunctionVariantPrimitive) (Helpers.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
+        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Error.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-literalVariant :: Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.LiteralVariant
+literalVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.LiteralVariant
 literalVariant cx raw =
-    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -71,15 +71,15 @@ literalVariant cx raw =
                       (Core.Name "float", (\input -> Eithers.map (\t -> Variants.LiteralVariantFloat) (Helpers.decodeUnit cx input))),
                       (Core.Name "integer", (\input -> Eithers.map (\t -> Variants.LiteralVariantInteger) (Helpers.decodeUnit cx input))),
                       (Core.Name "string", (\input -> Eithers.map (\t -> Variants.LiteralVariantString) (Helpers.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
+        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Error.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-termVariant :: Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.TermVariant
+termVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.TermVariant
 termVariant cx raw =
-    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -104,15 +104,15 @@ termVariant cx raw =
                       (Core.Name "unit", (\input -> Eithers.map (\t -> Variants.TermVariantUnit) (Helpers.decodeUnit cx input))),
                       (Core.Name "variable", (\input -> Eithers.map (\t -> Variants.TermVariantVariable) (Helpers.decodeUnit cx input))),
                       (Core.Name "wrap", (\input -> Eithers.map (\t -> Variants.TermVariantWrap) (Helpers.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
+        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Error.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-typeVariant :: Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.TypeVariant
+typeVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.TypeVariant
 typeVariant cx raw =
-    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+    Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermUnion v0 ->
         let field = Core.injectionField v0
             fname = Core.fieldName field
@@ -135,8 +135,8 @@ typeVariant cx raw =
                       (Core.Name "unit", (\input -> Eithers.map (\t -> Variants.TypeVariantUnit) (Helpers.decodeUnit cx input))),
                       (Core.Name "variable", (\input -> Eithers.map (\t -> Variants.TypeVariantVariable) (Helpers.decodeUnit cx input))),
                       (Core.Name "wrap", (\input -> Eithers.map (\t -> Variants.TypeVariantWrap) (Helpers.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
+        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Error.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
+      _ -> Left (Errors.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)

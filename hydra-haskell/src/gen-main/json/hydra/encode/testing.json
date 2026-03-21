@@ -4550,6 +4550,46 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": [{"variable": "hydra.testing.UnshadowVariablesTestCase"}],
+                        "parameter": "y"}}}},
+                {
+                  "name": "validateCoreTerm",
+                  "term": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "union": {
+                            "field": {
+                              "name": "union",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.testing.TestCase"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {
+                                                "wrap": {
+                                                  "body": {"literal": {"string": "validateCoreTerm"}},
+                                                  "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "y"},
+                                                  "function": {"variable": "hydra.encode.testing.validateCoreTermTestCase"}}}}],
+                                          "typeName": "hydra.core.Field"}}}],
+                                  "typeName": "hydra.core.Injection"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": [{"variable": "hydra.testing.ValidateCoreTermTestCase"}],
                         "parameter": "y"}}}}],
               "default": null,
               "typeName": "hydra.testing.TestCase"}}}},
@@ -7161,12 +7201,117 @@
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.testing.JoinTypesTestCase"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.encode.testing.validateCoreTermTestCase",
+      "term": {
+        "function": {
+          "lambda": {
+            "body": {
+              "union": {
+                "field": {
+                  "name": "record",
+                  "term": {
+                    "record": {
+                      "fields": [
+                        {
+                          "name": "typeName",
+                          "term": {
+                            "wrap": {
+                              "body": {"literal": {"string": "hydra.testing.ValidateCoreTermTestCase"}},
+                              "typeName": "hydra.core.Name"}}},
+                        {
+                          "name": "fields",
+                          "term": {
+                            "list": [
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "input"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {
+                                                      "field": "input",
+                                                      "typeName": "hydra.testing.ValidateCoreTermTestCase"}}}}}},
+                                          "function": {"variable": "hydra.encode.core.term"}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "output"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {
+                                                      "field": "output",
+                                                      "typeName": "hydra.testing.ValidateCoreTermTestCase"}}}}}},
+                                          "function": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "maybe",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "opt"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "hydra.encode.error.core.invalidTermError"},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                      "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                                                                  "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                    "typeName": "hydra.core.Term"}},
+                                                "domain": [{"maybe": {"variable": "hydra.error.core.InvalidTermError"}}],
+                                                "parameter": "opt"}}}}}}],
+                                  "typeName": "hydra.core.Field"}}]}}],
+                      "typeName": "hydra.core.Record"}}},
+                "typeName": "hydra.core.Term"}},
+            "domain": [{"variable": "hydra.testing.ValidateCoreTermTestCase"}],
+            "parameter": "x"}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.testing.ValidateCoreTermTestCase"}}},
           "variables": []}]}],
   "namespace": "hydra.encode.testing",
   "termDependencies": [
     "hydra.encode.core",
     "hydra.encode.ast",
     "hydra.encode.coders",
+    "hydra.encode.error.core",
     "hydra.encode.graph",
     "hydra.encode.json.model",
     "hydra.encode.module",

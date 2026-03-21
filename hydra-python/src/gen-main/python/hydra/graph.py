@@ -10,7 +10,7 @@ from hydra.dsl.python import Either, FrozenDict, frozenlist
 from typing import Annotated, Generic, TypeAlias, TypeVar, cast
 import hydra.context
 import hydra.core
-import hydra.error
+import hydra.errors
 
 A = TypeVar("A")
 
@@ -43,7 +43,7 @@ class Primitive:
 
     name: Annotated[hydra.core.Name, "The unique name of the primitive function"]
     type: Annotated[hydra.core.TypeScheme, "The type signature of the primitive function"]
-    implementation: Annotated[Callable[[hydra.context.Context, Graph, frozenlist[hydra.core.Term]], Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]], "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."]
+    implementation: Annotated[Callable[[hydra.context.Context, Graph, frozenlist[hydra.core.Term]], Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]], "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."]
 
     TYPE_ = hydra.core.Name("hydra.graph.Primitive")
     NAME = hydra.core.Name("name")
@@ -55,8 +55,8 @@ class TermCoder(Generic[A]):
     r"""A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms."""
 
     type: Annotated[hydra.core.Type, "The Hydra type of encoded terms"]
-    encode: Annotated[Callable[[hydra.context.Context, Graph, hydra.core.Term], Either[hydra.context.InContext[hydra.error.Error], A]], "An encode function from terms to native values"]
-    decode: Annotated[Callable[[hydra.context.Context, A], Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]], "A decode function from native values to terms"]
+    encode: Annotated[Callable[[hydra.context.Context, Graph, hydra.core.Term], Either[hydra.context.InContext[hydra.errors.Error], A]], "An encode function from terms to native values"]
+    decode: Annotated[Callable[[hydra.context.Context, A], Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]], "A decode function from native values to terms"]
 
     TYPE_ = hydra.core.Name("hydra.graph.TermCoder")
     TYPE = hydra.core.Name("type")

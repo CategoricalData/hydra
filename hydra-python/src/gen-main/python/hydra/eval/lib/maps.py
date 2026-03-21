@@ -9,7 +9,7 @@ from hydra.dsl.python import Either, FrozenDict, Left, Nothing, Right
 from typing import TypeVar, cast
 import hydra.context
 import hydra.core
-import hydra.error
+import hydra.errors
 import hydra.lib.lists
 import hydra.lib.maps
 import hydra.lib.pairs
@@ -18,7 +18,7 @@ import hydra.show.core
 
 T0 = TypeVar("T0")
 
-def alter(cx: hydra.context.Context, g: T0, fun_term: hydra.core.Term, key_term: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+def alter(cx: hydra.context.Context, g: T0, fun_term: hydra.core.Term, key_term: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly alter for Map terms."""
 
     match map_term:
@@ -32,9 +32,9 @@ def alter(cx: hydra.context.Context, g: T0, fun_term: hydra.core.Term, key_term:
             return Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maybes.maybe"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maps.delete"))))), key_term))), map_term)))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("newV"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maps.insert"))))), key_term))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("newV")))))), map_term))))))))))), new_val()))))
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map value"), " but found "), hydra.show.core.term(map_term))))), cx))
+            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map value"), " but found "), hydra.show.core.term(map_term))))), cx))
 
-def bimap(cx: hydra.context.Context, g: T0, key_fun: hydra.core.Term, val_fun: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+def bimap(cx: hydra.context.Context, g: T0, key_fun: hydra.core.Term, val_fun: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly bimap for Map terms."""
 
     match map_term:
@@ -45,9 +45,9 @@ def bimap(cx: hydra.context.Context, g: T0, key_fun: hydra.core.Term, val_fun: h
             return Right(cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (k := hydra.lib.pairs.first(p), v := hydra.lib.pairs.second(p), (cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(key_fun, k))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(val_fun, v)))))[2]), pairs())))))
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map value"), " but found "), hydra.show.core.term(map_term))))), cx))
+            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map value"), " but found "), hydra.show.core.term(map_term))))), cx))
 
-def filter(cx: hydra.context.Context, g: T0, val_pred: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+def filter(cx: hydra.context.Context, g: T0, val_pred: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly filter for Map terms."""
 
     match map_term:
@@ -58,9 +58,9 @@ def filter(cx: hydra.context.Context, g: T0, val_pred: hydra.core.Term, map_term
             return Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maps.fromList"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.concat"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda p: (v := hydra.lib.pairs.second(p), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.logic.ifElse"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(val_pred, v)))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.pure(cast(hydra.core.Term, hydra.core.TermPair((hydra.lib.pairs.first(p), v))))))))), cast(hydra.core.Term, hydra.core.TermList(()))))))[1]), pairs()))))))))))
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map value"), " but found "), hydra.show.core.term(map_term))))), cx))
+            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map value"), " but found "), hydra.show.core.term(map_term))))), cx))
 
-def filter_with_key(cx: hydra.context.Context, g: T0, pred: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+def filter_with_key(cx: hydra.context.Context, g: T0, pred: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly filterWithKey for Map terms."""
 
     match map_term:
@@ -71,9 +71,9 @@ def filter_with_key(cx: hydra.context.Context, g: T0, pred: hydra.core.Term, map
             return Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maps.fromList"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.concat"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda p: (k := hydra.lib.pairs.first(p), v := hydra.lib.pairs.second(p), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.logic.ifElse"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(pred, k))), v)))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.pure(cast(hydra.core.Term, hydra.core.TermPair((k, v))))))))), cast(hydra.core.Term, hydra.core.TermList(()))))))[2]), pairs()))))))))))
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map value"), " but found "), hydra.show.core.term(map_term))))), cx))
+            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map value"), " but found "), hydra.show.core.term(map_term))))), cx))
 
-def map(cx: hydra.context.Context, g: T0, val_fun: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+def map(cx: hydra.context.Context, g: T0, val_fun: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly map for Map terms."""
 
     match map_term:
@@ -84,9 +84,9 @@ def map(cx: hydra.context.Context, g: T0, val_fun: hydra.core.Term, map_term: hy
             return Right(cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (k := hydra.lib.pairs.first(p), v := hydra.lib.pairs.second(p), (k, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(val_fun, v)))))[2]), pairs())))))
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map value"), " but found "), hydra.show.core.term(map_term))))), cx))
+            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map value"), " but found "), hydra.show.core.term(map_term))))), cx))
 
-def map_keys(cx: hydra.context.Context, g: T0, key_fun: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+def map_keys(cx: hydra.context.Context, g: T0, key_fun: hydra.core.Term, map_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]:
     r"""Interpreter-friendly mapKeys for Map terms."""
 
     match map_term:
@@ -97,4 +97,4 @@ def map_keys(cx: hydra.context.Context, g: T0, key_fun: hydra.core.Term, map_ter
             return Right(cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (k := hydra.lib.pairs.first(p), v := hydra.lib.pairs.second(p), (cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(key_fun, k))), v))[2]), pairs())))))
 
         case _:
-            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map value"), " but found "), hydra.show.core.term(map_term))))), cx))
+            return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map value"), " but found "), hydra.show.core.term(map_term))))), cx))

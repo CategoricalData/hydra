@@ -15,7 +15,9 @@ import hydra.context
 import hydra.core
 import hydra.decode.core
 import hydra.encode.core
-import hydra.error
+import hydra.error.checking
+import hydra.error.core
+import hydra.errors
 import hydra.extract.core
 import hydra.extract.helpers
 import hydra.formatting
@@ -40,7 +42,8 @@ import hydra.parsing
 import hydra.rewriting
 import hydra.serialization
 import hydra.show.core
-import hydra.show.error
+import hydra.show.error.core
+import hydra.show.errors
 import hydra.show.meta
 import hydra.show.typing
 import hydra.sorting

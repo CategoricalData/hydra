@@ -490,12 +490,12 @@
                                                     "body": {
                                                       "function": {
                                                         "elimination": {"record": {"field": "object", "typeName": "hydra.context.InContext"}}}},
-                                                    "type": {"variable": "hydra.error.Error"}}}}},
-                                            "function": {"variable": "hydra.show.error.error"}}},
+                                                    "type": {"variable": "hydra.errors.Error"}}}}},
+                                            "function": {"variable": "hydra.show.errors.error"}}},
                                         "domain": [
                                           {
                                             "application": {
-                                              "argument": {"variable": "hydra.error.Error"},
+                                              "argument": {"variable": "hydra.errors.Error"},
                                               "function": {"variable": "hydra.context.InContext"}}}],
                                         "parameter": "ic"}}},
                                   "function": {
@@ -509,7 +509,7 @@
                                                   "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
                                                   "type": {
                                                     "application": {
-                                                      "argument": {"variable": "hydra.error.Error"},
+                                                      "argument": {"variable": "hydra.errors.Error"},
                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                               "type": {"variable": "hydra.typing.InferenceResult"}}},
                                           "type": {"literal": {"string": {}}}}},
@@ -533,7 +533,7 @@
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}]}],
   "namespace": "hydra.test.utils",
-  "termDependencies": ["hydra.inference", "hydra.show.error", "hydra.lexical"],
+  "termDependencies": ["hydra.inference", "hydra.show.errors", "hydra.lexical"],
   "typeDependencies": [
     "hydra.accessors",
     "hydra.ast",
@@ -541,7 +541,10 @@
     "hydra.coders",
     "hydra.context",
     "hydra.core",
-    "hydra.error",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.error.module",
+    "hydra.errors",
     "hydra.grammar",
     "hydra.graph",
     "hydra.json.model",

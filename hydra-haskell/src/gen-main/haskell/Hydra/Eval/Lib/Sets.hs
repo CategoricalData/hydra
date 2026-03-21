@@ -6,7 +6,7 @@ module Hydra.Eval.Lib.Sets where
 
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -20,7 +20,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Interpreter-friendly map for Set terms.
-map :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+map :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 map cx g fun setTerm =
     Eithers.bind (Core_.set cx g setTerm) (\elements -> Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.fromList"))),

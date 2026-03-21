@@ -6,7 +6,7 @@ module Hydra.Eval.Lib.Lists where
 
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -20,7 +20,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Interpreter-friendly applicative apply for List terms.
-apply :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+apply :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 apply cx g funsTerm argsTerm =
     Eithers.bind (Core_.list cx g funsTerm) (\funs -> Eithers.bind (Core_.list cx g argsTerm) (\arguments ->
       let applyOne =
@@ -30,7 +30,7 @@ apply cx g funsTerm argsTerm =
       in (Right (Core.TermList (Lists.concat (Lists.map applyOne funs))))))
 
 -- | Interpreter-friendly monadic bind for List terms.
-bind :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+bind :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 bind cx g listTerm funTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
@@ -50,7 +50,7 @@ dropWhile cx g predTerm listTerm =
         Core.applicationArgument = listTerm}))}))
 
 -- | Interpreter-friendly filter for List terms.
-filter :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+filter :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 filter cx g predTerm listTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
@@ -76,7 +76,7 @@ find cx g predTerm listTerm =
         Core.applicationArgument = listTerm}))}))
 
 -- | Interpreter-friendly left fold for List terms.
-foldl :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+foldl :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 foldl cx g funTerm initTerm listTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -85,7 +85,7 @@ foldl cx g funTerm initTerm listTerm =
       Core.applicationArgument = el})) initTerm elements))
 
 -- | Interpreter-friendly right fold for List terms.
-foldr :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+foldr :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 foldr cx g funTerm initTerm listTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Lists.foldr (\el -> \acc -> Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -94,14 +94,14 @@ foldr cx g funTerm initTerm listTerm =
       Core.applicationArgument = acc})) initTerm elements))
 
 -- | Interpreter-friendly map for List terms.
-map :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+map :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 map cx g funTerm listTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Core.TermList (Lists.reverse (Lists.foldl (\acc -> \el -> Lists.cons (Core.TermApplication (Core.Application {
       Core.applicationFunction = funTerm,
       Core.applicationArgument = el})) acc) [] elements))))
 
 -- | Interpreter-friendly partition for List terms.
-partition :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+partition :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 partition cx g predTerm listTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements ->
       let initialState = Core.TermPair (Core.TermList [], (Core.TermList []))
@@ -137,7 +137,7 @@ partition cx g predTerm listTerm =
       in (Right finalState))
 
 -- | Interpreter-friendly sortOn for List terms.
-sortOn :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+sortOn :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 sortOn cx g projTerm listTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Lists.foldl (\sorted -> \x ->
       let splitResult =
@@ -176,7 +176,7 @@ sortOn cx g projTerm listTerm =
           Core.applicationArgument = after}))}))) (Core.TermList []) elements))
 
 -- | Interpreter-friendly span for List terms.
-span :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+span :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 span cx g predTerm listTerm =
     Eithers.bind (Core_.list cx g listTerm) (\elements ->
       let initialState =
@@ -231,7 +231,7 @@ span cx g predTerm listTerm =
         Core.applicationArgument = finalState}))))))
 
 -- | Interpreter-friendly zipWith for List terms.
-zipWith :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term
+zipWith :: Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Errors.Error) Core.Term
 zipWith cx g funTerm listTerm1 listTerm2 =
     Eithers.bind (Core_.list cx g listTerm1) (\elements1 -> Eithers.bind (Core_.list cx g listTerm2) (\elements2 -> Right (Core.TermList (Lists.map (\p ->
       let a = Pairs.first p

@@ -659,226 +659,55 @@ public interface Bootstrap {
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A term wrapped in a type name"))))))),
       hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.CheckingError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Union(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("incorrectUnification"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.IncorrectUnificationError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A post-unification consistency check failure"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("notAForallType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.NotAForallTypeError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type that is not a forall type when one was expected"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("notAFunctionType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.NotAFunctionTypeError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type that is not a function type when one was expected"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("typeArityMismatch"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.TypeArityMismatchError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type constructor applied to the wrong number of arguments"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("typeMismatch"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.TypeMismatchError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type mismatch between expected and actual types"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("unboundTypeVariables"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UnboundTypeVariablesError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("Type variables that are not bound in scope"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("unequalTypes"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UnequalTypesError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("Multiple types that should be equal but are not"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("unsupportedTermVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UnsupportedTermVariantError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A term variant that the type checker does not support"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("untypedLambda"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UntypedLambdaError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A lambda expression without a type annotation on its parameter"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("untypedLetBinding"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UntypedLetBindingError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A let binding without a type annotation"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("An error that occurred during type checking"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.DecodingError"),
+        new hydra.core.Name("hydra.errors.DecodingError"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Wrap(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("An error that occurred during decoding of a term"))))))),
       hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.DuplicateBindingError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(new hydra.core.FieldType(new hydra.core.Name("name"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The duplicated binding name"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A duplicate binding name in a let expression"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.DuplicateFieldError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(new hydra.core.FieldType(new hydra.core.Name("name"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The duplicated field name"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A duplicate field name in a record or union type"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.Error"),
+        new hydra.core.Name("hydra.errors.Error"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Union(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("checking"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.CheckingError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("checking"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.checking.CheckingError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type checking error"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("decoding"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.DecodingError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("decoding"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.errors.DecodingError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("An error that occurred during decoding of a term"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("duplicateBinding"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.DuplicateBindingError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("duplicateBinding"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.core.DuplicateBindingError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A duplicate binding name error"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("duplicateField"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.DuplicateFieldError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("duplicateField"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.core.DuplicateFieldError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A duplicate field name error"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("other"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.OtherError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("other"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.errors.OtherError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("Any other error"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("undefinedField"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UndefinedFieldError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("undefinedField"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.core.UndefinedFieldError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to an undefined field"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("undefinedTerm"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UndefinedTermError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("undefinedTerm"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.core.UndefinedTermError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to an undefined term"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("undefinedType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UndefinedTypeError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("undefinedType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.core.UndefinedTypeError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to an undefined type"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("unexpectedTermVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UnexpectedTermVariantError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("unexpectedTermVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.core.UnexpectedTermVariantError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("An unexpected term variant"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("unexpectedTypeVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UnexpectedTypeVariantError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("unexpectedTypeVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.core.UnexpectedTypeVariantError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("An unexpected type variant"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("unification"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UnificationError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("unification"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.errors.UnificationError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type unification error"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("An error of any kind, with kernel errors particularly differentiated"))))))),
       hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.IncorrectUnificationError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(new hydra.core.FieldType(new hydra.core.Name("substitution"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.typing.TypeSubst")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The substitution that failed the consistency check"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A post-unification consistency check failure"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.NotAForallTypeError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The actual type encountered"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("typeArguments"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type arguments that were being applied"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type that is not a forall type when type arguments are being applied"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.NotAFunctionTypeError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The actual type encountered"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type that is not a function type when one was expected in an application"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.OtherError"),
+        new hydra.core.Name("hydra.errors.OtherError"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Wrap(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("Any other error"))))))),
       hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.TypeArityMismatchError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type being checked"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("expectedArity"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32())), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The expected number of type arguments"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("actualArity"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32())), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The actual number of type arguments provided"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("typeArguments"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type arguments that were provided"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type constructor applied to the wrong number of type arguments"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.TypeMismatchError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("expectedType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The expected type"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("actualType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The actual type encountered"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type mismatch between expected and actual types"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.UnboundTypeVariablesError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("variables"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Set(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The set of unbound type variable names"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type containing the unbound variables"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("Type variables that appear free in a type but are not bound in scope"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.UndefinedFieldError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("fieldName"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The name of the undefined field"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("typeName"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The name of the type in which the field was expected"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to a field that does not exist in the given type"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.UndefinedTermError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(new hydra.core.FieldType(new hydra.core.Name("name"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The name of the undefined term"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to a term (element, binding, or primitive) that is not defined"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.UndefinedTypeError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(new hydra.core.FieldType(new hydra.core.Name("name"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The name of the undefined type"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to a type or type variable that is not defined"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.UnequalTypesError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("types"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The list of types that are not all equal"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("description"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A description of the context in which the types were expected to be equal"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("Multiple types that should all be equal but are not"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.UnexpectedTermVariantError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("expectedVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.variants.TermVariant")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The expected term variant"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("actualTerm"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The actual term that was encountered"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("An unexpected term variant was encountered"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.UnexpectedTypeVariantError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("expectedVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.variants.TypeVariant")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The expected type variant"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("actualType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-            new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The actual type that was encountered"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("An unexpected type variant was encountered"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.UnificationError"),
+        new hydra.core.Name("hydra.errors.UnificationError"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
           new hydra.core.FieldType(new hydra.core.Name("leftType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
@@ -891,25 +720,6 @@ public interface Bootstrap {
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A human-readable error message"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("An error that occurred during type unification"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.UnsupportedTermVariantError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(new hydra.core.FieldType(new hydra.core.Name("termVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.variants.TermVariant")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The unsupported term variant"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A term variant that the type checker does not support"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.UntypedLambdaError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record((hydra.util.ConsList<hydra.core.FieldType>) (hydra.util.ConsList.<hydra.core.FieldType>empty())), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A lambda expression without a type annotation on its parameter"))))))),
-      hydra.util.PersistentMap.entry(
-        new hydra.core.Name("hydra.error.UntypedLetBindingError"),
-        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(new hydra.core.FieldType(new hydra.core.Name("binding"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Binding")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The untyped binding"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
-          new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A let binding without a type annotation"))))))),
       hydra.util.PersistentMap.entry(
         new hydra.core.Name("hydra.graph.Graph"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(hydra.util.ConsList.of(
@@ -948,7 +758,7 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.TypeScheme")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type signature of the primitive function"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("implementation"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.graph.Graph")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term"))), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("implementation"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.graph.Graph")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term"))), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.errors.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting."))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
           new hydra.core.Name("description"),
@@ -959,10 +769,10 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("The Hydra type of encoded terms"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("encode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.graph.Graph")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("a")))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("encode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.graph.Graph")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.errors.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("a")))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("An encode function from terms to native values"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("decode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("a")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("decode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("a")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.errors.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A decode function from native values to terms"))))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
           new hydra.core.Name("description"),
@@ -1109,10 +919,10 @@ public interface Bootstrap {
       hydra.util.PersistentMap.entry(
         new hydra.core.Name("hydra.util.Coder"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("v1"), new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("v2"), new hydra.core.Type.Record(hydra.util.ConsList.of(
-          new hydra.core.FieldType(new hydra.core.Name("encode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("v1")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("v2")))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("encode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("v1")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.errors.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("v2")))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A function which encodes source values as target values in a given context"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("decode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("v2")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("v1")))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("decode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("v2")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.errors.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("v1")))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A function which decodes target values as source values in a given context"))))))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
           new hydra.core.Name("description"),

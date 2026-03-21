@@ -28,7 +28,7 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Serialization as Serialization
-import qualified Hydra.Show.Error as Error
+import qualified Hydra.Show.Errors as Errors
 import qualified Hydra.Test.Utils as Utils_
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -70,7 +70,7 @@ emptyPythonModuleMetadata ns_ =
 -- | Convert a Hydra term to a Python expression string with a pre-built graph context
 termToPythonWithContext :: Module.Namespaces Syntax.DottedName -> Graph.Graph -> Bool -> Core.Term -> t0 -> Either String String
 termToPythonWithContext namespaces_ graph0 skipCasts term _g =
-    Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\arg_ -> Serialization.printExpr (Serde.encodeExpression arg_)) (Coder.encodeTermInline Lexical.emptyContext (Helpers.PythonEnvironment {
+    Eithers.bimap (\ic -> Errors.error (Context.inContextObject ic)) (\arg_ -> Serialization.printExpr (Serde.encodeExpression arg_)) (Coder.encodeTermInline Lexical.emptyContext (Helpers.PythonEnvironment {
       Helpers.pythonEnvironmentNamespaces = namespaces_,
       Helpers.pythonEnvironmentBoundTypeVariables = ([], Maps.empty),
       Helpers.pythonEnvironmentGraph = graph0,
@@ -86,7 +86,7 @@ termToPython namespaces_ term g = termToPythonWithContext namespaces_ g False te
 -- | Convert a Hydra type to a Python type expression string
 typeToPython :: Module.Namespaces Syntax.DottedName -> Core.Type -> Graph.Graph -> Either String String
 typeToPython namespaces_ typ g =
-    Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\arg_ -> Serialization.printExpr (Serde.encodeExpression arg_)) (Coder.encodeType (Helpers.PythonEnvironment {
+    Eithers.bimap (\ic -> Errors.error (Context.inContextObject ic)) (\arg_ -> Serialization.printExpr (Serde.encodeExpression arg_)) (Coder.encodeType (Helpers.PythonEnvironment {
       Helpers.pythonEnvironmentNamespaces = namespaces_,
       Helpers.pythonEnvironmentBoundTypeVariables = ([], Maps.empty),
       Helpers.pythonEnvironmentGraph = g,

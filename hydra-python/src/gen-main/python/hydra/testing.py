@@ -12,6 +12,7 @@ from typing import Annotated, Generic, TypeAlias, TypeVar, cast
 import hydra.ast
 import hydra.coders
 import hydra.core
+import hydra.error.core
 import hydra.graph
 import hydra.json.model
 import hydra.module
@@ -522,13 +523,16 @@ class TestCaseJoinTypes(Node["JoinTypesTestCase"]):
 class TestCaseUnshadowVariables(Node["UnshadowVariablesTestCase"]):
     r"""An unshadow variables test"""
 
+class TestCaseValidateCoreTerm(Node["ValidateCoreTermTestCase"]):
+    r"""A core term validation test"""
+
 class _TestCaseMeta(type):
     def __getitem__(cls, item):
         return object
 
 # A simple test case with an input and an expected output.
 class TestCase(metaclass=_TestCaseMeta):
-    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonDecode | TestCaseJsonEncode | TestCaseJsonParser | TestCaseJsonRoundtrip | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms | TestCaseHoistCaseStatements | TestCaseHoistLetBindings | TestCaseHoistPolymorphicLetBindings | TestCaseSubstInType | TestCaseVariableOccursInType | TestCaseUnifyTypes | TestCaseJoinTypes | TestCaseUnshadowVariables"""
+    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonDecode | TestCaseJsonEncode | TestCaseJsonParser | TestCaseJsonRoundtrip | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms | TestCaseHoistCaseStatements | TestCaseHoistLetBindings | TestCaseHoistPolymorphicLetBindings | TestCaseSubstInType | TestCaseVariableOccursInType | TestCaseUnifyTypes | TestCaseJoinTypes | TestCaseUnshadowVariables | TestCaseValidateCoreTerm"""
 
     TYPE_ = hydra.core.Name("hydra.testing.TestCase")
     ALPHA_CONVERSION = hydra.core.Name("alphaConversion")
@@ -569,6 +573,7 @@ class TestCase(metaclass=_TestCaseMeta):
     UNIFY_TYPES = hydra.core.Name("unifyTypes")
     JOIN_TYPES = hydra.core.Name("joinTypes")
     UNSHADOW_VARIABLES = hydra.core.Name("unshadowVariables")
+    VALIDATE_CORE_TERM = hydra.core.Name("validateCoreTerm")
 
 @dataclass(frozen=True)
 class TestCaseWithMetadata:
@@ -774,3 +779,14 @@ class JoinTypesTestCase:
     LEFT = hydra.core.Name("left")
     RIGHT = hydra.core.Name("right")
     EXPECTED = hydra.core.Name("expected")
+
+@dataclass(frozen=True)
+class ValidateCoreTermTestCase:
+    r"""A test case which validates a term and compares the result with an expected Maybe InvalidTermError."""
+
+    input: Annotated[hydra.core.Term, "The term to validate"]
+    output: Annotated[Maybe[hydra.error.core.InvalidTermError], "The expected validation result (Nothing if valid, Just error if invalid)"]
+
+    TYPE_ = hydra.core.Name("hydra.testing.ValidateCoreTermTestCase")
+    INPUT = hydra.core.Name("input")
+    OUTPUT = hydra.core.Name("output")

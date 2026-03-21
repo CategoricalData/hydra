@@ -12,7 +12,7 @@ public interface TestCodec {
 
   static <T0> hydra.util.Either<String, String> termToPythonWithContext(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces_, hydra.graph.Graph graph0, Boolean skipCasts, hydra.core.Term term, T0 _g) {
     return hydra.lib.eithers.Bimap.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
+      (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ic -> hydra.show.errors.Errors.error(((java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.errors.Error_>) (projected -> projected.object)).apply(ic))),
       (java.util.function.Function<hydra.ext.python.syntax.Expression, String>) (arg_ -> hydra.serialization.Serialization.printExpr(hydra.ext.python.serde.Serde.encodeExpression(arg_))),
       hydra.ext.python.coder.Coder.encodeTermInline(
         hydra.lexical.Lexical.emptyContext(),
@@ -32,7 +32,7 @@ public interface TestCodec {
 
   static hydra.util.Either<String, String> typeToPython(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces_, hydra.core.Type typ, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bimap.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
+      (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ic -> hydra.show.errors.Errors.error(((java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.errors.Error_>) (projected -> projected.object)).apply(ic))),
       (java.util.function.Function<hydra.ext.python.syntax.Expression, String>) (arg_ -> hydra.serialization.Serialization.printExpr(hydra.ext.python.serde.Serde.encodeExpression(arg_))),
       hydra.ext.python.coder.Coder.encodeType(
         new hydra.ext.python.helpers.PythonEnvironment(namespaces_, (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), (hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.ext.python.syntax.Name>apply()))))), g, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), hydra.ext.python.utils.Utils.targetPythonVersion(), false, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),

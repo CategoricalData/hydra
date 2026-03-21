@@ -5355,7 +5355,7 @@
                                                 "either": {
                                                   "left": {
                                                     "application": {
-                                                      "argument": {"variable": "hydra.error.Error"},
+                                                      "argument": {"variable": "hydra.errors.Error"},
                                                       "function": {"variable": "hydra.context.InContext"}}},
                                                   "right": {"variable": "hydra.core.Term"}}},
                                               "domain": {"list": {"variable": "hydra.core.Term"}}}},
@@ -5421,7 +5421,7 @@
                                             "either": {
                                               "left": {
                                                 "application": {
-                                                  "argument": {"variable": "hydra.error.Error"},
+                                                  "argument": {"variable": "hydra.errors.Error"},
                                                   "function": {"variable": "hydra.context.InContext"}}},
                                               "right": {"variable": "hydra.core.Term"}}},
                                           "domain": {"list": {"variable": "hydra.core.Term"}}}},
@@ -5702,7 +5702,7 @@
                                     "either": {
                                       "left": {
                                         "application": {
-                                          "argument": {"variable": "hydra.error.Error"},
+                                          "argument": {"variable": "hydra.errors.Error"},
                                           "function": {"variable": "hydra.context.InContext"}}},
                                       "right": {"variable": "hydra.core.Term"}}},
                                   "domain": {"list": {"variable": "hydra.core.Term"}}}},
@@ -6323,7 +6323,7 @@
                                           "either": {
                                             "left": {
                                               "application": {
-                                                "argument": {"variable": "hydra.error.Error"},
+                                                "argument": {"variable": "hydra.errors.Error"},
                                                 "function": {"variable": "hydra.context.InContext"}}},
                                             "right": {"variable": "hydra.core.Term"}}},
                                         "domain": {"list": {"variable": "hydra.core.Term"}}}},
@@ -6368,7 +6368,7 @@
                                         "either": {
                                           "left": {
                                             "application": {
-                                              "argument": {"variable": "hydra.error.Error"},
+                                              "argument": {"variable": "hydra.errors.Error"},
                                               "function": {"variable": "hydra.context.InContext"}}},
                                           "right": {"variable": "hydra.core.Term"}}},
                                       "domain": {"list": {"variable": "hydra.core.Term"}}}},
@@ -6479,7 +6479,7 @@
                                             "either": {
                                               "left": {
                                                 "application": {
-                                                  "argument": {"variable": "hydra.error.Error"},
+                                                  "argument": {"variable": "hydra.errors.Error"},
                                                   "function": {"variable": "hydra.context.InContext"}}},
                                               "right": {"variable": "hydra.core.Term"}}},
                                           "domain": {"variable": "a"}}},
@@ -6506,7 +6506,7 @@
                                           "either": {
                                             "left": {
                                               "application": {
-                                                "argument": {"variable": "hydra.error.Error"},
+                                                "argument": {"variable": "hydra.errors.Error"},
                                                 "function": {"variable": "hydra.context.InContext"}}},
                                             "right": {"variable": "a"}}},
                                         "domain": {"variable": "hydra.core.Term"}}},
@@ -6559,7 +6559,7 @@
                                         "either": {
                                           "left": {
                                             "application": {
-                                              "argument": {"variable": "hydra.error.Error"},
+                                              "argument": {"variable": "hydra.errors.Error"},
                                               "function": {"variable": "hydra.context.InContext"}}},
                                           "right": {"variable": "hydra.core.Term"}}},
                                       "domain": {"variable": "a"}}},
@@ -6584,7 +6584,7 @@
                                         "either": {
                                           "left": {
                                             "application": {
-                                              "argument": {"variable": "hydra.error.Error"},
+                                              "argument": {"variable": "hydra.errors.Error"},
                                               "function": {"variable": "hydra.context.InContext"}}},
                                           "right": {"variable": "a"}}},
                                       "domain": {"variable": "hydra.core.Term"}}},
@@ -6779,7 +6779,7 @@
                                     "either": {
                                       "left": {
                                         "application": {
-                                          "argument": {"variable": "hydra.error.Error"},
+                                          "argument": {"variable": "hydra.errors.Error"},
                                           "function": {"variable": "hydra.context.InContext"}}},
                                       "right": {"variable": "a"}}},
                                   "domain": {"variable": "hydra.core.Term"}}},
@@ -6881,7 +6881,7 @@
                                 "either": {
                                   "left": {
                                     "application": {
-                                      "argument": {"variable": "hydra.error.Error"},
+                                      "argument": {"variable": "hydra.errors.Error"},
                                       "function": {"variable": "hydra.context.InContext"}}},
                                   "right": {"variable": "hydra.core.Term"}}},
                               "domain": {"variable": "a"}}},
@@ -7300,7 +7300,7 @@
                                           "either": {
                                             "left": {
                                               "application": {
-                                                "argument": {"variable": "hydra.error.Error"},
+                                                "argument": {"variable": "hydra.errors.Error"},
                                                 "function": {"variable": "hydra.context.InContext"}}},
                                             "right": {"variable": "a"}}},
                                         "domain": {"variable": "hydra.core.Term"}}},
@@ -7350,7 +7350,7 @@
                                         "either": {
                                           "left": {
                                             "application": {
-                                              "argument": {"variable": "hydra.error.Error"},
+                                              "argument": {"variable": "hydra.errors.Error"},
                                               "function": {"variable": "hydra.context.InContext"}}},
                                           "right": {"variable": "a"}}},
                                       "domain": {"variable": "hydra.core.Term"}}},
@@ -7549,7 +7549,7 @@
                                       "either": {
                                         "left": {
                                           "application": {
-                                            "argument": {"variable": "hydra.error.Error"},
+                                            "argument": {"variable": "hydra.errors.Error"},
                                             "function": {"variable": "hydra.context.InContext"}}},
                                         "right": {"variable": "hydra.core.Term"}}},
                                     "domain": {"variable": "a"}}},
@@ -7596,7 +7596,7 @@
                                     "either": {
                                       "left": {
                                         "application": {
-                                          "argument": {"variable": "hydra.error.Error"},
+                                          "argument": {"variable": "hydra.errors.Error"},
                                           "function": {"variable": "hydra.context.InContext"}}},
                                       "right": {"variable": "hydra.core.Term"}}},
                                   "domain": {"variable": "a"}}},
@@ -7611,10 +7611,10 @@
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": ["a"]}]}],
   "namespace": "hydra.dsl.graph",
-  "termDependencies": ["hydra.dsl.context", "hydra.dsl.core", "hydra.dsl.error"],
+  "termDependencies": ["hydra.dsl.context", "hydra.dsl.core", "hydra.dsl.errors"],
   "typeDependencies": [
     "hydra.graph",
     "hydra.phantoms",
     "hydra.context",
     "hydra.core",
-    "hydra.error"]}
+    "hydra.errors"]}

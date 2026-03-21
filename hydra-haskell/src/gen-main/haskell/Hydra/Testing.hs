@@ -7,6 +7,7 @@ module Hydra.Testing where
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Error.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Module as Module
@@ -648,7 +649,9 @@ data TestCase =
   -- | A join types test (produce type constraints)
   TestCaseJoinTypes JoinTypesTestCase |
   -- | An unshadow variables test
-  TestCaseUnshadowVariables UnshadowVariablesTestCase
+  TestCaseUnshadowVariables UnshadowVariablesTestCase |
+  -- | A core term validation test
+  TestCaseValidateCoreTerm ValidateCoreTermTestCase
   deriving (Eq, Ord, Read, Show)
 
 _TestCase = Core.Name "hydra.testing.TestCase"
@@ -728,6 +731,8 @@ _TestCase_unifyTypes = Core.Name "unifyTypes"
 _TestCase_joinTypes = Core.Name "joinTypes"
 
 _TestCase_unshadowVariables = Core.Name "unshadowVariables"
+
+_TestCase_validateCoreTerm = Core.Name "validateCoreTerm"
 
 -- | One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
 data TestCaseWithMetadata =
@@ -1019,3 +1024,18 @@ _JoinTypesTestCase_left = Core.Name "left"
 _JoinTypesTestCase_right = Core.Name "right"
 
 _JoinTypesTestCase_expected = Core.Name "expected"
+
+-- | A test case which validates a term and compares the result with an expected Maybe InvalidTermError
+data ValidateCoreTermTestCase =
+  ValidateCoreTermTestCase {
+    -- | The term to validate
+    validateCoreTermTestCaseInput :: Core.Term,
+    -- | The expected validation result (Nothing if valid, Just error if invalid)
+    validateCoreTermTestCaseOutput :: (Maybe Core_.InvalidTermError)}
+  deriving (Eq, Ord, Read, Show)
+
+_ValidateCoreTermTestCase = Core.Name "hydra.testing.ValidateCoreTermTestCase"
+
+_ValidateCoreTermTestCase_input = Core.Name "input"
+
+_ValidateCoreTermTestCase_output = Core.Name "output"

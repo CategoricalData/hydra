@@ -126,7 +126,7 @@
                                                                                                             "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
                                                                                                             "type": {"unit": {}}}},
                                                                                                         "type": {"variable": "hydra.util.CaseConvention"}}},
-                                                                                                    "type": {"variable": "hydra.error.DecodingError"}}}}}}},
+                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                                                         "domain": [{"variable": "hydra.core.Term"}],
                                                                                         "parameter": "input"}}}}},
                                                                               "type": {"variable": "hydra.core.Name"}}},
@@ -134,7 +134,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.CaseConvention"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}},
                                                                       {
@@ -179,7 +179,7 @@
                                                                                                             "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
                                                                                                             "type": {"unit": {}}}},
                                                                                                         "type": {"variable": "hydra.util.CaseConvention"}}},
-                                                                                                    "type": {"variable": "hydra.error.DecodingError"}}}}}}},
+                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                                                         "domain": [{"variable": "hydra.core.Term"}],
                                                                                         "parameter": "input"}}}}},
                                                                               "type": {"variable": "hydra.core.Name"}}},
@@ -187,7 +187,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.CaseConvention"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}},
                                                                       {
@@ -232,7 +232,7 @@
                                                                                                             "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
                                                                                                             "type": {"unit": {}}}},
                                                                                                         "type": {"variable": "hydra.util.CaseConvention"}}},
-                                                                                                    "type": {"variable": "hydra.error.DecodingError"}}}}}}},
+                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                                                         "domain": [{"variable": "hydra.core.Term"}],
                                                                                         "parameter": "input"}}}}},
                                                                               "type": {"variable": "hydra.core.Name"}}},
@@ -240,7 +240,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.CaseConvention"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}},
                                                                       {
@@ -285,7 +285,7 @@
                                                                                                             "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
                                                                                                             "type": {"unit": {}}}},
                                                                                                         "type": {"variable": "hydra.util.CaseConvention"}}},
-                                                                                                    "type": {"variable": "hydra.error.DecodingError"}}}}}}},
+                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                                                         "domain": [{"variable": "hydra.core.Term"}],
                                                                                         "parameter": "input"}}}}},
                                                                               "type": {"variable": "hydra.core.Name"}}},
@@ -293,7 +293,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.CaseConvention"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}}]},
                                                                   "function": {
@@ -306,7 +306,7 @@
                                                                         "function": {
                                                                           "codomain": {
                                                                             "either": {
-                                                                              "left": {"variable": "hydra.error.DecodingError"},
+                                                                              "left": {"variable": "hydra.errors.DecodingError"},
                                                                               "right": {"variable": "hydra.util.CaseConvention"}}},
                                                                           "domain": {"variable": "hydra.core.Term"}}}}}}},
                                                               "type": [
@@ -319,7 +319,7 @@
                                                                         "function": {
                                                                           "codomain": {
                                                                             "either": {
-                                                                              "left": {"variable": "hydra.error.DecodingError"},
+                                                                              "left": {"variable": "hydra.errors.DecodingError"},
                                                                               "right": {"variable": "hydra.util.CaseConvention"}}},
                                                                           "domain": {"variable": "hydra.core.Term"}}}}},
                                                                   "variables": []}]}],
@@ -341,7 +341,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.CaseConvention"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}}}}}},
                                                               "function": {
@@ -356,7 +356,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.CaseConvention"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}],
                                                                         "parameter": "f"}}},
@@ -381,8 +381,8 @@
                                                                                                   "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
                                                                                               {"literal": {"string": " in union"}}]},
                                                                                           "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                                      "typeName": "hydra.error.DecodingError"}}}},
-                                                                              "type": {"variable": "hydra.error.DecodingError"}}},
+                                                                                      "typeName": "hydra.errors.DecodingError"}}}},
+                                                                              "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                           "type": {"variable": "hydra.util.CaseConvention"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -391,13 +391,13 @@
                                                                               "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
                                                                               "type": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.CaseConvention"}}}}},
                                                                           "type": {
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.CaseConvention"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}}}}}}}}}},
                                                       "domain": [{"variable": "hydra.core.Injection"}],
@@ -412,8 +412,8 @@
                                                           "@left": {
                                                             "wrap": {
                                                               "body": {"literal": {"string": "expected union"}},
-                                                              "typeName": "hydra.error.DecodingError"}}}},
-                                                      "type": {"variable": "hydra.error.DecodingError"}}},
+                                                              "typeName": "hydra.errors.DecodingError"}}}},
+                                                      "type": {"variable": "hydra.errors.DecodingError"}}},
                                                   "type": {"variable": "hydra.util.CaseConvention"}}}],
                                             "typeName": "hydra.core.Term"}}}}}},
                                 "domain": [{"variable": "hydra.core.Term"}],
@@ -430,8 +430,10 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "wrap": {"body": {"variable": "err"}, "typeName": "hydra.error.DecodingError"}}}},
-                                            "type": {"variable": "hydra.error.DecodingError"}}},
+                                                  "wrap": {
+                                                    "body": {"variable": "err"},
+                                                    "typeName": "hydra.errors.DecodingError"}}}},
+                                            "type": {"variable": "hydra.errors.DecodingError"}}},
                                         "type": {"variable": "hydra.util.CaseConvention"}}},
                                     "domain": [{"literal": {"string": {}}}],
                                     "parameter": "err"}}},
@@ -446,7 +448,7 @@
                                       "type": {"variable": "hydra.core.Term"}}},
                                   "type": {
                                     "either": {
-                                      "left": {"variable": "hydra.error.DecodingError"},
+                                      "left": {"variable": "hydra.errors.DecodingError"},
                                       "right": {"variable": "hydra.util.CaseConvention"}}}}}}}}}}},
                   "domain": [{"variable": "hydra.core.Term"}],
                   "parameter": "raw"}}},
@@ -461,7 +463,7 @@
                 "function": {
                   "codomain": {
                     "either": {
-                      "left": {"variable": "hydra.error.DecodingError"},
+                      "left": {"variable": "hydra.errors.DecodingError"},
                       "right": {"variable": "hydra.util.CaseConvention"}}},
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
@@ -591,7 +593,7 @@
                                                                                                             "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
                                                                                                             "type": {"unit": {}}}},
                                                                                                         "type": {"variable": "hydra.util.Comparison"}}},
-                                                                                                    "type": {"variable": "hydra.error.DecodingError"}}}}}}},
+                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                                                         "domain": [{"variable": "hydra.core.Term"}],
                                                                                         "parameter": "input"}}}}},
                                                                               "type": {"variable": "hydra.core.Name"}}},
@@ -599,7 +601,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.Comparison"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}},
                                                                       {
@@ -644,7 +646,7 @@
                                                                                                             "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
                                                                                                             "type": {"unit": {}}}},
                                                                                                         "type": {"variable": "hydra.util.Comparison"}}},
-                                                                                                    "type": {"variable": "hydra.error.DecodingError"}}}}}}},
+                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                                                         "domain": [{"variable": "hydra.core.Term"}],
                                                                                         "parameter": "input"}}}}},
                                                                               "type": {"variable": "hydra.core.Name"}}},
@@ -652,7 +654,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.Comparison"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}},
                                                                       {
@@ -697,7 +699,7 @@
                                                                                                             "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
                                                                                                             "type": {"unit": {}}}},
                                                                                                         "type": {"variable": "hydra.util.Comparison"}}},
-                                                                                                    "type": {"variable": "hydra.error.DecodingError"}}}}}}},
+                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                                                         "domain": [{"variable": "hydra.core.Term"}],
                                                                                         "parameter": "input"}}}}},
                                                                               "type": {"variable": "hydra.core.Name"}}},
@@ -705,7 +707,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.Comparison"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}}]},
                                                                   "function": {
@@ -718,7 +720,7 @@
                                                                         "function": {
                                                                           "codomain": {
                                                                             "either": {
-                                                                              "left": {"variable": "hydra.error.DecodingError"},
+                                                                              "left": {"variable": "hydra.errors.DecodingError"},
                                                                               "right": {"variable": "hydra.util.Comparison"}}},
                                                                           "domain": {"variable": "hydra.core.Term"}}}}}}},
                                                               "type": [
@@ -731,7 +733,7 @@
                                                                         "function": {
                                                                           "codomain": {
                                                                             "either": {
-                                                                              "left": {"variable": "hydra.error.DecodingError"},
+                                                                              "left": {"variable": "hydra.errors.DecodingError"},
                                                                               "right": {"variable": "hydra.util.Comparison"}}},
                                                                           "domain": {"variable": "hydra.core.Term"}}}}},
                                                                   "variables": []}]}],
@@ -753,7 +755,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.Comparison"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}}}}}},
                                                               "function": {
@@ -768,7 +770,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.Comparison"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}],
                                                                         "parameter": "f"}}},
@@ -793,8 +795,8 @@
                                                                                                   "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
                                                                                               {"literal": {"string": " in union"}}]},
                                                                                           "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                                      "typeName": "hydra.error.DecodingError"}}}},
-                                                                              "type": {"variable": "hydra.error.DecodingError"}}},
+                                                                                      "typeName": "hydra.errors.DecodingError"}}}},
+                                                                              "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                           "type": {"variable": "hydra.util.Comparison"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -803,13 +805,13 @@
                                                                               "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
                                                                               "type": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.Comparison"}}}}},
                                                                           "type": {
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.Comparison"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}}}}}}}}}},
                                                       "domain": [{"variable": "hydra.core.Injection"}],
@@ -824,8 +826,8 @@
                                                           "@left": {
                                                             "wrap": {
                                                               "body": {"literal": {"string": "expected union"}},
-                                                              "typeName": "hydra.error.DecodingError"}}}},
-                                                      "type": {"variable": "hydra.error.DecodingError"}}},
+                                                              "typeName": "hydra.errors.DecodingError"}}}},
+                                                      "type": {"variable": "hydra.errors.DecodingError"}}},
                                                   "type": {"variable": "hydra.util.Comparison"}}}],
                                             "typeName": "hydra.core.Term"}}}}}},
                                 "domain": [{"variable": "hydra.core.Term"}],
@@ -842,8 +844,10 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "wrap": {"body": {"variable": "err"}, "typeName": "hydra.error.DecodingError"}}}},
-                                            "type": {"variable": "hydra.error.DecodingError"}}},
+                                                  "wrap": {
+                                                    "body": {"variable": "err"},
+                                                    "typeName": "hydra.errors.DecodingError"}}}},
+                                            "type": {"variable": "hydra.errors.DecodingError"}}},
                                         "type": {"variable": "hydra.util.Comparison"}}},
                                     "domain": [{"literal": {"string": {}}}],
                                     "parameter": "err"}}},
@@ -858,7 +862,7 @@
                                       "type": {"variable": "hydra.core.Term"}}},
                                   "type": {
                                     "either": {
-                                      "left": {"variable": "hydra.error.DecodingError"},
+                                      "left": {"variable": "hydra.errors.DecodingError"},
                                       "right": {"variable": "hydra.util.Comparison"}}}}}}}}}}},
                   "domain": [{"variable": "hydra.core.Term"}],
                   "parameter": "raw"}}},
@@ -873,7 +877,7 @@
                 "function": {
                   "codomain": {
                     "either": {
-                      "left": {"variable": "hydra.error.DecodingError"},
+                      "left": {"variable": "hydra.errors.DecodingError"},
                       "right": {"variable": "hydra.util.Comparison"}}},
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
@@ -1003,7 +1007,7 @@
                                                                                                             "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
                                                                                                             "type": {"unit": {}}}},
                                                                                                         "type": {"variable": "hydra.util.Precision"}}},
-                                                                                                    "type": {"variable": "hydra.error.DecodingError"}}}}}}},
+                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                                                         "domain": [{"variable": "hydra.core.Term"}],
                                                                                         "parameter": "input"}}}}},
                                                                               "type": {"variable": "hydra.core.Name"}}},
@@ -1011,7 +1015,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.Precision"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}},
                                                                       {
@@ -1093,7 +1097,7 @@
                                                                                                                                                                                           "body": {
                                                                                                                                                                                             "typeApplication": {
                                                                                                                                                                                               "body": {"either": {"@right": {"variable": "i"}}},
-                                                                                                                                                                                              "type": {"variable": "hydra.error.DecodingError"}}},
+                                                                                                                                                                                              "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                                                                           "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                                                                       "domain": [{"literal": {"integer": {"int32": {}}}}],
                                                                                                                                                                                       "parameter": "i"}}}}],
@@ -1107,8 +1111,8 @@
                                                                                                                                                                                           "@left": {
                                                                                                                                                                                             "wrap": {
                                                                                                                                                                                               "body": {"literal": {"string": "expected int32 value"}},
-                                                                                                                                                                                              "typeName": "hydra.error.DecodingError"}}}},
-                                                                                                                                                                                      "type": {"variable": "hydra.error.DecodingError"}}},
+                                                                                                                                                                                              "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                                                                      "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                                                                   "type": {"literal": {"integer": {"int32": {}}}}}}],
                                                                                                                                                                             "typeName": "hydra.core.IntegerValue"}}}}}],
                                                                                                                                                                 "default": [
@@ -1121,8 +1125,8 @@
                                                                                                                                                                               "@left": {
                                                                                                                                                                                 "wrap": {
                                                                                                                                                                                   "body": {"literal": {"string": "expected int32 literal"}},
-                                                                                                                                                                                  "typeName": "hydra.error.DecodingError"}}}},
-                                                                                                                                                                          "type": {"variable": "hydra.error.DecodingError"}}},
+                                                                                                                                                                                  "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                                                          "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}}],
                                                                                                                                                                 "typeName": "hydra.core.Literal"}}}}}},
                                                                                                                                                     "domain": [{"variable": "hydra.core.Literal"}],
@@ -1137,8 +1141,8 @@
                                                                                                                                                         "@left": {
                                                                                                                                                           "wrap": {
                                                                                                                                                             "body": {"literal": {"string": "expected literal"}},
-                                                                                                                                                            "typeName": "hydra.error.DecodingError"}}}},
-                                                                                                                                                    "type": {"variable": "hydra.error.DecodingError"}}},
+                                                                                                                                                            "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                                 "type": {"literal": {"integer": {"int32": {}}}}}}],
                                                                                                                                           "typeName": "hydra.core.Term"}}}}}},
                                                                                                                               "domain": [{"variable": "hydra.core.Term"}],
@@ -1155,8 +1159,10 @@
                                                                                                                                           "body": {
                                                                                                                                             "either": {
                                                                                                                                               "@left": {
-                                                                                                                                                "wrap": {"body": {"variable": "err"}, "typeName": "hydra.error.DecodingError"}}}},
-                                                                                                                                          "type": {"variable": "hydra.error.DecodingError"}}},
+                                                                                                                                                "wrap": {
+                                                                                                                                                  "body": {"variable": "err"},
+                                                                                                                                                  "typeName": "hydra.errors.DecodingError"}}}},
+                                                                                                                                          "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                                                   "domain": [{"literal": {"string": {}}}],
                                                                                                                                   "parameter": "err"}}},
@@ -1171,7 +1177,7 @@
                                                                                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                 "type": {
                                                                                                                                   "either": {
-                                                                                                                                    "left": {"variable": "hydra.error.DecodingError"},
+                                                                                                                                    "left": {"variable": "hydra.errors.DecodingError"},
                                                                                                                                     "right": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}},
                                                                                                                 "domain": [{"variable": "hydra.core.Term"}],
                                                                                                                 "parameter": "raw"}}},
@@ -1197,7 +1203,7 @@
                                                                                                             "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
                                                                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                         "type": {"variable": "hydra.util.Precision"}}},
-                                                                                                    "type": {"variable": "hydra.error.DecodingError"}}}}}}},
+                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                                                         "domain": [{"variable": "hydra.core.Term"}],
                                                                                         "parameter": "input"}}}}},
                                                                               "type": {"variable": "hydra.core.Name"}}},
@@ -1205,7 +1211,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.Precision"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}}]},
                                                                   "function": {
@@ -1218,7 +1224,7 @@
                                                                         "function": {
                                                                           "codomain": {
                                                                             "either": {
-                                                                              "left": {"variable": "hydra.error.DecodingError"},
+                                                                              "left": {"variable": "hydra.errors.DecodingError"},
                                                                               "right": {"variable": "hydra.util.Precision"}}},
                                                                           "domain": {"variable": "hydra.core.Term"}}}}}}},
                                                               "type": [
@@ -1231,7 +1237,7 @@
                                                                         "function": {
                                                                           "codomain": {
                                                                             "either": {
-                                                                              "left": {"variable": "hydra.error.DecodingError"},
+                                                                              "left": {"variable": "hydra.errors.DecodingError"},
                                                                               "right": {"variable": "hydra.util.Precision"}}},
                                                                           "domain": {"variable": "hydra.core.Term"}}}}},
                                                                   "variables": []}]}],
@@ -1253,7 +1259,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.Precision"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}}}}}},
                                                               "function": {
@@ -1268,7 +1274,7 @@
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.Precision"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}],
                                                                         "parameter": "f"}}},
@@ -1293,8 +1299,8 @@
                                                                                                   "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
                                                                                               {"literal": {"string": " in union"}}]},
                                                                                           "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                                                                      "typeName": "hydra.error.DecodingError"}}}},
-                                                                              "type": {"variable": "hydra.error.DecodingError"}}},
+                                                                                      "typeName": "hydra.errors.DecodingError"}}}},
+                                                                              "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                           "type": {"variable": "hydra.util.Precision"}}},
                                                                       "function": {
                                                                         "typeApplication": {
@@ -1303,13 +1309,13 @@
                                                                               "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
                                                                               "type": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.Precision"}}}}},
                                                                           "type": {
                                                                             "function": {
                                                                               "codomain": {
                                                                                 "either": {
-                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
                                                                                   "right": {"variable": "hydra.util.Precision"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}}}}}}}}}},
                                                       "domain": [{"variable": "hydra.core.Injection"}],
@@ -1324,8 +1330,8 @@
                                                           "@left": {
                                                             "wrap": {
                                                               "body": {"literal": {"string": "expected union"}},
-                                                              "typeName": "hydra.error.DecodingError"}}}},
-                                                      "type": {"variable": "hydra.error.DecodingError"}}},
+                                                              "typeName": "hydra.errors.DecodingError"}}}},
+                                                      "type": {"variable": "hydra.errors.DecodingError"}}},
                                                   "type": {"variable": "hydra.util.Precision"}}}],
                                             "typeName": "hydra.core.Term"}}}}}},
                                 "domain": [{"variable": "hydra.core.Term"}],
@@ -1342,8 +1348,10 @@
                                             "body": {
                                               "either": {
                                                 "@left": {
-                                                  "wrap": {"body": {"variable": "err"}, "typeName": "hydra.error.DecodingError"}}}},
-                                            "type": {"variable": "hydra.error.DecodingError"}}},
+                                                  "wrap": {
+                                                    "body": {"variable": "err"},
+                                                    "typeName": "hydra.errors.DecodingError"}}}},
+                                            "type": {"variable": "hydra.errors.DecodingError"}}},
                                         "type": {"variable": "hydra.util.Precision"}}},
                                     "domain": [{"literal": {"string": {}}}],
                                     "parameter": "err"}}},
@@ -1358,7 +1366,7 @@
                                       "type": {"variable": "hydra.core.Term"}}},
                                   "type": {
                                     "either": {
-                                      "left": {"variable": "hydra.error.DecodingError"},
+                                      "left": {"variable": "hydra.errors.DecodingError"},
                                       "right": {"variable": "hydra.util.Precision"}}}}}}}}}}},
                   "domain": [{"variable": "hydra.core.Term"}],
                   "parameter": "raw"}}},
@@ -1373,7 +1381,7 @@
                 "function": {
                   "codomain": {
                     "either": {
-                      "left": {"variable": "hydra.error.DecodingError"},
+                      "left": {"variable": "hydra.errors.DecodingError"},
                       "right": {"variable": "hydra.util.Precision"}}},
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
@@ -1385,5 +1393,5 @@
     "hydra.rewriting",
     "hydra.decode.context",
     "hydra.decode.core",
-    "hydra.decode.error"],
+    "hydra.decode.errors"],
   "typeDependencies": ["hydra.util", "hydra.util"]}

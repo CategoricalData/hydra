@@ -10,7 +10,7 @@ from typing import TypeVar, cast
 import hydra.coders
 import hydra.context
 import hydra.core
-import hydra.error
+import hydra.errors
 import hydra.graph
 import hydra.hoisting
 import hydra.inference
@@ -33,7 +33,7 @@ import hydra.reflect
 import hydra.rewriting
 import hydra.schemas
 import hydra.show.core
-import hydra.show.error
+import hydra.show.errors
 import hydra.util
 
 T0 = TypeVar("T0")
@@ -330,7 +330,7 @@ def term_alternatives(cx: hydra.context.Context, graph: hydra.graph.Graph, term:
             def for_field_type(ft: hydra.core.FieldType) -> hydra.core.Field:
                 ftname = ft.name
                 return hydra.core.Field(fname, cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.logic.if_else(hydra.lib.equality.equal(ftname, fname), (lambda : Just(fterm)), (lambda : Nothing())))))
-            return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda x: x), hydra.schemas.require_union_type(cx, graph, tname)), (lambda rt: Right((cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(tname, hydra.lib.lists.map((lambda x1: for_field_type(x1)), rt)))),))))
+            return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda x: x), hydra.schemas.require_union_type(cx, graph, tname)), (lambda rt: Right((cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(tname, hydra.lib.lists.map((lambda x1: for_field_type(x1)), rt)))),))))
 
         case hydra.core.TermUnit():
             return Right((cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))),))
@@ -596,7 +596,7 @@ def data_graph_to_definitions(constraints: hydra.coders.LanguageConstraints, do_
     @lru_cache(1)
     def bins1() -> frozenlist[hydra.core.Binding]:
         return hydra.lib.logic.if_else(do_hoist_case_statements, (lambda : hoist_cases(bins0)), (lambda : bins0))
-    return hydra.lib.eithers.bind(hydra.lib.logic.if_else(do_infer, (lambda : hydra.lib.eithers.map((lambda result: hydra.lib.pairs.second(hydra.lib.pairs.first(result))), hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda x: x), hydra.inference.infer_graph_types(cx, bins1(), rebuild_graph(bins1()))))), (lambda : check_bindings_typed("after case hoisting", bins1()))), (lambda bins2: hydra.lib.eithers.bind(hydra.lib.logic.if_else(do_hoist_polymorphic_let_bindings, (lambda : check_bindings_typed("after let hoisting", hoist_poly(bins2))), (lambda : Right(bins2))), (lambda bins3: hydra.lib.eithers.bind(adapt_data_graph(constraints, do_expand, bins3, cx, rebuild_graph(bins3)), (lambda adapt_result: (adapted := hydra.lib.pairs.first(adapt_result), adapted_bindings := hydra.lib.pairs.second(adapt_result), hydra.lib.eithers.bind(check_bindings_typed("after adaptation", adapted_bindings), (lambda bins4: (bins5 := normalize_bindings(bins4), to_def := (lambda el: hydra.lib.maybes.map((lambda ts: hydra.module.TermDefinition(el.name, el.term, ts)), el.type)), selected_elements := hydra.lib.lists.filter((lambda el: hydra.lib.maybes.maybe((lambda : False), (lambda ns: hydra.lib.sets.member(ns, namespaces_set())), hydra.names.namespace_of(el.name))), bins5), elements_by_namespace := hydra.lib.lists.foldl((lambda acc, el: hydra.lib.maybes.maybe((lambda : acc), (lambda ns: (existing := hydra.lib.maybes.maybe((lambda : ()), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(ns, acc)), hydra.lib.maps.insert(ns, hydra.lib.lists.concat2(existing, (el,)), acc))[1]), hydra.names.namespace_of(el.name))), hydra.lib.maps.empty(), selected_elements), defs_grouped := hydra.lib.lists.map((lambda ns: (els_for_ns := hydra.lib.maybes.maybe((lambda : ()), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(ns, elements_by_namespace)), hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: to_def(x1)), els_for_ns)))[1]), namespaces), g := hydra.lexical.build_graph(bins5, hydra.lib.maps.empty(), adapted.primitives), Right((hydra.graph.Graph(g.bound_terms, g.bound_types, g.class_constraints, g.lambda_variables, g.metadata, g.primitives, adapted.schema_types, g.type_variables), defs_grouped)))[6])))[2]))))))
+    return hydra.lib.eithers.bind(hydra.lib.logic.if_else(do_infer, (lambda : hydra.lib.eithers.map((lambda result: hydra.lib.pairs.second(hydra.lib.pairs.first(result))), hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda x: x), hydra.inference.infer_graph_types(cx, bins1(), rebuild_graph(bins1()))))), (lambda : check_bindings_typed("after case hoisting", bins1()))), (lambda bins2: hydra.lib.eithers.bind(hydra.lib.logic.if_else(do_hoist_polymorphic_let_bindings, (lambda : check_bindings_typed("after let hoisting", hoist_poly(bins2))), (lambda : Right(bins2))), (lambda bins3: hydra.lib.eithers.bind(adapt_data_graph(constraints, do_expand, bins3, cx, rebuild_graph(bins3)), (lambda adapt_result: (adapted := hydra.lib.pairs.first(adapt_result), adapted_bindings := hydra.lib.pairs.second(adapt_result), hydra.lib.eithers.bind(check_bindings_typed("after adaptation", adapted_bindings), (lambda bins4: (bins5 := normalize_bindings(bins4), to_def := (lambda el: hydra.lib.maybes.map((lambda ts: hydra.module.TermDefinition(el.name, el.term, ts)), el.type)), selected_elements := hydra.lib.lists.filter((lambda el: hydra.lib.maybes.maybe((lambda : False), (lambda ns: hydra.lib.sets.member(ns, namespaces_set())), hydra.names.namespace_of(el.name))), bins5), elements_by_namespace := hydra.lib.lists.foldl((lambda acc, el: hydra.lib.maybes.maybe((lambda : acc), (lambda ns: (existing := hydra.lib.maybes.maybe((lambda : ()), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(ns, acc)), hydra.lib.maps.insert(ns, hydra.lib.lists.concat2(existing, (el,)), acc))[1]), hydra.names.namespace_of(el.name))), hydra.lib.maps.empty(), selected_elements), defs_grouped := hydra.lib.lists.map((lambda ns: (els_for_ns := hydra.lib.maybes.maybe((lambda : ()), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(ns, elements_by_namespace)), hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: to_def(x1)), els_for_ns)))[1]), namespaces), g := hydra.lexical.build_graph(bins5, hydra.lib.maps.empty(), adapted.primitives), Right((hydra.graph.Graph(g.bound_terms, g.bound_types, g.class_constraints, g.lambda_variables, g.metadata, g.primitives, adapted.schema_types, g.type_variables), defs_grouped)))[6])))[2]))))))
 
 def schema_graph_to_definitions(constraints: hydra.coders.LanguageConstraints, graph: hydra.graph.Graph, name_lists: frozenlist[frozenlist[hydra.core.Name]], cx: hydra.context.Context) -> Either[str, tuple[FrozenDict[hydra.core.Name, hydra.core.Type], frozenlist[frozenlist[hydra.module.TypeDefinition]]]]:
     r"""Given a schema graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, then return a corresponding type definition for each element name."""
@@ -613,4 +613,4 @@ def simple_language_adapter(lang: hydra.coders.Language, cx: T0, g: hydra.graph.
     @lru_cache(1)
     def litmap() -> FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType]:
         return adapt_literal_types_map(constraints)
-    return hydra.lib.eithers.bind(adapt_type(constraints, litmap(), typ), (lambda adapted_type: Right(hydra.util.Adapter(False, typ, adapted_type, hydra.util.Coder((lambda cx2, term: hydra.lib.eithers.bimap((lambda _s: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_s))), cx2)), (lambda _x: _x), adapt_term(constraints, litmap(), cx2, g, term))), (lambda cx2, term: Right(term)))))))
+    return hydra.lib.eithers.bind(adapt_type(constraints, litmap(), typ), (lambda adapted_type: Right(hydra.util.Adapter(False, typ, adapted_type, hydra.util.Coder((lambda cx2, term: hydra.lib.eithers.bimap((lambda _s: hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(_s))), cx2)), (lambda _x: _x), adapt_term(constraints, litmap(), cx2, g, term))), (lambda cx2, term: Right(term)))))))

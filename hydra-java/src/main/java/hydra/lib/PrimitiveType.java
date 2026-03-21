@@ -5,8 +5,8 @@ import hydra.context.InContext;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.dsl.Types;
-import hydra.error.Error_;
-import hydra.error.OtherError;
+import hydra.errors.Error_;
+import hydra.errors.OtherError;
 import hydra.graph.Graph;
 import hydra.util.Either;
 
