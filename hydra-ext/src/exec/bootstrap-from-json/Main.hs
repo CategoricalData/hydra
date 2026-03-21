@@ -353,7 +353,7 @@ main = do
             "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allUniverse extModsForTests >> return ()
             "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outMain allUniverse extModsForTests >> return ()
             "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allUniverse extModsForTests >> return ()
-            _ | Just gen <- lispGenerator -> generateSources gen lispLanguage True False False False outMain allUniverse extModsForTests >> return ()
+            _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False outMain allUniverse extModsForTests >> return ()
             _ -> return ()
           putStrLn ""
 
@@ -364,7 +364,7 @@ main = do
         "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outTest allUniverse testMods
         "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outTest allUniverse testMods
         "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outTest allUniverse testMods
-        _ | Just gen <- lispGenerator -> generateSources gen lispLanguage True False False False outTest allUniverse testMods
+        _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False outTest allUniverse testMods
         _ -> return 0
       testEnd <- getCurrentTime
 

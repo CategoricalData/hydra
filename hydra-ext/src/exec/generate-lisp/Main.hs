@@ -25,7 +25,7 @@ main = do
   let libDstDir = schemeMainDir </> "hydra" </> "lib"
 
   putStrLn "Generating Scheme..."
-  n1 <- writeScheme schemeMainDir kernelModules kernelModules
+  n1 <- writeScheme schemeMainDir mainModules mainModules
   putStrLn $ "  " ++ show n1 ++ " kernel modules"
   e1 <- writeScheme schemeMainDir universeModules testDependencyModules
   putStrLn $ "  " ++ show e1 ++ " extra modules (test dependencies)"
@@ -53,7 +53,7 @@ main = do
   let clojureMainDir = "../hydra-lisp/hydra-clojure/src/gen-main/clojure"
   let clojureTestDir = "../hydra-lisp/hydra-clojure/src/gen-test/clojure"
   putStrLn "Generating Clojure..."
-  n2 <- writeClojure clojureMainDir kernelModules kernelModules
+  n2 <- writeClojure clojureMainDir mainModules mainModules
   putStrLn $ "  " ++ show n2 ++ " kernel modules"
   e2 <- writeClojure clojureMainDir universeModules testDependencyModules
   putStrLn $ "  " ++ show e2 ++ " extra modules (test dependencies)"
@@ -64,7 +64,7 @@ main = do
   let commonLispMainDir = "../hydra-lisp/hydra-common-lisp/src/gen-main/common-lisp"
   let commonLispTestDir = "../hydra-lisp/hydra-common-lisp/src/gen-test/common-lisp"
   putStrLn "Generating Common Lisp..."
-  n3 <- writeCommonLisp commonLispMainDir kernelModules kernelModules
+  n3 <- writeCommonLisp commonLispMainDir mainModules mainModules
   putStrLn $ "  " ++ show n3 ++ " kernel modules"
   e3 <- writeCommonLisp commonLispMainDir universeModules testDependencyModules
   putStrLn $ "  " ++ show e3 ++ " extra modules (test dependencies)"
@@ -75,7 +75,7 @@ main = do
   let emacsLispMainDir = "../hydra-lisp/hydra-emacs-lisp/src/gen-main/emacs-lisp"
   let emacsLispTestDir = "../hydra-lisp/hydra-emacs-lisp/src/gen-test/emacs-lisp"
   putStrLn "Generating Emacs Lisp..."
-  n4 <- writeEmacsLisp emacsLispMainDir kernelModules kernelModules
+  n4 <- writeEmacsLisp emacsLispMainDir mainModules mainModules
   putStrLn $ "  " ++ show n4 ++ " kernel modules"
   e4 <- writeEmacsLisp emacsLispMainDir universeModules testDependencyModules
   putStrLn $ "  " ++ show e4 ++ " extra modules (test dependencies)"

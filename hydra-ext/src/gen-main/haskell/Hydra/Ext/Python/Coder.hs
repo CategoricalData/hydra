@@ -1650,14 +1650,12 @@ encodeApplication :: Context.Context -> Helpers.PythonEnvironment -> Core.Applic
 encodeApplication cx env app =
 
       let g = pythonEnvironmentGetGraph env
-          tc = Helpers.pythonEnvironmentGraph env
-          skipCasts = Helpers.pythonEnvironmentSkipCasts env
           term = Core.TermApplication app
           gathered = CoderUtils.gatherArgs term []
           fun = Pairs.first gathered
           args = Pairs.second gathered
-          termArity = termArityWithPrimitives g fun
-          arity = Eithers.fromRight termArity (Eithers.map (\_r -> Arity.typeArity (Pairs.first _r)) (Checking.typeOf cx tc [] fun))
+          knownArity = termArityWithPrimitives g fun
+          arity = Math.max knownArity (Lists.length args)
       in (Eithers.bind (Eithers.mapList (\t -> encodeTermInline cx env False t) args) (\pargs ->
         let hargs = Lists.take arity pargs
             rargs = Lists.drop arity pargs

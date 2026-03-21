@@ -240,14 +240,14 @@ freeTypeVariablesInTerm term0 =
 freeVariablesInTerm :: Core.Term -> S.Set Core.Name
 freeVariablesInTerm term =
 
-      let dfltVars = Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInTerm t)) Sets.empty (subterms term)
+      let dfltVars = \_ -> Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInTerm t)) Sets.empty (subterms term)
       in case term of
         Core.TermFunction v0 -> case v0 of
           Core.FunctionLambda v1 -> Sets.delete (Core.lambdaParameter v1) (freeVariablesInTerm (Core.lambdaBody v1))
-          _ -> dfltVars
-        Core.TermLet v0 -> Sets.difference dfltVars (Sets.fromList (Lists.map Core.bindingName (Core.letBindings v0)))
+          _ -> dfltVars ()
+        Core.TermLet v0 -> Sets.difference (dfltVars ()) (Sets.fromList (Lists.map Core.bindingName (Core.letBindings v0)))
         Core.TermVariable v0 -> Sets.singleton v0
-        _ -> dfltVars
+        _ -> dfltVars ()
 
 -- | Find the free variables (i.e. variables not bound by a lambda or let) in a type
 freeVariablesInType :: Core.Type -> S.Set Core.Name

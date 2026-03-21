@@ -367,30 +367,59 @@ isPrimitiveRef primName term =
       Core.TermTypeLambda v0 -> isPrimitiveRef primName (Core.typeLambdaBody v0)
       _ -> False
 
+wrapInThunk :: Syntax.Expression -> Syntax.Expression
+wrapInThunk expr =
+    Syntax.ExpressionLambda (Syntax.Lambda {
+      Syntax.lambdaName = Nothing,
+      Syntax.lambdaParams = [],
+      Syntax.lambdaRestParam = Nothing,
+      Syntax.lambdaBody = [
+        expr]})
+
+isLazy2ArgPrimitive :: Core.Name -> Bool
+isLazy2ArgPrimitive name =
+    Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromLeft")) (Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromRight")) (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe")))
+
+isLazy3ArgPrimitive :: Core.Name -> Bool
+isLazy3ArgPrimitive name = Equality.equal name (Core.Name "hydra.lib.maybes.maybe")
+
+isCasesPrimitive :: Core.Name -> Bool
+isCasesPrimitive name = Equality.equal name (Core.Name "hydra.lib.maybes.cases")
+
 encodeApplication :: Syntax.Dialect -> t0 -> t1 -> Core.Term -> Core.Term -> Either t2 Syntax.Expression
 encodeApplication dialect cx g rawFun rawArg =
 
       let dFun = Rewriting.deannotateTerm rawFun
+          normal =
+                  Eithers.bind (encodeTerm dialect cx g rawFun) (\fun -> Eithers.bind (encodeTerm dialect cx g rawArg) (\arg -> Right (lispApp fun [
+                    arg])))
+          enc = \t -> encodeTerm dialect cx g t
       in case dFun of
         Core.TermApplication v0 ->
           let midFun = Core.applicationFunction v0
               midArg = Core.applicationArgument v0
               dMidFun = Rewriting.deannotateTerm midFun
-          in case dMidFun of
+              isLazy2 =
+                      Logic.or (isPrimitiveRef "hydra.lib.eithers.fromLeft" dMidFun) (Logic.or (isPrimitiveRef "hydra.lib.eithers.fromRight" dMidFun) (isPrimitiveRef "hydra.lib.maybes.fromMaybe" dMidFun))
+          in (Logic.ifElse isLazy2 (Eithers.bind (enc midFun) (\ePrim -> Eithers.bind (enc midArg) (\eDef -> Eithers.bind (enc rawArg) (\eArg -> Right (lispApp (lispApp ePrim [
+            wrapInThunk eDef]) [
+            eArg]))))) (case dMidFun of
             Core.TermApplication v1 ->
               let innerFun = Core.applicationFunction v1
                   innerArg = Core.applicationArgument v1
                   dInnerFun = Rewriting.deannotateTerm innerFun
-                  isIfElse = isPrimitiveRef "hydra.lib.logic.ifElse" dInnerFun
-              in (Logic.ifElse isIfElse (Eithers.bind (encodeTerm dialect cx g innerArg) (\condExpr -> Eithers.bind (encodeTerm dialect cx g midArg) (\thenExpr -> Eithers.bind (encodeTerm dialect cx g rawArg) (\elseExpr -> Right (Syntax.ExpressionIf (Syntax.IfExpression {
-                Syntax.ifExpressionCondition = condExpr,
-                Syntax.ifExpressionThen = thenExpr,
-                Syntax.ifExpressionElse = (Just elseExpr)})))))) (Eithers.bind (encodeTerm dialect cx g rawFun) (\fun -> Eithers.bind (encodeTerm dialect cx g rawArg) (\arg -> Right (lispApp fun [
-                arg])))))
-            _ -> Eithers.bind (encodeTerm dialect cx g rawFun) (\fun -> Eithers.bind (encodeTerm dialect cx g rawArg) (\arg -> Right (lispApp fun [
-              arg])))
-        _ -> Eithers.bind (encodeTerm dialect cx g rawFun) (\fun -> Eithers.bind (encodeTerm dialect cx g rawArg) (\arg -> Right (lispApp fun [
-          arg])))
+              in (Logic.ifElse (isPrimitiveRef "hydra.lib.logic.ifElse" dInnerFun) (Eithers.bind (enc innerArg) (\eC -> Eithers.bind (enc midArg) (\eT -> Eithers.bind (enc rawArg) (\eE -> Right (Syntax.ExpressionIf (Syntax.IfExpression {
+                Syntax.ifExpressionCondition = eC,
+                Syntax.ifExpressionThen = eT,
+                Syntax.ifExpressionElse = (Just eE)})))))) (Logic.ifElse (isPrimitiveRef "hydra.lib.maybes.maybe" dInnerFun) (Eithers.bind (enc innerFun) (\eP -> Eithers.bind (enc innerArg) (\eDef -> Eithers.bind (enc midArg) (\eF -> Eithers.bind (enc rawArg) (\eM -> Right (lispApp (lispApp (lispApp eP [
+                wrapInThunk eDef]) [
+                eF]) [
+                eM])))))) (Logic.ifElse (isPrimitiveRef "hydra.lib.maybes.cases" dInnerFun) (Eithers.bind (enc innerFun) (\eP -> Eithers.bind (enc innerArg) (\eM -> Eithers.bind (enc midArg) (\eN -> Eithers.bind (enc rawArg) (\eJ -> Right (lispApp (lispApp (lispApp eP [
+                eM]) [
+                wrapInThunk eN]) [
+                eJ])))))) normal)))
+            _ -> normal))
+        _ -> normal
 
 encodeElimination :: Syntax.Dialect -> t0 -> t1 -> Core.Elimination -> Maybe Core.Term -> Either t2 Syntax.Expression
 encodeElimination dialect cx g elim marg =

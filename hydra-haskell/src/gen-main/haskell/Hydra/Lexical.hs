@@ -250,8 +250,7 @@ requirePrimitive cx graph name =
 requirePrimitiveType :: Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) Core.TypeScheme
 requirePrimitiveType cx tx name =
 
-      let mts =
-              Maps.lookup name (Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx))))
+      let mts = Maybes.map (\_p -> Graph.primitiveType _p) (Maps.lookup name (Graph.graphPrimitives tx))
       in (Maybes.maybe (Left (Context.InContext {
         Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "no such primitive function: " (Core.unName name)))),
         Context.inContextContext = cx})) (\ts -> Right ts) mts)

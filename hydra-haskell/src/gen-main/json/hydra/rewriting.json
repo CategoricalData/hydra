@@ -2617,54 +2617,65 @@
                       {
                         "name": "dfltVars",
                         "term": {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"variable": "term"},
-                                "function": {"variable": "hydra.rewriting.subterms"}}},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "typeApplication": {
-                                    "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
-                                    "type": {"variable": "hydra.core.Name"}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {
+                          "typeLambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {"variable": "term"},
+                                          "function": {"variable": "hydra.rewriting.subterms"}}},
                                       "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "t"},
-                                                        "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "s"},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.sets.union"}},
-                                                            "type": {"variable": "hydra.core.Name"}}}}}}},
-                                                "domain": [{"variable": "hydra.core.Term"}],
-                                                "parameter": "t"}}},
-                                          "domain": [{"set": {"variable": "hydra.core.Name"}}],
-                                          "parameter": "s"}}},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
-                                            "type": {"set": {"variable": "hydra.core.Name"}}}},
-                                        "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                                        "application": {
+                                          "argument": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                              "type": {"variable": "hydra.core.Name"}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {"variable": "t"},
+                                                                  "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"variable": "s"},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.sets.union"}},
+                                                                      "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                          "domain": [{"variable": "hydra.core.Term"}],
+                                                          "parameter": "t"}}},
+                                                    "domain": [{"set": {"variable": "hydra.core.Name"}}],
+                                                    "parameter": "s"}}},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                      "type": {"set": {"variable": "hydra.core.Name"}}}},
+                                                  "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                                  "domain": [{"variable": "t0"}],
+                                  "parameter": "_"}}},
+                            "parameter": "t0"}},
                         "type": [
                           {
                             "constraints": null,
-                            "type": {"set": {"variable": "hydra.core.Name"}},
-                            "variables": []}]}],
+                            "type": {
+                              "function": {
+                                "codomain": {"set": {"variable": "hydra.core.Name"}},
+                                "domain": {"variable": "t0"}}},
+                            "variables": ["t0"]}]}],
                     "body": {
                       "application": {
                         "argument": {"variable": "term"},
@@ -2710,7 +2721,12 @@
                                                                   "type": {"variable": "hydra.core.Name"}}}}}}},
                                                       "domain": [{"variable": "hydra.core.Lambda"}],
                                                       "parameter": "l"}}}}],
-                                            "default": [{"variable": "dfltVars"}],
+                                            "default": [
+                                              {
+                                                "application": {
+                                                  "argument": {"unit": {}},
+                                                  "function": {
+                                                    "typeApplication": {"body": {"variable": "dfltVars"}, "type": {"unit": {}}}}}}],
                                             "typeName": "hydra.core.Function"}}}}},
                                   {
                                     "name": "let",
@@ -2747,7 +2763,11 @@
                                                       "type": {"variable": "hydra.core.Name"}}}}},
                                               "function": {
                                                 "application": {
-                                                  "argument": {"variable": "dfltVars"},
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"unit": {}},
+                                                      "function": {
+                                                        "typeApplication": {"body": {"variable": "dfltVars"}, "type": {"unit": {}}}}}},
                                                   "function": {
                                                     "typeApplication": {
                                                       "body": {"function": {"primitive": "hydra.lib.sets.difference"}},
@@ -2768,7 +2788,12 @@
                                                   "type": {"variable": "hydra.core.Name"}}}}},
                                           "domain": [{"variable": "hydra.core.Name"}],
                                           "parameter": "v"}}}}],
-                                "default": [{"variable": "dfltVars"}],
+                                "default": [
+                                  {
+                                    "application": {
+                                      "argument": {"unit": {}},
+                                      "function": {
+                                        "typeApplication": {"body": {"variable": "dfltVars"}, "type": {"unit": {}}}}}}],
                                 "typeName": "hydra.core.Term"}}}}}}}},
                 "domain": [{"variable": "hydra.core.Term"}],
                 "parameter": "term"}}}}},
