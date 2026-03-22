@@ -78,7 +78,6 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
-import qualified Hydra.Sources.Kernel.Terms.Tarjan         as Tarjan
 import qualified Hydra.Sources.Kernel.Terms.Templates      as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification    as Unification
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
