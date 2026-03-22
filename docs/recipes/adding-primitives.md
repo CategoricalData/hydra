@@ -254,7 +254,7 @@ public class IsAlphaNum extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
                 c -> Terms.boolean_(apply(c)),
-                hydra.extract.core.Core.int32(cx, graph, args.get(0)));
+                hydra.extract.Core.int32(cx, graph, args.get(0)));
     }
 
     public static boolean apply(int codePoint) {

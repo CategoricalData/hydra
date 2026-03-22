@@ -491,7 +491,7 @@ public interface MyTypes {
     String NS = "my.namespace";
 
     static Binding define(String localName, Type type) {
-        return hydra.annotations.Annotations.typeElement(
+        return hydra.Annotations.typeElement(
             new Name(NS + "." + localName), type);
     }
 

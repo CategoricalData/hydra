@@ -262,7 +262,7 @@ The original unit-type fix script used file-level regex replacement, which incor
 
 Many primitive function `implementation()` methods were building `Term.Application` terms without reducing them. This means when the test evaluator called `reduceTerm`, these primitives returned unreduced application trees instead of actual computed results.
 
-**Root cause:** The pattern `Terms.apply(f, x)` just constructs a `Term.Application` node in the AST — it does NOT evaluate the function. The `implementation()` methods need to call `hydra.reduction.Reduction.reduceTerm(true, ...)` on these application terms to get actual results.
+**Root cause:** The pattern `Terms.apply(f, x)` just constructs a `Term.Application` node in the AST — it does NOT evaluate the function. The `implementation()` methods need to call `hydra.Reduction.reduceTerm(true, ...)` on these application terms to get actual results.
 
 **Files fixed:**
 
@@ -287,7 +287,7 @@ Many primitive function `implementation()` methods were building `Term.Applicati
 
 `Lt`, `Gt`, `Lte`, `Gte` `implementation()` methods were using `args.get(0).toString().compareTo(args.get(1).toString())` for term comparison. Since `Term` has no custom `toString()`, this compared Java default `Object.toString()` strings containing hash codes — giving effectively random results.
 
-**Fix:** Changed to use `Compare.compareTerms()` which uses `hydra.show.core.Core.term()` for deterministic string comparison. Also fixed `Compare.compareTerms()` itself for the same issue.
+**Fix:** Changed to use `Compare.compareTerms()` which uses `hydra.show.Core.term()` for deterministic string comparison. Also fixed `Compare.compareTerms()` itself for the same issue.
 
 This was the root cause of all predicate-based list test failures (dropWhile, filter, find, partition, span — 15 tests).
 
@@ -300,7 +300,7 @@ This was the root cause of all predicate-based list test failures (dropWhile, fi
 
 ### Fix 37: Proper structural comparison in Compare.compareTerms (session 19)
 
-`Compare.compareTerms()` was using `hydra.show.core.Core.term()` string comparison, which fails for numeric values (e.g., "1:int32" < "10:int32" because ':' > '0'). Implemented proper structural comparison:
+`Compare.compareTerms()` was using `hydra.show.Core.term()` string comparison, which fails for numeric values (e.g., "1:int32" < "10:int32" because ':' > '0'). Implemented proper structural comparison:
 - Integer literals: convert to BigInteger and compare numerically
 - Float literals: convert to BigDecimal and compare
 - String literals: use String.compareTo
