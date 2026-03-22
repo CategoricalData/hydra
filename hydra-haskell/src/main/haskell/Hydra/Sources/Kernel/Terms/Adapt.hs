@@ -6,7 +6,9 @@ import Hydra.Kernel hiding (
   adaptFloatType, adaptDataGraph, adaptGraphSchema, adaptIntegerType, adaptLambdaDomains, adaptLiteral,
   adaptLiteralType, adaptLiteralTypesMap, adaptLiteralValue, adaptNestedTypes, adaptPrimitive,
   adaptTerm, adaptTermForLanguage, adaptType, adaptTypeForLanguage, adaptTypeScheme,
-  composeCoders, dataGraphToDefinitions, literalTypeSupported, pushTypeAppsInward, schemaGraphToDefinitions,
+  composeCoders, dataGraphToDefinitions, literalTypeSupported,
+  prepareFloatType, prepareIntegerType, prepareLiteralType, prepareType, prepareSame,
+  pushTypeAppsInward, schemaGraphToDefinitions,
   simpleLanguageAdapter, termAlternatives, typeAlternatives)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Accessors    as Accessors
@@ -107,6 +109,14 @@ module_ = Module ns elements
       toBinding composeCoders,
       toBinding dataGraphToDefinitions,
       toBinding literalTypeSupported,
+      -- TODO: the prepare* functions below duplicate logic already in adaptFloatType, adaptIntegerType,
+      -- adaptLiteralType, etc. They should be simplified or eliminated in favor of those functions.
+      -- They were moved here from hydra.ext.scala.prepare as part of the coder standardization effort.
+      toBinding prepareFloatType,
+      toBinding prepareIntegerType,
+      toBinding prepareLiteralType,
+      toBinding prepareType,
+      toBinding prepareSame,
       toBinding pushTypeAppsInward,
       toBinding schemaGraphToDefinitions,
       toBinding simpleLanguageAdapter,
@@ -831,3 +841,114 @@ simpleLanguageAdapter = define "simpleLanguageAdapter" $
         Eithers.bimap ("_s" ~> Ctx.inContext (Error.errorOther $ Error.otherError $ var "_s") (var "cx")) ("_x" ~> var "_x")
           (adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "g" @@ var "term"))
       ("cx" ~> "term" ~> right $ var "term"))
+
+
+--------------------------------------------------------------------------------
+-- Type preparation functions
+-- TODO: these functions duplicate logic already in adaptFloatType, adaptIntegerType,
+-- adaptLiteralType, etc. above. They differ in that they return a triple of
+-- (adapted type, term transformer, diagnostic messages) rather than just the adapted type.
+-- They should be simplified or eliminated in a future refactoring pass.
+--------------------------------------------------------------------------------
+
+-- | Prepare a literal type, substituting unsupported types.
+-- Returns (adapted literal type, literal value transformer, diagnostic messages).
+prepareLiteralType :: TBinding (LiteralType -> (LiteralType, Literal -> Literal, S.Set String))
+prepareLiteralType = define "prepareLiteralType" $
+  doc "Prepare a literal type, substituting unsupported types" $
+  lambda "at" $
+    (cases _LiteralType (var "at") (Just (prepareSame @@ var "at")) [
+      _LiteralType_binary>>: (constant $
+        triple
+          (Core.literalTypeString)
+          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
+            _Literal_binary>>: ("b" ~> inject _Literal _Literal_string (Literals.binaryToString (var "b")))])
+          (Sets.fromList $ list [string "replace binary strings with character strings"])),
+      _LiteralType_float>>: ("ft" ~> lets [
+        "result">: prepareFloatType @@ var "ft",
+        "rtyp">: Pairs.first (var "result"),
+        "rep">: Pairs.first (Pairs.second (var "result")),
+        "msgs">: Pairs.second (Pairs.second (var "result"))] $
+        triple
+          (Core.literalTypeFloat (var "rtyp"))
+          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
+            _Literal_float>>: ("fv" ~> inject _Literal _Literal_float (var "rep" @@ var "fv"))])
+          (var "msgs")),
+      _LiteralType_integer>>: ("it" ~> lets [
+        "result">: prepareIntegerType @@ var "it",
+        "rtyp">: Pairs.first (var "result"),
+        "rep">: Pairs.first (Pairs.second (var "result")),
+        "msgs">: Pairs.second (Pairs.second (var "result"))] $
+        triple
+          (Core.literalTypeInteger (var "rtyp"))
+          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
+            _Literal_integer>>: ("iv" ~> inject _Literal _Literal_integer (var "rep" @@ var "iv"))])
+          (var "msgs"))])
+
+-- | Prepare a float type, substituting unsupported types.
+prepareFloatType :: TBinding (FloatType -> (FloatType, FloatValue -> FloatValue, S.Set String))
+prepareFloatType = define "prepareFloatType" $
+  doc "Prepare a float type, substituting unsupported types" $
+  lambda "ft" $
+    (cases _FloatType (var "ft") (Just (prepareSame @@ var "ft")) [
+      _FloatType_bigfloat>>: (constant $
+        triple
+          Core.floatTypeFloat64
+          ("v" ~> cases _FloatValue (var "v") (Just (var "v")) [
+            _FloatValue_bigfloat>>: ("d" ~> inject _FloatValue _FloatValue_float64 (Literals.bigfloatToFloat64 (var "d")))])
+          (Sets.fromList $ list [string "replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"]))])
+
+-- | Prepare an integer type, substituting unsupported types.
+prepareIntegerType :: TBinding (IntegerType -> (IntegerType, IntegerValue -> IntegerValue, S.Set String))
+prepareIntegerType = define "prepareIntegerType" $
+  doc "Prepare an integer type, substituting unsupported types" $
+  lambda "it" $
+    (cases _IntegerType (var "it") (Just (prepareSame @@ var "it")) [
+      _IntegerType_bigint>>: (constant $
+        triple
+          Core.integerTypeInt64
+          ("v" ~> cases _IntegerValue (var "v") (Just (var "v")) [
+            _IntegerValue_bigint>>: ("i" ~> inject _IntegerValue _IntegerValue_int64 (Literals.bigintToInt64 (var "i")))])
+          (Sets.fromList $ list [string "replace arbitrary-precision integers with 64-bit integers"])),
+      _IntegerType_uint8>>: (constant $
+        triple
+          Core.integerTypeInt8
+          ("v" ~> cases _IntegerValue (var "v") (Just (var "v")) [
+            _IntegerValue_uint8>>: ("i" ~> inject _IntegerValue _IntegerValue_int8 (Literals.bigintToInt8 (Literals.uint8ToBigint (var "i"))))])
+          (Sets.fromList $ list [string "replace unsigned 8-bit integers with signed 8-bit integers"])),
+      _IntegerType_uint32>>: (constant $
+        triple
+          Core.integerTypeInt32
+          ("v" ~> cases _IntegerValue (var "v") (Just (var "v")) [
+            _IntegerValue_uint32>>: ("i" ~> inject _IntegerValue _IntegerValue_int32 (Literals.bigintToInt32 (Literals.uint32ToBigint (var "i"))))])
+          (Sets.fromList $ list [string "replace unsigned 32-bit integers with signed 32-bit integers"])),
+      _IntegerType_uint64>>: (constant $
+        triple
+          Core.integerTypeInt64
+          ("v" ~> cases _IntegerValue (var "v") (Just (var "v")) [
+            _IntegerValue_uint64>>: ("i" ~> inject _IntegerValue _IntegerValue_int64 (Literals.bigintToInt64 (Literals.uint64ToBigint (var "i"))))])
+          (Sets.fromList $ list [string "replace unsigned 64-bit integers with signed 64-bit integers"]))])
+
+-- | Prepare a type, substituting unsupported literal types.
+prepareType :: TBinding (Graph -> Type -> (Type, Term -> Term, S.Set String))
+prepareType = define "prepareType" $
+  doc "Prepare a type, substituting unsupported literal types" $
+  lambda "cx" $ lambda "typ" $
+    (cases _Type (Rewriting.deannotateType @@ var "typ") (Just (prepareSame @@ var "typ")) [
+      _Type_literal>>: ("at" ~> lets [
+        "result">: prepareLiteralType @@ var "at",
+        "rtyp">: Pairs.first (var "result"),
+        "rep">: Pairs.first (Pairs.second (var "result")),
+        "msgs">: Pairs.second (Pairs.second (var "result"))] $
+        triple
+          (MetaTypes.literal (var "rtyp"))
+          ("v" ~> cases _Term (var "v") (Just (var "v")) [
+            _Term_literal>>: ("av" ~> inject _Term _Term_literal (var "rep" @@ var "av"))])
+          (var "msgs"))])
+
+-- | Return a value unchanged with identity transform and no messages.
+prepareSame :: TBinding (a -> (a, b -> b, S.Set c))
+prepareSame = define "prepareSame" $
+  doc "Return a value unchanged with identity transform and no messages" $
+  lambda "x" $
+    triple (var "x") ("y" ~> var "y") (Sets.empty)
