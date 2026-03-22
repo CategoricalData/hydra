@@ -37,7 +37,7 @@ Screen-capture demo with audio commentary, preceded by a brief slideshow. Target
     - Hydra-Java — now also complete (issue #166, Feb 2026). Three widely separated languages pass the same 2700+ tests.
 - **Slide 5: "Mutual self-hosting"**
   - Hydra is written in Hydra (self-hosting)
-  - Transpiles to multiple mainstream languages (multi-target) — so far Haskell, Java, Python; in progress: Rust, Go, Scala
+  - Transpiles to multiple mainstream languages (multi-target) — so far Haskell, Java, Python, Clojure, Scala; in progress: Rust, Go
   - Each implementation passes the same test suite (semantics-preserving)
   - Each implementation generates every other (mutual self-hosting) — Java→Python, Python→Haskell, Haskell→Java, Python→Python, etc.
   - Speaker notes — the conceptual ladder (for deeper explanation if needed):

@@ -11,7 +11,7 @@ It explores an isomorphism between typed lambda calculus and labeled hypergraphs
 **programs are graphs, and graphs are programs.**
 
 Hydra is self-hosting: the kernel is defined in Haskell-based DSLs and code-generated
-into Haskell, Java, Python, and Clojure. All four implementations are complete and pass
+into Haskell, Java, Python, Clojure, and Scala. All five implementations are complete and pass
 the common test suite. Version: **0.13.0** (as of 2026-02-05).
 
 Key use cases: graph construction (TinkerPop, RDF, SHACL, GQL), data integration
@@ -30,7 +30,7 @@ hydra/
   hydra-python/     # Complete Python implementation
   hydra-lisp/       # Complete Clojure implementation (+ experimental Scheme, Common Lisp, Emacs Lisp)
   hydra-ext/        # Code generators, coders, demos, tools (Haskell)
-  hydra-scala/      # Experimental Scala implementation
+  hydra-scala/      # Complete Scala implementation
   hydra-rust/       # Early-stage Rust
   hydra-go/         # Early-stage Go
   hydra-javascript/  # Early-stage JavaScript
@@ -68,7 +68,7 @@ This section links to every major document in the project with a brief descripti
 | Hydra-Java | [hydra-java/README.md](hydra-java/README.md) | Complete Java implementation. Gradle build, test commands, code organization, Java code generation from hydra-ext, visitor pattern for ADTs, union type design |
 | Hydra-Python | [hydra-python/README.md](hydra-python/README.md) | Complete Python implementation. Setup with uv, pytest, ruff, pyright. Code generation, validation of generated code |
 | Hydra-Ext | [hydra-ext/README.md](hydra-ext/README.md) | Code generators, coders, demos, tools. Comprehensive coder reference (Java, Python, C++, Protobuf, GraphQL, JSON Schema, PDL, Scala, Avro, RDF, SHACL, Graphviz). Type mapping tables per target. Sync scripts. Language syntax models and domain models |
-| Hydra-Scala | [hydra-scala/README.md](hydra-scala/README.md) | Experimental, on hold. Build with `sbt compile` |
+| Hydra-Scala | [hydra-scala/README.md](hydra-scala/README.md) | Complete Scala 3 implementation. Build with `sbt compile`. Bootstrapping host for Haskell, Java, Python targets |
 | GenPG demo | [hydra-ext/demos/genpg/README.md](hydra-ext/demos/genpg/README.md) | End-to-end CSV-to-property-graph demo. Runs in Haskell or Python. LLM-assisted schema generation workflow. GraphSON output for TinkerPop-compatible databases |
 | Bootstrapping demo | [hydra-ext/demos/bootstrapping/README.md](hydra-ext/demos/bootstrapping/README.md) | Self-hosting validation: 3 host languages x 3 target languages. JSON module interchange, code generation, baseline diffing |
 
@@ -235,6 +235,16 @@ to the individual demo READMEs.
 | Generated kernel | `hydra-python/src/gen-main/python/` |
 | Generated tests | `hydra-python/src/gen-test/python/` |
 
+### Hydra-Scala
+
+| Purpose | Path |
+|---------|------|
+| Bootstrap entry point | `hydra-scala/src/main/scala/hydra/Bootstrap.scala` |
+| Generation I/O wrapper | `hydra-scala/src/main/scala/hydra/Generation.scala` |
+| Hand-written primitives | `hydra-scala/src/main/scala/hydra/lib/` |
+| Primitive registry | `hydra-scala/src/main/scala/hydra/lib/Libraries.scala` |
+| Generated kernel | `hydra-scala/src/gen-main/scala/` |
+
 ## Build and test commands
 
 ### Haskell (hydra-haskell)
@@ -290,6 +300,20 @@ pyright
 
 Requires: **Python 3.12+**
 
+### Scala (hydra-scala)
+
+```bash
+cd hydra-scala
+
+# Build
+sbt compile
+
+# Run bootstrapping (generate Java from JSON)
+sbt "runMain hydra.bootstrap --target java --json-dir ../hydra-haskell/src/gen-main/json"
+```
+
+Requires: **Scala 3.3.7+**, **sbt 1.10.x**, **Java 17+** (JDK 19 has sbt compatibility issues)
+
 ### Hydra-Ext (code generation)
 
 ```bash
@@ -331,9 +355,12 @@ Or run individual phases:
 
 # Regenerate Python (from hydra-ext/)
 ./bin/sync-python.sh           # or --quick to skip tests
+
+# Regenerate Scala (from hydra-ext/)
+./bin/sync-scala.sh            # or --quick to skip compilation
 ```
 
-The order is: **Haskell first, then Ext, then Java and Python.** The `sync-all.sh`
+The order is: **Haskell first, then Ext, then Java, Python, and Scala.** The `sync-all.sh`
 script enforces this order and stops at the first error.
 
 ## Benchmarking

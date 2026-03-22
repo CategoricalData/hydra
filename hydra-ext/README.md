@@ -56,7 +56,7 @@ These coders generate type/schema definitions but not term-level code. They are 
 | **JSON Schema** | Stable | Generates JSON Schema (2020-12 spec) |
 | **Protobuf** | Stable | Proto3 format; no polymorphism support |
 | **PDL (Pegasus)** | Stable | No polymorphism or cyclic types |
-| **Scala** | Beta | Has known bugs; generates type aliases |
+| **Scala** | Complete | Full Scala 3 code generation; bootstrapping host |
 
 #### Specialized/data-oriented
 
@@ -284,7 +284,8 @@ writePdl "/tmp/pdl" [Accessors.module_] [Accessors.module_]
 
 ### Scala
 
-The Scala coder generates Scala source files (`.scala`). Note that this coder has known bugs and may not work correctly for all types.
+The Scala coder generates Scala 3 source files (`.scala`). It produces a complete, compiling
+implementation of the Hydra kernel that supports bootstrapping (code generation from JSON).
 
 ```haskell
 import qualified Hydra.Sources.Kernel.Types.Accessors as Accessors
@@ -297,24 +298,28 @@ writeScala "/tmp/scala" [Accessors.module_] [Accessors.module_]
 
 | Hydra type | Scala representation |
 |------------|---------------------|
-| Record | Type alias (case classes not yet supported) |
-| Union | Type alias (sealed traits not yet supported) |
+| Record | `case class` |
+| Union | `enum` (Scala 3 enum with case classes) |
 | List | `Seq[T]` |
-| Set | `Set[T]` |
+| Set | `scala.collection.immutable.Set[T]` |
 | Map | `Map[K, V]` |
 | Maybe | `Option[T]` |
 | Either | `Either[L, R]` |
 | Pair | `Tuple2[A, B]` |
 | Wrap | Type alias |
-| Function | `A => B` |
-| Literal (String) | `String` |
+| Function | `A => B` (curried) |
+| Literal (String) | `scala.Predef.String` |
 | Literal (Boolean) | `Boolean` |
 | Literal (Int32) | `Int` |
 | Literal (Int64) | `Long` |
 | Literal (Float32) | `Float` |
 | Literal (Float64) | `Double` |
+| Literal (BigInt) | `BigInt` |
+| Literal (BigDecimal) | `BigDecimal` |
 
-Note: The Scala coder currently generates type aliases rather than full case class/sealed trait hierarchies. Term definitions are encoded as `val` or `def` declarations.
+Term definitions are encoded as `val` (with type annotations) or `def` (for functions and
+polymorphic bindings). The coder handles reserved word escaping, lambda domain annotations,
+type parameter inference, and lazy evaluation patterns via Scala's by-name parameters.
 
 ## Models
 
