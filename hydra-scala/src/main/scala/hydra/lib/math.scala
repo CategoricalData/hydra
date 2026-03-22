@@ -28,7 +28,7 @@ object math:
   def pi: Double = scala.math.Pi
   def pow(base: Double)(exp: Double): Double = scala.math.pow(base, exp)
   def pred(x: Int): Int = x - 1
-  def range(start: Int)(end: Int): Seq[Int] = (start until end).toSeq
+  def range(start: Int)(end: Int): Seq[Int] = (start to end).toSeq
   def rem(x: Int)(y: Int): Int = if y == 0 then 0 else x % y
   def round(x: Double): Int = scala.math.round(x).toInt
   def roundBigfloat(precision: Int)(x: Double): Double = BigDecimal(x).setScale(precision, BigDecimal.RoundingMode.HALF_UP).toDouble
