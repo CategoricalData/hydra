@@ -73,7 +73,8 @@ object Generation:
         try
           val jsonValue = parseJsonFile(filePath)
           val mod = decodeModuleFromJson(bsGraph, schemaMap, jsonValue)
-          println(s"  Loaded: $ns")
+          val typedBindings = mod.elements.count(_.`type`.isDefined)
+          println(s"  Loaded: $ns (${mod.elements.size} bindings, $typedBindings typed)")
           Seq(mod)
         catch
           case e: Exception =>
