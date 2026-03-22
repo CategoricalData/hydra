@@ -8,8 +8,9 @@ Hydra has the ability to translate its own kernel into several other languages, 
 Haskell ([Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)),
 Java ([Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java)),
 Python ([Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python)),
-and Clojure ([Hydra-Clojure](https://github.com/CategoricalData/hydra/tree/main/hydra-lisp/hydra-clojure)).
-All four implementations are complete and pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
+Clojure ([Hydra-Clojure](https://github.com/CategoricalData/hydra/tree/main/hydra-lisp/hydra-clojure)),
+and Scala ([Hydra-Scala](https://github.com/CategoricalData/hydra/tree/main/hydra-scala)).
+All five implementations are complete and pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
 Hydra is used for data modeling, validation, and transforms at Microsoft,
 while its closed-source predecessor [Dragon](https://www.uber.com/blog/dragon-schema-integration-at-uber-scale/) was used
 for data integration and graph construction at Uber.
@@ -31,7 +32,7 @@ Typical use cases include:
   [GraphQL](https://graphql.org/),
   LinkedIn's [PDL Schema](https://linkedin.github.io/rest.li/pdl_schema) language, as well as simple tabular data (CSV/TSV).
   Hydra has been used extensively with (Delta) [Parquet](https://en.wikipedia.org/wiki/Apache_Parquet), although this support is not currently open source. 
- There is also limited support for [C Sharp](https://en.wikipedia.org/wiki/C_Sharp_(programming_language)) and [Scala](https://en.wikipedia.org/wiki/Scala_(programming_language)) ([Hydra-Scala](https://github.com/CategoricalData/hydra/tree/main/hydra-scala)).
+ There is also limited support for [C Sharp](https://en.wikipedia.org/wiki/C_Sharp_(programming_language)).
 
 * **Computational graphs**. Unusually among graph data models and query languages, Hydra has deep support for [polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism),
   as well as embedding computational elements with a graph (sometimes called *computational knowledge graphs*).
@@ -43,7 +44,7 @@ and we think it will be very useful in heterogeneous environments like TinkerPop
 -- validation, query steps, user-defined functions, etc. -- to be manifested identically in more than one programming language.
 
 If any of the above sounds interesting, feel free to ask questions or get involved via the [LambdaGraph Discord](https://bit.ly/lg-discord) server.
-We are preparing for the 1.0 release, with all four core implementations (Haskell, Java, Python, Clojure) now complete.
+We are preparing for the 1.0 release, with all five core implementations (Haskell, Java, Python, Clojure, Scala) now complete.
 Near-term goals include integrating with [Apache TinkerPop](https://tinkerpop.apache.org),
 expanding language support, and growing the community.
 There is a recent [demo video](https://drive.google.com/file/d/1p2R6WWc1cW02eb7O8l-4cV1htDb84Y43/view) you can check out,
