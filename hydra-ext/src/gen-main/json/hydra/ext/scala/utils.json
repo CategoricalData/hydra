@@ -327,6 +327,35 @@
                             "type": {"literal": {"string": {}}},
                             "variables": []}]},
                       {
+                        "name": "sanitized3",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "sanitized2"},
+                            "function": {
+                              "application": {
+                                "argument": {"literal": {"string": "toString_"}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"literal": {"string": "toString"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "sanitized2"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                "type": {"literal": {"string": {}}}}}}}}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                        "type": {"literal": {"string": {}}}}}}}}}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"literal": {"string": {}}},
+                            "variables": []}]},
+                      {
                         "name": "needsBackticks",
                         "term": {
                           "application": {
@@ -339,7 +368,7 @@
                                       "application": {
                                         "argument": {
                                           "application": {
-                                            "argument": {"variable": "sanitized2"},
+                                            "argument": {"variable": "sanitized3"},
                                             "function": {
                                               "application": {
                                                 "argument": {
@@ -349,7 +378,7 @@
                                                       "application": {
                                                         "argument": {
                                                           "application": {
-                                                            "argument": {"variable": "sanitized2"},
+                                                            "argument": {"variable": "sanitized3"},
                                                             "function": {"function": {"primitive": "hydra.lib.strings.length"}}}},
                                                         "function": {"function": {"primitive": "hydra.lib.math.sub"}}}}}},
                                                 "function": {"function": {"primitive": "hydra.lib.strings.charAt"}}}}}},
@@ -366,7 +395,7 @@
                                           "application": {
                                             "argument": {
                                               "application": {
-                                                "argument": {"variable": "sanitized2"},
+                                                "argument": {"variable": "sanitized3"},
                                                 "function": {"function": {"primitive": "hydra.lib.strings.length"}}}},
                                             "function": {
                                               "typeApplication": {
@@ -380,7 +409,7 @@
                                     "argument": {"variable": "hydra.ext.scala.utils.scalaReservedWords"},
                                     "function": {
                                       "application": {
-                                        "argument": {"variable": "sanitized2"},
+                                        "argument": {"variable": "sanitized3"},
                                         "function": {
                                           "typeApplication": {
                                             "body": {"function": {"primitive": "hydra.lib.sets.member"}},
@@ -393,7 +422,7 @@
                             "variables": []}]}],
                     "body": {
                       "application": {
-                        "argument": {"variable": "sanitized2"},
+                        "argument": {"variable": "sanitized3"},
                         "function": {
                           "application": {
                             "argument": {
@@ -401,7 +430,7 @@
                                 "argument": {
                                   "list": [
                                     {"literal": {"string": "`"}},
-                                    {"variable": "sanitized2"},
+                                    {"variable": "sanitized3"},
                                     {"literal": {"string": "`"}}]},
                                 "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
                             "function": {
@@ -656,28 +685,16 @@
                               "application": {
                                 "argument": {
                                   "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "qname"},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {
-                                                  "record": {"field": "namespace", "typeName": "hydra.module.QualifiedName"}}}}}},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.maybes.fromJust"}},
-                                            "type": {"variable": "hydra.module.Namespace"}}}}},
-                                    "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
+                                    "argument": {"variable": "qname"},
+                                    "function": {
+                                      "function": {
+                                        "elimination": {
+                                          "record": {"field": "namespace", "typeName": "hydra.module.QualifiedName"}}}}}},
                                 "function": {
-                                  "application": {
-                                    "argument": {"literal": {"string": "."}},
-                                    "function": {"function": {"primitive": "hydra.lib.strings.splitOn"}}}}}},
-                            "function": {
-                              "typeApplication": {
-                                "body": {"function": {"primitive": "hydra.lib.lists.last"}},
-                                "type": {"literal": {"string": {}}}}}}},
+                                  "typeApplication": {
+                                    "body": {"function": {"primitive": "hydra.lib.maybes.fromJust"}},
+                                    "type": {"variable": "hydra.module.Namespace"}}}}},
+                            "function": {"function": {"elimination": {"wrap": "hydra.module.Namespace"}}}}},
                         "type": [
                           {
                             "constraints": null,

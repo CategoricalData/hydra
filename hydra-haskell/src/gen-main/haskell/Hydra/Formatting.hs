@@ -33,12 +33,11 @@ convertCase from to original =
 
                 let byCaps =
 
-                          let splitOnUpperOrUnderscore =
-                                  \acc -> \c -> Logic.ifElse (Equality.equal c 95) (Lists.concat2 [
-                                    []] acc) (Logic.ifElse (Chars.isUpper c) (Lists.concat2 [
-                                    []] (Lists.cons (Lists.cons c (Lists.head acc)) (Lists.tail acc))) (Lists.cons (Lists.cons c (Lists.head acc)) (Lists.tail acc)))
-                          in (Lists.filter (\w -> Logic.not (Equality.equal (Strings.length w) 0)) (Lists.map Strings.fromList (Lists.foldl splitOnUpperOrUnderscore [
-                            []] (Lists.reverse (Strings.toList (decapitalize original))))))
+                          let splitOnUppercase =
+                                  \acc -> \c -> Lists.concat2 (Logic.ifElse (Chars.isUpper c) [
+                                    []] []) (Lists.cons (Lists.cons c (Lists.head acc)) (Lists.tail acc))
+                          in (Lists.map Strings.fromList (Lists.foldl splitOnUppercase [
+                            []] (Lists.reverse (Strings.toList (decapitalize original)))))
                     byUnderscores = Strings.splitOn "_" original
                 in case from of
                   Util.CaseConventionCamel -> byCaps
@@ -50,6 +49,14 @@ convertCase from to original =
         Util.CaseConventionPascal -> Strings.cat (Lists.map (\arg_ -> capitalize (Strings.toLower arg_)) parts)
         Util.CaseConventionLowerSnake -> Strings.intercalate "_" (Lists.map Strings.toLower parts)
         Util.CaseConventionUpperSnake -> Strings.intercalate "_" (Lists.map Strings.toUpper parts)
+
+-- | Convert a string from camel case (possibly with underscores) to lower snake case. Splits on underscores first, then converts each part from camel case.
+convertCaseCamelOrUnderscoreToLowerSnake :: String -> String
+convertCaseCamelOrUnderscoreToLowerSnake s =
+
+      let parts = Strings.splitOn "_" s
+          snakeParts = Lists.map (\p -> convertCaseCamelToLowerSnake p) parts
+      in (Strings.intercalate "_" snakeParts)
 
 -- | Convert a string from camel case to lower snake case
 convertCaseCamelToLowerSnake :: String -> String

@@ -222,7 +222,7 @@ qualifiedSnakeName = def "qualifiedSnakeName" $
   lambda "name" $
     "raw" <~ Core.unName (var "name") $
     "parts" <~ Strings.splitOn (string ".") (var "raw") $
-    "snakeParts" <~ Lists.map (lambda "p" $ Formatting.convertCaseCamelToLowerSnake @@ var "p") (var "parts") $
+    "snakeParts" <~ Lists.map (lambda "p" $ Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ var "p") (var "parts") $
     "joined" <~ Strings.intercalate (string "_") (var "snakeParts") $
     Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ var "joined"
 
@@ -546,7 +546,7 @@ encodeTerm = def "encodeTerm" $
        right (asTerm lispNilExpr),
 
      _Term_variable>>: lambda "name" $
-       right (lispVar @@ (Formatting.convertCaseCamelToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (var "name")))),
+       right (lispVar @@ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (var "name")))),
 
      _Term_typeApplication>>: lambda "ta" $
        encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.typeApplicationTermBody (var "ta"),
@@ -567,11 +567,11 @@ encodeFunction = def "encodeFunction" $
   "dialect" ~> "cx" ~> "g" ~> lambda "fun" $
     cases _Function (var "fun") Nothing [
       _Function_lambda>>: lambda "lam" $
-        "param" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.lambdaParameter (var "lam")))) $
+        "param" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.lambdaParameter (var "lam")))) $
         "body" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.lambdaBody (var "lam")) $
           right (lispLambdaExpr @@ list [var "param"] @@ var "body"),
       _Function_primitive>>: lambda "name" $
-        right (lispVar @@ (Formatting.convertCaseCamelToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (var "name")))),
+        right (lispVar @@ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (var "name")))),
       _Function_elimination>>: lambda "elim" $
         encodeElimination @@ var "dialect" @@ var "cx" @@ var "g" @@ var "elim" @@ nothing]
 
@@ -672,7 +672,7 @@ encodeLetAsLambdaApp = def "encodeLetAsLambdaApp" $
     "bodyExpr" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "body") $
     Eithers.foldl
       (lambda "acc" $ lambda "b" $
-        "bname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.bindingName (var "b")))) $
+        "bname" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.bindingName (var "b")))) $
         "bval" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ Core.bindingTerm (var "b")) $
           right (lispApp @@ (lispLambdaExpr @@ list [var "bname"] @@ var "acc") @@ list [var "bval"]))
       (var "bodyExpr")
@@ -716,7 +716,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
     -- E.g., `recurse = f(fsub(recurse))` becomes `recurse = (lambda (_arg) ((f (fsub recurse)) _arg))`
     "encodedBindings" <<~ (Eithers.mapList
       (lambda "b" $
-        "bname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.bindingName (var "b")))) $
+        "bname" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.bindingName (var "b")))) $
         "isSelfRef" <~ (Sets.member (Core.bindingName (var "b"))
           (Rewriting.freeVariablesInTerm @@ Core.bindingTerm (var "b"))) $
         "isLambda" <~ (cases _Term (Rewriting.deannotateTerm @@ Core.bindingTerm (var "b"))

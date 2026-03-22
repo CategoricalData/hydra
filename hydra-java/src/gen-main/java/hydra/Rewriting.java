@@ -3890,7 +3890,7 @@ public interface Rewriting {
   }
 
   static hydra.core.Term substituteTypeVariablesInTerm(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> subst, hydra.core.Term term) {
-    java.util.function.Function<hydra.core.Type, hydra.core.Type> st = (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (v1 -> hydra.rewriting.Rewriting.substituteTypeVariables(
+    java.util.function.Function<hydra.core.Type, hydra.core.Type> st = (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (v1 -> hydra.Rewriting.substituteTypeVariables(
       subst,
       v1));
     java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, hydra.util.Maybe<hydra.core.Type>> stOpt = (java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, hydra.util.Maybe<hydra.core.Type>>) (mt -> hydra.lib.maybes.Map.apply(
@@ -3948,7 +3948,7 @@ public interface Rewriting {
         return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((recurse).apply((at).value.body), (at).value.annotation));
       }
     })));
-    return hydra.rewriting.Rewriting.rewriteTerm(
+    return hydra.Rewriting.rewriteTerm(
       replace,
       term);
   }

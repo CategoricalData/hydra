@@ -531,7 +531,7 @@ encodeComplexTermDef = def "encodeComplexTermDef" $
                 lets [
                 "gForLets">: Logic.ifElse (Lists.null (var "letBindings"))
                   (var "gWithTypeVars")
-                  (Schemas.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "gWithTypeVars"
+                  (Rewriting.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "gWithTypeVars"
                     @@ Core.let_ (var "letBindings") (Core.termVariable (wrap _Name (string "dummy"))))] $
                 -- Encode let bindings, passing current type params as outer scope
                 Eithers.bind (Eithers.mapList (asTerm encodeLetBinding @@ var "cx" @@ var "gForLets" @@ (Sets.fromList (var "freeTypeVars"))) (var "letBindings"))
@@ -587,7 +587,7 @@ encodeLocalDef = def "encodeLocalDef" $
                 lets [
                 "gForLets">: Logic.ifElse (Lists.null (var "letBindings"))
                   (var "gWithTypeVars")
-                  (Schemas.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "gWithTypeVars"
+                  (Rewriting.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "gWithTypeVars"
                     @@ Core.let_ (var "letBindings") (Core.termVariable (wrap _Name (string "dummy"))))] $
                 Eithers.bind (Eithers.mapList (asTerm encodeLetBinding @@ var "cx" @@ var "gForLets" @@ var "allTypeVars") (var "letBindings"))
                   ("sbindings" ~> lets [
@@ -1033,7 +1033,7 @@ encodeTerm = def "encodeTerm" $
               -- For eliminations (record/union projections): encode the substituted body
               asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")])]),
       _Term_typeLambda>>: ("tl" ~>
-        asTerm encodeTerm @@ var "cx" @@ (Schemas.extendGraphForTypeLambda @@ var "g" @@ var "tl") @@ (Core.typeLambdaBody $ var "tl")),
+        asTerm encodeTerm @@ var "cx" @@ (Rewriting.extendGraphForTypeLambda @@ var "g" @@ var "tl") @@ (Core.typeLambdaBody $ var "tl")),
       _Term_application>>: ("app" ~> lets [
         "fun">: project _Application _Application_function @@ var "app",
         "arg">: project _Application _Application_argument @@ var "app"] $
@@ -1242,12 +1242,12 @@ encodeTerm = def "encodeTerm" $
       _Term_typeApplication>>: ("ta" ~>
         asTerm encodeTerm @@ var "cx" @@ var "g" @@ (Core.typeApplicationTermBody $ var "ta")),
       _Term_typeLambda>>: ("tl" ~>
-        asTerm encodeTerm @@ var "cx" @@ (Schemas.extendGraphForTypeLambda @@ var "g" @@ var "tl") @@ (Core.typeLambdaBody $ var "tl")),
+        asTerm encodeTerm @@ var "cx" @@ (Rewriting.extendGraphForTypeLambda @@ var "g" @@ var "tl") @@ (Core.typeLambdaBody $ var "tl")),
       _Term_let>>: ("lt" ~> lets [
         "bindings">: Core.letBindings $ var "lt",
         "body">: Core.letBody $ var "lt",
         -- Extend the graph with the let bindings so type lookups work for recursive refs
-        "gLet">: Schemas.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "g" @@ var "lt"] $
+        "gLet">: Rewriting.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "g" @@ var "lt"] $
         Eithers.bind
           (Eithers.mapList (asTerm encodeLetBinding @@ var "cx" @@ var "gLet" @@ (Graph.graphTypeVariables $ var "gLet"))
             (var "bindings"))
