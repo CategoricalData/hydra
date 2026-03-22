@@ -58,7 +58,7 @@ public class Group extends PrimitiveFunction {
                     groups.add(currentGroup);
                 }
                 return Terms.list(groups.stream().map(Terms::list).collect(java.util.stream.Collectors.toList()));
-            }, hydra.extract.core.Core.list(cx, graph, args.get(0)));
+            }, hydra.extract.Core.list(cx, graph, args.get(0)));
     }
 
     /**

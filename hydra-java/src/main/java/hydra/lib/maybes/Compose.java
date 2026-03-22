@@ -41,12 +41,12 @@ public class Compose extends PrimitiveFunction {
         return args -> cx -> graph -> {
             Function<Term, Either<InContext<Error_>, Maybe<Term>>> nativeF = val ->
                 hydra.lib.eithers.Bind.apply(
-                    hydra.reduction.Reduction.reduceTerm(hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), val)),
-                    reduced -> hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, reduced));
+                    hydra.Reduction.reduceTerm(hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), val)),
+                    reduced -> hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, reduced));
             Function<Term, Either<InContext<Error_>, Maybe<Term>>> nativeG = val ->
                 hydra.lib.eithers.Bind.apply(
-                    hydra.reduction.Reduction.reduceTerm(hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(1), val)),
-                    reduced -> hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, reduced));
+                    hydra.Reduction.reduceTerm(hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(1), val)),
+                    reduced -> hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, reduced));
             return hydra.lib.eithers.Bind.apply(nativeF.apply(args.get(2)), maybeB -> {
                 if (!maybeB.isJust()) {
                     return Either.right(Terms.optional(Maybe.nothing()));

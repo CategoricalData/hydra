@@ -50,7 +50,7 @@ public class FromList extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> {
-            Either<InContext<Error_>, ConsList<Integer>> list = hydra.extract.core.Core.listOf(cx, t -> hydra.extract.core.Core.int32(cx, graph, t), graph, args.get(0));
+            Either<InContext<Error_>, ConsList<Integer>> list = hydra.extract.Core.listOf(cx, t -> hydra.extract.Core.int32(cx, graph, t), graph, args.get(0));
             return hydra.lib.eithers.Map.apply(l -> Terms.string(FromList.apply(l)), list);
         };
     }

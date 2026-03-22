@@ -1,7 +1,7 @@
 package hydra;
 
-import hydra.annotations.Annotations;
-import hydra.codeGeneration.CodeGeneration;
+import hydra.Annotations;
+import hydra.CodeGeneration;
 import hydra.core.Binding;
 import hydra.core.Name;
 import hydra.core.Term;
@@ -14,7 +14,7 @@ import hydra.lib.Libraries;
 import hydra.module.Definition;
 import hydra.module.Module;
 import hydra.module.Namespace;
-import hydra.rewriting.Rewriting;
+import hydra.Rewriting;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.ConsList;
 import hydra.util.Either;
@@ -263,7 +263,7 @@ public class Generation {
             boolean stripTypeSchemes, Value jsonVal) {
         Name modName = new Name("hydra.module.Module");
         hydra.core.Type modType = new hydra.core.Type.Variable(modName);
-        Either<String, hydra.core.Term> jsonResult = hydra.json.decode.Decode.fromJson(PersistentMap.fromMap(schemaMap), modName, modType, jsonVal);
+        Either<String, hydra.core.Term> jsonResult = hydra.json.Decode.fromJson(PersistentMap.fromMap(schemaMap), modName, modType, jsonVal);
         return jsonResult.accept(new Either.Visitor<String, hydra.core.Term, Module>() {
             @Override
             public Module visit(Either.Left<String, hydra.core.Term> instance) {
@@ -274,7 +274,7 @@ public class Generation {
             public Module visit(Either.Right<String, hydra.core.Term> instance) {
                 hydra.core.Term term = instance.value;
                 Either<hydra.errors.DecodingError, Module> modResult =
-                    hydra.decode.module.Module.module(bsGraph, term);
+                    hydra.decode.Module.module(bsGraph, term);
                 return modResult.accept(new Either.Visitor<hydra.errors.DecodingError, Module, Module>() {
                     @Override
                     public Module visit(Either.Left<hydra.errors.DecodingError, Module> left) {
@@ -299,10 +299,10 @@ public class Generation {
      * then extracts and recursively deannotates the body type for JSON decoding.
      */
     public static Map<Name, hydra.core.Type> bootstrapSchemaMap() {
-        Map<Name, hydra.core.Type> raw = hydra.json.bootstrap.Bootstrap.typesByName();
+        Map<Name, hydra.core.Type> raw = hydra.json.Bootstrap.typesByName();
         Map<Name, hydra.core.Type> result = new HashMap<>();
         for (Map.Entry<Name, hydra.core.Type> entry : raw.entrySet()) {
-            hydra.core.TypeScheme ts = hydra.rewriting.Rewriting.fTypeToTypeScheme(entry.getValue());
+            hydra.core.TypeScheme ts = hydra.Rewriting.fTypeToTypeScheme(entry.getValue());
             result.put(entry.getKey(), Rewriting.deannotateTypeRecursive(ts.type));
         }
         return result;
@@ -313,10 +313,10 @@ public class Generation {
      * Converts each System F type (with foralls) to a TypeScheme.
      */
     public static Map<Name, hydra.core.TypeScheme> bootstrapTypeSchemes() {
-        Map<Name, hydra.core.Type> raw = hydra.json.bootstrap.Bootstrap.typesByName();
+        Map<Name, hydra.core.Type> raw = hydra.json.Bootstrap.typesByName();
         Map<Name, hydra.core.TypeScheme> result = new HashMap<>();
         for (Map.Entry<Name, hydra.core.Type> entry : raw.entrySet()) {
-            result.put(entry.getKey(), hydra.rewriting.Rewriting.fTypeToTypeScheme(entry.getValue()));
+            result.put(entry.getKey(), hydra.Rewriting.fTypeToTypeScheme(entry.getValue()));
         }
         return result;
     }
@@ -400,7 +400,7 @@ public class Generation {
         ConsList<Pair<String, String>> files;
         if (result.isLeft()) {
             hydra.context.InContext<hydra.errors.Error_> err = ((Either.Left<hydra.context.InContext<hydra.errors.Error_>, ConsList<Pair<String, String>>>) result).value;
-            throw new RuntimeException("Code generation failed: " + hydra.show.errors.Errors.error(err.object));
+            throw new RuntimeException("Code generation failed: " + hydra.show.Errors.error(err.object));
         }
         files = ((Either.Right<hydra.context.InContext<hydra.errors.Error_>, ConsList<Pair<String, String>>>) result).value;
         for (Pair<String, String> pair : files) {
@@ -424,8 +424,8 @@ public class Generation {
      */
     public static void writeJava(String basePath, List<Module> universe, List<Module> mods) {
         generateSources(
-                mod -> defs -> cx -> g -> hydra.ext.java.coder.Coder.moduleToJava(mod, defs, cx, g),
-                hydra.ext.java.language.Language.javaLanguage(),
+                mod -> defs -> cx -> g -> hydra.ext.java.Coder.moduleToJava(mod, defs, cx, g),
+                hydra.ext.java.Language.javaLanguage(),
                 false, true, false, true,
                 basePath, universe, mods);
     }
@@ -435,8 +435,8 @@ public class Generation {
      */
     public static void writePython(String basePath, List<Module> universe, List<Module> mods) {
         generateSources(
-                mod -> defs -> cx -> g -> hydra.ext.python.coder.Coder.moduleToPython(mod, defs, cx, g),
-                hydra.ext.python.language.Language.pythonLanguage(),
+                mod -> defs -> cx -> g -> hydra.ext.python.Coder.moduleToPython(mod, defs, cx, g),
+                hydra.ext.python.Language.pythonLanguage(),
                 false, true, true, false,
                 basePath, universe, mods);
     }
@@ -446,8 +446,8 @@ public class Generation {
      */
     public static void writeHaskell(String basePath, List<Module> universe, List<Module> mods) {
         generateSources(
-                mod -> defs -> cx -> g -> hydra.ext.haskell.coder.Coder.moduleToHaskell(mod, defs, cx, g),
-                hydra.ext.haskell.language.Language.haskellLanguage(),
+                mod -> defs -> cx -> g -> hydra.ext.haskell.Coder.moduleToHaskell(mod, defs, cx, g),
+                hydra.ext.haskell.Language.haskellLanguage(),
                 false, false, false, false,
                 basePath, universe, mods);
     }
@@ -484,19 +484,19 @@ public class Generation {
         final hydra.util.CaseConvention cc = caseConv;
         generateSources(
                 mod -> defs -> cx -> g -> {
-                    hydra.util.Either result = hydra.ext.lisp.coder.Coder.moduleToLisp(d, mod, defs, cx, g);
+                    hydra.util.Either result = hydra.ext.lisp.Coder.moduleToLisp(d, mod, defs, cx, g);
                     if (result instanceof hydra.util.Either.Left) {
                         return result;
                     }
                     hydra.ext.lisp.syntax.Program program = (hydra.ext.lisp.syntax.Program) ((hydra.util.Either.Right) result).value;
-                    String code = hydra.serialization.Serialization.printExpr(
-                            hydra.serialization.Serialization.parenthesize(
-                                    hydra.ext.lisp.serde.Serde.programToExpr(program)));
-                    String filePath = hydra.names.Names.namespaceToFilePath(
+                    String code = hydra.Serialization.printExpr(
+                            hydra.Serialization.parenthesize(
+                                    hydra.ext.lisp.Serde.programToExpr(program)));
+                    String filePath = hydra.Names.namespaceToFilePath(
                             cc, new hydra.module.FileExtension(fileExt), mod.namespace);
                     return new hydra.util.Either.Right(PersistentMap.<String, String>empty().insert(filePath, code));
                 },
-                hydra.ext.lisp.language.Language.lispLanguage(),
+                hydra.ext.lisp.Language.lispLanguage(),
                 false, false, false, false,
                 basePath, universe, mods);
     }

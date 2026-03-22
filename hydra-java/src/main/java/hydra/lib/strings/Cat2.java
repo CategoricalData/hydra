@@ -45,7 +45,7 @@ public class Cat2 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.string(cx, graph, args.get(0)), l -> hydra.lib.eithers.Map.apply(r -> Terms.string(Cat2.apply(l, r)), hydra.extract.core.Core.string(cx, graph, args.get(1))));
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.string(cx, graph, args.get(0)), l -> hydra.lib.eithers.Map.apply(r -> Terms.string(Cat2.apply(l, r)), hydra.extract.Core.string(cx, graph, args.get(1))));
     }
 
     /**

@@ -49,7 +49,7 @@ public class Difference extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.set(cx, graph, args.get(0)), s1 -> hydra.lib.eithers.Map.apply(s2 -> Terms.set(apply(s1, s2)), hydra.extract.core.Core.set(cx, graph, args.get(1))));
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.set(cx, graph, args.get(0)), s1 -> hydra.lib.eithers.Map.apply(s2 -> Terms.set(apply(s1, s2)), hydra.extract.Core.set(cx, graph, args.get(1))));
     }
 
     /**

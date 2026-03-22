@@ -47,7 +47,7 @@ public class ShowFloat32 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Float, Term>) f -> Terms.string(apply(f)), hydra.extract.core.Core.float32(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Float, Term>) f -> Terms.string(apply(f)), hydra.extract.Core.float32(cx, graph, args.get(0)));
     }
 
     /**

@@ -52,14 +52,14 @@ public class FilterWithKey extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp -> {
                 Term pred = args.get(0);
                 Map<Term, Term> result = FromList.emptyLike(mp);
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {
-                    Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(Terms.apply(pred, entry.getKey()), entry.getValue()));
+                    Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                        hydra.Lexical.emptyContext(), graph, true, Terms.apply(Terms.apply(pred, entry.getKey()), entry.getValue()));
                     if (r.isLeft()) return (Either) r;
-                    Either<InContext<Error_>, Boolean> b = hydra.extract.core.Core.boolean_(cx, graph,
+                    Either<InContext<Error_>, Boolean> b = hydra.extract.Core.boolean_(cx, graph,
                         ((Either.Right<InContext<Error_>, Term>) r).value);
                     if (b.isLeft()) return (Either) b;
                     if (((Either.Right<InContext<Error_>, Boolean>) b).value) {

@@ -43,7 +43,7 @@ public class Sort extends PrimitiveFunction {
                 ArrayList<Term> sorted = lst.toArrayList();
                 sorted.sort(hydra.lib.equality.Compare::compareTerms);
                 return Terms.list(sorted);
-            }, hydra.extract.core.Core.list(cx, graph, args.get(0)));
+            }, hydra.extract.Core.list(cx, graph, args.get(0)));
     }
 
     /**

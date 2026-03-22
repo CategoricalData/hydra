@@ -52,7 +52,7 @@ public class Lookup extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<PersistentMap<Term, Term>, Term>) mp -> Terms.optional(apply(args.get(0), mp)), hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<PersistentMap<Term, Term>, Term>) mp -> Terms.optional(apply(args.get(0), mp)), hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
     }
 
     /**

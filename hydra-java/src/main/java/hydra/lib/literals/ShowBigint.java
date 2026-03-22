@@ -48,7 +48,7 @@ public class ShowBigint extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<BigInteger, Term>) i -> Terms.string(apply(i)), hydra.extract.core.Core.bigint(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<BigInteger, Term>) i -> Terms.string(apply(i)), hydra.extract.Core.bigint(cx, graph, args.get(0)));
     }
 
     /**

@@ -50,7 +50,7 @@ public class FromRight extends PrimitiveFunction {
                     public Term visit(hydra.util.Either.Right<Term, Term> right) {
                         return right.value;
                     }
-                }), hydra.extract.core.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
+                }), hydra.extract.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
         };
     }
 

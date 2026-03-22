@@ -54,7 +54,7 @@ public class Bind extends PrimitiveFunction {
                         // Apply function to Right value
                         return Terms.apply(funTerm, right.value);
                     }
-                }), hydra.extract.core.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
+                }), hydra.extract.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
         };
     }
 

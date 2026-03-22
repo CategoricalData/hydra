@@ -46,7 +46,7 @@ public class CharAt extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.int32(cx, graph, args.get(0)), i -> hydra.lib.eithers.Map.apply(s -> Terms.int32(apply(i, s)), hydra.extract.core.Core.string(cx, graph, args.get(1))));
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(cx, graph, args.get(0)), i -> hydra.lib.eithers.Map.apply(s -> Terms.int32(apply(i, s)), hydra.extract.Core.string(cx, graph, args.get(1))));
     }
 
     /**

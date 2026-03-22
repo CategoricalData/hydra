@@ -56,7 +56,7 @@ public class FindWithDefault extends PrimitiveFunction {
                     Maybe<Term> result = Lookup.apply(args.get(1), mp);
                     return result.orElse(args.get(0));
                 },
-                hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
+                hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
     }
 
     /**

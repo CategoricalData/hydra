@@ -42,13 +42,13 @@ public class Foldr extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(2)), xs -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(2)), xs -> {
                 Term acc = args.get(1);
                 // Fold from the right by iterating in reverse
                 java.util.ArrayList<Term> indexed = new java.util.ArrayList<>(xs);
                 for (int i = indexed.size() - 1; i >= 0; i--) {
-                    Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), indexed.get(i), acc));
+                    Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                        hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), indexed.get(i), acc));
                     if (r.isLeft()) return r;
                     acc = ((Either.Right<InContext<Error_>, Term>) r).value;
                 }

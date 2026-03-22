@@ -42,16 +42,16 @@ public class ZipWith extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), lst1 ->
-                hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(2)), lst2 -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(1)), lst1 ->
+                hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(2)), lst2 -> {
                     Term f = args.get(0);
                     ArrayList<Term> items1 = lst1.toArrayList();
                     ArrayList<Term> items2 = lst2.toArrayList();
                     List<Term> results = new ArrayList<>();
                     int minSize = Math.min(items1.size(), items2.size());
                     for (int i = 0; i < minSize; i++) {
-                        Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                            hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(Terms.apply(f, items1.get(i)), items2.get(i)));
+                        Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                            hydra.Lexical.emptyContext(), graph, true, Terms.apply(Terms.apply(f, items1.get(i)), items2.get(i)));
                         if (r.isLeft()) return (Either) r;
                         results.add(((Either.Right<InContext<Error_>, Term>) r).value);
                     }

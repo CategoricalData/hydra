@@ -6,7 +6,7 @@ import hydra.context.InContext;
 import hydra.core.Term;
 import hydra.error.Error_;
 import hydra.graph.Graph;
-import hydra.json.writer.Writer;
+import hydra.json.Writer;
 import hydra.pg.model.Edge;
 import hydra.pg.model.Element;
 import hydra.pg.model.LazyGraph;
@@ -19,10 +19,10 @@ import hydra.util.Either;
 import hydra.util.Pair;
 import hydra.util.PersistentMap;
 
-import hydra.demos.genpg.transform.Transform;
-import hydra.demos.genpg.sales.Sales;
-import hydra.demos.genpg.health.Health;
-import hydra.pg.graphson.utils.Utils;
+import hydra.demos.genpg.Transform;
+import hydra.demos.genpg.Sales;
+import hydra.demos.genpg.Health;
+import hydra.pg.graphson.Utils;
 
 import hydra.util.ConsList;
 import hydra.util.PersistentMap;
@@ -93,7 +93,7 @@ public class Demo {
             Transform.transformTableRows(cx, graphContext, vspecs, especs, tableType, table.data);
         if (result.isLeft()) {
             throw new RuntimeException(
-                "Transform error: " + hydra.show.error.Error_.error(((Either.Left<InContext<Error_>, ?>) result).value.object));
+                "Transform error: " + hydra.show.Error_.error(((Either.Left<InContext<Error_>, ?>) result).value.object));
         }
         return ((Either.Right<InContext<Error_>, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>>) result).value;
     }

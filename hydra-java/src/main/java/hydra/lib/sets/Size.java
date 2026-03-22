@@ -51,7 +51,7 @@ public class Size extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(arg -> Terms.int32(apply(arg)), hydra.extract.core.Core.set(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(arg -> Terms.int32(apply(arg)), hydra.extract.Core.set(cx, graph, args.get(0)));
     }
 
     /**

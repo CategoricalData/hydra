@@ -52,14 +52,14 @@ public class MapMaybe extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), inputList -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(1)), inputList -> {
                 Term f = args.get(0);
                 List<Term> results = new ArrayList<>();
                 for (Term item : inputList) {
-                    Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(f, item));
+                    Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                        hydra.Lexical.emptyContext(), graph, true, Terms.apply(f, item));
                     if (r.isLeft()) return (Either) r;
-                    Either<InContext<Error_>, Maybe<Term>> maybeResult = hydra.extract.core.Core.maybeTerm(cx,
+                    Either<InContext<Error_>, Maybe<Term>> maybeResult = hydra.extract.Core.maybeTerm(cx,
                         t -> Either.right(t), graph, ((Either.Right<InContext<Error_>, Term>) r).value);
                     if (maybeResult.isLeft()) return (Either) maybeResult;
                     Maybe<Term> maybe = ((Either.Right<InContext<Error_>, Maybe<Term>>) maybeResult).value;

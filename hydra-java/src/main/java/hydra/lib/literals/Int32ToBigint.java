@@ -47,7 +47,7 @@ public class Int32ToBigint extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(s -> Terms.bigint(apply(s)), hydra.extract.core.Core.int32(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(s -> Terms.bigint(apply(s)), hydra.extract.Core.int32(cx, graph, args.get(0)));
     }
 
     /**

@@ -54,7 +54,7 @@ public class ToList extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
             (Function<Maybe<Term>, Term>) opt -> Terms.list(apply(opt)),
-            hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(0)));
+            hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(0)));
     }
 
     /**

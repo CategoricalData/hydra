@@ -57,7 +57,7 @@ public class ToList extends PrimitiveFunction {
                 terms.add(Terms.int32(i));
             }
             return Terms.list(terms);
-        }, hydra.extract.core.Core.string(cx, graph, args.get(0)));
+        }, hydra.extract.Core.string(cx, graph, args.get(0)));
     }
 
     /**

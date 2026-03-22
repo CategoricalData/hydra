@@ -54,14 +54,14 @@ public class Alter extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), (PersistentMap<Term, Term> mp) -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), (PersistentMap<Term, Term> mp) -> {
                 Term f = args.get(0);
                 Term key = args.get(1);
                 Maybe<Term> currentValue = Lookup.apply(key, mp);
-                Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                    hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(f, Terms.optional(currentValue)));
+                Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                    hydra.Lexical.emptyContext(), graph, true, Terms.apply(f, Terms.optional(currentValue)));
                 if (r.isLeft()) return (Either) r;
-                Either<InContext<Error_>, Maybe<Term>> maybeResult = hydra.extract.core.Core.maybeTerm(cx,
+                Either<InContext<Error_>, Maybe<Term>> maybeResult = hydra.extract.Core.maybeTerm(cx,
                     t -> Either.right(t), graph, ((Either.Right<InContext<Error_>, Term>) r).value);
                 if (maybeResult.isLeft()) return (Either) maybeResult;
                 Maybe<Term> newValue = ((Either.Right<InContext<Error_>, Maybe<Term>>) maybeResult).value;

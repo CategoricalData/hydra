@@ -46,7 +46,7 @@ public class IsEmpty extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(s -> Terms.boolean_(apply(s)), hydra.extract.core.Core.string(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(s -> Terms.boolean_(apply(s)), hydra.extract.Core.string(cx, graph, args.get(0)));
     }
 
     /**

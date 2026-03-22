@@ -53,7 +53,7 @@ public class Member extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
                 (Function<PersistentMap<Term, Term>, Term>) mp -> Terms.boolean_(mp.containsKey(args.get(0))),
-                hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
+                hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
     }
 
     /**

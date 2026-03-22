@@ -53,7 +53,7 @@ public class Insert extends PrimitiveFunction {
         return args -> cx -> graph -> {
             Term key = args.get(0);
             Term value = args.get(1);
-            return hydra.lib.eithers.Map.apply(before -> Terms.map(apply(key, value, before)), hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
+            return hydra.lib.eithers.Map.apply(before -> Terms.map(apply(key, value, before)), hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
         };
     }
 

@@ -63,7 +63,7 @@ public class Compare extends PrimitiveFunction {
             return compareLiterals(l1, l2);
         }
         // Fallback: compare show representations
-        return hydra.show.core.Core.term(t1).compareTo(hydra.show.core.Core.term(t2));
+        return hydra.show.Core.term(t1).compareTo(hydra.show.Core.term(t2));
     }
 
     private static int compareLiterals(Literal l1, Literal l2) {
@@ -81,7 +81,7 @@ public class Compare extends PrimitiveFunction {
             return Boolean.compare(((Literal.Boolean_) l1).value, ((Literal.Boolean_) l2).value);
         }
         // Different literal types: use show representation
-        return hydra.show.core.Core.literal(l1).compareTo(hydra.show.core.Core.literal(l2));
+        return hydra.show.Core.literal(l1).compareTo(hydra.show.Core.literal(l2));
     }
 
     @SuppressWarnings("unchecked")

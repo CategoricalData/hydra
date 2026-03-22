@@ -48,7 +48,7 @@ public class ShowBigfloat extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<BigDecimal, Term>) d -> Terms.string(apply(d)), hydra.extract.core.Core.bigfloat(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<BigDecimal, Term>) d -> Terms.string(apply(d)), hydra.extract.Core.bigfloat(cx, graph, args.get(0)));
     }
 
     /**

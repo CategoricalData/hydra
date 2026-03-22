@@ -50,12 +50,12 @@ public class Apply extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph ->
-            hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(0)), optionalF ->
+            hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(0)), optionalF ->
                 hydra.lib.eithers.Map.apply(optionalArg ->
                     (optionalF.isJust() && optionalArg.isJust())
                         ? Terms.optional(Maybe.just(Terms.apply(optionalF.fromJust(), optionalArg.fromJust())))
                         : Terms.optional(Maybe.nothing()),
-                    hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(1))));
+                    hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(1))));
     }
 
     /**

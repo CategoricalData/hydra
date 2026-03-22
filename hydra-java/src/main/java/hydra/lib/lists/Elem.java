@@ -39,7 +39,7 @@ public class Elem extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) lst -> Terms.boolean_(lst.contains(args.get(0))), hydra.extract.core.Core.list(cx, graph, args.get(1)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) lst -> Terms.boolean_(lst.contains(args.get(0))), hydra.extract.Core.list(cx, graph, args.get(1)));
     }
 
     /**

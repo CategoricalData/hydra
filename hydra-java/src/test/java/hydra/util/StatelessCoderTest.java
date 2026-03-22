@@ -109,7 +109,7 @@ public class StatelessCoderTest extends HydraTestBase {
         if (result.isRight()) {
             return Either.right(((Either.Right<hydra.context.InContext<hydra.errors.Error_>, V2>) result).value);
         } else {
-            return Either.left(hydra.show.errors.Errors.error(((Either.Left<hydra.context.InContext<hydra.errors.Error_>, V2>) result).value.object));
+            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.context.InContext<hydra.errors.Error_>, V2>) result).value.object));
         }
     }
 
@@ -126,7 +126,7 @@ public class StatelessCoderTest extends HydraTestBase {
         if (result.isRight()) {
             return Either.right(((Either.Right<hydra.context.InContext<hydra.errors.Error_>, V1>) result).value);
         } else {
-            return Either.left(hydra.show.errors.Errors.error(((Either.Left<hydra.context.InContext<hydra.errors.Error_>, V1>) result).value.object));
+            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.context.InContext<hydra.errors.Error_>, V1>) result).value.object));
         }
     }
 }
