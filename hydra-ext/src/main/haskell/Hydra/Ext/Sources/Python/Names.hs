@@ -87,9 +87,9 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import qualified Hydra.Ext.Python.Syntax as Py
-import qualified Hydra.Ext.Python.Helpers as PyHelpers
+import qualified Hydra.Ext.Python.Environment as PyHelpers
 import qualified Hydra.Ext.Sources.Python.Syntax as PySyntax
-import qualified Hydra.Ext.Sources.Python.Helpers as PyHelpersSource
+import qualified Hydra.Ext.Sources.Python.Environment as PyEnvironmentSource
 import qualified Hydra.Ext.Sources.Python.Serde as PySerde
 import qualified Hydra.Ext.Sources.Python.Language as PyLanguage
 import qualified Hydra.Ext.Dsl.Python.Syntax as PyDsl
@@ -107,7 +107,7 @@ pyLanguageNs = Namespace "hydra.ext.python.language"
 module_ :: Module
 module_ = Module ns elements
     [Names.ns, Formatting.ns, PySerde.ns, pyLanguageNs]
-    (PyHelpersSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
+    (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Python naming utilities: encoding Hydra names as Python names"
   where
     elements = [

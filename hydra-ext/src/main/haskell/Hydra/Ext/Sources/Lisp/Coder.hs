@@ -46,6 +46,7 @@ import qualified Data.Maybe                                as Y
 import qualified Hydra.Ext.Lisp.Syntax as L
 import qualified Hydra.Ext.Sources.Lisp.Syntax as LispSyntax
 import qualified Hydra.Ext.Sources.Lisp.Language as LispLanguageSource
+import qualified Hydra.Sources.CoderUtils as CoderUtils
 
 
 def :: String -> TTerm a -> TBinding a
@@ -57,7 +58,7 @@ ns = Namespace "hydra.ext.lisp.coder"
 module_ :: Module
 module_ = Module ns elements
     [moduleNamespace LispLanguageSource.module_,
-      Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Sorting.ns, Lexical.ns]
+      Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Sorting.ns, Lexical.ns, CoderUtils.ns]
     (LispSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Lisp code generator: converts Hydra type and term modules to Lisp AST"
   where
@@ -96,7 +97,6 @@ module_ = Module ns elements
       toBinding encodeTypeBody,
       toBinding encodeTypeDefinition,
       toBinding encodeTermDefinition,
-      toBinding reorderDefs,
       toBinding moduleImports,
       toBinding moduleExports,
       toBinding moduleToLisp]
@@ -1044,25 +1044,6 @@ encodeTermDefinition = def "encodeTermDefinition" $
 -- | Reorder definitions: type definitions first, then term definitions in topological order.
 --   This ensures that all forward references are resolved, making the generated code
 --   loadable without a special loader.
-reorderDefs :: TBinding ([Definition] -> [Definition])
-reorderDefs = def "reorderDefs" $
-  "defs" ~>
-    "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $
-    "typeDefs" <~ Lists.map ("td" ~> inject _Definition _Definition_type (var "td"))
-      (Pairs.first (var "partitioned")) $
-    "termDefsWrapped" <~ Lists.map ("td" ~> inject _Definition _Definition_term (var "td"))
-      (Pairs.second (var "partitioned")) $
-    -- Topologically sort term definitions by free variable dependencies
-    "sortedTermDefs" <~ (Lists.concat $ Sorting.topologicalSortNodes @@
-      ("d" ~> cases _Definition (var "d") Nothing [
-        _Definition_term>>: "td" ~> project _TermDefinition _TermDefinition_name @@ var "td"])
-      @@
-      ("d" ~> cases _Definition (var "d") (Just (list ([] :: [TTerm Name]))) [
-        _Definition_term>>: "td" ~>
-          Sets.toList $ Rewriting.freeVariablesInTerm @@ (project _TermDefinition _TermDefinition_term @@ var "td")])
-      @@ var "termDefsWrapped") $
-    Lists.concat (list [var "typeDefs", var "sortedTermDefs"])
-
 -- =============================================================================
 -- Import and export generation
 -- =============================================================================
@@ -1117,7 +1098,7 @@ moduleToLisp :: TBinding (L.Dialect -> Module -> [Definition] -> Context -> Grap
 moduleToLisp = def "moduleToLisp" $
   "dialect" ~> "mod" ~> "defs0" ~> "cx" ~> "g" ~>
     -- Reorder definitions: types first, then topologically sorted terms
-    "defs" <~ (reorderDefs @@ var "defs0") $
+    "defs" <~ (CoderUtils.reorderDefs @@ var "defs0") $
     "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $
     "allTypeDefs" <~ Pairs.first (var "partitioned") $
     "termDefs" <~ Pairs.second (var "partitioned") $

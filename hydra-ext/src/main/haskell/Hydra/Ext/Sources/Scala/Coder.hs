@@ -49,12 +49,11 @@ import qualified Data.Set as S
 import Data.Coerce (coerce)
 
 -- Additional imports
-import qualified Hydra.Ext.Scala.Meta as Scala
+import qualified Hydra.Ext.Scala.Syntax as Scala
 import qualified Hydra.Typing as HydraTyping
-import qualified Hydra.Ext.Sources.Scala.Meta as ScalaMeta
+import qualified Hydra.Ext.Sources.Scala.Syntax as ScalaSyntax
 import qualified Hydra.Ext.Sources.Scala.Language as ScalaLanguageSource
 import qualified Hydra.Ext.Sources.Scala.Utils as ScalaUtilsSource
-import qualified Hydra.Ext.Sources.Scala.Prepare as ScalaPrepareSource
 import qualified Hydra.Ext.Sources.Scala.Serde as ScalaSerdeSource
 
 
@@ -71,9 +70,9 @@ ns = Namespace "hydra.ext.scala.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [ScalaUtilsSource.ns, ScalaPrepareSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Rewriting.ns, CoderUtils.ns, Schemas.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+    [ScalaUtilsSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Rewriting.ns, CoderUtils.ns, Schemas.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns]
-    (ScalaMeta.ns:moduleNamespace ScalaLanguageSource.scalaLanguageModule:KernelTypes.kernelTypesNamespaces) $
+    (ScalaSyntax.ns:moduleNamespace ScalaLanguageSource.scalaLanguageModule:KernelTypes.kernelTypesNamespaces) $
     Just "Scala code generator: converts Hydra modules to Scala source code"
   where
     elements = [

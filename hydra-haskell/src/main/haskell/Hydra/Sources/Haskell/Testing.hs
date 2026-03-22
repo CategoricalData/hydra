@@ -1,7 +1,7 @@
 -- | Haskell test code generation codec in Hydra DSL.
 -- This module provides DSL versions of Haskell test codec functions for HSpec-based generation tests.
 
-module Hydra.Sources.Haskell.TestCodec where
+module Hydra.Sources.Haskell.Testing where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
@@ -89,8 +89,8 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import qualified Hydra.Ext.Haskell.Ast as H
-import qualified Hydra.Sources.Haskell.Ast as HaskellAst
+import qualified Hydra.Ext.Haskell.Syntax as H
+import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Coder as HaskellCoderSource
 import qualified Hydra.Sources.Haskell.Serde as HaskellSerdeSource
 import qualified Hydra.Sources.Haskell.Utils as HaskellUtilsSource
@@ -103,14 +103,14 @@ define = definitionInModule module_
 
 
 ns :: Namespace
-ns = Namespace "hydra.ext.haskell.testCodec"
+ns = Namespace "hydra.ext.haskell.testing"
 
 module_ :: Module
 module_ = Module ns elements
     [Namespace "hydra.ext.haskell.coder", HaskellSerdeSource.ns, HaskellUtilsSource.ns,
      SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns,
      Inference.ns, Constants.ns, Rewriting.ns, Substitution.ns, Schemas.ns, ShowError.ns, Lexical.ns]
-    (HaskellAst.ns:KernelTypes.kernelTypesNamespaces) $
+    (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Haskell test code generation codec for HSpec-based generation tests"
   where
     elements = [

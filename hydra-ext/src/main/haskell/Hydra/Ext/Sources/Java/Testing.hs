@@ -1,7 +1,7 @@
 -- | Java test code generation codec in Hydra DSL.
 -- This module provides DSL versions of Java test codec functions for JUnit-based generation tests.
 
-module Hydra.Ext.Sources.Java.TestCodec where
+module Hydra.Ext.Sources.Java.Testing where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
@@ -90,9 +90,9 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import qualified Hydra.Ext.Java.Syntax as Java
-import qualified Hydra.Ext.Java.Helpers as JavaHelpers
+import qualified Hydra.Ext.Java.Environment as JavaHelpers
 import qualified Hydra.Ext.Sources.Java.Syntax as JavaSyntax
-import qualified Hydra.Ext.Sources.Java.Helpers as JavaHelpersSource
+import qualified Hydra.Ext.Sources.Java.Environment as JavaEnvironmentSource
 import qualified Hydra.Ext.Sources.Java.Coder as JavaCoderSource
 import qualified Hydra.Ext.Sources.Java.Serde as JavaSerdeSource
 import qualified Hydra.Sources.Test.Utils as TestUtils
@@ -106,12 +106,12 @@ define = definitionInModule module_
 
 
 ns :: Namespace
-ns = Namespace "hydra.ext.java.testCodec"
+ns = Namespace "hydra.ext.java.testing"
 
 module_ :: Module
 module_ = Module ns elements
     [JavaCoderSource.ns, JavaSerdeSource.ns, SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Inference.ns, Constants.ns, Rewriting.ns, ShowError.ns]
-    (JavaHelpersSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
+    (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Java test code generation codec for JUnit-based generation tests"
   where
     elements = [

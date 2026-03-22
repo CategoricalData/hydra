@@ -13,12 +13,12 @@ import Hydra.Sources.Kernel.Types.All
 import Hydra.Sources.Test.All
 
 import qualified Hydra.Sources.CoderUtils as CoderUtils
-import qualified Hydra.Sources.Haskell.Ast as HaskellAst
+import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Coder as HaskellCoder
 import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
 import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
 import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
-import qualified Hydra.Sources.Haskell.TestCodec as HaskellTestCodec
+import qualified Hydra.Sources.Haskell.Testing as HaskellTesting
 import qualified Hydra.Sources.Haskell.Utils as HaskellUtils
 import qualified Hydra.Sources.Json.Bootstrap as JsonBootstrap
 import qualified Hydra.Sources.Json.Decode as JsonDecode
@@ -49,12 +49,12 @@ kernelModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules
 
 haskellModules :: [Module]
 haskellModules = [
-  HaskellAst.module_,
+  HaskellSyntax.module_,
   HaskellCoder.module_,
   HaskellLanguage.module_,
   HaskellOperators.module_,
   HaskellSerde.module_,
-  HaskellTestCodec.module_,
+  HaskellTesting.module_,
   HaskellUtils.module_]
 
 jsonModules :: [Module]

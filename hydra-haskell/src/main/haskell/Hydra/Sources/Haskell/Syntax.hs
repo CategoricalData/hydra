@@ -1,6 +1,6 @@
 -- | A Haskell syntax model, loosely based on Language.Haskell.Tools.AST
 
-module Hydra.Sources.Haskell.Ast where
+module Hydra.Sources.Haskell.Syntax where
 
 -- Standard type-level imports
 import           Hydra.Kernel
@@ -12,7 +12,7 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
 ns :: Namespace
-ns = Namespace "hydra.ext.haskell.ast"
+ns = Namespace "hydra.ext.haskell.syntax"
 
 define :: String -> Type -> Binding
 define = defineType ns

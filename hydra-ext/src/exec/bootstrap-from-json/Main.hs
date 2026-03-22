@@ -41,9 +41,9 @@ import Hydra.Ext.Python.Language (pythonLanguage)
 import Hydra.Ext.Lisp.Language (lispLanguage)
 import qualified Hydra.Ext.Lisp.Syntax as LispSyntax
 import Hydra.Generation (TestGenerator, generateGenerationTestSuite, createTestGroupLookup)
-import Hydra.Ext.Haskell.TestCodecIo (haskellTestGenerator)
-import Hydra.Ext.Java.TestCodecIo (javaTestGenerator)
-import Hydra.Ext.Python.TestCodecIo (pythonTestGenerator)
+import Hydra.Ext.Haskell.TestingIo (haskellTestGenerator)
+import Hydra.Ext.Java.TestingIo (javaTestGenerator)
+import Hydra.Ext.Python.TestingIo (pythonTestGenerator)
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import qualified Hydra.Test.TestSuite as GenTests
 

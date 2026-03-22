@@ -1,7 +1,7 @@
--- | Helper types for Python code generation.
+-- | Environment types for Python code generation.
 -- These types support the Python coder and are used to track code generation state.
 
-module Hydra.Ext.Sources.Python.Helpers where
+module Hydra.Ext.Sources.Python.Environment where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
@@ -19,13 +19,13 @@ import qualified Hydra.Ext.Sources.Python.Syntax as Syntax
 
 
 ns :: Namespace
-ns = Namespace "hydra.ext.python.helpers"
+ns = Namespace "hydra.ext.python.environment"
 
 def :: String -> Type -> Binding
 def = datatype ns
 
-helpers :: String -> Type
-helpers = typeref ns
+environment :: String -> Type
+environment = typeref ns
 
 syntax :: String -> Type
 syntax = typeref Syntax.ns
@@ -44,7 +44,7 @@ typing = typeref Typing.ns
 
 module_ :: Module
 module_ = Module ns elements [] [Syntax.ns, Util.ns, Core.ns, Graph.ns, Module.ns, Typing.ns] $
-    Just "Helper types for Python code generation"
+    Just "Environment types for Python code generation"
   where
     elements = [
       pythonVersion,
@@ -79,7 +79,7 @@ pythonEnvironment = def "PythonEnvironment" $
       T.set (core "Name"),
     "version">:
       doc "Target Python version" $
-      helpers "PythonVersion",
+      environment "PythonVersion",
     "skipCasts">:
       doc "When True, skip generating cast() calls for reduced memory usage" $
       T.boolean,
@@ -129,4 +129,4 @@ pyGraph = def "PyGraph" $
       graph "Graph",
     "metadata">:
       doc "Accumulated module metadata" $
-      helpers "PythonModuleMetadata"]
+      environment "PythonModuleMetadata"]

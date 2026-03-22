@@ -3,15 +3,15 @@
 -- and only adds the TestGenerator (which involves IO infrastructure)
 -- and the aggregator file generator (which uses System.FilePath).
 
-module Hydra.Ext.Haskell.TestCodecIo where
+module Hydra.Ext.Haskell.TestingIo where
 
 import Hydra.Kernel hiding (map)
 import Hydra.Testing
 import Hydra.Generation (showError, TestGenerator(..), generateGenerationTestSuite)
 import Hydra.Test.Transform (addGenerationPrefix)
 import Hydra.Ext.Haskell.Utils (namespacesForModule, sanitizeHaskellName)
-import qualified Hydra.Ext.Haskell.TestCodec as Generated
-import qualified Hydra.Ext.Haskell.Ast as H
+import qualified Hydra.Ext.Haskell.Testing as Generated
+import qualified Hydra.Ext.Haskell.Syntax as H
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Strings as Strings
 

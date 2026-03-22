@@ -1,4 +1,4 @@
-module Hydra.Ext.Sources.Scala.Meta where
+module Hydra.Ext.Sources.Scala.Syntax where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
@@ -14,7 +14,7 @@ import qualified Data.Maybe                      as Y
 
 
 ns :: Namespace
-ns = Namespace "hydra.ext.scala.meta"
+ns = Namespace "hydra.ext.scala.syntax"
 
 def :: String -> Type -> Binding
 def = datatype ns

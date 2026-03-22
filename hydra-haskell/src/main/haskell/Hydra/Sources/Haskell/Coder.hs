@@ -86,9 +86,9 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import qualified Hydra.Ext.Haskell.Ast as H
+import qualified Hydra.Ext.Haskell.Syntax as H
 import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
-import qualified Hydra.Sources.Haskell.Ast as HaskellAst
+import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
 import qualified Hydra.Sources.Haskell.Utils as HaskellUtils
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
@@ -110,7 +110,7 @@ module_ :: Module
 module_ = Module ns elements
     [HaskellSerde.ns, HaskellUtils.ns,
       Adapt.ns, Rewriting.ns, Serialization.ns, ShowError.ns]
-    (HaskellAst.ns:KernelTypes.kernelTypesNamespaces) $
+    (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Functions for encoding Hydra modules as Haskell modules"
   where
     ns = Namespace "hydra.ext.haskell.coder"

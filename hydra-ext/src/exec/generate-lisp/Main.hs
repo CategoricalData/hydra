@@ -6,7 +6,7 @@ import Hydra.Kernel (Module, moduleNamespace)
 import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import qualified Hydra.Test.TestSuite as GenTests
-import Hydra.Ext.Lisp.TestCodecIo
+import Hydra.Ext.Lisp.TestingIo
 import System.Directory (createDirectoryIfMissing, copyFile, listDirectory, doesFileExist)
 import System.FilePath ((</>), takeExtension)
 

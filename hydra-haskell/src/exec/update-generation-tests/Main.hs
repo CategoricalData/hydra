@@ -8,7 +8,7 @@ module Main where
 
 import Hydra.Kernel
 import Hydra.Generation (createTestGroupLookup, generateGenerationTestSuite)
-import Hydra.Ext.Haskell.TestCodecIo (haskellTestGenerator)
+import Hydra.Ext.Haskell.TestingIo (haskellTestGenerator)
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import qualified Hydra.Test.TestSuite as GenTests
 

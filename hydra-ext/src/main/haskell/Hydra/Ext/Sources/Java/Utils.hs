@@ -33,10 +33,10 @@ import qualified Data.Set as S
 
 -- Additional imports
 import qualified Hydra.Ext.Java.Syntax as Java
-import qualified Hydra.Ext.Java.Helpers as JavaHelpers
+import qualified Hydra.Ext.Java.Environment as JavaHelpers
 import qualified Hydra.Ext.Dsl.Java.Syntax as JavaDsl
 import qualified Hydra.Ext.Sources.Java.Syntax as JavaSyntax
-import qualified Hydra.Ext.Sources.Java.Helpers as JavaHelpersSource
+import qualified Hydra.Ext.Sources.Java.Environment as JavaEnvironmentSource
 import qualified Hydra.Ext.Sources.Java.Language as JavaLanguageSource
 import qualified Hydra.Ext.Sources.Java.Names as JavaNamesSource
 import qualified Hydra.Ext.Sources.Java.Serde as JavaSerdeSource
@@ -51,7 +51,7 @@ ns = Namespace "hydra.ext.java.utils"
 module_ :: Module
 module_ = Module ns elements
     [moduleNamespace JavaLanguageSource.module_, JavaNamesSource.ns, JavaSerdeSource.ns, Formatting.ns, Names.ns, Serialization.ns]
-    (JavaHelpersSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
+    (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Java utilities for constructing Java syntax trees"
   where
     elements = [
