@@ -396,6 +396,9 @@ def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) ->
         case hydra.testing.TestCaseUnshadowVariables(value=tc):
             return lambda: run_unshadow_variables_test(tc)
 
+        case hydra.testing.TestCaseValidateCoreTerm(value=tc):
+            return lambda: run_validate_core_term_test(tc)
+
         case _:
             # Fail on unhandled test case types to catch missing implementations
             case_type = type(tcase.case).__name__
@@ -658,6 +661,18 @@ def run_unshadow_variables_test(test_case: hydra.testing.UnshadowVariablesTestCa
         f"Unshadow variables failed:\n"
         f"  Expected: {hydra.show.core.term(test_case.output)}\n"
         f"  Actual: {hydra.show.core.term(result)}"
+    )
+
+
+def run_validate_core_term_test(test_case: hydra.testing.ValidateCoreTermTestCase) -> None:
+    """Execute a validate core term test."""
+    import hydra.validate.core
+    graph = get_test_graph()
+    result = hydra.validate.core.term(graph, test_case.input)
+    assert result == test_case.output, (
+        f"Validate core term failed:\n"
+        f"  Expected: {test_case.output}\n"
+        f"  Actual: {result}"
     )
 
 
