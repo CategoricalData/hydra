@@ -579,6 +579,12 @@
   (hydra-run-simple-test path (cdr (assq :output tc))
     (lambda () (funcall hydra_rewriting_unshadow_variables (cdr (assq :input tc))))))
 
+(defun hydra-run-validate-core-term-test (path tc)
+  (if (boundp 'hydra_validate_core_term)
+      (hydra-run-simple-test path (cdr (assq :output tc))
+        (lambda () (funcall (funcall hydra_validate_core_term hydra--test-graph) (cdr (assq :input tc)))))
+    (list 0 0 1)))
+
 (defun hydra-run-eta-expansion-test (path tc)
   (let ((cx (hydra-empty-context)) (graph hydra--test-graph))
     (hydra-run-either-test path (cdr (assq :output tc))
@@ -952,6 +958,7 @@
              ((eq case-type :json_roundtrip)          (hydra-run-json-roundtrip-test full case-data))
              ((eq case-type :json_decode)             (hydra-run-json-decode-test full case-data))
              ((eq case-type :json_encode)             (list 0 0 1))
+             ((eq case-type :validate_core_term)      (hydra-run-validate-core-term-test full case-data))
              ((eq case-type :delegated_evaluation)    (list 0 0 1))
              (t (list 0 0 1))))))
     (error

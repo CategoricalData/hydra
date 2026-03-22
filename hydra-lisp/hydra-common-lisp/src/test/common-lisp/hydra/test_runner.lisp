@@ -1247,6 +1247,12 @@
           (t (list 0 1 0))))
       (error (e) (format t "FAIL: ~A~%  EXCEPTION: ~A~%" path e) (list 0 1 0)))))
 
+(defun run-validate-core-term-test (path tc)
+  (if (boundp 'hydra_validate_core_term)
+    (run-simple-test path (a :output tc)
+      (lambda () (funcall (funcall (symbol-value 'hydra_validate_core_term) (get-test-graph)) (a :input tc))))
+    (list 0 0 1)))
+
 ;; ==========================================================================
 ;; Test case dispatcher
 ;; ==========================================================================
@@ -1300,6 +1306,7 @@
                 ((eq case-type :json_roundtrip)          (run-json-roundtrip-test full case-data))
                 ((eq case-type :json_decode)             (run-json-decode-test full case-data))
                 ((eq case-type :json_encode)             (list 0 0 1)) ;; no test data (Java also skips)
+                ((eq case-type :validate_core_term)      (run-validate-core-term-test full case-data))
                 ((eq case-type :delegated_evaluation)    (list 0 0 1))
                 (t (list 0 0 1))))))
     (error (e)

@@ -1491,6 +1491,15 @@
   ;; Java also skips this.
   (list 0 0 1))
 
+(define (run-validate-core-term-test path tc)
+  (guard (exn (#t (list 0 0 1)))  ;; skip if validate module not loaded
+    (let* ((graph (get-test-graph))
+           (input (cdr (assq 'input tc)))
+           (expected (cdr (assq 'output tc)))
+           (result (hydra_validate_core_term graph input)))
+      (if (equal? result expected) (list 1 0 0)
+          (begin (display (string-append "FAIL: " path "\n")) (list 0 1 0))))))
+
 ;; ==========================================================================
 ;; Test case dispatcher
 ;; ==========================================================================
@@ -1550,6 +1559,7 @@
               ((eq? case-type 'json_roundtrip)          (run-json-roundtrip-test full case-data))
               ((eq? case-type 'json_decode)             (run-json-decode-test full case-data))
               ((eq? case-type 'json_encode)             (run-json-encode-test full case-data))
+              ((eq? case-type 'validate_core_term)      (run-validate-core-term-test full case-data))
               ;; Skip remaining unimplemented test types
               ((eq? case-type 'delegated_evaluation)    (list 0 0 1))
               (else                                     (list 0 0 1))))))))

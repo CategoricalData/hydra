@@ -1245,6 +1245,12 @@
   ;; Java also skips this: `return withTimeout(name, () -> {});`
   [0 0 1])
 
+(defn- run-validate-core-term-test [path tc]
+  (if (resolve 'hydra_validate_core_term)
+    (run-simple-test path (:output tc)
+      (fn [] ((resolve 'hydra_validate_core_term) (get-test-graph) (:input tc))))
+    [0 0 1]))
+
 ;; ---- Test case dispatcher ----
 
 (defn- run-test-case [path tcase]
@@ -1294,6 +1300,7 @@
               :json_roundtrip          (run-json-roundtrip-test full case-data)
               :json_decode             (run-json-decode-test full case-data)
               :json_encode             (run-json-encode-test full case-data)
+              :validate_core_term      (run-validate-core-term-test full case-data)
               ;; Skip remaining unimplemented test types
               :delegated_evaluation    [0 0 1]
               [0 0 1]))))
