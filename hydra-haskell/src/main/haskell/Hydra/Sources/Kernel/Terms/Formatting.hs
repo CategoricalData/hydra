@@ -98,11 +98,17 @@ convertCase = define "convertCase" $
   lambdas ["from", "to", "original"] $ lets [
     "parts">: lets [
       "byCaps">: lets [
-        "splitOnUppercase">: lambda "acc" $ lambda "c" $ Lists.concat2
-          (Logic.ifElse (Chars.isUpper $ var "c") emptyParts (list ([] :: [TTerm [Char]])))
-          (Lists.cons (Lists.cons (var "c") (Lists.head $ var "acc")) (Lists.tail $ var "acc"))]
-        $ Lists.map (primitive _strings_fromList) $ Lists.foldl (var "splitOnUppercase") emptyParts
-          $ Lists.reverse $ Strings.toList (decapitalize @@ var "original"),
+        -- Split on uppercase letters AND underscores (underscores are dropped)
+        "splitOnUpperOrUnderscore">: lambda "acc" $ lambda "c" $
+          Logic.ifElse (Equality.equal (var "c") (char '_'))
+            (Lists.concat2 emptyParts (var "acc"))  -- underscore: start new word, drop the underscore
+            (Logic.ifElse (Chars.isUpper $ var "c")
+              (Lists.concat2 emptyParts
+                (Lists.cons (Lists.cons (var "c") (Lists.head $ var "acc")) (Lists.tail $ var "acc")))
+              (Lists.cons (Lists.cons (var "c") (Lists.head $ var "acc")) (Lists.tail $ var "acc")))]
+        $ Lists.filter (lambda "w" $ Logic.not (Equality.equal (Strings.length $ var "w") (int32 0)))
+          $ Lists.map (primitive _strings_fromList) $ Lists.foldl (var "splitOnUpperOrUnderscore") emptyParts
+            $ Lists.reverse $ Strings.toList (decapitalize @@ var "original"),
       "byUnderscores">: Strings.splitOn (string "_") $ var "original"]
       $ (match _CaseConvention Nothing [
         _CaseConvention_camel>>: constant $ var "byCaps",
