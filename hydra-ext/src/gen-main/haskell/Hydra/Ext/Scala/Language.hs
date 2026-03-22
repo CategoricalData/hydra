@@ -97,6 +97,7 @@ scalaLanguage =
           Variants.TypeVariantUnit,
           Variants.TypeVariantForall,
           Variants.TypeVariantVariable,
+          Variants.TypeVariantVoid,
           Variants.TypeVariantWrap]
     typePredicate = \_ -> True
 

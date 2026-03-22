@@ -7060,6 +7060,33 @@
                                                                 "domain": [{"variable": "hydra.core.Name"}],
                                                                 "parameter": "v1"}}}},
                                                         {
+                                                          "name": "void",
+                                                          "term": {
+                                                            "function": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "either": {
+                                                                            "@right": {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "variable",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "argument": {"literal": {"string": "Void"}},
+                                                                                      "function": {"variable": "hydra.ext.haskell.utils.rawName"}}}},
+                                                                                "typeName": "hydra.ext.haskell.ast.Type"}}}},
+                                                                        "type": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.errors.Error"},
+                                                                            "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                    "type": {"variable": "hydra.ext.haskell.ast.Type"}}},
+                                                                "domain": [{"unit": {}}],
+                                                                "parameter": "_"}}}},
+                                                        {
                                                           "name": "wrap",
                                                           "term": {
                                                             "function": {

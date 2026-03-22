@@ -1166,6 +1166,11 @@ public interface Adapt {
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Unit ignored) {
         return hydra.util.ConsList.of(new hydra.core.Type.Literal(new hydra.core.LiteralType.Boolean_()));
       }
+
+      @Override
+      public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Void_ ignored) {
+        return hydra.util.ConsList.of(new hydra.core.Type.Unit());
+      }
     });
   }
 }

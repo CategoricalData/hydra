@@ -166,4 +166,4 @@ def type_variant(v1: hydra.variants.TypeVariant) -> hydra.core.Term:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TypeVariant"), hydra.core.Field(hydra.core.Name("wrap"), cast(hydra.core.Term, hydra.core.TermUnit())))))
 
         case _:
-            raise AssertionError("Unreachable: all variants handled")
+            raise TypeError("Unsupported TypeVariant")

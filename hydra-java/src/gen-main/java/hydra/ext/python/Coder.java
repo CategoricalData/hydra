@@ -416,6 +416,11 @@ public interface Coder {
       }
 
       @Override
+      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Void_ ignored) {
+        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
+      }
+
+      @Override
       public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>> visit(hydra.core.Type.Wrap ignored) {
         return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Type>>(t, ps)));
       }
@@ -515,6 +520,11 @@ public interface Coder {
 
       @Override
       public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Variable ignored) {
+        return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
+      }
+
+      @Override
+      public hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>> visit(hydra.core.Type.Void_ ignored) {
         return (hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>(t, hydra.lib.lists.Reverse.apply(ps))));
       }
 
@@ -643,6 +653,13 @@ public interface Coder {
 
         @Override
         public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Variable ignored) {
+          return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
+            dom,
+            rdoms)), innerCod)));
+        }
+
+        @Override
+        public hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Void_ ignored) {
           return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Reverse.apply(hydra.lib.lists.Cons.apply(
             dom,
             rdoms)), innerCod)));
@@ -808,6 +825,11 @@ public interface Coder {
       @Override
       public hydra.util.Either<T0, hydra.ext.python.syntax.Expression> visit(hydra.core.Type.Unit ignored) {
         return hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.Utils.pyNameToPyExpression(hydra.ext.python.Utils.pyNone()));
+      }
+
+      @Override
+      public hydra.util.Either<T0, hydra.ext.python.syntax.Expression> visit(hydra.core.Type.Void_ ignored) {
+        return hydra.util.Either.<T0, hydra.ext.python.syntax.Expression>right(hydra.ext.python.utils.Utils.pyNameToPyExpression(hydra.ext.python.utils.Utils.pyNone()));
       }
 
       @Override

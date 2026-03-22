@@ -78,6 +78,7 @@ protobufLanguage =
           Variants.TypeVariantUnion,
           Variants.TypeVariantUnit,
           Variants.TypeVariantVariable,
+          Variants.TypeVariantVoid,
           Variants.TypeVariantWrap]
     typePredicate =
         \typ -> case typ of

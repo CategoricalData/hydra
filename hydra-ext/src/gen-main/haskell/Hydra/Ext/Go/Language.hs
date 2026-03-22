@@ -100,6 +100,7 @@ goLanguage =
           Variants.TypeVariantUnion,
           Variants.TypeVariantUnit,
           Variants.TypeVariantVariable,
+          Variants.TypeVariantVoid,
           Variants.TypeVariantWrap]
     typePredicate = \_ -> True
 

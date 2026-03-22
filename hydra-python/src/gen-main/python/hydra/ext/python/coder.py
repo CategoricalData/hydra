@@ -505,6 +505,9 @@ def encode_application_type(env: hydra.ext.python.helpers.PythonEnvironment, at:
                 case hydra.core.TypeVariable():
                     return (t, ps)
 
+                case hydra.core.TypeVoid():
+                    return (t, ps)
+
                 case hydra.core.TypeWrap():
                     return (t, ps)
 
@@ -572,6 +575,9 @@ def encode_forall_type(env: hydra.ext.python.helpers.PythonEnvironment, lt: hydr
                     return (t, hydra.lib.lists.reverse(ps))
 
                 case hydra.core.TypeVariable():
+                    return (t, hydra.lib.lists.reverse(ps))
+
+                case hydra.core.TypeVoid():
                     return (t, hydra.lib.lists.reverse(ps))
 
                 case hydra.core.TypeWrap():
@@ -645,6 +651,9 @@ def encode_function_type(env: hydra.ext.python.helpers.PythonEnvironment, ft: hy
                 case hydra.core.TypeVariable():
                     return (hydra.lib.lists.reverse(hydra.lib.lists.cons(dom, rdoms)), inner_cod)
 
+                case hydra.core.TypeVoid():
+                    return (hydra.lib.lists.reverse(hydra.lib.lists.cons(dom, rdoms)), inner_cod)
+
                 case hydra.core.TypeWrap():
                     return (hydra.lib.lists.reverse(hydra.lib.lists.cons(dom, rdoms)), inner_cod)
 
@@ -705,6 +714,9 @@ def encode_type(env: hydra.ext.python.helpers.PythonEnvironment, typ: hydra.core
             return dflt()
 
         case hydra.core.TypeUnit():
+            return Right(hydra.ext.python.utils.py_name_to_py_expression(hydra.ext.python.utils.py_none))
+
+        case hydra.core.TypeVoid():
             return Right(hydra.ext.python.utils.py_name_to_py_expression(hydra.ext.python.utils.py_none))
 
         case hydra.core.TypeVariable(value=name):

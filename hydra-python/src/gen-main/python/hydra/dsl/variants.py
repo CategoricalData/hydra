@@ -96,4 +96,6 @@ type_variant_unit = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUn
 
 type_variant_variable = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TypeVariant"), hydra.core.Field(hydra.core.Name("variable"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
+type_variant_void = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TypeVariant"), hydra.core.Field(hydra.core.Name("void"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+
 type_variant_wrap = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TypeVariant"), hydra.core.Field(hydra.core.Name("wrap"), cast(hydra.core.Term, hydra.core.TermUnit()))))))

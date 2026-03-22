@@ -9327,6 +9327,19 @@
                                                     "typeName": "hydra.core.LiteralType"}}},
                                               "typeName": "hydra.core.Type"}}]},
                                       "domain": [{"unit": {}}],
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "void",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "list": [
+                                          {
+                                            "union": {
+                                              "field": {"name": "unit", "term": {"unit": {}}},
+                                              "typeName": "hydra.core.Type"}}]},
+                                      "domain": [{"unit": {}}],
                                       "parameter": "_"}}}}],
                             "default": [
                               {

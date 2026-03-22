@@ -781,6 +781,11 @@ public interface Core {
       }
 
       @Override
+      public String visit(hydra.core.Type.Void_ ignored) {
+        return "void";
+      }
+
+      @Override
       public String visit(hydra.core.Type.Wrap wt) {
         return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
           "wrap(",

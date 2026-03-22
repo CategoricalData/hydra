@@ -178,6 +178,11 @@ public interface Meta {
       }
 
       @Override
+      public String visit(hydra.variants.TypeVariant.Void_ ignored) {
+        return "void";
+      }
+
+      @Override
       public String visit(hydra.variants.TypeVariant.Wrap ignored) {
         return "wrap";
       }

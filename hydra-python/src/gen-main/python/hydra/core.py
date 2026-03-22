@@ -594,6 +594,15 @@ class TypeUnit:
 class TypeVariable(Node["Name"]):
     r"""A type variable"""
 
+class TypeVoid:
+    r"""The void (uninhabited, or bottom) type"""
+
+    __slots__ = ()
+    def __eq__(self, other):
+        return isinstance(other, TypeVoid)
+    def __hash__(self):
+        return hash("TypeVoid")
+
 class TypeWrap(Node["Type"]):
     r"""A wrapped type (newtype)"""
 
@@ -603,7 +612,7 @@ class _TypeMeta(type):
 
 # A data type.
 class Type(metaclass=_TypeMeta):
-    r"""TypeAnnotated | TypeApplication | TypeEither | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypePair | TypeRecord | TypeSet | TypeUnion | TypeUnit | TypeVariable | TypeWrap"""
+    r"""TypeAnnotated | TypeApplication | TypeEither | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypePair | TypeRecord | TypeSet | TypeUnion | TypeUnit | TypeVariable | TypeVoid | TypeWrap"""
 
     TYPE_ = Name("hydra.core.Type")
     ANNOTATED = Name("annotated")
@@ -621,6 +630,7 @@ class Type(metaclass=_TypeMeta):
     UNION = Name("union")
     UNIT = Name("unit")
     VARIABLE = Name("variable")
+    VOID = Name("void")
     WRAP = Name("wrap")
 
 @dataclass(frozen=True)

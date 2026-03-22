@@ -251,6 +251,7 @@ encodeApplicationType env at =
                 Core.TypeUnion _ -> (t, ps)
                 Core.TypeUnit -> (t, ps)
                 Core.TypeVariable _ -> (t, ps)
+                Core.TypeVoid -> (t, ps)
                 Core.TypeWrap _ -> (t, ps)
           bodyAndArgs = gatherParams (Core.TypeApplication at) []
           body = Pairs.first bodyAndArgs
@@ -278,6 +279,7 @@ encodeForallType env lt =
                 Core.TypeUnion _ -> (t, (Lists.reverse ps))
                 Core.TypeUnit -> (t, (Lists.reverse ps))
                 Core.TypeVariable _ -> (t, (Lists.reverse ps))
+                Core.TypeVoid -> (t, (Lists.reverse ps))
                 Core.TypeWrap _ -> (t, (Lists.reverse ps))
           bodyAndParams = gatherParams (Core.TypeForall lt) []
           body = Pairs.first bodyAndParams
@@ -328,6 +330,7 @@ encodeFunctionType env ft =
                   Core.TypeUnion _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
                   Core.TypeUnit -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
                   Core.TypeVariable _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+                  Core.TypeVoid -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
                   Core.TypeWrap _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
           domsAndCod = gatherParams [] ft
           doms = Pairs.first domsAndCod
@@ -363,6 +366,7 @@ encodeType env typ =
           pyet]))
         Core.TypeUnion _ -> dflt
         Core.TypeUnit -> Right (Utils.pyNameToPyExpression Utils.pyNone)
+        Core.TypeVoid -> Right (Utils.pyNameToPyExpression Utils.pyNone)
         Core.TypeVariable v0 -> Right (Names.typeVariableReference env v0)
         Core.TypeWrap _ -> dflt
         Core.TypeAnnotated _ -> dflt

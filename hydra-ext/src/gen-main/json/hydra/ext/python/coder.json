@@ -2351,6 +2351,20 @@
                                                                     "domain": [{"variable": "hydra.core.Name"}],
                                                                     "parameter": "_"}}}},
                                                             {
+                                                              "name": "void",
+                                                              "term": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"pair": {"@first": {"variable": "t"}, "@second": {"variable": "ps"}}},
+                                                                            "type": {"variable": "hydra.core.Type"}}},
+                                                                        "type": {"list": {"variable": "hydra.core.Type"}}}},
+                                                                    "domain": [{"unit": {}}],
+                                                                    "parameter": "_"}}}},
+                                                            {
                                                               "name": "wrap",
                                                               "term": {
                                                                 "function": {
@@ -2948,6 +2962,29 @@
                                                                             "type": {"variable": "hydra.core.Type"}}},
                                                                         "type": {"list": {"variable": "hydra.core.Name"}}}},
                                                                     "domain": [{"variable": "hydra.core.Name"}],
+                                                                    "parameter": "_"}}}},
+                                                            {
+                                                              "name": "void",
+                                                              "term": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "pair": {
+                                                                                "@first": {"variable": "t"},
+                                                                                "@second": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "ps"},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
+                                                                                        "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                                            "type": {"variable": "hydra.core.Type"}}},
+                                                                        "type": {"list": {"variable": "hydra.core.Name"}}}},
+                                                                    "domain": [{"unit": {}}],
                                                                     "parameter": "_"}}}},
                                                             {
                                                               "name": "wrap",
@@ -3825,6 +3862,38 @@
                                                                                     "type": {"list": {"variable": "hydra.core.Type"}}}},
                                                                                 "type": {"variable": "hydra.core.Type"}}},
                                                                             "domain": [{"variable": "hydra.core.Name"}],
+                                                                            "parameter": "_"}}}},
+                                                                    {
+                                                                      "name": "void",
+                                                                      "term": {
+                                                                        "function": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "pair": {
+                                                                                        "@first": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "rdoms"},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "dom"},
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                                        "type": {"variable": "hydra.core.Type"}}}}}}},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
+                                                                                                "type": {"variable": "hydra.core.Type"}}}}},
+                                                                                        "@second": {"variable": "innerCod"}}},
+                                                                                    "type": {"list": {"variable": "hydra.core.Type"}}}},
+                                                                                "type": {"variable": "hydra.core.Type"}}},
+                                                                            "domain": [{"unit": {}}],
                                                                             "parameter": "_"}}}},
                                                                     {
                                                                       "name": "wrap",
@@ -4708,6 +4777,25 @@
                                                     "parameter": "_"}}}},
                                             {
                                               "name": "unit",
+                                              "term": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "either": {
+                                                                "@right": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.ext.python.utils.pyNone"},
+                                                                    "function": {"variable": "hydra.ext.python.utils.pyNameToPyExpression"}}}}},
+                                                            "type": {"variable": "t0"}}},
+                                                        "type": {"variable": "hydra.ext.python.syntax.Expression"}}},
+                                                    "domain": [{"unit": {}}],
+                                                    "parameter": "_"}}}},
+                                            {
+                                              "name": "void",
                                               "term": {
                                                 "function": {
                                                   "lambda": {

@@ -306,6 +306,10 @@
                               "typeName": "hydra.variants.TypeVariant"}},
                           {
                             "union": {
+                              "field": {"name": "void", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
                               "field": {"name": "wrap", "term": {"unit": {}}},
                               "typeName": "hydra.variants.TypeVariant"}}]},
                       "function": {

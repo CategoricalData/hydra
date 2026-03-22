@@ -182,6 +182,10 @@ public interface Variants {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TypeVariant"), new hydra.core.Field(new hydra.core.Name("variable"), new hydra.core.Term.Unit()))));
   }
 
+  static hydra.phantoms.TTerm<hydra.variants.TypeVariant> typeVariantVoid() {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TypeVariant"), new hydra.core.Field(new hydra.core.Name("void"), new hydra.core.Term.Unit()))));
+  }
+
   static hydra.phantoms.TTerm<hydra.variants.TypeVariant> typeVariantWrap() {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TypeVariant"), new hydra.core.Field(new hydra.core.Name("wrap"), new hydra.core.Term.Unit()))));
   }

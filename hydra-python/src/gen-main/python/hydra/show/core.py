@@ -192,6 +192,9 @@ def type(typ: hydra.core.Type) -> str:
         case hydra.core.TypeVariable(value=name):
             return name.value
 
+        case hydra.core.TypeVoid():
+            return "void"
+
         case hydra.core.TypeWrap(value=wt):
             return hydra.lib.strings.cat(("wrap(", type(wt), ")"))
 

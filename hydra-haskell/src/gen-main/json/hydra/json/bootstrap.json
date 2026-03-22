@@ -9287,6 +9287,53 @@
                                                 "name": "name",
                                                 "term": {
                                                   "wrap": {
+                                                    "body": {"literal": {"string": "void"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              {
+                                                "name": "type",
+                                                "term": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "annotated",
+                                                      "term": {
+                                                        "record": {
+                                                          "fields": [
+                                                            {
+                                                              "name": "body",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {"name": "unit", "term": {"unit": {}}},
+                                                                  "typeName": "hydra.core.Type"}}},
+                                                            {
+                                                              "name": "annotation",
+                                                              "term": {
+                                                                "map": [
+                                                                  {
+                                                                    "@key": {
+                                                                      "wrap": {
+                                                                        "body": {"literal": {"string": "description"}},
+                                                                        "typeName": "hydra.core.Name"}},
+                                                                    "@value": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "literal",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "string",
+                                                                                "term": {"literal": {"string": "The void (uninhabited, or bottom) type"}}},
+                                                                              "typeName": "hydra.core.Literal"}}},
+                                                                        "typeName": "hydra.core.Term"}}}]}}],
+                                                          "typeName": "hydra.core.AnnotatedType"}}},
+                                                    "typeName": "hydra.core.Type"}}}],
+                                            "typeName": "hydra.core.FieldType"}},
+                                        {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "name",
+                                                "term": {
+                                                  "wrap": {
                                                     "body": {"literal": {"string": "wrap"}},
                                                     "typeName": "hydra.core.Name"}}},
                                               {

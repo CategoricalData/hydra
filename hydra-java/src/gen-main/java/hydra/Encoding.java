@@ -302,6 +302,11 @@ public interface Encoding {
       }
 
       @Override
+      public hydra.core.Type visit(hydra.core.Type.Void_ ignored) {
+        return new hydra.core.Type.Void_();
+      }
+
+      @Override
       public hydra.core.Type visit(hydra.core.Type.Wrap ignored) {
         return new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term"));
       }
@@ -387,6 +392,11 @@ public interface Encoding {
       @Override
       public hydra.core.Type visit(hydra.core.Type.Variable name) {
         return new hydra.core.Type.Variable((name).value);
+      }
+
+      @Override
+      public hydra.core.Type visit(hydra.core.Type.Void_ ignored) {
+        return new hydra.core.Type.Void_();
       }
 
       @Override
@@ -767,6 +777,11 @@ public interface Encoding {
       }
 
       @Override
+      public hydra.core.Term visit(hydra.core.Type.Void_ ignored) {
+        return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit()))))));
+      }
+
+      @Override
       public hydra.core.Term visit(hydra.core.Type.Variable typeName) {
         return new hydra.core.Term.Variable(hydra.Encoding.encodeBindingName((typeName).value));
       }
@@ -862,6 +877,11 @@ public interface Encoding {
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Unit ignored) {
+        return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit()))))));
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.core.Type.Void_ ignored) {
         return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("_"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("unit"), new hydra.core.Term.Unit()))))));
       }
 
