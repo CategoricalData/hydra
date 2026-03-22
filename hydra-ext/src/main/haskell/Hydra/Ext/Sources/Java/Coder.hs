@@ -116,6 +116,8 @@ module_ = Module ns elements
       toBinding encodeLiteralType_simple,
       -- Namespace helpers
       toBinding elementsClassName,
+      toBinding namespaceParent,
+      toBinding elementsQualifiedName,
       -- Aliases field accessors
       toBinding isRecursiveVariable,
       -- Interface types
@@ -564,6 +566,23 @@ elementsClassName = def "elementsClassName" $
     Formatting.sanitizeWithUnderscores @@ JavaLanguageSource.reservedWords
       @@ (Formatting.capitalize @@ (Lists.last (var "parts")))
 
+-- | Get the parent namespace (all but last segment), or Nothing if there is no parent.
+-- E.g., "hydra.formatting" -> Just "hydra", "hydra.ext.java.syntax" -> Just "hydra.ext.java"
+namespaceParent :: TBinding (Namespace -> Maybe Namespace)
+namespaceParent = def "namespaceParent" $
+  lambda "ns" $ lets [
+    "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns")] $
+    Logic.ifElse (Lists.null (Lists.init (var "parts")))
+      nothing
+      (just (wrap _Namespace (Strings.intercalate (string ".") (Lists.init (var "parts")))))
+
+-- | Produce the qualified name for a term module's elements interface.
+-- Uses the parent namespace so that e.g. "hydra.formatting" -> "hydra.Formatting" (not "hydra.formatting.Formatting").
+elementsQualifiedName :: TBinding (Namespace -> Name)
+elementsQualifiedName = def "elementsQualifiedName" $
+  lambda "ns" $
+    Names.unqualifyName @@ Module.qualifiedName (namespaceParent @@ var "ns") (elementsClassName @@ var "ns")
+
 -- =============================================================================
 -- Aliases field accessors
 -- =============================================================================
@@ -991,7 +1010,7 @@ elementJavaIdentifier = def "elementJavaIdentifier" $
         (wrap Java._Identifier (JavaUtilsSource.sanitizeJavaName @@ var "local"))
         (lambda "n" $ wrap Java._Identifier (Strings.cat2
           (Strings.cat2
-            (elementJavaIdentifier_qualify @@ var "aliases" @@ just (var "n")
+            (elementJavaIdentifier_qualify @@ var "aliases" @@ (namespaceParent @@ var "n")
               @@ (elementsClassName @@ var "n"))
             (var "sep"))
           (JavaUtilsSource.sanitizeJavaName @@ var "local"))))
@@ -1059,11 +1078,14 @@ findMatchingLambdaVar = def "findMatchingLambdaVar" $
 constructElementsInterface :: TBinding (Module -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit))
 constructElementsInterface = def "constructElementsInterface" $
   lambda "mod" $ lambda "members" $ lets [
-    "pkg">: JavaUtilsSource.javaPackageDeclaration @@ Module.moduleNamespace (var "mod"),
+    "ns">: Module.moduleNamespace (var "mod"),
+    "parentNs">: namespaceParent @@ var "ns",
+    "pkg">: Maybes.cases (var "parentNs")
+      (JavaUtilsSource.javaPackageDeclaration @@ var "ns")
+      (lambda "pns" $ JavaUtilsSource.javaPackageDeclaration @@ var "pns"),
     "mods">: list [inject Java._InterfaceModifier Java._InterfaceModifier_public unit],
-    "className">: elementsClassName @@ Module.moduleNamespace (var "mod"),
-    "elName">: Names.unqualifyName @@ Module.qualifiedName
-      (just (Module.moduleNamespace (var "mod"))) (var "className"),
+    "className">: elementsClassName @@ var "ns",
+    "elName">: elementsQualifiedName @@ var "ns",
     "body">: wrap Java._InterfaceBody (var "members"),
     "itf">: inject Java._TypeDeclaration Java._TypeDeclaration_interface
       (inject Java._InterfaceDeclaration Java._InterfaceDeclaration_normalInterface
@@ -4493,7 +4515,7 @@ functionCall = def "functionCall" $
                     right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
                       (JavaDsl.methodInvocation_ (var "header") (var "jargs"))))
                   (lambda "ns_" $
-                    "classId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ (Names.unqualifyName @@ (Module.qualifiedName (just (var "ns_")) (elementsClassName @@ var "ns_")))) $
+                    "classId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ (elementsQualifiedName @@ var "ns_")) $
                     "methodId" <~ (Logic.ifElse (var "isPrim")
                       (var "overrideMethodName" @@ (JavaDsl.identifier (Strings.cat2
                         (JavaDsl.unIdentifier (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ (Names.unqualifyName @@ (Module.qualifiedName (just (var "ns_")) (Formatting.capitalize @@ var "localName")))))
@@ -4938,7 +4960,7 @@ typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
                 @@ var "jatyp" @@ var "body" @@ var "correctedTyp" @@ var "cx" @@ var "g")
               (lambda "ns_" $
                 "classId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases"
-                  @@ (Names.unqualifyName @@ Module.qualifiedName (just (var "ns_")) (elementsClassName @@ var "ns_"))) $
+                  @@ (elementsQualifiedName @@ var "ns_")) $
                 "methodId" <~ JavaDsl.identifier (JavaUtilsSource.sanitizeJavaName @@ var "localName") $
                 "filteredTypeArgs" <<~ (filterPhantomTypeArgs @@ var "varName" @@ var "allTypeArgs" @@ var "cx" @@ var "g") $
                 "jTypeArgs" <<~ (Eithers.mapList (lambda "t" $
@@ -4955,7 +4977,7 @@ typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
                 @@ var "jatyp" @@ var "body" @@ var "correctedTyp" @@ var "cx" @@ var "g")
               (lambda "ns_" $
                 "classId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases"
-                  @@ (Names.unqualifyName @@ Module.qualifiedName (just (var "ns_")) (elementsClassName @@ var "ns_"))) $
+                  @@ (elementsQualifiedName @@ var "ns_")) $
                 "methodId" <~ JavaDsl.identifier (JavaUtilsSource.sanitizeJavaName @@ var "localName") $
                 "filteredTypeArgs" <<~ (filterPhantomTypeArgs @@ var "varName" @@ var "allTypeArgs" @@ var "cx" @@ var "g") $
                 "jTypeArgs" <<~ (Eithers.mapList (lambda "t" $
