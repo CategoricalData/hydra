@@ -1,0 +1,13 @@
+(defpackage :hydra.ext.java.helpers
+(:use :cl :hydra.core :hydra.ext.java.syntax :hydra.graph :hydra.module)
+(:export :hydra_ext_java_helpers_java_symbol_class-variants :make-hydra_ext_java_helpers_java_features :hydra_ext_java_helpers_java_features? :hydra_ext_java_helpers_java_features-supports_diamond_operator :make-hydra_ext_java_helpers_aliases :hydra_ext_java_helpers_aliases? :hydra_ext_java_helpers_aliases-current_namespace :hydra_ext_java_helpers_aliases-packages :hydra_ext_java_helpers_aliases-branch_vars :hydra_ext_java_helpers_aliases-recursive_vars :hydra_ext_java_helpers_aliases-in_scope_type_params :hydra_ext_java_helpers_aliases-polymorphic_locals :hydra_ext_java_helpers_aliases-in_scope_java_vars :hydra_ext_java_helpers_aliases-var_renames :hydra_ext_java_helpers_aliases-lambda_vars :hydra_ext_java_helpers_aliases-type_var_subst :hydra_ext_java_helpers_aliases-trusted_type_vars :hydra_ext_java_helpers_aliases-method_codomain :hydra_ext_java_helpers_aliases-thunked_vars :make-hydra_ext_java_helpers_java_environment :hydra_ext_java_helpers_java_environment? :hydra_ext_java_helpers_java_environment-aliases :hydra_ext_java_helpers_java_environment-graph))
+
+(in-package :hydra.ext.java.helpers)
+
+(cl:defvar hydra_ext_java_helpers_java_symbol_class-variants (cl:list :constant :nullary_function :hoisted_lambda :unary_function :local_variable))
+
+(cl:defstruct hydra_ext_java_helpers_java_features supports_diamond_operator)
+
+(cl:defstruct hydra_ext_java_helpers_aliases current_namespace packages branch_vars recursive_vars in_scope_type_params polymorphic_locals in_scope_java_vars var_renames lambda_vars type_var_subst trusted_type_vars method_codomain thunked_vars)
+
+(cl:defstruct hydra_ext_java_helpers_java_environment aliases graph)
