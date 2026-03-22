@@ -1,7 +1,7 @@
 -- | Python test code generation codec in Hydra DSL.
 -- This module provides DSL versions of Python test codec functions for pytest-based generation tests.
 
-module Hydra.Ext.Sources.Python.TestCodec where
+module Hydra.Ext.Sources.Python.Testing where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
@@ -90,9 +90,9 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import qualified Hydra.Ext.Python.Syntax as Py
-import qualified Hydra.Ext.Python.Helpers as PyHelpers
+import qualified Hydra.Ext.Python.Environment as PyHelpers
 import qualified Hydra.Ext.Sources.Python.Syntax as PySyntax
-import qualified Hydra.Ext.Sources.Python.Helpers as PyHelpersSource
+import qualified Hydra.Ext.Sources.Python.Environment as PyEnvironmentSource
 import qualified Hydra.Ext.Sources.Python.Coder as PyCoderSource
 import qualified Hydra.Ext.Sources.Python.Serde as PySerde
 import qualified Hydra.Ext.Sources.Python.Names as PyNames
@@ -109,12 +109,12 @@ define = definitionInModule module_
 
 
 ns :: Namespace
-ns = Namespace "hydra.ext.python.testCodec"
+ns = Namespace "hydra.ext.python.testing"
 
 module_ :: Module
 module_ = Module ns elements
     [PyCoderSource.ns, PySerde.ns, PyNames.ns, PyUtils.ns, SerializationSource.ns, Formatting.ns, Names.ns, TestUtils.ns, Constants.ns, Rewriting.ns, Lexical.ns, ShowError.ns]
-    (PyHelpersSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
+    (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Python test code generation codec for pytest-based generation tests"
   where
     elements = [

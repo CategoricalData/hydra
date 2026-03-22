@@ -84,8 +84,8 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import qualified Hydra.Ext.Haskell.Ast as H
-import qualified Hydra.Sources.Haskell.Ast as HaskellAst
+import qualified Hydra.Ext.Haskell.Syntax as H
+import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
@@ -101,7 +101,7 @@ ns = Namespace "hydra.ext.haskell.utils"
 module_ :: Module
 module_ = Module ns elements
     [Formatting.ns, HaskellLanguage.ns, Schemas.ns, Names.ns]
-    (HaskellAst.ns:KernelTypes.kernelTypesNamespaces) $
+    (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Utilities for working with Haskell syntax trees"
   where
     elements = [

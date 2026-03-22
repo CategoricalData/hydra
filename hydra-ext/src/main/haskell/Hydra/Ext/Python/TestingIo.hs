@@ -1,5 +1,5 @@
 -- | Python test code generation codec, similar to TestCodec in hydra-haskell but for pytest
-module Hydra.Ext.Python.TestCodecIo (
+module Hydra.Ext.Python.TestingIo (
   pythonTestGenerator,
   generatePythonGenerationTests,
 ) where
@@ -11,10 +11,10 @@ import Hydra.Coders (LanguageName(..))
 import Hydra.Test.Transform (collectTestCases)
 import Hydra.Generation (TestGenerator(..), createTestGroupLookup, generateGenerationTestSuite)
 import Hydra.Ext.Python.Coder (encodeTermInline, encodeType)
-import Hydra.Ext.Python.Helpers (PythonModuleMetadata(..))
+import Hydra.Ext.Python.Environment (PythonModuleMetadata(..))
 import qualified Hydra.Ext.Python.Names as PyNames
 import Hydra.Ext.Python.Names (encodeNamespace)
-import Hydra.Ext.Python.Helpers (PythonEnvironment(..))
+import Hydra.Ext.Python.Environment (PythonEnvironment(..))
 import Hydra.Ext.Python.Utils
 import qualified Hydra.Ext.Python.Serde as PySer
 import Hydra.Serialization (printExpr, parenthesize)

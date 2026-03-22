@@ -1,6 +1,6 @@
 -- | Java test code generation codec for JUnit-based generation tests
 
-module Hydra.Ext.Java.TestCodecIo (
+module Hydra.Ext.Java.TestingIo (
   javaTestGenerator,
   generateJavaGenerationTests,
 ) where
@@ -12,7 +12,7 @@ import Hydra.Coders (LanguageName(..))
 import Hydra.Test.Transform (collectTestCases)
 import Hydra.Generation (TestGenerator(..), createTestGroupLookup, generateGenerationTestSuite)
 import Hydra.Ext.Java.Coder (encodeTerm)
-import Hydra.Ext.Java.Helpers (JavaEnvironment(..), Aliases(..))
+import Hydra.Ext.Java.Environment (JavaEnvironment(..), Aliases(..))
 import Hydra.Ext.Java.Utils (importAliasesForModule)
 import Hydra.Ext.Java.Serde (writeExpression)
 import Hydra.Serialization (printExpr, parenthesize)

@@ -47,10 +47,10 @@ import Data.Coerce (coerce)
 
 -- Additional imports
 import qualified Hydra.Ext.Java.Syntax as Java
-import qualified Hydra.Ext.Java.Helpers as JavaHelpers
+import qualified Hydra.Ext.Java.Environment as JavaHelpers
 import qualified Hydra.Ext.Dsl.Java.Syntax as JavaDsl
 import qualified Hydra.Ext.Sources.Java.Syntax as JavaSyntax
-import qualified Hydra.Ext.Sources.Java.Helpers as JavaHelpersSource
+import qualified Hydra.Ext.Sources.Java.Environment as JavaEnvironmentSource
 import qualified Hydra.Ext.Sources.Java.Language as JavaLanguageSource
 import qualified Hydra.Ext.Sources.Java.Names as JavaNamesSource
 import qualified Hydra.Ext.Sources.Java.Serde as JavaSerdeSource
@@ -82,7 +82,7 @@ module_ :: Module
 module_ = Module ns elements
     [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Formatting.ns, Names.ns, Rewriting.ns, CoderUtils.ns, Lexical.ns, Schemas.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, SerializationSource.ns]
-    (JavaHelpersSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
+    (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Java code generator: converts Hydra modules to Java source code"
   where
     elements = [

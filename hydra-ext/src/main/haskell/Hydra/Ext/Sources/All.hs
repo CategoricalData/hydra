@@ -45,14 +45,14 @@ import qualified Hydra.Ext.Sources.Gql.PathAlgebra.Syntax      as PathAlgebraSyn
 import qualified Hydra.Ext.Sources.Graphviz.Coder              as GraphvizCoder
 import qualified Hydra.Ext.Sources.Graphviz.Dot                as Dot
 import qualified Hydra.Ext.Sources.Graphviz.Serde              as GraphvizSerde
-import qualified Hydra.Ext.Sources.Java.Helpers                as JavaHelpers
+import qualified Hydra.Ext.Sources.Java.Environment            as JavaEnvironment
 import qualified Hydra.Ext.Sources.Java.Language               as JavaLanguage
 import qualified Hydra.Ext.Sources.Java.Names                  as JavaNames
 import qualified Hydra.Ext.Sources.Java.Serde                  as JavaSerde
 import qualified Hydra.Ext.Sources.Java.Syntax                 as JavaSyntax
 import qualified Hydra.Ext.Sources.Java.Utils                  as JavaUtils
 import qualified Hydra.Ext.Sources.Java.Coder                 as JavaCoder
-import qualified Hydra.Ext.Sources.Java.TestCodec              as JavaTestCodec
+import qualified Hydra.Ext.Sources.Java.Testing              as JavaTesting
 import qualified Hydra.Ext.Sources.JavaScript.Language         as JavaScriptLanguage
 import qualified Hydra.Ext.Sources.JavaScript.Operators        as JavaScriptOperators
 import qualified Hydra.Ext.Sources.JavaScript.Serde            as JavaScriptSerde
@@ -94,8 +94,8 @@ import qualified Hydra.Ext.Sources.Protobuf.Environment        as ProtobufEnviro
 import qualified Hydra.Ext.Sources.Protobuf.Serde              as ProtobufSerde
 import qualified Hydra.Ext.Sources.Protobuf.SourceContext      as ProtobufSourceContext
 import qualified Hydra.Ext.Sources.Python.Coder                as PythonCoder
-import qualified Hydra.Ext.Sources.Python.TestCodec            as PythonTestCodec
-import qualified Hydra.Ext.Sources.Python.Helpers              as PythonHelpers
+import qualified Hydra.Ext.Sources.Python.Testing            as PythonTesting
+import qualified Hydra.Ext.Sources.Python.Environment          as PythonEnvironment
 import qualified Hydra.Ext.Sources.Python.Names                as PythonNames
 import qualified Hydra.Ext.Sources.Python.Serde                as PythonSerde
 import qualified Hydra.Ext.Sources.Python.Syntax               as PythonSyntax
@@ -114,8 +114,7 @@ import qualified Hydra.Ext.Sources.Rust.Serde                  as RustSerde
 import qualified Hydra.Ext.Sources.Rust.Syntax                 as RustSyntax
 import qualified Hydra.Ext.Sources.Scala.Coder                  as ScalaCoder
 import qualified Hydra.Ext.Sources.Scala.Language               as ScalaLanguage
-import qualified Hydra.Ext.Sources.Scala.Meta                  as ScalaMeta
-import qualified Hydra.Ext.Sources.Scala.Prepare               as ScalaPrepare
+import qualified Hydra.Ext.Sources.Scala.Syntax                  as ScalaSyntax
 import qualified Hydra.Ext.Sources.Scala.Serde                 as ScalaSerde
 import qualified Hydra.Ext.Sources.Scala.Utils                 as ScalaUtils
 import qualified Hydra.Ext.Sources.Shacl.Coder                as ShaclCoder
@@ -254,14 +253,14 @@ graphsonModules = [
 
 javaModules :: [Module]
 javaModules = [
-  JavaHelpers.module_,
+  JavaEnvironment.module_,
   JavaLanguage.module_,
   JavaNames.module_,
   JavaSerde.module_,
   JavaSyntax.module_,
   JavaUtils.module_,
   JavaCoder.module_,
-  JavaTestCodec.module_]
+  JavaTesting.module_]
 
 javaScriptModules :: [Module]
 javaScriptModules = [
@@ -316,14 +315,14 @@ protobufModules = [
 
 pythonModules :: [Module]
 pythonModules = [
-  PythonHelpers.module_,
+  PythonEnvironment.module_,
   pythonLanguageModule,
   PythonNames.module_,
   PythonSerde.module_,
   PythonSyntax.module_,
   PythonUtils.module_,
   PythonCoder.module_,
-  PythonTestCodec.module_]
+  PythonTesting.module_]
 
 rdfModules :: [Module]
 rdfModules = [
@@ -349,8 +348,7 @@ scalaModules :: [Module]
 scalaModules = [
   ScalaCoder.module_,
   ScalaLanguage.scalaLanguageModule,
-  ScalaMeta.module_,
-  ScalaPrepare.module_,
+  ScalaSyntax.module_,
   ScalaSerde.module_,
   ScalaUtils.module_]
 
@@ -411,7 +409,6 @@ hydraExtRecentlyPromotedModules = [
   RdfSerde.module_,
   RdfUtils.module_,
   ScalaCoder.module_,
-  ScalaPrepare.module_,
   ScalaSerde.module_,
   ScalaUtils.module_,
   ShaclCoder.module_,

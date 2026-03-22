@@ -84,8 +84,8 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import qualified Hydra.Ext.Scala.Meta as Scala
-import qualified Hydra.Ext.Sources.Scala.Meta as ScalaMeta
+import qualified Hydra.Ext.Scala.Syntax as Scala
+import qualified Hydra.Ext.Sources.Scala.Syntax as ScalaSyntax
 import qualified Hydra.Ext.Sources.Scala.Language as ScalaLanguageSource
 
 
@@ -101,7 +101,7 @@ scalaLanguageNs = moduleNamespace ScalaLanguageSource.scalaLanguageModule
 module_ :: Module
 module_ = Module ns elements
     [scalaLanguageNs, Names.ns, Formatting.ns]
-    (ScalaMeta.ns:KernelTypes.kernelTypesNamespaces) $
+    (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Utility functions for constructing Scala AST nodes"
   where
     elements = [

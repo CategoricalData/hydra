@@ -90,9 +90,9 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import qualified Hydra.Ext.Python.Syntax as Py
-import qualified Hydra.Ext.Python.Helpers as PyHelpers
+import qualified Hydra.Ext.Python.Environment as PyHelpers
 import qualified Hydra.Ext.Sources.Python.Syntax as PySyntax
-import qualified Hydra.Ext.Sources.Python.Helpers as PyHelpersSource
+import qualified Hydra.Ext.Sources.Python.Environment as PyEnvironmentSource
 import qualified Hydra.Ext.Sources.Python.Serde as PySerde
 import qualified Hydra.Ext.Sources.Python.Names as PyNames
 import qualified Hydra.Ext.Sources.Python.Utils as PyUtils
@@ -111,7 +111,7 @@ ns = Namespace "hydra.ext.python.coder"
 module_ :: Module
 module_ = Module ns elements
     [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Schemas.ns, Rewriting.ns, ShowCore.ns, CoderUtils.ns, Reduction.ns, Sorting.ns, Names.ns, Inference.ns]
-    (PyHelpersSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
+    (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Python code generator: converts Hydra modules to Python source code"
   where
     elements = [
@@ -251,7 +251,6 @@ module_ = Module ns elements
       toBinding setMetaUsesTypeAlias,
       -- Module encoding
       toBinding isTypeModuleCheck,
-      toBinding reorderDefs,
       toBinding tvarStatement,
       toBinding condImportSymbol,
       toBinding moduleDomainImports,
@@ -4018,41 +4017,6 @@ isTypeModuleCheck = def "isTypeModuleCheck" $
         _Definition_type>>: constant true])
       (var "defs")
 
--- | Reorder definitions: type definitions first (with Name first among types),
---   then term definitions in topological order
-reorderDefs :: TBinding ([Definition] -> [Definition])
-reorderDefs = def "reorderDefs" $
-  doc "Reorder definitions: types first, then topologically sorted terms" $
-  "defs" ~>
-    "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $
-    "typeDefsRaw" <~ Pairs.first (var "partitioned") $
-    "termDefsRaw" <~ Pairs.second (var "partitioned") $
-    -- Sort type defs: Name type first, then the rest
-    "nameFirst" <~ Lists.filter
-      ("td" ~> Equality.equal
-        (project _TypeDefinition _TypeDefinition_name @@ var "td")
-        (wrap _Name $ string "hydra.core.Name"))
-      (var "typeDefsRaw") $
-    "nameRest" <~ Lists.filter
-      ("td" ~> Logic.not $ Equality.equal
-        (project _TypeDefinition _TypeDefinition_name @@ var "td")
-        (wrap _Name $ string "hydra.core.Name"))
-      (var "typeDefsRaw") $
-    "sortedTypeDefs" <~ Lists.concat (list [
-      Lists.map ("td" ~> inject _Definition _Definition_type (var "td")) (var "nameFirst"),
-      Lists.map ("td" ~> inject _Definition _Definition_type (var "td")) (var "nameRest")]) $
-    -- Sort term defs topologically
-    "termDefs" <~ Lists.map ("td" ~> inject _Definition _Definition_term (var "td")) (var "termDefsRaw") $
-    "sortedTermDefs" <~ (Lists.concat $ Sorting.topologicalSortNodes @@
-      ("d" ~> cases _Definition (var "d") Nothing [
-        _Definition_term>>: "td" ~> project _TermDefinition _TermDefinition_name @@ var "td"])
-      @@
-      ("d" ~> cases _Definition (var "d") (Just (list ([] :: [TTerm Name]))) [
-        _Definition_term>>: "td" ~>
-          Sets.toList $ Rewriting.freeVariablesInTerm @@ (project _TermDefinition _TermDefinition_term @@ var "td")])
-      @@ var "termDefs") $
-    Lists.concat (list [var "sortedTypeDefs", var "sortedTermDefs"])
-
 -- | Create a TypeVar assignment statement for a type variable name
 tvarStatement :: TBinding (Py.Name -> Py.Statement)
 tvarStatement = def "tvarStatement" $
@@ -4193,7 +4157,7 @@ encodePythonModule :: TBinding (Context -> Graph -> Module -> [Definition] -> Ei
 encodePythonModule = def "encodePythonModule" $
   doc "Encode a Hydra module to a Python module AST" $
   "cx" ~> "g" ~> "mod" ~> "defs0" ~>
-    "defs" <~ (reorderDefs @@ var "defs0") $
+    "defs" <~ (CoderUtils.reorderDefs @@ var "defs0") $
     "meta0" <~ (gatherMetadata @@ (Module.moduleNamespace $ var "mod") @@ var "defs") $
     "namespaces0" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta0") $
     "env0" <~ (initialEnvironment @@ var "namespaces0" @@ var "g") $

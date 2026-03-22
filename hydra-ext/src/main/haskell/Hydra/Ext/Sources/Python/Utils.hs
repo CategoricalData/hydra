@@ -87,9 +87,9 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import qualified Hydra.Ext.Python.Syntax as Py
-import qualified Hydra.Ext.Python.Helpers as PyHelpers
+import qualified Hydra.Ext.Python.Environment as PyHelpers
 import qualified Hydra.Ext.Sources.Python.Syntax as PySyntax
-import qualified Hydra.Ext.Sources.Python.Helpers as PyHelpersSource
+import qualified Hydra.Ext.Sources.Python.Environment as PyEnvironmentSource
 import qualified Hydra.Ext.Sources.Python.Serde as PySerde
 import qualified Hydra.Ext.Sources.Python.Names as PyNames
 import qualified Hydra.Ext.Dsl.Python.Syntax as PyDsl
@@ -104,7 +104,7 @@ ns = Namespace "hydra.ext.python.utils"
 module_ :: Module
 module_ = Module ns elements
     [PyNames.ns, PySerde.ns, Serialization.ns, Schemas.ns]
-    (PyHelpersSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
+    (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Python utilities for constructing Python syntax trees"
   where
     elements = [

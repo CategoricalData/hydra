@@ -1,7 +1,7 @@
--- | Helper types for Java code generation.
+-- | Environment types for Java code generation.
 -- These types support the Java coder and are used to track code generation state.
 
-module Hydra.Ext.Sources.Java.Helpers where
+module Hydra.Ext.Sources.Java.Environment where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
@@ -18,13 +18,13 @@ import qualified Hydra.Ext.Sources.Java.Syntax as Syntax
 
 
 ns :: Namespace
-ns = Namespace "hydra.ext.java.helpers"
+ns = Namespace "hydra.ext.java.environment"
 
 def :: String -> Type -> Binding
 def = datatype ns
 
-helpers :: String -> Type
-helpers = typeref ns
+environment :: String -> Type
+environment = typeref ns
 
 syntax :: String -> Type
 syntax = typeref Syntax.ns
@@ -43,7 +43,7 @@ typing = typeref Typing.ns
 
 module_ :: Module
 module_ = Module ns elements [] [Syntax.ns, Core.ns, Graph.ns, Module.ns, Typing.ns] $
-    Just "Helper types for Java code generation"
+    Just "Environment types for Java code generation"
   where
     elements = [
       javaSymbolClass,
@@ -135,7 +135,7 @@ javaEnvironment = def "JavaEnvironment" $
   T.record [
     "aliases">:
       doc "Aliases and context state" $
-      helpers "Aliases",
+      environment "Aliases",
     "graph">:
       doc "Graph context for type inference" $
       graph "Graph"]

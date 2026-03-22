@@ -84,8 +84,8 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import Hydra.Ast
-import qualified Hydra.Ext.Scala.Meta as Scala
-import qualified Hydra.Ext.Sources.Scala.Meta as ScalaMeta
+import qualified Hydra.Ext.Scala.Syntax as Scala
+import qualified Hydra.Ext.Sources.Scala.Syntax as ScalaSyntax
 
 
 define :: String -> TTerm a -> TBinding a
@@ -97,7 +97,7 @@ ns = Namespace "hydra.ext.scala.serde"
 module_ :: Module
 module_ = Module ns elements
     [Serialization.ns]
-    (ScalaMeta.ns:KernelTypes.kernelTypesNamespaces) $
+    (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Serialization functions for converting Scala AST to abstract expressions"
   where
     elements = [

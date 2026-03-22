@@ -85,8 +85,8 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import Hydra.Ast
-import qualified Hydra.Ext.Haskell.Ast as H
-import qualified Hydra.Sources.Haskell.Ast as HaskellAst
+import qualified Hydra.Ext.Haskell.Syntax as H
+import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
 
 
@@ -99,7 +99,7 @@ ns = Namespace "hydra.ext.haskell.serde"
 module_ :: Module
 module_ = Module ns elements
     [Constants.ns, Serialization.ns, HaskellOperators.ns]
-    (HaskellAst.ns:KernelTypes.kernelTypesNamespaces) $
+    (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just ("Haskell operator precendence and associativity are drawn from:\n"
       <> "https://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\n"
       <> "Other operators were investigated using GHCi, e.g. \":info (->)\"\n"

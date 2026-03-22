@@ -1,6 +1,6 @@
 -- | Lisp test code generation codec for all four Lisp dialects
 
-module Hydra.Ext.Lisp.TestCodecIo (
+module Hydra.Ext.Lisp.TestingIo (
   lispTestGenerator,
   generateClojureGenerationTests,
   generateSchemeGenerationTests,
