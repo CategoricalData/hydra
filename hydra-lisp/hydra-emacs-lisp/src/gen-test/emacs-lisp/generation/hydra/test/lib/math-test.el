@@ -303,13 +303,13 @@
 
 (ert-deftest test-math-nege-negeuler-s-number ()
 
-  (should (equal 2.718281828459045 hydra_lib_math_e)))
+  (should (equal 2.71828182846 (funcall (funcall hydra_lib_math_round_float64 12) hydra_lib_math_e))))
 
 ;; pi
 
 (ert-deftest test-math-negpi-negpi-constant ()
 
-  (should (equal 3.141592653589793 hydra_lib_math_pi)))
+  (should (equal 3.14159265359 (funcall (funcall hydra_lib_math_round_float64 12) hydra_lib_math_pi))))
 
 ;; sin
 
@@ -319,11 +319,11 @@
 
 (ert-deftest test-math-negsin-negsin-pi-div2 ()
 
-  (should (equal 1.0 (funcall hydra_lib_math_sin 1.5707963267948966))))
+  (should (equal 1.0 (funcall (funcall hydra_lib_math_round_float64 12) (funcall hydra_lib_math_sin 1.5707963267948966)))))
 
 (ert-deftest test-math-negsin-negsin-pi ()
 
-  (should (equal 1.2246467991473532e-16 (funcall hydra_lib_math_sin 3.141592653589793))))
+  (should (equal 1.22464679915e-16 (funcall (funcall hydra_lib_math_round_float64 12) (funcall hydra_lib_math_sin 3.141592653589793)))))
 
 (ert-deftest test-math-negsin-negsin-1 ()
 
@@ -341,7 +341,7 @@
 
 (ert-deftest test-math-negcos-negcos-pi-div2 ()
 
-  (should (equal 6.123233995736766e-17 (funcall hydra_lib_math_cos 1.5707963267948966))))
+  (should (equal 6.12323399574e-17 (funcall (funcall hydra_lib_math_round_float64 12) (funcall hydra_lib_math_cos 1.5707963267948966)))))
 
 (ert-deftest test-math-negcos-negcos-pi ()
 
@@ -363,7 +363,7 @@
 
 (ert-deftest test-math-negtan-negtan-pi-div4 ()
 
-  (should (equal 0.9999999999999999 (funcall hydra_lib_math_tan 0.7853981633974483))))
+  (should (equal 1.0 (funcall (funcall hydra_lib_math_round_float64 12) (funcall hydra_lib_math_tan 0.7853981633974483)))))
 
 (ert-deftest test-math-negtan-negtan-1 ()
 
@@ -381,11 +381,11 @@
 
 (ert-deftest test-math-negasin-negasin-1 ()
 
-  (should (equal 1.5707963267948966 (funcall hydra_lib_math_asin 1.0))))
+  (should (equal 1.57079632679 (funcall (funcall hydra_lib_math_round_float64 12) (funcall hydra_lib_math_asin 1.0)))))
 
 (ert-deftest test-math-negasin-negasin--neg1 ()
 
-  (should (equal -1.5707963267948966 (funcall hydra_lib_math_asin -1.0))))
+  (should (equal -1.57079632679 (funcall (funcall hydra_lib_math_round_float64 12) (funcall hydra_lib_math_asin -1.0)))))
 
 (ert-deftest test-math-negasin-negasin-0-dot5 ()
 
@@ -399,11 +399,11 @@
 
 (ert-deftest test-math-negacos-negacos-0 ()
 
-  (should (equal 1.5707963267948966 (funcall hydra_lib_math_acos 0.0))))
+  (should (equal 1.57079632679 (funcall (funcall hydra_lib_math_round_float64 12) (funcall hydra_lib_math_acos 0.0)))))
 
 (ert-deftest test-math-negacos-negacos--neg1 ()
 
-  (should (equal 3.141592653589793 (funcall hydra_lib_math_acos -1.0))))
+  (should (equal 3.14159265359 (funcall (funcall hydra_lib_math_round_float64 12) (funcall hydra_lib_math_acos -1.0)))))
 
 (ert-deftest test-math-negacos-negacos-0-dot5 ()
 
@@ -417,7 +417,7 @@
 
 (ert-deftest test-math-negatan-negatan-1 ()
 
-  (should (equal 0.7853981633974483 (funcall hydra_lib_math_atan 1.0))))
+  (should (equal 0.785398163397 (funcall (funcall hydra_lib_math_round_float64 12) (funcall hydra_lib_math_atan 1.0)))))
 
 (ert-deftest test-math-negatan-negatan-0-dot5 ()
 
@@ -427,11 +427,11 @@
 
 (ert-deftest test-math-negatan2-negatan2-1-1 ()
 
-  (should (equal 0.7853981633974483 (funcall (funcall hydra_lib_math_atan2 1.0) 1.0))))
+  (should (equal 0.785398163397 (funcall (funcall hydra_lib_math_round_float64 12) (funcall (funcall hydra_lib_math_atan2 1.0) 1.0)))))
 
 (ert-deftest test-math-negatan2-negatan2-1-0 ()
 
-  (should (equal 1.5707963267948966 (funcall (funcall hydra_lib_math_atan2 1.0) 0.0))))
+  (should (equal 1.57079632679 (funcall (funcall hydra_lib_math_round_float64 12) (funcall (funcall hydra_lib_math_atan2 1.0) 0.0)))))
 
 (ert-deftest test-math-negatan2-negatan2-0-1 ()
 
@@ -449,7 +449,7 @@
 
 (ert-deftest test-math-negsinh-negsinh-1 ()
 
-  (should (equal 1.1752011936438014 (funcall hydra_lib_math_sinh 1.0))))
+  (should (equal 1.17520119364 (funcall (funcall hydra_lib_math_round_float64 12) (funcall hydra_lib_math_sinh 1.0)))))
 
 (ert-deftest test-math-negsinh-negsinh-2 ()
 
@@ -477,7 +477,7 @@
 
 (ert-deftest test-math-negtanh-negtanh-1 ()
 
-  (should (equal 0.7615941559557649 (funcall hydra_lib_math_tanh 1.0))))
+  (should (equal 0.761594155956 (funcall (funcall hydra_lib_math_round_float64 12) (funcall hydra_lib_math_tanh 1.0)))))
 
 (ert-deftest test-math-negtanh-negtanh-0-dot5 ()
 
@@ -555,7 +555,7 @@
 
 (ert-deftest test-math-neglog-neglog-e ()
 
-  (should (equal 1.0 (funcall hydra_lib_math_log 2.718281828459045))))
+  (should (equal 1.0 (funcall (funcall hydra_lib_math_round_float64 12) (funcall hydra_lib_math_log 2.718281828459045)))))
 
 (ert-deftest test-math-neglog-neglog-2 ()
 

@@ -301,13 +301,13 @@
 
 (defun test-math-nege-negeuler-s-number ()
 
-  (assert (equal 2.718281828459045 hydra_lib_math_e)))
+  (assert (equal 2.71828182846 ((hydra_lib_math_round_float64 12) hydra_lib_math_e))))
 
 ;; pi
 
 (defun test-math-negpi-negpi-constant ()
 
-  (assert (equal 3.141592653589793 hydra_lib_math_pi)))
+  (assert (equal 3.14159265359 ((hydra_lib_math_round_float64 12) hydra_lib_math_pi))))
 
 ;; sin
 
@@ -317,11 +317,11 @@
 
 (defun test-math-negsin-negsin-pi-div2 ()
 
-  (assert (equal 1.0 (hydra_lib_math_sin 1.5707963267948966))))
+  (assert (equal 1.0 ((hydra_lib_math_round_float64 12) (hydra_lib_math_sin 1.5707963267948966)))))
 
 (defun test-math-negsin-negsin-pi ()
 
-  (assert (equal 1.2246467991473532e-16 (hydra_lib_math_sin 3.141592653589793))))
+  (assert (equal 1.22464679915e-16 ((hydra_lib_math_round_float64 12) (hydra_lib_math_sin 3.141592653589793)))))
 
 (defun test-math-negsin-negsin-1 ()
 
@@ -339,7 +339,7 @@
 
 (defun test-math-negcos-negcos-pi-div2 ()
 
-  (assert (equal 6.123233995736766e-17 (hydra_lib_math_cos 1.5707963267948966))))
+  (assert (equal 6.12323399574e-17 ((hydra_lib_math_round_float64 12) (hydra_lib_math_cos 1.5707963267948966)))))
 
 (defun test-math-negcos-negcos-pi ()
 
@@ -361,7 +361,7 @@
 
 (defun test-math-negtan-negtan-pi-div4 ()
 
-  (assert (equal 0.9999999999999999 (hydra_lib_math_tan 0.7853981633974483))))
+  (assert (equal 1.0 ((hydra_lib_math_round_float64 12) (hydra_lib_math_tan 0.7853981633974483)))))
 
 (defun test-math-negtan-negtan-1 ()
 
@@ -379,11 +379,11 @@
 
 (defun test-math-negasin-negasin-1 ()
 
-  (assert (equal 1.5707963267948966 (hydra_lib_math_asin 1.0))))
+  (assert (equal 1.57079632679 ((hydra_lib_math_round_float64 12) (hydra_lib_math_asin 1.0)))))
 
 (defun test-math-negasin-negasin--neg1 ()
 
-  (assert (equal -1.5707963267948966 (hydra_lib_math_asin -1.0))))
+  (assert (equal -1.57079632679 ((hydra_lib_math_round_float64 12) (hydra_lib_math_asin -1.0)))))
 
 (defun test-math-negasin-negasin-0-dot5 ()
 
@@ -397,11 +397,11 @@
 
 (defun test-math-negacos-negacos-0 ()
 
-  (assert (equal 1.5707963267948966 (hydra_lib_math_acos 0.0))))
+  (assert (equal 1.57079632679 ((hydra_lib_math_round_float64 12) (hydra_lib_math_acos 0.0)))))
 
 (defun test-math-negacos-negacos--neg1 ()
 
-  (assert (equal 3.141592653589793 (hydra_lib_math_acos -1.0))))
+  (assert (equal 3.14159265359 ((hydra_lib_math_round_float64 12) (hydra_lib_math_acos -1.0)))))
 
 (defun test-math-negacos-negacos-0-dot5 ()
 
@@ -415,7 +415,7 @@
 
 (defun test-math-negatan-negatan-1 ()
 
-  (assert (equal 0.7853981633974483 (hydra_lib_math_atan 1.0))))
+  (assert (equal 0.785398163397 ((hydra_lib_math_round_float64 12) (hydra_lib_math_atan 1.0)))))
 
 (defun test-math-negatan-negatan-0-dot5 ()
 
@@ -425,11 +425,11 @@
 
 (defun test-math-negatan2-negatan2-1-1 ()
 
-  (assert (equal 0.7853981633974483 ((hydra_lib_math_atan2 1.0) 1.0))))
+  (assert (equal 0.785398163397 ((hydra_lib_math_round_float64 12) ((hydra_lib_math_atan2 1.0) 1.0)))))
 
 (defun test-math-negatan2-negatan2-1-0 ()
 
-  (assert (equal 1.5707963267948966 ((hydra_lib_math_atan2 1.0) 0.0))))
+  (assert (equal 1.57079632679 ((hydra_lib_math_round_float64 12) ((hydra_lib_math_atan2 1.0) 0.0)))))
 
 (defun test-math-negatan2-negatan2-0-1 ()
 
@@ -447,7 +447,7 @@
 
 (defun test-math-negsinh-negsinh-1 ()
 
-  (assert (equal 1.1752011936438014 (hydra_lib_math_sinh 1.0))))
+  (assert (equal 1.17520119364 ((hydra_lib_math_round_float64 12) (hydra_lib_math_sinh 1.0)))))
 
 (defun test-math-negsinh-negsinh-2 ()
 
@@ -475,7 +475,7 @@
 
 (defun test-math-negtanh-negtanh-1 ()
 
-  (assert (equal 0.7615941559557649 (hydra_lib_math_tanh 1.0))))
+  (assert (equal 0.761594155956 ((hydra_lib_math_round_float64 12) (hydra_lib_math_tanh 1.0)))))
 
 (defun test-math-negtanh-negtanh-0-dot5 ()
 
@@ -553,7 +553,7 @@
 
 (defun test-math-neglog-neglog-e ()
 
-  (assert (equal 1.0 (hydra_lib_math_log 2.718281828459045))))
+  (assert (equal 1.0 ((hydra_lib_math_round_float64 12) (hydra_lib_math_log 2.718281828459045)))))
 
 (defun test-math-neglog-neglog-2 ()
 
