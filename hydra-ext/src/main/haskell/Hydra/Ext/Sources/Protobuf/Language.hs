@@ -137,6 +137,7 @@ protobufLanguage = protobufLanguageDefinition "protobufLanguage" $
     Variants.typeVariantUnion,
     Variants.typeVariantUnit,
     Variants.typeVariantVariable,
+    Variants.typeVariantVoid,
     Variants.typeVariantWrap],
   "typePredicate">: "typ" ~> cases _Type (var "typ")
     (Just true) [

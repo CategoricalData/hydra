@@ -140,6 +140,7 @@ data TypeVariant =
   TypeVariantUnion  |
   TypeVariantUnit  |
   TypeVariantVariable  |
+  TypeVariantVoid  |
   TypeVariantWrap
   deriving (Eq, Ord, Read, Show)
 
@@ -174,5 +175,7 @@ _TypeVariant_union = Core.Name "union"
 _TypeVariant_unit = Core.Name "unit"
 
 _TypeVariant_variable = Core.Name "variable"
+
+_TypeVariant_void = Core.Name "void"
 
 _TypeVariant_wrap = Core.Name "wrap"

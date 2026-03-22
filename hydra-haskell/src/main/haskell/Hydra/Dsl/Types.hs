@@ -242,6 +242,10 @@ uint64 = integer IntegerTypeUint64
 unit :: Type
 unit = TypeUnit
 
+-- | Void type (uninhabited / bottom type)
+void :: Type
+void = TypeVoid
+
 -- | Create a union type with the given variants
 -- Example: union ["success">: int32, "failure">: string]
 -- This creates a tagged union type (sum type with named variants)

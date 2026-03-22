@@ -54,4 +54,5 @@ typeVariant x =
       Variants.TypeVariantUnion -> "union"
       Variants.TypeVariantUnit -> "unit"
       Variants.TypeVariantVariable -> "variable"
+      Variants.TypeVariantVoid -> "void"
       Variants.TypeVariantWrap -> "wrap"

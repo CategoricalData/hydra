@@ -94,4 +94,5 @@ typeVariant = define "TypeVariant" $
     "union",
     "unit",
     "variable",
+    "void",
     "wrap"]

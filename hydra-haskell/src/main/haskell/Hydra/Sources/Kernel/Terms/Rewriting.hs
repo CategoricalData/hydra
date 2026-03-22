@@ -1716,6 +1716,7 @@ rewriteType = define "rewriteType" $ "f" ~> "typ0" ~>
         Lists.map (var "forField") (var "rt"),
       _Type_unit>>: constant Core.typeUnit,
       _Type_variable>>: "v" ~> Core.typeVariable $ var "v",
+      _Type_void>>: constant Core.typeVoid,
       _Type_wrap>>: "wt" ~> Core.typeWrap $
         var "recurse" @@ var "wt"]) $
 --  rewrite @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
@@ -1777,6 +1778,7 @@ rewriteTypeM = define "rewriteTypeM" $
       right $ Core.typeUnion $ var "rfields",
     _Type_unit>>: constant $ right $ Core.typeUnit,
     _Type_variable>>: "v" ~> right $ Core.typeVariable $ var "v",
+    _Type_void>>: constant $ right $ Core.typeVoid,
     _Type_wrap>>: "wt" ~>
       "t" <<~ var "recurse" @@ var "wt" $
       right $ Core.typeWrap $ var "t"]) $
@@ -2030,6 +2032,7 @@ subtypes = define "subtypes" $
     _Type_union>>: "rt" ~> Lists.map (unaryFunction Core.fieldTypeType) (var "rt"),
     _Type_unit>>: constant $ list ([] :: [TTerm Type]),
     _Type_variable>>: constant $ list ([] :: [TTerm Type]),
+    _Type_void>>: constant $ list ([] :: [TTerm Type]),
     _Type_wrap>>: "nt" ~> list [var "nt"]]
 
 termDependencyNames :: TBinding (Bool -> Bool -> Bool -> Term -> S.Set Name)

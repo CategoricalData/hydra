@@ -366,6 +366,8 @@ encodeType = def "encodeType" $
         encodeType @@ var "cx" @@ var "g" @@ Core.applicationTypeFunction (var "at"),
       _Type_unit>>: constant $
         right (asTerm rustUnit),
+      _Type_void>>: constant $
+        right (asTerm rustUnit),
       _Type_literal>>: lambda "lt" $
         right (encodeLiteralType @@ var "lt"),
       _Type_list>>: lambda "inner" $

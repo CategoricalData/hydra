@@ -410,6 +410,9 @@ encodePossiblyOptionalType = def "encodePossiblyOptionalType" $
       _Type_pair>>: lambda "pt" $
         "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
         right (pair (var "t") false),
+      _Type_void>>: constant $
+        "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+        right (pair (var "t") false),
       _Type_annotated>>: lambda "at" $
         encodePossiblyOptionalType @@ var "cx" @@ var "g" @@ var "aliases" @@ Core.annotatedTypeBody (var "at")]
 

@@ -554,6 +554,7 @@ encodeApplicationType = def "encodeApplicationType" $
           _Type_union>>: constant $ pair (var "t") (var "ps"),
           _Type_unit>>: constant $ pair (var "t") (var "ps"),
           _Type_variable>>: constant $ pair (var "t") (var "ps"),
+          _Type_void>>: constant $ pair (var "t") (var "ps"),
           _Type_wrap>>: constant $ pair (var "t") (var "ps")]) $
     "bodyAndArgs" <~ (var "gatherParams" @@ (inject _Type _Type_application $ var "at") @@ list ([] :: [TTerm Type])) $
     "body" <~ Pairs.first (var "bodyAndArgs") $
@@ -591,6 +592,7 @@ encodeForallType = def "encodeForallType" $
           _Type_union>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
           _Type_unit>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
           _Type_variable>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
+          _Type_void>>: constant $ pair (var "t") (Lists.reverse (var "ps")),
           _Type_wrap>>: constant $ pair (var "t") (Lists.reverse (var "ps"))]) $
     "bodyAndParams" <~ (var "gatherParams" @@ (inject _Type _Type_forall $ var "lt") @@ list ([] :: [TTerm Name])) $
     "body" <~ Pairs.first (var "bodyAndParams") $
@@ -629,6 +631,7 @@ encodeFunctionType = def "encodeFunctionType" $
           _Type_union>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
           _Type_unit>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
           _Type_variable>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_void>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
           _Type_wrap>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod")]) $
     "domsAndCod" <~ (var "gatherParams" @@ list ([] :: [TTerm Type]) @@ var "ft") $
     "doms" <~ Pairs.first (var "domsAndCod") $
@@ -685,6 +688,7 @@ encodeType = def "encodeType" $
         right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "frozenset") @@ list [var "pyet"],
       _Type_union>>: constant $ var "dflt",
       _Type_unit>>: constant $ right $ PyUtils.pyNameToPyExpression @@ PyUtils.pyNone,
+      _Type_void>>: constant $ right $ PyUtils.pyNameToPyExpression @@ PyUtils.pyNone,
       _Type_variable>>: "name" ~>
         right $ PyNames.typeVariableReference @@ var "env" @@ var "name",
       _Type_wrap>>: constant $ var "dflt",

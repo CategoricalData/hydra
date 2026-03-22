@@ -580,4 +580,6 @@ typeAlternatives type_ =
           Core.TypeRecord optFields]
       Core.TypeUnit -> [
         Core.TypeLiteral Core.LiteralTypeBoolean]
+      Core.TypeVoid -> [
+        Core.TypeUnit]
       _ -> []

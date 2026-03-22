@@ -1428,6 +1428,7 @@ rewriteType f typ0 =
                   Core.TypeUnion v0 -> Core.TypeUnion (Lists.map forField v0)
                   Core.TypeUnit -> Core.TypeUnit
                   Core.TypeVariable v0 -> Core.TypeVariable v0
+                  Core.TypeVoid -> Core.TypeVoid
                   Core.TypeWrap v0 -> Core.TypeWrap (recurse v0)
           recurse = f (fsub recurse)
       in (recurse typ0)
@@ -1477,6 +1478,7 @@ rewriteTypeM f typ0 =
                   in (Eithers.bind (Eithers.mapList forField v0) (\rfields -> Right (Core.TypeUnion rfields)))
                 Core.TypeUnit -> Right Core.TypeUnit
                 Core.TypeVariable v0 -> Right (Core.TypeVariable v0)
+                Core.TypeVoid -> Right Core.TypeVoid
                 Core.TypeWrap v0 -> Eithers.bind (recurse v0) (\t -> Right (Core.TypeWrap t))
           recurse = f (fsub recurse)
       in (recurse typ0)
@@ -1722,6 +1724,7 @@ subtypes x =
       Core.TypeUnion v0 -> Lists.map Core.fieldTypeType v0
       Core.TypeUnit -> []
       Core.TypeVariable _ -> []
+      Core.TypeVoid -> []
       Core.TypeWrap v0 -> [
         v0]
 

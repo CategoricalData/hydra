@@ -112,4 +112,5 @@ typeVariant = define "typeVariant" $
     _TypeVariant_union>>: constant $ string "union",
     _TypeVariant_unit>>: constant $ string "unit",
     _TypeVariant_variable>>: constant $ string "variable",
+    _TypeVariant_void>>: constant $ string "void",
     _TypeVariant_wrap>>: constant $ string "wrap"]

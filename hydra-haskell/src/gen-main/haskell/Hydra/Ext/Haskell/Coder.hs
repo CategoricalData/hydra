@@ -428,6 +428,7 @@ encodeType namespaces typ cx g =
         Core.TypeUnion _ -> ref (Core.Name "placeholder")
         Core.TypeUnit -> Right unitTuple
         Core.TypeVariable v0 -> ref v0
+        Core.TypeVoid -> Right (Ast.TypeVariable (Utils.rawName "Void"))
         Core.TypeWrap _ -> ref (Core.Name "placeholder")
         _ -> Left (Context.InContext {
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected type: " (Core__.type_ typ)))),

@@ -490,6 +490,7 @@ type_ = define "type" $
     _Type_union>>: "rt" ~> Strings.cat2 (string "union") (var "showRowType" @@ var "rt"),
     _Type_unit>>: constant $ string "unit",
     _Type_variable>>: "name" ~> unwrap _Name @@ var "name",
+    _Type_void>>: constant $ string "void",
     _Type_wrap>>: "wt" ~>
       Strings.cat $ list [string "wrap(", type_ @@ var "wt", string ")"]]
 

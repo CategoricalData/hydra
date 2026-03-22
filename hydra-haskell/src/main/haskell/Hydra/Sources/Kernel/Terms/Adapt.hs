@@ -783,7 +783,9 @@ typeAlternatives = define "typeAlternatives" $
       list [
         Core.typeRecord (var "optFields")],
     _Type_unit>>: constant $ list [
-      Core.typeLiteral $ Core.literalTypeBoolean]]
+      Core.typeLiteral $ Core.literalTypeBoolean],
+    _Type_void>>: constant $ list [
+      Core.typeUnit]]
 
 adaptTypeForLanguage :: TBinding (Language -> Type -> Prelude.Either String Type)
 adaptTypeForLanguage = define "adaptTypeForLanguage" $

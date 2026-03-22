@@ -315,6 +315,7 @@ typeVariant = define "typeVariant" $
     _Type_union>>: constant Variants.typeVariantUnion,
     _Type_unit>>: constant Variants.typeVariantUnit,
     _Type_variable>>: constant Variants.typeVariantVariable,
+    _Type_void>>: constant Variants.typeVariantVoid,
     _Type_wrap>>: constant Variants.typeVariantWrap]
 
 typeVariants :: TBinding [TypeVariant]
@@ -336,4 +337,5 @@ typeVariants = define "typeVariants" $
     _TypeVariant_set,
     _TypeVariant_union,
     _TypeVariant_unit,
-    _TypeVariant_variable]
+    _TypeVariant_variable,
+    _TypeVariant_void]

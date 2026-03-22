@@ -143,6 +143,8 @@ joinTypes = define "joinTypes" $
       _Type_union>>: "r" ~> var "joinRowTypes" @@ (var "l") @@ (var "r")],
     _Type_unit>>: constant (cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_unit>>: constant (right (list ([] :: [TTerm TypeConstraint])))]),
+    _Type_void>>: constant (cases _Type (var "sright") (Just (var "cannotUnify")) [
+      _Type_void>>: constant (right (list ([] :: [TTerm TypeConstraint])))]),
     _Type_wrap>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_wrap>>: "r" ~> right (list [
         var "joinOne" @@ (var "l") @@ (var "r")])]]

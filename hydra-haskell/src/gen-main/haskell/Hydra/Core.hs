@@ -619,6 +619,8 @@ data Type =
   TypeUnit  |
   -- | A type variable
   TypeVariable Name |
+  -- | The void (uninhabited, or bottom) type
+  TypeVoid  |
   -- | A wrapped type (newtype)
   TypeWrap Type
   deriving (Eq, Ord, Read, Show)
@@ -654,6 +656,8 @@ _Type_union = Name "union"
 _Type_unit = Name "unit"
 
 _Type_variable = Name "variable"
+
+_Type_void = Name "void"
 
 _Type_wrap = Name "wrap"
 

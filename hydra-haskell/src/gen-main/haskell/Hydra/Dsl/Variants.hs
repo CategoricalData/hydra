@@ -366,6 +366,14 @@ typeVariantVariable =
         Core.fieldName = (Core.Name "variable"),
         Core.fieldTerm = Core.TermUnit}}))
 
+typeVariantVoid :: Phantoms.TTerm Variants.TypeVariant
+typeVariantVoid =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "void"),
+        Core.fieldTerm = Core.TermUnit}}))
+
 typeVariantWrap :: Phantoms.TTerm Variants.TypeVariant
 typeVariantWrap =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {

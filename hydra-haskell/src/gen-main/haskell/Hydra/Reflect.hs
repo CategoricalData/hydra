@@ -237,6 +237,7 @@ typeVariant x =
       Core.TypeUnion _ -> Variants.TypeVariantUnion
       Core.TypeUnit -> Variants.TypeVariantUnit
       Core.TypeVariable _ -> Variants.TypeVariantVariable
+      Core.TypeVoid -> Variants.TypeVariantVoid
       Core.TypeWrap _ -> Variants.TypeVariantWrap
 
 -- | All type variants, in a canonical order
@@ -258,4 +259,5 @@ typeVariants =
       Variants.TypeVariantSet,
       Variants.TypeVariantUnion,
       Variants.TypeVariantUnit,
-      Variants.TypeVariantVariable]
+      Variants.TypeVariantVariable,
+      Variants.TypeVariantVoid]
