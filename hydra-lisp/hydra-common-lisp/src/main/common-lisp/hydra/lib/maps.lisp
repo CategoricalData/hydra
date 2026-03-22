@@ -1,22 +1,15 @@
 (in-package :cl-user)
 
-;; Maps are association lists sorted by key: ((k1 . v1) (k2 . v2) ...)
+;; Maps are alists for compatibility with generated code that iterates maps as lists.
+;; Uses generic-compare for deterministic key ordering in toList.
 
-(defun alist-lookup (key alist)
-  (assoc key alist :test #'equal))
+(defun alist-lookup (key m)
+  "Look up a key in an alist. Returns (key . val) or nil."
+  (assoc key m :test #'equal))
 
-(defun alist-insert (key val alist)
-  "Insert maintaining sorted order by key."
-  (cond
-    ((null alist) (list (cons key val)))
-    ((= (generic-compare key (caar alist)) 0)
-     (cons (cons key val) (cdr alist)))
-    ((< (generic-compare key (caar alist)) 0)
-     (cons (cons key val) alist))
-    (t (cons (car alist) (alist-insert key val (cdr alist))))))
-
-(defun alist-delete (key alist)
-  (remove key alist :test #'equal :key #'car))
+(defun make-hydra-map (&optional pairs)
+  "Create an alist from a list of (key . val) pairs."
+  pairs)
 
 ;; alter :: (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
 (defun alter-is-nothing-p (m)
@@ -39,34 +32,26 @@
   (lambda (f)
     (lambda (k)
       (lambda (m)
-        (let* ((existing (alist-lookup k m))
-               (old-maybe (if existing
-                              (list :just (cdr existing))
-                              (list :nothing)))
-               (new-maybe (funcall f old-maybe)))
+        (let* ((old-entry (assoc k m :test #'equal))
+               (old-maybe (if old-entry (list :just (cdr old-entry)) (list :nothing)))
+               (new-maybe (funcall f old-maybe))
+               (new-m (remove k m :key #'car :test #'equal)))
           (if (alter-is-nothing-p new-maybe)
-              (alist-delete k m)
-              (alist-insert k (alter-get-value new-maybe) m)))))))
+              new-m
+              (cons (cons k (alter-get-value new-maybe)) new-m)))))))
 
 ;; bimap :: (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
 (defvar hydra_lib_maps_bimap
   (lambda (fk)
     (lambda (fv)
       (lambda (m)
-        (let ((pairs (mapcar (lambda (entry)
-                               (cons (funcall fk (car entry))
-                                     (funcall fv (cdr entry))))
-                             m)))
-          ;; Re-sort by new keys
-          (let ((result nil))
-            (dolist (p pairs result)
-              (setf result (alist-insert (car p) (cdr p) result)))))))))
+        (mapcar (lambda (pair) (cons (funcall fk (car pair)) (funcall fv (cdr pair)))) m)))))
 
 ;; delete :: k -> Map k v -> Map k v
 (defvar hydra_lib_maps_delete
   (lambda (k)
     (lambda (m)
-      (alist-delete k m))))
+      (remove k m :key #'car :test #'equal))))
 
 ;; elems :: Map k v -> [v]
 (defvar hydra_lib_maps_elems
@@ -80,49 +65,48 @@
 (defvar hydra_lib_maps_filter
   (lambda (pred)
     (lambda (m)
-      (remove-if-not (lambda (entry) (funcall pred (cdr entry))) m))))
+      (remove-if-not (lambda (pair) (funcall pred (cdr pair))) m))))
 
 ;; filter_with_key :: (k -> v -> Bool) -> Map k v -> Map k v
 (defvar hydra_lib_maps_filter_with_key
   (lambda (pred)
     (lambda (m)
-      (remove-if-not (lambda (entry)
-                       (funcall (funcall pred (car entry)) (cdr entry)))
-                     m))))
+      (remove-if-not (lambda (pair) (funcall (funcall pred (car pair)) (cdr pair))) m))))
 
 ;; find_with_default :: v -> k -> Map k v -> v
 (defvar hydra_lib_maps_find_with_default
   (lambda (def)
     (lambda (k)
       (lambda (m)
-        (let ((entry (alist-lookup k m)))
+        (let ((entry (assoc k m :test #'equal)))
           (if entry (cdr entry) def))))))
 
 ;; from_list :: [Pair k v] -> Map k v
-;; Input is list of (list k v) pairs
+;; Pairs are (key val) two-element lists; convert to alist (key . val)
+;; Later entries override earlier ones for duplicate keys (last wins)
 (defvar hydra_lib_maps_from_list
   (lambda (pairs)
-    (let ((acc nil))
-      (dolist (p pairs acc)
-        (setf acc (alist-insert (first p) (second p) acc))))))
+    (let ((result nil))
+      (dolist (p (reverse pairs) result)
+        (unless (assoc (first p) result :test #'equal)
+          (push (cons (first p) (second p)) result))))))
 
 ;; insert :: k -> v -> Map k v -> Map k v
 (defvar hydra_lib_maps_insert
   (lambda (k)
     (lambda (v)
       (lambda (m)
-        (alist-insert k v m)))))
+        (cons (cons k v) (remove k m :key #'car :test #'equal))))))
 
 ;; keys :: Map k v -> [k]
 (defvar hydra_lib_maps_keys
-  (lambda (m)
-    (mapcar #'car m)))
+  (lambda (m) (mapcar #'car m)))
 
 ;; lookup :: k -> Map k v -> Maybe v
 (defvar hydra_lib_maps_lookup
   (lambda (k)
     (lambda (m)
-      (let ((entry (alist-lookup k m)))
+      (let ((entry (assoc k m :test #'equal)))
         (if entry
             (list :just (cdr entry))
             (list :nothing))))))
@@ -131,26 +115,23 @@
 (defvar hydra_lib_maps_map
   (lambda (f)
     (lambda (m)
-      (mapcar (lambda (entry) (cons (car entry) (funcall f (cdr entry)))) m))))
+      (mapcar (lambda (pair) (cons (car pair) (funcall f (cdr pair)))) m))))
 
 ;; map_keys :: (k1 -> k2) -> Map k1 v -> Map k2 v
 (defvar hydra_lib_maps_map_keys
   (lambda (f)
     (lambda (m)
-      (let ((result nil))
-        (dolist (entry m result)
-          (setf result (alist-insert (funcall f (car entry)) (cdr entry) result)))))))
+      (mapcar (lambda (pair) (cons (funcall f (car pair)) (cdr pair))) m))))
 
 ;; member :: k -> Map k v -> Bool
 (defvar hydra_lib_maps_member
   (lambda (k)
     (lambda (m)
-      (if (alist-lookup k m) t nil))))
+      (if (assoc k m :test #'equal) t nil))))
 
 ;; null :: Map k v -> Bool
 (defvar hydra_lib_maps_null
-  (lambda (m)
-    (null m)))
+  (lambda (m) (null m)))
 
 ;; singleton :: k -> v -> Map k v
 (defvar hydra_lib_maps_singleton
@@ -160,20 +141,22 @@
 
 ;; size :: Map k v -> Int
 (defvar hydra_lib_maps_size
-  (lambda (m)
-    (length m)))
+  (lambda (m) (length m)))
 
 ;; to_list :: Map k v -> [Pair k v]
+;; Sort by key for deterministic output
 (defvar hydra_lib_maps_to_list
   (lambda (m)
-    (mapcar (lambda (entry) (list (car entry) (cdr entry))) m)))
+    (let ((pairs (mapcar (lambda (pair) (list (car pair) (cdr pair))) m)))
+      (sort pairs (lambda (a b) (< (generic-compare (first a) (first b)) 0))))))
 
-;; union :: Map k v -> Map k v -> Map k v
-;; Left-biased: entries from first map take precedence
+;; union :: Map k v -> Map k v -> Map k v (left-biased)
 (defvar hydra_lib_maps_union
   (lambda (m1)
     (lambda (m2)
-      (let ((acc m1))
-        (dolist (entry m2 acc)
-          (unless (alist-lookup (car entry) acc)
-            (setf acc (alist-insert (car entry) (cdr entry) acc))))))))
+      (let ((result (copy-list m2)))
+        (dolist (pair m1 result)
+          (let ((existing (assoc (car pair) result :test #'equal)))
+            (if existing
+                (setf (cdr existing) (cdr pair))
+                (push pair result))))))))

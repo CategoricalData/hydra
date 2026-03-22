@@ -2,9 +2,31 @@
 
 ;; Generic comparison for ordering heterogeneous values.
 ;; Returns -1, 0, or 1.
+(defun hash-table-equal-p (a b)
+  "Compare two hash tables for structural equality."
+  (and (= (hash-table-count a) (hash-table-count b))
+       (block nil
+         (maphash (lambda (k v)
+                    (multiple-value-bind (bv found) (gethash k b)
+                      (unless (and found (= (generic-compare v bv) 0))
+                        (return nil))))
+                  a)
+         t)))
+
 (defun generic-compare (a b)
   (cond
-    ((equal a b) 0)
+    ((eq a b) 0)
+    ((and (null a) (null b)) 0)
+    ((null a) -1)
+    ((null b) 1)
+    ((and (hash-table-p a) (hash-table-p b))
+     ;; Compare hash tables by converting to sorted alists
+     (if (hash-table-equal-p a b) 0
+         (let* ((al (sort (let (r) (maphash (lambda (k v) (push (cons k v) r)) a) r)
+                          (lambda (x y) (< (generic-compare (car x) (car y)) 0))))
+                (bl (sort (let (r) (maphash (lambda (k v) (push (cons k v) r)) b) r)
+                          (lambda (x y) (< (generic-compare (car x) (car y)) 0)))))
+           (generic-compare al bl))))
     ((and (numberp a) (numberp b))
      (cond ((< a b) -1) ((= a b) 0) (t 1)))
     ((and (stringp a) (stringp b))
@@ -21,9 +43,6 @@
        (if (= c 0)
            (generic-compare (cdr a) (cdr b))
            c)))
-    ((and (null a) (null b)) 0)
-    ((null a) -1)
-    ((null b) 1)
     (t (let ((sa (write-to-string a)) (sb (write-to-string b)))
          (cond ((string< sa sb) -1) ((string= sa sb) 0) (t 1))))))
 
@@ -41,7 +60,7 @@
 (defvar hydra_lib_equality_equal
   (lambda (a)
     (lambda (b)
-      (equal a b))))
+      (= (generic-compare a b) 0))))
 
 ;; gt :: a -> a -> Bool
 (defvar hydra_lib_equality_gt
