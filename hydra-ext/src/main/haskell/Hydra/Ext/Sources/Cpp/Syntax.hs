@@ -25,7 +25,7 @@ cpp :: String -> Type
 cpp = typeref ns
 
 module_ :: Module
-module_ = Module ns elements [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
     Just "A C++ syntax model, focusing on features for representing algebraic data types and declarative computations"
   where
     elements = accessSpecifiers ++ declarationTypes ++ expressionTypes ++ statementTypes

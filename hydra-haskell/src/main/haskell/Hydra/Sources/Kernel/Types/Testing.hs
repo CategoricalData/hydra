@@ -26,7 +26,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Ast.ns, Coders.ns, ErrorsCore.ns, Graph.ns, JsonModel.ns, Module.ns, Parsing.ns, Typing.ns, Util.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [Ast.ns, Coders.ns, ErrorsCore.ns, Graph.ns, JsonModel.ns, Module.ns, Parsing.ns, Typing.ns, Util.ns] [Core.ns] $
     Just "A model for unit testing"
   where
     elements = [

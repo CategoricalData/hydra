@@ -88,7 +88,7 @@ avroLanguageDefinition = definitionInModule avroLanguageModule
 
 avroLanguageModule :: Module
 avroLanguageModule = Module (Namespace "hydra.ext.avro.language")
-  [toBinding avroLanguage]
+  [toTermDefinition avroLanguage]
   [Lexical.ns, Rewriting.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for Apache Avro"

@@ -109,13 +109,13 @@ module_ = Module ns elements
     Just "Functions for constructing GraphSON vertices from property graph vertices."
   where
     elements = [
-      toBinding aggregateMap,
-      toBinding adjacentEdgeToGraphson,
-      toBinding edgePropertyToGraphson,
-      toBinding graphsonVertexToJsonCoder,
-      toBinding pgVertexWithAdjacentEdgesToGraphsonVertex,
-      toBinding pgVertexWithAdjacentEdgesToJson,
-      toBinding vertexPropertyToGraphson]
+      toTermDefinition aggregateMap,
+      toTermDefinition adjacentEdgeToGraphson,
+      toTermDefinition edgePropertyToGraphson,
+      toTermDefinition graphsonVertexToJsonCoder,
+      toTermDefinition pgVertexWithAdjacentEdgesToGraphsonVertex,
+      toTermDefinition pgVertexWithAdjacentEdgesToJson,
+      toTermDefinition vertexPropertyToGraphson]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

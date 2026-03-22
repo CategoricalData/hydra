@@ -105,25 +105,25 @@ module_ = Module ns elements
     Just "Pegasus PDL code generator: converts Hydra modules to PDL schema files"
   where
     elements = [
-      toBinding moduleToPdl,
-      toBinding constructModule,
-      toBinding typeToSchema,
-      toBinding toPair,
-      toBinding moduleToPegasusSchemas,
-      toBinding doc_,
-      toBinding encodeType_,
-      toBinding encode,
-      toBinding encodeRecordField,
-      toBinding encodeUnionField,
-      toBinding encodeEnumField,
-      toBinding encodePossiblyOptionalType,
-      toBinding getAnns,
-      toBinding importAliasesForModule,
-      toBinding noAnnotations_,
-      toBinding pdlNameForElement,
-      toBinding pdlNameForModule,
-      toBinding simpleUnionMember,
-      toBinding slashesToDots]
+      toTermDefinition moduleToPdl,
+      toTermDefinition constructModule,
+      toTermDefinition typeToSchema,
+      toTermDefinition toPair,
+      toTermDefinition moduleToPegasusSchemas,
+      toTermDefinition doc_,
+      toTermDefinition encodeType_,
+      toTermDefinition encode,
+      toTermDefinition encodeRecordField,
+      toTermDefinition encodeUnionField,
+      toTermDefinition encodeEnumField,
+      toTermDefinition encodePossiblyOptionalType,
+      toTermDefinition getAnns,
+      toTermDefinition importAliasesForModule,
+      toTermDefinition noAnnotations_,
+      toTermDefinition pdlNameForElement,
+      toTermDefinition pdlNameForModule,
+      toTermDefinition simpleUnionMember,
+      toTermDefinition slashesToDots]
 
 
 -- | err cx msg = Left (InContext (ErrorOther (OtherError msg)) cx)

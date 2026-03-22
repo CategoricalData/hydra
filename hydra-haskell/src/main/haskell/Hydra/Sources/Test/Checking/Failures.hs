@@ -27,9 +27,9 @@ module_ = Module ns elements
     (Just "Type checking failure test cases")
   where
     elements = [
-      Phantoms.toBinding allTests,
-      Phantoms.toBinding failOnUntypedTests,
-      Phantoms.toBinding untypedLambdasTests]
+      Phantoms.toTermDefinition allTests,
+      Phantoms.toTermDefinition failOnUntypedTests,
+      Phantoms.toTermDefinition untypedLambdasTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

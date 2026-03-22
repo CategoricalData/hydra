@@ -115,24 +115,24 @@ module_ = Module ns elements
     Just "Java test code generation codec for JUnit-based generation tests"
   where
     elements = [
-      toBinding termToJava,
-      toBinding typeToJava,
-      toBinding javaTestCodec,
-      toBinding formatJavaTestName,
-      toBinding namespaceToJavaClassName,
-      toBinding javaTestCaseTemplate,
-      toBinding javaTestGroupTemplate,
-      toBinding javaModuleTemplate,
-      toBinding javaImportTemplate,
-      toBinding findJavaImports,
-      toBinding generateJavaTestGroupHierarchy,
-      toBinding generateJavaTestCase,
-      toBinding getAssertionType,
-      toBinding generateAssertion,
-      toBinding isInferenceVar,
-      toBinding generateTestFileWithJavaCodec,
-      toBinding buildJavaTestModule,
-      toBinding generateJavaTestFile]
+      toTermDefinition termToJava,
+      toTermDefinition typeToJava,
+      toTermDefinition javaTestCodec,
+      toTermDefinition formatJavaTestName,
+      toTermDefinition namespaceToJavaClassName,
+      toTermDefinition javaTestCaseTemplate,
+      toTermDefinition javaTestGroupTemplate,
+      toTermDefinition javaModuleTemplate,
+      toTermDefinition javaImportTemplate,
+      toTermDefinition findJavaImports,
+      toTermDefinition generateJavaTestGroupHierarchy,
+      toTermDefinition generateJavaTestCase,
+      toTermDefinition getAssertionType,
+      toTermDefinition generateAssertion,
+      toTermDefinition isInferenceVar,
+      toTermDefinition generateTestFileWithJavaCodec,
+      toTermDefinition buildJavaTestModule,
+      toTermDefinition generateJavaTestFile]
 
 
 -- | Convert a Hydra term to a Java expression string

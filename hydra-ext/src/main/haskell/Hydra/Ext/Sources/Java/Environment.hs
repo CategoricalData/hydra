@@ -42,7 +42,7 @@ typing :: String -> Type
 typing = typeref Typing.ns
 
 module_ :: Module
-module_ = Module ns elements [] [Syntax.ns, Core.ns, Graph.ns, Module.ns, Typing.ns] $
+module_ = Module ns (map toTypeDef elements) [] [Syntax.ns, Core.ns, Graph.ns, Module.ns, Typing.ns] $
     Just "Environment types for Java code generation"
   where
     elements = [

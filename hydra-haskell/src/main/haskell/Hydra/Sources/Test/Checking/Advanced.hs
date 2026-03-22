@@ -27,11 +27,11 @@ module_ = Module ns elements
     (Just "Advanced type checking test cases: annotated terms and flows")
   where
     elements = [
-      Phantoms.toBinding allTests,
-      Phantoms.toBinding annotatedTermsTests,
-      Phantoms.toBinding topLevelAnnotationsTests,
-      Phantoms.toBinding nestedAnnotationsTests,
-      Phantoms.toBinding annotationsInComplexContextsTests]
+      Phantoms.toTermDefinition allTests,
+      Phantoms.toTermDefinition annotatedTermsTests,
+      Phantoms.toTermDefinition topLevelAnnotationsTests,
+      Phantoms.toTermDefinition nestedAnnotationsTests,
+      Phantoms.toTermDefinition annotationsInComplexContextsTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

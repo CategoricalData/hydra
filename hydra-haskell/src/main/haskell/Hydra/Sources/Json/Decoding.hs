@@ -98,13 +98,13 @@ module_ = Module ns elements
     Just "Decoding functions for JSON data"
   where
    elements = [
-     Phantoms.toBinding decodeArray,
-     Phantoms.toBinding decodeBoolean,
-     Phantoms.toBinding decodeField,
---     Phantoms.toBinding decodeNumber, TODO: restore
-     Phantoms.toBinding decodeObject,
-     Phantoms.toBinding decodeOptionalField,
-     Phantoms.toBinding decodeString]
+     Phantoms.toTermDefinition decodeArray,
+     Phantoms.toTermDefinition decodeBoolean,
+     Phantoms.toTermDefinition decodeField,
+--     Phantoms.toTermDefinition decodeNumber, TODO: restore
+     Phantoms.toTermDefinition decodeObject,
+     Phantoms.toTermDefinition decodeOptionalField,
+     Phantoms.toTermDefinition decodeString]
 
 define :: String -> TTerm a -> TBinding a
 define label = definitionInModule module_ ("decode" <> label)

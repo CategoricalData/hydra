@@ -58,7 +58,7 @@ withAnns fields = T.record $
   ("annotations">: T.list (owl "Annotation")):fields
 
 module_ :: Module
-module_ = Module ns elements [Core.ns, RdfSyntax.ns, XmlSchema.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [Core.ns, RdfSyntax.ns, XmlSchema.ns] [Core.ns] $
     Just "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax"
   where
     elements = generalDefinitions ++ owl2Definitions

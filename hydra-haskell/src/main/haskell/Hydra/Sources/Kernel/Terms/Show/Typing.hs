@@ -66,8 +66,8 @@ module_ = Module ns elements
     Just "String representations of hydra.typing types"
   where
    elements = [
-     toBinding typeConstraint,
-     toBinding typeSubst]
+     toTermDefinition typeConstraint,
+     toTermDefinition typeSubst]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

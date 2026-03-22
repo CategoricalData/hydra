@@ -25,8 +25,8 @@ module_ = Module ns elements
     (Just "Algorithm W inference tests")
   where
     elements = [
-      Phantoms.toBinding allTests,
-      Phantoms.toBinding testGroupForSystemF]
+      Phantoms.toTermDefinition allTests,
+      Phantoms.toTermDefinition testGroupForSystemF]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

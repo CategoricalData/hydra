@@ -67,23 +67,23 @@ module_ = Module ns elements
     Just "String formatting types and functions."
   where
     elements = [
-      toBinding capitalize,
-      toBinding convertCase,
-      toBinding convertCaseCamelOrUnderscoreToLowerSnake,
-      toBinding convertCaseCamelToLowerSnake,
-      toBinding convertCaseCamelToUpperSnake,
-      toBinding convertCasePascalToUpperSnake,
-      toBinding decapitalize,
-      toBinding escapeWithUnderscore,
-      toBinding indentLines,
-      toBinding javaStyleComment,
-      toBinding mapFirstLetter,
-      toBinding nonAlnumToUnderscores,
-      toBinding sanitizeWithUnderscores,
-      toBinding showList,
-      toBinding stripLeadingAndTrailingWhitespace,
-      toBinding withCharacterAliases,
-      toBinding wrapLine]
+      toTermDefinition capitalize,
+      toTermDefinition convertCase,
+      toTermDefinition convertCaseCamelOrUnderscoreToLowerSnake,
+      toTermDefinition convertCaseCamelToLowerSnake,
+      toTermDefinition convertCaseCamelToUpperSnake,
+      toTermDefinition convertCasePascalToUpperSnake,
+      toTermDefinition decapitalize,
+      toTermDefinition escapeWithUnderscore,
+      toTermDefinition indentLines,
+      toTermDefinition javaStyleComment,
+      toTermDefinition mapFirstLetter,
+      toTermDefinition nonAlnumToUnderscores,
+      toTermDefinition sanitizeWithUnderscores,
+      toTermDefinition showList,
+      toTermDefinition stripLeadingAndTrailingWhitespace,
+      toTermDefinition withCharacterAliases,
+      toTermDefinition wrapLine]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

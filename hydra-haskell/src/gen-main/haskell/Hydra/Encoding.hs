@@ -455,11 +455,16 @@ encodePairType pt =
 -- | Transform a type module into an encoder module
 encodeModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) (Maybe Module.Module)
 encodeModule cx graph mod =
-    Eithers.bind (filterTypeBindings cx graph (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
+    Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
+      Module.DefinitionType v0 -> Just (Annotations.typeElement (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
+      _ -> Nothing) (Module.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError (Context.inContextObject ic)))),
       Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Module.Module {
       Module.moduleNamespace = (encodeNamespace (Module.moduleNamespace mod)),
-      Module.moduleElements = encodedBindings,
+      Module.moduleDefinitions = (Lists.map (\b -> Module.DefinitionTerm (Module.TermDefinition {
+        Module.termDefinitionName = (Core.bindingName b),
+        Module.termDefinitionTerm = (Core.bindingTerm b),
+        Module.termDefinitionType = (Core.bindingType b)})) encodedBindings),
       Module.moduleTermDependencies = (Lists.nub (Lists.concat2 (Lists.map encodeNamespace (Module.moduleTypeDependencies mod)) (Lists.map encodeNamespace (Module.moduleTermDependencies mod)))),
       Module.moduleTypeDependencies = [
         Module.moduleNamespace mod],

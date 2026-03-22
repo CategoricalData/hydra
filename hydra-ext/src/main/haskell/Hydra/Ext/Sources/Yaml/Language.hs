@@ -26,7 +26,7 @@ ns = Namespace "hydra.ext.org.yaml.language"
 
 module_ :: Module
 module_ = Module ns
-  [toBinding yamlLanguage]
+  [toTermDefinition yamlLanguage]
   [Rewriting.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for YAML"

@@ -82,42 +82,42 @@ module_ = Module ns elements
     Just "Functions for generating term decoders from type modules"
   where
     elements = [
-      toBinding collectForallVariables,
-      toBinding collectOrdConstrainedVariables,
-      toBinding collectTypeVariables,
-      toBinding collectTypeVariablesFromType,
-      toBinding decodeBinding,
-      toBinding decodeBindingName,
-      toBinding decodeEitherType,
-      toBinding decodeForallType,
-      toBinding decodeListType,
-      toBinding decodeLiteralType,
-      toBinding decodeMapType,
-      toBinding decodeMaybeType,
-      toBinding decodeModule,
-      toBinding decodeNamespace,
-      toBinding decodePairType,
-      toBinding decodeRecordType,
-      toBinding decodeRecordTypeImpl,
-      toBinding decodeRecordTypeNamed,
-      toBinding decodeSetType,
-      toBinding decodeType,
-      toBinding decodeTypeNamed,
-      toBinding decodeUnitType,
-      toBinding decodeUnionType,
-      toBinding decodeUnionTypeNamed,
-      toBinding decodeWrappedType,
-      toBinding decodeWrappedTypeNamed,
-      toBinding decoderFullResultType,
-      toBinding decoderFullResultTypeNamed,
-      toBinding decoderResultType,
-      toBinding decoderType,
-      toBinding decoderTypeNamed,
-      toBinding decoderTypeScheme,
-      toBinding decoderTypeSchemeNamed,
-      toBinding filterTypeBindings,
-      toBinding isDecodableBinding,
-      toBinding prependForallDecoders]
+      toTermDefinition collectForallVariables,
+      toTermDefinition collectOrdConstrainedVariables,
+      toTermDefinition collectTypeVariables,
+      toTermDefinition collectTypeVariablesFromType,
+      toTermDefinition decodeBinding,
+      toTermDefinition decodeBindingName,
+      toTermDefinition decodeEitherType,
+      toTermDefinition decodeForallType,
+      toTermDefinition decodeListType,
+      toTermDefinition decodeLiteralType,
+      toTermDefinition decodeMapType,
+      toTermDefinition decodeMaybeType,
+      toTermDefinition decodeModule,
+      toTermDefinition decodeNamespace,
+      toTermDefinition decodePairType,
+      toTermDefinition decodeRecordType,
+      toTermDefinition decodeRecordTypeImpl,
+      toTermDefinition decodeRecordTypeNamed,
+      toTermDefinition decodeSetType,
+      toTermDefinition decodeType,
+      toTermDefinition decodeTypeNamed,
+      toTermDefinition decodeUnitType,
+      toTermDefinition decodeUnionType,
+      toTermDefinition decodeUnionTypeNamed,
+      toTermDefinition decodeWrappedType,
+      toTermDefinition decodeWrappedTypeNamed,
+      toTermDefinition decoderFullResultType,
+      toTermDefinition decoderFullResultTypeNamed,
+      toTermDefinition decoderResultType,
+      toTermDefinition decoderType,
+      toTermDefinition decoderTypeNamed,
+      toTermDefinition decoderTypeScheme,
+      toTermDefinition decoderTypeSchemeNamed,
+      toTermDefinition filterTypeBindings,
+      toTermDefinition isDecodableBinding,
+      toTermDefinition prependForallDecoders]
 
 define :: String -> TTerm x -> TBinding x
 define = definitionInModule module_
@@ -614,7 +614,12 @@ decodeModule :: TBinding (Context -> Graph -> Module -> Prelude.Either (InContex
 decodeModule = define "decodeModule" $
   doc "Transform a type module into a decoder module" $
   "cx" ~> "graph" ~> "mod" ~>
-    "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@ (Module.moduleElements (var "mod"))) $
+    "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
+      (Maybes.cat $ Lists.map
+        ("d" ~> cases _Definition (var "d") (Just nothing) [
+          _Definition_type>>: "td" ~>
+            just (Annotations.typeElement @@ (Module.typeDefinitionName $ var "td") @@ (Module.typeDefinitionType $ var "td"))])
+        (Module.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
       ("decodedBindings" <<~ Eithers.mapList ("b" ~>
@@ -635,7 +640,10 @@ decodeModule = define "decodeModule" $
         "allDecodedDeps" <~ (primitive _lists_nub @@ Lists.concat2 (var "decodedTypeDeps") (var "decodedTermDeps")) $
         right (just (Module.module_
           (decodeNamespace @@ (Module.moduleNamespace (var "mod")))
-          (var "decodedBindings")
+          (Lists.map ("b" ~> Module.definitionTerm (Module.termDefinition
+            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingType $ var "b")))
+            (var "decodedBindings"))
           (Lists.concat2
             (list [
               (Module.namespace $ string "hydra.extract.helpers"),

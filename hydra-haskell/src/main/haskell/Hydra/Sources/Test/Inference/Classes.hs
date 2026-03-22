@@ -25,14 +25,14 @@ module_ = Module ns elements
     (Just "Inference tests for type class constraints (ordering and equality)")
   where
     elements = [
-      Phantoms.toBinding allTests,
-      Phantoms.toBinding testGroupForMonomorphicConstraints,
-      Phantoms.toBinding testGroupForPrimitiveReferences,
-      Phantoms.toBinding testGroupForPartialApplication,
-      Phantoms.toBinding testGroupForLetBindings,
-      Phantoms.toBinding testGroupForComposition,
-      Phantoms.toBinding testGroupForNestedContainers,
-      Phantoms.toBinding testGroupForCollectionTerms]
+      Phantoms.toTermDefinition allTests,
+      Phantoms.toTermDefinition testGroupForMonomorphicConstraints,
+      Phantoms.toTermDefinition testGroupForPrimitiveReferences,
+      Phantoms.toTermDefinition testGroupForPartialApplication,
+      Phantoms.toTermDefinition testGroupForLetBindings,
+      Phantoms.toTermDefinition testGroupForComposition,
+      Phantoms.toTermDefinition testGroupForNestedContainers,
+      Phantoms.toTermDefinition testGroupForCollectionTerms]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

@@ -22,7 +22,7 @@ import qualified Hydra.Encode.Tabular as EncodeTabular
 salesModule :: Module
 salesModule = Module {
   moduleNamespace = salesNamespace,
-  moduleElements = [
+  moduleDefinitions = map bindingToDefinition [
     -- salesDatabaseSchema: list[TableType]
     Binding {
       bindingName = Name "hydra.demos.genpg.sales.salesDatabaseSchema",
@@ -67,7 +67,7 @@ salesNamespace = Namespace "hydra.demos.genpg.sales"
 healthModule :: Module
 healthModule = Module {
   moduleNamespace = healthNamespace,
-  moduleElements = [
+  moduleDefinitions = map bindingToDefinition [
     -- healthDatabaseSchema: list[TableType]
     Binding {
       bindingName = Name "hydra.demos.genpg.health.healthDatabaseSchema",

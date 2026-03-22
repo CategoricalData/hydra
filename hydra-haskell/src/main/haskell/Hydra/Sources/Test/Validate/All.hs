@@ -23,7 +23,7 @@ module_ :: Module
 module_ = Module ns elements namespaces kernelTypesNamespaces $
     Just "Hydra's validation test suite"
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
     namespaces = [ValidateCore.ns]
 
 allTests :: TBinding TestGroup

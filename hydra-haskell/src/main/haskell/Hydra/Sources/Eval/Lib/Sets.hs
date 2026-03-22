@@ -68,7 +68,7 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Set functions for the Hydra interpreter.")
   where
     elements = [
-      toBinding map_]
+      toTermDefinition map_]
 
 -- | Interpreter-friendly map for Set terms.
 -- Applies fun to each element.

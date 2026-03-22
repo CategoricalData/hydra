@@ -23,7 +23,7 @@ go :: String -> Type
 go = typeref ns
 
 module_ :: Module
-module_ = Module ns elements [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
     Just ("A Go syntax model, based on the Go Language Specification retrieved on 2025-02-05"
       ++ " from https://go.dev/ref/spec")
   where

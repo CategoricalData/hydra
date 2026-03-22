@@ -103,18 +103,18 @@ module_ = Module ns elements
     Just "Encoding functions for converting GraphSON syntax to JSON."
   where
     elements = [
-      toBinding adjacentEdgeToJson,
-      toBinding doubleValueToJson,
-      toBinding edgeMapToJson,
-      toBinding edgePropertyMapToJson,
-      toBinding floatValueToJson,
-      toBinding mapToJson,
-      toBinding toJsonObject,
-      toBinding typedValueToJson,
-      toBinding valueToJson,
-      toBinding vertexPropertyMapToJson,
-      toBinding vertexPropertyValueToJson,
-      toBinding vertexToJson]
+      toTermDefinition adjacentEdgeToJson,
+      toTermDefinition doubleValueToJson,
+      toTermDefinition edgeMapToJson,
+      toTermDefinition edgePropertyMapToJson,
+      toTermDefinition floatValueToJson,
+      toTermDefinition mapToJson,
+      toTermDefinition toJsonObject,
+      toTermDefinition typedValueToJson,
+      toTermDefinition valueToJson,
+      toTermDefinition vertexPropertyMapToJson,
+      toTermDefinition vertexPropertyValueToJson,
+      toTermDefinition vertexToJson]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

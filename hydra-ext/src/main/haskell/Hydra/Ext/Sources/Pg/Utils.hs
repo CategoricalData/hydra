@@ -110,14 +110,14 @@ module_ = Module ns elements
     Just "Utility functions for property graph operations"
   where
     elements = [
-      toBinding defaultTinkerpopAnnotations,
-      toBinding examplePgSchema,
-      toBinding expString,
-      toBinding lazyGraphToElements,
-      toBinding pgElementToJson,
-      toBinding pgElementsToJson,
-      toBinding propertyGraphElements,
-      toBinding typeApplicationTermToPropertyGraph]
+      toTermDefinition defaultTinkerpopAnnotations,
+      toTermDefinition examplePgSchema,
+      toTermDefinition expString,
+      toTermDefinition lazyGraphToElements,
+      toTermDefinition pgElementToJson,
+      toTermDefinition pgElementsToJson,
+      toTermDefinition propertyGraphElements,
+      toTermDefinition typeApplicationTermToPropertyGraph]
 
 -- | Default Tinkerpop annotation schema
 defaultTinkerpopAnnotations :: TBinding PGM.AnnotationSchema

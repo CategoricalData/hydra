@@ -26,7 +26,7 @@ rust :: String -> Type
 rust = typeref ns
 
 module_ :: Module
-module_ = Module ns elements [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
     Just ("A Rust syntax model, based on the Rust Reference grammar"
       ++ " (https://doc.rust-lang.org/reference/), retrieved 2025-01-29")
   where

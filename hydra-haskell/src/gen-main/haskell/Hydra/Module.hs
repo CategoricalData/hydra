@@ -58,8 +58,8 @@ data Module =
   Module {
     -- | A common prefix for all element names in the module
     moduleNamespace :: Namespace,
-    -- | The elements defined in this module
-    moduleElements :: [Core.Binding],
+    -- | The definitions in this module
+    moduleDefinitions :: [Definition],
     -- | Any modules which the term expressions of this module directly depend upon
     moduleTermDependencies :: [Namespace],
     -- | Any modules which the type expressions of this module directly depend upon
@@ -72,7 +72,7 @@ _Module = Core.Name "hydra.module.Module"
 
 _Module_namespace = Core.Name "namespace"
 
-_Module_elements = Core.Name "elements"
+_Module_definitions = Core.Name "definitions"
 
 _Module_termDependencies = Core.Name "termDependencies"
 
@@ -126,7 +126,7 @@ data TermDefinition =
     -- | The term being defined
     termDefinitionTerm :: Core.Term,
     -- | The type scheme of the term, including any class constraints
-    termDefinitionType :: Core.TypeScheme}
+    termDefinitionType :: (Maybe Core.TypeScheme)}
   deriving (Eq, Ord, Read, Show)
 
 _TermDefinition = Core.Name "hydra.module.TermDefinition"

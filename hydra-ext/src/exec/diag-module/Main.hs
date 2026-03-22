@@ -39,12 +39,12 @@ main = do
   hFlush stdout
   let termDeps = moduleTermDepsTransitive namespaceMap [modToGen]
   putStrLn $ "  Term dep modules: " ++ show (length termDeps)
-  let dataElements = concatMap moduleElements termDeps
+  let dataElements = concatMap moduleBindings termDeps
   putStrLn $ "  Data elements: " ++ show (length dataElements)
 
   let typeDeps = moduleTypeDepsTransitive namespaceMap [modToGen]
   putStrLn $ "  Type dep modules: " ++ show (length typeDeps)
-  let schemaElements = filter isNativeType $ concatMap moduleElements (typeDeps ++ [modToGen])
+  let schemaElements = filter isNativeType $ concatMap moduleBindings (typeDeps ++ [modToGen])
   putStrLn $ "  Schema elements: " ++ show (length schemaElements)
 
   -- Step 3: Build graphs

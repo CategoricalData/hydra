@@ -25,13 +25,13 @@ module_ = Module ns elements
     (Just "Inference tests for fundamental language features")
   where
     elements = [
-      Phantoms.toBinding allTests,
-      Phantoms.toBinding testGroupForLambdas,
-      Phantoms.toBinding testGroupForLet,
-      Phantoms.toBinding testGroupForLiterals,
-      Phantoms.toBinding testGroupForPathologicalTerms,
-      Phantoms.toBinding testGroupForPolymorphism,
-      Phantoms.toBinding testGroupForPrimitives]
+      Phantoms.toTermDefinition allTests,
+      Phantoms.toTermDefinition testGroupForLambdas,
+      Phantoms.toTermDefinition testGroupForLet,
+      Phantoms.toTermDefinition testGroupForLiterals,
+      Phantoms.toTermDefinition testGroupForPathologicalTerms,
+      Phantoms.toTermDefinition testGroupForPolymorphism,
+      Phantoms.toTermDefinition testGroupForPrimitives]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

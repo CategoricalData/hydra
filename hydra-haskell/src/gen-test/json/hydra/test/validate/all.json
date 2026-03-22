@@ -1,37 +1,38 @@
 {
-  "description": ["Hydra's validation test suite"],
-  "elements": [
+  "definitions": [
     {
-      "name": "hydra.test.validate.all.allTests",
       "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {"literal": {"string": "The group of all validation tests"}}}],
-          "body": {
-            "record": {
-              "fields": [
-                {"name": "name", "term": {"literal": {"string": "validation"}}},
-                {
-                  "name": "description",
-                  "term": {
-                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
-                {
-                  "name": "subgroups",
-                  "term": {"list": [{"variable": "hydra.test.validate.core.allTests"}]}},
-                {
-                  "name": "cases",
-                  "term": {
-                    "typeApplication": {
-                      "body": {"list": []},
-                      "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-              "typeName": "hydra.testing.TestGroup"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.testing.TestGroup"},
-          "variables": []}]}],
+        "name": "hydra.test.validate.all.allTests",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "The group of all validation tests"}}}],
+            "body": {
+              "record": {
+                "fields": [
+                  {"name": "name", "term": {"literal": {"string": "validation"}}},
+                  {
+                    "name": "description",
+                    "term": {
+                      "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "subgroups",
+                    "term": {"list": [{"variable": "hydra.test.validate.core.allTests"}]}},
+                  {
+                    "name": "cases",
+                    "term": {
+                      "typeApplication": {
+                        "body": {"list": []},
+                        "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+                "typeName": "hydra.testing.TestGroup"}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.testing.TestGroup"},
+            "variables": []}]}}],
+  "description": ["Hydra's validation test suite"],
   "namespace": "hydra.test.validate.all",
   "termDependencies": ["hydra.test.validate.core"],
   "typeDependencies": [

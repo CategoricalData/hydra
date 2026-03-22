@@ -27,7 +27,7 @@ module_ :: Module
 module_ = Module ns elements [] kernelTypesNamespaces $
     Just "Test cases for let-binding hoisting transformations"
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
 
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $

@@ -93,33 +93,33 @@ module_ = Module ns elements
   where
    elements = [
      -- Simple pure functions first
-     toBinding normalizeComment,
-     toBinding gatherApplications,
-     toBinding gatherArgs,
-     toBinding gatherArgsWithTypeApps,
+     toTermDefinition normalizeComment,
+     toTermDefinition gatherApplications,
+     toTermDefinition gatherArgs,
+     toTermDefinition gatherArgsWithTypeApps,
      -- Predicates
-     toBinding isSimpleAssignment,
-     toBinding isComplexTerm,
-     toBinding isComplexVariable,
-     toBinding isComplexBinding,
-     toBinding isTrivialTerm,
+     toTermDefinition isSimpleAssignment,
+     toTermDefinition isComplexTerm,
+     toTermDefinition isComplexVariable,
+     toTermDefinition isComplexBinding,
+     toTermDefinition isTrivialTerm,
      -- Tail-call optimization detection
-     toBinding isSelfTailRecursive,
-     toBinding isTailRecursiveInTailPosition,
+     toTermDefinition isSelfTailRecursive,
+     toTermDefinition isTailRecursiveInTailPosition,
      -- Type transformation utilities
-     toBinding nameToFilePath,
+     toTermDefinition nameToFilePath,
      -- Definition ordering
-     toBinding reorderDefs,
+     toTermDefinition reorderDefs,
      -- Context/graph utilities
-     toBinding commentsFromBinding,
-     toBinding commentsFromFieldType,
-     toBinding typeOfTerm,
+     toTermDefinition commentsFromBinding,
+     toTermDefinition commentsFromFieldType,
+     toTermDefinition typeOfTerm,
      -- Function analysis helpers
-     toBinding bindingMetadata,
-     toBinding analyzeFunctionTerm,
-     toBinding analyzeFunctionTermWith,
-     toBinding analyzeFunctionTermWith_finish,
-     toBinding analyzeFunctionTermWith_gather]
+     toTermDefinition bindingMetadata,
+     toTermDefinition analyzeFunctionTerm,
+     toTermDefinition analyzeFunctionTermWith,
+     toTermDefinition analyzeFunctionTermWith_finish,
+     toTermDefinition analyzeFunctionTermWith_gather]
 
 --------------------------------------------------------------------------------
 -- Simple pure functions

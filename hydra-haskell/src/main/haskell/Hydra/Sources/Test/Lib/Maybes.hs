@@ -26,7 +26,7 @@ module_ :: Module
 module_ = Module ns elements [] [] $
     Just "Test cases for hydra.lib.maybes primitives"
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
 
 -- Helper to create Just terms for Int32 values
 justInt32 :: Int -> TTerm Term

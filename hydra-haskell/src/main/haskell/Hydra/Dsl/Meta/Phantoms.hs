@@ -386,6 +386,11 @@ set = TTerm . Terms.set . S.fromList . fmap unTTerm
 toBinding :: TBinding a -> Binding
 toBinding (TBinding name (TTerm term)) = Binding name term Nothing
 
+-- | Convert a typed binding to a term Definition for use in module definition lists
+-- Example: toTermDefinition functionArity
+toTermDefinition :: TBinding a -> Definition
+toTermDefinition (TBinding name (TTerm term)) = DefinitionTerm $ TermDefinition name term Nothing
+
 
 triple :: TTerm a -> TTerm b -> TTerm c -> TTerm (a, b, c)
 triple (TTerm a) (TTerm b) (TTerm c) = TTerm $ Terms.triple a b c
@@ -404,6 +409,10 @@ unaryFunction f = case (unTTerm $ f $ var "x") of
   TermMaybe (Just _) -> primitive _maybes_pure
   TermUnion (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
   TermWrap (WrappedTerm tname _) -> lambda "x" $ wrap tname $ var "x"
+
+-- | Unsafe phantom type cast. Used during bootstrap when changing Module field types.
+unsafeCast :: TTerm a -> TTerm b
+unsafeCast (TTerm t) = TTerm t
 
 -- | Unit value (empty record)
 unit :: TTerm a

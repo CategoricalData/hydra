@@ -48,23 +48,23 @@ module_ = Module ns elements
     Just "Functions for generating domain-specific DSL modules from type modules"
   where
     elements = [
-      toBinding dslBindingName,
-      toBinding dslElementName,
-      toBinding dslModule,
-      toBinding dslNamespace,
-      toBinding filterTypeBindings,
-      toBinding generateBindingsForType,
-      toBinding generateRecordAccessor,
-      toBinding generateRecordConstructor,
-      toBinding generateRecordWithUpdater,
-      toBinding generateUnionInjector,
-      toBinding generateWrappedTypeAccessors,
-      toBinding deduplicateBindings,
-      toBinding findUniqueName,
-      toBinding isDslEligibleBinding,
-      toBinding dslTypeScheme,
-      toBinding collectForallVars,
-      toBinding nominalResultType]
+      toTermDefinition dslBindingName,
+      toTermDefinition dslElementName,
+      toTermDefinition dslModule,
+      toTermDefinition dslNamespace,
+      toTermDefinition filterTypeBindings,
+      toTermDefinition generateBindingsForType,
+      toTermDefinition generateRecordAccessor,
+      toTermDefinition generateRecordConstructor,
+      toTermDefinition generateRecordWithUpdater,
+      toTermDefinition generateUnionInjector,
+      toTermDefinition generateWrappedTypeAccessors,
+      toTermDefinition deduplicateBindings,
+      toTermDefinition findUniqueName,
+      toTermDefinition isDslEligibleBinding,
+      toTermDefinition dslTypeScheme,
+      toTermDefinition collectForallVars,
+      toTermDefinition nominalResultType]
 
 define :: String -> TTerm x -> TBinding x
 define = definitionInModule module_
@@ -548,7 +548,12 @@ dslModule :: TBinding (Context -> Graph -> Module -> Either (InContext Error) (M
 dslModule = define "dslModule" $
   doc "Transform a type module into a DSL module" $
   "cx" ~> "graph" ~> "mod" ~>
-    "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@ (Module.moduleElements (var "mod"))) $
+    "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
+      (Maybes.cat $ Lists.map
+        ("d" ~> cases _Definition (var "d") (Just nothing) [
+          _Definition_type>>: "td" ~>
+            just (Annotations.typeElement @@ (Module.typeDefinitionName $ var "td") @@ (Module.typeDefinitionType $ var "td"))])
+        (Module.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
       ("dslBindings" <<~ Eithers.mapList ("b" ~>
@@ -558,7 +563,10 @@ dslModule = define "dslModule" $
           (generateBindingsForType @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         right (just (Module.module_
           (dslNamespace @@ (Module.moduleNamespace (var "mod")))
-          (deduplicateBindings @@ Lists.concat (var "dslBindings"))
+          (Lists.map ("b" ~> Module.definitionTerm (Module.termDefinition
+            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingType $ var "b")))
+            (deduplicateBindings @@ Lists.concat (var "dslBindings")))
           -- DSL modules depend on DSL modules for type dependencies (to reference other types' DSL functions)
           (Lists.nub (primitive _lists_map @@ dslNamespace @@ (Module.moduleTypeDependencies (var "mod"))))
           -- Type dependencies: the original module + its type deps + hydra.phantoms (for TTerm)

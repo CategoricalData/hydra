@@ -125,7 +125,7 @@ transformModule :: Module.Module -> Module.Module
 transformModule m =
     Module.Module {
       Module.moduleNamespace = (addGenerationPrefix (Module.moduleNamespace m)),
-      Module.moduleElements = (Module.moduleElements m),
+      Module.moduleDefinitions = (Module.moduleDefinitions m),
       Module.moduleTermDependencies = (Module.moduleTermDependencies m),
       Module.moduleTypeDependencies = (Module.moduleTypeDependencies m),
       Module.moduleDescription = (Module.moduleDescription m)}

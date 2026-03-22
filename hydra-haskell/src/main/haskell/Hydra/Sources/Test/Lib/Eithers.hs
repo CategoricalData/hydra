@@ -27,7 +27,7 @@ module_ :: Module
 module_ = Module ns elements [] [] $
     Just "Test cases for hydra.lib.eithers primitives"
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
 
 -- Helper to create Left terms
 leftInt32 :: Int -> TTerm Term

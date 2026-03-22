@@ -26,7 +26,7 @@ module_ :: Module
 module_ = Module ns elements [] [] $
     Just "Test cases for hydra.lib.logic primitives"
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
 
 -- Test groups for hydra.lib.logic primitives
 

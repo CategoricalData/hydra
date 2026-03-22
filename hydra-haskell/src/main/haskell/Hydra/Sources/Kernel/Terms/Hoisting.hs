@@ -79,27 +79,27 @@ module_ = Module ns elements
     Just "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms."
   where
    elements = [
-     toBinding augmentBindingsWithNewFreeVars,
-     toBinding bindingIsPolymorphic,
-     toBinding bindingUsesContextTypeVars,
-     toBinding countVarOccurrences,
-     toBinding hoistAllLetBindings,
-     toBinding hoistCaseStatements,
-     toBinding hoistCaseStatementsInGraph,
-     toBinding hoistLetBindingsWithContext,
-     toBinding hoistLetBindingsWithPredicate,
-     toBinding hoistPolymorphicLetBindings,
-     toBinding hoistSubterms,
-     toBinding isApplicationFunction,
-     toBinding isEliminationUnion,
-     toBinding isLambdaBody,
-     toBinding isUnionElimination,
-     toBinding isUnionEliminationApplication,
-     toBinding normalizePathForHoisting,
-     toBinding shouldHoistAll,
-     toBinding shouldHoistCaseStatement,
-     toBinding shouldHoistPolymorphic,
-     toBinding updateHoistState]
+     toTermDefinition augmentBindingsWithNewFreeVars,
+     toTermDefinition bindingIsPolymorphic,
+     toTermDefinition bindingUsesContextTypeVars,
+     toTermDefinition countVarOccurrences,
+     toTermDefinition hoistAllLetBindings,
+     toTermDefinition hoistCaseStatements,
+     toTermDefinition hoistCaseStatementsInGraph,
+     toTermDefinition hoistLetBindingsWithContext,
+     toTermDefinition hoistLetBindingsWithPredicate,
+     toTermDefinition hoistPolymorphicLetBindings,
+     toTermDefinition hoistSubterms,
+     toTermDefinition isApplicationFunction,
+     toTermDefinition isEliminationUnion,
+     toTermDefinition isLambdaBody,
+     toTermDefinition isUnionElimination,
+     toTermDefinition isUnionEliminationApplication,
+     toTermDefinition normalizePathForHoisting,
+     toTermDefinition shouldHoistAll,
+     toTermDefinition shouldHoistCaseStatement,
+     toTermDefinition shouldHoistPolymorphic,
+     toTermDefinition updateHoistState]
 
 -- | Check if a binding has a polymorphic type (non-empty list of type scheme variables)
 bindingIsPolymorphic :: TBinding (Binding -> Bool)

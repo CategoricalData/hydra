@@ -64,8 +64,8 @@ module_ = Module ns elements
     Just "String representations of hydra.meta types"
   where
    elements = [
-     toBinding termVariant,
-     toBinding typeVariant]
+     toTermDefinition termVariant,
+     toTermDefinition typeVariant]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

@@ -676,7 +676,7 @@ encodeTermDefinition cx g td =
 
       let name = Module.termDefinitionName td
           term = Module.termDefinitionTerm td
-          typ = Module.termDefinitionType td
+          typ = Maybes.maybe (Core.TypeScheme [] (Core.TypeVariable (Core.Name "hydra.core.Unit")) Nothing) (\x -> x) (Module.termDefinitionType td)
           lname = Utils.scalaEscapeName (Names.localNameOf name)
           typ_ = Core.typeSchemeType typ
           isFunctionType =

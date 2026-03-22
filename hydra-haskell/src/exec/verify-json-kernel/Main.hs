@@ -159,26 +159,27 @@ main = do
 
 -- | Check whether a module contains only native type definitions (no term definitions).
 isTypeModule :: Module -> Bool
-isTypeModule m = all isNativeType (moduleElements m)
+isTypeModule m = all isNativeType (moduleBindings m)
 
 -- | Strip type annotations from a module for comparison with raw (pre-inference) modules.
 -- Removes TypeLambda, TypeApplication, binding TypeSchemes, and lambda domain types from terms,
 -- but preserves user annotations.
 stripTypeAnnotations :: Module -> Module
 stripTypeAnnotations m = m {
-  moduleElements = fmap stripBinding (moduleElements m) }
+  moduleDefinitions = fmap stripDef (moduleDefinitions m) }
   where
-    stripBinding b = b {
-      bindingTerm = Rewriting.removeTypesFromTerm (bindingTerm b),
-      bindingType = Nothing }
+    stripDef (DefinitionTerm td) = DefinitionTerm td {
+      termDefinitionTerm = Rewriting.removeTypesFromTerm (termDefinitionTerm td),
+      termDefinitionType = Just $ TypeScheme [] (TypeVariable $ Name "hydra.core.Unit") Nothing }
+    stripDef d = d
 
 -- | Find the first difference between two modules
 findDifference :: Module -> Module -> String
 findDifference orig decoded
   | moduleNamespace orig /= moduleNamespace decoded =
       "namespace differs: " ++ unNamespace (moduleNamespace orig) ++ " vs " ++ unNamespace (moduleNamespace decoded)
-  | length (moduleElements orig) /= length (moduleElements decoded) =
-      "element count differs: " ++ show (length (moduleElements orig)) ++ " vs " ++ show (length (moduleElements decoded))
+  | length (moduleDefinitions orig) /= length (moduleDefinitions decoded) =
+      "element count differs: " ++ show (length (moduleDefinitions orig)) ++ " vs " ++ show (length (moduleDefinitions decoded))
   | moduleTermDependencies orig /= moduleTermDependencies decoded =
       "termDependencies differ"
   | moduleTypeDependencies orig /= moduleTypeDependencies decoded =
@@ -186,13 +187,14 @@ findDifference orig decoded
   | moduleDescription orig /= moduleDescription decoded =
       "description differs"
   | otherwise =
-      "elements differ (checking first mismatch...)" ++ findElementDiff (moduleElements orig) (moduleElements decoded)
+      "elements differ (checking first mismatch...)" ++ findElementDiff (moduleDefinitions orig) (moduleDefinitions decoded)
 
-findElementDiff :: [Binding] -> [Binding] -> String
+findElementDiff :: [Definition] -> [Definition] -> String
 findElementDiff [] [] = ""
 findElementDiff (o:os) (d:ds)
   | o == d = findElementDiff os ds
-  | bindingName o /= bindingName d = " - name: " ++ unName (bindingName o) ++ " vs " ++ unName (bindingName d)
-  | bindingType o /= bindingType d = " - type differs for " ++ unName (bindingName o)
-  | otherwise = " - term differs for " ++ unName (bindingName o)
+  | otherwise = " - definition differs at " ++ show (defName o) ++ " vs " ++ show (defName d)
+  where
+    defName (DefinitionTerm td) = termDefinitionName td
+    defName (DefinitionType td) = typeDefinitionName td
 findElementDiff _ _ = " - different element counts"

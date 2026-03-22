@@ -54,7 +54,7 @@ elementSummary withTypes el g = do
       else Right Nothing
 
 elementsInModules :: [Module] -> [Binding]
-elementsInModules mods = L.sortBy (O.comparing bindingName) $ L.concat $ fmap moduleElements mods
+elementsInModules mods = L.sortBy (O.comparing bindingName) $ L.concat $ fmap moduleBindings mods
 
 elementsInKernelModules :: [Binding]
 elementsInKernelModules = elementsInModules kernelModules

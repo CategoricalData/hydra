@@ -119,33 +119,33 @@ module_ = Module ns elements
   where
     elements = [
       -- Python module metadata
-      toBinding emptyPythonModuleMetadata,
+      toTermDefinition emptyPythonModuleMetadata,
       -- Term and type encoding
-      toBinding termToPythonWithContext,
-      toBinding termToPython,
-      toBinding typeToPython,
+      toTermDefinition termToPythonWithContext,
+      toTermDefinition termToPython,
+      toTermDefinition typeToPython,
       -- Test codec construction
-      toBinding pythonTestCodec,
-      toBinding pythonTestCodecWithContext,
+      toTermDefinition pythonTestCodec,
+      toTermDefinition pythonTestCodecWithContext,
       -- Formatting helpers
-      toBinding formatPythonTestName,
-      toBinding namespaceToPythonModuleName,
+      toTermDefinition formatPythonTestName,
+      toTermDefinition namespaceToPythonModuleName,
       -- Templates
-      toBinding pythonTestCaseTemplate,
-      toBinding pythonTestGroupTemplate,
-      toBinding pythonModuleTemplate,
-      toBinding pythonImportTemplate,
+      toTermDefinition pythonTestCaseTemplate,
+      toTermDefinition pythonTestGroupTemplate,
+      toTermDefinition pythonModuleTemplate,
+      toTermDefinition pythonImportTemplate,
       -- Imports
-      toBinding findPythonImports,
+      toTermDefinition findPythonImports,
       -- Namespace helpers
-      toBinding namespacesForPythonModule,
+      toTermDefinition namespacesForPythonModule,
       -- Test hierarchy generation
-      toBinding generatePythonTestGroupHierarchy,
-      toBinding generatePythonTestCase,
+      toTermDefinition generatePythonTestGroupHierarchy,
+      toTermDefinition generatePythonTestCase,
       -- Test file generation
-      toBinding generateTestFileWithPythonCodec,
-      toBinding buildPythonTestModule,
-      toBinding generatePythonTestFile]
+      toTermDefinition generateTestFileWithPythonCodec,
+      toTermDefinition buildPythonTestModule,
+      toTermDefinition generatePythonTestFile]
 
 
 -- | Initial empty metadata for running encoding

@@ -358,12 +358,25 @@ moduleContainsBinaryLiterals mod =
                   _ -> False
                 _ -> False)
           termContainsBinary = \term -> Rewriting.foldOverTerm Coders.TraversalOrderPre checkTerm False term
-      in (Lists.foldl (\acc -> \el -> Logic.or acc (termContainsBinary (Core.bindingTerm el))) False (Module.moduleElements mod))
+          defTerms =
+                  Maybes.cat (Lists.map (\d -> case d of
+                    Module.DefinitionTerm v0 -> Just (Module.termDefinitionTerm v0)
+                    _ -> Nothing) (Module.moduleDefinitions mod))
+      in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsBinary t)) False defTerms)
 
 -- | Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)
 moduleDependencyNamespaces :: Context.Context -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> Module.Module -> Either (Context.InContext Errors.Error) (S.Set Module.Namespace)
 moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
-    Eithers.map (\deps -> Sets.delete (Module.moduleNamespace mod) deps) (dependencyNamespaces cx graph binds withPrims withNoms withSchema (Module.moduleElements mod))
+
+      let allBindings =
+              Maybes.cat (Lists.map (\d -> case d of
+                Module.DefinitionType v0 -> Just (Annotations.typeElement (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
+                Module.DefinitionTerm v0 -> Just (Core.Binding {
+                  Core.bindingName = (Module.termDefinitionName v0),
+                  Core.bindingTerm = (Module.termDefinitionTerm v0),
+                  Core.bindingType = (Module.termDefinitionType v0)})
+                _ -> Nothing) (Module.moduleDefinitions mod))
+      in (Eithers.map (\deps -> Sets.delete (Module.moduleNamespace mod) deps) (dependencyNamespaces cx graph binds withPrims withNoms withSchema allBindings))
 
 -- | Create namespaces mapping for definitions
 namespacesForDefinitions :: (Module.Namespace -> t0) -> Module.Namespace -> [Module.Definition] -> Module.Namespaces t0

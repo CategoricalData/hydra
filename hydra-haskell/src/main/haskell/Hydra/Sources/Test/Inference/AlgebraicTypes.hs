@@ -25,15 +25,15 @@ module_ = Module ns elements
     (Just "Inference tests for algebraic data types")
   where
     elements = [
-      Phantoms.toBinding allTests,
-      Phantoms.toBinding testGroupForCollectionPrimitives,
-      Phantoms.toBinding testGroupForEithers,
-      Phantoms.toBinding testGroupForFolds,
-      Phantoms.toBinding testGroupForLists,
-      Phantoms.toBinding testGroupForMaps,
-      Phantoms.toBinding testGroupForOptionals,
-      Phantoms.toBinding testGroupForPairs,
-      Phantoms.toBinding testGroupForSets]
+      Phantoms.toTermDefinition allTests,
+      Phantoms.toTermDefinition testGroupForCollectionPrimitives,
+      Phantoms.toTermDefinition testGroupForEithers,
+      Phantoms.toTermDefinition testGroupForFolds,
+      Phantoms.toTermDefinition testGroupForLists,
+      Phantoms.toTermDefinition testGroupForMaps,
+      Phantoms.toTermDefinition testGroupForOptionals,
+      Phantoms.toTermDefinition testGroupForPairs,
+      Phantoms.toTermDefinition testGroupForSets]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

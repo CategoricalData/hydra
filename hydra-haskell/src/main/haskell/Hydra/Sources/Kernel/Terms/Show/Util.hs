@@ -64,7 +64,7 @@ module_ = Module ns elements
     Just "String representations of hydra.util types"
   where
    elements = [
-     toBinding caseConvention]
+     toTermDefinition caseConvention]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

@@ -17,7 +17,7 @@ import qualified Hydra.Sources.Json.Model        as JsonModel
 
 
 module_ :: Module
-module_ = Module ns elements [JsonModel.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [JsonModel.ns] [Core.ns] $
     Just ("A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar")
   where
     ns = Namespace "hydra.ext.org.json.schema"

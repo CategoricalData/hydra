@@ -16,6 +16,7 @@ module Hydra.Ext.Demos.GraphqlJson (
 import Hydra.Kernel
 import Hydra.Ext.Generation
 import Hydra.Dsl.Bootstrap (bootstrapGraph)
+import Hydra.Module.Compat (moduleBindings)
 
 import qualified Hydra.Ext.Graphql.Coder as GraphqlCoder
 import qualified Hydra.Decode.Core as DecodeCore
@@ -64,14 +65,14 @@ generateGraphqlSchema outputDir = do
 
   -- Build the schema graph from kernel type modules
   let allMods = kernelTypesModules
-      schemaElements = concatMap (\m -> filter Annotations.isNativeType (moduleElements m)) allMods
+      schemaElements = concatMap (\m -> filter Annotations.isNativeType (moduleBindings m)) allMods
       schemaGraph = Lexical.elementsToGraph bootstrapGraph M.empty schemaElements
       cx = Context.Context [] [] M.empty
 
   -- For each schema module, decode types and run the coder
   let results = do
         mod <- schemaModules
-        let typeBindings = filter Annotations.isNativeType (moduleElements mod)
+        let typeBindings = filter Annotations.isNativeType (moduleBindings mod)
             typeDefs = bindingsToTypeDefinitions schemaGraph typeBindings
             defs = typeDefsToDefinitions typeDefs
         case GraphqlCoder.moduleToGraphql mod defs cx schemaGraph of

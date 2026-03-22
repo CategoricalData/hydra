@@ -78,44 +78,44 @@ module_ = Module ns elements
     Just "Functions for generating term encoders from type modules"
   where
     elements = [
-      toBinding encodeBinding,
-      toBinding encodeBindingName,
-      toBinding encoderCollectForallVariables,
-      toBinding encoderCollectOrdVars,
-      toBinding encoderCollectTypeVarsFromType,
-      toBinding encoderFullResultType,
-      toBinding encoderFullResultTypeNamed,
-      toBinding encoderType,
-      toBinding encoderTypeNamed,
-      toBinding encoderTypeScheme,
-      toBinding encoderTypeSchemeNamed,
-      toBinding prependForallEncoders,
-      toBinding encodeFieldValue,
-      toBinding encodeFloatValue,
-      toBinding encodeInjection,
-      toBinding encodeIntegerValue,
-      toBinding encodeListType,
-      toBinding encodeLiteralType,
-      toBinding encodeEitherType,
-      toBinding encodeForallType,
-      toBinding encodeMapType,
-      toBinding encodeOptionalType,
-      toBinding encodePairType,
-      toBinding encodeModule,
-      toBinding encodeName,
-      toBinding encodeNamespace,
-      toBinding encodeRecordType,
-      toBinding encodeRecordTypeNamed,
-      toBinding encodeSetType,
-      toBinding encodeType,
-      toBinding encodeTypeNamed,
-      toBinding encodeUnionType,
-      toBinding encodeUnionTypeNamed,
-      toBinding encodeWrappedType,
-      toBinding encodeWrappedTypeNamed,
-      toBinding filterTypeBindings,
-      toBinding isEncodableBinding,
-      toBinding isUnitType_]
+      toTermDefinition encodeBinding,
+      toTermDefinition encodeBindingName,
+      toTermDefinition encoderCollectForallVariables,
+      toTermDefinition encoderCollectOrdVars,
+      toTermDefinition encoderCollectTypeVarsFromType,
+      toTermDefinition encoderFullResultType,
+      toTermDefinition encoderFullResultTypeNamed,
+      toTermDefinition encoderType,
+      toTermDefinition encoderTypeNamed,
+      toTermDefinition encoderTypeScheme,
+      toTermDefinition encoderTypeSchemeNamed,
+      toTermDefinition prependForallEncoders,
+      toTermDefinition encodeFieldValue,
+      toTermDefinition encodeFloatValue,
+      toTermDefinition encodeInjection,
+      toTermDefinition encodeIntegerValue,
+      toTermDefinition encodeListType,
+      toTermDefinition encodeLiteralType,
+      toTermDefinition encodeEitherType,
+      toTermDefinition encodeForallType,
+      toTermDefinition encodeMapType,
+      toTermDefinition encodeOptionalType,
+      toTermDefinition encodePairType,
+      toTermDefinition encodeModule,
+      toTermDefinition encodeName,
+      toTermDefinition encodeNamespace,
+      toTermDefinition encodeRecordType,
+      toTermDefinition encodeRecordTypeNamed,
+      toTermDefinition encodeSetType,
+      toTermDefinition encodeType,
+      toTermDefinition encodeTypeNamed,
+      toTermDefinition encodeUnionType,
+      toTermDefinition encodeUnionTypeNamed,
+      toTermDefinition encodeWrappedType,
+      toTermDefinition encodeWrappedTypeNamed,
+      toTermDefinition filterTypeBindings,
+      toTermDefinition isEncodableBinding,
+      toTermDefinition isUnitType_]
 
 define :: String -> TTerm x -> TBinding x
 define = definitionInModule module_
@@ -500,7 +500,12 @@ encodeModule :: TBinding (Context -> Graph -> Module -> Prelude.Either (InContex
 encodeModule = define "encodeModule" $
   doc "Transform a type module into an encoder module" $
   "cx" ~> "graph" ~> "mod" ~>
-    "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@ (Module.moduleElements (var "mod"))) $
+    "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
+      (Maybes.cat $ Lists.map
+        ("d" ~> cases _Definition (var "d") (Just nothing) [
+          _Definition_type>>: "td" ~>
+            just (Annotations.typeElement @@ (Module.typeDefinitionName $ var "td") @@ (Module.typeDefinitionType $ var "td"))])
+        (Module.moduleDefinitions (var "mod")))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
       ("encodedBindings" <<~ Eithers.mapList ("b" ~>
@@ -512,7 +517,10 @@ encodeModule = define "encodeModule" $
         -- E.g., hydra.encode.constraints depends on hydra.encode.core (type dep) and hydra.encode.query (term dep)
         right (just (Module.module_
           (encodeNamespace @@ (Module.moduleNamespace (var "mod")))
-          (var "encodedBindings")
+          (Lists.map ("b" ~> Module.definitionTerm (Module.termDefinition
+            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingType $ var "b")))
+            (var "encodedBindings"))
           -- Transform both type and term dependency namespaces to their encoder namespaces
           (Lists.nub (Lists.concat2
             (primitive _lists_map @@ encodeNamespace @@ (Module.moduleTypeDependencies (var "mod")))

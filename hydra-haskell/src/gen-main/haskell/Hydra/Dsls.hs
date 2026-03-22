@@ -59,11 +59,16 @@ dslElementName typeName localName =
 -- | Transform a type module into a DSL module
 dslModule :: Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Errors.Error) (Maybe Module.Module)
 dslModule cx graph mod =
-    Eithers.bind (filterTypeBindings cx graph (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
+    Eithers.bind (filterTypeBindings cx graph (Maybes.cat (Lists.map (\d -> case d of
+      Module.DefinitionType v0 -> Just (Annotations.typeElement (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
+      _ -> Nothing) (Module.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError (Context.inContextObject ic)))),
       Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\dslBindings -> Right (Just (Module.Module {
       Module.moduleNamespace = (dslNamespace (Module.moduleNamespace mod)),
-      Module.moduleElements = (deduplicateBindings (Lists.concat dslBindings)),
+      Module.moduleDefinitions = (Lists.map (\b -> Module.DefinitionTerm (Module.TermDefinition {
+        Module.termDefinitionName = (Core.bindingName b),
+        Module.termDefinitionTerm = (Core.bindingTerm b),
+        Module.termDefinitionType = (Core.bindingType b)})) (deduplicateBindings (Lists.concat dslBindings))),
       Module.moduleTermDependencies = (Lists.nub (Lists.map dslNamespace (Module.moduleTypeDependencies mod))),
       Module.moduleTypeDependencies = (Lists.nub (Lists.concat2 [
         Module.moduleNamespace mod,

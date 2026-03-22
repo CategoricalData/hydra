@@ -88,7 +88,7 @@ pythonLanguageDefinition = definitionInModule pythonLanguageModule
 
 pythonLanguageModule :: Module
 pythonLanguageModule = Module (Namespace "hydra.ext.python.language")
-  [toBinding pythonLanguage, toBinding pythonReservedWords]
+  [toTermDefinition pythonLanguage, toTermDefinition pythonReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Python 3"

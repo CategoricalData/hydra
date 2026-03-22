@@ -88,7 +88,7 @@ define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.rust.language")
-  [toBinding rustLanguage, toBinding rustReservedWords]
+  [toTermDefinition rustLanguage, toTermDefinition rustReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Rust"

@@ -25,20 +25,20 @@ module_ = Module ns elements
     (Just "Inference tests for expected failures")
   where
     elements = [
-      Phantoms.toBinding allTests,
-      Phantoms.toBinding undefinedVariableTests,
-      Phantoms.toBinding unificationFailureTests,
-      Phantoms.toBinding invalidApplicationTests,
-      Phantoms.toBinding selfApplicationTests,
-      Phantoms.toBinding arityMismatchTests,
-      Phantoms.toBinding recursiveTypeTests,
-      Phantoms.toBinding occurCheckTests,
-      Phantoms.toBinding typeConstructorMisuseTests,
-      Phantoms.toBinding polymorphismViolationTests,
-      Phantoms.toBinding letBindingMismatchTests,
-      Phantoms.toBinding constraintSolverEdgeCaseTests,
-      Phantoms.toBinding primitiveTypeErrorTests,
-      Phantoms.toBinding complexConstraintFailureTests]
+      Phantoms.toTermDefinition allTests,
+      Phantoms.toTermDefinition undefinedVariableTests,
+      Phantoms.toTermDefinition unificationFailureTests,
+      Phantoms.toTermDefinition invalidApplicationTests,
+      Phantoms.toTermDefinition selfApplicationTests,
+      Phantoms.toTermDefinition arityMismatchTests,
+      Phantoms.toTermDefinition recursiveTypeTests,
+      Phantoms.toTermDefinition occurCheckTests,
+      Phantoms.toTermDefinition typeConstructorMisuseTests,
+      Phantoms.toTermDefinition polymorphismViolationTests,
+      Phantoms.toTermDefinition letBindingMismatchTests,
+      Phantoms.toTermDefinition constraintSolverEdgeCaseTests,
+      Phantoms.toTermDefinition primitiveTypeErrorTests,
+      Phantoms.toTermDefinition complexConstraintFailureTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

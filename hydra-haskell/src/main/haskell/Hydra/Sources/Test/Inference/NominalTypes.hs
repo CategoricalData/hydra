@@ -27,12 +27,12 @@ module_ = Module ns elements
     (Just "Inference tests for nominal types")
   where
     elements = [
-      Phantoms.toBinding allTests,
-      Phantoms.toBinding testGroupForCaseStatements,
-      Phantoms.toBinding testGroupForProjections,
-      Phantoms.toBinding testGroupForRecords,
-      Phantoms.toBinding testGroupForVariants,
-      Phantoms.toBinding testGroupForWrappers]
+      Phantoms.toTermDefinition allTests,
+      Phantoms.toTermDefinition testGroupForCaseStatements,
+      Phantoms.toTermDefinition testGroupForProjections,
+      Phantoms.toTermDefinition testGroupForRecords,
+      Phantoms.toTermDefinition testGroupForVariants,
+      Phantoms.toTermDefinition testGroupForWrappers]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

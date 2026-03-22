@@ -1148,7 +1148,7 @@ encodeDefinition cx env def_ =
       Module.DefinitionTerm v0 ->
         let name = Module.termDefinitionName v0
             term = Module.termDefinitionTerm v0
-            typ = Module.termDefinitionType v0
+            typ = Maybes.maybe (Core.TypeScheme [] (Core.TypeVariable (Core.Name "hydra.core.Unit")) Nothing) (\x -> x) (Module.termDefinitionType v0)
         in (Eithers.bind (Annotations.getTermDescription cx (pythonEnvironmentGetGraph env) term) (\comment ->
           let normComment = Maybes.map CoderUtils.normalizeComment comment
           in (Eithers.bind (encodeTermAssignment cx env name term typ normComment) (\stmt -> Right [
@@ -1297,7 +1297,7 @@ withDefinitions env defs body =
                 Module.DefinitionTerm v0 -> Just (Core.Binding {
                   Core.bindingName = (Module.termDefinitionName v0),
                   Core.bindingTerm = (Module.termDefinitionTerm v0),
-                  Core.bindingType = (Just (Module.termDefinitionType v0))})
+                  Core.bindingType = (Module.termDefinitionType v0)})
                 Module.DefinitionType _ -> Nothing
                 _ -> Nothing) defs)
           dummyLet =
@@ -2524,7 +2524,7 @@ gatherMetadata focusNs defs =
                   \meta -> \def -> case def of
                     Module.DefinitionTerm v0 ->
                       let term = Module.termDefinitionTerm v0
-                          typScheme = Module.termDefinitionType v0
+                          typScheme = Maybes.maybe (Core.TypeScheme [] (Core.TypeVariable (Core.Name "hydra.core.Unit")) Nothing) (\x -> x) (Module.termDefinitionType v0)
                           typ = Core.typeSchemeType typScheme
                           meta2 = extendMetaForType True True typ meta
                       in (extendMetaForTerm True meta2 term)

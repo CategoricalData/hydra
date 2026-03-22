@@ -85,7 +85,7 @@ import qualified Data.Maybe                                as Y
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.org.json.schema.language")
-  [toBinding jsonSchemaLanguage]
+  [toTermDefinition jsonSchemaLanguage]
   [Reflect.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for JSON Schema"

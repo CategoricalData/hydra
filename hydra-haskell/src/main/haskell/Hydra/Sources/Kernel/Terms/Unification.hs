@@ -69,11 +69,11 @@ module_ = Module ns elements
     Just ("Utilities for type unification.")
   where
    elements = [
-     toBinding joinTypes,
-     toBinding unifyTypeConstraints,
-     toBinding unifyTypeLists,
-     toBinding unifyTypes,
-     toBinding variableOccursInType]
+     toTermDefinition joinTypes,
+     toTermDefinition unifyTypeConstraints,
+     toTermDefinition unifyTypeLists,
+     toTermDefinition unifyTypes,
+     toTermDefinition variableOccursInType]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

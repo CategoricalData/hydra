@@ -34,7 +34,7 @@ module_ = Module ns elements
     kernelTypesNamespaces
     (Just "Test cases for term rewriting operations")
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

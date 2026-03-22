@@ -216,7 +216,7 @@ generateDslModules = generateCoderModulesIO Dsls.dslModule "DSL"
 writeDslHaskell :: FilePath -> [Module] -> [Module] -> IO ()
 writeDslHaskell basePath universeModules typeModules = do
     dslMods <- generateDslModules universeModules typeModules
-    let nonEmpty = filter (not . null . moduleElements) dslMods
+    let nonEmpty = filter (not . null . moduleDefinitions) dslMods
     let withCoreDeps = fmap addCoreDep nonEmpty
     _ <- generateSources moduleToHaskell haskellLanguage False False False False basePath universeModules withCoreDeps
     return ()
@@ -264,7 +264,7 @@ writeModulesJson doInfer basePath universeMods mods = do
 writeDslJson :: FilePath -> [Module] -> [Module] -> IO ()
 writeDslJson basePath universeModules typeModules = do
     dslMods <- generateDslModules universeModules typeModules
-    let nonEmpty = filter (not . null . moduleElements) dslMods
+    let nonEmpty = filter (not . null . moduleDefinitions) dslMods
     writeModulesJson False basePath universeModules nonEmpty
 
 -- | Write a manifest.json listing module namespaces for kernelModules, mainModules, and testModules.
@@ -272,7 +272,7 @@ writeDslJson basePath universeModules typeModules = do
 writeManifestJson :: FilePath -> IO ()
 writeManifestJson basePath = do
     dslMods <- generateDslModules Sources.mainModules Sources.kernelTypesModules
-    let nonEmptyDsls = filter (not . null . moduleElements) dslMods
+    let nonEmptyDsls = filter (not . null . moduleDefinitions) dslMods
     let jsonVal = Json.ValueObject $ M.fromList [
             ("dslModules", namespacesJson nonEmptyDsls),
             ("evalLibModules", namespacesJson EvalLib.evalLibModules),
@@ -379,7 +379,7 @@ buildNamespacesForTestGroup testGen testModule testGroup g = do
     let testCases = collectTestCases testGroup
         testTerms = concatMap extractTestTerms testCases
         testBindings = zipWith (\i term -> Binding (Name $ "_test_" ++ show i) term Nothing) ([0..] :: [Integer]) testTerms
-        tempModule = testModule { moduleElements = testBindings }
+        tempModule = testModule { moduleDefinitions = map bindingToDefinition testBindings }
     testGeneratorNamespacesForModule testGen tempModule g
   where
     extractTestTerms (TestCaseWithMetadata _ tcase _ _) = case tcase of

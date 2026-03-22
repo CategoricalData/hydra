@@ -32,7 +32,7 @@ module_ = Module ns elements
     (Just "Test cases for JSON parsing")
   where
     elements = [
-        Phantoms.toBinding allTests]
+        Phantoms.toTermDefinition allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

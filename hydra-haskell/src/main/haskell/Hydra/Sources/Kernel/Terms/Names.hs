@@ -68,14 +68,14 @@ module_ = Module ns elements
     Just ("Functions for working with qualified names.")
   where
    elements = [
-     toBinding compactName,
-     toBinding localNameOf,
-     toBinding namespaceOf,
-     toBinding namespaceToFilePath,
-     toBinding qname,
-     toBinding qualifyName,
-     toBinding uniqueLabel,
-     toBinding unqualifyName]
+     toTermDefinition compactName,
+     toTermDefinition localNameOf,
+     toTermDefinition namespaceOf,
+     toTermDefinition namespaceToFilePath,
+     toTermDefinition qname,
+     toTermDefinition qualifyName,
+     toTermDefinition uniqueLabel,
+     toTermDefinition unqualifyName]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

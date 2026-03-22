@@ -54,13 +54,13 @@ module_ = Module ns elements
     Just "YAML encoding and decoding for Hydra terms"
   where
     elements = [
-      toBinding yamlCoder,
-      toBinding literalYamlCoder,
-      toBinding recordCoder,
-      toBinding encodeRecord,
-      toBinding decodeRecord,
-      toBinding termCoder,
-      toBinding unitCoder]
+      toTermDefinition yamlCoder,
+      toTermDefinition literalYamlCoder,
+      toTermDefinition recordCoder,
+      toTermDefinition encodeRecord,
+      toTermDefinition decodeRecord,
+      toTermDefinition termCoder,
+      toTermDefinition unitCoder]
 
 yamlCoder :: TBinding (Type -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
 yamlCoder = define "yamlCoder" $

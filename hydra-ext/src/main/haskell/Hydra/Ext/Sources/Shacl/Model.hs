@@ -29,7 +29,7 @@ rdf :: String -> Type
 rdf = typeref $ RdfSyntax.ns
 
 module_ :: Module
-module_ = Module ns elements [RdfSyntax.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [RdfSyntax.ns] [Core.ns] $
     Just "A SHACL syntax model. See https://www.w3.org/TR/shacl"
   where
     elements = [

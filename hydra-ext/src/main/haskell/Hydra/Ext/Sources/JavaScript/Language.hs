@@ -90,7 +90,7 @@ define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.javaScript.language")
-  [toBinding javaScriptLanguage, toBinding javaScriptReservedWords]
+  [toTermDefinition javaScriptLanguage, toTermDefinition javaScriptReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for JavaScript (ECMAScript 2024)"

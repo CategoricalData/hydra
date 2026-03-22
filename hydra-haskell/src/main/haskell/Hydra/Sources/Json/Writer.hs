@@ -99,11 +99,11 @@ module_ = Module ns elements
   where
     ns = Namespace "hydra.json.writer"
     elements = [
-      toBinding colonOp,
-      toBinding jsonString,
-      toBinding keyValueToExpr,
-      toBinding printJson,
-      toBinding valueToExpr]
+      toTermDefinition colonOp,
+      toTermDefinition jsonString,
+      toTermDefinition keyValueToExpr,
+      toTermDefinition printJson,
+      toTermDefinition valueToExpr]
 
 colonOp :: TBinding Op
 colonOp = jsonSerdeDefinition "colonOp" $

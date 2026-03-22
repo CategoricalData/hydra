@@ -42,7 +42,7 @@ module_ :: Module
 module_ = Module ns elements [Annotations.ns, Lexical.ns] [] $
     Just "Test cases for hydra.annotations functions"
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
 
 
 -- | Test cases for getTermAnnotation and setTermAnnotation

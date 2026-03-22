@@ -26,7 +26,7 @@ module_ :: Module
 module_ = Module ns elements [] [] $
     Just "Test cases for hydra.lib.pairs primitives"
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
 
 -- Helper to create pair terms
 pairTerm :: Int -> String -> TTerm Term

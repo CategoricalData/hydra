@@ -38,7 +38,7 @@ module_ = Module ns elements
     kernelTypesNamespaces
     (Just "Test cases for topological sorting algorithms")
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = Phantoms.definitionInModule module_

@@ -69,7 +69,7 @@ module_ = Module ns elements
     Just ("Extraction and validation for hydra.util types")
   where
    elements = [
-     toBinding comparison]
+     toTermDefinition comparison]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

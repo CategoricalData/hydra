@@ -101,17 +101,17 @@ module_ = Module ns elements
     Just "Serialization functions for converting Pegasus PDL AST to abstract expressions"
   where
     elements = [
-      toBinding exprAnnotations,
-      toBinding exprEnumField,
-      toBinding exprImport,
-      toBinding exprNamedSchema,
-      toBinding exprPrimitiveType,
-      toBinding exprQualifiedName,
-      toBinding exprRecordField,
-      toBinding exprSchema,
-      toBinding exprSchemaFile,
-      toBinding exprUnionMember,
-      toBinding withAnnotations]
+      toTermDefinition exprAnnotations,
+      toTermDefinition exprEnumField,
+      toTermDefinition exprImport,
+      toTermDefinition exprNamedSchema,
+      toTermDefinition exprPrimitiveType,
+      toTermDefinition exprQualifiedName,
+      toTermDefinition exprRecordField,
+      toTermDefinition exprSchema,
+      toTermDefinition exprSchemaFile,
+      toTermDefinition exprUnionMember,
+      toTermDefinition withAnnotations]
 
 
 exprAnnotations :: TBinding (PDL.Annotations -> Maybe Expr)

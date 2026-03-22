@@ -70,22 +70,22 @@ module_ = Module ns elements
     Just "Validation functions for core terms and types"
   where
    elements = [
-     toBinding checkDuplicateBindings,
-     toBinding checkDuplicateFields,
-     toBinding checkDuplicateFieldTypes,
-     toBinding checkShadowing,
-     toBinding checkTerm,
-     toBinding validateTypeNode,
-     toBinding checkUndefinedTypeVariablesInType,
-     toBinding checkUndefinedTypeVariablesInTypeScheme,
-     toBinding checkVoid,
-     toBinding findDuplicate,
-     toBinding findDuplicateFieldType,
-     toBinding firstError,
-     toBinding firstTypeError,
-     toBinding isValidName,
-     toBinding term,
-     toBinding type_]
+     toTermDefinition checkDuplicateBindings,
+     toTermDefinition checkDuplicateFields,
+     toTermDefinition checkDuplicateFieldTypes,
+     toTermDefinition checkShadowing,
+     toTermDefinition checkTerm,
+     toTermDefinition validateTypeNode,
+     toTermDefinition checkUndefinedTypeVariablesInType,
+     toTermDefinition checkUndefinedTypeVariablesInTypeScheme,
+     toTermDefinition checkVoid,
+     toTermDefinition findDuplicate,
+     toTermDefinition findDuplicateFieldType,
+     toTermDefinition firstError,
+     toTermDefinition firstTypeError,
+     toTermDefinition isValidName,
+     toTermDefinition term,
+     toTermDefinition type_]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

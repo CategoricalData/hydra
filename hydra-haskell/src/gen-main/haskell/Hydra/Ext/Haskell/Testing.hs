@@ -318,7 +318,10 @@ buildNamespacesForTestGroup mod tgroup graph_ =
           tempModule =
                   Module.Module {
                     Module.moduleNamespace = (Module.moduleNamespace mod),
-                    Module.moduleElements = testBindings,
+                    Module.moduleDefinitions = (Lists.map (\b -> Module.DefinitionTerm (Module.TermDefinition {
+                      Module.termDefinitionName = (Core.bindingName b),
+                      Module.termDefinitionTerm = (Core.bindingTerm b),
+                      Module.termDefinitionType = (Core.bindingType b)})) testBindings),
                     Module.moduleTermDependencies = (Module.moduleTermDependencies mod),
                     Module.moduleTypeDependencies = (Module.moduleTypeDependencies mod),
                     Module.moduleDescription = (Module.moduleDescription mod)}

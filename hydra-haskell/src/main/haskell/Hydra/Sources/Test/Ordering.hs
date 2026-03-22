@@ -26,7 +26,7 @@ module_ :: Module
 module_ = Module ns elements [] [] $
     Just "Test cases for Ord instance comparisons on complex Hydra types"
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
 
 -- Helper for comparison result - exactly matching Equality.hs style
 compResult :: String -> TTerm Term

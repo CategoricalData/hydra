@@ -70,16 +70,16 @@ module_ = Module ns elements
     Just "Helper functions for decoding terms to domain types"
   where
     elements = [
-      toBinding decodeEither,
-      toBinding decodeList,
-      toBinding decodeMap,
-      toBinding decodeMaybe,
-      toBinding decodePair,
-      toBinding decodeSet,
-      toBinding decodeUnit,
-      toBinding decodeWrapped,
-      toBinding requireField,
-      toBinding toFieldMap]
+      toTermDefinition decodeEither,
+      toTermDefinition decodeList,
+      toTermDefinition decodeMap,
+      toTermDefinition decodeMaybe,
+      toTermDefinition decodePair,
+      toTermDefinition decodeSet,
+      toTermDefinition decodeUnit,
+      toTermDefinition decodeWrapped,
+      toTermDefinition requireField,
+      toTermDefinition toFieldMap]
 
 define :: String -> TTerm x -> TBinding x
 define = definitionInModule module_

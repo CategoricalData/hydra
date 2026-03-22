@@ -74,18 +74,18 @@ module_ = Module ns elements
       <> " https://hackage.haskell.org/package/GraphSCC.")
   where
    elements = [
-     toBinding adjacencyListToMap,
-     toBinding adjacencyListsToGraph,
-     toBinding createOrderingIsomorphism,
-     toBinding findReachableNodes,
-     toBinding initialState,
-     toBinding popStackUntil,
-     toBinding propagateTags,
-     toBinding strongConnect,
-     toBinding stronglyConnectedComponents,
-     toBinding topologicalSort,
-     toBinding topologicalSortComponents,
-     toBinding topologicalSortNodes]
+     toTermDefinition adjacencyListToMap,
+     toTermDefinition adjacencyListsToGraph,
+     toTermDefinition createOrderingIsomorphism,
+     toTermDefinition findReachableNodes,
+     toTermDefinition initialState,
+     toTermDefinition popStackUntil,
+     toTermDefinition propagateTags,
+     toTermDefinition strongConnect,
+     toTermDefinition stronglyConnectedComponents,
+     toTermDefinition topologicalSort,
+     toTermDefinition topologicalSortComponents,
+     toTermDefinition topologicalSortNodes]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

@@ -104,8 +104,8 @@ module_ = Module ns elements
     Just "JSON-to-YAML encoding. Converts JSON Values to YAML Nodes (always succeeds), and Hydra Terms to YAML Nodes via JSON."
   where
     elements = [
-      toBinding jsonToYaml,
-      toBinding toYaml]
+      toTermDefinition jsonToYaml,
+      toTermDefinition toYaml]
 
 -- | Convert a JSON Value to a YAML Node. This always succeeds since YAML is a superset of JSON.
 jsonToYaml :: TBinding (Value -> YM.Node)

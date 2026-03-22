@@ -88,7 +88,7 @@ shaclLanguageDefinition = definitionInModule shaclLanguageModule
 
 shaclLanguageModule :: Module
 shaclLanguageModule = Module (Namespace "hydra.ext.shacl.language")
-  [toBinding shaclLanguage]
+  [toTermDefinition shaclLanguage]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for W3C SHACL"

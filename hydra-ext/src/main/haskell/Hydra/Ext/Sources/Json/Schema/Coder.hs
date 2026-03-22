@@ -112,14 +112,14 @@ module_ = Module ns elements
     Just "JSON Schema code generator: converts Hydra modules to JSON Schema documents"
   where
     elements = [
-      toBinding moduleToJsonSchema,
-      toBinding constructModule,
-      toBinding encodeField,
-      toBinding encodeName,
-      toBinding encodeNamedType,
-      toBinding encodeType,
-      toBinding isRequiredField,
-      toBinding referenceRestriction]
+      toTermDefinition moduleToJsonSchema,
+      toTermDefinition constructModule,
+      toTermDefinition encodeField,
+      toTermDefinition encodeName,
+      toTermDefinition encodeNamedType,
+      toTermDefinition encodeType,
+      toTermDefinition isRequiredField,
+      toTermDefinition referenceRestriction]
 
 
 -- | Result type alias

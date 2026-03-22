@@ -85,18 +85,18 @@ module_ = Module ns elements
     Just "Functions for reducing terms and types, i.e. performing computations."
   where
    elements = [
-     toBinding alphaConvert,
-     toBinding betaReduceType,
-     toBinding contractTerm,
-     toBinding countPrimitiveInvocations,
-     toBinding etaReduceTerm,
-     toBinding etaExpandTerm,
-     toBinding etaExpandTermNew,
-     toBinding etaExpansionArity,
-     toBinding etaExpandTypedTerm,
-     toBinding reduceTerm,
-     toBinding termIsClosed,
-     toBinding termIsValue]
+     toTermDefinition alphaConvert,
+     toTermDefinition betaReduceType,
+     toTermDefinition contractTerm,
+     toTermDefinition countPrimitiveInvocations,
+     toTermDefinition etaReduceTerm,
+     toTermDefinition etaExpandTerm,
+     toTermDefinition etaExpandTermNew,
+     toTermDefinition etaExpansionArity,
+     toTermDefinition etaExpandTypedTerm,
+     toTermDefinition reduceTerm,
+     toTermDefinition termIsClosed,
+     toTermDefinition termIsValue]
 
 formatError :: TTerm (InContext Error -> String)
 formatError = "_fic" ~> ShowError.error_ @@ Ctx.inContextObject (var "_fic")

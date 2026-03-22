@@ -111,20 +111,20 @@ module_ = Module ns elements
     Just "Python naming utilities: encoding Hydra names as Python names"
   where
     elements = [
-      toBinding useFutureAnnotations,
-      toBinding encodeConstantForFieldName,
-      toBinding encodeConstantForTypeName,
-      toBinding encodeEnumValue,
-      toBinding encodeFieldName,
-      toBinding encodeName,
-      toBinding encodeNameQualified,
-      toBinding encodeNamespace,
-      toBinding encodeTypeVariable,
-      toBinding sanitizePythonName,
-      toBinding termVariableReference,
-      toBinding typeVariableReference,
-      toBinding variantName,
-      toBinding variableReference]
+      toTermDefinition useFutureAnnotations,
+      toTermDefinition encodeConstantForFieldName,
+      toTermDefinition encodeConstantForTypeName,
+      toTermDefinition encodeEnumValue,
+      toTermDefinition encodeFieldName,
+      toTermDefinition encodeName,
+      toTermDefinition encodeNameQualified,
+      toTermDefinition encodeNamespace,
+      toTermDefinition encodeTypeVariable,
+      toTermDefinition sanitizePythonName,
+      toTermDefinition termVariableReference,
+      toTermDefinition typeVariableReference,
+      toTermDefinition variantName,
+      toTermDefinition variableReference]
 
 -- | Temporary flag for Python code generation - use __future__ annotations.
 useFutureAnnotations :: TBinding Bool

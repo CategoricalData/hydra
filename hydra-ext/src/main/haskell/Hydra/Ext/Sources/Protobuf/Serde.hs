@@ -101,27 +101,27 @@ module_ = Module ns elements
     Just "Serialization functions for converting Protocol Buffers v3 AST to abstract expressions"
   where
     elements = [
-      toBinding deprecatedOptionName,
-      toBinding descriptionOptionName,
-      toBinding excludeInternalOptions,
-      toBinding optDesc,
-      toBinding protoBlock,
-      toBinding semi,
-      toBinding writeDefinition,
-      toBinding writeEnumDefinition,
-      toBinding writeEnumValue,
-      toBinding writeField,
-      toBinding writeFieldOption,
-      toBinding writeFieldOptions,
-      toBinding writeFieldType,
-      toBinding writeFileOption,
-      toBinding writeFileOptions,
-      toBinding writeImport,
-      toBinding writeMessageDefinition,
-      toBinding writeProtoFile,
-      toBinding writeScalarType,
-      toBinding writeSimpleType,
-      toBinding writeValue]
+      toTermDefinition deprecatedOptionName,
+      toTermDefinition descriptionOptionName,
+      toTermDefinition excludeInternalOptions,
+      toTermDefinition optDesc,
+      toTermDefinition protoBlock,
+      toTermDefinition semi,
+      toTermDefinition writeDefinition,
+      toTermDefinition writeEnumDefinition,
+      toTermDefinition writeEnumValue,
+      toTermDefinition writeField,
+      toTermDefinition writeFieldOption,
+      toTermDefinition writeFieldOptions,
+      toTermDefinition writeFieldType,
+      toTermDefinition writeFileOption,
+      toTermDefinition writeFileOptions,
+      toTermDefinition writeImport,
+      toTermDefinition writeMessageDefinition,
+      toTermDefinition writeProtoFile,
+      toTermDefinition writeScalarType,
+      toTermDefinition writeSimpleType,
+      toTermDefinition writeValue]
 
 
 deprecatedOptionName :: TBinding String

@@ -30,12 +30,12 @@ module_ = Module ns elements
     (Just "Test cases for core term and type validation")
   where
     elements = [
-      Phantoms.toBinding allTests,
-      Phantoms.toBinding duplicateBindingsTests,
-      Phantoms.toBinding duplicateFieldsTests,
-      Phantoms.toBinding emptyLetBindingsTests,
-      Phantoms.toBinding identityApplicationTests,
-      Phantoms.toBinding variableShadowingTests]
+      Phantoms.toTermDefinition allTests,
+      Phantoms.toTermDefinition duplicateBindingsTests,
+      Phantoms.toTermDefinition duplicateFieldsTests,
+      Phantoms.toTermDefinition emptyLetBindingsTests,
+      Phantoms.toTermDefinition identityApplicationTests,
+      Phantoms.toTermDefinition variableShadowingTests]
       -- Commented out pending test gen fixes (raw constructors / unresolvable names):
       -- annotationTests, selfApplicationTests, emptyCaseStatementTests,
       -- emptyTypeNameTests, namingConventionTests

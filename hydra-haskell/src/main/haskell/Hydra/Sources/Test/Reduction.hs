@@ -26,7 +26,7 @@ module_ :: Module
 module_ = Module ns elements [] [] $
     Just "Test cases for term reduction/evaluation mechanics"
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
 
 -- | Test cases for beta reduction (lambda application)
 betaReductionTests :: TTerm TestGroup

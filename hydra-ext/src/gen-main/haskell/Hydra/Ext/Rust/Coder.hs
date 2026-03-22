@@ -462,7 +462,7 @@ encodeTermDefinition cx g tdef =
 
       let name = Module.termDefinitionName tdef
           term = Module.termDefinitionTerm tdef
-          tscheme = Module.termDefinitionType tdef
+          tscheme = Maybes.maybe (Core.TypeScheme [] (Core.TypeVariable (Core.Name "hydra.core.Unit")) Nothing) (\x -> x) (Module.termDefinitionType tdef)
           lname = Formatting.convertCaseCamelToLowerSnake (Names.localNameOf name)
           typ = Core.typeSchemeType tscheme
       in (Eithers.bind (encodeTerm cx g term) (\body -> Eithers.bind (encodeType cx g typ) (\retType -> Right (Syntax.ItemWithComments {

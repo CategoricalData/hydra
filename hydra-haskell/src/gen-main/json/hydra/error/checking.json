@@ -1,1944 +1,388 @@
 {
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.error.checking.CheckingError",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "An error that occurred during type checking"}}}],
+            "body": {
+              "union": [
+                {
+                  "name": "incorrectUnification",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A post-unification consistency check failure"}}}],
+                      "body": {"variable": "hydra.error.checking.IncorrectUnificationError"}}}},
+                {
+                  "name": "notAForallType",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A type that is not a forall type when one was expected"}}}],
+                      "body": {"variable": "hydra.error.checking.NotAForallTypeError"}}}},
+                {
+                  "name": "notAFunctionType",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A type that is not a function type when one was expected"}}}],
+                      "body": {"variable": "hydra.error.checking.NotAFunctionTypeError"}}}},
+                {
+                  "name": "typeArityMismatch",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "A type constructor applied to the wrong number of arguments"}}}],
+                      "body": {"variable": "hydra.error.checking.TypeArityMismatchError"}}}},
+                {
+                  "name": "typeMismatch",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A type mismatch between expected and actual types"}}}],
+                      "body": {"variable": "hydra.error.checking.TypeMismatchError"}}}},
+                {
+                  "name": "unboundTypeVariables",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Type variables that are not bound in scope"}}}],
+                      "body": {"variable": "hydra.error.checking.UnboundTypeVariablesError"}}}},
+                {
+                  "name": "unequalTypes",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "Multiple types that should be equal but are not"}}}],
+                      "body": {"variable": "hydra.error.checking.UnequalTypesError"}}}},
+                {
+                  "name": "unsupportedTermVariant",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "A term variant that the type checker does not support"}}}],
+                      "body": {"variable": "hydra.error.checking.UnsupportedTermVariantError"}}}},
+                {
+                  "name": "untypedLambda",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "A lambda expression without a type annotation on its parameter"}}}],
+                      "body": {"variable": "hydra.error.checking.UntypedLambdaError"}}}},
+                {
+                  "name": "untypedLetBinding",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "A let binding without a type annotation"}}}],
+                      "body": {"variable": "hydra.error.checking.UntypedLetBindingError"}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.error.checking.IncorrectUnificationError",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {"string": "A post-unification consistency check failure"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "substitution",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "The substitution that failed the consistency check"}}}],
+                      "body": {"variable": "hydra.typing.TypeSubst"}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.error.checking.NotAForallTypeError",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A type that is not a forall type when type arguments are being applied"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "type",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}}},
+                {
+                  "name": "typeArguments",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The type arguments that were being applied"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.error.checking.NotAFunctionTypeError",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A type that is not a function type when one was expected in an application"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "type",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.error.checking.TypeArityMismatchError",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A type constructor applied to the wrong number of type arguments"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "type",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The type being checked"}}}],
+                      "body": {"variable": "hydra.core.Type"}}}},
+                {
+                  "name": "expectedArity",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The expected number of type arguments"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}}},
+                {
+                  "name": "actualArity",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "The actual number of type arguments provided"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}}},
+                {
+                  "name": "typeArguments",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The type arguments that were provided"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.error.checking.TypeMismatchError",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {"string": "A type mismatch between expected and actual types"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "expectedType",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The expected type"}}}],
+                      "body": {"variable": "hydra.core.Type"}}}},
+                {
+                  "name": "actualType",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The actual type encountered"}}}],
+                      "body": {"variable": "hydra.core.Type"}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.error.checking.UnboundTypeVariablesError",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "Type variables that appear free in a type but are not bound in scope"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "variables",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The set of unbound type variable names"}}}],
+                      "body": {"set": {"variable": "hydra.core.Name"}}}}},
+                {
+                  "name": "type",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The type containing the unbound variables"}}}],
+                      "body": {"variable": "hydra.core.Type"}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.error.checking.UnequalTypesError",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {"string": "Multiple types that should all be equal but are not"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "types",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The list of types that are not all equal"}}}],
+                      "body": {"list": {"variable": "hydra.core.Type"}}}}},
+                {
+                  "name": "description",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "A description of the context in which the types were expected to be equal"}}}],
+                      "body": {"literal": {"string": {}}}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.error.checking.UnsupportedTermVariantError",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {"string": "A term variant that the type checker does not support"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "termVariant",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The unsupported term variant"}}}],
+                      "body": {"variable": "hydra.variants.TermVariant"}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.error.checking.UntypedLambdaError",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A lambda expression without a type annotation on its parameter"}}}],
+            "body": {"record": []}}}}},
+    {
+      "type": {
+        "name": "hydra.error.checking.UntypedLetBindingError",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "A let binding without a type annotation"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "binding",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The untyped binding"}}}],
+                      "body": {"variable": "hydra.core.Binding"}}}}]}}}}}],
   "description": ["Error types for type checking"],
-  "elements": [
-    {
-      "name": "hydra.error.checking.CheckingError",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "annotated",
-                "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "union",
-                              "term": {
-                                "list": [
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "incorrectUnification"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {
-                                                                    "literal": {"string": "hydra.error.checking.IncorrectUnificationError"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {
-                                                                            "literal": {"string": "A post-unification consistency check failure"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "notAForallType"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.error.checking.NotAForallTypeError"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {
-                                                                            "literal": {"string": "A type that is not a forall type when one was expected"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "notAFunctionType"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.error.checking.NotAFunctionTypeError"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {
-                                                                            "literal": {"string": "A type that is not a function type when one was expected"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "typeArityMismatch"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.error.checking.TypeArityMismatchError"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {
-                                                                            "literal": {
-                                                                              "string": "A type constructor applied to the wrong number of arguments"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "typeMismatch"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.error.checking.TypeMismatchError"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {
-                                                                            "literal": {"string": "A type mismatch between expected and actual types"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "unboundTypeVariables"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {
-                                                                    "literal": {"string": "hydra.error.checking.UnboundTypeVariablesError"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "Type variables that are not bound in scope"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "unequalTypes"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.error.checking.UnequalTypesError"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {
-                                                                            "literal": {"string": "Multiple types that should be equal but are not"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "unsupportedTermVariant"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {
-                                                                    "literal": {"string": "hydra.error.checking.UnsupportedTermVariantError"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {
-                                                                            "literal": {"string": "A term variant that the type checker does not support"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "untypedLambda"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.error.checking.UntypedLambdaError"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {
-                                                                            "literal": {
-                                                                              "string": "A lambda expression without a type annotation on its parameter"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "untypedLetBinding"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.error.checking.UntypedLetBindingError"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "A let binding without a type annotation"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}}]}},
-                            "typeName": "hydra.core.Type"}}},
-                      {
-                        "name": "annotation",
-                        "term": {
-                          "map": [
-                            {
-                              "@key": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "description"}},
-                                  "typeName": "hydra.core.Name"}},
-                              "@value": {
-                                "union": {
-                                  "field": {
-                                    "name": "literal",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "string",
-                                          "term": {"literal": {"string": "An error that occurred during type checking"}}},
-                                        "typeName": "hydra.core.Literal"}}},
-                                  "typeName": "hydra.core.Term"}}}]}}],
-                    "typeName": "hydra.core.AnnotatedType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.error.checking.IncorrectUnificationError",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "annotated",
-                "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "list": [
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "substitution"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.typing.TypeSubst"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {
-                                                                            "literal": {"string": "The substitution that failed the consistency check"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}}]}},
-                            "typeName": "hydra.core.Type"}}},
-                      {
-                        "name": "annotation",
-                        "term": {
-                          "map": [
-                            {
-                              "@key": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "description"}},
-                                  "typeName": "hydra.core.Name"}},
-                              "@value": {
-                                "union": {
-                                  "field": {
-                                    "name": "literal",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "string",
-                                          "term": {
-                                            "literal": {"string": "A post-unification consistency check failure"}}},
-                                        "typeName": "hydra.core.Literal"}}},
-                                  "typeName": "hydra.core.Term"}}}]}}],
-                    "typeName": "hydra.core.AnnotatedType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.error.checking.NotAForallTypeError",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "annotated",
-                "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "list": [
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "type"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.core.Type"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "The actual type encountered"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "typeArguments"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "list",
-                                                              "term": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "variable",
-                                                                    "term": {
-                                                                      "wrap": {
-                                                                        "body": {"literal": {"string": "hydra.core.Type"}},
-                                                                        "typeName": "hydra.core.Name"}}},
-                                                                  "typeName": "hydra.core.Type"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "The type arguments that were being applied"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}}]}},
-                            "typeName": "hydra.core.Type"}}},
-                      {
-                        "name": "annotation",
-                        "term": {
-                          "map": [
-                            {
-                              "@key": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "description"}},
-                                  "typeName": "hydra.core.Name"}},
-                              "@value": {
-                                "union": {
-                                  "field": {
-                                    "name": "literal",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "string",
-                                          "term": {
-                                            "literal": {
-                                              "string": "A type that is not a forall type when type arguments are being applied"}}},
-                                        "typeName": "hydra.core.Literal"}}},
-                                  "typeName": "hydra.core.Term"}}}]}}],
-                    "typeName": "hydra.core.AnnotatedType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.error.checking.NotAFunctionTypeError",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "annotated",
-                "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "list": [
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "type"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.core.Type"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "The actual type encountered"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}}]}},
-                            "typeName": "hydra.core.Type"}}},
-                      {
-                        "name": "annotation",
-                        "term": {
-                          "map": [
-                            {
-                              "@key": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "description"}},
-                                  "typeName": "hydra.core.Name"}},
-                              "@value": {
-                                "union": {
-                                  "field": {
-                                    "name": "literal",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "string",
-                                          "term": {
-                                            "literal": {
-                                              "string": "A type that is not a function type when one was expected in an application"}}},
-                                        "typeName": "hydra.core.Literal"}}},
-                                  "typeName": "hydra.core.Term"}}}]}}],
-                    "typeName": "hydra.core.AnnotatedType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.error.checking.TypeArityMismatchError",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "annotated",
-                "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "list": [
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "type"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.core.Type"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "The type being checked"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "expectedArity"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "literal",
-                                                              "term": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "integer",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {"name": "int32", "term": {"unit": {}}},
-                                                                        "typeName": "hydra.core.IntegerType"}}},
-                                                                  "typeName": "hydra.core.LiteralType"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "The expected number of type arguments"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "actualArity"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "literal",
-                                                              "term": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "integer",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {"name": "int32", "term": {"unit": {}}},
-                                                                        "typeName": "hydra.core.IntegerType"}}},
-                                                                  "typeName": "hydra.core.LiteralType"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {
-                                                                            "literal": {"string": "The actual number of type arguments provided"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "typeArguments"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "list",
-                                                              "term": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "variable",
-                                                                    "term": {
-                                                                      "wrap": {
-                                                                        "body": {"literal": {"string": "hydra.core.Type"}},
-                                                                        "typeName": "hydra.core.Name"}}},
-                                                                  "typeName": "hydra.core.Type"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "The type arguments that were provided"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}}]}},
-                            "typeName": "hydra.core.Type"}}},
-                      {
-                        "name": "annotation",
-                        "term": {
-                          "map": [
-                            {
-                              "@key": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "description"}},
-                                  "typeName": "hydra.core.Name"}},
-                              "@value": {
-                                "union": {
-                                  "field": {
-                                    "name": "literal",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "string",
-                                          "term": {
-                                            "literal": {
-                                              "string": "A type constructor applied to the wrong number of type arguments"}}},
-                                        "typeName": "hydra.core.Literal"}}},
-                                  "typeName": "hydra.core.Term"}}}]}}],
-                    "typeName": "hydra.core.AnnotatedType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.error.checking.TypeMismatchError",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "annotated",
-                "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "list": [
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "expectedType"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.core.Type"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "The expected type"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "actualType"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.core.Type"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "The actual type encountered"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}}]}},
-                            "typeName": "hydra.core.Type"}}},
-                      {
-                        "name": "annotation",
-                        "term": {
-                          "map": [
-                            {
-                              "@key": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "description"}},
-                                  "typeName": "hydra.core.Name"}},
-                              "@value": {
-                                "union": {
-                                  "field": {
-                                    "name": "literal",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "string",
-                                          "term": {
-                                            "literal": {"string": "A type mismatch between expected and actual types"}}},
-                                        "typeName": "hydra.core.Literal"}}},
-                                  "typeName": "hydra.core.Term"}}}]}}],
-                    "typeName": "hydra.core.AnnotatedType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.error.checking.UnboundTypeVariablesError",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "annotated",
-                "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "list": [
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "variables"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "set",
-                                                              "term": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "variable",
-                                                                    "term": {
-                                                                      "wrap": {
-                                                                        "body": {"literal": {"string": "hydra.core.Name"}},
-                                                                        "typeName": "hydra.core.Name"}}},
-                                                                  "typeName": "hydra.core.Type"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "The set of unbound type variable names"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "type"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.core.Type"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "The type containing the unbound variables"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}}]}},
-                            "typeName": "hydra.core.Type"}}},
-                      {
-                        "name": "annotation",
-                        "term": {
-                          "map": [
-                            {
-                              "@key": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "description"}},
-                                  "typeName": "hydra.core.Name"}},
-                              "@value": {
-                                "union": {
-                                  "field": {
-                                    "name": "literal",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "string",
-                                          "term": {
-                                            "literal": {
-                                              "string": "Type variables that appear free in a type but are not bound in scope"}}},
-                                        "typeName": "hydra.core.Literal"}}},
-                                  "typeName": "hydra.core.Term"}}}]}}],
-                    "typeName": "hydra.core.AnnotatedType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.error.checking.UnequalTypesError",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "annotated",
-                "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "list": [
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "types"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "list",
-                                                              "term": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "variable",
-                                                                    "term": {
-                                                                      "wrap": {
-                                                                        "body": {"literal": {"string": "hydra.core.Type"}},
-                                                                        "typeName": "hydra.core.Name"}}},
-                                                                  "typeName": "hydra.core.Type"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "The list of types that are not all equal"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}},
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "description"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "literal",
-                                                              "term": {
-                                                                "union": {
-                                                                  "field": {"name": "string", "term": {"unit": {}}},
-                                                                  "typeName": "hydra.core.LiteralType"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {
-                                                                            "literal": {
-                                                                              "string": "A description of the context in which the types were expected to be equal"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}}]}},
-                            "typeName": "hydra.core.Type"}}},
-                      {
-                        "name": "annotation",
-                        "term": {
-                          "map": [
-                            {
-                              "@key": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "description"}},
-                                  "typeName": "hydra.core.Name"}},
-                              "@value": {
-                                "union": {
-                                  "field": {
-                                    "name": "literal",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "string",
-                                          "term": {
-                                            "literal": {"string": "Multiple types that should all be equal but are not"}}},
-                                        "typeName": "hydra.core.Literal"}}},
-                                  "typeName": "hydra.core.Term"}}}]}}],
-                    "typeName": "hydra.core.AnnotatedType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.error.checking.UnsupportedTermVariantError",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "annotated",
-                "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "list": [
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "termVariant"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.variants.TermVariant"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "The unsupported term variant"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}}]}},
-                            "typeName": "hydra.core.Type"}}},
-                      {
-                        "name": "annotation",
-                        "term": {
-                          "map": [
-                            {
-                              "@key": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "description"}},
-                                  "typeName": "hydra.core.Name"}},
-                              "@value": {
-                                "union": {
-                                  "field": {
-                                    "name": "literal",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "string",
-                                          "term": {
-                                            "literal": {"string": "A term variant that the type checker does not support"}}},
-                                        "typeName": "hydra.core.Literal"}}},
-                                  "typeName": "hydra.core.Term"}}}]}}],
-                    "typeName": "hydra.core.AnnotatedType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.error.checking.UntypedLambdaError",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "annotated",
-                "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {"name": "record", "term": {"list": []}},
-                            "typeName": "hydra.core.Type"}}},
-                      {
-                        "name": "annotation",
-                        "term": {
-                          "map": [
-                            {
-                              "@key": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "description"}},
-                                  "typeName": "hydra.core.Name"}},
-                              "@value": {
-                                "union": {
-                                  "field": {
-                                    "name": "literal",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "string",
-                                          "term": {
-                                            "literal": {
-                                              "string": "A lambda expression without a type annotation on its parameter"}}},
-                                        "typeName": "hydra.core.Literal"}}},
-                                  "typeName": "hydra.core.Term"}}}]}}],
-                    "typeName": "hydra.core.AnnotatedType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.error.checking.UntypedLetBindingError",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "annotated",
-                "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "list": [
-                                  {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "name",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "binding"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "type",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "annotated",
-                                                "term": {
-                                                  "record": {
-                                                    "fields": [
-                                                      {
-                                                        "name": "body",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.core.Binding"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      {
-                                                        "name": "annotation",
-                                                        "term": {
-                                                          "map": [
-                                                            {
-                                                              "@key": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "description"}},
-                                                                  "typeName": "hydra.core.Name"}},
-                                                              "@value": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "literal",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "string",
-                                                                          "term": {"literal": {"string": "The untyped binding"}}},
-                                                                        "typeName": "hydra.core.Literal"}}},
-                                                                  "typeName": "hydra.core.Term"}}}]}}],
-                                                    "typeName": "hydra.core.AnnotatedType"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.FieldType"}}]}},
-                            "typeName": "hydra.core.Type"}}},
-                      {
-                        "name": "annotation",
-                        "term": {
-                          "map": [
-                            {
-                              "@key": {
-                                "wrap": {
-                                  "body": {"literal": {"string": "description"}},
-                                  "typeName": "hydra.core.Name"}},
-                              "@value": {
-                                "union": {
-                                  "field": {
-                                    "name": "literal",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "string",
-                                          "term": {"literal": {"string": "A let binding without a type annotation"}}},
-                                        "typeName": "hydra.core.Literal"}}},
-                                  "typeName": "hydra.core.Term"}}}]}}],
-                    "typeName": "hydra.core.AnnotatedType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]}],
   "namespace": "hydra.error.checking",
   "termDependencies": ["hydra.core", "hydra.typing", "hydra.variants"],
   "typeDependencies": ["hydra.core", "hydra.typing", "hydra.variants"]}

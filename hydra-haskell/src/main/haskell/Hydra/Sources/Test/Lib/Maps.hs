@@ -27,7 +27,7 @@ module_ :: Module
 module_ = Module ns elements [] [] $
     Just "Test cases for hydra.lib.maps primitives"
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
 
 emptyStringMap = intStringMap []
 intStringMapOrEmpty = intStringMap

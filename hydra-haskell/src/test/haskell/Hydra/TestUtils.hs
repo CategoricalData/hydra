@@ -52,7 +52,7 @@ testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph) (
   where
     -- Include only essential kernel term definitions for interpreter tests.
     -- The evaluator needs hydra.annotations (and its dependencies).
-    kernelTermBindings = L.concat $ fmap moduleElements
+    kernelTermBindings = L.concat $ fmap moduleBindings
       [ TermConstants.module_
       , TermShowCore.module_
       , TermExtractCore.module_
@@ -70,7 +70,7 @@ testSchemaGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes hydraCoreGra
     -- CoderDirection (hydra.coders), Coder (hydra.util), and Type/Name/ForallType (hydra.core).
     (kernelElements ++ testElements)
   where
-    kernelElements = L.concat $ fmap moduleElements
+    kernelElements = L.concat $ fmap moduleBindings
       [ TypeCoders.module_
       , TypeContext.module_
       , TypeCore.module_

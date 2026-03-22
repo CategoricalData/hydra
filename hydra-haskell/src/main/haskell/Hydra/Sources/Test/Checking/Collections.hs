@@ -27,24 +27,24 @@ module_ = Module ns elements
     (Just "Collection type checking test cases: lists, sets, maps")
   where
     elements = [
-      Phantoms.toBinding allTests,
-      Phantoms.toBinding listsTests,
-      Phantoms.toBinding listsOfLiteralsTests,
-      Phantoms.toBinding emptyListsTests,
-      Phantoms.toBinding polymorphicListsTests,
-      Phantoms.toBinding nestedListsTests,
-      Phantoms.toBinding listsInComplexContextsTests,
-      Phantoms.toBinding mapsTests,
-      Phantoms.toBinding monomorphicMapsTests,
-      Phantoms.toBinding polymorphicMapsTests,
-      Phantoms.toBinding mapsInComplexContextsTests,
-      Phantoms.toBinding mapsWithComplexTypesTests,
-      Phantoms.toBinding setsTests,
-      Phantoms.toBinding monomorphicSetsTests,
-      Phantoms.toBinding polymorphicSetsTests,
-      Phantoms.toBinding setsInComplexContextsTests,
-      Phantoms.toBinding nestedSetsTests,
-      Phantoms.toBinding setsWithComplexTypesTests]
+      Phantoms.toTermDefinition allTests,
+      Phantoms.toTermDefinition listsTests,
+      Phantoms.toTermDefinition listsOfLiteralsTests,
+      Phantoms.toTermDefinition emptyListsTests,
+      Phantoms.toTermDefinition polymorphicListsTests,
+      Phantoms.toTermDefinition nestedListsTests,
+      Phantoms.toTermDefinition listsInComplexContextsTests,
+      Phantoms.toTermDefinition mapsTests,
+      Phantoms.toTermDefinition monomorphicMapsTests,
+      Phantoms.toTermDefinition polymorphicMapsTests,
+      Phantoms.toTermDefinition mapsInComplexContextsTests,
+      Phantoms.toTermDefinition mapsWithComplexTypesTests,
+      Phantoms.toTermDefinition setsTests,
+      Phantoms.toTermDefinition monomorphicSetsTests,
+      Phantoms.toTermDefinition polymorphicSetsTests,
+      Phantoms.toTermDefinition setsInComplexContextsTests,
+      Phantoms.toTermDefinition nestedSetsTests,
+      Phantoms.toTermDefinition setsWithComplexTypesTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

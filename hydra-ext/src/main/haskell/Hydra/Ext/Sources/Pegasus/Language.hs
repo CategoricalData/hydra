@@ -88,7 +88,7 @@ pdlLanguageDefinition = definitionInModule pdlLanguageModule
 
 pdlLanguageModule :: Module
 pdlLanguageModule = Module (Namespace "hydra.ext.pegasus.language")
-  [toBinding pdlLanguage]
+  [toTermDefinition pdlLanguage]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints for LinkedIn Pegasus (PDL)"

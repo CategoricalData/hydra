@@ -54,13 +54,13 @@ module_ cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "namespace" namespace fieldMap cx) (\field_namespace -> Eithers.bind (Helpers.requireField "elements" (Helpers.decodeList Core_.binding) fieldMap cx) (\field_elements -> Eithers.bind (Helpers.requireField "termDependencies" (Helpers.decodeList namespace) fieldMap cx) (\field_termDependencies -> Eithers.bind (Helpers.requireField "typeDependencies" (Helpers.decodeList namespace) fieldMap cx) (\field_typeDependencies -> Eithers.bind (Helpers.requireField "description" (Helpers.decodeMaybe (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Helpers.requireField "namespace" namespace fieldMap cx) (\field_namespace -> Eithers.bind (Helpers.requireField "definitions" (Helpers.decodeList definition) fieldMap cx) (\field_definitions -> Eithers.bind (Helpers.requireField "termDependencies" (Helpers.decodeList namespace) fieldMap cx) (\field_termDependencies -> Eithers.bind (Helpers.requireField "typeDependencies" (Helpers.decodeList namespace) fieldMap cx) (\field_typeDependencies -> Eithers.bind (Helpers.requireField "description" (Helpers.decodeMaybe (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
           _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw))) fieldMap cx) (\field_description -> Right (Module.Module {
           Module.moduleNamespace = field_namespace,
-          Module.moduleElements = field_elements,
+          Module.moduleDefinitions = field_definitions,
           Module.moduleTermDependencies = field_termDependencies,
           Module.moduleTypeDependencies = field_typeDependencies,
           Module.moduleDescription = field_description})))))))
@@ -105,7 +105,7 @@ termDefinition cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "term" Core_.term fieldMap cx) (\field_term -> Eithers.bind (Helpers.requireField "type" Core_.typeScheme fieldMap cx) (\field_type -> Right (Module.TermDefinition {
+        in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "term" Core_.term fieldMap cx) (\field_term -> Eithers.bind (Helpers.requireField "type" (Helpers.decodeMaybe Core_.typeScheme) fieldMap cx) (\field_type -> Right (Module.TermDefinition {
           Module.termDefinitionName = field_name,
           Module.termDefinitionTerm = field_term,
           Module.termDefinitionType = field_type})))))

@@ -101,19 +101,19 @@ module_ = Module ns elements
     Just "Serialization functions for converting RDF graphs to N-Triples format expressions"
   where
     elements = [
-      toBinding escapeIriChar,
-      toBinding escapeIriStr,
-      toBinding escapeLiteralChar,
-      toBinding escapeLiteralString,
-      toBinding rdfGraphToNtriples,
-      toBinding writeBlankNode,
-      toBinding writeGraph,
-      toBinding writeIri,
-      toBinding writeLanguageTag,
-      toBinding writeLiteral,
-      toBinding writeNode,
-      toBinding writeResource,
-      toBinding writeTriple]
+      toTermDefinition escapeIriChar,
+      toTermDefinition escapeIriStr,
+      toTermDefinition escapeLiteralChar,
+      toTermDefinition escapeLiteralString,
+      toTermDefinition rdfGraphToNtriples,
+      toTermDefinition writeBlankNode,
+      toTermDefinition writeGraph,
+      toTermDefinition writeIri,
+      toTermDefinition writeLanguageTag,
+      toTermDefinition writeLiteral,
+      toTermDefinition writeNode,
+      toTermDefinition writeResource,
+      toTermDefinition writeTriple]
 
 
 -- | Escape a single IRI character (as char code). Characters outside printable ASCII or in the

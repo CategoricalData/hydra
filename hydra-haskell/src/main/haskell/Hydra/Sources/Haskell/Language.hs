@@ -91,7 +91,7 @@ ns = Namespace "hydra.ext.haskell.language"
 
 module_ :: Module
 module_ = Module ns
-  [toBinding haskellLanguage, toBinding reservedWords]
+  [toTermDefinition haskellLanguage, toTermDefinition reservedWords]
   []
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Haskell"

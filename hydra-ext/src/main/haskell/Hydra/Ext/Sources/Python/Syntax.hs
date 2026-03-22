@@ -19,7 +19,7 @@ python :: String -> Type
 python = typeref ns
 
 module_ :: Module
-module_ = Module ns elements [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
     Just ("A Python syntax model, based on the Python v3 PEG grammar retrieved on 2024-12-22"
       ++ " from https://docs.python.org/3/reference/grammar.html")
   where

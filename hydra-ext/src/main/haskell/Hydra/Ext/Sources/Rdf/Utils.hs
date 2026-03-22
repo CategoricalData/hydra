@@ -100,24 +100,24 @@ module_ = Module ns elements
     Just "Utility functions for working with RDF graphs and descriptions"
   where
     elements = [
-      toBinding key_rdfBlankNodeCounter,
-      toBinding descriptionsToGraph,
-      toBinding emptyDescription,
-      toBinding emptyRdfGraph,
-      toBinding emptyLangStrings,
-      toBinding encodeLiteral,
-      toBinding forObjects,
-      toBinding iri,
-      toBinding keyIri,
-      toBinding mergeGraphs,
-      toBinding nameToIri,
-      toBinding nextBlankNode,
-      toBinding propertyIri,
-      toBinding rdfIri,
-      toBinding resourceToNode,
-      toBinding subjectsOf,
-      toBinding triplesOf,
-      toBinding xmlSchemaDatatypeIri]
+      toTermDefinition key_rdfBlankNodeCounter,
+      toTermDefinition descriptionsToGraph,
+      toTermDefinition emptyDescription,
+      toTermDefinition emptyRdfGraph,
+      toTermDefinition emptyLangStrings,
+      toTermDefinition encodeLiteral,
+      toTermDefinition forObjects,
+      toTermDefinition iri,
+      toTermDefinition keyIri,
+      toTermDefinition mergeGraphs,
+      toTermDefinition nameToIri,
+      toTermDefinition nextBlankNode,
+      toTermDefinition propertyIri,
+      toTermDefinition rdfIri,
+      toTermDefinition resourceToNode,
+      toTermDefinition subjectsOf,
+      toTermDefinition triplesOf,
+      toTermDefinition xmlSchemaDatatypeIri]
 
 
 -- | The key used for tracking blank node counters

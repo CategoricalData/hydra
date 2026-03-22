@@ -41,7 +41,7 @@ bootstrapTypeModules = [
   Util.module_]
 
 module_ :: Module
-module_ = Module ns [typesByNameBinding] [] [Namespace "hydra.core"] $
+module_ = Module ns [bindingToDefinition typesByNameBinding] [] [Namespace "hydra.core"] $
     Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
       ++ " This avoids certain problems with generating entire source modules into target languages like Java,"
       ++ " which is subject to method size limits for large modules like hydra.core.")
@@ -59,5 +59,5 @@ typesByNameTerm :: Term
 typesByNameTerm = TermMap $ M.fromList entries
   where
     entries = concatMap moduleEntries bootstrapTypeModules
-    moduleEntries mod = fmap bindingEntry (moduleElements mod)
+    moduleEntries mod = fmap bindingEntry (moduleBindings mod)
     bindingEntry b = (EncodeCore.name (bindingName b), bindingTerm b)

@@ -97,18 +97,18 @@ module_ = Module ns elements
     Just "Utilities for extracting values from JSON objects"
   where
     elements = [
-      toBinding expectArray,
-      toBinding expectNumber,
-      toBinding expectObject,
-      toBinding expectString,
-      toBinding opt,
-      toBinding optArray,
-      toBinding optString,
-      toBinding require,
-      toBinding requireArray,
-      toBinding requireNumber,
-      toBinding requireString,
-      toBinding showValue]
+      toTermDefinition expectArray,
+      toTermDefinition expectNumber,
+      toTermDefinition expectObject,
+      toTermDefinition expectString,
+      toTermDefinition opt,
+      toTermDefinition optArray,
+      toTermDefinition optString,
+      toTermDefinition require,
+      toTermDefinition requireArray,
+      toTermDefinition requireNumber,
+      toTermDefinition requireString,
+      toTermDefinition showValue]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

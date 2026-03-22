@@ -24,7 +24,7 @@ module_ :: Module
 module_ = Module ns elements namespaces kernelTypesNamespaces $
     Just "Hydra's hoisting test suite"
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
     namespaces = [
       Cases.ns,
       Let.ns]

@@ -66,26 +66,26 @@ module_ = Module ns elements
     Just "String representations of hydra.core types"
   where
    elements = [
-     toBinding readTerm, -- TODO: move this to hydra.read.core
-     toBinding binding,
-     toBinding elimination,
-     toBinding field,
-     toBinding fieldType,
-     toBinding fields,
-     toBinding floatValue,
-     toBinding floatType,
-     toBinding function,
-     toBinding injection,
-     toBinding integerValue,
-     toBinding integerType,
-     toBinding lambda,
-     toBinding let_,
-     toBinding list_,
-     toBinding literal,
-     toBinding literalType,
-     toBinding term,
-     toBinding type_,
-     toBinding typeScheme]
+     toTermDefinition readTerm, -- TODO: move this to hydra.read.core
+     toTermDefinition binding,
+     toTermDefinition elimination,
+     toTermDefinition field,
+     toTermDefinition fieldType,
+     toTermDefinition fields,
+     toTermDefinition floatValue,
+     toTermDefinition floatType,
+     toTermDefinition function,
+     toTermDefinition injection,
+     toTermDefinition integerValue,
+     toTermDefinition integerType,
+     toTermDefinition lambda,
+     toTermDefinition let_,
+     toTermDefinition list_,
+     toTermDefinition literal,
+     toTermDefinition literalType,
+     toTermDefinition term,
+     toTermDefinition type_,
+     toTermDefinition typeScheme]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

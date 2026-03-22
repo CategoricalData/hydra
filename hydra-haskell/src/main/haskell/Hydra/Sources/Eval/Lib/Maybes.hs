@@ -70,13 +70,13 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Maybe functions for the Hydra interpreter.")
   where
     elements = [
-      toBinding apply_,
-      toBinding bind_,
-      toBinding cases_,
-      toBinding compose_,
-      toBinding map_,
-      toBinding mapMaybe_,
-      toBinding maybe_]
+      toTermDefinition apply_,
+      toTermDefinition bind_,
+      toTermDefinition cases_,
+      toTermDefinition compose_,
+      toTermDefinition map_,
+      toTermDefinition mapMaybe_,
+      toTermDefinition maybe_]
 
 -- | Interpreter-friendly applicative apply for Maybe terms.
 -- apply (Just f) (Just x) = Just (f x); otherwise Nothing

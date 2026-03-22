@@ -25,8 +25,8 @@ module_ = Module ns elements
     (Just "Inference tests for examples from the Hydra kernel")
   where
     elements = [
-      Phantoms.toBinding allTests,
-      Phantoms.toBinding testGroupForNestedLet]
+      Phantoms.toTermDefinition allTests,
+      Phantoms.toTermDefinition testGroupForNestedLet]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

@@ -7,6 +7,7 @@ module Hydra.Dsl.Bootstrap (
   qualify,
   typeref,
   defineType,
+  toTypeDef,
   use,
   useType,
 ) where
@@ -20,6 +21,7 @@ import Hydra.Lexical
 import Hydra.Annotations
 import Hydra.Module
 import Hydra.Sources.Libraries
+import qualified Hydra.Decode.Core as Decode
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -54,6 +56,18 @@ typeref ns = TypeVariable . qualify ns . Name
 -- | Define a type in a namespace
 defineType :: Namespace -> String -> Type -> Binding
 defineType = datatype
+
+-- | Convert a type Binding (from defineType) to a type Definition.
+-- The Binding must have been created by defineType/datatype, which stores
+-- the type encoded as a term via typeElement. We decode it back.
+toTypeDef :: Binding -> Definition
+toTypeDef b = case Decode.type_ bootstrapGraph (stripAnnotations $ bindingTerm b) of
+  Right typ -> DefinitionType $ TypeDefinition (bindingName b) typ
+  Left err -> error $ "toTypeDef: failed to decode type from binding "
+    ++ show (bindingName b) ++ ": " ++ show err
+  where
+    stripAnnotations (TermAnnotated (AnnotatedTerm body _)) = stripAnnotations body
+    stripAnnotations t = t
 
 -- | Reference a type by its binding
 use :: Binding -> Type

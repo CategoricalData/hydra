@@ -101,11 +101,11 @@ module_ = Module ns elements
     Just "Printing functions for property graph elements"
   where
     elements = [
-      toBinding printEdge,
-      toBinding printGraph,
-      toBinding printLazyGraph,
-      toBinding printProperty,
-      toBinding printVertex]
+      toTermDefinition printEdge,
+      toTermDefinition printGraph,
+      toTermDefinition printLazyGraph,
+      toTermDefinition printProperty,
+      toTermDefinition printVertex]
 
 -- | Print an edge using the provided printer functions
 printEdge :: TBinding ((v -> String) -> PG.Edge v -> String)
