@@ -44,7 +44,6 @@ import hydra.show.error
 import hydra.show.meta
 import hydra.show.typing
 import hydra.sorting
-import hydra.tarjan
 import hydra.testing
 import hydra.topology
 import hydra.typing

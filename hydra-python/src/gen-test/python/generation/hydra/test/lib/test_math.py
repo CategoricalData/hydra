@@ -44,7 +44,6 @@ import hydra.show.error
 import hydra.show.meta
 import hydra.show.typing
 import hydra.sorting
-import hydra.tarjan
 import hydra.testing
 import hydra.topology
 import hydra.typing
@@ -351,13 +350,13 @@ def test_succ__negative():
 
 def test_e__euler_s_number():
 
-    assert (hydra.lib.math.e()) == (2.718281828459045)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.e())) == (2.71828182846)
 
 # pi
 
 def test_pi__pi_constant():
 
-    assert (hydra.lib.math.pi()) == (3.141592653589793)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.pi())) == (3.14159265359)
 
 # sin
 
@@ -367,11 +366,11 @@ def test_sin__sin_0():
 
 def test_sin__sin_pi_2():
 
-    assert (hydra.lib.math.sin(1.5707963267948966)) == (1.0)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.sin(1.5707963267948966))) == (1.0)
 
 def test_sin__sin_pi():
 
-    assert (hydra.lib.math.sin(3.141592653589793)) == (1.2246467991473532e-16)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.sin(3.141592653589793))) == (1.22464679915e-16)
 
 def test_sin__sin_1():
 
@@ -389,7 +388,7 @@ def test_cos__cos_0():
 
 def test_cos__cos_pi_2():
 
-    assert (hydra.lib.math.cos(1.5707963267948966)) == (6.123233995736766e-17)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.cos(1.5707963267948966))) == (6.12323399574e-17)
 
 def test_cos__cos_pi():
 
@@ -411,7 +410,7 @@ def test_tan__tan_0():
 
 def test_tan__tan_pi_4():
 
-    assert (hydra.lib.math.tan(0.7853981633974483)) == (0.9999999999999999)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.tan(0.7853981633974483))) == (1.0)
 
 def test_tan__tan_1():
 
@@ -429,11 +428,11 @@ def test_asin__asin_0():
 
 def test_asin__asin_1():
 
-    assert (hydra.lib.math.asin(1.0)) == (1.5707963267948966)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.asin(1.0))) == (1.57079632679)
 
 def test_asin__asin__1():
 
-    assert (hydra.lib.math.asin(-1.0)) == (-1.5707963267948966)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.asin(-1.0))) == (-1.57079632679)
 
 def test_asin__asin_0_5():
 
@@ -447,11 +446,11 @@ def test_acos__acos_1():
 
 def test_acos__acos_0():
 
-    assert (hydra.lib.math.acos(0.0)) == (1.5707963267948966)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.acos(0.0))) == (1.57079632679)
 
 def test_acos__acos__1():
 
-    assert (hydra.lib.math.acos(-1.0)) == (3.141592653589793)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.acos(-1.0))) == (3.14159265359)
 
 def test_acos__acos_0_5():
 
@@ -465,7 +464,7 @@ def test_atan__atan_0():
 
 def test_atan__atan_1():
 
-    assert (hydra.lib.math.atan(1.0)) == (0.7853981633974483)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.atan(1.0))) == (0.785398163397)
 
 def test_atan__atan_0_5():
 
@@ -475,11 +474,11 @@ def test_atan__atan_0_5():
 
 def test_atan2__atan2_1_1():
 
-    assert (hydra.lib.math.atan2(1.0, 1.0)) == (0.7853981633974483)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.atan2(1.0, 1.0))) == (0.785398163397)
 
 def test_atan2__atan2_1_0():
 
-    assert (hydra.lib.math.atan2(1.0, 0.0)) == (1.5707963267948966)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.atan2(1.0, 0.0))) == (1.57079632679)
 
 def test_atan2__atan2_0_1():
 
@@ -497,7 +496,7 @@ def test_sinh__sinh_0():
 
 def test_sinh__sinh_1():
 
-    assert (hydra.lib.math.sinh(1.0)) == (1.1752011936438014)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.sinh(1.0))) == (1.17520119364)
 
 def test_sinh__sinh_2():
 
@@ -525,7 +524,7 @@ def test_tanh__tanh_0():
 
 def test_tanh__tanh_1():
 
-    assert (hydra.lib.math.tanh(1.0)) == (0.7615941559557649)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.tanh(1.0))) == (0.761594155956)
 
 def test_tanh__tanh_0_5():
 
@@ -603,7 +602,7 @@ def test_log__log_1():
 
 def test_log__log_e():
 
-    assert (hydra.lib.math.log(2.718281828459045)) == (1.0)
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.log(2.718281828459045))) == (1.0)
 
 def test_log__log_2():
 
