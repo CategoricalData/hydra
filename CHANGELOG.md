@@ -75,6 +75,12 @@ Major release completing Hydra-Python and Hydra-Java as self-hosting Hydra imple
   - Either support in all three implementations
   - Comprehensive test coverage
 
+- **Void Type** (#237)
+  - Added uninhabited `void` type to the core type system as the dual of `unit`
+  - Type-level only: no term constructor (void has no inhabitants)
+  - Support in type unification, rewriting, encoding/decoding, adaptation, and all language coders
+  - Void type support across all implementations (Haskell, Java, Python)
+
 - **Native JSON Parser and Writer** (#188, #242)
   - New bidirectional JSON encoder/decoder
   - Replaced Aeson dependency with Hydra's own JSON parser and writer
