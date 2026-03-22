@@ -12,10 +12,10 @@ object eithers:
     xs.foldLeft[Either[E, B]](Right(z)) { (acc, x) =>
       acc.flatMap(b => f(b)(x))
     }
-  def fromLeft[A, B](d: A)(e: Either[A, B]): A = e match
+  def fromLeft[A, B](d: => A)(e: Either[A, B]): A = e match
     case Left(a) => a
     case Right(_) => d
-  def fromRight[A, B](d: B)(e: Either[A, B]): B = e match
+  def fromRight[A, B](d: => B)(e: Either[A, B]): B = e match
     case Left(_) => d
     case Right(b) => b
   def isLeft[A, B](e: Either[A, B]): Boolean = e.isLeft
