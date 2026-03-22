@@ -187,6 +187,18 @@ elementsClassName ns =
           parts = Strings.splitOn "." nsStr
       in (Formatting.sanitizeWithUnderscores Language.reservedWords (Formatting.capitalize (Lists.last parts)))
 
+namespaceParent :: Module.Namespace -> Maybe Module.Namespace
+namespaceParent ns =
+
+      let parts = Strings.splitOn "." (Module.unNamespace ns)
+      in (Logic.ifElse (Lists.null (Lists.init parts)) Nothing (Just (Module.Namespace (Strings.intercalate "." (Lists.init parts)))))
+
+elementsQualifiedName :: Module.Namespace -> Core.Name
+elementsQualifiedName ns =
+    Names_.unqualifyName (Module.QualifiedName {
+      Module.qualifiedNameNamespace = (namespaceParent ns),
+      Module.qualifiedNameLocal = (elementsClassName ns)})
+
 isRecursiveVariable :: Helpers.Aliases -> Core.Name -> Bool
 isRecursiveVariable aliases name = Sets.member name (Helpers.aliasesRecursiveVars aliases)
 
@@ -417,7 +429,7 @@ elementJavaIdentifier isPrim isMethod aliases name =
           ns_ = Module.qualifiedNameNamespace qn
           local = Module.qualifiedNameLocal qn
           sep = Logic.ifElse isMethod "::" "."
-      in (Logic.ifElse isPrim (Syntax.Identifier (Strings.cat2 (Strings.cat2 (elementJavaIdentifier_qualify aliases ns_ (Formatting.capitalize local)) ".") Names.applyMethodName)) (Maybes.cases ns_ (Syntax.Identifier (Utils.sanitizeJavaName local)) (\n -> Syntax.Identifier (Strings.cat2 (Strings.cat2 (elementJavaIdentifier_qualify aliases (Just n) (elementsClassName n)) sep) (Utils.sanitizeJavaName local)))))
+      in (Logic.ifElse isPrim (Syntax.Identifier (Strings.cat2 (Strings.cat2 (elementJavaIdentifier_qualify aliases ns_ (Formatting.capitalize local)) ".") Names.applyMethodName)) (Maybes.cases ns_ (Syntax.Identifier (Utils.sanitizeJavaName local)) (\n -> Syntax.Identifier (Strings.cat2 (Strings.cat2 (elementJavaIdentifier_qualify aliases (namespaceParent n) (elementsClassName n)) sep) (Utils.sanitizeJavaName local)))))
 
 elementJavaIdentifier_qualify :: Helpers.Aliases -> Maybe Module.Namespace -> String -> String
 elementJavaIdentifier_qualify aliases mns s =
@@ -439,14 +451,13 @@ findMatchingLambdaVar name lambdaVars =
 constructElementsInterface :: Module.Module -> [Syntax.InterfaceMemberDeclaration] -> (Core.Name, Syntax.CompilationUnit)
 constructElementsInterface mod members =
 
-      let pkg = Utils.javaPackageDeclaration (Module.moduleNamespace mod)
+      let ns = Module.moduleNamespace mod
+          parentNs = namespaceParent ns
+          pkg = Maybes.cases parentNs (Utils.javaPackageDeclaration ns) (\pns -> Utils.javaPackageDeclaration pns)
           mods = [
                 Syntax.InterfaceModifierPublic]
-          className = elementsClassName (Module.moduleNamespace mod)
-          elName =
-                  Names_.unqualifyName (Module.QualifiedName {
-                    Module.qualifiedNameNamespace = (Just (Module.moduleNamespace mod)),
-                    Module.qualifiedNameLocal = className})
+          className = elementsClassName ns
+          elName = elementsQualifiedName ns
           body = Syntax.InterfaceBody members
           itf =
                   Syntax.TypeDeclarationInterface (Syntax.InterfaceDeclarationNormalInterface (Syntax.NormalInterfaceDeclaration {
@@ -2093,10 +2104,7 @@ functionCall env isPrim name args typeApps cx g =
               in (Right (Utils.javaMethodInvocationToJavaExpression (Syntax.MethodInvocation {
                 Syntax.methodInvocationHeader = header,
                 Syntax.methodInvocationArguments = jargs})))) (\ns_ ->
-              let classId =
-                      Utils.nameToJavaName aliases (Names_.unqualifyName (Module.QualifiedName {
-                        Module.qualifiedNameNamespace = (Just ns_),
-                        Module.qualifiedNameLocal = (elementsClassName ns_)}))
+              let classId = Utils.nameToJavaName aliases (elementsQualifiedName ns_)
                   methodId =
                           Logic.ifElse isPrim (overrideMethodName (Syntax.Identifier (Strings.cat2 (Syntax.unIdentifier (Utils.nameToJavaName aliases (Names_.unqualifyName (Module.QualifiedName {
                             Module.qualifiedNameNamespace = (Just ns_),
@@ -2642,17 +2650,11 @@ typeAppNullaryOrHoisted env aliases anns tyapps jatyp body correctedTyp varName 
           localName = Module.qualifiedNameLocal qn
       in case cls of
         Helpers.JavaSymbolClassNullaryFunction -> Maybes.cases mns (typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g) (\ns_ ->
-          let classId =
-                  Utils.nameToJavaName aliases (Names_.unqualifyName (Module.QualifiedName {
-                    Module.qualifiedNameNamespace = (Just ns_),
-                    Module.qualifiedNameLocal = (elementsClassName ns_)}))
+          let classId = Utils.nameToJavaName aliases (elementsQualifiedName ns_)
               methodId = Syntax.Identifier (Utils.sanitizeJavaName localName)
           in (Eithers.bind (filterPhantomTypeArgs varName allTypeArgs cx g) (\filteredTypeArgs -> Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Eithers.bind (Utils.javaTypeToJavaReferenceType jt cx) (\rt -> Right (Syntax.TypeArgumentReference rt)))) filteredTypeArgs) (\jTypeArgs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs classId methodId jTypeArgs []))))))
         Helpers.JavaSymbolClassHoistedLambda v0 -> Maybes.cases mns (typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g) (\ns_ ->
-          let classId =
-                  Utils.nameToJavaName aliases (Names_.unqualifyName (Module.QualifiedName {
-                    Module.qualifiedNameNamespace = (Just ns_),
-                    Module.qualifiedNameLocal = (elementsClassName ns_)}))
+          let classId = Utils.nameToJavaName aliases (elementsQualifiedName ns_)
               methodId = Syntax.Identifier (Utils.sanitizeJavaName localName)
           in (Eithers.bind (filterPhantomTypeArgs varName allTypeArgs cx g) (\filteredTypeArgs -> Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Eithers.bind (Utils.javaTypeToJavaReferenceType jt cx) (\rt -> Right (Syntax.TypeArgumentReference rt)))) filteredTypeArgs) (\jTypeArgs ->
             let paramNames = Lists.map (\i -> Core.Name (Strings.cat2 "p" (Literals.showInt32 i))) (Math.range 0 (Math.sub v0 1))
