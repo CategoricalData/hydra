@@ -33,11 +33,12 @@ convertCase from to original =
 
                 let byCaps =
 
-                          let splitOnUppercase =
-                                  \acc -> \c -> Lists.concat2 (Logic.ifElse (Chars.isUpper c) [
-                                    []] []) (Lists.cons (Lists.cons c (Lists.head acc)) (Lists.tail acc))
-                          in (Lists.map Strings.fromList (Lists.foldl splitOnUppercase [
-                            []] (Lists.reverse (Strings.toList (decapitalize original)))))
+                          let splitOnUpperOrUnderscore =
+                                  \acc -> \c -> Logic.ifElse (Equality.equal c 95) (Lists.concat2 [
+                                    []] acc) (Logic.ifElse (Chars.isUpper c) (Lists.concat2 [
+                                    []] (Lists.cons (Lists.cons c (Lists.head acc)) (Lists.tail acc))) (Lists.cons (Lists.cons c (Lists.head acc)) (Lists.tail acc)))
+                          in (Lists.filter (\w -> Logic.not (Equality.equal (Strings.length w) 0)) (Lists.map Strings.fromList (Lists.foldl splitOnUpperOrUnderscore [
+                            []] (Lists.reverse (Strings.toList (decapitalize original))))))
                     byUnderscores = Strings.splitOn "_" original
                 in case from of
                   Util.CaseConventionCamel -> byCaps
