@@ -34,12 +34,13 @@
           (funcall f (maybe-value m))))))
 
 ;; cases :: Maybe a -> b -> (a -> b) -> b
+;; Thunk-aware: if def is a zero-arg function (thunk), only called when Maybe is Nothing
 (defvar hydra_lib_maybes_cases
   (lambda (m)
     (lambda (def)
       (lambda (f)
         (if (maybe-nothing-p m)
-            def
+            (if (functionp def) (funcall def) def)
             (funcall f (maybe-value m)))))))
 
 ;; cat :: [Maybe a] -> [a]
@@ -68,11 +69,12 @@
         (maybe-value m))))
 
 ;; from_maybe :: a -> Maybe a -> a
+;; Thunk-aware: if def is a zero-arg function (thunk), only called when Maybe is Nothing
 (defvar hydra_lib_maybes_from_maybe
   (lambda (def)
     (lambda (m)
       (if (maybe-nothing-p m)
-          def
+          (if (functionp def) (funcall def) def)
           (maybe-value m)))))
 
 ;; is_just :: Maybe a -> Bool
@@ -104,12 +106,13 @@
               (push (maybe-value result) acc))))))))
 
 ;; maybe :: b -> (a -> b) -> Maybe a -> b
+;; Thunk-aware: if def is a zero-arg function (thunk), only called when Maybe is Nothing
 (defvar hydra_lib_maybes_maybe
   (lambda (def)
     (lambda (f)
       (lambda (m)
         (if (maybe-nothing-p m)
-            def
+            (if (functionp def) (funcall def) def)
             (funcall f (maybe-value m)))))))
 
 ;; pure :: a -> Maybe a
