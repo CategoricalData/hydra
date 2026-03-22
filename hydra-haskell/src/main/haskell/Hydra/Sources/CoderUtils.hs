@@ -7,7 +7,7 @@ module Hydra.Sources.CoderUtils where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  commentsFromElement,
+  commentsFromBinding,
   commentsFromFieldType,
   gatherApplications,
   gatherArgs,
@@ -18,8 +18,7 @@ import Hydra.Kernel hiding (
   isSimpleAssignment,
   isTrivialTerm,
   nameToFilePath,
-  normalizeComment,
-  unionTypeToRecordType)
+  normalizeComment)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Annotations   as Annotations
 import qualified Hydra.Dsl.Ast           as Ast
@@ -77,6 +76,7 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
+import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
 
 
 ns :: Namespace
@@ -87,7 +87,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, Arity.ns, Checking.ns, Formatting.ns, Lexical.ns, Names.ns, Rewriting.ns, Schemas.ns]
+    [Annotations.ns, Arity.ns, Checking.ns, Formatting.ns, Lexical.ns, Names.ns, Rewriting.ns, Schemas.ns, Sorting.ns]
     kernelTypesNamespaces $
     Just "Common utilities for language coders, providing shared patterns for term decomposition and analysis."
   where
@@ -108,9 +108,10 @@ module_ = Module ns elements
      toBinding isTailRecursiveInTailPosition,
      -- Type transformation utilities
      toBinding nameToFilePath,
-     toBinding unionTypeToRecordType,
+     -- Definition ordering
+     toBinding reorderDefs,
      -- Context/graph utilities
-     toBinding commentsFromElement,
+     toBinding commentsFromBinding,
      toBinding commentsFromFieldType,
      toBinding typeOfTerm,
      -- Function analysis helpers
@@ -490,25 +491,56 @@ nameToFilePath = define "nameToFilePath" $
   "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
   Strings.cat (list [var "prefix", var "suffix", string ".", Module.unFileExtension (var "ext")])
 
-unionTypeToRecordType :: TBinding ([FieldType] -> [FieldType])
-unionTypeToRecordType = define "unionTypeToRecordType" $
-  doc "Convert a union field type list to a record field type list with optional fields" $
-  "rt" ~>
-  "makeOptional" <~ ("f" ~>
-    "fn" <~ Core.fieldTypeName (var "f") $
-    "ft" <~ Core.fieldTypeType (var "f") $
-    Core.fieldType (var "fn") (Rewriting.mapBeneathTypeAnnotations @@ unaryFunction Core.typeMaybe @@ var "ft")) $
-  Lists.map (var "makeOptional") (var "rt")
+
+--------------------------------------------------------------------------------
+-- Definition ordering
+--------------------------------------------------------------------------------
+
+-- | Reorder definitions: types first, then topologically sorted terms.
+-- This is a common pattern across language coders to ensure definitions
+-- appear in dependency order in the generated output.
+reorderDefs :: TBinding ([Definition] -> [Definition])
+reorderDefs = define "reorderDefs" $
+  doc "Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms" $
+  "defs" ~>
+    "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $
+    "typeDefsRaw" <~ Pairs.first (var "partitioned") $
+    -- Sort type defs: Name type first (it is referenced by almost everything else)
+    "nameFirst" <~ Lists.filter
+      ("td" ~> Equality.equal
+        (project _TypeDefinition _TypeDefinition_name @@ var "td")
+        (wrap _Name $ string "hydra.core.Name"))
+      (var "typeDefsRaw") $
+    "nameRest" <~ Lists.filter
+      ("td" ~> Logic.not $ Equality.equal
+        (project _TypeDefinition _TypeDefinition_name @@ var "td")
+        (wrap _Name $ string "hydra.core.Name"))
+      (var "typeDefsRaw") $
+    "typeDefs" <~ Lists.concat (list [
+      Lists.map ("td" ~> inject _Definition _Definition_type (var "td")) (var "nameFirst"),
+      Lists.map ("td" ~> inject _Definition _Definition_type (var "td")) (var "nameRest")]) $
+    "termDefsWrapped" <~ Lists.map ("td" ~> inject _Definition _Definition_term (var "td"))
+      (Pairs.second (var "partitioned")) $
+    -- Topologically sort term definitions by free variable dependencies
+    "sortedTermDefs" <~ (Lists.concat $ Sorting.topologicalSortNodes @@
+      ("d" ~> cases _Definition (var "d") Nothing [
+        _Definition_term>>: "td" ~> project _TermDefinition _TermDefinition_name @@ var "td"])
+      @@
+      ("d" ~> cases _Definition (var "d") (Just (list ([] :: [TTerm Name]))) [
+        _Definition_term>>: "td" ~>
+          Sets.toList $ Rewriting.freeVariablesInTerm @@ (project _TermDefinition _TermDefinition_term @@ var "td")])
+      @@ var "termDefsWrapped") $
+    Lists.concat (list [var "typeDefs", var "sortedTermDefs"])
 
 
 --------------------------------------------------------------------------------
 -- Context/graph utilities
 --------------------------------------------------------------------------------
 
--- | Extract comments/description from a Binding (element definition).
+-- | Extract comments/description from a Binding.
 -- This is a common pattern for coders that need to preserve documentation.
-commentsFromElement :: TBinding (Context -> Graph -> Binding -> Either (InContext Error) (Maybe String))
-commentsFromElement = define "commentsFromElement" $
+commentsFromBinding :: TBinding (Context -> Graph -> Binding -> Either (InContext Error) (Maybe String))
+commentsFromBinding = define "commentsFromBinding" $
   doc "Extract comments/description from a Binding" $
   "cx" ~> "g" ~> "b" ~>
   Annotations.getTermDescription @@ var "cx" @@ var "g" @@ (Core.bindingTerm $ var "b")
