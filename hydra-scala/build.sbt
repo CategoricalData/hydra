@@ -13,6 +13,10 @@ lazy val root = project
     // Lib dependencies
     libraryDependencies += "org.apache.commons" % "commons-text" % "1.12.0",
 
+    // Fork JVM for run with increased stack
+    Compile / run / fork := true,
+    Compile / run / javaOptions ++= Seq("-Xss256m", "-Xmx4g"),
+
     // Testing dependencies
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.19",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % "test"
