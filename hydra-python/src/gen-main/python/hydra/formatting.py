@@ -91,6 +91,17 @@ def convert_case_camel_to_lower_snake(v1: str) -> str:
 
     return convert_case(hydra.util.CaseConvention.CAMEL, hydra.util.CaseConvention.LOWER_SNAKE, v1)
 
+def convert_case_camel_or_underscore_to_lower_snake(s: str) -> str:
+    r"""Convert a string from camel case (possibly with underscores) to lower snake case. Splits on underscores first, then converts each part from camel case."""
+
+    @lru_cache(1)
+    def parts() -> frozenlist[str]:
+        return hydra.lib.strings.split_on("_", s)
+    @lru_cache(1)
+    def snake_parts() -> frozenlist[str]:
+        return hydra.lib.lists.map((lambda p: convert_case_camel_to_lower_snake(p)), parts())
+    return hydra.lib.strings.intercalate("_", snake_parts())
+
 def convert_case_camel_to_upper_snake(v1: str) -> str:
     r"""Convert a string from camel case to upper snake case."""
 

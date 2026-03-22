@@ -22,7 +22,7 @@ from hydra.core import (
     Type,
 )
 from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing, frozenlist, Either, Left, Right
-from hydra.error import Error, ErrorOther, OtherError
+from hydra.errors import Error, ErrorOther, OtherError
 from hydra.graph import Graph, Primitive, TermCoder
 from hydra.util import Comparison
 
