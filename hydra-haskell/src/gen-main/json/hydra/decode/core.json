@@ -12776,6 +12776,59 @@
                                                                                 "pair": {
                                                                                   "@first": {
                                                                                     "wrap": {
+                                                                                      "body": {"literal": {"string": "void"}},
+                                                                                      "typeName": "hydra.core.Name"}},
+                                                                                  "@second": {
+                                                                                    "function": {
+                                                                                      "lambda": {
+                                                                                        "body": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "input"},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "cx"},
+                                                                                                    "function": {"variable": "hydra.extract.helpers.decodeUnit"}}}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "function": {
+                                                                                                    "lambda": {
+                                                                                                      "body": {
+                                                                                                        "union": {
+                                                                                                          "field": {"name": "void", "term": {"variable": "t"}},
+                                                                                                          "typeName": "hydra.core.Type"}},
+                                                                                                      "domain": [{"unit": {}}],
+                                                                                                      "parameter": "t"}}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                                                            "type": {"unit": {}}}},
+                                                                                                        "type": {"variable": "hydra.core.Type"}}},
+                                                                                                    "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
+                                                                                        "domain": [{"variable": "hydra.core.Term"}],
+                                                                                        "parameter": "input"}}}}},
+                                                                              "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {
+                                                                            "function": {
+                                                                              "codomain": {
+                                                                                "either": {
+                                                                                  "left": {"variable": "hydra.errors.DecodingError"},
+                                                                                  "right": {"variable": "hydra.core.Type"}}},
+                                                                              "domain": {"variable": "hydra.core.Term"}}}}},
+                                                                      {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "pair": {
+                                                                                  "@first": {
+                                                                                    "wrap": {
                                                                                       "body": {"literal": {"string": "wrap"}},
                                                                                       "typeName": "hydra.core.Name"}},
                                                                                   "@second": {

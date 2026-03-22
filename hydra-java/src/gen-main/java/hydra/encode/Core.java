@@ -562,6 +562,11 @@ public interface Core {
       }
 
       @Override
+      public hydra.core.Term visit(hydra.core.Type.Void_ y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("void"), new hydra.core.Term.Unit())));
+      }
+
+      @Override
       public hydra.core.Term visit(hydra.core.Type.Wrap y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("wrap"), hydra.encode.Core.type((y).value))));
       }

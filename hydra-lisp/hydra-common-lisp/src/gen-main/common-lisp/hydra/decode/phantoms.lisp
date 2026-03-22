@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.phantoms
-(:use :cl :hydra.core :hydra.decode.core :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.phantoms)
+(:use :cl :hydra.core :hydra.decode.core :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.phantoms)
 (:export :hydra_decode_phantoms_t_term :hydra_decode_phantoms_t_binding))
 
 (in-package :hydra.decode.phantoms)

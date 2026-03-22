@@ -130,6 +130,7 @@ enum Type :
    case union(value: Seq[hydra.core.FieldType]) extends Type
    case unit extends Type
    case variable(value: hydra.core.Name) extends Type
+   case void extends Type
    case wrap(value: hydra.core.Type) extends Type
 
 case class TypeApplicationTerm(body: hydra.core.Term, `type`: hydra.core.Type)

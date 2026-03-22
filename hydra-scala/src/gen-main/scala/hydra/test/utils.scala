@@ -41,5 +41,5 @@ def inferTestCase(g: hydra.graph.Graph)(tcm: hydra.testing.TestCaseWithMetadata)
 }
 
 def inferTerm(g: hydra.graph.Graph)(term: hydra.core.Term): Either[scala.Predef.String, hydra.core.Term] =
-  hydra.lib.eithers.bimap[hydra.context.InContext[hydra.error.Error], hydra.typing.InferenceResult, scala.Predef.String,
-     hydra.core.Term]((ic: hydra.context.InContext[hydra.error.Error]) => hydra.show.error.error(ic.`object`))((x: hydra.typing.InferenceResult) => (x.term))(hydra.inference.inferInGraphContext(hydra.lexical.emptyContext)(g)(term))
+  hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.Error], hydra.typing.InferenceResult, scala.Predef.String,
+     hydra.core.Term]((ic: hydra.context.InContext[hydra.errors.Error]) => hydra.show.errors.error(ic.`object`))((x: hydra.typing.InferenceResult) => (x.term))(hydra.inference.inferInGraphContext(hydra.lexical.emptyContext)(g)(term))

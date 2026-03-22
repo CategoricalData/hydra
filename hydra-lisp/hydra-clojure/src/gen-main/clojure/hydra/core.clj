@@ -77,7 +77,7 @@
 
 (def hydra_core_term-variants (list :annotated :application :either :function :let :list :literal :map :maybe :pair :record :set :type_application :type_lambda :union :unit :variable :wrap))
 
-(def hydra_core_type-variants (list :annotated :application :either :forall :function :list :literal :map :maybe :pair :record :set :union :unit :variable :wrap))
+(def hydra_core_type-variants (list :annotated :application :either :forall :function :list :literal :map :maybe :pair :record :set :union :unit :variable :void :wrap))
 
 (defrecord hydra_core_type_application_term [body type])
 (defn make-hydra_core_type_application_term [body type] (->hydra_core_type_application_term body type))

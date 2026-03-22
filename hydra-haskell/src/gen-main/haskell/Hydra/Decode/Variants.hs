@@ -134,6 +134,7 @@ typeVariant cx raw =
                       (Core.Name "union", (\input -> Eithers.map (\t -> Variants.TypeVariantUnion) (Helpers.decodeUnit cx input))),
                       (Core.Name "unit", (\input -> Eithers.map (\t -> Variants.TypeVariantUnit) (Helpers.decodeUnit cx input))),
                       (Core.Name "variable", (\input -> Eithers.map (\t -> Variants.TypeVariantVariable) (Helpers.decodeUnit cx input))),
+                      (Core.Name "void", (\input -> Eithers.map (\t -> Variants.TypeVariantVoid) (Helpers.decodeUnit cx input))),
                       (Core.Name "wrap", (\input -> Eithers.map (\t -> Variants.TypeVariantWrap) (Helpers.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",

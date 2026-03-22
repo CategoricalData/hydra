@@ -68,6 +68,7 @@ def transformTestCase(tcm: hydra.testing.TestCaseWithMetadata): Option[hydra.tes
       Some(hydra.testing.TestCaseWithMetadata(`name_`, hydra.testing.TestCase.delegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(hydra.test.transform.buildTopologicalSortSCCCall(adjList),
          hydra.test.transform.encodeListList(expected))), desc, `tags_`))
     }
+    case hydra.testing.TestCase.validateCoreTerm(v_TestCase_validateCoreTerm__) => Some(tcm)
     case _ => None
 }
 

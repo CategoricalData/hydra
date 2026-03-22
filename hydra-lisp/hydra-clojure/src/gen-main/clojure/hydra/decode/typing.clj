@@ -1,5 +1,5 @@
 (ns hydra.decode.typing
-  (:require [hydra.core :refer :all] [hydra.decode.context :refer :all] [hydra.decode.core :refer :all] [hydra.error :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.typing :refer :all]
+  (:require [hydra.core :refer :all] [hydra.decode.context :refer :all] [hydra.decode.core :refer :all] [hydra.errors :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.typing :refer :all]
 ))
 
 (declare hydra_decode_typing_function_structure hydra_decode_typing_type_subst hydra_decode_typing_inference_result hydra_decode_typing_term_subst hydra_decode_typing_type_constraint)

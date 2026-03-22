@@ -1,0 +1,21 @@
+(defpackage :hydra.error.core
+(:use :cl :hydra.accessors :hydra.core :hydra.variants)
+(:export :make-hydra_error_core_duplicate_binding_error :hydra_error_core_duplicate_binding_error? :hydra_error_core_duplicate_binding_error-location :hydra_error_core_duplicate_binding_error-name :make-hydra_error_core_duplicate_field_error :hydra_error_core_duplicate_field_error? :hydra_error_core_duplicate_field_error-location :hydra_error_core_duplicate_field_error-name :hydra_error_core_invalid_term_error-variants :make-hydra_error_core_undefined_field_error :hydra_error_core_undefined_field_error? :hydra_error_core_undefined_field_error-field_name :hydra_error_core_undefined_field_error-type_name :make-hydra_error_core_undefined_term_error :hydra_error_core_undefined_term_error? :hydra_error_core_undefined_term_error-name :make-hydra_error_core_undefined_type_error :hydra_error_core_undefined_type_error? :hydra_error_core_undefined_type_error-name :make-hydra_error_core_unexpected_term_variant_error :hydra_error_core_unexpected_term_variant_error? :hydra_error_core_unexpected_term_variant_error-expected_variant :hydra_error_core_unexpected_term_variant_error-actual_term :make-hydra_error_core_unexpected_type_variant_error :hydra_error_core_unexpected_type_variant_error? :hydra_error_core_unexpected_type_variant_error-expected_variant :hydra_error_core_unexpected_type_variant_error-actual_type))
+
+(in-package :hydra.error.core)
+
+(cl:defstruct hydra_error_core_duplicate_binding_error location name)
+
+(cl:defstruct hydra_error_core_duplicate_field_error location name)
+
+(cl:defvar hydra_error_core_invalid_term_error-variants (cl:list :duplicate_binding :duplicate_field))
+
+(cl:defstruct hydra_error_core_undefined_field_error field_name type_name)
+
+(cl:defstruct hydra_error_core_undefined_term_error name)
+
+(cl:defstruct hydra_error_core_undefined_type_error name)
+
+(cl:defstruct hydra_error_core_unexpected_term_variant_error expected_variant actual_term)
+
+(cl:defstruct hydra_error_core_unexpected_type_variant_error expected_variant actual_type)

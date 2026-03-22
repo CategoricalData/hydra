@@ -2,7 +2,7 @@
 
 (require 'hydra.context)
 
-(require 'hydra.error)
+(require 'hydra.errors)
 
 (cl-defstruct hydra_util_adapter is_lossy source target coder)
 

@@ -6,6 +6,8 @@ import hydra.coders.*
 
 import hydra.core.*
 
+import hydra.error.core.*
+
 import hydra.graph.*
 
 import hydra.json.model.*
@@ -23,6 +25,8 @@ import hydra.ast
 import hydra.coders
 
 import hydra.core
+
+import hydra.error.core
 
 import hydra.graph
 
@@ -163,6 +167,7 @@ enum TestCase :
    case unifyTypes(value: hydra.testing.UnifyTypesTestCase) extends TestCase
    case joinTypes(value: hydra.testing.JoinTypesTestCase) extends TestCase
    case unshadowVariables(value: hydra.testing.UnshadowVariablesTestCase) extends TestCase
+   case validateCoreTerm(value: hydra.testing.ValidateCoreTermTestCase) extends TestCase
 
 case class TestCaseWithMetadata(name: scala.Predef.String, `case`: hydra.testing.TestCase, description: Option[scala.Predef.String],
    tags: Seq[hydra.testing.Tag])
@@ -201,3 +206,5 @@ case class UnifyTypesTestCase(schemaTypes: Seq[hydra.core.Name], left: hydra.cor
    expected: Either[scala.Predef.String, hydra.typing.TypeSubst])
 
 case class JoinTypesTestCase(left: hydra.core.Type, right: hydra.core.Type, expected: Either[Unit, Seq[hydra.typing.TypeConstraint]])
+
+case class ValidateCoreTermTestCase(input: hydra.core.Term, output: Option[hydra.error.core.InvalidTermError])

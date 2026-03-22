@@ -27,6 +27,8 @@ import hydra.lib.strings
 import hydra.module
 import hydra.names
 import hydra.rewriting
+import hydra.schemas
+import hydra.sorting
 import hydra.typing
 import hydra.util
 
@@ -121,7 +123,7 @@ def analyze_function_term(cx: hydra.context.Context, get_t_c: Callable[[T0], hyd
 
     return analyze_function_term_with(cx, (lambda x1, x2: binding_metadata(x1, x2)), get_t_c, set_t_c, env, term)
 
-def comments_from_element(cx: hydra.context.Context, g: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[str]]:
+def comments_from_binding(cx: hydra.context.Context, g: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[str]]:
     r"""Extract comments/description from a Binding."""
 
     return hydra.annotations.get_term_description(cx, g, b.term)
@@ -378,11 +380,33 @@ def normalize_comment(s: str) -> str:
         return hydra.formatting.strip_leading_and_trailing_whitespace(s)
     return hydra.lib.logic.if_else(hydra.lib.strings.null(stripped()), (lambda : ""), (lambda : (last_idx := hydra.lib.math.sub(hydra.lib.strings.length(stripped()), 1), (last_char := hydra.lib.strings.char_at(last_idx, stripped()), hydra.lib.logic.if_else(hydra.lib.equality.equal(last_char, 46), (lambda : stripped()), (lambda : hydra.lib.strings.cat2(stripped(), "."))))[1])[1]))
 
-def union_type_to_record_type(rt: frozenlist[hydra.core.FieldType]) -> frozenlist[hydra.core.FieldType]:
-    r"""Convert a union field type list to a record field type list with optional fields."""
+def reorder_defs(defs: frozenlist[hydra.module.Definition]) -> frozenlist[hydra.module.Definition]:
+    r"""Reorder definitions: types first, then topologically sorted terms."""
 
-    def make_optional(f: hydra.core.FieldType) -> hydra.core.FieldType:
-        fn = f.name
-        ft = f.type
-        return hydra.core.FieldType(fn, hydra.rewriting.map_beneath_type_annotations((lambda x: cast(hydra.core.Type, hydra.core.TypeMaybe(x))), ft))
-    return hydra.lib.lists.map((lambda x1: make_optional(x1)), rt)
+    @lru_cache(1)
+    def partitioned() -> tuple[frozenlist[hydra.module.TypeDefinition], frozenlist[hydra.module.TermDefinition]]:
+        return hydra.schemas.partition_definitions(defs)
+    @lru_cache(1)
+    def type_defs() -> frozenlist[hydra.module.Definition]:
+        return hydra.lib.lists.map((lambda td: cast(hydra.module.Definition, hydra.module.DefinitionType(td))), hydra.lib.pairs.first(partitioned()))
+    @lru_cache(1)
+    def term_defs_wrapped() -> frozenlist[hydra.module.Definition]:
+        return hydra.lib.lists.map((lambda td: cast(hydra.module.Definition, hydra.module.DefinitionTerm(td))), hydra.lib.pairs.second(partitioned()))
+    @lru_cache(1)
+    def sorted_term_defs():
+        def _hoist_sorted_term_defs_1(v1):
+            match v1:
+                case hydra.module.DefinitionTerm(value=td):
+                    return td.name
+
+                case _:
+                    raise TypeError("Unsupported Definition")
+        def _hoist_sorted_term_defs_2(v1):
+            match v1:
+                case hydra.module.DefinitionTerm(value=td):
+                    return hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_term(td.term))
+
+                case _:
+                    return ()
+        return hydra.lib.lists.concat(hydra.sorting.topological_sort_nodes((lambda d: _hoist_sorted_term_defs_1(d)), (lambda d: _hoist_sorted_term_defs_2(d)), term_defs_wrapped()))
+    return hydra.lib.lists.concat((type_defs(), sorted_term_defs()))

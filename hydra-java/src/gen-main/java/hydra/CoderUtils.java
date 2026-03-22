@@ -615,20 +615,39 @@ public interface CoderUtils {
       (ext).value));
   }
 
-  static hydra.util.ConsList<hydra.core.FieldType> unionTypeToRecordType(hydra.util.ConsList<hydra.core.FieldType> rt) {
-    java.util.function.Function<hydra.core.FieldType, hydra.core.FieldType> makeOptional = (java.util.function.Function<hydra.core.FieldType, hydra.core.FieldType>) (f -> {
-      hydra.core.Name fn = (f).name;
-      hydra.core.Type ft = (f).type;
-      return new hydra.core.FieldType(fn, hydra.Rewriting.mapBeneathTypeAnnotations(
-        (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x -> new hydra.core.Type.Maybe(x)),
-        ft));
-    });
-    return hydra.lib.lists.Map.apply(
-      makeOptional,
-      rt);
+  static hydra.util.ConsList<hydra.module.Definition> reorderDefs(hydra.util.ConsList<hydra.module.Definition> defs) {
+    hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>> partitioned = hydra.Schemas.partitionDefinitions(defs);
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> termDefsWrapped = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.TermDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Term(td)),
+      hydra.lib.pairs.Second.apply(partitioned)));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> sortedTermDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.Sorting.topologicalSortNodes(
+      (java.util.function.Function<hydra.module.Definition, hydra.core.Name>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.core.Name visit(hydra.module.Definition.Term td) {
+          return (td).value.name;
+        }
+      })),
+      (java.util.function.Function<hydra.module.Definition, hydra.util.ConsList<hydra.core.Name>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.module.Definition instance) {
+          return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty());
+        }
+
+        @Override
+        public hydra.util.ConsList<hydra.core.Name> visit(hydra.module.Definition.Term td) {
+          return hydra.lib.sets.ToList.apply(hydra.Rewriting.freeVariablesInTerm((td).value.term));
+        }
+      })),
+      termDefsWrapped.get())));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.TypeDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Type(td)),
+      hydra.lib.pairs.First.apply(partitioned)));
+    return hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+      typeDefs.get(),
+      sortedTermDefs.get()));
   }
 
-  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> commentsFromElement(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Binding b) {
+  static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> commentsFromBinding(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Binding b) {
     return hydra.Annotations.getTermDescription(
       cx,
       g,

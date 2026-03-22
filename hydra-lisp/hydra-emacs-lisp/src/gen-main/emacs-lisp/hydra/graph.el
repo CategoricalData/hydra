@@ -4,7 +4,7 @@
 
 (require 'hydra.core)
 
-(require 'hydra.error)
+(require 'hydra.errors)
 
 (cl-defstruct hydra_graph_graph bound_terms bound_types class_constraints lambda_variables metadata primitives schema_types type_variables)
 

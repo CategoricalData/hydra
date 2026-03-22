@@ -4159,6 +4159,45 @@ module_ =
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.core.name")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
               Core.Field {
+                Core.fieldName = (Core.Name "void"),
+                Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "y"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                    Core.injectionField = Core.Field {
+                      Core.fieldName = (Core.Name "union"),
+                      Core.fieldTerm = (Core.TermRecord (Core.Record {
+                        Core.recordTypeName = (Core.Name "hydra.core.Injection"),
+                        Core.recordFields = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "typeName"),
+                            Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                              Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.core.Type"))}))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "field"),
+                            Core.fieldTerm = (Core.TermRecord (Core.Record {
+                              Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                              Core.recordFields = [
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "name"),
+                                  Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                    Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "void"))}))},
+                                Core.Field {
+                                  Core.fieldName = (Core.Name "term"),
+                                  Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                      Core.lambdaParameter = (Core.Name "_"),
+                                      Core.lambdaDomain = Nothing,
+                                      Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                                        Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                                        Core.injectionField = Core.Field {
+                                          Core.fieldName = (Core.Name "unit"),
+                                          Core.fieldTerm = Core.TermUnit}}))}))),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
+              Core.Field {
                 Core.fieldName = (Core.Name "wrap"),
                 Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),

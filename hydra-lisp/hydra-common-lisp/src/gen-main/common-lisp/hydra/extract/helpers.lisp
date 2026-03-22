@@ -1,5 +1,5 @@
 (defpackage :hydra.extract.helpers
-(:use :cl :hydra.core :hydra.error :hydra.lexical :hydra.lib.eithers :hydra.lib.lists :hydra.lib.maps :hydra.lib.maybes :hydra.lib.pairs :hydra.lib.sets :hydra.lib.strings)
+(:use :cl :hydra.core :hydra.errors :hydra.lexical :hydra.lib.eithers :hydra.lib.lists :hydra.lib.maps :hydra.lib.maybes :hydra.lib.pairs :hydra.lib.sets :hydra.lib.strings)
 (:export :hydra_extract_helpers_decode_either :hydra_extract_helpers_decode_list :hydra_extract_helpers_decode_map :hydra_extract_helpers_decode_maybe :hydra_extract_helpers_decode_pair :hydra_extract_helpers_decode_set :hydra_extract_helpers_decode_unit :hydra_extract_helpers_decode_wrapped :hydra_extract_helpers_require_field :hydra_extract_helpers_to_field_map))
 
 (in-package :hydra.extract.helpers)

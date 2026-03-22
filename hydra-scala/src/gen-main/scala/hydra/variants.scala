@@ -55,4 +55,5 @@ enum TypeVariant :
    case union extends TypeVariant
    case unit extends TypeVariant
    case variable extends TypeVariant
+   case void extends TypeVariant
    case wrap extends TypeVariant

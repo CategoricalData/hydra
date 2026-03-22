@@ -40,4 +40,5 @@ def typeVariant(v1: hydra.variants.TypeVariant): scala.Predef.String =
   case hydra.variants.TypeVariant.union => "union"
   case hydra.variants.TypeVariant.unit => "unit"
   case hydra.variants.TypeVariant.variable => "variable"
+  case hydra.variants.TypeVariant.void => "void"
   case hydra.variants.TypeVariant.wrap => "wrap"

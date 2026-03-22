@@ -6,8 +6,8 @@ package hydra.ext.python;
  * Python utilities for constructing Python syntax trees
  */
 public interface Utils {
-  static hydra.ext.python.helpers.PythonVersion targetPythonVersion() {
-    return new hydra.ext.python.helpers.PythonVersion.Python310();
+  static hydra.ext.python.environment.PythonVersion targetPythonVersion() {
+    return new hydra.ext.python.environment.PythonVersion.Python310();
   }
 
   static hydra.ext.python.syntax.Name pyNone() {

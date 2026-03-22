@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.parsing
-(:use :cl :hydra.core :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings :hydra.parsing)
+(:use :cl :hydra.core :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings :hydra.parsing)
 (:export :hydra_decode_parsing_parse_error :hydra_decode_parsing_parse_success :hydra_decode_parsing_parse_result))
 
 (in-package :hydra.decode.parsing)

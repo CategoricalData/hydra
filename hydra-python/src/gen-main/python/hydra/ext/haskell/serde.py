@@ -14,8 +14,8 @@ from typing import cast
 import hydra.ast
 import hydra.constants
 import hydra.core
-import hydra.ext.haskell.ast
 import hydra.ext.haskell.operators
+import hydra.ext.haskell.syntax
 import hydra.lib.equality
 import hydra.lib.lists
 import hydra.lib.literals
@@ -24,150 +24,150 @@ import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.serialization
 
-def write_qualified_name(qname: hydra.ext.haskell.ast.QualifiedName) -> str:
+def write_qualified_name(qname: hydra.ext.haskell.syntax.QualifiedName) -> str:
     r"""Write a qualified name as a string."""
 
     qualifiers = qname.qualifiers
     unqual = qname.unqualified
-    def h(name_part: hydra.ext.haskell.ast.NamePart) -> str:
+    def h(name_part: hydra.ext.haskell.syntax.NamePart) -> str:
         return name_part.value
     @lru_cache(1)
     def all_parts() -> frozenlist[str]:
         return hydra.lib.lists.concat2(hydra.lib.lists.map((lambda x1: h(x1)), qualifiers), (h(unqual),))
     return hydra.lib.strings.intercalate(".", all_parts())
 
-def name_to_expr(name: hydra.ext.haskell.ast.Name):
+def name_to_expr(name: hydra.ext.haskell.syntax.Name):
     def _hoist_hydra_ext_haskell_serde_name_to_expr_1(v1):
         match v1:
-            case hydra.ext.haskell.ast.NameImplicit(value=qn):
+            case hydra.ext.haskell.syntax.NameImplicit(value=qn):
                 return hydra.lib.strings.cat2("?", write_qualified_name(qn))
 
-            case hydra.ext.haskell.ast.NameNormal(value=qn):
+            case hydra.ext.haskell.syntax.NameNormal(value=qn):
                 return write_qualified_name(qn)
 
-            case hydra.ext.haskell.ast.NameParens(value=qn):
+            case hydra.ext.haskell.syntax.NameParens(value=qn):
                 return hydra.lib.strings.cat(("(", write_qualified_name(qn), ")"))
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     return hydra.serialization.cst(_hoist_hydra_ext_haskell_serde_name_to_expr_1(name))
 
-def literal_to_expr(lit: hydra.ext.haskell.ast.Literal):
+def literal_to_expr(lit: hydra.ext.haskell.syntax.Literal):
     r"""Convert a literal value to an AST expression."""
 
     def parens_if_neg(b: bool, e: str) -> str:
         return hydra.lib.logic.if_else(b, (lambda : hydra.lib.strings.cat(("(", e, ")"))), (lambda : e))
     def _hoist_body_1(v1):
         match v1:
-            case hydra.ext.haskell.ast.LiteralChar(value=c):
+            case hydra.ext.haskell.syntax.LiteralChar(value=c):
                 return hydra.lib.literals.show_string(hydra.lib.literals.show_uint16(c))
 
-            case hydra.ext.haskell.ast.LiteralDouble(value=d):
+            case hydra.ext.haskell.syntax.LiteralDouble(value=d):
                 return parens_if_neg(hydra.lib.equality.lt(d, 0.0), hydra.lib.literals.show_float64(d))
 
-            case hydra.ext.haskell.ast.LiteralFloat(value=f):
+            case hydra.ext.haskell.syntax.LiteralFloat(value=f):
                 return parens_if_neg(hydra.lib.equality.lt(f, 0.0), hydra.lib.literals.show_float32(f))
 
-            case hydra.ext.haskell.ast.LiteralInt(value=i):
+            case hydra.ext.haskell.syntax.LiteralInt(value=i):
                 return parens_if_neg(hydra.lib.equality.lt(i, 0), hydra.lib.literals.show_int32(i))
 
-            case hydra.ext.haskell.ast.LiteralInteger(value=i):
+            case hydra.ext.haskell.syntax.LiteralInteger(value=i):
                 return parens_if_neg(hydra.lib.equality.lt(i, 0), hydra.lib.literals.show_bigint(i))
 
-            case hydra.ext.haskell.ast.LiteralString(value=s):
+            case hydra.ext.haskell.syntax.LiteralString(value=s):
                 return hydra.lib.literals.show_string(s)
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     return hydra.serialization.cst(_hoist_body_1(lit))
 
-def application_pattern_to_expr(app_pat: hydra.ext.haskell.ast.ApplicationPattern) -> hydra.ast.Expr:
+def application_pattern_to_expr(app_pat: hydra.ext.haskell.syntax.ApplicationPattern) -> hydra.ast.Expr:
     r"""Convert an application pattern to an AST expression."""
 
     name = app_pat.name
     pats = app_pat.args
     return hydra.serialization.space_sep(hydra.lib.lists.cons(name_to_expr(name), hydra.lib.lists.map((lambda x1: pattern_to_expr(x1)), pats)))
 
-def pattern_to_expr(pat: hydra.ext.haskell.ast.Pattern) -> hydra.ast.Expr:
+def pattern_to_expr(pat: hydra.ext.haskell.syntax.Pattern) -> hydra.ast.Expr:
     r"""Convert a pattern to an AST expression."""
 
     match pat:
-        case hydra.ext.haskell.ast.PatternApplication(value=app):
+        case hydra.ext.haskell.syntax.PatternApplication(value=app):
             return application_pattern_to_expr(app)
 
-        case hydra.ext.haskell.ast.PatternList(value=pats):
+        case hydra.ext.haskell.syntax.PatternList(value=pats):
             return hydra.serialization.bracket_list(hydra.serialization.half_block_style, hydra.lib.lists.map((lambda x1: pattern_to_expr(x1)), pats))
 
-        case hydra.ext.haskell.ast.PatternLiteral(value=lit):
+        case hydra.ext.haskell.syntax.PatternLiteral(value=lit):
             return literal_to_expr(lit)
 
-        case hydra.ext.haskell.ast.PatternName(value=name):
+        case hydra.ext.haskell.syntax.PatternName(value=name):
             return name_to_expr(name)
 
-        case hydra.ext.haskell.ast.PatternParens(value=pat_):
+        case hydra.ext.haskell.syntax.PatternParens(value=pat_):
             return hydra.serialization.parenthesize(pattern_to_expr(pat_))
 
-        case hydra.ext.haskell.ast.PatternTuple(value=pats2):
+        case hydra.ext.haskell.syntax.PatternTuple(value=pats2):
             return hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: pattern_to_expr(x1)), pats2))
 
-        case hydra.ext.haskell.ast.PatternWildcard():
+        case hydra.ext.haskell.syntax.PatternWildcard():
             return hydra.serialization.cst("_")
 
         case _:
             raise TypeError("Unsupported Pattern")
 
-def assertion_to_expr(sert: hydra.ext.haskell.ast.Assertion) -> hydra.ast.Expr:
+def assertion_to_expr(sert: hydra.ext.haskell.syntax.Assertion) -> hydra.ast.Expr:
     r"""Convert a type class assertion to an AST expression."""
 
     match sert:
-        case hydra.ext.haskell.ast.AssertionClass(value=cls):
+        case hydra.ext.haskell.syntax.AssertionClass(value=cls):
             return class_assertion_to_expr(cls)
 
-        case hydra.ext.haskell.ast.AssertionTuple(value=serts):
+        case hydra.ext.haskell.syntax.AssertionTuple(value=serts):
             return hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: assertion_to_expr(x1)), serts))
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def class_assertion_to_expr(cls_asrt: hydra.ext.haskell.ast.ClassAssertion) -> hydra.ast.Expr:
+def class_assertion_to_expr(cls_asrt: hydra.ext.haskell.syntax.ClassAssertion) -> hydra.ast.Expr:
     r"""Convert a class assertion to an AST expression."""
 
     name = cls_asrt.name
     types = cls_asrt.types
     return hydra.serialization.space_sep(hydra.lib.lists.cons(name_to_expr(name), (hydra.serialization.comma_sep(hydra.serialization.half_block_style, hydra.lib.lists.map((lambda x1: type_to_expr(x1)), types)),)))
 
-def type_to_expr(htype: hydra.ext.haskell.ast.Type) -> hydra.ast.Expr:
+def type_to_expr(htype: hydra.ext.haskell.syntax.Type) -> hydra.ast.Expr:
     r"""Convert a Haskell type to an AST expression."""
 
     match htype:
-        case hydra.ext.haskell.ast.TypeApplication(value=app_type):
+        case hydra.ext.haskell.syntax.TypeApplication(value=app_type):
             lhs = app_type.context
             rhs = app_type.argument
             return hydra.serialization.ifx(hydra.ext.haskell.operators.app_op, type_to_expr(lhs), type_to_expr(rhs))
 
-        case hydra.ext.haskell.ast.TypeCtx(value=ctx_type):
+        case hydra.ext.haskell.syntax.TypeCtx(value=ctx_type):
             ctx = ctx_type.ctx
             typ = ctx_type.type
             return hydra.serialization.ifx(hydra.ext.haskell.operators.assert_op(), assertion_to_expr(ctx), type_to_expr(typ))
 
-        case hydra.ext.haskell.ast.TypeFunction(value=fun_type):
+        case hydra.ext.haskell.syntax.TypeFunction(value=fun_type):
             dom = fun_type.domain
             cod = fun_type.codomain
             return hydra.serialization.ifx(hydra.ext.haskell.operators.arrow_op(), type_to_expr(dom), type_to_expr(cod))
 
-        case hydra.ext.haskell.ast.TypeList(value=htype_):
+        case hydra.ext.haskell.syntax.TypeList(value=htype_):
             return hydra.serialization.bracket_list(hydra.serialization.inline_style, (type_to_expr(htype_),))
 
-        case hydra.ext.haskell.ast.TypeTuple(value=types):
+        case hydra.ext.haskell.syntax.TypeTuple(value=types):
             return hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: type_to_expr(x1)), types))
 
-        case hydra.ext.haskell.ast.TypeVariable(value=name):
+        case hydra.ext.haskell.syntax.TypeVariable(value=name):
             return name_to_expr(name)
 
         case _:
             raise TypeError("Unsupported Type")
 
-def type_signature_to_expr(type_sig: hydra.ext.haskell.ast.TypeSignature) -> hydra.ast.Expr:
+def type_signature_to_expr(type_sig: hydra.ext.haskell.syntax.TypeSignature) -> hydra.ast.Expr:
     r"""Convert a type signature to an AST expression."""
 
     name = type_sig.name
@@ -183,17 +183,17 @@ def type_signature_to_expr(type_sig: hydra.ext.haskell.ast.TypeSignature) -> hyd
         return hydra.serialization.structural_space_sep((name_expr(), hydra.serialization.cst("::"), type_expr()))
     return hydra.lib.logic.if_else(hydra.lib.equality.gt(hydra.serialization.expression_length(inline_sig()), 120), (lambda : hydra.serialization.newline_sep((hydra.serialization.space_sep((name_expr(), hydra.serialization.cst("::"))), hydra.serialization.tab_indent(type_expr())))), (lambda : inline_sig()))
 
-def alternative_to_expr(alt: hydra.ext.haskell.ast.Alternative) -> hydra.ast.Expr:
+def alternative_to_expr(alt: hydra.ext.haskell.syntax.Alternative) -> hydra.ast.Expr:
     r"""Convert a pattern-matching alternative to an AST expression."""
 
     return hydra.serialization.structural_space_sep((pattern_to_expr(alt.pattern), hydra.serialization.cst("->"), case_rhs_to_expr(alt.rhs)))
 
-def application_expression_to_expr(app: hydra.ext.haskell.ast.ApplicationExpression) -> hydra.ast.Expr:
+def application_expression_to_expr(app: hydra.ext.haskell.syntax.ApplicationExpression) -> hydra.ast.Expr:
     r"""Convert a function application expression to an AST expression."""
 
     return hydra.serialization.ifx(hydra.ext.haskell.operators.app_op, expression_to_expr(app.function), expression_to_expr(app.argument))
 
-def case_expression_to_expr(case_expr: hydra.ext.haskell.ast.CaseExpression) -> hydra.ast.Expr:
+def case_expression_to_expr(case_expr: hydra.ext.haskell.syntax.CaseExpression) -> hydra.ast.Expr:
     r"""Convert a case expression to an AST expression."""
 
     cs = case_expr.case
@@ -207,17 +207,17 @@ def case_expression_to_expr(case_expr: hydra.ext.haskell.ast.CaseExpression) -> 
         return hydra.serialization.newline_sep(hydra.lib.lists.map((lambda x1: alternative_to_expr(x1)), alts))
     return hydra.serialization.ifx(of_op, lhs(), rhs())
 
-def case_rhs_to_expr(rhs: hydra.ext.haskell.ast.CaseRhs) -> hydra.ast.Expr:
+def case_rhs_to_expr(rhs: hydra.ext.haskell.syntax.CaseRhs) -> hydra.ast.Expr:
     r"""Convert a case right-hand side to an AST expression."""
 
     return expression_to_expr(rhs.value)
 
-def construct_record_expression_to_expr(construct_record: hydra.ext.haskell.ast.ConstructRecordExpression) -> hydra.ast.Expr:
+def construct_record_expression_to_expr(construct_record: hydra.ext.haskell.syntax.ConstructRecordExpression) -> hydra.ast.Expr:
     r"""Convert a record construction expression to an AST expression."""
 
     name = construct_record.name
     updates = construct_record.fields
-    def from_update(update: hydra.ext.haskell.ast.FieldUpdate) -> hydra.ast.Expr:
+    def from_update(update: hydra.ext.haskell.syntax.FieldUpdate) -> hydra.ast.Expr:
         fn = update.name
         val = update.value
         return hydra.serialization.ifx(hydra.ext.haskell.operators.define_op(), name_to_expr(fn), expression_to_expr(val))
@@ -226,54 +226,54 @@ def construct_record_expression_to_expr(construct_record: hydra.ext.haskell.ast.
         return hydra.serialization.comma_sep(hydra.serialization.half_block_style, hydra.lib.lists.map((lambda x1: from_update(x1)), updates))
     return hydra.serialization.space_sep(hydra.lib.lists.cons(name_to_expr(name), (hydra.serialization.brackets(hydra.serialization.curly_braces, hydra.serialization.half_block_style, body()),)))
 
-def expression_to_expr(expr: hydra.ext.haskell.ast.Expression) -> hydra.ast.Expr:
+def expression_to_expr(expr: hydra.ext.haskell.syntax.Expression) -> hydra.ast.Expr:
     r"""Convert a Haskell expression to an AST expression."""
 
     match expr:
-        case hydra.ext.haskell.ast.ExpressionApplication(value=app):
+        case hydra.ext.haskell.syntax.ExpressionApplication(value=app):
             return application_expression_to_expr(app)
 
-        case hydra.ext.haskell.ast.ExpressionCase(value=cases):
+        case hydra.ext.haskell.syntax.ExpressionCase(value=cases):
             return case_expression_to_expr(cases)
 
-        case hydra.ext.haskell.ast.ExpressionConstructRecord(value=r):
+        case hydra.ext.haskell.syntax.ExpressionConstructRecord(value=r):
             return construct_record_expression_to_expr(r)
 
-        case hydra.ext.haskell.ast.ExpressionDo(value=statements):
+        case hydra.ext.haskell.syntax.ExpressionDo(value=statements):
             return hydra.serialization.indent_block(hydra.lib.lists.cons(hydra.serialization.cst("do"), hydra.lib.lists.map((lambda x1: statement_to_expr(x1)), statements)))
 
-        case hydra.ext.haskell.ast.ExpressionIf(value=ifte):
+        case hydra.ext.haskell.syntax.ExpressionIf(value=ifte):
             return if_expression_to_expr(ifte)
 
-        case hydra.ext.haskell.ast.ExpressionLiteral(value=lit):
+        case hydra.ext.haskell.syntax.ExpressionLiteral(value=lit):
             return literal_to_expr(lit)
 
-        case hydra.ext.haskell.ast.ExpressionLambda(value=lam):
+        case hydra.ext.haskell.syntax.ExpressionLambda(value=lam):
             return hydra.serialization.parenthesize(lambda_expression_to_expr(lam))
 
-        case hydra.ext.haskell.ast.ExpressionLet(value=let_expr):
+        case hydra.ext.haskell.syntax.ExpressionLet(value=let_expr):
             bindings = let_expr.bindings
             inner = let_expr.inner
-            def encode_binding(binding: hydra.ext.haskell.ast.LocalBinding) -> hydra.ast.Expr:
+            def encode_binding(binding: hydra.ext.haskell.syntax.LocalBinding) -> hydra.ast.Expr:
                 return hydra.serialization.indent_subsequent_lines("    ", local_binding_to_expr(binding))
             return hydra.serialization.indent_block(hydra.lib.lists.cons(hydra.serialization.cst(""), hydra.lib.lists.cons(hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("let"), (hydra.serialization.custom_indent_block("    ", hydra.lib.lists.map((lambda x1: encode_binding(x1)), bindings)),))), (hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("in"), (expression_to_expr(inner),))),))))
 
-        case hydra.ext.haskell.ast.ExpressionList(value=exprs):
+        case hydra.ext.haskell.syntax.ExpressionList(value=exprs):
             return hydra.serialization.bracket_list(hydra.serialization.half_block_style, hydra.lib.lists.map((lambda x1: expression_to_expr(x1)), exprs))
 
-        case hydra.ext.haskell.ast.ExpressionParens(value=expr_):
+        case hydra.ext.haskell.syntax.ExpressionParens(value=expr_):
             return hydra.serialization.parenthesize(expression_to_expr(expr_))
 
-        case hydra.ext.haskell.ast.ExpressionTuple(value=exprs2):
+        case hydra.ext.haskell.syntax.ExpressionTuple(value=exprs2):
             return hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: expression_to_expr(x1)), exprs2))
 
-        case hydra.ext.haskell.ast.ExpressionVariable(value=name):
+        case hydra.ext.haskell.syntax.ExpressionVariable(value=name):
             return name_to_expr(name)
 
         case _:
             raise TypeError("Unsupported Expression")
 
-def if_expression_to_expr(if_expr: hydra.ext.haskell.ast.IfExpression) -> hydra.ast.Expr:
+def if_expression_to_expr(if_expr: hydra.ext.haskell.syntax.IfExpression) -> hydra.ast.Expr:
     r"""Convert an if-then-else expression to an AST expression."""
 
     eif = if_expr.condition
@@ -285,7 +285,7 @@ def if_expression_to_expr(if_expr: hydra.ext.haskell.ast.IfExpression) -> hydra.
         return hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("then"), (expression_to_expr(ethen),))), (hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("else"), (expression_to_expr(eelse),))),)))
     return hydra.serialization.ifx(if_op, hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("if"), (expression_to_expr(eif),))), body())
 
-def lambda_expression_to_expr(lambda_expr: hydra.ext.haskell.ast.LambdaExpression) -> hydra.ast.Expr:
+def lambda_expression_to_expr(lambda_expr: hydra.ext.haskell.syntax.LambdaExpression) -> hydra.ast.Expr:
     r"""Convert a lambda expression to an AST expression."""
 
     bindings = lambda_expr.bindings
@@ -298,34 +298,34 @@ def lambda_expression_to_expr(lambda_expr: hydra.ext.haskell.ast.LambdaExpressio
         return expression_to_expr(inner)
     return hydra.serialization.ifx(hydra.ext.haskell.operators.lambda_op(), hydra.serialization.prefix("\\", head()), body())
 
-def local_binding_to_expr(binding: hydra.ext.haskell.ast.LocalBinding) -> hydra.ast.Expr:
+def local_binding_to_expr(binding: hydra.ext.haskell.syntax.LocalBinding) -> hydra.ast.Expr:
     r"""Convert a local binding to an AST expression."""
 
     match binding:
-        case hydra.ext.haskell.ast.LocalBindingSignature(value=ts):
+        case hydra.ext.haskell.syntax.LocalBindingSignature(value=ts):
             return type_signature_to_expr(ts)
 
-        case hydra.ext.haskell.ast.LocalBindingValue(value=vb):
+        case hydra.ext.haskell.syntax.LocalBindingValue(value=vb):
             return value_binding_to_expr(vb)
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def right_hand_side_to_expr(rhs: hydra.ext.haskell.ast.RightHandSide) -> hydra.ast.Expr:
+def right_hand_side_to_expr(rhs: hydra.ext.haskell.syntax.RightHandSide) -> hydra.ast.Expr:
     r"""Convert a right-hand side to an AST expression."""
 
     return expression_to_expr(rhs.value)
 
-def statement_to_expr(stmt: hydra.ext.haskell.ast.Statement) -> hydra.ast.Expr:
+def statement_to_expr(stmt: hydra.ext.haskell.syntax.Statement) -> hydra.ast.Expr:
     r"""Convert a statement to an AST expression."""
 
     return expression_to_expr(stmt.value)
 
-def value_binding_to_expr(vb: hydra.ext.haskell.ast.ValueBinding) -> hydra.ast.Expr:
+def value_binding_to_expr(vb: hydra.ext.haskell.syntax.ValueBinding) -> hydra.ast.Expr:
     r"""Convert a value binding to an AST expression."""
 
     match vb:
-        case hydra.ext.haskell.ast.ValueBindingSimple(value=simple_v_b):
+        case hydra.ext.haskell.syntax.ValueBindingSimple(value=simple_v_b):
             pat = simple_v_b.pattern
             rhs = simple_v_b.rhs
             local = simple_v_b.local_bindings
@@ -346,7 +346,7 @@ def value_binding_to_expr(vb: hydra.ext.haskell.ast.ValueBinding) -> hydra.ast.E
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def field_to_expr(field: hydra.ext.haskell.ast.Field) -> hydra.ast.Expr:
+def field_to_expr(field: hydra.ext.haskell.syntax.Field) -> hydra.ast.Expr:
     r"""Convert a field declaration to an AST expression."""
 
     name = field.name
@@ -358,23 +358,23 @@ def to_haskell_comments(c: str) -> str:
 
     return hydra.lib.strings.intercalate("\n", hydra.lib.lists.map((lambda s: hydra.lib.strings.cat2("-- | ", s)), hydra.lib.strings.lines(c)))
 
-def field_with_comments_to_expr(field_with_comments: hydra.ext.haskell.ast.FieldWithComments) -> hydra.ast.Expr:
+def field_with_comments_to_expr(field_with_comments: hydra.ext.haskell.syntax.FieldWithComments) -> hydra.ast.Expr:
     r"""Convert a field with comments to an AST expression."""
 
     field = field_with_comments.field
     mc = field_with_comments.comments
     return hydra.lib.maybes.maybe((lambda : field_to_expr(field)), (lambda c: hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.cst(to_haskell_comments(c)), (field_to_expr(field),)))), mc)
 
-def constructor_to_expr(cons: hydra.ext.haskell.ast.Constructor) -> hydra.ast.Expr:
+def constructor_to_expr(cons: hydra.ext.haskell.syntax.Constructor) -> hydra.ast.Expr:
     r"""Convert a data constructor to an AST expression."""
 
     match cons:
-        case hydra.ext.haskell.ast.ConstructorOrdinary(value=ord):
+        case hydra.ext.haskell.syntax.ConstructorOrdinary(value=ord):
             name = ord.name
             types = ord.fields
             return hydra.serialization.space_sep(hydra.lib.lists.cons(name_to_expr(name), (hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: type_to_expr(x1)), types)),)))
 
-        case hydra.ext.haskell.ast.ConstructorRecord(value=rec):
+        case hydra.ext.haskell.syntax.ConstructorRecord(value=rec):
             name = rec.name
             fields = rec.fields
             return hydra.serialization.space_sep(hydra.lib.lists.cons(name_to_expr(name), (hydra.serialization.curly_braces_list(Nothing(), hydra.serialization.half_block_style, hydra.lib.lists.map((lambda x1: field_with_comments_to_expr(x1)), fields)),)))
@@ -382,57 +382,57 @@ def constructor_to_expr(cons: hydra.ext.haskell.ast.Constructor) -> hydra.ast.Ex
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def constructor_with_comments_to_expr(cons_with_comments: hydra.ext.haskell.ast.ConstructorWithComments) -> hydra.ast.Expr:
+def constructor_with_comments_to_expr(cons_with_comments: hydra.ext.haskell.syntax.ConstructorWithComments) -> hydra.ast.Expr:
     r"""Convert a data constructor with comments to an AST expression."""
 
     body = cons_with_comments.body
     mc = cons_with_comments.comments
     return hydra.lib.maybes.maybe((lambda : constructor_to_expr(body)), (lambda c: hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.cst(to_haskell_comments(c)), (constructor_to_expr(body),)))), mc)
 
-def data_or_newtype_to_expr(kw: hydra.ext.haskell.ast.DataOrNewtype) -> hydra.ast.Expr:
+def data_or_newtype_to_expr(kw: hydra.ext.haskell.syntax.DataOrNewtype) -> hydra.ast.Expr:
     r"""Convert a data/newtype keyword to an AST expression."""
 
     match kw:
-        case hydra.ext.haskell.ast.DataOrNewtype.DATA:
+        case hydra.ext.haskell.syntax.DataOrNewtype.DATA:
             return hydra.serialization.cst("data")
 
-        case hydra.ext.haskell.ast.DataOrNewtype.NEWTYPE:
+        case hydra.ext.haskell.syntax.DataOrNewtype.NEWTYPE:
             return hydra.serialization.cst("newtype")
 
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def variable_to_expr(variable: hydra.ext.haskell.ast.Variable) -> hydra.ast.Expr:
+def variable_to_expr(variable: hydra.ext.haskell.syntax.Variable) -> hydra.ast.Expr:
     r"""Convert a type variable to an AST expression."""
 
     return name_to_expr(variable.value)
 
-def declaration_head_to_expr(hd: hydra.ext.haskell.ast.DeclarationHead) -> hydra.ast.Expr:
+def declaration_head_to_expr(hd: hydra.ext.haskell.syntax.DeclarationHead) -> hydra.ast.Expr:
     r"""Convert a declaration head to an AST expression."""
 
     match hd:
-        case hydra.ext.haskell.ast.DeclarationHeadApplication(value=app_head):
+        case hydra.ext.haskell.syntax.DeclarationHeadApplication(value=app_head):
             fun = app_head.function
             op = app_head.operand
             return hydra.serialization.space_sep(hydra.lib.lists.cons(declaration_head_to_expr(fun), (variable_to_expr(op),)))
 
-        case hydra.ext.haskell.ast.DeclarationHeadSimple(value=name):
+        case hydra.ext.haskell.syntax.DeclarationHeadSimple(value=name):
             return name_to_expr(name)
 
         case _:
             raise TypeError("Unsupported DeclarationHead")
 
-def declaration_to_expr(decl: hydra.ext.haskell.ast.Declaration) -> hydra.ast.Expr:
+def declaration_to_expr(decl: hydra.ext.haskell.syntax.Declaration) -> hydra.ast.Expr:
     r"""Convert a declaration to an AST expression."""
 
     match decl:
-        case hydra.ext.haskell.ast.DeclarationData(value=data_decl):
+        case hydra.ext.haskell.syntax.DeclarationData(value=data_decl):
             kw = data_decl.keyword
             hd = data_decl.head
             cons = data_decl.constructors
             deriv = data_decl.deriving
             @lru_cache(1)
-            def deriv_cat() -> frozenlist[hydra.ext.haskell.ast.Name]:
+            def deriv_cat() -> frozenlist[hydra.ext.haskell.syntax.Name]:
                 return hydra.lib.lists.concat(hydra.lib.lists.map((lambda v1: v1.value), deriv))
             @lru_cache(1)
             def constructors() -> hydra.ast.Expr:
@@ -445,15 +445,15 @@ def declaration_to_expr(decl: hydra.ext.haskell.ast.Declaration) -> hydra.ast.Ex
                 return (hydra.serialization.space_sep(hydra.lib.lists.cons(data_or_newtype_to_expr(kw), hydra.lib.lists.cons(declaration_head_to_expr(hd), (hydra.serialization.cst("="),)))), constructors())
             return hydra.serialization.indent_block(hydra.lib.lists.concat2(main_parts(), deriving_clause()))
 
-        case hydra.ext.haskell.ast.DeclarationType(value=type_decl):
+        case hydra.ext.haskell.syntax.DeclarationType(value=type_decl):
             hd = type_decl.name
             typ = type_decl.type
             return hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("type"), hydra.lib.lists.cons(declaration_head_to_expr(hd), hydra.lib.lists.cons(hydra.serialization.cst("="), (type_to_expr(typ),)))))
 
-        case hydra.ext.haskell.ast.DeclarationValueBinding(value=vb):
+        case hydra.ext.haskell.syntax.DeclarationValueBinding(value=vb):
             return value_binding_to_expr(vb)
 
-        case hydra.ext.haskell.ast.DeclarationTypedBinding(value=typed_binding):
+        case hydra.ext.haskell.syntax.DeclarationTypedBinding(value=typed_binding):
             type_sig = typed_binding.type_signature
             vb = typed_binding.value_binding
             name = type_sig.name
@@ -463,19 +463,19 @@ def declaration_to_expr(decl: hydra.ext.haskell.ast.Declaration) -> hydra.ast.Ex
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def declaration_with_comments_to_expr(decl_with_comments: hydra.ext.haskell.ast.DeclarationWithComments) -> hydra.ast.Expr:
+def declaration_with_comments_to_expr(decl_with_comments: hydra.ext.haskell.syntax.DeclarationWithComments) -> hydra.ast.Expr:
     r"""Convert a declaration with comments to an AST expression."""
 
     body = decl_with_comments.body
     mc = decl_with_comments.comments
     return hydra.lib.maybes.maybe((lambda : declaration_to_expr(body)), (lambda c: hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.cst(to_haskell_comments(c)), (declaration_to_expr(body),)))), mc)
 
-def import_export_spec_to_expr(spec: hydra.ext.haskell.ast.ImportExportSpec) -> hydra.ast.Expr:
+def import_export_spec_to_expr(spec: hydra.ext.haskell.syntax.ImportExportSpec) -> hydra.ast.Expr:
     r"""Convert an import/export specification to an AST expression."""
 
     return name_to_expr(spec.name)
 
-def import_to_expr(import_: hydra.ext.haskell.ast.Import) -> hydra.ast.Expr:
+def import_to_expr(import_: hydra.ext.haskell.syntax.Import) -> hydra.ast.Expr:
     r"""Convert an import statement to an AST expression."""
 
     qual = import_.qualified
@@ -483,9 +483,9 @@ def import_to_expr(import_: hydra.ext.haskell.ast.Import) -> hydra.ast.Expr:
     mod = import_.as_
     mspec = import_.spec
     name = mod_name.value
-    def hiding_sec(spec: hydra.ext.haskell.ast.SpecImport) -> hydra.ast.Expr:
+    def hiding_sec(spec: hydra.ext.haskell.syntax.SpecImport) -> hydra.ast.Expr:
         match spec:
-            case hydra.ext.haskell.ast.SpecImportHiding(value=names):
+            case hydra.ext.haskell.syntax.SpecImportHiding(value=names):
                 return hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("hiding "), (hydra.serialization.parens(hydra.serialization.comma_sep(hydra.serialization.inline_style, hydra.lib.lists.map((lambda x1: import_export_spec_to_expr(x1)), names))),)))
 
             case _:
@@ -495,7 +495,7 @@ def import_to_expr(import_: hydra.ext.haskell.ast.Import) -> hydra.ast.Expr:
         return hydra.lib.maybes.cat((Just(hydra.serialization.cst("import")), hydra.lib.logic.if_else(qual, (lambda : Just(hydra.serialization.cst("qualified"))), (lambda : Nothing())), Just(hydra.serialization.cst(name)), hydra.lib.maybes.map((lambda m: hydra.serialization.cst(hydra.lib.strings.cat2("as ", m.value))), mod), hydra.lib.maybes.map((lambda x1: hiding_sec(x1)), mspec)))
     return hydra.serialization.space_sep(parts())
 
-def module_head_to_expr(module_head: hydra.ext.haskell.ast.ModuleHead) -> hydra.ast.Expr:
+def module_head_to_expr(module_head: hydra.ext.haskell.syntax.ModuleHead) -> hydra.ast.Expr:
     r"""Convert a module head to an AST expression."""
 
     mc = module_head.comments
@@ -511,7 +511,7 @@ def to_simple_comments(c: str) -> str:
 
     return hydra.lib.strings.intercalate("\n", hydra.lib.lists.map((lambda s: hydra.lib.strings.cat2("-- ", s)), hydra.lib.strings.lines(c)))
 
-def module_to_expr(module: hydra.ext.haskell.ast.Module) -> hydra.ast.Expr:
+def module_to_expr(module: hydra.ext.haskell.syntax.Module) -> hydra.ast.Expr:
     r"""Convert a Haskell module to an AST expression."""
 
     mh = module.head

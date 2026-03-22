@@ -26,6 +26,8 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -237,22 +239,32 @@ nameToFilePath nsConv localConv ext name =
         ".",
         (Module.unFileExtension ext)])
 
--- | Convert a union field type list to a record field type list with optional fields
-unionTypeToRecordType :: [Core.FieldType] -> [Core.FieldType]
-unionTypeToRecordType rt =
+-- | Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms
+reorderDefs :: [Module.Definition] -> [Module.Definition]
+reorderDefs defs =
 
-      let makeOptional =
-              \f ->
-                let fn = Core.fieldTypeName f
-                    ft = Core.fieldTypeType f
-                in Core.FieldType {
-                  Core.fieldTypeName = fn,
-                  Core.fieldTypeType = (Rewriting.mapBeneathTypeAnnotations (\x -> Core.TypeMaybe x) ft)}
-      in (Lists.map makeOptional rt)
+      let partitioned = Schemas.partitionDefinitions defs
+          typeDefsRaw = Pairs.first partitioned
+          nameFirst = Lists.filter (\td -> Equality.equal (Module.typeDefinitionName td) (Core.Name "hydra.core.Name")) typeDefsRaw
+          nameRest =
+                  Lists.filter (\td -> Logic.not (Equality.equal (Module.typeDefinitionName td) (Core.Name "hydra.core.Name"))) typeDefsRaw
+          typeDefs =
+                  Lists.concat [
+                    Lists.map (\td -> Module.DefinitionType td) nameFirst,
+                    (Lists.map (\td -> Module.DefinitionType td) nameRest)]
+          termDefsWrapped = Lists.map (\td -> Module.DefinitionTerm td) (Pairs.second partitioned)
+          sortedTermDefs =
+                  Lists.concat (Sorting.topologicalSortNodes (\d -> case d of
+                    Module.DefinitionTerm v0 -> Module.termDefinitionName v0) (\d -> case d of
+                    Module.DefinitionTerm v0 -> Sets.toList (Rewriting.freeVariablesInTerm (Module.termDefinitionTerm v0))
+                    _ -> []) termDefsWrapped)
+      in (Lists.concat [
+        typeDefs,
+        sortedTermDefs])
 
 -- | Extract comments/description from a Binding
-commentsFromElement :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) (Maybe String)
-commentsFromElement cx g b = Annotations.getTermDescription cx g (Core.bindingTerm b)
+commentsFromBinding :: Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Errors.Error) (Maybe String)
+commentsFromBinding cx g b = Annotations.getTermDescription cx g (Core.bindingTerm b)
 
 -- | Extract comments/description from a FieldType
 commentsFromFieldType :: Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Errors.Error) (Maybe String)

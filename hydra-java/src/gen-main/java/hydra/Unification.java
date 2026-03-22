@@ -302,9 +302,9 @@ public interface Unification {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> otherwise(hydra.core.Type instance) {
-            return hydra.unification.Unification.joinTypes_cannotUnify(
+            return hydra.Unification.joinTypes_cannotUnify(
               cx,
-              hydra.show.core.Core::type,
+              hydra.show.Core::type,
               sleft,
               sright);
           }

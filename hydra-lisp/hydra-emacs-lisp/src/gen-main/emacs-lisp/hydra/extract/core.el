@@ -4,7 +4,7 @@
 
 (require 'hydra.core)
 
-(require 'hydra.error)
+(require 'hydra.errors)
 
 (require 'hydra.lexical)
 

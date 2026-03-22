@@ -6,7 +6,7 @@ import hydra.context.*
 
 import hydra.core.*
 
-import hydra.error.*
+import hydra.errors.*
 
 import hydra.graph.*
 
@@ -94,14 +94,14 @@ def modulesToGraph(bsGraph: hydra.graph.Graph)(universeModules: Seq[hydra.module
   val dataElements: Seq[hydra.core.Binding] = hydra.lib.lists.filter[hydra.core.Binding]((e: hydra.core.Binding) => hydra.lib.logic.not(hydra.annotations.isNativeType(e)))(hydra.lib.lists.concat[hydra.core.Binding](hydra.lib.lists.map[hydra.module.Module,
      Seq[hydra.core.Binding]]((m: hydra.module.Module) => (m.elements))(dataModules)))
   val schemaGraph: hydra.graph.Graph = hydra.lexical.elementsToGraph(bsGraph)(hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme])(schemaElements)
-  val schemaTypes: Map[hydra.core.Name, hydra.core.TypeScheme] = hydra.lib.eithers.either[hydra.context.InContext[hydra.error.Error],
-     Map[hydra.core.Name, hydra.core.TypeScheme], Map[hydra.core.Name, hydra.core.TypeScheme]]((_x: hydra.context.InContext[hydra.error.Error]) => hydra.lib.maps.empty[hydra.core.Name,
+  val schemaTypes: Map[hydra.core.Name, hydra.core.TypeScheme] = hydra.lib.eithers.either[hydra.context.InContext[hydra.errors.Error],
+     Map[hydra.core.Name, hydra.core.TypeScheme], Map[hydra.core.Name, hydra.core.TypeScheme]]((_x: hydra.context.InContext[hydra.errors.Error]) => hydra.lib.maps.empty[hydra.core.Name,
      hydra.core.TypeScheme])((_r: Map[hydra.core.Name, hydra.core.TypeScheme]) => _r)(hydra.schemas.schemaGraphToTypingEnvironment(hydra.lexical.emptyContext)(schemaGraph))
   hydra.lexical.elementsToGraph(bsGraph)(schemaTypes)(dataElements)
 }
 
-def generateSourceFiles[T0, T1](printDefinitions: (hydra.module.Module => Seq[hydra.module.Definition] => hydra.context.Context => hydra.graph.Graph => Either[hydra.context.InContext[hydra.error.Error],
-   Map[T0, T1]]))(lang: hydra.coders.Language)(doInfer: Boolean)(doExpand: Boolean)(doHoistCaseStatements: Boolean)(doHoistPolymorphicLetBindings: Boolean)(bsGraph: hydra.graph.Graph)(universeModules: Seq[hydra.module.Module])(modsToGenerate: Seq[hydra.module.Module])(cx: hydra.context.Context): Either[hydra.context.InContext[hydra.error.Error],
+def generateSourceFiles[T0, T1](printDefinitions: (hydra.module.Module => Seq[hydra.module.Definition] => hydra.context.Context => hydra.graph.Graph => Either[hydra.context.InContext[hydra.errors.Error],
+   Map[T0, T1]]))(lang: hydra.coders.Language)(doInfer: Boolean)(doExpand: Boolean)(doHoistCaseStatements: Boolean)(doHoistPolymorphicLetBindings: Boolean)(bsGraph: hydra.graph.Graph)(universeModules: Seq[hydra.module.Module])(modsToGenerate: Seq[hydra.module.Module])(cx: hydra.context.Context): Either[hydra.context.InContext[hydra.errors.Error],
    Seq[Tuple2[T0, T1]]] =
   {
   val namespaceMap: Map[hydra.module.Namespace, hydra.module.Module] = hydra.lib.maps.fromList[hydra.module.Namespace,
@@ -120,18 +120,18 @@ def generateSourceFiles[T0, T1](printDefinitions: (hydra.module.Module => Seq[hy
   val dataElements: Seq[hydra.core.Binding] = hydra.lib.lists.concat[hydra.core.Binding](hydra.lib.lists.map[hydra.module.Module,
      Seq[hydra.core.Binding]]((m: hydra.module.Module) => (m.elements))(dataMods))
   val schemaGraph: hydra.graph.Graph = hydra.lexical.elementsToGraph(bsGraph)(hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme])(schemaElements)
-  val schemaTypes2: Map[hydra.core.Name, hydra.core.TypeScheme] = hydra.lib.eithers.either[hydra.context.InContext[hydra.error.Error],
-     Map[hydra.core.Name, hydra.core.TypeScheme], Map[hydra.core.Name, hydra.core.TypeScheme]]((_x: hydra.context.InContext[hydra.error.Error]) => hydra.lib.maps.empty[hydra.core.Name,
+  val schemaTypes2: Map[hydra.core.Name, hydra.core.TypeScheme] = hydra.lib.eithers.either[hydra.context.InContext[hydra.errors.Error],
+     Map[hydra.core.Name, hydra.core.TypeScheme], Map[hydra.core.Name, hydra.core.TypeScheme]]((_x: hydra.context.InContext[hydra.errors.Error]) => hydra.lib.maps.empty[hydra.core.Name,
      hydra.core.TypeScheme])((_r: Map[hydra.core.Name, hydra.core.TypeScheme]) => _r)(hydra.schemas.schemaGraphToTypingEnvironment(hydra.lexical.emptyContext)(schemaGraph))
   val dataGraph: hydra.graph.Graph = hydra.lexical.elementsToGraph(bsGraph)(schemaTypes2)(dataElements)
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.error.Error], Seq[Tuple2[T0, T1]], Seq[Tuple2[T0,
-     T1]]](hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.error.Error], Seq[Tuple2[T0, T1]]]](hydra.lib.lists.`null`[hydra.module.Module](typeModulesToGenerate))(Right(Seq()))({
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[Tuple2[T0, T1]], Seq[Tuple2[T0,
+     T1]]](hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], Seq[Tuple2[T0, T1]]]](hydra.lib.lists.`null`[hydra.module.Module](typeModulesToGenerate))(Right(Seq()))({
     val nameLists: Seq[Seq[hydra.core.Name]] = hydra.lib.lists.map[hydra.module.Module, Seq[hydra.core.Name]]((m: hydra.module.Module) =>
       hydra.lib.lists.map[hydra.core.Binding, hydra.core.Name]((e: hydra.core.Binding) => (e.name))(hydra.lib.lists.filter[hydra.core.Binding]((e: hydra.core.Binding) => hydra.annotations.isNativeType(e))(m.elements)))(typeModulesToGenerate)
-    hydra.lib.eithers.bind[hydra.context.InContext[hydra.error.Error], Tuple2[Map[hydra.core.Name, hydra.core.Type],
+    hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Tuple2[Map[hydra.core.Name, hydra.core.Type],
        Seq[Seq[hydra.module.TypeDefinition]]], Seq[Tuple2[T0, T1]]](hydra.lib.eithers.bimap[scala.Predef.String,
-       Tuple2[Map[hydra.core.Name, hydra.core.Type], Seq[Seq[hydra.module.TypeDefinition]]], hydra.context.InContext[hydra.error.Error],
-       Tuple2[Map[hydra.core.Name, hydra.core.Type], Seq[Seq[hydra.module.TypeDefinition]]]]((s: scala.Predef.String) => hydra.context.InContext(hydra.error.Error.other(s),
+       Tuple2[Map[hydra.core.Name, hydra.core.Type], Seq[Seq[hydra.module.TypeDefinition]]], hydra.context.InContext[hydra.errors.Error],
+       Tuple2[Map[hydra.core.Name, hydra.core.Type], Seq[Seq[hydra.module.TypeDefinition]]]]((s: scala.Predef.String) => hydra.context.InContext(hydra.errors.Error.other(s),
        cx))((r: Tuple2[Map[hydra.core.Name, hydra.core.Type], Seq[Seq[hydra.module.TypeDefinition]]]) => r)(hydra.adapt.schemaGraphToDefinitions(constraints)(schemaGraph)(nameLists)(cx)))((schemaResult: Tuple2[Map[hydra.core.Name,
        hydra.core.Type], Seq[Seq[hydra.module.TypeDefinition]]]) =>
       {
@@ -141,15 +141,15 @@ def generateSourceFiles[T0, T1](printDefinitions: (hydra.module.Module => Seq[hy
         val schemaGraphWithTypes: hydra.graph.Graph = hydra.graph.Graph(schemaGraph.boundTerms, (schemaGraph.boundTypes),
            (schemaGraph.classConstraints), (schemaGraph.lambdaVariables), (schemaGraph.metadata), (schemaGraph.primitives),
            schemaTypes2, (schemaGraph.typeVariables))
-        hydra.lib.eithers.map[Seq[Seq[Tuple2[T0, T1]]], Seq[Tuple2[T0, T1]], hydra.context.InContext[hydra.error.Error]]((xs: Seq[Seq[Tuple2[T0,
+        hydra.lib.eithers.map[Seq[Seq[Tuple2[T0, T1]]], Seq[Tuple2[T0, T1]], hydra.context.InContext[hydra.errors.Error]]((xs: Seq[Seq[Tuple2[T0,
            T1]]]) => hydra.lib.lists.concat[Tuple2[T0, T1]](xs))(hydra.lib.eithers.mapList[Tuple2[hydra.module.Module,
-           Seq[hydra.module.TypeDefinition]], Seq[Tuple2[T0, T1]], hydra.context.InContext[hydra.error.Error]]((p: Tuple2[hydra.module.Module,
+           Seq[hydra.module.TypeDefinition]], Seq[Tuple2[T0, T1]], hydra.context.InContext[hydra.errors.Error]]((p: Tuple2[hydra.module.Module,
            Seq[hydra.module.TypeDefinition]]) =>
           {
           val mod: hydra.module.Module = hydra.lib.pairs.first[hydra.module.Module, Seq[hydra.module.TypeDefinition]](p)
           {
             val defs: Seq[hydra.module.TypeDefinition] = hydra.lib.pairs.second[hydra.module.Module, Seq[hydra.module.TypeDefinition]](p)
-            hydra.lib.eithers.map[Map[T0, T1], Seq[Tuple2[T0, T1]], hydra.context.InContext[hydra.error.Error]]((m: Map[T0,
+            hydra.lib.eithers.map[Map[T0, T1], Seq[Tuple2[T0, T1]], hydra.context.InContext[hydra.errors.Error]]((m: Map[T0,
                T1]) => hydra.lib.maps.toList[T0, T1](m))(printDefinitions(mod)(hydra.lib.lists.map[hydra.module.TypeDefinition,
                hydra.module.Definition]((d: hydra.module.TypeDefinition) => hydra.module.Definition.`type`(d))(defs))(cx)(schemaGraphWithTypes))
           }
@@ -157,13 +157,13 @@ def generateSourceFiles[T0, T1](printDefinitions: (hydra.module.Module => Seq[hy
       }
     })
   }))((schemaFiles: Seq[Tuple2[T0, T1]]) =>
-    hydra.lib.eithers.bind[hydra.context.InContext[hydra.error.Error], Seq[Tuple2[T0, T1]], Seq[Tuple2[T0,
-       T1]]](hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.error.Error], Seq[Tuple2[T0,
+    hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[Tuple2[T0, T1]], Seq[Tuple2[T0,
+       T1]]](hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], Seq[Tuple2[T0,
        T1]]]](hydra.lib.lists.`null`[hydra.module.Module](termModulesToGenerate))(Right(Seq()))({
     val namespaces: Seq[hydra.module.Namespace] = hydra.lib.lists.map[hydra.module.Module, hydra.module.Namespace]((m: hydra.module.Module) => (m.namespace))(termModulesToGenerate)
-    hydra.lib.eithers.bind[hydra.context.InContext[hydra.error.Error], Tuple2[hydra.graph.Graph, Seq[Seq[hydra.module.TermDefinition]]],
+    hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.graph.Graph, Seq[Seq[hydra.module.TermDefinition]]],
        Seq[Tuple2[T0, T1]]](hydra.lib.eithers.bimap[scala.Predef.String, Tuple2[hydra.graph.Graph, Seq[Seq[hydra.module.TermDefinition]]],
-       hydra.context.InContext[hydra.error.Error], Tuple2[hydra.graph.Graph, Seq[Seq[hydra.module.TermDefinition]]]]((s: scala.Predef.String) => hydra.context.InContext(hydra.error.Error.other(s),
+       hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.graph.Graph, Seq[Seq[hydra.module.TermDefinition]]]]((s: scala.Predef.String) => hydra.context.InContext(hydra.errors.Error.other(s),
        cx))((r: Tuple2[hydra.graph.Graph, Seq[Seq[hydra.module.TermDefinition]]]) => r)(hydra.adapt.dataGraphToDefinitions(constraints)(doInfer)(doExpand)(doHoistCaseStatements)(doHoistPolymorphicLetBindings)(dataElements)(dataGraph)(namespaces)(cx)))((dataResult: Tuple2[hydra.graph.Graph,
        Seq[Seq[hydra.module.TermDefinition]]]) =>
       {
@@ -180,15 +180,15 @@ def generateSourceFiles[T0, T1](printDefinitions: (hydra.module.Module => Seq[hy
             val allBindings: Seq[hydra.core.Binding] = hydra.lexical.graphToBindings(g1)
             {
               val refreshedMods: Seq[hydra.module.Module] = hydra.lib.lists.map[hydra.module.Module, hydra.module.Module]((m: hydra.module.Module) => refreshModule(allBindings)(m))(termModulesToGenerate)
-              hydra.lib.eithers.map[Seq[Seq[Tuple2[T0, T1]]], Seq[Tuple2[T0, T1]], hydra.context.InContext[hydra.error.Error]]((xs: Seq[Seq[Tuple2[T0,
+              hydra.lib.eithers.map[Seq[Seq[Tuple2[T0, T1]]], Seq[Tuple2[T0, T1]], hydra.context.InContext[hydra.errors.Error]]((xs: Seq[Seq[Tuple2[T0,
                  T1]]]) => hydra.lib.lists.concat[Tuple2[T0, T1]](xs))(hydra.lib.eithers.mapList[Tuple2[hydra.module.Module,
-                 Seq[hydra.module.TermDefinition]], Seq[Tuple2[T0, T1]], hydra.context.InContext[hydra.error.Error]]((p: Tuple2[hydra.module.Module,
+                 Seq[hydra.module.TermDefinition]], Seq[Tuple2[T0, T1]], hydra.context.InContext[hydra.errors.Error]]((p: Tuple2[hydra.module.Module,
                  Seq[hydra.module.TermDefinition]]) =>
                 {
                 val mod: hydra.module.Module = hydra.lib.pairs.first[hydra.module.Module, Seq[hydra.module.TermDefinition]](p)
                 {
                   val defs: Seq[hydra.module.TermDefinition] = hydra.lib.pairs.second[hydra.module.Module, Seq[hydra.module.TermDefinition]](p)
-                  hydra.lib.eithers.map[Map[T0, T1], Seq[Tuple2[T0, T1]], hydra.context.InContext[hydra.error.Error]]((m: Map[T0,
+                  hydra.lib.eithers.map[Map[T0, T1], Seq[Tuple2[T0, T1]], hydra.context.InContext[hydra.errors.Error]]((m: Map[T0,
                      T1]) => hydra.lib.maps.toList[T0, T1](m))(printDefinitions(mod)(hydra.lib.lists.map[hydra.module.TermDefinition,
                      hydra.module.Definition]((d: hydra.module.TermDefinition) => hydra.module.Definition.term(d))(defs))(cx)(g1))
                 }
@@ -216,8 +216,8 @@ def formatPrimitive(prim: hydra.graph.Primitive): scala.Predef.String =
   hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("  ")(name))(" : "))(typeStr)
 }
 
-def formatTypeBinding(graph: hydra.graph.Graph)(binding: hydra.core.Binding): Either[hydra.error.DecodingError, scala.Predef.String] =
-  hydra.lib.eithers.bind[hydra.error.DecodingError, hydra.core.Type, scala.Predef.String](hydra.decode.core.`type`(graph)(binding.term))((typ: hydra.core.Type) =>
+def formatTypeBinding(graph: hydra.graph.Graph)(binding: hydra.core.Binding): Either[hydra.errors.DecodingError, scala.Predef.String] =
+  hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Type, scala.Predef.String](hydra.decode.core.`type`(graph)(binding.term))((typ: hydra.core.Type) =>
   Right(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("  ")(binding.name))(" = "))(hydra.show.core.`type`(typ))))
 
 def buildSchemaMap(g: hydra.graph.Graph): Map[hydra.core.Name, hydra.core.Type] =
@@ -231,7 +231,7 @@ def moduleToSourceModule(m: hydra.module.Module): hydra.module.Module =
   hydra.module.Module(sourceNs, Seq(moduleBinding), Seq(modTypeNs), Seq(modTypeNs), Some(hydra.lib.strings.cat2("Source module for ")(m.namespace)))
 }
 
-def generateLexicon(graph: hydra.graph.Graph): Either[hydra.error.DecodingError, scala.Predef.String] =
+def generateLexicon(graph: hydra.graph.Graph): Either[hydra.errors.DecodingError, scala.Predef.String] =
   {
   val bindings: Seq[hydra.core.Binding] = hydra.lexical.graphToBindings(graph)
   val primitives: Seq[hydra.graph.Primitive] = hydra.lib.maps.elems[hydra.core.Name, hydra.graph.Primitive](graph.primitives)
@@ -241,8 +241,8 @@ def generateLexicon(graph: hydra.graph.Graph): Either[hydra.error.DecodingError,
   val sortedPrimitives: Seq[hydra.graph.Primitive] = hydra.lib.lists.sortOn[hydra.graph.Primitive, hydra.core.Name]((p: hydra.graph.Primitive) => (p.name))(primitives)
   val sortedTypes: Seq[hydra.core.Binding] = hydra.lib.lists.sortOn[hydra.core.Binding, hydra.core.Name]((b: hydra.core.Binding) => (b.name))(typeBindings)
   val sortedTerms: Seq[hydra.core.Binding] = hydra.lib.lists.sortOn[hydra.core.Binding, hydra.core.Name]((b: hydra.core.Binding) => (b.name))(termBindings)
-  hydra.lib.eithers.bind[hydra.error.DecodingError, Seq[scala.Predef.String], scala.Predef.String](hydra.lib.eithers.mapList[hydra.core.Binding,
-     scala.Predef.String, hydra.error.DecodingError]((b: hydra.core.Binding) => hydra.codeGeneration.formatTypeBinding(graph)(b))(sortedTypes))((typeLines: Seq[scala.Predef.String]) =>
+  hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[scala.Predef.String], scala.Predef.String](hydra.lib.eithers.mapList[hydra.core.Binding,
+     scala.Predef.String, hydra.errors.DecodingError]((b: hydra.core.Binding) => hydra.codeGeneration.formatTypeBinding(graph)(b))(sortedTypes))((typeLines: Seq[scala.Predef.String]) =>
     {
     val termLines: Seq[scala.Predef.String] = hydra.lib.lists.map[hydra.core.Binding, scala.Predef.String]((b: hydra.core.Binding) => hydra.codeGeneration.formatTermBinding(b))(sortedTerms)
     {
@@ -258,13 +258,13 @@ def moduleToJson(m: hydra.module.Module): Either[scala.Predef.String, scala.Pred
   hydra.lib.eithers.map[hydra.json.model.Value, scala.Predef.String, scala.Predef.String]((json: hydra.json.model.Value) => hydra.json.writer.printJson(json))(hydra.json.encode.toJson(term))
 }
 
-def inferModules(cx: hydra.context.Context)(bsGraph: hydra.graph.Graph)(universeMods: Seq[hydra.module.Module])(targetMods: Seq[hydra.module.Module]): Either[hydra.context.InContext[hydra.error.Error],
+def inferModules(cx: hydra.context.Context)(bsGraph: hydra.graph.Graph)(universeMods: Seq[hydra.module.Module])(targetMods: Seq[hydra.module.Module]): Either[hydra.context.InContext[hydra.errors.Error],
    Seq[hydra.module.Module]] =
   {
   val g0: hydra.graph.Graph = hydra.codeGeneration.modulesToGraph(bsGraph)(universeMods)(universeMods)
   val dataElements: Seq[hydra.core.Binding] = hydra.lib.lists.filter[hydra.core.Binding]((e: hydra.core.Binding) => hydra.lib.logic.not(hydra.annotations.isNativeType(e)))(hydra.lib.lists.concat[hydra.core.Binding](hydra.lib.lists.map[hydra.module.Module,
      Seq[hydra.core.Binding]]((m: hydra.module.Module) => (m.elements))(universeMods)))
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.error.Error], Tuple2[Tuple2[hydra.graph.Graph,
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Tuple2[Tuple2[hydra.graph.Graph,
      Seq[hydra.core.Binding]], hydra.context.Context], Seq[hydra.module.Module]](hydra.inference.inferGraphTypes(cx)(dataElements)(g0))((inferResultWithCx: Tuple2[Tuple2[hydra.graph.Graph,
      Seq[hydra.core.Binding]], hydra.context.Context]) =>
     {
@@ -304,8 +304,8 @@ def generateCoderModules[T0, T1, T2, T3](codec: (T0 => hydra.graph.Graph => T1 =
   val dataElements: Seq[hydra.core.Binding] = hydra.lib.lists.filter[hydra.core.Binding]((e: hydra.core.Binding) => hydra.lib.logic.not(hydra.annotations.isNativeType(e)))(hydra.lib.lists.concat[hydra.core.Binding](hydra.lib.lists.map[hydra.module.Module,
      Seq[hydra.core.Binding]]((m: hydra.module.Module) => (m.elements))(dataModules)))
   val schemaGraph: hydra.graph.Graph = hydra.lexical.elementsToGraph(bsGraph)(hydra.lib.maps.empty[hydra.core.Name, hydra.core.TypeScheme])(schemaElements)
-  val schemaTypes: Map[hydra.core.Name, hydra.core.TypeScheme] = hydra.lib.eithers.either[hydra.context.InContext[hydra.error.Error],
-     Map[hydra.core.Name, hydra.core.TypeScheme], Map[hydra.core.Name, hydra.core.TypeScheme]]((_x: hydra.context.InContext[hydra.error.Error]) => hydra.lib.maps.empty[hydra.core.Name,
+  val schemaTypes: Map[hydra.core.Name, hydra.core.TypeScheme] = hydra.lib.eithers.either[hydra.context.InContext[hydra.errors.Error],
+     Map[hydra.core.Name, hydra.core.TypeScheme], Map[hydra.core.Name, hydra.core.TypeScheme]]((_x: hydra.context.InContext[hydra.errors.Error]) => hydra.lib.maps.empty[hydra.core.Name,
      hydra.core.TypeScheme])((_r: Map[hydra.core.Name, hydra.core.TypeScheme]) => _r)(hydra.schemas.schemaGraphToTypingEnvironment(hydra.lexical.emptyContext)(schemaGraph))
   val allElements: Seq[hydra.core.Binding] = hydra.lib.lists.concat2[hydra.core.Binding](schemaElements)(dataElements)
   val graph: hydra.graph.Graph = hydra.lexical.elementsToGraph(bsGraph)(schemaTypes)(allElements)
@@ -320,15 +320,15 @@ def inferAndGenerateLexicon(cx: hydra.context.Context)(bsGraph: hydra.graph.Grap
   val dataElements: Seq[hydra.core.Binding] = hydra.lib.lists.filter[hydra.core.Binding]((e: hydra.core.Binding) => hydra.lib.logic.not(hydra.annotations.isNativeType(e)))(hydra.lib.lists.concat[hydra.core.Binding](hydra.lib.lists.map[hydra.module.Module,
      Seq[hydra.core.Binding]]((m: hydra.module.Module) => (m.elements))(kernelModules)))
   hydra.lib.eithers.bind[scala.Predef.String, Tuple2[Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]],
-     hydra.context.Context], scala.Predef.String](hydra.lib.eithers.bimap[hydra.context.InContext[hydra.error.Error],
+     hydra.context.Context], scala.Predef.String](hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.Error],
      Tuple2[Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]], hydra.context.Context], scala.Predef.String,
-     Tuple2[Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]], hydra.context.Context]]((ic: hydra.context.InContext[hydra.error.Error]) => hydra.show.error.error(ic.`object`))((x: Tuple2[Tuple2[hydra.graph.Graph,
+     Tuple2[Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]], hydra.context.Context]]((ic: hydra.context.InContext[hydra.errors.Error]) => hydra.show.errors.error(ic.`object`))((x: Tuple2[Tuple2[hydra.graph.Graph,
      Seq[hydra.core.Binding]], hydra.context.Context]) => x)(hydra.inference.inferGraphTypes(cx)(dataElements)(g0)))((inferResultWithCx: Tuple2[Tuple2[hydra.graph.Graph,
      Seq[hydra.core.Binding]], hydra.context.Context]) =>
     {
     val g1: hydra.graph.Graph = hydra.lib.pairs.first[hydra.graph.Graph, Seq[hydra.core.Binding]](hydra.lib.pairs.first[Tuple2[hydra.graph.Graph,
        Seq[hydra.core.Binding]], hydra.context.Context](inferResultWithCx))
-    hydra.lib.eithers.bimap[hydra.error.DecodingError, scala.Predef.String, scala.Predef.String, scala.Predef.String]((x) => x)((x: scala.Predef.String) => x)(hydra.codeGeneration.generateLexicon(g1))
+    hydra.lib.eithers.bimap[hydra.errors.DecodingError, scala.Predef.String, scala.Predef.String, scala.Predef.String]((x) => x)((x: scala.Predef.String) => x)(hydra.codeGeneration.generateLexicon(g1))
   })
 }
 
@@ -356,7 +356,7 @@ def decodeModuleFromJson(bsGraph: hydra.graph.Graph)(universeModules: Seq[hydra.
   val schemaMap: Map[hydra.core.Name, hydra.core.Type] = hydra.codeGeneration.buildSchemaMap(graph)
   val modType: hydra.core.Type = hydra.core.Type.variable("hydra.module.Module")
   hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[scala.Predef.String, hydra.module.Module]]((err: scala.Predef.String) => Left(err))((term: hydra.core.Term) =>
-    hydra.lib.eithers.either[hydra.error.DecodingError, hydra.module.Module, Either[scala.Predef.String,
-       hydra.module.Module]]((decErr: hydra.error.DecodingError) => Left(decErr))((mod: hydra.module.Module) =>
+    hydra.lib.eithers.either[hydra.errors.DecodingError, hydra.module.Module, Either[scala.Predef.String,
+       hydra.module.Module]]((decErr: hydra.errors.DecodingError) => Left(decErr))((mod: hydra.module.Module) =>
     Right(hydra.lib.logic.ifElse[hydra.module.Module](doStripTypeSchemes)(hydra.codeGeneration.stripModuleTypeSchemes(mod))(mod)))(hydra.decode.module.module(graph)(term)))(hydra.json.decode.fromJson(schemaMap)("hydra.module.Module")(modType)(jsonVal))
 }

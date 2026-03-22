@@ -647,7 +647,7 @@ public interface Utils {
     return new hydra.ext.java.syntax.EqualityExpression.Unary(re);
   }
 
-  static hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier> nameToQualifiedJavaName(hydra.ext.java.helpers.Aliases aliases, Boolean qualify, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
+  static hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier> nameToQualifiedJavaName(hydra.ext.java.environment.Aliases aliases, Boolean qualify, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
     hydra.module.QualifiedName qn = hydra.Names.qualifyName(name);
     hydra.util.Maybe<hydra.module.Namespace> ns_ = (qn).namespace;
     hydra.util.Lazy<hydra.util.Maybe<hydra.ext.java.syntax.PackageName>> alias = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.applyLazy(
@@ -680,7 +680,7 @@ public interface Utils {
     return (hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>) ((hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>) (new hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>(jid.get(), pkg.get())));
   }
 
-  static hydra.ext.java.syntax.ClassType nameToJavaClassType(hydra.ext.java.helpers.Aliases aliases, Boolean qualify, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> args, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
+  static hydra.ext.java.syntax.ClassType nameToJavaClassType(hydra.ext.java.environment.Aliases aliases, Boolean qualify, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> args, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
     hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier> result = hydra.ext.java.Utils.nameToQualifiedJavaName(
       aliases,
       qualify,
@@ -691,7 +691,7 @@ public interface Utils {
     return new hydra.ext.java.syntax.ClassType((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>empty()), pkg.get(), id.get(), args);
   }
 
-  static hydra.ext.java.syntax.ReferenceType nameToJavaReferenceType(hydra.ext.java.helpers.Aliases aliases, Boolean qualify, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> args, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
+  static hydra.ext.java.syntax.ReferenceType nameToJavaReferenceType(hydra.ext.java.environment.Aliases aliases, Boolean qualify, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> args, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
     return new hydra.ext.java.syntax.ReferenceType.ClassOrInterface(new hydra.ext.java.syntax.ClassOrInterfaceType.Class_(hydra.ext.java.Utils.nameToJavaClassType(
       aliases,
       qualify,
@@ -700,7 +700,7 @@ public interface Utils {
       mlocal)));
   }
 
-  static hydra.ext.java.syntax.Identifier nameToJavaName(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name name) {
+  static hydra.ext.java.syntax.Identifier nameToJavaName(hydra.ext.java.environment.Aliases aliases, hydra.core.Name name) {
     hydra.module.QualifiedName qn = hydra.Names.qualifyName(name);
     String local = (qn).local;
     hydra.util.Maybe<hydra.module.Namespace> ns_ = (qn).namespace;
@@ -730,7 +730,7 @@ public interface Utils {
         })));
   }
 
-  static hydra.ext.java.syntax.TypeIdentifier nameToJavaTypeIdentifier(hydra.ext.java.helpers.Aliases aliases, Boolean qualify, hydra.core.Name name) {
+  static hydra.ext.java.syntax.TypeIdentifier nameToJavaTypeIdentifier(hydra.ext.java.environment.Aliases aliases, Boolean qualify, hydra.core.Name name) {
     return hydra.lib.pairs.First.apply(hydra.ext.java.Utils.nameToQualifiedJavaName(
       aliases,
       qualify,
@@ -738,7 +738,7 @@ public interface Utils {
       (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())));
   }
 
-  static hydra.ext.java.syntax.Type javaTypeFromTypeName(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name elName) {
+  static hydra.ext.java.syntax.Type javaTypeFromTypeName(hydra.ext.java.environment.Aliases aliases, hydra.core.Name elName) {
     return hydra.ext.java.Utils.javaTypeVariableToType(new hydra.ext.java.syntax.TypeVariable((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>empty()), hydra.ext.java.Utils.nameToJavaTypeIdentifier(
       aliases,
       false,
@@ -769,7 +769,7 @@ public interface Utils {
     return hydra.ext.java.Utils.javaTypeVariable("r");
   }
 
-  static hydra.core.Name lookupJavaVarName(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name name) {
+  static hydra.core.Name lookupJavaVarName(hydra.ext.java.environment.Aliases aliases, hydra.core.Name name) {
     return hydra.lib.maybes.Cases.applyLazy(
       hydra.lib.maps.Lookup.apply(
         name,
@@ -855,11 +855,11 @@ public interface Utils {
     return (tp).identifier.value.value;
   }
 
-  static hydra.ext.java.helpers.Aliases importAliasesForModule(hydra.module.Module mod) {
-    return new hydra.ext.java.helpers.Aliases((mod).namespace, (hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) ((hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) (hydra.lib.maps.Empty.<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()));
+  static hydra.ext.java.environment.Aliases importAliasesForModule(hydra.module.Module mod) {
+    return new hydra.ext.java.environment.Aliases((mod).namespace, (hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) ((hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) (hydra.lib.maps.Empty.<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()));
   }
 
-  static hydra.ext.java.syntax.ClassDeclaration javaClassDeclaration(hydra.ext.java.helpers.Aliases aliases, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName, hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> mods, hydra.util.Maybe<hydra.core.Name> supname, hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> impls, hydra.util.ConsList<hydra.ext.java.syntax.ClassBodyDeclarationWithComments> bodyDecls) {
+  static hydra.ext.java.syntax.ClassDeclaration javaClassDeclaration(hydra.ext.java.environment.Aliases aliases, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName, hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> mods, hydra.util.Maybe<hydra.core.Name> supname, hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> impls, hydra.util.ConsList<hydra.ext.java.syntax.ClassBodyDeclarationWithComments> bodyDecls) {
     hydra.util.Lazy<hydra.util.Maybe<hydra.ext.java.syntax.ClassType>> extends_ = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
       (java.util.function.Function<hydra.core.Name, hydra.ext.java.syntax.ClassType>) (n -> hydra.ext.java.Utils.nameToJavaClassType(
         aliases,
@@ -871,7 +871,7 @@ public interface Utils {
     return new hydra.ext.java.syntax.ClassDeclaration.Normal(new hydra.ext.java.syntax.NormalClassDeclaration(mods, hydra.ext.java.Utils.javaDeclName(elName), tparams, extends_.get(), impls, new hydra.ext.java.syntax.ClassBody(bodyDecls)));
   }
 
-  static hydra.ext.java.syntax.ClassBodyDeclaration makeConstructor(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name elName, Boolean private_, hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> params, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> stmts) {
+  static hydra.ext.java.syntax.ClassBodyDeclaration makeConstructor(hydra.ext.java.environment.Aliases aliases, hydra.core.Name elName, Boolean private_, hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> params, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> stmts) {
     hydra.util.Lazy<hydra.ext.java.syntax.ConstructorBody> body = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.ConstructorBody((hydra.util.Maybe<hydra.ext.java.syntax.ExplicitConstructorInvocation>) (hydra.util.Maybe.<hydra.ext.java.syntax.ExplicitConstructorInvocation>nothing()), stmts));
     hydra.ext.java.syntax.SimpleTypeName nm = new hydra.ext.java.syntax.SimpleTypeName(hydra.ext.java.Utils.nameToJavaTypeIdentifier(
       aliases,
@@ -1049,7 +1049,7 @@ public interface Utils {
     });
   }
 
-  static hydra.core.Name uniqueVarName(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name name) {
+  static hydra.core.Name uniqueVarName(hydra.ext.java.environment.Aliases aliases, hydra.core.Name name) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.sets.Member.apply(
         name,
@@ -1061,7 +1061,7 @@ public interface Utils {
       () -> name);
   }
 
-  static hydra.core.Name uniqueVarName_go(hydra.ext.java.helpers.Aliases aliases, String base, Integer n) {
+  static hydra.core.Name uniqueVarName_go(hydra.ext.java.environment.Aliases aliases, String base, Integer n) {
     hydra.core.Name candidate = new hydra.core.Name(hydra.lib.strings.Cat2.apply(
       base,
       hydra.lib.literals.ShowInt32.apply(n)));
@@ -1078,23 +1078,23 @@ public interface Utils {
       () -> candidate);
   }
 
-  static hydra.ext.java.helpers.Aliases addInScopeVar(hydra.core.Name name, hydra.ext.java.helpers.Aliases aliases) {
-    return new hydra.ext.java.helpers.Aliases((aliases).currentNamespace, (aliases).packages, (aliases).branchVars, (aliases).recursiveVars, (aliases).inScopeTypeParams, (aliases).polymorphicLocals, hydra.lib.sets.Insert.apply(
+  static hydra.ext.java.environment.Aliases addInScopeVar(hydra.core.Name name, hydra.ext.java.environment.Aliases aliases) {
+    return new hydra.ext.java.environment.Aliases((aliases).currentNamespace, (aliases).packages, (aliases).branchVars, (aliases).recursiveVars, (aliases).inScopeTypeParams, (aliases).polymorphicLocals, hydra.lib.sets.Insert.apply(
       name,
       (aliases).inScopeJavaVars), (aliases).varRenames, (aliases).lambdaVars, (aliases).typeVarSubst, (aliases).trustedTypeVars, (aliases).methodCodomain, (aliases).thunkedVars);
   }
 
-  static hydra.ext.java.helpers.Aliases addInScopeVars(hydra.util.ConsList<hydra.core.Name> names, hydra.ext.java.helpers.Aliases aliases) {
+  static hydra.ext.java.environment.Aliases addInScopeVars(hydra.util.ConsList<hydra.core.Name> names, hydra.ext.java.environment.Aliases aliases) {
     return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.ext.java.helpers.Aliases, java.util.function.Function<hydra.core.Name, hydra.ext.java.helpers.Aliases>>) (a -> (java.util.function.Function<hydra.core.Name, hydra.ext.java.helpers.Aliases>) (n -> hydra.ext.java.Utils.addInScopeVar(
+      (java.util.function.Function<hydra.ext.java.environment.Aliases, java.util.function.Function<hydra.core.Name, hydra.ext.java.environment.Aliases>>) (a -> (java.util.function.Function<hydra.core.Name, hydra.ext.java.environment.Aliases>) (n -> hydra.ext.java.Utils.addInScopeVar(
         n,
         a))),
       aliases,
       names);
   }
 
-  static hydra.ext.java.helpers.Aliases addVarRename(hydra.core.Name original, hydra.core.Name renamed, hydra.ext.java.helpers.Aliases aliases) {
-    return new hydra.ext.java.helpers.Aliases((aliases).currentNamespace, (aliases).packages, (aliases).branchVars, (aliases).recursiveVars, (aliases).inScopeTypeParams, (aliases).polymorphicLocals, (aliases).inScopeJavaVars, hydra.lib.maps.Insert.apply(
+  static hydra.ext.java.environment.Aliases addVarRename(hydra.core.Name original, hydra.core.Name renamed, hydra.ext.java.environment.Aliases aliases) {
+    return new hydra.ext.java.environment.Aliases((aliases).currentNamespace, (aliases).packages, (aliases).branchVars, (aliases).recursiveVars, (aliases).inScopeTypeParams, (aliases).polymorphicLocals, (aliases).inScopeJavaVars, hydra.lib.maps.Insert.apply(
       original,
       renamed,
       (aliases).varRenames), (aliases).lambdaVars, (aliases).typeVarSubst, (aliases).trustedTypeVars, (aliases).methodCodomain, (aliases).thunkedVars);

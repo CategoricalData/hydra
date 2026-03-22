@@ -341,11 +341,14 @@ def type(v1: hydra.core.Type) -> hydra.core.Term:
         case hydra.core.TypeVariable(value=y15):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("variable"), name(y15)))))
 
-        case hydra.core.TypeWrap(value=y16):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), type(y16)))))
+        case hydra.core.TypeVoid():
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("void"), cast(hydra.core.Term, hydra.core.TermUnit())))))
+
+        case hydra.core.TypeWrap(value=y17):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), type(y17)))))
 
         case _:
-            raise TypeError("Unsupported Type")
+            raise AssertionError("Unreachable: all variants handled")
 
 def type_application_term(x: hydra.core.TypeApplicationTerm) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeApplicationTerm"), (hydra.core.Field(hydra.core.Name("body"), term(x.body)), hydra.core.Field(hydra.core.Name("type"), type(x.type))))))

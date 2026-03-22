@@ -30,7 +30,7 @@
 (define-record-type hydra_core_projection (make-hydra_core_projection type_name field) hydra_core_projection? (type_name hydra_core_projection-type_name) (field hydra_core_projection-field))
 (define-record-type hydra_core_record (make-hydra_core_record type_name fields) hydra_core_record? (type_name hydra_core_record-type_name) (fields hydra_core_record-fields))
 (define hydra_core_term-variants (list 'annotated 'application 'either 'function 'let 'list 'literal 'map 'maybe 'pair 'record 'set 'type_application 'type_lambda 'union 'unit 'variable 'wrap))
-(define hydra_core_type-variants (list 'annotated 'application 'either 'forall 'function 'list 'literal 'map 'maybe 'pair 'record 'set 'union 'unit 'variable 'wrap))
+(define hydra_core_type-variants (list 'annotated 'application 'either 'forall 'function 'list 'literal 'map 'maybe 'pair 'record 'set 'union 'unit 'variable 'void 'wrap))
 (define-record-type hydra_core_type_application_term (make-hydra_core_type_application_term body type) hydra_core_type_application_term? (body hydra_core_type_application_term-body) (type hydra_core_type_application_term-type))
 (define-record-type hydra_core_type_lambda (make-hydra_core_type_lambda parameter body) hydra_core_type_lambda? (parameter hydra_core_type_lambda-parameter) (body hydra_core_type_lambda-body))
 (define-record-type hydra_core_type_scheme (make-hydra_core_type_scheme variables type constraints) hydra_core_type_scheme? (variables hydra_core_type_scheme-variables) (type hydra_core_type_scheme-type) (constraints hydra_core_type_scheme-constraints))

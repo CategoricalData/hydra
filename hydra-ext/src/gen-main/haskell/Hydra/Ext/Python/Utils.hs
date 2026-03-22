@@ -4,7 +4,7 @@
 
 module Hydra.Ext.Python.Utils where
 
-import qualified Hydra.Ext.Python.Helpers as Helpers
+import qualified Hydra.Ext.Python.Environment as Environment
 import qualified Hydra.Ext.Python.Names as Names
 import qualified Hydra.Ext.Python.Serde as Serde
 import qualified Hydra.Ext.Python.Syntax as Syntax
@@ -26,8 +26,8 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Current target Python version for code generation
-targetPythonVersion :: Helpers.PythonVersion
-targetPythonVersion = Helpers.PythonVersionPython310
+targetPythonVersion :: Environment.PythonVersion
+targetPythonVersion = Environment.PythonVersionPython310
 
 -- | The Python None value as a Name
 pyNone :: Syntax.Name

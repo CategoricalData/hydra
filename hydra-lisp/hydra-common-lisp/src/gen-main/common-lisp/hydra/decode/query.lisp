@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.query
-(:use :cl :hydra.core :hydra.decode.core :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings :hydra.query)
+(:use :cl :hydra.core :hydra.decode.core :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings :hydra.query)
 (:export :hydra_decode_query_comparison_constraint :hydra_decode_query_edge :hydra_decode_query_variable :hydra_decode_query_node :hydra_decode_query_range :hydra_decode_query_regex_quantifier :hydra_decode_query_step :hydra_decode_query_path :hydra_decode_query_regex_sequence :hydra_decode_query_triple_pattern :hydra_decode_query_graph_pattern :hydra_decode_query_pattern :hydra_decode_query_path_equation :hydra_decode_query_pattern_implication :hydra_decode_query_query))
 
 (in-package :hydra.decode.query)

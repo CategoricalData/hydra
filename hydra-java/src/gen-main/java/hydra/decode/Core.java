@@ -1911,6 +1911,11 @@ public interface Core {
               hydra.decode.Core.name(
                 cx,
                 input)))))),
+            (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Type>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Type>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Type>>>(new hydra.core.Name("void"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Type>>) (input -> hydra.lib.eithers.Map.apply(
+              (java.util.function.Function<java.lang.Void, hydra.core.Type>) (t -> new hydra.core.Type.Void_()),
+              hydra.extract.Helpers.decodeUnit(
+                cx,
+                input)))))),
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Type>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Type>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Type>>>(new hydra.core.Name("wrap"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Type>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (t -> new hydra.core.Type.Wrap(t)),
               hydra.decode.Core.type(

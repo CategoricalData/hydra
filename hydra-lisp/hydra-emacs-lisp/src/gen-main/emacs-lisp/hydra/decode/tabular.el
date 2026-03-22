@@ -6,7 +6,7 @@
 
 (require 'hydra.decode.relational)
 
-(require 'hydra.error)
+(require 'hydra.errors)
 
 (require 'hydra.extract.helpers)
 

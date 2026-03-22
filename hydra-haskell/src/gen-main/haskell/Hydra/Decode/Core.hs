@@ -514,6 +514,7 @@ type_ cx raw =
                       (Core.Name "union", (\input -> Eithers.map (\t -> Core.TypeUnion t) (Helpers.decodeList fieldType cx input))),
                       (Core.Name "unit", (\input -> Eithers.map (\t -> Core.TypeUnit) (Helpers.decodeUnit cx input))),
                       (Core.Name "variable", (\input -> Eithers.map (\t -> Core.TypeVariable t) (name cx input))),
+                      (Core.Name "void", (\input -> Eithers.map (\t -> Core.TypeVoid) (Helpers.decodeUnit cx input))),
                       (Core.Name "wrap", (\input -> Eithers.map (\t -> Core.TypeWrap t) (type_ cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",

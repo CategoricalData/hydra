@@ -7,7 +7,7 @@ module Hydra.Ext.Java.Utils where
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Ext.Java.Helpers as Helpers
+import qualified Hydra.Ext.Java.Environment as Environment
 import qualified Hydra.Ext.Java.Language as Language
 import qualified Hydra.Ext.Java.Names as Names
 import qualified Hydra.Ext.Java.Syntax as Syntax
@@ -632,21 +632,21 @@ addExpressions exprs =
 javaRelationalExpressionToJavaEqualityExpression :: Syntax.RelationalExpression -> Syntax.EqualityExpression
 javaRelationalExpressionToJavaEqualityExpression re = Syntax.EqualityExpressionUnary re
 
-nameToQualifiedJavaName :: Helpers.Aliases -> Bool -> Core.Name -> Maybe String -> (Syntax.TypeIdentifier, Syntax.ClassTypeQualifier)
+nameToQualifiedJavaName :: Environment.Aliases -> Bool -> Core.Name -> Maybe String -> (Syntax.TypeIdentifier, Syntax.ClassTypeQualifier)
 nameToQualifiedJavaName aliases qualify name mlocal =
 
       let qn = Names_.qualifyName name
           ns_ = Module.qualifiedNameNamespace qn
           local = Module.qualifiedNameLocal qn
           alias =
-                  Maybes.cases ns_ Nothing (\n -> Just (Maybes.cases (Maps.lookup n (Helpers.aliasesPackages aliases)) (Names.javaPackageName (Strings.splitOn "." (Module.unNamespace n))) (\id -> id)))
+                  Maybes.cases ns_ Nothing (\n -> Just (Maybes.cases (Maps.lookup n (Environment.aliasesPackages aliases)) (Names.javaPackageName (Strings.splitOn "." (Module.unNamespace n))) (\id -> id)))
           pkg =
                   Logic.ifElse qualify (Maybes.cases alias Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p)) Syntax.ClassTypeQualifierNone
           jid =
                   javaTypeIdentifier (Maybes.cases mlocal (sanitizeJavaName local) (\l -> Strings.cat2 (Strings.cat2 (sanitizeJavaName local) ".") (sanitizeJavaName l)))
       in (jid, pkg)
 
-nameToJavaClassType :: Helpers.Aliases -> Bool -> [Syntax.TypeArgument] -> Core.Name -> Maybe String -> Syntax.ClassType
+nameToJavaClassType :: Environment.Aliases -> Bool -> [Syntax.TypeArgument] -> Core.Name -> Maybe String -> Syntax.ClassType
 nameToJavaClassType aliases qualify args name mlocal =
 
       let result = nameToQualifiedJavaName aliases qualify name mlocal
@@ -658,11 +658,11 @@ nameToJavaClassType aliases qualify args name mlocal =
         Syntax.classTypeIdentifier = id,
         Syntax.classTypeArguments = args}
 
-nameToJavaReferenceType :: Helpers.Aliases -> Bool -> [Syntax.TypeArgument] -> Core.Name -> Maybe String -> Syntax.ReferenceType
+nameToJavaReferenceType :: Environment.Aliases -> Bool -> [Syntax.TypeArgument] -> Core.Name -> Maybe String -> Syntax.ReferenceType
 nameToJavaReferenceType aliases qualify args name mlocal =
     Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (nameToJavaClassType aliases qualify args name mlocal))
 
-nameToJavaName :: Helpers.Aliases -> Core.Name -> Syntax.Identifier
+nameToJavaName :: Environment.Aliases -> Core.Name -> Syntax.Identifier
 nameToJavaName aliases name =
 
       let qn = Names_.qualifyName name
@@ -670,15 +670,15 @@ nameToJavaName aliases name =
           local = Module.qualifiedNameLocal qn
       in (Logic.ifElse (isEscaped (Core.unName name)) (Syntax.Identifier (sanitizeJavaName local)) (Maybes.cases ns_ (Syntax.Identifier local) (\gname ->
         let parts =
-                Maybes.cases (Maps.lookup gname (Helpers.aliasesPackages aliases)) (Strings.splitOn "." (Module.unNamespace gname)) (\pkgName -> Lists.map (\i -> Syntax.unIdentifier i) (Syntax.unPackageName pkgName))
+                Maybes.cases (Maps.lookup gname (Environment.aliasesPackages aliases)) (Strings.splitOn "." (Module.unNamespace gname)) (\pkgName -> Lists.map (\i -> Syntax.unIdentifier i) (Syntax.unPackageName pkgName))
             allParts = Lists.concat2 parts [
                   sanitizeJavaName local]
         in (Syntax.Identifier (Strings.intercalate "." allParts)))))
 
-nameToJavaTypeIdentifier :: Helpers.Aliases -> Bool -> Core.Name -> Syntax.TypeIdentifier
+nameToJavaTypeIdentifier :: Environment.Aliases -> Bool -> Core.Name -> Syntax.TypeIdentifier
 nameToJavaTypeIdentifier aliases qualify name = Pairs.first (nameToQualifiedJavaName aliases qualify name Nothing)
 
-javaTypeFromTypeName :: Helpers.Aliases -> Core.Name -> Syntax.Type
+javaTypeFromTypeName :: Environment.Aliases -> Core.Name -> Syntax.Type
 javaTypeFromTypeName aliases elName =
     javaTypeVariableToType (Syntax.TypeVariable {
       Syntax.typeVariableAnnotations = [],
@@ -703,9 +703,9 @@ javaBytePrimitiveType =
 visitorTypeVariable :: Syntax.ReferenceType
 visitorTypeVariable = javaTypeVariable "r"
 
-lookupJavaVarName :: Helpers.Aliases -> Core.Name -> Core.Name
+lookupJavaVarName :: Environment.Aliases -> Core.Name -> Core.Name
 lookupJavaVarName aliases name =
-    Maybes.cases (Maps.lookup name (Helpers.aliasesVarRenames aliases)) name (\renamed -> renamed)
+    Maybes.cases (Maps.lookup name (Environment.aliasesVarRenames aliases)) name (\renamed -> renamed)
 
 variantClassName :: Bool -> Core.Name -> Core.Name -> Core.Name
 variantClassName qualify elName fname =
@@ -790,24 +790,24 @@ toAssignStmt fname =
 unTypeParameter :: Syntax.TypeParameter -> String
 unTypeParameter tp = Syntax.unIdentifier (Syntax.unTypeIdentifier (Syntax.typeParameterIdentifier tp))
 
-importAliasesForModule :: Module.Module -> Helpers.Aliases
+importAliasesForModule :: Module.Module -> Environment.Aliases
 importAliasesForModule mod =
-    Helpers.Aliases {
-      Helpers.aliasesCurrentNamespace = (Module.moduleNamespace mod),
-      Helpers.aliasesPackages = Maps.empty,
-      Helpers.aliasesBranchVars = Sets.empty,
-      Helpers.aliasesRecursiveVars = Sets.empty,
-      Helpers.aliasesInScopeTypeParams = Sets.empty,
-      Helpers.aliasesPolymorphicLocals = Sets.empty,
-      Helpers.aliasesInScopeJavaVars = Sets.empty,
-      Helpers.aliasesVarRenames = Maps.empty,
-      Helpers.aliasesLambdaVars = Sets.empty,
-      Helpers.aliasesTypeVarSubst = Maps.empty,
-      Helpers.aliasesTrustedTypeVars = Sets.empty,
-      Helpers.aliasesMethodCodomain = Nothing,
-      Helpers.aliasesThunkedVars = Sets.empty}
+    Environment.Aliases {
+      Environment.aliasesCurrentNamespace = (Module.moduleNamespace mod),
+      Environment.aliasesPackages = Maps.empty,
+      Environment.aliasesBranchVars = Sets.empty,
+      Environment.aliasesRecursiveVars = Sets.empty,
+      Environment.aliasesInScopeTypeParams = Sets.empty,
+      Environment.aliasesPolymorphicLocals = Sets.empty,
+      Environment.aliasesInScopeJavaVars = Sets.empty,
+      Environment.aliasesVarRenames = Maps.empty,
+      Environment.aliasesLambdaVars = Sets.empty,
+      Environment.aliasesTypeVarSubst = Maps.empty,
+      Environment.aliasesTrustedTypeVars = Sets.empty,
+      Environment.aliasesMethodCodomain = Nothing,
+      Environment.aliasesThunkedVars = Sets.empty}
 
-javaClassDeclaration :: Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Syntax.ClassModifier] -> Maybe Core.Name -> [Syntax.InterfaceType] -> [Syntax.ClassBodyDeclarationWithComments] -> Syntax.ClassDeclaration
+javaClassDeclaration :: Environment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Syntax.ClassModifier] -> Maybe Core.Name -> [Syntax.InterfaceType] -> [Syntax.ClassBodyDeclarationWithComments] -> Syntax.ClassDeclaration
 javaClassDeclaration aliases tparams elName mods supname impls bodyDecls =
 
       let extends_ = Maybes.map (\n -> nameToJavaClassType aliases True [] n Nothing) supname
@@ -819,7 +819,7 @@ javaClassDeclaration aliases tparams elName mods supname impls bodyDecls =
         Syntax.normalClassDeclarationImplements = impls,
         Syntax.normalClassDeclarationBody = (Syntax.ClassBody bodyDecls)}))
 
-makeConstructor :: Helpers.Aliases -> Core.Name -> Bool -> [Syntax.FormalParameter] -> [Syntax.BlockStatement] -> Syntax.ClassBodyDeclaration
+makeConstructor :: Environment.Aliases -> Core.Name -> Bool -> [Syntax.FormalParameter] -> [Syntax.BlockStatement] -> Syntax.ClassBodyDeclaration
 makeConstructor aliases elName private params stmts =
 
       let nm = Syntax.SimpleTypeName (nameToJavaTypeIdentifier aliases False elName)
@@ -954,49 +954,49 @@ addJavaTypeParameter rt t cx =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "expected a reference type")),
         Context.inContextContext = cx})
 
-uniqueVarName :: Helpers.Aliases -> Core.Name -> Core.Name
+uniqueVarName :: Environment.Aliases -> Core.Name -> Core.Name
 uniqueVarName aliases name =
-    Logic.ifElse (Sets.member name (Helpers.aliasesInScopeJavaVars aliases)) (uniqueVarName_go aliases (Core.unName name) 2) name
+    Logic.ifElse (Sets.member name (Environment.aliasesInScopeJavaVars aliases)) (uniqueVarName_go aliases (Core.unName name) 2) name
 
-uniqueVarName_go :: Helpers.Aliases -> String -> Int -> Core.Name
+uniqueVarName_go :: Environment.Aliases -> String -> Int -> Core.Name
 uniqueVarName_go aliases base n =
 
       let candidate = Core.Name (Strings.cat2 base (Literals.showInt32 n))
-      in (Logic.ifElse (Sets.member candidate (Helpers.aliasesInScopeJavaVars aliases)) (uniqueVarName_go aliases base (Math.add n 1)) candidate)
+      in (Logic.ifElse (Sets.member candidate (Environment.aliasesInScopeJavaVars aliases)) (uniqueVarName_go aliases base (Math.add n 1)) candidate)
 
-addInScopeVar :: Core.Name -> Helpers.Aliases -> Helpers.Aliases
+addInScopeVar :: Core.Name -> Environment.Aliases -> Environment.Aliases
 addInScopeVar name aliases =
-    Helpers.Aliases {
-      Helpers.aliasesCurrentNamespace = (Helpers.aliasesCurrentNamespace aliases),
-      Helpers.aliasesPackages = (Helpers.aliasesPackages aliases),
-      Helpers.aliasesBranchVars = (Helpers.aliasesBranchVars aliases),
-      Helpers.aliasesRecursiveVars = (Helpers.aliasesRecursiveVars aliases),
-      Helpers.aliasesInScopeTypeParams = (Helpers.aliasesInScopeTypeParams aliases),
-      Helpers.aliasesPolymorphicLocals = (Helpers.aliasesPolymorphicLocals aliases),
-      Helpers.aliasesInScopeJavaVars = (Sets.insert name (Helpers.aliasesInScopeJavaVars aliases)),
-      Helpers.aliasesVarRenames = (Helpers.aliasesVarRenames aliases),
-      Helpers.aliasesLambdaVars = (Helpers.aliasesLambdaVars aliases),
-      Helpers.aliasesTypeVarSubst = (Helpers.aliasesTypeVarSubst aliases),
-      Helpers.aliasesTrustedTypeVars = (Helpers.aliasesTrustedTypeVars aliases),
-      Helpers.aliasesMethodCodomain = (Helpers.aliasesMethodCodomain aliases),
-      Helpers.aliasesThunkedVars = (Helpers.aliasesThunkedVars aliases)}
+    Environment.Aliases {
+      Environment.aliasesCurrentNamespace = (Environment.aliasesCurrentNamespace aliases),
+      Environment.aliasesPackages = (Environment.aliasesPackages aliases),
+      Environment.aliasesBranchVars = (Environment.aliasesBranchVars aliases),
+      Environment.aliasesRecursiveVars = (Environment.aliasesRecursiveVars aliases),
+      Environment.aliasesInScopeTypeParams = (Environment.aliasesInScopeTypeParams aliases),
+      Environment.aliasesPolymorphicLocals = (Environment.aliasesPolymorphicLocals aliases),
+      Environment.aliasesInScopeJavaVars = (Sets.insert name (Environment.aliasesInScopeJavaVars aliases)),
+      Environment.aliasesVarRenames = (Environment.aliasesVarRenames aliases),
+      Environment.aliasesLambdaVars = (Environment.aliasesLambdaVars aliases),
+      Environment.aliasesTypeVarSubst = (Environment.aliasesTypeVarSubst aliases),
+      Environment.aliasesTrustedTypeVars = (Environment.aliasesTrustedTypeVars aliases),
+      Environment.aliasesMethodCodomain = (Environment.aliasesMethodCodomain aliases),
+      Environment.aliasesThunkedVars = (Environment.aliasesThunkedVars aliases)}
 
-addInScopeVars :: [Core.Name] -> Helpers.Aliases -> Helpers.Aliases
+addInScopeVars :: [Core.Name] -> Environment.Aliases -> Environment.Aliases
 addInScopeVars names aliases = Lists.foldl (\a -> \n -> addInScopeVar n a) aliases names
 
-addVarRename :: Core.Name -> Core.Name -> Helpers.Aliases -> Helpers.Aliases
+addVarRename :: Core.Name -> Core.Name -> Environment.Aliases -> Environment.Aliases
 addVarRename original renamed aliases =
-    Helpers.Aliases {
-      Helpers.aliasesCurrentNamespace = (Helpers.aliasesCurrentNamespace aliases),
-      Helpers.aliasesPackages = (Helpers.aliasesPackages aliases),
-      Helpers.aliasesBranchVars = (Helpers.aliasesBranchVars aliases),
-      Helpers.aliasesRecursiveVars = (Helpers.aliasesRecursiveVars aliases),
-      Helpers.aliasesInScopeTypeParams = (Helpers.aliasesInScopeTypeParams aliases),
-      Helpers.aliasesPolymorphicLocals = (Helpers.aliasesPolymorphicLocals aliases),
-      Helpers.aliasesInScopeJavaVars = (Helpers.aliasesInScopeJavaVars aliases),
-      Helpers.aliasesVarRenames = (Maps.insert original renamed (Helpers.aliasesVarRenames aliases)),
-      Helpers.aliasesLambdaVars = (Helpers.aliasesLambdaVars aliases),
-      Helpers.aliasesTypeVarSubst = (Helpers.aliasesTypeVarSubst aliases),
-      Helpers.aliasesTrustedTypeVars = (Helpers.aliasesTrustedTypeVars aliases),
-      Helpers.aliasesMethodCodomain = (Helpers.aliasesMethodCodomain aliases),
-      Helpers.aliasesThunkedVars = (Helpers.aliasesThunkedVars aliases)}
+    Environment.Aliases {
+      Environment.aliasesCurrentNamespace = (Environment.aliasesCurrentNamespace aliases),
+      Environment.aliasesPackages = (Environment.aliasesPackages aliases),
+      Environment.aliasesBranchVars = (Environment.aliasesBranchVars aliases),
+      Environment.aliasesRecursiveVars = (Environment.aliasesRecursiveVars aliases),
+      Environment.aliasesInScopeTypeParams = (Environment.aliasesInScopeTypeParams aliases),
+      Environment.aliasesPolymorphicLocals = (Environment.aliasesPolymorphicLocals aliases),
+      Environment.aliasesInScopeJavaVars = (Environment.aliasesInScopeJavaVars aliases),
+      Environment.aliasesVarRenames = (Maps.insert original renamed (Environment.aliasesVarRenames aliases)),
+      Environment.aliasesLambdaVars = (Environment.aliasesLambdaVars aliases),
+      Environment.aliasesTypeVarSubst = (Environment.aliasesTypeVarSubst aliases),
+      Environment.aliasesTrustedTypeVars = (Environment.aliasesTrustedTypeVars aliases),
+      Environment.aliasesMethodCodomain = (Environment.aliasesMethodCodomain aliases),
+      Environment.aliasesThunkedVars = (Environment.aliasesThunkedVars aliases)}

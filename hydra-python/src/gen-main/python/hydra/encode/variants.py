@@ -162,8 +162,11 @@ def type_variant(v1: hydra.variants.TypeVariant) -> hydra.core.Term:
         case hydra.variants.TypeVariant.VARIABLE:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TypeVariant"), hydra.core.Field(hydra.core.Name("variable"), cast(hydra.core.Term, hydra.core.TermUnit())))))
 
+        case hydra.variants.TypeVariant.VOID:
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TypeVariant"), hydra.core.Field(hydra.core.Name("void"), cast(hydra.core.Term, hydra.core.TermUnit())))))
+
         case hydra.variants.TypeVariant.WRAP:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.variants.TypeVariant"), hydra.core.Field(hydra.core.Name("wrap"), cast(hydra.core.Term, hydra.core.TermUnit())))))
 
         case _:
-            raise TypeError("Unsupported TypeVariant")
+            raise AssertionError("Unreachable: all variants handled")

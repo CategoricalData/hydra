@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.json.model
-(:use :cl :hydra.core :hydra.error :hydra.extract.helpers :hydra.json.model :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings)
+(:use :cl :hydra.core :hydra.errors :hydra.extract.helpers :hydra.json.model :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings)
 (:export :hydra_decode_json_model_value))
 
 (in-package :hydra.decode.json.model)

@@ -2,7 +2,7 @@
 
 (require 'hydra.core)
 
-(require 'hydra.error)
+(require 'hydra.errors)
 
 (require 'hydra.extract.helpers)
 

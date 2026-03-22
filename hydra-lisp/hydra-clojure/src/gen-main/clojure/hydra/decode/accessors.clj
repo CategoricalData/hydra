@@ -1,5 +1,5 @@
 (ns hydra.decode.accessors
-  (:require [hydra.accessors :refer :all] [hydra.core :refer :all] [hydra.decode.core :refer :all] [hydra.error :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.maps :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.strings :refer :all]
+  (:require [hydra.accessors :refer :all] [hydra.core :refer :all] [hydra.decode.core :refer :all] [hydra.errors :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.maps :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.strings :refer :all]
 ))
 
 (declare hydra_decode_accessors_accessor_node hydra_decode_accessors_term_accessor hydra_decode_accessors_accessor_path hydra_decode_accessors_accessor_edge hydra_decode_accessors_accessor_graph)

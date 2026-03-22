@@ -322,6 +322,7 @@ def `type`(typ: hydra.core.Type): scala.Predef.String =
     case hydra.core.Type.union(v_Type_union_rt) => hydra.lib.strings.cat2("union")(showRowType(v_Type_union_rt))
     case hydra.core.Type.unit => "unit"
     case hydra.core.Type.variable(v_Type_variable_name) => v_Type_variable_name
+    case hydra.core.Type.void => "void"
     case hydra.core.Type.wrap(v_Type_wrap_wt) => hydra.lib.strings.cat(Seq("wrap(", hydra.show.core.`type`(v_Type_wrap_wt), ")"))
 }
 

@@ -666,7 +666,7 @@ if the session is interrupted (e.g., by a power failure or context limit).
 Make frequent checkpoint commits whenever the code reaches a stable state (tests
 pass, build succeeds). Prefix these with `WIP:`, e.g. `WIP: regenerate Lisp
 generation test files`. All commit messages must be short (120 characters or
-less) with no line breaks or multi-line bodies.
+less) with no line breaks or multi-line bodies. No "Co-Authored-By:" line.
 
 When a task is completed or an important intermediate goal is reached, ask the
 user if they are ready to squash commits. When squashing:

@@ -1,5 +1,5 @@
 (ns hydra.decode.coders
-  (:require [hydra.coders :refer :all] [hydra.core :refer :all] [hydra.error :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.maps :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.strings :refer :all]
+  (:require [hydra.coders :refer :all] [hydra.core :refer :all] [hydra.errors :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.maps :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.strings :refer :all]
 ))
 
 (declare hydra_decode_coders_coder_direction hydra_decode_coders_language_name hydra_decode_coders_traversal_order)

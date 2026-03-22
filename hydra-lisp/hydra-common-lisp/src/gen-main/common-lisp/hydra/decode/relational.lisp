@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.relational
-(:use :cl :hydra.core :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.relational)
+(:use :cl :hydra.core :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.relational)
 (:export :hydra_decode_relational_column_name :hydra_decode_relational_column_schema :hydra_decode_relational_relation_name :hydra_decode_relational_foreign_key :hydra_decode_relational_primary_key :hydra_decode_relational_row :hydra_decode_relational_relation :hydra_decode_relational_relation_schema :hydra_decode_relational_relationship))
 
 (in-package :hydra.decode.relational)

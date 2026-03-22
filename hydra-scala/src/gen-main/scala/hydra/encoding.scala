@@ -4,7 +4,7 @@ import hydra.context.*
 
 import hydra.core.*
 
-import hydra.error.*
+import hydra.errors.*
 
 import hydra.module.*
 
@@ -22,10 +22,10 @@ import hydra.lib.sets
 
 import hydra.lib.strings
 
-def encodeBinding(cx: hydra.context.Context)(graph: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.error.DecodingError],
+def encodeBinding(cx: hydra.context.Context)(graph: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.DecodingError],
    hydra.core.Binding] =
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.error.DecodingError], hydra.core.Type, hydra.core.Binding](hydra.lib.eithers.bimap[hydra.error.DecodingError,
-     hydra.core.Type, hydra.context.InContext[hydra.error.DecodingError], hydra.core.Type]((_wc_e: hydra.error.DecodingError) => hydra.context.InContext(_wc_e,
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.DecodingError], hydra.core.Type, hydra.core.Binding](hydra.lib.eithers.bimap[hydra.errors.DecodingError,
+     hydra.core.Type, hydra.context.InContext[hydra.errors.DecodingError], hydra.core.Type]((_wc_e: hydra.errors.DecodingError) => hydra.context.InContext(_wc_e,
      cx))((_wc_a: hydra.core.Type) => _wc_a)(hydra.decode.core.`type`(graph)(b.term)))((typ: hydra.core.Type) =>
   Right(hydra.core.Binding(hydra.encoding.encodeBindingName(b.name), hydra.encoding.encodeTypeNamed(b.name)(typ),
      Some(hydra.encoding.encoderTypeSchemeNamed(b.name)(typ)))))
@@ -98,6 +98,7 @@ def encoderFullResultType(typ: hydra.core.Type): hydra.core.Type =
   case hydra.core.Type.union(v_Type_union__) => hydra.core.Type.variable("hydra.core.Term")
   case hydra.core.Type.unit => hydra.core.Type.unit
   case hydra.core.Type.variable(v_Type_variable_name) => hydra.core.Type.variable(v_Type_variable_name)
+  case hydra.core.Type.void => hydra.core.Type.void
   case hydra.core.Type.wrap(v_Type_wrap__) => hydra.core.Type.variable("hydra.core.Term")
   case _ => hydra.core.Type.variable("hydra.core.Term")
 
@@ -122,6 +123,7 @@ def encoderFullResultTypeNamed(ename: hydra.core.Name)(typ: hydra.core.Type): hy
   case hydra.core.Type.union(v_Type_union__) => hydra.core.Type.variable(ename)
   case hydra.core.Type.unit => hydra.core.Type.unit
   case hydra.core.Type.variable(v_Type_variable_name) => hydra.core.Type.variable(v_Type_variable_name)
+  case hydra.core.Type.void => hydra.core.Type.void
   case hydra.core.Type.wrap(v_Type_wrap__) => hydra.core.Type.variable(ename)
   case _ => hydra.core.Type.variable("hydra.core.Term")
 
@@ -248,15 +250,15 @@ def encodePairType(pt: hydra.core.PairType): hydra.core.Term =
      hydra.core.Field("pair", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.pairs.bimap")),
      hydra.encoding.encodeType(pt.first))), hydra.encoding.encodeType(pt.second))), hydra.core.Term.variable("p")))))))))
 
-def encodeModule(cx: hydra.context.Context)(graph: hydra.graph.Graph)(mod: hydra.module.Module): Either[hydra.context.InContext[hydra.error.Error],
+def encodeModule(cx: hydra.context.Context)(graph: hydra.graph.Graph)(mod: hydra.module.Module): Either[hydra.context.InContext[hydra.errors.Error],
    Option[hydra.module.Module]] =
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.error.Error], Seq[hydra.core.Binding], Option[hydra.module.Module]](hydra.encoding.filterTypeBindings(cx)(graph)(mod.elements))((typeBindings: Seq[hydra.core.Binding]) =>
-  hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.error.Error], Option[hydra.module.Module]]](hydra.lib.lists.`null`[hydra.core.Binding](typeBindings))(Right(None))(hydra.lib.eithers.bind[hydra.context.InContext[hydra.error.Error],
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.core.Binding], Option[hydra.module.Module]](hydra.encoding.filterTypeBindings(cx)(graph)(mod.elements))((typeBindings: Seq[hydra.core.Binding]) =>
+  hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], Option[hydra.module.Module]]](hydra.lib.lists.`null`[hydra.core.Binding](typeBindings))(Right(None))(hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
      Seq[hydra.core.Binding], Option[hydra.module.Module]](hydra.lib.eithers.mapList[hydra.core.Binding,
-     hydra.core.Binding, hydra.context.InContext[hydra.error.Error]]((b: hydra.core.Binding) =>
-  hydra.lib.eithers.bimap[hydra.context.InContext[hydra.error.DecodingError], hydra.core.Binding, hydra.context.InContext[hydra.error.Error],
-     hydra.core.Binding]((ic: hydra.context.InContext[hydra.error.DecodingError]) =>
-  hydra.context.InContext(hydra.error.Error.other(ic.`object`), (ic.context)))((x: hydra.core.Binding) => x)(hydra.encoding.encodeBinding(cx)(graph)(b)))(typeBindings))((encodedBindings: Seq[hydra.core.Binding]) =>
+     hydra.core.Binding, hydra.context.InContext[hydra.errors.Error]]((b: hydra.core.Binding) =>
+  hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.DecodingError], hydra.core.Binding, hydra.context.InContext[hydra.errors.Error],
+     hydra.core.Binding]((ic: hydra.context.InContext[hydra.errors.DecodingError]) =>
+  hydra.context.InContext(hydra.errors.Error.other(ic.`object`), (ic.context)))((x: hydra.core.Binding) => x)(hydra.encoding.encodeBinding(cx)(graph)(b)))(typeBindings))((encodedBindings: Seq[hydra.core.Binding]) =>
   Right(Some(hydra.module.Module(hydra.encoding.encodeNamespace(mod.namespace), encodedBindings, hydra.lib.lists.nub[hydra.module.Namespace](hydra.lib.lists.concat2[hydra.module.Namespace](hydra.lib.lists.map[hydra.module.Namespace,
      hydra.module.Namespace](hydra.encoding.encodeNamespace)(mod.typeDependencies))(hydra.lib.lists.map[hydra.module.Namespace,
      hydra.module.Namespace](hydra.encoding.encodeNamespace)(mod.termDependencies))), Seq(mod.namespace),
@@ -305,6 +307,8 @@ def encodeType(v1: hydra.core.Type): hydra.core.Term =
   case hydra.core.Type.wrap(v_Type_wrap_wt) => hydra.encoding.encodeWrappedType(v_Type_wrap_wt)
   case hydra.core.Type.unit => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_",
      None, hydra.core.Term.union(hydra.core.Injection("hydra.core.Term", hydra.core.Field("unit", hydra.core.Term.unit))))))
+  case hydra.core.Type.void => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_",
+     None, hydra.core.Term.union(hydra.core.Injection("hydra.core.Term", hydra.core.Field("unit", hydra.core.Term.unit))))))
   case hydra.core.Type.variable(v_Type_variable_typeName) => hydra.core.Term.variable(hydra.encoding.encodeBindingName(v_Type_variable_typeName))
   case _ => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("x", None, hydra.core.Term.variable("x"))))
 
@@ -329,6 +333,8 @@ def encodeTypeNamed(ename: hydra.core.Name)(typ: hydra.core.Type): hydra.core.Te
   case hydra.core.Type.wrap(v_Type_wrap_wt) => hydra.encoding.encodeWrappedTypeNamed(ename)(v_Type_wrap_wt)
   case hydra.core.Type.unit => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_",
      None, hydra.core.Term.union(hydra.core.Injection("hydra.core.Term", hydra.core.Field("unit", hydra.core.Term.unit))))))
+  case hydra.core.Type.void => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("_",
+     None, hydra.core.Term.union(hydra.core.Injection("hydra.core.Term", hydra.core.Field("unit", hydra.core.Term.unit))))))
   case hydra.core.Type.variable(v_Type_variable_typeName) => hydra.core.Term.variable(hydra.encoding.encodeBindingName(v_Type_variable_typeName))
   case _ => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("x", None, hydra.core.Term.variable("x"))))
 
@@ -348,14 +354,14 @@ def encodeWrappedTypeNamed(ename: hydra.core.Name)(wt: hydra.core.Type): hydra.c
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.wrap(ename))),
      hydra.core.Term.variable("x")))))))))))))))
 
-def filterTypeBindings(cx: hydra.context.Context)(graph: hydra.graph.Graph)(bindings: Seq[hydra.core.Binding]): Either[hydra.context.InContext[hydra.error.Error],
+def filterTypeBindings(cx: hydra.context.Context)(graph: hydra.graph.Graph)(bindings: Seq[hydra.core.Binding]): Either[hydra.context.InContext[hydra.errors.Error],
    Seq[hydra.core.Binding]] =
-  hydra.lib.eithers.map[Seq[Option[hydra.core.Binding]], Seq[hydra.core.Binding], hydra.context.InContext[hydra.error.Error]](hydra.lib.maybes.cat[hydra.core.Binding])(hydra.lib.eithers.mapList[hydra.core.Binding,
-     Option[hydra.core.Binding], hydra.context.InContext[hydra.error.Error]]((v1: hydra.core.Binding) => hydra.encoding.isEncodableBinding(cx)(graph)(v1))(hydra.lib.lists.filter[hydra.core.Binding](hydra.annotations.isNativeType)(bindings)))
+  hydra.lib.eithers.map[Seq[Option[hydra.core.Binding]], Seq[hydra.core.Binding], hydra.context.InContext[hydra.errors.Error]](hydra.lib.maybes.cat[hydra.core.Binding])(hydra.lib.eithers.mapList[hydra.core.Binding,
+     Option[hydra.core.Binding], hydra.context.InContext[hydra.errors.Error]]((v1: hydra.core.Binding) => hydra.encoding.isEncodableBinding(cx)(graph)(v1))(hydra.lib.lists.filter[hydra.core.Binding](hydra.annotations.isNativeType)(bindings)))
 
-def isEncodableBinding(cx: hydra.context.Context)(graph: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.error.Error],
+def isEncodableBinding(cx: hydra.context.Context)(graph: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error],
    Option[hydra.core.Binding]] =
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.error.Error], Boolean, Option[hydra.core.Binding]](hydra.schemas.isSerializableByName(cx)(graph)(b.name))((serializable: Boolean) =>
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Boolean, Option[hydra.core.Binding]](hydra.schemas.isSerializableByName(cx)(graph)(b.name))((serializable: Boolean) =>
   Right(hydra.lib.logic.ifElse[Option[hydra.core.Binding]](serializable)(Some(b))(None)))
 
 def isUnitType(v1: hydra.core.Type): Boolean =
