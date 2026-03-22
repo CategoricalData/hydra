@@ -534,7 +534,7 @@ public interface Reduction {
             @Override
             public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Function.Primitive pn2) {
               return hydra.lib.maybes.Map.apply(
-                hydra.rewriting.Rewriting::typeSchemeToFType,
+                hydra.Rewriting::typeSchemeToFType,
                 hydra.lib.maps.Lookup.apply(
                   (pn2).value,
                   primTypes.get()));

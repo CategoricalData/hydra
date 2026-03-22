@@ -403,6 +403,84 @@
               "domain": {"variable": "hydra.util.CaseConvention"}}},
           "variables": []}]},
     {
+      "name": "hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Convert a string from camel case (possibly with underscores) to lower snake case. Splits on underscores first, then converts each part from camel case."}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "parts",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "s"},
+                            "function": {
+                              "application": {
+                                "argument": {"literal": {"string": "_"}},
+                                "function": {"function": {"primitive": "hydra.lib.strings.splitOn"}}}}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"list": {"literal": {"string": {}}}},
+                            "variables": []}]}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "snakeParts",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "parts"},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "application": {
+                                              "argument": {"variable": "p"},
+                                              "function": {"variable": "hydra.formatting.convertCaseCamelToLowerSnake"}}},
+                                          "domain": [{"literal": {"string": {}}}],
+                                          "parameter": "p"}}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                            "type": {"literal": {"string": {}}}}},
+                                        "type": {"literal": {"string": {}}}}}}}}},
+                            "type": [
+                              {
+                                "constraints": null,
+                                "type": {"list": {"literal": {"string": {}}}},
+                                "variables": []}]}],
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "snakeParts"},
+                            "function": {
+                              "application": {
+                                "argument": {"literal": {"string": "_"}},
+                                "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}}}}}},
+                "domain": [{"literal": {"string": {}}}],
+                "parameter": "s"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"string": {}}},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}]},
+    {
       "name": "hydra.formatting.convertCaseCamelToLowerSnake",
       "term": {
         "annotated": {

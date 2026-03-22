@@ -127,7 +127,7 @@ qualifiedSnakeName name =
 
       let raw = Core.unName name
           parts = Strings.splitOn "." raw
-          snakeParts = Lists.map (\p -> Formatting.convertCaseCamelToLowerSnake p) parts
+          snakeParts = Lists.map (\p -> Formatting.convertCaseCamelOrUnderscoreToLowerSnake p) parts
           joined = Strings.intercalate "_" snakeParts
       in (Formatting.sanitizeWithUnderscores Language.lispReservedWords joined)
 
@@ -268,7 +268,7 @@ encodeTerm dialect cx g term =
           lispKeyword (Formatting.convertCaseCamelToLowerSnake fname),
           sval]))))
       Core.TermUnit -> Right lispNilExpr
-      Core.TermVariable v0 -> Right (lispVar (Formatting.convertCaseCamelToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName v0))))
+      Core.TermVariable v0 -> Right (lispVar (Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName v0))))
       Core.TermTypeApplication v0 -> encodeTerm dialect cx g (Core.typeApplicationTermBody v0)
       Core.TermTypeLambda v0 -> encodeTerm dialect cx g (Core.typeLambdaBody v0)
       Core.TermWrap v0 -> encodeTerm dialect cx g (Core.wrappedTermBody v0)
@@ -278,17 +278,17 @@ encodeFunction dialect cx g fun =
     case fun of
       Core.FunctionLambda v0 ->
         let param =
-                Formatting.convertCaseCamelToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.lambdaParameter v0)))
+                Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.lambdaParameter v0)))
         in (Eithers.bind (encodeTerm dialect cx g (Core.lambdaBody v0)) (\body -> Right (lispLambdaExpr [
           param] body)))
-      Core.FunctionPrimitive v0 -> Right (lispVar (Formatting.convertCaseCamelToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName v0))))
+      Core.FunctionPrimitive v0 -> Right (lispVar (Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName v0))))
       Core.FunctionElimination v0 -> encodeElimination dialect cx g v0 Nothing
 
 encodeLetAsLambdaApp :: Syntax.Dialect -> t0 -> t1 -> [Core.Binding] -> Core.Term -> Either t2 Syntax.Expression
 encodeLetAsLambdaApp dialect cx g bindings body =
     Eithers.bind (encodeTerm dialect cx g body) (\bodyExpr -> Eithers.foldl (\acc -> \b ->
       let bname =
-              Formatting.convertCaseCamelToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.bindingName b)))
+              Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.bindingName b)))
       in (Eithers.bind (encodeTerm dialect cx g (Core.bindingTerm b)) (\bval -> Right (lispApp (lispLambdaExpr [
         bname] acc) [
         bval])))) bodyExpr (Lists.reverse bindings))
@@ -311,7 +311,7 @@ encodeLetAsNative dialect cx g bindings body =
                   in (Eithers.either (\_ -> bindings) (\sorted -> Lists.map (\name -> Maybes.fromMaybe (Lists.head bindings) (Maps.lookup name nameToBinding)) sorted) sortResult)) bindings
         in (Eithers.bind (Eithers.mapList (\b ->
           let bname =
-                  Formatting.convertCaseCamelToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.bindingName b)))
+                  Formatting.convertCaseCamelOrUnderscoreToLowerSnake (Formatting.sanitizeWithUnderscores Language.lispReservedWords (Core.unName (Core.bindingName b)))
               isSelfRef = Sets.member (Core.bindingName b) (Rewriting.freeVariablesInTerm (Core.bindingTerm b))
               isLambda =
                       case (Rewriting.deannotateTerm (Core.bindingTerm b)) of

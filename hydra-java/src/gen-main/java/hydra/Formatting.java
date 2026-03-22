@@ -88,6 +88,18 @@ public interface Formatting {
     });
   }
 
+  static String convertCaseCamelOrUnderscoreToLowerSnake(String s) {
+    hydra.util.ConsList<String> parts = hydra.lib.strings.SplitOn.apply(
+      "_",
+      s);
+    hydra.util.Lazy<hydra.util.ConsList<String>> snakeParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+      (java.util.function.Function<String, String>) (p -> hydra.Formatting.convertCaseCamelToLowerSnake(p)),
+      parts));
+    return hydra.lib.strings.Intercalate.apply(
+      "_",
+      snakeParts.get());
+  }
+
   static String convertCaseCamelToLowerSnake(String v1) {
     return hydra.Formatting.convertCase(
       new hydra.util.CaseConvention.Camel(),

@@ -616,7 +616,8 @@
                                           "body": {
                                             "application": {
                                               "argument": {"variable": "p"},
-                                              "function": {"variable": "hydra.formatting.convertCaseCamelToLowerSnake"}}},
+                                              "function": {
+                                                "variable": "hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake"}}},
                                           "domain": [{"literal": {"string": {}}}],
                                           "parameter": "p"}}},
                                     "function": {
@@ -3263,7 +3264,8 @@
                                                                                           "application": {
                                                                                             "argument": {"variable": "hydra.ext.lisp.language.lispReservedWords"},
                                                                                             "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}},
-                                                                                    "function": {"variable": "hydra.formatting.convertCaseCamelToLowerSnake"}}},
+                                                                                    "function": {
+                                                                                      "variable": "hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake"}}},
                                                                                 "function": {"variable": "hydra.ext.lisp.coder.lispVar"}}}}},
                                                                         "type": {"variable": "t2"}}},
                                                                     "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
@@ -3460,7 +3462,8 @@
                                                                                   "application": {
                                                                                     "argument": {"variable": "hydra.ext.lisp.language.lispReservedWords"},
                                                                                     "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}},
-                                                                            "function": {"variable": "hydra.formatting.convertCaseCamelToLowerSnake"}}},
+                                                                            "function": {
+                                                                              "variable": "hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake"}}},
                                                                         "type": [
                                                                           {
                                                                             "constraints": null,
@@ -3554,7 +3557,8 @@
                                                                                           "application": {
                                                                                             "argument": {"variable": "hydra.ext.lisp.language.lispReservedWords"},
                                                                                             "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}},
-                                                                                    "function": {"variable": "hydra.formatting.convertCaseCamelToLowerSnake"}}},
+                                                                                    "function": {
+                                                                                      "variable": "hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake"}}},
                                                                                 "function": {"variable": "hydra.ext.lisp.coder.lispVar"}}}}},
                                                                         "type": {"variable": "t2"}}},
                                                                     "type": {"variable": "hydra.ext.lisp.syntax.Expression"}}},
@@ -3696,7 +3700,8 @@
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "hydra.ext.lisp.language.lispReservedWords"},
                                                                                                       "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}},
-                                                                                              "function": {"variable": "hydra.formatting.convertCaseCamelToLowerSnake"}}},
+                                                                                              "function": {
+                                                                                                "variable": "hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake"}}},
                                                                                           "type": [
                                                                                             {
                                                                                               "constraints": null,
@@ -4557,7 +4562,8 @@
                                                                                                           "application": {
                                                                                                             "argument": {"variable": "hydra.ext.lisp.language.lispReservedWords"},
                                                                                                             "function": {"variable": "hydra.formatting.sanitizeWithUnderscores"}}}}},
-                                                                                                    "function": {"variable": "hydra.formatting.convertCaseCamelToLowerSnake"}}},
+                                                                                                    "function": {
+                                                                                                      "variable": "hydra.formatting.convertCaseCamelOrUnderscoreToLowerSnake"}}},
                                                                                                 "type": [
                                                                                                   {
                                                                                                     "constraints": null,

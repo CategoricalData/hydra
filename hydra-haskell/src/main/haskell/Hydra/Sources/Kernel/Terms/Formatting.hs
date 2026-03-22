@@ -2,7 +2,7 @@ module Hydra.Sources.Kernel.Terms.Formatting where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  capitalize, convertCase, convertCaseCamelToLowerSnake, convertCaseCamelToUpperSnake,
+  capitalize, convertCase, convertCaseCamelOrUnderscoreToLowerSnake, convertCaseCamelToLowerSnake, convertCaseCamelToUpperSnake,
   convertCasePascalToUpperSnake, decapitalize, escapeWithUnderscore, indentLines,
   javaStyleComment, mapFirstLetter, nonAlnumToUnderscores, sanitizeWithUnderscores,
   showList, stripLeadingAndTrailingWhitespace, withCharacterAliases, wrapLine)
@@ -69,6 +69,7 @@ module_ = Module ns elements
     elements = [
       toBinding capitalize,
       toBinding convertCase,
+      toBinding convertCaseCamelOrUnderscoreToLowerSnake,
       toBinding convertCaseCamelToLowerSnake,
       toBinding convertCaseCamelToUpperSnake,
       toBinding convertCasePascalToUpperSnake,
@@ -98,17 +99,11 @@ convertCase = define "convertCase" $
   lambdas ["from", "to", "original"] $ lets [
     "parts">: lets [
       "byCaps">: lets [
-        -- Split on uppercase letters AND underscores (underscores are dropped)
-        "splitOnUpperOrUnderscore">: lambda "acc" $ lambda "c" $
-          Logic.ifElse (Equality.equal (var "c") (char '_'))
-            (Lists.concat2 emptyParts (var "acc"))  -- underscore: start new word, drop the underscore
-            (Logic.ifElse (Chars.isUpper $ var "c")
-              (Lists.concat2 emptyParts
-                (Lists.cons (Lists.cons (var "c") (Lists.head $ var "acc")) (Lists.tail $ var "acc")))
-              (Lists.cons (Lists.cons (var "c") (Lists.head $ var "acc")) (Lists.tail $ var "acc")))]
-        $ Lists.filter (lambda "w" $ Logic.not (Equality.equal (Strings.length $ var "w") (int32 0)))
-          $ Lists.map (primitive _strings_fromList) $ Lists.foldl (var "splitOnUpperOrUnderscore") emptyParts
-            $ Lists.reverse $ Strings.toList (decapitalize @@ var "original"),
+        "splitOnUppercase">: lambda "acc" $ lambda "c" $ Lists.concat2
+          (Logic.ifElse (Chars.isUpper $ var "c") emptyParts (list ([] :: [TTerm [Char]])))
+          (Lists.cons (Lists.cons (var "c") (Lists.head $ var "acc")) (Lists.tail $ var "acc"))]
+        $ Lists.map (primitive _strings_fromList) $ Lists.foldl (var "splitOnUppercase") emptyParts
+          $ Lists.reverse $ Strings.toList (decapitalize @@ var "original"),
       "byUnderscores">: Strings.splitOn (string "_") $ var "original"]
       $ (match _CaseConvention Nothing [
         _CaseConvention_camel>>: constant $ var "byCaps",
@@ -128,6 +123,14 @@ convertCaseCamelToLowerSnake :: TBinding (String -> String)
 convertCaseCamelToLowerSnake = define "convertCaseCamelToLowerSnake" $
   doc "Convert a string from camel case to lower snake case" $
   convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake
+
+convertCaseCamelOrUnderscoreToLowerSnake :: TBinding (String -> String)
+convertCaseCamelOrUnderscoreToLowerSnake = define "convertCaseCamelOrUnderscoreToLowerSnake" $
+  doc "Convert a string from camel case (possibly with underscores) to lower snake case. Splits on underscores first, then converts each part from camel case." $
+  lambda "s" $
+    "parts" <~ Strings.splitOn (string "_") (var "s") $
+    "snakeParts" <~ Lists.map (lambda "p" $ convertCaseCamelToLowerSnake @@ var "p") (var "parts") $
+    Strings.intercalate (string "_") (var "snakeParts")
 
 convertCaseCamelToUpperSnake :: TBinding (String -> String)
 convertCaseCamelToUpperSnake = define "convertCaseCamelToUpperSnake" $
