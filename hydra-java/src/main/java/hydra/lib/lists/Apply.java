@@ -39,13 +39,13 @@ public class Apply extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(0)), functions ->
-                hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), arguments -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(0)), functions ->
+                hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(1)), arguments -> {
                     List<Term> results = new LinkedList<>();
                     for (Term f : functions) {
                         for (Term a : arguments) {
-                            Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                                hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(f, a));
+                            Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                                hydra.Lexical.emptyContext(), graph, true, Terms.apply(f, a));
                             if (r.isLeft()) return (Either) r;
                             results.add(((Either.Right<InContext<Error_>, Term>) r).value);
                         }

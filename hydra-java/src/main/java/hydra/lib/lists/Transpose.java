@@ -38,7 +38,7 @@ public class Transpose extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(0)), outerList -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(0)), outerList -> {
             // Parse each inner list
             Either<InContext<Error_>, List<List<Term>>> matrixFlow = Either.right(new ArrayList<>());
             for (Term inner : outerList) {
@@ -47,7 +47,7 @@ public class Transpose extends PrimitiveFunction {
                         List<List<Term>> newAcc = new ArrayList<>(acc);
                         newAcc.add(row);
                         return newAcc;
-                    }, hydra.extract.core.Core.list(cx, graph, inner)));
+                    }, hydra.extract.Core.list(cx, graph, inner)));
             }
             return hydra.lib.eithers.Map.apply(matrix -> {
                 List<List<Term>> transposed = transposeRaw(matrix);

@@ -42,17 +42,17 @@ public class MapMaybe extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(1)), maybe -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(1)), maybe -> {
                 Term fn = args.get(0);
                 if (maybe.isNothing()) {
                     return Either.right(new Term.Either(new hydra.util.Either.Right<>(Terms.optional(Maybe.nothing()))));
                 }
                 Term val = maybe.fromJust();
-                Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                    hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(fn, val));
+                Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                    hydra.Lexical.emptyContext(), graph, true, Terms.apply(fn, val));
                 if (r.isLeft()) return (Either) r;
                 Either<InContext<Error_>, hydra.util.Either<Term, Term>> eitherResult =
-                    hydra.extract.core.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph,
+                    hydra.extract.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph,
                         ((Either.Right<InContext<Error_>, Term>) r).value);
                 if (eitherResult.isLeft()) return (Either) eitherResult;
                 hydra.util.Either<Term, Term> inner =

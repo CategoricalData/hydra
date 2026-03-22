@@ -83,12 +83,12 @@ public class Coders {
             hydra.util.PersistentMap.empty());
         Either<InContext<Error_>, V2> encResult = coder.encode.apply(cx).apply(initialValue);
         if (encResult.isLeft()) {
-            return Either.left(hydra.show.errors.Errors.error(((Either.Left<InContext<Error_>, V2>) encResult).value.object));
+            return Either.left(hydra.show.Errors.error(((Either.Left<InContext<Error_>, V2>) encResult).value.object));
         }
         V2 encoded = ((Either.Right<InContext<Error_>, V2>) encResult).value;
         Either<InContext<Error_>, V1> decResult = coder.decode.apply(cx).apply(encoded);
         if (decResult.isLeft()) {
-            return Either.left(hydra.show.errors.Errors.error(((Either.Left<InContext<Error_>, V1>) decResult).value.object));
+            return Either.left(hydra.show.Errors.error(((Either.Left<InContext<Error_>, V1>) decResult).value.object));
         }
         return Either.right(((Either.Right<InContext<Error_>, V1>) decResult).value);
     }

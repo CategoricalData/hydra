@@ -52,7 +52,7 @@ public class Lines extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
             s -> Terms.list(apply(s).stream().map(Terms::string).collect(Collectors.toList())),
-            hydra.extract.core.Core.string(cx, graph, args.get(0)));
+            hydra.extract.Core.string(cx, graph, args.get(0)));
     }
 
     /**

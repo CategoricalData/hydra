@@ -49,15 +49,15 @@ public class Bind extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(0)), arg -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(0)), arg -> {
                 if (arg.isNothing()) {
                     return Either.right(Terms.optional(Maybe.nothing()));
                 }
                 Term val = arg.fromJust();
-                Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                    hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(1), val));
+                Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                    hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(1), val));
                 if (r.isLeft()) return (Either) r;
-                Either<InContext<Error_>, Maybe<Term>> maybeResult = hydra.extract.core.Core.maybeTerm(cx,
+                Either<InContext<Error_>, Maybe<Term>> maybeResult = hydra.extract.Core.maybeTerm(cx,
                     t -> Either.right(t), graph, ((Either.Right<InContext<Error_>, Term>) r).value);
                 if (maybeResult.isLeft()) return (Either) maybeResult;
                 return Either.right(Terms.optional(((Either.Right<InContext<Error_>, Maybe<Term>>) maybeResult).value));

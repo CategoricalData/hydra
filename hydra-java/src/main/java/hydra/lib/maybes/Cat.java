@@ -51,7 +51,7 @@ public class Cat extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Maybe<Term>>, Term>) optionals -> Terms.list(apply(optionals)), hydra.extract.core.Core.listOf(cx, x -> hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, x), graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Maybe<Term>>, Term>) optionals -> Terms.list(apply(optionals)), hydra.extract.Core.listOf(cx, x -> hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, x), graph, args.get(0)));
     }
 
     /**

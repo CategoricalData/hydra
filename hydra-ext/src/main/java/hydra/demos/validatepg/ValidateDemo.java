@@ -8,7 +8,7 @@ import hydra.dsl.Literals;
 import hydra.json.model.Value;
 import hydra.pg.model.Graph;
 import hydra.pg.model.GraphSchema;
-import hydra.pg.validation.Validation;
+import hydra.pg.Validation;
 import hydra.util.Maybe;
 
 import java.io.IOException;

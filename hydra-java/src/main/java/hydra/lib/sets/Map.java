@@ -53,7 +53,7 @@ public class Map extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> {
             Term mapping = args.get(0);
-            return hydra.lib.eithers.Map.apply(arg -> Terms.set(FromList.orderedSet(arg.stream().map(e -> Terms.apply(mapping, e)).collect(Collectors.toList()))), hydra.extract.core.Core.set(cx, graph, args.get(1)));
+            return hydra.lib.eithers.Map.apply(arg -> Terms.set(FromList.orderedSet(arg.stream().map(e -> Terms.apply(mapping, e)).collect(Collectors.toList()))), hydra.extract.Core.set(cx, graph, args.get(1)));
         };
     }
 

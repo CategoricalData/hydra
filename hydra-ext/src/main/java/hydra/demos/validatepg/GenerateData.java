@@ -5,10 +5,10 @@ import hydra.core.LiteralType;
 import hydra.core.Term;
 import hydra.dsl.LiteralTypes;
 import hydra.dsl.Literals;
-import hydra.encode.pg.model.Model;
-import hydra.json.encode.Encode;
+import hydra.encode.pg.Model;
+import hydra.json.Encode;
 import hydra.json.model.Value;
-import hydra.json.writer.Writer;
+import hydra.json.Writer;
 import hydra.pg.dsl.Graphs;
 import hydra.pg.model.Edge;
 import hydra.pg.model.EdgeType;
@@ -248,7 +248,7 @@ public class GenerateData {
     // -- Encoding helpers --
 
     private static String encodeSchemaToJson(GraphSchema<LiteralType> schema) {
-        Term term = Model.graphSchema(hydra.encode.core.Core::literalType, schema);
+        Term term = Model.graphSchema(hydra.encode.Core::literalType, schema);
         Either<String, Value> result = Encode.toJson(term);
         return result.accept(new Either.Visitor<String, Value, String>() {
             @Override
@@ -264,7 +264,7 @@ public class GenerateData {
     }
 
     private static String encodeGraphToJson(Graph<Literal> graph) {
-        Term term = Model.graph(hydra.encode.core.Core::literal, graph);
+        Term term = Model.graph(hydra.encode.Core::literal, graph);
         Either<String, Value> result = Encode.toJson(term);
         return result.accept(new Either.Visitor<String, Value, String>() {
             @Override

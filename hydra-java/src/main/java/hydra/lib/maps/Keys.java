@@ -56,7 +56,7 @@ public class Keys extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> {
-            Either<InContext<Error_>, PersistentMap<Term, Term>> r = hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
+            Either<InContext<Error_>, PersistentMap<Term, Term>> r = hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
             return hydra.lib.eithers.Map.apply(map -> Terms.list(map.keys()), r);
         };
     }

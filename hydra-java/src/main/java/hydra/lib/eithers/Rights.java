@@ -58,7 +58,7 @@ public class Rights extends PrimitiveFunction {
                     });
                 }
                 return new Term.List(ConsList.fromList(rights));
-            }, hydra.extract.core.Core.listOf(cx, arg -> hydra.extract.core.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph, arg), graph, args.get(0)));
+            }, hydra.extract.Core.listOf(cx, arg -> hydra.extract.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph, arg), graph, args.get(0)));
     }
 
     /**

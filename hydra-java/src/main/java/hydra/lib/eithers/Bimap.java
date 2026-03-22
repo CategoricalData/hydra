@@ -54,7 +54,7 @@ public class Bimap extends PrimitiveFunction {
                     public Term visit(hydra.util.Either.Right<Term, Term> right) {
                         return Terms.right(Terms.apply(forRight, right.value));
                     }
-                }), hydra.extract.core.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
+                }), hydra.extract.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
         };
     }
 

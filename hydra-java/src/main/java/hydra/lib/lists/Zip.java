@@ -42,7 +42,7 @@ public class Zip extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(0)), lst1 ->
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(0)), lst1 ->
             hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) lst2 -> {
                     ArrayList<Term> items1 = lst1.toArrayList();
                     ArrayList<Term> items2 = lst2.toArrayList();
@@ -52,7 +52,7 @@ public class Zip extends PrimitiveFunction {
                         result.add(Terms.pair(items1.get(i), items2.get(i)));
                     }
                     return Terms.list(result);
-                }, hydra.extract.core.Core.list(cx, graph, args.get(1))));
+                }, hydra.extract.Core.list(cx, graph, args.get(1))));
     }
 
     /**

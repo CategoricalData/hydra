@@ -47,7 +47,7 @@ public class ShowUint8 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Short, Term>) s -> Terms.string(apply(s)), hydra.extract.core.Core.uint8(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Short, Term>) s -> Terms.string(apply(s)), hydra.extract.Core.uint8(cx, graph, args.get(0)));
     }
 
     /**

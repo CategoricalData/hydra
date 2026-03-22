@@ -51,11 +51,11 @@ public class Map extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph ->
-            hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp -> {
+            hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp -> {
                 java.util.Map<Term, Term> result = FromList.emptyLike(mp);
                 for (java.util.Map.Entry<Term, Term> e : mp.entrySet()) {
-                    Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), e.getValue()));
+                    Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                        hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), e.getValue()));
                     if (r.isLeft()) return (Either) r;
                     result.put(e.getKey(), ((Either.Right<InContext<Error_>, Term>) r).value);
                 }

@@ -47,7 +47,7 @@ public class ShowUint16 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Character, Term>) i -> Terms.string(apply(i)), hydra.extract.core.Core.uint16(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Character, Term>) i -> Terms.string(apply(i)), hydra.extract.Core.uint16(cx, graph, args.get(0)));
     }
 
     /**

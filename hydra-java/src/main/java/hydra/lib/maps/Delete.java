@@ -52,7 +52,7 @@ public class Delete extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> {
             Term key = args.get(0);
-            return hydra.lib.eithers.Map.apply(before -> Terms.map(apply(key, before)), hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
+            return hydra.lib.eithers.Map.apply(before -> Terms.map(apply(key, before)), hydra.extract.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
         };
     }
 

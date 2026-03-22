@@ -133,7 +133,7 @@ public class TermsTest {
             @Override
             public String visit(Term.Annotated instance) {
                 Term desc = instance.value.annotation.get(new Name("description"));
-                return ((hydra.util.Either.Right<?, String>) hydra.extract.core.Core.string(null, null, desc)).value;
+                return ((hydra.util.Either.Right<?, String>) hydra.extract.Core.string(null, null, desc)).value;
             }
 
             @Override

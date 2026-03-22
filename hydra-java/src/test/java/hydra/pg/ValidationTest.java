@@ -12,7 +12,7 @@ import hydra.pg.model.PropertyKey;
 import hydra.pg.model.Vertex;
 import hydra.pg.model.VertexLabel;
 import hydra.pg.model.VertexType;
-import hydra.pg.validation.Validation;
+import hydra.pg.Validation;
 import hydra.util.Maybe;
 
 import java.util.HashMap;

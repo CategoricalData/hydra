@@ -22,7 +22,7 @@ import org.eclipse.rdf4j.rio.Rio;
 /**
  * RDF4j-based serialization for Hydra RDF graphs.
  */
-public interface Serde {
+public interface SerdeNative {
   /** Value factory for creating RDF4j values. */
   ValueFactory valueFactory = SimpleValueFactory.getInstance();
 
@@ -35,7 +35,7 @@ public interface Serde {
   static String toNtriples(List<Description> descriptions) {
     List<Triple> triples = descriptions.stream().flatMap(
         description -> description.graph.value.stream()).collect(Collectors.toList());
-    return Serde.toNtriples(triples);
+    return SerdeNative.toNtriples(triples);
   }
 
   /**
@@ -56,7 +56,7 @@ public interface Serde {
    */
   static String toNtriples(Collection<Triple> triples) {
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    List<Statement> model = triples.stream().map(Serde::tripleToStatement).collect(Collectors.toList());
+    List<Statement> model = triples.stream().map(SerdeNative::tripleToStatement).collect(Collectors.toList());
     Rio.write(model, bos, RDFFormat.TURTLE);
 
     return bos.toString();

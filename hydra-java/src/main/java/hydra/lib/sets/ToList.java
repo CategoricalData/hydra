@@ -59,7 +59,7 @@ public class ToList extends PrimitiveFunction {
             java.util.List<Term> sorted = new java.util.ArrayList<>(terms);
             sorted.sort(hydra.lib.equality.Compare::compareTerms);
             return Terms.list(sorted);
-        }, hydra.extract.core.Core.set(cx, graph, args.get(0)));
+        }, hydra.extract.Core.set(cx, graph, args.get(0)));
     }
 
     /**

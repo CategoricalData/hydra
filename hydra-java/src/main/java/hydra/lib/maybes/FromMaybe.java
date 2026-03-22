@@ -48,7 +48,7 @@ public class FromMaybe extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(Either.right(args.get(0)), defaultTerm ->
-            hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(1)), opt ->
+            hydra.lib.eithers.Bind.apply(hydra.extract.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(1)), opt ->
                 Either.right(opt.isJust() ? opt.fromJust() : defaultTerm)));
     }
 

@@ -3,6 +3,7 @@ package hydra.pg.dsl;
 import hydra.pg.query.ApplicationQuery;
 import hydra.pg.query.Query;
 import hydra.pg.query.SelectQuery;
+import hydra.util.ConsList;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +27,7 @@ public interface Queries {
         } else if (subqueries.size() == 1) {
             return subqueries.get(0);
         } else {
-            return new Query.Application(new ApplicationQuery(subqueries));
+            return new Query.Application(new ApplicationQuery(ConsList.fromList(subqueries)));
         }
     }
 

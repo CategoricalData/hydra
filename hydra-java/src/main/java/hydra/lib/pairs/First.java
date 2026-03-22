@@ -47,7 +47,7 @@ public class First extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Pair<Term, Term>, Term>) pair -> apply(pair), hydra.extract.core.Core.pair(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Pair<Term, Term>, Term>) pair -> apply(pair), hydra.extract.Core.pair(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
     }
 
     /**

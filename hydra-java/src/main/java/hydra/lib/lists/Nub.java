@@ -40,7 +40,7 @@ public class Nub extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-      return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) l -> Terms.list(Nub.apply(l)), hydra.extract.core.Core.list(cx, graph, args.get(0)));
+      return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) l -> Terms.list(Nub.apply(l)), hydra.extract.Core.list(cx, graph, args.get(0)));
     }
 
     /**

@@ -42,11 +42,11 @@ public class Foldl extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(2)), xs -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(cx, graph, args.get(2)), xs -> {
                 Term acc = args.get(1);
                 for (Term x : xs) {
-                    Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), acc, x));
+                    Either<InContext<Error_>, Term> r = hydra.Reduction.reduceTerm(
+                        hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), acc, x));
                     if (r.isLeft()) return r;
                     acc = ((Either.Right<InContext<Error_>, Term>) r).value;
                 }

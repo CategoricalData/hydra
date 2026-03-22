@@ -39,7 +39,7 @@ public class Concat extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(l -> Terms.list(apply(l)), hydra.extract.core.Core.listOf(cx, t -> hydra.extract.core.Core.list(cx, graph, t), graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(l -> Terms.list(apply(l)), hydra.extract.Core.listOf(cx, t -> hydra.extract.Core.list(cx, graph, t), graph, args.get(0)));
     }
 
     /**

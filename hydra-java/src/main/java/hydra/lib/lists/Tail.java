@@ -38,7 +38,7 @@ public class Tail extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
                 (Function<ConsList<Term>, Term>) terms -> Terms.list(apply(terms)),
-                hydra.extract.core.Core.list(cx, graph, args.get(0)));
+                hydra.extract.Core.list(cx, graph, args.get(0)));
     }
 
     /**

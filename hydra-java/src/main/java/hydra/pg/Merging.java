@@ -187,7 +187,7 @@ public class Merging {
         if (result.isRight()) {
             return Either.right(((Either.Right<hydra.context.InContext<hydra.errors.Error_>, V>) result).value);
         } else {
-            return Either.left(hydra.show.errors.Errors.error(((Either.Left<hydra.context.InContext<hydra.errors.Error_>, V>) result).value.object));
+            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.context.InContext<hydra.errors.Error_>, V>) result).value.object));
         }
     }
 
@@ -201,7 +201,7 @@ public class Merging {
         if (result.isRight()) {
             return Either.right(((Either.Right<hydra.context.InContext<hydra.errors.Error_>, V>) result).value);
         } else {
-            return Either.left(hydra.show.errors.Errors.error(((Either.Left<hydra.context.InContext<hydra.errors.Error_>, V>) result).value.object));
+            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.context.InContext<hydra.errors.Error_>, V>) result).value.object));
         }
     }
 
