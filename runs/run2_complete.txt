@@ -1,0 +1,27 @@
+  Each cell: main files (test files) / gen: main time (test time) / test: run time
+
+  ┌───────────────┬──────────────────────┬──────────────────────┬───────────────────────┐
+  │ Host \ Target │ Haskell              │ Java                 │ Python                │
+  ├───────────────┼──────────────────────┼──────────────────────┼───────────────────────┤
+  │ Haskell       │ 123 files (47 test)  │ 293 files (47 test)  │ 123 files (47 test)   │
+  │               │ gen: 5.0s (12.4s)    │ gen: 6.8s (3.7s)     │ gen: 5.4s (6.6s)      │
+  │               │ test: 0.1s           │ test: 6.3s           │ test: 6.0s            │
+  ├───────────────┼──────────────────────┼──────────────────────┼───────────────────────┤
+  │ Java          │ 169 files (47 test)  │ 828 files (47 test)  │ 141 files (47 test)   │
+  │               │ gen: 1m 28s (3m 51s) │ gen: 29m 29s (31.4s) │ gen: 27m 18s (2m 52s) │
+  │               │ test: 0.1s           │ test: 6.3s           │ test: 6.1s            │
+  ├───────────────┼──────────────────────┼──────────────────────┼───────────────────────┤
+  │ Python        │ 169 files (47 test)  │ 828 files (47 test)  │ 141 files (47 test)   │
+  │               │ gen: 33.9s (7m 54s)  │ gen: 2m 6s (31.4s)   │ gen: 1m 49s (8m 11s)  │
+  │               │ test: 0.1s           │ test: 6.2s           │ test: 6.0s            │
+  └───────────────┴──────────────────────┴──────────────────────┴───────────────────────┘
+
+  Total time:      274m 50s
+  Run directory:   /Users/josh/projects/github/CategoricalData/hydra/bootstrap/runs/run_2026-03-09_082238_759
+  Dashboard:       bin/run-bootstrapping-demo.sh dashboard
+
+
+real	274m50.581s
+user	51m55.972s
+sys	3m57.343s
+marvin7:hydra josh$ 
