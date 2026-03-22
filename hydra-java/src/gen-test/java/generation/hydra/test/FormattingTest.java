@@ -20,7 +20,7 @@ public class FormattingTest {
 
             "A_HELLO_WORLD_42_A42_42A_B",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.LowerSnake(),
   new hydra.util.CaseConvention.UpperSnake(),
   "a_hello_world_42_a42_42a_b"));
@@ -35,7 +35,7 @@ public class FormattingTest {
 
             "aHelloWorld42A4242aB",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.LowerSnake(),
   new hydra.util.CaseConvention.Camel(),
   "a_hello_world_42_a42_42a_b"));
@@ -50,7 +50,7 @@ public class FormattingTest {
 
             "AHelloWorld42A4242aB",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.LowerSnake(),
   new hydra.util.CaseConvention.Pascal(),
   "a_hello_world_42_a42_42a_b"));
@@ -65,7 +65,7 @@ public class FormattingTest {
 
             "a_hello_world_42_a42_42a_b",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.LowerSnake(),
   new hydra.util.CaseConvention.LowerSnake(),
   "a_hello_world_42_a42_42a_b"));
@@ -80,7 +80,7 @@ public class FormattingTest {
 
             "a_hello_world_42_a42_42a_b",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.UpperSnake(),
   new hydra.util.CaseConvention.LowerSnake(),
   "A_HELLO_WORLD_42_A42_42A_B"));
@@ -95,7 +95,7 @@ public class FormattingTest {
 
             "aHelloWorld42A4242aB",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.UpperSnake(),
   new hydra.util.CaseConvention.Camel(),
   "A_HELLO_WORLD_42_A42_42A_B"));
@@ -110,7 +110,7 @@ public class FormattingTest {
 
             "AHelloWorld42A4242aB",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.UpperSnake(),
   new hydra.util.CaseConvention.Pascal(),
   "A_HELLO_WORLD_42_A42_42A_B"));
@@ -125,7 +125,7 @@ public class FormattingTest {
 
             "A_HELLO_WORLD_42_A42_42A_B",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.UpperSnake(),
   new hydra.util.CaseConvention.UpperSnake(),
   "A_HELLO_WORLD_42_A42_42A_B"));
@@ -140,7 +140,7 @@ public class FormattingTest {
 
             "a_hello_world42_a4242a_b",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.Camel(),
   new hydra.util.CaseConvention.LowerSnake(),
   "aHelloWorld42A4242aB"));
@@ -155,7 +155,7 @@ public class FormattingTest {
 
             "A_HELLO_WORLD42_A4242A_B",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.Camel(),
   new hydra.util.CaseConvention.UpperSnake(),
   "aHelloWorld42A4242aB"));
@@ -170,7 +170,7 @@ public class FormattingTest {
 
             "AHelloWorld42A4242aB",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.Camel(),
   new hydra.util.CaseConvention.Pascal(),
   "aHelloWorld42A4242aB"));
@@ -185,7 +185,7 @@ public class FormattingTest {
 
             "aHelloWorld42A4242aB",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.Camel(),
   new hydra.util.CaseConvention.Camel(),
   "aHelloWorld42A4242aB"));
@@ -200,7 +200,7 @@ public class FormattingTest {
 
             "a_hello_world42_a4242a_b",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.Pascal(),
   new hydra.util.CaseConvention.LowerSnake(),
   "AHelloWorld42A4242aB"));
@@ -215,7 +215,7 @@ public class FormattingTest {
 
             "A_HELLO_WORLD42_A4242A_B",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.Pascal(),
   new hydra.util.CaseConvention.UpperSnake(),
   "AHelloWorld42A4242aB"));
@@ -230,7 +230,7 @@ public class FormattingTest {
 
             "aHelloWorld42A4242aB",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.Pascal(),
   new hydra.util.CaseConvention.Camel(),
   "AHelloWorld42A4242aB"));
@@ -245,7 +245,7 @@ public class FormattingTest {
 
             "AHelloWorld42A4242aB",
 
-            hydra.formatting.Formatting.convertCase(
+            hydra.Formatting.convertCase(
   new hydra.util.CaseConvention.Pascal(),
   new hydra.util.CaseConvention.Pascal(),
   "AHelloWorld42A4242aB"));

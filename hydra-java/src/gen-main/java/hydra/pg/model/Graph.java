@@ -9,20 +9,20 @@ import java.io.Serializable;
  */
 public class Graph<V> implements Serializable, Comparable<Graph<V>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.Graph");
-  
+
   public static final hydra.core.Name VERTICES = new hydra.core.Name("vertices");
-  
+
   public static final hydra.core.Name EDGES = new hydra.core.Name("edges");
-  
+
   public final hydra.util.PersistentMap<V, hydra.pg.model.Vertex<V>> vertices;
-  
+
   public final hydra.util.PersistentMap<V, hydra.pg.model.Edge<V>> edges;
-  
+
   public Graph (hydra.util.PersistentMap<V, hydra.pg.model.Vertex<V>> vertices, hydra.util.PersistentMap<V, hydra.pg.model.Edge<V>> edges) {
     this.vertices = vertices;
     this.edges = edges;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Graph)) {
@@ -35,31 +35,27 @@ public class Graph<V> implements Serializable, Comparable<Graph<V>> {
       this.edges,
       o.edges);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(vertices) + 3 * java.util.Objects.hashCode(edges);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Graph other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      vertices.hashCode(),
-      other.vertices.hashCode());
+    cmp = ((Comparable) vertices).compareTo(other.vertices);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      edges.hashCode(),
-      other.edges.hashCode());
+    return ((Comparable) edges).compareTo(other.edges);
   }
-  
+
   public Graph withVertices(hydra.util.PersistentMap<V, hydra.pg.model.Vertex<V>> vertices) {
     return new Graph(vertices, edges);
   }
-  
+
   public Graph withEdges(hydra.util.PersistentMap<V, hydra.pg.model.Edge<V>> edges) {
     return new Graph(vertices, edges);
   }

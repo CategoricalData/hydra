@@ -4,8 +4,8 @@ import com.cedarsoftware.util.io.JsonObject;
 import hydra.util.Coder;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.Error_;
-import hydra.error.OtherError;
+import hydra.errors.Error_;
+import hydra.errors.OtherError;
 import hydra.json.model.Value;
 import hydra.util.Either;
 

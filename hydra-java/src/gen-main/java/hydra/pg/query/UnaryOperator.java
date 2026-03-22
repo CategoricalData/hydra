@@ -6,34 +6,34 @@ import java.io.Serializable;
 
 public abstract class UnaryOperator implements Serializable, Comparable<UnaryOperator> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.query.UnaryOperator");
-  
+
   public static final hydra.core.Name NEGATE = new hydra.core.Name("negate");
-  
+
   private UnaryOperator () {
-  
+
   }
-  
+
   public abstract <R> R accept(Visitor<R> visitor) ;
-  
+
   public interface Visitor<R> {
     R visit(Negate instance) ;
   }
-  
+
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(UnaryOperator instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
-    
+
     default R visit(Negate instance) {
       return otherwise(instance);
     }
   }
-  
+
   public static final class Negate extends hydra.pg.query.UnaryOperator implements Serializable {
     public Negate () {
-    
+
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Negate)) {
@@ -42,22 +42,22 @@ public abstract class UnaryOperator implements Serializable, Comparable<UnaryOpe
       Negate o = (Negate) other;
       return true;
     }
-    
+
     @Override
     public int hashCode() {
       return 0;
     }
-    
+
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(UnaryOperator other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
       return 0;
     }
-    
+
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);

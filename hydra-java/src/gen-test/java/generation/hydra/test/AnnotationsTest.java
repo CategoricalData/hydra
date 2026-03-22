@@ -22,7 +22,7 @@ public class AnnotationsTest {
   new hydra.core.Name("k1"),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))))),
 
-            hydra.annotations.Annotations.setTermAnnotation(
+            hydra.Annotations.setTermAnnotation(
   new hydra.core.Name("k1"),
   hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42)))),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo"))));
@@ -39,7 +39,7 @@ public class AnnotationsTest {
   new hydra.core.Name("myKey"),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(-17))))))),
 
-            hydra.annotations.Annotations.setTermAnnotation(
+            hydra.Annotations.setTermAnnotation(
   new hydra.core.Name("myKey"),
   hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(-17)))),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar"))));
@@ -56,7 +56,7 @@ public class AnnotationsTest {
   new hydra.core.Name("x"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("hello")))))),
 
-            hydra.annotations.Annotations.setTermAnnotation(
+            hydra.Annotations.setTermAnnotation(
   new hydra.core.Name("x"),
   hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_("hello"))),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0)))));
@@ -71,9 +71,9 @@ public class AnnotationsTest {
 
             hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_("value"))),
 
-            hydra.annotations.Annotations.getTermAnnotation(
+            hydra.Annotations.getTermAnnotation(
   new hydra.core.Name("k1"),
-  hydra.annotations.Annotations.setTermAnnotation(
+  hydra.Annotations.setTermAnnotation(
     new hydra.core.Name("k1"),
     hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_("value"))),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))));
@@ -88,9 +88,9 @@ public class AnnotationsTest {
 
             hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_(""))),
 
-            hydra.annotations.Annotations.getTermAnnotation(
+            hydra.Annotations.getTermAnnotation(
   new hydra.core.Name("foo"),
-  hydra.annotations.Annotations.setTermAnnotation(
+  hydra.Annotations.setTermAnnotation(
     new hydra.core.Name("foo"),
     hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_(""))),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(99))))));
@@ -105,9 +105,9 @@ public class AnnotationsTest {
 
             hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(123)))),
 
-            hydra.annotations.Annotations.getTermAnnotation(
+            hydra.Annotations.getTermAnnotation(
   new hydra.core.Name("key"),
-  hydra.annotations.Annotations.setTermAnnotation(
+  hydra.Annotations.setTermAnnotation(
     new hydra.core.Name("key"),
     hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(123)))),
     new hydra.core.Term.Literal(new hydra.core.Literal.String_("test")))));
@@ -122,7 +122,7 @@ public class AnnotationsTest {
 
             (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
-            hydra.annotations.Annotations.getTermAnnotation(
+            hydra.Annotations.getTermAnnotation(
   new hydra.core.Name("k1"),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int16((short) (42))))));
 
@@ -136,7 +136,7 @@ public class AnnotationsTest {
 
             (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
-            hydra.annotations.Annotations.getTermAnnotation(
+            hydra.Annotations.getTermAnnotation(
   new hydra.core.Name("nonexistent"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("hello"))));
 
@@ -150,9 +150,9 @@ public class AnnotationsTest {
 
             (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
-            hydra.annotations.Annotations.getTermAnnotation(
+            hydra.Annotations.getTermAnnotation(
   new hydra.core.Name("k1"),
-  hydra.annotations.Annotations.setTermAnnotation(
+  hydra.Annotations.setTermAnnotation(
     new hydra.core.Name("k2"),
     hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1)))),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))));
@@ -173,10 +173,10 @@ public class AnnotationsTest {
     new hydra.core.Name("k2"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(200))))))),
 
-            hydra.annotations.Annotations.setTermAnnotation(
+            hydra.Annotations.setTermAnnotation(
   new hydra.core.Name("k2"),
   hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(200)))),
-  hydra.annotations.Annotations.setTermAnnotation(
+  hydra.Annotations.setTermAnnotation(
     new hydra.core.Name("k1"),
     hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_("first"))),
     new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(true)))));
@@ -197,10 +197,10 @@ public class AnnotationsTest {
     new hydra.core.Name("b"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0))))))),
 
-            hydra.annotations.Annotations.setTermAnnotation(
+            hydra.Annotations.setTermAnnotation(
   new hydra.core.Name("b"),
   hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0)))),
-  hydra.annotations.Annotations.setTermAnnotation(
+  hydra.Annotations.setTermAnnotation(
     new hydra.core.Name("a"),
     hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(-5)))),
     new hydra.core.Term.Literal(new hydra.core.Literal.String_("test")))));
@@ -217,10 +217,10 @@ public class AnnotationsTest {
   new hydra.core.Name("k1"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("outer")))))),
 
-            hydra.annotations.Annotations.setTermAnnotation(
+            hydra.Annotations.setTermAnnotation(
   new hydra.core.Name("k1"),
   hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_("outer"))),
-  hydra.annotations.Annotations.setTermAnnotation(
+  hydra.Annotations.setTermAnnotation(
     new hydra.core.Name("k1"),
     hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_("inner"))),
     new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar")))));
@@ -237,10 +237,10 @@ public class AnnotationsTest {
   new hydra.core.Name("x"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("new")))))),
 
-            hydra.annotations.Annotations.setTermAnnotation(
+            hydra.Annotations.setTermAnnotation(
   new hydra.core.Name("x"),
   hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_("new"))),
-  hydra.annotations.Annotations.setTermAnnotation(
+  hydra.Annotations.setTermAnnotation(
     new hydra.core.Name("x"),
     hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_("old"))),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))));
@@ -257,10 +257,10 @@ public class AnnotationsTest {
   new hydra.core.Name("key"),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(999))))))),
 
-            hydra.annotations.Annotations.setTermAnnotation(
+            hydra.Annotations.setTermAnnotation(
   new hydra.core.Name("key"),
   hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(999)))),
-  hydra.annotations.Annotations.setTermAnnotation(
+  hydra.Annotations.setTermAnnotation(
     new hydra.core.Name("key"),
     hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1)))),
     new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(false)))));
@@ -275,10 +275,10 @@ public class AnnotationsTest {
 
             new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int64((long) (137)))),
 
-            hydra.annotations.Annotations.setTermAnnotation(
+            hydra.Annotations.setTermAnnotation(
   new hydra.core.Name("k1"),
   (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()),
-  hydra.annotations.Annotations.setTermAnnotation(
+  hydra.Annotations.setTermAnnotation(
     new hydra.core.Name("k1"),
     hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo"))),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int64((long) (137)))))));
@@ -293,10 +293,10 @@ public class AnnotationsTest {
 
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("test")),
 
-            hydra.annotations.Annotations.setTermAnnotation(
+            hydra.Annotations.setTermAnnotation(
   new hydra.core.Name("x"),
   (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()),
-  hydra.annotations.Annotations.setTermAnnotation(
+  hydra.Annotations.setTermAnnotation(
     new hydra.core.Name("x"),
     hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42)))),
     new hydra.core.Term.Literal(new hydra.core.Literal.String_("test")))));
@@ -313,13 +313,13 @@ public class AnnotationsTest {
   new hydra.core.Name("k2"),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(200))))))),
 
-            hydra.annotations.Annotations.setTermAnnotation(
+            hydra.Annotations.setTermAnnotation(
   new hydra.core.Name("k1"),
   (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()),
-  hydra.annotations.Annotations.setTermAnnotation(
+  hydra.Annotations.setTermAnnotation(
     new hydra.core.Name("k2"),
     hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(200)))),
-    hydra.annotations.Annotations.setTermAnnotation(
+    hydra.Annotations.setTermAnnotation(
       new hydra.core.Name("k1"),
       hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.String_("first"))),
       new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int64((long) (137))))))));
@@ -336,13 +336,13 @@ public class AnnotationsTest {
   new hydra.core.Name("a"),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1))))))),
 
-            hydra.annotations.Annotations.setTermAnnotation(
+            hydra.Annotations.setTermAnnotation(
   new hydra.core.Name("b"),
   (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()),
-  hydra.annotations.Annotations.setTermAnnotation(
+  hydra.Annotations.setTermAnnotation(
     new hydra.core.Name("b"),
     hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(2)))),
-    hydra.annotations.Annotations.setTermAnnotation(
+    hydra.Annotations.setTermAnnotation(
       new hydra.core.Name("a"),
       hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1)))),
       new hydra.core.Term.Literal(new hydra.core.Literal.String_("x"))))));
@@ -361,7 +361,7 @@ public class AnnotationsTest {
   new hydra.core.Name("description"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("my description")))))),
 
-            hydra.annotations.Annotations.setTermDescription(
+            hydra.Annotations.setTermDescription(
   hydra.util.Maybe.just("my description"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo"))));
 
@@ -377,7 +377,7 @@ public class AnnotationsTest {
   new hydra.core.Name("description"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("")))))),
 
-            hydra.annotations.Annotations.setTermDescription(
+            hydra.Annotations.setTermDescription(
   hydra.util.Maybe.just(""),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42)))));
 
@@ -393,7 +393,7 @@ public class AnnotationsTest {
   new hydra.core.Name("description"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("A longer description with spaces")))))),
 
-            hydra.annotations.Annotations.setTermDescription(
+            hydra.Annotations.setTermDescription(
   hydra.util.Maybe.just("A longer description with spaces"),
   new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(true))));
 
@@ -407,10 +407,10 @@ public class AnnotationsTest {
 
             hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("hello")),
 
-            hydra.annotations.Annotations.getTermDescription(
-  hydra.lexical.Lexical.emptyContext(),
-  hydra.lexical.Lexical.emptyGraph(),
-  hydra.annotations.Annotations.setTermDescription(
+            hydra.Annotations.getTermDescription(
+  hydra.Lexical.emptyContext(),
+  hydra.Lexical.emptyGraph(),
+  hydra.Annotations.setTermDescription(
     hydra.util.Maybe.just("hello"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))));
 
@@ -424,10 +424,10 @@ public class AnnotationsTest {
 
             hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("")),
 
-            hydra.annotations.Annotations.getTermDescription(
-  hydra.lexical.Lexical.emptyContext(),
-  hydra.lexical.Lexical.emptyGraph(),
-  hydra.annotations.Annotations.setTermDescription(
+            hydra.Annotations.getTermDescription(
+  hydra.Lexical.emptyContext(),
+  hydra.Lexical.emptyGraph(),
+  hydra.Annotations.setTermDescription(
     hydra.util.Maybe.just(""),
     new hydra.core.Term.Literal(new hydra.core.Literal.String_("test")))));
 
@@ -441,10 +441,10 @@ public class AnnotationsTest {
 
             hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("desc")),
 
-            hydra.annotations.Annotations.getTermDescription(
-  hydra.lexical.Lexical.emptyContext(),
-  hydra.lexical.Lexical.emptyGraph(),
-  hydra.annotations.Annotations.setTermDescription(
+            hydra.Annotations.getTermDescription(
+  hydra.Lexical.emptyContext(),
+  hydra.Lexical.emptyGraph(),
+  hydra.Annotations.setTermDescription(
     hydra.util.Maybe.just("desc"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(false)))));
 
@@ -458,9 +458,9 @@ public class AnnotationsTest {
 
             hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())),
 
-            hydra.annotations.Annotations.getTermDescription(
-  hydra.lexical.Lexical.emptyContext(),
-  hydra.lexical.Lexical.emptyGraph(),
+            hydra.Annotations.getTermDescription(
+  hydra.Lexical.emptyContext(),
+  hydra.Lexical.emptyGraph(),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int16((short) (42))))));
 
     }
@@ -473,9 +473,9 @@ public class AnnotationsTest {
 
             hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())),
 
-            hydra.annotations.Annotations.getTermDescription(
-  hydra.lexical.Lexical.emptyContext(),
-  hydra.lexical.Lexical.emptyGraph(),
+            hydra.Annotations.getTermDescription(
+  hydra.Lexical.emptyContext(),
+  hydra.Lexical.emptyGraph(),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("no description here"))));
 
     }
@@ -488,9 +488,9 @@ public class AnnotationsTest {
 
             hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())),
 
-            hydra.annotations.Annotations.getTermDescription(
-  hydra.lexical.Lexical.emptyContext(),
-  hydra.lexical.Lexical.emptyGraph(),
+            hydra.Annotations.getTermDescription(
+  hydra.Lexical.emptyContext(),
+  hydra.Lexical.emptyGraph(),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0)))));
 
     }
@@ -505,9 +505,9 @@ public class AnnotationsTest {
   new hydra.core.Name("description"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("outer")))))),
 
-            hydra.annotations.Annotations.setTermDescription(
+            hydra.Annotations.setTermDescription(
   hydra.util.Maybe.just("outer"),
-  hydra.annotations.Annotations.setTermDescription(
+  hydra.Annotations.setTermDescription(
     hydra.util.Maybe.just("inner"),
     new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar")))));
 
@@ -523,9 +523,9 @@ public class AnnotationsTest {
   new hydra.core.Name("description"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("new")))))),
 
-            hydra.annotations.Annotations.setTermDescription(
+            hydra.Annotations.setTermDescription(
   hydra.util.Maybe.just("new"),
-  hydra.annotations.Annotations.setTermDescription(
+  hydra.Annotations.setTermDescription(
     hydra.util.Maybe.just("old"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(99))))));
 
@@ -539,9 +539,9 @@ public class AnnotationsTest {
 
             new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int64((long) (137)))),
 
-            hydra.annotations.Annotations.setTermDescription(
+            hydra.Annotations.setTermDescription(
   (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
-  hydra.annotations.Annotations.setTermDescription(
+  hydra.Annotations.setTermDescription(
     hydra.util.Maybe.just("desc"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int64((long) (137)))))));
 
@@ -555,9 +555,9 @@ public class AnnotationsTest {
 
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("test")),
 
-            hydra.annotations.Annotations.setTermDescription(
+            hydra.Annotations.setTermDescription(
   (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
-  hydra.annotations.Annotations.setTermDescription(
+  hydra.Annotations.setTermDescription(
     hydra.util.Maybe.just("to be removed"),
     new hydra.core.Term.Literal(new hydra.core.Literal.String_("test")))));
 
@@ -573,7 +573,7 @@ public class AnnotationsTest {
 
             (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
-            hydra.annotations.Annotations.getTermAnnotation(
+            hydra.Annotations.getTermAnnotation(
   new hydra.core.Name("one"),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42)))));
 
@@ -587,7 +587,7 @@ public class AnnotationsTest {
 
             hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1)))),
 
-            hydra.annotations.Annotations.getTermAnnotation(
+            hydra.Annotations.getTermAnnotation(
   new hydra.core.Name("one"),
   new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("one"),
@@ -603,7 +603,7 @@ public class AnnotationsTest {
 
             hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1)))),
 
-            hydra.annotations.Annotations.getTermAnnotation(
+            hydra.Annotations.getTermAnnotation(
   new hydra.core.Name("one"),
   new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("one"),
@@ -621,7 +621,7 @@ public class AnnotationsTest {
 
             hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(2)))),
 
-            hydra.annotations.Annotations.getTermAnnotation(
+            hydra.Annotations.getTermAnnotation(
   new hydra.core.Name("two"),
   new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("one"),
@@ -639,7 +639,7 @@ public class AnnotationsTest {
 
             hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(2)))),
 
-            hydra.annotations.Annotations.getTermAnnotation(
+            hydra.Annotations.getTermAnnotation(
   new hydra.core.Name("two"),
   new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("one"),
@@ -659,7 +659,7 @@ public class AnnotationsTest {
 
             hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(99)))),
 
-            hydra.annotations.Annotations.getTermAnnotation(
+            hydra.Annotations.getTermAnnotation(
   new hydra.core.Name("one"),
   new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("one"),

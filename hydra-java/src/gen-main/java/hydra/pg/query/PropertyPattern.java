@@ -6,20 +6,20 @@ import java.io.Serializable;
 
 public class PropertyPattern implements Serializable, Comparable<PropertyPattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.query.PropertyPattern");
-  
+
   public static final hydra.core.Name KEY = new hydra.core.Name("key");
-  
+
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
-  
+
   public final hydra.pg.model.PropertyKey key;
-  
+
   public final hydra.pg.query.PropertyValuePattern value;
-  
+
   public PropertyPattern (hydra.pg.model.PropertyKey key, hydra.pg.query.PropertyValuePattern value) {
     this.key = key;
     this.value = value;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof PropertyPattern)) {
@@ -32,12 +32,12 @@ public class PropertyPattern implements Serializable, Comparable<PropertyPattern
       this.value,
       o.value);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(key) + 3 * java.util.Objects.hashCode(value);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PropertyPattern other) {
@@ -48,11 +48,11 @@ public class PropertyPattern implements Serializable, Comparable<PropertyPattern
     }
     return ((Comparable) value).compareTo(other.value);
   }
-  
+
   public PropertyPattern withKey(hydra.pg.model.PropertyKey key) {
     return new PropertyPattern(key, value);
   }
-  
+
   public PropertyPattern withValue(hydra.pg.query.PropertyValuePattern value) {
     return new PropertyPattern(key, value);
   }

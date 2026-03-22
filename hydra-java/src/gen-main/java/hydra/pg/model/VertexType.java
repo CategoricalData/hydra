@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class VertexType<T> implements Serializable, Comparable<VertexType<T>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.VertexType");
-  
+
   public static final hydra.core.Name LABEL = new hydra.core.Name("label");
-  
+
   public static final hydra.core.Name ID = new hydra.core.Name("id");
-  
+
   public static final hydra.core.Name PROPERTIES = new hydra.core.Name("properties");
-  
+
   /**
    * The label of any vertex of this vertex type
    */
   public final hydra.pg.model.VertexLabel label;
-  
+
   /**
    * The type of the id of any vertex of this vertex type
    */
   public final T id;
-  
+
   /**
    * A list of property types. The types are ordered for the sake of applications in which property order is significant.
    */
   public final hydra.util.ConsList<hydra.pg.model.PropertyType<T>> properties;
-  
+
   public VertexType (hydra.pg.model.VertexLabel label, T id, hydra.util.ConsList<hydra.pg.model.PropertyType<T>> properties) {
     this.label = label;
     this.id = id;
     this.properties = properties;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof VertexType)) {
@@ -51,12 +51,12 @@ public class VertexType<T> implements Serializable, Comparable<VertexType<T>> {
       this.properties,
       o.properties);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(label) + 3 * java.util.Objects.hashCode(id) + 5 * java.util.Objects.hashCode(properties);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(VertexType other) {
@@ -69,19 +69,17 @@ public class VertexType<T> implements Serializable, Comparable<VertexType<T>> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      properties.hashCode(),
-      other.properties.hashCode());
+    return ((Comparable) properties).compareTo(other.properties);
   }
-  
+
   public VertexType withLabel(hydra.pg.model.VertexLabel label) {
     return new VertexType(label, id, properties);
   }
-  
+
   public VertexType withId(T id) {
     return new VertexType(label, id, properties);
   }
-  
+
   public VertexType withProperties(hydra.util.ConsList<hydra.pg.model.PropertyType<T>> properties) {
     return new VertexType(label, id, properties);
   }
