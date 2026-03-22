@@ -119,6 +119,8 @@ class TypeVariant(Enum):
 
     VARIABLE = hydra.core.Name("variable")
 
+    VOID = hydra.core.Name("void")
+
     WRAP = hydra.core.Name("wrap")
 
 TypeVariant.TYPE_ = hydra.core.Name("hydra.variants.TypeVariant")

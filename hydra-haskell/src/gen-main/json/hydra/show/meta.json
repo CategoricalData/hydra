@@ -302,6 +302,14 @@
                             "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
+                      "name": "void",
+                      "term": {
+                        "function": {
+                          "lambda": {
+                            "body": {"literal": {"string": "void"}},
+                            "domain": [{"unit": {}}],
+                            "parameter": "_"}}}},
+                    {
                       "name": "wrap",
                       "term": {
                         "function": {

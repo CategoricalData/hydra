@@ -327,6 +327,9 @@ def decode_type(typ: hydra.core.Type) -> hydra.core.Term:
         case hydra.core.TypeUnit():
             return decode_unit_type
 
+        case hydra.core.TypeVoid():
+            return decode_unit_type
+
         case hydra.core.TypeWrap(value=wt):
             return decode_wrapped_type(wt)
 
@@ -409,6 +412,9 @@ def decode_type_named(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.cor
         case hydra.core.TypeUnit():
             return decode_unit_type
 
+        case hydra.core.TypeVoid():
+            return decode_unit_type
+
         case hydra.core.TypeWrap(value=wt):
             return decode_wrapped_type_named(ename, wt)
 
@@ -464,6 +470,9 @@ def decoder_full_result_type(typ: hydra.core.Type) -> hydra.core.Type:
         case hydra.core.TypeVariable(value=name):
             return cast(hydra.core.Type, hydra.core.TypeVariable(name))
 
+        case hydra.core.TypeVoid():
+            return cast(hydra.core.Type, hydra.core.TypeVoid())
+
         case hydra.core.TypeWrap():
             return cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Term")))
 
@@ -518,6 +527,9 @@ def decoder_full_result_type_named(ename: hydra.core.Name, typ: hydra.core.Type)
 
         case hydra.core.TypeVariable(value=name):
             return cast(hydra.core.Type, hydra.core.TypeVariable(name))
+
+        case hydra.core.TypeVoid():
+            return cast(hydra.core.Type, hydra.core.TypeVoid())
 
         case _:
             return cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Term")))

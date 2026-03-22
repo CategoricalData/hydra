@@ -206,6 +206,7 @@ encodeType cx g t =
         Core.TypeAnnotated v0 -> encodeType cx g (Core.annotatedTypeBody v0)
         Core.TypeApplication v0 -> encodeType cx g (Core.applicationTypeFunction v0)
         Core.TypeUnit -> Right rustUnit
+        Core.TypeVoid -> Right rustUnit
         Core.TypeLiteral v0 -> Right (encodeLiteralType v0)
         Core.TypeList v0 -> Eithers.map (\enc -> rustApply1 "Vec" enc) (encodeType cx g v0)
         Core.TypeSet v0 -> Eithers.map (\enc -> rustApply1 "BTreeSet" enc) (encodeType cx g v0)

@@ -927,6 +927,22 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
+                                              "body": {"literal": {"string": "void"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {"name": "unit", "term": {"unit": {}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
                                               "body": {"literal": {"string": "wrap"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {

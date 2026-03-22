@@ -152,6 +152,9 @@ def rewrite_type(f: Callable[[Callable[[hydra.core.Type], hydra.core.Type], hydr
             case hydra.core.TypeVariable(value=v):
                 return cast(hydra.core.Type, hydra.core.TypeVariable(v))
 
+            case hydra.core.TypeVoid():
+                return cast(hydra.core.Type, hydra.core.TypeVoid())
+
             case hydra.core.TypeWrap(value=wt):
                 return cast(hydra.core.Type, hydra.core.TypeWrap(recurse(wt)))
 
@@ -589,6 +592,9 @@ def subtypes(v1: hydra.core.Type) -> frozenlist[hydra.core.Type]:
             return ()
 
         case hydra.core.TypeVariable():
+            return ()
+
+        case hydra.core.TypeVoid():
             return ()
 
         case hydra.core.TypeWrap(value=nt):
@@ -1040,6 +1046,9 @@ def rewrite_type_m(f: Callable[[
 
             case hydra.core.TypeVariable(value=v):
                 return Right(cast(hydra.core.Type, hydra.core.TypeVariable(v)))
+
+            case hydra.core.TypeVoid():
+                return Right(cast(hydra.core.Type, hydra.core.TypeVoid()))
 
             case hydra.core.TypeWrap(value=wt):
                 return hydra.lib.eithers.bind(recurse(wt), (lambda t: Right(cast(hydra.core.Type, hydra.core.TypeWrap(t)))))

@@ -564,6 +564,8 @@ def type_variable_metadata_classes(x: hydra.phantoms.TTerm[hydra.core.TypeVariab
 def type_variable_metadata_with_classes(original: hydra.phantoms.TTerm[hydra.core.TypeVariableMetadata], new_val: hydra.phantoms.TTerm[frozenset[hydra.core.Name]]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.TypeVariableMetadata"), (hydra.core.Field(hydra.core.Name("classes"), new_val.value),)))))
 
+type_void = hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("void"), cast(hydra.core.Term, hydra.core.TermUnit()))))))
+
 def type_wrap(x: hydra.phantoms.TTerm[hydra.core.Type]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), x.value)))))
 

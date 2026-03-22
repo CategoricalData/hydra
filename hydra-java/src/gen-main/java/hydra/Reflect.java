@@ -541,6 +541,11 @@ public interface Reflect {
       }
 
       @Override
+      public hydra.variants.TypeVariant visit(hydra.core.Type.Void_ ignored) {
+        return new hydra.variants.TypeVariant.Void_();
+      }
+
+      @Override
       public hydra.variants.TypeVariant visit(hydra.core.Type.Wrap ignored) {
         return new hydra.variants.TypeVariant.Wrap();
       }
@@ -564,6 +569,7 @@ public interface Reflect {
       new hydra.variants.TypeVariant.Set(),
       new hydra.variants.TypeVariant.Union(),
       new hydra.variants.TypeVariant.Unit(),
-      new hydra.variants.TypeVariant.Variable());
+      new hydra.variants.TypeVariant.Variable(),
+      new hydra.variants.TypeVariant.Void_());
   }
 }

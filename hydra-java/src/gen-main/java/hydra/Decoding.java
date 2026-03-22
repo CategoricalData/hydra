@@ -585,6 +585,11 @@ public interface Decoding {
       }
 
       @Override
+      public hydra.core.Term visit(hydra.core.Type.Void_ ignored) {
+        return hydra.decoding.Decoding.decodeUnitType();
+      }
+
+      @Override
       public hydra.core.Term visit(hydra.core.Type.Wrap wt) {
         return hydra.Decoding.decodeWrappedType((wt).value);
       }
@@ -674,6 +679,11 @@ public interface Decoding {
       @Override
       public hydra.core.Term visit(hydra.core.Type.Unit ignored) {
         return hydra.Decoding.decodeUnitType();
+      }
+
+      @Override
+      public hydra.core.Term visit(hydra.core.Type.Void_ ignored) {
+        return hydra.decoding.Decoding.decodeUnitType();
       }
 
       @Override
@@ -803,6 +813,11 @@ public interface Decoding {
       }
 
       @Override
+      public hydra.core.Type visit(hydra.core.Type.Void_ ignored) {
+        return new hydra.core.Type.Void_();
+      }
+
+      @Override
       public hydra.core.Type visit(hydra.core.Type.Wrap ignored) {
         return new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term"));
       }
@@ -893,6 +908,11 @@ public interface Decoding {
       @Override
       public hydra.core.Type visit(hydra.core.Type.Variable name) {
         return new hydra.core.Type.Variable((name).value);
+      }
+
+      @Override
+      public hydra.core.Type visit(hydra.core.Type.Void_ ignored) {
+        return new hydra.core.Type.Void_();
       }
     });
   }

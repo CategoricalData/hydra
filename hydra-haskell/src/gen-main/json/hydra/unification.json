@@ -1212,6 +1212,49 @@
                                                                                     "domain": [{"unit": {}}],
                                                                                     "parameter": "_"}}}},
                                                                             {
+                                                                              "name": "void",
+                                                                              "term": {
+                                                                                "function": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "sright"},
+                                                                                        "function": {
+                                                                                          "function": {
+                                                                                            "elimination": {
+                                                                                              "union": {
+                                                                                                "cases": [
+                                                                                                  {
+                                                                                                    "name": "void",
+                                                                                                    "term": {
+                                                                                                      "function": {
+                                                                                                        "lambda": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {
+                                                                                                                    "either": {
+                                                                                                                      "@right": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {"list": []},
+                                                                                                                          "type": {"variable": "hydra.typing.TypeConstraint"}}}}},
+                                                                                                                  "type": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "hydra.errors.UnificationError"},
+                                                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                                              "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
+                                                                                                          "domain": [{"unit": {}}],
+                                                                                                          "parameter": "_"}}}}],
+                                                                                                "default": [
+                                                                                                  {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "cannotUnify"},
+                                                                                                      "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}],
+                                                                                                "typeName": "hydra.core.Type"}}}}}},
+                                                                                    "domain": [{"unit": {}}],
+                                                                                    "parameter": "_"}}}},
+                                                                            {
                                                                               "name": "wrap",
                                                                               "term": {
                                                                                 "function": {

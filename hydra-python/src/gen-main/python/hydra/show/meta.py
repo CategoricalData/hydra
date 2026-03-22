@@ -118,6 +118,9 @@ def type_variant(v1: hydra.variants.TypeVariant) -> str:
         case hydra.variants.TypeVariant.VARIABLE:
             return "variable"
 
+        case hydra.variants.TypeVariant.VOID:
+            return "void"
+
         case hydra.variants.TypeVariant.WRAP:
             return "wrap"
 

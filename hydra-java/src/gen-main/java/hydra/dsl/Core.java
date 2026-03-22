@@ -816,6 +816,10 @@ public interface Core {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("variable"), (x).value))));
   }
 
+  static hydra.phantoms.TTerm<hydra.core.Type> typeVoid() {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("void"), new hydra.core.Term.Unit()))));
+  }
+
   static hydra.phantoms.TTerm<hydra.core.Type> typeWrap(hydra.phantoms.TTerm<hydra.core.Type> x) {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("wrap"), (x).value))));
   }

@@ -77,6 +77,9 @@ def type_alternatives(type: hydra.core.Type) -> frozenlist[hydra.core.Type]:
         case hydra.core.TypeUnit():
             return (cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean()))),)
 
+        case hydra.core.TypeVoid():
+            return (cast(hydra.core.Type, hydra.core.TypeUnit()),)
+
         case _:
             return ()
 

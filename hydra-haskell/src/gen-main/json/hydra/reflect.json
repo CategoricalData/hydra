@@ -1534,6 +1534,17 @@
                             "domain": [{"variable": "hydra.core.Name"}],
                             "parameter": "_"}}}},
                     {
+                      "name": "void",
+                      "term": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "union": {
+                                "field": {"name": "void", "term": {"unit": {}}},
+                                "typeName": "hydra.variants.TypeVariant"}},
+                            "domain": [{"unit": {}}],
+                            "parameter": "_"}}}},
+                    {
                       "name": "wrap",
                       "term": {
                         "function": {
@@ -1627,6 +1638,10 @@
               {
                 "union": {
                   "field": {"name": "variable", "term": {"unit": {}}},
+                  "typeName": "hydra.variants.TypeVariant"}},
+              {
+                "union": {
+                  "field": {"name": "void", "term": {"unit": {}}},
                   "typeName": "hydra.variants.TypeVariant"}}]}}},
       "type": [
         {

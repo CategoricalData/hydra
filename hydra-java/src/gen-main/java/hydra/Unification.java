@@ -298,6 +298,25 @@ public interface Unification {
       }
 
       @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Void_ ignored) {
+        return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> otherwise(hydra.core.Type instance) {
+            return hydra.unification.Unification.joinTypes_cannotUnify(
+              cx,
+              hydra.show.core.Core::type,
+              sleft,
+              sright);
+          }
+
+          @Override
+          public hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Void_ _2) {
+            return hydra.util.Either.<hydra.context.InContext<hydra.errors.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right((hydra.util.ConsList<hydra.typing.TypeConstraint>) (hydra.util.ConsList.<hydra.typing.TypeConstraint>empty()));
+          }
+        });
+      }
+
+      @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Wrap l) {
         return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
           @Override

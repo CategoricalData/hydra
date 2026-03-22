@@ -162,6 +162,9 @@ def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.Module
         case hydra.core.TypeVariable(value=v1):
             return ref(v1)
 
+        case hydra.core.TypeVoid():
+            return Right(cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeVariable(hydra.ext.haskell.utils.raw_name("Void"))))
+
         case hydra.core.TypeWrap():
             return ref(hydra.core.Name("placeholder"))
 

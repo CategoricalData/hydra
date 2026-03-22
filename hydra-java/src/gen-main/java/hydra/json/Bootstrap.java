@@ -599,6 +599,9 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("variable"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type variable"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("void"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Unit(), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The void (uninhabited, or bottom) type"))))))),
           new hydra.core.FieldType(new hydra.core.Name("wrap"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A wrapped type (newtype)"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(

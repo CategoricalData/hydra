@@ -361,6 +361,9 @@ def type_variant(v1: hydra.core.Type) -> hydra.variants.TypeVariant:
         case hydra.core.TypeVariable():
             return hydra.variants.TypeVariant.VARIABLE
 
+        case hydra.core.TypeVoid():
+            return hydra.variants.TypeVariant.VOID
+
         case hydra.core.TypeWrap():
             return hydra.variants.TypeVariant.WRAP
 
@@ -368,4 +371,4 @@ def type_variant(v1: hydra.core.Type) -> hydra.variants.TypeVariant:
             raise AssertionError("Unreachable: all variants handled")
 
 # All type variants, in a canonical order.
-type_variants = (hydra.variants.TypeVariant.ANNOTATED, hydra.variants.TypeVariant.APPLICATION, hydra.variants.TypeVariant.EITHER, hydra.variants.TypeVariant.FUNCTION, hydra.variants.TypeVariant.FORALL, hydra.variants.TypeVariant.LIST, hydra.variants.TypeVariant.LITERAL, hydra.variants.TypeVariant.MAP, hydra.variants.TypeVariant.WRAP, hydra.variants.TypeVariant.MAYBE, hydra.variants.TypeVariant.PAIR, hydra.variants.TypeVariant.RECORD, hydra.variants.TypeVariant.SET, hydra.variants.TypeVariant.UNION, hydra.variants.TypeVariant.UNIT, hydra.variants.TypeVariant.VARIABLE)
+type_variants = (hydra.variants.TypeVariant.ANNOTATED, hydra.variants.TypeVariant.APPLICATION, hydra.variants.TypeVariant.EITHER, hydra.variants.TypeVariant.FUNCTION, hydra.variants.TypeVariant.FORALL, hydra.variants.TypeVariant.LIST, hydra.variants.TypeVariant.LITERAL, hydra.variants.TypeVariant.MAP, hydra.variants.TypeVariant.WRAP, hydra.variants.TypeVariant.MAYBE, hydra.variants.TypeVariant.PAIR, hydra.variants.TypeVariant.RECORD, hydra.variants.TypeVariant.SET, hydra.variants.TypeVariant.UNION, hydra.variants.TypeVariant.UNIT, hydra.variants.TypeVariant.VARIABLE, hydra.variants.TypeVariant.VOID)

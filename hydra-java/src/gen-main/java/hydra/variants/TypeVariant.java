@@ -40,6 +40,8 @@ public abstract class TypeVariant implements Serializable, Comparable<TypeVarian
 
   public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
 
+  public static final hydra.core.Name VOID = new hydra.core.Name("void");
+
   public static final hydra.core.Name WRAP = new hydra.core.Name("wrap");
 
   private TypeVariant () {
@@ -78,6 +80,8 @@ public abstract class TypeVariant implements Serializable, Comparable<TypeVarian
     R visit(Unit instance) ;
 
     R visit(Variable instance) ;
+
+    R visit(Void_ instance) ;
 
     R visit(Wrap instance) ;
   }
@@ -144,6 +148,10 @@ public abstract class TypeVariant implements Serializable, Comparable<TypeVarian
     }
 
     default R visit(Variable instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Void_ instance) {
       return otherwise(instance);
     }
 
@@ -653,6 +661,41 @@ public abstract class TypeVariant implements Serializable, Comparable<TypeVarian
         return false;
       }
       Variable o = (Variable) other;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(TypeVariant other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  public static final class Void_ extends hydra.variants.TypeVariant implements Serializable {
+    public Void_ () {
+
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Void_)) {
+        return false;
+      }
+      Void_ o = (Void_) other;
       return true;
     }
 

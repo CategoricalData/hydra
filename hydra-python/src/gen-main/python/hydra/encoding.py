@@ -210,6 +210,9 @@ def encode_type(v1: hydra.core.Type) -> hydra.core.Term:
         case hydra.core.TypeUnit():
             return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))))
 
+        case hydra.core.TypeVoid():
+            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))))
+
         case hydra.core.TypeVariable(value=type_name):
             return cast(hydra.core.Term, hydra.core.TermVariable(encode_binding_name(type_name)))
 
@@ -283,6 +286,9 @@ def encode_type_named(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.cor
             return encode_wrapped_type_named(ename, wt)
 
         case hydra.core.TypeUnit():
+            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))))
+
+        case hydra.core.TypeVoid():
             return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))))
 
         case hydra.core.TypeVariable(value=type_name):
@@ -436,6 +442,9 @@ def encoder_full_result_type(typ: hydra.core.Type) -> hydra.core.Type:
         case hydra.core.TypeVariable(value=name):
             return cast(hydra.core.Type, hydra.core.TypeVariable(name))
 
+        case hydra.core.TypeVoid():
+            return cast(hydra.core.Type, hydra.core.TypeVoid())
+
         case hydra.core.TypeWrap():
             return cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Term")))
 
@@ -487,6 +496,9 @@ def encoder_full_result_type_named(ename: hydra.core.Name, typ: hydra.core.Type)
 
         case hydra.core.TypeVariable(value=name):
             return cast(hydra.core.Type, hydra.core.TypeVariable(name))
+
+        case hydra.core.TypeVoid():
+            return cast(hydra.core.Type, hydra.core.TypeVoid())
 
         case hydra.core.TypeWrap():
             return cast(hydra.core.Type, hydra.core.TypeVariable(ename))

@@ -997,6 +997,11 @@ public interface Coder {
       }
 
       @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Void_ ignored) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable(hydra.ext.haskell.utils.Utils.rawName("Void")));
+      }
+
+      @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Wrap ignored) {
         return hydra.ext.haskell.Coder.encodeType_ref(
           (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, java.util.function.Function<hydra.core.Name, hydra.ext.haskell.ast.Name>>) (p0 -> p1 -> hydra.ext.haskell.Utils.elementReference(

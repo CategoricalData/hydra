@@ -24552,6 +24552,17 @@
                                                                 "domain": [{"variable": "hydra.core.Name"}],
                                                                 "parameter": "v"}}}},
                                                         {
+                                                          "name": "void",
+                                                          "term": {
+                                                            "function": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "union": {
+                                                                    "field": {"name": "void", "term": {"unit": {}}},
+                                                                    "typeName": "hydra.core.Type"}},
+                                                                "domain": [{"unit": {}}],
+                                                                "parameter": "_"}}}},
+                                                        {
                                                           "name": "wrap",
                                                           "term": {
                                                             "function": {
@@ -25646,6 +25657,25 @@
                                                                             "type": {"variable": "hydra.core.Type"}}},
                                                                         "domain": [{"variable": "hydra.core.Name"}],
                                                                         "parameter": "v"}}}},
+                                                                {
+                                                                  "name": "void",
+                                                                  "term": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "either": {
+                                                                                    "@right": {
+                                                                                      "union": {
+                                                                                        "field": {"name": "void", "term": {"unit": {}}},
+                                                                                        "typeName": "hydra.core.Type"}}}},
+                                                                                "type": {"variable": "t1"}}},
+                                                                            "type": {"variable": "hydra.core.Type"}}},
+                                                                        "domain": [{"unit": {}}],
+                                                                        "parameter": "_"}}}},
                                                                 {
                                                                   "name": "wrap",
                                                                   "term": {
@@ -28894,6 +28924,15 @@
                             "body": {
                               "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Type"}}},
                             "domain": [{"variable": "hydra.core.Name"}],
+                            "parameter": "_"}}}},
+                    {
+                      "name": "void",
+                      "term": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Type"}}},
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "wrap",

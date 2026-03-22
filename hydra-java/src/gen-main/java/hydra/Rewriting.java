@@ -3619,6 +3619,11 @@ public interface Rewriting {
         }
 
         @Override
+        public hydra.core.Type visit(hydra.core.Type.Void_ ignored) {
+          return new hydra.core.Type.Void_();
+        }
+
+        @Override
         public hydra.core.Type visit(hydra.core.Type.Wrap wt) {
           return new hydra.core.Type.Wrap((recurse).apply((wt).value));
         }
@@ -3752,6 +3757,11 @@ public interface Rewriting {
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Variable v) {
         return hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Variable((v).value));
+      }
+
+      @Override
+      public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Void_ ignored) {
+        return hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Void_());
       }
 
       @Override
@@ -4426,6 +4436,11 @@ public interface Rewriting {
 
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Variable ignored) {
+        return (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty());
+      }
+
+      @Override
+      public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Void_ ignored) {
         return (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty());
       }
 

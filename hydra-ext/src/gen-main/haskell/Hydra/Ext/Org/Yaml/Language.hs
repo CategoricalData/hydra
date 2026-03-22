@@ -58,7 +58,8 @@ yamlLanguage =
           Variants.TypeVariantMap,
           Variants.TypeVariantMaybe,
           Variants.TypeVariantRecord,
-          Variants.TypeVariantUnit]
+          Variants.TypeVariantUnit,
+          Variants.TypeVariantVoid]
     typePredicate =
         \typ -> case (Rewriting.deannotateType typ) of
           Core.TypeMaybe v0 -> case v0 of

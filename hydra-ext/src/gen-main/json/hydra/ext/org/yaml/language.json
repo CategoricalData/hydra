@@ -177,6 +177,10 @@
                           {
                             "union": {
                               "field": {"name": "unit", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "void", "term": {"unit": {}}},
                               "typeName": "hydra.variants.TypeVariant"}}]},
                       "function": {
                         "typeApplication": {

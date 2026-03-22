@@ -123,7 +123,14 @@ def join_types(cx: hydra.context.Context, left: hydra.core.Type, right: hydra.co
 
             case _:
                 return cannot_unify()
-    def _hoist_body_12(l, v1):
+    def _hoist_body_12(v1):
+        match v1:
+            case hydra.core.TypeVoid():
+                return Right(())
+
+            case _:
+                return cannot_unify()
+    def _hoist_body_13(l, v1):
         match v1:
             case hydra.core.TypeWrap(value=r):
                 return Right((join_one(l, r),))
@@ -167,8 +174,11 @@ def join_types(cx: hydra.context.Context, left: hydra.core.Type, right: hydra.co
         case hydra.core.TypeUnit():
             return _hoist_body_11(sright())
 
+        case hydra.core.TypeVoid():
+            return _hoist_body_12(sright())
+
         case hydra.core.TypeWrap(value=l11):
-            return _hoist_body_12(l11, sright())
+            return _hoist_body_13(l11, sright())
 
         case _:
             return cannot_unify()

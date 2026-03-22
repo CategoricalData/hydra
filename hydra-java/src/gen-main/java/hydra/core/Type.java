@@ -40,6 +40,8 @@ public abstract class Type implements Serializable, Comparable<Type> {
 
   public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
 
+  public static final hydra.core.Name VOID = new hydra.core.Name("void");
+
   public static final hydra.core.Name WRAP = new hydra.core.Name("wrap");
 
   private Type () {
@@ -78,6 +80,8 @@ public abstract class Type implements Serializable, Comparable<Type> {
     R visit(Unit instance) ;
 
     R visit(Variable instance) ;
+
+    R visit(Void_ instance) ;
 
     R visit(Wrap instance) ;
   }
@@ -144,6 +148,10 @@ public abstract class Type implements Serializable, Comparable<Type> {
     }
 
     default R visit(Variable instance) {
+      return otherwise(instance);
+    }
+
+    default R visit(Void_ instance) {
       return otherwise(instance);
     }
 
@@ -784,6 +792,44 @@ public abstract class Type implements Serializable, Comparable<Type> {
       }
       Variable o = (Variable) other;
       return ((Comparable) value).compareTo(o.value);
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+
+  /**
+   * The void (uninhabited, or bottom) type
+   */
+  public static final class Void_ extends hydra.core.Type implements Serializable {
+    public Void_ () {
+
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Void_)) {
+        return false;
+      }
+      Void_ o = (Void_) other;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Type other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
 
     @Override

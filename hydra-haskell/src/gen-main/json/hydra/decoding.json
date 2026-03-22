@@ -12443,6 +12443,14 @@
                                       "domain": [{"unit": {}}],
                                       "parameter": "_"}}}},
                               {
+                                "name": "void",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {"variable": "hydra.decoding.decodeUnitType"},
+                                      "domain": [{"unit": {}}],
+                                      "parameter": "_"}}}},
+                              {
                                 "name": "wrap",
                                 "term": {
                                   "function": {
@@ -12811,6 +12819,14 @@
                                             "parameter": "rt"}}}},
                                     {
                                       "name": "unit",
+                                      "term": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {"variable": "hydra.decoding.decodeUnitType"},
+                                            "domain": [{"unit": {}}],
+                                            "parameter": "_"}}}},
+                                    {
+                                      "name": "void",
                                       "term": {
                                         "function": {
                                           "lambda": {
@@ -15202,6 +15218,17 @@
                                       "domain": [{"variable": "hydra.core.Name"}],
                                       "parameter": "name"}}}},
                               {
+                                "name": "void",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "union": {
+                                          "field": {"name": "void", "term": {"unit": {}}},
+                                          "typeName": "hydra.core.Type"}},
+                                      "domain": [{"unit": {}}],
+                                      "parameter": "_"}}}},
+                              {
                                 "name": "wrap",
                                 "term": {
                                   "function": {
@@ -15593,7 +15620,18 @@
                                                 "field": {"name": "variable", "term": {"variable": "name"}},
                                                 "typeName": "hydra.core.Type"}},
                                             "domain": [{"variable": "hydra.core.Name"}],
-                                            "parameter": "name"}}}}],
+                                            "parameter": "name"}}}},
+                                    {
+                                      "name": "void",
+                                      "term": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "union": {
+                                                "field": {"name": "void", "term": {"unit": {}}},
+                                                "typeName": "hydra.core.Type"}},
+                                            "domain": [{"unit": {}}],
+                                            "parameter": "_"}}}}],
                                   "default": [
                                     {
                                       "union": {

@@ -58,6 +58,7 @@ public interface Language {
       new hydra.variants.TypeVariant.Union(),
       new hydra.variants.TypeVariant.Unit(),
       new hydra.variants.TypeVariant.Variable(),
+      new hydra.variants.TypeVariant.Void_(),
       new hydra.variants.TypeVariant.Wrap())));
     return new hydra.coders.Language(new hydra.coders.LanguageName("hydra.ext.lisp"), new hydra.coders.LanguageConstraints(eliminationVariants.get(), literalVariants.get(), floatTypes.get(), functionVariants.get(), integerTypes.get(), termVariants.get(), typeVariants.get(), p0 -> hydra.ext.lisp.Language.<hydra.core.Type>lispLanguage_typePredicate(p0)));
   }

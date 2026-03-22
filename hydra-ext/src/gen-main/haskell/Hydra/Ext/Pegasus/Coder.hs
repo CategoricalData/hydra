@@ -236,6 +236,7 @@ encodePossiblyOptionalType cx g aliases typ =
       Core.TypeWrap _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
       Core.TypeEither _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
       Core.TypePair _ -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
+      Core.TypeVoid -> Eithers.bind (encode cx g aliases typ) (\t -> Right (t, False))
       Core.TypeAnnotated v0 -> encodePossiblyOptionalType cx g aliases (Core.annotatedTypeBody v0)
 
 getAnns :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Errors.Error) Pdl.Annotations

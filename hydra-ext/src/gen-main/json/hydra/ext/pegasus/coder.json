@@ -4722,6 +4722,75 @@
                                                     "domain": [{"variable": "hydra.core.PairType"}],
                                                     "parameter": "pt"}}}},
                                             {
+                                              "name": "void",
+                                              "term": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "either": {
+                                                                          "@right": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "pair": {
+                                                                                      "@first": {"variable": "t"},
+                                                                                      "@second": {"literal": {"boolean": false}}}},
+                                                                                  "type": {"variable": "hydra.ext.pegasus.pdl.Schema"}}},
+                                                                              "type": {"literal": {"boolean": {}}}}}}},
+                                                                      "type": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "hydra.errors.Error"},
+                                                                          "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                  "type": {
+                                                                    "pair": {
+                                                                      "first": {"variable": "hydra.ext.pegasus.pdl.Schema"},
+                                                                      "second": {"literal": {"boolean": {}}}}}}},
+                                                              "domain": [{"variable": "hydra.ext.pegasus.pdl.Schema"}],
+                                                              "parameter": "t"}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "typ"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "aliases"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "g"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "cx"},
+                                                                            "function": {"variable": "hydra.ext.pegasus.coder.encode"}}}}}}}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                        "type": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.errors.Error"},
+                                                                            "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                    "type": {"variable": "hydra.ext.pegasus.pdl.Schema"}}},
+                                                                "type": {
+                                                                  "pair": {
+                                                                    "first": {"variable": "hydra.ext.pegasus.pdl.Schema"},
+                                                                    "second": {"literal": {"boolean": {}}}}}}}}}}},
+                                                    "domain": [{"unit": {}}],
+                                                    "parameter": "_"}}}},
+                                            {
                                               "name": "annotated",
                                               "term": {
                                                 "function": {
