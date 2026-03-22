@@ -190,9 +190,23 @@
     (t val)))
 
 (defun deep-equal-p (a b)
-  "Structural equality that works across alist-based records."
+  "Structural equality that works across alist-based records and hash tables."
   (cond
+    ((eq a b) t)
     ((equal a b) t)
+    ;; Hash table equality
+    ((and (hash-table-p a) (hash-table-p b))
+     (and (= (hash-table-count a) (hash-table-count b))
+          (block nil
+            (maphash (lambda (k v)
+                       (multiple-value-bind (bv found) (gethash k b)
+                         (unless (and found (deep-equal-p v bv))
+                           (return nil))))
+                     a)
+            t)))
+    ;; Hash table vs nil (empty map/set)
+    ((and (hash-table-p a) (null b)) (= (hash-table-count a) 0))
+    ((and (null a) (hash-table-p b)) (= (hash-table-count b) 0))
     ((and (consp a) (consp b) (consp (car a)) (consp (car b))
           (equal (mapcar #'car a) (mapcar #'car b)))
      (every (lambda (ka) (deep-equal-p (cdr (assoc (car ka) a))
@@ -666,8 +680,35 @@
                          (second m)))
       m))
 
+(defun hash-table-is-set-p (ht)
+  "Check if a hash table represents a set (all values are T)."
+  (block nil
+    (maphash (lambda (k v) (declare (ignore k)) (unless (eq v t) (return nil))) ht)
+    t))
+
+(defun normalize-hash-tables (x)
+  "Recursively convert hash tables to sorted lists/alists for comparison.
+   Sets (all values T) become sorted lists of keys.
+   Maps become sorted alists of (key . val) pairs."
+  (cond
+    ((hash-table-p x)
+     (if (hash-table-is-set-p x)
+         ;; Set: return sorted list of keys
+         (let ((keys nil))
+           (maphash (lambda (k v) (declare (ignore v)) (push (normalize-hash-tables k) keys)) x)
+           (sort keys (lambda (a b) (< (generic-compare a b) 0))))
+         ;; Map: return sorted alist
+         (let ((pairs nil))
+           (maphash (lambda (k v) (push (cons (normalize-hash-tables k)
+                                              (normalize-hash-tables v)) pairs)) x)
+           (sort pairs (lambda (a b) (< (generic-compare (car a) (car b)) 0))))))
+    ((consp x)
+     (cons (normalize-hash-tables (car x))
+           (normalize-hash-tables (cdr x))))
+    (t x)))
+
 (defun terms-match-p (actual expected)
-  (or (equal actual expected)
+  (or (deep-equal-p (normalize-hash-tables actual) (normalize-hash-tables expected))
       (handler-case
           (let ((a-str (show-term actual))
                 (e-str (show-term expected)))
@@ -969,8 +1010,13 @@
         ((eq (first expected) :right)
          (if (eq (first result) :left)
              (progn (format t "FAIL: ~A~%  Expected success but got: ~A~%" path (second result)) (list 0 1 0))
-             (if (equal (second expected) (second result)) (list 1 0 0)
-                 (progn (format t "FAIL: ~A~%  Subst mismatch~%" path) (list 0 1 0)))))
+             (let ((ne (sort (copy-list (normalize-hash-tables (second expected)))
+                             (lambda (a b) (< (generic-compare a b) 0))))
+                   (nr (sort (copy-list (normalize-hash-tables (second result)))
+                             (lambda (a b) (< (generic-compare a b) 0)))))
+               (if (deep-equal-p ne nr) (list 1 0 0)
+                   (progn (format t "FAIL: ~A~%  Subst mismatch~%  Expected: ~S~%  Actual:   ~S~%" path ne nr)
+                          (list 0 1 0))))))
         (t (list 0 1 0)))
       (error (e) (format t "FAIL: ~A~%  EXCEPTION: ~A~%" path e) (list 0 1 0)))))
 
@@ -985,8 +1031,12 @@
         ((eq (first expected) :right)
          (if (eq (first result) :left)
              (progn (format t "FAIL: ~A~%  Expected success but got: ~A~%" path (second result)) (list 0 1 0))
-             (if (equal (second expected) (second result)) (list 1 0 0)
-                 (progn (format t "FAIL: ~A~%  Value mismatch~%" path) (list 0 1 0)))))
+             (let ((ne (sort (copy-list (normalize-hash-tables (second expected)))
+                             (lambda (a b) (< (generic-compare a b) 0))))
+                   (nr (sort (copy-list (normalize-hash-tables (second result)))
+                             (lambda (a b) (< (generic-compare a b) 0)))))
+               (if (deep-equal-p ne nr) (list 1 0 0)
+                   (progn (format t "FAIL: ~A~%  Value mismatch~%" path) (list 0 1 0))))))
         (t (list 0 1 0)))
       (error (e) (format t "FAIL: ~A~%  EXCEPTION: ~A~%" path e) (list 0 1 0)))))
 
