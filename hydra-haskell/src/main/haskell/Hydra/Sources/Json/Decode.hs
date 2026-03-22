@@ -100,14 +100,14 @@ module_ = Module ns elements
     Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling."
   where
     elements = [
-      toBinding fromJson,
-      toBinding decodeLiteral,
-      toBinding decodeFloat,
-      toBinding decodeInteger,
-      toBinding expectString,
-      toBinding expectArray,
-      toBinding expectObject,
-      toBinding expectNumber]
+      toTermDefinition fromJson,
+      toTermDefinition decodeLiteral,
+      toTermDefinition decodeFloat,
+      toTermDefinition decodeInteger,
+      toTermDefinition expectString,
+      toTermDefinition expectArray,
+      toTermDefinition expectObject,
+      toTermDefinition expectNumber]
 
 -- | Decode a JSON Value to a Term given a Type and type lookup table.
 -- Returns Left with an error message for type mismatches or invalid JSON.

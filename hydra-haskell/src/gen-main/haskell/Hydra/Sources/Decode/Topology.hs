@@ -17,17 +17,17 @@ module_ :: Module.Module
 module_ =
     Module.Module {
       Module.moduleNamespace = (Module.Namespace "hydra.decode.topology"),
-      Module.moduleElements = [
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.decode.topology.graph"),
-          Core.bindingTerm = (Core.TermApplication (Core.Application {
+      Module.moduleDefinitions = [
+        Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.decode.topology.graph"),
+          Module.termDefinitionTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeMap")),
               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.topology.vertex"))})),
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeList")),
               Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.topology.vertex"))}))})),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
@@ -38,10 +38,10 @@ module_ =
                   Core.eitherTypeRight = (Core.TypeMap (Core.MapType {
                     Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.topology.Vertex")),
                     Core.mapTypeValues = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.topology.Vertex")))}))}))}))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.decode.topology.tarjanState"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))}),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.decode.topology.tarjanState"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "cx"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -387,7 +387,7 @@ module_ =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
@@ -396,10 +396,10 @@ module_ =
                 Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.topology.TarjanState"))}))}))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.decode.topology.vertex"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.decode.topology.vertex"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "cx"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -458,7 +458,7 @@ module_ =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
@@ -467,7 +467,7 @@ module_ =
                 Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.core.Literal"))}))}))})),
-            Core.typeSchemeConstraints = Nothing}))}],
+            Core.typeSchemeConstraints = Nothing}))}))],
       Module.moduleTermDependencies = [
         Module.Namespace "hydra.extract.helpers",
         (Module.Namespace "hydra.lexical"),

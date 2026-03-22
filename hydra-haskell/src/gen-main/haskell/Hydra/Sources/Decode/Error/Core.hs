@@ -6,6 +6,7 @@ module Hydra.Sources.Decode.Error.Core where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
+import Hydra.Module.Compat (bindingToDefinition)
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -17,7 +18,7 @@ module_ :: Module.Module
 module_ =
     Module.Module {
       Module.moduleNamespace = (Module.Namespace "hydra.decode.error.core"),
-      Module.moduleElements = [
+      Module.moduleDefinitions = L.map bindingToDefinition [
         Core.Binding {
           Core.bindingName = (Core.Name "hydra.decode.error.core.duplicateBindingError"),
           Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {

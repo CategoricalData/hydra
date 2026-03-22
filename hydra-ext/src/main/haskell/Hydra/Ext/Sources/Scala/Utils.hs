@@ -105,24 +105,24 @@ module_ = Module ns elements
     Just "Utility functions for constructing Scala AST nodes"
   where
     elements = [
-      toBinding nameOfType,
-      toBinding qualifyUnionFieldName,
-      toBinding scalaTypeName,
-      toBinding scalaEscapeName,
-      toBinding sapply,
-      toBinding sassign,
-      toBinding slambda,
-      toBinding sname,
-      toBinding sprim,
-      toBinding sapplyTypes,
-      toBinding typeToString,
-      toBinding stapply,
-      toBinding stapply1,
-      toBinding stapply2,
-      toBinding stparam,
-      toBinding stref,
-      toBinding svar,
-      toBinding scalaReservedWordsRef]
+      toTermDefinition nameOfType,
+      toTermDefinition qualifyUnionFieldName,
+      toTermDefinition scalaTypeName,
+      toTermDefinition scalaEscapeName,
+      toTermDefinition sapply,
+      toTermDefinition sassign,
+      toTermDefinition slambda,
+      toTermDefinition sname,
+      toTermDefinition sprim,
+      toTermDefinition sapplyTypes,
+      toTermDefinition typeToString,
+      toTermDefinition stapply,
+      toTermDefinition stapply1,
+      toTermDefinition stapply2,
+      toTermDefinition stparam,
+      toTermDefinition stref,
+      toTermDefinition svar,
+      toTermDefinition scalaReservedWordsRef]
 
 
 nameOfType :: TBinding (Graph -> Type -> Y.Maybe Name)

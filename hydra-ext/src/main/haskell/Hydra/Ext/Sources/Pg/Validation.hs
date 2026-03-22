@@ -98,19 +98,19 @@ module_ = Module (Namespace "hydra.pg.validation") elements
     Just "Utilities for validating property graphs against property graph schemas"
   where
    elements = [
-     toBinding validateEdge,
-     toBinding validateElement,
-     toBinding validateGraph,
-     toBinding validateProperties,
-     toBinding validateVertex,
+     toTermDefinition validateEdge,
+     toTermDefinition validateElement,
+     toTermDefinition validateGraph,
+     toTermDefinition validateProperties,
+     toTermDefinition validateVertex,
      --
-     toBinding checkAll,
-     toBinding edgeError,
-     toBinding edgeLabelMismatch,
-     toBinding prepend,
-     toBinding verify,
-     toBinding vertexError,
-     toBinding vertexLabelMismatch]
+     toTermDefinition checkAll,
+     toTermDefinition edgeError,
+     toTermDefinition edgeLabelMismatch,
+     toTermDefinition prepend,
+     toTermDefinition verify,
+     toTermDefinition vertexError,
+     toTermDefinition vertexLabelMismatch]
 
 validateEdge :: TBinding (
      (t -> v -> Maybe String)

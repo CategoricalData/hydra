@@ -115,29 +115,29 @@ module_ = Module ns elements
   where
     ns = Namespace "hydra.ext.haskell.coder"
     elements = [
-      toBinding includeTypeDefinitions,
-      toBinding useCoreImport,
-      toBinding keyHaskellVar,
-      toBinding adaptTypeToHaskellAndEncode,
-      toBinding constantForFieldName,
-      toBinding constantForTypeName,
-      toBinding constructModule,
-      toBinding encodeCaseExpression,
-      toBinding encodeFunction,
-      toBinding encodeLiteral,
-      toBinding encodeTerm,
-      toBinding encodeType,
-      toBinding encodeTypeWithClassAssertions,
-      toBinding findOrdVariables,
-      toBinding getImplicitTypeClasses,
-      toBinding moduleToHaskellModule,
-      toBinding moduleToHaskell,
-      toBinding nameDecls,
-      toBinding toDataDeclaration,
---      toBinding toTypeDeclarations,
-      toBinding toTypeDeclarationsFrom,
-      toBinding typeDecl,
-      toBinding typeSchemeConstraintsToClassMap]
+      toTermDefinition includeTypeDefinitions,
+      toTermDefinition useCoreImport,
+      toTermDefinition keyHaskellVar,
+      toTermDefinition adaptTypeToHaskellAndEncode,
+      toTermDefinition constantForFieldName,
+      toTermDefinition constantForTypeName,
+      toTermDefinition constructModule,
+      toTermDefinition encodeCaseExpression,
+      toTermDefinition encodeFunction,
+      toTermDefinition encodeLiteral,
+      toTermDefinition encodeTerm,
+      toTermDefinition encodeType,
+      toTermDefinition encodeTypeWithClassAssertions,
+      toTermDefinition findOrdVariables,
+      toTermDefinition getImplicitTypeClasses,
+      toTermDefinition moduleToHaskellModule,
+      toTermDefinition moduleToHaskell,
+      toTermDefinition nameDecls,
+      toTermDefinition toDataDeclaration,
+--      toTermDefinition toTypeDeclarations,
+      toTermDefinition toTypeDeclarationsFrom,
+      toTermDefinition typeDecl,
+      toTermDefinition typeSchemeConstraintsToClassMap]
 
 -- TODO: make these settings configurable
 includeTypeDefinitions :: TBinding Bool
@@ -764,12 +764,13 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
           "hterm" <<~ encodeTerm @@ int32 0 @@ var "namespaces" @@ var "term'" @@ var "cx" @@ var "g" $ lets [
          "vb">: HaskellUtils.simpleValueBinding @@ var "hname'" @@ var "hterm" @@ var "bindings",
          -- Extract constraints from the TypeScheme and convert to class assertions
-         "schemeConstraints">: Core.typeSchemeConstraints (var "typ"),
+         "schemeConstraints">: optCases (var "typ") Phantoms.nothing ("ts" ~> Core.typeSchemeConstraints (var "ts")),
          "schemeClasses">: typeSchemeConstraintsToClassMap @@ var "schemeConstraints"] $
          "explicitClasses" <<~ Annotations.getTypeClasses @@ var "cx" @@ var "g" @@ (Rewriting.removeTypesFromTerm @@ var "term") $
          -- Combine constraints from TypeScheme with any explicit annotations
          "combinedClasses" <~ Maps.union (var "schemeClasses") (var "explicitClasses") $
-         "htype" <<~ encodeTypeWithClassAssertions @@ var "namespaces" @@ var "combinedClasses" @@ (Core.typeSchemeType $ var "typ") @@ var "cx" @@ var "g" $ lets [
+         "schemeType" <~ optCases (var "typ") Core.typeUnit ("ts" ~> Core.typeSchemeType (var "ts")) $
+         "htype" <<~ encodeTypeWithClassAssertions @@ var "namespaces" @@ var "combinedClasses" @@ var "schemeType" @@ var "cx" @@ var "g" $ lets [
          "decl">: inject H._Declaration H._Declaration_typedBinding $ record H._TypedBinding [
            H._TypedBinding_typeSignature>>: record H._TypeSignature [
              H._TypeSignature_name>>: var "hname'",
@@ -782,12 +783,12 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
           -- For let terms, encode each binding's term directly
           "lbindings">: Core.letBindings $ var "letTerm",
           "env">: Core.letBody $ var "letTerm",
-          "toBinding">: "hname''" ~> "hterm'" ~>
+          "toTermDefinition">: "hname''" ~> "hterm'" ~>
             inject H._LocalBinding H._LocalBinding_value $ HaskellUtils.simpleValueBinding @@ var "hname''" @@ var "hterm'" @@ nothing,
           "hnames">: Lists.map ("binding" ~> HaskellUtils.simpleName @@ (Core.unName $ Core.bindingName $ var "binding")) (var "lbindings"),
           "terms">: Lists.map (unaryFunction $ Core.bindingTerm) (var "lbindings")] $
           "hterms" <<~ Eithers.mapList ("t" ~> encodeTerm @@ int32 0 @@ var "namespaces" @@ var "t" @@ var "cx" @@ var "g") (var "terms") $ lets [
-          "hbindings">: Lists.zipWith (var "toBinding") (var "hnames") (var "hterms"),
+          "hbindings">: Lists.zipWith (var "toTermDefinition") (var "hnames") (var "hterms"),
           -- Merge new bindings with any previously accumulated bindings from outer lets
           "prevBindings">: Maybes.maybe (list ([] :: [TTerm H.LocalBinding])) ("lb" ~> unwrap H._LocalBindings @@ var "lb") (var "bindings"),
           "allBindings">: Lists.concat2 (var "prevBindings") (var "hbindings")] $

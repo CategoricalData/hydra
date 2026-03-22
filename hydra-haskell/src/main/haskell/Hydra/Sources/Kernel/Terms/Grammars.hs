@@ -72,17 +72,17 @@ module_ = Module ns elements
     Just ("A utility for converting a BNF grammar to a Hydra module.")
   where
    elements = [
-     toBinding childName,
-     toBinding findNames,
-     toBinding grammarToModule,
-     toBinding isComplex,
-     toBinding isNontrivial,
-     toBinding makeElements,
-     toBinding rawName,
-     toBinding replacePlaceholders,
-     toBinding simplify,
-     toBinding toName,
-     toBinding wrapType]
+     toTermDefinition childName,
+     toTermDefinition findNames,
+     toTermDefinition grammarToModule,
+     toTermDefinition isComplex,
+     toTermDefinition isNontrivial,
+     toTermDefinition makeElements,
+     toTermDefinition rawName,
+     toTermDefinition replacePlaceholders,
+     toTermDefinition simplify,
+     toTermDefinition toName,
+     toTermDefinition wrapType]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -134,7 +134,12 @@ grammarToModule = define "grammarToModule" $
       "typ" <~ replacePlaceholders @@ var "elName" @@ (wrapType @@ (Pairs.second (var "pair"))) $
       Annotations.typeElement @@ var "elName" @@ var "typ")
     (var "elementPairs") $
-  Module.module_ (var "ns") (var "elements") (list ([] :: [TTerm Namespace])) (list ([] :: [TTerm Namespace])) (var "desc")
+  Module.module_ (var "ns")
+    (Lists.map ("b" ~> Module.definitionTerm (Module.termDefinition
+      (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+      nothing))
+      (var "elements"))
+    (list ([] :: [TTerm Namespace])) (list ([] :: [TTerm Namespace])) (var "desc")
 
 isComplex :: TBinding (G.Pattern -> Bool)
 isComplex = define "isComplex" $

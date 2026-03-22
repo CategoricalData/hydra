@@ -28,7 +28,7 @@ import Prelude hiding ((++))
 testNs = Namespace "hydra.demos.meteredEvaluation"
 
 testModule :: Module
-testModule = Module testNs elements [] [] Nothing
+testModule = Module testNs (Prelude.map bindingToDefinition elements) [] [] Nothing
   where
     test local tterm = TBinding (unqualifyName $ QualifiedName (Just testNs) local) tterm
     elements = [

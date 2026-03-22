@@ -90,38 +90,38 @@ module_ = Module ns elements
     Just "Simple, one-way adapters for types and terms"
   where
     elements = [
-      toBinding adaptFloatType,
-      toBinding adaptDataGraph,
-      toBinding adaptGraphSchema,
-      toBinding adaptIntegerType,
-      toBinding adaptLambdaDomains,
-      toBinding adaptLiteral,
-      toBinding adaptLiteralType,
-      toBinding adaptLiteralTypesMap,
-      toBinding adaptLiteralValue,
-      toBinding adaptNestedTypes,
-      toBinding adaptPrimitive,
-      toBinding adaptTerm,
-      toBinding adaptTermForLanguage,
-      toBinding adaptType,
-      toBinding adaptTypeForLanguage,
-      toBinding adaptTypeScheme,
-      toBinding composeCoders,
-      toBinding dataGraphToDefinitions,
-      toBinding literalTypeSupported,
+      toTermDefinition adaptFloatType,
+      toTermDefinition adaptDataGraph,
+      toTermDefinition adaptGraphSchema,
+      toTermDefinition adaptIntegerType,
+      toTermDefinition adaptLambdaDomains,
+      toTermDefinition adaptLiteral,
+      toTermDefinition adaptLiteralType,
+      toTermDefinition adaptLiteralTypesMap,
+      toTermDefinition adaptLiteralValue,
+      toTermDefinition adaptNestedTypes,
+      toTermDefinition adaptPrimitive,
+      toTermDefinition adaptTerm,
+      toTermDefinition adaptTermForLanguage,
+      toTermDefinition adaptType,
+      toTermDefinition adaptTypeForLanguage,
+      toTermDefinition adaptTypeScheme,
+      toTermDefinition composeCoders,
+      toTermDefinition dataGraphToDefinitions,
+      toTermDefinition literalTypeSupported,
       -- TODO: the prepare* functions below duplicate logic already in adaptFloatType, adaptIntegerType,
       -- adaptLiteralType, etc. They should be simplified or eliminated in favor of those functions.
       -- They were moved here from hydra.ext.scala.prepare as part of the coder standardization effort.
-      toBinding prepareFloatType,
-      toBinding prepareIntegerType,
-      toBinding prepareLiteralType,
-      toBinding prepareType,
-      toBinding prepareSame,
-      toBinding pushTypeAppsInward,
-      toBinding schemaGraphToDefinitions,
-      toBinding simpleLanguageAdapter,
-      toBinding termAlternatives,
-      toBinding typeAlternatives]
+      toTermDefinition prepareFloatType,
+      toTermDefinition prepareIntegerType,
+      toTermDefinition prepareLiteralType,
+      toTermDefinition prepareType,
+      toTermDefinition prepareSame,
+      toTermDefinition pushTypeAppsInward,
+      toTermDefinition schemaGraphToDefinitions,
+      toTermDefinition simpleLanguageAdapter,
+      toTermDefinition termAlternatives,
+      toTermDefinition typeAlternatives]
 
 formatError :: TTerm (InContext Error -> String)
 formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
@@ -676,7 +676,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       ("ts" ~> Module.termDefinition
         (Core.bindingName $ var "el")
         (Core.bindingTerm $ var "el")
-        (var "ts"))
+        (just $ var "ts"))
       (Core.bindingType $ var "el")) $
   -- Filter to elements in the requested namespaces
   "selectedElements" <~ Lists.filter

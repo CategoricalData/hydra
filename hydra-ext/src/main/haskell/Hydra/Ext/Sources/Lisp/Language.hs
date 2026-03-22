@@ -88,7 +88,7 @@ lispLanguageDefinition = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.lisp.language")
-  [toBinding lispLanguage, toBinding lispReservedWords]
+  [toTermDefinition lispLanguage, toTermDefinition lispReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Lisp (covering Clojure, Emacs Lisp, Common Lisp, and Scheme)"

@@ -73,20 +73,20 @@ module_ = Module ns elements
     Just "Transform test cases for code generation, filtering to tests that can be compiled to target languages"
   where
     elements = [
-      toBinding transformToCompiledTests,
-      toBinding transformTestCase,
-      toBinding buildConvertCaseCall,
-      toBinding encodeCaseConvention,
-      toBinding addGenerationPrefix,
-      toBinding transformModule,
-      toBinding collectTestCases,
-      toBinding buildTopologicalSortCall,
-      toBinding buildTopologicalSortSCCCall,
-      toBinding encodeAdjacencyList,
-      toBinding encodeInt,
-      toBinding encodeEitherListList,
-      toBinding encodeListList,
-      toBinding encodeIntList]
+      toTermDefinition transformToCompiledTests,
+      toTermDefinition transformTestCase,
+      toTermDefinition buildConvertCaseCall,
+      toTermDefinition encodeCaseConvention,
+      toTermDefinition addGenerationPrefix,
+      toTermDefinition transformModule,
+      toTermDefinition collectTestCases,
+      toTermDefinition buildTopologicalSortCall,
+      toTermDefinition buildTopologicalSortSCCCall,
+      toTermDefinition encodeAdjacencyList,
+      toTermDefinition encodeInt,
+      toTermDefinition encodeEitherListList,
+      toTermDefinition encodeListList,
+      toTermDefinition encodeIntList]
 
 
 -- | Transform test group hierarchy to only include delegated evaluation tests
@@ -205,7 +205,7 @@ transformModule = define "transformModule" $
   lambda "m" $
     Module.module_
       (addGenerationPrefix @@ (project _Module _Module_namespace @@ var "m"))
-      (project _Module _Module_elements @@ var "m")
+      (project _Module _Module_definitions @@ var "m")
       (project _Module _Module_termDependencies @@ var "m")
       (project _Module _Module_typeDependencies @@ var "m")
       (project _Module _Module_description @@ var "m")

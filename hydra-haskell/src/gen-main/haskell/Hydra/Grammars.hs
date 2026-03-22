@@ -67,7 +67,10 @@ grammarToModule ns grammar desc =
                     in (Annotations.typeElement elName typ)) elementPairs
       in Module.Module {
         Module.moduleNamespace = ns,
-        Module.moduleElements = elements,
+        Module.moduleDefinitions = (Lists.map (\b -> Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.bindingName b),
+          Module.termDefinitionTerm = (Core.bindingTerm b),
+          Module.termDefinitionType = Nothing})) elements),
         Module.moduleTermDependencies = [],
         Module.moduleTypeDependencies = [],
         Module.moduleDescription = desc}

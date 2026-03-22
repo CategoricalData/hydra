@@ -66,8 +66,8 @@ module_ = Module ns elements
     Just ("Utilities for working with term accessors.")
   where
    elements = [
-     toBinding termAccessor,
-     toBinding termToAccessorGraph] -- TODO: move out of hydra.show.accessors
+     toTermDefinition termAccessor,
+     toTermDefinition termToAccessorGraph] -- TODO: move out of hydra.show.accessors
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

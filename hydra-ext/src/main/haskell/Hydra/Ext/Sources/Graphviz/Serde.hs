@@ -101,21 +101,21 @@ module_ = Module ns elements
     Just "Serialization functions for converting Graphviz DOT AST to abstract expressions"
   where
     elements = [
-      toBinding writeAttrList,
-      toBinding writeAttrStmt,
-      toBinding writeAttrType,
-      toBinding writeCompassPt,
-      toBinding writeEdgeStmt,
-      toBinding writeEqualityPair,
-      toBinding writeGraph,
-      toBinding writeId,
-      toBinding writeNodeId,
-      toBinding writeNodeOrSubgraph,
-      toBinding writeNodeStmt,
-      toBinding writePort,
-      toBinding writeStmt,
-      toBinding writeSubgraph,
-      toBinding writeSubgraphId]
+      toTermDefinition writeAttrList,
+      toTermDefinition writeAttrStmt,
+      toTermDefinition writeAttrType,
+      toTermDefinition writeCompassPt,
+      toTermDefinition writeEdgeStmt,
+      toTermDefinition writeEqualityPair,
+      toTermDefinition writeGraph,
+      toTermDefinition writeId,
+      toTermDefinition writeNodeId,
+      toTermDefinition writeNodeOrSubgraph,
+      toTermDefinition writeNodeStmt,
+      toTermDefinition writePort,
+      toTermDefinition writeStmt,
+      toTermDefinition writeSubgraph,
+      toTermDefinition writeSubgraphId]
 
 
 writeAttrList :: TBinding (Dot.AttrList -> Expr)

@@ -61,7 +61,7 @@ ns = Namespace "hydra.languages"
 
 module_ :: Module
 module_ = Module ns
-  [toBinding hydraLanguage]
+  [toTermDefinition hydraLanguage]
   [Reflect.ns]
   kernelTypesNamespaces $
   Just "Language constraints for Hydra Core"

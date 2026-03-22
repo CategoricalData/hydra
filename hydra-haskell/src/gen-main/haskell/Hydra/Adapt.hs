@@ -356,7 +356,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                       \el -> Maybes.map (\ts -> Module.TermDefinition {
                         Module.termDefinitionName = (Core.bindingName el),
                         Module.termDefinitionTerm = (Core.bindingTerm el),
-                        Module.termDefinitionType = ts}) (Core.bindingType el)
+                        Module.termDefinitionType = (Just ts)}) (Core.bindingType el)
               selectedElements =
                       Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.namespaceOf (Core.bindingName el))) bins5
               elementsByNamespace =

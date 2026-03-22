@@ -17,10 +17,10 @@ module_ :: Module.Module
 module_ =
     Module.Module {
       Module.moduleNamespace = (Module.Namespace "hydra.encode.testing"),
-      Module.moduleElements = [
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.alphaConversionTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+      Module.moduleDefinitions = [
+        Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.alphaConversionTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -106,15 +106,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.AlphaConversionTestCase"),
                                     Core.projectionField = (Core.Name "result")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.AlphaConversionTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.evaluationStyle"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+            Core.typeSchemeConstraints = Nothing}))}),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.evaluationStyle"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
             Core.caseStatementTypeName = (Core.Name "hydra.testing.EvaluationStyle"),
             Core.caseStatementDefault = Nothing,
             Core.caseStatementCases = [
@@ -196,15 +196,15 @@ module_ =
                                           Core.fieldName = (Core.Name "unit"),
                                           Core.fieldTerm = Core.TermUnit}}))}))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.EvaluationStyle")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.caseConversionTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.caseConversionTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -312,15 +312,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.CaseConversionTestCase"),
                                     Core.projectionField = (Core.Name "toString")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.CaseConversionTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.delegatedEvaluationTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.delegatedEvaluationTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -372,15 +372,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.DelegatedEvaluationTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.DelegatedEvaluationTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.etaExpansionTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.etaExpansionTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -432,15 +432,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.EtaExpansionTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.EtaExpansionTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.deannotateTermTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.deannotateTermTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -492,15 +492,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.DeannotateTermTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.DeannotateTermTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.deannotateTypeTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.deannotateTypeTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -552,15 +552,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.DeannotateTypeTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.DeannotateTypeTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.flattenLetTermsTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.flattenLetTermsTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -612,15 +612,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.FlattenLetTermsTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.FlattenLetTermsTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.foldOperation"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.foldOperation"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
             Core.caseStatementTypeName = (Core.Name "hydra.testing.FoldOperation"),
             Core.caseStatementDefault = Nothing,
             Core.caseStatementCases = [
@@ -741,15 +741,15 @@ module_ =
                                           Core.fieldName = (Core.Name "unit"),
                                           Core.fieldTerm = Core.TermUnit}}))}))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.FoldOperation")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.foldOverTermTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.foldOverTermTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -835,15 +835,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.FoldOverTermTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.FoldOverTermTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.freeVariablesTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.freeVariablesTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -906,15 +906,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.FreeVariablesTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.FreeVariablesTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.hoistPredicate"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.hoistPredicate"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
             Core.caseStatementTypeName = (Core.Name "hydra.testing.HoistPredicate"),
             Core.caseStatementDefault = Nothing,
             Core.caseStatementCases = [
@@ -1074,15 +1074,15 @@ module_ =
                                           Core.fieldName = (Core.Name "unit"),
                                           Core.fieldTerm = Core.TermUnit}}))}))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.HoistPredicate")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.hoistLetBindingsTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.hoistLetBindingsTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -1134,15 +1134,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.HoistLetBindingsTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.HoistLetBindingsTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.hoistPolymorphicLetBindingsTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.hoistPolymorphicLetBindingsTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -1194,15 +1194,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.HoistPolymorphicLetBindingsTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.HoistPolymorphicLetBindingsTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.hoistSubtermsTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.hoistSubtermsTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -1271,15 +1271,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.HoistSubtermsTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.HoistSubtermsTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.hoistCaseStatementsTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.hoistCaseStatementsTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -1331,15 +1331,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.HoistCaseStatementsTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.HoistCaseStatementsTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.termRewriter"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.termRewriter"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
             Core.caseStatementTypeName = (Core.Name "hydra.testing.TermRewriter"),
             Core.caseStatementDefault = Nothing,
             Core.caseStatementCases = [
@@ -1421,15 +1421,15 @@ module_ =
                                           Core.fieldName = (Core.Name "unit"),
                                           Core.fieldTerm = Core.TermUnit}}))}))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.TermRewriter")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.rewriteTermTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.rewriteTermTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -1498,15 +1498,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.RewriteTermTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.RewriteTermTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.typeRewriter"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.typeRewriter"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
             Core.caseStatementTypeName = (Core.Name "hydra.testing.TypeRewriter"),
             Core.caseStatementDefault = Nothing,
             Core.caseStatementCases = [
@@ -1549,15 +1549,15 @@ module_ =
                                           Core.fieldName = (Core.Name "unit"),
                                           Core.fieldTerm = Core.TermUnit}}))}))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.TypeRewriter")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.rewriteTypeTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.rewriteTypeTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -1626,15 +1626,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.RewriteTypeTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.RewriteTypeTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.evaluationTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.evaluationTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -1703,15 +1703,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.EvaluationTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.EvaluationTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.inferenceFailureTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.inferenceFailureTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -1746,15 +1746,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.InferenceFailureTestCase"),
                                     Core.projectionField = (Core.Name "input")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.InferenceFailureTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.inferenceTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.inferenceTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -1806,15 +1806,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.InferenceTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.InferenceTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.jsonDecodeTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.jsonDecodeTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -1907,15 +1907,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.JsonDecodeTestCase"),
                                     Core.projectionField = (Core.Name "expected")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.JsonDecodeTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.jsonEncodeTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.jsonEncodeTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -1991,28 +1991,28 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.JsonEncodeTestCase"),
                                     Core.projectionField = (Core.Name "expected")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.JsonEncodeTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.jsonParserTestCase"),
-          Core.bindingTerm = (Core.TermApplication (Core.Application {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.jsonParserTestCase"),
+          Module.termDefinitionTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.testing.parserTestCase")),
             Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.json.model.value"))})),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.testing.ParserTestCase")),
                 Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.json.model.Value"))})),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.jsonRoundtripTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.jsonRoundtripTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -2064,15 +2064,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.JsonRoundtripTestCase"),
                                     Core.projectionField = (Core.Name "term")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.JsonRoundtripTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.liftLambdaAboveLetTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.liftLambdaAboveLetTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -2124,28 +2124,28 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.LiftLambdaAboveLetTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.LiftLambdaAboveLetTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.jsonWriterTestCase"),
-          Core.bindingTerm = (Core.TermApplication (Core.Application {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.jsonWriterTestCase"),
+          Module.termDefinitionTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.testing.writerTestCase")),
             Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.json.model.value"))})),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.testing.WriterTestCase")),
                 Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.json.model.Value"))})),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.parserTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.parserTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "a"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -2213,7 +2213,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.testing.ParserTestCase"),
                                       Core.projectionField = (Core.Name "output")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "a"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -2225,10 +2225,10 @@ module_ =
                   Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.testing.ParserTestCase")),
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.tag"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.tag"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -2261,15 +2261,15 @@ module_ =
                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.testing.Tag")))),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.Tag")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.testCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.testCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
             Core.caseStatementTypeName = (Core.Name "hydra.testing.TestCase"),
             Core.caseStatementDefault = Nothing,
             Core.caseStatementCases = [
@@ -3521,15 +3521,15 @@ module_ =
                                   Core.fieldTerm = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.testing.validateCoreTermTestCase")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.TestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.testCaseWithMetadata"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.testCaseWithMetadata"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -3659,15 +3659,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.TestCaseWithMetadata"),
                                     Core.projectionField = (Core.Name "tags")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.TestCaseWithMetadata")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.testGroup"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.testGroup"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -3808,15 +3808,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.TestGroup"),
                                     Core.projectionField = (Core.Name "cases")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.TestGroup")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.typeCheckingTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.typeCheckingTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -3885,15 +3885,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.TypeCheckingTestCase"),
                                     Core.projectionField = (Core.Name "outputType")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.TypeCheckingTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.typeCheckingFailureTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.typeCheckingFailureTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -3928,15 +3928,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.TypeCheckingFailureTestCase"),
                                     Core.projectionField = (Core.Name "input")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.TypeCheckingFailureTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.topologicalSortBindingsTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.topologicalSortBindingsTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -4047,15 +4047,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.TopologicalSortBindingsTestCase"),
                                     Core.projectionField = (Core.Name "expected")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.TopologicalSortBindingsTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.topologicalSortTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.topologicalSortTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -4248,15 +4248,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.TopologicalSortTestCase"),
                                     Core.projectionField = (Core.Name "expected")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.TopologicalSortTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.topologicalSortSCCTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.topologicalSortSCCTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -4410,15 +4410,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.TopologicalSortSCCTestCase"),
                                     Core.projectionField = (Core.Name "expected")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.TopologicalSortSCCTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.serializationTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.serializationTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -4481,15 +4481,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.SerializationTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.SerializationTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.simplifyTermTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.simplifyTermTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -4541,15 +4541,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.SimplifyTermTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.SimplifyTermTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.normalizeTypeVariablesTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.normalizeTypeVariablesTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -4601,15 +4601,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.NormalizeTypeVariablesTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.NormalizeTypeVariablesTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.typeReductionTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.typeReductionTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -4661,15 +4661,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.TypeReductionTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.TypeReductionTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.writerTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.writerTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "a"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -4735,7 +4735,7 @@ module_ =
                                       Core.projectionTypeName = (Core.Name "hydra.testing.WriterTestCase"),
                                       Core.projectionField = (Core.Name "output")})))),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "a"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -4747,10 +4747,10 @@ module_ =
                   Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.testing.WriterTestCase")),
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})),
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.substInTypeTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.substInTypeTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -4843,15 +4843,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.SubstInTypeTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.SubstInTypeTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.variableOccursInTypeTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.variableOccursInTypeTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -4931,15 +4931,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.VariableOccursInTypeTestCase"),
                                     Core.projectionField = (Core.Name "expected")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.VariableOccursInTypeTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.unshadowVariablesTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.unshadowVariablesTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -4991,15 +4991,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.UnshadowVariablesTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.UnshadowVariablesTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.unifyTypesTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.unifyTypesTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -5120,15 +5120,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.UnifyTypesTestCase"),
                                     Core.projectionField = (Core.Name "expected")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.UnifyTypesTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.joinTypesTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.joinTypesTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -5228,15 +5228,15 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.JoinTypesTestCase"),
                                     Core.projectionField = (Core.Name "expected")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.JoinTypesTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.encode.testing.validateCoreTermTestCase"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.encode.testing.validateCoreTermTestCase"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -5327,12 +5327,12 @@ module_ =
                                     Core.projectionTypeName = (Core.Name "hydra.testing.ValidateCoreTermTestCase"),
                                     Core.projectionField = (Core.Name "output")})))),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
               Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.ValidateCoreTermTestCase")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-            Core.typeSchemeConstraints = Nothing}))}],
+            Core.typeSchemeConstraints = Nothing}))}))],
       Module.moduleTermDependencies = [
         Module.Namespace "hydra.encode.core",
         (Module.Namespace "hydra.encode.ast"),

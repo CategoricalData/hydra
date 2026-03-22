@@ -105,62 +105,62 @@ module_ = Module ns elements
   where
     elements = [
       -- Function application
-      toBinding appOp,
+      toTermDefinition appOp,
 
       -- Member access
-      toBinding memberOp,
-      toBinding optionalChainOp,
+      toTermDefinition memberOp,
+      toTermDefinition optionalChainOp,
 
       -- Arithmetic operators
-      toBinding exponentiateOp,
-      toBinding multiplyOp,
-      toBinding divideOp,
-      toBinding moduloOp,
-      toBinding addOp,
-      toBinding subtractOp,
+      toTermDefinition exponentiateOp,
+      toTermDefinition multiplyOp,
+      toTermDefinition divideOp,
+      toTermDefinition moduloOp,
+      toTermDefinition addOp,
+      toTermDefinition subtractOp,
 
       -- Comparison operators
-      toBinding lessThanOp,
-      toBinding lessThanOrEqualOp,
-      toBinding greaterThanOp,
-      toBinding greaterThanOrEqualOp,
-      toBinding inOp,
-      toBinding instanceOfOp,
-      toBinding equalOp,
-      toBinding notEqualOp,
-      toBinding strictEqualOp,
-      toBinding strictNotEqualOp,
+      toTermDefinition lessThanOp,
+      toTermDefinition lessThanOrEqualOp,
+      toTermDefinition greaterThanOp,
+      toTermDefinition greaterThanOrEqualOp,
+      toTermDefinition inOp,
+      toTermDefinition instanceOfOp,
+      toTermDefinition equalOp,
+      toTermDefinition notEqualOp,
+      toTermDefinition strictEqualOp,
+      toTermDefinition strictNotEqualOp,
 
       -- Bitwise operators
-      toBinding bitwiseAndOp,
-      toBinding bitwiseXorOp,
-      toBinding bitwiseOrOp,
-      toBinding leftShiftOp,
-      toBinding rightShiftOp,
-      toBinding unsignedRightShiftOp,
+      toTermDefinition bitwiseAndOp,
+      toTermDefinition bitwiseXorOp,
+      toTermDefinition bitwiseOrOp,
+      toTermDefinition leftShiftOp,
+      toTermDefinition rightShiftOp,
+      toTermDefinition unsignedRightShiftOp,
 
       -- Logical operators
-      toBinding logicalAndOp,
-      toBinding logicalOrOp,
-      toBinding nullishCoalescingOp,
+      toTermDefinition logicalAndOp,
+      toTermDefinition logicalOrOp,
+      toTermDefinition nullishCoalescingOp,
 
       -- Assignment operators
-      toBinding assignOp,
+      toTermDefinition assignOp,
 
       -- Arrow function
-      toBinding arrowOp,
+      toTermDefinition arrowOp,
 
       -- Ternary
-      toBinding ternaryOp,
+      toTermDefinition ternaryOp,
 
       -- Comma
-      toBinding commaOp,
+      toTermDefinition commaOp,
 
       -- Definition (for const x = ...)
-      toBinding defineOp,
+      toTermDefinition defineOp,
 
       -- Type annotation (for JSDoc/TypeScript)
-      toBinding colonOp]
+      toTermDefinition colonOp]
 
 -- Note: JavaScript precedence levels (MDN):
 -- 1 = comma, 2 = assignment, 3 = conditional, 4 = nullish coalescing,

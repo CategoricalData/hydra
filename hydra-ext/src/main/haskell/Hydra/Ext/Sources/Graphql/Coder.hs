@@ -104,19 +104,19 @@ module_ = Module ns elements
     Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions"
   where
     elements = [
-      toBinding moduleToGraphql,
-      toBinding encodeTypeDefinition,
-      toBinding descriptionFromType,
-      toBinding encodeEnumFieldType,
-      toBinding encodeEnumFieldName,
-      toBinding encodeFieldName,
-      toBinding encodeFieldType,
-      toBinding encodeLiteralType,
-      toBinding encodeNamedType,
-      toBinding encodeType,
-      toBinding encodeTypeName,
-      toBinding encodeUnionFieldType,
-      toBinding sanitize]
+      toTermDefinition moduleToGraphql,
+      toTermDefinition encodeTypeDefinition,
+      toTermDefinition descriptionFromType,
+      toTermDefinition encodeEnumFieldType,
+      toTermDefinition encodeEnumFieldName,
+      toTermDefinition encodeFieldName,
+      toTermDefinition encodeFieldType,
+      toTermDefinition encodeLiteralType,
+      toTermDefinition encodeNamedType,
+      toTermDefinition encodeType,
+      toTermDefinition encodeTypeName,
+      toTermDefinition encodeUnionFieldType,
+      toTermDefinition sanitize]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

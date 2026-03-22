@@ -69,8 +69,8 @@ module_ = Module ns elements
     Just "A utility which instantiates a nonrecursive type with default values"
   where
    elements = [
-     toBinding graphToSchema,
-     toBinding instantiateTemplate]
+     toTermDefinition graphToSchema,
+     toTermDefinition instantiateTemplate]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

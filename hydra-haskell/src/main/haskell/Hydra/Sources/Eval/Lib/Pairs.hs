@@ -69,7 +69,7 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Pair functions for the Hydra interpreter.")
   where
     elements = [
-      toBinding bimap_]
+      toTermDefinition bimap_]
 
 -- | Interpreter-friendly bimap for Pair terms.
 -- Applies firstFun to the first element and secondFun to the second element.

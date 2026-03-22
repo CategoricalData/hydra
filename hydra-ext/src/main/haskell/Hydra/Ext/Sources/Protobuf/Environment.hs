@@ -19,7 +19,7 @@ coreType :: String -> Type
 coreType = typeref CoreTypes.ns
 
 module_ :: Module
-module_ = Module ns elements [] [CoreTypes.ns] $
+module_ = Module ns (map toTypeDef elements) [] [CoreTypes.ns] $
     Just "Type definitions for the Protobuf code generation environment"
   where
     elements = [

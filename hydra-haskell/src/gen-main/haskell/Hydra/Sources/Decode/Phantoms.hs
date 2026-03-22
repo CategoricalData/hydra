@@ -17,10 +17,10 @@ module_ :: Module.Module
 module_ =
     Module.Module {
       Module.moduleNamespace = (Module.Namespace "hydra.decode.phantoms"),
-      Module.moduleElements = [
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.decode.phantoms.tBinding"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+      Module.moduleDefinitions = [
+        Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.decode.phantoms.tBinding"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "a"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -109,7 +109,7 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "a"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -129,10 +129,10 @@ module_ =
                     Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
                       Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TBinding")),
                       Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))}))}))}))}))})),
-            Core.typeSchemeConstraints = Nothing}))},
-        Core.Binding {
-          Core.bindingName = (Core.Name "hydra.decode.phantoms.tTerm"),
-          Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.typeSchemeConstraints = Nothing}))}),
+        (Module.DefinitionTerm (Module.TermDefinition {
+          Module.termDefinitionName = (Core.Name "hydra.decode.phantoms.tTerm"),
+          Module.termDefinitionTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
             Core.lambdaParameter = (Core.Name "a"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -190,7 +190,7 @@ module_ =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))}))),
-          Core.bindingType = (Just (Core.TypeScheme {
+          Module.termDefinitionType = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [
               Core.Name "a"],
             Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
@@ -210,7 +210,7 @@ module_ =
                     Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
                       Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.phantoms.TTerm")),
                       Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))}))}))}))}))})),
-            Core.typeSchemeConstraints = Nothing}))}],
+            Core.typeSchemeConstraints = Nothing}))}))],
       Module.moduleTermDependencies = [
         Module.Namespace "hydra.extract.helpers",
         (Module.Namespace "hydra.lexical"),

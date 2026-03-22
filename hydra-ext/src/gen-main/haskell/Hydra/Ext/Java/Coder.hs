@@ -2872,7 +2872,7 @@ encodeTermDefinition env tdef cx g =
 
       let name = Module.termDefinitionName tdef
           term0 = Module.termDefinitionTerm tdef
-          ts = Module.termDefinitionType tdef
+          ts = Maybes.maybe (Core.TypeScheme [] (Core.TypeVariable (Core.Name "hydra.core.Unit")) Nothing) (\x -> x) (Module.termDefinitionType tdef)
           term = Rewriting.unshadowVariables term0
       in (Eithers.bind (analyzeJavaFunction env term cx g) (\fs ->
         let schemeVars = Lists.filter (\v -> isSimpleName v) (Core.typeSchemeVariables ts)

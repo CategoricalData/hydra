@@ -100,7 +100,7 @@ module_ = Module ns elements
     Just "Language constraints based on TinkerPop Graph.Features"
   where
     elements = [
-      toBinding tinkerpopLanguage]
+      toTermDefinition tinkerpopLanguage]
 
 
 -- | Populate language constraints based on TinkerPop Graph.Features.

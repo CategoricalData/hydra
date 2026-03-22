@@ -101,23 +101,23 @@ module_ = Module ns elements
     Just "Serialization functions for converting GraphQL AST to abstract expressions"
   where
     elements = [
-      toBinding exprDefinition,
-      toBinding exprDescription,
-      toBinding exprDocument,
-      toBinding exprEnumTypeDefinition,
-      toBinding exprEnumValue,
-      toBinding exprEnumValueDefinition,
-      toBinding exprFieldDefinition,
-      toBinding exprListType,
-      toBinding exprName,
-      toBinding exprNamedType,
-      toBinding exprNonNullType,
-      toBinding exprObjectTypeDefinition,
-      toBinding exprType,
-      toBinding exprTypeDefinition,
-      toBinding exprTypeSystemDefinition,
-      toBinding exprTypeSystemDefinitionOrExtension,
-      toBinding withDescription]
+      toTermDefinition exprDefinition,
+      toTermDefinition exprDescription,
+      toTermDefinition exprDocument,
+      toTermDefinition exprEnumTypeDefinition,
+      toTermDefinition exprEnumValue,
+      toTermDefinition exprEnumValueDefinition,
+      toTermDefinition exprFieldDefinition,
+      toTermDefinition exprListType,
+      toTermDefinition exprName,
+      toTermDefinition exprNamedType,
+      toTermDefinition exprNonNullType,
+      toTermDefinition exprObjectTypeDefinition,
+      toTermDefinition exprType,
+      toTermDefinition exprTypeDefinition,
+      toTermDefinition exprTypeSystemDefinition,
+      toTermDefinition exprTypeSystemDefinitionOrExtension,
+      toTermDefinition withDescription]
 
 
 exprDefinition :: TBinding (G.Definition -> Expr)

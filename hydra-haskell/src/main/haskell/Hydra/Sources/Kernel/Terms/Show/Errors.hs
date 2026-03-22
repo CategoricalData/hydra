@@ -72,21 +72,21 @@ module_ = Module ns elements
     Just "String representations of hydra.error types"
   where
    elements = [
-     toBinding checkingError,
-     toBinding decodingError,
-     toBinding error_,
-     toBinding incorrectUnificationError,
-     toBinding notAForallTypeError,
-     toBinding notAFunctionTypeError,
-     toBinding otherError,
-     toBinding typeArityMismatchError,
-     toBinding typeMismatchError,
-     toBinding unboundTypeVariablesError,
-     toBinding unequalTypesError,
-     toBinding unificationError,
-     toBinding unsupportedTermVariantError,
-     toBinding untypedLambdaError,
-     toBinding untypedLetBindingError]
+     toTermDefinition checkingError,
+     toTermDefinition decodingError,
+     toTermDefinition error_,
+     toTermDefinition incorrectUnificationError,
+     toTermDefinition notAForallTypeError,
+     toTermDefinition notAFunctionTypeError,
+     toTermDefinition otherError,
+     toTermDefinition typeArityMismatchError,
+     toTermDefinition typeMismatchError,
+     toTermDefinition unboundTypeVariablesError,
+     toTermDefinition unequalTypesError,
+     toTermDefinition unificationError,
+     toTermDefinition unsupportedTermVariantError,
+     toTermDefinition untypedLambdaError,
+     toTermDefinition untypedLetBindingError]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

@@ -100,24 +100,24 @@ module_ = Module ns elements
   where
     ns = Namespace "hydra.json.parser"
     elements = [
-      toBinding whitespace,
-      toBinding token,
-      toBinding jsonNull,
-      toBinding jsonBool,
-      toBinding digit,
-      toBinding digits,
-      toBinding jsonIntegerPart,
-      toBinding jsonFractionPart,
-      toBinding jsonExponentPart,
-      toBinding jsonNumber,
-      toBinding jsonEscapeChar,
-      toBinding jsonStringChar,
-      toBinding jsonString,
-      toBinding jsonArray,
-      toBinding jsonKeyValue,
-      toBinding jsonObject,
-      toBinding jsonValue,
-      toBinding parseJson]
+      toTermDefinition whitespace,
+      toTermDefinition token,
+      toTermDefinition jsonNull,
+      toTermDefinition jsonBool,
+      toTermDefinition digit,
+      toTermDefinition digits,
+      toTermDefinition jsonIntegerPart,
+      toTermDefinition jsonFractionPart,
+      toTermDefinition jsonExponentPart,
+      toTermDefinition jsonNumber,
+      toTermDefinition jsonEscapeChar,
+      toTermDefinition jsonStringChar,
+      toTermDefinition jsonString,
+      toTermDefinition jsonArray,
+      toTermDefinition jsonKeyValue,
+      toTermDefinition jsonObject,
+      toTermDefinition jsonValue,
+      toTermDefinition parseJson]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

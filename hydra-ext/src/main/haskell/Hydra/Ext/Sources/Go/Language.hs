@@ -88,7 +88,7 @@ define = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.go.language")
-  [toBinding goLanguage, toBinding goReservedWords]
+  [toTermDefinition goLanguage, toTermDefinition goReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Go 1.22+"

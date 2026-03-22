@@ -71,18 +71,18 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of List functions for the Hydra interpreter.")
   where
     elements = [
-      toBinding apply_,
-      toBinding bind_,
-      toBinding dropWhile_,
-      toBinding filter_,
-      toBinding find_,
-      toBinding foldl_,
-      toBinding foldr_,
-      toBinding map_,
-      toBinding partition_,
-      toBinding sortOn_,
-      toBinding span_,
-      toBinding zipWith_]
+      toTermDefinition apply_,
+      toTermDefinition bind_,
+      toTermDefinition dropWhile_,
+      toTermDefinition filter_,
+      toTermDefinition find_,
+      toTermDefinition foldl_,
+      toTermDefinition foldr_,
+      toTermDefinition map_,
+      toTermDefinition partition_,
+      toTermDefinition sortOn_,
+      toTermDefinition span_,
+      toTermDefinition zipWith_]
 
 -- | Interpreter-friendly applicative apply for List terms.
 -- Applies each function in funsTerm to each argument in argsTerm.

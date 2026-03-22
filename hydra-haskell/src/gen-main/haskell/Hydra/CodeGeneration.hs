@@ -46,18 +46,20 @@ import qualified Data.Set as S
 namespaceToPath :: Module__.Namespace -> String
 namespaceToPath ns = Strings.intercalate "/" (Strings.splitOn "." (Module__.unNamespace ns))
 
--- | Strip TypeSchemes from term bindings in a module, preserving type binding TypeSchemes. JSON-loaded modules carry inferred TypeSchemes from the original compilation. After adaptation (e.g., bigfloat -> float64), these TypeSchemes become stale and can cause inference errors. Stripping them allows the inference engine to reconstruct correct TypeSchemes from scratch.
+-- | Strip TypeSchemes from term definitions in a module, preserving type definitions. JSON-loaded modules carry inferred TypeSchemes from the original compilation. After adaptation (e.g., bigfloat -> float64), these TypeSchemes become stale and can cause inference errors. Stripping them allows the inference engine to reconstruct correct TypeSchemes from scratch.
 stripModuleTypeSchemes :: Module__.Module -> Module__.Module
 stripModuleTypeSchemes m =
 
-      let stripIfTerm =
-              \b -> Logic.ifElse (Annotations.isNativeType b) b (Core.Binding {
-                Core.bindingName = (Core.bindingName b),
-                Core.bindingTerm = (Core.bindingTerm b),
-                Core.bindingType = Nothing})
+      let stripDef =
+              \d -> case d of
+                Module__.DefinitionTerm v0 -> Module__.DefinitionTerm (Module__.TermDefinition {
+                  Module__.termDefinitionName = (Module__.termDefinitionName v0),
+                  Module__.termDefinitionTerm = (Module__.termDefinitionTerm v0),
+                  Module__.termDefinitionType = Nothing})
+                _ -> d
       in Module__.Module {
         Module__.moduleNamespace = (Module__.moduleNamespace m),
-        Module__.moduleElements = (Lists.map stripIfTerm (Module__.moduleElements m)),
+        Module__.moduleDefinitions = (Lists.map stripDef (Module__.moduleDefinitions m)),
         Module__.moduleTermDependencies = (Module__.moduleTermDependencies m),
         Module__.moduleTypeDependencies = (Module__.moduleTypeDependencies m),
         Module__.moduleDescription = (Module__.moduleDescription m)}
@@ -101,9 +103,16 @@ modulesToGraph bsGraph universeModules modules =
           schemaModules = moduleTypeDepsTransitive universe modules
           dataModules = moduleTermDepsTransitive universe modules
           schemaElements =
-                  Lists.filter (\e -> Annotations.isNativeType e) (Lists.concat (Lists.map (\m -> Module__.moduleElements m) (Lists.concat2 schemaModules modules)))
+                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                    Module__.DefinitionType v0 -> Just (Annotations.typeElement (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
+                    _ -> Nothing) (Module__.moduleDefinitions m))) (Lists.concat2 schemaModules modules))
           dataElements =
-                  Lists.filter (\e -> Logic.not (Annotations.isNativeType e)) (Lists.concat (Lists.map (\m -> Module__.moduleElements m) dataModules))
+                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                    Module__.DefinitionTerm v0 -> Just (Core.Binding {
+                      Core.bindingName = (Module__.termDefinitionName v0),
+                      Core.bindingTerm = (Module__.termDefinitionTerm v0),
+                      Core.bindingType = (Module__.termDefinitionType v0)})
+                    _ -> Nothing) (Module__.moduleDefinitions m))) dataModules)
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
           schemaTypes =
                   Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment Lexical.emptyContext schemaGraph)
@@ -117,22 +126,34 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
               Maps.fromList (Lists.map (\m -> (Module__.moduleNamespace m, m)) (Lists.concat2 universeModules modsToGenerate))
           constraints = Coders.languageConstraints lang
           isTypeModule =
-                  \mod -> Logic.not (Lists.null (Lists.filter (\e -> Annotations.isNativeType e) (Module__.moduleElements mod)))
+                  \mod -> Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
+                    Module__.DefinitionType v0 -> Just (Annotations.typeElement (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
+                    _ -> Nothing) (Module__.moduleDefinitions mod))))
           partitioned = Lists.partition isTypeModule modsToGenerate
           typeModulesToGenerate = Pairs.first partitioned
           termModulesToGenerate = Pairs.second partitioned
           schemaMods = moduleTypeDepsTransitive namespaceMap modsToGenerate
           schemaElements =
-                  Lists.filter (\e -> Annotations.isNativeType e) (Lists.concat (Lists.map (\m -> Module__.moduleElements m) (Lists.concat2 schemaMods typeModulesToGenerate)))
+                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                    Module__.DefinitionType v0 -> Just (Annotations.typeElement (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
+                    _ -> Nothing) (Module__.moduleDefinitions m))) (Lists.concat2 schemaMods typeModulesToGenerate))
           dataMods = moduleTermDepsTransitive namespaceMap modsToGenerate
-          dataElements = Lists.concat (Lists.map (\m -> Module__.moduleElements m) dataMods)
+          dataElements =
+                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                    Module__.DefinitionTerm v0 -> Just (Core.Binding {
+                      Core.bindingName = (Module__.termDefinitionName v0),
+                      Core.bindingTerm = (Module__.termDefinitionTerm v0),
+                      Core.bindingType = (Module__.termDefinitionType v0)})
+                    _ -> Nothing) (Module__.moduleDefinitions m))) dataMods)
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
           schemaTypes2 =
                   Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment Lexical.emptyContext schemaGraph)
           dataGraph = Lexical.elementsToGraph bsGraph schemaTypes2 dataElements
       in (Eithers.bind (Logic.ifElse (Lists.null typeModulesToGenerate) (Right []) (
         let nameLists =
-                Lists.map (\m -> Lists.map (\e -> Core.bindingName e) (Lists.filter (\e -> Annotations.isNativeType e) (Module__.moduleElements m))) typeModulesToGenerate
+                Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                  Module__.DefinitionType v0 -> Just (Module__.typeDefinitionName v0)
+                  _ -> Nothing) (Module__.moduleDefinitions m))) typeModulesToGenerate
         in (Eithers.bind (Eithers.bimap (\s -> Context.InContext {
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError s)),
           Context.inContextContext = cx}) (\r -> r) (Adapt.schemaGraphToDefinitions constraints schemaGraph nameLists cx)) (\schemaResult ->
@@ -157,10 +178,17 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
           Context.inContextContext = cx}) (\r -> r) (Adapt.dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataElements dataGraph namespaces cx)) (\dataResult ->
           let g1 = Pairs.first dataResult
               defLists = Pairs.second dataResult
+              defName =
+                      \d -> case d of
+                        Module__.DefinitionTerm v0 -> Module__.termDefinitionName v0
+                        Module__.DefinitionType v0 -> Module__.typeDefinitionName v0
               refreshModule =
                       \els -> \m -> Module__.Module {
                         Module__.moduleNamespace = (Module__.moduleNamespace m),
-                        Module__.moduleElements = (Maybes.cat (Lists.map (\e -> Lists.find (\b -> Equality.equal (Core.bindingName b) (Core.bindingName e)) els) (Module__.moduleElements m))),
+                        Module__.moduleDefinitions = (Maybes.cat (Lists.map (\d -> Maybes.map (\b -> Module__.DefinitionTerm (Module__.TermDefinition {
+                          Module__.termDefinitionName = (Core.bindingName b),
+                          Module__.termDefinitionTerm = (Core.bindingTerm b),
+                          Module__.termDefinitionType = (Core.bindingType b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (defName d)) els)) (Module__.moduleDefinitions m))),
                         Module__.moduleTermDependencies = (Module__.moduleTermDependencies m),
                         Module__.moduleTypeDependencies = (Module__.moduleTypeDependencies m),
                         Module__.moduleDescription = (Module__.moduleDescription m)}
@@ -203,15 +231,15 @@ moduleToSourceModule m =
       let sourceNs =
               Module__.Namespace (Strings.cat2 "hydra.sources." (Strings.intercalate "." (Lists.drop 1 (Strings.splitOn "." (Module__.unNamespace (Module__.moduleNamespace m))))))
           modTypeNs = Module__.Namespace "hydra.module"
-          moduleBinding =
-                  Core.Binding {
-                    Core.bindingName = (Core.Name (Strings.cat2 (Module__.unNamespace sourceNs) ".module_")),
-                    Core.bindingTerm = (Module_.module_ m),
-                    Core.bindingType = Nothing}
+          moduleDef =
+                  Module__.DefinitionTerm (Module__.TermDefinition {
+                    Module__.termDefinitionName = (Core.Name (Strings.cat2 (Module__.unNamespace sourceNs) ".module_")),
+                    Module__.termDefinitionTerm = (Module_.module_ m),
+                    Module__.termDefinitionType = Nothing})
       in Module__.Module {
         Module__.moduleNamespace = sourceNs,
-        Module__.moduleElements = [
-          moduleBinding],
+        Module__.moduleDefinitions = [
+          moduleDef],
         Module__.moduleTermDependencies = [
           modTypeNs],
         Module__.moduleTypeDependencies = [
@@ -248,17 +276,34 @@ inferModules cx bsGraph universeMods targetMods =
 
       let g0 = modulesToGraph bsGraph universeMods universeMods
           dataElements =
-                  Lists.filter (\e -> Logic.not (Annotations.isNativeType e)) (Lists.concat (Lists.map (\m -> Module__.moduleElements m) universeMods))
+                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                    Module__.DefinitionTerm v0 -> Just (Core.Binding {
+                      Core.bindingName = (Module__.termDefinitionName v0),
+                      Core.bindingTerm = (Module__.termDefinitionTerm v0),
+                      Core.bindingType = (Module__.termDefinitionType v0)})
+                    _ -> Nothing) (Module__.moduleDefinitions m))) universeMods)
       in (Eithers.bind (Inference.inferGraphTypes cx dataElements g0) (\inferResultWithCx ->
         let inferResult = Pairs.first inferResultWithCx
             g1 = Pairs.first inferResult
             inferredElements = Pairs.second inferResult
-            isTypeModule =
-                    \mod -> Lists.null (Lists.filter (\e -> Logic.not (Annotations.isNativeType e)) (Module__.moduleElements mod))
+            isTypeOnlyModule =
+                    \mod -> Logic.not (Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
+                      Module__.DefinitionTerm v0 -> Just (Core.Binding {
+                        Core.bindingName = (Module__.termDefinitionName v0),
+                        Core.bindingTerm = (Module__.termDefinitionTerm v0),
+                        Core.bindingType = (Module__.termDefinitionType v0)})
+                      _ -> Nothing) (Module__.moduleDefinitions mod)))))
+            defName =
+                    \d -> case d of
+                      Module__.DefinitionTerm v0 -> Module__.termDefinitionName v0
+                      Module__.DefinitionType v0 -> Module__.typeDefinitionName v0
             refreshModule =
-                    \m -> Logic.ifElse (isTypeModule m) m (Module__.Module {
+                    \m -> Logic.ifElse (isTypeOnlyModule m) m (Module__.Module {
                       Module__.moduleNamespace = (Module__.moduleNamespace m),
-                      Module__.moduleElements = (Maybes.cat (Lists.map (\e -> Lists.find (\b -> Equality.equal (Core.bindingName b) (Core.bindingName e)) inferredElements) (Module__.moduleElements m))),
+                      Module__.moduleDefinitions = (Maybes.cat (Lists.map (\d -> Maybes.map (\b -> Module__.DefinitionTerm (Module__.TermDefinition {
+                        Module__.termDefinitionName = (Core.bindingName b),
+                        Module__.termDefinitionTerm = (Core.bindingTerm b),
+                        Module__.termDefinitionType = (Core.bindingType b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (defName d)) inferredElements)) (Module__.moduleDefinitions m))),
                       Module__.moduleTermDependencies = (Module__.moduleTermDependencies m),
                       Module__.moduleTypeDependencies = (Module__.moduleTypeDependencies m),
                       Module__.moduleDescription = (Module__.moduleDescription m)})
@@ -272,9 +317,16 @@ generateCoderModules codec bsGraph universeModules typeModules cx =
           schemaModules = moduleTypeDepsTransitive universe universeModules
           dataModules = moduleTermDepsTransitive universe universeModules
           schemaElements =
-                  Lists.filter (\e -> Annotations.isNativeType e) (Lists.concat (Lists.map (\m -> Module__.moduleElements m) (Lists.concat2 schemaModules universeModules)))
+                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                    Module__.DefinitionType v0 -> Just (Annotations.typeElement (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
+                    _ -> Nothing) (Module__.moduleDefinitions m))) (Lists.concat2 schemaModules universeModules))
           dataElements =
-                  Lists.filter (\e -> Logic.not (Annotations.isNativeType e)) (Lists.concat (Lists.map (\m -> Module__.moduleElements m) dataModules))
+                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                    Module__.DefinitionTerm v0 -> Just (Core.Binding {
+                      Core.bindingName = (Module__.termDefinitionName v0),
+                      Core.bindingTerm = (Module__.termDefinitionTerm v0),
+                      Core.bindingType = (Module__.termDefinitionType v0)})
+                    _ -> Nothing) (Module__.moduleDefinitions m))) dataModules)
           schemaGraph = Lexical.elementsToGraph bsGraph Maps.empty schemaElements
           schemaTypes =
                   Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment Lexical.emptyContext schemaGraph)
@@ -288,7 +340,12 @@ inferAndGenerateLexicon cx bsGraph kernelModules =
 
       let g0 = modulesToGraph bsGraph kernelModules kernelModules
           dataElements =
-                  Lists.filter (\e -> Logic.not (Annotations.isNativeType e)) (Lists.concat (Lists.map (\m -> Module__.moduleElements m) kernelModules))
+                  Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
+                    Module__.DefinitionTerm v0 -> Just (Core.Binding {
+                      Core.bindingName = (Module__.termDefinitionName v0),
+                      Core.bindingTerm = (Module__.termDefinitionTerm v0),
+                      Core.bindingType = (Module__.termDefinitionType v0)})
+                    _ -> Nothing) (Module__.moduleDefinitions m))) kernelModules)
       in (Eithers.bind (Eithers.bimap (\ic -> Errors_.error (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx dataElements g0)) (\inferResultWithCx ->
         let g1 = Pairs.first (Pairs.first inferResultWithCx)
         in (Eithers.bimap Errors.unDecodingError (\x -> x) (generateLexicon g1))))

@@ -64,26 +64,26 @@ module_ = Module ns elements
     Just "General-purpose parser combinators"
   where
    elements = [
-     toBinding alt,
-     toBinding anyChar,
-     toBinding apply,
-     toBinding between,
-     toBinding bind,
-     toBinding char,
-     toBinding choice,
-     toBinding eof,
-     toBinding fail,
-     toBinding lazy,
-     toBinding many,
-     toBinding map,
-     toBinding optional,
-     toBinding pure,
-     toBinding runParser,
-     toBinding satisfy,
-     toBinding sepBy,
-     toBinding sepBy1,
-     toBinding some,
-     toBinding string_]
+     toTermDefinition alt,
+     toTermDefinition anyChar,
+     toTermDefinition apply,
+     toTermDefinition between,
+     toTermDefinition bind,
+     toTermDefinition char,
+     toTermDefinition choice,
+     toTermDefinition eof,
+     toTermDefinition fail,
+     toTermDefinition lazy,
+     toTermDefinition many,
+     toTermDefinition map,
+     toTermDefinition optional,
+     toTermDefinition pure,
+     toTermDefinition runParser,
+     toTermDefinition satisfy,
+     toTermDefinition sepBy,
+     toTermDefinition sepBy1,
+     toTermDefinition some,
+     toTermDefinition string_]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

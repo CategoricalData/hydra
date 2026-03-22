@@ -66,12 +66,12 @@ module_ = Module ns elements
     Just "Functions dealing with arguments and arity."
   where
     elements = [
-      toBinding functionArity,
-      toBinding primitiveArity,
-      toBinding termArity,
-      toBinding typeArity,
-      toBinding typeSchemeArity,
-      toBinding uncurryType]
+      toTermDefinition functionArity,
+      toTermDefinition primitiveArity,
+      toTermDefinition termArity,
+      toTermDefinition typeArity,
+      toTermDefinition typeSchemeArity,
+      toTermDefinition uncurryType]
 
 functionArity :: TBinding (Function -> Int)
 functionArity = define "functionArity" $

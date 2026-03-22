@@ -100,10 +100,10 @@ module_ = Module ns elements
     Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling."
   where
     elements = [
-      toBinding toJson,
-      toBinding encodeLiteral,
-      toBinding encodeFloat,
-      toBinding encodeInteger]
+      toTermDefinition toJson,
+      toTermDefinition encodeLiteral,
+      toTermDefinition encodeFloat,
+      toTermDefinition encodeInteger]
 
 -- | Encode a Term to a JSON Value.
 -- Returns Left with an error message for unsupported term constructs.

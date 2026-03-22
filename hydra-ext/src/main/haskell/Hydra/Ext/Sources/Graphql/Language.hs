@@ -88,7 +88,7 @@ graphqlLanguageDefinition = definitionInModule graphqlLanguageModule
 
 graphqlLanguageModule :: Module
 graphqlLanguageModule = Module (Namespace "hydra.ext.graphql.language")
-  [toBinding graphqlLanguage, toBinding graphqlReservedWords]
+  [toTermDefinition graphqlLanguage, toTermDefinition graphqlReservedWords]
   [Lexical.ns, Rewriting.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for GraphQL"

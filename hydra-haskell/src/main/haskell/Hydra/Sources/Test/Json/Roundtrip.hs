@@ -33,7 +33,7 @@ module_ = Module ns elements
     (Just "Round-trip test cases for JSON encoding and decoding")
   where
     elements = [
-        Phantoms.toBinding allTests]
+        Phantoms.toTermDefinition allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

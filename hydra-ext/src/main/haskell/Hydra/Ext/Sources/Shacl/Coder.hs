@@ -105,22 +105,22 @@ module_ = Module ns elements
     Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions"
   where
     elements = [
-      toBinding err,
-      toBinding unexpectedE,
-      toBinding shaclCoder,
-      toBinding common,
-      toBinding defaultCommonProperties,
-      toBinding elementIri,
-      toBinding encodeField,
-      toBinding encodeFieldType,
-      toBinding encodeLiteralType,
-      toBinding encodeTerm,
-      toBinding encodeList,
-      toBinding foldAccumResult,
-      toBinding encodeType,
-      toBinding node,
-      toBinding property,
-      toBinding withType]
+      toTermDefinition err,
+      toTermDefinition unexpectedE,
+      toTermDefinition shaclCoder,
+      toTermDefinition common,
+      toTermDefinition defaultCommonProperties,
+      toTermDefinition elementIri,
+      toTermDefinition encodeField,
+      toTermDefinition encodeFieldType,
+      toTermDefinition encodeLiteralType,
+      toTermDefinition encodeTerm,
+      toTermDefinition encodeList,
+      toTermDefinition foldAccumResult,
+      toTermDefinition encodeType,
+      toTermDefinition node,
+      toTermDefinition property,
+      toTermDefinition withType]
 
 
 -- | Construct a Left (InContext Error) error
@@ -146,7 +146,11 @@ shaclCoder :: TBinding (Module -> Context -> Graph -> Either (InContext Error) (
 shaclCoder = define "shaclCoder" $
   doc "Encode a module's type elements as a SHACL ShapesGraph" $
   lambda "mod" $ lambda "cx" $ lambda "g" $ lets [
-    "typeEls">: Lists.filter (asTerm Annotations.isNativeType) (Module.moduleElements (var "mod")),
+    "typeEls">: Maybes.cat (Lists.map
+      ("d" ~> cases _Definition (var "d") (Just nothing) [
+        _Definition_type>>: "td" ~>
+          just (Annotations.typeElement @@ (Module.typeDefinitionName $ var "td") @@ (Module.typeDefinitionType $ var "td"))])
+      (Module.moduleDefinitions (var "mod"))),
     "toShape">: lambda "el" $
       Eithers.bind
         (Eithers.bimap

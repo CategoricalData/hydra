@@ -69,21 +69,21 @@ module_ = Module ns elements
     Just ("Variable substitution in type and term expressions.")
   where
    elements = [
-     toBinding composeTypeSubst,
-     toBinding composeTypeSubstNonEmpty,
-     toBinding composeTypeSubstList,
-     toBinding idTypeSubst,
-     toBinding singletonTypeSubst,
-     toBinding substituteInBinding,
-     toBinding substituteInConstraint,
-     toBinding substituteInConstraints,
-     toBinding substInClassConstraints,
-     toBinding substInContext,
-     toBinding substituteInTerm,
-     toBinding substInType,
-     toBinding substInTypeNonEmpty,
-     toBinding substInTypeScheme,
-     toBinding substTypesInTerm]
+     toTermDefinition composeTypeSubst,
+     toTermDefinition composeTypeSubstNonEmpty,
+     toTermDefinition composeTypeSubstList,
+     toTermDefinition idTypeSubst,
+     toTermDefinition singletonTypeSubst,
+     toTermDefinition substituteInBinding,
+     toTermDefinition substituteInConstraint,
+     toTermDefinition substituteInConstraints,
+     toTermDefinition substInClassConstraints,
+     toTermDefinition substInContext,
+     toTermDefinition substituteInTerm,
+     toTermDefinition substInType,
+     toTermDefinition substInTypeNonEmpty,
+     toTermDefinition substInTypeScheme,
+     toTermDefinition substTypesInTerm]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

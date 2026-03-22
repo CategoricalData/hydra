@@ -88,7 +88,7 @@ javaLanguageDefinition = definitionInModule module_
 
 module_ :: Module
 module_ = Module (Namespace "hydra.ext.java.language")
-  [toBinding javaMaxTupleLength, toBinding javaLanguage, toBinding reservedWords]
+  [toTermDefinition javaMaxTupleLength, toTermDefinition javaLanguage, toTermDefinition reservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Java"

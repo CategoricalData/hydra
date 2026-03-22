@@ -17,7 +17,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Core.ns, Typing.ns, Variants.ns] [Core.ns, Typing.ns, Variants.ns] $
+module_ = Module ns (map toTypeDef elements) [Core.ns, Typing.ns, Variants.ns] [Core.ns, Typing.ns, Variants.ns] $
     Just "Error types for type checking"
   where
     elements = [

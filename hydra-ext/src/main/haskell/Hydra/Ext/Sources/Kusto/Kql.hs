@@ -23,7 +23,7 @@ kql :: String -> Type
 kql = typeref ns
 
 module_ :: Module
-module_ = Module ns elements [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
     Just ("A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative.")
   where
     elements = [

@@ -16,7 +16,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
     Just "A model for language-agnostic graph pattern queries"
   where
     elements = [

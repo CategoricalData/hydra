@@ -139,59 +139,59 @@ module_ = Module ns elements
     Just ("Various functions for dereferencing and decoding schema types.")
   where
     elements = [
-      toBinding addNamesToNamespaces,
-      toBinding definitionDependencyNamespaces,
-      toBinding dependencyNamespaces,
-      toBinding dereferenceType,
-      toBinding elementAsTypeApplicationTerm,
-      toBinding elementsWithDependencies,
-      toBinding fieldMap,
-      toBinding fieldTypeMap,
-      toBinding fieldTypes,
-      toBinding findFieldType,
-      toBinding freshName,
-      toBinding freshNames,
-      toBinding fTypeIsPolymorphic,
-      toBinding fullyStripAndNormalizeType,
-      toBinding fullyStripType,
-      toBinding graphAsLet,
-      toBinding graphAsTerm,
-      toBinding graphAsTypes,
-      toBinding instantiateType,
-      toBinding instantiateTypeScheme,
-      toBinding isEncodedTerm,
-      toBinding isEncodedType,
-      toBinding isEnumRowType,
-      toBinding isEnumType,
-      toBinding isSerializable,
-      toBinding isSerializableType,
-      toBinding isSerializableByName,
-      toBinding isNominalType,
-      toBinding isType,
-      toBinding isUnitTerm,
-      toBinding isUnitType,
-      toBinding moduleContainsBinaryLiterals,
-      toBinding moduleDependencyNamespaces,
-      toBinding namespacesForDefinitions,
-      toBinding nominalApplication,
-      toBinding normalTypeVariable,
-      toBinding partitionDefinitions,
-      toBinding requireRecordType,
-      toBinding requireRowType,
-      toBinding requireSchemaType,
-      toBinding requireType,
-      toBinding requireUnionField_,
-      toBinding requireUnionType,
-      toBinding resolveType,
-      toBinding schemaGraphToTypingEnvironment,
-      toBinding termAsBindings,
-      toBinding topologicalSortTypeDefinitions,
-      toBinding typeDependencies,
-      toBinding typeToTypeScheme,
-      toBinding typesToElements,
-      toBinding withLambdaContext,
-      toBinding withLetContext,
-      toBinding withTypeLambdaContext]
+      toTermDefinition addNamesToNamespaces,
+      toTermDefinition definitionDependencyNamespaces,
+      toTermDefinition dependencyNamespaces,
+      toTermDefinition dereferenceType,
+      toTermDefinition elementAsTypeApplicationTerm,
+      toTermDefinition elementsWithDependencies,
+      toTermDefinition fieldMap,
+      toTermDefinition fieldTypeMap,
+      toTermDefinition fieldTypes,
+      toTermDefinition findFieldType,
+      toTermDefinition freshName,
+      toTermDefinition freshNames,
+      toTermDefinition fTypeIsPolymorphic,
+      toTermDefinition fullyStripAndNormalizeType,
+      toTermDefinition fullyStripType,
+      toTermDefinition graphAsLet,
+      toTermDefinition graphAsTerm,
+      toTermDefinition graphAsTypes,
+      toTermDefinition instantiateType,
+      toTermDefinition instantiateTypeScheme,
+      toTermDefinition isEncodedTerm,
+      toTermDefinition isEncodedType,
+      toTermDefinition isEnumRowType,
+      toTermDefinition isEnumType,
+      toTermDefinition isSerializable,
+      toTermDefinition isSerializableType,
+      toTermDefinition isSerializableByName,
+      toTermDefinition isNominalType,
+      toTermDefinition isType,
+      toTermDefinition isUnitTerm,
+      toTermDefinition isUnitType,
+      toTermDefinition moduleContainsBinaryLiterals,
+      toTermDefinition moduleDependencyNamespaces,
+      toTermDefinition namespacesForDefinitions,
+      toTermDefinition nominalApplication,
+      toTermDefinition normalTypeVariable,
+      toTermDefinition partitionDefinitions,
+      toTermDefinition requireRecordType,
+      toTermDefinition requireRowType,
+      toTermDefinition requireSchemaType,
+      toTermDefinition requireType,
+      toTermDefinition requireUnionField_,
+      toTermDefinition requireUnionType,
+      toTermDefinition resolveType,
+      toTermDefinition schemaGraphToTypingEnvironment,
+      toTermDefinition termAsBindings,
+      toTermDefinition topologicalSortTypeDefinitions,
+      toTermDefinition typeDependencies,
+      toTermDefinition typeToTypeScheme,
+      toTermDefinition typesToElements,
+      toTermDefinition withLambdaContext,
+      toTermDefinition withLetContext,
+      toTermDefinition withTypeLambdaContext]
 
 addNamesToNamespaces :: TBinding ((Namespace -> a) -> S.Set Name -> Namespaces a -> Namespaces a)
 addNamesToNamespaces = define "addNamesToNamespaces" $
@@ -554,19 +554,31 @@ moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
           _Literal_binary>>: constant true]]) $
   "termContainsBinary" <~ ("term" ~>
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "checkTerm" @@ false @@ var "term") $
+  "defTerms" <~ Maybes.cat (Lists.map
+    ("d" ~> cases _Definition (var "d") (Just nothing) [
+      _Definition_term>>: "td" ~> just (Module.termDefinitionTerm $ var "td")])
+    (Module.moduleDefinitions (var "mod"))) $
   Lists.foldl
-    ("acc" ~> "el" ~> Logic.or (var "acc") (var "termContainsBinary" @@ Core.bindingTerm (var "el")))
+    ("acc" ~> "t" ~> Logic.or (var "acc") (var "termContainsBinary" @@ var "t"))
     false
-    (Module.moduleElements (var "mod"))
+    (var "defTerms")
 
 moduleDependencyNamespaces :: TBinding (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> Module -> Either (InContext Error) (S.Set Namespace))
 moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
   doc "Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "mod" ~>
+  "allBindings" <~ Maybes.cat (Lists.map
+    ("d" ~> cases _Definition (var "d") (Just nothing) [
+      _Definition_type>>: "td" ~>
+        just (Annotations.typeElement @@ (Module.typeDefinitionName $ var "td") @@ (Module.typeDefinitionType $ var "td")),
+      _Definition_term>>: "td" ~>
+        just (Core.binding (Module.termDefinitionName $ var "td") (Module.termDefinitionTerm $ var "td")
+          (Module.termDefinitionType $ var "td"))])
+    (Module.moduleDefinitions (var "mod"))) $
   Eithers.map
     ("deps" ~> Sets.delete (Module.moduleNamespace (var "mod")) (var "deps"))
     (dependencyNamespaces @@ var "cx" @@ var "graph" @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "withSchema" @@
-      Module.moduleElements (var "mod"))
+      (var "allBindings"))
 
 namespacesForDefinitions :: TBinding ((Namespace -> a) -> Namespace -> [Definition] -> Namespaces a)
 namespacesForDefinitions = define "namespacesForDefinitions" $

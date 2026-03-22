@@ -16,7 +16,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
     Just "Variant types which describe the structure of Hydra core types and terms."
   where
     elements = [

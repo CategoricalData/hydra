@@ -72,7 +72,7 @@ module_ = Module ns elements namespaces kernelTypesNamespaces $
     Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
       <> " the criterion for a true Hydra implementation is that all test cases pass.")
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
     namespaces = fst <$> testPairs
 
 allTests :: TBinding TestGroup

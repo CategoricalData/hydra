@@ -270,7 +270,7 @@ main = do
               in not (isPrefixOf "hydra.ext." ns) && not (isPrefixOf "hydra.json.yaml." ns)) allMods
         else allMods
   let filtered2 = if optTypesOnly opts
-        then Prelude.filter (\m -> any isNativeType (moduleElements m)) filtered1
+        then Prelude.filter (\m -> any isNativeType (moduleBindings m)) filtered1
         else filtered1
   let allMainMods = filtered2
 

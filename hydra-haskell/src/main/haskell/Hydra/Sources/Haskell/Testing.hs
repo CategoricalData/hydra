@@ -114,30 +114,30 @@ module_ = Module ns elements
     Just "Haskell test code generation codec for HSpec-based generation tests"
   where
     elements = [
-      toBinding termToHaskell,
-      toBinding typeToHaskell,
-      toBinding haskellTestCodec,
-      toBinding haskellTestCaseTemplate,
-      toBinding haskellTestGroupTemplate,
-      toBinding haskellModuleTemplate,
-      toBinding haskellImportTemplate,
-      toBinding findHaskellImports,
-      toBinding namespaceToModuleName,
-      toBinding generateTestGroupHierarchy,
-      toBinding generateTestCaseWithCodec,
-      toBinding indentContinuationLines,
-      toBinding generateTypeAnnotationFor,
-      toBinding tryInferTypeOf,
-      toBinding containsTriviallyPolymorphic,
-      toBinding buildTestModuleWithCodec,
-      toBinding generateTestFileWithCodec,
-      toBinding extractEncodedTermVariableNames,
-      toBinding collectNames,
-      toBinding addNamespacesToNamespaces,
-      toBinding generateHaskellTestFile,
-      toBinding buildNamespacesForTestGroup,
-      toBinding collectTestCases,
-      toBinding extractTestTerms]
+      toTermDefinition termToHaskell,
+      toTermDefinition typeToHaskell,
+      toTermDefinition haskellTestCodec,
+      toTermDefinition haskellTestCaseTemplate,
+      toTermDefinition haskellTestGroupTemplate,
+      toTermDefinition haskellModuleTemplate,
+      toTermDefinition haskellImportTemplate,
+      toTermDefinition findHaskellImports,
+      toTermDefinition namespaceToModuleName,
+      toTermDefinition generateTestGroupHierarchy,
+      toTermDefinition generateTestCaseWithCodec,
+      toTermDefinition indentContinuationLines,
+      toTermDefinition generateTypeAnnotationFor,
+      toTermDefinition tryInferTypeOf,
+      toTermDefinition containsTriviallyPolymorphic,
+      toTermDefinition buildTestModuleWithCodec,
+      toTermDefinition generateTestFileWithCodec,
+      toTermDefinition extractEncodedTermVariableNames,
+      toTermDefinition collectNames,
+      toTermDefinition addNamespacesToNamespaces,
+      toTermDefinition generateHaskellTestFile,
+      toTermDefinition buildNamespacesForTestGroup,
+      toTermDefinition collectTestCases,
+      toTermDefinition extractTestTerms]
 
 
 -- | Convert a Hydra term to a Haskell expression string
@@ -534,7 +534,10 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
       (var "testTerms"),
     "tempModule">: record _Module [
       _Module_namespace>>: Module.moduleNamespace (var "mod"),
-      _Module_elements>>: var "testBindings",
+      _Module_definitions>>: Lists.map ("b" ~> Module.definitionTerm (Module.termDefinition
+        (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+        (Core.bindingType $ var "b")))
+        (var "testBindings"),
       _Module_termDependencies>>: project _Module _Module_termDependencies @@ var "mod",
       _Module_typeDependencies>>: project _Module _Module_typeDependencies @@ var "mod",
       _Module_description>>: project _Module _Module_description @@ var "mod"]] $

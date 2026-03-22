@@ -88,7 +88,7 @@ csharpLanguageDefinition = definitionInModule csharpLanguageModule
 
 csharpLanguageModule :: Module
 csharpLanguageModule = Module (Namespace "hydra.ext.csharp.language")
-  [toBinding csharpLanguage, toBinding csharpReservedWords]
+  [toTermDefinition csharpLanguage, toTermDefinition csharpReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for C Sharp (C#)"

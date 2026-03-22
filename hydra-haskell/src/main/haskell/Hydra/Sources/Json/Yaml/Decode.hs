@@ -103,8 +103,8 @@ module_ = Module ns elements
     Just "YAML-to-JSON decoding. Converts YAML Nodes to JSON Values (may fail for non-JSON YAML), and YAML Nodes to Hydra Terms via JSON."
   where
     elements = [
-      toBinding yamlToJson,
-      toBinding fromYaml]
+      toTermDefinition yamlToJson,
+      toTermDefinition fromYaml]
 
 -- | Convert a YAML Node to a JSON Value. Fails if the YAML uses non-JSON features
 -- (e.g. non-string mapping keys, integer scalars without a JSON number equivalent).

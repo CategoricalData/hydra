@@ -38,13 +38,13 @@ module_ = Module ns elements
     (Just "Test cases for AST serialization")
   where
     elements = [
-      Phantoms.toBinding arrowOp,
-      Phantoms.toBinding gtOp,
-      Phantoms.toBinding plusOp,
-      Phantoms.toBinding multOp,
-      Phantoms.toBinding lambdaOp,
-      Phantoms.toBinding caseOp,
-      Phantoms.toBinding allTests]
+      Phantoms.toTermDefinition arrowOp,
+      Phantoms.toTermDefinition gtOp,
+      Phantoms.toTermDefinition plusOp,
+      Phantoms.toTermDefinition multOp,
+      Phantoms.toTermDefinition lambdaOp,
+      Phantoms.toTermDefinition caseOp,
+      Phantoms.toTermDefinition allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

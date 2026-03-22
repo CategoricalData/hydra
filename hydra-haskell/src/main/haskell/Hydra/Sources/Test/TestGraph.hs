@@ -42,10 +42,10 @@ module_ = Module ns elements
     Just ("A module defining the graph used in the test suite.")
   where
    elements = [
-     Phantoms.toBinding testTerms,
-     Phantoms.toBinding testTypes,
-     Phantoms.toBinding testNamespace,
-     Phantoms.toBinding testSchemaNamespace]
+     Phantoms.toTermDefinition testTerms,
+     Phantoms.toTermDefinition testTypes,
+     Phantoms.toTermDefinition testNamespace,
+     Phantoms.toTermDefinition testSchemaNamespace]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

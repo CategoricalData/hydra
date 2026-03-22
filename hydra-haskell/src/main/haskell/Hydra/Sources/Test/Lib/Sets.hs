@@ -26,7 +26,7 @@ module_ :: Module
 module_ = Module ns elements [] [] $
     Just "Test cases for hydra.lib.sets primitives"
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
 
 emptyStringSet = intSet []
 intSetOrEmpty = intSet

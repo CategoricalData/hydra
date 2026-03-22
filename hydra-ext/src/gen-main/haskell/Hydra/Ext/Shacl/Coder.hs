@@ -5,6 +5,7 @@
 module Hydra.Ext.Shacl.Coder where
 
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Module.Compat as Compat
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
@@ -53,7 +54,7 @@ unexpectedE cx expected found =
 shaclCoder :: Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Model.ShapesGraph, Context.Context)
 shaclCoder mod cx g =
 
-      let typeEls = Lists.filter Annotations.isNativeType (Module.moduleElements mod)
+      let typeEls = Lists.filter Annotations.isNativeType (Compat.moduleBindings mod)
           toShape =
                   \el -> Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
                     Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),

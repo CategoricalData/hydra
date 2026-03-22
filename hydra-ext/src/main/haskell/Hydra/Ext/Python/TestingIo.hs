@@ -193,7 +193,7 @@ namespacesForPythonModule mod graph = do
   where
     bindingToDefinition :: Binding -> Maybe Definition
     bindingToDefinition (Binding name term mts) = case mts of
-      Just ts -> Just $ DefinitionTerm $ TermDefinition name term ts
+      Just ts -> Just $ DefinitionTerm $ TermDefinition name term (Just ts)
       Nothing -> Nothing  -- Skip bindings without type info
 
 -- | Convert namespace to Python module name
@@ -305,7 +305,7 @@ generatePythonTestFile testModule testGroup g = do
       let testCases = collectTestCases tgroup
           testTerms = concatMap extractTestTerms testCases
           testBindings = zipWith (\i term -> Binding (Name $ "_test_" ++ show i) term Nothing) ([0..] :: [Integer]) testTerms
-          tempModule = mod { moduleElements = testBindings }
+          tempModule = mod { moduleDefinitions = map bindingToDefinition testBindings }
       namespacesForPythonModule tempModule graph
     extractTestTerms (TestCaseWithMetadata _ tcase _ _) = case tcase of
       TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> [input, output]

@@ -36,7 +36,7 @@ v3 :: String -> Type
 v3 = typeref $ PgModel.ns
 
 module_ :: Module
-module_ = Module ns elements
+module_ = Module ns (map toTypeDef elements)
     [PgModel.ns, Core.ns, Util.ns] [Core.ns] $
     Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"
   where

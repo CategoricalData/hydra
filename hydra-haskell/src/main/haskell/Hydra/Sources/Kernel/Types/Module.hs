@@ -17,7 +17,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Graph.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [Graph.ns] [Core.ns] $
     Just "A model for Hydra namespaces and modules"
   where
     elements = [
@@ -68,9 +68,9 @@ module' = define "Module" $
     "namespace">:
       doc "A common prefix for all element names in the module"
       namespace,
-    "elements">:
-      doc "The elements defined in this module" $
-      T.list Core.binding,
+    "definitions">:
+      doc "The definitions in this module" $
+      T.list definition,
     "termDependencies">:
       doc "Any modules which the term expressions of this module directly depend upon" $
       T.list namespace,
@@ -119,8 +119,8 @@ termDefinition = define "TermDefinition" $
       doc "The term being defined"
       Core.term,
     "type">:
-      doc "The type scheme of the term, including any class constraints"
-      Core.typeScheme]
+      doc "The type scheme of the term, including any class constraints" $
+      T.maybe Core.typeScheme]
 
 typeDefinition :: Binding
 typeDefinition = define "TypeDefinition" $

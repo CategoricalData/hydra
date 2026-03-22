@@ -28,10 +28,10 @@ module_ = Module ns elements
     (Just "Term definitions for the test suite")
   where
     elements = [
-      Phantoms.toBinding latlonRecord,
-      Phantoms.toBinding testDataArthur,
-      Phantoms.toBinding testElementArthur,
-      Phantoms.toBinding testElementFirstName]
+      Phantoms.toTermDefinition latlonRecord,
+      Phantoms.toTermDefinition testDataArthur,
+      Phantoms.toTermDefinition testElementArthur,
+      Phantoms.toTermDefinition testElementFirstName]
 
 defineTerm :: String -> TTerm a -> TBinding a
 defineTerm = definitionInModule module_

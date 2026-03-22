@@ -47,8 +47,8 @@ module_ x =
           Core.fieldName = (Core.Name "namespace"),
           Core.fieldTerm = (namespace (Module.moduleNamespace x))},
         Core.Field {
-          Core.fieldName = (Core.Name "elements"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.binding xs)) (Module.moduleElements x))},
+          Core.fieldName = (Core.Name "definitions"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map definition xs)) (Module.moduleDefinitions x))},
         Core.Field {
           Core.fieldName = (Core.Name "termDependencies"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map namespace xs)) (Module.moduleTermDependencies x))},
@@ -102,7 +102,7 @@ termDefinition x =
           Core.fieldTerm = (Core_.term (Module.termDefinitionTerm x))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core_.typeScheme (Module.termDefinitionType x))}]})
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Core_.typeScheme opt)) (Module.termDefinitionType x))}]})
 
 typeDefinition :: Module.TypeDefinition -> Core.Term
 typeDefinition x =

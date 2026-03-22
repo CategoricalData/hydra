@@ -24,7 +24,7 @@ parquet = typeref ns
 
 -- Note: deprecated and trivial/empty type definitions are excluded from this model
 module_ :: Module
-module_ = Module ns elements [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
     Just ("A model for the Parquet format. Based on the Thrift-based specification at:\n" ++
       "  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift")
   where

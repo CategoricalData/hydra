@@ -28,7 +28,7 @@ module_ :: Module
 module_ = Module ns elements [] [] $
     Just "Test cases for hydra.lib.literals primitives"
   where
-    elements = [Phantoms.toBinding allTests]
+    elements = [Phantoms.toTermDefinition allTests]
 
 -- Test groups for hydra.lib.literals primitives
 -- Note: Testing a representative subset of the many literal conversion functions

@@ -64,10 +64,10 @@ module_ = Module ns elements
     Just "Conversion functions for literal values."
   where
    elements = [
-     toBinding bigfloatToFloatValue,
-     toBinding bigintToIntegerValue,
-     toBinding floatValueToBigfloat,
-     toBinding integerValueToBigint]
+     toTermDefinition bigfloatToFloatValue,
+     toTermDefinition bigintToIntegerValue,
+     toTermDefinition floatValueToBigfloat,
+     toTermDefinition integerValueToBigint]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

@@ -1,44 +1,45 @@
 {
-  "description": ["Hydra's type checking test suite"],
-  "elements": [
+  "definitions": [
     {
-      "name": "hydra.test.checking.all.allTests",
       "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {"literal": {"string": "The group of all type checking tests"}}}],
-          "body": {
-            "record": {
-              "fields": [
-                {"name": "name", "term": {"literal": {"string": "checking"}}},
-                {
-                  "name": "description",
-                  "term": {
-                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
-                {
-                  "name": "subgroups",
-                  "term": {
-                    "list": [
-                      {"variable": "hydra.test.checking.advanced.allTests"},
-                      {"variable": "hydra.test.checking.algebraicTypes.allTests"},
-                      {"variable": "hydra.test.checking.collections.allTests"},
-                      {"variable": "hydra.test.checking.failures.allTests"},
-                      {"variable": "hydra.test.checking.fundamentals.allTests"},
-                      {"variable": "hydra.test.checking.nominalTypes.allTests"}]}},
-                {
-                  "name": "cases",
-                  "term": {
-                    "typeApplication": {
-                      "body": {"list": []},
-                      "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-              "typeName": "hydra.testing.TestGroup"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.testing.TestGroup"},
-          "variables": []}]}],
+        "name": "hydra.test.checking.all.allTests",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {"literal": {"string": "The group of all type checking tests"}}}],
+            "body": {
+              "record": {
+                "fields": [
+                  {"name": "name", "term": {"literal": {"string": "checking"}}},
+                  {
+                    "name": "description",
+                    "term": {
+                      "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "subgroups",
+                    "term": {
+                      "list": [
+                        {"variable": "hydra.test.checking.advanced.allTests"},
+                        {"variable": "hydra.test.checking.algebraicTypes.allTests"},
+                        {"variable": "hydra.test.checking.collections.allTests"},
+                        {"variable": "hydra.test.checking.failures.allTests"},
+                        {"variable": "hydra.test.checking.fundamentals.allTests"},
+                        {"variable": "hydra.test.checking.nominalTypes.allTests"}]}},
+                  {
+                    "name": "cases",
+                    "term": {
+                      "typeApplication": {
+                        "body": {"list": []},
+                        "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+                "typeName": "hydra.testing.TestGroup"}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {"variable": "hydra.testing.TestGroup"},
+            "variables": []}]}}],
+  "description": ["Hydra's type checking test suite"],
   "namespace": "hydra.test.checking.all",
   "termDependencies": [
     "hydra.test.checking.advanced",

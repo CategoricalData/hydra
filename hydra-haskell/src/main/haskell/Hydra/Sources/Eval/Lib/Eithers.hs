@@ -68,14 +68,14 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Either functions for the Hydra interpreter.")
   where
     elements = [
-      toBinding bind_,
-      toBinding bimap_,
-      toBinding either_,
-      toBinding foldl_,
-      toBinding map_,
-      toBinding mapList_,
-      toBinding mapMaybe_,
-      toBinding mapSet_]
+      toTermDefinition bind_,
+      toTermDefinition bimap_,
+      toTermDefinition either_,
+      toTermDefinition foldl_,
+      toTermDefinition map_,
+      toTermDefinition mapList_,
+      toTermDefinition mapMaybe_,
+      toTermDefinition mapSet_]
 
 -- | Interpreter-friendly bind for Either terms.
 -- Takes an Either term and a function term, applies the function to the Right

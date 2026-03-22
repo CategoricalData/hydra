@@ -28,8 +28,8 @@ module_ = Module ns elements
     (Just "Test cases for string formatting and case conversion")
   where
     elements = [
-      Phantoms.toBinding allTests,
-      Phantoms.toBinding caseConversionTests]
+      Phantoms.toTermDefinition allTests,
+      Phantoms.toTermDefinition caseConversionTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

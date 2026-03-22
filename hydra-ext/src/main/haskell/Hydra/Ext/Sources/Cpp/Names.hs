@@ -109,23 +109,23 @@ module_ = Module ns elements
     Just "C++ naming utilities: encoding Hydra names as C++ names"
   where
     elements = [
-      toBinding className,
-      toBinding createTypeReference,
-      toBinding encodeEnumValue,
-      toBinding encodeFieldName,
-      toBinding encodeName,
-      toBinding encodeNameQualified,
-      toBinding encodeNamespace,
-      toBinding encodeTypeVariable,
-      toBinding fwdHeaderName,
-      toBinding namespaceDecl,
-      toBinding partialVisitorName,
-      toBinding sanitizeCppName,
-      toBinding termVariableReference,
-      toBinding typeVariableReference,
-      toBinding variableReference,
-      toBinding variantName,
-      toBinding visitorName]
+      toTermDefinition className,
+      toTermDefinition createTypeReference,
+      toTermDefinition encodeEnumValue,
+      toTermDefinition encodeFieldName,
+      toTermDefinition encodeName,
+      toTermDefinition encodeNameQualified,
+      toTermDefinition encodeNamespace,
+      toTermDefinition encodeTypeVariable,
+      toTermDefinition fwdHeaderName,
+      toTermDefinition namespaceDecl,
+      toTermDefinition partialVisitorName,
+      toTermDefinition sanitizeCppName,
+      toTermDefinition termVariableReference,
+      toTermDefinition typeVariableReference,
+      toTermDefinition variableReference,
+      toTermDefinition variantName,
+      toTermDefinition visitorName]
 
 -- | Get the C++ class name from a Hydra Name
 className :: TBinding (Name -> String)

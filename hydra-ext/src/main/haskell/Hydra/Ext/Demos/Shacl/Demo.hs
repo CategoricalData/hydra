@@ -15,6 +15,7 @@ module Hydra.Ext.Demos.Shacl.Demo where
 import Hydra.Kernel
 import Hydra.Generation (modulesToGraph, loadModulesFromJson, readManifestField)
 import Hydra.Sources.All (kernelModules)
+import Hydra.Module.Compat (moduleBindings)
 
 import qualified Hydra.Ext.Shacl.Coder as ShaclCoder
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
@@ -61,7 +62,7 @@ runDemo jsonDir outDir = do
   -- Step 2: Generate SHACL shapes from kernel type elements, skipping unsupported types
   putStrLn "Step 2: Generating SHACL shapes from kernel type modules..."
   startTime <- getCPUTime
-  let allTypeEls = concatMap (\m -> filter isNativeType (moduleElements m)) kernelModules
+  let allTypeEls = concatMap (\m -> filter isNativeType (moduleBindings m)) kernelModules
   let (shapes, nSkipped) = encodeShapes cx graph allTypeEls
   let allTriples = shapesGraphToTriples shapes
   let shapesNt = triplesToNtriples allTriples
@@ -156,10 +157,11 @@ encodeModulesAsRdf cx graph mods = go cx mods [] 0
 -- (namespace, element names, type schemes, dependencies, description) while
 -- avoiding unsupported term variants (functions, type applications, etc.).
 simplifyModule :: Module -> Module
-simplifyModule m = m { moduleElements = map simplifyBinding (moduleElements m) }
+simplifyModule m = m { moduleDefinitions = map simplifyDef (moduleDefinitions m) }
   where
-    simplifyBinding b = b {
-      bindingTerm = TermLiteral (LiteralString (unName (bindingName b))) }
+    simplifyDef (DefinitionTerm td) = DefinitionTerm $ td {
+      termDefinitionTerm = TermLiteral (LiteralString (unName (termDefinitionName td))) }
+    simplifyDef d = d
 
 -- | Try to encode a term as RDF, catching both Either errors and exceptions.
 tryEncode :: Rdf.Resource -> Term -> Context.Context -> Graph

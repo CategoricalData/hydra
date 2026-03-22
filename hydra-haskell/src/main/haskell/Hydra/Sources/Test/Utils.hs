@@ -105,9 +105,9 @@ module_ = Module ns elements
     Just "Shared utility functions for test code generation codecs"
   where
     elements = [
-      toBinding inferTestGroupTerms,
-      toBinding inferTestCase,
-      toBinding inferTerm]
+      toTermDefinition inferTestGroupTerms,
+      toTermDefinition inferTestCase,
+      toTermDefinition inferTerm]
 
 
 -- | Run type inference on all terms in a TestGroup

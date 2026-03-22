@@ -105,23 +105,23 @@ module_ = Module ns elements
     Just "Utilities for working with Haskell syntax trees"
   where
     elements = [
-      toBinding applicationPattern,
-      toBinding elementReference,
-      toBinding hsapp,
-      toBinding hslambda,
-      toBinding hslit,
-      toBinding hsvar,
-      toBinding namespacesForModule,
-      toBinding newtypeAccessorName,
-      toBinding rawName,
-      toBinding recordFieldReference,
-      toBinding sanitizeHaskellName,
-      toBinding simpleName,
-      toBinding simpleValueBinding,
-      toBinding toTypeApplication,
-      toBinding typeNameForRecord,
-      toBinding unionFieldReference,
-      toBinding unpackForallType]
+      toTermDefinition applicationPattern,
+      toTermDefinition elementReference,
+      toTermDefinition hsapp,
+      toTermDefinition hslambda,
+      toTermDefinition hslit,
+      toTermDefinition hsvar,
+      toTermDefinition namespacesForModule,
+      toTermDefinition newtypeAccessorName,
+      toTermDefinition rawName,
+      toTermDefinition recordFieldReference,
+      toTermDefinition sanitizeHaskellName,
+      toTermDefinition simpleName,
+      toTermDefinition simpleValueBinding,
+      toTermDefinition toTypeApplication,
+      toTermDefinition typeNameForRecord,
+      toTermDefinition unionFieldReference,
+      toTermDefinition unpackForallType]
 
 applicationPattern :: TBinding (H.Name -> [H.Pattern] -> H.Pattern)
 applicationPattern = haskellUtilsDefinition "applicationPattern" $

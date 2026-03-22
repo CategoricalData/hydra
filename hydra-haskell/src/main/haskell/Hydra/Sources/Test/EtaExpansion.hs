@@ -28,7 +28,7 @@ module_ = Module ns elements
     (Just "Test cases for eta expansion of terms")
   where
     elements = [
-      Phantoms.toBinding allTests]
+      Phantoms.toTermDefinition allTests]
 
 define :: String -> TTerm a -> TBinding a
 define = Phantoms.definitionInModule module_

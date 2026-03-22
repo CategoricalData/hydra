@@ -37,22 +37,22 @@ module_ = Module ns elements
     Just "Native YAML serialization: YAML Node to String"
   where
     elements = [
-      toBinding hydraYamlToString,
-      toBinding writeNode,
-      toBinding writeScalar,
-      toBinding writeString,
-      toBinding writeSequenceItem,
-      toBinding writeMappingEntry,
-      toBinding writeMappingEntryInline,
-      toBinding writeNodeInline,
-      toBinding indentString,
-      toBinding needsQuoting,
-      toBinding looksLikeNumber,
-      toBinding isDecimalString,
-      toBinding hasLeadingTrailingSpace,
-      toBinding escapeSingleQuotes,
-      toBinding yamlReservedWords,
-      toBinding yamlSpecialChars]
+      toTermDefinition hydraYamlToString,
+      toTermDefinition writeNode,
+      toTermDefinition writeScalar,
+      toTermDefinition writeString,
+      toTermDefinition writeSequenceItem,
+      toTermDefinition writeMappingEntry,
+      toTermDefinition writeMappingEntryInline,
+      toTermDefinition writeNodeInline,
+      toTermDefinition indentString,
+      toTermDefinition needsQuoting,
+      toTermDefinition looksLikeNumber,
+      toTermDefinition isDecimalString,
+      toTermDefinition hasLeadingTrailingSpace,
+      toTermDefinition escapeSingleQuotes,
+      toTermDefinition yamlReservedWords,
+      toTermDefinition yamlSpecialChars]
 
 -- | Serialize a YAML node to a string
 hydraYamlToString :: TBinding (YM.Node -> String)

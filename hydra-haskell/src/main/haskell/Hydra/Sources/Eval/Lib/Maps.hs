@@ -69,12 +69,12 @@ module_ = Module ns elements
     Just ("Evaluation-level implementations of Map functions for the Hydra interpreter.")
   where
     elements = [
-      toBinding alter_,
-      toBinding bimap_,
-      toBinding filter_,
-      toBinding filterWithKey_,
-      toBinding map_,
-      toBinding mapKeys_]
+      toTermDefinition alter_,
+      toTermDefinition bimap_,
+      toTermDefinition filter_,
+      toTermDefinition filterWithKey_,
+      toTermDefinition map_,
+      toTermDefinition mapKeys_]
 
 -- | Interpreter-friendly alter for Map terms.
 -- Applies funTerm to the current value (or Nothing) and updates accordingly.

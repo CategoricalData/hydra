@@ -104,27 +104,27 @@ module_ = Module ns elements
     Just "Java naming constants and package name utilities"
   where
     elements = [
-      toBinding acceptMethodName,
-      toBinding applyMethodName,
-      toBinding compareToMethodName,
-      toBinding equalsMethodName,
-      toBinding getMethodName,
-      toBinding hashCodeMethodName,
-      toBinding instanceName,
-      toBinding otherInstanceName,
-      toBinding otherwiseMethodName,
-      toBinding partialVisitorName,
-      toBinding setMethodName,
-      toBinding valueFieldName,
-      toBinding visitMethodName,
-      toBinding visitorName,
-      toBinding visitorReturnParameter,
-      toBinding javaPackageName,
-      toBinding hydraCorePackageName,
-      toBinding hydraUtilPackageName,
-      toBinding javaLangPackageName,
-      toBinding javaUtilFunctionPackageName,
-      toBinding javaUtilPackageName]
+      toTermDefinition acceptMethodName,
+      toTermDefinition applyMethodName,
+      toTermDefinition compareToMethodName,
+      toTermDefinition equalsMethodName,
+      toTermDefinition getMethodName,
+      toTermDefinition hashCodeMethodName,
+      toTermDefinition instanceName,
+      toTermDefinition otherInstanceName,
+      toTermDefinition otherwiseMethodName,
+      toTermDefinition partialVisitorName,
+      toTermDefinition setMethodName,
+      toTermDefinition valueFieldName,
+      toTermDefinition visitMethodName,
+      toTermDefinition visitorName,
+      toTermDefinition visitorReturnParameter,
+      toTermDefinition javaPackageName,
+      toTermDefinition hydraCorePackageName,
+      toTermDefinition hydraUtilPackageName,
+      toTermDefinition javaLangPackageName,
+      toTermDefinition javaUtilFunctionPackageName,
+      toTermDefinition javaUtilPackageName]
 
 -- String constants for Java method and field names
 

@@ -26,7 +26,7 @@ enumVal :: String -> String -> FieldType
 enumVal name desc = name>: doc desc T.unit
 
 module_ :: Module
-module_ = Module ns elements [Core.ns] [Core.ns] $
+module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
     Just ("A partial Delta Parquet model, based on DataType and its subclasses as specified in the 3.0.0 Java API:"
       ++ " https://docs.delta.io/3.0.0/api/java/kernel/io/delta/kernel/types/DataType.html")
   where

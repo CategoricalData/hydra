@@ -88,7 +88,7 @@ scalaLanguageDefinition = definitionInModule scalaLanguageModule
 
 scalaLanguageModule :: Module
 scalaLanguageModule = Module (Namespace "hydra.ext.scala.language")
-  [toBinding scalaLanguage, toBinding scalaReservedWords]
+  [toTermDefinition scalaLanguage, toTermDefinition scalaReservedWords]
   [Lexical.ns]
   KernelTypes.kernelTypesNamespaces $
   Just "Language constraints and reserved words for Scala"

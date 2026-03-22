@@ -98,21 +98,21 @@ module_ = Module ns elements
     Just "Functions for converting Hydra terms to Graphviz DOT graphs"
   where
     elements = [
-      toBinding nodeStyleSimple,
-      toBinding nodeStyleElement,
-      toBinding nodeStyleVariable,
-      toBinding nodeStylePrimitive,
-      toBinding labelAttr,
-      toBinding labelAttrs,
-      toBinding standardNamespaces,
-      toBinding toEdgeStmt,
-      toBinding toNodeId,
-      toBinding toNodeOrSubgraph,
-      toBinding termLabel,
-      toBinding termToAccessorDotStmts,
-      toBinding termToAccessorDotGraph,
-      toBinding termToDotStmts,
-      toBinding termToDotGraph]
+      toTermDefinition nodeStyleSimple,
+      toTermDefinition nodeStyleElement,
+      toTermDefinition nodeStyleVariable,
+      toTermDefinition nodeStylePrimitive,
+      toTermDefinition labelAttr,
+      toTermDefinition labelAttrs,
+      toTermDefinition standardNamespaces,
+      toTermDefinition toEdgeStmt,
+      toTermDefinition toNodeId,
+      toTermDefinition toNodeOrSubgraph,
+      toTermDefinition termLabel,
+      toTermDefinition termToAccessorDotStmts,
+      toTermDefinition termToAccessorDotGraph,
+      toTermDefinition termToDotStmts,
+      toTermDefinition termToDotGraph]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

@@ -68,26 +68,26 @@ module_ = Module ns elements
     Just ("Reflection functions for working with term, type, and literal type variants, as well as numeric precision.")
   where
     elements = [
-      toBinding eliminationVariant,
-      toBinding eliminationVariants,
-      toBinding floatTypePrecision,
-      toBinding floatTypes,
-      toBinding floatValueType,
-      toBinding functionVariant,
-      toBinding functionVariants,
-      toBinding integerTypeIsSigned,
-      toBinding integerTypePrecision,
-      toBinding integerTypes,
-      toBinding integerValueType,
-      toBinding literalType,
-      toBinding literalTypeVariant,
-      toBinding literalTypes,
-      toBinding literalVariant,
-      toBinding literalVariants,
-      toBinding termVariant,
-      toBinding termVariants,
-      toBinding typeVariant,
-      toBinding typeVariants]
+      toTermDefinition eliminationVariant,
+      toTermDefinition eliminationVariants,
+      toTermDefinition floatTypePrecision,
+      toTermDefinition floatTypes,
+      toTermDefinition floatValueType,
+      toTermDefinition functionVariant,
+      toTermDefinition functionVariants,
+      toTermDefinition integerTypeIsSigned,
+      toTermDefinition integerTypePrecision,
+      toTermDefinition integerTypes,
+      toTermDefinition integerValueType,
+      toTermDefinition literalType,
+      toTermDefinition literalTypeVariant,
+      toTermDefinition literalTypes,
+      toTermDefinition literalVariant,
+      toTermDefinition literalVariants,
+      toTermDefinition termVariant,
+      toTermDefinition termVariants,
+      toTermDefinition typeVariant,
+      toTermDefinition typeVariants]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_

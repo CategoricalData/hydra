@@ -107,10 +107,10 @@ module_ = Module ns elements
     Just "Utility functions for GraphSON encoding and property graph conversion."
   where
     elements = [
-      toBinding elementsToVerticesWithAdjacentEdges,
-      toBinding encodeStringValue,
-      toBinding encodeTermValue,
-      toBinding pgElementsToGraphson]
+      toTermDefinition elementsToVerticesWithAdjacentEdges,
+      toTermDefinition encodeStringValue,
+      toTermDefinition encodeTermValue,
+      toTermDefinition pgElementsToGraphson]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
