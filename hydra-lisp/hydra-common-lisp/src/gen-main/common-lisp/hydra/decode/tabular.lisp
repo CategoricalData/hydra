@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.tabular
-(:use :cl :hydra.core :hydra.decode.core :hydra.decode.relational :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.tabular)
+(:use :cl :hydra.core :hydra.decode.core :hydra.decode.relational :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.tabular)
 (:export :hydra_decode_tabular_column_type :hydra_decode_tabular_data_row :hydra_decode_tabular_header_row :hydra_decode_tabular_table :hydra_decode_tabular_table_type))
 
 (in-package :hydra.decode.tabular)

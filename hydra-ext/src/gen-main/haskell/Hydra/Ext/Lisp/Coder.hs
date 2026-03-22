@@ -4,6 +4,7 @@
 
 module Hydra.Ext.Lisp.Coder where
 
+import qualified Hydra.CoderUtils as CoderUtils
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Lisp.Language as Language
 import qualified Hydra.Ext.Lisp.Syntax as Syntax
@@ -540,21 +541,6 @@ encodeTermDefinition dialect cx g tdef =
           Syntax.variableDefinitionValue = sterm,
           Syntax.variableDefinitionDoc = Nothing}))))
 
-reorderDefs :: [Module.Definition] -> [Module.Definition]
-reorderDefs defs =
-
-      let partitioned = Schemas.partitionDefinitions defs
-          typeDefs = Lists.map (\td -> Module.DefinitionType td) (Pairs.first partitioned)
-          termDefsWrapped = Lists.map (\td -> Module.DefinitionTerm td) (Pairs.second partitioned)
-          sortedTermDefs =
-                  Lists.concat (Sorting.topologicalSortNodes (\d -> case d of
-                    Module.DefinitionTerm v0 -> Module.termDefinitionName v0) (\d -> case d of
-                    Module.DefinitionTerm v0 -> Sets.toList (Rewriting.freeVariablesInTerm (Module.termDefinitionTerm v0))
-                    _ -> []) termDefsWrapped)
-      in (Lists.concat [
-        typeDefs,
-        sortedTermDefs])
-
 moduleImports :: Module.Namespace -> [Module.Definition] -> [Syntax.ImportDeclaration]
 moduleImports focusNs defs =
 
@@ -595,7 +581,7 @@ moduleExports forms =
 moduleToLisp :: Syntax.Dialect -> Module.Module -> [Module.Definition] -> t0 -> t1 -> Either t2 Syntax.Program
 moduleToLisp dialect mod defs0 cx g =
 
-      let defs = reorderDefs defs0
+      let defs = CoderUtils.reorderDefs defs0
           partitioned = Schemas.partitionDefinitions defs
           allTypeDefs = Pairs.first partitioned
           termDefs = Pairs.second partitioned

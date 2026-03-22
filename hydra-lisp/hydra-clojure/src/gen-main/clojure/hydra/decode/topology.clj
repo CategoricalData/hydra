@@ -1,5 +1,5 @@
 (ns hydra.decode.topology
-  (:require [hydra.core :refer :all] [hydra.error :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.topology :refer :all]
+  (:require [hydra.core :refer :all] [hydra.errors :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.topology :refer :all]
 ))
 
 (declare hydra_decode_topology_vertex hydra_decode_topology_graph hydra_decode_topology_tarjan_state)

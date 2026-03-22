@@ -1,12 +1,12 @@
 (defpackage :hydra.ext.haskell.utils
-(:use :cl :hydra.core :hydra.ext.haskell.ast :hydra.ext.haskell.language :hydra.formatting :hydra.lib.eithers :hydra.lib.equality :hydra.lib.lists :hydra.lib.logic :hydra.lib.maps :hydra.lib.maybes :hydra.lib.pairs :hydra.lib.sets :hydra.lib.strings :hydra.module :hydra.names :hydra.rewriting :hydra.schemas)
+(:use :cl :hydra.core :hydra.ext.haskell.language :hydra.ext.haskell.syntax :hydra.formatting :hydra.lib.eithers :hydra.lib.equality :hydra.lib.lists :hydra.lib.logic :hydra.lib.maps :hydra.lib.maybes :hydra.lib.pairs :hydra.lib.sets :hydra.lib.strings :hydra.module :hydra.names :hydra.rewriting :hydra.schemas)
 (:export :hydra_ext_haskell_utils_application_pattern :hydra_ext_haskell_utils_raw_name :hydra_ext_haskell_utils_sanitize_haskell_name :hydra_ext_haskell_utils_simple_name :hydra_ext_haskell_utils_element_reference :hydra_ext_haskell_utils_hsapp :hydra_ext_haskell_utils_hslambda :hydra_ext_haskell_utils_hslit :hydra_ext_haskell_utils_hsvar :hydra_ext_haskell_utils_namespaces_for_module :hydra_ext_haskell_utils_newtype_accessor_name :hydra_ext_haskell_utils_type_name_for_record :hydra_ext_haskell_utils_record_field_reference :hydra_ext_haskell_utils_simple_value_binding :hydra_ext_haskell_utils_to_type_application :hydra_ext_haskell_utils_union_field_reference :hydra_ext_haskell_utils_unpack_forall_type))
 
 (in-package :hydra.ext.haskell.utils)
 
-(cl:defvar hydra_ext_haskell_utils_application_pattern (cl:lambda (name) (cl:lambda (args) (list :application (make-hydra_ext_haskell_ast_application_pattern name args)))))
+(cl:defvar hydra_ext_haskell_utils_application_pattern (cl:lambda (name) (cl:lambda (args) (list :application (make-hydra_ext_haskell_syntax_application_pattern name args)))))
 
-(cl:defvar hydra_ext_haskell_utils_raw_name (cl:lambda (n) (list :normal (make-hydra_ext_haskell_ast_qualified_name (cl:list) n))))
+(cl:defvar hydra_ext_haskell_utils_raw_name (cl:lambda (n) (list :normal (make-hydra_ext_haskell_syntax_qualified_name (cl:list) n))))
 
 (cl:defvar hydra_ext_haskell_utils_sanitize_haskell_name (hydra_formatting_sanitize_with_underscores hydra_ext_haskell_language_reserved_words))
 
@@ -14,9 +14,9 @@
 
 (cl:defvar hydra_ext_haskell_utils_element_reference (cl:lambda (namespaces) (cl:lambda (name) (let* ((qname (hydra_names_qualify_name name)) (local ((cl:lambda (v) (hydra_module_qualified_name-local v)) qname)) (esc_local (hydra_ext_haskell_utils_sanitize_haskell_name local)) (namespace_pair ((cl:lambda (v) (hydra_module_namespaces-focus v)) namespaces)) (gmod ((cl:lambda (v) v) (hydra_lib_pairs_second namespace_pair))) (gname (hydra_lib_pairs_first namespace_pair)) (mns ((cl:lambda (v) (hydra_module_qualified_name-namespace v)) qname)) (namespaces_map ((cl:lambda (v) (hydra_module_namespaces-mapping v)) namespaces))) (((hydra_lib_maybes_cases ((cl:lambda (v) (hydra_module_qualified_name-namespace v)) qname)) (cl:lambda () (hydra_ext_haskell_utils_simple_name local))) (cl:lambda (ns_) (((hydra_lib_maybes_cases ((hydra_lib_maps_lookup ns_) namespaces_map)) (cl:lambda () (hydra_ext_haskell_utils_simple_name local))) (cl:lambda (mn) (let ((alias_str ((cl:lambda (v) v) mn))) (if ((hydra_lib_equality_equal ns_) gname) (hydra_ext_haskell_utils_simple_name esc_local) (hydra_ext_haskell_utils_raw_name (hydra_lib_strings_cat (cl:list alias_str "." (hydra_ext_haskell_utils_sanitize_haskell_name local))))))))))))))
 
-(cl:defvar hydra_ext_haskell_utils_hsapp (cl:lambda (l) (cl:lambda (r) (list :application (make-hydra_ext_haskell_ast_application_expression l r)))))
+(cl:defvar hydra_ext_haskell_utils_hsapp (cl:lambda (l) (cl:lambda (r) (list :application (make-hydra_ext_haskell_syntax_application_expression l r)))))
 
-(cl:defvar hydra_ext_haskell_utils_hslambda (cl:lambda (name) (cl:lambda (rhs) (list :lambda (make-hydra_ext_haskell_ast_lambda_expression (cl:list (list :name name)) rhs)))))
+(cl:defvar hydra_ext_haskell_utils_hslambda (cl:lambda (name) (cl:lambda (rhs) (list :lambda (make-hydra_ext_haskell_syntax_lambda_expression (cl:list (list :name name)) rhs)))))
 
 (cl:defvar hydra_ext_haskell_utils_hslit (cl:lambda (lit) (list :literal lit)))
 
@@ -30,9 +30,9 @@
 
 (cl:defvar hydra_ext_haskell_utils_record_field_reference (cl:lambda (namespaces) (cl:lambda (sname) (cl:lambda (fname) (let* ((fname_str ((cl:lambda (v) v) fname)) (capitalized (hydra_formatting_capitalize fname_str)) (type_name_str (hydra_ext_haskell_utils_type_name_for_record sname)) (decapitalized (hydra_formatting_decapitalize type_name_str)) (nm ((hydra_lib_strings_cat2 decapitalized) capitalized)) (qname (hydra_names_qualify_name sname)) (ns_ ((cl:lambda (v) (hydra_module_qualified_name-namespace v)) qname)) (qual_name (make-hydra_module_qualified_name ns_ nm)) (unqual_name (hydra_names_unqualify_name qual_name))) ((hydra_ext_haskell_utils_element_reference namespaces) unqual_name))))))
 
-(cl:defvar hydra_ext_haskell_utils_simple_value_binding (cl:lambda (hname) (cl:lambda (rhs) (cl:lambda (bindings) (let* ((pat (list :application (make-hydra_ext_haskell_ast_application_pattern hname (cl:list)))) (right_hand_side rhs)) (list :simple (make-hydra_ext_haskell_ast_simple_value_binding pat right_hand_side bindings)))))))
+(cl:defvar hydra_ext_haskell_utils_simple_value_binding (cl:lambda (hname) (cl:lambda (rhs) (cl:lambda (bindings) (let* ((pat (list :application (make-hydra_ext_haskell_syntax_application_pattern hname (cl:list)))) (right_hand_side rhs)) (list :simple (make-hydra_ext_haskell_syntax_simple_value_binding pat right_hand_side bindings)))))))
 
-(cl:defvar hydra_ext_haskell_utils_to_type_application (cl:lambda (types) (letrec ((app (cl:lambda (l) (if ((hydra_lib_equality_gt (hydra_lib_lists_length l)) 1) (list :application (make-hydra_ext_haskell_ast_application_type (app (hydra_lib_lists_tail l)) (hydra_lib_lists_head l))) (hydra_lib_lists_head l))))) (app (hydra_lib_lists_reverse types)))))
+(cl:defvar hydra_ext_haskell_utils_to_type_application (cl:lambda (types) (letrec ((app (cl:lambda (l) (if ((hydra_lib_equality_gt (hydra_lib_lists_length l)) 1) (list :application (make-hydra_ext_haskell_syntax_application_type (app (hydra_lib_lists_tail l)) (hydra_lib_lists_head l))) (hydra_lib_lists_head l))))) (app (hydra_lib_lists_reverse types)))))
 
 (cl:defvar hydra_ext_haskell_utils_union_field_reference (cl:lambda (bound_names) (cl:lambda (namespaces) (cl:lambda (sname) (cl:lambda (fname) (letrec ((fname_str ((cl:lambda (v) v) fname)) (capitalized_field_name (hydra_formatting_capitalize fname_str)) (type_name_str (hydra_ext_haskell_utils_type_name_for_record sname)) (capitalized_type_name (hydra_formatting_capitalize type_name_str)) (qname (hydra_names_qualify_name sname)) (ns_ ((cl:lambda (v) (hydra_module_qualified_name-namespace v)) qname)) (deconflict (cl:lambda (name) (let ((tname (hydra_names_unqualify_name (make-hydra_module_qualified_name ns_ name)))) (if ((hydra_lib_sets_member tname) bound_names) (deconflict ((hydra_lib_strings_cat2 name) "_")) name)))) (nm (deconflict ((hydra_lib_strings_cat2 capitalized_type_name) capitalized_field_name))) (qual_name (make-hydra_module_qualified_name ns_ nm)) (unqual_name (hydra_names_unqualify_name qual_name))) ((hydra_ext_haskell_utils_element_reference namespaces) unqual_name)))))))
 

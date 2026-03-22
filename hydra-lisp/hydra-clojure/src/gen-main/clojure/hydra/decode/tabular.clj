@@ -1,5 +1,5 @@
 (ns hydra.decode.tabular
-  (:require [hydra.core :refer :all] [hydra.decode.core :refer :all] [hydra.decode.relational :refer :all] [hydra.error :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.tabular :refer :all]
+  (:require [hydra.core :refer :all] [hydra.decode.core :refer :all] [hydra.decode.relational :refer :all] [hydra.errors :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.tabular :refer :all]
 ))
 
 (declare hydra_decode_tabular_column_type hydra_decode_tabular_data_row hydra_decode_tabular_header_row hydra_decode_tabular_table hydra_decode_tabular_table_type)

@@ -1,5 +1,5 @@
 (ns hydra.testing
-  (:require [hydra.ast :refer :all] [hydra.coders :refer :all] [hydra.core :refer :all] [hydra.graph :refer :all] [hydra.json.model :refer :all] [hydra.module :refer :all] [hydra.parsing :refer :all] [hydra.typing :refer :all] [hydra.util :refer :all]
+  (:require [hydra.ast :refer :all] [hydra.coders :refer :all] [hydra.core :refer :all] [hydra.error.core :refer :all] [hydra.graph :refer :all] [hydra.json.model :refer :all] [hydra.module :refer :all] [hydra.parsing :refer :all] [hydra.typing :refer :all] [hydra.util :refer :all]
 ))
 
 (declare hydra_testing_evaluation_style-variants hydra_testing_fold_operation-variants hydra_testing_hoist_predicate-variants hydra_testing_term_rewriter-variants hydra_testing_type_rewriter-variants hydra_testing_test_case-variants)
@@ -92,7 +92,7 @@
 (defrecord hydra_testing_test_generator [namespaces_for_module create_codec generate_test_file aggregator_file])
 (defn make-hydra_testing_test_generator [namespaces_for_module create_codec generate_test_file aggregator_file] (->hydra_testing_test_generator namespaces_for_module create_codec generate_test_file aggregator_file))
 
-(def hydra_testing_test_case-variants (list :alpha_conversion :case_conversion :deannotate_term :deannotate_type :delegated_evaluation :eta_expansion :flatten_let_terms :free_variables :evaluation :inference :inference_failure :json_decode :json_encode :json_parser :json_roundtrip :json_writer :lift_lambda_above_let :serialization :simplify_term :topological_sort :topological_sort_bindings :topological_sort_s_c_c :type_checking :type_checking_failure :type_reduction :normalize_type_variables :fold_over_term :rewrite_term :rewrite_type :hoist_subterms :hoist_case_statements :hoist_let_bindings :hoist_polymorphic_let_bindings :subst_in_type :variable_occurs_in_type :unify_types :join_types :unshadow_variables))
+(def hydra_testing_test_case-variants (list :alpha_conversion :case_conversion :deannotate_term :deannotate_type :delegated_evaluation :eta_expansion :flatten_let_terms :free_variables :evaluation :inference :inference_failure :json_decode :json_encode :json_parser :json_roundtrip :json_writer :lift_lambda_above_let :serialization :simplify_term :topological_sort :topological_sort_bindings :topological_sort_s_c_c :type_checking :type_checking_failure :type_reduction :normalize_type_variables :fold_over_term :rewrite_term :rewrite_type :hoist_subterms :hoist_case_statements :hoist_let_bindings :hoist_polymorphic_let_bindings :subst_in_type :variable_occurs_in_type :unify_types :join_types :unshadow_variables :validate_core_term))
 
 (defrecord hydra_testing_test_case_with_metadata [name case description tags])
 (defn make-hydra_testing_test_case_with_metadata [name case description tags] (->hydra_testing_test_case_with_metadata name case description tags))
@@ -144,3 +144,6 @@
 
 (defrecord hydra_testing_join_types_test_case [left right expected])
 (defn make-hydra_testing_join_types_test_case [left right expected] (->hydra_testing_join_types_test_case left right expected))
+
+(defrecord hydra_testing_validate_core_term_test_case [input output])
+(defn make-hydra_testing_validate_core_term_test_case [input output] (->hydra_testing_validate_core_term_test_case input output))

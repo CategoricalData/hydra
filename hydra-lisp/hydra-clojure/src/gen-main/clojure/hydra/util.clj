@@ -1,5 +1,5 @@
 (ns hydra.util
-  (:require [hydra.context :refer :all] [hydra.error :refer :all]
+  (:require [hydra.context :refer :all] [hydra.errors :refer :all]
 ))
 
 (declare hydra_util_case_convention-variants hydra_util_comparison-variants hydra_util_precision-variants)

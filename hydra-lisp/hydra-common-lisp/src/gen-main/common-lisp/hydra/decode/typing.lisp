@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.typing
-(:use :cl :hydra.core :hydra.decode.context :hydra.decode.core :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.typing)
+(:use :cl :hydra.core :hydra.decode.context :hydra.decode.core :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.typing)
 (:export :hydra_decode_typing_function_structure :hydra_decode_typing_type_subst :hydra_decode_typing_inference_result :hydra_decode_typing_term_subst :hydra_decode_typing_type_constraint))
 
 (in-package :hydra.decode.typing)

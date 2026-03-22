@@ -5,7 +5,7 @@
 module Hydra.Ext.Python.Names where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Ext.Python.Helpers as Helpers
+import qualified Hydra.Ext.Python.Environment as Environment
 import qualified Hydra.Ext.Python.Language as Language
 import qualified Hydra.Ext.Python.Serde as Serde
 import qualified Hydra.Ext.Python.Syntax as Syntax
@@ -41,21 +41,21 @@ encodeConstantForTypeName :: t0 -> t1 -> Syntax.Name
 encodeConstantForTypeName env tname = Syntax.Name "TYPE_"
 
 -- | Encode a name as a Python enum value (UPPER_SNAKE case)
-encodeEnumValue :: Helpers.PythonEnvironment -> Core.Name -> Syntax.Name
+encodeEnumValue :: Environment.PythonEnvironment -> Core.Name -> Syntax.Name
 encodeEnumValue = encodeName False Util.CaseConventionUpperSnake
 
 -- | Encode a name as a Python field name (lower_snake case)
-encodeFieldName :: Helpers.PythonEnvironment -> Core.Name -> Syntax.Name
+encodeFieldName :: Environment.PythonEnvironment -> Core.Name -> Syntax.Name
 encodeFieldName env fname = encodeName False Util.CaseConventionLowerSnake env fname
 
 -- | Encode a Hydra name as a Python name
-encodeName :: Bool -> Util.CaseConvention -> Helpers.PythonEnvironment -> Core.Name -> Syntax.Name
+encodeName :: Bool -> Util.CaseConvention -> Environment.PythonEnvironment -> Core.Name -> Syntax.Name
 encodeName isQualified conv env name =
 
-      let namespaces = Helpers.pythonEnvironmentNamespaces env
+      let namespaces = Environment.pythonEnvironmentNamespaces env
           focusPair = Module.namespacesFocus namespaces
           focusNs = Pairs.first focusPair
-          boundVars = Pairs.second (Helpers.pythonEnvironmentBoundTypeVariables env)
+          boundVars = Pairs.second (Environment.pythonEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
           mns = Module.qualifiedNameNamespace qualName
           local = Module.qualifiedNameLocal qualName
@@ -65,13 +65,13 @@ encodeName isQualified conv env name =
       in (Logic.ifElse isQualified (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations pyLocal (Serde.escapePythonString True pyLocal))) (Maybes.maybe (Syntax.Name pyLocal) (\nsVal -> Syntax.Name (Strings.cat2 (pyNs nsVal) (Strings.cat2 "." pyLocal))) mns)) (\n -> n) (Maps.lookup name boundVars)) (Syntax.Name pyLocal))
 
 -- | Encode a name as a fully qualified Python name
-encodeNameQualified :: Helpers.PythonEnvironment -> Core.Name -> Syntax.Name
+encodeNameQualified :: Environment.PythonEnvironment -> Core.Name -> Syntax.Name
 encodeNameQualified env name =
 
-      let namespaces = Helpers.pythonEnvironmentNamespaces env
+      let namespaces = Environment.pythonEnvironmentNamespaces env
           focusPair = Module.namespacesFocus namespaces
           focusNs = Pairs.first focusPair
-          boundVars = Pairs.second (Helpers.pythonEnvironmentBoundTypeVariables env)
+          boundVars = Pairs.second (Environment.pythonEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
           mns = Module.qualifiedNameNamespace qualName
           local = Module.qualifiedNameLocal qualName
@@ -91,20 +91,20 @@ sanitizePythonName :: String -> String
 sanitizePythonName = Formatting.sanitizeWithUnderscores Language.pythonReservedWords
 
 -- | Reference a term variable as a Python expression
-termVariableReference :: Helpers.PythonEnvironment -> Core.Name -> Syntax.Expression
+termVariableReference :: Environment.PythonEnvironment -> Core.Name -> Syntax.Expression
 termVariableReference = variableReference Util.CaseConventionLowerSnake False
 
 -- | Reference a type variable as a Python expression
-typeVariableReference :: Helpers.PythonEnvironment -> Core.Name -> Syntax.Expression
+typeVariableReference :: Environment.PythonEnvironment -> Core.Name -> Syntax.Expression
 typeVariableReference = variableReference Util.CaseConventionPascal False
 
 -- | Generate a variant name from type name and field name
-variantName :: Bool -> Helpers.PythonEnvironment -> Core.Name -> Core.Name -> Syntax.Name
+variantName :: Bool -> Environment.PythonEnvironment -> Core.Name -> Core.Name -> Syntax.Name
 variantName isQualified env tname fname =
     encodeName isQualified Util.CaseConventionPascal env (Core.Name (Strings.cat2 (Core.unName tname) (Formatting.capitalize (Core.unName fname))))
 
 -- | Reference a variable as a Python expression
-variableReference :: Util.CaseConvention -> Bool -> Helpers.PythonEnvironment -> Core.Name -> Syntax.Expression
+variableReference :: Util.CaseConvention -> Bool -> Environment.PythonEnvironment -> Core.Name -> Syntax.Expression
 variableReference conv quoted env name =
 
       let pyName = encodeName True conv env name
@@ -130,7 +130,7 @@ variableReference conv quoted env name =
                                         Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName pyName))},
                                       Syntax.powerRhs = Nothing}))}}}}}},
                         Syntax.comparisonRhs = []})]])
-          namespaces = Helpers.pythonEnvironmentNamespaces env
+          namespaces = Environment.pythonEnvironmentNamespaces env
           focusPair = Module.namespacesFocus namespaces
           focusNs = Pairs.first focusPair
           mns = Names.namespaceOf name

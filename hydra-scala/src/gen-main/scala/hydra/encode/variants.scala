@@ -106,5 +106,7 @@ def typeVariant(v1: hydra.variants.TypeVariant): hydra.core.Term =
      hydra.core.Field("unit", hydra.core.Term.unit)))
   case hydra.variants.TypeVariant.variable => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TypeVariant",
      hydra.core.Field("variable", hydra.core.Term.unit)))
+  case hydra.variants.TypeVariant.void => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TypeVariant",
+     hydra.core.Field("void", hydra.core.Term.unit)))
   case hydra.variants.TypeVariant.wrap => hydra.core.Term.union(hydra.core.Injection("hydra.variants.TypeVariant",
      hydra.core.Field("wrap", hydra.core.Term.unit)))

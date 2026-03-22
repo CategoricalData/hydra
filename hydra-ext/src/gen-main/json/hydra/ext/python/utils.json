@@ -13,11 +13,11 @@
           "body": {
             "union": {
               "field": {"name": "python310", "term": {"unit": {}}},
-              "typeName": "hydra.ext.python.helpers.PythonVersion"}}}},
+              "typeName": "hydra.ext.python.environment.PythonVersion"}}}},
       "type": [
         {
           "constraints": null,
-          "type": {"variable": "hydra.ext.python.helpers.PythonVersion"},
+          "type": {"variable": "hydra.ext.python.environment.PythonVersion"},
           "variables": []}]},
     {
       "name": "hydra.ext.python.utils.pyNone",
@@ -5625,7 +5625,7 @@
     "hydra.serialization",
     "hydra.schemas"],
   "typeDependencies": [
-    "hydra.ext.python.helpers",
+    "hydra.ext.python.environment",
     "hydra.ext.python.syntax",
     "hydra.accessors",
     "hydra.ast",

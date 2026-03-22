@@ -5401,7 +5401,9 @@
                                                                         "function": {
                                                                           "function": {
                                                                             "elimination": {
-                                                                              "record": {"field": "packages", "typeName": "hydra.ext.java.helpers.Aliases"}}}}}},
+                                                                              "record": {
+                                                                                "field": "packages",
+                                                                                "typeName": "hydra.ext.java.environment.Aliases"}}}}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {"variable": "n"},
@@ -5557,7 +5559,7 @@
                         "parameter": "name"}}},
                   "domain": [{"literal": {"boolean": {}}}],
                   "parameter": "qualify"}}},
-            "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+            "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
             "parameter": "aliases"}}},
       "type": [
         {
@@ -5577,7 +5579,7 @@
                           "domain": {"maybe": {"literal": {"string": {}}}}}},
                       "domain": {"variable": "hydra.core.Name"}}},
                   "domain": {"literal": {"boolean": {}}}}},
-              "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+              "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.java.utils.nameToJavaClassType",
@@ -5677,7 +5679,7 @@
                         "parameter": "args"}}},
                   "domain": [{"literal": {"boolean": {}}}],
                   "parameter": "qualify"}}},
-            "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+            "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
             "parameter": "aliases"}}},
       "type": [
         {
@@ -5697,7 +5699,7 @@
                           "domain": {"variable": "hydra.core.Name"}}},
                       "domain": {"list": {"variable": "hydra.ext.java.syntax.TypeArgument"}}}},
                   "domain": {"literal": {"boolean": {}}}}},
-              "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+              "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.java.utils.nameToJavaReferenceType",
@@ -5750,7 +5752,7 @@
                         "parameter": "args"}}},
                   "domain": [{"literal": {"boolean": {}}}],
                   "parameter": "qualify"}}},
-            "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+            "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
             "parameter": "aliases"}}},
       "type": [
         {
@@ -5770,7 +5772,7 @@
                           "domain": {"variable": "hydra.core.Name"}}},
                       "domain": {"list": {"variable": "hydra.ext.java.syntax.TypeArgument"}}}},
                   "domain": {"literal": {"boolean": {}}}}},
-              "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+              "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.java.utils.nameToJavaName",
@@ -5889,7 +5891,9 @@
                                                                 "function": {
                                                                   "function": {
                                                                     "elimination": {
-                                                                      "record": {"field": "packages", "typeName": "hydra.ext.java.helpers.Aliases"}}}}}},
+                                                                      "record": {
+                                                                        "field": "packages",
+                                                                        "typeName": "hydra.ext.java.environment.Aliases"}}}}}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "gname"},
@@ -5986,7 +5990,7 @@
                                       "type": {"variable": "hydra.ext.java.syntax.Identifier"}}}}}}}}}}},
                   "domain": [{"variable": "hydra.core.Name"}],
                   "parameter": "name"}}},
-            "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+            "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
             "parameter": "aliases"}}},
       "type": [
         {
@@ -5997,7 +6001,7 @@
                 "function": {
                   "codomain": {"variable": "hydra.ext.java.syntax.Identifier"},
                   "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+              "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.java.utils.nameToJavaTypeIdentifier",
@@ -6037,7 +6041,7 @@
                         "parameter": "name"}}},
                   "domain": [{"literal": {"boolean": {}}}],
                   "parameter": "qualify"}}},
-            "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+            "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
             "parameter": "aliases"}}},
       "type": [
         {
@@ -6051,7 +6055,7 @@
                       "codomain": {"variable": "hydra.ext.java.syntax.TypeIdentifier"},
                       "domain": {"variable": "hydra.core.Name"}}},
                   "domain": {"literal": {"boolean": {}}}}},
-              "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+              "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.java.utils.javaTypeFromTypeName",
@@ -6088,7 +6092,7 @@
                       "function": {"variable": "hydra.ext.java.utils.javaTypeVariableToType"}}},
                   "domain": [{"variable": "hydra.core.Name"}],
                   "parameter": "elName"}}},
-            "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+            "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
             "parameter": "aliases"}}},
       "type": [
         {
@@ -6099,7 +6103,7 @@
                 "function": {
                   "codomain": {"variable": "hydra.ext.java.syntax.Type"},
                   "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+              "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.java.utils.javaDoubleCastExpression",
@@ -6282,7 +6286,9 @@
                                       "function": {
                                         "function": {
                                           "elimination": {
-                                            "record": {"field": "varRenames", "typeName": "hydra.ext.java.helpers.Aliases"}}}}}},
+                                            "record": {
+                                              "field": "varRenames",
+                                              "typeName": "hydra.ext.java.environment.Aliases"}}}}}},
                                   "function": {
                                     "application": {
                                       "argument": {"variable": "name"},
@@ -6302,7 +6308,7 @@
                                   "type": {"variable": "hydra.core.Name"}}}}}}}}},
                   "domain": [{"variable": "hydra.core.Name"}],
                   "parameter": "name"}}},
-            "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+            "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
             "parameter": "aliases"}}},
       "type": [
         {
@@ -6313,7 +6319,7 @@
                 "function": {
                   "codomain": {"variable": "hydra.core.Name"},
                   "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+              "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.java.utils.variantClassName",
@@ -7134,7 +7140,7 @@
                       "typeApplication": {
                         "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
                         "type": {"variable": "hydra.core.Name"}}}}],
-                "typeName": "hydra.ext.java.helpers.Aliases"}},
+                "typeName": "hydra.ext.java.environment.Aliases"}},
             "domain": [{"variable": "hydra.module.Module"}],
             "parameter": "mod"}}},
       "type": [
@@ -7142,7 +7148,7 @@
           "constraints": null,
           "type": {
             "function": {
-              "codomain": {"variable": "hydra.ext.java.helpers.Aliases"},
+              "codomain": {"variable": "hydra.ext.java.environment.Aliases"},
               "domain": {"variable": "hydra.module.Module"}}},
           "variables": []}]},
     {
@@ -7254,7 +7260,7 @@
                         "parameter": "elName"}}},
                   "domain": [{"list": {"variable": "hydra.ext.java.syntax.TypeParameter"}}],
                   "parameter": "tparams"}}},
-            "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+            "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
             "parameter": "aliases"}}},
       "type": [
         {
@@ -7281,7 +7287,7 @@
                           "domain": {"list": {"variable": "hydra.ext.java.syntax.ClassModifier"}}}},
                       "domain": {"variable": "hydra.core.Name"}}},
                   "domain": {"list": {"variable": "hydra.ext.java.syntax.TypeParameter"}}}},
-              "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+              "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.java.utils.makeConstructor",
@@ -7420,7 +7426,7 @@
                         "parameter": "private"}}},
                   "domain": [{"variable": "hydra.core.Name"}],
                   "parameter": "elName"}}},
-            "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+            "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
             "parameter": "aliases"}}},
       "type": [
         {
@@ -7440,7 +7446,7 @@
                           "domain": {"list": {"variable": "hydra.ext.java.syntax.FormalParameter"}}}},
                       "domain": {"literal": {"boolean": {}}}}},
                   "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+              "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.java.utils.toAcceptMethod",
@@ -8691,7 +8697,7 @@
                                           "elimination": {
                                             "record": {
                                               "field": "inScopeJavaVars",
-                                              "typeName": "hydra.ext.java.helpers.Aliases"}}}}}},
+                                              "typeName": "hydra.ext.java.environment.Aliases"}}}}}},
                                   "function": {
                                     "application": {
                                       "argument": {"variable": "name"},
@@ -8705,7 +8711,7 @@
                                   "type": {"variable": "hydra.core.Name"}}}}}}}}},
                   "domain": [{"variable": "hydra.core.Name"}],
                   "parameter": "name"}}},
-            "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+            "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
             "parameter": "aliases"}}},
       "type": [
         {
@@ -8716,7 +8722,7 @@
                 "function": {
                   "codomain": {"variable": "hydra.core.Name"},
                   "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+              "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.java.utils.uniqueVarName_go",
@@ -8785,7 +8791,7 @@
                                                     "elimination": {
                                                       "record": {
                                                         "field": "inScopeJavaVars",
-                                                        "typeName": "hydra.ext.java.helpers.Aliases"}}}}}},
+                                                        "typeName": "hydra.ext.java.environment.Aliases"}}}}}},
                                             "function": {
                                               "application": {
                                                 "argument": {"variable": "candidate"},
@@ -8801,7 +8807,7 @@
                         "parameter": "n"}}},
                   "domain": [{"literal": {"string": {}}}],
                   "parameter": "base"}}},
-            "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+            "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
             "parameter": "aliases"}}},
       "type": [
         {
@@ -8815,7 +8821,7 @@
                       "codomain": {"variable": "hydra.core.Name"},
                       "domain": {"literal": {"integer": {"int32": {}}}}}},
                   "domain": {"literal": {"string": {}}}}},
-              "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+              "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.java.utils.addInScopeVar",
@@ -8838,7 +8844,7 @@
                                   "elimination": {
                                     "record": {
                                       "field": "currentNamespace",
-                                      "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                      "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                         {
                           "name": "packages",
                           "term": {
@@ -8847,7 +8853,9 @@
                               "function": {
                                 "function": {
                                   "elimination": {
-                                    "record": {"field": "packages", "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                    "record": {
+                                      "field": "packages",
+                                      "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                         {
                           "name": "branchVars",
                           "term": {
@@ -8856,7 +8864,9 @@
                               "function": {
                                 "function": {
                                   "elimination": {
-                                    "record": {"field": "branchVars", "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                    "record": {
+                                      "field": "branchVars",
+                                      "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                         {
                           "name": "recursiveVars",
                           "term": {
@@ -8867,7 +8877,7 @@
                                   "elimination": {
                                     "record": {
                                       "field": "recursiveVars",
-                                      "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                      "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                         {
                           "name": "inScopeTypeParams",
                           "term": {
@@ -8878,7 +8888,7 @@
                                   "elimination": {
                                     "record": {
                                       "field": "inScopeTypeParams",
-                                      "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                      "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                         {
                           "name": "polymorphicLocals",
                           "term": {
@@ -8889,7 +8899,7 @@
                                   "elimination": {
                                     "record": {
                                       "field": "polymorphicLocals",
-                                      "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                      "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                         {
                           "name": "inScopeJavaVars",
                           "term": {
@@ -8902,7 +8912,7 @@
                                       "elimination": {
                                         "record": {
                                           "field": "inScopeJavaVars",
-                                          "typeName": "hydra.ext.java.helpers.Aliases"}}}}}},
+                                          "typeName": "hydra.ext.java.environment.Aliases"}}}}}},
                               "function": {
                                 "application": {
                                   "argument": {"variable": "name"},
@@ -8918,7 +8928,9 @@
                               "function": {
                                 "function": {
                                   "elimination": {
-                                    "record": {"field": "varRenames", "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                    "record": {
+                                      "field": "varRenames",
+                                      "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                         {
                           "name": "lambdaVars",
                           "term": {
@@ -8927,7 +8939,9 @@
                               "function": {
                                 "function": {
                                   "elimination": {
-                                    "record": {"field": "lambdaVars", "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                    "record": {
+                                      "field": "lambdaVars",
+                                      "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                         {
                           "name": "typeVarSubst",
                           "term": {
@@ -8938,7 +8952,7 @@
                                   "elimination": {
                                     "record": {
                                       "field": "typeVarSubst",
-                                      "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                      "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                         {
                           "name": "trustedTypeVars",
                           "term": {
@@ -8949,7 +8963,7 @@
                                   "elimination": {
                                     "record": {
                                       "field": "trustedTypeVars",
-                                      "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                      "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                         {
                           "name": "methodCodomain",
                           "term": {
@@ -8960,7 +8974,7 @@
                                   "elimination": {
                                     "record": {
                                       "field": "methodCodomain",
-                                      "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                      "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                         {
                           "name": "thunkedVars",
                           "term": {
@@ -8969,9 +8983,11 @@
                               "function": {
                                 "function": {
                                   "elimination": {
-                                    "record": {"field": "thunkedVars", "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}}],
-                      "typeName": "hydra.ext.java.helpers.Aliases"}},
-                  "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+                                    "record": {
+                                      "field": "thunkedVars",
+                                      "typeName": "hydra.ext.java.environment.Aliases"}}}}}}}],
+                      "typeName": "hydra.ext.java.environment.Aliases"}},
+                  "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
                   "parameter": "aliases"}}},
             "domain": [{"variable": "hydra.core.Name"}],
             "parameter": "name"}}},
@@ -8982,8 +8998,8 @@
             "function": {
               "codomain": {
                 "function": {
-                  "codomain": {"variable": "hydra.ext.java.helpers.Aliases"},
-                  "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+                  "codomain": {"variable": "hydra.ext.java.environment.Aliases"},
+                  "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
               "domain": {"variable": "hydra.core.Name"}}},
           "variables": []}]},
     {
@@ -9017,16 +9033,16 @@
                                                   "function": {"variable": "hydra.ext.java.utils.addInScopeVar"}}}}},
                                           "domain": [{"variable": "hydra.core.Name"}],
                                           "parameter": "n"}}},
-                                    "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+                                    "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
                                     "parameter": "a"}}},
                               "function": {
                                 "typeApplication": {
                                   "body": {
                                     "typeApplication": {
                                       "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
-                                      "type": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+                                      "type": {"variable": "hydra.ext.java.environment.Aliases"}}},
                                   "type": {"variable": "hydra.core.Name"}}}}}}}}},
-                  "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+                  "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
                   "parameter": "aliases"}}},
             "domain": [{"list": {"variable": "hydra.core.Name"}}],
             "parameter": "names"}}},
@@ -9037,8 +9053,8 @@
             "function": {
               "codomain": {
                 "function": {
-                  "codomain": {"variable": "hydra.ext.java.helpers.Aliases"},
-                  "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+                  "codomain": {"variable": "hydra.ext.java.environment.Aliases"},
+                  "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
               "domain": {"list": {"variable": "hydra.core.Name"}}}},
           "variables": []}]},
     {
@@ -9065,7 +9081,7 @@
                                         "elimination": {
                                           "record": {
                                             "field": "currentNamespace",
-                                            "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                            "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                               {
                                 "name": "packages",
                                 "term": {
@@ -9074,7 +9090,9 @@
                                     "function": {
                                       "function": {
                                         "elimination": {
-                                          "record": {"field": "packages", "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                          "record": {
+                                            "field": "packages",
+                                            "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                               {
                                 "name": "branchVars",
                                 "term": {
@@ -9083,7 +9101,9 @@
                                     "function": {
                                       "function": {
                                         "elimination": {
-                                          "record": {"field": "branchVars", "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                          "record": {
+                                            "field": "branchVars",
+                                            "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                               {
                                 "name": "recursiveVars",
                                 "term": {
@@ -9094,7 +9114,7 @@
                                         "elimination": {
                                           "record": {
                                             "field": "recursiveVars",
-                                            "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                            "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                               {
                                 "name": "inScopeTypeParams",
                                 "term": {
@@ -9105,7 +9125,7 @@
                                         "elimination": {
                                           "record": {
                                             "field": "inScopeTypeParams",
-                                            "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                            "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                               {
                                 "name": "polymorphicLocals",
                                 "term": {
@@ -9116,7 +9136,7 @@
                                         "elimination": {
                                           "record": {
                                             "field": "polymorphicLocals",
-                                            "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                            "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                               {
                                 "name": "inScopeJavaVars",
                                 "term": {
@@ -9127,7 +9147,7 @@
                                         "elimination": {
                                           "record": {
                                             "field": "inScopeJavaVars",
-                                            "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                            "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                               {
                                 "name": "varRenames",
                                 "term": {
@@ -9138,7 +9158,9 @@
                                         "function": {
                                           "function": {
                                             "elimination": {
-                                              "record": {"field": "varRenames", "typeName": "hydra.ext.java.helpers.Aliases"}}}}}},
+                                              "record": {
+                                                "field": "varRenames",
+                                                "typeName": "hydra.ext.java.environment.Aliases"}}}}}},
                                     "function": {
                                       "application": {
                                         "argument": {"variable": "renamed"},
@@ -9160,7 +9182,9 @@
                                     "function": {
                                       "function": {
                                         "elimination": {
-                                          "record": {"field": "lambdaVars", "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                          "record": {
+                                            "field": "lambdaVars",
+                                            "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                               {
                                 "name": "typeVarSubst",
                                 "term": {
@@ -9171,7 +9195,7 @@
                                         "elimination": {
                                           "record": {
                                             "field": "typeVarSubst",
-                                            "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                            "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                               {
                                 "name": "trustedTypeVars",
                                 "term": {
@@ -9182,7 +9206,7 @@
                                         "elimination": {
                                           "record": {
                                             "field": "trustedTypeVars",
-                                            "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                            "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                               {
                                 "name": "methodCodomain",
                                 "term": {
@@ -9193,7 +9217,7 @@
                                         "elimination": {
                                           "record": {
                                             "field": "methodCodomain",
-                                            "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}},
+                                            "typeName": "hydra.ext.java.environment.Aliases"}}}}}}},
                               {
                                 "name": "thunkedVars",
                                 "term": {
@@ -9202,9 +9226,11 @@
                                     "function": {
                                       "function": {
                                         "elimination": {
-                                          "record": {"field": "thunkedVars", "typeName": "hydra.ext.java.helpers.Aliases"}}}}}}}],
-                            "typeName": "hydra.ext.java.helpers.Aliases"}},
-                        "domain": [{"variable": "hydra.ext.java.helpers.Aliases"}],
+                                          "record": {
+                                            "field": "thunkedVars",
+                                            "typeName": "hydra.ext.java.environment.Aliases"}}}}}}}],
+                            "typeName": "hydra.ext.java.environment.Aliases"}},
+                        "domain": [{"variable": "hydra.ext.java.environment.Aliases"}],
                         "parameter": "aliases"}}},
                   "domain": [{"variable": "hydra.core.Name"}],
                   "parameter": "renamed"}}},
@@ -9219,8 +9245,8 @@
                 "function": {
                   "codomain": {
                     "function": {
-                      "codomain": {"variable": "hydra.ext.java.helpers.Aliases"},
-                      "domain": {"variable": "hydra.ext.java.helpers.Aliases"}}},
+                      "codomain": {"variable": "hydra.ext.java.environment.Aliases"},
+                      "domain": {"variable": "hydra.ext.java.environment.Aliases"}}},
                   "domain": {"variable": "hydra.core.Name"}}},
               "domain": {"variable": "hydra.core.Name"}}},
           "variables": []}]}],
@@ -9233,7 +9259,7 @@
     "hydra.names",
     "hydra.serialization"],
   "typeDependencies": [
-    "hydra.ext.java.helpers",
+    "hydra.ext.java.environment",
     "hydra.ext.java.syntax",
     "hydra.accessors",
     "hydra.ast",

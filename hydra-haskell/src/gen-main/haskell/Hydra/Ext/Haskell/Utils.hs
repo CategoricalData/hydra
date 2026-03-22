@@ -7,8 +7,8 @@ module Hydra.Ext.Haskell.Utils where
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Ext.Haskell.Ast as Ast
 import qualified Hydra.Ext.Haskell.Language as Language
+import qualified Hydra.Ext.Haskell.Syntax as Syntax
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
@@ -32,56 +32,56 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Create an application pattern from a name and argument patterns
-applicationPattern :: Ast.Name -> [Ast.Pattern] -> Ast.Pattern
+applicationPattern :: Syntax.Name -> [Syntax.Pattern] -> Syntax.Pattern
 applicationPattern name args =
-    Ast.PatternApplication (Ast.ApplicationPattern {
-      Ast.applicationPatternName = name,
-      Ast.applicationPatternArgs = args})
+    Syntax.PatternApplication (Syntax.ApplicationPattern {
+      Syntax.applicationPatternName = name,
+      Syntax.applicationPatternArgs = args})
 
 -- | Generate a Haskell name reference for a Hydra element
-elementReference :: Module.Namespaces Ast.ModuleName -> Core.Name -> Ast.Name
+elementReference :: Module.Namespaces Syntax.ModuleName -> Core.Name -> Syntax.Name
 elementReference namespaces name =
 
       let namespacePair = Module.namespacesFocus namespaces
           gname = Pairs.first namespacePair
-          gmod = Ast.unModuleName (Pairs.second namespacePair)
+          gmod = Syntax.unModuleName (Pairs.second namespacePair)
           namespacesMap = Module.namespacesMapping namespaces
           qname = Names.qualifyName name
           local = Module.qualifiedNameLocal qname
           escLocal = sanitizeHaskellName local
           mns = Module.qualifiedNameNamespace qname
       in (Maybes.cases (Module.qualifiedNameNamespace qname) (simpleName local) (\ns -> Maybes.cases (Maps.lookup ns namespacesMap) (simpleName local) (\mn ->
-        let aliasStr = Ast.unModuleName mn
+        let aliasStr = Syntax.unModuleName mn
         in (Logic.ifElse (Equality.equal ns gname) (simpleName escLocal) (rawName (Strings.cat [
           aliasStr,
           ".",
           (sanitizeHaskellName local)]))))))
 
 -- | Create a Haskell function application expression
-hsapp :: Ast.Expression -> Ast.Expression -> Ast.Expression
+hsapp :: Syntax.Expression -> Syntax.Expression -> Syntax.Expression
 hsapp l r =
-    Ast.ExpressionApplication (Ast.ApplicationExpression {
-      Ast.applicationExpressionFunction = l,
-      Ast.applicationExpressionArgument = r})
+    Syntax.ExpressionApplication (Syntax.ApplicationExpression {
+      Syntax.applicationExpressionFunction = l,
+      Syntax.applicationExpressionArgument = r})
 
 -- | Create a Haskell lambda expression
-hslambda :: Ast.Name -> Ast.Expression -> Ast.Expression
+hslambda :: Syntax.Name -> Syntax.Expression -> Syntax.Expression
 hslambda name rhs =
-    Ast.ExpressionLambda (Ast.LambdaExpression {
-      Ast.lambdaExpressionBindings = [
-        Ast.PatternName name],
-      Ast.lambdaExpressionInner = rhs})
+    Syntax.ExpressionLambda (Syntax.LambdaExpression {
+      Syntax.lambdaExpressionBindings = [
+        Syntax.PatternName name],
+      Syntax.lambdaExpressionInner = rhs})
 
 -- | Create a Haskell literal expression
-hslit :: Ast.Literal -> Ast.Expression
-hslit lit = Ast.ExpressionLiteral lit
+hslit :: Syntax.Literal -> Syntax.Expression
+hslit lit = Syntax.ExpressionLiteral lit
 
 -- | Create a Haskell variable expression from a string
-hsvar :: String -> Ast.Expression
-hsvar s = Ast.ExpressionVariable (rawName s)
+hsvar :: String -> Syntax.Expression
+hsvar s = Syntax.ExpressionVariable (rawName s)
 
 -- | Compute the Haskell module namespaces for a Hydra module
-namespacesForModule :: Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Module.Namespaces Ast.ModuleName)
+namespacesForModule :: Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Module.Namespaces Syntax.ModuleName)
 namespacesForModule mod cx g =
     Eithers.bind (Schemas.moduleDependencyNamespaces cx g True True True True mod) (\nss ->
       let ns = Module.moduleNamespace mod
@@ -91,7 +91,7 @@ namespacesForModule mod cx g =
                         parts = Strings.splitOn "." namespaceStr
                         lastPart = Lists.last parts
                         capitalized = Formatting.capitalize lastPart
-                    in (Ast.ModuleName capitalized)
+                    in (Syntax.ModuleName capitalized)
           toPair = \name -> (name, (toModuleName name))
           addPair =
                   \state -> \namePair ->
@@ -99,8 +99,8 @@ namespacesForModule mod cx g =
                         currentSet = Pairs.second state
                         name = Pairs.first namePair
                         alias = Pairs.second namePair
-                        aliasStr = Ast.unModuleName alias
-                    in (Logic.ifElse (Sets.member alias currentSet) (addPair state (name, (Ast.ModuleName (Strings.cat2 aliasStr "_")))) (Maps.insert name alias currentMap, (Sets.insert alias currentSet)))
+                        aliasStr = Syntax.unModuleName alias
+                    in (Logic.ifElse (Sets.member alias currentSet) (addPair state (name, (Syntax.ModuleName (Strings.cat2 aliasStr "_")))) (Maps.insert name alias currentMap, (Sets.insert alias currentSet)))
           focusPair = toPair ns
           nssAsList = Sets.toList nss
           nssPairs = Lists.map toPair nssAsList
@@ -116,14 +116,14 @@ newtypeAccessorName :: Core.Name -> String
 newtypeAccessorName name = Strings.cat2 "un" (Names.localNameOf name)
 
 -- | Create a raw Haskell name from a string without sanitization
-rawName :: String -> Ast.Name
+rawName :: String -> Syntax.Name
 rawName n =
-    Ast.NameNormal (Ast.QualifiedName {
-      Ast.qualifiedNameQualifiers = [],
-      Ast.qualifiedNameUnqualified = (Ast.NamePart n)})
+    Syntax.NameNormal (Syntax.QualifiedName {
+      Syntax.qualifiedNameQualifiers = [],
+      Syntax.qualifiedNameUnqualified = (Syntax.NamePart n)})
 
 -- | Generate a Haskell name for a record field accessor
-recordFieldReference :: Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Name -> Ast.Name
+recordFieldReference :: Module.Namespaces Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name
 recordFieldReference namespaces sname fname =
 
       let fnameStr = Core.unName fname
@@ -145,31 +145,31 @@ sanitizeHaskellName :: String -> String
 sanitizeHaskellName = Formatting.sanitizeWithUnderscores Language.reservedWords
 
 -- | Create a sanitized Haskell name from a string
-simpleName :: String -> Ast.Name
+simpleName :: String -> Syntax.Name
 simpleName arg_ = rawName (sanitizeHaskellName arg_)
 
 -- | Create a simple value binding (e.g., 'foo = expr' or 'foo = expr where ...')
-simpleValueBinding :: Ast.Name -> Ast.Expression -> Maybe Ast.LocalBindings -> Ast.ValueBinding
+simpleValueBinding :: Syntax.Name -> Syntax.Expression -> Maybe Syntax.LocalBindings -> Syntax.ValueBinding
 simpleValueBinding hname rhs bindings =
 
       let pat =
-              Ast.PatternApplication (Ast.ApplicationPattern {
-                Ast.applicationPatternName = hname,
-                Ast.applicationPatternArgs = []})
-          rightHandSide = Ast.RightHandSide rhs
-      in (Ast.ValueBindingSimple (Ast.SimpleValueBinding {
-        Ast.simpleValueBindingPattern = pat,
-        Ast.simpleValueBindingRhs = rightHandSide,
-        Ast.simpleValueBindingLocalBindings = bindings}))
+              Syntax.PatternApplication (Syntax.ApplicationPattern {
+                Syntax.applicationPatternName = hname,
+                Syntax.applicationPatternArgs = []})
+          rightHandSide = Syntax.RightHandSide rhs
+      in (Syntax.ValueBindingSimple (Syntax.SimpleValueBinding {
+        Syntax.simpleValueBindingPattern = pat,
+        Syntax.simpleValueBindingRhs = rightHandSide,
+        Syntax.simpleValueBindingLocalBindings = bindings}))
 
 -- | Convert a list of types into a nested type application
-toTypeApplication :: [Ast.Type] -> Ast.Type
+toTypeApplication :: [Syntax.Type] -> Syntax.Type
 toTypeApplication types =
 
       let app =
-              \l -> Logic.ifElse (Equality.gt (Lists.length l) 1) (Ast.TypeApplication (Ast.ApplicationType {
-                Ast.applicationTypeContext = (app (Lists.tail l)),
-                Ast.applicationTypeArgument = (Lists.head l)})) (Lists.head l)
+              \l -> Logic.ifElse (Equality.gt (Lists.length l) 1) (Syntax.TypeApplication (Syntax.ApplicationType {
+                Syntax.applicationTypeContext = (app (Lists.tail l)),
+                Syntax.applicationTypeArgument = (Lists.head l)})) (Lists.head l)
       in (app (Lists.reverse types))
 
 -- | Extract the local type name from a fully qualified record type name
@@ -181,7 +181,7 @@ typeNameForRecord sname =
       in (Lists.last parts)
 
 -- | Generate a Haskell name for a union variant constructor, with disambiguation
-unionFieldReference :: S.Set Core.Name -> Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Name -> Ast.Name
+unionFieldReference :: S.Set Core.Name -> Module.Namespaces Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name
 unionFieldReference boundNames namespaces sname fname =
 
       let fnameStr = Core.unName fname

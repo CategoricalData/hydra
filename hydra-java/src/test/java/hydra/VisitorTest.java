@@ -148,6 +148,11 @@ public class VisitorTest {
         public String visit(Type.Wrap instance) {
             return "wrap(" + instance.value.accept(typeToString) + ")";
         }
+
+        @Override
+        public String visit(Type.Void_ instance) {
+            return "void";
+        }
     };
 
     // Example partial visitor: check whether a type is a numeric literal type

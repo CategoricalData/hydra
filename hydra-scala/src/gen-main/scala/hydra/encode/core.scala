@@ -257,6 +257,7 @@ def `type`(v1: hydra.core.Type): hydra.core.Term =
   case hydra.core.Type.unit => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type", hydra.core.Field("unit", hydra.core.Term.unit)))
   case hydra.core.Type.variable(v_Type_variable_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("variable", hydra.encode.core.name(v_Type_variable_y))))
+  case hydra.core.Type.void => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type", hydra.core.Field("void", hydra.core.Term.unit)))
   case hydra.core.Type.wrap(v_Type_wrap_y) => hydra.core.Term.union(hydra.core.Injection("hydra.core.Type",
      hydra.core.Field("wrap", hydra.encode.core.`type`(v_Type_wrap_y))))
 

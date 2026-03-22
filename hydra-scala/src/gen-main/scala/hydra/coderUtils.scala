@@ -279,25 +279,31 @@ def nameToFilePath(nsConv: hydra.util.CaseConvention)(localConv: hydra.util.Case
   hydra.lib.strings.cat(Seq(prefix, suffix, ".", ext))
 }
 
-def unionTypeToRecordType(rt: Seq[hydra.core.FieldType]): Seq[hydra.core.FieldType] =
+def reorderDefs(defs: Seq[hydra.module.Definition]): Seq[hydra.module.Definition] =
   {
-  def makeOptional(f: hydra.core.FieldType): hydra.core.FieldType =
-    {
-    val fn: hydra.core.Name = (f.name)
-    val ft: hydra.core.Type = (f.`type`)
-    hydra.core.FieldType(fn, hydra.rewriting.mapBeneathTypeAnnotations((x: hydra.core.Type) => hydra.core.Type.maybe(x))(ft))
-  }
-  hydra.lib.lists.map[hydra.core.FieldType, hydra.core.FieldType](makeOptional)(rt)
+  val partitioned: Tuple2[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]] = hydra.schemas.partitionDefinitions(defs)
+  val typeDefs: Seq[hydra.module.Definition] = hydra.lib.lists.map[hydra.module.TypeDefinition, hydra.module.Definition]((td: hydra.module.TypeDefinition) => hydra.module.Definition.`type`(td))(hydra.lib.pairs.first[Seq[hydra.module.TypeDefinition],
+     Seq[hydra.module.TermDefinition]](partitioned))
+  val termDefsWrapped: Seq[hydra.module.Definition] = hydra.lib.lists.map[hydra.module.TermDefinition,
+     hydra.module.Definition]((td: hydra.module.TermDefinition) => hydra.module.Definition.term(td))(hydra.lib.pairs.second[Seq[hydra.module.TypeDefinition],
+     Seq[hydra.module.TermDefinition]](partitioned))
+  val sortedTermDefs: Seq[hydra.module.Definition] = hydra.lib.lists.concat[hydra.module.Definition](hydra.sorting.topologicalSortNodes((d: hydra.module.Definition) =>
+    d match
+    case hydra.module.Definition.term(v_Definition_term_td) => (v_Definition_term_td.name))((d: hydra.module.Definition) =>
+    d match
+    case hydra.module.Definition.term(v_Definition_term_td) => hydra.lib.sets.toList[hydra.core.Name](hydra.rewriting.freeVariablesInTerm(v_Definition_term_td.term))
+    case _ => Seq())(termDefsWrapped))
+  hydra.lib.lists.concat[hydra.module.Definition](Seq(typeDefs, sortedTermDefs))
 }
 
-def commentsFromElement(cx: hydra.context.Context)(g: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.error.Error],
+def commentsFromBinding(cx: hydra.context.Context)(g: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error],
    Option[scala.Predef.String]] = hydra.annotations.getTermDescription(cx)(g)(b.term)
 
-def commentsFromFieldType(cx: hydra.context.Context)(g: hydra.graph.Graph)(ft: hydra.core.FieldType): Either[hydra.context.InContext[hydra.error.Error],
+def commentsFromFieldType(cx: hydra.context.Context)(g: hydra.graph.Graph)(ft: hydra.core.FieldType): Either[hydra.context.InContext[hydra.errors.Error],
    Option[scala.Predef.String]] = hydra.annotations.getTypeDescription(cx)(g)(ft.`type`)
 
-def typeOfTerm(cx: hydra.context.Context)(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type] =
-  hydra.lib.eithers.map[Tuple2[hydra.core.Type, hydra.context.Context], hydra.core.Type, hydra.context.InContext[hydra.error.Error]](hydra.lib.pairs.first[hydra.core.Type,
+def typeOfTerm(cx: hydra.context.Context)(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Type] =
+  hydra.lib.eithers.map[Tuple2[hydra.core.Type, hydra.context.Context], hydra.core.Type, hydra.context.InContext[hydra.errors.Error]](hydra.lib.pairs.first[hydra.core.Type,
      hydra.context.Context])(hydra.checking.typeOf(cx)(g)(Seq())(term))
 
 def bindingMetadata(tc: hydra.graph.Graph)(b: hydra.core.Binding): Option[hydra.core.Term] =
@@ -317,8 +323,8 @@ def analyzeFunctionTermWith_finish[T0, T1](cx: hydra.context.Context)(getTC: (T0
   val bodyWithTapps: hydra.core.Term = hydra.lib.lists.foldl[hydra.core.Term, hydra.core.Type]((trm: hydra.core.Term) =>
     (typ: hydra.core.Type) =>
     hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(trm, typ)))(body)(tapps)
-  val mcod: Option[hydra.core.Type] = hydra.lib.eithers.either[hydra.context.InContext[hydra.error.Error],
-     hydra.core.Type, Option[hydra.core.Type]]((_x: hydra.context.InContext[hydra.error.Error]) => None)((c: hydra.core.Type) => Some(c))(hydra.coderUtils.typeOfTerm(cx)(getTC(fEnv))(bodyWithTapps))
+  val mcod: Option[hydra.core.Type] = hydra.lib.eithers.either[hydra.context.InContext[hydra.errors.Error],
+     hydra.core.Type, Option[hydra.core.Type]]((_x: hydra.context.InContext[hydra.errors.Error]) => None)((c: hydra.core.Type) => Some(c))(hydra.coderUtils.typeOfTerm(cx)(getTC(fEnv))(bodyWithTapps))
   Right(hydra.typing.FunctionStructure(hydra.lib.lists.reverse[hydra.core.Name](tparams), hydra.lib.lists.reverse[hydra.core.Name](args),
      bindings, bodyWithTapps, hydra.lib.lists.reverse[hydra.core.Type](doms), mcod, fEnv))
 }
@@ -334,7 +340,7 @@ def analyzeFunctionTermWith_gather[T0, T1](cx: hydra.context.Context)(forBinding
         {
           val body: hydra.core.Term = (v_Function_lambda_lam.body)
           {
-            val newEnv: T0 = setTC(hydra.schemas.extendGraphForLambda(getTC(gEnv))(v_Function_lambda_lam))(gEnv)
+            val newEnv: T0 = setTC(hydra.rewriting.extendGraphForLambda(getTC(gEnv))(v_Function_lambda_lam))(gEnv)
             hydra.coderUtils.analyzeFunctionTermWith_gather(cx)(forBinding)(getTC)(setTC)(argMode)(newEnv)(tparams)(hydra.lib.lists.cons[hydra.core.Name](v)(args))(bindings)(hydra.lib.lists.cons[hydra.core.Type](dom)(doms))(tapps)(body)
           }
         }
@@ -346,7 +352,7 @@ def analyzeFunctionTermWith_gather[T0, T1](cx: hydra.context.Context)(forBinding
     {
       val body: hydra.core.Term = (v_Term_let_lt.body)
       {
-        val newEnv: T0 = setTC(hydra.schemas.extendGraphForLet(forBinding)(getTC(gEnv))(v_Term_let_lt))(gEnv)
+        val newEnv: T0 = setTC(hydra.rewriting.extendGraphForLet(forBinding)(getTC(gEnv))(v_Term_let_lt))(gEnv)
         hydra.coderUtils.analyzeFunctionTermWith_gather(cx)(forBinding)(getTC)(setTC)(false)(newEnv)(tparams)(args)(hydra.lib.lists.concat2[hydra.core.Binding](bindings)(newBindings))(doms)(tapps)(body)
       }
     }
@@ -363,7 +369,7 @@ def analyzeFunctionTermWith_gather[T0, T1](cx: hydra.context.Context)(forBinding
     {
       val tlBody: hydra.core.Term = (v_Term_typeLambda_tl.body)
       {
-        val newEnv: T0 = setTC(hydra.schemas.extendGraphForTypeLambda(getTC(gEnv))(v_Term_typeLambda_tl))(gEnv)
+        val newEnv: T0 = setTC(hydra.rewriting.extendGraphForTypeLambda(getTC(gEnv))(v_Term_typeLambda_tl))(gEnv)
         hydra.coderUtils.analyzeFunctionTermWith_gather(cx)(forBinding)(getTC)(setTC)(argMode)(newEnv)(hydra.lib.lists.cons[hydra.core.Name](tvar)(tparams))(args)(bindings)(doms)(tapps)(tlBody)
       }
     }

@@ -1,5 +1,5 @@
 (ns hydra.templates
-  (:require [hydra.context :refer :all] [hydra.core :refer :all] [hydra.decode.core :refer :all] [hydra.error :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.logic :refer :all] [hydra.lib.maps :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.sets :refer :all] [hydra.lib.strings :refer :all] [hydra.show.core :refer :all]
+  (:require [hydra.context :refer :all] [hydra.core :refer :all] [hydra.decode.core :refer :all] [hydra.errors :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.logic :refer :all] [hydra.lib.maps :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.sets :refer :all] [hydra.lib.strings :refer :all] [hydra.show.core :refer :all]
 ))
 
 (declare hydra_templates_graph_to_schema hydra_templates_instantiate_template)

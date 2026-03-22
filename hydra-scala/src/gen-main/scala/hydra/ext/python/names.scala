@@ -2,7 +2,7 @@ package hydra.ext.python.names
 
 import hydra.core.*
 
-import hydra.ext.python.helpers.*
+import hydra.ext.python.environment.*
 
 import hydra.ext.python.syntax.*
 
@@ -31,13 +31,13 @@ def encodeConstantForFieldName[T0, T1](env: T0)(tname: T1)(fname: hydra.core.Nam
 
 def encodeConstantForTypeName[T0, T1](env: T0)(tname: T1): hydra.ext.python.syntax.Name = "TYPE_"
 
-def encodeEnumValue(v1: hydra.ext.python.helpers.PythonEnvironment)(v2: hydra.core.Name): hydra.ext.python.syntax.Name =
+def encodeEnumValue(v1: hydra.ext.python.environment.PythonEnvironment)(v2: hydra.core.Name): hydra.ext.python.syntax.Name =
   hydra.ext.python.names.encodeName(false)(hydra.util.CaseConvention.upperSnake)(v1)(v2)
 
-def encodeFieldName(env: hydra.ext.python.helpers.PythonEnvironment)(fname: hydra.core.Name): hydra.ext.python.syntax.Name =
+def encodeFieldName(env: hydra.ext.python.environment.PythonEnvironment)(fname: hydra.core.Name): hydra.ext.python.syntax.Name =
   hydra.ext.python.names.encodeName(false)(hydra.util.CaseConvention.lowerSnake)(env)(fname)
 
-def encodeName(isQualified: Boolean)(conv: hydra.util.CaseConvention)(env: hydra.ext.python.helpers.PythonEnvironment)(name: hydra.core.Name): hydra.ext.python.syntax.Name =
+def encodeName(isQualified: Boolean)(conv: hydra.util.CaseConvention)(env: hydra.ext.python.environment.PythonEnvironment)(name: hydra.core.Name): hydra.ext.python.syntax.Name =
   {
   val namespaces: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName] = (env.namespaces)
   val focusPair: Tuple2[hydra.module.Namespace, hydra.ext.python.syntax.DottedName] = (namespaces.focus)
@@ -58,7 +58,7 @@ def encodeName(isQualified: Boolean)(conv: hydra.util.CaseConvention)(env: hydra
        hydra.ext.python.syntax.Name](name)(boundVars)))(pyLocal)
 }
 
-def encodeNameQualified(env: hydra.ext.python.helpers.PythonEnvironment)(name: hydra.core.Name): hydra.ext.python.syntax.Name =
+def encodeNameQualified(env: hydra.ext.python.environment.PythonEnvironment)(name: hydra.core.Name): hydra.ext.python.syntax.Name =
   {
   val namespaces: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName] = (env.namespaces)
   val focusPair: Tuple2[hydra.module.Namespace, hydra.ext.python.syntax.DottedName] = (namespaces.focus)
@@ -82,16 +82,16 @@ def encodeTypeVariable(name: hydra.core.Name): hydra.ext.python.syntax.Name = hy
 def sanitizePythonName(v1: scala.Predef.String): scala.Predef.String =
   hydra.formatting.sanitizeWithUnderscores(hydra.ext.python.language.pythonReservedWords)(v1)
 
-def termVariableReference(v1: hydra.ext.python.helpers.PythonEnvironment)(v2: hydra.core.Name): hydra.ext.python.syntax.Expression =
+def termVariableReference(v1: hydra.ext.python.environment.PythonEnvironment)(v2: hydra.core.Name): hydra.ext.python.syntax.Expression =
   hydra.ext.python.names.variableReference(hydra.util.CaseConvention.lowerSnake)(false)(v1)(v2)
 
-def typeVariableReference(v1: hydra.ext.python.helpers.PythonEnvironment)(v2: hydra.core.Name): hydra.ext.python.syntax.Expression =
+def typeVariableReference(v1: hydra.ext.python.environment.PythonEnvironment)(v2: hydra.core.Name): hydra.ext.python.syntax.Expression =
   hydra.ext.python.names.variableReference(hydra.util.CaseConvention.pascal)(false)(v1)(v2)
 
-def variantName(isQualified: Boolean)(env: hydra.ext.python.helpers.PythonEnvironment)(tname: hydra.core.Name)(fname: hydra.core.Name): hydra.ext.python.syntax.Name =
+def variantName(isQualified: Boolean)(env: hydra.ext.python.environment.PythonEnvironment)(tname: hydra.core.Name)(fname: hydra.core.Name): hydra.ext.python.syntax.Name =
   hydra.ext.python.names.encodeName(isQualified)(hydra.util.CaseConvention.pascal)(env)(hydra.lib.strings.cat2(tname)(hydra.formatting.capitalize(fname)))
 
-def variableReference(conv: hydra.util.CaseConvention)(quoted: Boolean)(env: hydra.ext.python.helpers.PythonEnvironment)(name: hydra.core.Name): hydra.ext.python.syntax.Expression =
+def variableReference(conv: hydra.util.CaseConvention)(quoted: Boolean)(env: hydra.ext.python.environment.PythonEnvironment)(name: hydra.core.Name): hydra.ext.python.syntax.Expression =
   {
   val pyName: hydra.ext.python.syntax.Name = hydra.ext.python.names.encodeName(true)(conv)(env)(name)
   val unquoted: hydra.ext.python.syntax.Expression = hydra.ext.python.syntax.Expression.simple(Seq(Seq(hydra.ext.python.syntax.Inversion.simple(hydra.ext.python.syntax.Comparison(hydra.ext.python.syntax.BitwiseOr(None,

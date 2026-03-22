@@ -151,7 +151,7 @@
                 "function": {
                   "codomain": {"variable": "hydra.ext.python.syntax.Name"},
                   "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.ext.python.helpers.PythonEnvironment"}}},
+              "domain": {"variable": "hydra.ext.python.environment.PythonEnvironment"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.python.names.encodeFieldName",
@@ -186,7 +186,7 @@
                                       "function": {"variable": "hydra.ext.python.names.encodeName"}}}}}}}}},
                       "domain": [{"variable": "hydra.core.Name"}],
                       "parameter": "fname"}}},
-                "domain": [{"variable": "hydra.ext.python.helpers.PythonEnvironment"}],
+                "domain": [{"variable": "hydra.ext.python.environment.PythonEnvironment"}],
                 "parameter": "env"}}}}},
       "type": [
         {
@@ -197,7 +197,7 @@
                 "function": {
                   "codomain": {"variable": "hydra.ext.python.syntax.Name"},
                   "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.ext.python.helpers.PythonEnvironment"}}},
+              "domain": {"variable": "hydra.ext.python.environment.PythonEnvironment"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.python.names.encodeName",
@@ -232,7 +232,7 @@
                                                   "elimination": {
                                                     "record": {
                                                       "field": "namespaces",
-                                                      "typeName": "hydra.ext.python.helpers.PythonEnvironment"}}}}}},
+                                                      "typeName": "hydra.ext.python.environment.PythonEnvironment"}}}}}},
                                           "type": [
                                             {
                                               "constraints": null,
@@ -289,7 +289,7 @@
                                                       "elimination": {
                                                         "record": {
                                                           "field": "boundTypeVariables",
-                                                          "typeName": "hydra.ext.python.helpers.PythonEnvironment"}}}}}},
+                                                          "typeName": "hydra.ext.python.environment.PythonEnvironment"}}}}}},
                                               "function": {
                                                 "typeApplication": {
                                                   "body": {
@@ -556,7 +556,7 @@
                                                       "type": {"variable": "hydra.ext.python.syntax.Name"}}}}}}}}}}},
                                   "domain": [{"variable": "hydra.core.Name"}],
                                   "parameter": "name"}}},
-                            "domain": [{"variable": "hydra.ext.python.helpers.PythonEnvironment"}],
+                            "domain": [{"variable": "hydra.ext.python.environment.PythonEnvironment"}],
                             "parameter": "env"}}},
                       "domain": [{"variable": "hydra.util.CaseConvention"}],
                       "parameter": "conv"}}},
@@ -575,7 +575,7 @@
                         "function": {
                           "codomain": {"variable": "hydra.ext.python.syntax.Name"},
                           "domain": {"variable": "hydra.core.Name"}}},
-                      "domain": {"variable": "hydra.ext.python.helpers.PythonEnvironment"}}},
+                      "domain": {"variable": "hydra.ext.python.environment.PythonEnvironment"}}},
                   "domain": {"variable": "hydra.util.CaseConvention"}}},
               "domain": {"literal": {"boolean": {}}}}},
           "variables": []}]},
@@ -607,7 +607,7 @@
                                       "elimination": {
                                         "record": {
                                           "field": "namespaces",
-                                          "typeName": "hydra.ext.python.helpers.PythonEnvironment"}}}}}},
+                                          "typeName": "hydra.ext.python.environment.PythonEnvironment"}}}}}},
                               "type": [
                                 {
                                   "constraints": null,
@@ -664,7 +664,7 @@
                                           "elimination": {
                                             "record": {
                                               "field": "boundTypeVariables",
-                                              "typeName": "hydra.ext.python.helpers.PythonEnvironment"}}}}}},
+                                              "typeName": "hydra.ext.python.environment.PythonEnvironment"}}}}}},
                                   "function": {
                                     "typeApplication": {
                                       "body": {
@@ -829,7 +829,7 @@
                                           "type": {"variable": "hydra.ext.python.syntax.Name"}}}}}}}}}}},
                       "domain": [{"variable": "hydra.core.Name"}],
                       "parameter": "name"}}},
-                "domain": [{"variable": "hydra.ext.python.helpers.PythonEnvironment"}],
+                "domain": [{"variable": "hydra.ext.python.environment.PythonEnvironment"}],
                 "parameter": "env"}}}}},
       "type": [
         {
@@ -840,7 +840,7 @@
                 "function": {
                   "codomain": {"variable": "hydra.ext.python.syntax.Name"},
                   "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.ext.python.helpers.PythonEnvironment"}}},
+              "domain": {"variable": "hydra.ext.python.environment.PythonEnvironment"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.python.names.encodeNamespace",
@@ -990,7 +990,7 @@
                 "function": {
                   "codomain": {"variable": "hydra.ext.python.syntax.Expression"},
                   "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.ext.python.helpers.PythonEnvironment"}}},
+              "domain": {"variable": "hydra.ext.python.environment.PythonEnvironment"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.python.names.typeVariableReference",
@@ -1020,7 +1020,7 @@
                 "function": {
                   "codomain": {"variable": "hydra.ext.python.syntax.Expression"},
                   "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.ext.python.helpers.PythonEnvironment"}}},
+              "domain": {"variable": "hydra.ext.python.environment.PythonEnvironment"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.python.names.variantName",
@@ -1081,7 +1081,7 @@
                                   "parameter": "fname"}}},
                             "domain": [{"variable": "hydra.core.Name"}],
                             "parameter": "tname"}}},
-                      "domain": [{"variable": "hydra.ext.python.helpers.PythonEnvironment"}],
+                      "domain": [{"variable": "hydra.ext.python.environment.PythonEnvironment"}],
                       "parameter": "env"}}},
                 "domain": [{"literal": {"boolean": {}}}],
                 "parameter": "isQualified"}}}}},
@@ -1099,7 +1099,7 @@
                           "codomain": {"variable": "hydra.ext.python.syntax.Name"},
                           "domain": {"variable": "hydra.core.Name"}}},
                       "domain": {"variable": "hydra.core.Name"}}},
-                  "domain": {"variable": "hydra.ext.python.helpers.PythonEnvironment"}}},
+                  "domain": {"variable": "hydra.ext.python.environment.PythonEnvironment"}}},
               "domain": {"literal": {"boolean": {}}}}},
           "variables": []}]},
     {
@@ -1299,7 +1299,7 @@
                                                   "elimination": {
                                                     "record": {
                                                       "field": "namespaces",
-                                                      "typeName": "hydra.ext.python.helpers.PythonEnvironment"}}}}}},
+                                                      "typeName": "hydra.ext.python.environment.PythonEnvironment"}}}}}},
                                           "type": [
                                             {
                                               "constraints": null,
@@ -1567,7 +1567,7 @@
                                                       "type": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}}}}}},
                                   "domain": [{"variable": "hydra.core.Name"}],
                                   "parameter": "name"}}},
-                            "domain": [{"variable": "hydra.ext.python.helpers.PythonEnvironment"}],
+                            "domain": [{"variable": "hydra.ext.python.environment.PythonEnvironment"}],
                             "parameter": "env"}}},
                       "domain": [{"literal": {"boolean": {}}}],
                       "parameter": "quoted"}}},
@@ -1586,7 +1586,7 @@
                         "function": {
                           "codomain": {"variable": "hydra.ext.python.syntax.Expression"},
                           "domain": {"variable": "hydra.core.Name"}}},
-                      "domain": {"variable": "hydra.ext.python.helpers.PythonEnvironment"}}},
+                      "domain": {"variable": "hydra.ext.python.environment.PythonEnvironment"}}},
                   "domain": {"literal": {"boolean": {}}}}},
               "domain": {"variable": "hydra.util.CaseConvention"}}},
           "variables": []}]}],
@@ -1597,7 +1597,7 @@
     "hydra.ext.python.serde",
     "hydra.ext.python.language"],
   "typeDependencies": [
-    "hydra.ext.python.helpers",
+    "hydra.ext.python.environment",
     "hydra.ext.python.syntax",
     "hydra.accessors",
     "hydra.ast",

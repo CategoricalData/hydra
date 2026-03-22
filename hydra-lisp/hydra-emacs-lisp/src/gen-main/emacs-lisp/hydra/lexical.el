@@ -4,7 +4,7 @@
 
 (require 'hydra.core)
 
-(require 'hydra.error)
+(require 'hydra.errors)
 
 (require 'hydra.graph)
 
@@ -51,8 +51,6 @@
 (defvar hydra_lexical_empty_context (make-hydra_context_context (list) (list) hydra_lib_maps_empty))
 
 (defvar hydra_lexical_empty_graph (make-hydra_graph_graph hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_sets_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_maps_empty hydra_lib_sets_empty))
-
-(defvar hydra_lexical_extend_graph_with_bindings (lambda (bindings) (lambda (g) (let ((new_terms (hydra_lib_maps_from_list (funcall (hydra_lib_lists_map (lambda (b) (list (funcall (lambda (v) (hydra_core_binding-name v)) b) (funcall (lambda (v) (hydra_core_binding-term v)) b)))) bindings)))) (let ((new_types (hydra_lib_maps_from_list (hydra_lib_maybes_cat (funcall (hydra_lib_lists_map (lambda (b) (funcall (hydra_lib_maybes_map (lambda (ts) (list (funcall (lambda (v) (hydra_core_binding-name v)) b) ts))) (funcall (lambda (v) (hydra_core_binding-type v)) b)))) bindings))))) (make-hydra_graph_graph (funcall (hydra_lib_maps_union new_terms) (funcall (lambda (v) (hydra_graph_graph-bound_terms v)) g)) (funcall (hydra_lib_maps_union new_types) (funcall (lambda (v) (hydra_graph_graph-bound_types v)) g)) (funcall (lambda (v) (hydra_graph_graph-class_constraints v)) g) (funcall (lambda (v) (hydra_graph_graph-lambda_variables v)) g) (funcall (lambda (v) (hydra_graph_graph-metadata v)) g) (funcall (lambda (v) (hydra_graph_graph-primitives v)) g) (funcall (lambda (v) (hydra_graph_graph-schema_types v)) g) (funcall (lambda (v) (hydra_graph_graph-type_variables v)) g)))))))
 
 (defvar hydra_lexical_fields_of (lambda (t_) (let ((stripped (hydra_rewriting_deannotate_type t_))) (funcall (lambda (match_target) (funcall (lambda (match_value) (cond ((equal (car match_target) :forall) (funcall (lambda (forall_type) (hydra_lexical_fields_of (funcall (lambda (v) (hydra_core_forall_type-body v)) forall_type))) match_value)) ((equal (car match_target) :record) (funcall (lambda (rt) rt) match_value)) ((equal (car match_target) :union) (funcall (lambda (rt) rt) match_value)) (t (list)))) (cadr match_target))) stripped))))
 

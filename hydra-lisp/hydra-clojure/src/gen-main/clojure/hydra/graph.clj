@@ -1,5 +1,5 @@
 (ns hydra.graph
-  (:require [hydra.context :refer :all] [hydra.core :refer :all] [hydra.error :refer :all]
+  (:require [hydra.context :refer :all] [hydra.core :refer :all] [hydra.errors :refer :all]
 ))
 
 (defrecord hydra_graph_graph [bound_terms bound_types class_constraints lambda_variables metadata primitives schema_types type_variables])

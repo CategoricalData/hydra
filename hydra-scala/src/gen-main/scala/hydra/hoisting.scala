@@ -393,13 +393,13 @@ def hoistLetBindingsWithPredicate(isParentBinding: (hydra.core.Binding => Boolea
       }
       case _ => Tuple2(Tuple2(hydra.lib.lists.concat2[hydra.core.Binding](previouslyFinishedBindings)(bindingsSoFar), alreadyUsedNames), newTerm)
   }
-  val cx1: hydra.graph.Graph = hydra.schemas.extendGraphForLet((c: hydra.graph.Graph) => (b: hydra.core.Binding) => None)(cx0)(let0)
+  val cx1: hydra.graph.Graph = hydra.rewriting.extendGraphForLet((c: hydra.graph.Graph) => (b: hydra.core.Binding) => None)(cx0)(let0)
   def forActiveBinding(b: hydra.core.Binding): Seq[hydra.core.Binding] =
     {
     val prefix: scala.Predef.String = hydra.lib.strings.cat2(b.name)("_")
     def init[T0]: Tuple2[Seq[T0], scala.collection.immutable.Set[hydra.core.Name]] = Tuple2(Seq(), hydra.lib.sets.singleton[hydra.core.Name](b.name))
     val resultPair: Tuple2[Tuple2[Seq[hydra.core.Binding], scala.collection.immutable.Set[hydra.core.Name]],
-       hydra.core.Term] = hydra.hoisting.rewriteAndFoldTermWithTypeContext((v1: (Tuple2[Seq[hydra.core.Binding],
+       hydra.core.Term] = hydra.rewriting.rewriteAndFoldTermWithGraph((v1: (Tuple2[Seq[hydra.core.Binding],
        scala.collection.immutable.Set[hydra.core.Name]] => hydra.core.Term => Tuple2[Tuple2[Seq[hydra.core.Binding],
        scala.collection.immutable.Set[hydra.core.Name]], hydra.core.Term])) =>
       (v2: hydra.graph.Graph) =>
@@ -497,7 +497,7 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.accessors.TermAccessor], hydra.
           }
         }
     }
-    val result: Tuple2[Tuple2[Int, Seq[hydra.core.Binding]], hydra.core.Term] = hydra.hoisting.rewriteAndFoldTermWithTypeContextAndPath(collectAndReplace)(cx)(Tuple2(counter,
+    val result: Tuple2[Tuple2[Int, Seq[hydra.core.Binding]], hydra.core.Term] = hydra.rewriting.rewriteAndFoldTermWithGraphAndPath(collectAndReplace)(cx)(Tuple2(counter,
        Seq()))(subterm)
     val finalAcc: Tuple2[Int, Seq[hydra.core.Binding]] = hydra.lib.pairs.first[Tuple2[Int, Seq[hydra.core.Binding]], hydra.core.Term](result)
     val transformedSubterm: hydra.core.Term = hydra.lib.pairs.second[Tuple2[Int, Seq[hydra.core.Binding]], hydra.core.Term](result)
@@ -544,7 +544,7 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.accessors.TermAccessor], hydra.
       }
     }
     case _ => recurse(counter)(term)
-  hydra.lib.pairs.second[Int, hydra.core.Term](hydra.hoisting.rewriteAndFoldTermWithTypeContextAndPath(rewrite)(cx0)(1)(term0))
+  hydra.lib.pairs.second[Int, hydra.core.Term](hydra.rewriting.rewriteAndFoldTermWithGraphAndPath(rewrite)(cx0)(1)(term0))
 }
 
 def isApplicationFunction(acc: hydra.accessors.TermAccessor): Boolean =
@@ -588,101 +588,6 @@ def normalizePathForHoisting(path: Seq[hydra.accessors.TermAccessor]): Seq[hydra
     }
   })
   go(path)
-}
-
-def rewriteAndFoldTermWithTypeContext[T0](f: ((T0 => hydra.core.Term => Tuple2[T0, hydra.core.Term]) => hydra.graph.Graph => T0 => hydra.core.Term => Tuple2[T0,
-   hydra.core.Term]))(cx0: hydra.graph.Graph)(val0: T0)(term0: hydra.core.Term): Tuple2[T0, hydra.core.Term] =
-  {
-  def wrapper[T1](lowLevelRecurse: (Tuple2[T0, hydra.graph.Graph] => hydra.core.Term => Tuple2[Tuple2[T0,
-     T1], hydra.core.Term]))(valAndCx: Tuple2[T0, hydra.graph.Graph])(term: hydra.core.Term): Tuple2[Tuple2[T0,
-     hydra.graph.Graph], hydra.core.Term] =
-    {
-    val `val`: T0 = hydra.lib.pairs.first[T0, hydra.graph.Graph](valAndCx)
-    val cx: hydra.graph.Graph = hydra.lib.pairs.second[T0, hydra.graph.Graph](valAndCx)
-    val cx1: hydra.graph.Graph = term match
-      case hydra.core.Term.function(v_Term_function_fun) => v_Term_function_fun match
-        case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.schemas.extendGraphForLambda(cx)(v_Function_lambda_l)
-        case _ => cx
-      case hydra.core.Term.let(v_Term_let_l) => hydra.schemas.extendGraphForLet((_x: hydra.graph.Graph) => (_2: hydra.core.Binding) => None)(cx)(v_Term_let_l)
-      case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => hydra.schemas.extendGraphForTypeLambda(cx)(v_Term_typeLambda_tl)
-      case _ => cx
-    def recurseForUser(newVal: T0)(subterm: hydra.core.Term): Tuple2[T0, hydra.core.Term] =
-      {
-      val result: Tuple2[Tuple2[T0, T1], hydra.core.Term] = lowLevelRecurse(Tuple2(newVal, cx1))(subterm)
-      Tuple2(hydra.lib.pairs.first[T0, T1](hydra.lib.pairs.first[Tuple2[T0, T1], hydra.core.Term](result)),
-         hydra.lib.pairs.second[Tuple2[T0, T1], hydra.core.Term](result))
-    }
-    val fResult: Tuple2[T0, hydra.core.Term] = f(recurseForUser)(cx1)(`val`)(term)
-    Tuple2(Tuple2(hydra.lib.pairs.first[T0, hydra.core.Term](fResult), cx), hydra.lib.pairs.second[T0, hydra.core.Term](fResult))
-  }
-  val result: Tuple2[Tuple2[T0, hydra.graph.Graph], hydra.core.Term] = hydra.rewriting.rewriteAndFoldTerm(wrapper)(Tuple2(val0, cx0))(term0)
-  Tuple2(hydra.lib.pairs.first[T0, hydra.graph.Graph](hydra.lib.pairs.first[Tuple2[T0, hydra.graph.Graph],
-     hydra.core.Term](result)), hydra.lib.pairs.second[Tuple2[T0, hydra.graph.Graph], hydra.core.Term](result))
-}
-
-def rewriteAndFoldTermWithTypeContextAndPath[T0](f: ((T0 => hydra.core.Term => Tuple2[T0, hydra.core.Term]) => Seq[hydra.accessors.TermAccessor] => hydra.graph.Graph => T0 => hydra.core.Term => Tuple2[T0,
-   hydra.core.Term]))(cx0: hydra.graph.Graph)(val0: T0)(term0: hydra.core.Term): Tuple2[T0, hydra.core.Term] =
-  {
-  def wrapper[T1](recurse: (Seq[hydra.accessors.TermAccessor] => Tuple2[hydra.graph.Graph, T0] => hydra.core.Term => Tuple2[Tuple2[T1,
-     T0], hydra.core.Term]))(path: Seq[hydra.accessors.TermAccessor])(cxAndVal: Tuple2[hydra.graph.Graph,
-     T0])(term: hydra.core.Term): Tuple2[Tuple2[hydra.graph.Graph, T0], hydra.core.Term] =
-    {
-    val cx: hydra.graph.Graph = hydra.lib.pairs.first[hydra.graph.Graph, T0](cxAndVal)
-    val `val`: T0 = hydra.lib.pairs.second[hydra.graph.Graph, T0](cxAndVal)
-    val cx1: hydra.graph.Graph = term match
-      case hydra.core.Term.function(v_Term_function_fun) => v_Term_function_fun match
-        case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.schemas.extendGraphForLambda(cx)(v_Function_lambda_l)
-        case _ => cx
-      case hydra.core.Term.let(v_Term_let_l) => hydra.schemas.extendGraphForLet((_x: hydra.graph.Graph) => (_2: hydra.core.Binding) => None)(cx)(v_Term_let_l)
-      case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => hydra.schemas.extendGraphForTypeLambda(cx)(v_Term_typeLambda_tl)
-      case _ => cx
-    def recurseForUser(valIn: T0)(termIn: hydra.core.Term): Tuple2[T0, hydra.core.Term] =
-      {
-      val result: Tuple2[Tuple2[T1, T0], hydra.core.Term] = recurse(path)(Tuple2(cx1, valIn))(termIn)
-      Tuple2(hydra.lib.pairs.second[T1, T0](hydra.lib.pairs.first[Tuple2[T1, T0], hydra.core.Term](result)),
-         hydra.lib.pairs.second[Tuple2[T1, T0], hydra.core.Term](result))
-    }
-    val fResult: Tuple2[T0, hydra.core.Term] = f(recurseForUser)(path)(cx1)(`val`)(term)
-    Tuple2(Tuple2(cx, hydra.lib.pairs.first[T0, hydra.core.Term](fResult)), hydra.lib.pairs.second[T0, hydra.core.Term](fResult))
-  }
-  val result: Tuple2[Tuple2[hydra.graph.Graph, T0], hydra.core.Term] = hydra.rewriting.rewriteAndFoldTermWithPath(wrapper)(Tuple2(cx0, val0))(term0)
-  Tuple2(hydra.lib.pairs.second[hydra.graph.Graph, T0](hydra.lib.pairs.first[Tuple2[hydra.graph.Graph,
-     T0], hydra.core.Term](result)), hydra.lib.pairs.second[Tuple2[hydra.graph.Graph, T0], hydra.core.Term](result))
-}
-
-def rewriteTermWithTypeContext[T0](f: ((hydra.core.Term => T0) => hydra.graph.Graph => hydra.core.Term => T0))(cx0: hydra.graph.Graph)(term0: hydra.core.Term): T0 =
-  {
-  def f2(recurse: (hydra.graph.Graph => hydra.core.Term => T0))(cx: hydra.graph.Graph)(term: hydra.core.Term): T0 =
-    {
-    def recurse1(term2: hydra.core.Term): T0 = recurse(cx)(term2)
-    term match
-      case hydra.core.Term.function(v_Term_function_fun) => v_Term_function_fun match
-        case hydra.core.Function.lambda(v_Function_lambda_l) => {
-          val cx1: hydra.graph.Graph = hydra.schemas.extendGraphForLambda(cx)(v_Function_lambda_l)
-          {
-            def recurse2(term2: hydra.core.Term): T0 = recurse(cx1)(term2)
-            f(recurse2)(cx1)(term)
-          }
-        }
-        case _ => f(recurse1)(cx)(term)
-      case hydra.core.Term.let(v_Term_let_l) => {
-        val cx1: hydra.graph.Graph = hydra.schemas.extendGraphForLet((_x: hydra.graph.Graph) => (_2: hydra.core.Binding) => None)(cx)(v_Term_let_l)
-        {
-          def recurse2(term2: hydra.core.Term): T0 = recurse(cx1)(term2)
-          f(recurse2)(cx1)(term)
-        }
-      }
-      case hydra.core.Term.typeLambda(v_Term_typeLambda_tl) => {
-        val cx1: hydra.graph.Graph = hydra.schemas.extendGraphForTypeLambda(cx)(v_Term_typeLambda_tl)
-        {
-          def recurse2(term2: hydra.core.Term): T0 = recurse(cx1)(term2)
-          f(recurse2)(cx1)(term)
-        }
-      }
-      case _ => f(recurse1)(cx)(term)
-  }
-  def rewrite(cx: hydra.graph.Graph)(term: hydra.core.Term): T0 = f2(rewrite)(cx)(term)
-  rewrite(cx0)(term0)
 }
 
 def shouldHoistAll[T0, T1](_x: T0)(_2: T1): Boolean = true

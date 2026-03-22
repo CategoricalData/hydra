@@ -1,5 +1,5 @@
 (defpackage :hydra.templates
-(:use :cl :hydra.context :hydra.core :hydra.decode.core :hydra.error :hydra.lib.eithers :hydra.lib.logic :hydra.lib.maps :hydra.lib.maybes :hydra.lib.sets :hydra.lib.strings :hydra.show.core)
+(:use :cl :hydra.context :hydra.core :hydra.decode.core :hydra.errors :hydra.lib.eithers :hydra.lib.logic :hydra.lib.maps :hydra.lib.maybes :hydra.lib.sets :hydra.lib.strings :hydra.show.core)
 (:export :hydra_templates_graph_to_schema :hydra_templates_instantiate_template))
 
 (in-package :hydra.templates)

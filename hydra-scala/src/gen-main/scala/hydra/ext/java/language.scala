@@ -36,7 +36,8 @@ val javaLanguage: hydra.coders.Language = {
      hydra.variants.TypeVariant.forall, hydra.variants.TypeVariant.list, hydra.variants.TypeVariant.literal,
      hydra.variants.TypeVariant.map, hydra.variants.TypeVariant.maybe, hydra.variants.TypeVariant.pair,
      hydra.variants.TypeVariant.record, hydra.variants.TypeVariant.set, hydra.variants.TypeVariant.union,
-     hydra.variants.TypeVariant.unit, hydra.variants.TypeVariant.variable, hydra.variants.TypeVariant.wrap))
+     hydra.variants.TypeVariant.unit, hydra.variants.TypeVariant.variable, hydra.variants.TypeVariant.void,
+     hydra.variants.TypeVariant.wrap))
   def typePredicate[T0](_x: T0): Boolean = true
   hydra.coders.Language("hydra.ext.java", hydra.coders.LanguageConstraints(eliminationVariants, literalVariants,
      floatTypes, functionVariants, integerTypes, termVariants, typeVariants, typePredicate))

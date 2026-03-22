@@ -252,6 +252,11 @@ typeVariant x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "variable"),
           Core.fieldTerm = Core.TermUnit}})
+      Variants.TypeVariantVoid -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "void"),
+          Core.fieldTerm = Core.TermUnit}})
       Variants.TypeVariantWrap -> Core.TermUnion (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
         Core.injectionField = Core.Field {

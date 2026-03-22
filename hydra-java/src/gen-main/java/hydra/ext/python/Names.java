@@ -21,7 +21,7 @@ public interface Names {
     return new hydra.ext.python.syntax.Name("TYPE_");
   }
 
-  static hydra.ext.python.syntax.Name encodeEnumValue(hydra.ext.python.helpers.PythonEnvironment v1, hydra.core.Name v2) {
+  static hydra.ext.python.syntax.Name encodeEnumValue(hydra.ext.python.environment.PythonEnvironment v1, hydra.core.Name v2) {
     return hydra.ext.python.Names.encodeName(
       false,
       new hydra.util.CaseConvention.UpperSnake(),
@@ -29,7 +29,7 @@ public interface Names {
       v2);
   }
 
-  static hydra.ext.python.syntax.Name encodeFieldName(hydra.ext.python.helpers.PythonEnvironment env, hydra.core.Name fname) {
+  static hydra.ext.python.syntax.Name encodeFieldName(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name fname) {
     return hydra.ext.python.Names.encodeName(
       false,
       new hydra.util.CaseConvention.LowerSnake(),
@@ -37,7 +37,7 @@ public interface Names {
       fname);
   }
 
-  static hydra.ext.python.syntax.Name encodeName(Boolean isQualified, hydra.util.CaseConvention conv, hydra.ext.python.helpers.PythonEnvironment env, hydra.core.Name name) {
+  static hydra.ext.python.syntax.Name encodeName(Boolean isQualified, hydra.util.CaseConvention conv, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name) {
     hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>> boundVars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((env).boundTypeVariables));
     hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces = (env).namespaces;
     hydra.util.Lazy<hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>> focusPair = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces));
@@ -87,7 +87,7 @@ public interface Names {
       () -> new hydra.ext.python.syntax.Name(pyLocal));
   }
 
-  static hydra.ext.python.syntax.Name encodeNameQualified(hydra.ext.python.helpers.PythonEnvironment env, hydra.core.Name name) {
+  static hydra.ext.python.syntax.Name encodeNameQualified(hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name) {
     hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>> boundVars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((env).boundTypeVariables));
     hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces = (env).namespaces;
     hydra.util.Lazy<hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>> focusPair = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces));
@@ -140,7 +140,7 @@ public interface Names {
       v1);
   }
 
-  static hydra.ext.python.syntax.Expression termVariableReference(hydra.ext.python.helpers.PythonEnvironment v1, hydra.core.Name v2) {
+  static hydra.ext.python.syntax.Expression termVariableReference(hydra.ext.python.environment.PythonEnvironment v1, hydra.core.Name v2) {
     return hydra.ext.python.Names.variableReference(
       new hydra.util.CaseConvention.LowerSnake(),
       false,
@@ -148,7 +148,7 @@ public interface Names {
       v2);
   }
 
-  static hydra.ext.python.syntax.Expression typeVariableReference(hydra.ext.python.helpers.PythonEnvironment v1, hydra.core.Name v2) {
+  static hydra.ext.python.syntax.Expression typeVariableReference(hydra.ext.python.environment.PythonEnvironment v1, hydra.core.Name v2) {
     return hydra.ext.python.Names.variableReference(
       new hydra.util.CaseConvention.Pascal(),
       false,
@@ -156,7 +156,7 @@ public interface Names {
       v2);
   }
 
-  static hydra.ext.python.syntax.Name variantName(Boolean isQualified, hydra.ext.python.helpers.PythonEnvironment env, hydra.core.Name tname, hydra.core.Name fname) {
+  static hydra.ext.python.syntax.Name variantName(Boolean isQualified, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name tname, hydra.core.Name fname) {
     return hydra.ext.python.Names.encodeName(
       isQualified,
       new hydra.util.CaseConvention.Pascal(),
@@ -166,7 +166,7 @@ public interface Names {
         hydra.Formatting.capitalize((fname).value))));
   }
 
-  static hydra.ext.python.syntax.Expression variableReference(hydra.util.CaseConvention conv, Boolean quoted, hydra.ext.python.helpers.PythonEnvironment env, hydra.core.Name name) {
+  static hydra.ext.python.syntax.Expression variableReference(hydra.util.CaseConvention conv, Boolean quoted, hydra.ext.python.environment.PythonEnvironment env, hydra.core.Name name) {
     hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces = (env).namespaces;
     hydra.util.Lazy<hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>> focusPair = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces));
     hydra.util.Lazy<hydra.module.Namespace> focusNs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(focusPair.get()));

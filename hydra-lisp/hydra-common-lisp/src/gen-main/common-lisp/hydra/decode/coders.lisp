@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.coders
-(:use :cl :hydra.coders :hydra.core :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings)
+(:use :cl :hydra.coders :hydra.core :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings)
 (:export :hydra_decode_coders_coder_direction :hydra_decode_coders_language_name :hydra_decode_coders_traversal_order))
 
 (in-package :hydra.decode.coders)

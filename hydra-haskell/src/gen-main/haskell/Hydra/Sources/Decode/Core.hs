@@ -5358,6 +5358,27 @@ module_ =
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
                                         (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
                                           Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "void"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                          Core.lambdaParameter = (Core.Name "input"),
+                                          Core.lambdaDomain = Nothing,
+                                          Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.map"))),
+                                              Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                                Core.lambdaParameter = (Core.Name "t"),
+                                                Core.lambdaDomain = Nothing,
+                                                Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                                                  Core.injectionTypeName = (Core.Name "hydra.core.Type"),
+                                                  Core.injectionField = Core.Field {
+                                                    Core.fieldName = (Core.Name "void"),
+                                                    Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
+                                            Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit")),
+                                                Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
+                                              Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
+                                        (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
+                                          Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                           Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "wrap"))}), (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                           Core.lambdaParameter = (Core.Name "input"),
                                           Core.lambdaDomain = Nothing,

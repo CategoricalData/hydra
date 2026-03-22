@@ -1,5 +1,5 @@
 (ns hydra.decode.relational
-  (:require [hydra.core :refer :all] [hydra.error :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.relational :refer :all]
+  (:require [hydra.core :refer :all] [hydra.errors :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.relational :refer :all]
 ))
 
 (declare hydra_decode_relational_column_name hydra_decode_relational_column_schema hydra_decode_relational_relation_name hydra_decode_relational_foreign_key hydra_decode_relational_primary_key hydra_decode_relational_row hydra_decode_relational_relation hydra_decode_relational_relation_schema hydra_decode_relational_relationship)

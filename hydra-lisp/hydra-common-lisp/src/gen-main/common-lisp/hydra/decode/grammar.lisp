@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.grammar
-(:use :cl :hydra.core :hydra.error :hydra.extract.helpers :hydra.grammar :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings)
+(:use :cl :hydra.core :hydra.errors :hydra.extract.helpers :hydra.grammar :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings)
 (:export :hydra_decode_grammar_constant :hydra_decode_grammar_label :hydra_decode_grammar_regex :hydra_decode_grammar_symbol :hydra_decode_grammar_labeled_pattern :hydra_decode_grammar_pattern :hydra_decode_grammar_production :hydra_decode_grammar_grammar))
 
 (in-package :hydra.decode.grammar)

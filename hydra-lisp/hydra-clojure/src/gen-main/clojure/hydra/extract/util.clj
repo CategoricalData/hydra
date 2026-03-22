@@ -1,5 +1,5 @@
 (ns hydra.extract.util
-  (:require [hydra.context :refer :all] [hydra.core :refer :all] [hydra.error :refer :all] [hydra.extract.core :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.equality :refer :all] [hydra.lib.logic :refer :all] [hydra.lib.strings :refer :all] [hydra.util :refer :all]
+  (:require [hydra.context :refer :all] [hydra.core :refer :all] [hydra.errors :refer :all] [hydra.extract.core :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.equality :refer :all] [hydra.lib.logic :refer :all] [hydra.lib.strings :refer :all] [hydra.util :refer :all]
 ))
 
 (declare hydra_extract_util_comparison)

@@ -1,6 +1,6 @@
 (define-library (hydra decode topology)
 (export hydra_decode_topology_vertex hydra_decode_topology_graph hydra_decode_topology_tarjan_state)
-(import (scheme base) (hydra core) (hydra error) (hydra extract helpers) (hydra lexical) (hydra lib eithers) (hydra topology))
+(import (scheme base) (hydra core) (hydra errors) (hydra extract helpers) (hydra lexical) (hydra lib eithers) (hydra topology))
 (begin
 (define hydra_decode_topology_vertex (lambda (cx) (lambda (raw) (((hydra_lib_eithers_either (lambda (err) (list 'left err))) (lambda (stripped) ((lambda (match_target) ((lambda (match_value) (cond ((equal? (car match_target) 'literal) ((lambda (v) ((lambda (match_target) ((lambda (match_value) (cond ((equal? (car match_target) 'integer) ((lambda (match_target) ((lambda (match_value) (cond ((equal? (car match_target) 'int32) ((lambda (i) (list 'right i)) match_value)) (else (list 'left "expected int32 value")))) (cadr match_target))) match_value)) (else (list 'left "expected int32 literal")))) (cadr match_target))) v)) match_value)) (else (list 'left "expected literal")))) (cadr match_target))) stripped))) ((hydra_lexical_strip_and_dereference_term_either cx) raw)))))
 (define hydra_decode_topology_graph ((hydra_extract_helpers_decode_map hydra_decode_topology_vertex) (hydra_extract_helpers_decode_list hydra_decode_topology_vertex)))

@@ -243,6 +243,8 @@ def testCase(v1: hydra.testing.TestCase): hydra.core.Term =
      hydra.core.Field("joinTypes", hydra.encode.testing.joinTypesTestCase(v_TestCase_joinTypes_y))))
   case hydra.testing.TestCase.unshadowVariables(v_TestCase_unshadowVariables_y) => hydra.core.Term.union(hydra.core.Injection("hydra.testing.TestCase",
      hydra.core.Field("unshadowVariables", hydra.encode.testing.unshadowVariablesTestCase(v_TestCase_unshadowVariables_y))))
+  case hydra.testing.TestCase.validateCoreTerm(v_TestCase_validateCoreTerm_y) => hydra.core.Term.union(hydra.core.Injection("hydra.testing.TestCase",
+     hydra.core.Field("validateCoreTerm", hydra.encode.testing.validateCoreTermTestCase(v_TestCase_validateCoreTerm_y))))
 
 def testCaseWithMetadata(x: hydra.testing.TestCaseWithMetadata): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.TestCaseWithMetadata", Seq(hydra.core.Field("name",
@@ -352,3 +354,8 @@ def joinTypesTestCase(x: hydra.testing.JoinTypesTestCase): hydra.core.Term =
      hydra.core.Field("expected", hydra.core.Term.either(hydra.lib.eithers.bimap[Unit, Seq[hydra.typing.TypeConstraint],
      hydra.core.Term, hydra.core.Term]((_x: Unit) => hydra.core.Term.unit)((xs: Seq[hydra.typing.TypeConstraint]) =>
   hydra.core.Term.list(hydra.lib.lists.map[hydra.typing.TypeConstraint, hydra.core.Term](hydra.encode.typing.typeConstraint)(xs)))(x.expected))))))
+
+def validateCoreTermTestCase(x: hydra.testing.ValidateCoreTermTestCase): hydra.core.Term =
+  hydra.core.Term.record(hydra.core.Record("hydra.testing.ValidateCoreTermTestCase", Seq(hydra.core.Field("input",
+     hydra.encode.core.term(x.input)), hydra.core.Field("output", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.error.core.InvalidTermError,
+     hydra.core.Term](hydra.encode.error.core.invalidTermError)(x.output))))))

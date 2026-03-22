@@ -1,5 +1,5 @@
 (defpackage :hydra.extract.util
-(:use :cl :hydra.context :hydra.core :hydra.error :hydra.extract.core :hydra.lib.eithers :hydra.lib.equality :hydra.lib.logic :hydra.lib.strings :hydra.util)
+(:use :cl :hydra.context :hydra.core :hydra.errors :hydra.extract.core :hydra.lib.eithers :hydra.lib.equality :hydra.lib.logic :hydra.lib.strings :hydra.util)
 (:export :hydra_extract_util_comparison))
 
 (in-package :hydra.extract.util)

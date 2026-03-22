@@ -51,6 +51,13 @@ def convertCase(from: hydra.util.CaseConvention)(to: hydra.util.CaseConvention)(
        scala.Predef.String](hydra.lib.strings.toUpper)(parts))
 }
 
+def convertCaseCamelOrUnderscoreToLowerSnake(s: scala.Predef.String): scala.Predef.String =
+  {
+  val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn("_")(s)
+  val snakeParts: Seq[scala.Predef.String] = hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((p: scala.Predef.String) => hydra.formatting.convertCaseCamelToLowerSnake(p))(parts)
+  hydra.lib.strings.intercalate("_")(snakeParts)
+}
+
 def convertCaseCamelToLowerSnake(v1: scala.Predef.String): scala.Predef.String =
   hydra.formatting.convertCase(hydra.util.CaseConvention.camel)(hydra.util.CaseConvention.lowerSnake)(v1)
 

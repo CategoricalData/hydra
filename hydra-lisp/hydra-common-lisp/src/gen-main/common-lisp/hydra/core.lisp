@@ -60,7 +60,7 @@
 
 (cl:defvar hydra_core_term-variants (cl:list :annotated :application :either :function :let :list :literal :map :maybe :pair :record :set :type_application :type_lambda :union :unit :variable :wrap))
 
-(cl:defvar hydra_core_type-variants (cl:list :annotated :application :either :forall :function :list :literal :map :maybe :pair :record :set :union :unit :variable :wrap))
+(cl:defvar hydra_core_type-variants (cl:list :annotated :application :either :forall :function :list :literal :map :maybe :pair :record :set :union :unit :variable :void :wrap))
 
 (cl:defstruct hydra_core_type_application_term body type)
 

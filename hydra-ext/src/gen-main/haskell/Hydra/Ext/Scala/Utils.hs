@@ -6,7 +6,7 @@ module Hydra.Ext.Scala.Utils where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Scala.Language as Language
-import qualified Hydra.Ext.Scala.Meta as Meta
+import qualified Hydra.Ext.Scala.Syntax as Syntax
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -58,38 +58,38 @@ scalaEscapeName s =
         "`"]) sanitized3)
 
 -- | Apply a Scala data expression to a list of arguments
-sapply :: Meta.Data -> [Meta.Data] -> Meta.Data
+sapply :: Syntax.Data -> [Syntax.Data] -> Syntax.Data
 sapply fun args =
-    Meta.DataApply (Meta.Data_Apply {
-      Meta.data_ApplyFun = fun,
-      Meta.data_ApplyArgs = args})
+    Syntax.DataApply (Syntax.Data_Apply {
+      Syntax.data_ApplyFun = fun,
+      Syntax.data_ApplyArgs = args})
 
 -- | Create a Scala assignment expression
-sassign :: Meta.Data -> Meta.Data -> Meta.Data
+sassign :: Syntax.Data -> Syntax.Data -> Syntax.Data
 sassign lhs rhs =
-    Meta.DataAssign (Meta.Data_Assign {
-      Meta.data_AssignLhs = lhs,
-      Meta.data_AssignRhs = rhs})
+    Syntax.DataAssign (Syntax.Data_Assign {
+      Syntax.data_AssignLhs = lhs,
+      Syntax.data_AssignRhs = rhs})
 
 -- | Create a Scala lambda (function) expression
-slambda :: String -> Meta.Data -> Maybe Meta.Type -> Meta.Data
+slambda :: String -> Syntax.Data -> Maybe Syntax.Type -> Syntax.Data
 slambda v body sdom =
-    Meta.DataFunctionData (Meta.Data_FunctionDataFunction (Meta.Data_Function {
-      Meta.data_FunctionParams = [
-        Meta.Data_Param {
-          Meta.data_ParamMods = [],
-          Meta.data_ParamName = (Meta.NameValue v),
-          Meta.data_ParamDecltpe = sdom,
-          Meta.data_ParamDefault = Nothing}],
-      Meta.data_FunctionBody = body}))
+    Syntax.DataFunctionData (Syntax.Data_FunctionDataFunction (Syntax.Data_Function {
+      Syntax.data_FunctionParams = [
+        Syntax.Data_Param {
+          Syntax.data_ParamMods = [],
+          Syntax.data_ParamName = (Syntax.NameValue v),
+          Syntax.data_ParamDecltpe = sdom,
+          Syntax.data_ParamDefault = Nothing}],
+      Syntax.data_FunctionBody = body}))
 
 -- | Create a Scala name reference
-sname :: String -> Meta.Data
-sname s = Meta.DataRef (Meta.Data_RefName (Meta.Data_Name {
-  Meta.data_NameValue = (Meta.PredefString s)}))
+sname :: String -> Syntax.Data
+sname s = Syntax.DataRef (Syntax.Data_RefName (Syntax.Data_Name {
+  Syntax.data_NameValue = (Syntax.PredefString s)}))
 
 -- | Create a Scala primitive reference from a Hydra name
-sprim :: Core.Name -> Meta.Data
+sprim :: Core.Name -> Syntax.Data
 sprim name =
 
       let qname = Names.qualifyName name
@@ -98,7 +98,7 @@ sprim name =
       in (sname (Strings.cat2 (Strings.cat2 prefix ".") local))
 
 -- | Apply explicit type parameters to a Scala expression (e.g. f[A, B])
-sapplyTypes :: Meta.Data -> [Meta.Type] -> Meta.Data
+sapplyTypes :: Syntax.Data -> [Syntax.Type] -> Syntax.Data
 sapplyTypes fun typeArgs =
 
       let typeToStr = \t -> typeToString t
@@ -109,35 +109,35 @@ sapplyTypes fun typeArgs =
                     (Strings.intercalate ", " typeStrings),
                     "]"]
       in case fun of
-        Meta.DataRef v0 -> case v0 of
-          Meta.Data_RefName v1 ->
-            let nameStr = Meta.data_NameValue v1
-                rawName = Meta.unPredefString nameStr
+        Syntax.DataRef v0 -> case v0 of
+          Syntax.Data_RefName v1 ->
+            let nameStr = Syntax.data_NameValue v1
+                rawName = Syntax.unPredefString nameStr
             in (sname (Strings.cat2 rawName typeArgStr))
           _ -> fun
         _ -> fun
 
 -- | Convert a Scala type to its string representation
-typeToString :: Meta.Type -> String
+typeToString :: Syntax.Type -> String
 typeToString t =
     case t of
-      Meta.TypeRef v0 -> case v0 of
-        Meta.Type_RefName v1 -> Meta.type_NameValue v1
+      Syntax.TypeRef v0 -> case v0 of
+        Syntax.Type_RefName v1 -> Syntax.type_NameValue v1
         _ -> "Any"
-      Meta.TypeVar v0 -> Meta.type_NameValue (Meta.type_VarName v0)
-      Meta.TypeFunctionType v0 -> case v0 of
-        Meta.Type_FunctionTypeFunction v1 ->
-          let params = Lists.map typeToString (Meta.type_FunctionParams v1)
-              res = typeToString (Meta.type_FunctionRes v1)
+      Syntax.TypeVar v0 -> Syntax.type_NameValue (Syntax.type_VarName v0)
+      Syntax.TypeFunctionType v0 -> case v0 of
+        Syntax.Type_FunctionTypeFunction v1 ->
+          let params = Lists.map typeToString (Syntax.type_FunctionParams v1)
+              res = typeToString (Syntax.type_FunctionRes v1)
           in (Strings.cat [
             "(",
             (Strings.intercalate ", " params),
             ") => ",
             res])
         _ -> "Any"
-      Meta.TypeApply v0 ->
-        let base = typeToString (Meta.type_ApplyTpe v0)
-            argStrs = Lists.map typeToString (Meta.type_ApplyArgs v0)
+      Syntax.TypeApply v0 ->
+        let base = typeToString (Syntax.type_ApplyTpe v0)
+            argStrs = Lists.map typeToString (Syntax.type_ApplyArgs v0)
         in (Strings.cat [
           base,
           "[",
@@ -146,50 +146,50 @@ typeToString t =
       _ -> "Any"
 
 -- | Apply a Scala type to a list of type arguments
-stapply :: Meta.Type -> [Meta.Type] -> Meta.Type
+stapply :: Syntax.Type -> [Syntax.Type] -> Syntax.Type
 stapply t args =
-    Meta.TypeApply (Meta.Type_Apply {
-      Meta.type_ApplyTpe = t,
-      Meta.type_ApplyArgs = args})
+    Syntax.TypeApply (Syntax.Type_Apply {
+      Syntax.type_ApplyTpe = t,
+      Syntax.type_ApplyArgs = args})
 
 -- | Apply a Scala type to one type argument
-stapply1 :: Meta.Type -> Meta.Type -> Meta.Type
+stapply1 :: Syntax.Type -> Syntax.Type -> Syntax.Type
 stapply1 t1 t2 = stapply t1 [
   t2]
 
 -- | Apply a Scala type to two type arguments
-stapply2 :: Meta.Type -> Meta.Type -> Meta.Type -> Meta.Type
+stapply2 :: Syntax.Type -> Syntax.Type -> Syntax.Type -> Syntax.Type
 stapply2 t1 t2 t3 =
     stapply t1 [
       t2,
       t3]
 
 -- | Create a Scala type parameter from a Hydra name, capitalizing to avoid collision with value params
-stparam :: Core.Name -> Meta.Type_Param
+stparam :: Core.Name -> Syntax.Type_Param
 stparam name =
 
       let v = Formatting.capitalize (Core.unName name)
-      in Meta.Type_Param {
-        Meta.type_ParamMods = [],
-        Meta.type_ParamName = (Meta.NameValue v),
-        Meta.type_ParamTparams = [],
-        Meta.type_ParamTbounds = [],
-        Meta.type_ParamVbounds = [],
-        Meta.type_ParamCbounds = []}
+      in Syntax.Type_Param {
+        Syntax.type_ParamMods = [],
+        Syntax.type_ParamName = (Syntax.NameValue v),
+        Syntax.type_ParamTparams = [],
+        Syntax.type_ParamTbounds = [],
+        Syntax.type_ParamVbounds = [],
+        Syntax.type_ParamCbounds = []}
 
 -- | Create a Scala type reference by name
-stref :: String -> Meta.Type
-stref s = Meta.TypeRef (Meta.Type_RefName (Meta.Type_Name {
-  Meta.type_NameValue = s}))
+stref :: String -> Syntax.Type
+stref s = Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
+  Syntax.type_NameValue = s}))
 
 -- | Create a Scala pattern variable
-svar :: Core.Name -> Meta.Pat
+svar :: Core.Name -> Syntax.Pat
 svar name =
 
       let v = Core.unName name
-      in (Meta.PatVar (Meta.Pat_Var {
-        Meta.pat_VarName = Meta.Data_Name {
-          Meta.data_NameValue = (Meta.PredefString v)}}))
+      in (Syntax.PatVar (Syntax.Pat_Var {
+        Syntax.pat_VarName = Syntax.Data_Name {
+          Syntax.data_NameValue = (Syntax.PredefString v)}}))
 
 -- | Reference to scalaReservedWords from the language module
 scalaReservedWords :: S.Set String

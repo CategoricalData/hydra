@@ -12,7 +12,7 @@
 
 (require 'hydra.encode.core)
 
-(require 'hydra.error)
+(require 'hydra.errors)
 
 (require 'hydra.extract.core)
 

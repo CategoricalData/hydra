@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.ast
-(:use :cl :hydra.ast :hydra.core :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings)
+(:use :cl :hydra.ast :hydra.core :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings)
 (:export :hydra_decode_ast_associativity :hydra_decode_ast_block_style :hydra_decode_ast_symbol :hydra_decode_ast_brackets :hydra_decode_ast_indent_style :hydra_decode_ast_ws :hydra_decode_ast_padding :hydra_decode_ast_precedence :hydra_decode_ast_op :hydra_decode_ast_bracket_expr :hydra_decode_ast_expr :hydra_decode_ast_indented_expression :hydra_decode_ast_op_expr :hydra_decode_ast_seq_expr))
 
 (in-package :hydra.decode.ast)

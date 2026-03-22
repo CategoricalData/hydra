@@ -8,7 +8,7 @@ from functools import lru_cache
 from hydra.dsl.python import Just, Maybe, Nothing, frozenlist
 from typing import TypeVar, cast
 import hydra.core
-import hydra.ext.python.helpers
+import hydra.ext.python.environment
 import hydra.ext.python.names
 import hydra.ext.python.serde
 import hydra.ext.python.syntax
@@ -390,7 +390,7 @@ def single_quoted_string(s: str) -> hydra.ext.python.syntax.Expression:
     return string_to_py_expression(hydra.ext.python.syntax.QuoteStyle.SINGLE, s)
 
 # Current target Python version for code generation.
-target_python_version = hydra.ext.python.helpers.PythonVersion.PYTHON310
+target_python_version = hydra.ext.python.environment.PythonVersion.PYTHON310
 
 def type_alias_statement(name: hydra.ext.python.syntax.Name, tparams: frozenlist[hydra.ext.python.syntax.TypeParameter], mcomment: Maybe[str], tyexpr: hydra.ext.python.syntax.Expression) -> hydra.ext.python.syntax.Statement:
     r"""Generate a type alias statement using PEP 695 syntax (Python 3.12+)."""

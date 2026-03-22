@@ -586,7 +586,7 @@ public interface Decoding {
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Void_ ignored) {
-        return hydra.decoding.Decoding.decodeUnitType();
+        return hydra.Decoding.decodeUnitType();
       }
 
       @Override
@@ -683,7 +683,7 @@ public interface Decoding {
 
       @Override
       public hydra.core.Term visit(hydra.core.Type.Void_ ignored) {
-        return hydra.decoding.Decoding.decodeUnitType();
+        return hydra.Decoding.decodeUnitType();
       }
 
       @Override

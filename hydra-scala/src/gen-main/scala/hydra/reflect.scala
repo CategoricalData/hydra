@@ -151,6 +151,7 @@ def typeVariant(v1: hydra.core.Type): hydra.variants.TypeVariant =
   case hydra.core.Type.union(v_Type_union__) => hydra.variants.TypeVariant.union
   case hydra.core.Type.unit => hydra.variants.TypeVariant.unit
   case hydra.core.Type.variable(v_Type_variable__) => hydra.variants.TypeVariant.variable
+  case hydra.core.Type.void => hydra.variants.TypeVariant.void
   case hydra.core.Type.wrap(v_Type_wrap__) => hydra.variants.TypeVariant.wrap
 
 val typeVariants: Seq[hydra.variants.TypeVariant] = Seq(hydra.variants.TypeVariant.annotated, hydra.variants.TypeVariant.application,
@@ -158,4 +159,4 @@ val typeVariants: Seq[hydra.variants.TypeVariant] = Seq(hydra.variants.TypeVaria
    hydra.variants.TypeVariant.list, hydra.variants.TypeVariant.literal, hydra.variants.TypeVariant.map,
    hydra.variants.TypeVariant.wrap, hydra.variants.TypeVariant.maybe, hydra.variants.TypeVariant.pair,
    hydra.variants.TypeVariant.record, hydra.variants.TypeVariant.set, hydra.variants.TypeVariant.union,
-   hydra.variants.TypeVariant.unit, hydra.variants.TypeVariant.variable)
+   hydra.variants.TypeVariant.unit, hydra.variants.TypeVariant.variable, hydra.variants.TypeVariant.void)

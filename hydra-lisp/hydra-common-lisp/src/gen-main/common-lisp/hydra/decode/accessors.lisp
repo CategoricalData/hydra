@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.accessors
-(:use :cl :hydra.accessors :hydra.core :hydra.decode.core :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings)
+(:use :cl :hydra.accessors :hydra.core :hydra.decode.core :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings)
 (:export :hydra_decode_accessors_accessor_node :hydra_decode_accessors_term_accessor :hydra_decode_accessors_accessor_path :hydra_decode_accessors_accessor_edge :hydra_decode_accessors_accessor_graph))
 
 (in-package :hydra.decode.accessors)

@@ -30,6 +30,8 @@
 
 (defvar hydra_formatting_convert_case_camel_to_lower_snake (funcall (hydra_formatting_convert_case (list :camel nil)) (list :lower_snake nil)))
 
+(defvar hydra_formatting_convert_case_camel_or_underscore_to_lower_snake (lambda (s) (let ((parts (funcall (hydra_lib_strings_split_on "_") s))) (let ((snake_parts (funcall (hydra_lib_lists_map (lambda (p) (hydra_formatting_convert_case_camel_to_lower_snake p))) parts))) (funcall (hydra_lib_strings_intercalate "_") snake_parts)))))
+
 (defvar hydra_formatting_convert_case_camel_to_upper_snake (funcall (hydra_formatting_convert_case (list :camel nil)) (list :upper_snake nil)))
 
 (defvar hydra_formatting_convert_case_pascal_to_upper_snake (funcall (hydra_formatting_convert_case (list :pascal nil)) (list :upper_snake nil)))

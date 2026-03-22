@@ -1,5 +1,5 @@
 (ns hydra.decode.module
-  (:require [hydra.core :refer :all] [hydra.decode.core :refer :all] [hydra.error :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.maps :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.strings :refer :all] [hydra.module :refer :all]
+  (:require [hydra.core :refer :all] [hydra.decode.core :refer :all] [hydra.errors :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.maps :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.strings :refer :all] [hydra.module :refer :all]
 ))
 
 (declare hydra_decode_module_term_definition hydra_decode_module_type_definition hydra_decode_module_definition hydra_decode_module_file_extension hydra_decode_module_namespace hydra_decode_module_module hydra_decode_module_namespaces hydra_decode_module_qualified_name)

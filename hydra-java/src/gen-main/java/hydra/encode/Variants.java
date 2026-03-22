@@ -245,6 +245,11 @@ public interface Variants {
       }
 
       @Override
+      public hydra.core.Term visit(hydra.variants.TypeVariant.Void_ y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TypeVariant"), new hydra.core.Field(new hydra.core.Name("void"), new hydra.core.Term.Unit())));
+      }
+
+      @Override
       public hydra.core.Term visit(hydra.variants.TypeVariant.Wrap y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.variants.TypeVariant"), new hydra.core.Field(new hydra.core.Name("wrap"), new hydra.core.Term.Unit())));
       }

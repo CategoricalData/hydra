@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.topology
-(:use :cl :hydra.core :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.topology)
+(:use :cl :hydra.core :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.topology)
 (:export :hydra_decode_topology_vertex :hydra_decode_topology_graph :hydra_decode_topology_tarjan_state))
 
 (in-package :hydra.decode.topology)

@@ -1,5 +1,5 @@
 (ns hydra.decode.util
-  (:require [hydra.core :refer :all] [hydra.error :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.maps :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.strings :refer :all] [hydra.util :refer :all]
+  (:require [hydra.core :refer :all] [hydra.errors :refer :all] [hydra.extract.helpers :refer :all] [hydra.lexical :refer :all] [hydra.lib.eithers :refer :all] [hydra.lib.maps :refer :all] [hydra.lib.maybes :refer :all] [hydra.lib.strings :refer :all] [hydra.util :refer :all]
 ))
 
 (declare hydra_decode_util_case_convention hydra_decode_util_comparison hydra_decode_util_precision)

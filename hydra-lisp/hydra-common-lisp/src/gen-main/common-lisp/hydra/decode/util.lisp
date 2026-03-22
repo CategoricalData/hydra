@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.util
-(:use :cl :hydra.core :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings :hydra.util)
+(:use :cl :hydra.core :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings :hydra.util)
 (:export :hydra_decode_util_case_convention :hydra_decode_util_comparison :hydra_decode_util_precision))
 
 (in-package :hydra.decode.util)

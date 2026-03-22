@@ -8,6 +8,7 @@ from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Just, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
+import hydra.coder_utils
 import hydra.core
 import hydra.ext.lisp.language
 import hydra.ext.lisp.syntax
@@ -552,39 +553,10 @@ def module_imports(focus_ns: hydra.module.Namespace, defs: frozenlist[hydra.modu
         return hydra.lib.sets.to_list(hydra.lib.sets.delete(focus_ns, hydra.schemas.definition_dependency_namespaces(defs)))
     return hydra.lib.lists.map((lambda ns: hydra.ext.lisp.syntax.ImportDeclaration(hydra.ext.lisp.syntax.NamespaceName(ns.value), cast(hydra.ext.lisp.syntax.ImportSpec, hydra.ext.lisp.syntax.ImportSpecAll()))), dep_nss())
 
-def reorder_defs(defs: frozenlist[hydra.module.Definition]) -> frozenlist[hydra.module.Definition]:
-    @lru_cache(1)
-    def partitioned() -> tuple[frozenlist[hydra.module.TypeDefinition], frozenlist[hydra.module.TermDefinition]]:
-        return hydra.schemas.partition_definitions(defs)
-    @lru_cache(1)
-    def type_defs() -> frozenlist[hydra.module.Definition]:
-        return hydra.lib.lists.map((lambda td: cast(hydra.module.Definition, hydra.module.DefinitionType(td))), hydra.lib.pairs.first(partitioned()))
-    @lru_cache(1)
-    def term_defs_wrapped() -> frozenlist[hydra.module.Definition]:
-        return hydra.lib.lists.map((lambda td: cast(hydra.module.Definition, hydra.module.DefinitionTerm(td))), hydra.lib.pairs.second(partitioned()))
-    @lru_cache(1)
-    def sorted_term_defs():
-        def _hoist_sorted_term_defs_1(v1):
-            match v1:
-                case hydra.module.DefinitionTerm(value=td):
-                    return td.name
-
-                case _:
-                    raise TypeError("Unsupported Definition")
-        def _hoist_sorted_term_defs_2(v1):
-            match v1:
-                case hydra.module.DefinitionTerm(value=td):
-                    return hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_term(td.term))
-
-                case _:
-                    return ()
-        return hydra.lib.lists.concat(hydra.sorting.topological_sort_nodes((lambda d: _hoist_sorted_term_defs_1(d)), (lambda d: _hoist_sorted_term_defs_2(d)), term_defs_wrapped()))
-    return hydra.lib.lists.concat((type_defs(), sorted_term_defs()))
-
 def module_to_lisp(dialect: hydra.ext.lisp.syntax.Dialect, mod: hydra.module.Module, defs0: frozenlist[hydra.module.Definition], cx: T0, g: T1) -> Either[hydra.ext.lisp.syntax.Program, hydra.ext.lisp.syntax.Program]:
     @lru_cache(1)
     def defs() -> frozenlist[hydra.module.Definition]:
-        return reorder_defs(defs0)
+        return hydra.coder_utils.reorder_defs(defs0)
     @lru_cache(1)
     def partitioned() -> tuple[frozenlist[hydra.module.TypeDefinition], frozenlist[hydra.module.TermDefinition]]:
         return hydra.schemas.partition_definitions(defs())

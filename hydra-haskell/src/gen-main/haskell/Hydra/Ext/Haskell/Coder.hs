@@ -13,9 +13,9 @@ import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as Core_
 import qualified Hydra.Errors as Errors
-import qualified Hydra.Ext.Haskell.Ast as Ast
 import qualified Hydra.Ext.Haskell.Language as Language
 import qualified Hydra.Ext.Haskell.Serde as Serde
+import qualified Hydra.Ext.Haskell.Syntax as Syntax
 import qualified Hydra.Ext.Haskell.Utils as Utils
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
@@ -58,7 +58,7 @@ keyHaskellVar :: Core.Name
 keyHaskellVar = Core.Name "haskellVar"
 
 -- | Adapt a Hydra type to Haskell's type system and encode it
-adaptTypeToHaskellAndEncode :: Module.Namespaces Ast.ModuleName -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) Ast.Type
+adaptTypeToHaskellAndEncode :: Module.Namespaces Syntax.ModuleName -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) Syntax.Type
 adaptTypeToHaskellAndEncode namespaces typ cx g =
 
       let enc = \t -> encodeType namespaces t cx g
@@ -82,7 +82,7 @@ constantForTypeName :: Core.Name -> String
 constantForTypeName tname = Strings.cat2 "_" (Names.localNameOf tname)
 
 -- | Construct a Haskell module from a Hydra module and its definitions
-constructModule :: Module.Namespaces Ast.ModuleName -> Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Ast.Module
+constructModule :: Module.Namespaces Syntax.ModuleName -> Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Module
 constructModule namespaces mod defs cx g =
 
       let h = \namespace -> Module.unNamespace namespace
@@ -95,7 +95,7 @@ constructModule namespaces mod defs cx g =
                     Module.DefinitionTerm v0 -> Eithers.bind (toDataDeclaration namespaces v0 cx g) (\d -> Right [
                       d])
           importName =
-                  \name -> Ast.ModuleName (Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." name)))
+                  \name -> Syntax.ModuleName (Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." name)))
           imports = Lists.concat2 domainImports standardImports
           domainImports =
 
@@ -104,11 +104,11 @@ constructModule namespaces mod defs cx g =
                               let namespace = Pairs.first pair
                                   alias = Pairs.second pair
                                   name = h namespace
-                              in Ast.Import {
-                                Ast.importQualified = True,
-                                Ast.importModule = (importName name),
-                                Ast.importAs = (Just alias),
-                                Ast.importSpec = Nothing}
+                              in Syntax.Import {
+                                Syntax.importQualified = True,
+                                Syntax.importModule = (importName name),
+                                Syntax.importAs = (Just alias),
+                                Syntax.importSpec = Nothing}
                     in (Lists.map toImport (Maps.toList (Module.namespacesMapping namespaces)))
           standardImports =
 
@@ -118,15 +118,15 @@ constructModule namespaces mod defs cx g =
                                   malias = Pairs.second (Pairs.first triple)
                                   hidden = Pairs.second triple
                                   spec =
-                                          Logic.ifElse (Lists.null hidden) Nothing (Just (Ast.SpecImportHiding (Lists.map (\n -> Ast.ImportExportSpec {
-                                            Ast.importExportSpecModifier = Nothing,
-                                            Ast.importExportSpecName = (Utils.simpleName n),
-                                            Ast.importExportSpecSubspec = Nothing}) hidden)))
-                              in Ast.Import {
-                                Ast.importQualified = (Maybes.isJust malias),
-                                Ast.importModule = (Ast.ModuleName name),
-                                Ast.importAs = (Maybes.map (\x -> Ast.ModuleName x) malias),
-                                Ast.importSpec = spec}
+                                          Logic.ifElse (Lists.null hidden) Nothing (Just (Syntax.SpecImportHiding (Lists.map (\n -> Syntax.ImportExportSpec {
+                                            Syntax.importExportSpecModifier = Nothing,
+                                            Syntax.importExportSpecName = (Utils.simpleName n),
+                                            Syntax.importExportSpecSubspec = Nothing}) hidden)))
+                              in Syntax.Import {
+                                Syntax.importQualified = (Maybes.isJust malias),
+                                Syntax.importModule = (Syntax.ModuleName name),
+                                Syntax.importAs = (Maybes.map (\x -> Syntax.ModuleName x) malias),
+                                Syntax.importSpec = spec}
                     in (Lists.map toImport (Lists.concat2 [
                       (("Prelude", Nothing), [
                         "Enum",
@@ -146,16 +146,16 @@ constructModule namespaces mod defs cx g =
       in (Eithers.bind (Eithers.mapList createDeclarations defs) (\declLists ->
         let decls = Lists.concat declLists
             mc = Module.moduleDescription mod
-        in (Right (Ast.Module {
-          Ast.moduleHead = (Just (Ast.ModuleHead {
-            Ast.moduleHeadComments = mc,
-            Ast.moduleHeadName = (importName (h (Module.moduleNamespace mod))),
-            Ast.moduleHeadExports = []})),
-          Ast.moduleImports = imports,
-          Ast.moduleDeclarations = decls}))))
+        in (Right (Syntax.Module {
+          Syntax.moduleHead = (Just (Syntax.ModuleHead {
+            Syntax.moduleHeadComments = mc,
+            Syntax.moduleHeadName = (importName (h (Module.moduleNamespace mod))),
+            Syntax.moduleHeadExports = []})),
+          Syntax.moduleImports = imports,
+          Syntax.moduleDeclarations = decls}))))
 
 -- | Encode a Hydra case statement as a Haskell case expression with a given scrutinee
-encodeCaseExpression :: Int -> Module.Namespaces Ast.ModuleName -> Core.CaseStatement -> Ast.Expression -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Ast.Expression
+encodeCaseExpression :: Int -> Module.Namespaces Syntax.ModuleName -> Core.CaseStatement -> Syntax.Expression -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeCaseExpression depth namespaces stmt scrutinee cx g =
 
       let dn = Core.caseStatementTypeName stmt
@@ -183,74 +183,74 @@ encodeCaseExpression depth namespaces stmt scrutinee cx g =
                       let ft = Core.fieldTypeType fieldType
                           noArgs = []
                           singleArg = [
-                                Ast.PatternName (Utils.rawName v1)]
+                                Syntax.PatternName (Utils.rawName v1)]
                       in case (Rewriting.deannotateType ft) of
                         Core.TypeUnit -> Right noArgs
                         _ -> Right singleArg)) (\args ->
                       let lhs = Utils.applicationPattern hname args
-                      in (Eithers.bind (Eithers.map (\x -> Ast.CaseRhs x) (encodeTerm (Math.add depth 1) namespaces rhsTerm cx g)) (\rhs -> Right (Ast.Alternative {
-                        Ast.alternativePattern = lhs,
-                        Ast.alternativeRhs = rhs,
-                        Ast.alternativeBinds = Nothing})))))
+                      in (Eithers.bind (Eithers.map (\x -> Syntax.CaseRhs x) (encodeTerm (Math.add depth 1) namespaces rhsTerm cx g)) (\rhs -> Right (Syntax.Alternative {
+                        Syntax.alternativePattern = lhs,
+                        Syntax.alternativeRhs = rhs,
+                        Syntax.alternativeBinds = Nothing})))))
       in (Eithers.bind (Schemas.requireUnionType cx g dn) (\rt ->
         let toFieldMapEntry = \f -> (Core.fieldTypeName f, f)
             fieldMap = Maps.fromList (Lists.map toFieldMapEntry rt)
-        in (Eithers.bind (Eithers.mapList (toAlt fieldMap) fields) (\ecases -> Eithers.bind (Maybes.cases def (Right []) (\d -> Eithers.bind (Eithers.map (\x -> Ast.CaseRhs x) (encodeTerm depth namespaces d cx g)) (\cs ->
-          let lhs = Ast.PatternName (Utils.rawName Constants.ignoredVariable)
+        in (Eithers.bind (Eithers.mapList (toAlt fieldMap) fields) (\ecases -> Eithers.bind (Maybes.cases def (Right []) (\d -> Eithers.bind (Eithers.map (\x -> Syntax.CaseRhs x) (encodeTerm depth namespaces d cx g)) (\cs ->
+          let lhs = Syntax.PatternName (Utils.rawName Constants.ignoredVariable)
               alt =
-                      Ast.Alternative {
-                        Ast.alternativePattern = lhs,
-                        Ast.alternativeRhs = cs,
-                        Ast.alternativeBinds = Nothing}
+                      Syntax.Alternative {
+                        Syntax.alternativePattern = lhs,
+                        Syntax.alternativeRhs = cs,
+                        Syntax.alternativeBinds = Nothing}
           in (Right [
-            alt])))) (\dcases -> Right (Ast.ExpressionCase (Ast.CaseExpression {
-          Ast.caseExpressionCase = scrutinee,
-          Ast.caseExpressionAlternatives = (Lists.concat2 ecases dcases)})))))))
+            alt])))) (\dcases -> Right (Syntax.ExpressionCase (Syntax.CaseExpression {
+          Syntax.caseExpressionCase = scrutinee,
+          Syntax.caseExpressionAlternatives = (Lists.concat2 ecases dcases)})))))))
 
 -- | Encode a Hydra function as a Haskell expression
-encodeFunction :: Int -> Module.Namespaces Ast.ModuleName -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Ast.Expression
+encodeFunction :: Int -> Module.Namespaces Syntax.ModuleName -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeFunction depth namespaces fun cx g =
     case fun of
       Core.FunctionElimination v0 -> case v0 of
-        Core.EliminationWrap v1 -> Right (Ast.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Maybes.fromJust (Names.namespaceOf v1)) (Utils.newtypeAccessorName v1))))
+        Core.EliminationWrap v1 -> Right (Syntax.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Maybes.fromJust (Names.namespaceOf v1)) (Utils.newtypeAccessorName v1))))
         Core.EliminationRecord v1 ->
           let dn = Core.projectionTypeName v1
               fname = Core.projectionField v1
-          in (Right (Ast.ExpressionVariable (Utils.recordFieldReference namespaces dn fname)))
+          in (Right (Syntax.ExpressionVariable (Utils.recordFieldReference namespaces dn fname)))
         Core.EliminationUnion v1 -> Eithers.map (Utils.hslambda (Utils.rawName "x")) (encodeCaseExpression depth namespaces v1 (Utils.hsvar "x") cx g)
       Core.FunctionLambda v0 ->
         let v = Core.lambdaParameter v0
             body = Core.lambdaBody v0
         in (Eithers.bind (encodeTerm depth namespaces body cx g) (\hbody -> Right (Utils.hslambda (Utils.elementReference namespaces v) hbody)))
-      Core.FunctionPrimitive v0 -> Right (Ast.ExpressionVariable (Utils.elementReference namespaces v0))
+      Core.FunctionPrimitive v0 -> Right (Syntax.ExpressionVariable (Utils.elementReference namespaces v0))
 
 -- | Encode a Hydra literal as a Haskell expression
-encodeLiteral :: Core.Literal -> Context.Context -> Either (Context.InContext Errors.Error) Ast.Expression
+encodeLiteral :: Core.Literal -> Context.Context -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeLiteral l cx =
     case l of
-      Core.LiteralBinary v0 -> Right (Utils.hsapp (Utils.hsvar "Literals.stringToBinary") (Utils.hslit (Ast.LiteralString (Literals.binaryToString v0))))
+      Core.LiteralBinary v0 -> Right (Utils.hsapp (Utils.hsvar "Literals.stringToBinary") (Utils.hslit (Syntax.LiteralString (Literals.binaryToString v0))))
       Core.LiteralBoolean v0 -> Right (Utils.hsvar (Logic.ifElse v0 "True" "False"))
       Core.LiteralFloat v0 -> case v0 of
-        Core.FloatValueFloat32 v1 -> Right (Utils.hslit (Ast.LiteralFloat v1))
-        Core.FloatValueFloat64 v1 -> Right (Utils.hslit (Ast.LiteralDouble v1))
-        Core.FloatValueBigfloat v1 -> Right (Utils.hslit (Ast.LiteralDouble (Literals.bigfloatToFloat64 v1)))
+        Core.FloatValueFloat32 v1 -> Right (Utils.hslit (Syntax.LiteralFloat v1))
+        Core.FloatValueFloat64 v1 -> Right (Utils.hslit (Syntax.LiteralDouble v1))
+        Core.FloatValueBigfloat v1 -> Right (Utils.hslit (Syntax.LiteralDouble (Literals.bigfloatToFloat64 v1)))
       Core.LiteralInteger v0 -> case v0 of
-        Core.IntegerValueBigint v1 -> Right (Utils.hslit (Ast.LiteralInteger v1))
-        Core.IntegerValueInt8 v1 -> Right (Utils.hslit (Ast.LiteralInteger (Literals.int8ToBigint v1)))
-        Core.IntegerValueInt16 v1 -> Right (Utils.hslit (Ast.LiteralInteger (Literals.int16ToBigint v1)))
-        Core.IntegerValueInt32 v1 -> Right (Utils.hslit (Ast.LiteralInt v1))
-        Core.IntegerValueInt64 v1 -> Right (Utils.hslit (Ast.LiteralInteger (Literals.int64ToBigint v1)))
-        Core.IntegerValueUint8 v1 -> Right (Utils.hslit (Ast.LiteralInteger (Literals.uint8ToBigint v1)))
-        Core.IntegerValueUint16 v1 -> Right (Utils.hslit (Ast.LiteralInteger (Literals.uint16ToBigint v1)))
-        Core.IntegerValueUint32 v1 -> Right (Utils.hslit (Ast.LiteralInteger (Literals.uint32ToBigint v1)))
-        Core.IntegerValueUint64 v1 -> Right (Utils.hslit (Ast.LiteralInteger (Literals.uint64ToBigint v1)))
-      Core.LiteralString v0 -> Right (Utils.hslit (Ast.LiteralString v0))
+        Core.IntegerValueBigint v1 -> Right (Utils.hslit (Syntax.LiteralInteger v1))
+        Core.IntegerValueInt8 v1 -> Right (Utils.hslit (Syntax.LiteralInteger (Literals.int8ToBigint v1)))
+        Core.IntegerValueInt16 v1 -> Right (Utils.hslit (Syntax.LiteralInteger (Literals.int16ToBigint v1)))
+        Core.IntegerValueInt32 v1 -> Right (Utils.hslit (Syntax.LiteralInt v1))
+        Core.IntegerValueInt64 v1 -> Right (Utils.hslit (Syntax.LiteralInteger (Literals.int64ToBigint v1)))
+        Core.IntegerValueUint8 v1 -> Right (Utils.hslit (Syntax.LiteralInteger (Literals.uint8ToBigint v1)))
+        Core.IntegerValueUint16 v1 -> Right (Utils.hslit (Syntax.LiteralInteger (Literals.uint16ToBigint v1)))
+        Core.IntegerValueUint32 v1 -> Right (Utils.hslit (Syntax.LiteralInteger (Literals.uint32ToBigint v1)))
+        Core.IntegerValueUint64 v1 -> Right (Utils.hslit (Syntax.LiteralInteger (Literals.uint64ToBigint v1)))
+      Core.LiteralString v0 -> Right (Utils.hslit (Syntax.LiteralString v0))
       _ -> Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "literal value " (Core__.literal l)))),
         Context.inContextContext = cx})
 
 -- | Encode a Hydra term as a Haskell expression
-encodeTerm :: Int -> Module.Namespaces Ast.ModuleName -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Ast.Expression
+encodeTerm :: Int -> Module.Namespaces Syntax.ModuleName -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Expression
 encodeTerm depth namespaces term cx g =
 
       let encode = \t -> encodeTerm depth namespaces t cx g
@@ -261,10 +261,10 @@ encodeTerm depth namespaces term cx g =
                                 \pair ->
                                   let k = Pairs.first pair
                                       v = Pairs.second pair
-                                  in (Eithers.bind (encode k) (\hk -> Eithers.bind (encode v) (\hv -> Right (Ast.ExpressionTuple [
+                                  in (Eithers.bind (encode k) (\hk -> Eithers.bind (encode v) (\hv -> Right (Syntax.ExpressionTuple [
                                     hk,
                                     hv]))))
-                    in (Eithers.bind (Eithers.map (\x -> Ast.ExpressionList x) (Eithers.mapList encodePair (Maps.toList m))) (\rhs -> Right (Utils.hsapp lhs rhs)))
+                    in (Eithers.bind (Eithers.map (\x -> Syntax.ExpressionList x) (Eithers.mapList encodePair (Maps.toList m))) (\rhs -> Right (Utils.hsapp lhs rhs)))
           nonemptySet =
                   \s ->
                     let lhs = Utils.hsvar "S.fromList"
@@ -301,15 +301,15 @@ encodeTerm depth namespaces term cx g =
                         let name = Core.bindingName binding
                             term_ = Core.bindingTerm binding
                             hname = Utils.simpleName (Core.unName name)
-                        in (Eithers.bind (encode term_) (\hexpr -> Right (Ast.LocalBindingValue (Utils.simpleValueBinding hname hexpr Nothing))))
-          in (Eithers.bind (Eithers.mapList encodeBinding allBindings) (\hbindings -> Eithers.bind (encode finalBody) (\hinner -> Right (Ast.ExpressionLet (Ast.LetExpression {
-            Ast.letExpressionBindings = hbindings,
-            Ast.letExpressionInner = hinner})))))
-        Core.TermList v0 -> Eithers.bind (Eithers.mapList encode v0) (\helems -> Right (Ast.ExpressionList helems))
+                        in (Eithers.bind (encode term_) (\hexpr -> Right (Syntax.LocalBindingValue (Utils.simpleValueBinding hname hexpr Nothing))))
+          in (Eithers.bind (Eithers.mapList encodeBinding allBindings) (\hbindings -> Eithers.bind (encode finalBody) (\hinner -> Right (Syntax.ExpressionLet (Syntax.LetExpression {
+            Syntax.letExpressionBindings = hbindings,
+            Syntax.letExpressionInner = hinner})))))
+        Core.TermList v0 -> Eithers.bind (Eithers.mapList encode v0) (\helems -> Right (Syntax.ExpressionList helems))
         Core.TermLiteral v0 -> encodeLiteral v0 cx
         Core.TermMap v0 -> Logic.ifElse (Maps.null v0) (Right (Utils.hsvar "M.empty")) (nonemptyMap v0)
         Core.TermMaybe v0 -> Maybes.cases v0 (Right (Utils.hsvar "Nothing")) (\t -> Eithers.bind (encode t) (\ht -> Right (Utils.hsapp (Utils.hsvar "Just") ht)))
-        Core.TermPair v0 -> Eithers.bind (encode (Pairs.first v0)) (\f -> Eithers.bind (encode (Pairs.second v0)) (\s -> Right (Ast.ExpressionTuple [
+        Core.TermPair v0 -> Eithers.bind (encode (Pairs.first v0)) (\f -> Eithers.bind (encode (Pairs.second v0)) (\s -> Right (Syntax.ExpressionTuple [
           f,
           s])))
         Core.TermRecord v0 ->
@@ -320,13 +320,13 @@ encodeTerm depth namespaces term cx g =
                         let fn = Core.fieldName field
                             ft = Core.fieldTerm field
                             fieldRef = Utils.recordFieldReference namespaces sname fn
-                        in (Eithers.bind (encode ft) (\hft -> Right (Ast.FieldUpdate {
-                          Ast.fieldUpdateName = fieldRef,
-                          Ast.fieldUpdateValue = hft})))
+                        in (Eithers.bind (encode ft) (\hft -> Right (Syntax.FieldUpdate {
+                          Syntax.fieldUpdateName = fieldRef,
+                          Syntax.fieldUpdateValue = hft})))
               typeName = Utils.elementReference namespaces sname
-          in (Eithers.bind (Eithers.mapList toFieldUpdate fields) (\updates -> Right (Ast.ExpressionConstructRecord (Ast.ConstructRecordExpression {
-            Ast.constructRecordExpressionName = typeName,
-            Ast.constructRecordExpressionFields = updates}))))
+          in (Eithers.bind (Eithers.mapList toFieldUpdate fields) (\updates -> Right (Syntax.ExpressionConstructRecord (Syntax.ConstructRecordExpression {
+            Syntax.constructRecordExpressionName = typeName,
+            Syntax.constructRecordExpressionFields = updates}))))
         Core.TermSet v0 -> Logic.ifElse (Sets.null v0) (Right (Utils.hsvar "S.empty")) (nonemptySet v0)
         Core.TermTypeLambda v0 ->
           let term1 = Core.typeLambdaBody v0
@@ -340,29 +340,29 @@ encodeTerm depth namespaces term cx g =
               fn = Core.fieldName field
               ft = Core.fieldTerm field
               lhs =
-                      Ast.ExpressionVariable (Utils.unionFieldReference (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) namespaces sname fn)
+                      Syntax.ExpressionVariable (Utils.unionFieldReference (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) namespaces sname fn)
               dflt = Eithers.map (Utils.hsapp lhs) (encode ft)
           in (Eithers.bind (Schemas.requireUnionField cx g sname fn) (\ftyp -> case (Rewriting.deannotateType ftyp) of
             Core.TypeUnit -> Right lhs
             _ -> dflt))
-        Core.TermUnit -> Right (Ast.ExpressionTuple [])
-        Core.TermVariable v0 -> Right (Ast.ExpressionVariable (Utils.elementReference namespaces v0))
+        Core.TermUnit -> Right (Syntax.ExpressionTuple [])
+        Core.TermVariable v0 -> Right (Syntax.ExpressionVariable (Utils.elementReference namespaces v0))
         Core.TermWrap v0 ->
           let tname = Core.wrappedTermTypeName v0
               term_ = Core.wrappedTermBody v0
-              lhs = Ast.ExpressionVariable (Utils.elementReference namespaces tname)
+              lhs = Syntax.ExpressionVariable (Utils.elementReference namespaces tname)
           in (Eithers.bind (encode term_) (\rhs -> Right (Utils.hsapp lhs rhs)))
         _ -> Left (Context.InContext {
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected term: " (Core__.term term)))),
           Context.inContextContext = cx})
 
 -- | Encode a Hydra type as a Haskell type
-encodeType :: Module.Namespaces Ast.ModuleName -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) Ast.Type
+encodeType :: Module.Namespaces Syntax.ModuleName -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) Syntax.Type
 encodeType namespaces typ cx g =
 
       let encode = \t -> encodeType namespaces t cx g
-          ref = \name -> Right (Ast.TypeVariable (Utils.elementReference namespaces name))
-          unitTuple = Ast.TypeTuple []
+          ref = \name -> Right (Syntax.TypeVariable (Utils.elementReference namespaces name))
+          unitTuple = Syntax.TypeTuple []
       in case (Rewriting.deannotateType typ) of
         Core.TypeApplication v0 ->
           let lhs = Core.applicationTypeFunction v0
@@ -374,37 +374,37 @@ encodeType namespaces typ cx g =
           let left_ = Core.eitherTypeLeft v0
               right_ = Core.eitherTypeRight v0
           in (Eithers.bind (encode left_) (\hleft -> Eithers.bind (encode right_) (\hright -> Right (Utils.toTypeApplication [
-            Ast.TypeVariable (Utils.rawName "Either"),
+            Syntax.TypeVariable (Utils.rawName "Either"),
             hleft,
             hright]))))
         Core.TypeFunction v0 ->
           let dom = Core.functionTypeDomain v0
               cod = Core.functionTypeCodomain v0
-          in (Eithers.bind (encode dom) (\hdom -> Eithers.bind (encode cod) (\hcod -> Right (Ast.TypeFunction (Ast.FunctionType {
-            Ast.functionTypeDomain = hdom,
-            Ast.functionTypeCodomain = hcod})))))
+          in (Eithers.bind (encode dom) (\hdom -> Eithers.bind (encode cod) (\hcod -> Right (Syntax.TypeFunction (Syntax.FunctionType {
+            Syntax.functionTypeDomain = hdom,
+            Syntax.functionTypeCodomain = hcod})))))
         Core.TypeForall v0 ->
           let v = Core.forallTypeParameter v0
               body = Core.forallTypeBody v0
           in (encode body)
-        Core.TypeList v0 -> Eithers.bind (encode v0) (\hlt -> Right (Ast.TypeList hlt))
+        Core.TypeList v0 -> Eithers.bind (encode v0) (\hlt -> Right (Syntax.TypeList hlt))
         Core.TypeLiteral v0 -> case v0 of
-          Core.LiteralTypeBinary -> Right (Ast.TypeVariable (Utils.rawName "B.ByteString"))
-          Core.LiteralTypeBoolean -> Right (Ast.TypeVariable (Utils.rawName "Bool"))
+          Core.LiteralTypeBinary -> Right (Syntax.TypeVariable (Utils.rawName "B.ByteString"))
+          Core.LiteralTypeBoolean -> Right (Syntax.TypeVariable (Utils.rawName "Bool"))
           Core.LiteralTypeFloat v1 -> case v1 of
-            Core.FloatTypeFloat32 -> Right (Ast.TypeVariable (Utils.rawName "Float"))
-            Core.FloatTypeFloat64 -> Right (Ast.TypeVariable (Utils.rawName "Double"))
-            Core.FloatTypeBigfloat -> Right (Ast.TypeVariable (Utils.rawName "Double"))
+            Core.FloatTypeFloat32 -> Right (Syntax.TypeVariable (Utils.rawName "Float"))
+            Core.FloatTypeFloat64 -> Right (Syntax.TypeVariable (Utils.rawName "Double"))
+            Core.FloatTypeBigfloat -> Right (Syntax.TypeVariable (Utils.rawName "Double"))
           Core.LiteralTypeInteger v1 -> case v1 of
-            Core.IntegerTypeBigint -> Right (Ast.TypeVariable (Utils.rawName "Integer"))
-            Core.IntegerTypeInt8 -> Right (Ast.TypeVariable (Utils.rawName "I.Int8"))
-            Core.IntegerTypeInt16 -> Right (Ast.TypeVariable (Utils.rawName "I.Int16"))
-            Core.IntegerTypeInt32 -> Right (Ast.TypeVariable (Utils.rawName "Int"))
-            Core.IntegerTypeInt64 -> Right (Ast.TypeVariable (Utils.rawName "I.Int64"))
+            Core.IntegerTypeBigint -> Right (Syntax.TypeVariable (Utils.rawName "Integer"))
+            Core.IntegerTypeInt8 -> Right (Syntax.TypeVariable (Utils.rawName "I.Int8"))
+            Core.IntegerTypeInt16 -> Right (Syntax.TypeVariable (Utils.rawName "I.Int16"))
+            Core.IntegerTypeInt32 -> Right (Syntax.TypeVariable (Utils.rawName "Int"))
+            Core.IntegerTypeInt64 -> Right (Syntax.TypeVariable (Utils.rawName "I.Int64"))
             _ -> Left (Context.InContext {
               Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected integer type: " (Core__.integerType v1)))),
               Context.inContextContext = cx})
-          Core.LiteralTypeString -> Right (Ast.TypeVariable (Utils.rawName "String"))
+          Core.LiteralTypeString -> Right (Syntax.TypeVariable (Utils.rawName "String"))
           _ -> Left (Context.InContext {
             Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected literal type: " (Core__.literalType v0)))),
             Context.inContextContext = cx})
@@ -412,30 +412,30 @@ encodeType namespaces typ cx g =
           let kt = Core.mapTypeKeys v0
               vt = Core.mapTypeValues v0
           in (Eithers.bind (encode kt) (\hkt -> Eithers.bind (encode vt) (\hvt -> Right (Utils.toTypeApplication [
-            Ast.TypeVariable (Utils.rawName "M.Map"),
+            Syntax.TypeVariable (Utils.rawName "M.Map"),
             hkt,
             hvt]))))
         Core.TypeMaybe v0 -> Eithers.bind (encode v0) (\hot -> Right (Utils.toTypeApplication [
-          Ast.TypeVariable (Utils.rawName "Maybe"),
+          Syntax.TypeVariable (Utils.rawName "Maybe"),
           hot]))
-        Core.TypePair v0 -> Eithers.bind (encode (Core.pairTypeFirst v0)) (\f -> Eithers.bind (encode (Core.pairTypeSecond v0)) (\s -> Right (Ast.TypeTuple [
+        Core.TypePair v0 -> Eithers.bind (encode (Core.pairTypeFirst v0)) (\f -> Eithers.bind (encode (Core.pairTypeSecond v0)) (\s -> Right (Syntax.TypeTuple [
           f,
           s])))
         Core.TypeRecord _ -> ref (Core.Name "placeholder")
         Core.TypeSet v0 -> Eithers.bind (encode v0) (\hst -> Right (Utils.toTypeApplication [
-          Ast.TypeVariable (Utils.rawName "S.Set"),
+          Syntax.TypeVariable (Utils.rawName "S.Set"),
           hst]))
         Core.TypeUnion _ -> ref (Core.Name "placeholder")
         Core.TypeUnit -> Right unitTuple
         Core.TypeVariable v0 -> ref v0
-        Core.TypeVoid -> Right (Ast.TypeVariable (Utils.rawName "Void"))
+        Core.TypeVoid -> Right (Syntax.TypeVariable (Utils.rawName "Void"))
         Core.TypeWrap _ -> ref (Core.Name "placeholder")
         _ -> Left (Context.InContext {
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected type: " (Core__.type_ typ)))),
           Context.inContextContext = cx})
 
 -- | Encode a Hydra type as a Haskell type with typeclass assertions
-encodeTypeWithClassAssertions :: Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) Ast.Type
+encodeTypeWithClassAssertions :: Module.Namespaces Syntax.ModuleName -> M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Errors.Error) Syntax.Type
 encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
 
       let classes = Maps.union explicitClasses (getImplicitTypeClasses typ)
@@ -448,10 +448,10 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
                                 Utils.rawName (case cls of
                                   Classes.TypeClassEquality -> "Eq"
                                   Classes.TypeClassOrdering -> "Ord")
-                        htype = Ast.TypeVariable (Utils.rawName (Core.unName name))
-                    in (Ast.AssertionClass (Ast.ClassAssertion {
-                      Ast.classAssertionName = hname,
-                      Ast.classAssertionTypes = [
+                        htype = Syntax.TypeVariable (Utils.rawName (Core.unName name))
+                    in (Syntax.AssertionClass (Syntax.ClassAssertion {
+                      Syntax.classAssertionName = hname,
+                      Syntax.classAssertionTypes = [
                         htype]}))
           assertPairs = Lists.concat (Lists.map toPairs (Maps.toList classes))
           toPairs =
@@ -462,10 +462,10 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
                     in (Lists.map toPair (Sets.toList clsSet))
       in (Eithers.bind (adaptTypeToHaskellAndEncode namespaces typ cx g) (\htyp -> Logic.ifElse (Lists.null assertPairs) (Right htyp) (
         let encoded = Lists.map encodeAssertion assertPairs
-            hassert = Logic.ifElse (Equality.equal (Lists.length encoded) 1) (Lists.head encoded) (Ast.AssertionTuple encoded)
-        in (Right (Ast.TypeCtx (Ast.ContextType {
-          Ast.contextTypeCtx = hassert,
-          Ast.contextTypeType = htyp}))))))
+            hassert = Logic.ifElse (Equality.equal (Lists.length encoded) 1) (Lists.head encoded) (Syntax.AssertionTuple encoded)
+        in (Right (Syntax.TypeCtx (Syntax.ContextType {
+          Syntax.contextTypeCtx = hassert,
+          Syntax.contextTypeType = htyp}))))))
 
 -- | Find type variables that require an Ord constraint (used in maps or sets)
 findOrdVariables :: Core.Type -> S.Set Core.Name
@@ -494,7 +494,7 @@ getImplicitTypeClasses typ =
       in (Maps.fromList (Lists.map toPair (Sets.toList (findOrdVariables typ))))
 
 -- | Convert a Hydra module and definitions to a Haskell module AST
-moduleToHaskellModule :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Ast.Module
+moduleToHaskellModule :: Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.Module
 moduleToHaskellModule mod defs cx g =
     Eithers.bind (Utils.namespacesForModule mod cx g) (\namespaces -> constructModule namespaces mod defs cx g)
 
@@ -507,7 +507,7 @@ moduleToHaskell mod defs cx g =
       in (Right (Maps.singleton filepath s)))
 
 -- | Generate Haskell declarations for type and field name constants
-nameDecls :: Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> [Ast.DeclarationWithComments]
+nameDecls :: Module.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> [Syntax.DeclarationWithComments]
 nameDecls namespaces name typ =
 
       let nm = Core.unName name
@@ -516,15 +516,15 @@ nameDecls namespaces name typ =
                     let k = Pairs.first pair
                         v = Pairs.second pair
                         decl =
-                                Ast.DeclarationValueBinding (Ast.ValueBindingSimple (Ast.SimpleValueBinding {
-                                  Ast.simpleValueBindingPattern = (Utils.applicationPattern (Utils.simpleName k) []),
-                                  Ast.simpleValueBindingRhs = (Ast.RightHandSide (Ast.ExpressionApplication (Ast.ApplicationExpression {
-                                    Ast.applicationExpressionFunction = (Ast.ExpressionVariable (Utils.elementReference namespaces n)),
-                                    Ast.applicationExpressionArgument = (Ast.ExpressionLiteral (Ast.LiteralString v))}))),
-                                  Ast.simpleValueBindingLocalBindings = Nothing}))
-                    in Ast.DeclarationWithComments {
-                      Ast.declarationWithCommentsBody = decl,
-                      Ast.declarationWithCommentsComments = Nothing}
+                                Syntax.DeclarationValueBinding (Syntax.ValueBindingSimple (Syntax.SimpleValueBinding {
+                                  Syntax.simpleValueBindingPattern = (Utils.applicationPattern (Utils.simpleName k) []),
+                                  Syntax.simpleValueBindingRhs = (Syntax.RightHandSide (Syntax.ExpressionApplication (Syntax.ApplicationExpression {
+                                    Syntax.applicationExpressionFunction = (Syntax.ExpressionVariable (Utils.elementReference namespaces n)),
+                                    Syntax.applicationExpressionArgument = (Syntax.ExpressionLiteral (Syntax.LiteralString v))}))),
+                                  Syntax.simpleValueBindingLocalBindings = Nothing}))
+                    in Syntax.DeclarationWithComments {
+                      Syntax.declarationWithCommentsBody = decl,
+                      Syntax.declarationWithCommentsComments = Nothing}
           nameDecl = (constantForTypeName name, nm)
           fieldDecls = Lists.map toConstant (Lexical.fieldsOf typ)
           toConstant =
@@ -534,7 +534,7 @@ nameDecls namespaces name typ =
       in (Logic.ifElse useCoreImport (Lists.cons (toDecl (Core.Name "hydra.core.Name") nameDecl) (Lists.map (toDecl (Core.Name "hydra.core.Name")) fieldDecls)) [])
 
 -- | Convert a Hydra term definition to a Haskell declaration with comments
-toDataDeclaration :: Module.Namespaces Ast.ModuleName -> Module.TermDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Ast.DeclarationWithComments
+toDataDeclaration :: Module.Namespaces Syntax.ModuleName -> Module.TermDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.DeclarationWithComments
 toDataDeclaration namespaces def cx g =
 
       let name = Module.termDefinitionName def
@@ -543,25 +543,25 @@ toDataDeclaration namespaces def cx g =
           hname = Utils.simpleName (Names.localNameOf name)
           rewriteValueBinding =
                   \vb -> case vb of
-                    Ast.ValueBindingSimple v0 ->
-                      let pattern_ = Ast.simpleValueBindingPattern v0
-                          rhs = Ast.simpleValueBindingRhs v0
-                          bindings = Ast.simpleValueBindingLocalBindings v0
+                    Syntax.ValueBindingSimple v0 ->
+                      let pattern_ = Syntax.simpleValueBindingPattern v0
+                          rhs = Syntax.simpleValueBindingRhs v0
+                          bindings = Syntax.simpleValueBindingLocalBindings v0
                       in case pattern_ of
-                        Ast.PatternApplication v1 ->
-                          let name_ = Ast.applicationPatternName v1
-                              args = Ast.applicationPatternArgs v1
-                              rhsExpr = Ast.unRightHandSide rhs
+                        Syntax.PatternApplication v1 ->
+                          let name_ = Syntax.applicationPatternName v1
+                              args = Syntax.applicationPatternArgs v1
+                              rhsExpr = Syntax.unRightHandSide rhs
                           in case rhsExpr of
-                            Ast.ExpressionLambda v2 ->
-                              let vars = Ast.lambdaExpressionBindings v2
-                                  body = Ast.lambdaExpressionInner v2
+                            Syntax.ExpressionLambda v2 ->
+                              let vars = Syntax.lambdaExpressionBindings v2
+                                  body = Syntax.lambdaExpressionInner v2
                                   newPattern = Utils.applicationPattern name_ (Lists.concat2 args vars)
-                                  newRhs = Ast.RightHandSide body
-                              in (rewriteValueBinding (Ast.ValueBindingSimple (Ast.SimpleValueBinding {
-                                Ast.simpleValueBindingPattern = newPattern,
-                                Ast.simpleValueBindingRhs = newRhs,
-                                Ast.simpleValueBindingLocalBindings = bindings})))
+                                  newRhs = Syntax.RightHandSide body
+                              in (rewriteValueBinding (Syntax.ValueBindingSimple (Syntax.SimpleValueBinding {
+                                Syntax.simpleValueBindingPattern = newPattern,
+                                Syntax.simpleValueBindingRhs = newRhs,
+                                Syntax.simpleValueBindingLocalBindings = bindings})))
                             _ -> vb
                         _ -> vb
           toDecl =
@@ -569,14 +569,14 @@ toDataDeclaration namespaces def cx g =
                     Core.TermLet v0 ->
                       let lbindings = Core.letBindings v0
                           env = Core.letBody v0
-                          toBinding = \hname_ -> \hterm_ -> Ast.LocalBindingValue (Utils.simpleValueBinding hname_ hterm_ Nothing)
+                          toBinding = \hname_ -> \hterm_ -> Syntax.LocalBindingValue (Utils.simpleValueBinding hname_ hterm_ Nothing)
                           hnames = Lists.map (\binding -> Utils.simpleName (Core.unName (Core.bindingName binding))) lbindings
                           terms = Lists.map Core.bindingTerm lbindings
                       in (Eithers.bind (Eithers.mapList (\t -> encodeTerm 0 namespaces t cx g) terms) (\hterms ->
                         let hbindings = Lists.zipWith toBinding hnames hterms
-                            prevBindings = Maybes.maybe [] (\lb -> Ast.unLocalBindings lb) bindings
+                            prevBindings = Maybes.maybe [] (\lb -> Syntax.unLocalBindings lb) bindings
                             allBindings = Lists.concat2 prevBindings hbindings
-                        in (toDecl comments hname_ env (Just (Ast.LocalBindings allBindings)))))
+                        in (toDecl comments hname_ env (Just (Syntax.LocalBindings allBindings)))))
                     _ -> Eithers.bind (encodeTerm 0 namespaces term_ cx g) (\hterm ->
                       let vb = Utils.simpleValueBinding hname_ hterm bindings
                           schemeConstraints = Core.typeSchemeConstraints typ
@@ -585,47 +585,47 @@ toDataDeclaration namespaces def cx g =
                         let combinedClasses = Maps.union schemeClasses explicitClasses
                         in (Eithers.bind (encodeTypeWithClassAssertions namespaces combinedClasses (Core.typeSchemeType typ) cx g) (\htype ->
                           let decl =
-                                  Ast.DeclarationTypedBinding (Ast.TypedBinding {
-                                    Ast.typedBindingTypeSignature = Ast.TypeSignature {
-                                      Ast.typeSignatureName = hname_,
-                                      Ast.typeSignatureType = htype},
-                                    Ast.typedBindingValueBinding = (rewriteValueBinding vb)})
-                          in (Right (Ast.DeclarationWithComments {
-                            Ast.declarationWithCommentsBody = decl,
-                            Ast.declarationWithCommentsComments = comments})))))))
+                                  Syntax.DeclarationTypedBinding (Syntax.TypedBinding {
+                                    Syntax.typedBindingTypeSignature = Syntax.TypeSignature {
+                                      Syntax.typeSignatureName = hname_,
+                                      Syntax.typeSignatureType = htype},
+                                    Syntax.typedBindingValueBinding = (rewriteValueBinding vb)})
+                          in (Right (Syntax.DeclarationWithComments {
+                            Syntax.declarationWithCommentsBody = decl,
+                            Syntax.declarationWithCommentsComments = comments})))))))
       in (Eithers.bind (Annotations.getTermDescription cx g term) (\comments -> toDecl comments hname term Nothing))
 
 -- | Convert a Hydra type definition to Haskell declarations
-toTypeDeclarationsFrom :: Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Ast.DeclarationWithComments]
+toTypeDeclarationsFrom :: Module.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) [Syntax.DeclarationWithComments]
 toTypeDeclarationsFrom namespaces elementName typ cx g =
 
       let lname = Names.localNameOf elementName
           hname = Utils.simpleName lname
           declHead =
-                  \name -> \vars_ -> Logic.ifElse (Lists.null vars_) (Ast.DeclarationHeadSimple name) (
+                  \name -> \vars_ -> Logic.ifElse (Lists.null vars_) (Syntax.DeclarationHeadSimple name) (
                     let h = Lists.head vars_
                         rest = Lists.tail vars_
-                        hvar = Ast.Variable (Utils.simpleName (Core.unName h))
-                    in (Ast.DeclarationHeadApplication (Ast.ApplicationDeclarationHead {
-                      Ast.applicationDeclarationHeadFunction = (declHead name rest),
-                      Ast.applicationDeclarationHeadOperand = hvar})))
+                        hvar = Syntax.Variable (Utils.simpleName (Core.unName h))
+                    in (Syntax.DeclarationHeadApplication (Syntax.ApplicationDeclarationHead {
+                      Syntax.applicationDeclarationHeadFunction = (declHead name rest),
+                      Syntax.applicationDeclarationHeadOperand = hvar})))
           newtypeCons =
                   \tname -> \typ_ ->
                     let hname0 = Utils.simpleName (Utils.newtypeAccessorName tname)
                     in (Eithers.bind (adaptTypeToHaskellAndEncode namespaces typ_ cx g) (\htype ->
                       let hfield =
-                              Ast.FieldWithComments {
-                                Ast.fieldWithCommentsField = Ast.Field {
-                                  Ast.fieldName = hname0,
-                                  Ast.fieldType = htype},
-                                Ast.fieldWithCommentsComments = Nothing}
+                              Syntax.FieldWithComments {
+                                Syntax.fieldWithCommentsField = Syntax.Field {
+                                  Syntax.fieldName = hname0,
+                                  Syntax.fieldType = htype},
+                                Syntax.fieldWithCommentsComments = Nothing}
                           constructorName = Utils.simpleName (Names.localNameOf tname)
-                      in (Right (Ast.ConstructorWithComments {
-                        Ast.constructorWithCommentsBody = (Ast.ConstructorRecord (Ast.RecordConstructor {
-                          Ast.recordConstructorName = constructorName,
-                          Ast.recordConstructorFields = [
+                      in (Right (Syntax.ConstructorWithComments {
+                        Syntax.constructorWithCommentsBody = (Syntax.ConstructorRecord (Syntax.RecordConstructor {
+                          Syntax.recordConstructorName = constructorName,
+                          Syntax.recordConstructorFields = [
                             hfield]})),
-                        Ast.constructorWithCommentsComments = Nothing}))))
+                        Syntax.constructorWithCommentsComments = Nothing}))))
           recordCons =
                   \lname_ -> \fields ->
                     let toField =
@@ -633,16 +633,16 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
                               let fname = Core.fieldTypeName fieldType
                                   ftype = Core.fieldTypeType fieldType
                                   hname_ = Utils.simpleName (Strings.cat2 (Formatting.decapitalize lname_) (Formatting.capitalize (Core.unName fname)))
-                              in (Eithers.bind (adaptTypeToHaskellAndEncode namespaces ftype cx g) (\htype -> Eithers.bind (Annotations.getTypeDescription cx g ftype) (\comments -> Right (Ast.FieldWithComments {
-                                Ast.fieldWithCommentsField = Ast.Field {
-                                  Ast.fieldName = hname_,
-                                  Ast.fieldType = htype},
-                                Ast.fieldWithCommentsComments = comments}))))
-                    in (Eithers.bind (Eithers.mapList toField fields) (\hFields -> Right (Ast.ConstructorWithComments {
-                      Ast.constructorWithCommentsBody = (Ast.ConstructorRecord (Ast.RecordConstructor {
-                        Ast.recordConstructorName = (Utils.simpleName lname_),
-                        Ast.recordConstructorFields = hFields})),
-                      Ast.constructorWithCommentsComments = Nothing})))
+                              in (Eithers.bind (adaptTypeToHaskellAndEncode namespaces ftype cx g) (\htype -> Eithers.bind (Annotations.getTypeDescription cx g ftype) (\comments -> Right (Syntax.FieldWithComments {
+                                Syntax.fieldWithCommentsField = Syntax.Field {
+                                  Syntax.fieldName = hname_,
+                                  Syntax.fieldType = htype},
+                                Syntax.fieldWithCommentsComments = comments}))))
+                    in (Eithers.bind (Eithers.mapList toField fields) (\hFields -> Right (Syntax.ConstructorWithComments {
+                      Syntax.constructorWithCommentsBody = (Syntax.ConstructorRecord (Syntax.RecordConstructor {
+                        Syntax.recordConstructorName = (Utils.simpleName lname_),
+                        Syntax.recordConstructorFields = hFields})),
+                      Syntax.constructorWithCommentsComments = Nothing})))
           unionCons =
                   \boundNames_ -> \lname_ -> \fieldType ->
                     let fname = Core.fieldTypeName fieldType
@@ -657,14 +657,14 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
                     in (Eithers.bind (Annotations.getTypeDescription cx g ftype) (\comments ->
                       let nm = deconflict (Strings.cat2 (Formatting.capitalize lname_) (Formatting.capitalize (Core.unName fname)))
                       in (Eithers.bind (Logic.ifElse (Equality.equal (Rewriting.deannotateType ftype) Core.TypeUnit) (Right []) (Eithers.bind (adaptTypeToHaskellAndEncode namespaces ftype cx g) (\htype -> Right [
-                        htype]))) (\typeList -> Right (Ast.ConstructorWithComments {
-                        Ast.constructorWithCommentsBody = (Ast.ConstructorOrdinary (Ast.OrdinaryConstructor {
-                          Ast.ordinaryConstructorName = (Utils.simpleName nm),
-                          Ast.ordinaryConstructorFields = typeList})),
-                        Ast.constructorWithCommentsComments = comments})))))
+                        htype]))) (\typeList -> Right (Syntax.ConstructorWithComments {
+                        Syntax.constructorWithCommentsBody = (Syntax.ConstructorOrdinary (Syntax.OrdinaryConstructor {
+                          Syntax.ordinaryConstructorName = (Utils.simpleName nm),
+                          Syntax.ordinaryConstructorFields = typeList})),
+                        Syntax.constructorWithCommentsComments = comments})))))
       in (Eithers.bind (Schemas.isSerializableByName cx g elementName) (\isSer ->
         let deriv =
-                Ast.Deriving (Logic.ifElse isSer (Lists.map Utils.rawName [
+                Syntax.Deriving (Logic.ifElse isSer (Lists.map Utils.rawName [
                   "Eq",
                   "Ord",
                   "Read",
@@ -674,37 +674,37 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
             t_ = Pairs.second unpackResult
             hd = declHead hname (Lists.reverse vars)
         in (Eithers.bind (case (Rewriting.deannotateType t_) of
-          Core.TypeRecord v0 -> Eithers.bind (recordCons lname v0) (\cons -> Right (Ast.DeclarationData (Ast.DataDeclaration {
-            Ast.dataDeclarationKeyword = Ast.DataOrNewtypeData,
-            Ast.dataDeclarationContext = [],
-            Ast.dataDeclarationHead = hd,
-            Ast.dataDeclarationConstructors = [
+          Core.TypeRecord v0 -> Eithers.bind (recordCons lname v0) (\cons -> Right (Syntax.DeclarationData (Syntax.DataDeclaration {
+            Syntax.dataDeclarationKeyword = Syntax.DataOrNewtypeData,
+            Syntax.dataDeclarationContext = [],
+            Syntax.dataDeclarationHead = hd,
+            Syntax.dataDeclarationConstructors = [
               cons],
-            Ast.dataDeclarationDeriving = [
+            Syntax.dataDeclarationDeriving = [
               deriv]})))
-          Core.TypeUnion v0 -> Eithers.bind (Eithers.mapList (unionCons (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) lname) v0) (\cons -> Right (Ast.DeclarationData (Ast.DataDeclaration {
-            Ast.dataDeclarationKeyword = Ast.DataOrNewtypeData,
-            Ast.dataDeclarationContext = [],
-            Ast.dataDeclarationHead = hd,
-            Ast.dataDeclarationConstructors = cons,
-            Ast.dataDeclarationDeriving = [
+          Core.TypeUnion v0 -> Eithers.bind (Eithers.mapList (unionCons (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) lname) v0) (\cons -> Right (Syntax.DeclarationData (Syntax.DataDeclaration {
+            Syntax.dataDeclarationKeyword = Syntax.DataOrNewtypeData,
+            Syntax.dataDeclarationContext = [],
+            Syntax.dataDeclarationHead = hd,
+            Syntax.dataDeclarationConstructors = cons,
+            Syntax.dataDeclarationDeriving = [
               deriv]})))
-          Core.TypeWrap v0 -> Eithers.bind (newtypeCons elementName v0) (\cons -> Right (Ast.DeclarationData (Ast.DataDeclaration {
-            Ast.dataDeclarationKeyword = Ast.DataOrNewtypeNewtype,
-            Ast.dataDeclarationContext = [],
-            Ast.dataDeclarationHead = hd,
-            Ast.dataDeclarationConstructors = [
+          Core.TypeWrap v0 -> Eithers.bind (newtypeCons elementName v0) (\cons -> Right (Syntax.DeclarationData (Syntax.DataDeclaration {
+            Syntax.dataDeclarationKeyword = Syntax.DataOrNewtypeNewtype,
+            Syntax.dataDeclarationContext = [],
+            Syntax.dataDeclarationHead = hd,
+            Syntax.dataDeclarationConstructors = [
               cons],
-            Ast.dataDeclarationDeriving = [
+            Syntax.dataDeclarationDeriving = [
               deriv]})))
-          _ -> Eithers.bind (adaptTypeToHaskellAndEncode namespaces typ cx g) (\htype -> Right (Ast.DeclarationType (Ast.TypeDeclaration {
-            Ast.typeDeclarationName = hd,
-            Ast.typeDeclarationType = htype})))) (\decl -> Eithers.bind (Annotations.getTypeDescription cx g typ) (\comments -> Eithers.bind (Logic.ifElse includeTypeDefinitions (Eithers.bind (typeDecl namespaces elementName typ cx g) (\decl_ -> Right [
+          _ -> Eithers.bind (adaptTypeToHaskellAndEncode namespaces typ cx g) (\htype -> Right (Syntax.DeclarationType (Syntax.TypeDeclaration {
+            Syntax.typeDeclarationName = hd,
+            Syntax.typeDeclarationType = htype})))) (\decl -> Eithers.bind (Annotations.getTypeDescription cx g typ) (\comments -> Eithers.bind (Logic.ifElse includeTypeDefinitions (Eithers.bind (typeDecl namespaces elementName typ cx g) (\decl_ -> Right [
           decl_])) (Right [])) (\tdecls ->
           let mainDecl =
-                  Ast.DeclarationWithComments {
-                    Ast.declarationWithCommentsBody = decl,
-                    Ast.declarationWithCommentsComments = comments}
+                  Syntax.DeclarationWithComments {
+                    Syntax.declarationWithCommentsBody = decl,
+                    Syntax.declarationWithCommentsComments = comments}
               nameDecls_ = nameDecls namespaces elementName typ
           in (Right (Lists.concat [
             [
@@ -713,7 +713,7 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
             tdecls]))))))))
 
 -- | Generate a Haskell declaration for a type definition constant
-typeDecl :: Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Ast.DeclarationWithComments
+typeDecl :: Module.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) Syntax.DeclarationWithComments
 typeDecl namespaces name typ cx g =
 
       let typeName = \ns -> \name_ -> Names.qname ns (typeNameLocal name_)
@@ -756,17 +756,17 @@ typeDecl namespaces name typ cx g =
                     in (Maybes.fromMaybe (recurse term) (Maybes.bind variantResult forType))
           finalTerm = Rewriting.rewriteTerm rewrite rawTerm
       in (Eithers.bind (encodeTerm 0 namespaces finalTerm cx g) (\expr ->
-        let rhs = Ast.RightHandSide expr
+        let rhs = Syntax.RightHandSide expr
             hname = Utils.simpleName (typeNameLocal name)
             pat = Utils.applicationPattern hname []
             decl =
-                    Ast.DeclarationValueBinding (Ast.ValueBindingSimple (Ast.SimpleValueBinding {
-                      Ast.simpleValueBindingPattern = pat,
-                      Ast.simpleValueBindingRhs = rhs,
-                      Ast.simpleValueBindingLocalBindings = Nothing}))
-        in (Right (Ast.DeclarationWithComments {
-          Ast.declarationWithCommentsBody = decl,
-          Ast.declarationWithCommentsComments = Nothing}))))
+                    Syntax.DeclarationValueBinding (Syntax.ValueBindingSimple (Syntax.SimpleValueBinding {
+                      Syntax.simpleValueBindingPattern = pat,
+                      Syntax.simpleValueBindingRhs = rhs,
+                      Syntax.simpleValueBindingLocalBindings = Nothing}))
+        in (Right (Syntax.DeclarationWithComments {
+          Syntax.declarationWithCommentsBody = decl,
+          Syntax.declarationWithCommentsComments = Nothing}))))
 
 -- | Convert type scheme constraints to a map of type variables to typeclasses
 typeSchemeConstraintsToClassMap :: Ord t0 => (Maybe (M.Map t0 Core.TypeVariableMetadata) -> M.Map t0 (S.Set Classes.TypeClass))

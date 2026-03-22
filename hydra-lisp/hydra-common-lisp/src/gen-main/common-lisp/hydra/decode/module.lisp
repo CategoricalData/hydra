@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.module
-(:use :cl :hydra.core :hydra.decode.core :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings :hydra.module)
+(:use :cl :hydra.core :hydra.decode.core :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings :hydra.module)
 (:export :hydra_decode_module_term_definition :hydra_decode_module_type_definition :hydra_decode_module_definition :hydra_decode_module_file_extension :hydra_decode_module_namespace :hydra_decode_module_module :hydra_decode_module_namespaces :hydra_decode_module_qualified_name))
 
 (in-package :hydra.decode.module)

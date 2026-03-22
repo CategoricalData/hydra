@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.classes
-(:use :cl :hydra.classes :hydra.core :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings)
+(:use :cl :hydra.classes :hydra.core :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers :hydra.lib.maps :hydra.lib.maybes :hydra.lib.strings)
 (:export :hydra_decode_classes_type_class))
 
 (in-package :hydra.decode.classes)

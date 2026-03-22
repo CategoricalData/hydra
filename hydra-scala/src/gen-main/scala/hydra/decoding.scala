@@ -4,7 +4,7 @@ import hydra.context.*
 
 import hydra.core.*
 
-import hydra.error.*
+import hydra.errors.*
 
 import hydra.module.*
 
@@ -68,10 +68,10 @@ def collectTypeVariablesFromType(typ: hydra.core.Type): Seq[hydra.core.Name] =
   case hydra.core.Type.wrap(v_Type_wrap_wt) => hydra.decoding.collectTypeVariablesFromType(v_Type_wrap_wt)
   case _ => Seq()
 
-def decodeBinding(cx: hydra.context.Context)(graph: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.error.DecodingError],
+def decodeBinding(cx: hydra.context.Context)(graph: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.DecodingError],
    hydra.core.Binding] =
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.error.DecodingError], hydra.core.Type, hydra.core.Binding](hydra.lib.eithers.bimap[hydra.error.DecodingError,
-     hydra.core.Type, hydra.context.InContext[hydra.error.DecodingError], hydra.core.Type]((_wc_e: hydra.error.DecodingError) => hydra.context.InContext(_wc_e,
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.DecodingError], hydra.core.Type, hydra.core.Binding](hydra.lib.eithers.bimap[hydra.errors.DecodingError,
+     hydra.core.Type, hydra.context.InContext[hydra.errors.DecodingError], hydra.core.Type]((_wc_e: hydra.errors.DecodingError) => hydra.context.InContext(_wc_e,
      cx))((_wc_a: hydra.core.Type) => _wc_a)(hydra.decode.core.`type`(graph)(b.term)))((typ: hydra.core.Type) =>
   Right(hydra.core.Binding(hydra.decoding.decodeBindingName(b.name), hydra.decoding.decodeTypeNamed(b.name)(typ),
      Some(hydra.decoding.decoderTypeSchemeNamed(b.name)(typ)))))
@@ -102,26 +102,26 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
   lt match
   case hydra.core.LiteralType.binary => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
      None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-     hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.literal(hydra.core.Literal.string("expected binary literal"))))))), Seq(hydra.core.Field("binary",
      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("b", None, hydra.core.Term.either(Right(hydra.core.Term.variable("b")))))))))))),
      hydra.core.Term.variable("v")))))))))))), hydra.core.Term.variable("stripped")))))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lexical.stripAndDereferenceTermEither"),
      hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
   case hydra.core.LiteralType.boolean => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
      None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-     hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.literal(hydra.core.Literal.string("expected boolean literal"))))))), Seq(hydra.core.Field("boolean",
      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("b", None, hydra.core.Term.either(Right(hydra.core.Term.variable("b")))))))))))),
      hydra.core.Term.variable("v")))))))))))), hydra.core.Term.variable("stripped")))))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lexical.stripAndDereferenceTermEither"),
@@ -129,16 +129,16 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
   case hydra.core.LiteralType.float(v_LiteralType_float_ft) => v_LiteralType_float_ft match
     case hydra.core.FloatType.bigfloat => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
        None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
        None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "bigfloat",
        " literal"))))))))), Seq(hydra.core.Field("float", hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.FloatValue",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "bigfloat",
        " value"))))))))), Seq(hydra.core.Field("bigfloat", hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("f",
        None, hydra.core.Term.either(Right(hydra.core.Term.variable("f")))))))))))))))))), hydra.core.Term.variable("v")))))))))))),
@@ -146,16 +146,16 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
        hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
     case hydra.core.FloatType.float32 => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
        None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
        None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "float32",
        " literal"))))))))), Seq(hydra.core.Field("float", hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.FloatValue",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "float32",
        " value"))))))))), Seq(hydra.core.Field("float32", hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("f",
        None, hydra.core.Term.either(Right(hydra.core.Term.variable("f")))))))))))))))))), hydra.core.Term.variable("v")))))))))))),
@@ -163,16 +163,16 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
        hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
     case hydra.core.FloatType.float64 => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
        None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
        None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "float64",
        " literal"))))))))), Seq(hydra.core.Field("float", hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.FloatValue",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "float64",
        " value"))))))))), Seq(hydra.core.Field("float64", hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("f",
        None, hydra.core.Term.either(Right(hydra.core.Term.variable("f")))))))))))))))))), hydra.core.Term.variable("v")))))))))))),
@@ -181,16 +181,16 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
   case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => v_LiteralType_integer_it match
     case hydra.core.IntegerType.bigint => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
        None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
        None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "bigint",
        " literal"))))))))), Seq(hydra.core.Field("integer", hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.IntegerValue",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "bigint",
        " value"))))))))), Seq(hydra.core.Field("bigint", hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("i",
        None, hydra.core.Term.either(Right(hydra.core.Term.variable("i")))))))))))))))))), hydra.core.Term.variable("v")))))))))))),
@@ -198,16 +198,16 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
        hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
     case hydra.core.IntegerType.int8 => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
        None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
        None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "int8",
        " literal"))))))))), Seq(hydra.core.Field("integer", hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.IntegerValue",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "int8",
        " value"))))))))), Seq(hydra.core.Field("int8", hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("i",
        None, hydra.core.Term.either(Right(hydra.core.Term.variable("i")))))))))))))))))), hydra.core.Term.variable("v")))))))))))),
@@ -215,16 +215,16 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
        hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
     case hydra.core.IntegerType.int16 => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
        None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
        None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "int16",
        " literal"))))))))), Seq(hydra.core.Field("integer", hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.IntegerValue",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "int16",
        " value"))))))))), Seq(hydra.core.Field("int16", hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("i",
        None, hydra.core.Term.either(Right(hydra.core.Term.variable("i")))))))))))))))))), hydra.core.Term.variable("v")))))))))))),
@@ -232,16 +232,16 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
        hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
     case hydra.core.IntegerType.int32 => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
        None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
        None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "int32",
        " literal"))))))))), Seq(hydra.core.Field("integer", hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.IntegerValue",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "int32",
        " value"))))))))), Seq(hydra.core.Field("int32", hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("i",
        None, hydra.core.Term.either(Right(hydra.core.Term.variable("i")))))))))))))))))), hydra.core.Term.variable("v")))))))))))),
@@ -249,16 +249,16 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
        hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
     case hydra.core.IntegerType.int64 => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
        None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
        None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "int64",
        " literal"))))))))), Seq(hydra.core.Field("integer", hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.IntegerValue",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "int64",
        " value"))))))))), Seq(hydra.core.Field("int64", hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("i",
        None, hydra.core.Term.either(Right(hydra.core.Term.variable("i")))))))))))))))))), hydra.core.Term.variable("v")))))))))))),
@@ -266,16 +266,16 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
        hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
     case hydra.core.IntegerType.uint8 => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
        None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
        None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "uint8",
        " literal"))))))))), Seq(hydra.core.Field("integer", hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.IntegerValue",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "uint8",
        " value"))))))))), Seq(hydra.core.Field("uint8", hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("i",
        None, hydra.core.Term.either(Right(hydra.core.Term.variable("i")))))))))))))))))), hydra.core.Term.variable("v")))))))))))),
@@ -283,16 +283,16 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
        hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
     case hydra.core.IntegerType.uint16 => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
        None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
        None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "uint16",
        " literal"))))))))), Seq(hydra.core.Field("integer", hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.IntegerValue",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "uint16",
        " value"))))))))), Seq(hydra.core.Field("uint16", hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("i",
        None, hydra.core.Term.either(Right(hydra.core.Term.variable("i")))))))))))))))))), hydra.core.Term.variable("v")))))))))))),
@@ -300,16 +300,16 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
        hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
     case hydra.core.IntegerType.uint32 => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
        None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
        None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "uint32",
        " literal"))))))))), Seq(hydra.core.Field("integer", hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.IntegerValue",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "uint32",
        " value"))))))))), Seq(hydra.core.Field("uint32", hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("i",
        None, hydra.core.Term.either(Right(hydra.core.Term.variable("i")))))))))))))))))), hydra.core.Term.variable("v")))))))))))),
@@ -317,16 +317,16 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
        hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
     case hydra.core.IntegerType.uint64 => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
        None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
        None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
        hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "uint64",
        " literal"))))))))), Seq(hydra.core.Field("integer", hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.IntegerValue",
-       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+       Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
        hydra.core.Term.literal(hydra.core.Literal.string(hydra.lib.strings.cat(Seq("expected ", "uint64",
        " value"))))))))), Seq(hydra.core.Field("uint64", hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("i",
        None, hydra.core.Term.either(Right(hydra.core.Term.variable("i")))))))))))))))))), hydra.core.Term.variable("v")))))))))))),
@@ -334,13 +334,13 @@ def decodeLiteralType(lt: hydra.core.LiteralType): hydra.core.Term =
        hydra.core.Term.variable("cx"))), hydra.core.Term.variable("raw")))))))))))
   case hydra.core.LiteralType.string => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx",
      None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-     hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.literal(hydra.core.Literal.string("expected literal"))))))), Seq(hydra.core.Field("literal",
      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("v", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Literal",
-     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.literal(hydra.core.Literal.string("expected string literal"))))))), Seq(hydra.core.Field("string",
      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("s", None, hydra.core.Term.either(Right(hydra.core.Term.variable("s")))))))))))),
      hydra.core.Term.variable("v")))))))))))), hydra.core.Term.variable("stripped")))))))), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.lexical.stripAndDereferenceTermEither"),
@@ -360,15 +360,15 @@ def decodeMaybeType(elemType: hydra.core.Type): hydra.core.Term =
   hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.helpers.decodeMaybe"), elemDecoder))
 }
 
-def decodeModule(cx: hydra.context.Context)(graph: hydra.graph.Graph)(mod: hydra.module.Module): Either[hydra.context.InContext[hydra.error.Error],
+def decodeModule(cx: hydra.context.Context)(graph: hydra.graph.Graph)(mod: hydra.module.Module): Either[hydra.context.InContext[hydra.errors.Error],
    Option[hydra.module.Module]] =
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.error.Error], Seq[hydra.core.Binding], Option[hydra.module.Module]](hydra.decoding.filterTypeBindings(cx)(graph)(mod.elements))((typeBindings: Seq[hydra.core.Binding]) =>
-  hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.error.Error], Option[hydra.module.Module]]](hydra.lib.lists.`null`[hydra.core.Binding](typeBindings))(Right(None))(hydra.lib.eithers.bind[hydra.context.InContext[hydra.error.Error],
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Seq[hydra.core.Binding], Option[hydra.module.Module]](hydra.decoding.filterTypeBindings(cx)(graph)(mod.elements))((typeBindings: Seq[hydra.core.Binding]) =>
+  hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], Option[hydra.module.Module]]](hydra.lib.lists.`null`[hydra.core.Binding](typeBindings))(Right(None))(hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error],
      Seq[hydra.core.Binding], Option[hydra.module.Module]](hydra.lib.eithers.mapList[hydra.core.Binding,
-     hydra.core.Binding, hydra.context.InContext[hydra.error.Error]]((b: hydra.core.Binding) =>
-  hydra.lib.eithers.bimap[hydra.context.InContext[hydra.error.DecodingError], hydra.core.Binding, hydra.context.InContext[hydra.error.Error],
-     hydra.core.Binding]((ic: hydra.context.InContext[hydra.error.DecodingError]) =>
-  hydra.context.InContext(hydra.error.Error.other(ic.`object`), (ic.context)))((x: hydra.core.Binding) => x)(hydra.decoding.decodeBinding(cx)(graph)(b)))(typeBindings))((decodedBindings: Seq[hydra.core.Binding]) =>
+     hydra.core.Binding, hydra.context.InContext[hydra.errors.Error]]((b: hydra.core.Binding) =>
+  hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.DecodingError], hydra.core.Binding, hydra.context.InContext[hydra.errors.Error],
+     hydra.core.Binding]((ic: hydra.context.InContext[hydra.errors.DecodingError]) =>
+  hydra.context.InContext(hydra.errors.Error.other(ic.`object`), (ic.context)))((x: hydra.core.Binding) => x)(hydra.decoding.decodeBinding(cx)(graph)(b)))(typeBindings))((decodedBindings: Seq[hydra.core.Binding]) =>
   {
   val decodedTypeDeps: Seq[hydra.module.Namespace] = hydra.lib.lists.map[hydra.module.Namespace, hydra.module.Namespace](hydra.decoding.decodeNamespace)(mod.typeDependencies)
   {
@@ -412,10 +412,10 @@ def decodeRecordTypeImpl(tname: hydra.core.Name)(rt: Seq[hydra.core.FieldType]):
     hydra.core.Field(ft.name, hydra.core.Term.variable(localVarName(ft))))(rt))))))(hydra.lib.lists.reverse[hydra.core.FieldType](rt))
   hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx", None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-     hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.literal(hydra.core.Literal.string("expected record"))))))), Seq(hydra.core.Field("record",
      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("record", None, hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("fieldMap",
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.variable("hydra.extract.helpers.toFieldMap"),
@@ -448,10 +448,11 @@ def decodeType(typ: hydra.core.Type): hydra.core.Term =
   case hydra.core.Type.set(v_Type_set_elemType) => hydra.decoding.decodeSetType(v_Type_set_elemType)
   case hydra.core.Type.union(v_Type_union_rt) => hydra.decoding.decodeUnionType(v_Type_union_rt)
   case hydra.core.Type.unit => hydra.decoding.decodeUnitType
+  case hydra.core.Type.void => hydra.decoding.decodeUnitType
   case hydra.core.Type.wrap(v_Type_wrap_wt) => hydra.decoding.decodeWrappedType(v_Type_wrap_wt)
   case hydra.core.Type.variable(v_Type_variable_typeName) => hydra.core.Term.variable(hydra.decoding.decodeBindingName(v_Type_variable_typeName))
   case _ => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx", None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("t",
-     None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.literal(hydra.core.Literal.string("unsupported type variant"))))))))))))
 
 def decodeTypeNamed(ename: hydra.core.Name)(typ: hydra.core.Type): hydra.core.Term =
@@ -471,10 +472,11 @@ def decodeTypeNamed(ename: hydra.core.Name)(typ: hydra.core.Type): hydra.core.Te
   case hydra.core.Type.set(v_Type_set_elemType) => hydra.decoding.decodeSetType(v_Type_set_elemType)
   case hydra.core.Type.union(v_Type_union_rt) => hydra.decoding.decodeUnionTypeNamed(ename)(v_Type_union_rt)
   case hydra.core.Type.unit => hydra.decoding.decodeUnitType
+  case hydra.core.Type.void => hydra.decoding.decodeUnitType
   case hydra.core.Type.wrap(v_Type_wrap_wt) => hydra.decoding.decodeWrappedTypeNamed(ename)(v_Type_wrap_wt)
   case hydra.core.Type.variable(v_Type_variable_typeName) => hydra.core.Term.variable(hydra.decoding.decodeBindingName(v_Type_variable_typeName))
   case _ => hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx", None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("t",
-     None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.literal(hydra.core.Literal.string("unsupported type variant"))))))))))))
 
 val decodeUnitType: hydra.core.Term = hydra.core.Term.variable("hydra.extract.helpers.decodeUnit")
@@ -491,10 +493,10 @@ def decodeUnionTypeNamed(ename: hydra.core.Name)(rt: Seq[hydra.core.FieldType]):
        hydra.core.Term.variable("cx"))), hydra.core.Term.variable("input"))))))))))
   hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx", None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-     hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.literal(hydra.core.Literal.string("expected union"))))))), Seq(hydra.core.Field("union",
      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("inj", None, hydra.core.Term.let(hydra.core.Let(Seq(hydra.core.Binding("field",
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.record(hydra.core.Projection("hydra.core.Injection",
@@ -503,7 +505,7 @@ def decodeUnionTypeNamed(ename: hydra.core.Name)(rt: Seq[hydra.core.FieldType]):
      "term")))), hydra.core.Term.variable("field"))), None), hydra.core.Binding("variantMap", hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.maps.fromList")),
      hydra.core.Term.list(hydra.lib.lists.map[hydra.core.FieldType, hydra.core.Term](toVariantPair)(rt)))),
      None)), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.maybes.maybe")),
-     hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.strings.cat")),
      hydra.core.Term.list(Seq(hydra.core.Term.literal(hydra.core.Literal.string("no such field ")), hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.wrap("hydra.core.Name"))),
      hydra.core.Term.variable("fname"))), hydra.core.Term.literal(hydra.core.Literal.string(" in union")))))))))))),
@@ -521,10 +523,10 @@ def decodeWrappedTypeNamed(ename: hydra.core.Name)(wt: hydra.core.Type): hydra.c
   val bodyDecoder: hydra.core.Term = hydra.decoding.decodeType(wt)
   hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("cx", None, hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("raw",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.either")),
-     hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("err", None, hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.variable("err")))))))))), hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("stripped",
      None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.elimination(hydra.core.Elimination.union(hydra.core.CaseStatement("hydra.core.Term",
-     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.error.DecodingError",
+     Some(hydra.core.Term.either(Left(hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.errors.DecodingError",
      hydra.core.Term.literal(hydra.core.Literal.string("expected wrapped type"))))))), Seq(hydra.core.Field("wrap",
      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("wrappedTerm", None, hydra.core.Term.application(hydra.core.Application(hydra.core.Term.application(hydra.core.Application(hydra.core.Term.function(hydra.core.Function.primitive("hydra.lib.eithers.map")),
      hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda("b", None, hydra.core.Term.wrap(hydra.core.WrappedTerm(ename,
@@ -556,6 +558,7 @@ def decoderFullResultType(typ: hydra.core.Type): hydra.core.Type =
   case hydra.core.Type.union(v_Type_union__) => hydra.core.Type.variable("hydra.core.Term")
   case hydra.core.Type.unit => hydra.core.Type.unit
   case hydra.core.Type.variable(v_Type_variable_name) => hydra.core.Type.variable(v_Type_variable_name)
+  case hydra.core.Type.void => hydra.core.Type.void
   case hydra.core.Type.wrap(v_Type_wrap__) => hydra.core.Type.variable("hydra.core.Term")
   case _ => hydra.core.Type.variable("hydra.core.Term")
 
@@ -581,6 +584,7 @@ def decoderFullResultTypeNamed(ename: hydra.core.Name)(typ: hydra.core.Type): hy
   case hydra.core.Type.set(v_Type_set_elemType) => hydra.core.Type.set(hydra.decoding.decoderFullResultType(v_Type_set_elemType))
   case hydra.core.Type.unit => hydra.core.Type.unit
   case hydra.core.Type.variable(v_Type_variable_name) => hydra.core.Type.variable(v_Type_variable_name)
+  case hydra.core.Type.void => hydra.core.Type.void
   case _ => hydra.core.Type.variable("hydra.core.Term")
 
 def decoderResultType(typ: hydra.core.Type): hydra.core.Name =
@@ -598,7 +602,7 @@ def decoderType(typ: hydra.core.Type): hydra.core.Type =
   {
   val resultType: hydra.core.Type = hydra.decoding.decoderFullResultType(typ)
   val baseType: hydra.core.Type = hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable("hydra.graph.Graph"),
-     hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable("hydra.core.Term"), hydra.core.Type.either(hydra.core.EitherType(hydra.core.Type.variable("hydra.error.DecodingError"),
+     hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable("hydra.core.Term"), hydra.core.Type.either(hydra.core.EitherType(hydra.core.Type.variable("hydra.errors.DecodingError"),
      resultType))))))
   hydra.decoding.prependForallDecoders(baseType)(typ)
 }
@@ -607,7 +611,7 @@ def decoderTypeNamed(ename: hydra.core.Name)(typ: hydra.core.Type): hydra.core.T
   {
   val resultType: hydra.core.Type = hydra.decoding.decoderFullResultTypeNamed(ename)(typ)
   val baseType: hydra.core.Type = hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable("hydra.graph.Graph"),
-     hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable("hydra.core.Term"), hydra.core.Type.either(hydra.core.EitherType(hydra.core.Type.variable("hydra.error.DecodingError"),
+     hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable("hydra.core.Term"), hydra.core.Type.either(hydra.core.EitherType(hydra.core.Type.variable("hydra.errors.DecodingError"),
      resultType))))))
   hydra.decoding.prependForallDecoders(baseType)(typ)
 }
@@ -636,20 +640,20 @@ def decoderTypeSchemeNamed(ename: hydra.core.Name)(typ: hydra.core.Type): hydra.
   hydra.core.TypeScheme(typeVars, hydra.decoding.decoderTypeNamed(ename)(typ), constraints)
 }
 
-def filterTypeBindings(cx: hydra.context.Context)(graph: hydra.graph.Graph)(bindings: Seq[hydra.core.Binding]): Either[hydra.context.InContext[hydra.error.Error],
+def filterTypeBindings(cx: hydra.context.Context)(graph: hydra.graph.Graph)(bindings: Seq[hydra.core.Binding]): Either[hydra.context.InContext[hydra.errors.Error],
    Seq[hydra.core.Binding]] =
-  hydra.lib.eithers.map[Seq[Option[hydra.core.Binding]], Seq[hydra.core.Binding], hydra.context.InContext[hydra.error.Error]](hydra.lib.maybes.cat[hydra.core.Binding])(hydra.lib.eithers.mapList[hydra.core.Binding,
-     Option[hydra.core.Binding], hydra.context.InContext[hydra.error.Error]]((v1: hydra.core.Binding) => hydra.decoding.isDecodableBinding(cx)(graph)(v1))(hydra.lib.lists.filter[hydra.core.Binding](hydra.annotations.isNativeType)(bindings)))
+  hydra.lib.eithers.map[Seq[Option[hydra.core.Binding]], Seq[hydra.core.Binding], hydra.context.InContext[hydra.errors.Error]](hydra.lib.maybes.cat[hydra.core.Binding])(hydra.lib.eithers.mapList[hydra.core.Binding,
+     Option[hydra.core.Binding], hydra.context.InContext[hydra.errors.Error]]((v1: hydra.core.Binding) => hydra.decoding.isDecodableBinding(cx)(graph)(v1))(hydra.lib.lists.filter[hydra.core.Binding](hydra.annotations.isNativeType)(bindings)))
 
-def isDecodableBinding(cx: hydra.context.Context)(graph: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.error.Error],
+def isDecodableBinding(cx: hydra.context.Context)(graph: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error],
    Option[hydra.core.Binding]] =
-  hydra.lib.eithers.bind[hydra.context.InContext[hydra.error.Error], Boolean, Option[hydra.core.Binding]](hydra.schemas.isSerializableByName(cx)(graph)(b.name))((serializable: Boolean) =>
+  hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Boolean, Option[hydra.core.Binding]](hydra.schemas.isSerializableByName(cx)(graph)(b.name))((serializable: Boolean) =>
   Right(hydra.lib.logic.ifElse[Option[hydra.core.Binding]](serializable)(Some(b))(None)))
 
 def prependForallDecoders(baseType: hydra.core.Type)(typ: hydra.core.Type): hydra.core.Type =
   typ match
   case hydra.core.Type.annotated(v_Type_annotated_at) => hydra.decoding.prependForallDecoders(baseType)(v_Type_annotated_at.body)
   case hydra.core.Type.forall(v_Type_forall_ft) => hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable("hydra.graph.Graph"),
-     hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable("hydra.core.Term"), hydra.core.Type.either(hydra.core.EitherType(hydra.core.Type.variable("hydra.error.DecodingError"),
+     hydra.core.Type.function(hydra.core.FunctionType(hydra.core.Type.variable("hydra.core.Term"), hydra.core.Type.either(hydra.core.EitherType(hydra.core.Type.variable("hydra.errors.DecodingError"),
      hydra.core.Type.variable(v_Type_forall_ft.parameter))))))), hydra.decoding.prependForallDecoders(baseType)(v_Type_forall_ft.body)))
   case _ => baseType

@@ -1,5 +1,5 @@
 (defpackage :hydra.decode.context
-(:use :cl :hydra.context :hydra.core :hydra.decode.core :hydra.error :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers)
+(:use :cl :hydra.context :hydra.core :hydra.decode.core :hydra.errors :hydra.extract.helpers :hydra.lexical :hydra.lib.eithers)
 (:export :hydra_decode_context_context :hydra_decode_context_in_context))
 
 (in-package :hydra.decode.context)
