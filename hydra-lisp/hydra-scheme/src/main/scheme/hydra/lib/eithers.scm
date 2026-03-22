@@ -57,20 +57,22 @@
                 (g (either-val e)))))))
 
     ;; fromLeft :: a -> Either a b -> a
+    ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Either is Right
     (define hydra_lib_eithers_from_left
       (lambda (def)
         (lambda (e)
           (if (eq? (either-tag e) 'left)
               (either-val e)
-              def))))
+              (if (procedure? def) (def) def)))))
 
     ;; fromRight :: b -> Either a b -> b
+    ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Either is Left
     (define hydra_lib_eithers_from_right
       (lambda (def)
         (lambda (e)
           (if (eq? (either-tag e) 'right)
               (either-val e)
-              def))))
+              (if (procedure? def) (def) def)))))
 
     ;; isLeft :: Either a b -> Bool
     (define hydra_lib_eithers_is_left

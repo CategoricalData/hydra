@@ -34,20 +34,22 @@
             (funcall g (either-val e)))))))
 
 ;; from_left :: a -> Either a b -> a
+;; Thunk-aware: if def is a zero-arg function (thunk), only called when Either is Right
 (defvar hydra_lib_eithers_from_left
   (lambda (def)
     (lambda (e)
       (if (eq (either-tag e) :left)
           (either-val e)
-          def))))
+          (if (functionp def) (funcall def) def)))))
 
 ;; from_right :: b -> Either a b -> b
+;; Thunk-aware: if def is a zero-arg function (thunk), only called when Either is Left
 (defvar hydra_lib_eithers_from_right
   (lambda (def)
     (lambda (e)
       (if (eq (either-tag e) :right)
           (either-val e)
-          def))))
+          (if (functionp def) (funcall def) def)))))
 
 ;; is_left :: Either a b -> Bool
 (defvar hydra_lib_eithers_is_left
