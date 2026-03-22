@@ -9,34 +9,34 @@ import java.io.Serializable;
  */
 public class VertexWithAdjacentEdges<V> implements Serializable, Comparable<VertexWithAdjacentEdges<V>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.VertexWithAdjacentEdges");
-  
+
   public static final hydra.core.Name VERTEX = new hydra.core.Name("vertex");
-  
+
   public static final hydra.core.Name INS = new hydra.core.Name("ins");
-  
+
   public static final hydra.core.Name OUTS = new hydra.core.Name("outs");
-  
+
   /**
    * The focus vertex
    */
   public final hydra.pg.model.Vertex<V> vertex;
-  
+
   /**
    * An adjacency list of edges in which the focus vertex is the head (in-vertex) of the edge
    */
   public final hydra.util.ConsList<hydra.pg.model.AdjacentEdge<V>> ins;
-  
+
   /**
    * An adjacency list of edges in which the focus vertex is the tail (out-vertex) of the edge
    */
   public final hydra.util.ConsList<hydra.pg.model.AdjacentEdge<V>> outs;
-  
+
   public VertexWithAdjacentEdges (hydra.pg.model.Vertex<V> vertex, hydra.util.ConsList<hydra.pg.model.AdjacentEdge<V>> ins, hydra.util.ConsList<hydra.pg.model.AdjacentEdge<V>> outs) {
     this.vertex = vertex;
     this.ins = ins;
     this.outs = outs;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof VertexWithAdjacentEdges)) {
@@ -51,12 +51,12 @@ public class VertexWithAdjacentEdges<V> implements Serializable, Comparable<Vert
       this.outs,
       o.outs);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(vertex) + 3 * java.util.Objects.hashCode(ins) + 5 * java.util.Objects.hashCode(outs);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(VertexWithAdjacentEdges other) {
@@ -65,25 +65,21 @@ public class VertexWithAdjacentEdges<V> implements Serializable, Comparable<Vert
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      ins.hashCode(),
-      other.ins.hashCode());
+    cmp = ((Comparable) ins).compareTo(other.ins);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      outs.hashCode(),
-      other.outs.hashCode());
+    return ((Comparable) outs).compareTo(other.outs);
   }
-  
+
   public VertexWithAdjacentEdges withVertex(hydra.pg.model.Vertex<V> vertex) {
     return new VertexWithAdjacentEdges(vertex, ins, outs);
   }
-  
+
   public VertexWithAdjacentEdges withIns(hydra.util.ConsList<hydra.pg.model.AdjacentEdge<V>> ins) {
     return new VertexWithAdjacentEdges(vertex, ins, outs);
   }
-  
+
   public VertexWithAdjacentEdges withOuts(hydra.util.ConsList<hydra.pg.model.AdjacentEdge<V>> outs) {
     return new VertexWithAdjacentEdges(vertex, ins, outs);
   }

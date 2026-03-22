@@ -20,7 +20,7 @@ public class SortingTest {
 
             hydra.util.Either.<T1, hydra.util.ConsList<T0>>right((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty())),
 
-            hydra.sorting.Sorting.topologicalSort((hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>>) (hydra.util.ConsList.<hydra.util.Pair<T0, hydra.util.ConsList<T0>>>empty())));
+            hydra.Sorting.topologicalSort((hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>>) (hydra.util.ConsList.<hydra.util.Pair<T0, hydra.util.ConsList<T0>>>empty())));
 
     }
 
@@ -32,7 +32,7 @@ public class SortingTest {
 
             hydra.util.Either.<T1, hydra.util.ConsList<Integer>>right(hydra.util.ConsList.of(1)),
 
-            hydra.sorting.Sorting.topologicalSort(hydra.util.ConsList.of((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))))));
+            hydra.Sorting.topologicalSort(hydra.util.ConsList.of((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))))));
 
     }
 
@@ -47,7 +47,7 @@ public class SortingTest {
   2,
   3)),
 
-            hydra.sorting.Sorting.topologicalSort(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSort(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(3, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(2, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))))));
@@ -65,7 +65,7 @@ public class SortingTest {
   3,
   2)),
 
-            hydra.sorting.Sorting.topologicalSort(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSort(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(3, hydra.util.ConsList.of(1)))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(2, hydra.util.ConsList.of(3)))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))))));
@@ -86,7 +86,7 @@ public class SortingTest {
   4,
   3)),
 
-            hydra.sorting.Sorting.topologicalSort(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSort(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(3, hydra.util.ConsList.of(
     1,
     4)))),
@@ -115,7 +115,7 @@ public class SortingTest {
   6,
   5)),
 
-            hydra.sorting.Sorting.topologicalSort(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSort(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(3, hydra.util.ConsList.of(
     1,
     4)))),
@@ -143,7 +143,7 @@ public class SortingTest {
   4,
   1)),
 
-            hydra.sorting.Sorting.topologicalSort(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSort(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, hydra.util.ConsList.of(
     3,
     4)))),
@@ -164,7 +164,7 @@ public class SortingTest {
   1,
   2))),
 
-            hydra.sorting.Sorting.topologicalSort(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSort(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, hydra.util.ConsList.of(2)))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(2, hydra.util.ConsList.of(1)))))));
 
@@ -180,7 +180,7 @@ public class SortingTest {
   2,
   3))),
 
-            hydra.sorting.Sorting.topologicalSort(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSort(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, hydra.util.ConsList.of(3)))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(3, hydra.util.ConsList.of(2)))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(2, hydra.util.ConsList.of(
@@ -201,7 +201,7 @@ public class SortingTest {
 
             (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
-            hydra.sorting.Sorting.topologicalSortComponents((hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>>) (hydra.util.ConsList.<hydra.util.Pair<T0, hydra.util.ConsList<T0>>>empty())));
+            hydra.Sorting.topologicalSortComponents((hydra.util.ConsList<hydra.util.Pair<T0, hydra.util.ConsList<T0>>>) (hydra.util.ConsList.<hydra.util.Pair<T0, hydra.util.ConsList<T0>>>empty())));
 
     }
 
@@ -213,7 +213,7 @@ public class SortingTest {
 
             hydra.util.ConsList.of(hydra.util.ConsList.of(1)),
 
-            hydra.sorting.Sorting.topologicalSortComponents(hydra.util.ConsList.of((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))))));
+            hydra.Sorting.topologicalSortComponents(hydra.util.ConsList.of((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))))));
 
     }
 
@@ -228,7 +228,7 @@ public class SortingTest {
   hydra.util.ConsList.of(2),
   hydra.util.ConsList.of(3)),
 
-            hydra.sorting.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(3, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(2, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))))));
@@ -245,7 +245,7 @@ public class SortingTest {
   hydra.util.ConsList.of(2),
   hydra.util.ConsList.of(1)),
 
-            hydra.sorting.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, hydra.util.ConsList.of(2)))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(2, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))))));
 
@@ -261,7 +261,7 @@ public class SortingTest {
   hydra.util.ConsList.of(1),
   hydra.util.ConsList.of(2)),
 
-            hydra.sorting.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(2, hydra.util.ConsList.of(1)))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))))));
 
@@ -278,7 +278,7 @@ public class SortingTest {
   hydra.util.ConsList.of(1),
   hydra.util.ConsList.of(2)),
 
-            hydra.sorting.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(2, hydra.util.ConsList.of(
     1,
     3)))),
@@ -297,7 +297,7 @@ public class SortingTest {
   1,
   2)),
 
-            hydra.sorting.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, hydra.util.ConsList.of(2)))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(2, hydra.util.ConsList.of(1)))))));
 
@@ -313,7 +313,7 @@ public class SortingTest {
   1,
   2)),
 
-            hydra.sorting.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(2, hydra.util.ConsList.of(1)))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, hydra.util.ConsList.of(2)))))));
 
@@ -330,7 +330,7 @@ public class SortingTest {
   2,
   3)),
 
-            hydra.sorting.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, hydra.util.ConsList.of(2)))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(2, hydra.util.ConsList.of(3)))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(3, hydra.util.ConsList.of(1)))))));
@@ -348,7 +348,7 @@ public class SortingTest {
   2,
   3)),
 
-            hydra.sorting.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(2, hydra.util.ConsList.of(1)))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(3, hydra.util.ConsList.of(2)))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, hydra.util.ConsList.of(3)))))));
@@ -373,7 +373,7 @@ public class SortingTest {
   hydra.util.ConsList.of(200),
   hydra.util.ConsList.of(300)),
 
-            hydra.sorting.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(200, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(100, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))),
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(300, (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())))),
@@ -396,7 +396,7 @@ public class SortingTest {
   2,
   3)),
 
-            hydra.sorting.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, hydra.util.ConsList.of(
     2,
     3)))),
@@ -421,7 +421,7 @@ public class SortingTest {
     2,
     3)),
 
-            hydra.sorting.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, hydra.util.ConsList.of(
     2,
     10)))),
@@ -455,7 +455,7 @@ public class SortingTest {
   hydra.util.ConsList.of(1000),
   hydra.util.ConsList.of(2000)),
 
-            hydra.sorting.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
+            hydra.Sorting.topologicalSortComponents(hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>(1, hydra.util.ConsList.of(
     2,
     3,

@@ -6,30 +6,30 @@ import java.io.Serializable;
 
 public class VertexPattern implements Serializable, Comparable<VertexPattern> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.query.VertexPattern");
-  
+
   public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
-  
+
   public static final hydra.core.Name LABEL = new hydra.core.Name("label");
-  
+
   public static final hydra.core.Name PROPERTIES = new hydra.core.Name("properties");
-  
+
   public static final hydra.core.Name EDGES = new hydra.core.Name("edges");
-  
+
   public final hydra.util.Maybe<hydra.pg.query.Variable> variable;
-  
+
   public final hydra.util.Maybe<hydra.pg.model.VertexLabel> label;
-  
-  public final java.util.List<hydra.pg.query.PropertyPattern> properties;
-  
-  public final java.util.List<hydra.pg.query.EdgeProjectionPattern> edges;
-  
-  public VertexPattern (hydra.util.Maybe<hydra.pg.query.Variable> variable, hydra.util.Maybe<hydra.pg.model.VertexLabel> label, java.util.List<hydra.pg.query.PropertyPattern> properties, java.util.List<hydra.pg.query.EdgeProjectionPattern> edges) {
+
+  public final hydra.util.ConsList<hydra.pg.query.PropertyPattern> properties;
+
+  public final hydra.util.ConsList<hydra.pg.query.EdgeProjectionPattern> edges;
+
+  public VertexPattern (hydra.util.Maybe<hydra.pg.query.Variable> variable, hydra.util.Maybe<hydra.pg.model.VertexLabel> label, hydra.util.ConsList<hydra.pg.query.PropertyPattern> properties, hydra.util.ConsList<hydra.pg.query.EdgeProjectionPattern> edges) {
     this.variable = variable;
     this.label = label;
     this.properties = properties;
     this.edges = edges;
   }
-  
+
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof VertexPattern)) {
@@ -46,52 +46,44 @@ public class VertexPattern implements Serializable, Comparable<VertexPattern> {
       this.edges,
       o.edges);
   }
-  
+
   @Override
   public int hashCode() {
     return 2 * java.util.Objects.hashCode(variable) + 3 * java.util.Objects.hashCode(label) + 5 * java.util.Objects.hashCode(properties) + 7 * java.util.Objects.hashCode(edges);
   }
-  
+
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(VertexPattern other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      variable.hashCode(),
-      other.variable.hashCode());
+    cmp = ((Comparable) variable).compareTo(other.variable);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      label.hashCode(),
-      other.label.hashCode());
+    cmp = ((Comparable) label).compareTo(other.label);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      properties.hashCode(),
-      other.properties.hashCode());
+    cmp = ((Comparable) properties).compareTo(other.properties);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      edges.hashCode(),
-      other.edges.hashCode());
+    return ((Comparable) edges).compareTo(other.edges);
   }
-  
+
   public VertexPattern withVariable(hydra.util.Maybe<hydra.pg.query.Variable> variable) {
     return new VertexPattern(variable, label, properties, edges);
   }
-  
+
   public VertexPattern withLabel(hydra.util.Maybe<hydra.pg.model.VertexLabel> label) {
     return new VertexPattern(variable, label, properties, edges);
   }
-  
-  public VertexPattern withProperties(java.util.List<hydra.pg.query.PropertyPattern> properties) {
+
+  public VertexPattern withProperties(hydra.util.ConsList<hydra.pg.query.PropertyPattern> properties) {
     return new VertexPattern(variable, label, properties, edges);
   }
-  
-  public VertexPattern withEdges(java.util.List<hydra.pg.query.EdgeProjectionPattern> edges) {
+
+  public VertexPattern withEdges(hydra.util.ConsList<hydra.pg.query.EdgeProjectionPattern> edges) {
     return new VertexPattern(variable, label, properties, edges);
   }
 }

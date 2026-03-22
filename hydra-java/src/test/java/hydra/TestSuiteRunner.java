@@ -1094,7 +1094,7 @@ public class TestSuiteRunner {
                 ValidateCoreTermTestCase tc = instance.value;
                 return withTimeout(name, () ->
                     assertEquals(tc.output,
-                        hydra.validate.core.Core.term(hydra.lexical.Lexical.emptyGraph(), tc.input)));
+                        hydra.validate.Core.term(hydra.Lexical.emptyGraph(), tc.input)));
             }
         });
     }

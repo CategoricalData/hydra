@@ -4,7 +4,7 @@ import hydra.Generation;
 import hydra.context.Context;
 import hydra.context.InContext;
 import hydra.core.Term;
-import hydra.error.Error_;
+import hydra.errors.Error_;
 import hydra.graph.Graph;
 import hydra.json.Writer;
 import hydra.pg.model.Edge;
@@ -93,7 +93,7 @@ public class Demo {
             Transform.transformTableRows(cx, graphContext, vspecs, especs, tableType, table.data);
         if (result.isLeft()) {
             throw new RuntimeException(
-                "Transform error: " + hydra.show.Error_.error(((Either.Left<InContext<Error_>, ?>) result).value.object));
+                "Transform error: " + hydra.show.Errors.error(((Either.Left<InContext<Error_>, ?>) result).value.object));
         }
         return ((Either.Right<InContext<Error_>, Pair<ConsList<Vertex<Term>>, ConsList<Edge<Term>>>>) result).value;
     }
