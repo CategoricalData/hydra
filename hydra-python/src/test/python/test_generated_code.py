@@ -172,7 +172,6 @@ from hydra.literals import *
 # from hydra.serialization import *
 # from hydra.sorting import *
 # from hydra.substitution import *
-# from hydra.tarjan import *
 # from hydra.templates import *
 # from hydra.unification import *
 from hydra.variants import *
