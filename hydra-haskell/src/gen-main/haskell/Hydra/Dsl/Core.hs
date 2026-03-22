@@ -1833,6 +1833,14 @@ typeVariable x =
         Core.fieldName = (Core.Name "variable"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
+typeVoid :: Phantoms.TTerm Core.Type
+typeVoid =
+    Phantoms.TTerm (Core.TermUnion (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.core.Type"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "void"),
+        Core.fieldTerm = Core.TermUnit}}))
+
 typeWrap :: Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.Type
 typeWrap x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {

@@ -521,6 +521,9 @@ type_ = define "Type" $
     "variable">:
       doc "A type variable"
       name,
+    "void">:
+      doc "The void (uninhabited, or bottom) type" $
+      T.unit,
     "wrap">:
       doc "A wrapped type (newtype)"
       type_]

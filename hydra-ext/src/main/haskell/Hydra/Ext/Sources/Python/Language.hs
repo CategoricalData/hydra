@@ -150,6 +150,7 @@ pythonLanguage = pythonLanguageDefinition "pythonLanguage" $
       Variants.typeVariantUnion,
       Variants.typeVariantUnit,
       Variants.typeVariantVariable,
+      Variants.typeVariantVoid,
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $ -- TODO: verify whether all are supported
     Coders.language

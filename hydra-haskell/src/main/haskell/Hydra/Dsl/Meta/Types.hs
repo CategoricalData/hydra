@@ -261,6 +261,11 @@ union _n pairs = typeUnion $ Phantoms.list (toField <$> pairs)
 unit :: TTerm Type
 unit = typeUnit
 
+-- | Term-encoded void type (uninhabited / bottom type)
+-- Example: void
+void :: TTerm Type
+void = typeVoid
+
 -- | Create a term-encoded type variable
 -- Example: variable "a"
 variable :: String -> TTerm Type

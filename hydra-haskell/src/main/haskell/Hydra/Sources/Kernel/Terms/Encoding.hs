@@ -333,6 +333,7 @@ encoderFullResultType = define "encoderFullResultType" $
     _Type_unit>>: constant Core.typeUnit,
     _Type_variable>>: "name" ~>
       Core.typeVariable (var "name"),
+    _Type_void>>: constant Core.typeVoid,
     _Type_wrap>>: constant (Core.typeVariable (Core.nameLift _Term))]
 
 -- | Get full result type for encoder input, with element name for nominal types
@@ -376,6 +377,7 @@ encoderFullResultTypeNamed = define "encoderFullResultTypeNamed" $
     _Type_unit>>: constant Core.typeUnit,
     _Type_variable>>: "name" ~>
       Core.typeVariable (var "name"),
+    _Type_void>>: constant Core.typeVoid,
     _Type_wrap>>: constant (Core.typeVariable (var "ename"))]
 
 -- | Build the encoder function type for a given type
@@ -609,6 +611,8 @@ encodeTypeNamed = define "encodeTypeNamed" $
       encodeWrappedTypeNamed @@ var "ename" @@ var "wt",
     _Type_unit>>: constant $
       DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
+    _Type_void>>: constant $
+      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
     _Type_variable>>: "typeName" ~>
       Core.termVariable (encodeBindingName @@ var "typeName")]
   where
@@ -648,6 +652,8 @@ encodeType = define "encodeType" $
     _Type_wrap>>: "wt" ~>
       encodeWrappedType @@ var "wt",
     _Type_unit>>: constant $
+      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
+    _Type_void>>: constant $
       DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
     _Type_variable>>: "typeName" ~>
       Core.termVariable (encodeBindingName @@ var "typeName")]

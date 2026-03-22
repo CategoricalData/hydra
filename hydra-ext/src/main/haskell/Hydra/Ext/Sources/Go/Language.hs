@@ -165,6 +165,7 @@ goLanguage = define "goLanguage" $
       Variants.typeVariantUnion, -- interface
       Variants.typeVariantUnit, -- struct{}
       Variants.typeVariantVariable,
+      Variants.typeVariantVoid,
       Variants.typeVariantWrap], -- type Name T
     -- Go's type system is more restrictive than Haskell's, but with generics most types work
     "typePredicate">: constant true] $

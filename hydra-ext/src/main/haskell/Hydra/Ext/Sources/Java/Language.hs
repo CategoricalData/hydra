@@ -159,6 +159,7 @@ javaLanguage = javaLanguageDefinition "javaLanguage" $
     Variants.typeVariantUnion,
     Variants.typeVariantUnit,
     Variants.typeVariantVariable,
+    Variants.typeVariantVoid,
     Variants.typeVariantWrap],
   "typePredicate">: constant true] $
   Coders.language

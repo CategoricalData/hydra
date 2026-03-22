@@ -422,6 +422,7 @@ type_ typ =
         Core.TypeUnion v0 -> Strings.cat2 "union" (showRowType v0)
         Core.TypeUnit -> "unit"
         Core.TypeVariable v0 -> Core.unName v0
+        Core.TypeVoid -> "void"
         Core.TypeWrap v0 -> Strings.cat [
           "wrap(",
           (type_ v0),

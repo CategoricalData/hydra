@@ -122,6 +122,7 @@ encoderFullResultType typ =
       Core.TypeUnion _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
       Core.TypeUnit -> Core.TypeUnit
       Core.TypeVariable v0 -> Core.TypeVariable v0
+      Core.TypeVoid -> Core.TypeVoid
       Core.TypeWrap _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
       _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
 
@@ -153,6 +154,7 @@ encoderFullResultTypeNamed ename typ =
       Core.TypeUnion _ -> Core.TypeVariable ename
       Core.TypeUnit -> Core.TypeUnit
       Core.TypeVariable v0 -> Core.TypeVariable v0
+      Core.TypeVoid -> Core.TypeVoid
       Core.TypeWrap _ -> Core.TypeVariable ename
       _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
 
@@ -564,6 +566,14 @@ encodeType x =
           Core.injectionField = Core.Field {
             Core.fieldName = (Core.Name "unit"),
             Core.fieldTerm = Core.TermUnit}}))}))
+      Core.TypeVoid -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "_"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermUnion (Core.Injection {
+          Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+          Core.injectionField = Core.Field {
+            Core.fieldName = (Core.Name "unit"),
+            Core.fieldTerm = Core.TermUnit}}))}))
       Core.TypeVariable v0 -> Core.TermVariable (encodeBindingName v0)
       _ -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
@@ -597,6 +607,14 @@ encodeTypeNamed ename typ =
       Core.TypeUnion v0 -> encodeUnionTypeNamed ename v0
       Core.TypeWrap v0 -> encodeWrappedTypeNamed ename v0
       Core.TypeUnit -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "_"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermUnion (Core.Injection {
+          Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+          Core.injectionField = Core.Field {
+            Core.fieldName = (Core.Name "unit"),
+            Core.fieldTerm = Core.TermUnit}}))}))
+      Core.TypeVoid -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "_"),
         Core.lambdaDomain = Nothing,
         Core.lambdaBody = (Core.TermUnion (Core.Injection {

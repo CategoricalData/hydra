@@ -1248,6 +1248,7 @@ decodeType typ =
       Core.TypeSet v0 -> decodeSetType v0
       Core.TypeUnion v0 -> decodeUnionType v0
       Core.TypeUnit -> decodeUnitType
+      Core.TypeVoid -> decodeUnitType
       Core.TypeWrap v0 -> decodeWrappedType v0
       Core.TypeVariable v0 -> Core.TermVariable (decodeBindingName v0)
       _ -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1282,6 +1283,7 @@ decodeTypeNamed ename typ =
       Core.TypeSet v0 -> decodeSetType v0
       Core.TypeUnion v0 -> decodeUnionTypeNamed ename v0
       Core.TypeUnit -> decodeUnitType
+      Core.TypeVoid -> decodeUnitType
       Core.TypeWrap v0 -> decodeWrappedTypeNamed ename v0
       Core.TypeVariable v0 -> Core.TermVariable (decodeBindingName v0)
       _ -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -1516,6 +1518,7 @@ decoderFullResultType typ =
       Core.TypeUnion _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
       Core.TypeUnit -> Core.TypeUnit
       Core.TypeVariable v0 -> Core.TypeVariable v0
+      Core.TypeVoid -> Core.TypeVoid
       Core.TypeWrap _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
       _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
 
@@ -1548,6 +1551,7 @@ decoderFullResultTypeNamed ename typ =
       Core.TypeSet v0 -> Core.TypeSet (decoderFullResultType v0)
       Core.TypeUnit -> Core.TypeUnit
       Core.TypeVariable v0 -> Core.TypeVariable v0
+      Core.TypeVoid -> Core.TypeVoid
       _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
 
 -- | Compute the result type name for a decoder

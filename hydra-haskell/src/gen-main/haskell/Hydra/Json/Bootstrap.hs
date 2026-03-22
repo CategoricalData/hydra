@@ -1016,6 +1016,12 @@ typesByName =
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A type variable")))])}))},
           Core.FieldType {
+            Core.fieldTypeName = (Core.Name "void"),
+            Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+              Core.annotatedTypeBody = Core.TypeUnit,
+              Core.annotatedTypeAnnotation = (M.fromList [
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The void (uninhabited, or bottom) type")))])}))},
+          Core.FieldType {
             Core.fieldTypeName = (Core.Name "wrap"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
               Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),

@@ -97,6 +97,9 @@ joinTypes cx left right comment =
         Core.TypeUnit -> case sright of
           Core.TypeUnit -> Right []
           _ -> cannotUnify
+        Core.TypeVoid -> case sright of
+          Core.TypeVoid -> Right []
+          _ -> cannotUnify
         Core.TypeWrap v0 -> case sright of
           Core.TypeWrap v1 -> Right [
             joinOne v0 v1]

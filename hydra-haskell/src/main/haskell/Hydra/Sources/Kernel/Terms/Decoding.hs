@@ -289,7 +289,8 @@ decoderFullResultTypeNamed = define "decoderFullResultTypeNamed" $
       Core.typeSet (decoderFullResultType @@ var "elemType"),
     _Type_unit>>: constant Core.typeUnit,
     _Type_variable>>: "name" ~>
-      Core.typeVariable (var "name")]
+      Core.typeVariable (var "name"),
+    _Type_void>>: constant Core.typeVoid]
 
 -- | Collect type variables from forall types
 -- Note: Graph is NOT included as a type variable - it's a concrete type
@@ -505,6 +506,7 @@ decoderFullResultType = define "decoderFullResultType" $
     _Type_unit>>: constant Core.typeUnit,
     _Type_variable>>: "name" ~>
       Core.typeVariable (var "name"),
+    _Type_void>>: constant Core.typeVoid,
     _Type_wrap>>: constant (Core.typeVariable (Core.nameLift _Term))]
 
 -- | Decode a single type binding into a decoder binding
@@ -801,6 +803,7 @@ decodeTypeNamed = define "decodeTypeNamed" $
     _Type_set>>: "elemType" ~> decodeSetType @@ var "elemType",
     _Type_union>>: "rt" ~> decodeUnionTypeNamed @@ var "ename" @@ var "rt",
     _Type_unit>>: constant decodeUnitType,
+    _Type_void>>: constant decodeUnitType,
     _Type_wrap>>: "wt" ~> decodeWrappedTypeNamed @@ var "ename" @@ var "wt",
     _Type_variable>>: "typeName" ~> Core.termVariable (decodeBindingName @@ var "typeName")]
 
@@ -826,6 +829,7 @@ decodeType = define "decodeType" $
     _Type_set>>: "elemType" ~> decodeSetType @@ var "elemType",
     _Type_union>>: "rt" ~> decodeUnionType @@ var "rt",
     _Type_unit>>: constant decodeUnitType,
+    _Type_void>>: constant decodeUnitType,
     _Type_wrap>>: "wt" ~> decodeWrappedType @@ var "wt",
     _Type_variable>>: "typeName" ~> Core.termVariable (decodeBindingName @@ var "typeName")]
 

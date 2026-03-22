@@ -59,7 +59,8 @@ yamlLanguage = define "yamlLanguage" $
     Variants.typeVariantMap,
     Variants.typeVariantMaybe,
     Variants.typeVariantRecord,
-    Variants.typeVariantUnit],
+    Variants.typeVariantUnit,
+    Variants.typeVariantVoid],
   "typePredicate">: lambda "typ" $ cases _Type (Rewriting.deannotateType @@ var "typ")
     (Just true) [
     _Type_maybe>>: lambda "innerType" $

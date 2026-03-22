@@ -616,6 +616,8 @@ encodeType = haskellCoderDefinition "encodeType" $
     _Type_union>>: constant (var "ref" @@ Core.name (string "placeholder")),
     _Type_unit>>: constant $ right $ var "unitTuple",
     _Type_variable>>: "v1" ~> var "ref" @@ var "v1",
+    _Type_void>>: constant $
+      right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Void",
     _Type_wrap>>: constant (var "ref" @@ Core.name (string "placeholder"))]
 
 encodeTypeWithClassAssertions :: TBinding (HaskellNamespaces -> M.Map Name (S.Set TypeClass) -> Type -> Context -> Graph -> Either (InContext Error) H.Type)

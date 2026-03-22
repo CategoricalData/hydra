@@ -74,4 +74,5 @@ typeVariant v = injectUnit _TypeVariant $ case v of
   TypeVariantUnion -> _TypeVariant_union
   TypeVariantUnit -> _TypeVariant_unit
   TypeVariantVariable -> _TypeVariant_variable
+  TypeVariantVoid -> _TypeVariant_void
   TypeVariantWrap -> _TypeVariant_wrap

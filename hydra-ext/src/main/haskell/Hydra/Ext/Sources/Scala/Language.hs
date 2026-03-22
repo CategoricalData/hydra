@@ -155,6 +155,7 @@ scalaLanguage = scalaLanguageDefinition "scalaLanguage" $
     Variants.typeVariantUnit,
     Variants.typeVariantForall,
     Variants.typeVariantVariable,
+    Variants.typeVariantVoid,
     Variants.typeVariantWrap],
   "typePredicate">: constant true] $
   Coders.language

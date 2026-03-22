@@ -155,6 +155,7 @@ javaScriptLanguage = define "javaScriptLanguage" $
       Variants.typeVariantUnion,
       Variants.typeVariantUnit,
       Variants.typeVariantVariable,
+      Variants.typeVariantVoid,
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $ -- All types supported via runtime representation
     Coders.language
