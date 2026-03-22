@@ -200,12 +200,14 @@ def "Term" $
     "list">: list $ core "Term",
     "literal">: core "Literal",
     "map">: Types.map (core "Term") (core "Term"),
-    "optional">: optional $ core "Term",
-    "product">: list $ core "Term",
+    "maybe">: optional $ core "Term",
+    "pair">: Types.pair (core "Term") (core "Term"),
     "record">: core "Record",
     "set">: set $ core "Term",
-    "sum">: core "Sum",
+    "typeApplication">: core "TypeApplicationTerm",
+    "typeLambda">: core "TypeLambda",
     "union">: core "Injection",
+    "unit">: T.unit,
     "variable">: core "Name",
     "wrap">: core "WrappedTerm"
   ]
@@ -243,9 +245,9 @@ def "TermVariant" $
   doc "The identifier of a term constructor" $
   enum [
     "annotated", "application", "either", "function",
-    "let", "list", "literal", "map", "optional",
-    "product", "record", "set", "sum", "union",
-    "variable", "wrap"
+    "let", "list", "literal", "map", "maybe",
+    "pair", "record", "set", "typeApplication",
+    "typeLambda", "union", "unit", "variable", "wrap"
   ]
 ```
 
