@@ -15698,7 +15698,6 @@
   "namespace": "hydra.ext.scala.coder",
   "termDependencies": [
     "hydra.ext.scala.utils",
-    "hydra.ext.scala.prepare",
     "hydra.ext.scala.serde",
     "hydra.formatting",
     "hydra.names",
