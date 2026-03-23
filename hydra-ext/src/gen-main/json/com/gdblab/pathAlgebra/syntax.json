@@ -1,2327 +1,365 @@
 {
+  "definitions": [
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.Number",
+        "type": {"literal": {"integer": {"bigint": {}}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.Text",
+        "type": {"literal": {"string": {}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.Label",
+        "type": {"literal": {"string": {}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.Variable",
+        "type": {"literal": {"string": {}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.PathName",
+        "type": {"literal": {"string": {}}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.PathQuery",
+        "type": {
+          "record": [
+            {
+              "name": "projection",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Projection"}},
+            {
+              "name": "restrictorExt",
+              "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.RestrictorExt"}}},
+            {
+              "name": "pathPattern",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.PathPattern"}},
+            {
+              "name": "groupBy",
+              "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.GroupBy"}}},
+            {
+              "name": "orderBy",
+              "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.OrderBy"}}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.Projection",
+        "type": {
+          "record": [
+            {
+              "name": "partProj",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.PartProj"}},
+            {
+              "name": "groupProj",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.GroupProj"}},
+            {
+              "name": "pathProj",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.PathProj"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.PartProj",
+        "type": {
+          "union": [
+            {"name": "all", "type": {"unit": {}}},
+            {
+              "name": "limited",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Number"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.GroupProj",
+        "type": {
+          "union": [
+            {"name": "all", "type": {"unit": {}}},
+            {
+              "name": "limited",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Number"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.PathProj",
+        "type": {
+          "union": [
+            {"name": "all", "type": {"unit": {}}},
+            {
+              "name": "limited",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Number"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.RestrictorExt",
+        "type": {
+          "union": [
+            {"name": "walk", "type": {"unit": {}}},
+            {"name": "trail", "type": {"unit": {}}},
+            {"name": "simple", "type": {"unit": {}}},
+            {"name": "acyclic", "type": {"unit": {}}},
+            {"name": "shortest", "type": {"unit": {}}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.OrderBy",
+        "type": {"wrap": {"variable": "com.gdblab.pathAlgebra.syntax.OrderByOption"}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.GroupBy",
+        "type": {"wrap": {"variable": "com.gdblab.pathAlgebra.syntax.GroupByOption"}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.OrderByOption",
+        "type": {
+          "union": [
+            {"name": "partition", "type": {"unit": {}}},
+            {"name": "group", "type": {"unit": {}}},
+            {"name": "path", "type": {"unit": {}}},
+            {"name": "partitionGroup", "type": {"unit": {}}},
+            {"name": "partitionPath", "type": {"unit": {}}},
+            {"name": "groupPath", "type": {"unit": {}}},
+            {"name": "partitionGroupPath", "type": {"unit": {}}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.GroupByOption",
+        "type": {
+          "union": [
+            {"name": "source", "type": {"unit": {}}},
+            {"name": "target", "type": {"unit": {}}},
+            {"name": "length", "type": {"unit": {}}},
+            {"name": "sourceTarget", "type": {"unit": {}}},
+            {"name": "sourceLength", "type": {"unit": {}}},
+            {"name": "targetLength", "type": {"unit": {}}},
+            {"name": "sourceTargetLength", "type": {"unit": {}}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.PathPattern",
+        "type": {
+          "record": [
+            {
+              "name": "pathName",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.PathName"}},
+            {
+              "name": "startNode",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.NodePattern"}},
+            {
+              "name": "edge",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.EdgePattern"}},
+            {
+              "name": "endNode",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.NodePattern"}},
+            {
+              "name": "condition",
+              "type": {
+                "maybe": {"variable": "com.gdblab.pathAlgebra.syntax.ComplexCondition"}}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.NodePattern",
+        "type": {
+          "record": [
+            {
+              "name": "variable",
+              "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.Variable"}}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.EdgePattern",
+        "type": {
+          "record": [
+            {
+              "name": "direction",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.EdgeDirection"}},
+            {
+              "name": "rpq",
+              "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.Rpq"}}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.EdgeDirection",
+        "type": {
+          "union": [
+            {"name": "outgoing", "type": {"unit": {}}},
+            {"name": "incoming", "type": {"unit": {}}},
+            {"name": "undirected", "type": {"unit": {}}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.Rpq",
+        "type": {
+          "union": [
+            {
+              "name": "parenthesis",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Rpq"}},
+            {
+              "name": "label",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Label"}},
+            {
+              "name": "negated",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Label"}},
+            {
+              "name": "reverse",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Label"}},
+            {
+              "name": "optional",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Rpq"}},
+            {
+              "name": "plus",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Plus"}},
+            {
+              "name": "star",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Star"}},
+            {
+              "name": "concatenation",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Concatenation"}},
+            {
+              "name": "alternation",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Alternation"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.Plus",
+        "type": {
+          "record": [
+            {
+              "name": "expression",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Rpq"}},
+            {
+              "name": "restrictor",
+              "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.RpqRestrictor"}}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.Star",
+        "type": {
+          "record": [
+            {
+              "name": "expression",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Rpq"}},
+            {
+              "name": "restrictor",
+              "type": {"maybe": {"variable": "com.gdblab.pathAlgebra.syntax.RpqRestrictor"}}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.Concatenation",
+        "type": {
+          "record": [
+            {
+              "name": "left",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Rpq"}},
+            {
+              "name": "right",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Rpq"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.Alternation",
+        "type": {
+          "record": [
+            {
+              "name": "left",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Rpq"}},
+            {
+              "name": "right",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Rpq"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.RpqRestrictor",
+        "type": {"wrap": {"variable": "com.gdblab.pathAlgebra.syntax.RestrictorExt"}}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.ComplexCondition",
+        "type": {
+          "union": [
+            {
+              "name": "simple",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Condition"}},
+            {
+              "name": "compound",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.CompoundComplexCondition"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.CompoundComplexCondition",
+        "type": {
+          "record": [
+            {
+              "name": "lhs",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Condition"}},
+            {
+              "name": "operator",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.BoolOp"}},
+            {
+              "name": "rhs",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.ComplexCondition"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.Condition",
+        "type": {
+          "record": [
+            {
+              "name": "function",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Function"}},
+            {
+              "name": "compareSym",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.CompareSym"}},
+            {
+              "name": "value",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Text"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.CompareSym",
+        "type": {
+          "union": [
+            {"name": "equal", "type": {"unit": {}}},
+            {"name": "notEqual", "type": {"unit": {}}},
+            {"name": "lessThan", "type": {"unit": {}}},
+            {"name": "greaterThan", "type": {"unit": {}}},
+            {"name": "lessThanOrEqual", "type": {"unit": {}}},
+            {"name": "greaterThanOrEqual", "type": {"unit": {}}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.Function",
+        "type": {
+          "union": [
+            {
+              "name": "simple",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.SimpleFunction"}},
+            {
+              "name": "nested",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.NestedFunction"}},
+            {
+              "name": "complex",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.ComplexFunction"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.SimpleFunction",
+        "type": {
+          "record": [
+            {
+              "name": "name",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Text"}},
+            {
+              "name": "argument",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Text"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.NestedFunction",
+        "type": {
+          "record": [
+            {
+              "name": "name",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Text"}},
+            {
+              "name": "innerFunction",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Function"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.ComplexFunction",
+        "type": {
+          "record": [
+            {
+              "name": "name",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Text"}},
+            {
+              "name": "innerFunction",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Function"}},
+            {
+              "name": "additionalArg",
+              "type": {"variable": "com.gdblab.pathAlgebra.syntax.Text"}}]}}},
+    {
+      "type": {
+        "name": "com.gdblab.pathAlgebra.syntax.BoolOp",
+        "type": {
+          "union": [
+            {"name": "and", "type": {"unit": {}}},
+            {"name": "or", "type": {"unit": {}}}]}}}],
   "description": [
     "A syntax model for the path algebra grammar by Angles et al. See the paper \"Path-based Algebraic Foundations of Graph Query Languages\" and the ANTLR grammar at https://github.com/pathalgebra/AlgebraParser"],
-  "elements": [
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.Number",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "literal",
-                "term": {
-                  "union": {
-                    "field": {
-                      "name": "integer",
-                      "term": {
-                        "union": {
-                          "field": {"name": "bigint", "term": {"unit": {}}},
-                          "typeName": "hydra.core.IntegerType"}}},
-                    "typeName": "hydra.core.LiteralType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.Text",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "literal",
-                "term": {
-                  "union": {
-                    "field": {"name": "string", "term": {"unit": {}}},
-                    "typeName": "hydra.core.LiteralType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.Label",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "literal",
-                "term": {
-                  "union": {
-                    "field": {"name": "string", "term": {"unit": {}}},
-                    "typeName": "hydra.core.LiteralType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.Variable",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "literal",
-                "term": {
-                  "union": {
-                    "field": {"name": "string", "term": {"unit": {}}},
-                    "typeName": "hydra.core.LiteralType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.PathName",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "literal",
-                "term": {
-                  "union": {
-                    "field": {"name": "string", "term": {"unit": {}}},
-                    "typeName": "hydra.core.LiteralType"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.PathQuery",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "projection"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Projection"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "restrictorExt"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "maybe",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.RestrictorExt"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "pathPattern"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.PathPattern"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "groupBy"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "maybe",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.GroupBy"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "orderBy"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "maybe",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.OrderBy"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.Projection",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "partProj"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.PartProj"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "groupProj"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.GroupProj"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "pathProj"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.PathProj"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.PartProj",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "all"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "limited"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Number"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.GroupProj",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "all"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "limited"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Number"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.PathProj",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "all"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "limited"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Number"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.RestrictorExt",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "walk"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "trail"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "simple"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "acyclic"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "shortest"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.OrderBy",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "wrap",
-                "term": {
-                  "union": {
-                    "field": {
-                      "name": "variable",
-                      "term": {
-                        "wrap": {
-                          "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.OrderByOption"}},
-                          "typeName": "hydra.core.Name"}}},
-                    "typeName": "hydra.core.Type"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.GroupBy",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "wrap",
-                "term": {
-                  "union": {
-                    "field": {
-                      "name": "variable",
-                      "term": {
-                        "wrap": {
-                          "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.GroupByOption"}},
-                          "typeName": "hydra.core.Name"}}},
-                    "typeName": "hydra.core.Type"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.OrderByOption",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "partition"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "group"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "path"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "partitionGroup"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "partitionPath"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "groupPath"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "partitionGroupPath"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.GroupByOption",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "source"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "target"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "length"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "sourceTarget"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "sourceLength"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "targetLength"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "sourceTargetLength"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.PathPattern",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "pathName"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.PathName"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "startNode"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.NodePattern"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "edge"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.EdgePattern"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "endNode"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.NodePattern"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "condition"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "maybe",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {
-                                              "literal": {"string": "com.gdblab.pathAlgebra.syntax.ComplexCondition"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.NodePattern",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "variable"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "maybe",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Variable"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.EdgePattern",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "direction"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.EdgeDirection"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "rpq"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "maybe",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Rpq"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.EdgeDirection",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "outgoing"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "incoming"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "undirected"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.Rpq",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "parenthesis"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Rpq"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "label"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Label"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "negated"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Label"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "reverse"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Label"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "optional"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Rpq"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "plus"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Plus"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "star"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Star"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "concatenation"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Concatenation"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "alternation"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Alternation"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.Plus",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "expression"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Rpq"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "restrictor"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "maybe",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.RpqRestrictor"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.Star",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "expression"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Rpq"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "restrictor"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "maybe",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.RpqRestrictor"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.Concatenation",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "left"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Rpq"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "right"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Rpq"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.Alternation",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "left"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Rpq"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "right"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Rpq"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.RpqRestrictor",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "wrap",
-                "term": {
-                  "union": {
-                    "field": {
-                      "name": "variable",
-                      "term": {
-                        "wrap": {
-                          "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.RestrictorExt"}},
-                          "typeName": "hydra.core.Name"}}},
-                    "typeName": "hydra.core.Type"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.ComplexCondition",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "simple"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Condition"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "compound"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {
-                                        "literal": {"string": "com.gdblab.pathAlgebra.syntax.CompoundComplexCondition"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.CompoundComplexCondition",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "lhs"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Condition"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "operator"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.BoolOp"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "rhs"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {
-                                        "literal": {"string": "com.gdblab.pathAlgebra.syntax.ComplexCondition"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.Condition",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "function"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Function"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "compareSym"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.CompareSym"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "value"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Text"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.CompareSym",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "equal"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "notEqual"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "lessThan"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "greaterThan"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "lessThanOrEqual"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "greaterThanOrEqual"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.Function",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "simple"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {
-                                        "literal": {"string": "com.gdblab.pathAlgebra.syntax.SimpleFunction"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "nested"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {
-                                        "literal": {"string": "com.gdblab.pathAlgebra.syntax.NestedFunction"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "complex"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {
-                                        "literal": {"string": "com.gdblab.pathAlgebra.syntax.ComplexFunction"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.SimpleFunction",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "name"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Text"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "argument"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Text"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.NestedFunction",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "name"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Text"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "innerFunction"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Function"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.ComplexFunction",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "name"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Text"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "innerFunction"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Function"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "additionalArg"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "com.gdblab.pathAlgebra.syntax.Text"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "com.gdblab.pathAlgebra.syntax.BoolOp",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "and"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {"body": {"literal": {"string": "or"}}, "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]}],
   "namespace": "com.gdblab.pathAlgebra.syntax",
   "termDependencies": ["hydra.core"],
   "typeDependencies": ["hydra.core"]}

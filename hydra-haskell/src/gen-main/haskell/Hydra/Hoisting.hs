@@ -317,12 +317,16 @@ hoistSubterms shouldHoist cx0 term0 =
                                       newBindings = Pairs.second newAcc
                                       fullPath = Lists.concat2 pathPrefix path
                                   in (Logic.ifElse (shouldHoist (fullPath, processedTerm)) (
-                                    let bindingName =
+                                    let proposedName =
                                             Core.Name (Strings.cat [
                                               "_hoist_",
                                               namePrefix,
                                               "_",
                                               (Literals.showInt32 newCounter)])
+                                        existingNames = Sets.fromList (Lists.map (\b -> Core.bindingName b) newBindings)
+                                        freeVarsInSubterm = Rewriting.freeVariablesInTerm subterm
+                                        allReserved = Sets.union existingNames freeVarsInSubterm
+                                        bindingName = Lexical.chooseUniqueName allReserved proposedName
                                         allLambdaVars = Graph.graphLambdaVariables cxInner
                                         newLambdaVars = Sets.difference allLambdaVars baselineLambdaVars
                                         freeVars = Rewriting.freeVariablesInTerm processedTerm
@@ -375,7 +379,10 @@ hoistSubterms shouldHoist cx0 term0 =
                         newBindings = Lists.reverse newBindingsReversed
                         bodyPathPrefix = Lists.concat2 path [
                               Accessors.TermAccessorLetBody]
-                        bodyResult = processImmediateSubterm cx 1 "_body" bodyPathPrefix body
+                        firstBindingName =
+                                Maybes.maybe "body" (\b -> Strings.intercalate "_" (Strings.splitOn "." (Core.unName (Core.bindingName b)))) (Lists.safeHead bindings)
+                        bodyPrefix = Strings.cat2 firstBindingName "_body"
+                        bodyResult = processImmediateSubterm cx 1 bodyPrefix bodyPathPrefix body
                         newBody = Pairs.second bodyResult
                     in (counter, (Core.TermLet (Core.Let {
                       Core.letBindings = newBindings,

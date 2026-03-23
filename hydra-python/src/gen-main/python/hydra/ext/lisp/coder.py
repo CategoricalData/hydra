@@ -226,7 +226,7 @@ def encode_application(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, ra
             @lru_cache(1)
             def is_lazy2() -> bool:
                 return hydra.lib.logic.or_(is_primitive_ref("hydra.lib.eithers.fromLeft", d_mid_fun()), hydra.lib.logic.or_(is_primitive_ref("hydra.lib.eithers.fromRight", d_mid_fun()), is_primitive_ref("hydra.lib.maybes.fromMaybe", d_mid_fun())))
-            def _hoist_body_1(v1):
+            def _hoist_is_lazy2_body_1(v1):
                 match v1:
                     case hydra.core.TermApplication(value=app3):
                         inner_fun = app3.function
@@ -238,7 +238,7 @@ def encode_application(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1, ra
 
                     case _:
                         return normal()
-            return hydra.lib.logic.if_else(is_lazy2(), (lambda : hydra.lib.eithers.bind(enc(mid_fun), (lambda e_prim: hydra.lib.eithers.bind(enc(mid_arg), (lambda e_def: hydra.lib.eithers.bind(enc(raw_arg), (lambda e_arg: Right(lisp_app(lisp_app(e_prim, (wrap_in_thunk(e_def),)), (e_arg,)))))))))), (lambda : _hoist_body_1(d_mid_fun())))
+            return hydra.lib.logic.if_else(is_lazy2(), (lambda : hydra.lib.eithers.bind(enc(mid_fun), (lambda e_prim: hydra.lib.eithers.bind(enc(mid_arg), (lambda e_def: hydra.lib.eithers.bind(enc(raw_arg), (lambda e_arg: Right(lisp_app(lisp_app(e_prim, (wrap_in_thunk(e_def),)), (e_arg,)))))))))), (lambda : _hoist_is_lazy2_body_1(d_mid_fun())))
 
         case _:
             return normal()
@@ -402,7 +402,7 @@ def encode_term_definition(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1
     @lru_cache(1)
     def dterm() -> hydra.core.Term:
         return hydra.rewriting.deannotate_term(term)
-    def _hoist_body_1(v1):
+    def _hoist_dterm_body_1(v1):
         match v1:
             case hydra.core.FunctionLambda():
                 return hydra.lib.eithers.bind(encode_term(dialect, cx, g, term), (lambda sterm: Right(lisp_top_form(cast(hydra.ext.lisp.syntax.TopLevelForm, hydra.ext.lisp.syntax.TopLevelFormVariable(hydra.ext.lisp.syntax.VariableDefinition(hydra.ext.lisp.syntax.Symbol(lname()), sterm, Nothing())))))))
@@ -411,7 +411,7 @@ def encode_term_definition(dialect: hydra.ext.lisp.syntax.Dialect, cx: T0, g: T1
                 return hydra.lib.eithers.bind(encode_term(dialect, cx, g, term), (lambda sterm: Right(lisp_top_form(cast(hydra.ext.lisp.syntax.TopLevelForm, hydra.ext.lisp.syntax.TopLevelFormVariable(hydra.ext.lisp.syntax.VariableDefinition(hydra.ext.lisp.syntax.Symbol(lname()), sterm, Nothing())))))))
     match dterm():
         case hydra.core.TermFunction(value=fun):
-            return _hoist_body_1(fun)
+            return _hoist_dterm_body_1(fun)
 
         case _:
             return hydra.lib.eithers.bind(encode_term(dialect, cx, g, term), (lambda sterm: Right(lisp_top_form(cast(hydra.ext.lisp.syntax.TopLevelForm, hydra.ext.lisp.syntax.TopLevelFormVariable(hydra.ext.lisp.syntax.VariableDefinition(hydra.ext.lisp.syntax.Symbol(lname()), sterm, Nothing())))))))
@@ -420,7 +420,7 @@ def encode_type(cx: T0, g: T1, t: hydra.core.Type):
     @lru_cache(1)
     def typ() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(t)
-    def _hoist_body_1(v1):
+    def _hoist_typ_body_1(v1):
         match v1:
             case hydra.core.LiteralTypeBinary():
                 return cast(hydra.ext.lisp.syntax.TypeSpecifier, hydra.ext.lisp.syntax.TypeSpecifierNamed(hydra.ext.lisp.syntax.Symbol("ByteArray")))
@@ -450,7 +450,7 @@ def encode_type(cx: T0, g: T1, t: hydra.core.Type):
             return Right(cast(hydra.ext.lisp.syntax.TypeSpecifier, hydra.ext.lisp.syntax.TypeSpecifierUnit()))
 
         case hydra.core.TypeLiteral(value=lt):
-            return Right(_hoist_body_1(lt))
+            return Right(_hoist_typ_body_1(lt))
 
         case hydra.core.TypeList(value=inner):
             return hydra.lib.eithers.map((lambda enc: cast(hydra.ext.lisp.syntax.TypeSpecifier, hydra.ext.lisp.syntax.TypeSpecifierList(enc))), encode_type(cx, g, inner))
@@ -544,7 +544,7 @@ def lisp_top_form_with_comments(mdoc: Maybe[str], form: hydra.ext.lisp.syntax.To
 def module_exports(forms: frozenlist[hydra.ext.lisp.syntax.TopLevelFormWithComments]) -> frozenlist[hydra.ext.lisp.syntax.ExportDeclaration]:
     @lru_cache(1)
     def symbols():
-        return hydra.lib.lists.concat(hydra.lib.lists.map((lambda fwc: (form := fwc.form, _hoist_body_1 := (lambda v1: (lambda vd: (vd.name,))(v1.value) if isinstance(v1, hydra.ext.lisp.syntax.TopLevelFormVariable) else (lambda rdef: (rname := rdef.name.value, fields := rdef.fields, field_syms := hydra.lib.lists.map((lambda f: (fn := f.name.value, hydra.ext.lisp.syntax.Symbol(hydra.lib.strings.cat((rname, "-", fn))))[1]), fields), hydra.lib.lists.concat(((hydra.ext.lisp.syntax.Symbol(hydra.lib.strings.cat2("make-", rname)), hydra.ext.lisp.syntax.Symbol(hydra.lib.strings.cat2(rname, "?"))), field_syms)))[3])(v1.value) if isinstance(v1, hydra.ext.lisp.syntax.TopLevelFormRecordType) else ()), _hoist_body_1(form))[2]), forms))
+        return hydra.lib.lists.concat(hydra.lib.lists.map((lambda fwc: (form := fwc.form, _hoist_form_body_1 := (lambda v1: (lambda vd: (vd.name,))(v1.value) if isinstance(v1, hydra.ext.lisp.syntax.TopLevelFormVariable) else (lambda rdef: (rname := rdef.name.value, fields := rdef.fields, field_syms := hydra.lib.lists.map((lambda f: (fn := f.name.value, hydra.ext.lisp.syntax.Symbol(hydra.lib.strings.cat((rname, "-", fn))))[1]), fields), hydra.lib.lists.concat(((hydra.ext.lisp.syntax.Symbol(hydra.lib.strings.cat2("make-", rname)), hydra.ext.lisp.syntax.Symbol(hydra.lib.strings.cat2(rname, "?"))), field_syms)))[3])(v1.value) if isinstance(v1, hydra.ext.lisp.syntax.TopLevelFormRecordType) else ()), _hoist_form_body_1(form))[2]), forms))
     return hydra.lib.logic.if_else(hydra.lib.lists.null(symbols()), (lambda : ()), (lambda : (hydra.ext.lisp.syntax.ExportDeclaration(symbols()),)))
 
 def module_imports(focus_ns: hydra.module.Namespace, defs: frozenlist[hydra.module.Definition]) -> frozenlist[hydra.ext.lisp.syntax.ImportDeclaration]:

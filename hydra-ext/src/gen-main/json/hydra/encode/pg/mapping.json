@@ -1,1154 +1,1160 @@
 {
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.encode.pg.mapping.annotationSchema",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "union": {
+                  "field": {
+                    "name": "record",
+                    "term": {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "typeName",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "hydra.pg.mapping.AnnotationSchema"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "fields",
+                            "term": {
+                              "list": [
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "vertexLabel"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {
+                                                        "field": "vertexLabel",
+                                                        "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "edgeLabel"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {
+                                                        "field": "edgeLabel",
+                                                        "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "vertexId"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "vertexId", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "edgeId"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "edgeId", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "propertyKey"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {
+                                                        "field": "propertyKey",
+                                                        "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "propertyValue"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {
+                                                        "field": "propertyValue",
+                                                        "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "outVertex"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {
+                                                        "field": "outVertex",
+                                                        "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "outVertexLabel"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {
+                                                        "field": "outVertexLabel",
+                                                        "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "inVertex"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "inVertex", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "inVertexLabel"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {
+                                                        "field": "inVertexLabel",
+                                                        "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "outEdge"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "outEdge", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "outEdgeLabel"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {
+                                                        "field": "outEdgeLabel",
+                                                        "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "inEdge"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "inEdge", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "inEdgeLabel"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {
+                                                        "field": "inEdgeLabel",
+                                                        "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "ignore"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "ignore", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"variable": "x"}},
+                                                            "typeName": "hydra.core.Literal"}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"literal": {"string": {}}}],
+                                                  "parameter": "x"}}}}}}],
+                                    "typeName": "hydra.core.Field"}}]}}],
+                        "typeName": "hydra.core.Record"}}},
+                  "typeName": "hydra.core.Term"}},
+              "domain": [{"variable": "hydra.pg.mapping.AnnotationSchema"}],
+              "parameter": "x"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {"variable": "hydra.core.Term"},
+                "domain": {"variable": "hydra.pg.mapping.AnnotationSchema"}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.encode.pg.mapping.edgeSpec",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "union": {
+                  "field": {
+                    "name": "record",
+                    "term": {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "typeName",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "hydra.pg.mapping.EdgeSpec"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "fields",
+                            "term": {
+                              "list": [
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "label"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "label", "typeName": "hydra.pg.mapping.EdgeSpec"}}}}}},
+                                            "function": {"variable": "hydra.encode.pg.model.edgeLabel"}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {"body": {"literal": {"string": "id"}}, "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {"record": {"field": "id", "typeName": "hydra.pg.mapping.EdgeSpec"}}}}}},
+                                            "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "out"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {"record": {"field": "out", "typeName": "hydra.pg.mapping.EdgeSpec"}}}}}},
+                                            "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {"body": {"literal": {"string": "in"}}, "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {"record": {"field": "in", "typeName": "hydra.pg.mapping.EdgeSpec"}}}}}},
+                                            "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "properties"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "properties", "typeName": "hydra.pg.mapping.EdgeSpec"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "list",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "xs"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "hydra.encode.pg.mapping.propertySpec"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                        "type": {"variable": "hydra.pg.mapping.PropertySpec"}}},
+                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"list": {"variable": "hydra.pg.mapping.PropertySpec"}}],
+                                                  "parameter": "xs"}}}}}}],
+                                    "typeName": "hydra.core.Field"}}]}}],
+                        "typeName": "hydra.core.Record"}}},
+                  "typeName": "hydra.core.Term"}},
+              "domain": [{"variable": "hydra.pg.mapping.EdgeSpec"}],
+              "parameter": "x"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {"variable": "hydra.core.Term"},
+                "domain": {"variable": "hydra.pg.mapping.EdgeSpec"}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.encode.pg.mapping.elementSpec",
+        "term": {
+          "function": {
+            "elimination": {
+              "union": {
+                "cases": [
+                  {
+                    "name": "vertex",
+                    "term": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "union": {
+                              "field": {
+                                "name": "union",
+                                "term": {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "typeName",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "hydra.pg.mapping.ElementSpec"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "field",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "name",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "vertex"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              {
+                                                "name": "term",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {"variable": "y"},
+                                                    "function": {"variable": "hydra.encode.pg.mapping.vertexSpec"}}}}],
+                                            "typeName": "hydra.core.Field"}}}],
+                                    "typeName": "hydra.core.Injection"}}},
+                              "typeName": "hydra.core.Term"}},
+                          "domain": [{"variable": "hydra.pg.mapping.VertexSpec"}],
+                          "parameter": "y"}}}},
+                  {
+                    "name": "edge",
+                    "term": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "union": {
+                              "field": {
+                                "name": "union",
+                                "term": {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "typeName",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "hydra.pg.mapping.ElementSpec"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "field",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "name",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "edge"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              {
+                                                "name": "term",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {"variable": "y"},
+                                                    "function": {"variable": "hydra.encode.pg.mapping.edgeSpec"}}}}],
+                                            "typeName": "hydra.core.Field"}}}],
+                                    "typeName": "hydra.core.Injection"}}},
+                              "typeName": "hydra.core.Term"}},
+                          "domain": [{"variable": "hydra.pg.mapping.EdgeSpec"}],
+                          "parameter": "y"}}}}],
+                "default": null,
+                "typeName": "hydra.pg.mapping.ElementSpec"}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {"variable": "hydra.core.Term"},
+                "domain": {"variable": "hydra.pg.mapping.ElementSpec"}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.encode.pg.mapping.propertySpec",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "union": {
+                  "field": {
+                    "name": "record",
+                    "term": {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "typeName",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "hydra.pg.mapping.PropertySpec"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "fields",
+                            "term": {
+                              "list": [
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "key"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "key", "typeName": "hydra.pg.mapping.PropertySpec"}}}}}},
+                                            "function": {"variable": "hydra.encode.pg.model.propertyKey"}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "value"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "value", "typeName": "hydra.pg.mapping.PropertySpec"}}}}}},
+                                            "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
+                                    "typeName": "hydra.core.Field"}}]}}],
+                        "typeName": "hydra.core.Record"}}},
+                  "typeName": "hydra.core.Term"}},
+              "domain": [{"variable": "hydra.pg.mapping.PropertySpec"}],
+              "parameter": "x"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {"variable": "hydra.core.Term"},
+                "domain": {"variable": "hydra.pg.mapping.PropertySpec"}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.encode.pg.mapping.valueSpec",
+        "term": {
+          "function": {
+            "elimination": {
+              "union": {
+                "cases": [
+                  {
+                    "name": "value",
+                    "term": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "union": {
+                              "field": {
+                                "name": "union",
+                                "term": {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "typeName",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "hydra.pg.mapping.ValueSpec"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "field",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "name",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "value"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              {
+                                                "name": "term",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {"variable": "y"},
+                                                    "function": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "union": {
+                                                              "field": {"name": "unit", "term": {"unit": {}}},
+                                                              "typeName": "hydra.core.Term"}},
+                                                          "domain": [{"unit": {}}],
+                                                          "parameter": "_"}}}}}}],
+                                            "typeName": "hydra.core.Field"}}}],
+                                    "typeName": "hydra.core.Injection"}}},
+                              "typeName": "hydra.core.Term"}},
+                          "domain": [{"unit": {}}],
+                          "parameter": "y"}}}},
+                  {
+                    "name": "pattern",
+                    "term": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "union": {
+                              "field": {
+                                "name": "union",
+                                "term": {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "typeName",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "hydra.pg.mapping.ValueSpec"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "field",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "name",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "pattern"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              {
+                                                "name": "term",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {"variable": "y"},
+                                                    "function": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "union": {
+                                                              "field": {
+                                                                "name": "literal",
+                                                                "term": {
+                                                                  "union": {
+                                                                    "field": {"name": "string", "term": {"variable": "x"}},
+                                                                    "typeName": "hydra.core.Literal"}}},
+                                                              "typeName": "hydra.core.Term"}},
+                                                          "domain": [{"literal": {"string": {}}}],
+                                                          "parameter": "x"}}}}}}],
+                                            "typeName": "hydra.core.Field"}}}],
+                                    "typeName": "hydra.core.Injection"}}},
+                              "typeName": "hydra.core.Term"}},
+                          "domain": [{"literal": {"string": {}}}],
+                          "parameter": "y"}}}}],
+                "default": null,
+                "typeName": "hydra.pg.mapping.ValueSpec"}}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {"variable": "hydra.core.Term"},
+                "domain": {"variable": "hydra.pg.mapping.ValueSpec"}}},
+            "variables": []}]}},
+    {
+      "term": {
+        "name": "hydra.encode.pg.mapping.vertexSpec",
+        "term": {
+          "function": {
+            "lambda": {
+              "body": {
+                "union": {
+                  "field": {
+                    "name": "record",
+                    "term": {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "typeName",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "hydra.pg.mapping.VertexSpec"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "fields",
+                            "term": {
+                              "list": [
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "label"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "label", "typeName": "hydra.pg.mapping.VertexSpec"}}}}}},
+                                            "function": {"variable": "hydra.encode.pg.model.vertexLabel"}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {"body": {"literal": {"string": "id"}}, "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {"record": {"field": "id", "typeName": "hydra.pg.mapping.VertexSpec"}}}}}},
+                                            "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
+                                    "typeName": "hydra.core.Field"}},
+                                {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "name",
+                                        "term": {
+                                          "wrap": {
+                                            "body": {"literal": {"string": "properties"}},
+                                            "typeName": "hydra.core.Name"}}},
+                                      {
+                                        "name": "term",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "x"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "properties", "typeName": "hydra.pg.mapping.VertexSpec"}}}}}},
+                                            "function": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "list",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "xs"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "hydra.encode.pg.mapping.propertySpec"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                        "type": {"variable": "hydra.pg.mapping.PropertySpec"}}},
+                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                      "typeName": "hydra.core.Term"}},
+                                                  "domain": [{"list": {"variable": "hydra.pg.mapping.PropertySpec"}}],
+                                                  "parameter": "xs"}}}}}}],
+                                    "typeName": "hydra.core.Field"}}]}}],
+                        "typeName": "hydra.core.Record"}}},
+                  "typeName": "hydra.core.Term"}},
+              "domain": [{"variable": "hydra.pg.mapping.VertexSpec"}],
+              "parameter": "x"}}},
+        "type": [
+          {
+            "constraints": null,
+            "type": {
+              "function": {
+                "codomain": {"variable": "hydra.core.Term"},
+                "domain": {"variable": "hydra.pg.mapping.VertexSpec"}}},
+            "variables": []}]}}],
   "description": ["Term encoders for hydra.pg.mapping"],
-  "elements": [
-    {
-      "name": "hydra.encode.pg.mapping.annotationSchema",
-      "term": {
-        "function": {
-          "lambda": {
-            "body": {
-              "union": {
-                "field": {
-                  "name": "record",
-                  "term": {
-                    "record": {
-                      "fields": [
-                        {
-                          "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.pg.mapping.AnnotationSchema"}},
-                              "typeName": "hydra.core.Name"}}},
-                        {
-                          "name": "fields",
-                          "term": {
-                            "list": [
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "vertexLabel"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {
-                                                      "field": "vertexLabel",
-                                                      "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "edgeLabel"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {
-                                                      "field": "edgeLabel",
-                                                      "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "vertexId"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {"field": "vertexId", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "edgeId"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {"field": "edgeId", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "propertyKey"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {
-                                                      "field": "propertyKey",
-                                                      "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "propertyValue"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {
-                                                      "field": "propertyValue",
-                                                      "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "outVertex"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {
-                                                      "field": "outVertex",
-                                                      "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "outVertexLabel"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {
-                                                      "field": "outVertexLabel",
-                                                      "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "inVertex"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {"field": "inVertex", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "inVertexLabel"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {
-                                                      "field": "inVertexLabel",
-                                                      "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "outEdge"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {"field": "outEdge", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "outEdgeLabel"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {
-                                                      "field": "outEdgeLabel",
-                                                      "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "inEdge"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {"field": "inEdge", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "inEdgeLabel"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {
-                                                      "field": "inEdgeLabel",
-                                                      "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "ignore"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {"field": "ignore", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "union": {
-                                                          "field": {"name": "string", "term": {"variable": "x"}},
-                                                          "typeName": "hydra.core.Literal"}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"literal": {"string": {}}}],
-                                                "parameter": "x"}}}}}}],
-                                  "typeName": "hydra.core.Field"}}]}}],
-                      "typeName": "hydra.core.Record"}}},
-                "typeName": "hydra.core.Term"}},
-            "domain": [{"variable": "hydra.pg.mapping.AnnotationSchema"}],
-            "parameter": "x"}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.pg.mapping.AnnotationSchema"}}},
-          "variables": []}]},
-    {
-      "name": "hydra.encode.pg.mapping.edgeSpec",
-      "term": {
-        "function": {
-          "lambda": {
-            "body": {
-              "union": {
-                "field": {
-                  "name": "record",
-                  "term": {
-                    "record": {
-                      "fields": [
-                        {
-                          "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.pg.mapping.EdgeSpec"}},
-                              "typeName": "hydra.core.Name"}}},
-                        {
-                          "name": "fields",
-                          "term": {
-                            "list": [
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "label"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {"field": "label", "typeName": "hydra.pg.mapping.EdgeSpec"}}}}}},
-                                          "function": {"variable": "hydra.encode.pg.model.edgeLabel"}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {"body": {"literal": {"string": "id"}}, "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {"record": {"field": "id", "typeName": "hydra.pg.mapping.EdgeSpec"}}}}}},
-                                          "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "out"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {"record": {"field": "out", "typeName": "hydra.pg.mapping.EdgeSpec"}}}}}},
-                                          "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {"body": {"literal": {"string": "in"}}, "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {"record": {"field": "in", "typeName": "hydra.pg.mapping.EdgeSpec"}}}}}},
-                                          "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "properties"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {"field": "properties", "typeName": "hydra.pg.mapping.EdgeSpec"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "list",
-                                                      "term": {
-                                                        "application": {
-                                                          "argument": {"variable": "xs"},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {"variable": "hydra.encode.pg.mapping.propertySpec"},
-                                                              "function": {
-                                                                "typeApplication": {
-                                                                  "body": {
-                                                                    "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                      "type": {"variable": "hydra.pg.mapping.PropertySpec"}}},
-                                                                  "type": {"variable": "hydra.core.Term"}}}}}}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"list": {"variable": "hydra.pg.mapping.PropertySpec"}}],
-                                                "parameter": "xs"}}}}}}],
-                                  "typeName": "hydra.core.Field"}}]}}],
-                      "typeName": "hydra.core.Record"}}},
-                "typeName": "hydra.core.Term"}},
-            "domain": [{"variable": "hydra.pg.mapping.EdgeSpec"}],
-            "parameter": "x"}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.pg.mapping.EdgeSpec"}}},
-          "variables": []}]},
-    {
-      "name": "hydra.encode.pg.mapping.elementSpec",
-      "term": {
-        "function": {
-          "elimination": {
-            "union": {
-              "cases": [
-                {
-                  "name": "vertex",
-                  "term": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "union": {
-                            "field": {
-                              "name": "union",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.pg.mapping.ElementSpec"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "field",
-                                      "term": {
-                                        "record": {
-                                          "fields": [
-                                            {
-                                              "name": "name",
-                                              "term": {
-                                                "wrap": {
-                                                  "body": {"literal": {"string": "vertex"}},
-                                                  "typeName": "hydra.core.Name"}}},
-                                            {
-                                              "name": "term",
-                                              "term": {
-                                                "application": {
-                                                  "argument": {"variable": "y"},
-                                                  "function": {"variable": "hydra.encode.pg.mapping.vertexSpec"}}}}],
-                                          "typeName": "hydra.core.Field"}}}],
-                                  "typeName": "hydra.core.Injection"}}},
-                            "typeName": "hydra.core.Term"}},
-                        "domain": [{"variable": "hydra.pg.mapping.VertexSpec"}],
-                        "parameter": "y"}}}},
-                {
-                  "name": "edge",
-                  "term": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "union": {
-                            "field": {
-                              "name": "union",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.pg.mapping.ElementSpec"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "field",
-                                      "term": {
-                                        "record": {
-                                          "fields": [
-                                            {
-                                              "name": "name",
-                                              "term": {
-                                                "wrap": {
-                                                  "body": {"literal": {"string": "edge"}},
-                                                  "typeName": "hydra.core.Name"}}},
-                                            {
-                                              "name": "term",
-                                              "term": {
-                                                "application": {
-                                                  "argument": {"variable": "y"},
-                                                  "function": {"variable": "hydra.encode.pg.mapping.edgeSpec"}}}}],
-                                          "typeName": "hydra.core.Field"}}}],
-                                  "typeName": "hydra.core.Injection"}}},
-                            "typeName": "hydra.core.Term"}},
-                        "domain": [{"variable": "hydra.pg.mapping.EdgeSpec"}],
-                        "parameter": "y"}}}}],
-              "default": null,
-              "typeName": "hydra.pg.mapping.ElementSpec"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.pg.mapping.ElementSpec"}}},
-          "variables": []}]},
-    {
-      "name": "hydra.encode.pg.mapping.propertySpec",
-      "term": {
-        "function": {
-          "lambda": {
-            "body": {
-              "union": {
-                "field": {
-                  "name": "record",
-                  "term": {
-                    "record": {
-                      "fields": [
-                        {
-                          "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.pg.mapping.PropertySpec"}},
-                              "typeName": "hydra.core.Name"}}},
-                        {
-                          "name": "fields",
-                          "term": {
-                            "list": [
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "key"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {"field": "key", "typeName": "hydra.pg.mapping.PropertySpec"}}}}}},
-                                          "function": {"variable": "hydra.encode.pg.model.propertyKey"}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "value"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {"field": "value", "typeName": "hydra.pg.mapping.PropertySpec"}}}}}},
-                                          "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
-                                  "typeName": "hydra.core.Field"}}]}}],
-                      "typeName": "hydra.core.Record"}}},
-                "typeName": "hydra.core.Term"}},
-            "domain": [{"variable": "hydra.pg.mapping.PropertySpec"}],
-            "parameter": "x"}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.pg.mapping.PropertySpec"}}},
-          "variables": []}]},
-    {
-      "name": "hydra.encode.pg.mapping.valueSpec",
-      "term": {
-        "function": {
-          "elimination": {
-            "union": {
-              "cases": [
-                {
-                  "name": "value",
-                  "term": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "union": {
-                            "field": {
-                              "name": "union",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.pg.mapping.ValueSpec"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "field",
-                                      "term": {
-                                        "record": {
-                                          "fields": [
-                                            {
-                                              "name": "name",
-                                              "term": {
-                                                "wrap": {
-                                                  "body": {"literal": {"string": "value"}},
-                                                  "typeName": "hydra.core.Name"}}},
-                                            {
-                                              "name": "term",
-                                              "term": {
-                                                "application": {
-                                                  "argument": {"variable": "y"},
-                                                  "function": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "union": {
-                                                            "field": {"name": "unit", "term": {"unit": {}}},
-                                                            "typeName": "hydra.core.Term"}},
-                                                        "domain": [{"unit": {}}],
-                                                        "parameter": "_"}}}}}}],
-                                          "typeName": "hydra.core.Field"}}}],
-                                  "typeName": "hydra.core.Injection"}}},
-                            "typeName": "hydra.core.Term"}},
-                        "domain": [{"unit": {}}],
-                        "parameter": "y"}}}},
-                {
-                  "name": "pattern",
-                  "term": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "union": {
-                            "field": {
-                              "name": "union",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.pg.mapping.ValueSpec"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "field",
-                                      "term": {
-                                        "record": {
-                                          "fields": [
-                                            {
-                                              "name": "name",
-                                              "term": {
-                                                "wrap": {
-                                                  "body": {"literal": {"string": "pattern"}},
-                                                  "typeName": "hydra.core.Name"}}},
-                                            {
-                                              "name": "term",
-                                              "term": {
-                                                "application": {
-                                                  "argument": {"variable": "y"},
-                                                  "function": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "literal",
-                                                              "term": {
-                                                                "union": {
-                                                                  "field": {"name": "string", "term": {"variable": "x"}},
-                                                                  "typeName": "hydra.core.Literal"}}},
-                                                            "typeName": "hydra.core.Term"}},
-                                                        "domain": [{"literal": {"string": {}}}],
-                                                        "parameter": "x"}}}}}}],
-                                          "typeName": "hydra.core.Field"}}}],
-                                  "typeName": "hydra.core.Injection"}}},
-                            "typeName": "hydra.core.Term"}},
-                        "domain": [{"literal": {"string": {}}}],
-                        "parameter": "y"}}}}],
-              "default": null,
-              "typeName": "hydra.pg.mapping.ValueSpec"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.pg.mapping.ValueSpec"}}},
-          "variables": []}]},
-    {
-      "name": "hydra.encode.pg.mapping.vertexSpec",
-      "term": {
-        "function": {
-          "lambda": {
-            "body": {
-              "union": {
-                "field": {
-                  "name": "record",
-                  "term": {
-                    "record": {
-                      "fields": [
-                        {
-                          "name": "typeName",
-                          "term": {
-                            "wrap": {
-                              "body": {"literal": {"string": "hydra.pg.mapping.VertexSpec"}},
-                              "typeName": "hydra.core.Name"}}},
-                        {
-                          "name": "fields",
-                          "term": {
-                            "list": [
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "label"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {"field": "label", "typeName": "hydra.pg.mapping.VertexSpec"}}}}}},
-                                          "function": {"variable": "hydra.encode.pg.model.vertexLabel"}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {"body": {"literal": {"string": "id"}}, "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {"record": {"field": "id", "typeName": "hydra.pg.mapping.VertexSpec"}}}}}},
-                                          "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
-                                  "typeName": "hydra.core.Field"}},
-                              {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "properties"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "term",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "x"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {
-                                                    "record": {"field": "properties", "typeName": "hydra.pg.mapping.VertexSpec"}}}}}},
-                                          "function": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "list",
-                                                      "term": {
-                                                        "application": {
-                                                          "argument": {"variable": "xs"},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {"variable": "hydra.encode.pg.mapping.propertySpec"},
-                                                              "function": {
-                                                                "typeApplication": {
-                                                                  "body": {
-                                                                    "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                      "type": {"variable": "hydra.pg.mapping.PropertySpec"}}},
-                                                                  "type": {"variable": "hydra.core.Term"}}}}}}}},
-                                                    "typeName": "hydra.core.Term"}},
-                                                "domain": [{"list": {"variable": "hydra.pg.mapping.PropertySpec"}}],
-                                                "parameter": "xs"}}}}}}],
-                                  "typeName": "hydra.core.Field"}}]}}],
-                      "typeName": "hydra.core.Record"}}},
-                "typeName": "hydra.core.Term"}},
-            "domain": [{"variable": "hydra.pg.mapping.VertexSpec"}],
-            "parameter": "x"}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.core.Term"},
-              "domain": {"variable": "hydra.pg.mapping.VertexSpec"}}},
-          "variables": []}]}],
   "namespace": "hydra.encode.pg.mapping",
   "termDependencies": ["hydra.encode.core", "hydra.encode.pg.model", "hydra.encode.util"],
   "typeDependencies": ["hydra.pg.mapping"]}

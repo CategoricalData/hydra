@@ -171,7 +171,7 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
         @lru_cache(1)
         def new_term() -> hydra.core.Term:
             return hydra.lib.pairs.second(result())
-        def _hoist_body_1(v1):
+        def _hoist_new_term_body_1(v1):
             match v1:
                 case hydra.core.TermLet(value=l):
                     body = l.body
@@ -298,7 +298,7 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
 
                 case _:
                     return ((hydra.lib.lists.concat2(previously_finished_bindings(), bindings_so_far()), already_used_names()), new_term())
-        return _hoist_body_1(new_term())
+        return _hoist_new_term_body_1(new_term())
     @lru_cache(1)
     def cx1() -> hydra.graph.Graph:
         return hydra.rewriting.extend_graph_for_let((lambda c, b: Nothing()), cx0, let0)
@@ -356,7 +356,7 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
                     return (acc, term)
 
                 case _:
-                    return (result := recurse(acc, term), (new_acc := hydra.lib.pairs.first(result), (processed_term := hydra.lib.pairs.second(result), (new_counter := hydra.lib.pairs.first(new_acc), (new_bindings := hydra.lib.pairs.second(new_acc), (full_path := hydra.lib.lists.concat2(path_prefix, path), hydra.lib.logic.if_else(should_hoist((full_path, processed_term)), (lambda : (binding_name := hydra.core.Name(hydra.lib.strings.cat(("_hoist_", name_prefix, "_", hydra.lib.literals.show_int32(new_counter)))), (all_lambda_vars := cx_inner.lambda_variables, (new_lambda_vars := hydra.lib.sets.difference(all_lambda_vars, baseline_lambda_vars), (free_vars := hydra.rewriting.free_variables_in_term(processed_term), (captured_vars := hydra.lib.sets.to_list(hydra.lib.sets.intersection(new_lambda_vars, free_vars)), (type_map := hydra.lib.maps.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), cx_inner.bound_types), (wrapped_term := hydra.lib.lists.foldl((lambda body, var_name: cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(var_name, hydra.lib.maps.lookup(var_name, type_map), body)))))), processed_term, hydra.lib.lists.reverse(captured_vars)), (reference := hydra.lib.lists.foldl((lambda fn, var_name: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fn, cast(hydra.core.Term, hydra.core.TermVariable(var_name)))))), cast(hydra.core.Term, hydra.core.TermVariable(binding_name)), captured_vars), (new_binding := hydra.core.Binding(binding_name, wrapped_term, Nothing()), ((hydra.lib.math.add(new_counter, 1), hydra.lib.lists.cons(new_binding, new_bindings)), reference))[1])[1])[1])[1])[1])[1])[1])[1])[1]), (lambda : (new_acc, processed_term))))[1])[1])[1])[1])[1])[1]
+                    return (result := recurse(acc, term), (new_acc := hydra.lib.pairs.first(result), (processed_term := hydra.lib.pairs.second(result), (new_counter := hydra.lib.pairs.first(new_acc), (new_bindings := hydra.lib.pairs.second(new_acc), (full_path := hydra.lib.lists.concat2(path_prefix, path), hydra.lib.logic.if_else(should_hoist((full_path, processed_term)), (lambda : (proposed_name := hydra.core.Name(hydra.lib.strings.cat(("_hoist_", name_prefix, "_", hydra.lib.literals.show_int32(new_counter)))), (existing_names := hydra.lib.sets.from_list(hydra.lib.lists.map((lambda b: b.name), new_bindings)), (free_vars_in_subterm := hydra.rewriting.free_variables_in_term(subterm), (all_reserved := hydra.lib.sets.union(existing_names, free_vars_in_subterm), (binding_name := hydra.lexical.choose_unique_name(all_reserved, proposed_name), (all_lambda_vars := cx_inner.lambda_variables, (new_lambda_vars := hydra.lib.sets.difference(all_lambda_vars, baseline_lambda_vars), (free_vars := hydra.rewriting.free_variables_in_term(processed_term), (captured_vars := hydra.lib.sets.to_list(hydra.lib.sets.intersection(new_lambda_vars, free_vars)), (type_map := hydra.lib.maps.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), cx_inner.bound_types), (wrapped_term := hydra.lib.lists.foldl((lambda body, var_name: cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(var_name, hydra.lib.maps.lookup(var_name, type_map), body)))))), processed_term, hydra.lib.lists.reverse(captured_vars)), (reference := hydra.lib.lists.foldl((lambda fn, var_name: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fn, cast(hydra.core.Term, hydra.core.TermVariable(var_name)))))), cast(hydra.core.Term, hydra.core.TermVariable(binding_name)), captured_vars), (new_binding := hydra.core.Binding(binding_name, wrapped_term, Nothing()), ((hydra.lib.math.add(new_counter, 1), hydra.lib.lists.cons(new_binding, new_bindings)), reference))[1])[1])[1])[1])[1])[1])[1])[1])[1])[1])[1])[1])[1]), (lambda : (new_acc, processed_term))))[1])[1])[1])[1])[1])[1]
         @lru_cache(1)
         def result() -> tuple[tuple[int, frozenlist[hydra.core.Binding]], hydra.core.Term]:
             return hydra.rewriting.rewrite_and_fold_term_with_graph_and_path((lambda x1, x2, x3, x4, x5: collect_and_replace(x1, x2, x3, x4, x5)), cx, (counter, ()), subterm)
@@ -401,8 +401,14 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
         def body_path_prefix() -> frozenlist[hydra.accessors.TermAccessor]:
             return hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()),))
         @lru_cache(1)
+        def first_binding_name() -> str:
+            return hydra.lib.maybes.maybe((lambda : "body"), (lambda b: hydra.lib.strings.intercalate("_", hydra.lib.strings.split_on(".", b.name.value))), hydra.lib.lists.safe_head(bindings))
+        @lru_cache(1)
+        def body_prefix() -> str:
+            return hydra.lib.strings.cat2(first_binding_name(), "_body")
+        @lru_cache(1)
         def body_result() -> tuple[int, hydra.core.Term]:
-            return process_immediate_subterm(cx, 1, "_body", body_path_prefix(), body)
+            return process_immediate_subterm(cx, 1, body_prefix(), body_path_prefix(), body)
         @lru_cache(1)
         def new_body() -> hydra.core.Term:
             return hydra.lib.pairs.second(body_result())
@@ -419,14 +425,14 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
                 @lru_cache(1)
                 def recursed_term() -> hydra.core.Term:
                     return hydra.lib.pairs.second(recursed())
-                def _hoist_body_1(v1):
+                def _hoist_recursed_term_body_1(v1):
                     match v1:
                         case hydra.core.TermLet(value=lt2):
                             return process_let_term(cx, new_counter(), path, lt2)
 
                         case _:
                             return (new_counter(), recursed_term())
-                return _hoist_body_1(recursed_term())
+                return _hoist_recursed_term_body_1(recursed_term())
 
             case _:
                 return recurse(counter, term)
@@ -476,7 +482,7 @@ def update_hoist_state(accessor: hydra.accessors.TermAccessor, state: tuple[bool
     @lru_cache(1)
     def used_app() -> bool:
         return hydra.lib.pairs.second(state)
-    def _hoist_body_1(v1):
+    def _hoist_used_app_body_1(v1):
         match v1:
             case hydra.accessors.TermAccessorAnnotatedBody():
                 return (True, used_app())
@@ -504,7 +510,7 @@ def update_hoist_state(accessor: hydra.accessors.TermAccessor, state: tuple[bool
 
             case _:
                 return (False, used_app())
-    return hydra.lib.logic.if_else(hydra.lib.logic.not_(at_top()), (lambda : (False, used_app())), (lambda : _hoist_body_1(accessor)))
+    return hydra.lib.logic.if_else(hydra.lib.logic.not_(at_top()), (lambda : (False, used_app())), (lambda : _hoist_used_app_body_1(accessor)))
 
 def should_hoist_case_statement(path_and_term: tuple[frozenlist[hydra.accessors.TermAccessor], hydra.core.Term]) -> bool:
     r"""Predicate for case statement hoisting. Returns True if term is a union elimination (bare case function) or a case statement application (union elimination applied to an argument) AND not at top level. Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS. Once through an app LHS, lambda bodies no longer pass through."""

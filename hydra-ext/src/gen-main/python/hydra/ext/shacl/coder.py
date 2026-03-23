@@ -148,7 +148,7 @@ def encode_literal_type(lt: hydra.core.LiteralType):
 
     def xsd(local: str) -> hydra.ext.org.w3.shacl.model.CommonProperties:
         return common((cast(hydra.ext.org.w3.shacl.model.CommonConstraint, hydra.ext.org.w3.shacl.model.CommonConstraintDatatype(hydra.ext.rdf.utils.xml_schema_datatype_iri(local))),))
-    def _hoist_body_1(v1):
+    def _hoist_xsd_body_1(v1):
         match v1:
             case hydra.core.FloatType.BIGFLOAT:
                 return xsd("decimal")
@@ -161,7 +161,7 @@ def encode_literal_type(lt: hydra.core.LiteralType):
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def _hoist_body_2(v1):
+    def _hoist_xsd_body_2(v1):
         match v1:
             case hydra.core.IntegerType.BIGINT:
                 return xsd("integer")
@@ -200,10 +200,10 @@ def encode_literal_type(lt: hydra.core.LiteralType):
             return xsd("boolean")
 
         case hydra.core.LiteralTypeFloat(value=ft):
-            return _hoist_body_1(ft)
+            return _hoist_xsd_body_1(ft)
 
         case hydra.core.LiteralTypeInteger(value=it):
-            return _hoist_body_2(it)
+            return _hoist_xsd_body_2(it)
 
         case hydra.core.LiteralTypeString():
             return xsd("string")

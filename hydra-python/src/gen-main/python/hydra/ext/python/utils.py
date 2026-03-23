@@ -190,14 +190,14 @@ def decode_py_comparison_to_py_await_primary(c: hydra.ext.python.syntax.Comparis
     sum_rhs = shift_rhs.rhs
     term_lhs = sum_rhs.lhs
     term_rhs = sum_rhs.rhs
-    def _hoist_body_1(v1):
+    def _hoist_rhs_body_1(v1):
         match v1:
             case hydra.ext.python.syntax.FactorSimple(value=power):
                 return decode_py_power_to_py_primary(power)
 
             case _:
                 return Nothing()
-    return hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.lists.null(rhs)), (lambda : Nothing()), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(or_lhs), (lambda : Nothing()), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(xor_lhs), (lambda : Nothing()), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(and_lhs), (lambda : Nothing()), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(shift_lhs), (lambda : Nothing()), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(sum_lhs), (lambda : Nothing()), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(term_lhs), (lambda : Nothing()), (lambda : _hoist_body_1(term_rhs)))))))))))))))
+    return hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.lists.null(rhs)), (lambda : Nothing()), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(or_lhs), (lambda : Nothing()), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(xor_lhs), (lambda : Nothing()), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(and_lhs), (lambda : Nothing()), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(shift_lhs), (lambda : Nothing()), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(sum_lhs), (lambda : Nothing()), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(term_lhs), (lambda : Nothing()), (lambda : _hoist_rhs_body_1(term_rhs)))))))))))))))
 
 def decode_py_inversion_to_py_primary(i: hydra.ext.python.syntax.Inversion) -> Maybe[hydra.ext.python.syntax.Primary]:
     r"""Decode an Inversion to a Primary if possible."""

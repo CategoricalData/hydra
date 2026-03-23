@@ -128,7 +128,7 @@ def literal_to_expr(d: hydra.ext.lisp.syntax.Dialect, lit: hydra.ext.lisp.syntax
             @lru_cache(1)
             def e1() -> str:
                 return hydra.lib.strings.intercalate("\\\\", hydra.lib.strings.split_on("\\", s))
-            def _hoist_body_1(v1):
+            def _hoist_e1_body_1(v1):
                 match v1:
                     case hydra.ext.lisp.syntax.Dialect.COMMON_LISP:
                         @lru_cache(1)
@@ -183,11 +183,11 @@ def literal_to_expr(d: hydra.ext.lisp.syntax.Dialect, lit: hydra.ext.lisp.syntax
 
                     case _:
                         raise AssertionError("Unreachable: all variants handled")
-            return _hoist_body_1(d)
+            return _hoist_e1_body_1(d)
 
         case hydra.ext.lisp.syntax.LiteralCharacter(value=c):
             ch = c.value
-            def _hoist_body_1(v1):
+            def _hoist_ch_body_1(v1):
                 match v1:
                     case hydra.ext.lisp.syntax.Dialect.CLOJURE:
                         return hydra.serialization.cst(hydra.lib.strings.cat2("\\", ch))
@@ -203,7 +203,7 @@ def literal_to_expr(d: hydra.ext.lisp.syntax.Dialect, lit: hydra.ext.lisp.syntax
 
                     case _:
                         raise AssertionError("Unreachable: all variants handled")
-            return _hoist_body_1(d)
+            return _hoist_ch_body_1(d)
 
         case hydra.ext.lisp.syntax.LiteralBoolean(value=b):
             return hydra.lib.logic.if_else(b, (lambda : true_expr(d)), (lambda : false_expr(d)))
@@ -236,7 +236,7 @@ def variable_reference_to_expr(d: hydra.ext.lisp.syntax.Dialect, vref: hydra.ext
     def name() -> hydra.ast.Expr:
         return symbol_to_expr(vref.name)
     is_fn_ns = vref.function_namespace
-    def _hoist_body_1(v1):
+    def _hoist_name_body_1(v1):
         match v1:
             case hydra.ext.lisp.syntax.Dialect.COMMON_LISP:
                 return hydra.serialization.no_sep((hydra.serialization.cst("#'"), name()))
@@ -252,7 +252,7 @@ def variable_reference_to_expr(d: hydra.ext.lisp.syntax.Dialect, vref: hydra.ext
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    return hydra.lib.logic.if_else(is_fn_ns, (lambda : _hoist_body_1(d)), (lambda : name()))
+    return hydra.lib.logic.if_else(is_fn_ns, (lambda : _hoist_name_body_1(d)), (lambda : name()))
 
 def and_expression_to_expr(d: hydra.ext.lisp.syntax.Dialect, and_expr: hydra.ext.lisp.syntax.AndExpression) -> hydra.ast.Expr:
     return hydra.serialization.parens(hydra.serialization.space_sep(hydra.lib.lists.concat2((hydra.serialization.cst("and"),), hydra.lib.lists.map((lambda v1: expression_to_expr(d, v1)), and_expr.expressions))))
@@ -562,7 +562,7 @@ def let_expression_to_expr(d: hydra.ext.lisp.syntax.Dialect, let_expr: hydra.ext
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
         return hydra.lib.lists.map((lambda b: _hoist_binding_pairs_1(b)), bindings)
-    def _hoist_body_1(v1):
+    def _hoist_kind_body_1(v1):
         match v1:
             case hydra.ext.lisp.syntax.LetKind.RECURSIVE:
                 return hydra.serialization.parens(hydra.serialization.space_sep(hydra.lib.lists.concat(((hydra.serialization.cst("let"),), (hydra.serialization.brackets(hydra.serialization.square_brackets, hydra.serialization.inline_style, hydra.serialization.space_sep(hydra.lib.lists.concat(hydra.lib.lists.map((lambda p: (hydra.lib.pairs.first(p), hydra.lib.pairs.second(p))), binding_pairs())))),), body()))))
@@ -577,7 +577,7 @@ def let_expression_to_expr(d: hydra.ext.lisp.syntax.Dialect, let_expr: hydra.ext
                 raise AssertionError("Unreachable: all variants handled")
     match d:
         case hydra.ext.lisp.syntax.Dialect.CLOJURE:
-            return _hoist_body_1(kind)
+            return _hoist_kind_body_1(kind)
 
         case hydra.ext.lisp.syntax.Dialect.EMACS_LISP:
             @lru_cache(1)
@@ -1021,7 +1021,7 @@ def program_to_expr(prog: hydra.ext.lisp.syntax.Program) -> hydra.ast.Expr:
         return hydra.lib.lists.concat(hydra.lib.lists.map((lambda edecl: hydra.lib.lists.map((lambda x1: symbol_to_expr(x1)), edecl.symbols)), exports))
     match d:
         case hydra.ext.lisp.syntax.Dialect.CLOJURE:
-            return hydra.lib.maybes.maybe((lambda : hydra.serialization.double_newline_sep(form_part())), (lambda m: (name_str := m.name.value, require_clauses := hydra.lib.lists.map((lambda imp: hydra.serialization.brackets(hydra.serialization.square_brackets, hydra.serialization.inline_style, hydra.serialization.space_sep((hydra.serialization.cst(imp), hydra.serialization.cst(":refer"), hydra.serialization.cst(":all"))))), import_names()), ns_form := hydra.lib.logic.if_else(hydra.lib.lists.null(require_clauses), (lambda : hydra.serialization.parens(hydra.serialization.space_sep((hydra.serialization.cst("ns"), hydra.serialization.cst(name_str))))), (lambda : hydra.serialization.parens(hydra.serialization.newline_sep((hydra.serialization.space_sep((hydra.serialization.cst("ns"), hydra.serialization.cst(name_str))), hydra.serialization.space_sep(hydra.lib.lists.concat2((hydra.serialization.cst("  (:require"),), require_clauses)), hydra.serialization.cst(")")))))), var_names := hydra.lib.lists.concat(hydra.lib.lists.map((lambda fwc: (form := fwc.form, _hoist_body_1 := (lambda v1: (lambda vd: (symbol_to_expr(vd.name),))(v1.value) if isinstance(v1, hydra.ext.lisp.syntax.TopLevelFormVariable) else (lambda fd: (symbol_to_expr(fd.name),))(v1.value) if isinstance(v1, hydra.ext.lisp.syntax.TopLevelFormFunction) else ()), _hoist_body_1(form))[2]), forms)), declare_form := hydra.lib.logic.if_else(hydra.lib.lists.null(var_names), (lambda : ()), (lambda : (hydra.serialization.parens(hydra.serialization.space_sep(hydra.lib.lists.concat2((hydra.serialization.cst("declare"),), var_names))),))), hydra.serialization.double_newline_sep(hydra.lib.lists.concat(((ns_form,), declare_form, form_part()))))[5]), mod_decl)
+            return hydra.lib.maybes.maybe((lambda : hydra.serialization.double_newline_sep(form_part())), (lambda m: (name_str := m.name.value, require_clauses := hydra.lib.lists.map((lambda imp: hydra.serialization.brackets(hydra.serialization.square_brackets, hydra.serialization.inline_style, hydra.serialization.space_sep((hydra.serialization.cst(imp), hydra.serialization.cst(":refer"), hydra.serialization.cst(":all"))))), import_names()), ns_form := hydra.lib.logic.if_else(hydra.lib.lists.null(require_clauses), (lambda : hydra.serialization.parens(hydra.serialization.space_sep((hydra.serialization.cst("ns"), hydra.serialization.cst(name_str))))), (lambda : hydra.serialization.parens(hydra.serialization.newline_sep((hydra.serialization.space_sep((hydra.serialization.cst("ns"), hydra.serialization.cst(name_str))), hydra.serialization.space_sep(hydra.lib.lists.concat2((hydra.serialization.cst("  (:require"),), require_clauses)), hydra.serialization.cst(")")))))), var_names := hydra.lib.lists.concat(hydra.lib.lists.map((lambda fwc: (form := fwc.form, _hoist_form_body_1 := (lambda v1: (lambda vd: (symbol_to_expr(vd.name),))(v1.value) if isinstance(v1, hydra.ext.lisp.syntax.TopLevelFormVariable) else (lambda fd: (symbol_to_expr(fd.name),))(v1.value) if isinstance(v1, hydra.ext.lisp.syntax.TopLevelFormFunction) else ()), _hoist_form_body_1(form))[2]), forms)), declare_form := hydra.lib.logic.if_else(hydra.lib.lists.null(var_names), (lambda : ()), (lambda : (hydra.serialization.parens(hydra.serialization.space_sep(hydra.lib.lists.concat2((hydra.serialization.cst("declare"),), var_names))),))), hydra.serialization.double_newline_sep(hydra.lib.lists.concat(((ns_form,), declare_form, form_part()))))[5]), mod_decl)
 
         case hydra.ext.lisp.syntax.Dialect.EMACS_LISP:
             return hydra.lib.maybes.maybe((lambda : hydra.serialization.double_newline_sep(form_part())), (lambda m: (name_str := m.name.value, require_cl_lib := hydra.serialization.parens(hydra.serialization.space_sep((hydra.serialization.cst("require"), hydra.serialization.no_sep((hydra.serialization.cst("'"), hydra.serialization.cst("cl-lib")))))), require_imports := hydra.lib.lists.map((lambda imp: hydra.serialization.parens(hydra.serialization.space_sep((hydra.serialization.cst("require"), hydra.serialization.no_sep((hydra.serialization.cst("'"), hydra.serialization.cst(imp))))))), import_names()), provide_form := hydra.serialization.parens(hydra.serialization.space_sep((hydra.serialization.cst("provide"), hydra.serialization.no_sep((hydra.serialization.cst("'"), hydra.serialization.cst(name_str)))))), hydra.serialization.double_newline_sep(hydra.lib.lists.concat(((require_cl_lib,), require_imports, form_part(), (provide_form,)))))[4]), mod_decl)

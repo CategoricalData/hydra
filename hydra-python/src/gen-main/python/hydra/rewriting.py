@@ -171,14 +171,14 @@ def deannotate_type_recursive(typ: hydra.core.Type) -> hydra.core.Type:
         @lru_cache(1)
         def rewritten() -> hydra.core.Type:
             return recurse(typ2)
-        def _hoist_body_1(v1):
+        def _hoist_rewritten_body_1(v1):
             match v1:
                 case hydra.core.TypeAnnotated(value=at):
                     return at.body
 
                 case _:
                     return rewritten()
-        return _hoist_body_1(rewritten())
+        return _hoist_rewritten_body_1(rewritten())
     return rewrite_type((lambda x1, x2: strip(x1, x2)), typ)
 
 def deannotate_type_scheme_recursive(ts: hydra.core.TypeScheme) -> hydra.core.TypeScheme:
@@ -432,7 +432,7 @@ def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Term:
         @lru_cache(1)
         def rewritten() -> hydra.core.Term:
             return recurse(term2)
-        def _hoist_body_1(v1):
+        def _hoist_rewritten_body_1(v1):
             match v1:
                 case hydra.core.TermLet(value=lt):
                     bindings = lt.bindings
@@ -455,7 +455,7 @@ def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Term:
 
                 case _:
                     return rewritten()
-        return _hoist_body_1(rewritten())
+        return _hoist_rewritten_body_1(rewritten())
     return rewrite_term((lambda x1, x2: flatten(x1, x2)), term)
 
 def subterms(v1: hydra.core.Term) -> frozenlist[hydra.core.Term]:
@@ -696,7 +696,7 @@ def rewrite_and_fold_term_with_path(f: Callable[[
         @lru_cache(1)
         def dflt() -> tuple[T1, hydra.core.Term]:
             return (val0, term02)
-        def _hoist_body_1(v1):
+        def _hoist_dflt_body_1(v1):
             match v1:
                 case hydra.core.TermAnnotated(value=at):
                     return for_single_with_accessor(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(t, at.annotation)))), cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorAnnotatedBody()), val0, at.body)
@@ -781,7 +781,7 @@ def rewrite_and_fold_term_with_path(f: Callable[[
 
                 case _:
                     return dflt()
-        return _hoist_body_1(term02)
+        return _hoist_dflt_body_1(term02)
     def recurse(v1: frozenlist[hydra.accessors.TermAccessor], v2: T0, v3: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
         return f((lambda v12, v22, v32: fsub((lambda x1, x2, x3: recurse(x1, x2, x3)), v12, v22, v32)), v1, v2, v3)
     return recurse((), term0, v1)
@@ -890,7 +890,7 @@ def free_type_variables_in_term(term0: hydra.core.Term) -> frozenset[hydra.core.
         @lru_cache(1)
         def dflt() -> frozenset[hydra.core.Name]:
             return all_of(hydra.lib.lists.map((lambda x1: recurse(x1)), subterms(term)))
-        def _hoist_body_1(v1):
+        def _hoist_dflt_body_1(v1):
             match v1:
                 case hydra.core.FunctionElimination():
                     return dflt()
@@ -905,7 +905,7 @@ def free_type_variables_in_term(term0: hydra.core.Term) -> frozenset[hydra.core.
                     return dflt()
         match term:
             case hydra.core.TermFunction(value=f):
-                return _hoist_body_1(f)
+                return _hoist_dflt_body_1(f)
 
             case hydra.core.TermLet(value=l):
                 def for_binding(b: hydra.core.Binding) -> frozenset[hydra.core.Name]:
@@ -930,7 +930,7 @@ def free_variables_in_term(term: hydra.core.Term):
 
     def dflt_vars(_: T0) -> frozenset[hydra.core.Name]:
         return hydra.lib.lists.foldl((lambda s, t: hydra.lib.sets.union(s, free_variables_in_term(t))), hydra.lib.sets.empty(), subterms(term))
-    def _hoist_body_1(v1):
+    def _hoist_dflt_vars_body_1(v1):
         match v1:
             case hydra.core.FunctionLambda(value=l):
                 return hydra.lib.sets.delete(l.parameter, free_variables_in_term(l.body))
@@ -939,7 +939,7 @@ def free_variables_in_term(term: hydra.core.Term):
                 return dflt_vars(None)
     match term:
         case hydra.core.TermFunction(value=_match_value):
-            return _hoist_body_1(_match_value)
+            return _hoist_dflt_vars_body_1(_match_value)
 
         case hydra.core.TermLet(value=l):
             return hydra.lib.sets.difference(dflt_vars(None), hydra.lib.sets.from_list(hydra.lib.lists.map((lambda v1: v1.name), l.bindings)))
@@ -1249,14 +1249,14 @@ def remove_type_annotations(typ: hydra.core.Type) -> hydra.core.Type:
         @lru_cache(1)
         def rewritten() -> hydra.core.Type:
             return recurse(typ2)
-        def _hoist_body_1(v1):
+        def _hoist_rewritten_body_1(v1):
             match v1:
                 case hydra.core.TypeAnnotated(value=at):
                     return at.body
 
                 case _:
                     return rewritten()
-        return _hoist_body_1(rewritten())
+        return _hoist_rewritten_body_1(rewritten())
     return rewrite_type((lambda x1, x2: remove(x1, x2)), typ)
 
 def remove_type_annotations_from_term(term: hydra.core.Term) -> hydra.core.Term:
@@ -1268,7 +1268,7 @@ def remove_type_annotations_from_term(term: hydra.core.Term) -> hydra.core.Term:
             return recurse(term2)
         def strip_binding(b: hydra.core.Binding) -> hydra.core.Binding:
             return hydra.core.Binding(b.name, b.term, Nothing())
-        def _hoist_body_1(v1):
+        def _hoist_strip_binding_body_1(v1):
             match v1:
                 case hydra.core.TermLet(value=lt):
                     return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map((lambda x1: strip_binding(x1)), lt.bindings), lt.body)))
@@ -1281,7 +1281,7 @@ def remove_type_annotations_from_term(term: hydra.core.Term) -> hydra.core.Term:
 
                 case _:
                     return rewritten()
-        return _hoist_body_1(rewritten())
+        return _hoist_strip_binding_body_1(rewritten())
     return rewrite_term((lambda x1, x2: strip(x1, x2)), term)
 
 def remove_types_from_term(term: hydra.core.Term) -> hydra.core.Term:
@@ -1293,7 +1293,7 @@ def remove_types_from_term(term: hydra.core.Term) -> hydra.core.Term:
             return recurse(term2)
         def strip_binding(b: hydra.core.Binding) -> hydra.core.Binding:
             return hydra.core.Binding(b.name, b.term, Nothing())
-        def _hoist_body_1(f, v1):
+        def _hoist_strip_binding_body_1(f, v1):
             match v1:
                 case hydra.core.FunctionElimination(value=e):
                     return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(e))))
@@ -1303,10 +1303,10 @@ def remove_types_from_term(term: hydra.core.Term) -> hydra.core.Term:
 
                 case _:
                     return cast(hydra.core.Term, hydra.core.TermFunction(f))
-        def _hoist_body_2(v1):
+        def _hoist_strip_binding_body_2(v1):
             match v1:
                 case hydra.core.TermFunction(value=f):
-                    return _hoist_body_1(f, f)
+                    return _hoist_strip_binding_body_1(f, f)
 
                 case hydra.core.TermLet(value=lt):
                     return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map((lambda x1: strip_binding(x1)), lt.bindings), lt.body)))
@@ -1319,7 +1319,7 @@ def remove_types_from_term(term: hydra.core.Term) -> hydra.core.Term:
 
                 case _:
                     return rewritten()
-        return _hoist_body_2(rewritten())
+        return _hoist_strip_binding_body_2(rewritten())
     return rewrite_term((lambda x1, x2: strip(x1, x2)), term)
 
 def replace_free_term_variable(vold: hydra.core.Name, tnew: hydra.core.Term, term: hydra.core.Term) -> hydra.core.Term:
@@ -1481,7 +1481,7 @@ def rewrite_and_fold_term(f: Callable[[
         @lru_cache(1)
         def dflt() -> tuple[T1, hydra.core.Term]:
             return (val0, term02)
-        def _hoist_body_1(v1):
+        def _hoist_dflt_body_1(v1):
             match v1:
                 case hydra.core.TermAnnotated(value=at):
                     return for_single(recurse, (lambda t: cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(t, at.annotation)))), val0, at.body)
@@ -1545,7 +1545,7 @@ def rewrite_and_fold_term(f: Callable[[
 
                 case _:
                     return dflt()
-        return _hoist_body_1(term02)
+        return _hoist_dflt_body_1(term02)
     def recurse(v1: T0, v2: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
         return f((lambda v12, v22: fsub((lambda x1, x2: recurse(x1, x2)), v12, v22)), v1, v2)
     return recurse(term0, v1)
@@ -1613,7 +1613,7 @@ def rewrite_term_m(f: Callable[[
             return hydra.lib.eithers.bind(recurse(hydra.lib.pairs.first(kv)), (lambda k: hydra.lib.eithers.bind(recurse(hydra.lib.pairs.second(kv)), (lambda v: Right((k, v))))))
         def map_binding(b: hydra.core.Binding) -> Either[hydra.core.Term, hydra.core.Binding]:
             return hydra.lib.eithers.bind(recurse(b.term), (lambda v: Right(hydra.core.Binding(b.name, v, b.type))))
-        def _hoist_body_1(v1):
+        def _hoist_map_binding_body_1(v1):
             match v1:
                 case hydra.core.TermAnnotated(value=at):
                     return hydra.lib.eithers.bind(recurse(at.body), (lambda ex: Right(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(ex, at.annotation))))))
@@ -1717,7 +1717,7 @@ def rewrite_term_m(f: Callable[[
 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
-        return _hoist_body_1(term)
+        return _hoist_map_binding_body_1(term)
     def recurse(v1: hydra.core.Term) -> Either[T0, hydra.core.Term]:
         return f((lambda v12: fsub((lambda x1: recurse(x1)), v12)), v1)
     return recurse(term0)
@@ -1771,7 +1771,7 @@ def rewrite_term_with_context(f: Callable[[
             def for_pair(p: tuple[hydra.core.Term, hydra.core.Term]) -> tuple[hydra.core.Term, hydra.core.Term]:
                 return (recurse(hydra.lib.pairs.first(p)), recurse(hydra.lib.pairs.second(p)))
             return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda x1: for_pair(x1)), hydra.lib.maps.to_list(m)))
-        def _hoist_body_1(v1):
+        def _hoist_for_map_body_1(v1):
             match v1:
                 case hydra.core.TermAnnotated(value=at):
                     return cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(recurse(at.body), at.annotation)))
@@ -1829,7 +1829,7 @@ def rewrite_term_with_context(f: Callable[[
 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
-        return _hoist_body_1(term)
+        return _hoist_for_map_body_1(term)
     def rewrite(cx: T0, term: hydra.core.Term) -> hydra.core.Term:
         return f((lambda v1, v2: for_subterms((lambda x1, x2: rewrite(x1, x2)), v1, v2)), cx, term)
     return rewrite(cx0, term0)
@@ -1885,7 +1885,7 @@ def rewrite_term_with_context_m(f: Callable[[
             return _hoist_for_function_1(fun)
         def map_binding(b: hydra.core.Binding) -> Either[T3, hydra.core.Binding]:
             return hydra.lib.eithers.bind(recurse(b.term), (lambda v: Right(hydra.core.Binding(b.name, v, b.type))))
-        def _hoist_body_1(v1):
+        def _hoist_map_binding_body_1(v1):
             match v1:
                 case hydra.core.TermAnnotated(value=at):
                     return hydra.lib.eithers.bind(recurse(at.body), (lambda ex: Right(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(ex, at.annotation))))))
@@ -1953,7 +1953,7 @@ def rewrite_term_with_context_m(f: Callable[[
 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
-        return _hoist_body_1(term)
+        return _hoist_map_binding_body_1(term)
     def rewrite(cx: T0, term: hydra.core.Term) -> Either[T1, hydra.core.Term]:
         return f((lambda v1, v2: for_subterms((lambda x1, x2: rewrite(x1, x2)), v1, v2)), cx, term)
     return rewrite(cx0, term0)
@@ -1964,7 +1964,7 @@ def rewrite_term_with_graph(f: Callable[[Callable[[hydra.core.Term], T0], hydra.
     def f2(recurse: Callable[[hydra.graph.Graph, hydra.core.Term], T0], cx: hydra.graph.Graph, term: hydra.core.Term):
         def recurse1(term2: hydra.core.Term) -> T0:
             return recurse(cx, term2)
-        def _hoist_body_1(v1):
+        def _hoist_recurse1_body_1(v1):
             match v1:
                 case hydra.core.FunctionLambda(value=l):
                     @lru_cache(1)
@@ -1978,7 +1978,7 @@ def rewrite_term_with_graph(f: Callable[[Callable[[hydra.core.Term], T0], hydra.
                     return f((lambda x1: recurse1(x1)), cx, term)
         match term:
             case hydra.core.TermFunction(value=fun):
-                return _hoist_body_1(fun)
+                return _hoist_recurse1_body_1(fun)
 
             case hydra.core.TermLet(value=l):
                 @lru_cache(1)
@@ -2049,14 +2049,14 @@ def simplify_term(term: hydra.core.Term) -> hydra.core.Term:
                         case _:
                             return term2
                 return _hoist_for_fun_1(fun)
-            def _hoist_body_1(v1):
+            def _hoist_for_fun_body_1(v1):
                 match v1:
                     case hydra.core.TermFunction(value=fun):
                         return for_fun(fun)
 
                     case _:
                         return term2
-            return _hoist_body_1(deannotate_term(lhs))
+            return _hoist_for_fun_body_1(deannotate_term(lhs))
         def for_term(stripped: hydra.core.Term):
             def _hoist_for_term_1(v1):
                 match v1:
@@ -2226,7 +2226,7 @@ def term_dependency_names(binds: bool, with_prims: bool, with_noms: bool, term0:
             return hydra.lib.logic.if_else(with_prims, (lambda : hydra.lib.sets.insert(name, names)), (lambda : names))
         def var(name: hydra.core.Name) -> frozenset[hydra.core.Name]:
             return hydra.lib.logic.if_else(binds, (lambda : hydra.lib.sets.insert(name, names)), (lambda : names))
-        def _hoist_body_1(v1):
+        def _hoist_var_body_1(v1):
             match v1:
                 case hydra.core.EliminationRecord(value=proj):
                     return nominal(proj.type_name)
@@ -2239,19 +2239,19 @@ def term_dependency_names(binds: bool, with_prims: bool, with_noms: bool, term0:
 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
-        def _hoist_body_2(v1):
+        def _hoist_var_body_2(v1):
             match v1:
                 case hydra.core.FunctionPrimitive(value=name):
                     return prim(name)
 
                 case hydra.core.FunctionElimination(value=e):
-                    return _hoist_body_1(e)
+                    return _hoist_var_body_1(e)
 
                 case _:
                     return names
         match term:
             case hydra.core.TermFunction(value=f):
-                return _hoist_body_2(f)
+                return _hoist_var_body_2(f)
 
             case hydra.core.TermRecord(value=record):
                 return nominal(record.type_name)

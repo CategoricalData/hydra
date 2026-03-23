@@ -215,7 +215,7 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.
                 def len() -> int:
                     return hydra.lib.lists.length(arr)
                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(len(), 0), (lambda : Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(len(), 1), (lambda : decode_just(arr)), (lambda : Left("expected single-element array for Just")))))
-            def _hoist_body_1(v1):
+            def _hoist_decode_maybe_array_body_1(v1):
                 match v1:
                     case hydra.json.model.ValueNull():
                         return Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())))
@@ -225,7 +225,7 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.
 
                     case _:
                         return Left("expected null or single-element array for Maybe")
-            return _hoist_body_1(value)
+            return _hoist_decode_maybe_array_body_1(value)
 
         case hydra.core.TypeRecord(value=rt):
             @lru_cache(1)

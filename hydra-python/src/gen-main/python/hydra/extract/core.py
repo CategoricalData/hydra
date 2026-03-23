@@ -383,14 +383,14 @@ def map(cx: hydra.context.Context, fk: Callable[[hydra.core.Term], Either[hydra.
         def vterm() -> hydra.core.Term:
             return hydra.lib.pairs.second(kv_pair)
         return hydra.lib.eithers.bind(fk(kterm()), (lambda kval: hydra.lib.eithers.bind(fv(vterm()), (lambda vval: Right((kval, vval))))))
-    def _hoist_body_1(term, v1):
+    def _hoist_pair_body_1(term, v1):
         match v1:
             case hydra.core.TermMap(value=m):
                 return hydra.lib.eithers.map((lambda x1: hydra.lib.maps.from_list(x1)), hydra.lib.eithers.map_list((lambda x1: pair(x1)), hydra.lib.maps.to_list(m)))
 
             case _:
                 return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map"), " but found "), hydra.show.core.term(term))))), cx))
-    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_body_1(term, term)))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_pair_body_1(term, term)))
 
 def map_type(cx: hydra.context.Context, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.core.MapType]:
     r"""Extract the key and value types from a map type."""

@@ -41,9 +41,7 @@ def optString[T0](fname: T0)(m: Map[T0, hydra.json.model.Value]): Either[scala.P
   hydra.lib.eithers.map[scala.Predef.String, Option[scala.Predef.String], scala.Predef.String]((x: scala.Predef.String) => Some(x))(hydra.extract.json.expectString(s)))(hydra.extract.json.opt(fname)(m))
 
 def require[T0, T1](fname: T0)(m: Map[T0, T1]): Either[scala.Predef.String, T1] =
-  hydra.lib.maybes.maybe[Either[scala.Predef.String, T1], T1](Left(hydra.lib.strings.cat(Seq("required attribute ",
-     hydra.extract.json.showValue(fname), " not found"))))((value: T1) => Right(value))(hydra.lib.maps.lookup[T0,
-     T1](fname)(m))
+  hydra.lib.maybes.maybe[Either[scala.Predef.String, T1], T1](Left(hydra.lib.strings.cat(Seq("required attribute ", hydra.extract.json.showValue(fname), " not found"))))((value: T1) => Right(value))(hydra.lib.maps.lookup[T0, T1](fname)(m))
 
 def requireArray[T0](fname: T0)(m: Map[T0, hydra.json.model.Value]): Either[scala.Predef.String, Seq[hydra.json.model.Value]] =
   hydra.lib.eithers.bind[scala.Predef.String, hydra.json.model.Value, Seq[hydra.json.model.Value]](hydra.extract.json.require(fname)(m))(hydra.extract.json.expectArray)

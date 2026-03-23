@@ -68,7 +68,7 @@ def check_for_unbound_type_variables(cx: hydra.context.Context, tx: hydra.graph.
             return hydra.lib.logic.if_else(hydra.lib.sets.null(badvars()), (lambda : Right(None)), (lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorChecking(cast(hydra.error.checking.CheckingError, hydra.error.checking.CheckingErrorUnboundTypeVariables(hydra.error.checking.UnboundTypeVariablesError(badvars(), typ))))), cx))))
         def check_optional(m: Maybe[hydra.core.Type]) -> Either[hydra.context.InContext[hydra.errors.Error], None]:
             return hydra.lib.eithers.bind(hydra.lib.eithers.map_maybe((lambda x1: check(x1)), m), (lambda _: Right(None)))
-        def _hoist_body_1(v1):
+        def _hoist_check_optional_body_1(v1):
             match v1:
                 case hydra.core.FunctionElimination():
                     return dflt()
@@ -80,7 +80,7 @@ def check_for_unbound_type_variables(cx: hydra.context.Context, tx: hydra.graph.
                     return dflt()
         match term:
             case hydra.core.TermFunction(value=f):
-                return _hoist_body_1(f)
+                return _hoist_check_optional_body_1(f)
 
             case hydra.core.TermLet(value=l):
                 def for_binding(b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.errors.Error], None]:
@@ -216,7 +216,7 @@ def type_of(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenl
     @lru_cache(1)
     def cx1() -> hydra.context.Context:
         return hydra.context.Context(hydra.lib.lists.cons("typeOf", cx.trace), cx.messages, cx.other)
-    def _hoist_body_1(v1):
+    def _hoist_cx1_body_1(v1):
         match v1:
             case hydra.core.EliminationRecord(value=v12):
                 return type_of_projection(cx1(), tx, type_args, v12)
@@ -229,10 +229,10 @@ def type_of(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenl
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def _hoist_body_2(v1):
+    def _hoist_cx1_body_2(v1):
         match v1:
             case hydra.core.FunctionElimination(value=elm):
-                return _hoist_body_1(elm)
+                return _hoist_cx1_body_1(elm)
 
             case hydra.core.FunctionLambda(value=v12):
                 return type_of_lambda(cx1(), tx, type_args, v12)
@@ -253,7 +253,7 @@ def type_of(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenl
             return type_of_either(cx1(), tx, type_args, v13)
 
         case hydra.core.TermFunction(value=f):
-            return _hoist_body_2(f)
+            return _hoist_cx1_body_2(f)
 
         case hydra.core.TermLet(value=v14):
             return type_of_let(cx1(), tx, type_args, v14)

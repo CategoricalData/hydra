@@ -1,0 +1,74 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.ext.scala.meta;
+
+import java.io.Serializable;
+
+public class Case implements Serializable, Comparable<Case> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.scala.meta.Case");
+
+  public static final hydra.core.Name PAT = new hydra.core.Name("pat");
+
+  public static final hydra.core.Name COND = new hydra.core.Name("cond");
+
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
+
+  public final hydra.ext.scala.meta.Pat pat;
+
+  public final hydra.util.Maybe<hydra.ext.scala.meta.Data> cond;
+
+  public final hydra.ext.scala.meta.Data body;
+
+  public Case (hydra.ext.scala.meta.Pat pat, hydra.util.Maybe<hydra.ext.scala.meta.Data> cond, hydra.ext.scala.meta.Data body) {
+    this.pat = pat;
+    this.cond = cond;
+    this.body = body;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Case)) {
+      return false;
+    }
+    Case o = (Case) other;
+    return java.util.Objects.equals(
+      this.pat,
+      o.pat) && java.util.Objects.equals(
+      this.cond,
+      o.cond) && java.util.Objects.equals(
+      this.body,
+      o.body);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * java.util.Objects.hashCode(pat) + 3 * java.util.Objects.hashCode(cond) + 5 * java.util.Objects.hashCode(body);
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Case other) {
+    int cmp = 0;
+    cmp = ((Comparable) pat).compareTo(other.pat);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) cond).compareTo(other.cond);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) body).compareTo(other.body);
+  }
+
+  public Case withPat(hydra.ext.scala.meta.Pat pat) {
+    return new Case(pat, cond, body);
+  }
+
+  public Case withCond(hydra.util.Maybe<hydra.ext.scala.meta.Data> cond) {
+    return new Case(pat, cond, body);
+  }
+
+  public Case withBody(hydra.ext.scala.meta.Data body) {
+    return new Case(pat, cond, body);
+  }
+}

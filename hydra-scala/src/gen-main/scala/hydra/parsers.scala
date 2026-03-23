@@ -21,15 +21,14 @@ def alt[T0](p1: hydra.parsing.Parser[T0])(p2: hydra.parsing.Parser[T0]): hydra.p
   parse
 }
 
-val anyChar: hydra.parsing.Parser[Int] = hydra.parsers.satisfy((_x: Int) => true)
+lazy val anyChar: hydra.parsing.Parser[Int] = hydra.parsers.satisfy((_x: Int) => true)
 
 def apply[T0, T1](pf: hydra.parsing.Parser[T0 => T1])(pa: hydra.parsing.Parser[T0]): hydra.parsing.Parser[T1] =
   {
   def parse(input: scala.Predef.String): hydra.parsing.ParseResult[T1] =
     pf(input) match
     case hydra.parsing.ParseResult.success(v_ParseResult_success_sf) => pa(v_ParseResult_success_sf.remainder) match
-      case hydra.parsing.ParseResult.success(v_ParseResult_success_sa) => hydra.parsing.ParseResult.success(hydra.parsing.ParseSuccess(v_ParseResult_success_sf.value(v_ParseResult_success_sa.value),
-         (v_ParseResult_success_sa.remainder)))
+      case hydra.parsing.ParseResult.success(v_ParseResult_success_sa) => hydra.parsing.ParseResult.success(hydra.parsing.ParseSuccess(v_ParseResult_success_sf.value(v_ParseResult_success_sa.value), (v_ParseResult_success_sa.remainder)))
       case hydra.parsing.ParseResult.failure(v_ParseResult_failure_e) => hydra.parsing.ParseResult.failure(v_ParseResult_failure_e)
     case hydra.parsing.ParseResult.failure(v_ParseResult_failure_e) => hydra.parsing.ParseResult.failure(v_ParseResult_failure_e)
   parse
@@ -53,9 +52,8 @@ def char(c: Int): hydra.parsing.Parser[Int] = hydra.parsers.satisfy((x: Int) => 
 def choice[T0](ps: Seq[hydra.parsing.Parser[T0]]): hydra.parsing.Parser[T0] =
   hydra.lib.lists.foldl[hydra.parsing.Parser[T0], hydra.parsing.Parser[T0]](hydra.parsers.alt)(hydra.parsers.fail("no choice matched"))(ps)
 
-val eof: hydra.parsing.Parser[Unit] = (input: scala.Predef.String) =>
-  hydra.lib.logic.ifElse[hydra.parsing.ParseResult[Unit]](hydra.lib.equality.equal[scala.Predef.String](input)(""))(hydra.parsing.ParseResult.success(hydra.parsing.ParseSuccess((),
-     "")))(hydra.parsing.ParseResult.failure(hydra.parsing.ParseError("expected end of input", input)))
+lazy val eof: hydra.parsing.Parser[Unit] = (input: scala.Predef.String) =>
+  hydra.lib.logic.ifElse[hydra.parsing.ParseResult[Unit]](hydra.lib.equality.equal[scala.Predef.String](input)(""))(hydra.parsing.ParseResult.success(hydra.parsing.ParseSuccess((), "")))(hydra.parsing.ParseResult.failure(hydra.parsing.ParseError("expected end of input", input)))
 
 def fail[T0](msg: scala.Predef.String): hydra.parsing.Parser[T0] =
   (input: scala.Predef.String) =>
@@ -69,8 +67,7 @@ def map[T0, T1](f: (T0 => T1))(pa: hydra.parsing.Parser[T0]): hydra.parsing.Pars
   {
   def parse(input: scala.Predef.String): hydra.parsing.ParseResult[T1] =
     pa(input) match
-    case hydra.parsing.ParseResult.success(v_ParseResult_success_s) => hydra.parsing.ParseResult.success(hydra.parsing.ParseSuccess(f(v_ParseResult_success_s.value),
-       (v_ParseResult_success_s.remainder)))
+    case hydra.parsing.ParseResult.success(v_ParseResult_success_s) => hydra.parsing.ParseResult.success(hydra.parsing.ParseSuccess(f(v_ParseResult_success_s.value), (v_ParseResult_success_s.remainder)))
     case hydra.parsing.ParseResult.failure(v_ParseResult_failure_e) => hydra.parsing.ParseResult.failure(v_ParseResult_failure_e)
   parse
 }
@@ -88,14 +85,11 @@ def satisfy(pred: (Int => Boolean)): hydra.parsing.Parser[Int] =
   {
   def parse(input: scala.Predef.String): hydra.parsing.ParseResult[Int] =
     {
-    val codes: Seq[Int] = hydra.lib.strings.toList(input)
-    hydra.lib.maybes.maybe[hydra.parsing.ParseResult[Int], Int](hydra.parsing.ParseResult.failure(hydra.parsing.ParseError("unexpected end of input",
-       input)))((c: Int) =>
+    lazy val codes: Seq[Int] = hydra.lib.strings.toList(input)
+    hydra.lib.maybes.maybe[hydra.parsing.ParseResult[Int], Int](hydra.parsing.ParseResult.failure(hydra.parsing.ParseError("unexpected end of input", input)))((c: Int) =>
       {
-      val rest: scala.Predef.String = hydra.lib.strings.fromList(hydra.lib.lists.drop[Int](1)(codes))
-      hydra.lib.logic.ifElse[hydra.parsing.ParseResult[Int]](pred(c))(hydra.parsing.ParseResult.success(hydra.parsing.ParseSuccess(c,
-         rest)))(hydra.parsing.ParseResult.failure(hydra.parsing.ParseError("character did not satisfy predicate",
-         input)))
+      lazy val rest: scala.Predef.String = hydra.lib.strings.fromList(hydra.lib.lists.drop[Int](1)(codes))
+      hydra.lib.logic.ifElse[hydra.parsing.ParseResult[Int]](pred(c))(hydra.parsing.ParseResult.success(hydra.parsing.ParseSuccess(c, rest)))(hydra.parsing.ParseResult.failure(hydra.parsing.ParseError("character did not satisfy predicate", input)))
     })(hydra.lib.lists.safeHead[Int](codes))
   }
   parse
@@ -114,16 +108,14 @@ def some[T0](p: hydra.parsing.Parser[T0]): hydra.parsing.Parser[Seq[T0]] =
 def string(str: scala.Predef.String): hydra.parsing.Parser[scala.Predef.String] =
   (input: scala.Predef.String) =>
   {
-  val strCodes: Seq[Int] = hydra.lib.strings.toList(str)
+  lazy val strCodes: Seq[Int] = hydra.lib.strings.toList(str)
   {
-    val inputCodes: Seq[Int] = hydra.lib.strings.toList(input)
+    lazy val inputCodes: Seq[Int] = hydra.lib.strings.toList(input)
     {
-      val strLen: Int = hydra.lib.lists.length[Int](strCodes)
+      lazy val strLen: Int = hydra.lib.lists.length[Int](strCodes)
       {
-        val inputPrefix: Seq[Int] = hydra.lib.lists.take[Int](strLen)(inputCodes)
-        hydra.lib.logic.ifElse[hydra.parsing.ParseResult[scala.Predef.String]](hydra.lib.equality.equal[Seq[Int]](strCodes)(inputPrefix))(hydra.parsing.ParseResult.success(hydra.parsing.ParseSuccess(str,
-           hydra.lib.strings.fromList(hydra.lib.lists.drop[Int](strLen)(inputCodes)))))(hydra.parsing.ParseResult.failure(hydra.parsing.ParseError(hydra.lib.strings.cat2("expected: ")(str),
-           input)))
+        lazy val inputPrefix: Seq[Int] = hydra.lib.lists.take[Int](strLen)(inputCodes)
+        hydra.lib.logic.ifElse[hydra.parsing.ParseResult[scala.Predef.String]](hydra.lib.equality.equal[Seq[Int]](strCodes)(inputPrefix))(hydra.parsing.ParseResult.success(hydra.parsing.ParseSuccess(str, hydra.lib.strings.fromList(hydra.lib.lists.drop[Int](strLen)(inputCodes)))))(hydra.parsing.ParseResult.failure(hydra.parsing.ParseError(hydra.lib.strings.cat2("expected: ")(str), input)))
       }
     }
   }

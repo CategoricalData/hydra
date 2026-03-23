@@ -186,7 +186,7 @@ def is_tail_recursive_in_tail_position(func_name: hydra.core.Name, term: hydra.c
     @lru_cache(1)
     def stripped() -> hydra.core.Term:
         return hydra.rewriting.deannotate_and_detype_term(term)
-    def _hoist_body_1(v1):
+    def _hoist_stripped_body_1(v1):
         match v1:
             case hydra.core.FunctionLambda(value=lam):
                 return is_tail_recursive_in_tail_position(func_name, lam.body)
@@ -207,7 +207,7 @@ def is_tail_recursive_in_tail_position(func_name: hydra.core.Name, term: hydra.c
             @lru_cache(1)
             def stripped_fun() -> hydra.core.Term:
                 return hydra.rewriting.deannotate_and_detype_term(gather_fun())
-            def _hoist_body_1(v1):
+            def _hoist_stripped_fun_body_1(v1):
                 match v1:
                     case hydra.core.EliminationUnion(value=cs):
                         cases_ = cs.cases
@@ -225,27 +225,27 @@ def is_tail_recursive_in_tail_position(func_name: hydra.core.Name, term: hydra.c
 
                     case _:
                         return hydra.rewriting.is_free_variable_in_term(func_name, term)
-            def _hoist_body_2(v1):
+            def _hoist_stripped_fun_body_2(v1):
                 match v1:
                     case hydra.core.FunctionElimination(value=e):
-                        return _hoist_body_1(e)
+                        return _hoist_stripped_fun_body_1(e)
 
                     case _:
                         return hydra.rewriting.is_free_variable_in_term(func_name, term)
-            def _hoist_body_3(v1):
+            def _hoist_stripped_fun_body_3(v1):
                 match v1:
                     case hydra.core.TermVariable(value=vname):
                         return hydra.lib.logic.if_else(hydra.lib.equality.equal(vname, func_name), (lambda : (args_no_func := hydra.lib.lists.foldl((lambda ok, arg: hydra.lib.logic.and_(ok, hydra.rewriting.is_free_variable_in_term(func_name, arg))), True, gather_args()), (args_no_lambda := (_hoist_args_no_lambda_1 := (lambda v12: (lambda lam: (ignore := lam.body, True)[1])(v12.value) if isinstance(v12, hydra.core.FunctionLambda) else False), _hoist_args_no_lambda_2 := (lambda v12: (lambda f2: _hoist_args_no_lambda_1(f2))(v12.value) if isinstance(v12, hydra.core.TermFunction) else False), hydra.lib.lists.foldl((lambda ok, arg: hydra.lib.logic.and_(ok, hydra.lib.logic.not_(hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda found, t: hydra.lib.logic.or_(found, _hoist_args_no_lambda_2(t))), False, arg)))), True, gather_args()))[2], hydra.lib.logic.and_(args_no_func, args_no_lambda))[1])[1]), (lambda : hydra.rewriting.is_free_variable_in_term(func_name, term)))
 
                     case hydra.core.TermFunction(value=f):
-                        return _hoist_body_2(f)
+                        return _hoist_stripped_fun_body_2(f)
 
                     case _:
                         return hydra.rewriting.is_free_variable_in_term(func_name, term)
-            return _hoist_body_3(stripped_fun())
+            return _hoist_stripped_fun_body_3(stripped_fun())
 
         case hydra.core.TermFunction(value=f):
-            return _hoist_body_1(f)
+            return _hoist_stripped_body_1(f)
 
         case hydra.core.TermLet(value=lt):
             @lru_cache(1)
@@ -292,7 +292,7 @@ def is_simple_assignment(term: hydra.core.Term):
                 continue
 
             case _:
-                return (base_term := hydra.lib.pairs.first(gather_args(term, ())), (_hoist_body_1 := (lambda v1: (lambda _: False)(v1.value) if isinstance(v1, hydra.core.EliminationUnion) else True), _hoist_body_2 := (lambda v1: (lambda elim: _hoist_body_1(elim))(v1.value) if isinstance(v1, hydra.core.FunctionElimination) else True), _hoist_body_3 := (lambda v1: (lambda f: _hoist_body_2(f))(v1.value) if isinstance(v1, hydra.core.TermFunction) else True), _hoist_body_3(base_term))[3])[1]
+                return (base_term := hydra.lib.pairs.first(gather_args(term, ())), (_hoist_base_term_body_1 := (lambda v1: (lambda _: False)(v1.value) if isinstance(v1, hydra.core.EliminationUnion) else True), _hoist_base_term_body_2 := (lambda v1: (lambda elim: _hoist_base_term_body_1(elim))(v1.value) if isinstance(v1, hydra.core.FunctionElimination) else True), _hoist_base_term_body_3 := (lambda v1: (lambda f: _hoist_base_term_body_2(f))(v1.value) if isinstance(v1, hydra.core.TermFunction) else True), _hoist_base_term_body_3(base_term))[3])[1]
 
 def is_trivial_term(t: hydra.core.Term):
     r"""Check if a term is trivially cheap (no thunking needed)."""
@@ -310,7 +310,7 @@ def is_trivial_term(t: hydra.core.Term):
         case hydra.core.TermApplication(value=app):
             fun = app.function
             arg = app.argument
-            def _hoist_body_1(v1):
+            def _hoist_arg_body_1(v1):
                 match v1:
                     case hydra.core.EliminationRecord():
                         return is_trivial_term(arg)
@@ -320,21 +320,21 @@ def is_trivial_term(t: hydra.core.Term):
 
                     case _:
                         return False
-            def _hoist_body_2(v1):
+            def _hoist_arg_body_2(v1):
                 match v1:
                     case hydra.core.FunctionElimination(value=e):
-                        return _hoist_body_1(e)
+                        return _hoist_arg_body_1(e)
 
                     case _:
                         return False
-            def _hoist_body_3(v1):
+            def _hoist_arg_body_3(v1):
                 match v1:
                     case hydra.core.TermFunction(value=f):
-                        return _hoist_body_2(f)
+                        return _hoist_arg_body_2(f)
 
                     case _:
                         return False
-            return _hoist_body_3(fun)
+            return _hoist_arg_body_3(fun)
 
         case hydra.core.TermMaybe(value=opt):
             return hydra.lib.maybes.maybe((lambda : True), (lambda inner: is_trivial_term(inner)), opt)

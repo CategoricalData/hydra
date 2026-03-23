@@ -493,46 +493,64 @@ public interface Hoisting {
             return hydra.lib.logic.IfElse.lazy(
               (shouldHoist).apply((hydra.util.Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, hydra.core.Term>(fullPath.get(), processedTerm.get())))),
               () -> ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
-                hydra.core.Name bindingName = new hydra.core.Name(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
+                hydra.core.Name proposedName = new hydra.core.Name(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
                   "_hoist_",
                   namePrefix,
                   "_",
                   hydra.lib.literals.ShowInt32.apply(newCounter.get()))));
                 return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
-                  hydra.util.PersistentSet<hydra.core.Name> allLambdaVars = (cxInner).lambdaVariables;
+                  hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> existingNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
+                    (java.util.function.Function<hydra.core.Binding, hydra.core.Name>) (b -> (b).name),
+                    newBindings.get())));
                   return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
-                    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> newLambdaVars = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
-                      allLambdaVars,
-                      baselineLambdaVars));
+                    hydra.util.PersistentSet<hydra.core.Name> freeVarsInSubterm = hydra.Rewriting.freeVariablesInTerm(subterm);
                     return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
-                      hydra.util.PersistentSet<hydra.core.Name> freeVars = hydra.Rewriting.freeVariablesInTerm(processedTerm.get());
+                      hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> allReserved = new hydra.util.Lazy<>(() -> hydra.lib.sets.Union.apply(
+                        existingNames.get(),
+                        freeVarsInSubterm));
                       return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
-                        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> capturedVars = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Intersection.apply(
-                          newLambdaVars.get(),
-                          freeVars)));
+                        hydra.core.Name bindingName = hydra.Lexical.chooseUniqueName(
+                          allReserved.get(),
+                          proposedName);
                         return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
-                          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> typeMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.Map.apply(
-                            hydra.Rewriting::typeSchemeToFType,
-                            (cxInner).boundTypes));
+                          hydra.util.PersistentSet<hydra.core.Name> allLambdaVars = (cxInner).lambdaVariables;
                           return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
-                            hydra.util.Lazy<hydra.core.Term> wrappedTerm = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-                              (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (body -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (varName -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(varName, hydra.lib.maps.Lookup.apply(
-                                varName,
-                                typeMap.get()), body))))),
-                              processedTerm.get(),
-                              hydra.lib.lists.Reverse.apply(capturedVars.get())));
+                            hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> newLambdaVars = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
+                              allLambdaVars,
+                              baselineLambdaVars));
                             return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
-                              hydra.util.Lazy<hydra.core.Term> reference = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-                                (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (fn -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (varName -> new hydra.core.Term.Application(new hydra.core.Application(fn, new hydra.core.Term.Variable(varName))))),
-                                new hydra.core.Term.Variable(bindingName),
-                                capturedVars.get()));
+                              hydra.util.PersistentSet<hydra.core.Name> freeVars = hydra.Rewriting.freeVariablesInTerm(processedTerm.get());
                               return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
-                                hydra.util.Lazy<hydra.core.Binding> newBinding = new hydra.util.Lazy<>(() -> new hydra.core.Binding(bindingName, wrappedTerm.get(), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())));
-                                return (hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>((hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>(hydra.lib.math.Add.apply(
-                                  newCounter.get(),
-                                  1), hydra.lib.lists.Cons.apply(
-                                  newBinding.get(),
-                                  newBindings.get())))), reference.get())));
+                                hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> capturedVars = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Intersection.apply(
+                                  newLambdaVars.get(),
+                                  freeVars)));
+                                return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
+                                  hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> typeMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.Map.apply(
+                                    hydra.Rewriting::typeSchemeToFType,
+                                    (cxInner).boundTypes));
+                                  return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
+                                    hydra.util.Lazy<hydra.core.Term> wrappedTerm = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+                                      (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (body -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (varName -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(varName, hydra.lib.maps.Lookup.apply(
+                                        varName,
+                                        typeMap.get()), body))))),
+                                      processedTerm.get(),
+                                      hydra.lib.lists.Reverse.apply(capturedVars.get())));
+                                    return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
+                                      hydra.util.Lazy<hydra.core.Term> reference = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+                                        (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (fn -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (varName -> new hydra.core.Term.Application(new hydra.core.Application(fn, new hydra.core.Term.Variable(varName))))),
+                                        new hydra.core.Term.Variable(bindingName),
+                                        capturedVars.get()));
+                                      return ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
+                                        hydra.util.Lazy<hydra.core.Binding> newBinding = new hydra.util.Lazy<>(() -> new hydra.core.Binding(bindingName, wrappedTerm.get(), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())));
+                                        return (hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>((hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>(hydra.lib.math.Add.apply(
+                                          newCounter.get(),
+                                          1), hydra.lib.lists.Cons.apply(
+                                          newBinding.get(),
+                                          newBindings.get())))), reference.get())));
+                                      })).get();
+                                    })).get();
+                                  })).get();
+                                })).get();
                               })).get();
                             })).get();
                           })).get();
@@ -592,7 +610,18 @@ public interface Hoisting {
     hydra.util.Lazy<hydra.util.ConsList<hydra.accessors.TermAccessor>> bodyPathPrefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
       path,
       hydra.util.ConsList.of(new hydra.accessors.TermAccessor.LetBody())));
-    hydra.util.Pair<Integer, hydra.core.Term> bodyResult = (processImmediateSubterm).apply(cx).apply(1).apply("_body").apply(bodyPathPrefix.get()).apply(body);
+    hydra.util.Lazy<String> firstBindingName = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> "body",
+      (java.util.function.Function<hydra.core.Binding, String>) (b -> hydra.lib.strings.Intercalate.apply(
+        "_",
+        hydra.lib.strings.SplitOn.apply(
+          ".",
+          (b).name.value))),
+      hydra.lib.lists.SafeHead.apply(bindings)));
+    String bodyPrefix = hydra.lib.strings.Cat2.apply(
+      firstBindingName.get(),
+      "_body");
+    hydra.util.Pair<Integer, hydra.core.Term> bodyResult = (processImmediateSubterm).apply(cx).apply(1).apply(bodyPrefix).apply(bodyPathPrefix.get()).apply(body);
     java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, java.util.function.Function<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>> processBinding = (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, java.util.function.Function<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>>) (acc -> (java.util.function.Function<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>) (binding -> {
       hydra.util.Lazy<hydra.util.ConsList<hydra.accessors.TermAccessor>> bindingPathPrefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
         path,

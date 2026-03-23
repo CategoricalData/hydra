@@ -1,1564 +1,222 @@
 {
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.Document",
+        "type": {
+          "record": [
+            {"name": "id", "type": {"maybe": {"literal": {"string": {}}}}},
+            {
+              "name": "definitions",
+              "type": {
+                "maybe": {
+                  "map": {
+                    "keys": {"variable": "hydra.ext.org.json.schema.Keyword"},
+                    "values": {"variable": "hydra.ext.org.json.schema.Schema"}}}}},
+            {
+              "name": "root",
+              "type": {"variable": "hydra.ext.org.json.schema.Schema"}}]}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.Keyword",
+        "type": {"wrap": {"literal": {"string": {}}}}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.Schema",
+        "type": {
+          "wrap": {"list": {"variable": "hydra.ext.org.json.schema.Restriction"}}}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.Restriction",
+        "type": {
+          "union": [
+            {
+              "name": "type",
+              "type": {"variable": "hydra.ext.org.json.schema.Type"}},
+            {
+              "name": "string",
+              "type": {"variable": "hydra.ext.org.json.schema.StringRestriction"}},
+            {
+              "name": "number",
+              "type": {"variable": "hydra.ext.org.json.schema.NumericRestriction"}},
+            {
+              "name": "array",
+              "type": {"variable": "hydra.ext.org.json.schema.ArrayRestriction"}},
+            {
+              "name": "object",
+              "type": {"variable": "hydra.ext.org.json.schema.ObjectRestriction"}},
+            {
+              "name": "multiple",
+              "type": {"variable": "hydra.ext.org.json.schema.MultipleRestriction"}},
+            {
+              "name": "reference",
+              "type": {"variable": "hydra.ext.org.json.schema.SchemaReference"}},
+            {"name": "title", "type": {"literal": {"string": {}}}},
+            {"name": "description", "type": {"literal": {"string": {}}}}]}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.Type",
+        "type": {
+          "union": [
+            {
+              "name": "single",
+              "type": {"variable": "hydra.ext.org.json.schema.TypeName"}},
+            {
+              "name": "multiple",
+              "type": {"list": {"variable": "hydra.ext.org.json.schema.TypeName"}}}]}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.TypeName",
+        "type": {
+          "union": [
+            {"name": "string", "type": {"unit": {}}},
+            {"name": "integer", "type": {"unit": {}}},
+            {"name": "number", "type": {"unit": {}}},
+            {"name": "boolean", "type": {"unit": {}}},
+            {"name": "null", "type": {"unit": {}}},
+            {"name": "array", "type": {"unit": {}}},
+            {"name": "object", "type": {"unit": {}}}]}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.StringRestriction",
+        "type": {
+          "union": [
+            {"name": "minLength", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"name": "maxLength", "type": {"literal": {"integer": {"int32": {}}}}},
+            {
+              "name": "pattern",
+              "type": {"variable": "hydra.ext.org.json.schema.RegularExpression"}}]}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.RegularExpression",
+        "type": {"wrap": {"literal": {"string": {}}}}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.NumericRestriction",
+        "type": {
+          "union": [
+            {
+              "name": "minimum",
+              "type": {"variable": "hydra.ext.org.json.schema.Limit"}},
+            {
+              "name": "maximum",
+              "type": {"variable": "hydra.ext.org.json.schema.Limit"}},
+            {
+              "name": "multipleOf",
+              "type": {"literal": {"integer": {"int32": {}}}}}]}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.Limit",
+        "type": {
+          "record": [
+            {"name": "value", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"name": "exclusive", "type": {"literal": {"boolean": {}}}}]}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.ArrayRestriction",
+        "type": {
+          "union": [
+            {
+              "name": "items",
+              "type": {"variable": "hydra.ext.org.json.schema.Items"}},
+            {
+              "name": "additionalItems",
+              "type": {"variable": "hydra.ext.org.json.schema.AdditionalItems"}},
+            {"name": "minItems", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"name": "maxItems", "type": {"literal": {"integer": {"int32": {}}}}},
+            {"name": "uniqueItems", "type": {"literal": {"boolean": {}}}}]}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.Items",
+        "type": {
+          "union": [
+            {
+              "name": "sameItems",
+              "type": {"variable": "hydra.ext.org.json.schema.Schema"}},
+            {
+              "name": "varItems",
+              "type": {"list": {"variable": "hydra.ext.org.json.schema.Schema"}}}]}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.AdditionalItems",
+        "type": {
+          "union": [
+            {"name": "any", "type": {"literal": {"boolean": {}}}},
+            {
+              "name": "schema",
+              "type": {"variable": "hydra.ext.org.json.schema.Schema"}}]}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.ObjectRestriction",
+        "type": {
+          "union": [
+            {
+              "name": "properties",
+              "type": {
+                "map": {
+                  "keys": {"variable": "hydra.ext.org.json.schema.Keyword"},
+                  "values": {"variable": "hydra.ext.org.json.schema.Schema"}}}},
+            {
+              "name": "additionalProperties",
+              "type": {"variable": "hydra.ext.org.json.schema.AdditionalItems"}},
+            {
+              "name": "required",
+              "type": {"list": {"variable": "hydra.ext.org.json.schema.Keyword"}}},
+            {
+              "name": "minProperties",
+              "type": {"literal": {"integer": {"int32": {}}}}},
+            {
+              "name": "maxProperties",
+              "type": {"literal": {"integer": {"int32": {}}}}},
+            {
+              "name": "dependencies",
+              "type": {
+                "map": {
+                  "keys": {"variable": "hydra.ext.org.json.schema.Keyword"},
+                  "values": {"variable": "hydra.ext.org.json.schema.SchemaOrArray"}}}},
+            {
+              "name": "patternProperties",
+              "type": {
+                "map": {
+                  "keys": {"variable": "hydra.ext.org.json.schema.RegularExpression"},
+                  "values": {"variable": "hydra.ext.org.json.schema.Schema"}}}}]}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.SchemaOrArray",
+        "type": {
+          "union": [
+            {
+              "name": "schema",
+              "type": {"variable": "hydra.ext.org.json.schema.Schema"}},
+            {
+              "name": "array",
+              "type": {"list": {"variable": "hydra.ext.org.json.schema.Keyword"}}}]}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.MultipleRestriction",
+        "type": {
+          "union": [
+            {
+              "name": "allOf",
+              "type": {"list": {"variable": "hydra.ext.org.json.schema.Schema"}}},
+            {
+              "name": "anyOf",
+              "type": {"list": {"variable": "hydra.ext.org.json.schema.Schema"}}},
+            {
+              "name": "oneOf",
+              "type": {"list": {"variable": "hydra.ext.org.json.schema.Schema"}}},
+            {
+              "name": "not",
+              "type": {"variable": "hydra.ext.org.json.schema.Schema"}},
+            {
+              "name": "enum",
+              "type": {"list": {"variable": "hydra.json.model.Value"}}}]}}},
+    {
+      "type": {
+        "name": "hydra.ext.org.json.schema.SchemaReference",
+        "type": {"wrap": {"literal": {"string": {}}}}}}],
   "description": [
     "A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar"],
-  "elements": [
-    {
-      "name": "hydra.ext.org.json.schema.Document",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {"body": {"literal": {"string": "id"}}, "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "maybe",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "literal",
-                                        "term": {
-                                          "union": {
-                                            "field": {"name": "string", "term": {"unit": {}}},
-                                            "typeName": "hydra.core.LiteralType"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "definitions"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "maybe",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "map",
-                                        "term": {
-                                          "record": {
-                                            "fields": [
-                                              {
-                                                "name": "keys",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "variable",
-                                                      "term": {
-                                                        "wrap": {
-                                                          "body": {"literal": {"string": "hydra.ext.org.json.schema.Keyword"}},
-                                                          "typeName": "hydra.core.Name"}}},
-                                                    "typeName": "hydra.core.Type"}}},
-                                              {
-                                                "name": "values",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {
-                                                      "name": "variable",
-                                                      "term": {
-                                                        "wrap": {
-                                                          "body": {"literal": {"string": "hydra.ext.org.json.schema.Schema"}},
-                                                          "typeName": "hydra.core.Name"}}},
-                                                    "typeName": "hydra.core.Type"}}}],
-                                            "typeName": "hydra.core.MapType"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "root"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.Schema"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.Keyword",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "wrap",
-                "term": {
-                  "union": {
-                    "field": {
-                      "name": "literal",
-                      "term": {
-                        "union": {
-                          "field": {"name": "string", "term": {"unit": {}}},
-                          "typeName": "hydra.core.LiteralType"}}},
-                    "typeName": "hydra.core.Type"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.Schema",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "wrap",
-                "term": {
-                  "union": {
-                    "field": {
-                      "name": "list",
-                      "term": {
-                        "union": {
-                          "field": {
-                            "name": "variable",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "hydra.ext.org.json.schema.Restriction"}},
-                                "typeName": "hydra.core.Name"}}},
-                          "typeName": "hydra.core.Type"}}},
-                    "typeName": "hydra.core.Type"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.Restriction",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "type"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.Type"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "string"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.StringRestriction"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "number"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {
-                                        "literal": {"string": "hydra.ext.org.json.schema.NumericRestriction"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "array"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.ArrayRestriction"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "object"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.ObjectRestriction"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "multiple"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {
-                                        "literal": {"string": "hydra.ext.org.json.schema.MultipleRestriction"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "reference"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.SchemaReference"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "title"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "literal",
-                                  "term": {
-                                    "union": {
-                                      "field": {"name": "string", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.LiteralType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "description"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "literal",
-                                  "term": {
-                                    "union": {
-                                      "field": {"name": "string", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.LiteralType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.Type",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "single"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.TypeName"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "multiple"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "list",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "hydra.ext.org.json.schema.TypeName"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.TypeName",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "string"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "integer"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "number"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "boolean"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "null"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "array"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "object"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {"name": "unit", "term": {"unit": {}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.StringRestriction",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "minLength"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "literal",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "integer",
-                                        "term": {
-                                          "union": {
-                                            "field": {"name": "int32", "term": {"unit": {}}},
-                                            "typeName": "hydra.core.IntegerType"}}},
-                                      "typeName": "hydra.core.LiteralType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "maxLength"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "literal",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "integer",
-                                        "term": {
-                                          "union": {
-                                            "field": {"name": "int32", "term": {"unit": {}}},
-                                            "typeName": "hydra.core.IntegerType"}}},
-                                      "typeName": "hydra.core.LiteralType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "pattern"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.RegularExpression"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.RegularExpression",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "wrap",
-                "term": {
-                  "union": {
-                    "field": {
-                      "name": "literal",
-                      "term": {
-                        "union": {
-                          "field": {"name": "string", "term": {"unit": {}}},
-                          "typeName": "hydra.core.LiteralType"}}},
-                    "typeName": "hydra.core.Type"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.NumericRestriction",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "minimum"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.Limit"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "maximum"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.Limit"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "multipleOf"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "literal",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "integer",
-                                        "term": {
-                                          "union": {
-                                            "field": {"name": "int32", "term": {"unit": {}}},
-                                            "typeName": "hydra.core.IntegerType"}}},
-                                      "typeName": "hydra.core.LiteralType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.Limit",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "record",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "value"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "literal",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "integer",
-                                        "term": {
-                                          "union": {
-                                            "field": {"name": "int32", "term": {"unit": {}}},
-                                            "typeName": "hydra.core.IntegerType"}}},
-                                      "typeName": "hydra.core.LiteralType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "exclusive"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "literal",
-                                  "term": {
-                                    "union": {
-                                      "field": {"name": "boolean", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.LiteralType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.ArrayRestriction",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "items"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.Items"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "additionalItems"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.AdditionalItems"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "minItems"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "literal",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "integer",
-                                        "term": {
-                                          "union": {
-                                            "field": {"name": "int32", "term": {"unit": {}}},
-                                            "typeName": "hydra.core.IntegerType"}}},
-                                      "typeName": "hydra.core.LiteralType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "maxItems"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "literal",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "integer",
-                                        "term": {
-                                          "union": {
-                                            "field": {"name": "int32", "term": {"unit": {}}},
-                                            "typeName": "hydra.core.IntegerType"}}},
-                                      "typeName": "hydra.core.LiteralType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "uniqueItems"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "literal",
-                                  "term": {
-                                    "union": {
-                                      "field": {"name": "boolean", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.LiteralType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.Items",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "sameItems"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.Schema"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "varItems"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "list",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "hydra.ext.org.json.schema.Schema"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.AdditionalItems",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "any"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "literal",
-                                  "term": {
-                                    "union": {
-                                      "field": {"name": "boolean", "term": {"unit": {}}},
-                                      "typeName": "hydra.core.LiteralType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "schema"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.Schema"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.ObjectRestriction",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "properties"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "map",
-                                  "term": {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "keys",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "variable",
-                                                "term": {
-                                                  "wrap": {
-                                                    "body": {"literal": {"string": "hydra.ext.org.json.schema.Keyword"}},
-                                                    "typeName": "hydra.core.Name"}}},
-                                              "typeName": "hydra.core.Type"}}},
-                                        {
-                                          "name": "values",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "variable",
-                                                "term": {
-                                                  "wrap": {
-                                                    "body": {"literal": {"string": "hydra.ext.org.json.schema.Schema"}},
-                                                    "typeName": "hydra.core.Name"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.MapType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "additionalProperties"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.AdditionalItems"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "required"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "list",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "hydra.ext.org.json.schema.Keyword"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "minProperties"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "literal",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "integer",
-                                        "term": {
-                                          "union": {
-                                            "field": {"name": "int32", "term": {"unit": {}}},
-                                            "typeName": "hydra.core.IntegerType"}}},
-                                      "typeName": "hydra.core.LiteralType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "maxProperties"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "literal",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "integer",
-                                        "term": {
-                                          "union": {
-                                            "field": {"name": "int32", "term": {"unit": {}}},
-                                            "typeName": "hydra.core.IntegerType"}}},
-                                      "typeName": "hydra.core.LiteralType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "dependencies"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "map",
-                                  "term": {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "keys",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "variable",
-                                                "term": {
-                                                  "wrap": {
-                                                    "body": {"literal": {"string": "hydra.ext.org.json.schema.Keyword"}},
-                                                    "typeName": "hydra.core.Name"}}},
-                                              "typeName": "hydra.core.Type"}}},
-                                        {
-                                          "name": "values",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "variable",
-                                                "term": {
-                                                  "wrap": {
-                                                    "body": {"literal": {"string": "hydra.ext.org.json.schema.SchemaOrArray"}},
-                                                    "typeName": "hydra.core.Name"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.MapType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "patternProperties"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "map",
-                                  "term": {
-                                    "record": {
-                                      "fields": [
-                                        {
-                                          "name": "keys",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "variable",
-                                                "term": {
-                                                  "wrap": {
-                                                    "body": {"literal": {"string": "hydra.ext.org.json.schema.RegularExpression"}},
-                                                    "typeName": "hydra.core.Name"}}},
-                                              "typeName": "hydra.core.Type"}}},
-                                        {
-                                          "name": "values",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "variable",
-                                                "term": {
-                                                  "wrap": {
-                                                    "body": {"literal": {"string": "hydra.ext.org.json.schema.Schema"}},
-                                                    "typeName": "hydra.core.Name"}}},
-                                              "typeName": "hydra.core.Type"}}}],
-                                      "typeName": "hydra.core.MapType"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.SchemaOrArray",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "schema"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.Schema"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "array"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "list",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "hydra.ext.org.json.schema.Keyword"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.MultipleRestriction",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "union",
-                "term": {
-                  "list": [
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "allOf"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "list",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "hydra.ext.org.json.schema.Schema"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "anyOf"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "list",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "hydra.ext.org.json.schema.Schema"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "oneOf"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "list",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "hydra.ext.org.json.schema.Schema"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "not"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "variable",
-                                  "term": {
-                                    "wrap": {
-                                      "body": {"literal": {"string": "hydra.ext.org.json.schema.Schema"}},
-                                      "typeName": "hydra.core.Name"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}},
-                    {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "name",
-                            "term": {
-                              "wrap": {
-                                "body": {"literal": {"string": "enum"}},
-                                "typeName": "hydra.core.Name"}}},
-                          {
-                            "name": "type",
-                            "term": {
-                              "union": {
-                                "field": {
-                                  "name": "list",
-                                  "term": {
-                                    "union": {
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {
-                                          "wrap": {
-                                            "body": {"literal": {"string": "hydra.json.model.Value"}},
-                                            "typeName": "hydra.core.Name"}}},
-                                      "typeName": "hydra.core.Type"}}},
-                                "typeName": "hydra.core.Type"}}}],
-                        "typeName": "hydra.core.FieldType"}}]}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]},
-    {
-      "name": "hydra.ext.org.json.schema.SchemaReference",
-      "term": {
-        "annotated": {
-          "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
-          "body": {
-            "union": {
-              "field": {
-                "name": "wrap",
-                "term": {
-                  "union": {
-                    "field": {
-                      "name": "literal",
-                      "term": {
-                        "union": {
-                          "field": {"name": "string", "term": {"unit": {}}},
-                          "typeName": "hydra.core.LiteralType"}}},
-                    "typeName": "hydra.core.Type"}}},
-              "typeName": "hydra.core.Type"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Type"},
-          "variables": []}]}],
   "namespace": "hydra.ext.org.json.schema",
   "termDependencies": ["hydra.json.model"],
   "typeDependencies": ["hydra.core"]}

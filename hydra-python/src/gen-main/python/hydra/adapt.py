@@ -371,7 +371,7 @@ def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
             def supported_variant() -> bool:
                 return hydra.lib.sets.member(hydra.reflect.term_variant(term), constraints.term_variants)
             return hydra.lib.logic.if_else(supported_variant(), (lambda : for_supported(term)), (lambda : for_unsupported(term)))
-        def _hoist_body_1(term1, v1):
+        def _hoist_for_supported_body_1(term1, v1):
             match v1:
                 case hydra.core.TermTypeApplication(value=ta):
                     return hydra.lib.eithers.bind(adapt_type(constraints, litmap, ta.type), (lambda atyp: Right(cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(ta.body, atyp))))))
@@ -381,7 +381,7 @@ def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
 
                 case _:
                     return hydra.lib.eithers.bind(try_term(term1), (lambda mterm: hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat2("no alternatives for term: ", hydra.show.core.term(term1)))), (lambda term2: Right(term2)), mterm)))
-        return hydra.lib.eithers.bind(recurse(term02), (lambda term1: _hoist_body_1(term1, term1)))
+        return hydra.lib.eithers.bind(recurse(term02), (lambda term1: _hoist_for_supported_body_1(term1, term1)))
     return hydra.rewriting.rewrite_term_m((lambda x1, x2: rewrite(x1, x2)), term0)
 
 def push_type_apps_inward(term: hydra.core.Term) -> hydra.core.Term:
