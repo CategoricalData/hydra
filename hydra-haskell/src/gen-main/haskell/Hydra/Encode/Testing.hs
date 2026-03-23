@@ -861,6 +861,9 @@ validateCoreTermTestCase x =
       Core.recordTypeName = (Core.Name "hydra.testing.ValidateCoreTermTestCase"),
       Core.recordFields = [
         Core.Field {
+          Core.fieldName = (Core.Name "typed"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Testing.validateCoreTermTestCaseTyped x))},
+        Core.Field {
           Core.fieldName = (Core.Name "input"),
           Core.fieldTerm = (Core_.term (Testing.validateCoreTermTestCaseInput x))},
         Core.Field {

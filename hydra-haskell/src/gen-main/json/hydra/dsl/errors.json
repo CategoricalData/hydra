@@ -555,7 +555,7 @@
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}]},
     {
-      "name": "hydra.dsl.errors.errorUndefinedTerm",
+      "name": "hydra.dsl.errors.errorUndefinedTermVariable",
       "term": {
         "function": {
           "lambda": {
@@ -583,7 +583,7 @@
                                       "name": "name",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "undefinedTerm"}},
+                                          "body": {"literal": {"string": "undefinedTermVariable"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
@@ -603,8 +603,8 @@
                       "annotation": [
                         {
                           "@key": "description",
-                          "@value": {"literal": {"string": "A reference to an undefined term"}}}],
-                      "body": {"variable": "hydra.error.core.UndefinedTermError"}}},
+                          "@value": {"literal": {"string": "A reference to an undefined term variable"}}}],
+                      "body": {"variable": "hydra.error.core.UndefinedTermVariableError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}],
             "parameter": "x"}}},
       "type": [
@@ -623,12 +623,12 @@
                       "annotation": [
                         {
                           "@key": "description",
-                          "@value": {"literal": {"string": "A reference to an undefined term"}}}],
-                      "body": {"variable": "hydra.error.core.UndefinedTermError"}}},
+                          "@value": {"literal": {"string": "A reference to an undefined term variable"}}}],
+                      "body": {"variable": "hydra.error.core.UndefinedTermVariableError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}]},
     {
-      "name": "hydra.dsl.errors.errorUndefinedType",
+      "name": "hydra.dsl.errors.errorUntypedTermVariable",
       "term": {
         "function": {
           "lambda": {
@@ -656,7 +656,7 @@
                                       "name": "name",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "undefinedType"}},
+                                          "body": {"literal": {"string": "untypedTermVariable"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "term",
@@ -676,8 +676,8 @@
                       "annotation": [
                         {
                           "@key": "description",
-                          "@value": {"literal": {"string": "A reference to an undefined type"}}}],
-                      "body": {"variable": "hydra.error.core.UndefinedTypeError"}}},
+                          "@value": {"literal": {"string": "A term variable whose type is not known"}}}],
+                      "body": {"variable": "hydra.error.core.UntypedTermVariableError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}],
             "parameter": "x"}}},
       "type": [
@@ -696,8 +696,8 @@
                       "annotation": [
                         {
                           "@key": "description",
-                          "@value": {"literal": {"string": "A reference to an undefined type"}}}],
-                      "body": {"variable": "hydra.error.core.UndefinedTypeError"}}},
+                          "@value": {"literal": {"string": "A term variable whose type is not known"}}}],
+                      "body": {"variable": "hydra.error.core.UntypedTermVariableError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}]},
     {

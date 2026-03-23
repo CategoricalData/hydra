@@ -48050,59 +48050,92 @@
               "function": {
                 "lambda": {
                   "body": {
-                    "wrap": {
-                      "body": {
-                        "union": {
-                          "field": {
-                            "name": "record",
-                            "term": {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "typeName",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "hydra.testing.ValidateCoreTermTestCase"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "fields",
-                                    "term": {
-                                      "list": [
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "wrap": {
+                            "body": {
+                              "union": {
+                                "field": {
+                                  "name": "record",
+                                  "term": {
+                                    "record": {
+                                      "fields": [
                                         {
-                                          "record": {
-                                            "fields": [
-                                              {
-                                                "name": "name",
-                                                "term": {
-                                                  "wrap": {
-                                                    "body": {"literal": {"string": "input"}},
-                                                    "typeName": "hydra.core.Name"}}},
-                                              {
-                                                "name": "term",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {"variable": "input"},
-                                                    "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
-                                            "typeName": "hydra.core.Field"}},
+                                          "name": "typeName",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "hydra.testing.ValidateCoreTermTestCase"}},
+                                              "typeName": "hydra.core.Name"}}},
                                         {
-                                          "record": {
-                                            "fields": [
+                                          "name": "fields",
+                                          "term": {
+                                            "list": [
                                               {
-                                                "name": "name",
-                                                "term": {
-                                                  "wrap": {
-                                                    "body": {"literal": {"string": "output"}},
-                                                    "typeName": "hydra.core.Name"}}},
+                                                "record": {
+                                                  "fields": [
+                                                    {
+                                                      "name": "name",
+                                                      "term": {
+                                                        "wrap": {
+                                                          "body": {"literal": {"string": "typed"}},
+                                                          "typeName": "hydra.core.Name"}}},
+                                                    {
+                                                      "name": "term",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "typed"},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                                  "typeName": "hydra.core.Field"}},
                                               {
-                                                "name": "term",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {"variable": "output"},
-                                                    "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
-                                            "typeName": "hydra.core.Field"}}]}}],
-                                "typeName": "hydra.core.Record"}}},
-                          "typeName": "hydra.core.Term"}},
-                      "typeName": "hydra.phantoms.TTerm"}},
+                                                "record": {
+                                                  "fields": [
+                                                    {
+                                                      "name": "name",
+                                                      "term": {
+                                                        "wrap": {
+                                                          "body": {"literal": {"string": "input"}},
+                                                          "typeName": "hydra.core.Name"}}},
+                                                    {
+                                                      "name": "term",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "input"},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                                  "typeName": "hydra.core.Field"}},
+                                              {
+                                                "record": {
+                                                  "fields": [
+                                                    {
+                                                      "name": "name",
+                                                      "term": {
+                                                        "wrap": {
+                                                          "body": {"literal": {"string": "output"}},
+                                                          "typeName": "hydra.core.Name"}}},
+                                                    {
+                                                      "name": "term",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "output"},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                                  "typeName": "hydra.core.Field"}}]}}],
+                                      "typeName": "hydra.core.Record"}}},
+                                "typeName": "hydra.core.Term"}},
+                            "typeName": "hydra.phantoms.TTerm"}},
+                        "domain": [
+                          {
+                            "application": {
+                              "argument": {
+                                "annotated": {
+                                  "annotation": [
+                                    {
+                                      "@key": "description",
+                                      "@value": {
+                                        "literal": {
+                                          "string": "The expected validation result (Nothing if valid, Just error if invalid)"}}}],
+                                  "body": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}}}},
+                              "function": {"variable": "hydra.phantoms.TTerm"}}}],
+                        "parameter": "output"}}},
                   "domain": [
                     {
                       "application": {
@@ -48111,12 +48144,10 @@
                             "annotation": [
                               {
                                 "@key": "description",
-                                "@value": {
-                                  "literal": {
-                                    "string": "The expected validation result (Nothing if valid, Just error if invalid)"}}}],
-                            "body": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}}}},
+                                "@value": {"literal": {"string": "The term to validate"}}}],
+                            "body": {"variable": "hydra.core.Term"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}],
-                  "parameter": "output"}}},
+                  "parameter": "input"}}},
             "domain": [
               {
                 "application": {
@@ -48125,10 +48156,12 @@
                       "annotation": [
                         {
                           "@key": "description",
-                          "@value": {"literal": {"string": "The term to validate"}}}],
-                      "body": {"variable": "hydra.core.Term"}}},
+                          "@value": {
+                            "literal": {
+                              "string": "Whether to expect System F (typed) terms. When true, type variable binding checks and UntypedTermVariableError are active."}}}],
+                      "body": {"literal": {"boolean": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}],
-            "parameter": "input"}}},
+            "parameter": "typed"}}},
       "type": [
         {
           "constraints": null,
@@ -48137,9 +48170,23 @@
               "codomain": {
                 "function": {
                   "codomain": {
-                    "application": {
-                      "argument": {"variable": "hydra.testing.ValidateCoreTermTestCase"},
-                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "function": {
+                      "codomain": {
+                        "application": {
+                          "argument": {"variable": "hydra.testing.ValidateCoreTermTestCase"},
+                          "function": {"variable": "hydra.phantoms.TTerm"}}},
+                      "domain": {
+                        "application": {
+                          "argument": {
+                            "annotated": {
+                              "annotation": [
+                                {
+                                  "@key": "description",
+                                  "@value": {
+                                    "literal": {
+                                      "string": "The expected validation result (Nothing if valid, Just error if invalid)"}}}],
+                              "body": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}}}},
+                          "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                   "domain": {
                     "application": {
                       "argument": {
@@ -48147,10 +48194,8 @@
                           "annotation": [
                             {
                               "@key": "description",
-                              "@value": {
-                                "literal": {
-                                  "string": "The expected validation result (Nothing if valid, Just error if invalid)"}}}],
-                          "body": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}}}},
+                              "@value": {"literal": {"string": "The term to validate"}}}],
+                          "body": {"variable": "hydra.core.Term"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
@@ -48159,8 +48204,94 @@
                       "annotation": [
                         {
                           "@key": "description",
-                          "@value": {"literal": {"string": "The term to validate"}}}],
-                      "body": {"variable": "hydra.core.Term"}}},
+                          "@value": {
+                            "literal": {
+                              "string": "Whether to expect System F (typed) terms. When true, type variable binding checks and UntypedTermVariableError are active."}}}],
+                      "body": {"literal": {"boolean": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}]},
+    {
+      "name": "hydra.dsl.testing.validateCoreTermTestCaseTyped",
+      "term": {
+        "function": {
+          "lambda": {
+            "body": {
+              "wrap": {
+                "body": {
+                  "union": {
+                    "field": {
+                      "name": "application",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "function",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "function",
+                                    "term": {
+                                      "union": {
+                                        "field": {
+                                          "name": "elimination",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "record",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "typeName",
+                                                        "term": {
+                                                          "wrap": {
+                                                            "body": {"literal": {"string": "hydra.testing.ValidateCoreTermTestCase"}},
+                                                            "typeName": "hydra.core.Name"}}},
+                                                      {
+                                                        "name": "field",
+                                                        "term": {
+                                                          "wrap": {
+                                                            "body": {"literal": {"string": "typed"}},
+                                                            "typeName": "hydra.core.Name"}}}],
+                                                    "typeName": "hydra.core.Projection"}}},
+                                              "typeName": "hydra.core.Elimination"}}},
+                                        "typeName": "hydra.core.Function"}}},
+                                  "typeName": "hydra.core.Term"}}},
+                            {
+                              "name": "argument",
+                              "term": {
+                                "application": {
+                                  "argument": {"variable": "x"},
+                                  "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                          "typeName": "hydra.core.Application"}}},
+                    "typeName": "hydra.core.Term"}},
+                "typeName": "hydra.phantoms.TTerm"}},
+            "domain": [
+              {
+                "application": {
+                  "argument": {"variable": "hydra.testing.ValidateCoreTermTestCase"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}],
+            "parameter": "x"}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "Whether to expect System F (typed) terms. When true, type variable binding checks and UntypedTermVariableError are active."}}}],
+                      "body": {"literal": {"boolean": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.testing.ValidateCoreTermTestCase"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}]},
     {
@@ -48330,6 +48461,220 @@
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}]},
     {
+      "name": "hydra.dsl.testing.validateCoreTermTestCaseWithTyped",
+      "term": {
+        "function": {
+          "lambda": {
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "wrap": {
+                      "body": {
+                        "union": {
+                          "field": {
+                            "name": "record",
+                            "term": {
+                              "record": {
+                                "fields": [
+                                  {
+                                    "name": "typeName",
+                                    "term": {
+                                      "wrap": {
+                                        "body": {"literal": {"string": "hydra.testing.ValidateCoreTermTestCase"}},
+                                        "typeName": "hydra.core.Name"}}},
+                                  {
+                                    "name": "fields",
+                                    "term": {
+                                      "list": [
+                                        {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "name",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "typed"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              {
+                                                "name": "term",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {"variable": "newVal"},
+                                                    "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                            "typeName": "hydra.core.Field"}},
+                                        {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "name",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "input"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              {
+                                                "name": "term",
+                                                "term": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "application",
+                                                      "term": {
+                                                        "record": {
+                                                          "fields": [
+                                                            {
+                                                              "name": "function",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "function",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "elimination",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "record",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "typeName",
+                                                                                        "term": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "hydra.testing.ValidateCoreTermTestCase"}},
+                                                                                            "typeName": "hydra.core.Name"}}},
+                                                                                      {
+                                                                                        "name": "field",
+                                                                                        "term": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "input"}},
+                                                                                            "typeName": "hydra.core.Name"}}}],
+                                                                                    "typeName": "hydra.core.Projection"}}},
+                                                                              "typeName": "hydra.core.Elimination"}}},
+                                                                        "typeName": "hydra.core.Function"}}},
+                                                                  "typeName": "hydra.core.Term"}}},
+                                                            {
+                                                              "name": "argument",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "original"},
+                                                                  "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                                          "typeName": "hydra.core.Application"}}},
+                                                    "typeName": "hydra.core.Term"}}}],
+                                            "typeName": "hydra.core.Field"}},
+                                        {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "name",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "output"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              {
+                                                "name": "term",
+                                                "term": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "application",
+                                                      "term": {
+                                                        "record": {
+                                                          "fields": [
+                                                            {
+                                                              "name": "function",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "function",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "elimination",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "record",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "typeName",
+                                                                                        "term": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "hydra.testing.ValidateCoreTermTestCase"}},
+                                                                                            "typeName": "hydra.core.Name"}}},
+                                                                                      {
+                                                                                        "name": "field",
+                                                                                        "term": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "output"}},
+                                                                                            "typeName": "hydra.core.Name"}}}],
+                                                                                    "typeName": "hydra.core.Projection"}}},
+                                                                              "typeName": "hydra.core.Elimination"}}},
+                                                                        "typeName": "hydra.core.Function"}}},
+                                                                  "typeName": "hydra.core.Term"}}},
+                                                            {
+                                                              "name": "argument",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "original"},
+                                                                  "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                                          "typeName": "hydra.core.Application"}}},
+                                                    "typeName": "hydra.core.Term"}}}],
+                                            "typeName": "hydra.core.Field"}}]}}],
+                                "typeName": "hydra.core.Record"}}},
+                          "typeName": "hydra.core.Term"}},
+                      "typeName": "hydra.phantoms.TTerm"}},
+                  "domain": [
+                    {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [
+                              {
+                                "@key": "description",
+                                "@value": {
+                                  "literal": {
+                                    "string": "Whether to expect System F (typed) terms. When true, type variable binding checks and UntypedTermVariableError are active."}}}],
+                            "body": {"literal": {"boolean": {}}}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}}],
+                  "parameter": "newVal"}}},
+            "domain": [
+              {
+                "application": {
+                  "argument": {"variable": "hydra.testing.ValidateCoreTermTestCase"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}],
+            "parameter": "original"}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.testing.ValidateCoreTermTestCase"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {
+                                  "string": "Whether to expect System F (typed) terms. When true, type variable binding checks and UntypedTermVariableError are active."}}}],
+                          "body": {"literal": {"boolean": {}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.testing.ValidateCoreTermTestCase"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}]},
+    {
       "name": "hydra.dsl.testing.validateCoreTermTestCaseWithInput",
       "term": {
         "function": {
@@ -48356,6 +48701,66 @@
                                     "name": "fields",
                                     "term": {
                                       "list": [
+                                        {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "name",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "typed"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              {
+                                                "name": "term",
+                                                "term": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "application",
+                                                      "term": {
+                                                        "record": {
+                                                          "fields": [
+                                                            {
+                                                              "name": "function",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "function",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "elimination",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "record",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "typeName",
+                                                                                        "term": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "hydra.testing.ValidateCoreTermTestCase"}},
+                                                                                            "typeName": "hydra.core.Name"}}},
+                                                                                      {
+                                                                                        "name": "field",
+                                                                                        "term": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "typed"}},
+                                                                                            "typeName": "hydra.core.Name"}}}],
+                                                                                    "typeName": "hydra.core.Projection"}}},
+                                                                              "typeName": "hydra.core.Elimination"}}},
+                                                                        "typeName": "hydra.core.Function"}}},
+                                                                  "typeName": "hydra.core.Term"}}},
+                                                            {
+                                                              "name": "argument",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "original"},
+                                                                  "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                                          "typeName": "hydra.core.Application"}}},
+                                                    "typeName": "hydra.core.Term"}}}],
+                                            "typeName": "hydra.core.Field"}},
                                         {
                                           "record": {
                                             "fields": [
@@ -48506,6 +48911,66 @@
                                     "name": "fields",
                                     "term": {
                                       "list": [
+                                        {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "name",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "typed"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              {
+                                                "name": "term",
+                                                "term": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "application",
+                                                      "term": {
+                                                        "record": {
+                                                          "fields": [
+                                                            {
+                                                              "name": "function",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "function",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "elimination",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {
+                                                                                "name": "record",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "typeName",
+                                                                                        "term": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "hydra.testing.ValidateCoreTermTestCase"}},
+                                                                                            "typeName": "hydra.core.Name"}}},
+                                                                                      {
+                                                                                        "name": "field",
+                                                                                        "term": {
+                                                                                          "wrap": {
+                                                                                            "body": {"literal": {"string": "typed"}},
+                                                                                            "typeName": "hydra.core.Name"}}}],
+                                                                                    "typeName": "hydra.core.Projection"}}},
+                                                                              "typeName": "hydra.core.Elimination"}}},
+                                                                        "typeName": "hydra.core.Function"}}},
+                                                                  "typeName": "hydra.core.Term"}}},
+                                                            {
+                                                              "name": "argument",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "original"},
+                                                                  "function": {"function": {"elimination": {"wrap": "hydra.phantoms.TTerm"}}}}}}],
+                                                          "typeName": "hydra.core.Application"}}},
+                                                    "typeName": "hydra.core.Term"}}}],
+                                            "typeName": "hydra.core.Field"}},
                                         {
                                           "record": {
                                             "fields": [

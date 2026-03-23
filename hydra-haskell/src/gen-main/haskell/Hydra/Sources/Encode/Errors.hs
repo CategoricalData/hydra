@@ -258,7 +258,7 @@ module_ =
                                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.undefinedFieldError")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
               Core.Field {
-                Core.fieldName = (Core.Name "undefinedTerm"),
+                Core.fieldName = (Core.Name "undefinedTermVariable"),
                 Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
@@ -283,14 +283,14 @@ module_ =
                                   Core.fieldName = (Core.Name "name"),
                                   Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                     Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "undefinedTerm"))}))},
+                                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "undefinedTermVariable"))}))},
                                 Core.Field {
                                   Core.fieldName = (Core.Name "term"),
                                   Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.undefinedTermError")),
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.undefinedTermVariableError")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
               Core.Field {
-                Core.fieldName = (Core.Name "undefinedType"),
+                Core.fieldName = (Core.Name "untypedTermVariable"),
                 Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "y"),
                   Core.lambdaDomain = Nothing,
@@ -315,11 +315,11 @@ module_ =
                                   Core.fieldName = (Core.Name "name"),
                                   Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                     Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "undefinedType"))}))},
+                                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "untypedTermVariable"))}))},
                                 Core.Field {
                                   Core.fieldName = (Core.Name "term"),
                                   Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.undefinedTypeError")),
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.untypedTermVariableError")),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
               Core.Field {
                 Core.fieldName = (Core.Name "unexpectedTermVariant"),

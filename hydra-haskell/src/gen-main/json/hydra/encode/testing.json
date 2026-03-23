@@ -7231,6 +7231,43 @@
                                       "name": "name",
                                       "term": {
                                         "wrap": {
+                                          "body": {"literal": {"string": "typed"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {
+                                                      "field": "typed",
+                                                      "typeName": "hydra.testing.ValidateCoreTermTestCase"}}}}}},
+                                          "function": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "literal",
+                                                      "term": {
+                                                        "union": {
+                                                          "field": {"name": "boolean", "term": {"variable": "x"}},
+                                                          "typeName": "hydra.core.Literal"}}},
+                                                    "typeName": "hydra.core.Term"}},
+                                                "domain": [{"literal": {"boolean": {}}}],
+                                                "parameter": "x"}}}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
                                           "body": {"literal": {"string": "input"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {

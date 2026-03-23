@@ -48,8 +48,8 @@ error cx raw =
                       (Core.Name "duplicateField", (\input -> Eithers.map (\t -> Errors.ErrorDuplicateField t) (Core__.duplicateFieldError cx input))),
                       (Core.Name "other", (\input -> Eithers.map (\t -> Errors.ErrorOther t) (otherError cx input))),
                       (Core.Name "undefinedField", (\input -> Eithers.map (\t -> Errors.ErrorUndefinedField t) (Core__.undefinedFieldError cx input))),
-                      (Core.Name "undefinedTerm", (\input -> Eithers.map (\t -> Errors.ErrorUndefinedTerm t) (Core__.undefinedTermError cx input))),
-                      (Core.Name "undefinedType", (\input -> Eithers.map (\t -> Errors.ErrorUndefinedType t) (Core__.undefinedTypeError cx input))),
+                      (Core.Name "undefinedTermVariable", (\input -> Eithers.map (\t -> Errors.ErrorUndefinedTermVariable t) (Core__.undefinedTermVariableError cx input))),
+                      (Core.Name "untypedTermVariable", (\input -> Eithers.map (\t -> Errors.ErrorUntypedTermVariable t) (Core__.untypedTermVariableError cx input))),
                       (Core.Name "unexpectedTermVariant", (\input -> Eithers.map (\t -> Errors.ErrorUnexpectedTermVariant t) (Core__.unexpectedTermVariantError cx input))),
                       (Core.Name "unexpectedTypeVariant", (\input -> Eithers.map (\t -> Errors.ErrorUnexpectedTypeVariant t) (Core__.unexpectedTypeVariantError cx input))),
                       (Core.Name "unification", (\input -> Eithers.map (\t -> Errors.ErrorUnification t) (unificationError cx input)))]

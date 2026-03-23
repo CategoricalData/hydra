@@ -668,7 +668,7 @@
                                                                                 "pair": {
                                                                                   "@first": {
                                                                                     "wrap": {
-                                                                                      "body": {"literal": {"string": "undefinedTerm"}},
+                                                                                      "body": {"literal": {"string": "undefinedTermVariable"}},
                                                                                       "typeName": "hydra.core.Name"}},
                                                                                   "@second": {
                                                                                     "function": {
@@ -681,7 +681,7 @@
                                                                                                 "function": {
                                                                                                   "application": {
                                                                                                     "argument": {"variable": "cx"},
-                                                                                                    "function": {"variable": "hydra.decode.error.core.undefinedTermError"}}}}},
+                                                                                                    "function": {"variable": "hydra.decode.error.core.undefinedTermVariableError"}}}}},
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "argument": {
@@ -689,9 +689,9 @@
                                                                                                     "lambda": {
                                                                                                       "body": {
                                                                                                         "union": {
-                                                                                                          "field": {"name": "undefinedTerm", "term": {"variable": "t"}},
+                                                                                                          "field": {"name": "undefinedTermVariable", "term": {"variable": "t"}},
                                                                                                           "typeName": "hydra.errors.Error"}},
-                                                                                                      "domain": [{"variable": "hydra.error.core.UndefinedTermError"}],
+                                                                                                      "domain": [{"variable": "hydra.error.core.UndefinedTermVariableError"}],
                                                                                                       "parameter": "t"}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
@@ -700,7 +700,7 @@
                                                                                                         "body": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
-                                                                                                            "type": {"variable": "hydra.error.core.UndefinedTermError"}}},
+                                                                                                            "type": {"variable": "hydra.error.core.UndefinedTermVariableError"}}},
                                                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                                                     "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                                                         "domain": [{"variable": "hydra.core.Term"}],
@@ -721,7 +721,7 @@
                                                                                 "pair": {
                                                                                   "@first": {
                                                                                     "wrap": {
-                                                                                      "body": {"literal": {"string": "undefinedType"}},
+                                                                                      "body": {"literal": {"string": "untypedTermVariable"}},
                                                                                       "typeName": "hydra.core.Name"}},
                                                                                   "@second": {
                                                                                     "function": {
@@ -734,7 +734,7 @@
                                                                                                 "function": {
                                                                                                   "application": {
                                                                                                     "argument": {"variable": "cx"},
-                                                                                                    "function": {"variable": "hydra.decode.error.core.undefinedTypeError"}}}}},
+                                                                                                    "function": {"variable": "hydra.decode.error.core.untypedTermVariableError"}}}}},
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "argument": {
@@ -742,9 +742,9 @@
                                                                                                     "lambda": {
                                                                                                       "body": {
                                                                                                         "union": {
-                                                                                                          "field": {"name": "undefinedType", "term": {"variable": "t"}},
+                                                                                                          "field": {"name": "untypedTermVariable", "term": {"variable": "t"}},
                                                                                                           "typeName": "hydra.errors.Error"}},
-                                                                                                      "domain": [{"variable": "hydra.error.core.UndefinedTypeError"}],
+                                                                                                      "domain": [{"variable": "hydra.error.core.UntypedTermVariableError"}],
                                                                                                       "parameter": "t"}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
@@ -753,7 +753,7 @@
                                                                                                         "body": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
-                                                                                                            "type": {"variable": "hydra.error.core.UndefinedTypeError"}}},
+                                                                                                            "type": {"variable": "hydra.error.core.UntypedTermVariableError"}}},
                                                                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                                                                     "type": {"variable": "hydra.errors.DecodingError"}}}}}}},
                                                                                         "domain": [{"variable": "hydra.core.Term"}],

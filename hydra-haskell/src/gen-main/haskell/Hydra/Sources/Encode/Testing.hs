@@ -5261,6 +5261,34 @@ module_ =
                               Core.fieldName = (Core.Name "name"),
                               Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                 Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "typed"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "term"),
+                              Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                  Core.lambdaParameter = (Core.Name "x"),
+                                  Core.lambdaDomain = Nothing,
+                                  Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                                    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                                    Core.injectionField = Core.Field {
+                                      Core.fieldName = (Core.Name "literal"),
+                                      Core.fieldTerm = (Core.TermUnion (Core.Injection {
+                                        Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
+                                        Core.injectionField = Core.Field {
+                                          Core.fieldName = (Core.Name "boolean"),
+                                          Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))}))),
+                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                    Core.projectionTypeName = (Core.Name "hydra.testing.ValidateCoreTermTestCase"),
+                                    Core.projectionField = (Core.Name "typed")})))),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                        (Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "name"),
+                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                 Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "input"))}))},
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
@@ -5270,7 +5298,7 @@ module_ =
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.testing.ValidateCoreTermTestCase"),
                                     Core.projectionField = (Core.Name "input")})))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                         (Core.TermRecord (Core.Record {
                           Core.recordTypeName = (Core.Name "hydra.core.Field"),
                           Core.recordFields = [

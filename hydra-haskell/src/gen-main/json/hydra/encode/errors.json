@@ -301,7 +301,7 @@
                         "domain": [{"variable": "hydra.error.core.UndefinedFieldError"}],
                         "parameter": "y"}}}},
                 {
-                  "name": "undefinedTerm",
+                  "name": "undefinedTermVariable",
                   "term": {
                     "function": {
                       "lambda": {
@@ -327,21 +327,21 @@
                                               "name": "name",
                                               "term": {
                                                 "wrap": {
-                                                  "body": {"literal": {"string": "undefinedTerm"}},
+                                                  "body": {"literal": {"string": "undefinedTermVariable"}},
                                                   "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
                                               "term": {
                                                 "application": {
                                                   "argument": {"variable": "y"},
-                                                  "function": {"variable": "hydra.encode.error.core.undefinedTermError"}}}}],
+                                                  "function": {"variable": "hydra.encode.error.core.undefinedTermVariableError"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [{"variable": "hydra.error.core.UndefinedTermError"}],
+                        "domain": [{"variable": "hydra.error.core.UndefinedTermVariableError"}],
                         "parameter": "y"}}}},
                 {
-                  "name": "undefinedType",
+                  "name": "untypedTermVariable",
                   "term": {
                     "function": {
                       "lambda": {
@@ -367,18 +367,18 @@
                                               "name": "name",
                                               "term": {
                                                 "wrap": {
-                                                  "body": {"literal": {"string": "undefinedType"}},
+                                                  "body": {"literal": {"string": "untypedTermVariable"}},
                                                   "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
                                               "term": {
                                                 "application": {
                                                   "argument": {"variable": "y"},
-                                                  "function": {"variable": "hydra.encode.error.core.undefinedTypeError"}}}}],
+                                                  "function": {"variable": "hydra.encode.error.core.untypedTermVariableError"}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": [{"variable": "hydra.error.core.UndefinedTypeError"}],
+                        "domain": [{"variable": "hydra.error.core.UntypedTermVariableError"}],
                         "parameter": "y"}}}},
                 {
                   "name": "unexpectedTermVariant",
