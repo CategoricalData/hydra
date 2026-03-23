@@ -61,6 +61,24 @@ An orchestrator script runs all three, compares their output, and displays a tim
 
 See the [ValidatePG README](../../hydra-ext/demos/validatepg/README.md) for setup and usage.
 
+## SHACL (RDF data generation and validation)
+
+This demo generates [SHACL](https://www.w3.org/TR/shacl/) shapes from Hydra's kernel types,
+encodes kernel modules as conforming RDF data, and validates the data against the shapes
+using [pyshacl](https://pypi.org/project/pyshacl/).
+Intentionally non-conforming data is also generated and validated to demonstrate that the
+shapes catch constraint violations (missing required properties, wrong datatypes, etc.).
+
+The demo uses Hydra's own type system as the subject: all kernel type elements that the SHACL
+language can represent (records, unions, literals, newtypes, named type references, collections)
+become SHACL shapes. The kernel modules serialized as JSON in `hydra-haskell/src/gen-main/json/`
+are decoded back into `Module` terms and encoded as RDF data conforming to those shapes.
+
+The demo currently runs in Haskell. The SHACL coder and RDF serde are generated into Java and
+Python as well, so translingual support is feasible.
+
+See the [SHACL README](../../hydra-ext/demos/shacl/README.md) for setup and usage.
+
 ## Avro to property graphs
 
 This demo transforms Avro-schema'd JSON data into either GraphSON property graphs or SHACL RDF.
