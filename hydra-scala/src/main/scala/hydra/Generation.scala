@@ -101,7 +101,7 @@ object Generation:
   /** Generate source files and write them to disk. Returns number of files written. */
   def generateSources(
       coder: Module => Seq[Definition] => hydra.context.Context => Graph =>
-        Either[hydra.context.InContext[hydra.error.Error], Map[String, String]],
+        Either[hydra.context.InContext[hydra.errors.Error], Map[String, String]],
       language: hydra.coders.Language,
       doInfer: Boolean,
       doExpand: Boolean,
