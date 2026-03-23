@@ -656,6 +656,34 @@
                    nil t_ t_ t_ t_)))))
 
 ;; ============================================================================
+;; Regex
+;; ============================================================================
+
+(defun register-regex ()
+  (let ((ns_ "hydra.lib.regex")
+        (s (tc-string))
+        (b (tc-boolean)))
+    (list
+      (cons (qname ns_ "find")       (prim2 (qname ns_ "find")
+                                              hydra_lib_regex_find
+                                              nil s s (tc-optional s)))
+      (cons (qname ns_ "findAll")    (prim2 (qname ns_ "findAll")
+                                              hydra_lib_regex_find_all
+                                              nil s s (tc-list s)))
+      (cons (qname ns_ "matches")    (prim2 (qname ns_ "matches")
+                                              hydra_lib_regex_matches
+                                              nil s s b))
+      (cons (qname ns_ "replace")    (prim3 (qname ns_ "replace")
+                                              hydra_lib_regex_replace
+                                              nil s s s s))
+      (cons (qname ns_ "replaceAll") (prim3 (qname ns_ "replaceAll")
+                                              hydra_lib_regex_replace_all
+                                              nil s s s s))
+      (cons (qname ns_ "split")      (prim2 (qname ns_ "split")
+                                              hydra_lib_regex_split
+                                              nil s s (tc-list s))))))
+
+;; ============================================================================
 ;; Standard library: all primitives combined
 ;; ============================================================================
 
@@ -672,6 +700,7 @@
     (register-math)
     (register-maybes)
     (register-pairs)
+    (register-regex)
     (register-sets)
     (register-strings)
     (register-annotations)))

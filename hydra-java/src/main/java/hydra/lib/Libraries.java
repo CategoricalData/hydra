@@ -48,6 +48,7 @@ public class Libraries {
         prims.addAll(mathPrimitives());
         prims.addAll(maybesPrimitives());
         prims.addAll(pairsPrimitives());
+        prims.addAll(regexPrimitives());
         prims.addAll(setsPrimitives());
         prims.addAll(stringsPrimitives());
 
@@ -300,6 +301,16 @@ public class Libraries {
                 new hydra.lib.pairs.Bimap(),
                 new hydra.lib.pairs.First(),
                 new hydra.lib.pairs.Second());
+    }
+
+    private static List<PrimitiveFunction> regexPrimitives() {
+        return Arrays.asList(
+                new hydra.lib.regex.Find(),
+                new hydra.lib.regex.FindAll(),
+                new hydra.lib.regex.Matches(),
+                new hydra.lib.regex.Replace(),
+                new hydra.lib.regex.ReplaceAll(),
+                new hydra.lib.regex.Split());
     }
 
     private static List<PrimitiveFunction> setsPrimitives() {
