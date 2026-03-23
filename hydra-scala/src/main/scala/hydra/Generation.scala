@@ -67,19 +67,13 @@ object Generation:
         hydra.codeGeneration.namespaceToPath(ns) + ".json"
       val file = new File(filePath)
       if !file.exists() then
-        System.err.println(s"  Warning: skipping missing module: $ns")
-        Seq.empty
+        throw new RuntimeException(s"Missing module file: $filePath")
       else
-        try
-          val jsonValue = parseJsonFile(filePath)
-          val mod = decodeModuleFromJson(bsGraph, schemaMap, jsonValue)
-          val typedBindings = mod.elements.count(_.`type`.isDefined)
-          println(s"  Loaded: $ns (${mod.elements.size} bindings, $typedBindings typed)")
-          Seq(mod)
-        catch
-          case e: Exception =>
-            System.err.println(s"  Warning: error loading $ns: ${e.getMessage}")
-            Seq.empty
+        val jsonValue = parseJsonFile(filePath)
+        val mod = decodeModuleFromJson(bsGraph, schemaMap, jsonValue)
+        val typedBindings = mod.elements.count(_.`type`.isDefined)
+        println(s"  Loaded: $ns (${mod.elements.size} bindings, $typedBindings typed)")
+        Seq(mod)
     }
 
   /** Read namespace list from a JSON manifest file. */
@@ -96,7 +90,7 @@ object Generation:
 
   /** Filter to kernel-only modules (exclude hydra.ext.*) */
   def filterKernelModules(mods: Seq[Module]): Seq[Module] =
-    mods.filter(m => !m.namespace.startsWith("hydra.ext."))
+    mods.filter(m => !m.namespace.startsWith("hydra.ext.") && !m.namespace.startsWith("hydra.json.yaml."))
 
   /** Generate source files and write them to disk. Returns number of files written. */
   def generateSources(

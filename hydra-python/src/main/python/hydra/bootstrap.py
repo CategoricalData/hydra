@@ -63,7 +63,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Bootstrap Hydra code generation from JSON modules")
     parser.add_argument("--target", required=True,
-                        choices=["haskell", "java", "python",
+                        choices=["haskell", "java", "python", "scala",
                                  "clojure", "scheme", "common-lisp", "emacs-lisp"],
                         help="Target language for code generation")
     parser.add_argument("--json-dir", required=True,
@@ -182,6 +182,9 @@ def main():
         write_java(os.path.join(out_main, "java"), all_main_mods, mods_to_generate)
     elif args.target == "python":
         write_python(os.path.join(out_main, "python"), all_main_mods, mods_to_generate)
+    elif args.target == "scala":
+        from hydra.generation import write_scala
+        write_scala(os.path.join(out_main, "scala"), all_main_mods, mods_to_generate)
     elif args.target in _lisp_dialects:
         dialect_name, _ext = _lisp_dialects[args.target]
         write_lisp_dialect(os.path.join(out_main, args.target), dialect_name, _ext,
@@ -189,7 +192,7 @@ def main():
 
     step_time = time.time() - step_start
 
-    ext = {"java": ".java", "python": ".py", "haskell": ".hs",
+    ext = {"java": ".java", "python": ".py", "haskell": ".hs", "scala": ".scala",
            "clojure": ".clj", "scheme": ".scm", "common-lisp": ".lisp",
            "emacs-lisp": ".el"}[args.target]
     main_file_count = _count_files(os.path.join(out_dir, "src/gen-main"), ext)
