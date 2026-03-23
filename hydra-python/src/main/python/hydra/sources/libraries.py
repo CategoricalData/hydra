@@ -842,6 +842,35 @@ def register_sets_primitives() -> dict[Name, Primitive]:
     return primitives
 
 
+def register_regex_primitives() -> dict[Name, Primitive]:
+    """Register all regex primitive functions."""
+    from hydra.lib import regex
+
+    namespace = "hydra.lib.regex"
+    primitives: dict[Name, Primitive] = {}
+
+    primitives[qname(namespace, "find")] = prims.prim2(
+        qname(namespace, "find"), regex.find, [], prims.string(), prims.string(), prims.optional(prims.string())
+    )
+    primitives[qname(namespace, "findAll")] = prims.prim2(
+        qname(namespace, "findAll"), regex.find_all, [], prims.string(), prims.string(), prims.list_(prims.string())
+    )
+    primitives[qname(namespace, "matches")] = prims.prim2(
+        qname(namespace, "matches"), regex.matches, [], prims.string(), prims.string(), prims.boolean()
+    )
+    primitives[qname(namespace, "replace")] = prims.prim3(
+        qname(namespace, "replace"), regex.replace, [], prims.string(), prims.string(), prims.string(), prims.string()
+    )
+    primitives[qname(namespace, "replaceAll")] = prims.prim3(
+        qname(namespace, "replaceAll"), regex.replace_all, [], prims.string(), prims.string(), prims.string(), prims.string()
+    )
+    primitives[qname(namespace, "split")] = prims.prim2(
+        qname(namespace, "split"), regex.split, [], prims.string(), prims.string(), prims.list_(prims.string())
+    )
+
+    return primitives
+
+
 def register_strings_primitives() -> dict[Name, Primitive]:
     """Register all string primitive functions."""
     from hydra.lib import strings
@@ -1167,6 +1196,7 @@ def standard_library() -> dict[Name, Primitive]:
     primitives.update(register_math_primitives())
     primitives.update(register_maybes_primitives())
     primitives.update(register_pairs_primitives())
+    primitives.update(register_regex_primitives())
     primitives.update(register_sets_primitives())
     primitives.update(register_strings_primitives())
     return primitives

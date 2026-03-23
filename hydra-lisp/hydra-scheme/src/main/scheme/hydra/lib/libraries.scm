@@ -15,6 +15,7 @@
           (hydra lib math)
           (hydra lib maybes)
           (hydra lib pairs)
+          (hydra lib regex)
           (hydra lib sets)
           (hydra lib strings))
   (export standard-library)
@@ -577,6 +578,34 @@
             (cons (qname ns "showString")   (prim1 (qname ns "showString")   hydra_lib_literals_show_string   #f s s))))))
 
     ;; ============================================================================
+    ;; Regex
+    ;; ============================================================================
+
+    (define (register-regex)
+      (let ((ns "hydra.lib.regex")
+            (s (tc-string))
+            (b (tc-boolean)))
+        (list
+          (cons (qname ns "find")       (prim2 (qname ns "find")
+                                                hydra_lib_regex_find
+                                                #f s s (tc-optional s)))
+          (cons (qname ns "findAll")    (prim2 (qname ns "findAll")
+                                                hydra_lib_regex_find_all
+                                                #f s s (tc-list s)))
+          (cons (qname ns "matches")    (prim2 (qname ns "matches")
+                                                hydra_lib_regex_matches
+                                                #f s s b))
+          (cons (qname ns "replace")    (prim3 (qname ns "replace")
+                                                hydra_lib_regex_replace
+                                                #f s s s s))
+          (cons (qname ns "replaceAll") (prim3 (qname ns "replaceAll")
+                                                hydra_lib_regex_replace_all
+                                                #f s s s s))
+          (cons (qname ns "split")      (prim2 (qname ns "split")
+                                                hydra_lib_regex_split
+                                                #f s s (tc-list s))))))
+
+    ;; ============================================================================
     ;; Standard library: all primitives combined
     ;; ============================================================================
 
@@ -592,6 +621,7 @@
         (register-math)
         (register-maybes)
         (register-pairs)
+        (register-regex)
         (register-sets)
         (register-strings)))
 

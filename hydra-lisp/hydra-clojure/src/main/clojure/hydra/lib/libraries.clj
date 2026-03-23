@@ -10,6 +10,7 @@
             [hydra.lib.math :as math]
             [hydra.lib.maybes :as maybes]
             [hydra.lib.pairs :as pairs]
+            [hydra.lib.regex :as regex]
             [hydra.lib.sets :as sets]
             [hydra.lib.strings :as strings]))
 
@@ -441,6 +442,33 @@
      (qname ns_ "unions")       (p/prim1 (qname ns_ "unions")   sets/hydra_lib_sets_unions   [] (p/tc-list (p/tc-set a)) (p/tc-set a) ord-a)}))
 
 ;; ============================================================
+;; Regex
+;; ============================================================
+
+(defn register-regex []
+  (let [ns_ "hydra.lib.regex"
+        s (p/tc-string)
+        b (p/tc-boolean)]
+    {(qname ns_ "find")       (p/prim2 (qname ns_ "find")
+                                        (fn [pat input] ((regex/hydra_lib_regex_find pat) input))
+                                        [] s s (p/tc-optional s))
+     (qname ns_ "findAll")    (p/prim2 (qname ns_ "findAll")
+                                        (fn [pat input] ((regex/hydra_lib_regex_find_all pat) input))
+                                        [] s s (p/tc-list s))
+     (qname ns_ "matches")    (p/prim2 (qname ns_ "matches")
+                                        (fn [pat input] ((regex/hydra_lib_regex_matches pat) input))
+                                        [] s s b)
+     (qname ns_ "replace")    (p/prim3 (qname ns_ "replace")
+                                        (fn [pat repl input] (((regex/hydra_lib_regex_replace pat) repl) input))
+                                        [] s s s s)
+     (qname ns_ "replaceAll") (p/prim3 (qname ns_ "replaceAll")
+                                        (fn [pat repl input] (((regex/hydra_lib_regex_replace_all pat) repl) input))
+                                        [] s s s s)
+     (qname ns_ "split")      (p/prim2 (qname ns_ "split")
+                                        (fn [pat input] ((regex/hydra_lib_regex_split pat) input))
+                                        [] s s (p/tc-list s))}))
+
+;; ============================================================
 ;; Strings
 ;; ============================================================
 
@@ -648,6 +676,7 @@
    (register-math)
    (register-maybes)
    (register-pairs)
+   (register-regex)
    (register-sets)
    (register-strings)
    (register-annotations)))
