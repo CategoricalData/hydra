@@ -31,6 +31,7 @@ module_ = Module ns elements
       toBinding math,
       toBinding maybes,
       toBinding pairs,
+      toBinding regex,
       toBinding sets,
       toBinding strings,
       toBinding typeclass,
@@ -275,6 +276,14 @@ module_ = Module ns elements
       toBinding setsUnion,
       toBinding setsUnions,
 
+      -- regex primitives
+      toBinding regexFind,
+      toBinding regexFindAll,
+      toBinding regexMatches,
+      toBinding regexReplace,
+      toBinding regexReplaceAll,
+      toBinding regexSplit,
+
       -- strings primitives
       toBinding stringsCat,
       toBinding stringsCat2,
@@ -338,6 +347,9 @@ maybes = defineNs "maybes" "hydra.lib.maybes"
 
 pairs :: TBinding Namespace
 pairs = defineNs "pairs" "hydra.lib.pairs"
+
+regex :: TBinding Namespace
+regex = defineNs "regex" "hydra.lib.regex"
 
 sets :: TBinding Namespace
 sets = defineNs "sets" "hydra.lib.sets"
@@ -598,6 +610,15 @@ setsSize         = defineName "setsSize" "hydra.lib.sets" "size"
 setsToList       = defineName "setsToList" "hydra.lib.sets" "toList"
 setsUnion        = defineName "setsUnion" "hydra.lib.sets" "union"
 setsUnions       = defineName "setsUnions" "hydra.lib.sets" "unions"
+
+-- Regex primitives
+
+regexFind       = defineName "regexFind" "hydra.lib.regex" "find"
+regexFindAll    = defineName "regexFindAll" "hydra.lib.regex" "findAll"
+regexMatches    = defineName "regexMatches" "hydra.lib.regex" "matches"
+regexReplace    = defineName "regexReplace" "hydra.lib.regex" "replace"
+regexReplaceAll = defineName "regexReplaceAll" "hydra.lib.regex" "replaceAll"
+regexSplit      = defineName "regexSplit" "hydra.lib.regex" "split"
 
 -- Strings primitives
 
