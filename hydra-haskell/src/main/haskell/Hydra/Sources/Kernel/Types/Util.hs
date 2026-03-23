@@ -27,6 +27,8 @@ module_ = Module ns elements [Context.ns, Core.ns, Error.ns] [Context.ns, Core.n
       caseConvention,
       coder,
       comparison,
+      either_,
+      pair,
       precision]
 
 adapter :: Binding
@@ -80,6 +82,28 @@ comparison = define "Comparison" $
     "lessThan",
     "equalTo",
     "greaterThan"]
+
+either_ :: Binding
+either_ = define "Either" $
+  doc "A named union type equivalent to the built-in Either type constructor, for use in languages that lack anonymous sum types" $
+  T.forAlls ["a", "b"] $ T.union [
+    "left">:
+      doc "The left alternative"
+      (T.var "a"),
+    "right">:
+      doc "The right alternative"
+      (T.var "b")]
+
+pair :: Binding
+pair = define "Pair" $
+  doc "A named record type equivalent to the built-in Pair type constructor, for use in languages that lack anonymous product types" $
+  T.forAlls ["a", "b"] $ T.record [
+    "first">:
+      doc "The first component"
+      (T.var "a"),
+    "second">:
+      doc "The second component"
+      (T.var "b")]
 
 precision :: Binding
 precision = define "Precision" $
