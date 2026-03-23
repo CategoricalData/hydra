@@ -1,5 +1,7 @@
 (require 'cl-lib)
 
+(cl-defstruct hydra_core_name value)
+
 (cl-defstruct hydra_core_annotated_term body annotation)
 
 (cl-defstruct hydra_core_annotated_type body annotation)
@@ -47,8 +49,6 @@
 (defvar hydra_core_literal_type-variants (list :binary :boolean :float :integer :string))
 
 (cl-defstruct hydra_core_map_type keys values)
-
-(cl-defstruct hydra_core_name value)
 
 (cl-defstruct hydra_core_projection type_name field)
 

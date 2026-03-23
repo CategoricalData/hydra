@@ -2651,7 +2651,7 @@
               "@key": "description",
               "@value": {
                 "literal": {
-                  "string": "Reorder definitions: types first, then topologically sorted terms"}}}],
+                  "string": "Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms"}}}],
           "body": {
             "function": {
               "lambda": {
@@ -2676,188 +2676,317 @@
                       "let": {
                         "bindings": [
                           {
-                            "name": "typeDefs",
+                            "name": "typeDefsRaw",
                             "term": {
                               "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"variable": "partitioned"},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                            "type": {"list": {"variable": "hydra.module.TypeDefinition"}}}},
-                                        "type": {"list": {"variable": "hydra.module.TermDefinition"}}}}}},
+                                "argument": {"variable": "partitioned"},
                                 "function": {
-                                  "application": {
-                                    "argument": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "union": {
-                                              "field": {"name": "type", "term": {"variable": "td"}},
-                                              "typeName": "hydra.module.Definition"}},
-                                          "domain": [{"variable": "hydra.module.TypeDefinition"}],
-                                          "parameter": "td"}}},
-                                    "function": {
+                                  "typeApplication": {
+                                    "body": {
                                       "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                            "type": {"variable": "hydra.module.TypeDefinition"}}},
-                                        "type": {"variable": "hydra.module.Definition"}}}}}}},
+                                        "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                        "type": {"list": {"variable": "hydra.module.TypeDefinition"}}}},
+                                    "type": {"list": {"variable": "hydra.module.TermDefinition"}}}}}},
                             "type": [
                               {
                                 "constraints": null,
-                                "type": {"list": {"variable": "hydra.module.Definition"}},
+                                "type": {"list": {"variable": "hydra.module.TypeDefinition"}},
                                 "variables": []}]}],
                         "body": {
                           "let": {
                             "bindings": [
                               {
-                                "name": "termDefsWrapped",
+                                "name": "nameFirst",
                                 "term": {
                                   "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"variable": "partitioned"},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
-                                                "type": {"list": {"variable": "hydra.module.TypeDefinition"}}}},
-                                            "type": {"list": {"variable": "hydra.module.TermDefinition"}}}}}},
+                                    "argument": {"variable": "typeDefsRaw"},
                                     "function": {
                                       "application": {
                                         "argument": {
                                           "function": {
                                             "lambda": {
                                               "body": {
-                                                "union": {
-                                                  "field": {"name": "term", "term": {"variable": "td"}},
-                                                  "typeName": "hydra.module.Definition"}},
-                                              "domain": [{"variable": "hydra.module.TermDefinition"}],
+                                                "application": {
+                                                  "argument": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "hydra.core.Name"}},
+                                                      "typeName": "hydra.core.Name"}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "td"},
+                                                          "function": {
+                                                            "function": {
+                                                              "elimination": {
+                                                                "record": {"field": "name", "typeName": "hydra.module.TypeDefinition"}}}}}},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                          "type": {"variable": "hydra.core.Name"}}}}}}},
+                                              "domain": [{"variable": "hydra.module.TypeDefinition"}],
                                               "parameter": "td"}}},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {
-                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                "type": {"variable": "hydra.module.TermDefinition"}}},
-                                            "type": {"variable": "hydra.module.Definition"}}}}}}},
+                                            "body": {"function": {"primitive": "hydra.lib.lists.filter"}},
+                                            "type": {"variable": "hydra.module.TypeDefinition"}}}}}}},
                                 "type": [
                                   {
                                     "constraints": null,
-                                    "type": {"list": {"variable": "hydra.module.Definition"}},
+                                    "type": {"list": {"variable": "hydra.module.TypeDefinition"}},
                                     "variables": []}]}],
                             "body": {
                               "let": {
                                 "bindings": [
                                   {
-                                    "name": "sortedTermDefs",
+                                    "name": "nameRest",
                                     "term": {
                                       "application": {
-                                        "argument": {
+                                        "argument": {"variable": "typeDefsRaw"},
+                                        "function": {
                                           "application": {
-                                            "argument": {"variable": "termDefsWrapped"},
+                                            "argument": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "wrap": {
+                                                              "body": {"literal": {"string": "hydra.core.Name"}},
+                                                              "typeName": "hydra.core.Name"}},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {"variable": "td"},
+                                                                  "function": {
+                                                                    "function": {
+                                                                      "elimination": {
+                                                                        "record": {"field": "name", "typeName": "hydra.module.TypeDefinition"}}}}}},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                  "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                      "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
+                                                  "domain": [{"variable": "hydra.module.TypeDefinition"}],
+                                                  "parameter": "td"}}},
                                             "function": {
+                                              "typeApplication": {
+                                                "body": {"function": {"primitive": "hydra.lib.lists.filter"}},
+                                                "type": {"variable": "hydra.module.TypeDefinition"}}}}}}},
+                                    "type": [
+                                      {
+                                        "constraints": null,
+                                        "type": {"list": {"variable": "hydra.module.TypeDefinition"}},
+                                        "variables": []}]}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "typeDefs",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "list": [
+                                                {
+                                                  "application": {
+                                                    "argument": {"variable": "nameFirst"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "union": {
+                                                                  "field": {"name": "type", "term": {"variable": "td"}},
+                                                                  "typeName": "hydra.module.Definition"}},
+                                                              "domain": [{"variable": "hydra.module.TypeDefinition"}],
+                                                              "parameter": "td"}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                "type": {"variable": "hydra.module.TypeDefinition"}}},
+                                                            "type": {"variable": "hydra.module.Definition"}}}}}}},
+                                                {
+                                                  "application": {
+                                                    "argument": {"variable": "nameRest"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "union": {
+                                                                  "field": {"name": "type", "term": {"variable": "td"}},
+                                                                  "typeName": "hydra.module.Definition"}},
+                                                              "domain": [{"variable": "hydra.module.TypeDefinition"}],
+                                                              "parameter": "td"}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                "type": {"variable": "hydra.module.TypeDefinition"}}},
+                                                            "type": {"variable": "hydra.module.Definition"}}}}}}}]},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                "type": {"variable": "hydra.module.Definition"}}}}},
+                                        "type": [
+                                          {
+                                            "constraints": null,
+                                            "type": {"list": {"variable": "hydra.module.Definition"}},
+                                            "variables": []}]}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "termDefsWrapped",
+                                            "term": {
                                               "application": {
                                                 "argument": {
-                                                  "function": {
-                                                    "lambda": {
-                                                      "body": {
-                                                        "application": {
-                                                          "argument": {"variable": "d"},
-                                                          "function": {
-                                                            "function": {
-                                                              "elimination": {
-                                                                "union": {
-                                                                  "cases": [
-                                                                    {
-                                                                      "name": "term",
-                                                                      "term": {
-                                                                        "function": {
-                                                                          "lambda": {
-                                                                            "body": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "td"},
-                                                                                        "function": {
-                                                                                          "function": {
-                                                                                            "elimination": {
-                                                                                              "record": {"field": "term", "typeName": "hydra.module.TermDefinition"}}}}}},
-                                                                                    "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
-                                                                                    "type": {"variable": "hydra.core.Name"}}}}},
-                                                                            "domain": [{"variable": "hydra.module.TermDefinition"}],
-                                                                            "parameter": "td"}}}}],
-                                                                  "default": [
-                                                                    {
-                                                                      "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}],
-                                                                  "typeName": "hydra.module.Definition"}}}}}},
-                                                      "domain": [{"variable": "hydra.module.Definition"}],
-                                                      "parameter": "d"}}},
+                                                  "application": {
+                                                    "argument": {"variable": "partitioned"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                            "type": {"list": {"variable": "hydra.module.TypeDefinition"}}}},
+                                                        "type": {"list": {"variable": "hydra.module.TermDefinition"}}}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
                                                       "function": {
                                                         "lambda": {
                                                           "body": {
-                                                            "application": {
-                                                              "argument": {"variable": "d"},
-                                                              "function": {
-                                                                "function": {
-                                                                  "elimination": {
-                                                                    "union": {
-                                                                      "cases": [
-                                                                        {
-                                                                          "name": "term",
-                                                                          "term": {
-                                                                            "function": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "td"},
-                                                                                    "function": {
-                                                                                      "function": {
-                                                                                        "elimination": {
-                                                                                          "record": {"field": "name", "typeName": "hydra.module.TermDefinition"}}}}}},
-                                                                                "domain": [{"variable": "hydra.module.TermDefinition"}],
-                                                                                "parameter": "td"}}}}],
-                                                                      "default": null,
-                                                                      "typeName": "hydra.module.Definition"}}}}}},
-                                                          "domain": [{"variable": "hydra.module.Definition"}],
-                                                          "parameter": "d"}}},
+                                                            "union": {
+                                                              "field": {"name": "term", "term": {"variable": "td"}},
+                                                              "typeName": "hydra.module.Definition"}},
+                                                          "domain": [{"variable": "hydra.module.TermDefinition"}],
+                                                          "parameter": "td"}}},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"variable": "hydra.sorting.topologicalSortNodes"},
-                                                            "type": {"variable": "hydra.module.Definition"}}},
-                                                        "type": {"variable": "hydra.core.Name"}}}}}}}}},
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
-                                            "type": {"variable": "hydra.module.Definition"}}}}},
-                                    "type": [
-                                      {
-                                        "constraints": null,
-                                        "type": {"list": {"variable": "hydra.module.Definition"}},
-                                        "variables": []}]}],
-                                "body": {
-                                  "application": {
-                                    "argument": {"list": [{"variable": "typeDefs"}, {"variable": "sortedTermDefs"}]},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
-                                        "type": {"variable": "hydra.module.Definition"}}}}}}}}}}}}},
+                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                            "type": {"variable": "hydra.module.TermDefinition"}}},
+                                                        "type": {"variable": "hydra.module.Definition"}}}}}}},
+                                            "type": [
+                                              {
+                                                "constraints": null,
+                                                "type": {"list": {"variable": "hydra.module.Definition"}},
+                                                "variables": []}]}],
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "sortedTermDefs",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "termDefsWrapped"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "d"},
+                                                                      "function": {
+                                                                        "function": {
+                                                                          "elimination": {
+                                                                            "union": {
+                                                                              "cases": [
+                                                                                {
+                                                                                  "name": "term",
+                                                                                  "term": {
+                                                                                    "function": {
+                                                                                      "lambda": {
+                                                                                        "body": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "td"},
+                                                                                                    "function": {
+                                                                                                      "function": {
+                                                                                                        "elimination": {
+                                                                                                          "record": {"field": "term", "typeName": "hydra.module.TermDefinition"}}}}}},
+                                                                                                "function": {"variable": "hydra.rewriting.freeVariablesInTerm"}}},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
+                                                                                                "type": {"variable": "hydra.core.Name"}}}}},
+                                                                                        "domain": [{"variable": "hydra.module.TermDefinition"}],
+                                                                                        "parameter": "td"}}}}],
+                                                                              "default": [
+                                                                                {
+                                                                                  "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}],
+                                                                              "typeName": "hydra.module.Definition"}}}}}},
+                                                                  "domain": [{"variable": "hydra.module.Definition"}],
+                                                                  "parameter": "d"}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "d"},
+                                                                          "function": {
+                                                                            "function": {
+                                                                              "elimination": {
+                                                                                "union": {
+                                                                                  "cases": [
+                                                                                    {
+                                                                                      "name": "term",
+                                                                                      "term": {
+                                                                                        "function": {
+                                                                                          "lambda": {
+                                                                                            "body": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "td"},
+                                                                                                "function": {
+                                                                                                  "function": {
+                                                                                                    "elimination": {
+                                                                                                      "record": {"field": "name", "typeName": "hydra.module.TermDefinition"}}}}}},
+                                                                                            "domain": [{"variable": "hydra.module.TermDefinition"}],
+                                                                                            "parameter": "td"}}}}],
+                                                                                  "default": null,
+                                                                                  "typeName": "hydra.module.Definition"}}}}}},
+                                                                      "domain": [{"variable": "hydra.module.Definition"}],
+                                                                      "parameter": "d"}}},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.sorting.topologicalSortNodes"},
+                                                                        "type": {"variable": "hydra.module.Definition"}}},
+                                                                    "type": {"variable": "hydra.core.Name"}}}}}}}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                        "type": {"variable": "hydra.module.Definition"}}}}},
+                                                "type": [
+                                                  {
+                                                    "constraints": null,
+                                                    "type": {"list": {"variable": "hydra.module.Definition"}},
+                                                    "variables": []}]}],
+                                            "body": {
+                                              "application": {
+                                                "argument": {"list": [{"variable": "typeDefs"}, {"variable": "sortedTermDefs"}]},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                    "type": {"variable": "hydra.module.Definition"}}}}}}}}}}}}}}}}}}},
                 "domain": [{"list": {"variable": "hydra.module.Definition"}}],
                 "parameter": "defs"}}}}},
       "type": [

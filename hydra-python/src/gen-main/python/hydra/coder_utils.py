@@ -381,14 +381,23 @@ def normalize_comment(s: str) -> str:
     return hydra.lib.logic.if_else(hydra.lib.strings.null(stripped()), (lambda : ""), (lambda : (last_idx := hydra.lib.math.sub(hydra.lib.strings.length(stripped()), 1), (last_char := hydra.lib.strings.char_at(last_idx, stripped()), hydra.lib.logic.if_else(hydra.lib.equality.equal(last_char, 46), (lambda : stripped()), (lambda : hydra.lib.strings.cat2(stripped(), "."))))[1])[1]))
 
 def reorder_defs(defs: frozenlist[hydra.module.Definition]) -> frozenlist[hydra.module.Definition]:
-    r"""Reorder definitions: types first, then topologically sorted terms."""
+    r"""Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms."""
 
     @lru_cache(1)
     def partitioned() -> tuple[frozenlist[hydra.module.TypeDefinition], frozenlist[hydra.module.TermDefinition]]:
         return hydra.schemas.partition_definitions(defs)
     @lru_cache(1)
+    def type_defs_raw() -> frozenlist[hydra.module.TypeDefinition]:
+        return hydra.lib.pairs.first(partitioned())
+    @lru_cache(1)
+    def name_first() -> frozenlist[hydra.module.TypeDefinition]:
+        return hydra.lib.lists.filter((lambda td: hydra.lib.equality.equal(td.name, hydra.core.Name("hydra.core.Name"))), type_defs_raw())
+    @lru_cache(1)
+    def name_rest() -> frozenlist[hydra.module.TypeDefinition]:
+        return hydra.lib.lists.filter((lambda td: hydra.lib.logic.not_(hydra.lib.equality.equal(td.name, hydra.core.Name("hydra.core.Name")))), type_defs_raw())
+    @lru_cache(1)
     def type_defs() -> frozenlist[hydra.module.Definition]:
-        return hydra.lib.lists.map((lambda td: cast(hydra.module.Definition, hydra.module.DefinitionType(td))), hydra.lib.pairs.first(partitioned()))
+        return hydra.lib.lists.concat((hydra.lib.lists.map((lambda td: cast(hydra.module.Definition, hydra.module.DefinitionType(td))), name_first()), hydra.lib.lists.map((lambda td: cast(hydra.module.Definition, hydra.module.DefinitionType(td))), name_rest())))
     @lru_cache(1)
     def term_defs_wrapped() -> frozenlist[hydra.module.Definition]:
         return hydra.lib.lists.map((lambda td: cast(hydra.module.Definition, hydra.module.DefinitionTerm(td))), hydra.lib.pairs.second(partitioned()))

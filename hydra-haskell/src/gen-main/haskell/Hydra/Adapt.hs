@@ -390,6 +390,82 @@ literalTypeSupported constraints lt =
                 _ -> True
       in (Logic.ifElse (Sets.member (Reflect.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (forType lt) False)
 
+-- | Prepare a float type, substituting unsupported types
+prepareFloatType :: Core.FloatType -> (Core.FloatType, ((Core.FloatValue -> Core.FloatValue), (S.Set String)))
+prepareFloatType ft =
+    case ft of
+      Core.FloatTypeBigfloat -> (Core.FloatTypeFloat64, ((\v -> case v of
+        Core.FloatValueBigfloat v1 -> Core.FloatValueFloat64 (Literals.bigfloatToFloat64 v1)
+        _ -> v), (Sets.fromList [
+        "replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"])))
+      _ -> prepareSame ft
+
+-- | Prepare an integer type, substituting unsupported types
+prepareIntegerType :: Core.IntegerType -> (Core.IntegerType, ((Core.IntegerValue -> Core.IntegerValue), (S.Set String)))
+prepareIntegerType it =
+    case it of
+      Core.IntegerTypeBigint -> (Core.IntegerTypeInt64, ((\v -> case v of
+        Core.IntegerValueBigint v1 -> Core.IntegerValueInt64 (Literals.bigintToInt64 v1)
+        _ -> v), (Sets.fromList [
+        "replace arbitrary-precision integers with 64-bit integers"])))
+      Core.IntegerTypeUint8 -> (Core.IntegerTypeInt8, ((\v -> case v of
+        Core.IntegerValueUint8 v1 -> Core.IntegerValueInt8 (Literals.bigintToInt8 (Literals.uint8ToBigint v1))
+        _ -> v), (Sets.fromList [
+        "replace unsigned 8-bit integers with signed 8-bit integers"])))
+      Core.IntegerTypeUint32 -> (Core.IntegerTypeInt32, ((\v -> case v of
+        Core.IntegerValueUint32 v1 -> Core.IntegerValueInt32 (Literals.bigintToInt32 (Literals.uint32ToBigint v1))
+        _ -> v), (Sets.fromList [
+        "replace unsigned 32-bit integers with signed 32-bit integers"])))
+      Core.IntegerTypeUint64 -> (Core.IntegerTypeInt64, ((\v -> case v of
+        Core.IntegerValueUint64 v1 -> Core.IntegerValueInt64 (Literals.bigintToInt64 (Literals.uint64ToBigint v1))
+        _ -> v), (Sets.fromList [
+        "replace unsigned 64-bit integers with signed 64-bit integers"])))
+      _ -> prepareSame it
+
+-- | Prepare a literal type, substituting unsupported types
+prepareLiteralType :: Core.LiteralType -> (Core.LiteralType, ((Core.Literal -> Core.Literal), (S.Set String)))
+prepareLiteralType at =
+    case at of
+      Core.LiteralTypeBinary -> (Core.LiteralTypeString, ((\v -> case v of
+        Core.LiteralBinary v1 -> Core.LiteralString (Literals.binaryToString v1)
+        _ -> v), (Sets.fromList [
+        "replace binary strings with character strings"])))
+      Core.LiteralTypeFloat v0 ->
+        let result = prepareFloatType v0
+            rtyp = Pairs.first result
+            rep = Pairs.first (Pairs.second result)
+            msgs = Pairs.second (Pairs.second result)
+        in (Core.LiteralTypeFloat rtyp, ((\v -> case v of
+          Core.LiteralFloat v1 -> Core.LiteralFloat (rep v1)
+          _ -> v), msgs))
+      Core.LiteralTypeInteger v0 ->
+        let result = prepareIntegerType v0
+            rtyp = Pairs.first result
+            rep = Pairs.first (Pairs.second result)
+            msgs = Pairs.second (Pairs.second result)
+        in (Core.LiteralTypeInteger rtyp, ((\v -> case v of
+          Core.LiteralInteger v1 -> Core.LiteralInteger (rep v1)
+          _ -> v), msgs))
+      _ -> prepareSame at
+
+-- | Prepare a type, substituting unsupported literal types
+prepareType :: t0 -> Core.Type -> (Core.Type, ((Core.Term -> Core.Term), (S.Set String)))
+prepareType cx typ =
+    case (Rewriting.deannotateType typ) of
+      Core.TypeLiteral v0 ->
+        let result = prepareLiteralType v0
+            rtyp = Pairs.first result
+            rep = Pairs.first (Pairs.second result)
+            msgs = Pairs.second (Pairs.second result)
+        in (Core.TypeLiteral rtyp, ((\v -> case v of
+          Core.TermLiteral v1 -> Core.TermLiteral (rep v1)
+          _ -> v), msgs))
+      _ -> prepareSame typ
+
+-- | Return a value unchanged with identity transform and no messages
+prepareSame :: Ord t2 => (t0 -> (t0, ((t1 -> t1), (S.Set t2))))
+prepareSame x = (x, ((\y -> y), Sets.empty))
+
 -- | Normalize a term by pushing TermTypeApplication inward past TermApplication and TermFunction (Lambda). This corrects structures produced by poly-let hoisting and eta expansion, where type applications from inference end up wrapping term applications or lambda abstractions instead of being directly on the polymorphic variable.
 pushTypeAppsInward :: Core.Term -> Core.Term
 pushTypeAppsInward term =

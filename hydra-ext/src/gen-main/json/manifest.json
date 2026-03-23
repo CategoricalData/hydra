@@ -226,7 +226,6 @@
     "hydra.ext.scala.coder",
     "hydra.ext.scala.language",
     "hydra.ext.scala.syntax",
-    "hydra.ext.scala.prepare",
     "hydra.ext.scala.serde",
     "hydra.ext.scala.utils",
     "hydra.ext.typeScript.language",

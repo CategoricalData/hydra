@@ -2,6 +2,9 @@
 
 (declare hydra_core_elimination-variants hydra_core_float_type-variants hydra_core_float_value-variants hydra_core_function-variants hydra_core_integer_type-variants hydra_core_integer_value-variants hydra_core_literal-variants hydra_core_literal_type-variants hydra_core_term-variants hydra_core_type-variants)
 
+(defrecord hydra_core_name [value])
+(defn make-hydra_core_name [value] (->hydra_core_name value))
+
 (defrecord hydra_core_annotated_term [body annotation])
 (defn make-hydra_core_annotated_term [body annotation] (->hydra_core_annotated_term body annotation))
 
@@ -65,9 +68,6 @@
 
 (defrecord hydra_core_map_type [keys values])
 (defn make-hydra_core_map_type [keys values] (->hydra_core_map_type keys values))
-
-(defrecord hydra_core_name [value])
-(defn make-hydra_core_name [value] (->hydra_core_name value))
 
 (defrecord hydra_core_projection [type_name field])
 (defn make-hydra_core_projection [type_name field] (->hydra_core_projection type_name field))
