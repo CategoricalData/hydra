@@ -115,6 +115,7 @@ module_ = Module ns elements
       toBinding encodeNamedType,
       toBinding encodeType,
       toBinding encodeTypeName,
+      toBinding encodeUnionFieldType,
       toBinding sanitize]
 
 define :: String -> TTerm a -> TBinding a
@@ -242,13 +243,24 @@ encodeNamedType = define "encodeNamedType" $
           G._ObjectTypeDefinition_Directives>>: nothing,
           G._ObjectTypeDefinition_FieldsDefinition>>: just (wrap G._FieldsDefinition (var "gfields"))]),
       _Type_union>>: lambda "rt" $
-        "values" <<~ (Eithers.mapList (lambda "f" $ encodeEnumFieldType @@ var "cx" @@ var "g" @@ var "f") (var "rt")) $
-        "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ var "typ") $
-        right (inject G._TypeDefinition G._TypeDefinition_enum $ record G._EnumTypeDefinition [
-          G._EnumTypeDefinition_Description>>: var "desc",
-          G._EnumTypeDefinition_Name>>: (encodeTypeName @@ var "prefixes" @@ var "name"),
-          G._EnumTypeDefinition_Directives>>: nothing,
-          G._EnumTypeDefinition_EnumValuesDefinition>>: just (wrap G._EnumValuesDefinition (var "values"))]),
+        Logic.ifElse (Schemas.isEnumRowType @@ var "rt")
+          -- Pure enum: all variants are unit-typed
+          ("values" <<~ (Eithers.mapList (lambda "f" $ encodeEnumFieldType @@ var "cx" @@ var "g" @@ var "f") (var "rt")) $
+           "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ var "typ") $
+           right (inject G._TypeDefinition G._TypeDefinition_enum $ record G._EnumTypeDefinition [
+             G._EnumTypeDefinition_Description>>: var "desc",
+             G._EnumTypeDefinition_Name>>: (encodeTypeName @@ var "prefixes" @@ var "name"),
+             G._EnumTypeDefinition_Directives>>: nothing,
+             G._EnumTypeDefinition_EnumValuesDefinition>>: just (wrap G._EnumValuesDefinition (var "values"))]))
+          -- Data-carrying union: encode as object type with nullable fields (one per variant)
+          ("gfields" <<~ (Eithers.mapList (lambda "f" $ encodeUnionFieldType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "f") (var "rt")) $
+           "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ var "typ") $
+           right (inject G._TypeDefinition G._TypeDefinition_object $ record G._ObjectTypeDefinition [
+             G._ObjectTypeDefinition_Description>>: var "desc",
+             G._ObjectTypeDefinition_Name>>: (encodeTypeName @@ var "prefixes" @@ var "name"),
+             G._ObjectTypeDefinition_ImplementsInterfaces>>: nothing,
+             G._ObjectTypeDefinition_Directives>>: nothing,
+             G._ObjectTypeDefinition_FieldsDefinition>>: just (wrap G._FieldsDefinition (var "gfields"))])),
       _Type_either>>: lambda "et" $
         encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@
           (inject _Type _Type_record $ list [
@@ -264,13 +276,30 @@ encodeNamedType = define "encodeNamedType" $
       _Type_set>>: lambda "st" $
         wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (inject _Type _Type_list (var "st")),
       _Type_map>>: lambda "mt" $
-        wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (inject _Type _Type_list (Core.mapTypeValues (var "mt"))),
+        encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@
+          (inject _Type _Type_record $ list [
+            Core.fieldType (Core.name $ string "key") (Core.mapTypeKeys (var "mt")),
+            Core.fieldType (Core.name $ string "value") (Core.mapTypeValues (var "mt"))]),
       _Type_literal>>: lambda "lt_" $
         wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (inject _Type _Type_literal (var "lt_")),
       _Type_variable>>: lambda "vn" $
         wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (inject _Type _Type_variable (var "vn")),
       _Type_wrap>>: lambda "wt" $
-        wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (var "wt")]
+        wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (var "wt"),
+      _Type_unit>>: constant $
+        wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (inject _Type _Type_literal (inject _LiteralType _LiteralType_boolean unit)),
+      -- Forall: strip the quantifier and encode the body type
+      _Type_forall>>: lambda "ft" $
+        encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@ (Core.forallTypeBody (var "ft")),
+      -- Type application: use the function type (strip the argument)
+      _Type_application>>: lambda "at" $
+        encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@ (Core.applicationTypeFunction (var "at")),
+      -- Function types: encode as a record with domain and codomain fields
+      _Type_function>>: lambda "ft" $
+        encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@
+          (inject _Type _Type_record $ list [
+            Core.fieldType (Core.name $ string "domain") (Core.functionTypeDomain (var "ft")),
+            Core.fieldType (Core.name $ string "codomain") (Core.functionTypeCodomain (var "ft"))])]
 
 -- | Helper: wrap a type in a record with a single "value" field
 wrapAsRecord :: TTerm Name -> TTerm Context -> TTerm Graph -> TTerm (M.Map Namespace String) -> TTerm Type -> TTerm (Either (InContext Error) G.TypeDefinition)
@@ -300,14 +329,26 @@ encodeType = define "encodeType" $
           _Type_literal>>: lambda "lt_" $
             Eithers.map (lambda "nt" $ inject G._Type G._Type_named (var "nt"))
               (encodeLiteralType @@ var "cx" @@ var "lt_"),
+          _Type_pair>>: constant $
+            right (inject G._Type G._Type_named (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (Core.name $ string "hydra.util.Pair")))),
+          _Type_either>>: constant $
+            right (inject G._Type G._Type_named (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (Core.name $ string "hydra.util.Either")))),
           _Type_record>>: constant $
             Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")) (var "cx"),
           _Type_union>>: constant $
             Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")) (var "cx"),
-          _Type_wrap>>: constant $
-            Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")) (var "cx"),
+          _Type_wrap>>: lambda "wt" $
+            encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (MetaTypes.optional (var "wt")),
           _Type_variable>>: lambda "n" $
-            right (inject G._Type G._Type_named (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (var "n"))))],
+            right (inject G._Type G._Type_named (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (var "n")))),
+          _Type_forall>>: lambda "ft" $
+            encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (MetaTypes.optional (Core.forallTypeBody (var "ft"))),
+          _Type_application>>: lambda "at" $
+            encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (MetaTypes.optional (Core.applicationTypeFunction (var "at"))),
+          _Type_function>>: constant $
+            right (inject G._Type G._Type_named (wrap G._NamedType (wrap G._Name (string "String")))),
+          _Type_unit>>: constant $
+            right (inject G._Type G._Type_named (wrap G._NamedType (wrap G._Name (string "Boolean"))))],
       -- Non-optional types become non-null
       _Type_list>>: lambda "et" $
         Eithers.map (lambda "gt" $ inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_list (wrap G._ListType (var "gt"))))
@@ -321,6 +362,12 @@ encodeType = define "encodeType" $
       _Type_literal>>: lambda "lt_" $
         Eithers.map (lambda "nt" $ inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_named (var "nt")))
           (encodeLiteralType @@ var "cx" @@ var "lt_"),
+      _Type_pair>>: constant $
+        right (inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_named
+          (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (Core.name $ string "hydra.util.Pair"))))),
+      _Type_either>>: constant $
+        right (inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_named
+          (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (Core.name $ string "hydra.util.Either"))))),
       _Type_record>>: constant $
         Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")) (var "cx"),
       _Type_union>>: constant $
@@ -328,8 +375,18 @@ encodeType = define "encodeType" $
       _Type_variable>>: lambda "n" $
         right (inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_named
           (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (var "n"))))),
-      _Type_wrap>>: constant $
-        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")) (var "cx")]
+      _Type_wrap>>: lambda "wt" $
+        encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "wt",
+      _Type_forall>>: lambda "ft" $
+        encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (Core.forallTypeBody (var "ft")),
+      _Type_application>>: lambda "at" $
+        encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (Core.applicationTypeFunction (var "at")),
+      _Type_function>>: lambda "ft" $
+        right (inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_named
+          (wrap G._NamedType (wrap G._Name (string "String"))))),
+      _Type_unit>>: constant $
+        right (inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_named
+          (wrap G._NamedType (wrap G._Name (string "Boolean")))))]
 
 -- | Encode a Hydra Name as a GraphQL Name with namespace prefix
 encodeTypeName :: TBinding (M.Map Namespace String -> Name -> G.Name)
@@ -342,6 +399,26 @@ encodeTypeName = define "encodeTypeName" $
       (lambda "ns_" $ Maybes.maybe (string "") ("p" ~> var "p") (Maps.lookup (var "ns_") (var "prefixes")))
       (var "mns")] $
     wrap G._Name (Strings.cat2 (var "prefix") (sanitize @@ var "local"))
+
+-- | Encode a union variant field type to a nullable GraphQL FieldDefinition.
+-- Unit-typed variants become Boolean fields; data-carrying variants use their actual type, made nullable.
+encodeUnionFieldType :: TBinding (Context -> Graph -> M.Map Namespace String -> FieldType -> Either (InContext Error) G.FieldDefinition)
+encodeUnionFieldType = define "encodeUnionFieldType" $
+  "cx" ~> "g" ~> lambda "prefixes" $ lambda "ft" $ lets [
+    "innerType">: Core.fieldTypeType $ var "ft",
+    "isUnit">: Schemas.isUnitType @@ (Rewriting.deannotateType @@ var "innerType"),
+    -- Unit variants use nullable Boolean; data-carrying variants use Maybe<innerType>
+    "effectiveType">: Logic.ifElse (var "isUnit")
+      (MetaTypes.optional (inject _Type _Type_literal (inject _LiteralType _LiteralType_boolean unit)))
+      (MetaTypes.optional (var "innerType"))] $
+    "gtype" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "effectiveType") $
+    "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ var "innerType") $
+    right (record G._FieldDefinition [
+      G._FieldDefinition_Description>>: var "desc",
+      G._FieldDefinition_Name>>: (encodeFieldName @@ (Core.fieldTypeName $ var "ft")),
+      G._FieldDefinition_ArgumentsDefinition>>: nothing,
+      G._FieldDefinition_Type>>: var "gtype",
+      G._FieldDefinition_Directives>>: nothing])
 
 -- | Sanitize a string for use as a GraphQL identifier
 sanitize :: TBinding (String -> String)
