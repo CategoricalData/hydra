@@ -43,6 +43,9 @@ maybes = Module.Namespace "hydra.lib.maybes"
 pairs :: Module.Namespace
 pairs = Module.Namespace "hydra.lib.pairs"
 
+regex :: Module.Namespace
+regex = Module.Namespace "hydra.lib.regex"
+
 sets :: Module.Namespace
 sets = Module.Namespace "hydra.lib.sets"
 
@@ -705,6 +708,24 @@ setsUnion = Core.Name "hydra.lib.sets.union"
 
 setsUnions :: Core.Name
 setsUnions = Core.Name "hydra.lib.sets.unions"
+
+regexFind :: Core.Name
+regexFind = Core.Name "hydra.lib.regex.find"
+
+regexFindAll :: Core.Name
+regexFindAll = Core.Name "hydra.lib.regex.findAll"
+
+regexMatches :: Core.Name
+regexMatches = Core.Name "hydra.lib.regex.matches"
+
+regexReplace :: Core.Name
+regexReplace = Core.Name "hydra.lib.regex.replace"
+
+regexReplaceAll :: Core.Name
+regexReplaceAll = Core.Name "hydra.lib.regex.replaceAll"
+
+regexSplit :: Core.Name
+regexSplit = Core.Name "hydra.lib.regex.split"
 
 stringsCat :: Core.Name
 stringsCat = Core.Name "hydra.lib.strings.cat"

@@ -294,6 +294,7 @@
     "hydra.test.lib.math",
     "hydra.test.lib.maybes",
     "hydra.test.lib.pairs",
+    "hydra.test.lib.regex",
     "hydra.test.lib.sets",
     "hydra.test.lib.strings",
     "hydra.test.hoisting.all",

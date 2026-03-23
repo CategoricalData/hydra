@@ -18,6 +18,7 @@ public interface TestSuite {
       hydra.test.lib.Math_.allTests(),
       hydra.test.lib.Maybes.allTests(),
       hydra.test.lib.Pairs.allTests(),
+      hydra.test.lib.Regex.allTests(),
       hydra.test.lib.Sets.allTests(),
       hydra.test.lib.Strings.allTests(),
       hydra.test.Annotations.allTests(),

@@ -92,6 +92,7 @@ standardNamespaces =
       (Module.Namespace "hydra.lib.math", "math"),
       (Module.Namespace "hydra.lib.maybes", "maybes"),
       (Module.Namespace "hydra.lib.pairs", "pairs"),
+      (Module.Namespace "hydra.lib.regex", "regex"),
       (Module.Namespace "hydra.lib.sets", "sets"),
       (Module.Namespace "hydra.lib.strings", "strings")]
 

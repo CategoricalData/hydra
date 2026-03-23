@@ -711,6 +711,14 @@ extractCodomain t =
       Core.TypeForall v0 -> extractCodomain (Core.forallTypeBody v0)
       _ -> t
 
+-- | Drop N domain types from a function type, returning the remaining type
+dropDomains :: Int -> Core.Type -> Core.Type
+dropDomains n t =
+    Logic.ifElse (Equality.lte n 0) t (case (Rewriting.deannotateType t) of
+      Core.TypeFunction v0 -> dropDomains (Math.sub n 1) (Core.functionTypeCodomain v0)
+      Core.TypeForall v0 -> dropDomains n (Core.forallTypeBody v0)
+      _ -> t)
+
 -- | Extract parameter names from a term
 extractParams :: Core.Term -> [Core.Name]
 extractParams t =
@@ -752,9 +760,9 @@ encodeComplexTermDef :: Context.Context -> Graph.Graph -> String -> Core.Term ->
 encodeComplexTermDef cx g lname term typ =
 
       let doms = extractDomains typ
-          cod = extractCodomain typ
           paramNames = extractParams term
           paramCount = Math.min (Lists.length paramNames) (Lists.length doms)
+          cod = dropDomains paramCount typ
           zippedParams = Lists.zip (Lists.take paramCount paramNames) (Lists.take paramCount doms)
           freeTypeVars =
                   Lists.filter (\v -> Logic.not (Lists.elem 46 (Strings.toList (Core.unName v)))) (Sets.toList (Rewriting.freeVariablesInType typ))
@@ -797,9 +805,9 @@ encodeLocalDef cx g outerTypeVars lname term typ =
       let freeTypeVars =
               Lists.filter (\v -> Logic.and (Logic.not (Lists.elem 46 (Strings.toList (Core.unName v)))) (Logic.not (Sets.member v outerTypeVars))) (Sets.toList (Rewriting.freeVariablesInType typ))
           doms = extractDomains typ
-          cod = extractCodomain typ
           paramNames = extractParams term
           paramCount = Math.min (Lists.length paramNames) (Lists.length doms)
+          cod = dropDomains paramCount typ
           zippedParams = Lists.zip (Lists.take paramCount paramNames) (Lists.take paramCount doms)
           letBindings = extractLetBindings term
           tparams = Lists.map (\tv -> Utils.stparam tv) freeTypeVars

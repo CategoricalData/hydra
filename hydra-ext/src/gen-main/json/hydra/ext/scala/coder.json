@@ -11629,6 +11629,116 @@
               "domain": {"variable": "hydra.core.Type"}}},
           "variables": []}]},
     {
+      "name": "hydra.ext.scala.coder.dropDomains",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Drop N domain types from a function type, returning the remaining type"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {"variable": "t"},
+                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                              "function": {
+                                "function": {
+                                  "elimination": {
+                                    "union": {
+                                      "cases": [
+                                        {
+                                          "name": "function",
+                                          "term": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "ft"},
+                                                        "function": {
+                                                          "function": {
+                                                            "elimination": {
+                                                              "record": {"field": "codomain", "typeName": "hydra.core.FunctionType"}}}}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"literal": {"integer": {"int32": 1}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "n"},
+                                                                "function": {"function": {"primitive": "hydra.lib.math.sub"}}}}}},
+                                                        "function": {"variable": "hydra.ext.scala.coder.dropDomains"}}}}},
+                                                "domain": [{"variable": "hydra.core.FunctionType"}],
+                                                "parameter": "ft"}}}},
+                                        {
+                                          "name": "forall",
+                                          "term": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "fa"},
+                                                        "function": {
+                                                          "function": {
+                                                            "elimination": {"record": {"field": "body", "typeName": "hydra.core.ForallType"}}}}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "n"},
+                                                        "function": {"variable": "hydra.ext.scala.coder.dropDomains"}}}}},
+                                                "domain": [{"variable": "hydra.core.ForallType"}],
+                                                "parameter": "fa"}}}}],
+                                      "default": [{"variable": "t"}],
+                                      "typeName": "hydra.core.Type"}}}}}},
+                          "function": {
+                            "application": {
+                              "argument": {"variable": "t"},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"literal": {"integer": {"int32": 0}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "n"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.equality.lte"}},
+                                              "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                      "type": {"variable": "hydra.core.Type"}}}}}}}}},
+                      "domain": [{"variable": "hydra.core.Type"}],
+                      "parameter": "t"}}},
+                "domain": [{"literal": {"integer": {"int32": {}}}}],
+                "parameter": "n"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Type"},
+                  "domain": {"variable": "hydra.core.Type"}}},
+              "domain": {"literal": {"integer": {"int32": {}}}}}},
+          "variables": []}]},
+    {
       "name": "hydra.ext.scala.coder.extractParams",
       "term": {
         "annotated": {
@@ -12052,17 +12162,6 @@
                                                     "type": {"list": {"variable": "hydra.core.Type"}},
                                                     "variables": []}]},
                                               {
-                                                "name": "cod",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {"variable": "typ"},
-                                                    "function": {"variable": "hydra.ext.scala.coder.extractCodomain"}}},
-                                                "type": [
-                                                  {
-                                                    "constraints": null,
-                                                    "type": {"variable": "hydra.core.Type"},
-                                                    "variables": []}]},
-                                              {
                                                 "name": "paramNames",
                                                 "term": {
                                                   "application": {
@@ -12098,6 +12197,20 @@
                                                   {
                                                     "constraints": null,
                                                     "type": {"literal": {"integer": {"int32": {}}}},
+                                                    "variables": []}]},
+                                              {
+                                                "name": "cod",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {"variable": "typ"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "paramCount"},
+                                                        "function": {"variable": "hydra.ext.scala.coder.dropDomains"}}}}},
+                                                "type": [
+                                                  {
+                                                    "constraints": null,
+                                                    "type": {"variable": "hydra.core.Type"},
                                                     "variables": []}]},
                                               {
                                                 "name": "zippedParams",
@@ -12820,17 +12933,6 @@
                                                           "type": {"list": {"variable": "hydra.core.Type"}},
                                                           "variables": []}]},
                                                     {
-                                                      "name": "cod",
-                                                      "term": {
-                                                        "application": {
-                                                          "argument": {"variable": "typ"},
-                                                          "function": {"variable": "hydra.ext.scala.coder.extractCodomain"}}},
-                                                      "type": [
-                                                        {
-                                                          "constraints": null,
-                                                          "type": {"variable": "hydra.core.Type"},
-                                                          "variables": []}]},
-                                                    {
                                                       "name": "paramNames",
                                                       "term": {
                                                         "application": {
@@ -12866,6 +12968,20 @@
                                                         {
                                                           "constraints": null,
                                                           "type": {"literal": {"integer": {"int32": {}}}},
+                                                          "variables": []}]},
+                                                    {
+                                                      "name": "cod",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "typ"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "paramCount"},
+                                                              "function": {"variable": "hydra.ext.scala.coder.dropDomains"}}}}},
+                                                      "type": [
+                                                        {
+                                                          "constraints": null,
+                                                          "type": {"variable": "hydra.core.Type"},
                                                           "variables": []}]},
                                                     {
                                                       "name": "zippedParams",

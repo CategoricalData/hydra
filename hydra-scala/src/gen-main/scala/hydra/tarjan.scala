@@ -24,6 +24,8 @@ def adjacencyListsToGraph[T0](edges0: Seq[Tuple2[T0, Seq[T0]]]): Tuple2[Map[Int,
   val indexedEdges: Seq[Tuple2[Int, Tuple2[T0, Seq[T0]]]] = hydra.lib.lists.zip[Int, Tuple2[T0, Seq[T0]]](hydra.lib.math.range(0)(hydra.lib.lists.length[Tuple2[T0,
     
     
+    
+    
      Seq[T0]]](sortedEdges)))(sortedEdges)
   val keyToVertex: Map[T0, Int] = hydra.lib.maps.fromList[T0, Int](hydra.lib.lists.map[Tuple2[Int, Tuple2[T0,
      Seq[T0]]], Tuple2[T0, Int]]((vkNeighbors: Tuple2[Int, Tuple2[T0, Seq[T0]]]) =>
@@ -116,6 +118,8 @@ def strongConnect(graph: Map[Int, Seq[Int]])(v: Int)(st: hydra.topology.TarjanSt
         {
           val low_w: Int = hydra.lib.maps.findWithDefault[Int, Int](hydra.constants.maxInt32)(w)(stAfter.lowLinks)
           hydra.topology.TarjanState(stAfter.counter, (stAfter.indices), hydra.lib.maps.insert[Int, Int](v)(hydra.lib.equality.min[Int](lowV2)(low_w))(stAfter.lowLinks),
+            
+            
             
             
              (stAfter.stack), (stAfter.onStack), (stAfter.sccs))

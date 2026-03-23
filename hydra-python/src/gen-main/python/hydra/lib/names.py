@@ -436,6 +436,20 @@ pairs_first = hydra.core.Name("hydra.lib.pairs.first")
 
 pairs_second = hydra.core.Name("hydra.lib.pairs.second")
 
+regex = hydra.module.Namespace("hydra.lib.regex")
+
+regex_find = hydra.core.Name("hydra.lib.regex.find")
+
+regex_find_all = hydra.core.Name("hydra.lib.regex.findAll")
+
+regex_matches = hydra.core.Name("hydra.lib.regex.matches")
+
+regex_replace = hydra.core.Name("hydra.lib.regex.replace")
+
+regex_replace_all = hydra.core.Name("hydra.lib.regex.replaceAll")
+
+regex_split = hydra.core.Name("hydra.lib.regex.split")
+
 sets = hydra.module.Namespace("hydra.lib.sets")
 
 sets_delete = hydra.core.Name("hydra.lib.sets.delete")

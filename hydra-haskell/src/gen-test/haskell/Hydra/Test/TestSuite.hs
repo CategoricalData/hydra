@@ -23,6 +23,7 @@ import qualified Hydra.Test.Lib.Maps as Maps
 import qualified Hydra.Test.Lib.Math as Math
 import qualified Hydra.Test.Lib.Maybes as Maybes
 import qualified Hydra.Test.Lib.Pairs as Pairs
+import qualified Hydra.Test.Lib.Regex as Regex
 import qualified Hydra.Test.Lib.Sets as Sets
 import qualified Hydra.Test.Lib.Strings as Strings
 import qualified Hydra.Test.Reduction as Reduction
@@ -57,6 +58,7 @@ allTests =
         Math.allTests,
         Maybes.allTests,
         Pairs.allTests,
+        Regex.allTests,
         Sets.allTests,
         Strings.allTests,
         Annotations.allTests,

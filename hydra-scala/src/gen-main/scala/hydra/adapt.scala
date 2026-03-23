@@ -494,7 +494,7 @@ def prepareLiteralType(at: hydra.core.LiteralType): Tuple2[hydra.core.LiteralTyp
        scala.collection.immutable.Set[scala.Predef.String]]] = hydra.adapt.prepareFloatType(v_LiteralType_float_ft)
     val rtyp: hydra.core.FloatType = hydra.lib.pairs.first[hydra.core.FloatType, Tuple2[(hydra.core.FloatValue) => hydra.core.FloatValue,
        scala.collection.immutable.Set[scala.Predef.String]]](result)
-    def rep: hydra.core.FloatValue =
+    def rep: (hydra.core.FloatValue => hydra.core.FloatValue) =
       hydra.lib.pairs.first[(hydra.core.FloatValue) => hydra.core.FloatValue, scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.FloatType,
          Tuple2[(hydra.core.FloatValue) => hydra.core.FloatValue, scala.collection.immutable.Set[scala.Predef.String]]](result))
     val msgs: scala.collection.immutable.Set[scala.Predef.String] = hydra.lib.pairs.second[(hydra.core.FloatValue) => hydra.core.FloatValue,
@@ -510,7 +510,7 @@ def prepareLiteralType(at: hydra.core.LiteralType): Tuple2[hydra.core.LiteralTyp
        scala.collection.immutable.Set[scala.Predef.String]]] = hydra.adapt.prepareIntegerType(v_LiteralType_integer_it)
     val rtyp: hydra.core.IntegerType = hydra.lib.pairs.first[hydra.core.IntegerType, Tuple2[(hydra.core.IntegerValue) => hydra.core.IntegerValue,
        scala.collection.immutable.Set[scala.Predef.String]]](result)
-    def rep: hydra.core.IntegerValue =
+    def rep: (hydra.core.IntegerValue => hydra.core.IntegerValue) =
       hydra.lib.pairs.first[(hydra.core.IntegerValue) => hydra.core.IntegerValue, scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.IntegerType,
          Tuple2[(hydra.core.IntegerValue) => hydra.core.IntegerValue, scala.collection.immutable.Set[scala.Predef.String]]](result))
     val msgs: scala.collection.immutable.Set[scala.Predef.String] = hydra.lib.pairs.second[(hydra.core.IntegerValue) => hydra.core.IntegerValue,
@@ -530,7 +530,7 @@ def prepareType[T0](cx: T0)(typ: hydra.core.Type): Tuple2[hydra.core.Type, Tuple
     val result: Tuple2[hydra.core.LiteralType, Tuple2[(hydra.core.Literal => hydra.core.Literal), scala.collection.immutable.Set[scala.Predef.String]]] = hydra.adapt.prepareLiteralType(v_Type_literal_at)
     val rtyp: hydra.core.LiteralType = hydra.lib.pairs.first[hydra.core.LiteralType, Tuple2[(hydra.core.Literal) => hydra.core.Literal,
        scala.collection.immutable.Set[scala.Predef.String]]](result)
-    def rep: hydra.core.Literal =
+    def rep: (hydra.core.Literal => hydra.core.Literal) =
       hydra.lib.pairs.first[(hydra.core.Literal) => hydra.core.Literal, scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.LiteralType,
          Tuple2[(hydra.core.Literal) => hydra.core.Literal, scala.collection.immutable.Set[scala.Predef.String]]](result))
     val msgs: scala.collection.immutable.Set[scala.Predef.String] = hydra.lib.pairs.second[(hydra.core.Literal) => hydra.core.Literal,

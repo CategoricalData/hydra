@@ -24,6 +24,8 @@ val maybes: hydra.module.Namespace = "hydra.lib.maybes"
 
 val pairs: hydra.module.Namespace = "hydra.lib.pairs"
 
+val regex: hydra.module.Namespace = "hydra.lib.regex"
+
 val sets: hydra.module.Namespace = "hydra.lib.sets"
 
 val strings: hydra.module.Namespace = "hydra.lib.strings"
@@ -465,6 +467,18 @@ val setsToList: hydra.core.Name = "hydra.lib.sets.toList"
 val setsUnion: hydra.core.Name = "hydra.lib.sets.union"
 
 val setsUnions: hydra.core.Name = "hydra.lib.sets.unions"
+
+val regexFind: hydra.core.Name = "hydra.lib.regex.find"
+
+val regexFindAll: hydra.core.Name = "hydra.lib.regex.findAll"
+
+val regexMatches: hydra.core.Name = "hydra.lib.regex.matches"
+
+val regexReplace: hydra.core.Name = "hydra.lib.regex.replace"
+
+val regexReplaceAll: hydra.core.Name = "hydra.lib.regex.replaceAll"
+
+val regexSplit: hydra.core.Name = "hydra.lib.regex.split"
 
 val stringsCat: hydra.core.Name = "hydra.lib.strings.cat"
 
