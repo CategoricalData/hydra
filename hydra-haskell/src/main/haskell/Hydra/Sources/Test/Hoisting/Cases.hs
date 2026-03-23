@@ -98,8 +98,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       (letExpr "x" (int32 1) (apply (var "f") (list [int32 1, int32 2, int32 3])))
       -- Output: body is wrapped in local let with hoisted list
       (letExpr "x" (int32 1)
-        (letExpr "_hoist__body_1" (list [int32 1, int32 2, int32 3])
-          (apply (var "f") (var "_hoist__body_1")))),
+        (letExpr "_hoist_x_body_1" (list [int32 1, int32 2, int32 3])
+          (apply (var "f") (var "_hoist_x_body_1")))),
 
     hoistCase "hoistLists: multiple lists in body are hoisted together"
       hoistPredicateLists
@@ -110,9 +110,9 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- Output: body is wrapped in local let with both hoisted lists
       (letExpr "x" (int32 1)
         (multiLet [
-          ("_hoist__body_1", list [int32 1, int32 2]),
-          ("_hoist__body_2", list [int32 3, int32 4])]
-          (apply (apply (var "pair") (var "_hoist__body_1")) (var "_hoist__body_2")))),
+          ("_hoist_x_body_1", list [int32 1, int32 2]),
+          ("_hoist_x_body_2", list [int32 3, int32 4])]
+          (apply (apply (var "pair") (var "_hoist_x_body_1")) (var "_hoist_x_body_2")))),
 
     hoistCase "hoistLists: list in binding value is hoisted into local let"
       hoistPredicateLists
@@ -132,9 +132,9 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- Output: inner list hoisted first, then outer list
       (letExpr "x" (int32 1)
         (multiLet [
-          ("_hoist__body_1", list [int32 1, int32 2]),
-          ("_hoist__body_2", list [var "_hoist__body_1", int32 3])]
-          (apply (var "f") (var "_hoist__body_2")))),
+          ("_hoist_x_body_1", list [int32 1, int32 2]),
+          ("_hoist_x_body_2", list [var "_hoist_x_body_1", int32 3])]
+          (apply (var "f") (var "_hoist_x_body_2")))),
 
     -- ============================================================
     -- Test: hoistApplications predicate
@@ -148,8 +148,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
         (list [apply (var "f") (var "x"), var "y"]))
       -- Output: body is wrapped in local let
       (letExpr "x" (int32 1)
-        (letExpr "_hoist__body_1" (apply (var "f") (var "x"))
-          (list [var "_hoist__body_1", var "y"]))),
+        (letExpr "_hoist_x_body_1" (apply (var "f") (var "x"))
+          (list [var "_hoist_x_body_1", var "y"]))),
 
     hoistCase "hoistApplications: application in record field is hoisted"
       hoistPredicateApplications
@@ -158,8 +158,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
         (record (nm "Data") [(nm "value", apply (var "f") (var "x"))]))
       -- Output: body is wrapped in local let
       (letExpr "x" (int32 1)
-        (letExpr "_hoist__body_1" (apply (var "f") (var "x"))
-          (record (nm "Data") [(nm "value", var "_hoist__body_1")]))),
+        (letExpr "_hoist_x_body_1" (apply (var "f") (var "x"))
+          (record (nm "Data") [(nm "value", var "_hoist_x_body_1")]))),
 
     hoistCase "hoistApplications: nested applications hoisted from inside out"
       hoistPredicateApplications
@@ -169,9 +169,9 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- Output: inner application hoisted first, then outer
       (letExpr "x" (int32 1)
         (multiLet [
-          ("_hoist__body_1", apply (var "g") (var "x")),
-          ("_hoist__body_2", apply (var "f") (var "_hoist__body_1"))]
-          (list [var "_hoist__body_2"]))),
+          ("_hoist_x_body_1", apply (var "g") (var "x")),
+          ("_hoist_x_body_2", apply (var "f") (var "_hoist_x_body_1"))]
+          (list [var "_hoist_x_body_2"]))),
 
     -- ============================================================
     -- Test: hoistCaseStatements predicate
@@ -188,11 +188,11 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
              (nm "nothing", int32 0)])))
       -- Output: body is wrapped in local let with hoisted case
       (letExpr "x" (optional $ just $ int32 42)
-        (letExpr "_hoist__body_1"
+        (letExpr "_hoist_x_body_1"
           (match (nm "Optional") (just $ var "x")
             [(nm "just", lambda "y" (var "y")),
              (nm "nothing", int32 0)])
-          (apply (var "f") (var "_hoist__body_1")))),
+          (apply (var "f") (var "_hoist_x_body_1")))),
 
     hoistCase "hoistCaseStatements: case in list element is hoisted"
       hoistPredicateCaseStatements
@@ -203,11 +203,11 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
            (nm "err", int32 0)]]))
       -- Output: body is wrapped in local let
       (letExpr "x" (int32 1)
-        (letExpr "_hoist__body_1"
+        (letExpr "_hoist_x_body_1"
           (match (nm "Result") (just $ var "y")
             [(nm "ok", var "x"),
              (nm "err", int32 0)])
-          (list [var "_hoist__body_1"]))),
+          (list [var "_hoist_x_body_1"]))),
 
     -- ============================================================
     -- Test: Nested let expressions
@@ -223,8 +223,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- Output: the list is hoisted in the inner let's body
       (letExpr "x" (int32 1)
         (letExpr "y" (int32 2)
-          (letExpr "_hoist__body_1" (list [var "x", var "y"])
-            (apply (var "f") (var "_hoist__body_1"))))),
+          (letExpr "_hoist_y_body_1" (list [var "x", var "y"])
+            (apply (var "f") (var "_hoist_y_body_1"))))),
 
     -- ============================================================
     -- Test: Non-let terms are unchanged
@@ -263,8 +263,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
         (apply (var "f") (list [var "x", int32 2])))
       -- Output: list is hoisted without any lambda wrapping
       (letExpr "x" (int32 1)
-        (letExpr "_hoist__body_1" (list [var "x", int32 2])
-          (apply (var "f") (var "_hoist__body_1")))),
+        (letExpr "_hoist_x_body_1" (list [var "x", int32 2])
+          (apply (var "f") (var "_hoist_x_body_1")))),
 
     -- Case 2: Hoisted term refers to lambda-bound variable ABOVE the let (no capture needed)
     hoistCase "hoistLists: term referring to lambda above let needs no capture"
@@ -277,8 +277,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- Output: list is hoisted without lambda wrapping (y was bound before let)
       (lambda "y"
         (letExpr "x" (int32 1)
-          (letExpr "_hoist__body_1" (list [var "y", var "x"])
-            (apply (var "f") (var "_hoist__body_1"))))),
+          (letExpr "_hoist_x_body_1" (list [var "y", var "x"])
+            (apply (var "f") (var "_hoist_x_body_1"))))),
 
     -- Case 3: Lambda-bound variable between let and hoisted term, but NOT free in hoisted term
     hoistCase "hoistLists: lambda-bound var not free in hoisted term needs no capture"
@@ -290,8 +290,8 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
         (lambda "y" (apply (var "f") (list [var "x", int32 2]))))
       -- Output: list [x, 2] is hoisted without lambda wrapping for y (y not free in list)
       (letExpr "x" (int32 1)
-        (letExpr "_hoist__body_1" (list [var "x", int32 2])
-          (lambda "y" (apply (var "f") (var "_hoist__body_1"))))),
+        (letExpr "_hoist_x_body_1" (list [var "x", int32 2])
+          (lambda "y" (apply (var "f") (var "_hoist_x_body_1"))))),
 
     -- Case 4: Lambda-bound variable between let and hoisted term, IS free in hoisted term
     hoistCase "hoistLists: lambda-bound var free in hoisted term requires capture"
@@ -301,10 +301,10 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- So [x, y] should be hoisted with y captured
       (letExpr "x" (int32 1)
         (lambda "y" (apply (var "f") (list [var "x", var "y"]))))
-      -- Output: _hoist__body_1 = \y -> [x, y], reference becomes _hoist__body_1 y
+      -- Output: _hoist_x_body_1 = \y -> [x, y], reference becomes _hoist_x_body_1 y
       (letExpr "x" (int32 1)
-        (letExpr "_hoist__body_1" (lambda "y" (list [var "x", var "y"]))
-          (lambda "y" (apply (var "f") (apply (var "_hoist__body_1") (var "y")))))),
+        (letExpr "_hoist_x_body_1" (lambda "y" (list [var "x", var "y"]))
+          (lambda "y" (apply (var "f") (apply (var "_hoist_x_body_1") (var "y")))))),
 
     -- Case 5: Multiple lambda-bound variables, only some free in hoisted term
     hoistCase "hoistLists: only free lambda-bound vars are captured"
@@ -314,10 +314,10 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- But only b appears in the list [x, b], so only b is captured
       (letExpr "x" (int32 1)
         (lambda "a" (lambda "b" (apply (var "f") (list [var "x", var "b"])))))
-      -- Output: _hoist__body_1 = \b -> [x, b], reference becomes _hoist__body_1 b
+      -- Output: _hoist_x_body_1 = \b -> [x, b], reference becomes _hoist_x_body_1 b
       (letExpr "x" (int32 1)
-        (letExpr "_hoist__body_1" (lambda "b" (list [var "x", var "b"]))
-          (lambda "a" (lambda "b" (apply (var "f") (apply (var "_hoist__body_1") (var "b"))))))),
+        (letExpr "_hoist_x_body_1" (lambda "b" (list [var "x", var "b"]))
+          (lambda "a" (lambda "b" (apply (var "f") (apply (var "_hoist_x_body_1") (var "b"))))))),
 
     -- ============================================================
     -- Test: Stable naming for sibling immediate subterms
@@ -331,12 +331,12 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
       -- Both binding value and body have lists to hoist
       (letExpr "x" (apply (var "f") (list [int32 1, int32 2]))
                    (apply (var "g") (list [int32 3, int32 4])))
-      -- Output: binding uses _hoist_x_1, body uses _hoist__body_1
+      -- Output: binding uses _hoist_x_1, body uses _hoist_x_body_1
       (letExpr "x"
         (letExpr "_hoist_x_1" (list [int32 1, int32 2])
           (apply (var "f") (var "_hoist_x_1")))
-        (letExpr "_hoist__body_1" (list [int32 3, int32 4])
-          (apply (var "g") (var "_hoist__body_1")))),
+        (letExpr "_hoist_x_body_1" (list [int32 3, int32 4])
+          (apply (var "g") (var "_hoist_x_body_1")))),
 
     hoistCase "hoistLists: stable naming for multiple bindings"
       hoistPredicateLists
@@ -627,11 +627,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
         (match (nm "Optional") (just $ var "a")
           [(nm "just", lambda "z" (var "z")),
            (nm "nothing", int32 0)])
-        (letExpr "_hoist__body_1"
+        (letExpr "_hoist_x_body_1"
           (match (nm "Optional") (just $ var "b")
             [(nm "just", lambda "w" (var "w")),
              (nm "nothing", int32 0)])
-          (apply (var "f") (var "_hoist__body_1")))),
+          (apply (var "f") (var "_hoist_x_body_1")))),
 
     -- ============================================================
     -- Test: Mixed let and lambda at top level (no hoisting needed)
@@ -906,11 +906,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
       -- Output: case hoisted into inner let's body
       (letExpr "outer"
         (letExpr "inner" (int32 1)
-          (letExpr "_hoist__body_1"
+          (letExpr "_hoist_inner_body_1"
             (match (nm "Optional") nothing
               [(nm "just", lambda "y" (var "y")),
                (nm "nothing", int32 0)])
-            (apply (var "g") (var "_hoist__body_1"))))
+            (apply (var "g") (var "_hoist_inner_body_1"))))
         (var "outer")),
 
     hoistCaseStatementsCase "case at top level of child let NOT hoisted"
@@ -1112,11 +1112,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
             [(nm "just", lambda "a" (var "a")),
              (nm "nothing",
               letExpr "b" (apply (var "g") (var "x"))
-                (letExpr "_hoist__body_1"
+                (letExpr "_hoist_b_body_1"
                   (match (nm "Result") nothing
                     [(nm "ok", lambda "y" (var "y")),
                      (nm "err", int32 0)])
-                  (apply (var "_hoist__body_1") (var "b"))))])
+                  (apply (var "_hoist_b_body_1") (var "b"))))])
           (var "x"))
         (var "f")),
 
@@ -1143,11 +1143,11 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
           (match (nm "Optional") nothing
             [(nm "just", lambda "a"
               (letExpr "b" (apply (var "h") (var "a"))
-                (letExpr "_hoist__body_1"
+                (letExpr "_hoist_b_body_1"
                   (match (nm "Result") nothing
                     [(nm "ok", lambda "y" (var "y")),
                      (nm "err", int32 0)])
-                  (apply (var "_hoist__body_1") (var "b"))))),
+                  (apply (var "_hoist_b_body_1") (var "b"))))),
              (nm "nothing", int32 0)])
           (var "x"))
         (var "f")),
