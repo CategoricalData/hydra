@@ -857,6 +857,9 @@ validateCoreTermTestCase :: Binding
 validateCoreTermTestCase = define "ValidateCoreTermTestCase" $
   doc "A test case which validates a term and compares the result with an expected Maybe InvalidTermError" $
   T.record [
+    "typed">:
+      doc "Whether to expect System F (typed) terms. When true, type variable binding checks and UntypedTermVariableError are active."
+      T.boolean,
     "input">:
       doc "The term to validate"
       Core.term,
