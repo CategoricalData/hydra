@@ -7,8 +7,8 @@ import hydra.graph.Primitive
   * For bootstrapping (code generation only), implementations are stubs.
   */
 object Libraries:
-  private val stubImpl: hydra.context.Context => hydra.graph.Graph => Seq[Term] => Either[hydra.context.InContext[hydra.error.Error], Term] =
-    _ => _ => _ => Left(hydra.context.InContext(hydra.error.Error.other("stub primitive"), hydra.context.Context(Seq.empty, Seq.empty, Map.empty)))
+  private val stubImpl: hydra.context.Context => hydra.graph.Graph => Seq[Term] => Either[hydra.context.InContext[hydra.errors.Error], Term] =
+    _ => _ => _ => Left(hydra.context.InContext(hydra.errors.Error.other("stub primitive"), hydra.context.Context(Seq.empty, Seq.empty, Map.empty)))
 
   private def mkPrim(name: String, ts: TypeScheme): Primitive =
     Primitive(name, ts, stubImpl)
@@ -506,6 +506,19 @@ object Libraries:
         tFun(tList(tSet(a)), tSet(a)))),
     )
 
+  // ===== Regex primitives =====
+
+  private def regexPrimitives(): Map[String, Primitive] =
+    val ns = "hydra.lib.regex"
+    Map(
+      s"$ns.find" -> mkPrim(s"$ns.find", tMono(tFun(tString, tFun(tString, tOpt(tString))))),
+      s"$ns.findAll" -> mkPrim(s"$ns.findAll", tMono(tFun(tString, tFun(tString, tList(tString))))),
+      s"$ns.matches" -> mkPrim(s"$ns.matches", tMono(tFun(tString, tFun(tString, tBool)))),
+      s"$ns.replace" -> mkPrim(s"$ns.replace", tMono(tFun(tString, tFun(tString, tFun(tString, tString))))),
+      s"$ns.replaceAll" -> mkPrim(s"$ns.replaceAll", tMono(tFun(tString, tFun(tString, tFun(tString, tString))))),
+      s"$ns.split" -> mkPrim(s"$ns.split", tMono(tFun(tString, tFun(tString, tList(tString))))),
+    )
+
   // ===== Strings primitives =====
 
   private def stringsPrimitives(): Map[String, Primitive] =
@@ -621,5 +634,6 @@ object Libraries:
     mathPrimitives() ++
     maybesPrimitives() ++
     pairsPrimitives() ++
+    regexPrimitives() ++
     setsPrimitives() ++
     stringsPrimitives()

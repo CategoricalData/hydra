@@ -94,6 +94,7 @@ module_ = Module ns elements
       toBinding encodeTermDefinition,
       toBinding extractDomains,
       toBinding extractCodomain,
+      toBinding dropDomains,
       toBinding extractParams,
       toBinding extractBody,
       toBinding extractLetBindings,
@@ -444,6 +445,21 @@ extractCodomain = def "extractCodomain" $
       _Type_function>>: ("ft" ~> extractCodomain @@ (Core.functionTypeCodomain $ var "ft")),
       _Type_forall>>: ("fa" ~> extractCodomain @@ (Core.forallTypeBody $ var "fa"))]
 
+-- | Drop N domain types from a function type, returning the remaining type.
+--   dropDomains 0 (A -> B -> C) = A -> B -> C
+--   dropDomains 1 (A -> B -> C) = B -> C
+--   dropDomains 2 (A -> B -> C) = C
+dropDomains :: TBinding (Int -> Type -> Type)
+dropDomains = def "dropDomains" $
+  doc "Drop N domain types from a function type, returning the remaining type" $
+  lambda "n" $ lambda "t" $
+    Logic.ifElse (Equality.lte (var "n") (int32 0))
+      (var "t")
+      (cases _Type (Rewriting.deannotateType @@ var "t")
+        (Just $ var "t") [
+        _Type_function>>: ("ft" ~> dropDomains @@ (Math.sub (var "n") (int32 1)) @@ (Core.functionTypeCodomain $ var "ft")),
+        _Type_forall>>: ("fa" ~> dropDomains @@ var "n" @@ (Core.forallTypeBody $ var "fa"))])
+
 -- | Extract parameter names from a term by peeling off lambdas
 extractParams :: TBinding (Term -> [Name])
 extractParams = def "extractParams" $
@@ -497,10 +513,11 @@ encodeComplexTermDef = def "encodeComplexTermDef" $
   doc "Encode a complex term definition with proper parameter types from the type signature" $
   lambda "cx" $ lambda "g" $ lambda "lname" $ lambda "term" $ lambda "typ" $ lets [
     "doms">: extractDomains @@ var "typ",
-    "cod">: extractCodomain @@ var "typ",
     "paramNames">: extractParams @@ var "term",
     -- Only zip as many params as we have domain types (in case of mismatch)
     "paramCount">: Math.min (Lists.length (var "paramNames")) (Lists.length (var "doms")),
+    -- Use effective codomain: only strip as many arrows as we have actual parameters
+    "cod">: dropDomains @@ var "paramCount" @@ var "typ",
     "zippedParams">: Lists.zip (Lists.take (var "paramCount") (var "paramNames")) (Lists.take (var "paramCount") (var "doms")),
     "freeTypeVars">: Lists.filter
       ("v" ~> Logic.not (Lists.elem (int32 46) (Strings.toList (Core.unName (var "v")))))
@@ -558,9 +575,10 @@ encodeLocalDef = def "encodeLocalDef" $
         (Logic.not (Sets.member (var "v") (var "outerTypeVars"))))
       (Sets.toList (Rewriting.freeVariablesInType @@ var "typ")),
     "doms">: extractDomains @@ var "typ",
-    "cod">: extractCodomain @@ var "typ",
     "paramNames">: extractParams @@ var "term",
     "paramCount">: Math.min (Lists.length (var "paramNames")) (Lists.length (var "doms")),
+    -- Use effective codomain: only strip as many arrows as we have actual parameters
+    "cod">: dropDomains @@ var "paramCount" @@ var "typ",
     "zippedParams">: Lists.zip (Lists.take (var "paramCount") (var "paramNames")) (Lists.take (var "paramCount") (var "doms")),
     "letBindings">: extractLetBindings @@ var "term",
     "tparams">: Lists.map (lambda "tv" $ ScalaUtilsSource.stparam @@ var "tv") (var "freeTypeVars"),
