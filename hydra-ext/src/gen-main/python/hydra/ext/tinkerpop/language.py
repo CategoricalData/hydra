@@ -53,7 +53,7 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
         @lru_cache(1)
         def dt() -> hydra.core.Type:
             return hydra.rewriting.deannotate_type(typ)
-        def _hoist_body_1(v1):
+        def _hoist_dt_body_1(v1):
             match v1:
                 case hydra.core.FloatType.FLOAT64:
                     return vp_features.supports_double_array_values
@@ -63,7 +63,7 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
 
                 case _:
                     return False
-        def _hoist_body_2(v1):
+        def _hoist_dt_body_2(v1):
             match v1:
                 case hydra.core.IntegerType.UINT8:
                     return vp_features.supports_byte_array_values
@@ -76,30 +76,30 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
 
                 case _:
                     return False
-        def _hoist_body_3(v1):
+        def _hoist_dt_body_3(v1):
             match v1:
                 case hydra.core.LiteralTypeBoolean():
                     return vp_features.supports_boolean_array_values
 
                 case hydra.core.LiteralTypeFloat(value=ft):
-                    return _hoist_body_1(ft)
+                    return _hoist_dt_body_1(ft)
 
                 case hydra.core.LiteralTypeInteger(value=it):
-                    return _hoist_body_2(it)
+                    return _hoist_dt_body_2(it)
 
                 case hydra.core.LiteralTypeString():
                     return vp_features.supports_string_array_values
 
                 case _:
                     return False
-        def _hoist_body_4(v1):
+        def _hoist_dt_body_4(v1):
             match v1:
                 case hydra.core.TypeLiteral(value=lt):
-                    return _hoist_body_3(lt)
+                    return _hoist_dt_body_3(lt)
 
                 case _:
                     return False
-        def _hoist_body_5(v1):
+        def _hoist_dt_body_5(v1):
             match v1:
                 case hydra.core.TypeLiteral():
                     return True
@@ -108,7 +108,7 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
                     return False
         match dt():
             case hydra.core.TypeList(value=t):
-                return _hoist_body_4(hydra.rewriting.deannotate_type(t))
+                return _hoist_dt_body_4(hydra.rewriting.deannotate_type(t))
 
             case hydra.core.TypeLiteral():
                 return True
@@ -120,7 +120,7 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
                 return True
 
             case hydra.core.TypeMaybe(value=ot):
-                return _hoist_body_5(hydra.rewriting.deannotate_type(ot))
+                return _hoist_dt_body_5(hydra.rewriting.deannotate_type(ot))
 
             case _:
                 return True

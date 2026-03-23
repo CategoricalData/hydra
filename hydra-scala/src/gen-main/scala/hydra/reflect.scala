@@ -14,8 +14,7 @@ def eliminationVariant(v1: hydra.core.Elimination): hydra.variants.EliminationVa
   case hydra.core.Elimination.union(v_Elimination_union__) => hydra.variants.EliminationVariant.union
   case hydra.core.Elimination.wrap(v_Elimination_wrap__) => hydra.variants.EliminationVariant.wrap
 
-val eliminationVariants: Seq[hydra.variants.EliminationVariant] = Seq(hydra.variants.EliminationVariant.record,
-   hydra.variants.EliminationVariant.union, hydra.variants.EliminationVariant.wrap)
+lazy val eliminationVariants: Seq[hydra.variants.EliminationVariant] = Seq(hydra.variants.EliminationVariant.record, hydra.variants.EliminationVariant.union, hydra.variants.EliminationVariant.wrap)
 
 def floatTypePrecision(v1: hydra.core.FloatType): hydra.util.Precision =
   v1 match
@@ -23,7 +22,7 @@ def floatTypePrecision(v1: hydra.core.FloatType): hydra.util.Precision =
   case hydra.core.FloatType.float32 => hydra.util.Precision.bits(32)
   case hydra.core.FloatType.float64 => hydra.util.Precision.bits(64)
 
-val floatTypes: Seq[hydra.core.FloatType] = Seq(hydra.core.FloatType.bigfloat, hydra.core.FloatType.float32, hydra.core.FloatType.float64)
+lazy val floatTypes: Seq[hydra.core.FloatType] = Seq(hydra.core.FloatType.bigfloat, hydra.core.FloatType.float32, hydra.core.FloatType.float64)
 
 def floatValueType(v1: hydra.core.FloatValue): hydra.core.FloatType =
   v1 match
@@ -37,8 +36,7 @@ def functionVariant(v1: hydra.core.Function): hydra.variants.FunctionVariant =
   case hydra.core.Function.lambda(v_Function_lambda__) => hydra.variants.FunctionVariant.lambda
   case hydra.core.Function.primitive(v_Function_primitive__) => hydra.variants.FunctionVariant.primitive
 
-val functionVariants: Seq[hydra.variants.FunctionVariant] = Seq(hydra.variants.FunctionVariant.elimination,
-   hydra.variants.FunctionVariant.lambda, hydra.variants.FunctionVariant.primitive)
+lazy val functionVariants: Seq[hydra.variants.FunctionVariant] = Seq(hydra.variants.FunctionVariant.elimination, hydra.variants.FunctionVariant.lambda, hydra.variants.FunctionVariant.primitive)
 
 def integerTypeIsSigned(v1: hydra.core.IntegerType): Boolean =
   v1 match
@@ -64,9 +62,7 @@ def integerTypePrecision(v1: hydra.core.IntegerType): hydra.util.Precision =
   case hydra.core.IntegerType.uint32 => hydra.util.Precision.bits(32)
   case hydra.core.IntegerType.uint64 => hydra.util.Precision.bits(64)
 
-val integerTypes: Seq[hydra.core.IntegerType] = Seq(hydra.core.IntegerType.bigint, hydra.core.IntegerType.int8,
-   hydra.core.IntegerType.int16, hydra.core.IntegerType.int32, hydra.core.IntegerType.int64, hydra.core.IntegerType.uint8,
-   hydra.core.IntegerType.uint16, hydra.core.IntegerType.uint32, hydra.core.IntegerType.uint64)
+lazy val integerTypes: Seq[hydra.core.IntegerType] = Seq(hydra.core.IntegerType.bigint, hydra.core.IntegerType.int8, hydra.core.IntegerType.int16, hydra.core.IntegerType.int32, hydra.core.IntegerType.int64, hydra.core.IntegerType.uint8, hydra.core.IntegerType.uint16, hydra.core.IntegerType.uint32, hydra.core.IntegerType.uint64)
 
 def integerValueType(v1: hydra.core.IntegerValue): hydra.core.IntegerType =
   v1 match
@@ -96,15 +92,11 @@ def literalTypeVariant(v1: hydra.core.LiteralType): hydra.variants.LiteralVarian
   case hydra.core.LiteralType.integer(v_LiteralType_integer__) => hydra.variants.LiteralVariant.integer
   case hydra.core.LiteralType.string => hydra.variants.LiteralVariant.string
 
-val literalTypes: Seq[hydra.core.LiteralType] = hydra.lib.lists.concat[hydra.core.LiteralType](Seq(Seq(hydra.core.LiteralType.binary,
-   hydra.core.LiteralType.boolean), hydra.lib.lists.map[hydra.core.FloatType, hydra.core.LiteralType]((x: hydra.core.FloatType) => hydra.core.LiteralType.float(x))(hydra.reflect.floatTypes),
-   hydra.lib.lists.map[hydra.core.IntegerType, hydra.core.LiteralType]((x: hydra.core.IntegerType) => hydra.core.LiteralType.integer(x))(hydra.reflect.integerTypes),
-   Seq(hydra.core.LiteralType.string)))
+lazy val literalTypes: Seq[hydra.core.LiteralType] = hydra.lib.lists.concat[hydra.core.LiteralType](Seq(Seq(hydra.core.LiteralType.binary, hydra.core.LiteralType.boolean), hydra.lib.lists.map[hydra.core.FloatType, hydra.core.LiteralType]((x: hydra.core.FloatType) => hydra.core.LiteralType.float(x))(hydra.reflect.floatTypes), hydra.lib.lists.map[hydra.core.IntegerType, hydra.core.LiteralType]((x: hydra.core.IntegerType) => hydra.core.LiteralType.integer(x))(hydra.reflect.integerTypes), Seq(hydra.core.LiteralType.string)))
 
 def literalVariant(`arg_`: hydra.core.Literal): hydra.variants.LiteralVariant = hydra.reflect.literalTypeVariant(hydra.reflect.literalType(`arg_`))
 
-val literalVariants: Seq[hydra.variants.LiteralVariant] = Seq(hydra.variants.LiteralVariant.binary, hydra.variants.LiteralVariant.boolean,
-   hydra.variants.LiteralVariant.float, hydra.variants.LiteralVariant.integer, hydra.variants.LiteralVariant.string)
+lazy val literalVariants: Seq[hydra.variants.LiteralVariant] = Seq(hydra.variants.LiteralVariant.binary, hydra.variants.LiteralVariant.boolean, hydra.variants.LiteralVariant.float, hydra.variants.LiteralVariant.integer, hydra.variants.LiteralVariant.string)
 
 def termVariant(v1: hydra.core.Term): hydra.variants.TermVariant =
   v1 match
@@ -127,12 +119,7 @@ def termVariant(v1: hydra.core.Term): hydra.variants.TermVariant =
   case hydra.core.Term.variable(v_Term_variable__) => hydra.variants.TermVariant.variable
   case hydra.core.Term.wrap(v_Term_wrap__) => hydra.variants.TermVariant.wrap
 
-val termVariants: Seq[hydra.variants.TermVariant] = Seq(hydra.variants.TermVariant.annotated, hydra.variants.TermVariant.application,
-   hydra.variants.TermVariant.either, hydra.variants.TermVariant.function, hydra.variants.TermVariant.list,
-   hydra.variants.TermVariant.literal, hydra.variants.TermVariant.map, hydra.variants.TermVariant.maybe,
-   hydra.variants.TermVariant.pair, hydra.variants.TermVariant.record, hydra.variants.TermVariant.set,
-   hydra.variants.TermVariant.typeLambda, hydra.variants.TermVariant.typeApplication, hydra.variants.TermVariant.union,
-   hydra.variants.TermVariant.unit, hydra.variants.TermVariant.variable, hydra.variants.TermVariant.wrap)
+lazy val termVariants: Seq[hydra.variants.TermVariant] = Seq(hydra.variants.TermVariant.annotated, hydra.variants.TermVariant.application, hydra.variants.TermVariant.either, hydra.variants.TermVariant.function, hydra.variants.TermVariant.list, hydra.variants.TermVariant.literal, hydra.variants.TermVariant.map, hydra.variants.TermVariant.maybe, hydra.variants.TermVariant.pair, hydra.variants.TermVariant.record, hydra.variants.TermVariant.set, hydra.variants.TermVariant.typeLambda, hydra.variants.TermVariant.typeApplication, hydra.variants.TermVariant.union, hydra.variants.TermVariant.unit, hydra.variants.TermVariant.variable, hydra.variants.TermVariant.wrap)
 
 def typeVariant(v1: hydra.core.Type): hydra.variants.TypeVariant =
   v1 match
@@ -154,9 +141,4 @@ def typeVariant(v1: hydra.core.Type): hydra.variants.TypeVariant =
   case hydra.core.Type.void => hydra.variants.TypeVariant.void
   case hydra.core.Type.wrap(v_Type_wrap__) => hydra.variants.TypeVariant.wrap
 
-val typeVariants: Seq[hydra.variants.TypeVariant] = Seq(hydra.variants.TypeVariant.annotated, hydra.variants.TypeVariant.application,
-   hydra.variants.TypeVariant.either, hydra.variants.TypeVariant.function, hydra.variants.TypeVariant.forall,
-   hydra.variants.TypeVariant.list, hydra.variants.TypeVariant.literal, hydra.variants.TypeVariant.map,
-   hydra.variants.TypeVariant.wrap, hydra.variants.TypeVariant.maybe, hydra.variants.TypeVariant.pair,
-   hydra.variants.TypeVariant.record, hydra.variants.TypeVariant.set, hydra.variants.TypeVariant.union,
-   hydra.variants.TypeVariant.unit, hydra.variants.TypeVariant.variable, hydra.variants.TypeVariant.void)
+lazy val typeVariants: Seq[hydra.variants.TypeVariant] = Seq(hydra.variants.TypeVariant.annotated, hydra.variants.TypeVariant.application, hydra.variants.TypeVariant.either, hydra.variants.TypeVariant.function, hydra.variants.TypeVariant.forall, hydra.variants.TypeVariant.list, hydra.variants.TypeVariant.literal, hydra.variants.TypeVariant.map, hydra.variants.TypeVariant.wrap, hydra.variants.TypeVariant.maybe, hydra.variants.TypeVariant.pair, hydra.variants.TypeVariant.record, hydra.variants.TypeVariant.set, hydra.variants.TypeVariant.union, hydra.variants.TypeVariant.unit, hydra.variants.TypeVariant.variable, hydra.variants.TypeVariant.void)

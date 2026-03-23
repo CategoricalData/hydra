@@ -14,8 +14,7 @@ type Relation [V] = Seq[hydra.relational.Row[V]]
 
 type RelationName = scala.Predef.String
 
-case class RelationSchema[T](name: hydra.relational.RelationName, columns: Seq[hydra.relational.ColumnSchema[T]],
-   primaryKeys: Seq[hydra.relational.PrimaryKey], foreignKeys: Seq[hydra.relational.ForeignKey])
+case class RelationSchema[T](name: hydra.relational.RelationName, columns: Seq[hydra.relational.ColumnSchema[T]], primaryKeys: Seq[hydra.relational.PrimaryKey], foreignKeys: Seq[hydra.relational.ForeignKey])
 
 type Relationship [V] = scala.collection.immutable.Set[Map[hydra.relational.ColumnName, V]]
 

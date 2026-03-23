@@ -116,21 +116,21 @@ def property_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v12):
+                def _hoist_field_map_body_1(v12):
                     match v12:
                         case hydra.core.LiteralBoolean(value=b):
                             return Right(b)
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected boolean literal"))
-                def _hoist_body_2(v12):
+                def _hoist_field_map_body_2(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
-                            return _hoist_body_1(v)
+                            return _hoist_field_map_body_1(v)
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("key", (lambda x1, x2: property_key(x1, x2)), field_map(), cx), (lambda field_key: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("value", t, field_map(), cx), (lambda field_value: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("required", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_required: Right(hydra.pg.model.PropertyType(field_key, field_value, field_required))))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("key", (lambda x1, x2: property_key(x1, x2)), field_map(), cx), (lambda field_key: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("value", t, field_map(), cx), (lambda field_value: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("required", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_required: Right(hydra.pg.model.PropertyType(field_key, field_value, field_required))))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))

@@ -291,24 +291,24 @@ def java_expression_to_java_primary(e: hydra.ext.java.syntax.Expression):
     @lru_cache(1)
     def fallback() -> hydra.ext.java.syntax.Primary:
         return cast(hydra.ext.java.syntax.Primary, hydra.ext.java.syntax.PrimaryNoNewArray_(cast(hydra.ext.java.syntax.PrimaryNoNewArray, hydra.ext.java.syntax.PrimaryNoNewArrayParens(e))))
-    def _hoist_body_1(v1):
+    def _hoist_fallback_body_1(v1):
         match v1:
             case hydra.ext.java.syntax.ConditionalExpressionSimple(value=cor):
                 cands = cor.value
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(cands), 1), (lambda : (iors := hydra.lib.lists.head(cands).value, hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(iors), 1), (lambda : (xors := hydra.lib.lists.head(iors).value, hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(xors), 1), (lambda : (ands := hydra.lib.lists.head(xors).value, hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(ands), 1), (lambda : (eqs := hydra.lib.lists.head(ands).value, (_hoist_body_1 := (lambda v12: (lambda p: p)(v12.value) if isinstance(v12, hydra.ext.java.syntax.PostfixExpressionPrimary) else fallback()), _hoist_body_2 := (lambda v12: (lambda pf: _hoist_body_1(pf))(v12.value) if isinstance(v12, hydra.ext.java.syntax.UnaryExpressionNotPlusMinusPostfix) else fallback()), _hoist_body_3 := (lambda v12: (lambda npm: _hoist_body_2(npm))(v12.value) if isinstance(v12, hydra.ext.java.syntax.UnaryExpressionOther) else fallback()), _hoist_body_4 := (lambda v12: (lambda unary: _hoist_body_3(unary))(v12.value) if isinstance(v12, hydra.ext.java.syntax.MultiplicativeExpressionUnary) else fallback()), _hoist_body_5 := (lambda v12: (lambda mul: _hoist_body_4(mul))(v12.value) if isinstance(v12, hydra.ext.java.syntax.AdditiveExpressionUnary) else fallback()), _hoist_body_6 := (lambda v12: (lambda add: _hoist_body_5(add))(v12.value) if isinstance(v12, hydra.ext.java.syntax.ShiftExpressionUnary) else fallback()), _hoist_body_7 := (lambda v12: (lambda shift: _hoist_body_6(shift))(v12.value) if isinstance(v12, hydra.ext.java.syntax.RelationalExpressionSimple) else fallback()), _hoist_body_8 := (lambda v12: (lambda rel: _hoist_body_7(rel))(v12.value) if isinstance(v12, hydra.ext.java.syntax.EqualityExpressionUnary) else fallback()), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(eqs), 1), (lambda : _hoist_body_8(hydra.lib.lists.head(eqs))), (lambda : fallback())))[8])[1]), (lambda : fallback())))[1]), (lambda : fallback())))[1]), (lambda : fallback())))[1]), (lambda : fallback()))
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(cands), 1), (lambda : (iors := hydra.lib.lists.head(cands).value, hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(iors), 1), (lambda : (xors := hydra.lib.lists.head(iors).value, hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(xors), 1), (lambda : (ands := hydra.lib.lists.head(xors).value, hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(ands), 1), (lambda : (eqs := hydra.lib.lists.head(ands).value, (_hoist_eqs_body_1 := (lambda v12: (lambda p: p)(v12.value) if isinstance(v12, hydra.ext.java.syntax.PostfixExpressionPrimary) else fallback()), _hoist_eqs_body_2 := (lambda v12: (lambda pf: _hoist_eqs_body_1(pf))(v12.value) if isinstance(v12, hydra.ext.java.syntax.UnaryExpressionNotPlusMinusPostfix) else fallback()), _hoist_eqs_body_3 := (lambda v12: (lambda npm: _hoist_eqs_body_2(npm))(v12.value) if isinstance(v12, hydra.ext.java.syntax.UnaryExpressionOther) else fallback()), _hoist_eqs_body_4 := (lambda v12: (lambda unary: _hoist_eqs_body_3(unary))(v12.value) if isinstance(v12, hydra.ext.java.syntax.MultiplicativeExpressionUnary) else fallback()), _hoist_eqs_body_5 := (lambda v12: (lambda mul: _hoist_eqs_body_4(mul))(v12.value) if isinstance(v12, hydra.ext.java.syntax.AdditiveExpressionUnary) else fallback()), _hoist_eqs_body_6 := (lambda v12: (lambda add: _hoist_eqs_body_5(add))(v12.value) if isinstance(v12, hydra.ext.java.syntax.ShiftExpressionUnary) else fallback()), _hoist_eqs_body_7 := (lambda v12: (lambda shift: _hoist_eqs_body_6(shift))(v12.value) if isinstance(v12, hydra.ext.java.syntax.RelationalExpressionSimple) else fallback()), _hoist_eqs_body_8 := (lambda v12: (lambda rel: _hoist_eqs_body_7(rel))(v12.value) if isinstance(v12, hydra.ext.java.syntax.EqualityExpressionUnary) else fallback()), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(eqs), 1), (lambda : _hoist_eqs_body_8(hydra.lib.lists.head(eqs))), (lambda : fallback())))[8])[1]), (lambda : fallback())))[1]), (lambda : fallback())))[1]), (lambda : fallback())))[1]), (lambda : fallback()))
 
             case _:
                 return fallback()
-    def _hoist_body_2(v1):
+    def _hoist_fallback_body_2(v1):
         match v1:
             case hydra.ext.java.syntax.AssignmentExpressionConditional(value=ce):
-                return _hoist_body_1(ce)
+                return _hoist_fallback_body_1(ce)
 
             case _:
                 return fallback()
     match e:
         case hydra.ext.java.syntax.ExpressionAssignment(value=ae):
-            return _hoist_body_2(ae)
+            return _hoist_fallback_body_2(ae)
 
         case _:
             return fallback()

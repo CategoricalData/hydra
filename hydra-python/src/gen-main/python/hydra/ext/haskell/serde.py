@@ -57,7 +57,7 @@ def literal_to_expr(lit: hydra.ext.haskell.syntax.Literal):
 
     def parens_if_neg(b: bool, e: str) -> str:
         return hydra.lib.logic.if_else(b, (lambda : hydra.lib.strings.cat(("(", e, ")"))), (lambda : e))
-    def _hoist_body_1(v1):
+    def _hoist_parens_if_neg_body_1(v1):
         match v1:
             case hydra.ext.haskell.syntax.LiteralChar(value=c):
                 return hydra.lib.literals.show_string(hydra.lib.literals.show_uint16(c))
@@ -79,7 +79,7 @@ def literal_to_expr(lit: hydra.ext.haskell.syntax.Literal):
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    return hydra.serialization.cst(_hoist_body_1(lit))
+    return hydra.serialization.cst(_hoist_parens_if_neg_body_1(lit))
 
 def application_pattern_to_expr(app_pat: hydra.ext.haskell.syntax.ApplicationPattern) -> hydra.ast.Expr:
     r"""Convert an application pattern to an AST expression."""

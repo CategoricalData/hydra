@@ -965,7 +965,7 @@ def write_method_invocation(mi: hydra.ext.java.syntax.MethodInvocation) -> hydra
                 @lru_cache(1)
                 def id_sec() -> hydra.ast.Expr:
                     return hydra.serialization.no_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(targs), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style, hydra.lib.lists.map((lambda x1: write_type_argument(x1)), targs))))), Just(write_identifier(cid)))))
-                def _hoist_body_1(v1):
+                def _hoist_cvar_body_1(v1):
                     match v1:
                         case hydra.ext.java.syntax.MethodInvocation_VariantType(value=tname):
                             return hydra.serialization.dot_sep((write_type_name(tname), id_sec()))
@@ -984,7 +984,7 @@ def write_method_invocation(mi: hydra.ext.java.syntax.MethodInvocation) -> hydra
 
                         case _:
                             raise AssertionError("Unreachable: all variants handled")
-                return _hoist_body_1(cvar)
+                return _hoist_cvar_body_1(cvar)
 
             case _:
                 raise AssertionError("Unreachable: all variants handled")

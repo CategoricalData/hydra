@@ -94,49 +94,49 @@ def range_(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v12):
+                def _hoist_field_map_body_1(v12):
                     match v12:
                         case hydra.core.IntegerValueInt32(value=i):
                             return Right(i)
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected int32 value"))
-                def _hoist_body_2(v12):
+                def _hoist_field_map_body_2(v12):
                     match v12:
                         case hydra.core.LiteralInteger(value=_match_value):
-                            return _hoist_body_1(_match_value)
+                            return _hoist_field_map_body_1(_match_value)
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected int32 literal"))
-                def _hoist_body_3(v12):
+                def _hoist_field_map_body_3(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
-                            return _hoist_body_2(v)
+                            return _hoist_field_map_body_2(v)
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                def _hoist_body_4(v12):
+                def _hoist_field_map_body_4(v12):
                     match v12:
                         case hydra.core.IntegerValueInt32(value=i):
                             return Right(i)
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected int32 value"))
-                def _hoist_body_5(v12):
+                def _hoist_field_map_body_5(v12):
                     match v12:
                         case hydra.core.LiteralInteger(value=_match_value):
-                            return _hoist_body_4(_match_value)
+                            return _hoist_field_map_body_4(_match_value)
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected int32 literal"))
-                def _hoist_body_6(v12):
+                def _hoist_field_map_body_6(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
-                            return _hoist_body_5(v)
+                            return _hoist_field_map_body_5(v)
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected literal"))
-                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("min", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_body_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_min: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("max", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_body_6(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_max: Right(hydra.query.Range(field_min, field_max))))))
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("min", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_min: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("max", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_field_map_body_6(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_max: Right(hydra.query.Range(field_min, field_max))))))
 
             case _:
                 return Left(hydra.errors.DecodingError("expected record"))

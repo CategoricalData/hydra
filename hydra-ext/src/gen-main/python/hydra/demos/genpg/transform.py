@@ -46,7 +46,7 @@ def decode_cell(col_type: hydra.tabular.ColumnType, mvalue: Maybe[str]) -> Eithe
         @lru_cache(1)
         def parse_error() -> str:
             return hydra.lib.strings.cat(("Invalid value for column ", cname, ": ", value))
-        def _hoist_body_1(v1):
+        def _hoist_parse_error_body_1(v1):
             match v1:
                 case hydra.core.FloatType.BIGFLOAT:
                     return hydra.lib.maybes.maybe((lambda : Left(parse_error())), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralFloat(cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(parsed))))))))), hydra.lib.literals.read_bigfloat(value))
@@ -59,7 +59,7 @@ def decode_cell(col_type: hydra.tabular.ColumnType, mvalue: Maybe[str]) -> Eithe
 
                 case _:
                     return Left(hydra.lib.strings.cat(("Unsupported float type for column ", cname)))
-        def _hoist_body_2(v1):
+        def _hoist_parse_error_body_2(v1):
             match v1:
                 case hydra.core.IntegerType.INT32:
                     return hydra.lib.maybes.maybe((lambda : Left(parse_error())), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(parsed))))))))), hydra.lib.literals.read_int32(value))
@@ -69,16 +69,16 @@ def decode_cell(col_type: hydra.tabular.ColumnType, mvalue: Maybe[str]) -> Eithe
 
                 case _:
                     return Left(hydra.lib.strings.cat(("Unsupported integer type for column ", cname)))
-        def _hoist_body_3(v1):
+        def _hoist_parse_error_body_3(v1):
             match v1:
                 case hydra.core.LiteralTypeBoolean():
                     return hydra.lib.maybes.maybe((lambda : Left(parse_error())), (lambda parsed: Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(parsed))))))), hydra.lib.literals.read_boolean(value))
 
                 case hydra.core.LiteralTypeFloat(value=ft):
-                    return _hoist_body_1(ft)
+                    return _hoist_parse_error_body_1(ft)
 
                 case hydra.core.LiteralTypeInteger(value=it):
-                    return _hoist_body_2(it)
+                    return _hoist_parse_error_body_2(it)
 
                 case hydra.core.LiteralTypeString():
                     return Right(Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(value))))))
@@ -87,7 +87,7 @@ def decode_cell(col_type: hydra.tabular.ColumnType, mvalue: Maybe[str]) -> Eithe
                     return Left(hydra.lib.strings.cat(("Unsupported literal type for column ", cname)))
         match typ:
             case hydra.core.TypeLiteral(value=lt):
-                return _hoist_body_3(lt)
+                return _hoist_parse_error_body_3(lt)
 
             case _:
                 return Left(hydra.lib.strings.cat(("Unsupported type for column ", cname)))

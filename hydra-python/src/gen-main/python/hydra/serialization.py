@@ -322,7 +322,7 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.ast.Expr:
                             @lru_cache(1)
                             def comparison() -> hydra.util.Comparison:
                                 return hydra.lib.equality.compare(prec, lprec)
-                            def _hoist_body_1(v12):
+                            def _hoist_comparison_body_1(v12):
                                 match v12:
                                     case hydra.util.Comparison.LESS_THAN:
                                         return lhs_()
@@ -335,7 +335,7 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.ast.Expr:
 
                                     case _:
                                         raise AssertionError("Unreachable: all variants handled")
-                            return _hoist_body_1(comparison())
+                            return _hoist_comparison_body_1(comparison())
 
                         case _:
                             return lhs_()
@@ -351,7 +351,7 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.ast.Expr:
                             @lru_cache(1)
                             def comparison() -> hydra.util.Comparison:
                                 return hydra.lib.equality.compare(prec, rprec)
-                            def _hoist_body_1(v12):
+                            def _hoist_comparison_body_1(v12):
                                 match v12:
                                     case hydra.util.Comparison.LESS_THAN:
                                         return rhs_()
@@ -364,7 +364,7 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.ast.Expr:
 
                                     case _:
                                         raise AssertionError("Unreachable: all variants handled")
-                            return _hoist_body_1(comparison())
+                            return _hoist_comparison_body_1(comparison())
 
                         case _:
                             return rhs_()

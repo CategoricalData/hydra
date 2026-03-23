@@ -814,7 +814,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -900,7 +900,7 @@
                                                                                                           "name": "variable",
                                                                                                           "term": {
                                                                                                             "wrap": {
-                                                                                                              "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                              "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                               "typeName": "hydra.core.Name"}}},
                                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                                 "typeName": "hydra.core.Application"}}},
@@ -1157,7 +1157,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -1210,7 +1210,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_2"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_2"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -1293,7 +1293,7 @@
                                                                                                                         "name": "variable",
                                                                                                                         "term": {
                                                                                                                           "wrap": {
-                                                                                                                            "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                            "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                                             "typeName": "hydra.core.Name"}}},
                                                                                                                       "typeName": "hydra.core.Term"}}}],
                                                                                                               "typeName": "hydra.core.Application"}}},
@@ -1306,7 +1306,7 @@
                                                                                                           "name": "variable",
                                                                                                           "term": {
                                                                                                             "wrap": {
-                                                                                                              "body": {"literal": {"string": "_hoist__body_2"}},
+                                                                                                              "body": {"literal": {"string": "_hoist_x_body_2"}},
                                                                                                               "typeName": "hydra.core.Name"}}},
                                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                                 "typeName": "hydra.core.Application"}}},
@@ -1800,7 +1800,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -1853,7 +1853,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_2"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_2"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -1869,7 +1869,7 @@
                                                                                                                   "name": "variable",
                                                                                                                   "term": {
                                                                                                                     "wrap": {
-                                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                                 "typeName": "hydra.core.Term"}},
                                                                                                             {
@@ -1920,7 +1920,7 @@
                                                                                                           "name": "variable",
                                                                                                           "term": {
                                                                                                             "wrap": {
-                                                                                                              "body": {"literal": {"string": "_hoist__body_2"}},
+                                                                                                              "body": {"literal": {"string": "_hoist_x_body_2"}},
                                                                                                               "typeName": "hydra.core.Name"}}},
                                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                                 "typeName": "hydra.core.Application"}}},
@@ -2114,7 +2114,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -2166,7 +2166,7 @@
                                                                                                       "name": "variable",
                                                                                                       "term": {
                                                                                                         "wrap": {
-                                                                                                          "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                          "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                           "typeName": "hydra.core.Name"}}},
                                                                                                     "typeName": "hydra.core.Term"}},
                                                                                                 {
@@ -2383,7 +2383,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -2457,7 +2457,7 @@
                                                                                                                       "name": "variable",
                                                                                                                       "term": {
                                                                                                                         "wrap": {
-                                                                                                                          "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                          "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                                           "typeName": "hydra.core.Name"}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                                             "typeName": "hydra.core.Field"}}]}}],
@@ -2665,7 +2665,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -2710,7 +2710,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_2"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_2"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -2738,7 +2738,7 @@
                                                                                                                       "name": "variable",
                                                                                                                       "term": {
                                                                                                                         "wrap": {
-                                                                                                                          "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                          "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                                           "typeName": "hydra.core.Name"}}},
                                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                                             "typeName": "hydra.core.Application"}}},
@@ -2764,7 +2764,7 @@
                                                                                                       "name": "variable",
                                                                                                       "term": {
                                                                                                         "wrap": {
-                                                                                                          "body": {"literal": {"string": "_hoist__body_2"}},
+                                                                                                          "body": {"literal": {"string": "_hoist_x_body_2"}},
                                                                                                           "typeName": "hydra.core.Name"}}},
                                                                                                     "typeName": "hydra.core.Term"}}]}},
                                                                                           "typeName": "hydra.core.Term"}}}],
@@ -3059,7 +3059,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -3205,7 +3205,7 @@
                                                                                                           "name": "variable",
                                                                                                           "term": {
                                                                                                             "wrap": {
-                                                                                                              "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                              "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                               "typeName": "hydra.core.Name"}}},
                                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                                 "typeName": "hydra.core.Application"}}},
@@ -3447,7 +3447,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -3555,7 +3555,7 @@
                                                                                                       "name": "variable",
                                                                                                       "term": {
                                                                                                         "wrap": {
-                                                                                                          "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                          "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                           "typeName": "hydra.core.Name"}}},
                                                                                                     "typeName": "hydra.core.Term"}}]}},
                                                                                           "typeName": "hydra.core.Term"}}}],
@@ -3836,7 +3836,7 @@
                                                                                                                 "name": "name",
                                                                                                                 "term": {
                                                                                                                   "wrap": {
-                                                                                                                    "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                    "body": {"literal": {"string": "_hoist_y_body_1"}},
                                                                                                                     "typeName": "hydra.core.Name"}}},
                                                                                                               {
                                                                                                                 "name": "term",
@@ -3894,7 +3894,7 @@
                                                                                                                         "name": "variable",
                                                                                                                         "term": {
                                                                                                                           "wrap": {
-                                                                                                                            "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                            "body": {"literal": {"string": "_hoist_y_body_1"}},
                                                                                                                             "typeName": "hydra.core.Name"}}},
                                                                                                                       "typeName": "hydra.core.Term"}}}],
                                                                                                               "typeName": "hydra.core.Application"}}},
@@ -4402,7 +4402,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -4467,7 +4467,7 @@
                                                                                                           "name": "variable",
                                                                                                           "term": {
                                                                                                             "wrap": {
-                                                                                                              "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                              "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                               "typeName": "hydra.core.Name"}}},
                                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                                 "typeName": "hydra.core.Application"}}},
@@ -4706,7 +4706,7 @@
                                                                                                                       "name": "name",
                                                                                                                       "term": {
                                                                                                                         "wrap": {
-                                                                                                                          "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                          "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                                           "typeName": "hydra.core.Name"}}},
                                                                                                                     {
                                                                                                                       "name": "term",
@@ -4764,7 +4764,7 @@
                                                                                                                               "name": "variable",
                                                                                                                               "term": {
                                                                                                                                 "wrap": {
-                                                                                                                                  "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                                  "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                     "typeName": "hydra.core.Application"}}},
@@ -4992,7 +4992,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -5078,7 +5078,7 @@
                                                                                                                               "name": "variable",
                                                                                                                               "term": {
                                                                                                                                 "wrap": {
-                                                                                                                                  "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                                  "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Term"}}}],
                                                                                                                     "typeName": "hydra.core.Application"}}},
@@ -5299,7 +5299,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -5411,7 +5411,7 @@
                                                                                                                                             "name": "variable",
                                                                                                                                             "term": {
                                                                                                                                               "wrap": {
-                                                                                                                                                "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                                                "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                                                                 "typeName": "hydra.core.Name"}}},
                                                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                                                     {
@@ -5666,7 +5666,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -5799,7 +5799,7 @@
                                                                                                                                                                 "name": "variable",
                                                                                                                                                                 "term": {
                                                                                                                                                                   "wrap": {
-                                                                                                                                                                    "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                                                                    "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                                                                                     "typeName": "hydra.core.Name"}}},
                                                                                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                                                                                         {
@@ -6147,7 +6147,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -6219,7 +6219,7 @@
                                                                                                           "name": "variable",
                                                                                                           "term": {
                                                                                                             "wrap": {
-                                                                                                              "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                              "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                               "typeName": "hydra.core.Name"}}},
                                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                                 "typeName": "hydra.core.Application"}}},
@@ -12213,7 +12213,7 @@
                                                                                                   "name": "name",
                                                                                                   "term": {
                                                                                                     "wrap": {
-                                                                                                      "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                      "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                       "typeName": "hydra.core.Name"}}},
                                                                                                 {
                                                                                                   "name": "term",
@@ -12359,7 +12359,7 @@
                                                                                                           "name": "variable",
                                                                                                           "term": {
                                                                                                             "wrap": {
-                                                                                                              "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                              "body": {"literal": {"string": "_hoist_x_body_1"}},
                                                                                                               "typeName": "hydra.core.Name"}}},
                                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                                 "typeName": "hydra.core.Application"}}},
@@ -18548,7 +18548,7 @@
                                                                                                                             "name": "name",
                                                                                                                             "term": {
                                                                                                                               "wrap": {
-                                                                                                                                "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                                "body": {"literal": {"string": "_hoist_inner_body_1"}},
                                                                                                                                 "typeName": "hydra.core.Name"}}},
                                                                                                                           {
                                                                                                                             "name": "term",
@@ -18687,7 +18687,7 @@
                                                                                                                                     "name": "variable",
                                                                                                                                     "term": {
                                                                                                                                       "wrap": {
-                                                                                                                                        "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                                        "body": {"literal": {"string": "_hoist_inner_body_1"}},
                                                                                                                                         "typeName": "hydra.core.Name"}}},
                                                                                                                                   "typeName": "hydra.core.Term"}}}],
                                                                                                                           "typeName": "hydra.core.Application"}}},
@@ -22681,7 +22681,7 @@
                                                                                                                                                                                 "name": "name",
                                                                                                                                                                                 "term": {
                                                                                                                                                                                   "wrap": {
-                                                                                                                                                                                    "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                                                                                    "body": {"literal": {"string": "_hoist_b_body_1"}},
                                                                                                                                                                                     "typeName": "hydra.core.Name"}}},
                                                                                                                                                                               {
                                                                                                                                                                                 "name": "term",
@@ -22809,7 +22809,7 @@
                                                                                                                                                                                         "name": "variable",
                                                                                                                                                                                         "term": {
                                                                                                                                                                                           "wrap": {
-                                                                                                                                                                                            "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                                                                                            "body": {"literal": {"string": "_hoist_b_body_1"}},
                                                                                                                                                                                             "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                 {
@@ -23387,7 +23387,7 @@
                                                                                                                                                                                                     "name": "name",
                                                                                                                                                                                                     "term": {
                                                                                                                                                                                                       "wrap": {
-                                                                                                                                                                                                        "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                                                                                                        "body": {"literal": {"string": "_hoist_b_body_1"}},
                                                                                                                                                                                                         "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                   {
                                                                                                                                                                                                     "name": "term",
@@ -23515,7 +23515,7 @@
                                                                                                                                                                                                             "name": "variable",
                                                                                                                                                                                                             "term": {
                                                                                                                                                                                                               "wrap": {
-                                                                                                                                                                                                                "body": {"literal": {"string": "_hoist__body_1"}},
+                                                                                                                                                                                                                "body": {"literal": {"string": "_hoist_b_body_1"}},
                                                                                                                                                                                                                 "typeName": "hydra.core.Name"}}},
                                                                                                                                                                                                           "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                                     {

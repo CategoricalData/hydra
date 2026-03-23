@@ -80,12 +80,12 @@ def contract_term(term: hydra.core.Term) -> hydra.core.Term:
         @lru_cache(1)
         def rec() -> hydra.core.Term:
             return recurse(t)
-        def _hoist_body_1(v1):
+        def _hoist_rec_body_1(v1):
             match v1:
                 case hydra.core.TermApplication(value=app):
                     lhs = app.function
                     rhs = app.argument
-                    def _hoist_body_1(v12):
+                    def _hoist_rhs_body_1(v12):
                         match v12:
                             case hydra.core.FunctionLambda(value=l):
                                 v = l.parameter
@@ -94,18 +94,18 @@ def contract_term(term: hydra.core.Term) -> hydra.core.Term:
 
                             case _:
                                 return rec()
-                    def _hoist_body_2(v12):
+                    def _hoist_rhs_body_2(v12):
                         match v12:
                             case hydra.core.TermFunction(value=f):
-                                return _hoist_body_1(f)
+                                return _hoist_rhs_body_1(f)
 
                             case _:
                                 return rec()
-                    return _hoist_body_2(hydra.rewriting.deannotate_term(lhs))
+                    return _hoist_rhs_body_2(hydra.rewriting.deannotate_term(lhs))
 
                 case _:
                     return rec()
-        return _hoist_body_1(rec())
+        return _hoist_rec_body_1(rec())
     return hydra.rewriting.rewrite_term((lambda x1, x2: rewrite(x1, x2)), term)
 
 count_primitive_invocations = True
@@ -346,7 +346,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
             def for_pair(pr: tuple[hydra.core.Term, hydra.core.Term]) -> tuple[hydra.core.Term, hydra.core.Term]:
                 return (recurse(tx, hydra.lib.pairs.first(pr)), recurse(tx, hydra.lib.pairs.second(pr)))
             return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda x1: for_pair(x1)), hydra.lib.maps.to_list(mp)))
-        def _hoist_body_1(v1):
+        def _hoist_for_map_body_1(v1):
             match v1:
                 case hydra.core.FunctionElimination(value=elm):
                     @lru_cache(1)
@@ -420,7 +420,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                 return after_recursion(cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.either((lambda l: Left(recurse(tx, l))), (lambda r: Right(recurse(tx, r))), e))))
 
             case hydra.core.TermFunction(value=fn):
-                return _hoist_body_1(fn)
+                return _hoist_for_map_body_1(fn)
 
             case hydra.core.TermLet(value=lt):
                 @lru_cache(1)
@@ -582,7 +582,7 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
                     case _:
                         return recurse(tx, term)
             return hydra.lib.eithers.bind(hydra.lib.eithers.map((lambda x1: unwind(x1)), check_base(elm)), (lambda base: Right(hydra.lib.logic.if_else(hydra.lib.logic.or_(top_level, forced), (lambda : padn(1, base)), (lambda : base)))))
-        def _hoist_body_1(v1):
+        def _hoist_for_elimination_body_1(v1):
             match v1:
                 case hydra.core.FunctionElimination(value=elm):
                     return for_elimination(elm)
@@ -602,7 +602,7 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
                 return hydra.lib.eithers.bind(rewrite(True, False, (), recurse, tx, rhs), (lambda rhs2: hydra.lib.eithers.bind(arity_of(tx, lhs), (lambda lhsarity: hydra.lib.eithers.bind(rewrite_spine(lhs), (lambda lhs2: (a2 := cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs2, rhs2))), Right(hydra.lib.logic.if_else(hydra.lib.equality.gt(lhsarity, 1), (lambda : padn(hydra.lib.math.sub(lhsarity, 1), a2)), (lambda : a2))))[1]))))))
 
             case hydra.core.TermFunction(value=f):
-                return _hoist_body_1(f)
+                return _hoist_for_elimination_body_1(f)
 
             case hydra.core.TermLet(value=l):
                 @lru_cache(1)
@@ -638,7 +638,7 @@ def eta_reduce_term(term: hydra.core.Term):
             case hydra.core.TermApplication(value=app):
                 lhs = app.function
                 rhs = app.argument
-                def _hoist_body_1(v1):
+                def _hoist_rhs_body_1(v1):
                     match v1:
                         case hydra.core.TermAnnotated(value=at):
                             return reduce_lambda(hydra.core.Lambda(v, d, cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs, at.body)))))
@@ -648,11 +648,11 @@ def eta_reduce_term(term: hydra.core.Term):
 
                         case _:
                             return no_change
-                return _hoist_body_1(eta_reduce_term(rhs))
+                return _hoist_rhs_body_1(eta_reduce_term(rhs))
 
             case _:
                 return no_change
-    def _hoist_body_1(v1):
+    def _hoist_reduce_lambda_body_1(v1):
         match v1:
             case hydra.core.FunctionLambda(value=l):
                 return reduce_lambda(l)
@@ -664,7 +664,7 @@ def eta_reduce_term(term: hydra.core.Term):
             return cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(eta_reduce_term(at.body), at.annotation)))
 
         case hydra.core.TermFunction(value=f):
-            return _hoist_body_1(f)
+            return _hoist_reduce_lambda_body_1(f)
 
         case _:
             return no_change
@@ -743,7 +743,7 @@ def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool
             def remaining_args() -> frozenlist[hydra.core.Term]:
                 return hydra.lib.lists.drop(arity, args2)
             return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: reduce_arg(eager2, v1)), arg_list()), (lambda reduced_args: (stripped_args := hydra.lib.lists.map((lambda x1: hydra.rewriting.deannotate_term(x1)), reduced_args), hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda x1: map_error_to_string(x1)), (lambda x: x), prim.implementation(cx, graph, stripped_args)), (lambda prim_result: hydra.lib.eithers.bind(reduce(eager2, prim_result), (lambda reduced_result: apply_if_nullary(eager2, reduced_result, remaining_args()))))))[1]))
-        def _hoist_body_1(v1):
+        def _hoist_for_primitive_body_1(v1):
             match v1:
                 case hydra.core.FunctionElimination(value=elm):
                     return hydra.lib.logic.if_else(hydra.lib.lists.null(args), (lambda : Right(original)), (lambda : for_elimination(elm, args)))
@@ -761,7 +761,7 @@ def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool
                 return apply_if_nullary(eager2, app.function, hydra.lib.lists.cons(app.argument, args))
 
             case hydra.core.TermFunction(value=_match_value):
-                return _hoist_body_1(_match_value)
+                return _hoist_for_primitive_body_1(_match_value)
 
             case hydra.core.TermVariable(value=v):
                 @lru_cache(1)

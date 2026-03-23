@@ -28,7 +28,7 @@ def infer_test_case(g: hydra.graph.Graph, tcm: hydra.testing.TestCaseWithMetadat
     tcase = tcm.case
     desc = tcm.description
     tags_ = tcm.tags
-    def _hoist_body_1(v1):
+    def _hoist_name_body_1(v1):
         match v1:
             case hydra.testing.TestCaseDelegatedEvaluation(value=del_case):
                 input_ = del_case.input
@@ -37,7 +37,7 @@ def infer_test_case(g: hydra.graph.Graph, tcm: hydra.testing.TestCaseWithMetadat
 
             case _:
                 return Right(tcase)
-    return hydra.lib.eithers.map((lambda inferred_case: hydra.testing.TestCaseWithMetadata(name_, inferred_case, desc, tags_)), _hoist_body_1(tcase))
+    return hydra.lib.eithers.map((lambda inferred_case: hydra.testing.TestCaseWithMetadata(name_, inferred_case, desc, tags_)), _hoist_name_body_1(tcase))
 
 def infer_test_group_terms(g: hydra.graph.Graph, tg: hydra.testing.TestGroup) -> Either[str, hydra.testing.TestGroup]:
     r"""Run type inference on all terms in a TestGroup to ensure lambdas have domain types."""
