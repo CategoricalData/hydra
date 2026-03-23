@@ -233,9 +233,11 @@ encodeType tname typ cx =
 
       let any = Right (common [])
       in case (Rewriting.deannotateType typ) of
+        Core.TypeEither _ -> any
         Core.TypeList _ -> any
         Core.TypeLiteral v0 -> Right (encodeLiteralType v0)
         Core.TypeMap _ -> any
+        Core.TypePair _ -> any
         Core.TypeWrap _ -> any
         Core.TypeRecord v0 -> Eithers.map (\_props -> common [
           Model.CommonConstraintProperty (Sets.fromList (Lists.map (\_p -> Model.ReferenceDefinition _p) _props))]) (Eithers.mapList (\_pair -> encodeFieldType tname (Just (Pairs.first _pair)) (Pairs.second _pair) cx) (Lists.zip (Lists.map (\_i -> Literals.int32ToBigint _i) (Math.range 0 (Lists.length v0))) v0))
@@ -244,6 +246,10 @@ encodeType tname typ cx =
           Model.CommonConstraintXone (Sets.fromList (Lists.map (\_p -> Model.ReferenceAnonymous (node [
             Model.CommonConstraintProperty (Sets.fromList [
               Model.ReferenceDefinition _p])])) _props))]) (Eithers.mapList (\_ft -> encodeFieldType tname Nothing _ft cx) v0)
+        Core.TypeUnit -> any
+        Core.TypeVariable vname -> Right (common [
+          Model.CommonConstraintNode (Sets.fromList [
+            Model.ReferenceNamed (Utils.nameToIri vname)])])
         _ -> unexpectedE cx "type" "unsupported type variant"
 
 -- | Construct a SHACL node shape from a list of common constraints
@@ -263,21 +269,25 @@ property iri =
       Model.propertyShapeOrder = Nothing,
       Model.propertyShapePath = iri}
 
--- | Add an rdf:type triple to an RDF Description
+-- | Add an rdf:type triple to an RDF Description.
+-- Note: literals cannot be RDF subjects, so we skip the type triple for literal descriptions.
 withType :: Core.Name -> Syntax.Description -> Syntax.Description
 withType name desc =
 
       let subj = Syntax.descriptionSubject desc
           triples = Syntax.unGraph (Syntax.descriptionGraph desc)
-          subjRes =
+      in case subj of
+        Syntax.NodeLiteral _ -> desc  -- Literals cannot be RDF subjects; return as-is
+        _ ->
+          let subjRes =
                   case subj of
                     Syntax.NodeIri v0 -> Syntax.ResourceIri v0
                     Syntax.NodeBnode v0 -> Syntax.ResourceBnode v0
-          triple =
+              triple =
                   Syntax.Triple {
                     Syntax.tripleSubject = subjRes,
                     Syntax.triplePredicate = (Utils.rdfIri "type"),
                     Syntax.tripleObject = (Syntax.NodeIri (Utils.nameToIri name))}
-      in Syntax.Description {
-        Syntax.descriptionSubject = subj,
-        Syntax.descriptionGraph = (Syntax.Graph (Sets.insert triple triples))}
+          in Syntax.Description {
+            Syntax.descriptionSubject = subj,
+            Syntax.descriptionGraph = (Syntax.Graph (Sets.insert triple triples))}
