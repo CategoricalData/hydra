@@ -80,6 +80,7 @@ import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Util         as Util
 import qualified Hydra.Dsl.Meta.Variants     as Variants
+import qualified Hydra.Dsl.Accessors         as Accessors
 import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors            as Error
 import qualified Hydra.Dsl.Error.Checking   as ErrorsChecking
@@ -728,7 +729,7 @@ typeOfPrimitive = define "typeOfPrimitive" $
   "rawTs" <~ Maybes.map ("_p" ~> Graph.primitiveType (var "_p"))
     (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx")) $
   Maybes.maybe
-    (Ctx.failInContext (Error.errorUndefinedTerm $ ErrorsCore.undefinedTermError (var "name")) (var "cx"))
+    (Ctx.failInContext (Error.errorUndefinedTermVariable $ ErrorsCore.undefinedTermVariableError (Accessors.accessorPath $ list ([] :: [TTerm TermAccessor])) (var "name")) (var "cx"))
     ("tsRaw" ~>
       "instResult" <~ Schemas.instantiateTypeScheme @@ var "cx" @@ var "tsRaw" $
       "ts" <~ Pairs.first (var "instResult") $
@@ -857,7 +858,7 @@ typeOfVariable = define "typeOfVariable" $
   "cx" ~> "tx" ~> "typeArgs" ~> "name" ~>
   "rawTypeScheme" <~ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx") $
   Maybes.maybe
-    (Ctx.failInContext (Error.errorUndefinedType $ ErrorsCore.undefinedTypeError (var "name")) (var "cx"))
+    (Ctx.failInContext (Error.errorUntypedTermVariable $ ErrorsCore.untypedTermVariableError (Accessors.accessorPath $ list ([] :: [TTerm TermAccessor])) (var "name")) (var "cx"))
     ("ts" ~>
       "tResult" <~ Logic.ifElse (Lists.null $ var "typeArgs")
         (Schemas.instantiateType @@ var "cx" @@ (Rewriting.typeSchemeToFType @@ var "ts"))
