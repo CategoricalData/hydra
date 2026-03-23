@@ -67,20 +67,29 @@ module_ :: Module
 module_ = Module ns elements
     [Rewriting.ns]
     kernelTypesNamespaces $
-    Just "Validation functions for core terms"
+    Just "Validation functions for core terms and types"
   where
    elements = [
      toBinding checkDuplicateBindings,
      toBinding checkDuplicateFields,
+     toBinding checkDuplicateFieldTypes,
+     toBinding checkShadowing,
      toBinding checkTerm,
+     toBinding validateTypeNode,
+     toBinding checkUndefinedTypeVariablesInType,
+     toBinding checkUndefinedTypeVariablesInTypeScheme,
+     toBinding checkVoid,
      toBinding findDuplicate,
-     toBinding term]
+     toBinding findDuplicateFieldType,
+     toBinding firstError,
+     toBinding firstTypeError,
+     toBinding isValidName,
+     toBinding term,
+     toBinding type_]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
--- | Validate a term, checking for duplicate binding names and duplicate field names.
--- Returns Nothing if the term is valid, or Just an InvalidTermError describing the first error found.
 -- | A Nothing of type Maybe InvalidTermError
 noError :: TTerm (Maybe InvalidTermError)
 noError = TTerm $ TermMaybe Nothing
@@ -89,16 +98,33 @@ noError = TTerm $ TermMaybe Nothing
 justError :: TTerm InvalidTermError -> TTerm (Maybe InvalidTermError)
 justError (TTerm t) = TTerm $ TermMaybe $ Just t
 
-term :: TBinding (Graph -> Term -> Maybe InvalidTermError)
+-- | Helper to make a just from a TTerm
+mkJust :: TTerm InvalidTermError -> TTerm (Maybe InvalidTermError)
+mkJust = just
+
+-- | Return the first Just from a list of Maybe values, or Nothing
+firstError :: TBinding ([Maybe InvalidTermError] -> Maybe InvalidTermError)
+firstError = define "firstError" $
+  doc "Return the first error from a list of optional errors, or nothing if all are valid" $
+  "checks" ~>
+  Lists.foldl
+    ("acc" ~> "check" ~>
+      Maybes.cases (var "acc")
+        (var "check")
+        (constant $ var "acc"))
+    noError
+    (var "checks")
+
+term :: TBinding (Bool -> Graph -> Term -> Maybe InvalidTermError)
 term = define "term" $
-  doc "Validate a term, returning the first error found or nothing if valid" $
-  "g" ~> "t" ~>
+  doc "Validate a term, returning the first error found or nothing if valid. The 'typed' parameter indicates whether to expect System F (typed) terms; when true, type variable binding checks and UntypedTermVariableError are active." $
+  "typed" ~> "g" ~> "t" ~>
   Rewriting.foldTermWithGraphAndPath
     @@ ("recurse" ~> "path" ~> "cx" ~> "acc" ~> "trm" ~>
       -- If we already found an error, short-circuit
       Maybes.cases (var "acc")
         -- No error yet: check the current term, then recurse into subterms
-        ("checkResult" <~ (checkTerm @@ (wrap _AccessorPath $ var "path") @@ var "trm") $
+        ("checkResult" <~ (checkTerm @@ var "typed" @@ (wrap _AccessorPath $ var "path") @@ var "cx" @@ var "trm") $
           Maybes.cases (var "checkResult")
             -- No error at this term: let the framework recurse into subterms
             (var "recurse" @@ noError @@ var "trm")
@@ -110,18 +136,322 @@ term = define "term" $
     @@ noError
     @@ var "t"
 
--- | Check a single term node for validation errors (without recursing into subterms)
-checkTerm :: TBinding (AccessorPath -> Term -> Maybe InvalidTermError)
+-- | Check a single term node for validation errors (without recursing into subterms).
+-- The Graph provides bound variable information; the typed flag controls System F checks.
+checkTerm :: TBinding (Bool -> AccessorPath -> Graph -> Term -> Maybe InvalidTermError)
 checkTerm = define "checkTerm" $
-  doc "Check a single term node for duplicate bindings or fields" $
-  "path" ~> "term" ~>
+  doc "Check a single term node for validation errors" $
+  "typed" ~> "path" ~> "cx" ~> "term" ~>
   cases _Term (var "term") (Just noError) [
-    _Term_let>>: "lt" ~>
-      checkDuplicateBindings @@ var "path" @@ Core.letBindings (var "lt"),
+
+    -- T16/T20/T21: TermAnnotated — check for nested or empty annotations
+    _Term_annotated>>: "ann" ~>
+      "body" <~ Core.annotatedTermBody (var "ann") $
+      "annMap" <~ Core.annotatedTermAnnotation (var "ann") $
+      firstError @@ list [
+        -- T21. EmptyTermAnnotationError
+        Logic.ifElse (Maps.null $ var "annMap")
+          (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTermAnnotation $
+            record _EmptyTermAnnotationError [
+              _EmptyTermAnnotationError_location>>: var "path"])
+          noError,
+        -- T20. NestedTermAnnotationError
+        cases _Term (var "body") (Just noError) [
+          _Term_annotated>>: constant $
+            mkJust $ inject _InvalidTermError _InvalidTermError_nestedTermAnnotation $
+              record _NestedTermAnnotationError [
+                _NestedTermAnnotationError_location>>: var "path"]]],
+
+    -- TermApplication — check for constant conditions, self-application,
+    -- identity application, redundant wrap/unwrap
+    _Term_application>>: "app" ~>
+      "fun" <~ Core.applicationFunction (var "app") $
+      "arg" <~ Core.applicationArgument (var "app") $
+      firstError @@ list [
+        -- T13. ConstantConditionError: ifElse applied to a literal boolean
+        cases _Term (var "fun") (Just noError) [
+          _Term_function>>: "f" ~>
+            cases _Function (var "f") (Just noError) [
+              _Function_primitive>>: "primName" ~>
+                Logic.ifElse (Equality.equal (Core.unName $ var "primName") (string "hydra.lib.logic.ifElse"))
+                  (cases _Term (var "arg") (Just noError) [
+                    _Term_literal>>: "lit" ~>
+                      cases _Literal (var "lit") (Just noError) [
+                        _Literal_boolean>>: "boolVal" ~>
+                          mkJust $ inject _InvalidTermError _InvalidTermError_constantCondition $
+                            record _ConstantConditionError [
+                              _ConstantConditionError_location>>: var "path",
+                              _ConstantConditionError_value>>: var "boolVal"]]])
+                  noError]],
+        -- T15. SelfApplicationError: (TermVariable x) applied to (TermVariable x)
+        cases _Term (var "fun") (Just noError) [
+          _Term_variable>>: "funName" ~>
+            cases _Term (var "arg") (Just noError) [
+              _Term_variable>>: "argName" ~>
+                Logic.ifElse (Equality.equal (var "funName") (var "argName"))
+                  (mkJust $ inject _InvalidTermError _InvalidTermError_selfApplication $
+                    record _SelfApplicationError [
+                      _SelfApplicationError_location>>: var "path",
+                      _SelfApplicationError_name>>: var "funName"])
+                  noError]],
+        -- T16. UnnecessaryIdentityApplicationError: (\x -> x) applied to arg
+        cases _Term (var "fun") (Just noError) [
+          _Term_function>>: "f" ~>
+            cases _Function (var "f") (Just noError) [
+              _Function_lambda>>: "lam" ~>
+                "param" <~ Core.lambdaParameter (var "lam") $
+                "body" <~ Core.lambdaBody (var "lam") $
+                cases _Term (var "body") (Just noError) [
+                  _Term_variable>>: "bodyVar" ~>
+                    Logic.ifElse (Equality.equal (var "param") (var "bodyVar"))
+                      (mkJust $ inject _InvalidTermError _InvalidTermError_unnecessaryIdentityApplication $
+                        record _UnnecessaryIdentityApplicationError [
+                          _UnnecessaryIdentityApplicationError_location>>: var "path"])
+                      noError]]],
+        -- T14. RedundantWrapUnwrapError: unwrap(n) applied to wrap(n, _)
+        cases _Term (var "fun") (Just noError) [
+          _Term_function>>: "f" ~>
+            cases _Function (var "f") (Just noError) [
+              _Function_elimination>>: "elim" ~>
+                cases _Elimination (var "elim") (Just noError) [
+                  _Elimination_wrap>>: "unwrapName" ~>
+                    cases _Term (var "arg") (Just noError) [
+                      _Term_wrap>>: "wt" ~>
+                        "wrapName" <~ Core.wrappedTermTypeName (var "wt") $
+                        Logic.ifElse (Equality.equal (var "unwrapName") (var "wrapName"))
+                          (mkJust $ inject _InvalidTermError _InvalidTermError_redundantWrapUnwrap $
+                            record _RedundantWrapUnwrapError [
+                              _RedundantWrapUnwrapError_location>>: var "path",
+                              _RedundantWrapUnwrapError_typeName>>: var "unwrapName"])
+                          noError]]]]],
+
+    -- T5: TermRecord — check for empty type name, duplicate fields
     _Term_record>>: "rec" ~>
-      checkDuplicateFields @@ var "path" @@ (Lists.map
-        (unaryFunction Core.fieldName)
-        (Core.recordFields $ var "rec"))]
+      "tname" <~ Core.recordTypeName (var "rec") $
+      "flds" <~ Core.recordFields (var "rec") $
+      firstError @@ list [
+        -- T5. EmptyTypeNameInTermError
+        Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
+          (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
+            record _EmptyTypeNameInTermError [
+              _EmptyTypeNameInTermError_location>>: var "path"])
+          noError,
+        -- T3. DuplicateRecordFieldNamesError (via DuplicateFieldError)
+        checkDuplicateFields @@ var "path" @@ (Lists.map
+          (unaryFunction Core.fieldName)
+          (var "flds"))],
+
+    -- T1/T2/T10/T11/T18: TermLet — empty bindings, duplicates, shadowing, naming, type var checks
+    _Term_let>>: "lt" ~>
+      "bindings" <~ Core.letBindings (var "lt") $
+      "names" <~ Lists.map (unaryFunction Core.bindingName) (var "bindings") $
+      firstError @@ list [
+        -- T1. EmptyLetBindingsError
+        Logic.ifElse (Lists.null $ var "bindings")
+          (mkJust $ inject _InvalidTermError _InvalidTermError_emptyLetBindings $
+            record _EmptyLetBindingsError [
+              _EmptyLetBindingsError_location>>: var "path"])
+          noError,
+        -- T2. DuplicateLetBindingNamesError (via DuplicateBindingError)
+        checkDuplicateBindings @@ var "path" @@ var "bindings",
+        -- T11. TermVariableShadowingError — deferred for let bindings.
+        -- The fold framework extends the graph BEFORE calling checkTerm, so we cannot
+        -- reliably detect shadowing without a pre-extension graph. Needs a new rewriting
+        -- helper that passes both pre- and post-extension graphs.
+        noError,
+        -- T18. InvalidLetBindingNameError — check each binding name
+        firstError @@ (Lists.map
+          ("bname" ~> Logic.ifElse (isValidName @@ var "bname")
+            noError
+            (mkJust $ inject _InvalidTermError _InvalidTermError_invalidLetBindingName $
+              record _InvalidLetBindingNameError [
+                _InvalidLetBindingNameError_location>>: var "path",
+                _InvalidLetBindingNameError_name>>: var "bname"]))
+          (var "names")),
+        -- T10. UndefinedTypeVariableInBindingTypeError (typed mode only)
+        Logic.ifElse (var "typed")
+          (firstError @@ (Lists.map
+            ("b" ~> Maybes.cases (Core.bindingType $ var "b")
+              noError
+              ("ts" ~> checkUndefinedTypeVariablesInTypeScheme
+                @@ var "path" @@ var "cx" @@ var "ts"
+                @@ ("uvName" ~>
+                  mkJust $ inject _InvalidTermError _InvalidTermError_undefinedTypeVariableInBindingType $
+                    record _UndefinedTypeVariableInBindingTypeError [
+                      _UndefinedTypeVariableInBindingTypeError_location>>: var "path",
+                      _UndefinedTypeVariableInBindingTypeError_name>>: var "uvName"])))
+            (var "bindings")))
+          noError],
+
+    -- T5: TermUnion (injection) — check for empty type name
+    _Term_union>>: "inj" ~>
+      "tname" <~ Core.injectionTypeName (var "inj") $
+      Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
+        (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
+          record _EmptyTypeNameInTermError [
+            _EmptyTypeNameInTermError_location>>: var "path"])
+        noError,
+
+    -- T11/T22/T5: TermFunction — check for shadowing, unknown primitives, empty type names
+    _Term_function>>: "fun" ~>
+      cases _Function (var "fun") (Just noError) [
+        -- T11/T17/T8: Lambda — shadowing, naming, undefined type vars in domain
+        _Function_lambda>>: "lam" ~>
+          "paramName" <~ Core.lambdaParameter (var "lam") $
+          firstError @@ list [
+            -- T11. TermVariableShadowingError
+            -- Note: the graph has already been extended with this lambda's parameter.
+            -- We check graphBoundTerms (not modified by lambdas) to detect let-to-lambda shadowing.
+            -- Lambda-to-lambda shadowing is not detected here due to the pre-extension.
+            Logic.ifElse
+              (Maybes.isJust $ Maps.lookup (var "paramName") (Graph.graphBoundTerms $ var "cx"))
+              (mkJust $ inject _InvalidTermError _InvalidTermError_termVariableShadowing $
+                record _TermVariableShadowingError [
+                  _TermVariableShadowingError_location>>: var "path",
+                  _TermVariableShadowingError_name>>: var "paramName"])
+              noError,
+            -- T17. InvalidLambdaParameterNameError
+            Logic.ifElse (isValidName @@ var "paramName")
+              noError
+              (mkJust $ inject _InvalidTermError _InvalidTermError_invalidLambdaParameterName $
+                record _InvalidLambdaParameterNameError [
+                  _InvalidLambdaParameterNameError_location>>: var "path",
+                  _InvalidLambdaParameterNameError_name>>: var "paramName"]),
+            -- T8. UndefinedTypeVariableInLambdaDomainError (typed mode only)
+            Logic.ifElse (var "typed")
+              (Maybes.cases (Core.lambdaDomain $ var "lam")
+                noError
+                ("dom" ~> checkUndefinedTypeVariablesInType
+                  @@ var "path" @@ var "cx" @@ var "dom"
+                  @@ ("uvName" ~>
+                    mkJust $ inject _InvalidTermError _InvalidTermError_undefinedTypeVariableInLambdaDomain $
+                      record _UndefinedTypeVariableInLambdaDomainError [
+                        _UndefinedTypeVariableInLambdaDomainError_location>>: var "path",
+                        _UndefinedTypeVariableInLambdaDomainError_name>>: var "uvName"])))
+              noError],
+        -- T22. UnknownPrimitiveNameError
+        _Function_primitive>>: "primName" ~>
+          Logic.ifElse
+            (Maybes.isJust $ Maps.lookup (var "primName") (Graph.graphPrimitives $ var "cx"))
+            noError
+            (mkJust $ inject _InvalidTermError _InvalidTermError_unknownPrimitiveName $
+              record _UnknownPrimitiveNameError [
+                _UnknownPrimitiveNameError_location>>: var "path",
+                _UnknownPrimitiveNameError_name>>: var "primName"]),
+        -- Elimination checks
+        _Function_elimination>>: "elim" ~>
+          cases _Elimination (var "elim") (Just noError) [
+            -- T5: Projection — check empty type name
+            _Elimination_record>>: "proj" ~>
+              "tname" <~ Core.projectionTypeName (var "proj") $
+              Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
+                (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
+                  record _EmptyTypeNameInTermError [
+                    _EmptyTypeNameInTermError_location>>: var "path"])
+                noError,
+            -- T4/T5/T6: CaseStatement — check empty type name, empty cases, duplicate case fields
+            _Elimination_union>>: "cs" ~>
+              "tname" <~ Core.caseStatementTypeName (var "cs") $
+              "csDefault" <~ Core.caseStatementDefault (var "cs") $
+              "csCases" <~ Core.caseStatementCases (var "cs") $
+              firstError @@ list [
+                -- T5. EmptyTypeNameInTermError
+                Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
+                  (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
+                    record _EmptyTypeNameInTermError [
+                      _EmptyTypeNameInTermError_location>>: var "path"])
+                  noError,
+                -- T6. EmptyCaseStatementError
+                Logic.ifElse
+                  (Logic.and (Lists.null $ var "csCases") (Maybes.isNothing $ var "csDefault"))
+                  (mkJust $ inject _InvalidTermError _InvalidTermError_emptyCaseStatement $
+                    record _EmptyCaseStatementError [
+                      _EmptyCaseStatementError_location>>: var "path",
+                      _EmptyCaseStatementError_typeName>>: var "tname"])
+                  noError,
+                -- T4. DuplicateCaseStatementFieldNamesError (via DuplicateFieldError)
+                checkDuplicateFields @@ var "path" @@ (Lists.map
+                  (unaryFunction Core.fieldName)
+                  (var "csCases"))]]],
+
+    -- T9. UndefinedTypeVariableInTypeApplicationError (typed mode only)
+    _Term_typeApplication>>: "ta" ~>
+      Logic.ifElse (var "typed")
+        (checkUndefinedTypeVariablesInType
+          @@ var "path" @@ var "cx" @@ (Core.typeApplicationTermType $ var "ta")
+          @@ ("uvName" ~>
+            mkJust $ inject _InvalidTermError _InvalidTermError_undefinedTypeVariableInTypeApplication $
+              record _UndefinedTypeVariableInTypeApplicationError [
+                _UndefinedTypeVariableInTypeApplicationError_location>>: var "path",
+                _UndefinedTypeVariableInTypeApplicationError_name>>: var "uvName"]))
+        noError,
+
+    -- T12/T19: TypeLambda — type variable shadowing and naming
+    _Term_typeLambda>>: "tl" ~>
+      "tvName" <~ Core.typeLambdaParameter (var "tl") $
+      firstError @@ list [
+        -- T12. TypeVariableShadowingInTypeLambdaError
+        -- Note: the graph has already been extended with this type lambda's parameter.
+        Logic.ifElse
+          (Sets.member (var "tvName") (Sets.delete (var "tvName") (Graph.graphTypeVariables $ var "cx")))
+          (mkJust $ inject _InvalidTermError _InvalidTermError_typeVariableShadowingInTypeLambda $
+            record _TypeVariableShadowingInTypeLambdaError [
+              _TypeVariableShadowingInTypeLambdaError_location>>: var "path",
+              _TypeVariableShadowingInTypeLambdaError_name>>: var "tvName"])
+          noError,
+        -- T19. InvalidTypeLambdaParameterNameError
+        Logic.ifElse (isValidName @@ var "tvName")
+          noError
+          (mkJust $ inject _InvalidTermError _InvalidTermError_invalidTypeLambdaParameterName $
+            record _InvalidTypeLambdaParameterNameError [
+              _InvalidTypeLambdaParameterNameError_location>>: var "path",
+              _InvalidTypeLambdaParameterNameError_name>>: var "tvName"])],
+
+    -- T7. UndefinedTermVariableError — check boundTerms, lambdaVariables, and primitives
+    _Term_variable>>: "varName" ~>
+      Logic.ifElse
+        (Logic.or
+          (Maybes.isJust $ Maps.lookup (var "varName") (Graph.graphBoundTerms $ var "cx"))
+          (Logic.or
+            (Sets.member (var "varName") (Graph.graphLambdaVariables $ var "cx"))
+            (Maybes.isJust $ Maps.lookup (var "varName") (Graph.graphPrimitives $ var "cx"))))
+        noError
+        (mkJust $ inject _InvalidTermError _InvalidTermError_undefinedTermVariable $
+          record _UndefinedTermVariableError [
+            _UndefinedTermVariableError_location>>: var "path",
+            _UndefinedTermVariableError_name>>: var "varName"]),
+
+    -- T5: TermWrap — check for empty type name
+    _Term_wrap>>: "wt" ~>
+      "tname" <~ Core.wrappedTermTypeName (var "wt") $
+      Logic.ifElse (Equality.equal (Core.unName $ var "tname") (string ""))
+        (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTypeNameInTerm $
+          record _EmptyTypeNameInTermError [
+            _EmptyTypeNameInTermError_location>>: var "path"])
+        noError]
+
+-- | Check a list of names for shadowing against the current graph scope
+checkShadowing :: TBinding (AccessorPath -> Graph -> [Name] -> Maybe InvalidTermError)
+checkShadowing = define "checkShadowing" $
+  doc "Check if any name in a list shadows a variable already in scope" $
+  "path" ~> "cx" ~> "names" ~>
+  -- Find the first name that is already bound
+  "result" <~ Lists.foldl
+    ("acc" ~> "name" ~>
+      Maybes.cases (var "acc")
+        (Logic.ifElse
+          (Logic.or
+            (Maybes.isJust $ Maps.lookup (var "name") (Graph.graphBoundTerms $ var "cx"))
+            (Sets.member (var "name") (Graph.graphLambdaVariables $ var "cx")))
+          (mkJust $ inject _InvalidTermError _InvalidTermError_termVariableShadowing $
+            record _TermVariableShadowingError [
+              _TermVariableShadowingError_location>>: var "path",
+              _TermVariableShadowingError_name>>: var "name"])
+          noError)
+        (constant $ var "acc"))
+    noError
+    (var "names") $
+  var "result"
 
 -- | Check a list of bindings for duplicate names
 checkDuplicateBindings :: TBinding (AccessorPath -> [Binding] -> Maybe InvalidTermError)
@@ -157,6 +487,304 @@ findDuplicate = define "findDuplicate" $
   "names" ~>
   -- Fold through names, tracking seen names in a set.
   -- Accumulator is (Set Name, Maybe Name): seen set and first duplicate found.
+  "result" <~ Lists.foldl
+    ("acc" ~> "name" ~>
+      "seen" <~ Pairs.first (var "acc") $
+      "dup" <~ Pairs.second (var "acc") $
+      Maybes.cases (var "dup")
+        (Logic.ifElse (Sets.member (var "name") (var "seen"))
+          (pair (var "seen") (just $ var "name"))
+          (pair (Sets.insert (var "name") (var "seen")) nothing))
+        (constant $ var "acc"))
+    (pair Sets.empty nothing)
+    (var "names") $
+  Pairs.second (var "result")
+
+-- | Validate a name at an introduction site.
+-- Currently only rejects empty strings; may be extended with additional naming conventions.
+isValidName :: TBinding (Name -> Bool)
+isValidName = define "isValidName" $
+  doc "Check whether a name is valid at an introduction site. Currently rejects empty strings." $
+  "name" ~>
+  Logic.not $ Equality.equal (Core.unName $ var "name") (string "")
+
+-- | Check a type for undefined type variables against the current graph scope.
+-- Takes a path, graph, type, and a handler function that receives the first undefined variable name
+-- and returns an error. Returns Nothing if all type variables are defined.
+checkUndefinedTypeVariablesInType :: TBinding (AccessorPath -> Graph -> Type -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
+checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
+  doc "Check a type for type variables not bound in the current scope" $
+  "path" ~> "cx" ~> "typ" ~> "mkError" ~>
+  "freeVars" <~ Rewriting.freeVariablesInType @@ var "typ" $
+  "undefined" <~ Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") $
+  Logic.ifElse (Sets.null $ var "undefined")
+    noError
+    ("firstUndefined" <~ Lists.head (Sets.toList $ var "undefined") $
+      var "mkError" @@ var "firstUndefined")
+
+-- | Check a type scheme for undefined type variables against the current graph scope.
+-- The scheme's own bound variables are excluded before checking.
+checkUndefinedTypeVariablesInTypeScheme :: TBinding (AccessorPath -> Graph -> TypeScheme -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
+checkUndefinedTypeVariablesInTypeScheme = define "checkUndefinedTypeVariablesInTypeScheme" $
+  doc "Check a type scheme for type variables not bound by the scheme or the current scope" $
+  "path" ~> "cx" ~> "ts" ~> "mkError" ~>
+  "freeVars" <~ Rewriting.freeVariablesInTypeScheme @@ var "ts" $
+  "undefined" <~ Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") $
+  Logic.ifElse (Sets.null $ var "undefined")
+    noError
+    ("firstUndefined" <~ Lists.head (Sets.toList $ var "undefined") $
+      var "mkError" @@ var "firstUndefined")
+
+-- ============================================================================
+-- Type validation
+-- ============================================================================
+
+-- | A Nothing of type Maybe InvalidTypeError
+noTypeError :: TTerm (Maybe InvalidTypeError)
+noTypeError = TTerm $ TermMaybe Nothing
+
+-- | A Just of type InvalidTypeError -> Maybe InvalidTypeError
+mkJustType :: TTerm InvalidTypeError -> TTerm (Maybe InvalidTypeError)
+mkJustType = just
+
+-- | Return the first Just from a list of Maybe InvalidTypeError values
+firstTypeError :: TBinding ([Maybe InvalidTypeError] -> Maybe InvalidTypeError)
+firstTypeError = define "firstTypeError" $
+  doc "Return the first type error from a list of optional errors, or nothing if all are valid" $
+  "checks" ~>
+  Lists.foldl
+    ("acc" ~> "check" ~>
+      Maybes.cases (var "acc")
+        (var "check")
+        (constant $ var "acc"))
+    noTypeError
+    (var "checks")
+
+-- | Validate a type, returning the first error found or nothing if valid.
+-- Recursively traverses the type, tracking bound type variables through forall binders.
+type_ :: TBinding (S.Set Name -> Type -> Maybe InvalidTypeError)
+type_ = define "type" $
+  doc "Validate a type, returning the first error found or nothing if valid. The first argument is the set of type variables already in scope." $
+  "boundVars" ~> "typ" ~>
+  -- Check the current node first
+  "checkResult" <~ validateTypeNode @@ var "boundVars" @@ var "typ" $
+  Maybes.cases (var "checkResult")
+    -- No error at this node: recurse into subtypes with updated scope
+    (cases _Type (var "typ") (Just noTypeError) [
+      -- For forall, extend bound vars before recursing into the body
+      _Type_forall>>: "ft" ~>
+        "newBound" <~ Sets.insert (Core.forallTypeParameter $ var "ft") (var "boundVars") $
+        type_ @@ var "newBound" @@ (Core.forallTypeBody $ var "ft"),
+      -- For all other types, recurse into subtypes with the same bound vars
+      _Type_annotated>>: "ann" ~> type_ @@ var "boundVars" @@ (Core.annotatedTypeBody $ var "ann"),
+      _Type_application>>: "at" ~>
+        firstTypeError @@ list [
+          type_ @@ var "boundVars" @@ (Core.applicationTypeFunction $ var "at"),
+          type_ @@ var "boundVars" @@ (Core.applicationTypeArgument $ var "at")],
+      _Type_either>>: "et" ~>
+        firstTypeError @@ list [
+          type_ @@ var "boundVars" @@ (Core.eitherTypeLeft $ var "et"),
+          type_ @@ var "boundVars" @@ (Core.eitherTypeRight $ var "et")],
+      _Type_function>>: "ft" ~>
+        firstTypeError @@ list [
+          type_ @@ var "boundVars" @@ (Core.functionTypeDomain $ var "ft"),
+          type_ @@ var "boundVars" @@ (Core.functionTypeCodomain $ var "ft")],
+      _Type_list>>: "lt" ~> type_ @@ var "boundVars" @@ var "lt",
+      _Type_map>>: "mt" ~>
+        firstTypeError @@ list [
+          type_ @@ var "boundVars" @@ (Core.mapTypeKeys $ var "mt"),
+          type_ @@ var "boundVars" @@ (Core.mapTypeValues $ var "mt")],
+      _Type_maybe>>: "mt" ~> type_ @@ var "boundVars" @@ var "mt",
+      _Type_pair>>: "pt" ~>
+        firstTypeError @@ list [
+          type_ @@ var "boundVars" @@ (Core.pairTypeFirst $ var "pt"),
+          type_ @@ var "boundVars" @@ (Core.pairTypeSecond $ var "pt")],
+      _Type_record>>: "fields" ~>
+        firstTypeError @@ (Lists.map
+          ("f" ~> type_ @@ var "boundVars" @@ (Core.fieldTypeType $ var "f"))
+          (var "fields")),
+      _Type_set>>: "st" ~> type_ @@ var "boundVars" @@ var "st",
+      _Type_union>>: "fields" ~>
+        firstTypeError @@ (Lists.map
+          ("f" ~> type_ @@ var "boundVars" @@ (Core.fieldTypeType $ var "f"))
+          (var "fields")),
+      _Type_wrap>>: "wt" ~> type_ @@ var "boundVars" @@ var "wt"])
+    -- Found an error: return it immediately
+    ("err" ~> mkJustType (var "err"))
+
+-- | Check if a type is TypeVoid and return a VoidInNonBottomPositionError if so
+checkVoid :: TBinding (Type -> Maybe InvalidTypeError)
+checkVoid = define "checkVoid" $
+  doc "Return an error if the given type is TypeVoid" $
+  "typ" ~>
+  cases _Type (var "typ") (Just noTypeError) [
+    _Type_void>>: constant $
+      mkJustType $ inject _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition $
+        record _VoidInNonBottomPositionError [
+          _VoidInNonBottomPositionError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor]))]]
+
+-- | Check a single type node for validation errors (without recursing into subtypes).
+validateTypeNode :: TBinding (S.Set Name -> Type -> Maybe InvalidTypeError)
+validateTypeNode = define "validateTypeNode" $
+  doc "Check a single type node for validation errors" $
+  "boundVars" ~> "typ" ~>
+  cases _Type (var "typ") (Just noTypeError) [
+
+    -- Y8/Y9: TypeAnnotated — nested or empty annotations
+    _Type_annotated>>: "ann" ~>
+      "body" <~ Core.annotatedTypeBody (var "ann") $
+      "annMap" <~ Core.annotatedTypeAnnotation (var "ann") $
+      firstTypeError @@ list [
+        -- Y9. EmptyTypeAnnotationError
+        Logic.ifElse (Maps.null $ var "annMap")
+          (mkJustType $ inject _InvalidTypeError _InvalidTypeError_emptyTypeAnnotation $
+            record _EmptyTypeAnnotationError [
+              _EmptyTypeAnnotationError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor]))])
+          noTypeError,
+        -- Y8. NestedTypeAnnotationError
+        cases _Type (var "body") (Just noTypeError) [
+          _Type_annotated>>: constant $
+            mkJustType $ inject _InvalidTypeError _InvalidTypeError_nestedTypeAnnotation $
+              record _NestedTypeAnnotationError [
+                _NestedTypeAnnotationError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor]))]]],
+
+    -- Y10: TypeEither — void in either components
+    _Type_either>>: "et" ~>
+      firstTypeError @@ list [
+        checkVoid @@ (Core.eitherTypeLeft $ var "et"),
+        checkVoid @@ (Core.eitherTypeRight $ var "et")],
+
+    -- Y7/Y13: TypeForall — type variable shadowing and naming
+    _Type_forall>>: "ft" ~>
+      "paramName" <~ Core.forallTypeParameter (var "ft") $
+      firstTypeError @@ list [
+        -- Y7. TypeVariableShadowingInForallError
+        Logic.ifElse (Sets.member (var "paramName") (var "boundVars"))
+          (mkJustType $ inject _InvalidTypeError _InvalidTypeError_typeVariableShadowingInForall $
+            record _TypeVariableShadowingInForallError [
+              _TypeVariableShadowingInForallError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+              _TypeVariableShadowingInForallError_name>>: var "paramName"])
+          noTypeError,
+        -- Y13. InvalidForallParameterNameError
+        Logic.ifElse (isValidName @@ var "paramName")
+          noTypeError
+          (mkJustType $ inject _InvalidTypeError _InvalidTypeError_invalidForallParameterName $
+            record _InvalidForallParameterNameError [
+              _InvalidForallParameterNameError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+              _InvalidForallParameterNameError_name>>: var "paramName"])],
+
+    -- Y10: TypeFunction — void in codomain
+    _Type_function>>: "ft" ~>
+      checkVoid @@ (Core.functionTypeCodomain $ var "ft"),
+
+    -- Y10: TypeList — void element type
+    _Type_list>>: "lt" ~> checkVoid @@ var "lt",
+
+    -- Y11/Y10: TypeMap — non-comparable key type, void in key/value
+    _Type_map>>: "mt" ~>
+      "keyType" <~ Core.mapTypeKeys (var "mt") $
+      firstTypeError @@ list [
+        cases _Type (var "keyType") (Just noTypeError) [
+          _Type_function>>: constant $
+            mkJustType $ inject _InvalidTypeError _InvalidTypeError_nonComparableMapKeyType $
+              record _NonComparableMapKeyTypeError [
+                _NonComparableMapKeyTypeError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+                _NonComparableMapKeyTypeError_keyType>>: var "keyType"]],
+        checkVoid @@ var "keyType",
+        checkVoid @@ (Core.mapTypeValues $ var "mt")],
+
+    -- Y10: TypePair — void in pair components
+    _Type_pair>>: "pt" ~>
+      firstTypeError @@ list [
+        checkVoid @@ (Core.pairTypeFirst $ var "pt"),
+        checkVoid @@ (Core.pairTypeSecond $ var "pt")],
+
+    -- Y1/Y4/Y10: TypeRecord — empty, duplicate field names, void in fields
+    _Type_record>>: "fields" ~>
+      firstTypeError @@ list [
+        -- Y1. EmptyRecordTypeError
+        Logic.ifElse (Lists.null $ var "fields")
+          (mkJustType $ inject _InvalidTypeError _InvalidTypeError_emptyRecordType $
+            record _EmptyRecordTypeError [
+              _EmptyRecordTypeError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor]))])
+          noTypeError,
+        -- Y4. DuplicateRecordTypeFieldNamesError
+        checkDuplicateFieldTypes @@ (var "fields")
+          @@ ("dupName" ~>
+            mkJustType $ inject _InvalidTypeError _InvalidTypeError_duplicateRecordTypeFieldNames $
+              record _DuplicateRecordTypeFieldNamesError [
+                _DuplicateRecordTypeFieldNamesError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+                _DuplicateRecordTypeFieldNamesError_name>>: var "dupName"]),
+        -- Y10. VoidInNonBottomPositionError — check field types
+        firstTypeError @@ (Lists.map
+          ("f" ~> checkVoid @@ (Core.fieldTypeType $ var "f"))
+          (var "fields"))],
+
+    -- Y12/Y10: TypeSet — non-comparable element type, void element
+    _Type_set>>: "elemType" ~>
+      firstTypeError @@ list [
+        cases _Type (var "elemType") (Just noTypeError) [
+          _Type_function>>: constant $
+            mkJustType $ inject _InvalidTypeError _InvalidTypeError_nonComparableSetElementType $
+              record _NonComparableSetElementTypeError [
+                _NonComparableSetElementTypeError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+                _NonComparableSetElementTypeError_elementType>>: var "elemType"]],
+        checkVoid @@ var "elemType"],
+
+    -- Y2/Y3/Y5/Y10: TypeUnion — empty, single-variant, duplicate field names, void in fields
+    _Type_union>>: "fields" ~>
+      firstTypeError @@ list [
+        -- Y2. EmptyUnionTypeError
+        Logic.ifElse (Lists.null $ var "fields")
+          (mkJustType $ inject _InvalidTypeError _InvalidTypeError_emptyUnionType $
+            record _EmptyUnionTypeError [
+              _EmptyUnionTypeError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor]))])
+          noTypeError,
+        -- Y3. SingleVariantUnionError
+        Logic.ifElse (Equality.equal (Lists.length $ var "fields") (int32 1))
+          ("singleField" <~ Lists.head (var "fields") $
+            mkJustType $ inject _InvalidTypeError _InvalidTypeError_singleVariantUnion $
+              record _SingleVariantUnionError [
+                _SingleVariantUnionError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+                _SingleVariantUnionError_fieldName>>: Core.fieldTypeName (var "singleField")])
+          noTypeError,
+        -- Y5. DuplicateUnionTypeFieldNamesError
+        checkDuplicateFieldTypes @@ (var "fields")
+          @@ ("dupName" ~>
+            mkJustType $ inject _InvalidTypeError _InvalidTypeError_duplicateUnionTypeFieldNames $
+              record _DuplicateUnionTypeFieldNamesError [
+                _DuplicateUnionTypeFieldNamesError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+                _DuplicateUnionTypeFieldNamesError_name>>: var "dupName"]),
+        -- Y10. VoidInNonBottomPositionError — check field types
+        firstTypeError @@ (Lists.map
+          ("f" ~> checkVoid @@ (Core.fieldTypeType $ var "f"))
+          (var "fields"))],
+
+    -- Y6. UndefinedTypeVariableError
+    _Type_variable>>: "varName" ~>
+      Logic.ifElse (Sets.member (var "varName") (var "boundVars"))
+        noTypeError
+        (mkJustType $ inject _InvalidTypeError _InvalidTypeError_undefinedTypeVariable $
+          record _UndefinedTypeVariableError [
+            _UndefinedTypeVariableError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+            _UndefinedTypeVariableError_name>>: var "varName"])]
+
+-- | Check a list of FieldType for duplicate names, calling a handler on the first duplicate found
+checkDuplicateFieldTypes :: TBinding ([FieldType] -> (Name -> Maybe InvalidTypeError) -> Maybe InvalidTypeError)
+checkDuplicateFieldTypes = define "checkDuplicateFieldTypes" $
+  doc "Check for duplicate field names in a list of field types" $
+  "fields" ~> "mkError" ~>
+  "names" <~ Lists.map (unaryFunction Core.fieldTypeName) (var "fields") $
+  "dup" <~ findDuplicateFieldType @@ var "names" $
+  Maybes.cases (var "dup")
+    noTypeError
+    ("name" ~> var "mkError" @@ var "name")
+
+-- | Find the first duplicate in a list of names (for field types)
+findDuplicateFieldType :: TBinding ([Name] -> Maybe Name)
+findDuplicateFieldType = define "findDuplicateFieldType" $
+  doc "Find the first duplicate name in a list (for field type validation)" $
+  "names" ~>
   "result" <~ Lists.foldl
     ("acc" ~> "name" ~>
       "seen" <~ Pairs.first (var "acc") $
