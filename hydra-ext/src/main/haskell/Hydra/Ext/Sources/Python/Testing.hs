@@ -360,7 +360,7 @@ namespacesForPythonModule = define "namespacesForPythonModule" $
             Module.definitionTerm (record _TermDefinition [
               _TermDefinition_name>>: project _Binding _Binding_name @@ var "b",
               _TermDefinition_term>>: project _Binding _Binding_term @@ var "b",
-              _TermDefinition_type>>: var "ts"]))
+              _TermDefinition_type>>: just (var "ts")]))
           (project _Binding _Binding_type @@ var "b"))
       (var "bindings")] $
     right (PyUtils.findNamespaces @@ Module.moduleNamespace (var "mod") @@ var "defs")

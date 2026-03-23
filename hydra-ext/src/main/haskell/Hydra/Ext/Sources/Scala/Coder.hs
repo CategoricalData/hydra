@@ -396,9 +396,11 @@ encodeTermDefinition = def "encodeTermDefinition" $
   lambda "cx" $ lambda "g" $ lambda "td" $ lets [
     "name">: project _TermDefinition _TermDefinition_name @@ var "td",
     "term">: project _TermDefinition _TermDefinition_term @@ var "td",
-    "typ">: project _TermDefinition _TermDefinition_type @@ var "td",
     "lname">: ScalaUtilsSource.scalaEscapeName @@ (Names.localNameOf @@ var "name"),
-    "typ'">: Core.typeSchemeType $ var "typ",
+    "typ'">: Maybes.maybe
+      (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
+      (unaryFunction Core.typeSchemeType)
+      (project _TermDefinition _TermDefinition_type @@ var "td"),
     -- Check if the type is a function type (needs def) by looking at the stripped type
     "isFunctionType">: cases _Type (Rewriting.deannotateType @@ var "typ'")
       (Just false)
@@ -415,12 +417,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
           Eithers.bind
             (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "term")
             ("rhs" ~>
-              right (inject _Stat _Stat_defn (inject _Defn _Defn_val (record _Defn_Val [
-                _Defn_Val_mods>>: emptyList,
-                _Defn_Val_pats>>: list [inject _Pat _Pat_var (record _Pat_Var [
-                  _Pat_Var_name>>: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "lname")]])],
-                _Defn_Val_decltpe>>: just (var "stype"),
-                _Defn_Val_rhs>>: var "rhs"]))))))
+              right (mkLazyVal (var "lname") (just (var "stype")) (var "rhs")))))
 
 -- | Extract parameter types from a function type by peeling off function arrows
 extractDomains :: TBinding (Type -> [Type])
@@ -643,6 +640,16 @@ mkVal vname mdecltpe rhs =
     _Defn_Val_decltpe>>: mdecltpe,
     _Defn_Val_rhs>>: rhs]))
 
+-- | Helper to construct a lazy val statement (for top-level definitions to avoid forward reference errors)
+mkLazyVal :: TTerm String -> TTerm (Maybe Scala.Type) -> TTerm Scala.Data -> TTerm Scala.Stat
+mkLazyVal vname mdecltpe rhs =
+  inject _Stat _Stat_defn (inject _Defn _Defn_val (record _Defn_Val [
+    _Defn_Val_mods>>: list [inject Scala._Mod Scala._Mod_lazy unit],
+    _Defn_Val_pats>>: list [inject _Pat _Pat_var (record _Pat_Var [
+      _Pat_Var_name>>: record _Data_Name [_Data_Name_value>>: wrap _PredefString vname]])],
+    _Defn_Val_decltpe>>: mdecltpe,
+    _Defn_Val_rhs>>: rhs]))
+
 encodeLetBinding :: TBinding (Context -> Graph -> S.Set Name -> Binding -> Either (InContext Error) Scala.Stat)
 encodeLetBinding = def "encodeLetBinding" $
   doc "Encode a let binding as a val or def declaration. outerTypeVars are type params from the enclosing scope." $
@@ -666,7 +673,7 @@ encodeLetBinding = def "encodeLetBinding" $
     Maybes.maybe
       -- No type scheme at all: simple val
       (Eithers.bind (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "bterm")
-        ("srhs" ~> right (mkVal (var "bname") nothing (var "srhs"))))
+        ("srhs" ~> right (mkLazyVal (var "bname") nothing (var "srhs"))))
       ("ts" ~> lets [
         "newVars">: Lists.filter ("v" ~> Logic.not (Sets.member (var "v") (var "outerTypeVars"))) (Core.typeSchemeVariables $ var "ts"),
         -- Use def when: function type, or has locally-quantified type vars (like Java's static <T0> method)
@@ -677,7 +684,7 @@ encodeLetBinding = def "encodeLetBinding" $
           -- Monomorphic non-function: val with type annotation
           (Eithers.bind (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "bterm")
             ("srhs" ~> Eithers.bind (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeSchemeType $ var "ts"))
-              ("styp" ~> right (mkVal (var "bname") (just (var "styp")) (var "srhs"))))))
+              ("styp" ~> right (mkLazyVal (var "bname") (just (var "styp")) (var "srhs"))))))
       (var "mts")
 
 encodeFunction :: TBinding (Context -> Graph -> M.Map Name Term -> Function -> Maybe Term -> Either (InContext Error) Scala.Data)

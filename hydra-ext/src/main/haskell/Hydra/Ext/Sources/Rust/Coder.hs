@@ -777,9 +777,11 @@ encodeTermDefinition = def "encodeTermDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Module.termDefinitionName (var "tdef") $
     "term" <~ Module.termDefinitionTerm (var "tdef") $
-    "tscheme" <~ Module.termDefinitionType (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
-    "typ" <~ Core.typeSchemeType (var "tscheme") $
+    "typ" <~ Maybes.maybe
+      (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
+      (unaryFunction Core.typeSchemeType)
+      (Module.termDefinitionType (var "tdef")) $
     "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
     "retType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
       right (record R._ItemWithComments [

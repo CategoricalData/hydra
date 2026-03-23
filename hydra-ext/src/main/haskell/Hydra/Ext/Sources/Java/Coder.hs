@@ -4321,7 +4321,8 @@ encodeElimination = def "encodeElimination" $
           (lambda "jarg" $
             "prim" <~ (JavaUtilsSource.javaExpressionToJavaPrimary @@ var "jarg") $
             "consId" <~ (innerClassRef @@ var "aliases" @@ var "tname" @@ asTerm JavaNamesSource.partialVisitorName) $
-            "jcod" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "cod" @@ var "cx" @@ var "g") $
+            "effectiveCod" <~ (var "cod") $
+            "jcod" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "effectiveCod" @@ var "cx" @@ var "g") $
             "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jcod" @@ var "cx") $
             "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ var "dom" @@ var "cx" @@ var "g") $
             "targs" <~ (typeArgsOrDiamond @@ (Lists.concat2 (var "domArgs") (list [JavaDsl.typeArgumentReference (var "rt")]))) $
@@ -5300,7 +5301,10 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "cx" ~> "g" ~>
     "name" <~ (project _TermDefinition _TermDefinition_name @@ var "tdef") $
     "term0" <~ (project _TermDefinition _TermDefinition_term @@ var "tdef") $
-    "ts" <~ (project _TermDefinition _TermDefinition_type @@ var "tdef") $
+    "ts" <~ Maybes.maybe
+      (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
+      ("x" ~> var "x")
+      (project _TermDefinition _TermDefinition_type @@ var "tdef") $
     -- Unshadow variables
     ("term" <~ (Rewriting.unshadowVariables @@ var "term0") $
       "fs" <<~ (analyzeJavaFunction @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
