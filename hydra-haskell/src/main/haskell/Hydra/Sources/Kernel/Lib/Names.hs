@@ -277,12 +277,12 @@ module_ = Module ns elements
       toTermDefinition setsUnions,
 
       -- regex primitives
-      toBinding regexFind,
-      toBinding regexFindAll,
-      toBinding regexMatches,
-      toBinding regexReplace,
-      toBinding regexReplaceAll,
-      toBinding regexSplit,
+      toTermDefinition regexFind,
+      toTermDefinition regexFindAll,
+      toTermDefinition regexMatches,
+      toTermDefinition regexReplace,
+      toTermDefinition regexReplaceAll,
+      toTermDefinition regexSplit,
 
       -- strings primitives
       toTermDefinition stringsCat,

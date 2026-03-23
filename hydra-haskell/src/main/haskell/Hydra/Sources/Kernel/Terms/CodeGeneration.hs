@@ -288,11 +288,9 @@ generateSourceFiles = define "generateSourceFiles" $
 
   "constraints" <~ Coders.languageConstraints (var "lang") $
 
-  -- Partition modules into type and term modules
-  "isTypeModule" <~ ("mod" ~> hasTypeDefinitions (var "mod")) $
-  "partitioned" <~ Lists.partition (var "isTypeModule") (var "modsToGenerate") $
-  "typeModulesToGenerate" <~ Pairs.first (var "partitioned") $
-  "termModulesToGenerate" <~ Pairs.second (var "partitioned") $
+  -- Filter modules into type and term categories (a module can appear in both)
+  "typeModulesToGenerate" <~ Lists.filter ("mod" ~> hasTypeDefinitions (var "mod")) (var "modsToGenerate") $
+  "termModulesToGenerate" <~ Lists.filter ("mod" ~> hasTermDefinitions (var "mod")) (var "modsToGenerate") $
 
   -- Compute transitive deps and build graphs
   "schemaMods" <~ moduleTypeDepsTransitive @@ var "namespaceMap" @@ var "modsToGenerate" $
@@ -343,12 +341,14 @@ generateSourceFiles = define "generateSourceFiles" $
         Module.module_
           (Module.moduleNamespace $ var "m")
           (Maybes.cat $ Lists.map
-            ("d" ~> Maybes.map
-              ("b" ~> Module.definitionTerm (Module.termDefinition
-                (Core.bindingName $ var "b")
-                (Core.bindingTerm $ var "b")
-                (Core.bindingType $ var "b")))
-              (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (var "defName" @@ var "d")) (var "els")))
+            ("d" ~> cases _Definition (var "d") Nothing [
+              _Definition_type>>: "td" ~> just (Module.definitionType (var "td")),
+              _Definition_term>>: "td" ~> Maybes.map
+                ("b" ~> Module.definitionTerm (Module.termDefinition
+                  (Core.bindingName $ var "b")
+                  (Core.bindingTerm $ var "b")
+                  (Core.bindingType $ var "b")))
+                (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Module.termDefinitionName $ var "td")) (var "els"))])
             (Module.moduleDefinitions $ var "m"))
           (Module.moduleTermDependencies $ var "m")
           (Module.moduleTypeDependencies $ var "m")
@@ -484,13 +484,15 @@ inferModules = define "inferModules" $
       (Module.module_
         (Module.moduleNamespace $ var "m")
         (Maybes.cat $ Lists.map
-          ("d" ~> Maybes.map
-            ("b" ~> Module.definitionTerm (Module.termDefinition
-              (Core.bindingName $ var "b")
-              (Core.bindingTerm $ var "b")
-              (Core.bindingType $ var "b")))
-            (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (var "defName" @@ var "d"))
-              (var "inferredElements")))
+          ("d" ~> cases _Definition (var "d") Nothing [
+            _Definition_type>>: "td" ~> just (Module.definitionType (var "td")),
+            _Definition_term>>: "td" ~> Maybes.map
+              ("b" ~> Module.definitionTerm (Module.termDefinition
+                (Core.bindingName $ var "b")
+                (Core.bindingTerm $ var "b")
+                (Core.bindingType $ var "b")))
+              (Lists.find ("b" ~> Equality.equal (Core.bindingName $ var "b") (Module.termDefinitionName $ var "td"))
+                (var "inferredElements"))])
           (Module.moduleDefinitions $ var "m"))
         (Module.moduleTermDependencies $ var "m")
         (Module.moduleTypeDependencies $ var "m")

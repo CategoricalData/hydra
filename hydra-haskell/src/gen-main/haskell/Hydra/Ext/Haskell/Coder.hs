@@ -569,37 +569,31 @@ toDataDeclaration namespaces def cx g =
                     Core.TermLet v0 ->
                       let lbindings = Core.letBindings v0
                           env = Core.letBody v0
-                          toBinding = \hname_ -> \hterm_ -> Syntax.LocalBindingValue (Utils.simpleValueBinding hname_ hterm_ Nothing)
+                          toTermDefinition = \hname_ -> \hterm_ -> Syntax.LocalBindingValue (Utils.simpleValueBinding hname_ hterm_ Nothing)
                           hnames = Lists.map (\binding -> Utils.simpleName (Core.unName (Core.bindingName binding))) lbindings
                           terms = Lists.map Core.bindingTerm lbindings
                       in (Eithers.bind (Eithers.mapList (\t -> encodeTerm 0 namespaces t cx g) terms) (\hterms ->
-                        let hbindings = Lists.zipWith toBinding hnames hterms
+                        let hbindings = Lists.zipWith toTermDefinition hnames hterms
                             prevBindings = Maybes.maybe [] (\lb -> Syntax.unLocalBindings lb) bindings
                             allBindings = Lists.concat2 prevBindings hbindings
                         in (toDecl comments hname_ env (Just (Syntax.LocalBindings allBindings)))))
                     _ -> Eithers.bind (encodeTerm 0 namespaces term_ cx g) (\hterm ->
                       let vb = Utils.simpleValueBinding hname_ hterm bindings
-                      in case typ of
-                        Nothing ->
-                          let decl = Syntax.DeclarationValueBinding (rewriteValueBinding vb)
+                          schemeConstraints = Maybes.maybe Nothing (\ts -> Core.typeSchemeConstraints ts) typ
+                          schemeClasses = typeSchemeConstraintsToClassMap schemeConstraints
+                      in (Eithers.bind (Annotations.getTypeClasses cx g (Rewriting.removeTypesFromTerm term)) (\explicitClasses ->
+                        let combinedClasses = Maps.union schemeClasses explicitClasses
+                            schemeType = Maybes.maybe Core.TypeUnit (\ts -> Core.typeSchemeType ts) typ
+                        in (Eithers.bind (encodeTypeWithClassAssertions namespaces combinedClasses schemeType cx g) (\htype ->
+                          let decl =
+                                  Syntax.DeclarationTypedBinding (Syntax.TypedBinding {
+                                    Syntax.typedBindingTypeSignature = Syntax.TypeSignature {
+                                      Syntax.typeSignatureName = hname_,
+                                      Syntax.typeSignatureType = htype},
+                                    Syntax.typedBindingValueBinding = (rewriteValueBinding vb)})
                           in (Right (Syntax.DeclarationWithComments {
                             Syntax.declarationWithCommentsBody = decl,
-                            Syntax.declarationWithCommentsComments = comments}))
-                        Just ts ->
-                          let schemeConstraints = Core.typeSchemeConstraints ts
-                              schemeClasses = typeSchemeConstraintsToClassMap schemeConstraints
-                          in (Eithers.bind (Annotations.getTypeClasses cx g (Rewriting.removeTypesFromTerm term)) (\explicitClasses ->
-                            let combinedClasses = Maps.union schemeClasses explicitClasses
-                            in (Eithers.bind (encodeTypeWithClassAssertions namespaces combinedClasses (Core.typeSchemeType ts) cx g) (\htype ->
-                              let decl =
-                                      Syntax.DeclarationTypedBinding (Syntax.TypedBinding {
-                                        Syntax.typedBindingTypeSignature = Syntax.TypeSignature {
-                                          Syntax.typeSignatureName = hname_,
-                                          Syntax.typeSignatureType = htype},
-                                        Syntax.typedBindingValueBinding = (rewriteValueBinding vb)})
-                              in (Right (Syntax.DeclarationWithComments {
-                                Syntax.declarationWithCommentsBody = decl,
-                                Syntax.declarationWithCommentsComments = comments})))))))
+                            Syntax.declarationWithCommentsComments = comments})))))))
       in (Eithers.bind (Annotations.getTermDescription cx g term) (\comments -> toDecl comments hname term Nothing))
 
 -- | Convert a Hydra type definition to Haskell declarations
