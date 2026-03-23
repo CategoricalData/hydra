@@ -85,6 +85,7 @@ import qualified Data.Maybe                                as Y
 -- Additional imports
 import Hydra.Ast
 import qualified Hydra.Ext.Scala.Syntax as Scala
+import qualified Hydra.Ext.Sources.Java.Serde as JavaSerdeSource
 import qualified Hydra.Ext.Sources.Scala.Syntax as ScalaSyntax
 
 
@@ -204,6 +205,7 @@ writeDefn = define "writeDefn" $
           Maybes.pure (writeType @@ var "body")]),
 
       Scala._Defn_val>>: lambda "dv" $ lets [
+        "mods">: project Scala._Defn_Val Scala._Defn_Val_mods @@ var "dv",
         "pats">: project Scala._Defn_Val Scala._Defn_Val_pats @@ var "dv",
         "typ">: project Scala._Defn_Val Scala._Defn_Val_decltpe @@ var "dv",
         "rhs">: project Scala._Defn_Val Scala._Defn_Val_rhs @@ var "dv",
@@ -216,9 +218,10 @@ writeDefn = define "writeDefn" $
           (lambda "t" $ Serialization.spaceSep @@ list [
             Serialization.cst @@ (Strings.cat2 (var "nameStr") (string ":")),
             writeType @@ var "t"])
-          (var "typ")] $
+          (var "typ"),
+        "valKeyword">: Logic.ifElse (Lists.null (var "mods")) (string "val") (string "lazy val")] $
         Serialization.spaceSep @@ list [
-          Serialization.cst @@ string "val",
+          Serialization.cst @@ var "valKeyword",
           var "nameAndType",
           Serialization.cst @@ string "=",
           writeTerm @@ var "rhs"],
@@ -335,7 +338,7 @@ writeLit = define "writeLit" $
       Scala._Lit_float>>: lambda "f" $ Serialization.cst @@ (Strings.cat2 (Literals.showFloat32 (var "f")) (string "f")),
       Scala._Lit_double>>: lambda "f" $ Serialization.cst @@ (Literals.showFloat64 (var "f")),
       Scala._Lit_unit>>: constant $ Serialization.cst @@ string "()",
-      Scala._Lit_string>>: lambda "s" $ Serialization.cst @@ (Literals.showString (var "s"))]
+      Scala._Lit_string>>: lambda "s" $ Serialization.cst @@ Strings.cat2 (string "\"") (Strings.cat2 (JavaSerdeSource.escapeJavaString @@ var "s") (string "\""))]
 
 writeName :: TBinding (Scala.Name -> Expr)
 writeName = define "writeName" $

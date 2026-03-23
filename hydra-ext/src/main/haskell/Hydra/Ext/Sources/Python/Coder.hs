@@ -1622,7 +1622,10 @@ encodeDefinition = def "encodeDefinition" $
       _Definition_term>>: "td" ~>
         "name" <~ (project _TermDefinition _TermDefinition_name @@ var "td") $
         "term" <~ (project _TermDefinition _TermDefinition_term @@ var "td") $
-        "typ" <~ (project _TermDefinition _TermDefinition_type @@ var "td") $
+        "typ" <~ Maybes.maybe
+          (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
+          ("x" ~> var "x")
+          (project _TermDefinition _TermDefinition_type @@ var "td") $
         "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term") $
         "normComment" <~ (Maybes.map CoderUtils.normalizeComment (var "comment")) $
         "stmt" <<~ (encodeTermAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "term" @@ var "typ" @@ var "normComment") $
@@ -1844,7 +1847,7 @@ withDefinitions = def "withDefinitions" $
             just $ Core.binding
               (project _TermDefinition _TermDefinition_name @@ var "td")
               (project _TermDefinition _TermDefinition_term @@ var "td")
-              (just $ project _TermDefinition _TermDefinition_type @@ var "td"),
+              (project _TermDefinition _TermDefinition_type @@ var "td"),
           _Definition_type>>: constant nothing])
       (var "defs")) $
     "dummyLet" <~ (Core.let_ (var "bindings") (Core.termLiteral $ Core.literalString $ string "dummy")) $
@@ -3938,8 +3941,10 @@ gatherMetadata = def "gatherMetadata" $
       cases _Definition (var "def") Nothing [
         _Definition_term>>: "termDef" ~>
           "term" <~ Module.termDefinitionTerm (var "termDef") $
-          "typScheme" <~ Module.termDefinitionType (var "termDef") $
-          "typ" <~ Core.typeSchemeType (var "typScheme") $
+          "typ" <~ Maybes.maybe
+            (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
+            (unaryFunction Core.typeSchemeType)
+            (Module.termDefinitionType (var "termDef")) $
           -- First extend for the type annotation (isTypeDef=True, isTermAnnot=True)
           "meta2" <~ (extendMetaForType @@ true @@ true @@ var "typ" @@ var "meta") $
           -- Then extend for the term body (isTopLevel=True)

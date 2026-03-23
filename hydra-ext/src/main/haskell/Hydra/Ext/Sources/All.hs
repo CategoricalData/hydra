@@ -142,7 +142,7 @@ import qualified Data.List as L
 -- | Coder modules for the bootstrap-relevant languages: Haskell, Java, Python, and Lisp.
 --   Each list includes the coder itself plus its dependencies (helpers, names, serde, syntax, utils, language).
 hydraBootstrapCoderModules :: [Module]
-hydraBootstrapCoderModules = haskellModules ++ javaModules ++ pythonModules ++ lispModules
+hydraBootstrapCoderModules = haskellModules ++ javaModules ++ pythonModules ++ scalaModules ++ lispModules
 
 -- | Essential hydra-ext modules: the Java and Python coder families.
 hydraExtEssentialModules :: [Module]
@@ -200,8 +200,8 @@ otherExtModules = [
   Dot.module_,
   GeoJson.module_,
   GraphqlLanguage.graphqlLanguageModule,
-  GraphqlCoder.module_,
-  GraphqlSerde.module_,
+  -- GraphqlCoder.module_,
+  -- GraphqlSerde.module_,
   graphqlSyntaxModule,
   GraphvizCoder.module_,
   GraphvizSerde.module_,
