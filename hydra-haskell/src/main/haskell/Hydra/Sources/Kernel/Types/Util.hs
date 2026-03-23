@@ -21,14 +21,15 @@ module_ :: Module
 module_ = Module ns (map toTypeDef elements) [Context.ns, Core.ns, Error.ns] [Context.ns, Core.ns, Error.ns] $
     Just "General-purpose utility types used across Hydra."
   where
+    -- Note: either_ and pair are NOT included here because they correspond to built-in
+    -- type constructors (TypeEither, TypePair) which are handled natively by all target languages.
+    -- Including them would cause conflicts with Haskell's Prelude.Either.
     elements = [
       adapter,
       bicoder,
       caseConvention,
       coder,
       comparison,
-      either_,
-      pair,
       precision]
 
 adapter :: Binding

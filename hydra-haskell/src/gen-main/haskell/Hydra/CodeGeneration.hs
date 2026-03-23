@@ -125,13 +125,17 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
       let namespaceMap =
               Maps.fromList (Lists.map (\m -> (Module__.moduleNamespace m, m)) (Lists.concat2 universeModules modsToGenerate))
           constraints = Coders.languageConstraints lang
-          isTypeModule =
-                  \mod -> Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
+          typeModulesToGenerate =
+                  Lists.filter (\mod -> Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
                     Module__.DefinitionType v0 -> Just (Annotations.typeElement (Module__.typeDefinitionName v0) (Module__.typeDefinitionType v0))
-                    _ -> Nothing) (Module__.moduleDefinitions mod))))
-          partitioned = Lists.partition isTypeModule modsToGenerate
-          typeModulesToGenerate = Pairs.first partitioned
-          termModulesToGenerate = Pairs.second partitioned
+                    _ -> Nothing) (Module__.moduleDefinitions mod))))) modsToGenerate
+          termModulesToGenerate =
+                  Lists.filter (\mod -> Logic.not (Lists.null (Maybes.cat (Lists.map (\d -> case d of
+                    Module__.DefinitionTerm v0 -> Just (Core.Binding {
+                      Core.bindingName = (Module__.termDefinitionName v0),
+                      Core.bindingTerm = (Module__.termDefinitionTerm v0),
+                      Core.bindingType = (Module__.termDefinitionType v0)})
+                    _ -> Nothing) (Module__.moduleDefinitions mod))))) modsToGenerate
           schemaMods = moduleTypeDepsTransitive namespaceMap modsToGenerate
           schemaElements =
                   Lists.concat (Lists.map (\m -> Maybes.cat (Lists.map (\d -> case d of
@@ -185,10 +189,12 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
               refreshModule =
                       \els -> \m -> Module__.Module {
                         Module__.moduleNamespace = (Module__.moduleNamespace m),
-                        Module__.moduleDefinitions = (Maybes.cat (Lists.map (\d -> Maybes.map (\b -> Module__.DefinitionTerm (Module__.TermDefinition {
-                          Module__.termDefinitionName = (Core.bindingName b),
-                          Module__.termDefinitionTerm = (Core.bindingTerm b),
-                          Module__.termDefinitionType = (Core.bindingType b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (defName d)) els)) (Module__.moduleDefinitions m))),
+                        Module__.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
+                          Module__.DefinitionType v0 -> Just (Module__.DefinitionType v0)
+                          Module__.DefinitionTerm v0 -> Maybes.map (\b -> Module__.DefinitionTerm (Module__.TermDefinition {
+                            Module__.termDefinitionName = (Core.bindingName b),
+                            Module__.termDefinitionTerm = (Core.bindingTerm b),
+                            Module__.termDefinitionType = (Core.bindingType b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Module__.termDefinitionName v0)) els)) (Module__.moduleDefinitions m))),
                         Module__.moduleTermDependencies = (Module__.moduleTermDependencies m),
                         Module__.moduleTypeDependencies = (Module__.moduleTypeDependencies m),
                         Module__.moduleDescription = (Module__.moduleDescription m)}
@@ -300,10 +306,12 @@ inferModules cx bsGraph universeMods targetMods =
             refreshModule =
                     \m -> Logic.ifElse (isTypeOnlyModule m) m (Module__.Module {
                       Module__.moduleNamespace = (Module__.moduleNamespace m),
-                      Module__.moduleDefinitions = (Maybes.cat (Lists.map (\d -> Maybes.map (\b -> Module__.DefinitionTerm (Module__.TermDefinition {
-                        Module__.termDefinitionName = (Core.bindingName b),
-                        Module__.termDefinitionTerm = (Core.bindingTerm b),
-                        Module__.termDefinitionType = (Core.bindingType b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (defName d)) inferredElements)) (Module__.moduleDefinitions m))),
+                      Module__.moduleDefinitions = (Maybes.cat (Lists.map (\d -> case d of
+                        Module__.DefinitionType v0 -> Just (Module__.DefinitionType v0)
+                        Module__.DefinitionTerm v0 -> Maybes.map (\b -> Module__.DefinitionTerm (Module__.TermDefinition {
+                          Module__.termDefinitionName = (Core.bindingName b),
+                          Module__.termDefinitionTerm = (Core.bindingTerm b),
+                          Module__.termDefinitionType = (Core.bindingType b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Module__.termDefinitionName v0)) inferredElements)) (Module__.moduleDefinitions m))),
                       Module__.moduleTermDependencies = (Module__.moduleTermDependencies m),
                       Module__.moduleTypeDependencies = (Module__.moduleTypeDependencies m),
                       Module__.moduleDescription = (Module__.moduleDescription m)})
