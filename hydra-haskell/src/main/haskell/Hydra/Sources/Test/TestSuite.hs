@@ -28,6 +28,7 @@ import qualified Hydra.Sources.Test.Lib.Maybes as Maybes
 import qualified Hydra.Sources.Test.Annotations as Annotations
 import qualified Hydra.Sources.Test.Ordering as Ordering
 import qualified Hydra.Sources.Test.Lib.Pairs as Pairs
+import qualified Hydra.Sources.Test.Lib.Regex as Regex
 import qualified Hydra.Sources.Test.Lib.Sets as Sets
 import qualified Hydra.Sources.Test.Lib.Strings as Strings
 import qualified Hydra.Sources.Test.Checking.All as CheckingAll
@@ -93,6 +94,7 @@ libPairs = [
   (Math.ns, Math.allTests),
   (Maybes.ns, Maybes.allTests),
   (Pairs.ns, Pairs.allTests),
+  (Regex.ns, Regex.allTests),
   (Sets.ns, Sets.allTests),
   (Strings.ns, Strings.allTests)]
 
@@ -125,7 +127,7 @@ testSuiteModules =
   -- Lib tests
   [Chars.module_, Eithers.module_, Equality.module_,
    Lists.module_, Literals.module_, Logic.module_, Maps.module_,
-   Math.module_, Maybes.module_, Pairs.module_, Sets.module_, Strings.module_,
+   Math.module_, Maybes.module_, Pairs.module_, Regex.module_, Sets.module_, Strings.module_,
    -- Hoisting tests (including sub-modules)
    HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,
    -- Other tests
