@@ -771,7 +771,12 @@ hoistSubterms = define "hoistSubterms" $
           Logic.ifElse (var "shouldHoist" @@ pair (var "fullPath") (var "processedTerm"))
             -- Hoist: add to collected bindings, return reference
             -- Use the namePrefix to create stable names: _hoist_<prefix>_<counter>
-            ("bindingName" <~ Core.name (Strings.cat (list [string "_hoist_", var "namePrefix", string "_", Literals.showInt32 (var "newCounter")])) $
+            -- Use chooseUniqueName to avoid collisions with names in the enclosing scope
+            ("proposedName" <~ Core.name (Strings.cat (list [string "_hoist_", var "namePrefix", string "_", Literals.showInt32 (var "newCounter")])) $
+             "existingNames" <~ Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "newBindings")) $
+             "freeVarsInSubterm" <~ Rewriting.freeVariablesInTerm @@ var "subterm" $
+             "allReserved" <~ Sets.union (var "existingNames") (var "freeVarsInSubterm") $
+             "bindingName" <~ Lexical.chooseUniqueName @@ var "allReserved" @@ var "proposedName" $
              -- Find lambda-bound variables that need to be captured
              -- Only capture variables that were added INSIDE this subterm (not at the let level)
              "allLambdaVars" <~ Graph.graphLambdaVariables (var "cxInner") $
@@ -851,10 +856,13 @@ hoistSubterms = define "hoistSubterms" $
     -- Fold over bindings, starting with empty list
     "newBindingsReversed" <~ Lists.foldl (var "processBinding") (list ([] :: [TTerm Binding])) (var "bindings") $
     "newBindings" <~ Lists.reverse (var "newBindingsReversed") $
-    -- Process the body with "_body" as the prefix, also starting with counter 1
+    -- Process the body with a unique prefix, also starting with counter 1
     -- Build the pathPrefix for the body: outer path + letBody accessor
     "bodyPathPrefix" <~ Lists.concat2 (var "path") (list [inject _TermAccessor _TermAccessor_letBody unit]) $
-    "bodyResult" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ string "_body" @@ var "bodyPathPrefix" @@ var "body" $
+    -- Use the first binding's name to disambiguate the body prefix across nesting levels
+    "firstBindingName" <~ Maybes.maybe (string "body") (lambda "b" $ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) (Lists.safeHead (var "bindings")) $
+    "bodyPrefix" <~ Strings.cat2 (var "firstBindingName") (string "_body") $
+    "bodyResult" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ var "bodyPrefix" @@ var "bodyPathPrefix" @@ var "body" $
     "newBody" <~ Pairs.second (var "bodyResult") $
     -- Return the original counter (siblings are independent, so counter doesn't propagate)
     pair (var "counter") (Core.termLet (Core.let_ (var "newBindings") (var "newBody")))) $
