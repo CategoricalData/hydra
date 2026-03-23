@@ -395,6 +395,12 @@
               {
                 "@key": {
                   "wrap": {
+                    "body": {"literal": {"string": "hydra.lib.regex"}},
+                    "typeName": "hydra.module.Namespace"}},
+                "@value": {"literal": {"string": "regex"}}},
+              {
+                "@key": {
+                  "wrap": {
                     "body": {"literal": {"string": "hydra.lib.sets"}},
                     "typeName": "hydra.module.Namespace"}},
                 "@value": {"literal": {"string": "sets"}}},

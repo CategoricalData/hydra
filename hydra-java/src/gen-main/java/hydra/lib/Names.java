@@ -46,6 +46,10 @@ public interface Names {
     return new hydra.module.Namespace("hydra.lib.pairs");
   }
 
+  static hydra.module.Namespace regex() {
+    return new hydra.module.Namespace("hydra.lib.regex");
+  }
+
   static hydra.module.Namespace sets() {
     return new hydra.module.Namespace("hydra.lib.sets");
   }
@@ -928,6 +932,30 @@ public interface Names {
 
   static hydra.core.Name setsUnions() {
     return new hydra.core.Name("hydra.lib.sets.unions");
+  }
+
+  static hydra.core.Name regexFind() {
+    return new hydra.core.Name("hydra.lib.regex.find");
+  }
+
+  static hydra.core.Name regexFindAll() {
+    return new hydra.core.Name("hydra.lib.regex.findAll");
+  }
+
+  static hydra.core.Name regexMatches() {
+    return new hydra.core.Name("hydra.lib.regex.matches");
+  }
+
+  static hydra.core.Name regexReplace() {
+    return new hydra.core.Name("hydra.lib.regex.replace");
+  }
+
+  static hydra.core.Name regexReplaceAll() {
+    return new hydra.core.Name("hydra.lib.regex.replaceAll");
+  }
+
+  static hydra.core.Name regexSplit() {
+    return new hydra.core.Name("hydra.lib.regex.split");
   }
 
   static hydra.core.Name stringsCat() {

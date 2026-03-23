@@ -112,6 +112,17 @@
           "type": {"variable": "hydra.module.Namespace"},
           "variables": []}]},
     {
+      "name": "hydra.lib.names.regex",
+      "term": {
+        "wrap": {
+          "body": {"literal": {"string": "hydra.lib.regex"}},
+          "typeName": "hydra.module.Namespace"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.module.Namespace"},
+          "variables": []}]},
+    {
       "name": "hydra.lib.names.sets",
       "term": {
         "wrap": {
@@ -2536,6 +2547,72 @@
       "term": {
         "wrap": {
           "body": {"literal": {"string": "hydra.lib.sets.unions"}},
+          "typeName": "hydra.core.Name"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
+    {
+      "name": "hydra.lib.names.regexFind",
+      "term": {
+        "wrap": {
+          "body": {"literal": {"string": "hydra.lib.regex.find"}},
+          "typeName": "hydra.core.Name"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
+    {
+      "name": "hydra.lib.names.regexFindAll",
+      "term": {
+        "wrap": {
+          "body": {"literal": {"string": "hydra.lib.regex.findAll"}},
+          "typeName": "hydra.core.Name"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
+    {
+      "name": "hydra.lib.names.regexMatches",
+      "term": {
+        "wrap": {
+          "body": {"literal": {"string": "hydra.lib.regex.matches"}},
+          "typeName": "hydra.core.Name"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
+    {
+      "name": "hydra.lib.names.regexReplace",
+      "term": {
+        "wrap": {
+          "body": {"literal": {"string": "hydra.lib.regex.replace"}},
+          "typeName": "hydra.core.Name"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
+    {
+      "name": "hydra.lib.names.regexReplaceAll",
+      "term": {
+        "wrap": {
+          "body": {"literal": {"string": "hydra.lib.regex.replaceAll"}},
+          "typeName": "hydra.core.Name"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
+    {
+      "name": "hydra.lib.names.regexSplit",
+      "term": {
+        "wrap": {
+          "body": {"literal": {"string": "hydra.lib.regex.split"}},
           "typeName": "hydra.core.Name"}},
       "type": [
         {

@@ -432,6 +432,20 @@
 
 (defvar hydra_lib_names_pairs_second "hydra.lib.pairs.second")
 
+(defvar hydra_lib_names_regex "hydra.lib.regex")
+
+(defvar hydra_lib_names_regex_find "hydra.lib.regex.find")
+
+(defvar hydra_lib_names_regex_find_all "hydra.lib.regex.findAll")
+
+(defvar hydra_lib_names_regex_matches "hydra.lib.regex.matches")
+
+(defvar hydra_lib_names_regex_replace "hydra.lib.regex.replace")
+
+(defvar hydra_lib_names_regex_replace_all "hydra.lib.regex.replaceAll")
+
+(defvar hydra_lib_names_regex_split "hydra.lib.regex.split")
+
 (defvar hydra_lib_names_sets "hydra.lib.sets")
 
 (defvar hydra_lib_names_sets_delete "hydra.lib.sets.delete")

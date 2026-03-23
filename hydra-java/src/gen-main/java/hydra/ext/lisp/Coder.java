@@ -643,7 +643,7 @@ public interface Coder {
   }
 
   static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> encodeFunction(hydra.ext.lisp.syntax.Dialect dialect, T0 cx, T1 g, hydra.core.Function fun) {
-    return (fun).accept(new hydra.core.Function.PartialVisitor<hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression>>() {
+    return (fun).accept(new hydra.core.Function.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T2, hydra.ext.lisp.syntax.Expression> visit(hydra.core.Function.Lambda lam) {
         String param = hydra.Formatting.convertCaseCamelOrUnderscoreToLowerSnake(hydra.Formatting.sanitizeWithUnderscores(
@@ -767,7 +767,7 @@ public interface Coder {
 
                 @Override
                 public Boolean visit(hydra.core.Term.Function f) {
-                  return (f).value.accept(new hydra.core.Function.PartialVisitor<Boolean>() {
+                  return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
                     @Override
                     public Boolean otherwise(hydra.core.Function instance) {
                       return false;
@@ -884,7 +884,7 @@ public interface Coder {
 
       @Override
       public Boolean visit(hydra.core.Term.Function f) {
-        return (f).value.accept(new hydra.core.Function.PartialVisitor<Boolean>() {
+        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public Boolean otherwise(hydra.core.Function instance) {
             return false;
@@ -1283,7 +1283,7 @@ public interface Coder {
 
       @Override
       public hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> visit(hydra.core.Term.Function fun) {
-        return (fun).value.accept(new hydra.core.Function.PartialVisitor<hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments>>() {
+        return (fun).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public hydra.util.Either<T2, hydra.ext.lisp.syntax.TopLevelFormWithComments> otherwise(hydra.core.Function instance) {
             return hydra.lib.eithers.Bind.apply(
