@@ -53,12 +53,12 @@ error_ = define "Error" $
     "undefinedField">:
       doc "A reference to an undefined field" $
       ErrorsCore.undefinedFieldError,
-    "undefinedTerm">:
-      doc "A reference to an undefined term" $
-      ErrorsCore.undefinedTermError,
-    "undefinedType">:
-      doc "A reference to an undefined type" $
-      ErrorsCore.undefinedTypeError,
+    "undefinedTermVariable">:
+      doc "A reference to an undefined term variable" $
+      ErrorsCore.undefinedTermVariableError,
+    "untypedTermVariable">:
+      doc "A term variable whose type is not known" $
+      ErrorsCore.untypedTermVariableError,
     "unexpectedTermVariant">:
       doc "An unexpected term variant" $
       ErrorsCore.unexpectedTermVariantError,

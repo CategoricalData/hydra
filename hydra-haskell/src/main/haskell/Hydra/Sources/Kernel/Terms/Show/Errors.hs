@@ -121,8 +121,8 @@ error_ = define "error" $
     _Error_duplicateField>>: ShowErrorCore.duplicateFieldError,
     _Error_other>>: otherError,
     _Error_undefinedField>>: ShowErrorCore.undefinedFieldError,
-    _Error_undefinedTerm>>: ShowErrorCore.undefinedTermError,
-    _Error_undefinedType>>: ShowErrorCore.undefinedTypeError,
+    _Error_undefinedTermVariable>>: ShowErrorCore.undefinedTermVariableError,
+    _Error_untypedTermVariable>>: ShowErrorCore.untypedTermVariableError,
     _Error_unexpectedTermVariant>>: ShowErrorCore.unexpectedTermVariantError,
     _Error_unexpectedTypeVariant>>: ShowErrorCore.unexpectedTypeVariantError,
     _Error_unification>>: unificationError]
