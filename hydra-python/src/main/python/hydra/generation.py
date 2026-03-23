@@ -265,6 +265,16 @@ def write_haskell(base_path, universe, mods):
         base_path, universe, mods)
 
 
+def write_scala(base_path, universe, mods):
+    """Generate Scala source files from modules."""
+    from hydra.ext.scala.coder import module_to_scala
+    from hydra.ext.scala.language import scala_language
+    generate_sources(
+        module_to_scala, scala_language(),
+        False, True, False, False,
+        base_path, universe, mods)
+
+
 def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
     """Generate source files for a Lisp dialect (Clojure, Scheme, Common Lisp, or Emacs Lisp)."""
     from hydra.ext.lisp.coder import module_to_lisp

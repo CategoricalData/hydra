@@ -38,4 +38,4 @@ echo "Scala host: generating $TARGET code..."
 echo ""
 
 cd "$HYDRA_SCALA_DIR"
-sbt -warn "runMain hydra.Bootstrap $EXTRA_ARGS"
+sbt -warn "runMain hydra.bootstrap $EXTRA_ARGS"

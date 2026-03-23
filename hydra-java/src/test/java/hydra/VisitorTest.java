@@ -140,6 +140,11 @@ public class VisitorTest {
         }
 
         @Override
+        public String visit(Type.Void_ instance) {
+            return "void";
+        }
+
+        @Override
         public String visit(Type.Variable instance) {
             return instance.value.value;
         }
