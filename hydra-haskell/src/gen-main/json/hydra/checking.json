@@ -10187,11 +10187,21 @@
                                                                           "term": {
                                                                             "union": {
                                                                               "field": {
-                                                                                "name": "undefinedTerm",
+                                                                                "name": "undefinedTermVariable",
                                                                                 "term": {
                                                                                   "record": {
-                                                                                    "fields": [{"name": "name", "term": {"variable": "name"}}],
-                                                                                    "typeName": "hydra.error.core.UndefinedTermError"}}},
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "location",
+                                                                                        "term": {
+                                                                                          "wrap": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"list": []},
+                                                                                                "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                                            "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                                      {"name": "name", "term": {"variable": "name"}}],
+                                                                                    "typeName": "hydra.error.core.UndefinedTermVariableError"}}},
                                                                               "typeName": "hydra.errors.Error"}}},
                                                                         {"name": "context", "term": {"variable": "cx"}}],
                                                                       "typeName": "hydra.context.InContext"}},
@@ -12852,11 +12862,21 @@
                                                                           "term": {
                                                                             "union": {
                                                                               "field": {
-                                                                                "name": "undefinedType",
+                                                                                "name": "untypedTermVariable",
                                                                                 "term": {
                                                                                   "record": {
-                                                                                    "fields": [{"name": "name", "term": {"variable": "name"}}],
-                                                                                    "typeName": "hydra.error.core.UndefinedTypeError"}}},
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "location",
+                                                                                        "term": {
+                                                                                          "wrap": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"list": []},
+                                                                                                "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                                            "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                                      {"name": "name", "term": {"variable": "name"}}],
+                                                                                    "typeName": "hydra.error.core.UntypedTermVariableError"}}},
                                                                               "typeName": "hydra.errors.Error"}}},
                                                                         {"name": "context", "term": {"variable": "cx"}}],
                                                                       "typeName": "hydra.context.InContext"}},

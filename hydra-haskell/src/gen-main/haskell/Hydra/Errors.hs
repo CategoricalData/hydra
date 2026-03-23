@@ -36,10 +36,10 @@ data Error =
   ErrorOther OtherError |
   -- | A reference to an undefined field
   ErrorUndefinedField Core_.UndefinedFieldError |
-  -- | A reference to an undefined term
-  ErrorUndefinedTerm Core_.UndefinedTermError |
-  -- | A reference to an undefined type
-  ErrorUndefinedType Core_.UndefinedTypeError |
+  -- | A reference to an undefined term variable
+  ErrorUndefinedTermVariable Core_.UndefinedTermVariableError |
+  -- | A term variable whose type is not known
+  ErrorUntypedTermVariable Core_.UntypedTermVariableError |
   -- | An unexpected term variant
   ErrorUnexpectedTermVariant Core_.UnexpectedTermVariantError |
   -- | An unexpected type variant
@@ -62,9 +62,9 @@ _Error_other = Core.Name "other"
 
 _Error_undefinedField = Core.Name "undefinedField"
 
-_Error_undefinedTerm = Core.Name "undefinedTerm"
+_Error_undefinedTermVariable = Core.Name "undefinedTermVariable"
 
-_Error_undefinedType = Core.Name "undefinedType"
+_Error_untypedTermVariable = Core.Name "untypedTermVariable"
 
 _Error_unexpectedTermVariant = Core.Name "unexpectedTermVariant"
 

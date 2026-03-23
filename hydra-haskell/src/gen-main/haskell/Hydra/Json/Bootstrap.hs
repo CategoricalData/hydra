@@ -1154,17 +1154,17 @@ typesByName =
               Core.annotatedTypeAnnotation = (M.fromList [
                 (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A reference to an undefined field")))])}))},
           Core.FieldType {
-            Core.fieldTypeName = (Core.Name "undefinedTerm"),
+            Core.fieldTypeName = (Core.Name "undefinedTermVariable"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.error.core.UndefinedTermError")),
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.error.core.UndefinedTermVariableError")),
               Core.annotatedTypeAnnotation = (M.fromList [
-                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A reference to an undefined term")))])}))},
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A reference to an undefined term variable")))])}))},
           Core.FieldType {
-            Core.fieldTypeName = (Core.Name "undefinedType"),
+            Core.fieldTypeName = (Core.Name "untypedTermVariable"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.error.core.UndefinedTypeError")),
+              Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.error.core.UntypedTermVariableError")),
               Core.annotatedTypeAnnotation = (M.fromList [
-                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A reference to an undefined type")))])}))},
+                (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A term variable whose type is not known")))])}))},
           Core.FieldType {
             Core.fieldTypeName = (Core.Name "unexpectedTermVariant"),
             Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {

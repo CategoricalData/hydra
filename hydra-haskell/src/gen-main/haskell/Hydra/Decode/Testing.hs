@@ -705,7 +705,12 @@ validateCoreTermTestCase cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" (Helpers.decodeMaybe Core__.invalidTermError) fieldMap cx) (\field_output -> Right (Testing.ValidateCoreTermTestCase {
+        in (Eithers.bind (Helpers.requireField "typed" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralBoolean v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected boolean literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_typed -> Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" (Helpers.decodeMaybe Core__.invalidTermError) fieldMap cx) (\field_output -> Right (Testing.ValidateCoreTermTestCase {
+          Testing.validateCoreTermTestCaseTyped = field_typed,
           Testing.validateCoreTermTestCaseInput = field_input,
-          Testing.validateCoreTermTestCaseOutput = field_output}))))
+          Testing.validateCoreTermTestCaseOutput = field_output})))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)

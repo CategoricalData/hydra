@@ -76,20 +76,20 @@ errorUndefinedField x =
         Core.fieldName = (Core.Name "undefinedField"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-errorUndefinedTerm :: Phantoms.TTerm Core_.UndefinedTermError -> Phantoms.TTerm Errors.Error
-errorUndefinedTerm x =
+errorUndefinedTermVariable :: Phantoms.TTerm Core_.UndefinedTermVariableError -> Phantoms.TTerm Errors.Error
+errorUndefinedTermVariable x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "undefinedTerm"),
+        Core.fieldName = (Core.Name "undefinedTermVariable"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-errorUndefinedType :: Phantoms.TTerm Core_.UndefinedTypeError -> Phantoms.TTerm Errors.Error
-errorUndefinedType x =
+errorUntypedTermVariable :: Phantoms.TTerm Core_.UntypedTermVariableError -> Phantoms.TTerm Errors.Error
+errorUntypedTermVariable x =
     Phantoms.TTerm (Core.TermUnion (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "undefinedType"),
+        Core.fieldName = (Core.Name "untypedTermVariable"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 errorUnexpectedTermVariant :: Phantoms.TTerm Core_.UnexpectedTermVariantError -> Phantoms.TTerm Errors.Error

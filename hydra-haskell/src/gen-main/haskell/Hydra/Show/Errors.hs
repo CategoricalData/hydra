@@ -52,8 +52,8 @@ error e =
       Errors.ErrorDuplicateField v0 -> Core__.duplicateFieldError v0
       Errors.ErrorOther v0 -> otherError v0
       Errors.ErrorUndefinedField v0 -> Core__.undefinedFieldError v0
-      Errors.ErrorUndefinedTerm v0 -> Core__.undefinedTermError v0
-      Errors.ErrorUndefinedType v0 -> Core__.undefinedTypeError v0
+      Errors.ErrorUndefinedTermVariable v0 -> Core__.undefinedTermVariableError v0
+      Errors.ErrorUntypedTermVariable v0 -> Core__.untypedTermVariableError v0
       Errors.ErrorUnexpectedTermVariant v0 -> Core__.unexpectedTermVariantError v0
       Errors.ErrorUnexpectedTypeVariant v0 -> Core__.unexpectedTypeVariantError v0
       Errors.ErrorUnification v0 -> unificationError v0

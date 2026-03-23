@@ -1028,6 +1028,8 @@ _JoinTypesTestCase_expected = Core.Name "expected"
 -- | A test case which validates a term and compares the result with an expected Maybe InvalidTermError
 data ValidateCoreTermTestCase =
   ValidateCoreTermTestCase {
+    -- | Whether to expect System F (typed) terms. When true, type variable binding checks and UntypedTermVariableError are active.
+    validateCoreTermTestCaseTyped :: Bool,
     -- | The term to validate
     validateCoreTermTestCaseInput :: Core.Term,
     -- | The expected validation result (Nothing if valid, Just error if invalid)
@@ -1035,6 +1037,8 @@ data ValidateCoreTermTestCase =
   deriving (Eq, Ord, Read, Show)
 
 _ValidateCoreTermTestCase = Core.Name "hydra.testing.ValidateCoreTermTestCase"
+
+_ValidateCoreTermTestCase_typed = Core.Name "typed"
 
 _ValidateCoreTermTestCase_input = Core.Name "input"
 

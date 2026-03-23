@@ -55,16 +55,16 @@ error x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "undefinedField"),
           Core.fieldTerm = (Core__.undefinedFieldError v0)}})
-      Errors.ErrorUndefinedTerm v0 -> Core.TermUnion (Core.Injection {
+      Errors.ErrorUndefinedTermVariable v0 -> Core.TermUnion (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "undefinedTerm"),
-          Core.fieldTerm = (Core__.undefinedTermError v0)}})
-      Errors.ErrorUndefinedType v0 -> Core.TermUnion (Core.Injection {
+          Core.fieldName = (Core.Name "undefinedTermVariable"),
+          Core.fieldTerm = (Core__.undefinedTermVariableError v0)}})
+      Errors.ErrorUntypedTermVariable v0 -> Core.TermUnion (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "undefinedType"),
-          Core.fieldTerm = (Core__.undefinedTypeError v0)}})
+          Core.fieldName = (Core.Name "untypedTermVariable"),
+          Core.fieldTerm = (Core__.untypedTermVariableError v0)}})
       Errors.ErrorUnexpectedTermVariant v0 -> Core.TermUnion (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {

@@ -134,11 +134,11 @@
                                 "name": "undefinedField",
                                 "term": {"variable": "hydra.show.error.core.undefinedFieldError"}},
                               {
-                                "name": "undefinedTerm",
-                                "term": {"variable": "hydra.show.error.core.undefinedTermError"}},
+                                "name": "undefinedTermVariable",
+                                "term": {"variable": "hydra.show.error.core.undefinedTermVariableError"}},
                               {
-                                "name": "undefinedType",
-                                "term": {"variable": "hydra.show.error.core.undefinedTypeError"}},
+                                "name": "untypedTermVariable",
+                                "term": {"variable": "hydra.show.error.core.untypedTermVariableError"}},
                               {
                                 "name": "unexpectedTermVariant",
                                 "term": {"variable": "hydra.show.error.core.unexpectedTermVariantError"}},

@@ -395,7 +395,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "undefinedTerm"}},
+                                              "body": {"literal": {"string": "undefinedTermVariable"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -414,7 +414,7 @@
                                                               "name": "variable",
                                                               "term": {
                                                                 "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.error.core.UndefinedTermError"}},
+                                                                  "body": {"literal": {"string": "hydra.error.core.UndefinedTermVariableError"}},
                                                                   "typeName": "hydra.core.Name"}}},
                                                             "typeName": "hydra.core.Type"}}},
                                                       {
@@ -434,7 +434,7 @@
                                                                       "union": {
                                                                         "field": {
                                                                           "name": "string",
-                                                                          "term": {"literal": {"string": "A reference to an undefined term"}}},
+                                                                          "term": {"literal": {"string": "A reference to an undefined term variable"}}},
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}}}]}}],
                                                     "typeName": "hydra.core.AnnotatedType"}}},
@@ -447,7 +447,7 @@
                                           "name": "name",
                                           "term": {
                                             "wrap": {
-                                              "body": {"literal": {"string": "undefinedType"}},
+                                              "body": {"literal": {"string": "untypedTermVariable"}},
                                               "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "type",
@@ -466,7 +466,7 @@
                                                               "name": "variable",
                                                               "term": {
                                                                 "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.error.core.UndefinedTypeError"}},
+                                                                  "body": {"literal": {"string": "hydra.error.core.UntypedTermVariableError"}},
                                                                   "typeName": "hydra.core.Name"}}},
                                                             "typeName": "hydra.core.Type"}}},
                                                       {
@@ -486,7 +486,7 @@
                                                                       "union": {
                                                                         "field": {
                                                                           "name": "string",
-                                                                          "term": {"literal": {"string": "A reference to an undefined type"}}},
+                                                                          "term": {"literal": {"string": "A term variable whose type is not known"}}},
                                                                         "typeName": "hydra.core.Literal"}}},
                                                                   "typeName": "hydra.core.Term"}}}]}}],
                                                     "typeName": "hydra.core.AnnotatedType"}}},

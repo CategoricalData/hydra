@@ -4,6 +4,7 @@
 
 module Hydra.Checking where
 
+import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
@@ -537,8 +538,9 @@ typeOfPrimitive cx tx typeArgs name =
 
       let rawTs = Maybes.map (\_p -> Graph.primitiveType _p) (Maps.lookup name (Graph.graphPrimitives tx))
       in (Maybes.maybe (Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorUndefinedTerm (Core_.UndefinedTermError {
-          Core_.undefinedTermErrorName = name})),
+        Context.inContextObject = (Errors.ErrorUndefinedTermVariable (Core_.UndefinedTermVariableError {
+          Core_.undefinedTermVariableErrorLocation = (Accessors.AccessorPath []),
+          Core_.undefinedTermVariableErrorName = name})),
         Context.inContextContext = cx})) (\tsRaw ->
         let instResult = Schemas.instantiateTypeScheme cx tsRaw
             ts = Pairs.first instResult
@@ -663,8 +665,9 @@ typeOfVariable cx tx typeArgs name =
 
       let rawTypeScheme = Maps.lookup name (Graph.graphBoundTypes tx)
       in (Maybes.maybe (Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorUndefinedType (Core_.UndefinedTypeError {
-          Core_.undefinedTypeErrorName = name})),
+        Context.inContextObject = (Errors.ErrorUntypedTermVariable (Core_.UntypedTermVariableError {
+          Core_.untypedTermVariableErrorLocation = (Accessors.AccessorPath []),
+          Core_.untypedTermVariableErrorName = name})),
         Context.inContextContext = cx})) (\ts ->
         let tResult =
                 Logic.ifElse (Lists.null typeArgs) (Schemas.instantiateType cx (Rewriting.typeSchemeToFType ts)) (Rewriting.typeSchemeToFType ts, cx)
