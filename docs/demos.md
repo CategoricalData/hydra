@@ -72,6 +72,24 @@ decodes JSON data into typed Hydra terms, and applies the chosen last-mile trans
 
 Entry point: `hydra-ext/src/main/haskell/Hydra/Ext/Demos/AvroToPropertyGraphs.hs`.
 
+## GraphQL JSON (querying Hydra modules with GraphQL)
+
+This demo generates a GraphQL schema from Hydra kernel types, then uses it to query the
+existing kernel JSON modules. It demonstrates the two parallel pipelines at the heart of
+Hydra's data model: types map to a GraphQL schema via the GraphQL coder, while terms
+(module instances) are already serialized to JSON via the term encoder + JSON encoder pipeline.
+Because both pipelines derive from the same type definitions, the schema and data are
+structurally aligned, and a standard GraphQL engine can resolve queries against the JSON.
+
+The demo uses Haskell for schema generation and Python (with `graphql-core`) for query execution.
+Five example queries are included: listing modules, finding dependents of a namespace,
+inspecting module details, searching by description, and ranking modules by element count.
+The architecture is naturally translingual -- the GraphQL coder is a generated function that
+could run in any Hydra target language.
+
+See the [GraphQL JSON README](../hydra-ext/demos/graphql-json/README.md) for setup, usage,
+and example queries.
+
 ## Metered evaluation
 
 A small, self-contained demo of Hydra's instrumented evaluation mode.
