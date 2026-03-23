@@ -181,9 +181,9 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
       H.it "unshadow variables" $ H.shouldBe
         (ShowCore.term $ Rewriting.unshadowVariables input)
         (ShowCore.term output)
-    TestCaseValidateCoreTerm (ValidateCoreTermTestCase input output) ->
+    TestCaseValidateCoreTerm (ValidateCoreTermTestCase typed input output) ->
       H.it "validate core term" $ H.shouldBe
-        (ValidateCore.term emptyGraph input)
+        (ValidateCore.term typed emptyGraph input)
         output
 
 runTestCase :: String -> TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
