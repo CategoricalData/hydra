@@ -436,9 +436,11 @@ encodeType = define "encodeType" $
   lambda "tname" $ lambda "typ" $ lambda "cx" $ lets [
     "any">: right (common @@ (list ([] :: [TTerm Shacl.CommonConstraint])))] $
     cases _Type (Rewriting.deannotateType @@ var "typ") (Just (unexpectedE @@ var "cx" @@ string "type" @@ string "unsupported type variant")) [
+      _Type_either>>: lambda "_" $ var "any",
       _Type_list>>: lambda "_" $ var "any",
       _Type_literal>>: lambda "lt" $ right (encodeLiteralType @@ var "lt"),
       _Type_map>>: lambda "_" $ var "any",
+      _Type_pair>>: lambda "_" $ var "any",
       _Type_wrap>>: lambda "_" $ var "any",
       _Type_record>>: "fts" ~>
         Eithers.map
@@ -462,7 +464,13 @@ encodeType = define "encodeType" $
                 (var "__props")))])
           (Eithers.mapList
             ("__ft" ~> encodeFieldType @@ var "tname" @@ nothing @@ var "__ft" @@ var "cx")
-            (var "fts"))]
+            (var "fts")),
+      _Type_unit>>: constant $ var "any",
+      _Type_variable>>: lambda "vname" $
+        right (common @@ list [
+          inject Shacl._CommonConstraint Shacl._CommonConstraint_node
+            (Sets.fromList (list [
+              inject Shacl._Reference Shacl._Reference_named (nameToIri @@ var "vname")]))])]
 
 -- | Construct a SHACL node shape from a list of common constraints
 node :: TBinding ([Shacl.CommonConstraint] -> Shacl.Shape)
