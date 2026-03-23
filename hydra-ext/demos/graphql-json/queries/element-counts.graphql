@@ -1,0 +1,6 @@
+{
+  modules {
+    namespace { value }
+    elements { name { value } }
+  }
+}

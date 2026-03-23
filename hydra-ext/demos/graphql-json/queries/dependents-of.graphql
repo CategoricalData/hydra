@@ -1,0 +1,6 @@
+query ($ns: String!) {
+  dependentsOf(namespace: $ns) {
+    namespace { value }
+    description
+  }
+}

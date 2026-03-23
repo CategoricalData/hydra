@@ -1,0 +1,6 @@
+query ($q: String!) {
+  search(query: $q) {
+    namespace { value }
+    description
+  }
+}
