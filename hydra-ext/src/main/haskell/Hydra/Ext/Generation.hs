@@ -81,6 +81,12 @@ writeCpp = generateSources moduleToCpp cppLanguage True False False False
 writeGraphql :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeGraphql = generateSources moduleToGraphql graphqlLanguage True False False False
 
+-- | Generate GraphQL source files without type adaptation.
+-- Useful when the source types include constructs (like forall) that the adapter doesn't handle,
+-- but the coder can encode directly.
+writeGraphqlRaw :: FP.FilePath -> [Module] -> [Module] -> IO Int
+writeGraphqlRaw = generateSources moduleToGraphql graphqlLanguage False False False False
+
 -- | Generate Java source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)

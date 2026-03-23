@@ -106,11 +106,18 @@ encodeNamedType cx g prefixes name typ =
         Syntax.objectTypeDefinitionImplementsInterfaces = Nothing,
         Syntax.objectTypeDefinitionDirectives = Nothing,
         Syntax.objectTypeDefinitionFieldsDefinition = (Just (Syntax.FieldsDefinition gfields))}))))
-      Core.TypeUnion v0 -> Eithers.bind (Eithers.mapList (\f -> encodeEnumFieldType cx g f) v0) (\values -> Eithers.bind (descriptionFromType cx g typ) (\desc -> Right (Syntax.TypeDefinitionEnum (Syntax.EnumTypeDefinition {
-        Syntax.enumTypeDefinitionDescription = desc,
-        Syntax.enumTypeDefinitionName = (encodeTypeName prefixes name),
-        Syntax.enumTypeDefinitionDirectives = Nothing,
-        Syntax.enumTypeDefinitionEnumValuesDefinition = (Just (Syntax.EnumValuesDefinition values))}))))
+      Core.TypeUnion v0 -> if Schemas.isEnumRowType v0
+        then Eithers.bind (Eithers.mapList (\f -> encodeEnumFieldType cx g f) v0) (\values -> Eithers.bind (descriptionFromType cx g typ) (\desc -> Right (Syntax.TypeDefinitionEnum (Syntax.EnumTypeDefinition {
+          Syntax.enumTypeDefinitionDescription = desc,
+          Syntax.enumTypeDefinitionName = (encodeTypeName prefixes name),
+          Syntax.enumTypeDefinitionDirectives = Nothing,
+          Syntax.enumTypeDefinitionEnumValuesDefinition = (Just (Syntax.EnumValuesDefinition values))}))))
+        else Eithers.bind (Eithers.mapList (\f -> encodeUnionFieldType cx g prefixes f) v0) (\gfields -> Eithers.bind (descriptionFromType cx g typ) (\desc -> Right (Syntax.TypeDefinitionObject (Syntax.ObjectTypeDefinition {
+          Syntax.objectTypeDefinitionDescription = desc,
+          Syntax.objectTypeDefinitionName = (encodeTypeName prefixes name),
+          Syntax.objectTypeDefinitionImplementsInterfaces = Nothing,
+          Syntax.objectTypeDefinitionDirectives = Nothing,
+          Syntax.objectTypeDefinitionFieldsDefinition = (Just (Syntax.FieldsDefinition gfields))}))))
       Core.TypeEither v0 -> encodeNamedType cx g prefixes name (Core.TypeRecord [
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "left"),
@@ -135,8 +142,11 @@ encodeNamedType cx g prefixes name typ =
           Core.fieldTypeType = (Core.TypeList v0)}])
       Core.TypeMap v0 -> encodeNamedType cx g prefixes name (Core.TypeRecord [
         Core.FieldType {
+          Core.fieldTypeName = (Core.Name "key"),
+          Core.fieldTypeType = (Core.mapTypeKeys v0)},
+        Core.FieldType {
           Core.fieldTypeName = (Core.Name "value"),
-          Core.fieldTypeType = (Core.TypeList (Core.mapTypeValues v0))}])
+          Core.fieldTypeType = (Core.mapTypeValues v0)}])
       Core.TypeLiteral v0 -> encodeNamedType cx g prefixes name (Core.TypeRecord [
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "value"),
@@ -149,6 +159,19 @@ encodeNamedType cx g prefixes name typ =
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "value"),
           Core.fieldTypeType = v0}])
+      Core.TypeForall v0 -> encodeNamedType cx g prefixes name (Core.forallTypeBody v0)
+      Core.TypeApplication v0 -> encodeNamedType cx g prefixes name (Core.applicationTypeFunction v0)
+      Core.TypeFunction v0 -> encodeNamedType cx g prefixes name (Core.TypeRecord [
+        Core.FieldType {
+          Core.fieldTypeName = (Core.Name "domain"),
+          Core.fieldTypeType = (Core.functionTypeDomain v0)},
+        Core.FieldType {
+          Core.fieldTypeName = (Core.Name "codomain"),
+          Core.fieldTypeType = (Core.functionTypeCodomain v0)}])
+      Core.TypeUnit -> encodeNamedType cx g prefixes name (Core.TypeRecord [
+        Core.FieldType {
+          Core.fieldTypeName = (Core.Name "value"),
+          Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)}])
       _ -> Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected record or union type, found: " (Core_.type_ typ)))),
         Context.inContextContext = cx})
@@ -161,16 +184,20 @@ encodeType cx g prefixes typ =
         Core.TypeSet v1 -> Eithers.map (\gt -> Syntax.TypeList (Syntax.ListType gt)) (encodeType cx g prefixes v1)
         Core.TypeMap v1 -> Eithers.map (\gt -> Syntax.TypeList (Syntax.ListType gt)) (encodeType cx g prefixes (Core.mapTypeValues v1))
         Core.TypeLiteral v1 -> Eithers.map (\nt -> Syntax.TypeNamed nt) (encodeLiteralType cx v1)
+        Core.TypePair _ -> Right (Syntax.TypeNamed (Syntax.NamedType (encodeTypeName prefixes (Core.Name "hydra.util.Pair"))))
+        Core.TypeEither _ -> Right (Syntax.TypeNamed (Syntax.NamedType (encodeTypeName prefixes (Core.Name "hydra.util.Either"))))
         Core.TypeRecord _ -> Left (Context.InContext {
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous record type")),
           Context.inContextContext = cx})
         Core.TypeUnion _ -> Left (Context.InContext {
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous union type")),
           Context.inContextContext = cx})
-        Core.TypeWrap _ -> Left (Context.InContext {
-          Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous wrap type")),
-          Context.inContextContext = cx})
+        Core.TypeWrap v1 -> encodeType cx g prefixes (Core.TypeMaybe v1)
         Core.TypeVariable v1 -> Right (Syntax.TypeNamed (Syntax.NamedType (encodeTypeName prefixes v1)))
+        Core.TypeForall v1 -> encodeType cx g prefixes (Core.TypeMaybe (Core.forallTypeBody v1))
+        Core.TypeApplication v1 -> encodeType cx g prefixes (Core.TypeMaybe (Core.applicationTypeFunction v1))
+        Core.TypeFunction _ -> Right (Syntax.TypeNamed (Syntax.NamedType (Syntax.Name "String")))
+        Core.TypeUnit -> Right (Syntax.TypeNamed (Syntax.NamedType (Syntax.Name "Boolean")))
         _ -> Left (Context.InContext {
           Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected GraphQL-compatible type, found: " (Core_.type_ v0)))),
           Context.inContextContext = cx})
@@ -178,6 +205,8 @@ encodeType cx g prefixes typ =
       Core.TypeSet v0 -> Eithers.map (\gt -> Syntax.TypeNonNull (Syntax.NonNullTypeList (Syntax.ListType gt))) (encodeType cx g prefixes v0)
       Core.TypeMap v0 -> Eithers.map (\gt -> Syntax.TypeNonNull (Syntax.NonNullTypeList (Syntax.ListType gt))) (encodeType cx g prefixes (Core.mapTypeValues v0))
       Core.TypeLiteral v0 -> Eithers.map (\nt -> Syntax.TypeNonNull (Syntax.NonNullTypeNamed nt)) (encodeLiteralType cx v0)
+      Core.TypePair _ -> Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (encodeTypeName prefixes (Core.Name "hydra.util.Pair")))))
+      Core.TypeEither _ -> Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (encodeTypeName prefixes (Core.Name "hydra.util.Either")))))
       Core.TypeRecord _ -> Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous record type")),
         Context.inContextContext = cx})
@@ -185,9 +214,11 @@ encodeType cx g prefixes typ =
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous union type")),
         Context.inContextContext = cx})
       Core.TypeVariable v0 -> Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (encodeTypeName prefixes v0))))
-      Core.TypeWrap _ -> Left (Context.InContext {
-        Context.inContextObject = (Errors.ErrorOther (Errors.OtherError "unexpected anonymous wrap type")),
-        Context.inContextContext = cx})
+      Core.TypeWrap v0 -> encodeType cx g prefixes v0
+      Core.TypeForall v0 -> encodeType cx g prefixes (Core.forallTypeBody v0)
+      Core.TypeApplication v0 -> encodeType cx g prefixes (Core.applicationTypeFunction v0)
+      Core.TypeFunction _ -> Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (Syntax.Name "String"))))
+      Core.TypeUnit -> Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (Syntax.Name "Boolean"))))
       _ -> Left (Context.InContext {
         Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected GraphQL-compatible type, found: " (Core_.type_ typ)))),
         Context.inContextContext = cx})
@@ -200,6 +231,22 @@ encodeTypeName prefixes name =
           mns = Module.qualifiedNameNamespace qualName
           prefix = Maybes.maybe "" (\ns_ -> Maybes.maybe "" (\p -> p) (Maps.lookup ns_ prefixes)) mns
       in (Syntax.Name (Strings.cat2 prefix (sanitize local)))
+
+encodeUnionFieldType :: Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.FieldType -> Either (Context.InContext Errors.Error) Syntax.FieldDefinition
+encodeUnionFieldType cx g prefixes ft =
+    let innerType = Core.fieldTypeType ft
+        isUnit = Schemas.isUnitType (Rewriting.deannotateType innerType)
+        effectiveType = if isUnit
+          then Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeBoolean)
+          else Core.TypeMaybe innerType
+    in Eithers.bind (encodeType cx g prefixes effectiveType) (\gtype ->
+       Eithers.bind (descriptionFromType cx g innerType) (\desc ->
+       Right (Syntax.FieldDefinition {
+         Syntax.fieldDefinitionDescription = desc,
+         Syntax.fieldDefinitionName = (encodeFieldName (Core.fieldTypeName ft)),
+         Syntax.fieldDefinitionArgumentsDefinition = Nothing,
+         Syntax.fieldDefinitionType = gtype,
+         Syntax.fieldDefinitionDirectives = Nothing})))
 
 sanitize :: String -> String
 sanitize s = Formatting.sanitizeWithUnderscores Language.graphqlReservedWords s
