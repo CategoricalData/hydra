@@ -7,7 +7,6 @@
 module Hydra.Ext.Demos.GenPG.Rdf where
 
 import Hydra.Kernel
-import qualified Hydra.Show.Errors as ShowError
 import Hydra.Ext.Demos.GenPG.Examples.Sales.DatabaseSchema
 import Hydra.Ext.Demos.GenPG.Examples.Sales.GraphSchema
 import Hydra.Ext.Demos.GenPG.Examples.Sales.Mapping
@@ -16,8 +15,9 @@ import Hydra.Ext.Demos.GenPG.Examples.Health.GraphSchema
 import Hydra.Ext.Demos.GenPG.Examples.Health.Mapping
 import Hydra.Ext.Demos.GenPG.Demo (transformTables)
 import Hydra.Ext.Demos.Shacl.ShaclRdf (shapesGraphToNtriples)
-import Hydra.Ext.Tools.PropertyGraphToRdf
 import Hydra.Lib.Literals (showInt32)
+import qualified Hydra.Pg.Rdf.Environment as PgRdfEnv
+import qualified Hydra.Pg.Rdf.Mappings as PgRdfMappings
 
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Org.W3.Shacl.Model as Shacl
@@ -66,15 +66,15 @@ generateRdf sourceRoot tableSchemas graphMapping graphSchema outputDir = do
 
   -- Generate RDF data from the property graph
   log "Encoding property graph as RDF..."
-  let helper = defaultTermHelper
-  let vertexDescs = map (encodeVertexOrFail helper) (Pg.lazyGraphVertices g)
-  let edgeDescs = map (encodeEdgeOrFail helper) (Pg.lazyGraphEdges g)
-  let allDescs = vertexDescs ++ edgeDescs
-  let dataNt = Serde.rdfGraphToNtriples $ RdfUtils.descriptionsToGraph allDescs
+  let env = defaultTermEnv
+  let dataGraph = PgRdfMappings.encodeLazyGraph env g
+  let nVertices = length (Pg.lazyGraphVertices g)
+  let nEdges = length (Pg.lazyGraphEdges g)
+  let dataNt = Serde.rdfGraphToNtriples dataGraph
   let dataFile = outputDir ++ "-data.nt"
   writeFile dataFile (ensureTrailingNewline dataNt)
-  log $ "  Wrote " ++ show (length vertexDescs) ++ " vertex descriptions and "
-    ++ show (length edgeDescs) ++ " edge descriptions to " ++ dataFile
+  log $ "  Wrote " ++ show nVertices ++ " vertex and "
+    ++ show nEdges ++ " edge descriptions to " ++ dataFile
 
   -- Generate intentionally non-conforming RDF data for negative validation
   log "Generating non-conforming RDF data..."
@@ -91,45 +91,34 @@ generateRdf sourceRoot tableSchemas graphMapping graphSchema outputDir = do
       | last s == '\n' = s
       | otherwise = s ++ "\n"
 
-    encodeVertexOrFail helper v = case encodeVertex helper v of
-      Left ic -> error $ "Error encoding vertex: " ++ show (inContextObject ic)
-      Right d -> d
-
-    encodeEdgeOrFail helper e = case encodeEdge helper e of
-      Left ic -> error $ "Error encoding edge: " ++ show (inContextObject ic)
-      Right d -> d
-
 
 --------------------------------------------------------------------------------
--- Default helpers for Term-valued property graphs
+-- Default environment for Term-valued property graphs
 
 -- | A default namespace prefix for the demo
 demoNs :: String
 demoNs = "urn:hydra:genpg:"
 
--- | Default helper for encoding Term-valued property graphs as RDF.
-defaultTermHelper :: PropertyGraphRdfHelper a Term
-defaultTermHelper = PropertyGraphRdfHelper {
-  encodeEdgeId = termToIri "edge:",
-  encodeEdgeLabel = \(Pg.EdgeLabel l) -> Right $ Rdf.Iri (demoNs ++ l),
-  encodePropertyKey = \(Pg.PropertyKey k) -> Right $ Rdf.Iri (demoNs ++ k),
-  encodePropertyValue = termToLiteral,
-  encodeVertexId = termToIri "vertex:",
-  encodeVertexLabel = \(Pg.VertexLabel l) -> Right $ Rdf.Iri (demoNs ++ l)}
+-- | Default environment for encoding Term-valued property graphs as RDF.
+defaultTermEnv :: PgRdfEnv.PgRdfEnvironment Term
+defaultTermEnv = PgRdfEnv.PgRdfEnvironment {
+  PgRdfEnv.pgRdfEnvironmentEncodeVertexId = termToIri "vertex:",
+  PgRdfEnv.pgRdfEnvironmentEncodeVertexLabel = \(Pg.VertexLabel l) -> Rdf.Iri (demoNs ++ l),
+  PgRdfEnv.pgRdfEnvironmentEncodeEdgeId = termToIri "edge:",
+  PgRdfEnv.pgRdfEnvironmentEncodeEdgeLabel = \(Pg.EdgeLabel l) -> Rdf.Iri (demoNs ++ l),
+  PgRdfEnv.pgRdfEnvironmentEncodePropertyKey = \(Pg.PropertyKey k) -> Rdf.Iri (demoNs ++ k),
+  PgRdfEnv.pgRdfEnvironmentEncodePropertyValue = termToLiteral}
 
-termToIri :: String -> Term -> Either (InContext Error) Rdf.Iri
+termToIri :: String -> Term -> Rdf.Iri
 termToIri prefix term = case term of
-  TermLiteral (LiteralString s) -> Right $ Rdf.Iri (demoNs ++ prefix ++ s)
-  TermLiteral (LiteralInteger (IntegerValueInt32 i)) -> Right $ Rdf.Iri (demoNs ++ prefix ++ showInt32 i)
-  _ -> otherError $ "Unsupported term type for IRI encoding: " ++ show term
+  TermLiteral (LiteralString s) -> Rdf.Iri (demoNs ++ prefix ++ s)
+  TermLiteral (LiteralInteger (IntegerValueInt32 i)) -> Rdf.Iri (demoNs ++ prefix ++ showInt32 i)
+  _ -> error $ "Unsupported term type for IRI encoding: " ++ show term
 
-termToLiteral :: Term -> Either (InContext Error) Rdf.Literal
+termToLiteral :: Term -> Rdf.Literal
 termToLiteral term = case term of
-  TermLiteral lit -> Right $ RdfUtils.encodeLiteral lit
-  _ -> otherError $ "Expected a literal term: " ++ show term
-
-otherError :: String -> Either (InContext Error) a
-otherError msg = Left $ InContext (ErrorOther $ OtherError msg) emptyContext
+  TermLiteral lit -> RdfUtils.encodeLiteral lit
+  _ -> error $ "Expected a literal term: " ++ show term
 
 
 --------------------------------------------------------------------------------
