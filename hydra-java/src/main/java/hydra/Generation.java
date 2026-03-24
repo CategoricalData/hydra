@@ -484,7 +484,8 @@ public class Generation {
         final hydra.util.CaseConvention cc = caseConv;
         generateSources(
                 mod -> defs -> cx -> g -> {
-                    hydra.util.Either result = hydra.ext.lisp.Coder.moduleToLisp(d, mod, defs, cx, g);
+                    // TODO: lisp.Coder excluded due to stale visitor patterns; needs regeneration
+                    hydra.util.Either result = new hydra.util.Either.Left("Lisp code generation temporarily disabled");
                     if (result instanceof hydra.util.Either.Left) {
                         return result;
                     }

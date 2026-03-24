@@ -2211,10 +2211,7 @@ public interface Coder {
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>> visit(hydra.module.Definition.Term td) {
         hydra.core.Name name = (td).value.name;
         hydra.core.Term term = (td).value.term;
-        hydra.util.Lazy<hydra.core.TypeScheme> typ = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-          () -> new hydra.core.TypeScheme((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Unit")), (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing())),
-          (java.util.function.Function<hydra.core.TypeScheme, hydra.core.TypeScheme>) (x -> x),
-          (td).value.type));
+        hydra.core.TypeScheme typ = (td).value.type;
         return hydra.lib.eithers.Bind.apply(
           hydra.Annotations.getTermDescription(
             cx,
@@ -2230,7 +2227,7 @@ public interface Coder {
                 env,
                 name,
                 term,
-                typ.get(),
+                typ,
                 normComment.get()),
               (java.util.function.Function<hydra.ext.python.syntax.Statement, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>>) (stmt -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>>>right(hydra.util.ConsList.of(hydra.util.ConsList.of(stmt)))));
           }));
@@ -2461,7 +2458,7 @@ public interface Coder {
 
         @Override
         public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Term td) {
-          return hydra.util.Maybe.just(new hydra.core.Binding((td).value.name, (td).value.term, (td).value.type));
+          return hydra.util.Maybe.just(new hydra.core.Binding((td).value.name, (td).value.term, hydra.util.Maybe.just((td).value.type)));
         }
 
         @Override
@@ -4509,14 +4506,12 @@ public interface Coder {
     java.util.function.Function<hydra.ext.python.environment.PythonModuleMetadata, java.util.function.Function<hydra.module.Definition, hydra.ext.python.environment.PythonModuleMetadata>> addDef = (java.util.function.Function<hydra.ext.python.environment.PythonModuleMetadata, java.util.function.Function<hydra.module.Definition, hydra.ext.python.environment.PythonModuleMetadata>>) (meta -> (java.util.function.Function<hydra.module.Definition, hydra.ext.python.environment.PythonModuleMetadata>) (def -> (def).accept(new hydra.module.Definition.PartialVisitor<>() {
       @Override
       public hydra.ext.python.environment.PythonModuleMetadata visit(hydra.module.Definition.Term termDef) {
-        hydra.util.Lazy<hydra.core.Type> typ = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-          () -> new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Unit")),
-          projected -> projected.type,
-          (termDef).value.type));
+        hydra.core.TypeScheme typScheme = (termDef).value.type;
+        hydra.core.Type typ = (typScheme).type;
         hydra.ext.python.environment.PythonModuleMetadata meta2 = hydra.ext.python.Coder.extendMetaForType(
           true,
           true,
-          typ.get(),
+          typ,
           meta);
         hydra.core.Term term = (termDef).value.term;
         return hydra.ext.python.Coder.extendMetaForTerm(
@@ -4578,6 +4573,54 @@ public interface Coder {
         }
       })),
       defs)));
+  }
+
+  static hydra.util.ConsList<hydra.module.Definition> reorderDefs(hydra.util.ConsList<hydra.module.Definition> defs) {
+    hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>> partitioned = hydra.Schemas.partitionDefinitions(defs);
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> typeDefsRaw = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> nameFirst = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+      (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> hydra.lib.equality.Equal.apply(
+        (td).name,
+        new hydra.core.Name("hydra.core.Name"))),
+      typeDefsRaw.get()));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> nameRest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+      (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
+        (td).name,
+        new hydra.core.Name("hydra.core.Name")))),
+      typeDefsRaw.get()));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TermDefinition>> termDefsRaw = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(partitioned));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> termDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.TermDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Term(td)),
+      termDefsRaw.get()));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> sortedTermDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.Sorting.topologicalSortNodes(
+      (java.util.function.Function<hydra.module.Definition, hydra.core.Name>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.core.Name visit(hydra.module.Definition.Term td) {
+          return (td).value.name;
+        }
+      })),
+      (java.util.function.Function<hydra.module.Definition, hydra.util.ConsList<hydra.core.Name>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.module.Definition instance) {
+          return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty());
+        }
+
+        @Override
+        public hydra.util.ConsList<hydra.core.Name> visit(hydra.module.Definition.Term td) {
+          return hydra.lib.sets.ToList.apply(hydra.Rewriting.freeVariablesInTerm((td).value.term));
+        }
+      })),
+      termDefs.get())));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> sortedTypeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+      hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.TypeDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Type(td)),
+        nameFirst.get()),
+      hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.TypeDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Type(td)),
+        nameRest.get()))));
+    return hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+      sortedTypeDefs.get(),
+      sortedTermDefs.get()));
   }
 
   static hydra.ext.python.syntax.Statement tvarStatement(hydra.ext.python.syntax.Name name) {
@@ -4698,7 +4741,7 @@ public interface Coder {
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.python.syntax.Module> encodePythonModule(hydra.context.Context cx, hydra.graph.Graph g, hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs0) {
-    hydra.util.ConsList<hydra.module.Definition> defs = hydra.CoderUtils.reorderDefs(defs0);
+    hydra.util.ConsList<hydra.module.Definition> defs = hydra.ext.python.Coder.reorderDefs(defs0);
     hydra.ext.python.environment.PythonModuleMetadata meta0 = hydra.ext.python.Coder.gatherMetadata(
       (mod).namespace,
       defs);
