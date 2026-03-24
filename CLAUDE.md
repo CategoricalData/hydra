@@ -94,6 +94,7 @@ This section links to every major document in the project with a brief descripti
 | Recipe | Path | Description |
 |--------|------|-------------|
 | Recipe index | [docs/recipes/index.md](docs/recipes/index.md) | Table of contents for all recipes, organized by category |
+| Code generation | [docs/recipes/code-generation.md](docs/recipes/code-generation.md) | End-to-end guide to generating code from Hydra modules. DSL vs JSON source paths, writeXxx functions, bootstrap CLI, sync scripts, troubleshooting |
 | Adding primitives | [docs/recipes/adding-primitives.md](docs/recipes/adding-primitives.md) | Add new primitive functions across all 3 implementations. File-by-file checklist. Covers `prim1`/`prim2`/`prim2Eval` registration, eval elements for higher-order primitives, DSL wrappers, tests |
 | Extending Hydra Core | [docs/recipes/extending-hydra-core.md](docs/recipes/extending-hydra-core.md) | Add new type/term constructors (e.g., Either). The most complex recipe. 12+ steps covering the bootstrap problem, manual patching of generated files, inference, checking, rewriting, encoding/decoding. Also covers adding fields to existing records |
 | Extending tests | [docs/recipes/extending-tests.md](docs/recipes/extending-tests.md) | Add tests to the common test suite. Choosing test modules, writing test cases with `checkWithType`/`inferWithType`/`primCase`, meta-level vs term-level DSL differences |

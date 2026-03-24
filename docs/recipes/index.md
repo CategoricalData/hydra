@@ -25,6 +25,10 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 - **[Promoting raw code to Hydra modules](promoting-code.md)** - Convert raw Haskell code into Hydra source modules that can be generated to multiple target languages
 - **[Refactoring Hydra namespaces](refactoring-namespaces.md)** - Rename or move a Hydra namespace across all implementations
 
+### Code Generation
+
+- **[Generating code with Hydra](code-generation.md)** - End-to-end guide to generating source code from Hydra modules: DSL vs JSON paths, the writeXxx functions, bootstrap CLI, sync scripts, and troubleshooting
+
 ### Development Workflow
 
 - **[LLM-assisted development](llm-assisted-development.md)** - Best practices for using AI assistants when working with Hydra
