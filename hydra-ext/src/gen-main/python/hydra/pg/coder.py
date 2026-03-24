@@ -66,7 +66,7 @@ def element_type_tree_edge(etype: hydra.pg.model.EdgeType[T0], deps: frozenlist[
 
     return hydra.pg.model.ElementTypeTree(cast(hydra.pg.model.ElementType, hydra.pg.model.ElementTypeEdge(etype)), deps)
 
-def encode_property(cx: hydra.context.Context, fields: FrozenDict[hydra.core.Name, hydra.core.Term], adapter: hydra.util.Adapter[hydra.core.FieldType, T0, hydra.core.Field, T1]):
+def encode_property(cx: hydra.context.Context, fields: FrozenDict[hydra.core.Name, hydra.core.Term], adapter: hydra.util.Adapter[hydra.core.FieldType, T0, hydra.core.Field, T1]) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[hydra.core.Term]]:
     r"""Encode a single property from a field map using a property adapter."""
 
     @lru_cache(1)
@@ -85,7 +85,7 @@ def encode_property(cx: hydra.context.Context, fields: FrozenDict[hydra.core.Nam
                 return False
     def encode_value(v: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[T1]]:
         return hydra.lib.eithers.map((lambda x: Just(x)), adapter.coder.encode(cx, hydra.core.Field(fname(), v)))
-    def _hoist_fname_body_1(value, v1):
+    def _hoist_fname_body_1(value: hydra.core.Term, v1: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[T1]]:
         match v1:
             case hydra.core.TermMaybe(value=ov):
                 return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda x1: encode_value(x1)), ov)
@@ -188,7 +188,7 @@ def element_type_tree_vertex(vtype: hydra.pg.model.VertexType[T0], deps: frozenl
 
     return hydra.pg.model.ElementTypeTree(cast(hydra.pg.model.ElementType, hydra.pg.model.ElementTypeVertex(vtype)), deps)
 
-def vertex_coder(g: T0, schema: hydra.pg.mapping.Schema[T1, T2, T3], source: T4, vid_type: T5, tname: T6, vlabel: hydra.pg.model.VertexLabel, id_adapter: tuple[hydra.core.Name, hydra.util.Adapter[T7, T8, hydra.core.Term, T3]], prop_adapters: frozenlist[hydra.util.Adapter[hydra.core.FieldType, hydra.pg.model.PropertyType[T5], hydra.core.Field, hydra.pg.model.Property[T3]]], edge_adapters: frozenlist[tuple[hydra.pg.model.Direction, tuple[hydra.core.FieldType, tuple[hydra.pg.model.EdgeLabel, hydra.util.Adapter[T9, hydra.pg.model.ElementTypeTree[T5], hydra.core.Term, hydra.pg.model.ElementTree[T3]]]]]]):
+def vertex_coder(g: T0, schema: hydra.pg.mapping.Schema[T1, T2, T3], source: T4, vid_type: T5, tname: T6, vlabel: hydra.pg.model.VertexLabel, id_adapter: tuple[hydra.core.Name, hydra.util.Adapter[T7, T8, hydra.core.Term, T3]], prop_adapters: frozenlist[hydra.util.Adapter[hydra.core.FieldType, hydra.pg.model.PropertyType[T5], hydra.core.Field, hydra.pg.model.Property[T3]]], edge_adapters: frozenlist[tuple[hydra.pg.model.Direction, tuple[hydra.core.FieldType, tuple[hydra.pg.model.EdgeLabel, hydra.util.Adapter[T9, hydra.pg.model.ElementTypeTree[T5], hydra.core.Term, hydra.pg.model.ElementTree[T3]]]]]]) -> hydra.util.Adapter[T4, hydra.pg.model.ElementTypeTree[T5], hydra.core.Term, hydra.pg.model.ElementTree[T3]]:
     r"""Create a vertex coder given all components."""
 
     @lru_cache(1)
@@ -260,7 +260,7 @@ def construct_vertex_coder(cx: hydra.context.Context, g: hydra.graph.Graph, sche
 
     return hydra.lib.eithers.bind(find_label_string(cx, g, source, name, hydra.core.Name(schema.annotations.vertex_label)), (lambda label_str: (label := hydra.pg.model.VertexLabel(label_str), hydra.lib.eithers.bind(vertex_id_adapter(cx, g, schema, vid_type, name, hydra.core.Name(schema.annotations.vertex_id), fields), (lambda id_adapter: hydra.lib.eithers.bind(find_adjacen_edge_adapters(cx, g, schema, vid_type, eid_type, label, hydra.pg.model.Direction.OUT, fields), (lambda out_edge_adapters: hydra.lib.eithers.bind(find_adjacen_edge_adapters(cx, g, schema, vid_type, eid_type, label, hydra.pg.model.Direction.IN, fields), (lambda in_edge_adapters: Right(vertex_coder(g, schema, source, vid_type, name, label, id_adapter, prop_adapters, hydra.lib.lists.concat2(out_edge_adapters, in_edge_adapters))))))))))[1]))
 
-def element_coder(mparent: Maybe[tuple[hydra.pg.model.Direction, hydra.pg.model.VertexLabel]], schema: hydra.pg.mapping.Schema[T0, T1, T2], source: hydra.core.Type, vid_type: T1, eid_type: T1, cx: hydra.context.Context, g: hydra.graph.Graph):
+def element_coder(mparent: Maybe[tuple[hydra.pg.model.Direction, hydra.pg.model.VertexLabel]], schema: hydra.pg.mapping.Schema[T0, T1, T2], source: hydra.core.Type, vid_type: T1, eid_type: T1, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.util.Adapter[hydra.core.Type, hydra.pg.model.ElementTypeTree[T1], hydra.core.Term, hydra.pg.model.ElementTree[T2]]]:
     r"""Construct an element adapter for a given type, interpreting it either as a vertex specification or an edge specification."""
 
     while True:

@@ -54,18 +54,8 @@ def edge_type(t: Callable[[T0], hydra.core.Term], x: hydra.pg.model.EdgeType[T0]
 def vertex(v: Callable[[T0], hydra.core.Term], x: hydra.pg.model.Vertex[T0]) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.pg.model.Vertex"), (hydra.core.Field(hydra.core.Name("label"), vertex_label(x.label)), hydra.core.Field(hydra.core.Name("id"), v(x.id)), hydra.core.Field(hydra.core.Name("properties"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap((lambda x1: property_key(x1)), v, x.properties))))))))
 
-def element(v: Callable[[T0], hydra.core.Term]):
-    def _hoist_hydra_encode_pg_model_element_1(v, v1):
-        match v1:
-            case hydra.pg.model.ElementVertex(value=y):
-                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.Element"), hydra.core.Field(hydra.core.Name("vertex"), vertex(v, y)))))
-
-            case hydra.pg.model.ElementEdge(value=y):
-                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.Element"), hydra.core.Field(hydra.core.Name("edge"), edge(v, y)))))
-
-            case _:
-                raise AssertionError("Unreachable: all variants handled")
-    return _hoist_hydra_encode_pg_model_element_1(v)
+def element(v: Callable[[T0], hydra.core.Term], v1: hydra.pg.model.Element):
+    return (lambda y: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.Element"), hydra.core.Field(hydra.core.Name("vertex"), vertex(v, y))))))(v1.value) if isinstance(v1, hydra.pg.model.ElementVertex) else (lambda y: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.Element"), hydra.core.Field(hydra.core.Name("edge"), edge(v, y))))))(v1.value) if isinstance(v1, hydra.pg.model.ElementEdge) else hydra.dsl.python.unsupported("no matching case in inline union elimination")
 
 def element_kind(v1: hydra.pg.model.ElementKind) -> hydra.core.Term:
     match v1:
@@ -84,18 +74,8 @@ def element_tree(v: Callable[[T0], hydra.core.Term], x: hydra.pg.model.ElementTr
 def vertex_type(t: Callable[[T0], hydra.core.Term], x: hydra.pg.model.VertexType[T0]) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.pg.model.VertexType"), (hydra.core.Field(hydra.core.Name("label"), vertex_label(x.label)), hydra.core.Field(hydra.core.Name("id"), t(x.id)), hydra.core.Field(hydra.core.Name("properties"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda v1: property_type(t, v1)), x.properties))))))))
 
-def element_type(t: Callable[[T0], hydra.core.Term]):
-    def _hoist_hydra_encode_pg_model_element_type_1(t, v1):
-        match v1:
-            case hydra.pg.model.ElementTypeVertex(value=y):
-                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.ElementType"), hydra.core.Field(hydra.core.Name("vertex"), vertex_type(t, y)))))
-
-            case hydra.pg.model.ElementTypeEdge(value=y):
-                return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.ElementType"), hydra.core.Field(hydra.core.Name("edge"), edge_type(t, y)))))
-
-            case _:
-                raise AssertionError("Unreachable: all variants handled")
-    return _hoist_hydra_encode_pg_model_element_type_1(t)
+def element_type(t: Callable[[T0], hydra.core.Term], v1: hydra.pg.model.ElementType):
+    return (lambda y: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.ElementType"), hydra.core.Field(hydra.core.Name("vertex"), vertex_type(t, y))))))(v1.value) if isinstance(v1, hydra.pg.model.ElementTypeVertex) else (lambda y: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.pg.model.ElementType"), hydra.core.Field(hydra.core.Name("edge"), edge_type(t, y))))))(v1.value) if isinstance(v1, hydra.pg.model.ElementTypeEdge) else hydra.dsl.python.unsupported("no matching case in inline union elimination")
 
 def element_type_tree(t: Callable[[T0], hydra.core.Term], x: hydra.pg.model.ElementTypeTree[T0]) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.pg.model.ElementTypeTree"), (hydra.core.Field(hydra.core.Name("self"), element_type(t, x.self)), hydra.core.Field(hydra.core.Name("dependencies"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda v1: element_type_tree(t, v1)), x.dependencies))))))))

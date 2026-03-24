@@ -18,23 +18,24 @@ import hydra.lib.strings
 import hydra.pg.model
 
 T0 = TypeVar("T0")
+T1 = TypeVar("T1")
 
-def edge_label(cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_edge_label_1(v1):
+def edge_label(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.EdgeLabel]:
+    def _hoist_hydra_decode_pg_model_edge_label_1(v1: hydra.core.Literal) -> Either[hydra.errors.DecodingError, str]:
         match v1:
             case hydra.core.LiteralString(value=s):
                 return Right(s)
 
             case _:
                 return Left(hydra.errors.DecodingError("expected string literal"))
-    def _hoist_hydra_decode_pg_model_edge_label_2(v1):
+    def _hoist_hydra_decode_pg_model_edge_label_2(v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, str]:
         match v1:
             case hydra.core.TermLiteral(value=v):
                 return _hoist_hydra_decode_pg_model_edge_label_1(v)
 
             case _:
                 return Left(hydra.errors.DecodingError("expected literal"))
-    def _hoist_hydra_decode_pg_model_edge_label_3(cx, v1):
+    def _hoist_hydra_decode_pg_model_edge_label_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.EdgeLabel]:
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.pg.model.EdgeLabel(b)), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_pg_model_edge_label_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
@@ -43,22 +44,22 @@ def edge_label(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_edge_label_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def property_key(cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_property_key_1(v1):
+def property_key(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.PropertyKey]:
+    def _hoist_hydra_decode_pg_model_property_key_1(v1: hydra.core.Literal) -> Either[hydra.errors.DecodingError, str]:
         match v1:
             case hydra.core.LiteralString(value=s):
                 return Right(s)
 
             case _:
                 return Left(hydra.errors.DecodingError("expected string literal"))
-    def _hoist_hydra_decode_pg_model_property_key_2(v1):
+    def _hoist_hydra_decode_pg_model_property_key_2(v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, str]:
         match v1:
             case hydra.core.TermLiteral(value=v):
                 return _hoist_hydra_decode_pg_model_property_key_1(v)
 
             case _:
                 return Left(hydra.errors.DecodingError("expected literal"))
-    def _hoist_hydra_decode_pg_model_property_key_3(cx, v1):
+    def _hoist_hydra_decode_pg_model_property_key_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.PropertyKey]:
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.pg.model.PropertyKey(b)), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_pg_model_property_key_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
@@ -67,8 +68,8 @@ def property_key(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_property_key_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def adjacent_edge(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_adjacent_edge_1(cx, v, v1):
+def adjacent_edge(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.AdjacentEdge[T0]]:
+    def _hoist_hydra_decode_pg_model_adjacent_edge_1(cx: hydra.graph.Graph, v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.AdjacentEdge[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -80,8 +81,8 @@ def adjacent_edge(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
                 return Left(hydra.errors.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_adjacent_edge_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def direction(cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_direction_1(cx, v1):
+def direction(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Direction]:
+    def _hoist_hydra_decode_pg_model_direction_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Direction]:
         match v1:
             case hydra.core.TermUnion(value=inj):
                 field = inj.field
@@ -96,8 +97,8 @@ def direction(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 return Left(hydra.errors.DecodingError("expected union"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_direction_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def edge(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_edge_1(cx, v, v1):
+def edge(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Edge[T0]]:
+    def _hoist_hydra_decode_pg_model_edge_1(cx: hydra.graph.Graph, v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Edge[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -109,21 +110,21 @@ def edge(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.D
                 return Left(hydra.errors.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_edge_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def property_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_property_type_1(cx, t, v1):
+def property_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.PropertyType[T0]]:
+    def _hoist_hydra_decode_pg_model_property_type_1(cx: hydra.graph.Graph, t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.PropertyType[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_field_map_body_1(v12):
+                def _hoist_field_map_body_1(v12: hydra.core.Literal) -> Either[hydra.errors.DecodingError, bool]:
                     match v12:
                         case hydra.core.LiteralBoolean(value=b):
                             return Right(b)
 
                         case _:
                             return Left(hydra.errors.DecodingError("expected boolean literal"))
-                def _hoist_field_map_body_2(v12):
+                def _hoist_field_map_body_2(v12: hydra.core.Term) -> Either[hydra.errors.DecodingError, bool]:
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_field_map_body_1(v)
@@ -136,22 +137,22 @@ def property_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
                 return Left(hydra.errors.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_property_type_1(cx, t, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def vertex_label(cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_vertex_label_1(v1):
+def vertex_label(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.VertexLabel]:
+    def _hoist_hydra_decode_pg_model_vertex_label_1(v1: hydra.core.Literal) -> Either[hydra.errors.DecodingError, str]:
         match v1:
             case hydra.core.LiteralString(value=s):
                 return Right(s)
 
             case _:
                 return Left(hydra.errors.DecodingError("expected string literal"))
-    def _hoist_hydra_decode_pg_model_vertex_label_2(v1):
+    def _hoist_hydra_decode_pg_model_vertex_label_2(v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, str]:
         match v1:
             case hydra.core.TermLiteral(value=v):
                 return _hoist_hydra_decode_pg_model_vertex_label_1(v)
 
             case _:
                 return Left(hydra.errors.DecodingError("expected literal"))
-    def _hoist_hydra_decode_pg_model_vertex_label_3(cx, v1):
+    def _hoist_hydra_decode_pg_model_vertex_label_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.VertexLabel]:
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.pg.model.VertexLabel(b)), hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_pg_model_vertex_label_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
@@ -160,8 +161,8 @@ def vertex_label(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 return Left(hydra.errors.DecodingError("expected wrapped type"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_vertex_label_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def edge_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_edge_type_1(cx, t, v1):
+def edge_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.EdgeType[T0]]:
+    def _hoist_hydra_decode_pg_model_edge_type_1(cx: hydra.graph.Graph, t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.EdgeType[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -173,8 +174,8 @@ def edge_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.err
                 return Left(hydra.errors.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_edge_type_1(cx, t, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def vertex(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_vertex_1(cx, v, v1):
+def vertex(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Vertex[T0]]:
+    def _hoist_hydra_decode_pg_model_vertex_1(cx: hydra.graph.Graph, v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Vertex[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -186,15 +187,15 @@ def vertex(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors
                 return Left(hydra.errors.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_vertex_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def element(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_element_1(cx, v, v1):
+def element(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Element[T0]]:
+    def _hoist_hydra_decode_pg_model_element_1(cx: hydra.graph.Graph, v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Element[T1]]:
         match v1:
             case hydra.core.TermUnion(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
                 @lru_cache(1)
-                def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.pg.model.Element[T0]]]]:
+                def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.pg.model.Element[T1]]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("vertex"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.pg.model.Element, hydra.pg.model.ElementVertex(t))), vertex(v, cx, input)))), (hydra.core.Name("edge"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.pg.model.Element, hydra.pg.model.ElementEdge(t))), edge(v, cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
@@ -202,8 +203,8 @@ def element(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.error
                 return Left(hydra.errors.DecodingError("expected union"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_element_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def element_kind(cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_element_kind_1(cx, v1):
+def element_kind(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.ElementKind]:
+    def _hoist_hydra_decode_pg_model_element_kind_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.ElementKind]:
         match v1:
             case hydra.core.TermUnion(value=inj):
                 field = inj.field
@@ -218,8 +219,8 @@ def element_kind(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 return Left(hydra.errors.DecodingError("expected union"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_element_kind_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def element_tree(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_element_tree_1(cx, v, v1):
+def element_tree(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.ElementTree[T0]]:
+    def _hoist_hydra_decode_pg_model_element_tree_1(cx: hydra.graph.Graph, v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.ElementTree[T0]]:
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -231,8 +232,8 @@ def element_tree(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.
                 return Left(hydra.errors.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_element_tree_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def vertex_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_vertex_type_1(cx, t, v1):
+def vertex_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.VertexType[T0]]:
+    def _hoist_hydra_decode_pg_model_vertex_type_1(cx: hydra.graph.Graph, t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.VertexType[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -244,15 +245,15 @@ def vertex_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.e
                 return Left(hydra.errors.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_vertex_type_1(cx, t, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def element_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_element_type_1(cx, t, v1):
+def element_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.ElementType[T0]]:
+    def _hoist_hydra_decode_pg_model_element_type_1(cx: hydra.graph.Graph, t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.ElementType[T1]]:
         match v1:
             case hydra.core.TermUnion(value=inj):
                 field = inj.field
                 fname = field.name
                 fterm = field.term
                 @lru_cache(1)
-                def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.pg.model.ElementType[T0]]]]:
+                def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.errors.DecodingError, hydra.pg.model.ElementType[T1]]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("vertex"), (lambda input: hydra.lib.eithers.map((lambda t2: cast(hydra.pg.model.ElementType, hydra.pg.model.ElementTypeVertex(t2))), vertex_type(t, cx, input)))), (hydra.core.Name("edge"), (lambda input: hydra.lib.eithers.map((lambda t2: cast(hydra.pg.model.ElementType, hydra.pg.model.ElementTypeEdge(t2))), edge_type(t, cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.errors.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
 
@@ -260,8 +261,8 @@ def element_type(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.
                 return Left(hydra.errors.DecodingError("expected union"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_element_type_1(cx, t, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def element_type_tree(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_element_type_tree_1(cx, t, v1):
+def element_type_tree(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.ElementTypeTree[T0]]:
+    def _hoist_hydra_decode_pg_model_element_type_tree_1(cx: hydra.graph.Graph, t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.ElementTypeTree[T0]]:
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -273,8 +274,8 @@ def element_type_tree(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[h
                 return Left(hydra.errors.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_element_type_tree_1(cx, t, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def graph(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_graph_1(cx, v, v1):
+def graph(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Graph[T0]]:
+    def _hoist_hydra_decode_pg_model_graph_1(cx: hydra.graph.Graph, v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Graph[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -286,8 +287,8 @@ def graph(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.
                 return Left(hydra.errors.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_graph_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def graph_schema(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_graph_schema_1(cx, t, v1):
+def graph_schema(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.GraphSchema[T0]]:
+    def _hoist_hydra_decode_pg_model_graph_schema_1(cx: hydra.graph.Graph, t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.GraphSchema[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -299,8 +300,8 @@ def graph_schema(t: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.
                 return Left(hydra.errors.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_graph_schema_1(cx, t, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def label(cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_label_1(cx, v1):
+def label(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Label]:
+    def _hoist_hydra_decode_pg_model_label_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Label]:
         match v1:
             case hydra.core.TermUnion(value=inj):
                 field = inj.field
@@ -315,8 +316,8 @@ def label(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 return Left(hydra.errors.DecodingError("expected union"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_label_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def lazy_graph(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_lazy_graph_1(cx, v, v1):
+def lazy_graph(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.LazyGraph[T0]]:
+    def _hoist_hydra_decode_pg_model_lazy_graph_1(cx: hydra.graph.Graph, v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.LazyGraph[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -328,8 +329,8 @@ def lazy_graph(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.er
                 return Left(hydra.errors.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_lazy_graph_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def property(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_property_1(cx, v, v1):
+def property(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Property[T0]]:
+    def _hoist_hydra_decode_pg_model_property_1(cx: hydra.graph.Graph, v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.Property[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -341,8 +342,8 @@ def property(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.erro
                 return Left(hydra.errors.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.errors.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_pg_model_property_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def vertex_with_adjacent_edges(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
-    def _hoist_hydra_decode_pg_model_vertex_with_adjacent_edges_1(cx, v, v1):
+def vertex_with_adjacent_edges(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.VertexWithAdjacentEdges[T0]]:
+    def _hoist_hydra_decode_pg_model_vertex_with_adjacent_edges_1(cx: hydra.graph.Graph, v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.errors.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.errors.DecodingError, hydra.pg.model.VertexWithAdjacentEdges[T1]]:
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)

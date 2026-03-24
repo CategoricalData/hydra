@@ -49,11 +49,11 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
     @lru_cache(1)
     def type_variants() -> frozenset[hydra.variants.TypeVariant]:
         return hydra.lib.sets.from_list(hydra.lib.maybes.cat((cond(hydra.variants.TypeVariant.LIST, supports_lists), cond(hydra.variants.TypeVariant.LITERAL, supports_literals), cond(hydra.variants.TypeVariant.MAP, supports_maps), hydra.lib.maybes.pure(hydra.variants.TypeVariant.MAYBE), hydra.lib.maybes.pure(hydra.variants.TypeVariant.WRAP))))
-    def type_predicate(typ: hydra.core.Type):
+    def type_predicate(typ: hydra.core.Type) -> bool:
         @lru_cache(1)
         def dt() -> hydra.core.Type:
             return hydra.rewriting.deannotate_type(typ)
-        def _hoist_dt_body_1(v1):
+        def _hoist_dt_body_1(v1: hydra.core.FloatType) -> bool:
             match v1:
                 case hydra.core.FloatType.FLOAT64:
                     return vp_features.supports_double_array_values
@@ -63,7 +63,7 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
 
                 case _:
                     return False
-        def _hoist_dt_body_2(v1):
+        def _hoist_dt_body_2(v1: hydra.core.IntegerType) -> bool:
             match v1:
                 case hydra.core.IntegerType.UINT8:
                     return vp_features.supports_byte_array_values
@@ -76,7 +76,7 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
 
                 case _:
                     return False
-        def _hoist_dt_body_3(v1):
+        def _hoist_dt_body_3(v1: hydra.core.LiteralType) -> bool:
             match v1:
                 case hydra.core.LiteralTypeBoolean():
                     return vp_features.supports_boolean_array_values
@@ -92,14 +92,14 @@ def tinkerpop_language(name: hydra.coders.LanguageName, features: hydra.ext.org.
 
                 case _:
                     return False
-        def _hoist_dt_body_4(v1):
+        def _hoist_dt_body_4(v1: hydra.core.Type) -> bool:
             match v1:
                 case hydra.core.TypeLiteral(value=lt):
                     return _hoist_dt_body_3(lt)
 
                 case _:
                     return False
-        def _hoist_dt_body_5(v1):
+        def _hoist_dt_body_5(v1: hydra.core.Type) -> bool:
             match v1:
                 case hydra.core.TypeLiteral():
                     return True

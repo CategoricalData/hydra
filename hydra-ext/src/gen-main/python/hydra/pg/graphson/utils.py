@@ -30,17 +30,9 @@ def elements_to_vertices_with_adjacent_edges(els: frozenlist[hydra.pg.model.Elem
     r"""Convert a list of property graph elements to a list of vertices with their adjacent edges."""
 
     @lru_cache(1)
-    def partitioned():
-        def _hoist_partitioned_1(acc, v1):
-            match v1:
-                case hydra.pg.model.ElementVertex(value=v):
-                    return (hydra.lib.lists.cons(v, hydra.lib.pairs.first(acc)), hydra.lib.pairs.second(acc))
-
-                case hydra.pg.model.ElementEdge(value=e):
-                    return (hydra.lib.pairs.first(acc), hydra.lib.lists.cons(e, hydra.lib.pairs.second(acc)))
-
-                case _:
-                    raise AssertionError("Unreachable: all variants handled")
+    def partitioned() -> tuple[frozenlist[hydra.pg.model.Vertex[T0]], frozenlist[hydra.pg.model.Edge[T0]]]:
+        def _hoist_partitioned_1(acc: tuple[frozenlist[hydra.pg.model.Vertex[T1]], frozenlist[hydra.pg.model.Edge[T1]]], v1: hydra.pg.model.Element):
+            return (lambda v: (hydra.lib.lists.cons(v, hydra.lib.pairs.first(acc)), hydra.lib.pairs.second(acc)))(v1.value) if isinstance(v1, hydra.pg.model.ElementVertex) else (lambda e: (hydra.lib.pairs.first(acc), hydra.lib.lists.cons(e, hydra.lib.pairs.second(acc))))(v1.value) if isinstance(v1, hydra.pg.model.ElementEdge) else hydra.dsl.python.unsupported("no matching case in inline union elimination")
         return hydra.lib.lists.foldl((lambda acc, el: _hoist_partitioned_1(acc, el)), ((), ()), els)
     @lru_cache(1)
     def vertices() -> frozenlist[hydra.pg.model.Vertex[T0]]:
@@ -61,40 +53,40 @@ def encode_string_value(s: str) -> Either[T0, hydra.pg.graphson.syntax.Value]:
 
     return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueString(s)))
 
-def encode_term_value(term: hydra.core.Term):
-    def _hoist_hydra_pg_graphson_utils_encode_term_value_1(v1):
+def encode_term_value(term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.pg.graphson.syntax.Value]:
+    def _hoist_hydra_pg_graphson_utils_encode_term_value_1(v1: hydra.core.FloatValue) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.pg.graphson.syntax.Value]:
         match v1:
             case hydra.core.FloatValueBigfloat(value=f):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueBigDecimal(hydra.pg.graphson.syntax.BigDecimalValue(hydra.lib.literals.show_bigfloat(f)))))
 
-            case hydra.core.FloatValueFloat32(value=f):
-                return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueFloat(cast(hydra.pg.graphson.syntax.FloatValue, hydra.pg.graphson.syntax.FloatValueFinite(f)))))
+            case hydra.core.FloatValueFloat32(value=f2):
+                return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueFloat(cast(hydra.pg.graphson.syntax.FloatValue, hydra.pg.graphson.syntax.FloatValueFinite(f2)))))
 
-            case hydra.core.FloatValueFloat64(value=f):
-                return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueDouble(cast(hydra.pg.graphson.syntax.DoubleValue, hydra.pg.graphson.syntax.DoubleValueFinite(f)))))
+            case hydra.core.FloatValueFloat64(value=f3):
+                return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueDouble(cast(hydra.pg.graphson.syntax.DoubleValue, hydra.pg.graphson.syntax.DoubleValueFinite(f3)))))
 
             case _:
                 return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported float type"))), hydra.lexical.empty_context()))
-    def _hoist_hydra_pg_graphson_utils_encode_term_value_2(v1):
+    def _hoist_hydra_pg_graphson_utils_encode_term_value_2(v1: hydra.core.IntegerValue) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.pg.graphson.syntax.Value]:
         match v1:
             case hydra.core.IntegerValueBigint(value=i):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueBigInteger(i)))
 
-            case hydra.core.IntegerValueInt32(value=i):
-                return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueInteger(i)))
+            case hydra.core.IntegerValueInt32(value=i2):
+                return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueInteger(i2)))
 
-            case hydra.core.IntegerValueInt64(value=i):
-                return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueLong(i)))
+            case hydra.core.IntegerValueInt64(value=i3):
+                return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueLong(i3)))
 
             case _:
                 return Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError("unsupported integer type"))), hydra.lexical.empty_context()))
-    def _hoist_hydra_pg_graphson_utils_encode_term_value_3(v1):
+    def _hoist_hydra_pg_graphson_utils_encode_term_value_3(v1: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.pg.graphson.syntax.Value]:
         match v1:
             case hydra.core.LiteralBinary(value=b):
                 return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueBinary(hydra.lib.literals.binary_to_string(b))))
 
-            case hydra.core.LiteralBoolean(value=b):
-                return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueBoolean(b)))
+            case hydra.core.LiteralBoolean(value=b2):
+                return Right(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueBoolean(b2)))
 
             case hydra.core.LiteralFloat(value=fv):
                 return _hoist_hydra_pg_graphson_utils_encode_term_value_1(fv)
