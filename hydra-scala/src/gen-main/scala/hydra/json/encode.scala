@@ -70,7 +70,7 @@ def toJson(term: hydra.core.Term): Either[scala.Predef.String, hydra.json.model.
         }
       }
     }
-    case hydra.core.Term.unit => Right(hydra.json.model.Value.`object`(hydra.lib.maps.empty[scala.Predef.String, hydra.json.model.Value]))
+    case hydra.core.Term.unit() => Right(hydra.json.model.Value.`object`(hydra.lib.maps.empty[scala.Predef.String, hydra.json.model.Value]))
     case hydra.core.Term.wrap(v_Term_wrap_wt) => hydra.json.encode.toJson(v_Term_wrap_wt.body)
     case hydra.core.Term.map(v_Term_map_m) => {
       def encodeEntry(kv: Tuple2[hydra.core.Term, hydra.core.Term]): Either[scala.Predef.String, hydra.json.model.Value] =

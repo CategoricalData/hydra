@@ -59,7 +59,7 @@ def checkTerm(typed: Boolean)(path: hydra.accessors.AccessorPath)(cx: hydra.grap
     {
       lazy val annMap: Map[hydra.core.Name, hydra.core.Term] = (v_Term_annotated_ann.annotation)
       hydra.validate.core.firstError(Seq(hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTermError]](hydra.lib.maps.`null`[hydra.core.Name, hydra.core.Term](annMap))(Some(hydra.error.core.InvalidTermError.emptyTermAnnotation(hydra.error.core.EmptyTermAnnotationError(path))))(None), body match
-        case hydra.core.Term.annotated => Some(hydra.error.core.InvalidTermError.nestedTermAnnotation(hydra.error.core.NestedTermAnnotationError(path)))
+        case hydra.core.Term.annotated() => Some(hydra.error.core.InvalidTermError.nestedTermAnnotation(hydra.error.core.NestedTermAnnotationError(path)))
         case _ => None))
     }
   }
@@ -172,7 +172,7 @@ def validateTypeNode(boundVars: scala.collection.immutable.Set[hydra.core.Name])
     {
       lazy val annMap: Map[hydra.core.Name, hydra.core.Term] = (v_Type_annotated_ann.annotation)
       hydra.validate.core.firstTypeError(Seq(hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTypeError]](hydra.lib.maps.`null`[hydra.core.Name, hydra.core.Term](annMap))(Some(hydra.error.core.InvalidTypeError.emptyTypeAnnotation(hydra.error.core.EmptyTypeAnnotationError(Seq()))))(None), body match
-        case hydra.core.Type.annotated => Some(hydra.error.core.InvalidTypeError.nestedTypeAnnotation(hydra.error.core.NestedTypeAnnotationError(Seq())))
+        case hydra.core.Type.annotated() => Some(hydra.error.core.InvalidTypeError.nestedTypeAnnotation(hydra.error.core.NestedTypeAnnotationError(Seq())))
         case _ => None))
     }
   }
@@ -186,14 +186,14 @@ def validateTypeNode(boundVars: scala.collection.immutable.Set[hydra.core.Name])
   case hydra.core.Type.map(v_Type_map_mt) => {
     lazy val keyType: hydra.core.Type = (v_Type_map_mt.keys)
     hydra.validate.core.firstTypeError(Seq(keyType match
-      case hydra.core.Type.function => Some(hydra.error.core.InvalidTypeError.nonComparableMapKeyType(hydra.error.core.NonComparableMapKeyTypeError(Seq(), keyType)))
+      case hydra.core.Type.function() => Some(hydra.error.core.InvalidTypeError.nonComparableMapKeyType(hydra.error.core.NonComparableMapKeyTypeError(Seq(), keyType)))
       case _ => None, hydra.validate.core.checkVoid(keyType), hydra.validate.core.checkVoid(v_Type_map_mt.values)))
   }
   case hydra.core.Type.pair(v_Type_pair_pt) => hydra.validate.core.firstTypeError(Seq(hydra.validate.core.checkVoid(v_Type_pair_pt.first), hydra.validate.core.checkVoid(v_Type_pair_pt.second)))
   case hydra.core.Type.record(v_Type_record_fields) => hydra.validate.core.firstTypeError(Seq(hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTypeError]](hydra.lib.lists.`null`[hydra.core.FieldType](v_Type_record_fields))(Some(hydra.error.core.InvalidTypeError.emptyRecordType(hydra.error.core.EmptyRecordTypeError(Seq()))))(None), hydra.validate.core.checkDuplicateFieldTypes(v_Type_record_fields)((dupName: hydra.core.Name) =>
     Some(hydra.error.core.InvalidTypeError.duplicateRecordTypeFieldNames(hydra.error.core.DuplicateRecordTypeFieldNamesError(Seq(), dupName)))), hydra.validate.core.firstTypeError(hydra.lib.lists.map[hydra.core.FieldType, Option[hydra.error.core.InvalidTypeError]]((f: hydra.core.FieldType) => hydra.validate.core.checkVoid(f.`type`))(v_Type_record_fields))))
   case hydra.core.Type.set(v_Type_set_elemType) => hydra.validate.core.firstTypeError(Seq(v_Type_set_elemType match
-    case hydra.core.Type.function => Some(hydra.error.core.InvalidTypeError.nonComparableSetElementType(hydra.error.core.NonComparableSetElementTypeError(Seq(), v_Type_set_elemType)))
+    case hydra.core.Type.function() => Some(hydra.error.core.InvalidTypeError.nonComparableSetElementType(hydra.error.core.NonComparableSetElementTypeError(Seq(), v_Type_set_elemType)))
     case _ => None, hydra.validate.core.checkVoid(v_Type_set_elemType)))
   case hydra.core.Type.union(v_Type_union_fields) => hydra.validate.core.firstTypeError(Seq(hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTypeError]](hydra.lib.lists.`null`[hydra.core.FieldType](v_Type_union_fields))(Some(hydra.error.core.InvalidTypeError.emptyUnionType(hydra.error.core.EmptyUnionTypeError(Seq()))))(None), hydra.lib.logic.ifElse[Option[hydra.error.core.InvalidTypeError]](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.core.FieldType](v_Type_union_fields))(1))({
     lazy val singleField: hydra.core.FieldType = hydra.lib.lists.head[hydra.core.FieldType](v_Type_union_fields)
@@ -225,7 +225,7 @@ def checkUndefinedTypeVariablesInTypeScheme[T0, T1](path: T0)(cx: hydra.graph.Gr
 
 def checkVoid(typ: hydra.core.Type): Option[hydra.error.core.InvalidTypeError] =
   typ match
-  case hydra.core.Type.void => Some(hydra.error.core.InvalidTypeError.voidInNonBottomPosition(hydra.error.core.VoidInNonBottomPositionError(Seq())))
+  case hydra.core.Type.void() => Some(hydra.error.core.InvalidTypeError.voidInNonBottomPosition(hydra.error.core.VoidInNonBottomPositionError(Seq())))
   case _ => None
 
 def findDuplicate[T0](names: Seq[T0]): Option[T0] =

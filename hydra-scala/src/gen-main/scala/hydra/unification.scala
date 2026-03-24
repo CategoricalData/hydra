@@ -52,7 +52,7 @@ def joinTypes(cx: hydra.context.Context)(left: hydra.core.Type)(right: hydra.cor
     case hydra.core.Type.list(v_Type_list_l) => sright match
       case hydra.core.Type.list(v_Type_list_r) => Right(Seq(joinOne(v_Type_list_l)(v_Type_list_r)))
       case _ => cannotUnify
-    case hydra.core.Type.literal => assertEqual
+    case hydra.core.Type.literal() => assertEqual
     case hydra.core.Type.map(v_Type_map_l) => sright match
       case hydra.core.Type.map(v_Type_map_r) => Right(Seq(joinOne(v_Type_map_l.keys)(v_Type_map_r.keys), joinOne(v_Type_map_l.values)(v_Type_map_r.values)))
       case _ => cannotUnify
@@ -71,11 +71,11 @@ def joinTypes(cx: hydra.context.Context)(left: hydra.core.Type)(right: hydra.cor
     case hydra.core.Type.union(v_Type_union_l) => sright match
       case hydra.core.Type.union(v_Type_union_r) => joinRowTypes(v_Type_union_l)(v_Type_union_r)
       case _ => cannotUnify
-    case hydra.core.Type.unit => sright match
-      case hydra.core.Type.unit => Right(Seq())
+    case hydra.core.Type.unit() => sright match
+      case hydra.core.Type.unit() => Right(Seq())
       case _ => cannotUnify
-    case hydra.core.Type.void => sright match
-      case hydra.core.Type.void => Right(Seq())
+    case hydra.core.Type.void() => sright match
+      case hydra.core.Type.void() => Right(Seq())
       case _ => cannotUnify
     case hydra.core.Type.wrap(v_Type_wrap_l) => sright match
       case hydra.core.Type.wrap(v_Type_wrap_r) => Right(Seq(joinOne(v_Type_wrap_l)(v_Type_wrap_r)))

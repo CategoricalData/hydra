@@ -86,9 +86,9 @@ def float(fv: hydra.core.FloatValue): scala.Predef.String =
 
 def floatType(ft: hydra.core.FloatType): scala.Predef.String =
   ft match
-  case hydra.core.FloatType.bigfloat => "bigfloat"
-  case hydra.core.FloatType.float32 => "float32"
-  case hydra.core.FloatType.float64 => "float64"
+  case hydra.core.FloatType.bigfloat() => "bigfloat"
+  case hydra.core.FloatType.float32() => "float32"
+  case hydra.core.FloatType.float64() => "float64"
 
 def function(f: hydra.core.Function): scala.Predef.String =
   f match
@@ -117,15 +117,15 @@ def integer(iv: hydra.core.IntegerValue): scala.Predef.String =
 
 def integerType(it: hydra.core.IntegerType): scala.Predef.String =
   it match
-  case hydra.core.IntegerType.bigint => "bigint"
-  case hydra.core.IntegerType.int8 => "int8"
-  case hydra.core.IntegerType.int16 => "int16"
-  case hydra.core.IntegerType.int32 => "int32"
-  case hydra.core.IntegerType.int64 => "int64"
-  case hydra.core.IntegerType.uint8 => "uint8"
-  case hydra.core.IntegerType.uint16 => "uint16"
-  case hydra.core.IntegerType.uint32 => "uint32"
-  case hydra.core.IntegerType.uint64 => "uint64"
+  case hydra.core.IntegerType.bigint() => "bigint"
+  case hydra.core.IntegerType.int8() => "int8"
+  case hydra.core.IntegerType.int16() => "int16"
+  case hydra.core.IntegerType.int32() => "int32"
+  case hydra.core.IntegerType.int64() => "int64"
+  case hydra.core.IntegerType.uint8() => "uint8"
+  case hydra.core.IntegerType.uint16() => "uint16"
+  case hydra.core.IntegerType.uint32() => "uint32"
+  case hydra.core.IntegerType.uint64() => "uint64"
 
 def lambda(l: hydra.core.Lambda): scala.Predef.String =
   {
@@ -152,7 +152,7 @@ def list[T0](f: (T0 => scala.Predef.String))(xs: Seq[T0]): scala.Predef.String =
 
 def literal(l: hydra.core.Literal): scala.Predef.String =
   l match
-  case hydra.core.Literal.binary => "[binary]"
+  case hydra.core.Literal.binary() => "[binary]"
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => hydra.lib.logic.ifElse[scala.Predef.String](v_Literal_boolean_b)("true")("false")
   case hydra.core.Literal.float(v_Literal_float_fv) => hydra.show.core.float(v_Literal_float_fv)
   case hydra.core.Literal.integer(v_Literal_integer_iv) => hydra.show.core.integer(v_Literal_integer_iv)
@@ -160,11 +160,11 @@ def literal(l: hydra.core.Literal): scala.Predef.String =
 
 def literalType(lt: hydra.core.LiteralType): scala.Predef.String =
   lt match
-  case hydra.core.LiteralType.binary => "binary"
-  case hydra.core.LiteralType.boolean => "boolean"
+  case hydra.core.LiteralType.binary() => "binary"
+  case hydra.core.LiteralType.boolean() => "boolean"
   case hydra.core.LiteralType.float(v_LiteralType_float_ft) => hydra.show.core.floatType(v_LiteralType_float_ft)
   case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.show.core.integerType(v_LiteralType_integer_it)
-  case hydra.core.LiteralType.string => "string"
+  case hydra.core.LiteralType.string() => "string"
 
 def term(t: hydra.core.Term): scala.Predef.String =
   {
@@ -226,7 +226,7 @@ def term(t: hydra.core.Term): scala.Predef.String =
       }
     }
     case hydra.core.Term.union(v_Term_union_v1) => hydra.show.core.injection(v_Term_union_v1)
-    case hydra.core.Term.unit => "unit"
+    case hydra.core.Term.unit() => "unit"
     case hydra.core.Term.variable(v_Term_variable_name) => v_Term_variable_name
     case hydra.core.Term.wrap(v_Term_wrap_wt) => {
       lazy val tname: scala.Predef.String = (v_Term_wrap_wt.typeName)
@@ -285,7 +285,7 @@ def `type`(typ: hydra.core.Type): scala.Predef.String =
         hydra.lib.strings.cat(Seq("(\u2200", `var`, ".", hydra.show.core.`type`(body), ")"))
       }
     }
-    case hydra.core.Type.function => {
+    case hydra.core.Type.function() => {
       lazy val types: Seq[hydra.core.Type] = gatherFunctionTypes(Seq())(typ)
       {
         lazy val typeStrs: Seq[scala.Predef.String] = hydra.lib.lists.map[hydra.core.Type, scala.Predef.String](hydra.show.core.`type`)(types)
@@ -312,9 +312,9 @@ def `type`(typ: hydra.core.Type): scala.Predef.String =
     case hydra.core.Type.record(v_Type_record_rt) => hydra.lib.strings.cat2("record")(showRowType(v_Type_record_rt))
     case hydra.core.Type.set(v_Type_set_etyp) => hydra.lib.strings.cat(Seq("set<", hydra.show.core.`type`(v_Type_set_etyp), ">"))
     case hydra.core.Type.union(v_Type_union_rt) => hydra.lib.strings.cat2("union")(showRowType(v_Type_union_rt))
-    case hydra.core.Type.unit => "unit"
+    case hydra.core.Type.unit() => "unit"
     case hydra.core.Type.variable(v_Type_variable_name) => v_Type_variable_name
-    case hydra.core.Type.void => "void"
+    case hydra.core.Type.void() => "void"
     case hydra.core.Type.wrap(v_Type_wrap_wt) => hydra.lib.strings.cat(Seq("wrap(", hydra.show.core.`type`(v_Type_wrap_wt), ")"))
 }
 

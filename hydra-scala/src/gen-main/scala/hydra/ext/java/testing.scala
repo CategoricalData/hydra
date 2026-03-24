@@ -101,9 +101,9 @@ def generateJavaTestCase(g: hydra.graph.Graph)(codec: hydra.testing.TestCodec)(g
 def getAssertionType(term: hydra.core.Term): scala.Predef.String =
   hydra.rewriting.deannotateTerm(term) match
   case hydra.core.Term.literal(v_Term_literal_lit) => v_Term_literal_lit match
-    case hydra.core.Literal.binary => "assertArrayEquals"
+    case hydra.core.Literal.binary() => "assertArrayEquals"
     case hydra.core.Literal.float(v_Literal_float_fv) => v_Literal_float_fv match
-      case hydra.core.FloatValue.bigfloat => "assertBigDecimalEquals"
+      case hydra.core.FloatValue.bigfloat() => "assertBigDecimalEquals"
       case _ => "assertDoubleEquals"
     case _ => "assertEquals"
   case _ => "assertEquals"

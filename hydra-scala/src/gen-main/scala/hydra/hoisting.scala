@@ -314,8 +314,8 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.accessors.TermAccessor], hydra.
       lazy val currentCounter: Int = hydra.lib.pairs.first[Int, Seq[hydra.core.Binding]](acc)
       lazy val collectedBindings: Seq[hydra.core.Binding] = hydra.lib.pairs.second[Int, Seq[hydra.core.Binding]](acc)
       term match
-        case hydra.core.Term.let => Tuple2(acc, term)
-        case hydra.core.Term.typeLambda => Tuple2(acc, term)
+        case hydra.core.Term.let() => Tuple2(acc, term)
+        case hydra.core.Term.typeLambda() => Tuple2(acc, term)
         case _ => {
           lazy val result: Tuple2[Tuple2[Int, Seq[hydra.core.Binding]], hydra.core.Term] = recurse(acc)(term)
           {
@@ -414,7 +414,7 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.accessors.TermAccessor], hydra.
   }
   def rewrite[T0, T1](recurse: (T0 => hydra.core.Term => Tuple2[T1, hydra.core.Term]))(path: Seq[hydra.accessors.TermAccessor])(cx: hydra.graph.Graph)(counter: T0)(term: hydra.core.Term): Tuple2[T1, hydra.core.Term] =
     term match
-    case hydra.core.Term.let => {
+    case hydra.core.Term.let() => {
       lazy val recursed: Tuple2[T1, hydra.core.Term] = recurse(counter)(term)
       {
         lazy val newCounter: T1 = hydra.lib.pairs.first[T1, hydra.core.Term](recursed)
@@ -432,19 +432,19 @@ def hoistSubterms(shouldHoist: (Tuple2[Seq[hydra.accessors.TermAccessor], hydra.
 
 def isApplicationFunction(acc: hydra.accessors.TermAccessor): Boolean =
   acc match
-  case hydra.accessors.TermAccessor.applicationFunction => true
+  case hydra.accessors.TermAccessor.applicationFunction() => true
   case _ => false
 
 def isEliminationUnion(f: hydra.core.Function): Boolean =
   f match
   case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-    case hydra.core.Elimination.union => true
+    case hydra.core.Elimination.union() => true
     case _ => false
   case _ => false
 
 def isLambdaBody(acc: hydra.accessors.TermAccessor): Boolean =
   acc match
-  case hydra.accessors.TermAccessor.lambdaBody => true
+  case hydra.accessors.TermAccessor.lambdaBody() => true
   case _ => false
 
 def isUnionElimination(term: hydra.core.Term): Boolean =
@@ -494,13 +494,13 @@ def updateHoistState(accessor: hydra.accessors.TermAccessor)(state: Tuple2[Boole
   lazy val atTop: Boolean = hydra.lib.pairs.first[Boolean, Boolean](state)
   lazy val usedApp: Boolean = hydra.lib.pairs.second[Boolean, Boolean](state)
   hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](hydra.lib.logic.not(atTop))(Tuple2(false, usedApp))(accessor match
-    case hydra.accessors.TermAccessor.annotatedBody => Tuple2(true, usedApp)
-    case hydra.accessors.TermAccessor.letBody => Tuple2(true, usedApp)
-    case hydra.accessors.TermAccessor.letBinding => Tuple2(true, usedApp)
-    case hydra.accessors.TermAccessor.lambdaBody => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, false))
-    case hydra.accessors.TermAccessor.unionCasesBranch => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, false))
-    case hydra.accessors.TermAccessor.unionCasesDefault => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, false))
-    case hydra.accessors.TermAccessor.applicationFunction => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, true))
-    case hydra.accessors.TermAccessor.applicationArgument => Tuple2(false, usedApp)
+    case hydra.accessors.TermAccessor.annotatedBody() => Tuple2(true, usedApp)
+    case hydra.accessors.TermAccessor.letBody() => Tuple2(true, usedApp)
+    case hydra.accessors.TermAccessor.letBinding() => Tuple2(true, usedApp)
+    case hydra.accessors.TermAccessor.lambdaBody() => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, false))
+    case hydra.accessors.TermAccessor.unionCasesBranch() => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, false))
+    case hydra.accessors.TermAccessor.unionCasesDefault() => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, false))
+    case hydra.accessors.TermAccessor.applicationFunction() => hydra.lib.logic.ifElse[Tuple2[Boolean, Boolean]](usedApp)(Tuple2(false, true))(Tuple2(true, true))
+    case hydra.accessors.TermAccessor.applicationArgument() => Tuple2(false, usedApp)
     case _ => Tuple2(false, usedApp))
 }

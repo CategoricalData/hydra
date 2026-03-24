@@ -74,7 +74,7 @@ def checkForUnboundTypeVariables(cx: hydra.context.Context)(tx: hydra.graph.Grap
       hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Option[Unit], Unit](hydra.lib.eithers.mapMaybe[hydra.core.Type, Unit, hydra.context.InContext[hydra.errors.Error]](check)(m))((_x: Option[Unit]) => Right(()))
     term match
       case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.elimination => dflt
+        case hydra.core.Function.elimination() => dflt
         case hydra.core.Function.lambda(v_Function_lambda_l) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], Unit, Unit](checkOptional(v_Function_lambda_l.domain))((_x: Unit) => recurse(v_Function_lambda_l.body))
         case _ => dflt
       case hydra.core.Term.let(v_Term_let_l) => {
@@ -132,9 +132,9 @@ def checkTypeSubst(cx: hydra.context.Context)(tx: hydra.graph.Graph)(subst: hydr
   lazy val suspectVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.intersection[hydra.core.Name](vars)(hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name, hydra.core.TypeScheme](tx.schemaTypes)))
   def isNominal(ts: hydra.core.TypeScheme): Boolean =
     hydra.rewriting.deannotateType(ts.`type`) match
-    case hydra.core.Type.record => true
-    case hydra.core.Type.union => true
-    case hydra.core.Type.wrap => true
+    case hydra.core.Type.record() => true
+    case hydra.core.Type.union() => true
+    case hydra.core.Type.wrap() => true
     case _ => false
   lazy val badVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.lists.filter[hydra.core.Name]((v: hydra.core.Name) =>
     hydra.lib.maybes.maybe[Boolean, hydra.core.TypeScheme](false)(isNominal)(hydra.lexical.dereferenceSchemaType(v)(tx.schemaTypes)))(hydra.lib.sets.toList[hydra.core.Name](suspectVars)))
@@ -196,7 +196,7 @@ def typeOf(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs: Seq[hydra
     case hydra.core.Term.typeApplication(v_Term_typeApplication_v1) => hydra.checking.typeOfTypeApplication(cx1)(tx)(typeArgs)(v_Term_typeApplication_v1)
     case hydra.core.Term.typeLambda(v_Term_typeLambda_v1) => hydra.checking.typeOfTypeLambda(cx1)(tx)(typeArgs)(v_Term_typeLambda_v1)
     case hydra.core.Term.union(v_Term_union_v1) => hydra.checking.typeOfInjection(cx1)(tx)(typeArgs)(v_Term_union_v1)
-    case hydra.core.Term.unit => hydra.checking.typeOfUnit(cx1)(tx)(typeArgs)
+    case hydra.core.Term.unit() => hydra.checking.typeOfUnit(cx1)(tx)(typeArgs)
     case hydra.core.Term.variable(v_Term_variable_v1) => hydra.checking.typeOfVariable(cx1)(tx)(typeArgs)(v_Term_variable_v1)
     case hydra.core.Term.wrap(v_Term_wrap_v1) => hydra.checking.typeOfWrappedTerm(cx1)(tx)(typeArgs)(v_Term_wrap_v1)
     case _ => Left(hydra.context.InContext(hydra.errors.Error.checking(hydra.error.checking.CheckingError.unsupportedTermVariant(hydra.error.checking.UnsupportedTermVariantError(hydra.reflect.termVariant(term)))), cx1))
@@ -218,7 +218,7 @@ def typeOfApplication(cx: hydra.context.Context)(tx: hydra.graph.Graph)(typeArgs
         hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], Tuple2[hydra.core.Type, hydra.context.Context]]](hydra.checking.typesEffectivelyEqual(tx)(dom)(targ))(Right(Tuple2(cod, cx0)))(Left(hydra.context.InContext(hydra.errors.Error.checking(hydra.error.checking.CheckingError.typeMismatch(hydra.error.checking.TypeMismatchError(dom, targ))), cx0)))
       }
     }
-    case hydra.core.Type.variable => {
+    case hydra.core.Type.variable() => {
       lazy val nameResult: Tuple2[hydra.core.Name, hydra.context.Context] = hydra.schemas.freshName(cx0)
       {
         lazy val freshN: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.context.Context](nameResult)

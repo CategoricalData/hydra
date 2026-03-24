@@ -32,18 +32,18 @@ def convertCase(from: hydra.util.CaseConvention)(to: hydra.util.CaseConvention)(
     }
     lazy val byUnderscores: Seq[scala.Predef.String] = hydra.lib.strings.splitOn("_")(original)
     from match
-      case hydra.util.CaseConvention.camel => byCaps
-      case hydra.util.CaseConvention.pascal => byCaps
-      case hydra.util.CaseConvention.lowerSnake => byUnderscores
-      case hydra.util.CaseConvention.upperSnake => byUnderscores
+      case hydra.util.CaseConvention.camel() => byCaps
+      case hydra.util.CaseConvention.pascal() => byCaps
+      case hydra.util.CaseConvention.lowerSnake() => byUnderscores
+      case hydra.util.CaseConvention.upperSnake() => byUnderscores
   }
   to match
-    case hydra.util.CaseConvention.camel => hydra.formatting.decapitalize(hydra.lib.strings.cat(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((`arg_`: scala.Predef.String) =>
+    case hydra.util.CaseConvention.camel() => hydra.formatting.decapitalize(hydra.lib.strings.cat(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((`arg_`: scala.Predef.String) =>
       hydra.formatting.capitalize(hydra.lib.strings.toLower(`arg_`)))(parts)))
-    case hydra.util.CaseConvention.pascal => hydra.lib.strings.cat(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((`arg_`: scala.Predef.String) =>
+    case hydra.util.CaseConvention.pascal() => hydra.lib.strings.cat(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String]((`arg_`: scala.Predef.String) =>
       hydra.formatting.capitalize(hydra.lib.strings.toLower(`arg_`)))(parts))
-    case hydra.util.CaseConvention.lowerSnake => hydra.lib.strings.intercalate("_")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String](hydra.lib.strings.toLower)(parts))
-    case hydra.util.CaseConvention.upperSnake => hydra.lib.strings.intercalate("_")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String](hydra.lib.strings.toUpper)(parts))
+    case hydra.util.CaseConvention.lowerSnake() => hydra.lib.strings.intercalate("_")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String](hydra.lib.strings.toLower)(parts))
+    case hydra.util.CaseConvention.upperSnake() => hydra.lib.strings.intercalate("_")(hydra.lib.lists.map[scala.Predef.String, scala.Predef.String](hydra.lib.strings.toUpper)(parts))
 }
 
 def convertCaseCamelOrUnderscoreToLowerSnake(s: scala.Predef.String): scala.Predef.String =

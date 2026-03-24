@@ -129,7 +129,7 @@ def generateTypeAnnotationFor(g: hydra.graph.Graph)(namespaces: hydra.module.Nam
   lazy val schemaVars: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.sets.fromList[hydra.core.Name](hydra.lib.maps.keys[hydra.core.Name, hydra.core.TypeScheme](g.schemaTypes))
   lazy val freeVars: Seq[hydra.core.Name] = hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.difference[hydra.core.Name](hydra.rewriting.freeVariablesInType(typ))(schemaVars))
   lazy val isEither: Boolean = hydra.rewriting.deannotateTerm(outputTerm) match
-    case hydra.core.Term.either => true
+    case hydra.core.Term.either() => true
     case _ => false
   hydra.lib.logic.ifElse[Either[scala.Predef.String, Option[scala.Predef.String]]](hydra.lib.logic.or(isEither)(hydra.lib.logic.not(hydra.lib.lists.`null`[hydra.core.Name](freeVars))))({
     lazy val int32Type: hydra.core.Type = hydra.core.Type.literal(hydra.core.LiteralType.integer(hydra.core.IntegerType.int32))
@@ -149,7 +149,7 @@ def containsTriviallyPolymorphic(term: hydra.core.Term): Boolean =
   case hydra.core.Term.set(v_Term_set_s) => hydra.lib.logic.or(hydra.lib.sets.`null`[hydra.core.Term](v_Term_set_s))(hydra.lib.lists.foldl[Boolean, Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Term, Boolean](hydra.ext.haskell.testing.containsTriviallyPolymorphic)(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s))))
   case hydra.core.Term.map(v_Term_map_m) => hydra.lib.logic.or(hydra.lib.maps.`null`[hydra.core.Term, hydra.core.Term](v_Term_map_m))(hydra.lib.logic.or(hydra.lib.lists.foldl[Boolean, Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Term, Boolean](hydra.ext.haskell.testing.containsTriviallyPolymorphic)(hydra.lib.maps.keys[hydra.core.Term, hydra.core.Term](v_Term_map_m))))(hydra.lib.lists.foldl[Boolean, Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Term, Boolean](hydra.ext.haskell.testing.containsTriviallyPolymorphic)(hydra.lib.lists.map[Tuple2[hydra.core.Term, hydra.core.Term], hydra.core.Term]((p: Tuple2[hydra.core.Term, hydra.core.Term]) => hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](p))(hydra.lib.maps.toList[hydra.core.Term, hydra.core.Term](v_Term_map_m))))))
   case hydra.core.Term.maybe(v_Term_maybe_mx) => hydra.lib.maybes.maybe[Boolean, hydra.core.Term](true)(hydra.ext.haskell.testing.containsTriviallyPolymorphic)(v_Term_maybe_mx)
-  case hydra.core.Term.either => true
+  case hydra.core.Term.either() => true
   case hydra.core.Term.union(v_Term_union_inj) => hydra.ext.haskell.testing.containsTriviallyPolymorphic(v_Term_union_inj.field.term)
   case hydra.core.Term.pair(v_Term_pair_p) => hydra.lib.logic.or(hydra.ext.haskell.testing.containsTriviallyPolymorphic(hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](v_Term_pair_p)))(hydra.ext.haskell.testing.containsTriviallyPolymorphic(hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](v_Term_pair_p)))
   case hydra.core.Term.record(v_Term_record_rec) => hydra.lib.lists.foldl[Boolean, Boolean](hydra.lib.logic.or)(false)(hydra.lib.lists.map[hydra.core.Field, Boolean]((f: hydra.core.Field) =>
