@@ -140,7 +140,7 @@ public interface Annotations {
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> getTermDescription(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.core.Term>> peel = new java.util.concurrent.atomic.AtomicReference<>();
-    peel.set((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> (t).accept(new hydra.core.Term.PartialVisitor<>() {
+    peel.set((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> (t).accept(new hydra.core.Term.PartialVisitor<hydra.core.Term>() {
       @Override
       public hydra.core.Term otherwise(hydra.core.Term instance) {
         return t;
@@ -419,10 +419,10 @@ public interface Annotations {
   }
 
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> termAnnotationInternal(hydra.core.Term term) {
-    java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.AnnotatedTerm>> getAnn = (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.AnnotatedTerm>>) (t -> (t).accept(new hydra.core.Term.PartialVisitor<>() {
+    java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.AnnotatedTerm>> getAnn = (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.AnnotatedTerm>>) (t -> (t).accept(new hydra.core.Term.PartialVisitor<hydra.util.Maybe<hydra.core.AnnotatedTerm>>() {
       @Override
       public hydra.util.Maybe<hydra.core.AnnotatedTerm> otherwise(hydra.core.Term instance) {
-        return (hydra.util.Maybe<hydra.core.AnnotatedTerm>) (hydra.util.Maybe.<hydra.core.AnnotatedTerm>nothing());
+        return hydra.util.Maybe.<hydra.core.AnnotatedTerm>nothing();
       }
 
       @Override
@@ -438,10 +438,10 @@ public interface Annotations {
   }
 
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> typeAnnotationInternal(hydra.core.Type typ) {
-    java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.AnnotatedType>> getAnn = (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.AnnotatedType>>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
+    java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.AnnotatedType>> getAnn = (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.AnnotatedType>>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<hydra.util.Maybe<hydra.core.AnnotatedType>>() {
       @Override
       public hydra.util.Maybe<hydra.core.AnnotatedType> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Maybe<hydra.core.AnnotatedType>) (hydra.util.Maybe.<hydra.core.AnnotatedType>nothing());
+        return hydra.util.Maybe.<hydra.core.AnnotatedType>nothing();
       }
 
       @Override

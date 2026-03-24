@@ -8367,10 +8367,7 @@ public interface Coder {
     hydra.core.Name name = (tdef).name;
     hydra.core.Term term0 = (tdef).term;
     hydra.core.Term term = hydra.Rewriting.unshadowVariables(term0);
-    hydra.util.Lazy<hydra.core.TypeScheme> ts = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-      () -> new hydra.core.TypeScheme((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Unit")), (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing())),
-      (java.util.function.Function<hydra.core.TypeScheme, hydra.core.TypeScheme>) (x -> x),
-      (tdef).type));
+    hydra.core.TypeScheme ts = (tdef).type;
     return hydra.lib.eithers.Bind.apply(
       hydra.ext.java.Coder.analyzeJavaFunction(
         env,
@@ -8382,7 +8379,7 @@ public interface Coder {
         hydra.util.Lazy<hydra.core.Term> body = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.java.environment.JavaEnvironment>, hydra.core.Term>) (projected -> projected.body)).apply(fs));
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> params = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.java.environment.JavaEnvironment>, hydra.util.ConsList<hydra.core.Name>>) (projected -> projected.params)).apply(fs));
         hydra.util.Lazy<Integer> numParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply(params.get()));
-        hydra.core.Type schemeType = ts.get().type;
+        hydra.core.Type schemeType = (ts).type;
         hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.core.Type> peelResult = hydra.ext.java.Coder.peelDomainsAndCod(
           numParams.get(),
           schemeType);
@@ -8390,11 +8387,11 @@ public interface Coder {
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Type>> doms = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.java.environment.JavaEnvironment>, hydra.util.ConsList<hydra.core.Type>>) (projected -> projected.domains)).apply(fs));
         hydra.util.Lazy<hydra.ext.java.environment.JavaEnvironment> env2 = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.java.environment.JavaEnvironment>, hydra.ext.java.environment.JavaEnvironment>) (projected -> projected.environment)).apply(fs));
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Type>> schemeDoms = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(peelResult));
-        hydra.util.PersistentSet<hydra.core.Name> schemeTypeVars = hydra.ext.java.Coder.collectTypeVars(ts.get().type);
+        hydra.util.PersistentSet<hydra.core.Name> schemeTypeVars = hydra.ext.java.Coder.collectTypeVars((ts).type);
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> termVars = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.java.environment.JavaEnvironment>, hydra.util.ConsList<hydra.core.Name>>) (projected -> projected.typeParams)).apply(fs));
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> schemeVars = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
           (java.util.function.Function<hydra.core.Name, Boolean>) (v -> hydra.ext.java.Coder.isSimpleName(v)),
-          ts.get().variables));
+          (ts).variables));
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> usedSchemeVars = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
           (java.util.function.Function<hydra.core.Name, Boolean>) (v -> hydra.lib.sets.Member.apply(
             v,
@@ -8474,7 +8471,7 @@ public interface Coder {
               fixedSchemeVarSet.get()), hydra.util.Maybe.just(fixedCod.get()), (aliases2base).thunkedVars));
             hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>> constraints = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
               () -> (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())),
-              ts.get().constraints));
+              (ts).constraints));
             hydra.ext.java.environment.JavaEnvironment env2WithTypeParams = new hydra.ext.java.environment.JavaEnvironment(aliases2.get(), env2.get().graph);
             hydra.util.Lazy<hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter>> jparams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.core.Name, hydra.ext.java.syntax.TypeParameter>) (v -> hydra.ext.java.Utils.javaTypeParameter(hydra.Formatting.capitalize((v).value))),
