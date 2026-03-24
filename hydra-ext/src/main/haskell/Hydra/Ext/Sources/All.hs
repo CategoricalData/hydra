@@ -76,6 +76,8 @@ import qualified Hydra.Ext.Sources.Pegasus.Language             as PegasusLangua
 import qualified Hydra.Ext.Sources.Pegasus.Pdl                 as Pdl
 import qualified Hydra.Ext.Sources.Pegasus.Serde               as PegasusSerde
 import qualified Hydra.Ext.Sources.Pg.Coder                    as PgCoder
+import qualified Hydra.Ext.Sources.Pg.Rdf.Environment          as PgRdfEnvironment
+import qualified Hydra.Ext.Sources.Pg.Rdf.Mappings             as PgRdfMappings
 import qualified Hydra.Ext.Sources.Pg.Graphson.Coder           as GraphsonCoder
 import qualified Hydra.Ext.Sources.Pg.Graphson.Construct       as GraphsonConstruct
 import qualified Hydra.Ext.Sources.Pg.Graphson.Syntax          as GraphsonSyntax
@@ -294,6 +296,8 @@ pgModules = [
   OpenCypher.module_,
   PgCoder.module_,
   PgMapping.module_,
+  PgRdfEnvironment.module_,
+  PgRdfMappings.module_,
   PgModel.module_,
   PgPrinting.module_,
   PgQuery.module_,
