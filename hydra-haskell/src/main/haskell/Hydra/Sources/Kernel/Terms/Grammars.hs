@@ -127,18 +127,15 @@ grammarToModule = define "grammarToModule" $
     (makeElements @@ false @@ var "ns")
     (var "capitalizedNames")
     (var "patterns")) $
-  "elements" <~ Lists.map
+  "typeDefs" <~ Lists.map
     ("pair" ~>
       "lname" <~ Pairs.first (var "pair") $
       "elName" <~ toName @@ var "ns" @@ var "lname" $
       "typ" <~ replacePlaceholders @@ var "elName" @@ (wrapType @@ (Pairs.second (var "pair"))) $
-      Annotations.typeElement @@ var "elName" @@ var "typ")
+      Module.definitionType (Module.typeDefinition (var "elName") (var "typ")))
     (var "elementPairs") $
   Module.module_ (var "ns")
-    (Lists.map ("b" ~> Module.definitionTerm (Module.termDefinition
-      (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-      nothing))
-      (var "elements"))
+    (var "typeDefs")
     (list ([] :: [TTerm Namespace])) (list ([] :: [TTerm Namespace])) (var "desc")
 
 isComplex :: TBinding (G.Pattern -> Bool)
