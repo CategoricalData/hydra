@@ -36,7 +36,7 @@ public interface Coder {
           cx)))));
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> typeEls = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
       hydra.Annotations::isNativeType,
-      (mod).elements));
+      hydra.Lexical.graphToBindings(g)));
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.util.ConsList<hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>>, hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>>) (_shapes -> (hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>) ((hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>) (new hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>(new hydra.ext.org.w3.shacl.model.ShapesGraph(hydra.lib.sets.FromList.apply(_shapes)), cx)))),
       hydra.lib.eithers.MapList.apply(

@@ -77,7 +77,7 @@ def isNontrivial(isRecord: Boolean)(pats: Seq[hydra.grammar.Pattern]): Boolean =
   lazy val minPats: Seq[hydra.grammar.Pattern] = hydra.grammars.simplify(isRecord)(pats)
   def isLabeled(p: hydra.grammar.Pattern): Boolean =
     p match
-    case hydra.grammar.Pattern.labeled() => true
+    case hydra.grammar.Pattern.labeled(_) => true
     case _ => false
   hydra.lib.logic.ifElse[Boolean](hydra.lib.equality.equal[Int](hydra.lib.lists.length[hydra.grammar.Pattern](minPats))(1))(isLabeled(hydra.lib.lists.head[hydra.grammar.Pattern](minPats)))(true)
 }
@@ -96,14 +96,14 @@ def makeElements(omitTrivial: Boolean)(ns: hydra.module.Namespace)(lname: scala.
   def forPat(pat2: hydra.grammar.Pattern): Seq[Tuple2[scala.Predef.String, hydra.core.Type]] =
     pat2 match
     case hydra.grammar.Pattern.alternatives(v_Pattern_alternatives_pats) => forRecordOrUnion(false)((fields: Seq[hydra.core.FieldType]) => hydra.core.Type.union(fields))(v_Pattern_alternatives_pats)
-    case hydra.grammar.Pattern.constant() => trivial
-    case hydra.grammar.Pattern.ignored() => Seq()
+    case hydra.grammar.Pattern.constant(_) => trivial
+    case hydra.grammar.Pattern.ignored(_) => Seq()
     case hydra.grammar.Pattern.labeled(v_Pattern_labeled_lp) => forPat(v_Pattern_labeled_lp.pattern)
-    case hydra.grammar.Pattern.nil() => trivial
+    case hydra.grammar.Pattern.nil => trivial
     case hydra.grammar.Pattern.nonterminal(v_Pattern_nonterminal_s) => Seq(Tuple2(lname, hydra.core.Type.variable(hydra.grammars.toName(ns)(v_Pattern_nonterminal_s))))
     case hydra.grammar.Pattern.option(v_Pattern_option_p) => mod("Option")((x: hydra.core.Type) => hydra.core.Type.maybe(x))(v_Pattern_option_p)
     case hydra.grammar.Pattern.plus(v_Pattern_plus_p) => mod("Elmt")((x: hydra.core.Type) => hydra.core.Type.list(x))(v_Pattern_plus_p)
-    case hydra.grammar.Pattern.regex() => Seq(Tuple2(lname, hydra.core.Type.literal(hydra.core.LiteralType.string)))
+    case hydra.grammar.Pattern.regex(_) => Seq(Tuple2(lname, hydra.core.Type.literal(hydra.core.LiteralType.string)))
     case hydra.grammar.Pattern.sequence(v_Pattern_sequence_pats) => forRecordOrUnion(true)((fields: Seq[hydra.core.FieldType]) => hydra.core.Type.record(fields))(v_Pattern_sequence_pats)
     case hydra.grammar.Pattern.star(v_Pattern_star_p) => mod("Elmt")((x: hydra.core.Type) => hydra.core.Type.list(x))(v_Pattern_star_p)
   def forRecordOrUnion(isRecord: Boolean)(construct: (Seq[hydra.core.FieldType] => hydra.core.Type))(pats: Seq[hydra.grammar.Pattern]): Seq[Tuple2[scala.Predef.String, hydra.core.Type]] =
@@ -123,16 +123,16 @@ def makeElements(omitTrivial: Boolean)(ns: hydra.module.Namespace)(lname: scala.
 
 def rawName(pat: hydra.grammar.Pattern): scala.Predef.String =
   pat match
-  case hydra.grammar.Pattern.alternatives() => "alts"
+  case hydra.grammar.Pattern.alternatives(_) => "alts"
   case hydra.grammar.Pattern.constant(v_Pattern_constant_c) => hydra.formatting.capitalize(hydra.formatting.withCharacterAliases(v_Pattern_constant_c))
-  case hydra.grammar.Pattern.ignored() => "ignored"
+  case hydra.grammar.Pattern.ignored(_) => "ignored"
   case hydra.grammar.Pattern.labeled(v_Pattern_labeled_lp) => (v_Pattern_labeled_lp.label)
-  case hydra.grammar.Pattern.nil() => "none"
+  case hydra.grammar.Pattern.nil => "none"
   case hydra.grammar.Pattern.nonterminal(v_Pattern_nonterminal_s) => hydra.formatting.capitalize(v_Pattern_nonterminal_s)
   case hydra.grammar.Pattern.option(v_Pattern_option_p) => hydra.formatting.capitalize(hydra.grammars.rawName(v_Pattern_option_p))
   case hydra.grammar.Pattern.plus(v_Pattern_plus_p) => hydra.lib.strings.cat2("listOf")(hydra.formatting.capitalize(hydra.grammars.rawName(v_Pattern_plus_p)))
-  case hydra.grammar.Pattern.regex() => "regex"
-  case hydra.grammar.Pattern.sequence() => "sequence"
+  case hydra.grammar.Pattern.regex(_) => "regex"
+  case hydra.grammar.Pattern.sequence(_) => "sequence"
   case hydra.grammar.Pattern.star(v_Pattern_star_p) => hydra.lib.strings.cat2("listOf")(hydra.formatting.capitalize(hydra.grammars.rawName(v_Pattern_star_p)))
 
 def replacePlaceholders[T0, T1](elName: T0)(typ: T1): T1 = typ
@@ -141,7 +141,7 @@ def simplify(isRecord: Boolean)(pats: Seq[hydra.grammar.Pattern]): Seq[hydra.gra
   {
   def isConstant(p: hydra.grammar.Pattern): Boolean =
     p match
-    case hydra.grammar.Pattern.constant() => true
+    case hydra.grammar.Pattern.constant(_) => true
     case _ => false
   hydra.lib.logic.ifElse[Seq[hydra.grammar.Pattern]](isRecord)(hydra.lib.lists.filter[hydra.grammar.Pattern]((p: hydra.grammar.Pattern) => hydra.lib.logic.not(isConstant(p)))(pats))(pats)
 }
@@ -150,7 +150,7 @@ def toName(ns: hydra.module.Namespace)(local: scala.Predef.String): hydra.core.N
 
 def wrapType(t: hydra.core.Type): hydra.core.Type =
   t match
-  case hydra.core.Type.record() => t
-  case hydra.core.Type.union() => t
-  case hydra.core.Type.wrap() => t
+  case hydra.core.Type.record(_) => t
+  case hydra.core.Type.union(_) => t
+  case hydra.core.Type.wrap(_) => t
   case _ => hydra.core.Type.wrap(t)

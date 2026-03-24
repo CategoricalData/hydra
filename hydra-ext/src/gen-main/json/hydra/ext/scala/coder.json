@@ -8031,57 +8031,6 @@
                                                         "domain": [{"unit": {}}],
                                                         "parameter": "_"}}}},
                                                 {
-                                                  "name": "typeApplication",
-                                                  "term": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "ta"},
-                                                                "function": {
-                                                                  "function": {
-                                                                    "elimination": {
-                                                                      "record": {"field": "body", "typeName": "hydra.core.TypeApplicationTerm"}}}}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "g"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "cx"},
-                                                                    "function": {"variable": "hydra.ext.scala.coder.encodeTerm"}}}}}}},
-                                                        "domain": [{"variable": "hydra.core.TypeApplicationTerm"}],
-                                                        "parameter": "ta"}}}},
-                                                {
-                                                  "name": "typeLambda",
-                                                  "term": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "tl"},
-                                                                "function": {
-                                                                  "function": {
-                                                                    "elimination": {"record": {"field": "body", "typeName": "hydra.core.TypeLambda"}}}}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "tl"},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "g"},
-                                                                        "function": {"variable": "hydra.rewriting.extendGraphForTypeLambda"}}}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "cx"},
-                                                                    "function": {"variable": "hydra.ext.scala.coder.encodeTerm"}}}}}}},
-                                                        "domain": [{"variable": "hydra.core.TypeLambda"}],
-                                                        "parameter": "tl"}}}},
-                                                {
                                                   "name": "let",
                                                   "term": {
                                                     "function": {

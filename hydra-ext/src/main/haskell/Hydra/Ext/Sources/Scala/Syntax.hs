@@ -74,7 +74,6 @@ module_ = Module ns (map toTypeDef elements) [Core.ns] [Core.ns] $
       data_ForYield,
       data_New,
       data_NewAnonymous,
-      data_Placeholder,
       data_Eta,
       data_Repeated,
       data_Param,
@@ -278,7 +277,7 @@ data_ = def "Data" $
     "forYield">: meta "Data_ForYield",
     "new">: meta "Data_New",
     "newAnonymous">: meta "Data_NewAnonymous",
-    "placeholder">: meta "Data_Placeholder",
+    "placeholder">: T.unit,
     "eta">: meta "Data_Eta",
     "repeated">: meta "Data_Repeated",
     "param">: meta "Data_Param"]
@@ -510,10 +509,6 @@ data_NewAnonymous :: Binding
 data_NewAnonymous = def "Data_NewAnonymous" $
   T.record [
     "templ">: meta "Template"]
-
-data_Placeholder :: Binding
-data_Placeholder = def "Data_Placeholder"
-  T.unit
 
 data_Eta :: Binding
 data_Eta = def "Data_Eta" $

@@ -355,13 +355,16 @@ generateSourceFiles = define "generateSourceFiles" $
           (Module.moduleDescription $ var "m")) $
       "allBindings" <~ Lexical.graphToBindings @@ var "g1" $
       "refreshedMods" <~ Lists.map ("m" ~> var "refreshModule" @@ var "allBindings" @@ var "m") (var "termModulesToGenerate") $
+      -- Deduplicate definitions by name to avoid duplicate functions in generated code
+      "dedupDefs" <~ ("defs" ~> Maps.elems (Maps.fromList (Lists.map ("d" ~> pair (Module.termDefinitionName (var "d")) (var "d")) (var "defs")))) $
+      "dedupedDefLists" <~ Lists.map (var "dedupDefs") (var "defLists") $
       Eithers.map ("xs" ~> Lists.concat (var "xs")) $
         Eithers.mapList ("p" ~>
           "mod" <~ Pairs.first (var "p") $
           "defs" <~ Pairs.second (var "p") $
           Eithers.map ("m" ~> Maps.toList (var "m")) $
             var "printDefinitions" @@ var "mod" @@ Lists.map ("d" ~> Module.definitionTerm (var "d")) (var "defs") @@ var "cx" @@ var "g1")
-        (Lists.zip (var "refreshedMods") (var "defLists"))) $
+        (Lists.zip (var "refreshedMods") (var "dedupedDefLists"))) $
 
   -- Combine results
   right $ Lists.concat2 (var "schemaFiles") (var "termFiles")

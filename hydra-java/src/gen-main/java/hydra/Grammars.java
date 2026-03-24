@@ -63,8 +63,8 @@ public interface Grammars {
         v2))),
       capitalizedNames.get(),
       patterns.get())));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> elements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Pair<String, hydra.core.Type>, hydra.core.Binding>) (pair -> {
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.util.Pair<String, hydra.core.Type>, hydra.module.Definition>) (pair -> {
         hydra.util.Lazy<String> lname = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
         hydra.core.Name elName = hydra.Grammars.toName(
           ns,
@@ -72,14 +72,10 @@ public interface Grammars {
         hydra.util.Lazy<hydra.core.Type> typ = new hydra.util.Lazy<>(() -> hydra.Grammars.replacePlaceholders(
           elName,
           hydra.Grammars.wrapType(hydra.lib.pairs.Second.apply(pair))));
-        return hydra.Annotations.typeElement(
-          elName,
-          typ.get());
+        return new hydra.module.Definition.Type(new hydra.module.TypeDefinition(elName, typ.get()));
       }),
       elementPairs.get()));
-    return new hydra.module.Module(ns, hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.core.Binding, hydra.module.Definition>) (b -> new hydra.module.Definition.Term(new hydra.module.TermDefinition((b).name, (b).term, (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())))),
-      elements.get()), (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>empty()), (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>empty()), desc);
+    return new hydra.module.Module(ns, typeDefs.get(), (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>empty()), (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>empty()), desc);
   }
 
   static Boolean isComplex(hydra.grammar.Pattern pat) {

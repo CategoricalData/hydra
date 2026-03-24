@@ -1219,7 +1219,7 @@ encodeTerm = def "encodeTerm" $
             _Type_unit>>: constant true,
             _Type_record>>: ("rt" ~> Equality.equal (Lists.length (var "rt")) (int32 0))])
           (Maps.lookup (var "fn") (var "unionFtypes")))
-          -- Unit-typed: bare constructor name
+          -- Unit-typed: bare constructor name (simple enum case in Scala 3)
           (right (var "lhs"))
           -- Non-unit: apply argument
           (Eithers.bind
@@ -1263,10 +1263,6 @@ encodeTerm = def "encodeTerm" $
               ("ss" ~>
                 right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "Tuple2") @@ list [var "sf", var "ss"])))),
       _Term_unit>>: (constant $ right (inject _Data _Data_lit (inject _Lit _Lit_unit unit))),
-      _Term_typeApplication>>: ("ta" ~>
-        asTerm encodeTerm @@ var "cx" @@ var "g" @@ (Core.typeApplicationTermBody $ var "ta")),
-      _Term_typeLambda>>: ("tl" ~>
-        asTerm encodeTerm @@ var "cx" @@ (Rewriting.extendGraphForTypeLambda @@ var "g" @@ var "tl") @@ (Core.typeLambdaBody $ var "tl")),
       _Term_let>>: ("lt" ~> lets [
         "bindings">: Core.letBindings $ var "lt",
         "body">: Core.letBody $ var "lt",

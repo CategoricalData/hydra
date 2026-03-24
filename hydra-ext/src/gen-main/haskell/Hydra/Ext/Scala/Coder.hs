@@ -472,8 +472,6 @@ encodeTerm cx g term0 =
           sf,
           ss])))
         Core.TermUnit -> Right (Syntax.DataLit Syntax.LitUnit)
-        Core.TermTypeApplication v0 -> encodeTerm cx g (Core.typeApplicationTermBody v0)
-        Core.TermTypeLambda v0 -> encodeTerm cx (Rewriting.extendGraphForTypeLambda g v0) (Core.typeLambdaBody v0)
         Core.TermLet v0 ->
           let bindings = Core.letBindings v0
               body = Core.letBody v0

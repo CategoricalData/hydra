@@ -181,8 +181,8 @@ def setTypeClasses(m: Map[hydra.core.Name, scala.collection.immutable.Set[hydra.
   {
   def encodeClass(tc: hydra.classes.TypeClass): hydra.core.Term =
     tc match
-    case hydra.classes.TypeClass.equality() => hydra.core.Term.union(hydra.core.Injection("hydra.classes.TypeClass", hydra.core.Field("equality", hydra.core.Term.unit)))
-    case hydra.classes.TypeClass.ordering() => hydra.core.Term.union(hydra.core.Injection("hydra.classes.TypeClass", hydra.core.Field("ordering", hydra.core.Term.unit)))
+    case hydra.classes.TypeClass.equality => hydra.core.Term.union(hydra.core.Injection("hydra.classes.TypeClass", hydra.core.Field("equality", hydra.core.Term.unit)))
+    case hydra.classes.TypeClass.ordering => hydra.core.Term.union(hydra.core.Injection("hydra.classes.TypeClass", hydra.core.Field("ordering", hydra.core.Term.unit)))
   def encodePair(nameClasses: Tuple2[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]]): Tuple2[hydra.core.Term, hydra.core.Term] =
     {
     lazy val name: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, scala.collection.immutable.Set[hydra.classes.TypeClass]](nameClasses)

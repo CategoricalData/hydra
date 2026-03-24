@@ -50,7 +50,7 @@ def transformTestCase(tcm: hydra.testing.TestCaseWithMetadata): Option[hydra.tes
       lazy val `output_`: hydra.core.Term = (v_TestCase_evaluation_ecase.output)
       Some(hydra.testing.TestCaseWithMetadata(`name_`, hydra.testing.TestCase.delegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(`input_`, `output_`)), desc, `tags_`))
     }
-    case hydra.testing.TestCase.delegatedEvaluation() => Some(tcm)
+    case hydra.testing.TestCase.delegatedEvaluation(_) => Some(tcm)
     case hydra.testing.TestCase.topologicalSort(v_TestCase_topologicalSort_tscase) => {
       lazy val adjList: Seq[Tuple2[Int, Seq[Int]]] = (v_TestCase_topologicalSort_tscase.adjacencyList)
       lazy val expected: Either[Seq[Seq[Int]], Seq[Int]] = (v_TestCase_topologicalSort_tscase.expected)
@@ -61,7 +61,7 @@ def transformTestCase(tcm: hydra.testing.TestCaseWithMetadata): Option[hydra.tes
       lazy val expected: Seq[Seq[Int]] = (v_TestCase_topologicalSortSCC_scccase.expected)
       Some(hydra.testing.TestCaseWithMetadata(`name_`, hydra.testing.TestCase.delegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(hydra.test.transform.buildTopologicalSortSCCCall(adjList), hydra.test.transform.encodeListList(expected))), desc, `tags_`))
     }
-    case hydra.testing.TestCase.validateCoreTerm() => Some(tcm)
+    case hydra.testing.TestCase.validateCoreTerm(_) => Some(tcm)
     case _ => None
 }
 
@@ -70,10 +70,10 @@ def buildConvertCaseCall(fromConv: hydra.util.CaseConvention)(toConv: hydra.util
 
 def encodeCaseConvention(conv: hydra.util.CaseConvention): hydra.core.Term =
   hydra.core.Term.union(hydra.core.Injection("hydra.util.CaseConvention", hydra.core.Field(conv match
-  case hydra.util.CaseConvention.lowerSnake() => "lowerSnake"
-  case hydra.util.CaseConvention.upperSnake() => "upperSnake"
-  case hydra.util.CaseConvention.camel() => "camel"
-  case hydra.util.CaseConvention.pascal() => "pascal", hydra.core.Term.unit)))
+  case hydra.util.CaseConvention.lowerSnake => "lowerSnake"
+  case hydra.util.CaseConvention.upperSnake => "upperSnake"
+  case hydra.util.CaseConvention.camel => "camel"
+  case hydra.util.CaseConvention.pascal => "pascal", hydra.core.Term.unit)))
 
 def addGenerationPrefix(`ns_`: hydra.module.Namespace): hydra.module.Namespace = hydra.lib.strings.cat2("generation.")(`ns_`)
 

@@ -50,7 +50,7 @@ def adaptTypeToHaskellAndEncode[T0](namespaces: hydra.module.Namespaces[hydra.ex
   {
   def enc(t: hydra.core.Type): Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Type] = hydra.ext.haskell.coder.encodeType(namespaces)(t)(cx)(g)
   hydra.rewriting.deannotateType(typ) match
-    case hydra.core.Type.variable() => enc(typ)
+    case hydra.core.Type.variable(_) => enc(typ)
     case _ => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, hydra.ext.haskell.syntax.Type](hydra.lib.eithers.bimap[scala.Predef.String, hydra.core.Type, hydra.context.InContext[hydra.errors.Error], hydra.core.Type]((_s: scala.Predef.String) => hydra.context.InContext(hydra.errors.Error.other(_s), cx))((_x: hydra.core.Type) => _x)(hydra.adapt.adaptTypeForLanguage(hydra.ext.haskell.language.haskellLanguage)(typ)))((adaptedType: hydra.core.Type) => enc(adaptedType))
 }
 
@@ -122,7 +122,7 @@ def encodeCaseExpression(depth: Int)(namespaces: hydra.module.Namespaces[hydra.e
       def noArgs[T0]: Seq[T0] = Seq()
       lazy val singleArg: Seq[hydra.ext.haskell.syntax.Pattern] = Seq(hydra.ext.haskell.syntax.Pattern.name(hydra.ext.haskell.utils.rawName(v1)))
       hydra.rewriting.deannotateType(ft) match
-        case hydra.core.Type.unit() => Right(noArgs)
+        case hydra.core.Type.unit => Right(noArgs)
         case _ => Right(singleArg)
     }))((args: Seq[hydra.ext.haskell.syntax.Pattern]) =>
       {
@@ -297,10 +297,10 @@ def encodeTerm(depth: Int)(namespaces: hydra.module.Namespaces[hydra.ext.haskell
       lazy val dflt: Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Expression] = hydra.lib.eithers.map[hydra.ext.haskell.syntax.Expression, hydra.ext.haskell.syntax.Expression, hydra.context.InContext[hydra.errors.Error]]((v1: hydra.ext.haskell.syntax.Expression) => hydra.ext.haskell.utils.hsapp(lhs)(v1))(encode(ft))
       hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Type, hydra.ext.haskell.syntax.Expression](hydra.schemas.requireUnionField(cx)(g)(sname)(fn))((ftyp: hydra.core.Type) =>
         hydra.rewriting.deannotateType(ftyp) match
-        case hydra.core.Type.unit() => Right(lhs)
+        case hydra.core.Type.unit => Right(lhs)
         case _ => dflt)
     }
-    case hydra.core.Term.unit() => Right(hydra.ext.haskell.syntax.Expression.tuple(Seq()))
+    case hydra.core.Term.unit => Right(hydra.ext.haskell.syntax.Expression.tuple(Seq()))
     case hydra.core.Term.variable(v_Term_variable_name) => Right(hydra.ext.haskell.syntax.Expression.variable(hydra.ext.haskell.utils.elementReference(namespaces)(v_Term_variable_name)))
     case hydra.core.Term.wrap(v_Term_wrap_wrapped) => {
       lazy val tname: hydra.core.Name = (v_Term_wrap_wrapped.typeName)
@@ -346,20 +346,20 @@ def encodeType[T0](namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.
     }
     case hydra.core.Type.list(v_Type_list_lt) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Type, hydra.ext.haskell.syntax.Type](encode(v_Type_list_lt))((hlt: hydra.ext.haskell.syntax.Type) => Right(hydra.ext.haskell.syntax.Type.list(hlt)))
     case hydra.core.Type.literal(v_Type_literal_lt) => v_Type_literal_lt match
-      case hydra.core.LiteralType.binary() => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("B.ByteString")))
-      case hydra.core.LiteralType.boolean() => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Bool")))
+      case hydra.core.LiteralType.binary => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("B.ByteString")))
+      case hydra.core.LiteralType.boolean => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Bool")))
       case hydra.core.LiteralType.float(v_LiteralType_float_ft) => v_LiteralType_float_ft match
-        case hydra.core.FloatType.float32() => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Float")))
-        case hydra.core.FloatType.float64() => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Double")))
-        case hydra.core.FloatType.bigfloat() => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Double")))
+        case hydra.core.FloatType.float32 => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Float")))
+        case hydra.core.FloatType.float64 => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Double")))
+        case hydra.core.FloatType.bigfloat => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Double")))
       case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => v_LiteralType_integer_it match
-        case hydra.core.IntegerType.bigint() => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Integer")))
-        case hydra.core.IntegerType.int8() => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("I.Int8")))
-        case hydra.core.IntegerType.int16() => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("I.Int16")))
-        case hydra.core.IntegerType.int32() => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Int")))
-        case hydra.core.IntegerType.int64() => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("I.Int64")))
+        case hydra.core.IntegerType.bigint => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Integer")))
+        case hydra.core.IntegerType.int8 => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("I.Int8")))
+        case hydra.core.IntegerType.int16 => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("I.Int16")))
+        case hydra.core.IntegerType.int32 => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Int")))
+        case hydra.core.IntegerType.int64 => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("I.Int64")))
         case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("unexpected integer type: ")(hydra.show.core.integerType(v_LiteralType_integer_it))), cx))
-      case hydra.core.LiteralType.string() => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("String")))
+      case hydra.core.LiteralType.string => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("String")))
       case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("unexpected literal type: ")(hydra.show.core.literalType(v_Type_literal_lt))), cx))
     case hydra.core.Type.map(v_Type_map_mapType) => {
       lazy val kt: hydra.core.Type = (v_Type_map_mapType.keys)
@@ -372,14 +372,14 @@ def encodeType[T0](namespaces: hydra.module.Namespaces[hydra.ext.haskell.syntax.
       Right(hydra.ext.haskell.utils.toTypeApplication(Seq(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Maybe")), hot))))
     case hydra.core.Type.pair(v_Type_pair_pt) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Type, hydra.ext.haskell.syntax.Type](encode(v_Type_pair_pt.first))((f: hydra.ext.haskell.syntax.Type) =>
       hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Type, hydra.ext.haskell.syntax.Type](encode(v_Type_pair_pt.second))((s: hydra.ext.haskell.syntax.Type) => Right(hydra.ext.haskell.syntax.Type.tuple(Seq(f, s)))))
-    case hydra.core.Type.record() => ref("placeholder")
+    case hydra.core.Type.record(_) => ref("placeholder")
     case hydra.core.Type.set(v_Type_set_st) => hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.ext.haskell.syntax.Type, hydra.ext.haskell.syntax.Type](encode(v_Type_set_st))((hst: hydra.ext.haskell.syntax.Type) =>
       Right(hydra.ext.haskell.utils.toTypeApplication(Seq(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("S.Set")), hst))))
-    case hydra.core.Type.union() => ref("placeholder")
-    case hydra.core.Type.unit() => Right(unitTuple)
+    case hydra.core.Type.union(_) => ref("placeholder")
+    case hydra.core.Type.unit => Right(unitTuple)
     case hydra.core.Type.variable(v_Type_variable_v1) => ref(v_Type_variable_v1)
-    case hydra.core.Type.void() => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Void")))
-    case hydra.core.Type.wrap() => ref("placeholder")
+    case hydra.core.Type.void => Right(hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName("Void")))
+    case hydra.core.Type.wrap(_) => ref("placeholder")
     case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2("unexpected type: ")(hydra.show.core.`type`(typ))), cx))
 }
 
@@ -392,8 +392,8 @@ def encodeTypeWithClassAssertions[T0](namespaces: hydra.module.Namespaces[hydra.
     lazy val name: hydra.core.Name = hydra.lib.pairs.first[hydra.core.Name, hydra.classes.TypeClass](pair)
     lazy val cls: hydra.classes.TypeClass = hydra.lib.pairs.second[hydra.core.Name, hydra.classes.TypeClass](pair)
     lazy val hname: hydra.ext.haskell.syntax.Name = hydra.ext.haskell.utils.rawName(cls match
-      case hydra.classes.TypeClass.equality() => "Eq"
-      case hydra.classes.TypeClass.ordering() => "Ord")
+      case hydra.classes.TypeClass.equality => "Eq"
+      case hydra.classes.TypeClass.ordering => "Ord")
     lazy val htype: hydra.ext.haskell.syntax.Type = hydra.ext.haskell.syntax.Type.variable(hydra.ext.haskell.utils.rawName(name))
     hydra.ext.haskell.syntax.Assertion.`class`(hydra.ext.haskell.syntax.ClassAssertion(hname, Seq(htype)))
   }

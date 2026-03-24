@@ -1,0 +1,2 @@
+[debug] Created transactional ClassFileManager with tempDir = /Users/josh/projects/github/CategoricalData/hydra/project/target/scala-2.12/sbt-1.0/classes.bak
+[debug] Removing the temporary directory used for backing up class files: /Users/josh/projects/github/CategoricalData/hydra/project/target/scala-2.12/sbt-1.0/classes.bak

@@ -146,7 +146,7 @@ def freshNames(n: Int)(cx: hydra.context.Context): Tuple2[Seq[hydra.core.Name], 
 def fTypeIsPolymorphic(typ: hydra.core.Type): Boolean =
   typ match
   case hydra.core.Type.annotated(v_Type_annotated_at) => hydra.schemas.fTypeIsPolymorphic(v_Type_annotated_at.body)
-  case hydra.core.Type.forall() => true
+  case hydra.core.Type.forall(_) => true
   case _ => false
 
 def fullyStripAndNormalizeType(typ: hydra.core.Type): hydra.core.Type =
@@ -257,9 +257,9 @@ def isSerializableByName(cx: hydra.context.Context)(graph: hydra.graph.Graph)(na
 
 def isNominalType(typ: hydra.core.Type): Boolean =
   hydra.rewriting.deannotateType(typ) match
-  case hydra.core.Type.record() => true
-  case hydra.core.Type.union() => true
-  case hydra.core.Type.wrap() => true
+  case hydra.core.Type.record(_) => true
+  case hydra.core.Type.union(_) => true
+  case hydra.core.Type.wrap(_) => true
   case hydra.core.Type.forall(v_Type_forall_fa) => hydra.schemas.isNominalType(v_Type_forall_fa.body)
   case _ => false
 
@@ -267,18 +267,18 @@ def isType(t: hydra.core.Type): Boolean =
   hydra.rewriting.deannotateType(t) match
   case hydra.core.Type.application(v_Type_application_a) => hydra.schemas.isType(v_Type_application_a.function)
   case hydra.core.Type.forall(v_Type_forall_l) => hydra.schemas.isType(v_Type_forall_l.body)
-  case hydra.core.Type.union() => false
+  case hydra.core.Type.union(_) => false
   case hydra.core.Type.variable(v_Type_variable_v) => hydra.lib.equality.equal[hydra.core.Name](v_Type_variable_v)("hydra.core.Type")
   case _ => false
 
 def isUnitTerm(v1: hydra.core.Term): Boolean =
   v1 match
-  case hydra.core.Term.unit() => true
+  case hydra.core.Term.unit => true
   case _ => false
 
 def isUnitType(v1: hydra.core.Type): Boolean =
   v1 match
-  case hydra.core.Type.unit() => true
+  case hydra.core.Type.unit => true
   case _ => false
 
 def moduleContainsBinaryLiterals(mod: hydra.module.Module): Boolean =
@@ -286,7 +286,7 @@ def moduleContainsBinaryLiterals(mod: hydra.module.Module): Boolean =
   def checkTerm(found: Boolean)(term: hydra.core.Term): Boolean =
     hydra.lib.logic.or(found)(term match
     case hydra.core.Term.literal(v_Term_literal_lit) => v_Term_literal_lit match
-      case hydra.core.Literal.binary() => true
+      case hydra.core.Literal.binary(_) => true
       case _ => false
     case _ => false)
   def termContainsBinary(term: hydra.core.Term): Boolean =
@@ -329,10 +329,10 @@ def partitionDefinitions(defs: Seq[hydra.module.Definition]): Tuple2[Seq[hydra.m
   def getType(`def`: hydra.module.Definition): Option[hydra.module.TypeDefinition] =
     `def` match
     case hydra.module.Definition.`type`(v_Definition_type_td) => Some(v_Definition_type_td)
-    case hydra.module.Definition.term() => None
+    case hydra.module.Definition.term(_) => None
   def getTerm(`def`: hydra.module.Definition): Option[hydra.module.TermDefinition] =
     `def` match
-    case hydra.module.Definition.`type`() => None
+    case hydra.module.Definition.`type`(_) => None
     case hydra.module.Definition.term(v_Definition_term_td) => Some(v_Definition_term_td)
   Tuple2(hydra.lib.maybes.cat[hydra.module.TypeDefinition](hydra.lib.lists.map[hydra.module.Definition, Option[hydra.module.TypeDefinition]](getType)(defs)), hydra.lib.maybes.cat[hydra.module.TermDefinition](hydra.lib.lists.map[hydra.module.Definition, Option[hydra.module.TermDefinition]](getTerm)(defs)))
 }

@@ -13,6 +13,7 @@ import hydra.json.model.Value;
 import hydra.lib.Libraries;
 import hydra.module.Definition;
 import hydra.module.Module;
+import hydra.module.TermDefinition;
 import hydra.module.Namespace;
 import hydra.Rewriting;
 import hydra.tools.PrimitiveFunction;
@@ -518,11 +519,21 @@ public class Generation {
      * (needed by isNativeType for schema graph construction).
      */
     public static Module stripTermTypes(Module m) {
-        List<Binding> stripped = new ArrayList<>();
-        for (Binding b : m.elements) {
-            Term newTerm = Rewriting.removeTypesFromTerm(b.term);
-            Maybe<TypeScheme> newType = Annotations.isNativeType(b) ? b.type : Maybe.nothing();
-            stripped.add(new Binding(b.name, newTerm, newType));
+        List<Definition> stripped = new ArrayList<>();
+        for (Definition d : m.definitions) {
+            d.accept(new Definition.Visitor<Void>() {
+                @Override public Void visit(Definition.Term td) {
+                    TermDefinition t = td.value;
+                    Term newTerm = Rewriting.removeTypesFromTerm(t.term);
+                    Maybe<TypeScheme> newType = Maybe.nothing();
+                    stripped.add(new Definition.Term(new TermDefinition(t.name, newTerm, newType)));
+                    return null;
+                }
+                @Override public Void visit(Definition.Type td) {
+                    stripped.add(d);
+                    return null;
+                }
+            });
         }
         return new Module(m.namespace, ConsList.fromList(stripped), m.typeDependencies, m.termDependencies, m.description);
     }
@@ -558,8 +569,8 @@ public class Generation {
         List<Module> result = new ArrayList<>();
         for (Module m : modules) {
             boolean hasTypes = false;
-            for (Binding b : m.elements) {
-                if (Annotations.isNativeType(b)) {
+            for (Definition d : m.definitions) {
+                if (d instanceof Definition.Type) {
                     hasTypes = true;
                     break;
                 }

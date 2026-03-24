@@ -82,9 +82,9 @@ def writeArrayCreationExpression(ace: hydra.ext.java.syntax.ArrayCreationExpress
     lazy val ai: hydra.ext.java.syntax.ArrayInitializer = (v_ArrayCreationExpression_primitiveArray_pa.array)
     hydra.serialization.spaceSep(Seq(hydra.serialization.cst("new"), hydra.serialization.noSep(Seq(hydra.ext.java.serde.writePrimitiveTypeWithAnnotations(pt), hydra.serialization.cst("[]"))), hydra.ext.java.serde.writeArrayInitializer(ai)))
   }
-  case hydra.ext.java.syntax.ArrayCreationExpression.classOrInterfaceArray() => hydra.serialization.cst("STUB:ArrayCreationExpression")
-  case hydra.ext.java.syntax.ArrayCreationExpression.primitive() => hydra.serialization.cst("STUB:ArrayCreationExpression")
-  case hydra.ext.java.syntax.ArrayCreationExpression.classOrInterface() => hydra.serialization.cst("STUB:ArrayCreationExpression")
+  case hydra.ext.java.syntax.ArrayCreationExpression.classOrInterfaceArray(_) => hydra.serialization.cst("STUB:ArrayCreationExpression")
+  case hydra.ext.java.syntax.ArrayCreationExpression.primitive(_) => hydra.serialization.cst("STUB:ArrayCreationExpression")
+  case hydra.ext.java.syntax.ArrayCreationExpression.classOrInterface(_) => hydra.serialization.cst("STUB:ArrayCreationExpression")
 
 def writeArrayInitializer(ai: hydra.ext.java.syntax.ArrayInitializer): hydra.ast.Expr =
   {
@@ -111,18 +111,18 @@ def writeAssignment(a: hydra.ext.java.syntax.Assignment): hydra.ast.Expr =
   lazy val op: hydra.ext.java.syntax.AssignmentOperator = (a.op)
   lazy val rhs: hydra.ext.java.syntax.Expression = (a.expression)
   lazy val ctop: scala.Predef.String = op match
-    case hydra.ext.java.syntax.AssignmentOperator.simple() => "="
-    case hydra.ext.java.syntax.AssignmentOperator.times() => "*="
-    case hydra.ext.java.syntax.AssignmentOperator.div() => "/="
-    case hydra.ext.java.syntax.AssignmentOperator.mod() => "%="
-    case hydra.ext.java.syntax.AssignmentOperator.plus() => "+="
-    case hydra.ext.java.syntax.AssignmentOperator.minus() => "-="
-    case hydra.ext.java.syntax.AssignmentOperator.shiftLeft() => "<<="
-    case hydra.ext.java.syntax.AssignmentOperator.shiftRight() => ">>="
-    case hydra.ext.java.syntax.AssignmentOperator.shiftRightZeroFill() => ">>>="
-    case hydra.ext.java.syntax.AssignmentOperator.and() => "&="
-    case hydra.ext.java.syntax.AssignmentOperator.xor() => "^="
-    case hydra.ext.java.syntax.AssignmentOperator.or() => "|="
+    case hydra.ext.java.syntax.AssignmentOperator.simple => "="
+    case hydra.ext.java.syntax.AssignmentOperator.times => "*="
+    case hydra.ext.java.syntax.AssignmentOperator.div => "/="
+    case hydra.ext.java.syntax.AssignmentOperator.mod => "%="
+    case hydra.ext.java.syntax.AssignmentOperator.plus => "+="
+    case hydra.ext.java.syntax.AssignmentOperator.minus => "-="
+    case hydra.ext.java.syntax.AssignmentOperator.shiftLeft => "<<="
+    case hydra.ext.java.syntax.AssignmentOperator.shiftRight => ">>="
+    case hydra.ext.java.syntax.AssignmentOperator.shiftRightZeroFill => ">>>="
+    case hydra.ext.java.syntax.AssignmentOperator.and => "&="
+    case hydra.ext.java.syntax.AssignmentOperator.xor => "^="
+    case hydra.ext.java.syntax.AssignmentOperator.or => "|="
   hydra.serialization.infixWs(ctop)(hydra.ext.java.serde.writeLeftHandSide(lhs))(hydra.ext.java.serde.writeExpression(rhs))
 }
 
@@ -218,18 +218,18 @@ def writeClassMemberDeclaration(d: hydra.ext.java.syntax.ClassMemberDeclaration)
   case hydra.ext.java.syntax.ClassMemberDeclaration.method(v_ClassMemberDeclaration_method_md) => hydra.ext.java.serde.writeMethodDeclaration(v_ClassMemberDeclaration_method_md)
   case hydra.ext.java.syntax.ClassMemberDeclaration.`class`(v_ClassMemberDeclaration_class_cd) => hydra.ext.java.serde.writeClassDeclaration(v_ClassMemberDeclaration_class_cd)
   case hydra.ext.java.syntax.ClassMemberDeclaration.interface(v_ClassMemberDeclaration_interface_id) => hydra.ext.java.serde.writeInterfaceDeclaration(v_ClassMemberDeclaration_interface_id)
-  case hydra.ext.java.syntax.ClassMemberDeclaration.none() => hydra.serialization.cst(";")
+  case hydra.ext.java.syntax.ClassMemberDeclaration.none => hydra.serialization.cst(";")
 
 def writeClassModifier(m: hydra.ext.java.syntax.ClassModifier): hydra.ast.Expr =
   m match
   case hydra.ext.java.syntax.ClassModifier.annotation(v_ClassModifier_annotation_ann) => hydra.ext.java.serde.writeAnnotation(v_ClassModifier_annotation_ann)
-  case hydra.ext.java.syntax.ClassModifier.public() => hydra.serialization.cst("public")
-  case hydra.ext.java.syntax.ClassModifier.`protected`() => hydra.serialization.cst("protected")
-  case hydra.ext.java.syntax.ClassModifier.`private`() => hydra.serialization.cst("private")
-  case hydra.ext.java.syntax.ClassModifier.`abstract`() => hydra.serialization.cst("abstract")
-  case hydra.ext.java.syntax.ClassModifier.static() => hydra.serialization.cst("static")
-  case hydra.ext.java.syntax.ClassModifier.`final`() => hydra.serialization.cst("final")
-  case hydra.ext.java.syntax.ClassModifier.strictfp() => hydra.serialization.cst("strictfp")
+  case hydra.ext.java.syntax.ClassModifier.public => hydra.serialization.cst("public")
+  case hydra.ext.java.syntax.ClassModifier.`protected` => hydra.serialization.cst("protected")
+  case hydra.ext.java.syntax.ClassModifier.`private` => hydra.serialization.cst("private")
+  case hydra.ext.java.syntax.ClassModifier.`abstract` => hydra.serialization.cst("abstract")
+  case hydra.ext.java.syntax.ClassModifier.static => hydra.serialization.cst("static")
+  case hydra.ext.java.syntax.ClassModifier.`final` => hydra.serialization.cst("final")
+  case hydra.ext.java.syntax.ClassModifier.strictfp => hydra.serialization.cst("strictfp")
 
 def writeClassOrInterfaceType(cit: hydra.ext.java.syntax.ClassOrInterfaceType): hydra.ast.Expr =
   cit match
@@ -250,7 +250,7 @@ def writeClassType(ct: hydra.ext.java.syntax.ClassType): hydra.ast.Expr =
   lazy val id: hydra.ext.java.syntax.TypeIdentifier = (ct.identifier)
   lazy val args: Seq[hydra.ext.java.syntax.TypeArgument] = (ct.arguments)
   lazy val qualifiedId: hydra.ast.Expr = qual match
-    case hydra.ext.java.syntax.ClassTypeQualifier.none() => hydra.ext.java.serde.writeTypeIdentifier(id)
+    case hydra.ext.java.syntax.ClassTypeQualifier.none => hydra.ext.java.serde.writeTypeIdentifier(id)
     case hydra.ext.java.syntax.ClassTypeQualifier.`package`(v_ClassTypeQualifier_package_pkg) => hydra.serialization.dotSep(Seq(hydra.ext.java.serde.writePackageName(v_ClassTypeQualifier_package_pkg), hydra.ext.java.serde.writeTypeIdentifier(id)))
     case hydra.ext.java.syntax.ClassTypeQualifier.parent(v_ClassTypeQualifier_parent_cit) => hydra.serialization.dotSep(Seq(hydra.ext.java.serde.writeClassOrInterfaceType(v_ClassTypeQualifier_parent_cit), hydra.ext.java.serde.writeTypeIdentifier(id)))
   hydra.serialization.noSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(Some(hydra.serialization.spaceSep(hydra.lib.maybes.cat[hydra.ast.Expr](Seq(hydra.lib.logic.ifElse[Option[hydra.ast.Expr]](hydra.lib.lists.`null`[hydra.ext.java.syntax.Annotation](anns))(None)(Some(hydra.serialization.commaSep(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.ext.java.syntax.Annotation, hydra.ast.Expr](hydra.ext.java.serde.writeAnnotation)(anns)))), Some(qualifiedId))))), hydra.lib.logic.ifElse[Option[hydra.ast.Expr]](hydra.lib.lists.`null`[hydra.ext.java.syntax.TypeArgument](args))(None)(Some(hydra.serialization.angleBracesList(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.ext.java.syntax.TypeArgument, hydra.ast.Expr](hydra.ext.java.serde.writeTypeArgument)(args)))))))
@@ -322,9 +322,9 @@ def writeConstructorDeclarator(cd: hydra.ext.java.syntax.ConstructorDeclarator):
 def writeConstructorModifier(m: hydra.ext.java.syntax.ConstructorModifier): hydra.ast.Expr =
   m match
   case hydra.ext.java.syntax.ConstructorModifier.annotation(v_ConstructorModifier_annotation_ann) => hydra.ext.java.serde.writeAnnotation(v_ConstructorModifier_annotation_ann)
-  case hydra.ext.java.syntax.ConstructorModifier.public() => hydra.serialization.cst("public")
-  case hydra.ext.java.syntax.ConstructorModifier.`protected`() => hydra.serialization.cst("protected")
-  case hydra.ext.java.syntax.ConstructorModifier.`private`() => hydra.serialization.cst("private")
+  case hydra.ext.java.syntax.ConstructorModifier.public => hydra.serialization.cst("public")
+  case hydra.ext.java.syntax.ConstructorModifier.`protected` => hydra.serialization.cst("protected")
+  case hydra.ext.java.syntax.ConstructorModifier.`private` => hydra.serialization.cst("private")
 
 def writeContinueStatement(cs: hydra.ext.java.syntax.ContinueStatement): hydra.ast.Expr =
   {
@@ -383,7 +383,7 @@ def writeFieldAccess(fa: hydra.ext.java.syntax.FieldAccess): hydra.ast.Expr =
   lazy val id: hydra.ext.java.syntax.Identifier = (fa.identifier)
   qual match
     case hydra.ext.java.syntax.FieldAccess_Qualifier.primary(v_FieldAccess_Qualifier_primary_p) => hydra.serialization.dotSep(Seq(hydra.ext.java.serde.writePrimary(v_FieldAccess_Qualifier_primary_p), hydra.ext.java.serde.writeIdentifier(id)))
-    case hydra.ext.java.syntax.FieldAccess_Qualifier.`super`() => hydra.serialization.dotSep(Seq(hydra.serialization.cst("super"), hydra.ext.java.serde.writeIdentifier(id)))
+    case hydra.ext.java.syntax.FieldAccess_Qualifier.`super` => hydra.serialization.dotSep(Seq(hydra.serialization.cst("super"), hydra.ext.java.serde.writeIdentifier(id)))
     case hydra.ext.java.syntax.FieldAccess_Qualifier.typed(v_FieldAccess_Qualifier_typed_tn) => hydra.serialization.dotSep(Seq(hydra.ext.java.serde.writeTypeName(v_FieldAccess_Qualifier_typed_tn), hydra.serialization.cst("super"), hydra.ext.java.serde.writeIdentifier(id)))
 }
 
@@ -398,20 +398,20 @@ def writeFieldDeclaration(fd: hydra.ext.java.syntax.FieldDeclaration): hydra.ast
 def writeFieldModifier(m: hydra.ext.java.syntax.FieldModifier): hydra.ast.Expr =
   m match
   case hydra.ext.java.syntax.FieldModifier.annotation(v_FieldModifier_annotation_ann) => hydra.ext.java.serde.writeAnnotation(v_FieldModifier_annotation_ann)
-  case hydra.ext.java.syntax.FieldModifier.public() => hydra.serialization.cst("public")
-  case hydra.ext.java.syntax.FieldModifier.`protected`() => hydra.serialization.cst("protected")
-  case hydra.ext.java.syntax.FieldModifier.`private`() => hydra.serialization.cst("private")
-  case hydra.ext.java.syntax.FieldModifier.static() => hydra.serialization.cst("static")
-  case hydra.ext.java.syntax.FieldModifier.`final`() => hydra.serialization.cst("final")
-  case hydra.ext.java.syntax.FieldModifier.transient() => hydra.serialization.cst("transient")
-  case hydra.ext.java.syntax.FieldModifier.volatile() => hydra.serialization.cst("volatile")
+  case hydra.ext.java.syntax.FieldModifier.public => hydra.serialization.cst("public")
+  case hydra.ext.java.syntax.FieldModifier.`protected` => hydra.serialization.cst("protected")
+  case hydra.ext.java.syntax.FieldModifier.`private` => hydra.serialization.cst("private")
+  case hydra.ext.java.syntax.FieldModifier.static => hydra.serialization.cst("static")
+  case hydra.ext.java.syntax.FieldModifier.`final` => hydra.serialization.cst("final")
+  case hydra.ext.java.syntax.FieldModifier.transient => hydra.serialization.cst("transient")
+  case hydra.ext.java.syntax.FieldModifier.volatile => hydra.serialization.cst("volatile")
 
 def writeFloatingPointLiteral(fl: hydra.ext.java.syntax.FloatingPointLiteral): hydra.ast.Expr = hydra.serialization.cst(hydra.lib.literals.showBigfloat(fl))
 
 def writeFloatingPointType(ft: hydra.ext.java.syntax.FloatingPointType): hydra.ast.Expr =
   ft match
-  case hydra.ext.java.syntax.FloatingPointType.float() => hydra.serialization.cst("float")
-  case hydra.ext.java.syntax.FloatingPointType.double() => hydra.serialization.cst("double")
+  case hydra.ext.java.syntax.FloatingPointType.float => hydra.serialization.cst("float")
+  case hydra.ext.java.syntax.FloatingPointType.double => hydra.serialization.cst("double")
 
 def writeForStatement[T0](_x: T0): hydra.ast.Expr = hydra.serialization.cst("STUB:ForStatement")
 
@@ -442,9 +442,9 @@ def writeIfThenElseStatement[T0](_x: T0): hydra.ast.Expr = hydra.serialization.c
 def writeImportDeclaration(imp: hydra.ext.java.syntax.ImportDeclaration): hydra.ast.Expr =
   imp match
   case hydra.ext.java.syntax.ImportDeclaration.singleType(v_ImportDeclaration_singleType_st) => hydra.serialization.withSemi(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("import"), hydra.ext.java.serde.writeTypeName(v_ImportDeclaration_singleType_st))))
-  case hydra.ext.java.syntax.ImportDeclaration.typeImportOnDemand() => hydra.serialization.cst("STUB:ImportDeclarationTypeImportOnDemand")
-  case hydra.ext.java.syntax.ImportDeclaration.singleStaticImport() => hydra.serialization.cst("STUB:ImportDeclarationSingleStaticImport")
-  case hydra.ext.java.syntax.ImportDeclaration.staticImportOnDemand() => hydra.serialization.cst("STUB:ImportDeclarationStaticImportOnDemand")
+  case hydra.ext.java.syntax.ImportDeclaration.typeImportOnDemand(_) => hydra.serialization.cst("STUB:ImportDeclarationTypeImportOnDemand")
+  case hydra.ext.java.syntax.ImportDeclaration.singleStaticImport(_) => hydra.serialization.cst("STUB:ImportDeclarationSingleStaticImport")
+  case hydra.ext.java.syntax.ImportDeclaration.staticImportOnDemand(_) => hydra.serialization.cst("STUB:ImportDeclarationStaticImportOnDemand")
 
 def writeInclusiveOrExpression(ioe: hydra.ext.java.syntax.InclusiveOrExpression): hydra.ast.Expr =
   hydra.serialization.infixWsList("|")(hydra.lib.lists.map[hydra.ext.java.syntax.ExclusiveOrExpression, hydra.ast.Expr](hydra.ext.java.serde.writeExclusiveOrExpression)(ioe))
@@ -460,11 +460,11 @@ def writeIntegerLiteral(il: hydra.ext.java.syntax.IntegerLiteral): hydra.ast.Exp
 
 def writeIntegralType(t: hydra.ext.java.syntax.IntegralType): hydra.ast.Expr =
   t match
-  case hydra.ext.java.syntax.IntegralType.byte() => hydra.serialization.cst("byte")
-  case hydra.ext.java.syntax.IntegralType.short() => hydra.serialization.cst("short")
-  case hydra.ext.java.syntax.IntegralType.int() => hydra.serialization.cst("int")
-  case hydra.ext.java.syntax.IntegralType.long() => hydra.serialization.cst("long")
-  case hydra.ext.java.syntax.IntegralType.char() => hydra.serialization.cst("char")
+  case hydra.ext.java.syntax.IntegralType.byte => hydra.serialization.cst("byte")
+  case hydra.ext.java.syntax.IntegralType.short => hydra.serialization.cst("short")
+  case hydra.ext.java.syntax.IntegralType.int => hydra.serialization.cst("int")
+  case hydra.ext.java.syntax.IntegralType.long => hydra.serialization.cst("long")
+  case hydra.ext.java.syntax.IntegralType.char => hydra.serialization.cst("char")
 
 def writeInterfaceBody(ib: hydra.ext.java.syntax.InterfaceBody): hydra.ast.Expr =
   hydra.serialization.curlyBlock(hydra.serialization.fullBlockStyle)(hydra.serialization.doubleNewlineSep(hydra.lib.lists.map[hydra.ext.java.syntax.InterfaceMemberDeclaration, hydra.ast.Expr](hydra.ext.java.serde.writeInterfaceMemberDeclaration)(ib)))
@@ -492,22 +492,22 @@ def writeInterfaceMethodDeclaration(imd: hydra.ext.java.syntax.InterfaceMethodDe
 def writeInterfaceMethodModifier(m: hydra.ext.java.syntax.InterfaceMethodModifier): hydra.ast.Expr =
   m match
   case hydra.ext.java.syntax.InterfaceMethodModifier.annotation(v_InterfaceMethodModifier_annotation_a) => hydra.ext.java.serde.writeAnnotation(v_InterfaceMethodModifier_annotation_a)
-  case hydra.ext.java.syntax.InterfaceMethodModifier.public() => hydra.serialization.cst("public")
-  case hydra.ext.java.syntax.InterfaceMethodModifier.`private`() => hydra.serialization.cst("private")
-  case hydra.ext.java.syntax.InterfaceMethodModifier.`abstract`() => hydra.serialization.cst("abstract")
-  case hydra.ext.java.syntax.InterfaceMethodModifier.default() => hydra.serialization.cst("default")
-  case hydra.ext.java.syntax.InterfaceMethodModifier.static() => hydra.serialization.cst("static")
-  case hydra.ext.java.syntax.InterfaceMethodModifier.strictfp() => hydra.serialization.cst("strictfp")
+  case hydra.ext.java.syntax.InterfaceMethodModifier.public => hydra.serialization.cst("public")
+  case hydra.ext.java.syntax.InterfaceMethodModifier.`private` => hydra.serialization.cst("private")
+  case hydra.ext.java.syntax.InterfaceMethodModifier.`abstract` => hydra.serialization.cst("abstract")
+  case hydra.ext.java.syntax.InterfaceMethodModifier.default => hydra.serialization.cst("default")
+  case hydra.ext.java.syntax.InterfaceMethodModifier.static => hydra.serialization.cst("static")
+  case hydra.ext.java.syntax.InterfaceMethodModifier.strictfp => hydra.serialization.cst("strictfp")
 
 def writeInterfaceModifier(m: hydra.ext.java.syntax.InterfaceModifier): hydra.ast.Expr =
   m match
   case hydra.ext.java.syntax.InterfaceModifier.annotation(v_InterfaceModifier_annotation_a) => hydra.ext.java.serde.writeAnnotation(v_InterfaceModifier_annotation_a)
-  case hydra.ext.java.syntax.InterfaceModifier.public() => hydra.serialization.cst("public")
-  case hydra.ext.java.syntax.InterfaceModifier.`protected`() => hydra.serialization.cst("protected")
-  case hydra.ext.java.syntax.InterfaceModifier.`private`() => hydra.serialization.cst("private")
-  case hydra.ext.java.syntax.InterfaceModifier.`abstract`() => hydra.serialization.cst("abstract")
-  case hydra.ext.java.syntax.InterfaceModifier.static() => hydra.serialization.cst("static")
-  case hydra.ext.java.syntax.InterfaceModifier.strictfb() => hydra.serialization.cst("strictfb")
+  case hydra.ext.java.syntax.InterfaceModifier.public => hydra.serialization.cst("public")
+  case hydra.ext.java.syntax.InterfaceModifier.`protected` => hydra.serialization.cst("protected")
+  case hydra.ext.java.syntax.InterfaceModifier.`private` => hydra.serialization.cst("private")
+  case hydra.ext.java.syntax.InterfaceModifier.`abstract` => hydra.serialization.cst("abstract")
+  case hydra.ext.java.syntax.InterfaceModifier.static => hydra.serialization.cst("static")
+  case hydra.ext.java.syntax.InterfaceModifier.strictfb => hydra.serialization.cst("strictfb")
 
 def writeInterfaceType(it: hydra.ext.java.syntax.InterfaceType): hydra.ast.Expr = hydra.ext.java.serde.writeClassType(it)
 
@@ -538,7 +538,7 @@ def writeLeftHandSide(lhs: hydra.ext.java.syntax.LeftHandSide): hydra.ast.Expr =
 
 def writeLiteral(l: hydra.ext.java.syntax.Literal): hydra.ast.Expr =
   l match
-  case hydra.ext.java.syntax.Literal.`null`() => hydra.serialization.cst("null")
+  case hydra.ext.java.syntax.Literal.`null` => hydra.serialization.cst("null")
   case hydra.ext.java.syntax.Literal.integer(v_Literal_integer_il) => hydra.ext.java.serde.writeIntegerLiteral(v_Literal_integer_il)
   case hydra.ext.java.syntax.Literal.floatingPoint(v_Literal_floatingPoint_fl) => hydra.ext.java.serde.writeFloatingPointLiteral(v_Literal_floatingPoint_fl)
   case hydra.ext.java.syntax.Literal.boolean(v_Literal_boolean_b) => hydra.serialization.cst(hydra.lib.logic.ifElse[scala.Predef.String](v_Literal_boolean_b)("true")("false"))
@@ -562,14 +562,14 @@ def writeLocalVariableDeclarationStatement(lvds: hydra.ext.java.syntax.LocalVari
 def writeLocalName(t: hydra.ext.java.syntax.LocalVariableType): hydra.ast.Expr =
   t match
   case hydra.ext.java.syntax.LocalVariableType.`type`(v_LocalVariableType_type_ut) => hydra.ext.java.serde.writeUnannType(v_LocalVariableType_type_ut)
-  case hydra.ext.java.syntax.LocalVariableType.`var`() => hydra.serialization.cst("var")
+  case hydra.ext.java.syntax.LocalVariableType.`var` => hydra.serialization.cst("var")
 
 def writeMarkerAnnotation(ma: hydra.ext.java.syntax.MarkerAnnotation): hydra.ast.Expr = hydra.serialization.prefix("@")(hydra.ext.java.serde.writeTypeName(ma))
 
 def writeMethodBody(b: hydra.ext.java.syntax.MethodBody): hydra.ast.Expr =
   b match
   case hydra.ext.java.syntax.MethodBody.block(v_MethodBody_block_block) => hydra.ext.java.serde.writeBlock(v_MethodBody_block_block)
-  case hydra.ext.java.syntax.MethodBody.none() => hydra.serialization.cst(";")
+  case hydra.ext.java.syntax.MethodBody.none => hydra.serialization.cst(";")
 
 def writeMethodDeclaration(md: hydra.ext.java.syntax.MethodDeclaration): hydra.ast.Expr =
   {
@@ -613,7 +613,7 @@ def writeMethodInvocation(mi: hydra.ext.java.syntax.MethodInvocation): hydra.ast
         case hydra.ext.java.syntax.MethodInvocation_Variant.`type`(v_MethodInvocation_Variant_type_tname) => hydra.serialization.dotSep(Seq(hydra.ext.java.serde.writeTypeName(v_MethodInvocation_Variant_type_tname), idSec))
         case hydra.ext.java.syntax.MethodInvocation_Variant.expression(v_MethodInvocation_Variant_expression_en) => hydra.serialization.dotSep(Seq(hydra.ext.java.serde.writeExpressionName(v_MethodInvocation_Variant_expression_en), idSec))
         case hydra.ext.java.syntax.MethodInvocation_Variant.primary(v_MethodInvocation_Variant_primary_p) => hydra.serialization.dotSep(Seq(hydra.ext.java.serde.writePrimary(v_MethodInvocation_Variant_primary_p), idSec))
-        case hydra.ext.java.syntax.MethodInvocation_Variant.`super`() => hydra.serialization.dotSep(Seq(hydra.serialization.cst("super"), idSec))
+        case hydra.ext.java.syntax.MethodInvocation_Variant.`super` => hydra.serialization.dotSep(Seq(hydra.serialization.cst("super"), idSec))
         case hydra.ext.java.syntax.MethodInvocation_Variant.typeSuper(v_MethodInvocation_Variant_typeSuper_tname) => hydra.serialization.dotSep(Seq(hydra.ext.java.serde.writeTypeName(v_MethodInvocation_Variant_typeSuper_tname), hydra.serialization.cst("super"), idSec))
     }
   hydra.serialization.noSep(Seq(headerSec, argSec))
@@ -622,14 +622,14 @@ def writeMethodInvocation(mi: hydra.ext.java.syntax.MethodInvocation): hydra.ast
 def writeMethodModifier(m: hydra.ext.java.syntax.MethodModifier): hydra.ast.Expr =
   m match
   case hydra.ext.java.syntax.MethodModifier.annotation(v_MethodModifier_annotation_ann) => hydra.ext.java.serde.writeAnnotation(v_MethodModifier_annotation_ann)
-  case hydra.ext.java.syntax.MethodModifier.public() => hydra.serialization.cst("public")
-  case hydra.ext.java.syntax.MethodModifier.`protected`() => hydra.serialization.cst("protected")
-  case hydra.ext.java.syntax.MethodModifier.`private`() => hydra.serialization.cst("private")
-  case hydra.ext.java.syntax.MethodModifier.`abstract`() => hydra.serialization.cst("abstract")
-  case hydra.ext.java.syntax.MethodModifier.`final`() => hydra.serialization.cst("final")
-  case hydra.ext.java.syntax.MethodModifier.synchronized() => hydra.serialization.cst("synchronized")
-  case hydra.ext.java.syntax.MethodModifier.native() => hydra.serialization.cst("native")
-  case hydra.ext.java.syntax.MethodModifier.strictfb() => hydra.serialization.cst("strictfb")
+  case hydra.ext.java.syntax.MethodModifier.public => hydra.serialization.cst("public")
+  case hydra.ext.java.syntax.MethodModifier.`protected` => hydra.serialization.cst("protected")
+  case hydra.ext.java.syntax.MethodModifier.`private` => hydra.serialization.cst("private")
+  case hydra.ext.java.syntax.MethodModifier.`abstract` => hydra.serialization.cst("abstract")
+  case hydra.ext.java.syntax.MethodModifier.`final` => hydra.serialization.cst("final")
+  case hydra.ext.java.syntax.MethodModifier.synchronized => hydra.serialization.cst("synchronized")
+  case hydra.ext.java.syntax.MethodModifier.native => hydra.serialization.cst("native")
+  case hydra.ext.java.syntax.MethodModifier.strictfb => hydra.serialization.cst("strictfb")
 
 def writeMethodName(mn: hydra.ext.java.syntax.MethodName): hydra.ast.Expr = hydra.ext.java.serde.writeIdentifier(mn)
 
@@ -715,7 +715,7 @@ def writePrimaryNoNewArray(p: hydra.ext.java.syntax.PrimaryNoNewArray): hydra.as
   p match
   case hydra.ext.java.syntax.PrimaryNoNewArray.literal(v_PrimaryNoNewArray_literal_l) => hydra.ext.java.serde.writeLiteral(v_PrimaryNoNewArray_literal_l)
   case hydra.ext.java.syntax.PrimaryNoNewArray.classLiteral(v_PrimaryNoNewArray_classLiteral_cl) => hydra.ext.java.serde.writeClassLiteral(v_PrimaryNoNewArray_classLiteral_cl)
-  case hydra.ext.java.syntax.PrimaryNoNewArray.`this`() => hydra.serialization.cst("this")
+  case hydra.ext.java.syntax.PrimaryNoNewArray.`this` => hydra.serialization.cst("this")
   case hydra.ext.java.syntax.PrimaryNoNewArray.dotThis(v_PrimaryNoNewArray_dotThis_n) => hydra.serialization.dotSep(Seq(hydra.ext.java.serde.writeTypeName(v_PrimaryNoNewArray_dotThis_n), hydra.serialization.cst("this")))
   case hydra.ext.java.syntax.PrimaryNoNewArray.parens(v_PrimaryNoNewArray_parens_e) => hydra.serialization.parenList(false)(Seq(hydra.ext.java.serde.writeExpression(v_PrimaryNoNewArray_parens_e)))
   case hydra.ext.java.syntax.PrimaryNoNewArray.classInstance(v_PrimaryNoNewArray_classInstance_ci) => hydra.ext.java.serde.writeClassInstanceCreationExpression(v_PrimaryNoNewArray_classInstance_ci)
@@ -727,7 +727,7 @@ def writePrimaryNoNewArray(p: hydra.ext.java.syntax.PrimaryNoNewArray): hydra.as
 def writePrimitiveType(pt: hydra.ext.java.syntax.PrimitiveType): hydra.ast.Expr =
   pt match
   case hydra.ext.java.syntax.PrimitiveType.numeric(v_PrimitiveType_numeric_nt) => hydra.ext.java.serde.writeNumericType(v_PrimitiveType_numeric_nt)
-  case hydra.ext.java.syntax.PrimitiveType.boolean() => hydra.serialization.cst("boolean")
+  case hydra.ext.java.syntax.PrimitiveType.boolean => hydra.serialization.cst("boolean")
 
 def writePrimitiveTypeWithAnnotations(ptwa: hydra.ext.java.syntax.PrimitiveTypeWithAnnotations): hydra.ast.Expr =
   {
@@ -771,7 +771,7 @@ def writeRelationalExpression_LessThanEqual(lte: hydra.ext.java.syntax.Relationa
 def writeResult(r: hydra.ext.java.syntax.Result): hydra.ast.Expr =
   r match
   case hydra.ext.java.syntax.Result.`type`(v_Result_type_t) => hydra.ext.java.serde.writeUnannType(v_Result_type_t)
-  case hydra.ext.java.syntax.Result.void() => hydra.serialization.cst("void")
+  case hydra.ext.java.syntax.Result.void => hydra.serialization.cst("void")
 
 def writeReturnStatement(rs: hydra.ext.java.syntax.ReturnStatement): hydra.ast.Expr =
   {
@@ -818,7 +818,7 @@ def writeStatementExpression(e: hydra.ext.java.syntax.StatementExpression): hydr
 def writeStatementWithoutTrailingSubstatement(s: hydra.ext.java.syntax.StatementWithoutTrailingSubstatement): hydra.ast.Expr =
   s match
   case hydra.ext.java.syntax.StatementWithoutTrailingSubstatement.block(v_StatementWithoutTrailingSubstatement_block_b) => hydra.ext.java.serde.writeBlock(v_StatementWithoutTrailingSubstatement_block_b)
-  case hydra.ext.java.syntax.StatementWithoutTrailingSubstatement.empty() => hydra.serialization.cst(";")
+  case hydra.ext.java.syntax.StatementWithoutTrailingSubstatement.empty => hydra.serialization.cst(";")
   case hydra.ext.java.syntax.StatementWithoutTrailingSubstatement.expression(v_StatementWithoutTrailingSubstatement_expression_e) => hydra.ext.java.serde.writeExpressionStatement(v_StatementWithoutTrailingSubstatement_expression_e)
   case hydra.ext.java.syntax.StatementWithoutTrailingSubstatement.assert(v_StatementWithoutTrailingSubstatement_assert_a) => hydra.ext.java.serde.writeAssertStatement(v_StatementWithoutTrailingSubstatement_assert_a)
   case hydra.ext.java.syntax.StatementWithoutTrailingSubstatement.switch(v_StatementWithoutTrailingSubstatement_switch_s2) => hydra.ext.java.serde.writeSwitchStatement(v_StatementWithoutTrailingSubstatement_switch_s2)
@@ -862,7 +862,7 @@ def writeTypeArgument(a: hydra.ext.java.syntax.TypeArgument): hydra.ast.Expr =
 def writeTypeArgumentsOrDiamond(targs: hydra.ext.java.syntax.TypeArgumentsOrDiamond): hydra.ast.Expr =
   targs match
   case hydra.ext.java.syntax.TypeArgumentsOrDiamond.arguments(v_TypeArgumentsOrDiamond_arguments_args) => hydra.serialization.angleBracesList(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.ext.java.syntax.TypeArgument, hydra.ast.Expr](hydra.ext.java.serde.writeTypeArgument)(v_TypeArgumentsOrDiamond_arguments_args))
-  case hydra.ext.java.syntax.TypeArgumentsOrDiamond.diamond() => hydra.serialization.cst("<>")
+  case hydra.ext.java.syntax.TypeArgumentsOrDiamond.diamond => hydra.serialization.cst("<>")
 
 def writeTypeBound(b: hydra.ext.java.syntax.TypeBound): hydra.ast.Expr =
   b match
@@ -877,7 +877,7 @@ def writeTypeDeclaration(d: hydra.ext.java.syntax.TypeDeclaration): hydra.ast.Ex
   d match
   case hydra.ext.java.syntax.TypeDeclaration.`class`(v_TypeDeclaration_class_d2) => hydra.ext.java.serde.writeClassDeclaration(v_TypeDeclaration_class_d2)
   case hydra.ext.java.syntax.TypeDeclaration.interface(v_TypeDeclaration_interface_d2) => hydra.ext.java.serde.writeInterfaceDeclaration(v_TypeDeclaration_interface_d2)
-  case hydra.ext.java.syntax.TypeDeclaration.none() => hydra.serialization.cst(";")
+  case hydra.ext.java.syntax.TypeDeclaration.none => hydra.serialization.cst(";")
 
 def writeTypeDeclarationWithComments(tdwc: hydra.ext.java.syntax.TypeDeclarationWithComments): hydra.ast.Expr =
   {
@@ -965,7 +965,7 @@ def writeVariableInitializer(i: hydra.ext.java.syntax.VariableInitializer): hydr
 def writeVariableModifier(m: hydra.ext.java.syntax.VariableModifier): hydra.ast.Expr =
   m match
   case hydra.ext.java.syntax.VariableModifier.annotation(v_VariableModifier_annotation_ann) => hydra.ext.java.serde.writeAnnotation(v_VariableModifier_annotation_ann)
-  case hydra.ext.java.syntax.VariableModifier.`final`() => hydra.serialization.cst("final")
+  case hydra.ext.java.syntax.VariableModifier.`final` => hydra.serialization.cst("final")
 
 def writeWhileStatement(ws: hydra.ext.java.syntax.WhileStatement): hydra.ast.Expr =
   {

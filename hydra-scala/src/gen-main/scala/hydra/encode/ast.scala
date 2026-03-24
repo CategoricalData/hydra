@@ -10,10 +10,10 @@ import hydra.lib.maybes
 
 def associativity(v1: hydra.ast.Associativity): hydra.core.Term =
   v1 match
-  case hydra.ast.Associativity.none() => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("none", hydra.core.Term.unit)))
-  case hydra.ast.Associativity.left() => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("left", hydra.core.Term.unit)))
-  case hydra.ast.Associativity.right() => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("right", hydra.core.Term.unit)))
-  case hydra.ast.Associativity.both() => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("both", hydra.core.Term.unit)))
+  case hydra.ast.Associativity.none => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("none", hydra.core.Term.unit)))
+  case hydra.ast.Associativity.left => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("left", hydra.core.Term.unit)))
+  case hydra.ast.Associativity.right => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("right", hydra.core.Term.unit)))
+  case hydra.ast.Associativity.both => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Associativity", hydra.core.Field("both", hydra.core.Term.unit)))
 
 def blockStyle(x: hydra.ast.BlockStyle): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.ast.BlockStyle", Seq(hydra.core.Field("indent", hydra.core.Term.maybe(hydra.lib.maybes.map[scala.Predef.String, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(x.indent))), hydra.core.Field("newlineBeforeContent", hydra.core.Term.literal(hydra.core.Literal.boolean(x.newlineBeforeContent))), hydra.core.Field("newlineAfterContent", hydra.core.Term.literal(hydra.core.Literal.boolean(x.newlineAfterContent))))))
@@ -60,8 +60,8 @@ def symbol(x: hydra.ast.Symbol): hydra.core.Term =
 
 def ws(v1: hydra.ast.Ws): hydra.core.Term =
   v1 match
-  case hydra.ast.Ws.none() => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("none", hydra.core.Term.unit)))
-  case hydra.ast.Ws.space() => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("space", hydra.core.Term.unit)))
-  case hydra.ast.Ws.break() => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("break", hydra.core.Term.unit)))
+  case hydra.ast.Ws.none => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("none", hydra.core.Term.unit)))
+  case hydra.ast.Ws.space => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("space", hydra.core.Term.unit)))
+  case hydra.ast.Ws.break => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("break", hydra.core.Term.unit)))
   case hydra.ast.Ws.breakAndIndent(v_Ws_breakAndIndent_y) => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("breakAndIndent", hydra.core.Term.literal(hydra.core.Literal.string(v_Ws_breakAndIndent_y)))))
-  case hydra.ast.Ws.doubleBreak() => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("doubleBreak", hydra.core.Term.unit)))
+  case hydra.ast.Ws.doubleBreak => hydra.core.Term.union(hydra.core.Injection("hydra.ast.Ws", hydra.core.Field("doubleBreak", hydra.core.Term.unit)))
