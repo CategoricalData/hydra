@@ -152,7 +152,7 @@ def list[T0](f: (T0 => scala.Predef.String))(xs: Seq[T0]): scala.Predef.String =
 
 def literal(l: hydra.core.Literal): scala.Predef.String =
   l match
-  case hydra.core.Literal.binary(v_Literal_binary__) => "[binary]"
+  case hydra.core.Literal.binary => "[binary]"
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => hydra.lib.logic.ifElse[scala.Predef.String](v_Literal_boolean_b)("true")("false")
   case hydra.core.Literal.float(v_Literal_float_fv) => hydra.show.core.float(v_Literal_float_fv)
   case hydra.core.Literal.integer(v_Literal_integer_iv) => hydra.show.core.integer(v_Literal_integer_iv)
@@ -285,7 +285,7 @@ def `type`(typ: hydra.core.Type): scala.Predef.String =
         hydra.lib.strings.cat(Seq("(\u2200", `var`, ".", hydra.show.core.`type`(body), ")"))
       }
     }
-    case hydra.core.Type.function(v_Type_function_ft) => {
+    case hydra.core.Type.function => {
       lazy val types: Seq[hydra.core.Type] = gatherFunctionTypes(Seq())(typ)
       {
         lazy val typeStrs: Seq[scala.Predef.String] = hydra.lib.lists.map[hydra.core.Type, scala.Predef.String](hydra.show.core.`type`)(types)

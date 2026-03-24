@@ -17,7 +17,7 @@ import hydra.lib.strings
 def encodeAnnotatedRhs(arhs: hydra.ext.python.syntax.AnnotatedRhs): hydra.ast.Expr =
   hydra.serialization.spaceSep(Seq(hydra.serialization.cst("="), arhs match
   case hydra.ext.python.syntax.AnnotatedRhs.star(v_AnnotatedRhs_star_ses) => hydra.serialization.commaSep(hydra.serialization.inlineStyle)(hydra.lib.lists.map[hydra.ext.python.syntax.StarExpression, hydra.ast.Expr](hydra.ext.python.serde.encodeStarExpression)(v_AnnotatedRhs_star_ses))
-  case hydra.ext.python.syntax.AnnotatedRhs.`yield`(v_AnnotatedRhs_yield__) => hydra.serialization.cst("yield ...")))
+  case hydra.ext.python.syntax.AnnotatedRhs.`yield` => hydra.serialization.cst("yield ...")))
 
 def encodeAnnotatedStatement(`as_`: hydra.ext.python.syntax.AnnotatedStatement): hydra.ast.Expr =
   {
@@ -41,7 +41,7 @@ def encodeAssignment(a: hydra.ext.python.syntax.Assignment): hydra.ast.Expr =
   a match
   case hydra.ext.python.syntax.Assignment.typed(v_Assignment_typed_t) => hydra.ext.python.serde.encodeTypedAssignment(v_Assignment_typed_t)
   case hydra.ext.python.syntax.Assignment.untyped(v_Assignment_untyped_u) => hydra.ext.python.serde.encodeUntypedAssignment(v_Assignment_untyped_u)
-  case hydra.ext.python.syntax.Assignment.aug(v_Assignment_aug__) => hydra.serialization.cst("... += ...")
+  case hydra.ext.python.syntax.Assignment.aug => hydra.serialization.cst("... += ...")
 
 def encodeAssignmentExpression(ae: hydra.ext.python.syntax.AssignmentExpression): hydra.ast.Expr =
   {
@@ -53,18 +53,18 @@ def encodeAssignmentExpression(ae: hydra.ext.python.syntax.AssignmentExpression)
 def encodeAtom(atom: hydra.ext.python.syntax.Atom): hydra.ast.Expr =
   atom match
   case hydra.ext.python.syntax.Atom.dict(v_Atom_dict_d) => hydra.ext.python.serde.encodeDict(v_Atom_dict_d)
-  case hydra.ext.python.syntax.Atom.dictcomp(v_Atom_dictcomp__) => hydra.serialization.cst("{...}")
+  case hydra.ext.python.syntax.Atom.dictcomp => hydra.serialization.cst("{...}")
   case hydra.ext.python.syntax.Atom.ellipsis => hydra.serialization.cst("...")
   case hydra.ext.python.syntax.Atom.`false` => hydra.serialization.cst("False")
-  case hydra.ext.python.syntax.Atom.genexp(v_Atom_genexp__) => hydra.serialization.cst("(...)")
+  case hydra.ext.python.syntax.Atom.genexp => hydra.serialization.cst("(...)")
   case hydra.ext.python.syntax.Atom.group(v_Atom_group_g) => hydra.ext.python.serde.encodeGroup(v_Atom_group_g)
   case hydra.ext.python.syntax.Atom.list(v_Atom_list_l) => hydra.ext.python.serde.encodeList(v_Atom_list_l)
-  case hydra.ext.python.syntax.Atom.listcomp(v_Atom_listcomp__) => hydra.serialization.cst("[...]")
+  case hydra.ext.python.syntax.Atom.listcomp => hydra.serialization.cst("[...]")
   case hydra.ext.python.syntax.Atom.name(v_Atom_name_n) => hydra.ext.python.serde.encodeName(v_Atom_name_n)
   case hydra.ext.python.syntax.Atom.none => hydra.serialization.cst("None")
   case hydra.ext.python.syntax.Atom.number(v_Atom_number_n) => hydra.ext.python.serde.encodeNumber(v_Atom_number_n)
   case hydra.ext.python.syntax.Atom.set(v_Atom_set_s) => hydra.ext.python.serde.encodeSet(v_Atom_set_s)
-  case hydra.ext.python.syntax.Atom.setcomp(v_Atom_setcomp__) => hydra.serialization.cst("{...}")
+  case hydra.ext.python.syntax.Atom.setcomp => hydra.serialization.cst("{...}")
   case hydra.ext.python.syntax.Atom.string(v_Atom_string_s) => hydra.ext.python.serde.encodeString(v_Atom_string_s)
   case hydra.ext.python.syntax.Atom.`true` => hydra.serialization.cst("True")
   case hydra.ext.python.syntax.Atom.tuple(v_Atom_tuple_t) => hydra.ext.python.serde.encodeTuple(v_Atom_tuple_t)
@@ -140,13 +140,13 @@ def encodeClassPattern(cp: hydra.ext.python.syntax.ClassPattern): hydra.ast.Expr
 
 def encodeClosedPattern(cp: hydra.ext.python.syntax.ClosedPattern): hydra.ast.Expr =
   cp match
-  case hydra.ext.python.syntax.ClosedPattern.literal(v_ClosedPattern_literal__) => hydra.serialization.cst("...")
+  case hydra.ext.python.syntax.ClosedPattern.literal => hydra.serialization.cst("...")
   case hydra.ext.python.syntax.ClosedPattern.capture(v_ClosedPattern_capture_c) => hydra.ext.python.serde.encodeCapturePattern(v_ClosedPattern_capture_c)
   case hydra.ext.python.syntax.ClosedPattern.wildcard => hydra.serialization.cst("_")
   case hydra.ext.python.syntax.ClosedPattern.value(v_ClosedPattern_value_v) => hydra.ext.python.serde.encodeValuePattern(v_ClosedPattern_value_v)
-  case hydra.ext.python.syntax.ClosedPattern.group(v_ClosedPattern_group__) => hydra.serialization.cst("(...)")
-  case hydra.ext.python.syntax.ClosedPattern.sequence(v_ClosedPattern_sequence__) => hydra.serialization.cst("[...]")
-  case hydra.ext.python.syntax.ClosedPattern.mapping(v_ClosedPattern_mapping__) => hydra.serialization.cst("{...}")
+  case hydra.ext.python.syntax.ClosedPattern.group => hydra.serialization.cst("(...)")
+  case hydra.ext.python.syntax.ClosedPattern.sequence => hydra.serialization.cst("[...]")
+  case hydra.ext.python.syntax.ClosedPattern.mapping => hydra.serialization.cst("{...}")
   case hydra.ext.python.syntax.ClosedPattern.`class`(v_ClosedPattern_class_c) => hydra.ext.python.serde.encodeClassPattern(v_ClosedPattern_class_c)
 
 def encodeComparison(cmp: hydra.ext.python.syntax.Comparison): hydra.ast.Expr = hydra.ext.python.serde.encodeBitwiseOr(cmp.lhs)
@@ -162,11 +162,11 @@ def encodeConditional(c: hydra.ext.python.syntax.Conditional): hydra.ast.Expr =
 def encodeCompoundStatement(cs: hydra.ext.python.syntax.CompoundStatement): hydra.ast.Expr =
   cs match
   case hydra.ext.python.syntax.CompoundStatement.function(v_CompoundStatement_function_f) => hydra.ext.python.serde.encodeFunctionDefinition(v_CompoundStatement_function_f)
-  case hydra.ext.python.syntax.CompoundStatement.`if`(v_CompoundStatement_if__) => hydra.serialization.cst("if ...")
+  case hydra.ext.python.syntax.CompoundStatement.`if` => hydra.serialization.cst("if ...")
   case hydra.ext.python.syntax.CompoundStatement.classDef(v_CompoundStatement_classDef_c) => hydra.ext.python.serde.encodeClassDefinition(v_CompoundStatement_classDef_c)
-  case hydra.ext.python.syntax.CompoundStatement.`with`(v_CompoundStatement_with__) => hydra.serialization.cst("with ...")
-  case hydra.ext.python.syntax.CompoundStatement.`for`(v_CompoundStatement_for__) => hydra.serialization.cst("for ...")
-  case hydra.ext.python.syntax.CompoundStatement.`try`(v_CompoundStatement_try__) => hydra.serialization.cst("try ...")
+  case hydra.ext.python.syntax.CompoundStatement.`with` => hydra.serialization.cst("with ...")
+  case hydra.ext.python.syntax.CompoundStatement.`for` => hydra.serialization.cst("for ...")
+  case hydra.ext.python.syntax.CompoundStatement.`try` => hydra.serialization.cst("try ...")
   case hydra.ext.python.syntax.CompoundStatement.`while`(v_CompoundStatement_while_w) => hydra.ext.python.serde.encodeWhileStatement(v_CompoundStatement_while_w)
   case hydra.ext.python.syntax.CompoundStatement.`match`(v_CompoundStatement_match_m) => hydra.ext.python.serde.encodeMatchStatement(v_CompoundStatement_match_m)
 
@@ -238,7 +238,7 @@ def encodeFunctionDefinition(fd: hydra.ext.python.syntax.FunctionDefinition): hy
 def encodeGroup(g: hydra.ext.python.syntax.Group): hydra.ast.Expr =
   g match
   case hydra.ext.python.syntax.Group.expression(v_Group_expression_ne) => hydra.ext.python.serde.encodeNamedExpression(v_Group_expression_ne)
-  case hydra.ext.python.syntax.Group.`yield`(v_Group_yield__) => hydra.serialization.cst("(yield ...)")
+  case hydra.ext.python.syntax.Group.`yield` => hydra.serialization.cst("(yield ...)")
 
 def encodeGuard(g: hydra.ext.python.syntax.Guard): hydra.ast.Expr =
   hydra.serialization.spaceSep(Seq(hydra.serialization.cst("if"), hydra.ext.python.serde.encodeNamedExpression(g)))
@@ -331,9 +331,9 @@ def encodeLambdaParameters(lp: hydra.ext.python.syntax.LambdaParameters): hydra.
 def encodeLambdaStarEtc(lse: hydra.ext.python.syntax.LambdaStarEtc): hydra.ast.Expr =
   lse match
   case hydra.ext.python.syntax.LambdaStarEtc.paramNoDefault(v_LambdaStarEtc_paramNoDefault_p) => hydra.ext.python.serde.encodeLambdaParamNoDefault(v_LambdaStarEtc_paramNoDefault_p)
-  case hydra.ext.python.syntax.LambdaStarEtc.star(v_LambdaStarEtc_star__) => hydra.serialization.cst("*...")
-  case hydra.ext.python.syntax.LambdaStarEtc.paramMaybeDefault(v_LambdaStarEtc_paramMaybeDefault__) => hydra.serialization.cst("...")
-  case hydra.ext.python.syntax.LambdaStarEtc.kwds(v_LambdaStarEtc_kwds__) => hydra.serialization.cst("**...")
+  case hydra.ext.python.syntax.LambdaStarEtc.star => hydra.serialization.cst("*...")
+  case hydra.ext.python.syntax.LambdaStarEtc.paramMaybeDefault => hydra.serialization.cst("...")
+  case hydra.ext.python.syntax.LambdaStarEtc.kwds => hydra.serialization.cst("**...")
 
 def encodeList(l: hydra.ext.python.syntax.List): hydra.ast.Expr =
   hydra.serialization.bracketListAdaptive(hydra.lib.lists.map[hydra.ext.python.syntax.StarNamedExpression, hydra.ast.Expr](hydra.ext.python.serde.encodeStarNamedExpression)(l))
@@ -389,20 +389,20 @@ def encodeParamNoDefaultParameters(pndp: hydra.ext.python.syntax.ParamNoDefaultP
 def encodeParameters(p: hydra.ext.python.syntax.Parameters): hydra.ast.Expr =
   p match
   case hydra.ext.python.syntax.Parameters.paramNoDefault(v_Parameters_paramNoDefault_pnd) => hydra.ext.python.serde.encodeParamNoDefaultParameters(v_Parameters_paramNoDefault_pnd)
-  case hydra.ext.python.syntax.Parameters.slashNoDefault(v_Parameters_slashNoDefault__) => hydra.serialization.cst("...")
-  case hydra.ext.python.syntax.Parameters.slashWithDefault(v_Parameters_slashWithDefault__) => hydra.serialization.cst("...")
+  case hydra.ext.python.syntax.Parameters.slashNoDefault => hydra.serialization.cst("...")
+  case hydra.ext.python.syntax.Parameters.slashWithDefault => hydra.serialization.cst("...")
 
 def encodePattern(p: hydra.ext.python.syntax.Pattern): hydra.ast.Expr =
   p match
   case hydra.ext.python.syntax.Pattern.or(v_Pattern_or_op) => hydra.ext.python.serde.encodeOrPattern(v_Pattern_or_op)
-  case hydra.ext.python.syntax.Pattern.as(v_Pattern_as__) => hydra.serialization.cst("... as ...")
+  case hydra.ext.python.syntax.Pattern.as => hydra.serialization.cst("... as ...")
 
 def encodePatternCaptureTarget(pct: hydra.ext.python.syntax.PatternCaptureTarget): hydra.ast.Expr = hydra.ext.python.serde.encodeName(pct)
 
 def encodePatterns(ps: hydra.ext.python.syntax.Patterns): hydra.ast.Expr =
   ps match
   case hydra.ext.python.syntax.Patterns.pattern(v_Patterns_pattern_p) => hydra.ext.python.serde.encodePattern(v_Patterns_pattern_p)
-  case hydra.ext.python.syntax.Patterns.sequence(v_Patterns_sequence__) => hydra.serialization.cst("...")
+  case hydra.ext.python.syntax.Patterns.sequence => hydra.serialization.cst("...")
 
 def encodePosArg(pa: hydra.ext.python.syntax.PosArg): hydra.ast.Expr =
   pa match
@@ -431,7 +431,7 @@ def encodePrimaryRhs(rhs: hydra.ext.python.syntax.PrimaryRhs): hydra.ast.Expr =
   case hydra.ext.python.syntax.PrimaryRhs.call(v_PrimaryRhs_call_args) => hydra.serialization.noSep(Seq(hydra.serialization.cst("("), hydra.ext.python.serde.encodeArgs(v_PrimaryRhs_call_args), hydra.serialization.cst(")")))
   case hydra.ext.python.syntax.PrimaryRhs.project(v_PrimaryRhs_project_name) => hydra.serialization.noSep(Seq(hydra.serialization.cst("."), hydra.ext.python.serde.encodeName(v_PrimaryRhs_project_name)))
   case hydra.ext.python.syntax.PrimaryRhs.slices(v_PrimaryRhs_slices_slices) => hydra.serialization.noSep(Seq(hydra.serialization.cst("["), hydra.ext.python.serde.encodeSlices(v_PrimaryRhs_slices_slices), hydra.serialization.cst("]")))
-  case hydra.ext.python.syntax.PrimaryRhs.genexp(v_PrimaryRhs_genexp__) => hydra.serialization.cst("[...]")
+  case hydra.ext.python.syntax.PrimaryRhs.genexp => hydra.serialization.cst("[...]")
 
 def encodePrimaryWithRhs(pwr: hydra.ext.python.syntax.PrimaryWithRhs): hydra.ast.Expr =
   {
@@ -475,23 +475,23 @@ def encodeSimpleStatement(ss: hydra.ext.python.syntax.SimpleStatement): hydra.as
   case hydra.ext.python.syntax.SimpleStatement.continue => hydra.serialization.cst("continue")
   case hydra.ext.python.syntax.SimpleStatement.`import`(v_SimpleStatement_import_i) => hydra.ext.python.serde.encodeImportStatement(v_SimpleStatement_import_i)
   case hydra.ext.python.syntax.SimpleStatement.typeAlias(v_SimpleStatement_typeAlias_t) => hydra.ext.python.serde.encodeTypeAlias(v_SimpleStatement_typeAlias_t)
-  case hydra.ext.python.syntax.SimpleStatement.assert(v_SimpleStatement_assert__) => hydra.serialization.cst("assert ...")
-  case hydra.ext.python.syntax.SimpleStatement.global(v_SimpleStatement_global__) => hydra.serialization.cst("global ...")
-  case hydra.ext.python.syntax.SimpleStatement.nonlocal(v_SimpleStatement_nonlocal__) => hydra.serialization.cst("nonlocal ...")
-  case hydra.ext.python.syntax.SimpleStatement.del(v_SimpleStatement_del__) => hydra.serialization.cst("del ...")
+  case hydra.ext.python.syntax.SimpleStatement.assert => hydra.serialization.cst("assert ...")
+  case hydra.ext.python.syntax.SimpleStatement.global => hydra.serialization.cst("global ...")
+  case hydra.ext.python.syntax.SimpleStatement.nonlocal => hydra.serialization.cst("nonlocal ...")
+  case hydra.ext.python.syntax.SimpleStatement.del => hydra.serialization.cst("del ...")
 
 def encodeSimpleTypeParameter(stp: hydra.ext.python.syntax.SimpleTypeParameter): hydra.ast.Expr = hydra.ext.python.serde.encodeName(stp.name)
 
 def encodeSingleTarget(st: hydra.ext.python.syntax.SingleTarget): hydra.ast.Expr =
   st match
   case hydra.ext.python.syntax.SingleTarget.name(v_SingleTarget_name_n) => hydra.ext.python.serde.encodeName(v_SingleTarget_name_n)
-  case hydra.ext.python.syntax.SingleTarget.parens(v_SingleTarget_parens__) => hydra.serialization.cst("(...)")
-  case hydra.ext.python.syntax.SingleTarget.subscriptAttributeTarget(v_SingleTarget_subscriptAttributeTarget__) => hydra.serialization.cst("...")
+  case hydra.ext.python.syntax.SingleTarget.parens => hydra.serialization.cst("(...)")
+  case hydra.ext.python.syntax.SingleTarget.subscriptAttributeTarget => hydra.serialization.cst("...")
 
 def encodeSlice(s: hydra.ext.python.syntax.Slice): hydra.ast.Expr =
   s match
   case hydra.ext.python.syntax.Slice.named(v_Slice_named_ne) => hydra.ext.python.serde.encodeNamedExpression(v_Slice_named_ne)
-  case hydra.ext.python.syntax.Slice.`slice_`(v_Slice_slice___) => hydra.serialization.cst(":")
+  case hydra.ext.python.syntax.Slice.`slice_` => hydra.serialization.cst(":")
 
 def encodeSliceOrStarredExpression(s: hydra.ext.python.syntax.SliceOrStarredExpression): hydra.ast.Expr =
   s match
@@ -508,9 +508,9 @@ def encodeSlices(s: hydra.ext.python.syntax.Slices): hydra.ast.Expr =
 def encodeStarAtom(sa: hydra.ext.python.syntax.StarAtom): hydra.ast.Expr =
   sa match
   case hydra.ext.python.syntax.StarAtom.name(v_StarAtom_name_n) => hydra.ext.python.serde.encodeName(v_StarAtom_name_n)
-  case hydra.ext.python.syntax.StarAtom.targetWithStarAtom(v_StarAtom_targetWithStarAtom__) => hydra.serialization.cst("(...)")
-  case hydra.ext.python.syntax.StarAtom.starTargetsTupleSeq(v_StarAtom_starTargetsTupleSeq__) => hydra.serialization.cst("(...)")
-  case hydra.ext.python.syntax.StarAtom.starTargetsListSeq(v_StarAtom_starTargetsListSeq__) => hydra.serialization.cst("[...]")
+  case hydra.ext.python.syntax.StarAtom.targetWithStarAtom => hydra.serialization.cst("(...)")
+  case hydra.ext.python.syntax.StarAtom.starTargetsTupleSeq => hydra.serialization.cst("(...)")
+  case hydra.ext.python.syntax.StarAtom.starTargetsListSeq => hydra.serialization.cst("[...]")
 
 def encodeStarExpression(se: hydra.ext.python.syntax.StarExpression): hydra.ast.Expr =
   se match
@@ -549,7 +549,7 @@ def encodeString(s: hydra.ext.python.syntax.String): hydra.ast.Expr =
 def encodeSubjectExpression(se: hydra.ext.python.syntax.SubjectExpression): hydra.ast.Expr =
   se match
   case hydra.ext.python.syntax.SubjectExpression.simple(v_SubjectExpression_simple_ne) => hydra.ext.python.serde.encodeNamedExpression(v_SubjectExpression_simple_ne)
-  case hydra.ext.python.syntax.SubjectExpression.tuple(v_SubjectExpression_tuple__) => hydra.serialization.cst("*...")
+  case hydra.ext.python.syntax.SubjectExpression.tuple => hydra.serialization.cst("*...")
 
 def encodeSum(s: hydra.ext.python.syntax.Sum): hydra.ast.Expr = hydra.ext.python.serde.encodeTerm(s.rhs)
 
@@ -559,7 +559,7 @@ def encodeTargetWithStarAtom(t: hydra.ext.python.syntax.TargetWithStarAtom): hyd
   t match
   case hydra.ext.python.syntax.TargetWithStarAtom.atom(v_TargetWithStarAtom_atom_a) => hydra.ext.python.serde.encodeStarAtom(v_TargetWithStarAtom_atom_a)
   case hydra.ext.python.syntax.TargetWithStarAtom.project(v_TargetWithStarAtom_project_pn) => hydra.ext.python.serde.encodeTPrimaryAndName(v_TargetWithStarAtom_project_pn)
-  case hydra.ext.python.syntax.TargetWithStarAtom.slices(v_TargetWithStarAtom_slices__) => hydra.serialization.cst("...")
+  case hydra.ext.python.syntax.TargetWithStarAtom.slices => hydra.serialization.cst("...")
 
 def encodeTPrimaryAndName(pn: hydra.ext.python.syntax.TPrimaryAndName): hydra.ast.Expr =
   {
@@ -572,9 +572,9 @@ def encodeTPrimary(tp: hydra.ext.python.syntax.TPrimary): hydra.ast.Expr =
   tp match
   case hydra.ext.python.syntax.TPrimary.atom(v_TPrimary_atom_a) => hydra.ext.python.serde.encodeAtom(v_TPrimary_atom_a)
   case hydra.ext.python.syntax.TPrimary.primaryAndName(v_TPrimary_primaryAndName_pn) => hydra.ext.python.serde.encodeTPrimaryAndName(v_TPrimary_primaryAndName_pn)
-  case hydra.ext.python.syntax.TPrimary.primaryAndSlices(v_TPrimary_primaryAndSlices__) => hydra.serialization.cst("...")
-  case hydra.ext.python.syntax.TPrimary.primaryAndGenexp(v_TPrimary_primaryAndGenexp__) => hydra.serialization.cst("...")
-  case hydra.ext.python.syntax.TPrimary.primaryAndArguments(v_TPrimary_primaryAndArguments__) => hydra.serialization.cst("...")
+  case hydra.ext.python.syntax.TPrimary.primaryAndSlices => hydra.serialization.cst("...")
+  case hydra.ext.python.syntax.TPrimary.primaryAndGenexp => hydra.serialization.cst("...")
+  case hydra.ext.python.syntax.TPrimary.primaryAndArguments => hydra.serialization.cst("...")
 
 def encodeTuple(t: hydra.ext.python.syntax.Tuple): hydra.ast.Expr =
   {
@@ -594,8 +594,8 @@ def encodeTypeAlias(ta: hydra.ext.python.syntax.TypeAlias): hydra.ast.Expr =
 def encodeTypeParameter(tp: hydra.ext.python.syntax.TypeParameter): hydra.ast.Expr =
   tp match
   case hydra.ext.python.syntax.TypeParameter.simple(v_TypeParameter_simple_s) => hydra.ext.python.serde.encodeSimpleTypeParameter(v_TypeParameter_simple_s)
-  case hydra.ext.python.syntax.TypeParameter.star(v_TypeParameter_star__) => hydra.serialization.cst("*...")
-  case hydra.ext.python.syntax.TypeParameter.doubleStar(v_TypeParameter_doubleStar__) => hydra.serialization.cst("**...")
+  case hydra.ext.python.syntax.TypeParameter.star => hydra.serialization.cst("*...")
+  case hydra.ext.python.syntax.TypeParameter.doubleStar => hydra.serialization.cst("**...")
 
 def encodeTypedAssignment(ta: hydra.ext.python.syntax.TypedAssignment): hydra.ast.Expr =
   {

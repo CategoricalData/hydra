@@ -162,11 +162,11 @@ def error(e: hydra.errors.Error) -> str:
         case hydra.errors.ErrorUndefinedField(value=v16):
             return hydra.show.error.core.undefined_field_error(v16)
 
-        case hydra.errors.ErrorUndefinedTerm(value=v17):
-            return hydra.show.error.core.undefined_term_error(v17)
+        case hydra.errors.ErrorUndefinedTermVariable(value=v17):
+            return hydra.show.error.core.undefined_term_variable_error(v17)
 
-        case hydra.errors.ErrorUndefinedType(value=v18):
-            return hydra.show.error.core.undefined_type_error(v18)
+        case hydra.errors.ErrorUntypedTermVariable(value=v18):
+            return hydra.show.error.core.untyped_term_variable_error(v18)
 
         case hydra.errors.ErrorUnexpectedTermVariant(value=v19):
             return hydra.show.error.core.unexpected_term_variant_error(v19)

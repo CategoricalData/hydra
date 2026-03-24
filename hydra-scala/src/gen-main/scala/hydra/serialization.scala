@@ -77,7 +77,7 @@ def expressionLength(e: hydra.ast.Expr): Int =
     case hydra.ast.Ws.none => 0
     case hydra.ast.Ws.space => 1
     case hydra.ast.Ws.break => 10000
-    case hydra.ast.Ws.breakAndIndent(v_Ws_breakAndIndent_s) => 10000
+    case hydra.ast.Ws.breakAndIndent => 10000
     case hydra.ast.Ws.doubleBreak => 10000
   def blockStyleLength(style: hydra.ast.BlockStyle): Int =
     {
@@ -201,7 +201,7 @@ def parenthesize(exp: hydra.ast.Expr): hydra.ast.Expr =
     case _ => true
   exp match
     case hydra.ast.Expr.brackets(v_Expr_brackets_bracketExpr) => hydra.ast.Expr.brackets(hydra.ast.BracketExpr(v_Expr_brackets_bracketExpr.brackets, hydra.serialization.parenthesize(v_Expr_brackets_bracketExpr.enclosed), (v_Expr_brackets_bracketExpr.style)))
-    case hydra.ast.Expr.const(v_Expr_const_ignored) => exp
+    case hydra.ast.Expr.const => exp
     case hydra.ast.Expr.indent(v_Expr_indent_indentExpr) => hydra.ast.Expr.indent(hydra.ast.IndentedExpression(v_Expr_indent_indentExpr.style, hydra.serialization.parenthesize(v_Expr_indent_indentExpr.expr)))
     case hydra.ast.Expr.seq(v_Expr_seq_seqExpr) => hydra.ast.Expr.seq(hydra.ast.SeqExpr(v_Expr_seq_seqExpr.op, hydra.lib.lists.map[hydra.ast.Expr, hydra.ast.Expr](hydra.serialization.parenthesize)(v_Expr_seq_seqExpr.elements)))
     case hydra.ast.Expr.op(v_Expr_op_opExpr) => {
@@ -281,7 +281,7 @@ def printExpr(e: hydra.ast.Expr): scala.Predef.String =
     case hydra.ast.Ws.none => ""
     case hydra.ast.Ws.space => " "
     case hydra.ast.Ws.break => "\n"
-    case hydra.ast.Ws.breakAndIndent(v_Ws_breakAndIndent_ignored) => "\n"
+    case hydra.ast.Ws.breakAndIndent => "\n"
     case hydra.ast.Ws.doubleBreak => "\n\n"
   def idt(ws: hydra.ast.Ws)(s: scala.Predef.String): scala.Predef.String =
     ws match

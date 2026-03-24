@@ -45,9 +45,9 @@ def module(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Dec
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
     hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.module.Namespace, hydra.module.Module](hydra.extract.helpers.requireField("namespace")(hydra.decode.module.namespace)(fieldMap)(cx))((field_namespace: hydra.module.Namespace) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.core.Binding], hydra.module.Module](hydra.extract.helpers.requireField("elements")((v1: hydra.graph.Graph) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.module.Definition], hydra.module.Module](hydra.extract.helpers.requireField("definitions")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
-      hydra.extract.helpers.decodeList(hydra.decode.core.binding)(v1)(v2))(fieldMap)(cx))((field_elements: Seq[hydra.core.Binding]) =>
+      hydra.extract.helpers.decodeList(hydra.decode.module.definition)(v1)(v2))(fieldMap)(cx))((field_definitions: Seq[hydra.module.Definition]) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Seq[hydra.module.Namespace], hydra.module.Module](hydra.extract.helpers.requireField("termDependencies")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeList(hydra.decode.module.namespace)(v1)(v2))(fieldMap)(cx))((field_termDependencies: Seq[hydra.module.Namespace]) =>
@@ -64,7 +64,7 @@ def module(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Dec
         case hydra.core.Literal.string(v_Literal_string_s) => Right(v_Literal_string_s)
         case _ => Left("expected string literal")
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(v1)(v2))(fieldMap)(cx))((field_description: Option[scala.Predef.String]) =>
-      Right(hydra.module.Module(field_namespace, field_elements, field_termDependencies, field_typeDependencies, field_description)))))))
+      Right(hydra.module.Module(field_namespace, field_definitions, field_termDependencies, field_typeDependencies, field_description)))))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
 
@@ -120,7 +120,9 @@ def termDefinition(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.er
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
     hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Name, hydra.module.TermDefinition](hydra.extract.helpers.requireField("name")(hydra.decode.core.name)(fieldMap)(cx))((field_name: hydra.core.Name) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, hydra.module.TermDefinition](hydra.extract.helpers.requireField("term")(hydra.decode.core.term)(fieldMap)(cx))((field_term: hydra.core.Term) =>
-      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.TypeScheme, hydra.module.TermDefinition](hydra.extract.helpers.requireField("type")(hydra.decode.core.typeScheme)(fieldMap)(cx))((field_type: hydra.core.TypeScheme) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, Option[hydra.core.TypeScheme], hydra.module.TermDefinition](hydra.extract.helpers.requireField("type")((v1: hydra.graph.Graph) =>
+      (v2: hydra.core.Term) =>
+      hydra.extract.helpers.decodeMaybe(hydra.decode.core.typeScheme)(v1)(v2))(fieldMap)(cx))((field_type: Option[hydra.core.TypeScheme]) =>
       Right(hydra.module.TermDefinition(field_name, field_term, field_type)))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))

@@ -595,10 +595,15 @@ def filter_type_bindings(cx: hydra.context.Context, graph: hydra.graph.Graph, bi
 
     return hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.cat(x1)), hydra.lib.eithers.map_list((lambda v1: is_decodable_binding(cx, graph, v1)), hydra.lib.lists.filter((lambda x1: hydra.annotations.is_native_type(x1)), bindings)))
 
-def decode_module(cx: hydra.context.Context, graph: hydra.graph.Graph, mod: hydra.module.Module) -> Either[hydra.context.InContext[hydra.errors.Error], Maybe[hydra.module.Module]]:
-    r"""Transform a type module into a decoder module."""
+def decode_module(cx: hydra.context.Context, graph: hydra.graph.Graph, mod: hydra.module.Module):
+    def _hoist_hydra_decoding_decode_module_1(v1):
+        match v1:
+            case hydra.module.DefinitionType(value=td):
+                return Just(hydra.annotations.type_element(td.name, td.type))
 
-    return hydra.lib.eithers.bind(filter_type_bindings(cx, graph, mod.elements), (lambda type_bindings: hydra.lib.logic.if_else(hydra.lib.lists.null(type_bindings), (lambda : Right(Nothing())), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda b: hydra.lib.eithers.bimap((lambda ic: hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(ic.object.value))), ic.context)), (lambda x: x), decode_binding(cx, graph, b))), type_bindings), (lambda decoded_bindings: (decoded_type_deps := hydra.lib.lists.map((lambda x1: decode_namespace(x1)), mod.type_dependencies), decoded_term_deps := hydra.lib.lists.map((lambda x1: decode_namespace(x1)), mod.term_dependencies), all_decoded_deps := hydra.lib.lists.nub(hydra.lib.lists.concat2(decoded_type_deps, decoded_term_deps)), Right(Just(hydra.module.Module(decode_namespace(mod.namespace), decoded_bindings, hydra.lib.lists.concat2((hydra.module.Namespace("hydra.extract.helpers"), hydra.module.Namespace("hydra.lexical"), hydra.module.Namespace("hydra.rewriting")), all_decoded_deps), (mod.namespace, hydra.module.Namespace("hydra.util")), Just(hydra.lib.strings.cat(("Term decoders for ", mod.namespace.value)))))))[3]))))))
+            case _:
+                return Nothing()
+    return hydra.lib.eithers.bind(filter_type_bindings(cx, graph, hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_hydra_decoding_decode_module_1(d)), mod.definitions))), (lambda type_bindings: hydra.lib.logic.if_else(hydra.lib.lists.null(type_bindings), (lambda : Right(Nothing())), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda b: hydra.lib.eithers.bimap((lambda ic: hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(ic.object.value))), ic.context)), (lambda x: x), decode_binding(cx, graph, b))), type_bindings), (lambda decoded_bindings: (decoded_type_deps := hydra.lib.lists.map((lambda x1: decode_namespace(x1)), mod.type_dependencies), decoded_term_deps := hydra.lib.lists.map((lambda x1: decode_namespace(x1)), mod.term_dependencies), all_decoded_deps := hydra.lib.lists.nub(hydra.lib.lists.concat2(decoded_type_deps, decoded_term_deps)), Right(Just(hydra.module.Module(decode_namespace(mod.namespace), hydra.lib.lists.map((lambda b: cast(hydra.module.Definition, hydra.module.DefinitionTerm(hydra.module.TermDefinition(b.name, b.term, b.type)))), decoded_bindings), hydra.lib.lists.concat2((hydra.module.Namespace("hydra.extract.helpers"), hydra.module.Namespace("hydra.lexical"), hydra.module.Namespace("hydra.rewriting")), all_decoded_deps), (mod.namespace, hydra.module.Namespace("hydra.util")), Just(hydra.lib.strings.cat(("Term decoders for ", mod.namespace.value)))))))[3]))))))
 
 def decoder_result_type(typ: hydra.core.Type) -> hydra.core.Name:
     r"""Compute the result type name for a decoder."""

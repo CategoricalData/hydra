@@ -4,1805 +4,286 @@ r"""A Shex model. Based on the BNF at:
   https://github.com/shexSpec/grammar/blob/master/bnf."""
 
 from __future__ import annotations
-from dataclasses import dataclass
-from enum import Enum
 from functools import lru_cache
-from hydra.dsl.python import Maybe, Node, frozenlist
-from typing import TypeAlias, cast
+from typing import cast
 import hydra.core
 
-@dataclass(frozen=True)
-class ShexDoc:
-    list_of_directive: frozenlist[Directive]
-    sequence: Maybe[ShexDoc_Sequence_Option]
-    prefix_decl: PrefixDecl
+annotation = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("Predicate"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Predicate")))), hydra.core.FieldType(hydra.core.Name("alts"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Annotation_Alts")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShexDoc")
-    LIST_OF_DIRECTIVE = hydra.core.Name("listOfDirective")
-    SEQUENCE = hydra.core.Name("Sequence")
-    PREFIX_DECL = hydra.core.Name("PrefixDecl")
+annotation_alts = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("Iri"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Iri")))), hydra.core.FieldType(hydra.core.Name("Literal"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Literal")))))))
 
-@dataclass(frozen=True)
-class ShexDoc_Sequence_Option:
-    alts: ShexDoc_Sequence_Option_Alts
-    list_of_statement: frozenlist[Statement]
+atp_name_ln = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("PnameNs"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnameNs")))), hydra.core.FieldType(hydra.core.Name("PnLocal"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option")
-    ALTS = hydra.core.Name("alts")
-    LIST_OF_STATEMENT = hydra.core.Name("listOfStatement")
+atp_name_ns = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnPrefix")))))))
 
-class ShexDoc_Sequence_Option_AltsNotStartAction(Node["NotStartAction"]):
-    ...
+base_decl = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.IriRef")))))
 
-class ShexDoc_Sequence_Option_AltsStartActions(Node["StartActions"]):
-    ...
+blank_node = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.BlankNodeLabel")))))
 
-class _ShexDoc_Sequence_Option_AltsMeta(type):
-    def __getitem__(cls, item):
-        return object
+blank_node_label = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("alts"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.BlankNodeLabel_Alts")))), hydra.core.FieldType(hydra.core.Name("ListOfAlts"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt")))))))), hydra.core.FieldType(hydra.core.Name("PnChars"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnChars")))))))
 
-class ShexDoc_Sequence_Option_Alts(metaclass=_ShexDoc_Sequence_Option_AltsMeta):
-    r"""ShexDoc_Sequence_Option_AltsNotStartAction | ShexDoc_Sequence_Option_AltsStartActions"""
+blank_node_label_alts = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("PnCharsU"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnCharsU")))), hydra.core.FieldType(hydra.core.Name("regex"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option_Alts")
-    NOT_START_ACTION = hydra.core.Name("NotStartAction")
-    START_ACTIONS = hydra.core.Name("StartActions")
+blank_node_label_list_of_alts_option_elmt = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("PnChars"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnChars")))), hydra.core.FieldType(hydra.core.Name("Period"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-class DirectiveBaseDecl(Node["BaseDecl"]):
-    ...
+boolean_literal = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("True"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("False"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-class DirectivePrefixDecl(Node["PrefixDecl"]):
-    ...
+bracketed_triple_expr = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("InnerTripleExpr"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.InnerTripleExpr")))), hydra.core.FieldType(hydra.core.Name("Cardinality"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Cardinality")))))), hydra.core.FieldType(hydra.core.Name("listOfAnnotation"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Annotation")))))), hydra.core.FieldType(hydra.core.Name("SemanticActions"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.SemanticActions")))))))
 
-class _DirectiveMeta(type):
-    def __getitem__(cls, item):
-        return object
+cardinality = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("Ast"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("Plus"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("Quest"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("RepeatRange"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.RepeatRange")))))))
 
-class Directive(metaclass=_DirectiveMeta):
-    r"""DirectiveBaseDecl | DirectivePrefixDecl"""
+code = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Code_Elmt")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Directive")
-    BASE_DECL = hydra.core.Name("BaseDecl")
-    PREFIX_DECL = hydra.core.Name("PrefixDecl")
+code_decl = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("Iri"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Iri")))), hydra.core.FieldType(hydra.core.Name("alts"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.CodeDecl_Alts")))))))
 
-class BaseDecl(Node["IriRef"]):
-    ...
+code_decl_alts = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("Code"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Code")))), hydra.core.FieldType(hydra.core.Name("Percnt"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-BaseDecl.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.BaseDecl")
+code_elmt = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("regex"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("Uchar"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Uchar")))))))
 
-@dataclass(frozen=True)
-class PrefixDecl:
-    pname_ns: PnameNs
-    iri_ref: IriRef
+datatype = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Iri")))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PrefixDecl")
-    PNAME_NS = hydra.core.Name("PnameNs")
-    IRI_REF = hydra.core.Name("IriRef")
+decimal = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))
 
-class NotStartActionStart(Node["ShapeExpression"]):
-    ...
+directive = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("BaseDecl"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.BaseDecl")))), hydra.core.FieldType(hydra.core.Name("PrefixDecl"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PrefixDecl")))))))
 
-class NotStartActionShapeExprDecl(Node["NotStartAction_ShapeExprDecl"]):
-    ...
+double = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))
 
-class _NotStartActionMeta(type):
-    def __getitem__(cls, item):
-        return object
+echar = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))
 
-class NotStartAction(metaclass=_NotStartActionMeta):
-    r"""NotStartActionStart | NotStartActionShapeExprDecl"""
+exclusion = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Iri")))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NotStartAction")
-    START = hydra.core.Name("start")
-    SHAPE_EXPR_DECL = hydra.core.Name("shapeExprDecl")
+extra_property_set = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Predicate")))))))
 
-@dataclass(frozen=True)
-class NotStartAction_ShapeExprDecl:
-    shape_expr_label: ShapeExprLabel
-    alts: NotStartAction_ShapeExprDecl_Alts
+group_triple_expr = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("SingleElementGroup"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.SingleElementGroup")))), hydra.core.FieldType(hydra.core.Name("MultiElementGroup"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.MultiElementGroup")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NotStartAction_ShapeExprDecl")
-    SHAPE_EXPR_LABEL = hydra.core.Name("ShapeExprLabel")
-    ALTS = hydra.core.Name("alts")
+hex = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))
 
-class NotStartAction_ShapeExprDecl_AltsShapeExpression(Node["ShapeExpression"]):
-    ...
+include = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.TripleExprLabel")))))
 
-class NotStartAction_ShapeExprDecl_AltsEXTERNAL:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, NotStartAction_ShapeExprDecl_AltsEXTERNAL)
-    def __hash__(self):
-        return hash("NotStartAction_ShapeExprDecl_AltsEXTERNAL")
+include_set = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeExprLabel")))))))
 
-class _NotStartAction_ShapeExprDecl_AltsMeta(type):
-    def __getitem__(cls, item):
-        return object
+inline_shape_and = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("InlineShapeNot"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeNot")))), hydra.core.FieldType(hydra.core.Name("listOfSequence"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeNot")))))))))
 
-class NotStartAction_ShapeExprDecl_Alts(metaclass=_NotStartAction_ShapeExprDecl_AltsMeta):
-    r"""NotStartAction_ShapeExprDecl_AltsShapeExpression | NotStartAction_ShapeExprDecl_AltsEXTERNAL"""
+inline_shape_atom = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAtom_Sequence")))), hydra.core.FieldType(hydra.core.Name("sequence2"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAtom_Sequence2")))), hydra.core.FieldType(hydra.core.Name("sequence3"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeExpression")))), hydra.core.FieldType(hydra.core.Name("Period"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NotStartAction_ShapeExprDecl_Alts")
-    SHAPE_EXPRESSION = hydra.core.Name("ShapeExpression")
-    E_X_T_E_R_N_A_L = hydra.core.Name("EXTERNAL")
+inline_shape_atom_sequence = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("NodeConstraint"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint")))), hydra.core.FieldType(hydra.core.Name("InlineShapeOrRef"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeOrRef")))))))))
 
-class StartActions(Node["frozenlist[CodeDecl]"]):
-    ...
+inline_shape_atom_sequence2 = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("InlineShapeOrRef"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeOrRef")))), hydra.core.FieldType(hydra.core.Name("NodeConstraint"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint")))))))))
 
-StartActions.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StartActions")
+inline_shape_definition = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("listOfAlts"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt")))))), hydra.core.FieldType(hydra.core.Name("TripleExpression"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.TripleExpression")))))))))
 
-class StatementDirective(Node["Directive"]):
-    ...
+inline_shape_definition_list_of_alts_elmt = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("IncludeSet"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.IncludeSet")))), hydra.core.FieldType(hydra.core.Name("ExtraPropertySet"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ExtraPropertySet")))), hydra.core.FieldType(hydra.core.Name("CLOSED"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-class StatementNotStartAction(Node["NotStartAction"]):
-    ...
+inline_shape_expression = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeOr")))))
 
-class _StatementMeta(type):
-    def __getitem__(cls, item):
-        return object
+inline_shape_not = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("NOT"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeUnit())))), hydra.core.FieldType(hydra.core.Name("InlineShapeAtom"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAtom")))))))
 
-class Statement(metaclass=_StatementMeta):
-    r"""StatementDirective | StatementNotStartAction"""
+inline_shape_or = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("ShapeAnd"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeAnd")))), hydra.core.FieldType(hydra.core.Name("listOfSequence"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAnd")))))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Statement")
-    DIRECTIVE = hydra.core.Name("Directive")
-    NOT_START_ACTION = hydra.core.Name("NotStartAction")
+inline_shape_or_ref = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("InlineShapeDefinition"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeDefinition")))), hydra.core.FieldType(hydra.core.Name("AtpNameLn"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.AtpNameLn")))), hydra.core.FieldType(hydra.core.Name("AtpNameNs"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.AtpNameNs")))), hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeExprLabel")))))))
 
-class ShapeExpression(Node["ShapeOr"]):
-    ...
+inner_triple_expr = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("MultiElementGroup"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.MultiElementGroup")))), hydra.core.FieldType(hydra.core.Name("MultiElementOneOf"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.MultiElementOneOf")))))))
 
-ShapeExpression.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeExpression")
+integer = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))
 
-class InlineShapeExpression(Node["InlineShapeOr"]):
-    ...
+iri = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("IriRef"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.IriRef")))), hydra.core.FieldType(hydra.core.Name("PrefixedName"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PrefixedName")))))))
 
-InlineShapeExpression.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeExpression")
+iri_range = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.IriRange_Sequence")))), hydra.core.FieldType(hydra.core.Name("sequence2"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Exclusion")))))))))
 
-@dataclass(frozen=True)
-class ShapeOr:
-    shape_and: ShapeAnd
-    list_of_sequence: frozenlist[ShapeAnd]
+iri_range_sequence = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("Iri"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Iri")))), hydra.core.FieldType(hydra.core.Name("Sequence"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Exclusion")))))))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeOr")
-    SHAPE_AND = hydra.core.Name("ShapeAnd")
-    LIST_OF_SEQUENCE = hydra.core.Name("listOfSequence")
+iri_ref = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.IriRef_Elmt")))))))
 
-@dataclass(frozen=True)
-class InlineShapeOr:
-    shape_and: ShapeAnd
-    list_of_sequence: frozenlist[InlineShapeAnd]
+iri_ref_elmt = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("regex"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("Uchar"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Uchar")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeOr")
-    SHAPE_AND = hydra.core.Name("ShapeAnd")
-    LIST_OF_SEQUENCE = hydra.core.Name("listOfSequence")
+lang_tag = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))
 
-@dataclass(frozen=True)
-class ShapeAnd:
-    shape_not: ShapeNot
-    list_of_sequence: frozenlist[ShapeNot]
+literal = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("RdfLiteral"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.RdfLiteral")))), hydra.core.FieldType(hydra.core.Name("NumericLiteral"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NumericLiteral")))), hydra.core.FieldType(hydra.core.Name("BooleanLiteral"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.BooleanLiteral")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeAnd")
-    SHAPE_NOT = hydra.core.Name("ShapeNot")
-    LIST_OF_SEQUENCE = hydra.core.Name("listOfSequence")
+multi_element_group = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("UnaryTripleExpr"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.UnaryTripleExpr")))), hydra.core.FieldType(hydra.core.Name("listOfSequence"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.UnaryTripleExpr")))))), hydra.core.FieldType(hydra.core.Name("Semi"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeUnit())))))))
 
-@dataclass(frozen=True)
-class InlineShapeAnd:
-    inline_shape_not: InlineShapeNot
-    list_of_sequence: frozenlist[InlineShapeNot]
+multi_element_one_of = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("GroupTripleExpr"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.GroupTripleExpr")))), hydra.core.FieldType(hydra.core.Name("listOfSequence"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.GroupTripleExpr")))))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAnd")
-    INLINE_SHAPE_NOT = hydra.core.Name("InlineShapeNot")
-    LIST_OF_SEQUENCE = hydra.core.Name("listOfSequence")
+node_constraint = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.XsFacet")))))), hydra.core.FieldType(hydra.core.Name("sequence2"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint_Sequence2")))), hydra.core.FieldType(hydra.core.Name("sequence3"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint_Sequence3")))), hydra.core.FieldType(hydra.core.Name("sequence4"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint_Sequence4")))), hydra.core.FieldType(hydra.core.Name("sequence5"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint_Sequence5")))), hydra.core.FieldType(hydra.core.Name("listOfXsFacet"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.XsFacet")))))))))
 
-@dataclass(frozen=True)
-class ShapeNot:
-    n_o_t: Maybe[None]
-    shape_atom: ShapeAtom
+node_constraint_sequence2 = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("NonLiteralKind"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NonLiteralKind")))), hydra.core.FieldType(hydra.core.Name("listOfStringFacet"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringFacet")))))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeNot")
-    N_O_T = hydra.core.Name("NOT")
-    SHAPE_ATOM = hydra.core.Name("ShapeAtom")
+node_constraint_sequence3 = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("Datatype"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Datatype")))), hydra.core.FieldType(hydra.core.Name("listOfXsFacet"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.XsFacet")))))))))
 
-@dataclass(frozen=True)
-class InlineShapeNot:
-    n_o_t: Maybe[None]
-    inline_shape_atom: InlineShapeAtom
+node_constraint_sequence4 = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("ValueSet"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ValueSet")))), hydra.core.FieldType(hydra.core.Name("listOfXsFacet"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.XsFacet")))))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeNot")
-    N_O_T = hydra.core.Name("NOT")
-    INLINE_SHAPE_ATOM = hydra.core.Name("InlineShapeAtom")
+node_constraint_sequence5 = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("ValueSet"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ValueSet")))), hydra.core.FieldType(hydra.core.Name("listOfXsFacet"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.XsFacet")))))))))
 
-class ShapeAtomSequence(Node["ShapeAtom_Sequence"]):
-    ...
+non_literal_kind = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("IRI"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("BNODE"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("NONLITERAL"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-class ShapeAtomShapeOrRef(Node["ShapeOrRef"]):
-    ...
+not_start_action = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("start"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeExpression")))), hydra.core.FieldType(hydra.core.Name("shapeExprDecl"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NotStartAction_ShapeExprDecl")))))))
 
-class ShapeAtomSequence2(Node["ShapeExpression"]):
-    ...
+not_start_action_shape_expr_decl = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("ShapeExprLabel"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeExprLabel")))), hydra.core.FieldType(hydra.core.Name("alts"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NotStartAction_ShapeExprDecl_Alts")))))))
 
-class ShapeAtomPeriod:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, ShapeAtomPeriod)
-    def __hash__(self):
-        return hash("ShapeAtomPeriod")
+not_start_action_shape_expr_decl_alts = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("ShapeExpression"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeExpression")))), hydra.core.FieldType(hydra.core.Name("EXTERNAL"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-class _ShapeAtomMeta(type):
-    def __getitem__(cls, item):
-        return object
+numeric_facet = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NumericFacet_Sequence")))), hydra.core.FieldType(hydra.core.Name("sequence2"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NumericFacet_Sequence2")))))))
 
-class ShapeAtom(metaclass=_ShapeAtomMeta):
-    r"""ShapeAtomSequence | ShapeAtomShapeOrRef | ShapeAtomSequence2 | ShapeAtomPeriod"""
+numeric_facet_sequence = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("NumericRange"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NumericRange")))), hydra.core.FieldType(hydra.core.Name("NumericLiteral"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NumericLiteral")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeAtom")
-    SEQUENCE = hydra.core.Name("sequence")
-    SHAPE_OR_REF = hydra.core.Name("ShapeOrRef")
-    SEQUENCE2 = hydra.core.Name("sequence2")
-    PERIOD = hydra.core.Name("Period")
+numeric_facet_sequence2 = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("NumericLength"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NumericLength")))), hydra.core.FieldType(hydra.core.Name("Integer"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Integer")))))))
 
-@dataclass(frozen=True)
-class ShapeAtom_Sequence:
-    node_constraint: NodeConstraint
-    shape_or_ref: Maybe[ShapeOrRef]
+numeric_length = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("TOTALDIGITS"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("FRACTIONDIGITS"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeAtom_Sequence")
-    NODE_CONSTRAINT = hydra.core.Name("NodeConstraint")
-    SHAPE_OR_REF = hydra.core.Name("ShapeOrRef")
+numeric_literal = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("Integer"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Integer")))), hydra.core.FieldType(hydra.core.Name("Decimal"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Decimal")))), hydra.core.FieldType(hydra.core.Name("Double"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Double")))))))
 
-class InlineShapeAtomSequence(Node["InlineShapeAtom_Sequence"]):
-    ...
+numeric_range = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("MININCLUSIVE"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("MINEXCLUSIVE"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("MAXINCLUSIVE"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("MAXEXCLUSIVE"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-class InlineShapeAtomSequence2(Node["InlineShapeAtom_Sequence2"]):
-    ...
+one_of_triple_expr = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("GroupTripleExpr"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.GroupTripleExpr")))), hydra.core.FieldType(hydra.core.Name("MultiElementOneOf"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.MultiElementOneOf")))))))
 
-class InlineShapeAtomSequence3(Node["ShapeExpression"]):
-    ...
+percent = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("Hex"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))), hydra.core.FieldType(hydra.core.Name("Hex2"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))))))
 
-class InlineShapeAtomPeriod:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, InlineShapeAtomPeriod)
-    def __hash__(self):
-        return hash("InlineShapeAtomPeriod")
+plx = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("Percent"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Percent")))), hydra.core.FieldType(hydra.core.Name("PnLocalEsc"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnLocalEsc")))))))
 
-class _InlineShapeAtomMeta(type):
-    def __getitem__(cls, item):
-        return object
+pn_chars = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("PnCharsU"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnCharsU")))), hydra.core.FieldType(hydra.core.Name("Minus"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("regex"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))))
 
-class InlineShapeAtom(metaclass=_InlineShapeAtomMeta):
-    r"""InlineShapeAtomSequence | InlineShapeAtomSequence2 | InlineShapeAtomSequence3 | InlineShapeAtomPeriod"""
+pn_chars_base = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("regex"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("regex2"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAtom")
-    SEQUENCE = hydra.core.Name("sequence")
-    SEQUENCE2 = hydra.core.Name("sequence2")
-    SEQUENCE3 = hydra.core.Name("sequence3")
-    PERIOD = hydra.core.Name("Period")
+pn_chars_u = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("PnCharsBase"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnCharsBase")))), hydra.core.FieldType(hydra.core.Name("Lowbar"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-@dataclass(frozen=True)
-class InlineShapeAtom_Sequence:
-    node_constraint: NodeConstraint
-    inline_shape_or_ref: Maybe[InlineShapeOrRef]
+pn_local = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("alts"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal_Alts")))), hydra.core.FieldType(hydra.core.Name("Sequence"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal_Sequence_Option")))))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAtom_Sequence")
-    NODE_CONSTRAINT = hydra.core.Name("NodeConstraint")
-    INLINE_SHAPE_OR_REF = hydra.core.Name("InlineShapeOrRef")
+pn_local_esc = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))
 
-@dataclass(frozen=True)
-class InlineShapeAtom_Sequence2:
-    inline_shape_or_ref: InlineShapeOrRef
-    node_constraint: Maybe[NodeConstraint]
+pn_local_alts = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("PnCharsU"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnCharsU")))), hydra.core.FieldType(hydra.core.Name("Colon"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("regex"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("Plx"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Plx")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeAtom_Sequence2")
-    INLINE_SHAPE_OR_REF = hydra.core.Name("InlineShapeOrRef")
-    NODE_CONSTRAINT = hydra.core.Name("NodeConstraint")
+pn_local_sequence_option = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("listOfAlts"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt")))))), hydra.core.FieldType(hydra.core.Name("alts"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_Alts")))))))
 
-class ShapeOrRefShapeDefinition(Node["ShapeDefinition"]):
-    ...
+pn_local_sequence_option_alts = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("PnChars"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnChars")))), hydra.core.FieldType(hydra.core.Name("Colon"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("Plx"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Plx")))))))
 
-class ShapeOrRefAtpNameLn(Node["AtpNameLn"]):
-    ...
+pn_local_sequence_option_list_of_alts_elmt = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("PnChars"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnChars")))), hydra.core.FieldType(hydra.core.Name("Period"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("Colon"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("Plx"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Plx")))))))
 
-class ShapeOrRefAtpNameNs(Node["AtpNameNs"]):
-    ...
+pn_prefix = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("PnCharsBase"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnCharsBase")))), hydra.core.FieldType(hydra.core.Name("Sequence"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnPrefix_Sequence_Option")))))))))
 
-class ShapeOrRefSequence(Node["ShapeExprLabel"]):
-    ...
+pn_prefix_sequence_option = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("alts"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnPrefix_Sequence_Option_Alts")))), hydra.core.FieldType(hydra.core.Name("PnChars"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnChars")))))))
 
-class _ShapeOrRefMeta(type):
-    def __getitem__(cls, item):
-        return object
+pn_prefix_sequence_option_alts = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("PnChars"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnChars")))), hydra.core.FieldType(hydra.core.Name("Period"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-class ShapeOrRef(metaclass=_ShapeOrRefMeta):
-    r"""ShapeOrRefShapeDefinition | ShapeOrRefAtpNameLn | ShapeOrRefAtpNameNs | ShapeOrRefSequence"""
+pname_ln = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("PnameNs"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnameNs")))), hydra.core.FieldType(hydra.core.Name("PnLocal"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeOrRef")
-    SHAPE_DEFINITION = hydra.core.Name("ShapeDefinition")
-    ATP_NAME_LN = hydra.core.Name("AtpNameLn")
-    ATP_NAME_NS = hydra.core.Name("AtpNameNs")
-    SEQUENCE = hydra.core.Name("sequence")
+pname_ns = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnPrefix")))))))
 
-class InlineShapeOrRefInlineShapeDefinition(Node["InlineShapeDefinition"]):
-    ...
+predicate = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("Iri"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Iri")))), hydra.core.FieldType(hydra.core.Name("RdfType"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.RdfType")))))))
 
-class InlineShapeOrRefAtpNameLn(Node["AtpNameLn"]):
-    ...
+prefix_decl = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("PnameNs"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnameNs")))), hydra.core.FieldType(hydra.core.Name("IriRef"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.IriRef")))))))
 
-class InlineShapeOrRefAtpNameNs(Node["AtpNameNs"]):
-    ...
+prefixed_name = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("PnameLn"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnameLn")))), hydra.core.FieldType(hydra.core.Name("PnameNs"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PnameNs")))))))
 
-class InlineShapeOrRefSequence(Node["ShapeExprLabel"]):
-    ...
+rdf_literal = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("String"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.String")))), hydra.core.FieldType(hydra.core.Name("Alts"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.RdfLiteral_Alts_Option")))))))))
 
-class _InlineShapeOrRefMeta(type):
-    def __getitem__(cls, item):
-        return object
+rdf_literal_alts_option = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("LangTag"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.LangTag")))), hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Datatype")))))))
 
-class InlineShapeOrRef(metaclass=_InlineShapeOrRefMeta):
-    r"""InlineShapeOrRefInlineShapeDefinition | InlineShapeOrRefAtpNameLn | InlineShapeOrRefAtpNameNs | InlineShapeOrRefSequence"""
+rdf_type = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeUnit())))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeOrRef")
-    INLINE_SHAPE_DEFINITION = hydra.core.Name("InlineShapeDefinition")
-    ATP_NAME_LN = hydra.core.Name("AtpNameLn")
-    ATP_NAME_NS = hydra.core.Name("AtpNameNs")
-    SEQUENCE = hydra.core.Name("sequence")
+regexp = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("listOfAlts"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Regexp_ListOfAlts_Elmt")))))), hydra.core.FieldType(hydra.core.Name("listOfRegex"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))))))
 
-class NodeConstraintSequence(Node["frozenlist[XsFacet]"]):
-    ...
+regexp_list_of_alts_elmt = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("regex"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("Uchar"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Uchar")))))))
 
-class NodeConstraintSequence2(Node["NodeConstraint_Sequence2"]):
-    ...
+repeat_range = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("Integer"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Integer")))), hydra.core.FieldType(hydra.core.Name("Sequence"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.RepeatRange_Sequence_Option_Option_Option")))))))))))))
 
-class NodeConstraintSequence3(Node["NodeConstraint_Sequence3"]):
-    ...
+repeat_range_sequence_option_option_option = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("Integer"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Integer")))), hydra.core.FieldType(hydra.core.Name("Ast"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-class NodeConstraintSequence4(Node["NodeConstraint_Sequence4"]):
-    ...
+semantic_actions = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.CodeDecl")))))))
 
-class NodeConstraintSequence5(Node["NodeConstraint_Sequence5"]):
-    ...
+sense_flags = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeUnit())))
 
-class NodeConstraintListOfXsFacet(Node["frozenlist[XsFacet]"]):
-    ...
+shape_and = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("ShapeNot"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeNot")))), hydra.core.FieldType(hydra.core.Name("listOfSequence"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeNot")))))))))
 
-class _NodeConstraintMeta(type):
-    def __getitem__(cls, item):
-        return object
+shape_atom = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeAtom_Sequence")))), hydra.core.FieldType(hydra.core.Name("ShapeOrRef"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeOrRef")))), hydra.core.FieldType(hydra.core.Name("sequence2"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeExpression")))), hydra.core.FieldType(hydra.core.Name("Period"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-class NodeConstraint(metaclass=_NodeConstraintMeta):
-    r"""NodeConstraintSequence | NodeConstraintSequence2 | NodeConstraintSequence3 | NodeConstraintSequence4 | NodeConstraintSequence5 | NodeConstraintListOfXsFacet"""
+shape_atom_sequence = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("NodeConstraint"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint")))), hydra.core.FieldType(hydra.core.Name("ShapeOrRef"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeOrRef")))))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint")
-    SEQUENCE = hydra.core.Name("sequence")
-    SEQUENCE2 = hydra.core.Name("sequence2")
-    SEQUENCE3 = hydra.core.Name("sequence3")
-    SEQUENCE4 = hydra.core.Name("sequence4")
-    SEQUENCE5 = hydra.core.Name("sequence5")
-    LIST_OF_XS_FACET = hydra.core.Name("listOfXsFacet")
+shape_definition = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("listOfAlts"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt")))))), hydra.core.FieldType(hydra.core.Name("TripleExpression"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.TripleExpression")))))), hydra.core.FieldType(hydra.core.Name("listOfAnnotation"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Annotation")))))), hydra.core.FieldType(hydra.core.Name("SemanticActions"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.SemanticActions")))))))
 
-@dataclass(frozen=True)
-class NodeConstraint_Sequence2:
-    non_literal_kind: NonLiteralKind
-    list_of_string_facet: frozenlist[StringFacet]
+shape_definition_list_of_alts_elmt = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("IncludeSet"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.IncludeSet")))), hydra.core.FieldType(hydra.core.Name("ExtraPropertySet"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ExtraPropertySet")))), hydra.core.FieldType(hydra.core.Name("CLOSED"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint_Sequence2")
-    NON_LITERAL_KIND = hydra.core.Name("NonLiteralKind")
-    LIST_OF_STRING_FACET = hydra.core.Name("listOfStringFacet")
+shape_expr_label = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("Iri"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Iri")))), hydra.core.FieldType(hydra.core.Name("BlankNode"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.BlankNode")))))))
 
-@dataclass(frozen=True)
-class NodeConstraint_Sequence3:
-    datatype: Datatype
-    list_of_xs_facet: frozenlist[XsFacet]
+shape_expression = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeOr")))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint_Sequence3")
-    DATATYPE = hydra.core.Name("Datatype")
-    LIST_OF_XS_FACET = hydra.core.Name("listOfXsFacet")
+shape_not = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("NOT"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeUnit())))), hydra.core.FieldType(hydra.core.Name("ShapeAtom"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeAtom")))))))
 
-@dataclass(frozen=True)
-class NodeConstraint_Sequence4:
-    value_set: ValueSet
-    list_of_xs_facet: frozenlist[XsFacet]
+shape_or = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("ShapeAnd"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeAnd")))), hydra.core.FieldType(hydra.core.Name("listOfSequence"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeAnd")))))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint_Sequence4")
-    VALUE_SET = hydra.core.Name("ValueSet")
-    LIST_OF_XS_FACET = hydra.core.Name("listOfXsFacet")
+shape_or_ref = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("ShapeDefinition"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeDefinition")))), hydra.core.FieldType(hydra.core.Name("AtpNameLn"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.AtpNameLn")))), hydra.core.FieldType(hydra.core.Name("AtpNameNs"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.AtpNameNs")))), hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShapeExprLabel")))))))
 
-@dataclass(frozen=True)
-class NodeConstraint_Sequence5:
-    value_set: ValueSet
-    list_of_xs_facet: frozenlist[XsFacet]
+shex_doc = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("listOfDirective"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Directive")))))), hydra.core.FieldType(hydra.core.Name("Sequence"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option")))))), hydra.core.FieldType(hydra.core.Name("PrefixDecl"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.PrefixDecl")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NodeConstraint_Sequence5")
-    VALUE_SET = hydra.core.Name("ValueSet")
-    LIST_OF_XS_FACET = hydra.core.Name("listOfXsFacet")
+shex_doc_sequence_option = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("alts"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option_Alts")))), hydra.core.FieldType(hydra.core.Name("listOfStatement"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Statement")))))))))
 
-class NonLiteralKind(Enum):
-    I_R_I = hydra.core.Name("IRI")
+shex_doc_sequence_option_alts = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("NotStartAction"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NotStartAction")))), hydra.core.FieldType(hydra.core.Name("StartActions"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StartActions")))))))
 
-    B_N_O_D_E = hydra.core.Name("BNODE")
+single_element_group = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("UnaryTripleExpr"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.UnaryTripleExpr")))), hydra.core.FieldType(hydra.core.Name("Semi"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeUnit())))))))
 
-    N_O_N_L_I_T_E_R_A_L = hydra.core.Name("NONLITERAL")
+start_actions = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.CodeDecl")))))))
 
-NonLiteralKind.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NonLiteralKind")
+statement = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("Directive"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Directive")))), hydra.core.FieldType(hydra.core.Name("NotStartAction"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NotStartAction")))))))
 
-class XsFacetStringFacet(Node["StringFacet"]):
-    ...
+string = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("StringLiteral1"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteral1")))), hydra.core.FieldType(hydra.core.Name("StringLiteralLong1"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1")))), hydra.core.FieldType(hydra.core.Name("StringLiteral2"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteral2")))), hydra.core.FieldType(hydra.core.Name("StringLiteralLong2"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2")))))))
 
-class XsFacetNumericFacet(Node["NumericFacet"]):
-    ...
+string_facet = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringFacet_Sequence")))), hydra.core.FieldType(hydra.core.Name("Regexp"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Regexp")))))))
 
-class _XsFacetMeta(type):
-    def __getitem__(cls, item):
-        return object
+string_facet_sequence = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("StringLength"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLength")))), hydra.core.FieldType(hydra.core.Name("Integer"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Integer")))))))
 
-class XsFacet(metaclass=_XsFacetMeta):
-    r"""XsFacetStringFacet | XsFacetNumericFacet"""
+string_length = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("LENGTH"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("MINLENGTH"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("MAXLENGTH"), cast(hydra.core.Type, hydra.core.TypeUnit())))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.XsFacet")
-    STRING_FACET = hydra.core.Name("StringFacet")
-    NUMERIC_FACET = hydra.core.Name("NumericFacet")
+string_literal1 = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteral1_Elmt")))))))
 
-class StringFacetSequence(Node["StringFacet_Sequence"]):
-    ...
+string_literal1_elmt = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("regex"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("Echar"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Echar")))), hydra.core.FieldType(hydra.core.Name("Uchar"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Uchar")))))))
 
-class StringFacetRegexp(Node["Regexp"]):
-    ...
+string_literal2 = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteral2_Elmt")))))))
 
-class _StringFacetMeta(type):
-    def __getitem__(cls, item):
-        return object
+string_literal2_elmt = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("regex"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("Echar"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Echar")))), hydra.core.FieldType(hydra.core.Name("Uchar"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Uchar")))))))
 
-class StringFacet(metaclass=_StringFacetMeta):
-    r"""StringFacetSequence | StringFacetRegexp"""
+string_literal_long1 = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringFacet")
-    SEQUENCE = hydra.core.Name("sequence")
-    REGEXP = hydra.core.Name("Regexp")
+string_literal_long1_elmt = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence")))), hydra.core.FieldType(hydra.core.Name("Echar"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Echar")))), hydra.core.FieldType(hydra.core.Name("Uchar"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Uchar")))))))
 
-@dataclass(frozen=True)
-class StringFacet_Sequence:
-    string_length: StringLength
-    integer: Integer
+string_literal_long1_elmt_sequence = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("Alts"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option")))))), hydra.core.FieldType(hydra.core.Name("regex"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringFacet_Sequence")
-    STRING_LENGTH = hydra.core.Name("StringLength")
-    INTEGER = hydra.core.Name("Integer")
+string_literal_long1_elmt_sequence_alts_option = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("Apos"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence")))))))
 
-class StringLength(Enum):
-    L_E_N_G_T_H = hydra.core.Name("LENGTH")
+@lru_cache(1)
+def string_literal_long1_elmt_sequence_alts_option_sequence() -> hydra.core.Type:
+    return cast(hydra.core.Type, hydra.core.TypeRecord(()))
 
-    M_I_N_L_E_N_G_T_H = hydra.core.Name("MINLENGTH")
+string_literal_long2 = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt")))))))
 
-    M_A_X_L_E_N_G_T_H = hydra.core.Name("MAXLENGTH")
+string_literal_long2_elmt = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt_Sequence")))), hydra.core.FieldType(hydra.core.Name("Echar"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Echar")))), hydra.core.FieldType(hydra.core.Name("Uchar"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Uchar")))))))
 
-StringLength.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLength")
+string_literal_long2_elmt_sequence = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("Alts"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option")))))), hydra.core.FieldType(hydra.core.Name("regex"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))))
 
-class NumericFacetSequence(Node["NumericFacet_Sequence"]):
-    ...
+string_literal_long2_elmt_sequence_alts_option = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("Quot"), cast(hydra.core.Type, hydra.core.TypeUnit())), hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence")))))))
 
-class NumericFacetSequence2(Node["NumericFacet_Sequence2"]):
-    ...
+@lru_cache(1)
+def string_literal_long2_elmt_sequence_alts_option_sequence() -> hydra.core.Type:
+    return cast(hydra.core.Type, hydra.core.TypeRecord(()))
 
-class _NumericFacetMeta(type):
-    def __getitem__(cls, item):
-        return object
+triple_constraint = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("SenseFlags"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.SenseFlags")))))), hydra.core.FieldType(hydra.core.Name("Predicate"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Predicate")))), hydra.core.FieldType(hydra.core.Name("InlineShapeExpression"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeExpression")))), hydra.core.FieldType(hydra.core.Name("Cardinality"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Cardinality")))))), hydra.core.FieldType(hydra.core.Name("listOfAnnotation"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Annotation")))))), hydra.core.FieldType(hydra.core.Name("SemanticActions"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.SemanticActions")))))))
 
-class NumericFacet(metaclass=_NumericFacetMeta):
-    r"""NumericFacetSequence | NumericFacetSequence2"""
+triple_expr_label = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("Iri"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Iri")))), hydra.core.FieldType(hydra.core.Name("BlankNode"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.BlankNode")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NumericFacet")
-    SEQUENCE = hydra.core.Name("sequence")
-    SEQUENCE2 = hydra.core.Name("sequence2")
+triple_expression = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.OneOfTripleExpr")))))
 
-@dataclass(frozen=True)
-class NumericFacet_Sequence:
-    numeric_range: NumericRange
-    numeric_literal: NumericLiteral
+uchar = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Uchar_Sequence")))), hydra.core.FieldType(hydra.core.Name("sequence2"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Uchar_Sequence2")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NumericFacet_Sequence")
-    NUMERIC_RANGE = hydra.core.Name("NumericRange")
-    NUMERIC_LITERAL = hydra.core.Name("NumericLiteral")
+uchar_sequence = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("Hex"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))), hydra.core.FieldType(hydra.core.Name("Hex2"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))), hydra.core.FieldType(hydra.core.Name("Hex3"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))), hydra.core.FieldType(hydra.core.Name("Hex4"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))))))
 
-@dataclass(frozen=True)
-class NumericFacet_Sequence2:
-    numeric_length: NumericLength
-    integer: Integer
+uchar_sequence2 = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("Hex"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))), hydra.core.FieldType(hydra.core.Name("Hex2"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))), hydra.core.FieldType(hydra.core.Name("Hex3"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))), hydra.core.FieldType(hydra.core.Name("Hex4"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))), hydra.core.FieldType(hydra.core.Name("Hex5"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))), hydra.core.FieldType(hydra.core.Name("Hex6"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))), hydra.core.FieldType(hydra.core.Name("Hex7"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))), hydra.core.FieldType(hydra.core.Name("Hex8"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Hex")))))))
 
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NumericFacet_Sequence2")
-    NUMERIC_LENGTH = hydra.core.Name("NumericLength")
-    INTEGER = hydra.core.Name("Integer")
+unary_triple_expr = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("sequence"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.UnaryTripleExpr_Sequence")))), hydra.core.FieldType(hydra.core.Name("Include"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Include")))))))
 
-class NumericRange(Enum):
-    M_I_N_I_N_C_L_U_S_I_V_E = hydra.core.Name("MININCLUSIVE")
+unary_triple_expr_sequence = cast(hydra.core.Type, hydra.core.TypeRecord((hydra.core.FieldType(hydra.core.Name("Sequence"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.TripleExprLabel")))))), hydra.core.FieldType(hydra.core.Name("alts"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.UnaryTripleExpr_Sequence_Alts")))))))
 
-    M_I_N_E_X_C_L_U_S_I_V_E = hydra.core.Name("MINEXCLUSIVE")
+unary_triple_expr_sequence_alts = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("TripleConstraint"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.TripleConstraint")))), hydra.core.FieldType(hydra.core.Name("BracketedTripleExpr"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.BracketedTripleExpr")))))))
 
-    M_A_X_I_N_C_L_U_S_I_V_E = hydra.core.Name("MAXINCLUSIVE")
+value_set = cast(hydra.core.Type, hydra.core.TypeWrap(cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.ValueSetValue")))))))
 
-    M_A_X_E_X_C_L_U_S_I_V_E = hydra.core.Name("MAXEXCLUSIVE")
+value_set_value = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("IriRange"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.IriRange")))), hydra.core.FieldType(hydra.core.Name("Literal"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.Literal")))))))
 
-NumericRange.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NumericRange")
-
-class NumericLength(Enum):
-    T_O_T_A_L_D_I_G_I_T_S = hydra.core.Name("TOTALDIGITS")
-
-    F_R_A_C_T_I_O_N_D_I_G_I_T_S = hydra.core.Name("FRACTIONDIGITS")
-
-NumericLength.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NumericLength")
-
-@dataclass(frozen=True)
-class ShapeDefinition:
-    list_of_alts: frozenlist[ShapeDefinition_ListOfAlts_Elmt]
-    triple_expression: Maybe[TripleExpression]
-    list_of_annotation: frozenlist[Annotation]
-    semantic_actions: SemanticActions
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeDefinition")
-    LIST_OF_ALTS = hydra.core.Name("listOfAlts")
-    TRIPLE_EXPRESSION = hydra.core.Name("TripleExpression")
-    LIST_OF_ANNOTATION = hydra.core.Name("listOfAnnotation")
-    SEMANTIC_ACTIONS = hydra.core.Name("SemanticActions")
-
-class ShapeDefinition_ListOfAlts_ElmtIncludeSet(Node["IncludeSet"]):
-    ...
-
-class ShapeDefinition_ListOfAlts_ElmtExtraPropertySet(Node["ExtraPropertySet"]):
-    ...
-
-class ShapeDefinition_ListOfAlts_ElmtCLOSED:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, ShapeDefinition_ListOfAlts_ElmtCLOSED)
-    def __hash__(self):
-        return hash("ShapeDefinition_ListOfAlts_ElmtCLOSED")
-
-class _ShapeDefinition_ListOfAlts_ElmtMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class ShapeDefinition_ListOfAlts_Elmt(metaclass=_ShapeDefinition_ListOfAlts_ElmtMeta):
-    r"""ShapeDefinition_ListOfAlts_ElmtIncludeSet | ShapeDefinition_ListOfAlts_ElmtExtraPropertySet | ShapeDefinition_ListOfAlts_ElmtCLOSED"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt")
-    INCLUDE_SET = hydra.core.Name("IncludeSet")
-    EXTRA_PROPERTY_SET = hydra.core.Name("ExtraPropertySet")
-    C_L_O_S_E_D = hydra.core.Name("CLOSED")
-
-@dataclass(frozen=True)
-class InlineShapeDefinition:
-    list_of_alts: frozenlist[InlineShapeDefinition_ListOfAlts_Elmt]
-    triple_expression: Maybe[TripleExpression]
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeDefinition")
-    LIST_OF_ALTS = hydra.core.Name("listOfAlts")
-    TRIPLE_EXPRESSION = hydra.core.Name("TripleExpression")
-
-class InlineShapeDefinition_ListOfAlts_ElmtIncludeSet(Node["IncludeSet"]):
-    ...
-
-class InlineShapeDefinition_ListOfAlts_ElmtExtraPropertySet(Node["ExtraPropertySet"]):
-    ...
-
-class InlineShapeDefinition_ListOfAlts_ElmtCLOSED:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, InlineShapeDefinition_ListOfAlts_ElmtCLOSED)
-    def __hash__(self):
-        return hash("InlineShapeDefinition_ListOfAlts_ElmtCLOSED")
-
-class _InlineShapeDefinition_ListOfAlts_ElmtMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class InlineShapeDefinition_ListOfAlts_Elmt(metaclass=_InlineShapeDefinition_ListOfAlts_ElmtMeta):
-    r"""InlineShapeDefinition_ListOfAlts_ElmtIncludeSet | InlineShapeDefinition_ListOfAlts_ElmtExtraPropertySet | InlineShapeDefinition_ListOfAlts_ElmtCLOSED"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt")
-    INCLUDE_SET = hydra.core.Name("IncludeSet")
-    EXTRA_PROPERTY_SET = hydra.core.Name("ExtraPropertySet")
-    C_L_O_S_E_D = hydra.core.Name("CLOSED")
-
-class ExtraPropertySet(Node["frozenlist[Predicate]"]):
-    ...
-
-ExtraPropertySet.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ExtraPropertySet")
-
-class TripleExpression(Node["OneOfTripleExpr"]):
-    ...
-
-TripleExpression.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.TripleExpression")
-
-class OneOfTripleExprGroupTripleExpr(Node["GroupTripleExpr"]):
-    ...
-
-class OneOfTripleExprMultiElementOneOf(Node["MultiElementOneOf"]):
-    ...
-
-class _OneOfTripleExprMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class OneOfTripleExpr(metaclass=_OneOfTripleExprMeta):
-    r"""OneOfTripleExprGroupTripleExpr | OneOfTripleExprMultiElementOneOf"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.OneOfTripleExpr")
-    GROUP_TRIPLE_EXPR = hydra.core.Name("GroupTripleExpr")
-    MULTI_ELEMENT_ONE_OF = hydra.core.Name("MultiElementOneOf")
-
-@dataclass(frozen=True)
-class MultiElementOneOf:
-    group_triple_expr: GroupTripleExpr
-    list_of_sequence: frozenlist[GroupTripleExpr]
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.MultiElementOneOf")
-    GROUP_TRIPLE_EXPR = hydra.core.Name("GroupTripleExpr")
-    LIST_OF_SEQUENCE = hydra.core.Name("listOfSequence")
-
-class InnerTripleExprMultiElementGroup(Node["MultiElementGroup"]):
-    ...
-
-class InnerTripleExprMultiElementOneOf(Node["MultiElementOneOf"]):
-    ...
-
-class _InnerTripleExprMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class InnerTripleExpr(metaclass=_InnerTripleExprMeta):
-    r"""InnerTripleExprMultiElementGroup | InnerTripleExprMultiElementOneOf"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.InnerTripleExpr")
-    MULTI_ELEMENT_GROUP = hydra.core.Name("MultiElementGroup")
-    MULTI_ELEMENT_ONE_OF = hydra.core.Name("MultiElementOneOf")
-
-class GroupTripleExprSingleElementGroup(Node["SingleElementGroup"]):
-    ...
-
-class GroupTripleExprMultiElementGroup(Node["MultiElementGroup"]):
-    ...
-
-class _GroupTripleExprMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class GroupTripleExpr(metaclass=_GroupTripleExprMeta):
-    r"""GroupTripleExprSingleElementGroup | GroupTripleExprMultiElementGroup"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.GroupTripleExpr")
-    SINGLE_ELEMENT_GROUP = hydra.core.Name("SingleElementGroup")
-    MULTI_ELEMENT_GROUP = hydra.core.Name("MultiElementGroup")
-
-@dataclass(frozen=True)
-class SingleElementGroup:
-    unary_triple_expr: UnaryTripleExpr
-    semi: Maybe[None]
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.SingleElementGroup")
-    UNARY_TRIPLE_EXPR = hydra.core.Name("UnaryTripleExpr")
-    SEMI = hydra.core.Name("Semi")
-
-@dataclass(frozen=True)
-class MultiElementGroup:
-    unary_triple_expr: UnaryTripleExpr
-    list_of_sequence: frozenlist[UnaryTripleExpr]
-    semi: Maybe[None]
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.MultiElementGroup")
-    UNARY_TRIPLE_EXPR = hydra.core.Name("UnaryTripleExpr")
-    LIST_OF_SEQUENCE = hydra.core.Name("listOfSequence")
-    SEMI = hydra.core.Name("Semi")
-
-class UnaryTripleExprSequence(Node["UnaryTripleExpr_Sequence"]):
-    ...
-
-class UnaryTripleExprInclude(Node["Include"]):
-    ...
-
-class _UnaryTripleExprMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class UnaryTripleExpr(metaclass=_UnaryTripleExprMeta):
-    r"""UnaryTripleExprSequence | UnaryTripleExprInclude"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.UnaryTripleExpr")
-    SEQUENCE = hydra.core.Name("sequence")
-    INCLUDE = hydra.core.Name("Include")
-
-@dataclass(frozen=True)
-class UnaryTripleExpr_Sequence:
-    sequence: Maybe[TripleExprLabel]
-    alts: UnaryTripleExpr_Sequence_Alts
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.UnaryTripleExpr_Sequence")
-    SEQUENCE = hydra.core.Name("Sequence")
-    ALTS = hydra.core.Name("alts")
-
-class UnaryTripleExpr_Sequence_AltsTripleConstraint(Node["TripleConstraint"]):
-    ...
-
-class UnaryTripleExpr_Sequence_AltsBracketedTripleExpr(Node["BracketedTripleExpr"]):
-    ...
-
-class _UnaryTripleExpr_Sequence_AltsMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class UnaryTripleExpr_Sequence_Alts(metaclass=_UnaryTripleExpr_Sequence_AltsMeta):
-    r"""UnaryTripleExpr_Sequence_AltsTripleConstraint | UnaryTripleExpr_Sequence_AltsBracketedTripleExpr"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.UnaryTripleExpr_Sequence_Alts")
-    TRIPLE_CONSTRAINT = hydra.core.Name("TripleConstraint")
-    BRACKETED_TRIPLE_EXPR = hydra.core.Name("BracketedTripleExpr")
-
-@dataclass(frozen=True)
-class BracketedTripleExpr:
-    inner_triple_expr: InnerTripleExpr
-    cardinality: Maybe[Cardinality]
-    list_of_annotation: frozenlist[Annotation]
-    semantic_actions: SemanticActions
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.BracketedTripleExpr")
-    INNER_TRIPLE_EXPR = hydra.core.Name("InnerTripleExpr")
-    CARDINALITY = hydra.core.Name("Cardinality")
-    LIST_OF_ANNOTATION = hydra.core.Name("listOfAnnotation")
-    SEMANTIC_ACTIONS = hydra.core.Name("SemanticActions")
-
-@dataclass(frozen=True)
-class TripleConstraint:
-    sense_flags: Maybe[SenseFlags]
-    predicate: Predicate
-    inline_shape_expression: InlineShapeExpression
-    cardinality: Maybe[Cardinality]
-    list_of_annotation: frozenlist[Annotation]
-    semantic_actions: SemanticActions
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.TripleConstraint")
-    SENSE_FLAGS = hydra.core.Name("SenseFlags")
-    PREDICATE = hydra.core.Name("Predicate")
-    INLINE_SHAPE_EXPRESSION = hydra.core.Name("InlineShapeExpression")
-    CARDINALITY = hydra.core.Name("Cardinality")
-    LIST_OF_ANNOTATION = hydra.core.Name("listOfAnnotation")
-    SEMANTIC_ACTIONS = hydra.core.Name("SemanticActions")
-
-class CardinalityAst:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, CardinalityAst)
-    def __hash__(self):
-        return hash("CardinalityAst")
-
-class CardinalityPlus:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, CardinalityPlus)
-    def __hash__(self):
-        return hash("CardinalityPlus")
-
-class CardinalityQuest:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, CardinalityQuest)
-    def __hash__(self):
-        return hash("CardinalityQuest")
-
-class CardinalityRepeatRange(Node["RepeatRange"]):
-    ...
-
-class _CardinalityMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class Cardinality(metaclass=_CardinalityMeta):
-    r"""CardinalityAst | CardinalityPlus | CardinalityQuest | CardinalityRepeatRange"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Cardinality")
-    AST = hydra.core.Name("Ast")
-    PLUS = hydra.core.Name("Plus")
-    QUEST = hydra.core.Name("Quest")
-    REPEAT_RANGE = hydra.core.Name("RepeatRange")
-
-class SenseFlags(Node[None]):
-    ...
-
-SenseFlags.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.SenseFlags")
-
-class ValueSet(Node["frozenlist[ValueSetValue]"]):
-    ...
-
-ValueSet.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ValueSet")
-
-class ValueSetValueIriRange(Node["IriRange"]):
-    ...
-
-class ValueSetValueLiteral(Node["Literal"]):
-    ...
-
-class _ValueSetValueMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class ValueSetValue(metaclass=_ValueSetValueMeta):
-    r"""ValueSetValueIriRange | ValueSetValueLiteral"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ValueSetValue")
-    IRI_RANGE = hydra.core.Name("IriRange")
-    LITERAL = hydra.core.Name("Literal")
-
-class IriRangeSequence(Node["IriRange_Sequence"]):
-    ...
-
-class IriRangeSequence2(Node["frozenlist[Exclusion]"]):
-    ...
-
-class _IriRangeMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class IriRange(metaclass=_IriRangeMeta):
-    r"""IriRangeSequence | IriRangeSequence2"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.IriRange")
-    SEQUENCE = hydra.core.Name("sequence")
-    SEQUENCE2 = hydra.core.Name("sequence2")
-
-@dataclass(frozen=True)
-class IriRange_Sequence:
-    iri: Iri
-    sequence: Maybe[frozenlist[Exclusion]]
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.IriRange_Sequence")
-    IRI = hydra.core.Name("Iri")
-    SEQUENCE = hydra.core.Name("Sequence")
-
-class Exclusion(Node["Iri"]):
-    ...
-
-Exclusion.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Exclusion")
-
-class Include(Node["TripleExprLabel"]):
-    ...
-
-Include.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Include")
-
-@dataclass(frozen=True)
-class Annotation:
-    predicate: Predicate
-    alts: Annotation_Alts
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Annotation")
-    PREDICATE = hydra.core.Name("Predicate")
-    ALTS = hydra.core.Name("alts")
-
-class Annotation_AltsIri(Node["Iri"]):
-    ...
-
-class Annotation_AltsLiteral(Node["Literal"]):
-    ...
-
-class _Annotation_AltsMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class Annotation_Alts(metaclass=_Annotation_AltsMeta):
-    r"""Annotation_AltsIri | Annotation_AltsLiteral"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Annotation_Alts")
-    IRI = hydra.core.Name("Iri")
-    LITERAL = hydra.core.Name("Literal")
-
-class SemanticActions(Node["frozenlist[CodeDecl]"]):
-    ...
-
-SemanticActions.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.SemanticActions")
-
-@dataclass(frozen=True)
-class CodeDecl:
-    iri: Iri
-    alts: CodeDecl_Alts
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.CodeDecl")
-    IRI = hydra.core.Name("Iri")
-    ALTS = hydra.core.Name("alts")
-
-class CodeDecl_AltsCode(Node["Code"]):
-    ...
-
-class CodeDecl_AltsPercnt:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, CodeDecl_AltsPercnt)
-    def __hash__(self):
-        return hash("CodeDecl_AltsPercnt")
-
-class _CodeDecl_AltsMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class CodeDecl_Alts(metaclass=_CodeDecl_AltsMeta):
-    r"""CodeDecl_AltsCode | CodeDecl_AltsPercnt"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.CodeDecl_Alts")
-    CODE = hydra.core.Name("Code")
-    PERCNT = hydra.core.Name("Percnt")
-
-class LiteralRdfLiteral(Node["RdfLiteral"]):
-    ...
-
-class LiteralNumericLiteral(Node["NumericLiteral"]):
-    ...
-
-class LiteralBooleanLiteral(Node["BooleanLiteral"]):
-    ...
-
-class _LiteralMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class Literal(metaclass=_LiteralMeta):
-    r"""LiteralRdfLiteral | LiteralNumericLiteral | LiteralBooleanLiteral"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Literal")
-    RDF_LITERAL = hydra.core.Name("RdfLiteral")
-    NUMERIC_LITERAL = hydra.core.Name("NumericLiteral")
-    BOOLEAN_LITERAL = hydra.core.Name("BooleanLiteral")
-
-class PredicateIri(Node["Iri"]):
-    ...
-
-class PredicateRdfType(Node["RdfType"]):
-    ...
-
-class _PredicateMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class Predicate(metaclass=_PredicateMeta):
-    r"""PredicateIri | PredicateRdfType"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Predicate")
-    IRI = hydra.core.Name("Iri")
-    RDF_TYPE = hydra.core.Name("RdfType")
-
-class Datatype(Node["Iri"]):
-    ...
-
-Datatype.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Datatype")
-
-class ShapeExprLabelIri(Node["Iri"]):
-    ...
-
-class ShapeExprLabelBlankNode(Node["BlankNode"]):
-    ...
-
-class _ShapeExprLabelMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class ShapeExprLabel(metaclass=_ShapeExprLabelMeta):
-    r"""ShapeExprLabelIri | ShapeExprLabelBlankNode"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.ShapeExprLabel")
-    IRI = hydra.core.Name("Iri")
-    BLANK_NODE = hydra.core.Name("BlankNode")
-
-class TripleExprLabelIri(Node["Iri"]):
-    ...
-
-class TripleExprLabelBlankNode(Node["BlankNode"]):
-    ...
-
-class _TripleExprLabelMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class TripleExprLabel(metaclass=_TripleExprLabelMeta):
-    r"""TripleExprLabelIri | TripleExprLabelBlankNode"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.TripleExprLabel")
-    IRI = hydra.core.Name("Iri")
-    BLANK_NODE = hydra.core.Name("BlankNode")
-
-class NumericLiteralInteger(Node["Integer"]):
-    ...
-
-class NumericLiteralDecimal(Node["Decimal"]):
-    ...
-
-class NumericLiteralDouble(Node["Double"]):
-    ...
-
-class _NumericLiteralMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class NumericLiteral(metaclass=_NumericLiteralMeta):
-    r"""NumericLiteralInteger | NumericLiteralDecimal | NumericLiteralDouble"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.NumericLiteral")
-    INTEGER = hydra.core.Name("Integer")
-    DECIMAL = hydra.core.Name("Decimal")
-    DOUBLE = hydra.core.Name("Double")
-
-@dataclass(frozen=True)
-class RdfLiteral:
-    string: String
-    alts: Maybe[RdfLiteral_Alts_Option]
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.RdfLiteral")
-    STRING = hydra.core.Name("String")
-    ALTS = hydra.core.Name("Alts")
-
-class RdfLiteral_Alts_OptionLangTag(Node["LangTag"]):
-    ...
-
-class RdfLiteral_Alts_OptionSequence(Node["Datatype"]):
-    ...
-
-class _RdfLiteral_Alts_OptionMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class RdfLiteral_Alts_Option(metaclass=_RdfLiteral_Alts_OptionMeta):
-    r"""RdfLiteral_Alts_OptionLangTag | RdfLiteral_Alts_OptionSequence"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.RdfLiteral_Alts_Option")
-    LANG_TAG = hydra.core.Name("LangTag")
-    SEQUENCE = hydra.core.Name("sequence")
-
-class BooleanLiteral(Enum):
-    TRUE = hydra.core.Name("True")
-
-    FALSE = hydra.core.Name("False")
-
-BooleanLiteral.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.BooleanLiteral")
-
-class StringStringLiteral1(Node["StringLiteral1"]):
-    ...
-
-class StringStringLiteralLong1(Node["StringLiteralLong1"]):
-    ...
-
-class StringStringLiteral2(Node["StringLiteral2"]):
-    ...
-
-class StringStringLiteralLong2(Node["StringLiteralLong2"]):
-    ...
-
-class _StringMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class String(metaclass=_StringMeta):
-    r"""StringStringLiteral1 | StringStringLiteralLong1 | StringStringLiteral2 | StringStringLiteralLong2"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.String")
-    STRING_LITERAL1 = hydra.core.Name("StringLiteral1")
-    STRING_LITERAL_LONG1 = hydra.core.Name("StringLiteralLong1")
-    STRING_LITERAL2 = hydra.core.Name("StringLiteral2")
-    STRING_LITERAL_LONG2 = hydra.core.Name("StringLiteralLong2")
-
-class IriIriRef(Node["IriRef"]):
-    ...
-
-class IriPrefixedName(Node["PrefixedName"]):
-    ...
-
-class _IriMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class Iri(metaclass=_IriMeta):
-    r"""IriIriRef | IriPrefixedName"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Iri")
-    IRI_REF = hydra.core.Name("IriRef")
-    PREFIXED_NAME = hydra.core.Name("PrefixedName")
-
-class PrefixedNamePnameLn(Node["PnameLn"]):
-    ...
-
-class PrefixedNamePnameNs(Node["PnameNs"]):
-    ...
-
-class _PrefixedNameMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class PrefixedName(metaclass=_PrefixedNameMeta):
-    r"""PrefixedNamePnameLn | PrefixedNamePnameNs"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PrefixedName")
-    PNAME_LN = hydra.core.Name("PnameLn")
-    PNAME_NS = hydra.core.Name("PnameNs")
-
-class BlankNode(Node["BlankNodeLabel"]):
-    ...
-
-BlankNode.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.BlankNode")
-
-class IncludeSet(Node["frozenlist[ShapeExprLabel]"]):
-    ...
-
-IncludeSet.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.IncludeSet")
-
-class Code(Node["frozenlist[Code_Elmt]"]):
-    ...
-
-Code.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Code")
-
-class Code_ElmtRegex(Node[str]):
-    ...
-
-class Code_ElmtSequence(Node[str]):
-    ...
-
-class Code_ElmtUchar(Node["Uchar"]):
-    ...
-
-class _Code_ElmtMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class Code_Elmt(metaclass=_Code_ElmtMeta):
-    r"""Code_ElmtRegex | Code_ElmtSequence | Code_ElmtUchar"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Code_Elmt")
-    REGEX = hydra.core.Name("regex")
-    SEQUENCE = hydra.core.Name("sequence")
-    UCHAR = hydra.core.Name("Uchar")
-
-@dataclass(frozen=True)
-class RepeatRange:
-    integer: Integer
-    sequence: Maybe[Maybe[Maybe[RepeatRange_Sequence_Option_Option_Option]]]
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.RepeatRange")
-    INTEGER = hydra.core.Name("Integer")
-    SEQUENCE = hydra.core.Name("Sequence")
-
-class RepeatRange_Sequence_Option_Option_OptionInteger(Node["Integer"]):
-    ...
-
-class RepeatRange_Sequence_Option_Option_OptionAst:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, RepeatRange_Sequence_Option_Option_OptionAst)
-    def __hash__(self):
-        return hash("RepeatRange_Sequence_Option_Option_OptionAst")
-
-class _RepeatRange_Sequence_Option_Option_OptionMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class RepeatRange_Sequence_Option_Option_Option(metaclass=_RepeatRange_Sequence_Option_Option_OptionMeta):
-    r"""RepeatRange_Sequence_Option_Option_OptionInteger | RepeatRange_Sequence_Option_Option_OptionAst"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.RepeatRange_Sequence_Option_Option_Option")
-    INTEGER = hydra.core.Name("Integer")
-    AST = hydra.core.Name("Ast")
-
-class RdfType(Node[None]):
-    ...
-
-RdfType.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.RdfType")
-
-class IriRef(Node["frozenlist[IriRef_Elmt]"]):
-    ...
-
-IriRef.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.IriRef")
-
-class IriRef_ElmtRegex(Node[str]):
-    ...
-
-class IriRef_ElmtUchar(Node["Uchar"]):
-    ...
-
-class _IriRef_ElmtMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class IriRef_Elmt(metaclass=_IriRef_ElmtMeta):
-    r"""IriRef_ElmtRegex | IriRef_ElmtUchar"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.IriRef_Elmt")
-    REGEX = hydra.core.Name("regex")
-    UCHAR = hydra.core.Name("Uchar")
-
-class PnameNs(Node["Maybe[PnPrefix]"]):
-    ...
-
-PnameNs.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnameNs")
-
-@dataclass(frozen=True)
-class PnameLn:
-    pname_ns: PnameNs
-    pn_local: PnLocal
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnameLn")
-    PNAME_NS = hydra.core.Name("PnameNs")
-    PN_LOCAL = hydra.core.Name("PnLocal")
-
-class AtpNameNs(Node["Maybe[PnPrefix]"]):
-    ...
-
-AtpNameNs.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.AtpNameNs")
-
-@dataclass(frozen=True)
-class AtpNameLn:
-    pname_ns: PnameNs
-    pn_local: PnLocal
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.AtpNameLn")
-    PNAME_NS = hydra.core.Name("PnameNs")
-    PN_LOCAL = hydra.core.Name("PnLocal")
-
-@dataclass(frozen=True)
-class Regexp:
-    list_of_alts: frozenlist[Regexp_ListOfAlts_Elmt]
-    list_of_regex: frozenlist[str]
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Regexp")
-    LIST_OF_ALTS = hydra.core.Name("listOfAlts")
-    LIST_OF_REGEX = hydra.core.Name("listOfRegex")
-
-class Regexp_ListOfAlts_ElmtRegex(Node[str]):
-    ...
-
-class Regexp_ListOfAlts_ElmtSequence(Node[str]):
-    ...
-
-class Regexp_ListOfAlts_ElmtUchar(Node["Uchar"]):
-    ...
-
-class _Regexp_ListOfAlts_ElmtMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class Regexp_ListOfAlts_Elmt(metaclass=_Regexp_ListOfAlts_ElmtMeta):
-    r"""Regexp_ListOfAlts_ElmtRegex | Regexp_ListOfAlts_ElmtSequence | Regexp_ListOfAlts_ElmtUchar"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Regexp_ListOfAlts_Elmt")
-    REGEX = hydra.core.Name("regex")
-    SEQUENCE = hydra.core.Name("sequence")
-    UCHAR = hydra.core.Name("Uchar")
-
-@dataclass(frozen=True)
-class BlankNodeLabel:
-    alts: BlankNodeLabel_Alts
-    list_of_alts: Maybe[frozenlist[BlankNodeLabel_ListOfAlts_Option_Elmt]]
-    pn_chars: PnChars
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.BlankNodeLabel")
-    ALTS = hydra.core.Name("alts")
-    LIST_OF_ALTS = hydra.core.Name("ListOfAlts")
-    PN_CHARS = hydra.core.Name("PnChars")
-
-class BlankNodeLabel_AltsPnCharsU(Node["PnCharsU"]):
-    ...
-
-class BlankNodeLabel_AltsRegex(Node[str]):
-    ...
-
-class _BlankNodeLabel_AltsMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class BlankNodeLabel_Alts(metaclass=_BlankNodeLabel_AltsMeta):
-    r"""BlankNodeLabel_AltsPnCharsU | BlankNodeLabel_AltsRegex"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.BlankNodeLabel_Alts")
-    PN_CHARS_U = hydra.core.Name("PnCharsU")
-    REGEX = hydra.core.Name("regex")
-
-class BlankNodeLabel_ListOfAlts_Option_ElmtPnChars(Node["PnChars"]):
-    ...
-
-class BlankNodeLabel_ListOfAlts_Option_ElmtPeriod:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, BlankNodeLabel_ListOfAlts_Option_ElmtPeriod)
-    def __hash__(self):
-        return hash("BlankNodeLabel_ListOfAlts_Option_ElmtPeriod")
-
-class _BlankNodeLabel_ListOfAlts_Option_ElmtMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class BlankNodeLabel_ListOfAlts_Option_Elmt(metaclass=_BlankNodeLabel_ListOfAlts_Option_ElmtMeta):
-    r"""BlankNodeLabel_ListOfAlts_Option_ElmtPnChars | BlankNodeLabel_ListOfAlts_Option_ElmtPeriod"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt")
-    PN_CHARS = hydra.core.Name("PnChars")
-    PERIOD = hydra.core.Name("Period")
-
-class LangTag(Node[str]):
-    ...
-
-LangTag.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.LangTag")
-
-class Integer(Node[str]):
-    ...
-
-Integer.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Integer")
-
-class Decimal(Node[str]):
-    ...
-
-Decimal.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Decimal")
-
-class Double(Node[str]):
-    ...
-
-Double.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Double")
-
-class StringLiteral1(Node["frozenlist[StringLiteral1_Elmt]"]):
-    ...
-
-StringLiteral1.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteral1")
-
-class StringLiteral1_ElmtRegex(Node[str]):
-    ...
-
-class StringLiteral1_ElmtEchar(Node["Echar"]):
-    ...
-
-class StringLiteral1_ElmtUchar(Node["Uchar"]):
-    ...
-
-class _StringLiteral1_ElmtMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class StringLiteral1_Elmt(metaclass=_StringLiteral1_ElmtMeta):
-    r"""StringLiteral1_ElmtRegex | StringLiteral1_ElmtEchar | StringLiteral1_ElmtUchar"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteral1_Elmt")
-    REGEX = hydra.core.Name("regex")
-    ECHAR = hydra.core.Name("Echar")
-    UCHAR = hydra.core.Name("Uchar")
-
-class StringLiteral2(Node["frozenlist[StringLiteral2_Elmt]"]):
-    ...
-
-StringLiteral2.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteral2")
-
-class StringLiteral2_ElmtRegex(Node[str]):
-    ...
-
-class StringLiteral2_ElmtEchar(Node["Echar"]):
-    ...
-
-class StringLiteral2_ElmtUchar(Node["Uchar"]):
-    ...
-
-class _StringLiteral2_ElmtMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class StringLiteral2_Elmt(metaclass=_StringLiteral2_ElmtMeta):
-    r"""StringLiteral2_ElmtRegex | StringLiteral2_ElmtEchar | StringLiteral2_ElmtUchar"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteral2_Elmt")
-    REGEX = hydra.core.Name("regex")
-    ECHAR = hydra.core.Name("Echar")
-    UCHAR = hydra.core.Name("Uchar")
-
-class StringLiteralLong1(Node["frozenlist[StringLiteralLong1_Elmt]"]):
-    ...
-
-StringLiteralLong1.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1")
-
-class StringLiteralLong1_ElmtSequence(Node["StringLiteralLong1_Elmt_Sequence"]):
-    ...
-
-class StringLiteralLong1_ElmtEchar(Node["Echar"]):
-    ...
-
-class StringLiteralLong1_ElmtUchar(Node["Uchar"]):
-    ...
-
-class _StringLiteralLong1_ElmtMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class StringLiteralLong1_Elmt(metaclass=_StringLiteralLong1_ElmtMeta):
-    r"""StringLiteralLong1_ElmtSequence | StringLiteralLong1_ElmtEchar | StringLiteralLong1_ElmtUchar"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt")
-    SEQUENCE = hydra.core.Name("sequence")
-    ECHAR = hydra.core.Name("Echar")
-    UCHAR = hydra.core.Name("Uchar")
-
-@dataclass(frozen=True)
-class StringLiteralLong1_Elmt_Sequence:
-    alts: Maybe[StringLiteralLong1_Elmt_Sequence_Alts_Option]
-    regex: str
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence")
-    ALTS = hydra.core.Name("Alts")
-    REGEX = hydra.core.Name("regex")
-
-class StringLiteralLong1_Elmt_Sequence_Alts_OptionApos:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, StringLiteralLong1_Elmt_Sequence_Alts_OptionApos)
-    def __hash__(self):
-        return hash("StringLiteralLong1_Elmt_Sequence_Alts_OptionApos")
-
-class StringLiteralLong1_Elmt_Sequence_Alts_OptionSequence(Node["StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence"]):
-    ...
-
-class _StringLiteralLong1_Elmt_Sequence_Alts_OptionMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class StringLiteralLong1_Elmt_Sequence_Alts_Option(metaclass=_StringLiteralLong1_Elmt_Sequence_Alts_OptionMeta):
-    r"""StringLiteralLong1_Elmt_Sequence_Alts_OptionApos | StringLiteralLong1_Elmt_Sequence_Alts_OptionSequence"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option")
-    APOS = hydra.core.Name("Apos")
-    SEQUENCE = hydra.core.Name("sequence")
-
-@dataclass(frozen=True)
-class StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence:
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence")
-
-class StringLiteralLong2(Node["frozenlist[StringLiteralLong2_Elmt]"]):
-    ...
-
-StringLiteralLong2.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2")
-
-class StringLiteralLong2_ElmtSequence(Node["StringLiteralLong2_Elmt_Sequence"]):
-    ...
-
-class StringLiteralLong2_ElmtEchar(Node["Echar"]):
-    ...
-
-class StringLiteralLong2_ElmtUchar(Node["Uchar"]):
-    ...
-
-class _StringLiteralLong2_ElmtMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class StringLiteralLong2_Elmt(metaclass=_StringLiteralLong2_ElmtMeta):
-    r"""StringLiteralLong2_ElmtSequence | StringLiteralLong2_ElmtEchar | StringLiteralLong2_ElmtUchar"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt")
-    SEQUENCE = hydra.core.Name("sequence")
-    ECHAR = hydra.core.Name("Echar")
-    UCHAR = hydra.core.Name("Uchar")
-
-@dataclass(frozen=True)
-class StringLiteralLong2_Elmt_Sequence:
-    alts: Maybe[StringLiteralLong2_Elmt_Sequence_Alts_Option]
-    regex: str
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt_Sequence")
-    ALTS = hydra.core.Name("Alts")
-    REGEX = hydra.core.Name("regex")
-
-class StringLiteralLong2_Elmt_Sequence_Alts_OptionQuot:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, StringLiteralLong2_Elmt_Sequence_Alts_OptionQuot)
-    def __hash__(self):
-        return hash("StringLiteralLong2_Elmt_Sequence_Alts_OptionQuot")
-
-class StringLiteralLong2_Elmt_Sequence_Alts_OptionSequence(Node["StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence"]):
-    ...
-
-class _StringLiteralLong2_Elmt_Sequence_Alts_OptionMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class StringLiteralLong2_Elmt_Sequence_Alts_Option(metaclass=_StringLiteralLong2_Elmt_Sequence_Alts_OptionMeta):
-    r"""StringLiteralLong2_Elmt_Sequence_Alts_OptionQuot | StringLiteralLong2_Elmt_Sequence_Alts_OptionSequence"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option")
-    QUOT = hydra.core.Name("Quot")
-    SEQUENCE = hydra.core.Name("sequence")
-
-@dataclass(frozen=True)
-class StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence:
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence")
-
-class UcharSequence(Node["Uchar_Sequence"]):
-    ...
-
-class UcharSequence2(Node["Uchar_Sequence2"]):
-    ...
-
-class _UcharMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class Uchar(metaclass=_UcharMeta):
-    r"""UcharSequence | UcharSequence2"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Uchar")
-    SEQUENCE = hydra.core.Name("sequence")
-    SEQUENCE2 = hydra.core.Name("sequence2")
-
-@dataclass(frozen=True)
-class Uchar_Sequence:
-    hex: Hex
-    hex2: Hex
-    hex3: Hex
-    hex4: Hex
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Uchar_Sequence")
-    HEX = hydra.core.Name("Hex")
-    HEX2 = hydra.core.Name("Hex2")
-    HEX3 = hydra.core.Name("Hex3")
-    HEX4 = hydra.core.Name("Hex4")
-
-@dataclass(frozen=True)
-class Uchar_Sequence2:
-    hex: Hex
-    hex2: Hex
-    hex3: Hex
-    hex4: Hex
-    hex5: Hex
-    hex6: Hex
-    hex7: Hex
-    hex8: Hex
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Uchar_Sequence2")
-    HEX = hydra.core.Name("Hex")
-    HEX2 = hydra.core.Name("Hex2")
-    HEX3 = hydra.core.Name("Hex3")
-    HEX4 = hydra.core.Name("Hex4")
-    HEX5 = hydra.core.Name("Hex5")
-    HEX6 = hydra.core.Name("Hex6")
-    HEX7 = hydra.core.Name("Hex7")
-    HEX8 = hydra.core.Name("Hex8")
-
-class Echar(Node[str]):
-    ...
-
-Echar.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Echar")
-
-class PnCharsBaseRegex(Node[str]):
-    ...
-
-class PnCharsBaseRegex2(Node[str]):
-    ...
-
-class _PnCharsBaseMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class PnCharsBase(metaclass=_PnCharsBaseMeta):
-    r"""PnCharsBaseRegex | PnCharsBaseRegex2"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnCharsBase")
-    REGEX = hydra.core.Name("regex")
-    REGEX2 = hydra.core.Name("regex2")
-
-class PnCharsUPnCharsBase(Node["PnCharsBase"]):
-    ...
-
-class PnCharsULowbar:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, PnCharsULowbar)
-    def __hash__(self):
-        return hash("PnCharsULowbar")
-
-class _PnCharsUMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class PnCharsU(metaclass=_PnCharsUMeta):
-    r"""PnCharsUPnCharsBase | PnCharsULowbar"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnCharsU")
-    PN_CHARS_BASE = hydra.core.Name("PnCharsBase")
-    LOWBAR = hydra.core.Name("Lowbar")
-
-class PnCharsPnCharsU(Node["PnCharsU"]):
-    ...
-
-class PnCharsMinus:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, PnCharsMinus)
-    def __hash__(self):
-        return hash("PnCharsMinus")
-
-class PnCharsRegex(Node[str]):
-    ...
-
-class _PnCharsMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class PnChars(metaclass=_PnCharsMeta):
-    r"""PnCharsPnCharsU | PnCharsMinus | PnCharsRegex"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnChars")
-    PN_CHARS_U = hydra.core.Name("PnCharsU")
-    MINUS = hydra.core.Name("Minus")
-    REGEX = hydra.core.Name("regex")
-
-@dataclass(frozen=True)
-class PnPrefix:
-    pn_chars_base: PnCharsBase
-    sequence: Maybe[PnPrefix_Sequence_Option]
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnPrefix")
-    PN_CHARS_BASE = hydra.core.Name("PnCharsBase")
-    SEQUENCE = hydra.core.Name("Sequence")
-
-@dataclass(frozen=True)
-class PnPrefix_Sequence_Option:
-    alts: PnPrefix_Sequence_Option_Alts
-    pn_chars: PnChars
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnPrefix_Sequence_Option")
-    ALTS = hydra.core.Name("alts")
-    PN_CHARS = hydra.core.Name("PnChars")
-
-class PnPrefix_Sequence_Option_AltsPnChars(Node["PnChars"]):
-    ...
-
-class PnPrefix_Sequence_Option_AltsPeriod:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, PnPrefix_Sequence_Option_AltsPeriod)
-    def __hash__(self):
-        return hash("PnPrefix_Sequence_Option_AltsPeriod")
-
-class _PnPrefix_Sequence_Option_AltsMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class PnPrefix_Sequence_Option_Alts(metaclass=_PnPrefix_Sequence_Option_AltsMeta):
-    r"""PnPrefix_Sequence_Option_AltsPnChars | PnPrefix_Sequence_Option_AltsPeriod"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnPrefix_Sequence_Option_Alts")
-    PN_CHARS = hydra.core.Name("PnChars")
-    PERIOD = hydra.core.Name("Period")
-
-@dataclass(frozen=True)
-class PnLocal:
-    alts: PnLocal_Alts
-    sequence: Maybe[PnLocal_Sequence_Option]
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal")
-    ALTS = hydra.core.Name("alts")
-    SEQUENCE = hydra.core.Name("Sequence")
-
-class PnLocal_AltsPnCharsU(Node["PnCharsU"]):
-    ...
-
-class PnLocal_AltsColon:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, PnLocal_AltsColon)
-    def __hash__(self):
-        return hash("PnLocal_AltsColon")
-
-class PnLocal_AltsRegex(Node[str]):
-    ...
-
-class PnLocal_AltsPlx(Node["Plx"]):
-    ...
-
-class _PnLocal_AltsMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class PnLocal_Alts(metaclass=_PnLocal_AltsMeta):
-    r"""PnLocal_AltsPnCharsU | PnLocal_AltsColon | PnLocal_AltsRegex | PnLocal_AltsPlx"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal_Alts")
-    PN_CHARS_U = hydra.core.Name("PnCharsU")
-    COLON = hydra.core.Name("Colon")
-    REGEX = hydra.core.Name("regex")
-    PLX = hydra.core.Name("Plx")
-
-@dataclass(frozen=True)
-class PnLocal_Sequence_Option:
-    list_of_alts: frozenlist[PnLocal_Sequence_Option_ListOfAlts_Elmt]
-    alts: PnLocal_Sequence_Option_Alts
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal_Sequence_Option")
-    LIST_OF_ALTS = hydra.core.Name("listOfAlts")
-    ALTS = hydra.core.Name("alts")
-
-class PnLocal_Sequence_Option_ListOfAlts_ElmtPnChars(Node["PnChars"]):
-    ...
-
-class PnLocal_Sequence_Option_ListOfAlts_ElmtPeriod:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, PnLocal_Sequence_Option_ListOfAlts_ElmtPeriod)
-    def __hash__(self):
-        return hash("PnLocal_Sequence_Option_ListOfAlts_ElmtPeriod")
-
-class PnLocal_Sequence_Option_ListOfAlts_ElmtColon:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, PnLocal_Sequence_Option_ListOfAlts_ElmtColon)
-    def __hash__(self):
-        return hash("PnLocal_Sequence_Option_ListOfAlts_ElmtColon")
-
-class PnLocal_Sequence_Option_ListOfAlts_ElmtPlx(Node["Plx"]):
-    ...
-
-class _PnLocal_Sequence_Option_ListOfAlts_ElmtMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class PnLocal_Sequence_Option_ListOfAlts_Elmt(metaclass=_PnLocal_Sequence_Option_ListOfAlts_ElmtMeta):
-    r"""PnLocal_Sequence_Option_ListOfAlts_ElmtPnChars | PnLocal_Sequence_Option_ListOfAlts_ElmtPeriod | PnLocal_Sequence_Option_ListOfAlts_ElmtColon | PnLocal_Sequence_Option_ListOfAlts_ElmtPlx"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt")
-    PN_CHARS = hydra.core.Name("PnChars")
-    PERIOD = hydra.core.Name("Period")
-    COLON = hydra.core.Name("Colon")
-    PLX = hydra.core.Name("Plx")
-
-class PnLocal_Sequence_Option_AltsPnChars(Node["PnChars"]):
-    ...
-
-class PnLocal_Sequence_Option_AltsColon:
-    __slots__ = ()
-    def __eq__(self, other):
-        return isinstance(other, PnLocal_Sequence_Option_AltsColon)
-    def __hash__(self):
-        return hash("PnLocal_Sequence_Option_AltsColon")
-
-class PnLocal_Sequence_Option_AltsPlx(Node["Plx"]):
-    ...
-
-class _PnLocal_Sequence_Option_AltsMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class PnLocal_Sequence_Option_Alts(metaclass=_PnLocal_Sequence_Option_AltsMeta):
-    r"""PnLocal_Sequence_Option_AltsPnChars | PnLocal_Sequence_Option_AltsColon | PnLocal_Sequence_Option_AltsPlx"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnLocal_Sequence_Option_Alts")
-    PN_CHARS = hydra.core.Name("PnChars")
-    COLON = hydra.core.Name("Colon")
-    PLX = hydra.core.Name("Plx")
-
-class PlxPercent(Node["Percent"]):
-    ...
-
-class PlxPnLocalEsc(Node["PnLocalEsc"]):
-    ...
-
-class _PlxMeta(type):
-    def __getitem__(cls, item):
-        return object
-
-class Plx(metaclass=_PlxMeta):
-    r"""PlxPercent | PlxPnLocalEsc"""
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Plx")
-    PERCENT = hydra.core.Name("Percent")
-    PN_LOCAL_ESC = hydra.core.Name("PnLocalEsc")
-
-@dataclass(frozen=True)
-class Percent:
-    hex: Hex
-    hex2: Hex
-
-    TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Percent")
-    HEX = hydra.core.Name("Hex")
-    HEX2 = hydra.core.Name("Hex2")
-
-class Hex(Node[str]):
-    ...
-
-Hex.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.Hex")
-
-class PnLocalEsc(Node[str]):
-    ...
-
-PnLocalEsc.TYPE_ = hydra.core.Name("hydra.ext.io.shex.syntax.PnLocalEsc")
+xs_facet = cast(hydra.core.Type, hydra.core.TypeUnion((hydra.core.FieldType(hydra.core.Name("StringFacet"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.StringFacet")))), hydra.core.FieldType(hydra.core.Name("NumericFacet"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.ext.io.shex.syntax.NumericFacet")))))))

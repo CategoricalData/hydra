@@ -90,7 +90,7 @@ def encode_either_list_list(e: Either[frozenlist[frozenlist[int]], frozenlist[in
 def transform_module(m: hydra.module.Module) -> hydra.module.Module:
     r"""Transform module with generation namespace."""
 
-    return hydra.module.Module(add_generation_prefix(m.namespace), m.elements, m.term_dependencies, m.type_dependencies, m.description)
+    return hydra.module.Module(add_generation_prefix(m.namespace), m.definitions, m.term_dependencies, m.type_dependencies, m.description)
 
 def transform_test_case(tcm: hydra.testing.TestCaseWithMetadata) -> Maybe[hydra.testing.TestCaseWithMetadata]:
     r"""Transform a test case to DelegatedEvaluationTestCase if applicable."""

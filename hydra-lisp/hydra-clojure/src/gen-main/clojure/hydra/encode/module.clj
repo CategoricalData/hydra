@@ -4,7 +4,7 @@
 
 (declare hydra_encode_module_term_definition hydra_encode_module_type_definition hydra_encode_module_definition hydra_encode_module_file_extension hydra_encode_module_namespace hydra_encode_module_module hydra_encode_module_namespaces hydra_encode_module_qualified_name)
 
-(def hydra_encode_module_term_definition (fn [x] (list :record (->hydra_core_record "hydra.module.TermDefinition" (list (->hydra_core_field "name" (hydra_encode_core_name ((fn [v] (:name v)) x))) (->hydra_core_field "term" (hydra_encode_core_term ((fn [v] (:term v)) x))) (->hydra_core_field "type" (hydra_encode_core_type_scheme ((fn [v] (:type v)) x))))))))
+(def hydra_encode_module_term_definition (fn [x] (list :record (->hydra_core_record "hydra.module.TermDefinition" (list (->hydra_core_field "name" (hydra_encode_core_name ((fn [v] (:name v)) x))) (->hydra_core_field "term" (hydra_encode_core_term ((fn [v] (:term v)) x))) (->hydra_core_field "type" ((fn [opt] (list :maybe ((hydra_lib_maybes_map hydra_encode_core_type_scheme) opt))) ((fn [v] (:type v)) x))))))))
 
 (def hydra_encode_module_type_definition (fn [x] (list :record (->hydra_core_record "hydra.module.TypeDefinition" (list (->hydra_core_field "name" (hydra_encode_core_name ((fn [v] (:name v)) x))) (->hydra_core_field "type" (hydra_encode_core_type ((fn [v] (:type v)) x))))))))
 
@@ -14,7 +14,7 @@
 
 (def hydra_encode_module_namespace (fn [x] (list :wrap (->hydra_core_wrapped_term "hydra.module.Namespace" ((fn [x] (list :literal (list :string x))) ((fn [v] v) x))))))
 
-(def hydra_encode_module_module (fn [x] (list :record (->hydra_core_record "hydra.module.Module" (list (->hydra_core_field "namespace" (hydra_encode_module_namespace ((fn [v] (:namespace v)) x))) (->hydra_core_field "elements" ((fn [xs] (list :list ((hydra_lib_lists_map hydra_encode_core_binding) xs))) ((fn [v] (:elements v)) x))) (->hydra_core_field "termDependencies" ((fn [xs] (list :list ((hydra_lib_lists_map hydra_encode_module_namespace) xs))) ((fn [v] (:term_dependencies v)) x))) (->hydra_core_field "typeDependencies" ((fn [xs] (list :list ((hydra_lib_lists_map hydra_encode_module_namespace) xs))) ((fn [v] (:type_dependencies v)) x))) (->hydra_core_field "description" ((fn [opt] (list :maybe ((hydra_lib_maybes_map (fn [x] (list :literal (list :string x)))) opt))) ((fn [v] (:description v)) x))))))))
+(def hydra_encode_module_module (fn [x] (list :record (->hydra_core_record "hydra.module.Module" (list (->hydra_core_field "namespace" (hydra_encode_module_namespace ((fn [v] (:namespace v)) x))) (->hydra_core_field "definitions" ((fn [xs] (list :list ((hydra_lib_lists_map hydra_encode_module_definition) xs))) ((fn [v] (:definitions v)) x))) (->hydra_core_field "termDependencies" ((fn [xs] (list :list ((hydra_lib_lists_map hydra_encode_module_namespace) xs))) ((fn [v] (:term_dependencies v)) x))) (->hydra_core_field "typeDependencies" ((fn [xs] (list :list ((hydra_lib_lists_map hydra_encode_module_namespace) xs))) ((fn [v] (:type_dependencies v)) x))) (->hydra_core_field "description" ((fn [opt] (list :maybe ((hydra_lib_maybes_map (fn [x] (list :literal (list :string x)))) opt))) ((fn [v] (:description v)) x))))))))
 
 (def hydra_encode_module_namespaces (fn [n] (fn [x] (list :record (->hydra_core_record "hydra.module.Namespaces" (list (->hydra_core_field "focus" ((fn [p] (list :pair (((hydra_lib_pairs_bimap hydra_encode_module_namespace) n) p))) ((fn [v] (:focus v)) x))) (->hydra_core_field "mapping" ((fn [m] (list :map (((hydra_lib_maps_bimap hydra_encode_module_namespace) n) m))) ((fn [v] (:mapping v)) x)))))))))
 

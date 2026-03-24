@@ -30,11 +30,8 @@ def error_other(x: hydra.phantoms.TTerm[hydra.errors.OtherError]) -> hydra.phant
 def error_undefined_field(x: hydra.phantoms.TTerm[hydra.error.core.UndefinedFieldError]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.errors.Error"), hydra.core.Field(hydra.core.Name("undefinedField"), x.value)))))
 
-def error_undefined_term(x: hydra.phantoms.TTerm[hydra.error.core.UndefinedTermError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.errors.Error"), hydra.core.Field(hydra.core.Name("undefinedTerm"), x.value)))))
-
-def error_undefined_type(x: hydra.phantoms.TTerm[hydra.error.core.UndefinedTypeError]) -> hydra.phantoms.TTerm:
-    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.errors.Error"), hydra.core.Field(hydra.core.Name("undefinedType"), x.value)))))
+def error_undefined_term_variable(x: hydra.phantoms.TTerm[hydra.error.core.UndefinedTermVariableError]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.errors.Error"), hydra.core.Field(hydra.core.Name("undefinedTermVariable"), x.value)))))
 
 def error_unexpected_term_variant(x: hydra.phantoms.TTerm[hydra.error.core.UnexpectedTermVariantError]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.errors.Error"), hydra.core.Field(hydra.core.Name("unexpectedTermVariant"), x.value)))))
@@ -44,6 +41,9 @@ def error_unexpected_type_variant(x: hydra.phantoms.TTerm[hydra.error.core.Unexp
 
 def error_unification(x: hydra.phantoms.TTerm[hydra.errors.UnificationError]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.errors.Error"), hydra.core.Field(hydra.core.Name("unification"), x.value)))))
+
+def error_untyped_term_variable(x: hydra.phantoms.TTerm[hydra.error.core.UntypedTermVariableError]) -> hydra.phantoms.TTerm:
+    return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.errors.Error"), hydra.core.Field(hydra.core.Name("untypedTermVariable"), x.value)))))
 
 def other_error(x: hydra.phantoms.TTerm[str]) -> hydra.phantoms.TTerm:
     return hydra.phantoms.TTerm(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.errors.OtherError"), x.value))))

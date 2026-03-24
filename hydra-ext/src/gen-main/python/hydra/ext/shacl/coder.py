@@ -257,6 +257,9 @@ def encode_type(tname: hydra.core.Name, typ: hydra.core.Type, cx: hydra.context.
     def any() -> Either[T0, hydra.ext.org.w3.shacl.model.CommonProperties]:
         return Right(common(()))
     match hydra.rewriting.deannotate_type(typ):
+        case hydra.core.TypeEither():
+            return any()
+
         case hydra.core.TypeList():
             return any()
 
@@ -264,6 +267,9 @@ def encode_type(tname: hydra.core.Name, typ: hydra.core.Type, cx: hydra.context.
             return Right(encode_literal_type(lt))
 
         case hydra.core.TypeMap():
+            return any()
+
+        case hydra.core.TypePair():
             return any()
 
         case hydra.core.TypeWrap():
@@ -278,6 +284,12 @@ def encode_type(tname: hydra.core.Name, typ: hydra.core.Type, cx: hydra.context.
         case hydra.core.TypeUnion(value=fts2):
             return hydra.lib.eithers.map((lambda _props: common((cast(hydra.ext.org.w3.shacl.model.CommonConstraint, hydra.ext.org.w3.shacl.model.CommonConstraintXone(hydra.lib.sets.from_list(hydra.lib.lists.map((lambda _p: cast(hydra.ext.org.w3.shacl.model.Reference, hydra.ext.org.w3.shacl.model.ReferenceAnonymous(node((cast(hydra.ext.org.w3.shacl.model.CommonConstraint, hydra.ext.org.w3.shacl.model.CommonConstraintProperty(hydra.lib.sets.from_list((cast(hydra.ext.org.w3.shacl.model.Reference, hydra.ext.org.w3.shacl.model.ReferenceDefinition(_p)),)))),))))), _props)))),))), hydra.lib.eithers.map_list((lambda _ft: encode_field_type(tname, Nothing(), _ft, cx)), fts2))
 
+        case hydra.core.TypeUnit():
+            return any()
+
+        case hydra.core.TypeVariable(value=vname):
+            return Right(common((cast(hydra.ext.org.w3.shacl.model.CommonConstraint, hydra.ext.org.w3.shacl.model.CommonConstraintNode(hydra.lib.sets.from_list((cast(hydra.ext.org.w3.shacl.model.Reference, hydra.ext.org.w3.shacl.model.ReferenceNamed(hydra.ext.rdf.utils.name_to_iri(vname))),)))),)))
+
         case _:
             return unexpected_e(cx, "type", "unsupported type variant")
 
@@ -285,8 +297,15 @@ def shacl_coder(mod: hydra.module.Module, cx: hydra.context.Context, g: hydra.gr
     r"""Encode a module's type elements as a SHACL ShapesGraph."""
 
     @lru_cache(1)
-    def type_els() -> frozenlist[hydra.core.Binding]:
-        return hydra.lib.lists.filter((lambda x1: hydra.annotations.is_native_type(x1)), mod.elements)
+    def type_els():
+        def _hoist_type_els_1(v1):
+            match v1:
+                case hydra.module.DefinitionType(value=td):
+                    return Just(hydra.annotations.type_element(td.name, td.type))
+
+                case _:
+                    return Nothing()
+        return hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_type_els_1(d)), mod.definitions))
     def to_shape(el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.org.w3.shacl.model.Definition[hydra.ext.org.w3.shacl.model.Shape]]:
         return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _de: hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorOther(hydra.errors.OtherError(_de.value))), cx)), (lambda _t: _t), hydra.decode.core.type(g, el.term)), (lambda _typ: hydra.lib.eithers.map((lambda _cp: hydra.ext.org.w3.shacl.model.Definition(element_iri(el), cast(hydra.ext.org.w3.shacl.model.Shape, hydra.ext.org.w3.shacl.model.ShapeNode(hydra.ext.org.w3.shacl.model.NodeShape(_cp))))), encode_type(el.name, _typ, cx))))
     return hydra.lib.eithers.map((lambda _shapes: (hydra.ext.org.w3.shacl.model.ShapesGraph(hydra.lib.sets.from_list(_shapes)), cx)), hydra.lib.eithers.map_list((lambda x1: to_shape(x1)), type_els()))

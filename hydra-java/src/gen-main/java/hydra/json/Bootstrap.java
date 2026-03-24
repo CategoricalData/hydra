@@ -687,12 +687,12 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("undefinedField"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.core.UndefinedFieldError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to an undefined field"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("undefinedTerm"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.core.UndefinedTermError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("undefinedTermVariable"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.core.UndefinedTermVariableError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to an undefined term"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("undefinedType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.core.UndefinedTypeError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to an undefined term variable"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("untypedTermVariable"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.core.UntypedTermVariableError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to an undefined type"))))))),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A term variable whose type is not known"))))))),
           new hydra.core.FieldType(new hydra.core.Name("unexpectedTermVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.core.UnexpectedTermVariantError")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("An unexpected term variant"))))))),
@@ -816,9 +816,9 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("namespace"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.Namespace")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A common prefix for all element names in the module"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("elements"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Binding"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("definitions"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.Definition"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The elements defined in this module"))))))),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The definitions in this module"))))))),
           new hydra.core.FieldType(new hydra.core.Name("termDependencies"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.Namespace"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("Any modules which the term expressions of this module directly depend upon"))))))),
@@ -866,7 +866,7 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("term"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("The term being defined"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.TypeScheme")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
+          new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Maybe(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.TypeScheme"))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type scheme of the term, including any class constraints"))))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
           new hydra.core.Name("description"),

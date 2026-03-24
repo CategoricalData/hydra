@@ -22,8 +22,8 @@ def coderDirection(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.er
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.coders.CoderDirection])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.coders.CoderDirection]](Seq(Tuple2("encode", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.coders.CoderDirection, hydra.errors.DecodingError]((t: Unit) => hydra.coders.CoderDirection.encode)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("decode", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.coders.CoderDirection, hydra.errors.DecodingError]((t: Unit) => hydra.coders.CoderDirection.decode)(hydra.extract.helpers.decodeUnit(cx)(input)))))
+      hydra.lib.eithers.map[Unit, hydra.coders.CoderDirection, hydra.errors.DecodingError]((t: Unit) => hydra.coders.CoderDirection.encode(t))(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("decode", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.coders.CoderDirection, hydra.errors.DecodingError]((t: Unit) => hydra.coders.CoderDirection.decode(t))(hydra.extract.helpers.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.coders.CoderDirection], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.coders.CoderDirection]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.coders.CoderDirection])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.coders.CoderDirection]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -47,8 +47,8 @@ def traversalOrder(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.er
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.coders.TraversalOrder])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.coders.TraversalOrder]](Seq(Tuple2("pre", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.coders.TraversalOrder, hydra.errors.DecodingError]((t: Unit) => hydra.coders.TraversalOrder.pre)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("post", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.coders.TraversalOrder, hydra.errors.DecodingError]((t: Unit) => hydra.coders.TraversalOrder.post)(hydra.extract.helpers.decodeUnit(cx)(input)))))
+      hydra.lib.eithers.map[Unit, hydra.coders.TraversalOrder, hydra.errors.DecodingError]((t: Unit) => hydra.coders.TraversalOrder.pre(t))(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("post", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.coders.TraversalOrder, hydra.errors.DecodingError]((t: Unit) => hydra.coders.TraversalOrder.post(t))(hydra.extract.helpers.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.coders.TraversalOrder], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.coders.TraversalOrder]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.coders.TraversalOrder])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.coders.TraversalOrder]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))

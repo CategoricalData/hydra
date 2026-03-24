@@ -193,4 +193,4 @@ case class UnifyTypesTestCase(schemaTypes: Seq[hydra.core.Name], left: hydra.cor
 
 case class JoinTypesTestCase(left: hydra.core.Type, right: hydra.core.Type, expected: Either[Unit, Seq[hydra.typing.TypeConstraint]])
 
-case class ValidateCoreTermTestCase(input: hydra.core.Term, output: Option[hydra.error.core.InvalidTermError])
+case class ValidateCoreTermTestCase(typed: Boolean, input: hydra.core.Term, output: Option[hydra.error.core.InvalidTermError])

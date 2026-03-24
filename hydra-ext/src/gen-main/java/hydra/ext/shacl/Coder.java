@@ -34,9 +34,21 @@ public interface Coder {
           (el).name,
           _typ,
           cx)))));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> typeEls = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      hydra.Annotations::isNativeType,
-      (mod).elements));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> typeEls = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+          return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+        }
+
+        @Override
+        public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Type td) {
+          return hydra.util.Maybe.just(hydra.Annotations.typeElement(
+            (td).value.name,
+            (td).value.type));
+        }
+      })),
+      (mod).definitions)));
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.util.ConsList<hydra.ext.org.w3.shacl.model.Definition<hydra.ext.org.w3.shacl.model.Shape>>, hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>>) (_shapes -> (hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>) ((hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>) (new hydra.util.Pair<hydra.ext.org.w3.shacl.model.ShapesGraph, hydra.context.Context>(new hydra.ext.org.w3.shacl.model.ShapesGraph(hydra.lib.sets.FromList.apply(_shapes)), cx)))),
       hydra.lib.eithers.MapList.apply(
@@ -440,6 +452,11 @@ public interface Coder {
       }
 
       @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Either ignored) {
+        return hydra.ext.shacl.Coder.encodeType_any(hydra.ext.shacl.Coder::common);
+      }
+
+      @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.List ignored) {
         return hydra.ext.shacl.Coder.encodeType_any(hydra.ext.shacl.Coder::common);
       }
@@ -451,6 +468,11 @@ public interface Coder {
 
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Map ignored) {
+        return hydra.ext.shacl.Coder.encodeType_any(hydra.ext.shacl.Coder::common);
+      }
+
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Pair ignored) {
         return hydra.ext.shacl.Coder.encodeType_any(hydra.ext.shacl.Coder::common);
       }
 
@@ -498,6 +520,16 @@ public interface Coder {
               _ft,
               cx)),
             (fts).value));
+      }
+
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Unit ignored) {
+        return hydra.ext.shacl.Coder.encodeType_any(hydra.ext.shacl.Coder::common);
+      }
+
+      @Override
+      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties> visit(hydra.core.Type.Variable vname) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.org.w3.shacl.model.CommonProperties>right(hydra.ext.shacl.Coder.common(hydra.util.ConsList.of(new hydra.ext.org.w3.shacl.model.CommonConstraint.Node(hydra.lib.sets.FromList.apply(hydra.util.ConsList.of((hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.NodeShape>) (new hydra.ext.org.w3.shacl.model.Reference.Named(hydra.ext.rdf.Utils.nameToIri((vname).value)))))))));
       }
     });
   }

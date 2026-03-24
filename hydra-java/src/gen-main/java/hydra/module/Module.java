@@ -12,7 +12,7 @@ public class Module implements Serializable, Comparable<Module> {
 
   public static final hydra.core.Name NAMESPACE = new hydra.core.Name("namespace");
 
-  public static final hydra.core.Name ELEMENTS = new hydra.core.Name("elements");
+  public static final hydra.core.Name DEFINITIONS = new hydra.core.Name("definitions");
 
   public static final hydra.core.Name TERM_DEPENDENCIES = new hydra.core.Name("termDependencies");
 
@@ -26,9 +26,9 @@ public class Module implements Serializable, Comparable<Module> {
   public final hydra.module.Namespace namespace;
 
   /**
-   * The elements defined in this module
+   * The definitions in this module
    */
-  public final hydra.util.ConsList<hydra.core.Binding> elements;
+  public final hydra.util.ConsList<hydra.module.Definition> definitions;
 
   /**
    * Any modules which the term expressions of this module directly depend upon
@@ -45,9 +45,9 @@ public class Module implements Serializable, Comparable<Module> {
    */
   public final hydra.util.Maybe<String> description;
 
-  public Module (hydra.module.Namespace namespace, hydra.util.ConsList<hydra.core.Binding> elements, hydra.util.ConsList<hydra.module.Namespace> termDependencies, hydra.util.ConsList<hydra.module.Namespace> typeDependencies, hydra.util.Maybe<String> description) {
+  public Module (hydra.module.Namespace namespace, hydra.util.ConsList<hydra.module.Definition> definitions, hydra.util.ConsList<hydra.module.Namespace> termDependencies, hydra.util.ConsList<hydra.module.Namespace> typeDependencies, hydra.util.Maybe<String> description) {
     this.namespace = namespace;
-    this.elements = elements;
+    this.definitions = definitions;
     this.termDependencies = termDependencies;
     this.typeDependencies = typeDependencies;
     this.description = description;
@@ -62,8 +62,8 @@ public class Module implements Serializable, Comparable<Module> {
     return java.util.Objects.equals(
       this.namespace,
       o.namespace) && java.util.Objects.equals(
-      this.elements,
-      o.elements) && java.util.Objects.equals(
+      this.definitions,
+      o.definitions) && java.util.Objects.equals(
       this.termDependencies,
       o.termDependencies) && java.util.Objects.equals(
       this.typeDependencies,
@@ -74,7 +74,7 @@ public class Module implements Serializable, Comparable<Module> {
 
   @Override
   public int hashCode() {
-    return 2 * java.util.Objects.hashCode(namespace) + 3 * java.util.Objects.hashCode(elements) + 5 * java.util.Objects.hashCode(termDependencies) + 7 * java.util.Objects.hashCode(typeDependencies) + 11 * java.util.Objects.hashCode(description);
+    return 2 * java.util.Objects.hashCode(namespace) + 3 * java.util.Objects.hashCode(definitions) + 5 * java.util.Objects.hashCode(termDependencies) + 7 * java.util.Objects.hashCode(typeDependencies) + 11 * java.util.Objects.hashCode(description);
   }
 
   @Override
@@ -85,7 +85,7 @@ public class Module implements Serializable, Comparable<Module> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) elements).compareTo(other.elements);
+    cmp = ((Comparable) definitions).compareTo(other.definitions);
     if (cmp != 0) {
       return cmp;
     }
@@ -101,22 +101,22 @@ public class Module implements Serializable, Comparable<Module> {
   }
 
   public Module withNamespace(hydra.module.Namespace namespace) {
-    return new Module(namespace, elements, termDependencies, typeDependencies, description);
+    return new Module(namespace, definitions, termDependencies, typeDependencies, description);
   }
 
-  public Module withElements(hydra.util.ConsList<hydra.core.Binding> elements) {
-    return new Module(namespace, elements, termDependencies, typeDependencies, description);
+  public Module withDefinitions(hydra.util.ConsList<hydra.module.Definition> definitions) {
+    return new Module(namespace, definitions, termDependencies, typeDependencies, description);
   }
 
   public Module withTermDependencies(hydra.util.ConsList<hydra.module.Namespace> termDependencies) {
-    return new Module(namespace, elements, termDependencies, typeDependencies, description);
+    return new Module(namespace, definitions, termDependencies, typeDependencies, description);
   }
 
   public Module withTypeDependencies(hydra.util.ConsList<hydra.module.Namespace> typeDependencies) {
-    return new Module(namespace, elements, termDependencies, typeDependencies, description);
+    return new Module(namespace, definitions, termDependencies, typeDependencies, description);
   }
 
   public Module withDescription(hydra.util.Maybe<String> description) {
-    return new Module(namespace, elements, termDependencies, typeDependencies, description);
+    return new Module(namespace, definitions, termDependencies, typeDependencies, description);
   }
 }

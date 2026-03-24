@@ -77,7 +77,9 @@ public interface Grammars {
           typ.get());
       }),
       elementPairs.get()));
-    return new hydra.module.Module(ns, elements.get(), (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>empty()), (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>empty()), desc);
+    return new hydra.module.Module(ns, hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.core.Binding, hydra.module.Definition>) (b -> new hydra.module.Definition.Term(new hydra.module.TermDefinition((b).name, (b).term, (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())))),
+      elements.get()), (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>empty()), (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>empty()), desc);
   }
 
   static Boolean isComplex(hydra.grammar.Pattern pat) {

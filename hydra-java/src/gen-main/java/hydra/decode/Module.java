@@ -115,16 +115,16 @@ public interface Module {
               cx),
             (java.util.function.Function<hydra.module.Namespace, hydra.util.Either<hydra.errors.DecodingError, hydra.module.Module>>) (field_namespace -> hydra.lib.eithers.Bind.apply(
               hydra.extract.Helpers.requireField(
-                "elements",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.core.Binding>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.core.Binding>>>) (v2 -> hydra.extract.Helpers.decodeList(
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Binding>>>) (p0 -> p1 -> hydra.decode.Core.binding(
+                "definitions",
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.module.Definition>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.module.Definition>>>) (v2 -> hydra.extract.Helpers.decodeList(
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.module.Definition>>>) (p0 -> p1 -> hydra.decode.Module.definition(
                     p0,
                     p1)),
                   v1,
                   v2))),
                 fieldMap,
                 cx),
-              (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.Either<hydra.errors.DecodingError, hydra.module.Module>>) (field_elements -> hydra.lib.eithers.Bind.apply(
+              (java.util.function.Function<hydra.util.ConsList<hydra.module.Definition>, hydra.util.Either<hydra.errors.DecodingError, hydra.module.Module>>) (field_definitions -> hydra.lib.eithers.Bind.apply(
                 hydra.extract.Helpers.requireField(
                   "termDependencies",
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.module.Namespace>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.ConsList<hydra.module.Namespace>>>) (v2 -> hydra.extract.Helpers.decodeList(
@@ -180,7 +180,7 @@ public interface Module {
                         v2))),
                       fieldMap,
                       cx),
-                    (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.errors.DecodingError, hydra.module.Module>>) (field_description -> hydra.util.Either.<hydra.errors.DecodingError, hydra.module.Module>right(new hydra.module.Module(field_namespace, field_elements, field_termDependencies, field_typeDependencies, field_description))))))))))));
+                    (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.errors.DecodingError, hydra.module.Module>>) (field_description -> hydra.util.Either.<hydra.errors.DecodingError, hydra.module.Module>right(new hydra.module.Module(field_namespace, field_definitions, field_termDependencies, field_typeDependencies, field_description))))))))))));
         }
       })),
       hydra.Lexical.stripAndDereferenceTermEither(
@@ -371,12 +371,15 @@ public interface Module {
               (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.module.TermDefinition>>) (field_term -> hydra.lib.eithers.Bind.apply(
                 hydra.extract.Helpers.requireField(
                   "type",
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.TypeScheme>>>) (p0 -> p1 -> hydra.decode.Core.typeScheme(
-                    p0,
-                    p1)),
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<hydra.core.TypeScheme>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<hydra.core.TypeScheme>>>) (v2 -> hydra.extract.Helpers.decodeMaybe(
+                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.TypeScheme>>>) (p0 -> p1 -> hydra.decode.Core.typeScheme(
+                      p0,
+                      p1)),
+                    v1,
+                    v2))),
                   fieldMap,
                   cx),
-                (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.errors.DecodingError, hydra.module.TermDefinition>>) (field_type -> hydra.util.Either.<hydra.errors.DecodingError, hydra.module.TermDefinition>right(new hydra.module.TermDefinition(field_name, field_term, field_type))))))));
+                (java.util.function.Function<hydra.util.Maybe<hydra.core.TypeScheme>, hydra.util.Either<hydra.errors.DecodingError, hydra.module.TermDefinition>>) (field_type -> hydra.util.Either.<hydra.errors.DecodingError, hydra.module.TermDefinition>right(new hydra.module.TermDefinition(field_name, field_term, field_type))))))));
         }
       })),
       hydra.Lexical.stripAndDereferenceTermEither(

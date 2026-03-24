@@ -1,6 +1,6 @@
 package hydra.ext.python.utils
 
-import hydra.ext.python.helpers.*
+import hydra.ext.python.environment.*
 
 import hydra.ext.python.syntax.*
 
@@ -20,7 +20,7 @@ import hydra.lib.pairs
 
 import hydra.lib.strings
 
-lazy val targetPythonVersion: hydra.ext.python.helpers.PythonVersion = hydra.ext.python.helpers.PythonVersion.python310
+lazy val targetPythonVersion: hydra.ext.python.environment.PythonVersion = hydra.ext.python.environment.PythonVersion.python310
 
 lazy val pyNone: hydra.ext.python.syntax.Name = "None"
 

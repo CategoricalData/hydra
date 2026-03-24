@@ -53,14 +53,14 @@ class Module:
     r"""A logical collection of elements in the same namespace, having dependencies on zero or more other modules."""
 
     namespace: Annotated[Namespace, "A common prefix for all element names in the module"]
-    elements: Annotated[frozenlist[hydra.core.Binding], "The elements defined in this module"]
+    definitions: Annotated[frozenlist[Definition], "The definitions in this module"]
     term_dependencies: Annotated[frozenlist[Namespace], "Any modules which the term expressions of this module directly depend upon"]
     type_dependencies: Annotated[frozenlist[Namespace], "Any modules which the type expressions of this module directly depend upon"]
     description: Annotated[Maybe[str], "An optional human-readable description of the module"]
 
     TYPE_ = hydra.core.Name("hydra.module.Module")
     NAMESPACE = hydra.core.Name("namespace")
-    ELEMENTS = hydra.core.Name("elements")
+    DEFINITIONS = hydra.core.Name("definitions")
     TERM_DEPENDENCIES = hydra.core.Name("termDependencies")
     TYPE_DEPENDENCIES = hydra.core.Name("typeDependencies")
     DESCRIPTION = hydra.core.Name("description")
@@ -98,7 +98,7 @@ class TermDefinition:
 
     name: Annotated[hydra.core.Name, "The name of the term"]
     term: Annotated[hydra.core.Term, "The term being defined"]
-    type: Annotated[hydra.core.TypeScheme, "The type scheme of the term, including any class constraints"]
+    type: Annotated[Maybe[hydra.core.TypeScheme], "The type scheme of the term, including any class constraints"]
 
     TYPE_ = hydra.core.Name("hydra.module.TermDefinition")
     NAME = hydra.core.Name("name")

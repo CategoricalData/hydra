@@ -136,7 +136,7 @@ def substTypesInTerm(subst: hydra.typing.TypeSubst)(term0: hydra.core.Term): hyd
     lazy val dflt: hydra.core.Term = recurse(term)
     def forFunction(f: hydra.core.Function): hydra.core.Term =
       f match
-      case hydra.core.Function.elimination(v_Function_elimination_e) => dflt
+      case hydra.core.Function.elimination => dflt
       case hydra.core.Function.lambda(v_Function_lambda_l) => forLambda(v_Function_lambda_l)
       case _ => dflt
     def forLambda(l: hydra.core.Lambda): hydra.core.Term =

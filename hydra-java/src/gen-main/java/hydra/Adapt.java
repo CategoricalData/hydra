@@ -769,7 +769,7 @@ public interface Adapt {
                   (hydra.util.PersistentMap<hydra.module.Namespace, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.PersistentMap<hydra.module.Namespace, hydra.util.ConsList<hydra.core.Binding>>) (hydra.lib.maps.Empty.<hydra.module.Namespace, hydra.util.ConsList<hydra.core.Binding>>apply())),
                   selectedElements.get()));
                 java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.module.TermDefinition>> toDef = (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.module.TermDefinition>>) (el -> hydra.lib.maybes.Map.apply(
-                  (java.util.function.Function<hydra.core.TypeScheme, hydra.module.TermDefinition>) (ts -> new hydra.module.TermDefinition((el).name, (el).term, ts)),
+                  (java.util.function.Function<hydra.core.TypeScheme, hydra.module.TermDefinition>) (ts -> new hydra.module.TermDefinition((el).name, (el).term, hydra.util.Maybe.just(ts))),
                   (el).type));
                 hydra.util.Lazy<hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>> defsGrouped = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
                   (java.util.function.Function<hydra.module.Namespace, hydra.util.ConsList<hydra.module.TermDefinition>>) (ns -> {

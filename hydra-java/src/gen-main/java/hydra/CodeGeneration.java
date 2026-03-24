@@ -15,13 +15,20 @@ public interface CodeGeneration {
   }
 
   static hydra.module.Module stripModuleTypeSchemes(hydra.module.Module m) {
-    java.util.function.Function<hydra.core.Binding, hydra.core.Binding> stripIfTerm = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> hydra.lib.logic.IfElse.lazy(
-      hydra.Annotations.isNativeType(b),
-      () -> b,
-      () -> new hydra.core.Binding((b).name, (b).term, (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))));
+    java.util.function.Function<hydra.module.Definition, hydra.module.Definition> stripDef = (java.util.function.Function<hydra.module.Definition, hydra.module.Definition>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+      @Override
+      public hydra.module.Definition otherwise(hydra.module.Definition instance) {
+        return d;
+      }
+
+      @Override
+      public hydra.module.Definition visit(hydra.module.Definition.Term td) {
+        return new hydra.module.Definition.Term(new hydra.module.TermDefinition((td).value.name, (td).value.term, (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())));
+      }
+    }));
     return new hydra.module.Module((m).namespace, hydra.lib.lists.Map.apply(
-      stripIfTerm,
-      (m).elements), (m).termDependencies, (m).typeDependencies, (m).description);
+      stripDef,
+      (m).definitions), (m).termDependencies, (m).typeDependencies, (m).description);
   }
 
   static hydra.util.PersistentSet<hydra.module.Namespace> transitiveDeps(java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.module.Namespace>> getDeps, hydra.util.PersistentMap<hydra.module.Namespace, hydra.module.Module> nsMap, hydra.util.ConsList<hydra.module.Module> startMods) {
@@ -100,21 +107,43 @@ public interface CodeGeneration {
     hydra.util.ConsList<hydra.module.Module> dataModules = hydra.CodeGeneration.moduleTermDepsTransitive(
       universe.get(),
       modules);
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> dataElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.core.Binding, Boolean>) (e -> hydra.lib.logic.Not.apply(hydra.Annotations.isNativeType(e))),
-      hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> (m).elements),
-        dataModules))));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> dataElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+            return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+          }
+
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Term td) {
+            return hydra.util.Maybe.just(new hydra.core.Binding((td).value.name, (td).value.term, (td).value.type));
+          }
+        })),
+        (m).definitions))),
+      dataModules)));
     hydra.util.ConsList<hydra.module.Module> schemaModules = hydra.CodeGeneration.moduleTypeDepsTransitive(
       universe.get(),
       modules);
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> schemaElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.core.Binding, Boolean>) (e -> hydra.Annotations.isNativeType(e)),
-      hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> (m).elements),
-        hydra.lib.lists.Concat2.apply(
-          schemaModules,
-          modules)))));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> schemaElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+            return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+          }
+
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Type td) {
+            return hydra.util.Maybe.just(hydra.Annotations.typeElement(
+              (td).value.name,
+              (td).value.type));
+          }
+        })),
+        (m).definitions))),
+      hydra.lib.lists.Concat2.apply(
+        schemaModules,
+        modules))));
     hydra.util.Lazy<hydra.graph.Graph> schemaGraph = new hydra.util.Lazy<>(() -> hydra.Lexical.elementsToGraph(
       bsGraph,
       (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())),
@@ -142,25 +171,59 @@ public interface CodeGeneration {
       namespaceMap.get(),
       modsToGenerate);
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> dataElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> (m).elements),
+      (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+            return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+          }
+
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Term td) {
+            return hydra.util.Maybe.just(new hydra.core.Binding((td).value.name, (td).value.term, (td).value.type));
+          }
+        })),
+        (m).definitions))),
       dataMods)));
     hydra.util.ConsList<hydra.module.Module> schemaMods = hydra.CodeGeneration.moduleTypeDepsTransitive(
       namespaceMap.get(),
       modsToGenerate);
-    java.util.function.Function<hydra.module.Module, Boolean> isTypeModule = (java.util.function.Function<hydra.module.Module, Boolean>) (mod -> hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.core.Binding, Boolean>) (e -> hydra.Annotations.isNativeType(e)),
-      (mod).elements))));
-    hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<hydra.module.Module>, hydra.util.ConsList<hydra.module.Module>>> partitioned = new hydra.util.Lazy<>(() -> hydra.lib.lists.Partition.apply(
-      isTypeModule,
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Module>> typeModulesToGenerate = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+      (java.util.function.Function<hydra.module.Module, Boolean>) (mod -> hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+            return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+          }
+
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Type td) {
+            return hydra.util.Maybe.just(hydra.Annotations.typeElement(
+              (td).value.name,
+              (td).value.type));
+          }
+        })),
+        (mod).definitions))))),
       modsToGenerate));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Module>> typeModulesToGenerate = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned.get()));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> schemaElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.core.Binding, Boolean>) (e -> hydra.Annotations.isNativeType(e)),
-      hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> (m).elements),
-        hydra.lib.lists.Concat2.apply(
-          schemaMods,
-          typeModulesToGenerate.get())))));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> schemaElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+            return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+          }
+
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Type td) {
+            return hydra.util.Maybe.just(hydra.Annotations.typeElement(
+              (td).value.name,
+              (td).value.type));
+          }
+        })),
+        (m).definitions))),
+      hydra.lib.lists.Concat2.apply(
+        schemaMods,
+        typeModulesToGenerate.get()))));
     hydra.util.Lazy<hydra.graph.Graph> schemaGraph = new hydra.util.Lazy<>(() -> hydra.Lexical.elementsToGraph(
       bsGraph,
       (hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())),
@@ -175,18 +238,40 @@ public interface CodeGeneration {
       bsGraph,
       schemaTypes2.get(),
       dataElements.get());
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Module>> termModulesToGenerate = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(partitioned.get()));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Module>> termModulesToGenerate = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+      (java.util.function.Function<hydra.module.Module, Boolean>) (mod -> hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+            return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+          }
+
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Term td) {
+            return hydra.util.Maybe.just(new hydra.core.Binding((td).value.name, (td).value.term, (td).value.type));
+          }
+        })),
+        (mod).definitions))))),
+      modsToGenerate));
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(typeModulesToGenerate.get()),
         () -> hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.Pair<T0, T1>>>right((hydra.util.ConsList<hydra.util.Pair<T0, T1>>) (hydra.util.ConsList.<hydra.util.Pair<T0, T1>>empty())),
         () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.util.Pair<T0, T1>>>>) (() -> {
           hydra.util.Lazy<hydra.util.ConsList<hydra.util.ConsList<hydra.core.Name>>> nameLists = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-            (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Name>>) (m -> hydra.lib.lists.Map.apply(
-              (java.util.function.Function<hydra.core.Binding, hydra.core.Name>) (e -> (e).name),
-              hydra.lib.lists.Filter.apply(
-                (java.util.function.Function<hydra.core.Binding, Boolean>) (e -> hydra.Annotations.isNativeType(e)),
-                (m).elements))),
+            (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Name>>) (m -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+              (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Name>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+                @Override
+                public hydra.util.Maybe<hydra.core.Name> otherwise(hydra.module.Definition instance) {
+                  return (hydra.util.Maybe<hydra.core.Name>) (hydra.util.Maybe.<hydra.core.Name>nothing());
+                }
+
+                @Override
+                public hydra.util.Maybe<hydra.core.Name> visit(hydra.module.Definition.Type td) {
+                  return hydra.util.Maybe.just((td).value.name);
+                }
+              })),
+              (m).definitions))),
             typeModulesToGenerate.get()));
           return hydra.lib.eithers.Bind.apply(
             hydra.lib.eithers.Bimap.apply(
@@ -243,13 +328,36 @@ public interface CodeGeneration {
                 hydra.util.Lazy<hydra.graph.Graph> g1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(dataResult));
                 hydra.util.ConsList<hydra.core.Binding> allBindings = hydra.Lexical.graphToBindings(g1.get());
                 hydra.util.Lazy<hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>> defLists = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(dataResult));
+                java.util.function.Function<hydra.module.Definition, hydra.core.Name> defName = (java.util.function.Function<hydra.module.Definition, hydra.core.Name>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+                  @Override
+                  public hydra.core.Name visit(hydra.module.Definition.Term td) {
+                    return (td).value.name;
+                  }
+
+                  @Override
+                  public hydra.core.Name visit(hydra.module.Definition.Type td) {
+                    return (td).value.name;
+                  }
+                }));
                 java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, java.util.function.Function<hydra.module.Module, hydra.module.Module>> refreshModule = (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, java.util.function.Function<hydra.module.Module, hydra.module.Module>>) (els -> (java.util.function.Function<hydra.module.Module, hydra.module.Module>) (m -> new hydra.module.Module((m).namespace, hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-                  (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Binding>>) (e -> hydra.lib.lists.Find.apply(
-                    (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
-                      (b).name,
-                      (e).name)),
-                    els)),
-                  (m).elements)), (m).termDependencies, (m).typeDependencies, (m).description)));
+                  (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.module.Definition>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+                    @Override
+                    public hydra.util.Maybe<hydra.module.Definition> visit(hydra.module.Definition.Type td) {
+                      return hydra.util.Maybe.just(new hydra.module.Definition.Type((td).value));
+                    }
+
+                    @Override
+                    public hydra.util.Maybe<hydra.module.Definition> visit(hydra.module.Definition.Term td) {
+                      return hydra.lib.maybes.Map.apply(
+                        (java.util.function.Function<hydra.core.Binding, hydra.module.Definition>) (b -> new hydra.module.Definition.Term(new hydra.module.TermDefinition((b).name, (b).term, (b).type))),
+                        hydra.lib.lists.Find.apply(
+                          (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
+                            (b).name,
+                            (td).value.name)),
+                          els));
+                    }
+                  })),
+                  (m).definitions)), (m).termDependencies, (m).typeDependencies, (m).description)));
                 hydra.util.Lazy<hydra.util.ConsList<hydra.module.Module>> refreshedMods = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
                   (java.util.function.Function<hydra.module.Module, hydra.module.Module>) (m -> (refreshModule).apply(allBindings).apply(m)),
                   termModulesToGenerate.get()));
@@ -333,10 +441,10 @@ public interface CodeGeneration {
           hydra.lib.strings.SplitOn.apply(
             ".",
             (m).namespace.value))))));
-    hydra.util.Lazy<hydra.core.Binding> moduleBinding = new hydra.util.Lazy<>(() -> new hydra.core.Binding(new hydra.core.Name(hydra.lib.strings.Cat2.apply(
+    hydra.util.Lazy<hydra.module.Definition> moduleDef = new hydra.util.Lazy<>(() -> new hydra.module.Definition.Term(new hydra.module.TermDefinition(new hydra.core.Name(hydra.lib.strings.Cat2.apply(
       sourceNs.get().value,
-      ".module_")), hydra.encode.Module.module(m), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())));
-    return new hydra.module.Module(sourceNs.get(), hydra.util.ConsList.of(moduleBinding.get()), hydra.util.ConsList.of(modTypeNs), hydra.util.ConsList.of(modTypeNs), hydra.util.Maybe.just(hydra.lib.strings.Cat2.apply(
+      ".module_")), hydra.encode.Module.module(m), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))));
+    return new hydra.module.Module(sourceNs.get(), hydra.util.ConsList.of(moduleDef.get()), hydra.util.ConsList.of(modTypeNs), hydra.util.ConsList.of(modTypeNs), hydra.util.Maybe.just(hydra.lib.strings.Cat2.apply(
       "Source module for ",
       (m).namespace.value)));
   }
@@ -393,11 +501,21 @@ public interface CodeGeneration {
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.module.Module>> inferModules(hydra.context.Context cx, hydra.graph.Graph bsGraph, hydra.util.ConsList<hydra.module.Module> universeMods, hydra.util.ConsList<hydra.module.Module> targetMods) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> dataElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.core.Binding, Boolean>) (e -> hydra.lib.logic.Not.apply(hydra.Annotations.isNativeType(e))),
-      hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> (m).elements),
-        universeMods))));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> dataElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+            return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+          }
+
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Term td) {
+            return hydra.util.Maybe.just(new hydra.core.Binding((td).value.name, (td).value.term, (td).value.type));
+          }
+        })),
+        (m).definitions))),
+      universeMods)));
     hydra.graph.Graph g0 = hydra.CodeGeneration.modulesToGraph(
       bsGraph,
       universeMods,
@@ -408,22 +526,55 @@ public interface CodeGeneration {
         dataElements.get(),
         g0),
       (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.module.Module>>>) (inferResultWithCx -> {
+        java.util.function.Function<hydra.module.Definition, hydra.core.Name> defName = (java.util.function.Function<hydra.module.Definition, hydra.core.Name>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+          @Override
+          public hydra.core.Name visit(hydra.module.Definition.Term td) {
+            return (td).value.name;
+          }
+
+          @Override
+          public hydra.core.Name visit(hydra.module.Definition.Type td) {
+            return (td).value.name;
+          }
+        }));
         hydra.util.Lazy<hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.core.Binding>>> inferResult = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(inferResultWithCx));
         hydra.util.Lazy<hydra.graph.Graph> g1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(inferResult.get()));
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> inferredElements = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(inferResult.get()));
-        java.util.function.Function<hydra.module.Module, Boolean> isTypeModule = (java.util.function.Function<hydra.module.Module, Boolean>) (mod -> hydra.lib.lists.Null.apply(hydra.lib.lists.Filter.apply(
-          (java.util.function.Function<hydra.core.Binding, Boolean>) (e -> hydra.lib.logic.Not.apply(hydra.Annotations.isNativeType(e))),
-          (mod).elements)));
+        java.util.function.Function<hydra.module.Module, Boolean> isTypeOnlyModule = (java.util.function.Function<hydra.module.Module, Boolean>) (mod -> hydra.lib.logic.Not.apply(hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+            @Override
+            public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+              return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+            }
+
+            @Override
+            public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Term td) {
+              return hydra.util.Maybe.just(new hydra.core.Binding((td).value.name, (td).value.term, (td).value.type));
+            }
+          })),
+          (mod).definitions))))));
         java.util.function.Function<hydra.module.Module, hydra.module.Module> refreshModule = (java.util.function.Function<hydra.module.Module, hydra.module.Module>) (m -> hydra.lib.logic.IfElse.lazy(
-          (isTypeModule).apply(m),
+          (isTypeOnlyModule).apply(m),
           () -> m,
           () -> new hydra.module.Module((m).namespace, hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-            (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Binding>>) (e -> hydra.lib.lists.Find.apply(
-              (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
-                (b).name,
-                (e).name)),
-              inferredElements.get())),
-            (m).elements)), (m).termDependencies, (m).typeDependencies, (m).description)));
+            (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.module.Definition>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+              @Override
+              public hydra.util.Maybe<hydra.module.Definition> visit(hydra.module.Definition.Type td) {
+                return hydra.util.Maybe.just(new hydra.module.Definition.Type((td).value));
+              }
+
+              @Override
+              public hydra.util.Maybe<hydra.module.Definition> visit(hydra.module.Definition.Term td) {
+                return hydra.lib.maybes.Map.apply(
+                  (java.util.function.Function<hydra.core.Binding, hydra.module.Definition>) (b -> new hydra.module.Definition.Term(new hydra.module.TermDefinition((b).name, (b).term, (b).type))),
+                  hydra.lib.lists.Find.apply(
+                    (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
+                      (b).name,
+                      (td).value.name)),
+                    inferredElements.get()));
+              }
+            })),
+            (m).definitions)), (m).termDependencies, (m).typeDependencies, (m).description)));
         return hydra.util.Either.<hydra.context.InContext<hydra.errors.Error_>, hydra.util.ConsList<hydra.module.Module>>right(hydra.lib.lists.Map.apply(
           refreshModule,
           targetMods));
@@ -439,21 +590,43 @@ public interface CodeGeneration {
     hydra.util.ConsList<hydra.module.Module> dataModules = hydra.CodeGeneration.moduleTermDepsTransitive(
       universe.get(),
       universeModules);
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> dataElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.core.Binding, Boolean>) (e -> hydra.lib.logic.Not.apply(hydra.Annotations.isNativeType(e))),
-      hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> (m).elements),
-        dataModules))));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> dataElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+            return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+          }
+
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Term td) {
+            return hydra.util.Maybe.just(new hydra.core.Binding((td).value.name, (td).value.term, (td).value.type));
+          }
+        })),
+        (m).definitions))),
+      dataModules)));
     hydra.util.ConsList<hydra.module.Module> schemaModules = hydra.CodeGeneration.moduleTypeDepsTransitive(
       universe.get(),
       universeModules);
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> schemaElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.core.Binding, Boolean>) (e -> hydra.Annotations.isNativeType(e)),
-      hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> (m).elements),
-        hydra.lib.lists.Concat2.apply(
-          schemaModules,
-          universeModules)))));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> schemaElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+            return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+          }
+
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Type td) {
+            return hydra.util.Maybe.just(hydra.Annotations.typeElement(
+              (td).value.name,
+              (td).value.type));
+          }
+        })),
+        (m).definitions))),
+      hydra.lib.lists.Concat2.apply(
+        schemaModules,
+        universeModules))));
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> allElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
       schemaElements.get(),
       dataElements.get()));
@@ -479,11 +652,21 @@ public interface CodeGeneration {
   }
 
   static hydra.util.Either<String, String> inferAndGenerateLexicon(hydra.context.Context cx, hydra.graph.Graph bsGraph, hydra.util.ConsList<hydra.module.Module> kernelModules) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> dataElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.core.Binding, Boolean>) (e -> hydra.lib.logic.Not.apply(hydra.Annotations.isNativeType(e))),
-      hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> (m).elements),
-        kernelModules))));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> dataElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Binding>>) (m -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+            return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+          }
+
+          @Override
+          public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Term td) {
+            return hydra.util.Maybe.just(new hydra.core.Binding((td).value.name, (td).value.term, (td).value.type));
+          }
+        })),
+        (m).definitions))),
+      kernelModules)));
     hydra.graph.Graph g0 = hydra.CodeGeneration.modulesToGraph(
       bsGraph,
       kernelModules,

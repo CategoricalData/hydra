@@ -137,7 +137,7 @@ public interface Testing {
     hydra.util.ConsList<hydra.core.Binding> bindings = hydra.Lexical.graphToBindings(graph_);
     hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> defs = new hydra.util.Lazy<>(() -> hydra.lib.maybes.MapMaybe.apply(
       (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.module.Definition>>) (b -> hydra.lib.maybes.Map.apply(
-        (java.util.function.Function<hydra.core.TypeScheme, hydra.module.Definition>) (ts -> new hydra.module.Definition.Term(new hydra.module.TermDefinition((b).name, (b).term, ts))),
+        (java.util.function.Function<hydra.core.TypeScheme, hydra.module.Definition>) (ts -> new hydra.module.Definition.Term(new hydra.module.TermDefinition((b).name, (b).term, hydra.util.Maybe.just(ts)))),
         (b).type)),
       bindings));
     return hydra.util.Either.<T0, hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>>right(hydra.ext.python.Utils.findNamespaces(

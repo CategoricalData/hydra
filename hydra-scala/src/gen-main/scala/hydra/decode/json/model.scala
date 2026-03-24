@@ -29,7 +29,7 @@ def value(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.errors.Deco
         case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(v_Literal_boolean_b)
         case _ => Left("expected boolean literal")
       case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx)(input)))), Tuple2("null", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.json.model.Value, hydra.errors.DecodingError]((t: Unit) => hydra.json.model.Value.`null`)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("number", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.json.model.Value, hydra.errors.DecodingError]((t: Unit) => hydra.json.model.Value.`null`(t))(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("number", (input: hydra.core.Term) =>
       hydra.lib.eithers.map[BigDecimal, hydra.json.model.Value, hydra.errors.DecodingError]((t: BigDecimal) => hydra.json.model.Value.number(t))(hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, BigDecimal]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
       stripped2 match
       case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match

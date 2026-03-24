@@ -27,9 +27,9 @@ public interface Module {
   static hydra.core.Term module(hydra.module.Module x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.Module"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("namespace"), hydra.encode.Module.namespace((x).namespace)),
-      new hydra.core.Field(new hydra.core.Name("elements"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-        hydra.encode.Core::binding,
-        (x).elements))),
+      new hydra.core.Field(new hydra.core.Name("definitions"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        hydra.encode.Module::definition,
+        (x).definitions))),
       new hydra.core.Field(new hydra.core.Name("termDependencies"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.Module::namespace,
         (x).termDependencies))),
@@ -69,7 +69,9 @@ public interface Module {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.module.TermDefinition"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)),
       new hydra.core.Field(new hydra.core.Name("term"), hydra.encode.Core.term((x).term)),
-      new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.Core.typeScheme((x).type)))));
+      new hydra.core.Field(new hydra.core.Name("type"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
+        hydra.encode.Core::typeScheme,
+        (x).type))))));
   }
 
   static hydra.core.Term typeDefinition(hydra.module.TypeDefinition x) {

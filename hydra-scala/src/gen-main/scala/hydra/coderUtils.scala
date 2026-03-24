@@ -104,17 +104,17 @@ def isSimpleAssignment(term: hydra.core.Term): Boolean =
   term match
   case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.coderUtils.isSimpleAssignment(v_Term_annotated_at.body)
   case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-    case hydra.core.Function.lambda(v_Function_lambda__) => false
+    case hydra.core.Function.lambda => false
     case _ => true
-  case hydra.core.Term.let(v_Term_let__) => false
-  case hydra.core.Term.typeLambda(v_Term_typeLambda__) => false
+  case hydra.core.Term.let => false
+  case hydra.core.Term.typeLambda => false
   case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => hydra.coderUtils.isSimpleAssignment(v_Term_typeApplication_ta.body)
   case _ => {
     lazy val baseTerm: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term, Seq[hydra.core.Term]](hydra.coderUtils.gatherArgs(term)(Seq()))
     baseTerm match
       case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
         case hydra.core.Function.elimination(v_Function_elimination_elim) => v_Function_elimination_elim match
-          case hydra.core.Elimination.union(v_Elimination_union__) => false
+          case hydra.core.Elimination.union => false
           case _ => true
         case _ => true
       case _ => true
@@ -122,9 +122,9 @@ def isSimpleAssignment(term: hydra.core.Term): Boolean =
 
 def isComplexTerm(tc: hydra.graph.Graph)(t: hydra.core.Term): Boolean =
   t match
-  case hydra.core.Term.let(v_Term_let__) => true
-  case hydra.core.Term.typeApplication(v_Term_typeApplication__) => true
-  case hydra.core.Term.typeLambda(v_Term_typeLambda__) => true
+  case hydra.core.Term.let => true
+  case hydra.core.Term.typeApplication => true
+  case hydra.core.Term.typeLambda => true
   case hydra.core.Term.variable(v_Term_variable_name) => hydra.coderUtils.isComplexVariable(tc)(v_Term_variable_name)
   case _ => hydra.lib.lists.foldl[Boolean, hydra.core.Term]((b: Boolean) =>
     (sub: hydra.core.Term) =>
@@ -159,8 +159,8 @@ def isComplexBinding(tc: hydra.graph.Graph)(b: hydra.core.Binding): Boolean =
 
 def isTrivialTerm(t: hydra.core.Term): Boolean =
   hydra.rewriting.deannotateTerm(t) match
-  case hydra.core.Term.literal(v_Term_literal__) => true
-  case hydra.core.Term.variable(v_Term_variable__) => true
+  case hydra.core.Term.literal => true
+  case hydra.core.Term.variable => true
   case hydra.core.Term.unit => true
   case hydra.core.Term.application(v_Term_application_app) => {
     lazy val fun: hydra.core.Term = (v_Term_application_app.function)
@@ -169,8 +169,8 @@ def isTrivialTerm(t: hydra.core.Term): Boolean =
       fun match
         case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
           case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-            case hydra.core.Elimination.record(v_Elimination_record__) => hydra.coderUtils.isTrivialTerm(arg)
-            case hydra.core.Elimination.wrap(v_Elimination_wrap__) => hydra.coderUtils.isTrivialTerm(arg)
+            case hydra.core.Elimination.record => hydra.coderUtils.isTrivialTerm(arg)
+            case hydra.core.Elimination.wrap => hydra.coderUtils.isTrivialTerm(arg)
             case _ => false
           case _ => false
         case _ => false
@@ -195,7 +195,7 @@ def isTailRecursiveInTailPosition(funcName: hydra.core.Name)(term: hydra.core.Te
   {
   lazy val stripped: hydra.core.Term = hydra.rewriting.deannotateAndDetypeTerm(term)
   stripped match
-    case hydra.core.Term.application(v_Term_application_app) => {
+    case hydra.core.Term.application => {
       lazy val gathered: Tuple2[Seq[hydra.core.Term], hydra.core.Term] = hydra.coderUtils.gatherApplications(stripped)
       {
         lazy val gatherArgs: Seq[hydra.core.Term] = hydra.lib.pairs.first[Seq[hydra.core.Term], hydra.core.Term](gathered)
@@ -278,18 +278,26 @@ def nameToFilePath(nsConv: hydra.util.CaseConvention)(localConv: hydra.util.Case
   hydra.lib.strings.cat(Seq(prefix, suffix, ".", ext))
 }
 
-def unionTypeToRecordType(rt: Seq[hydra.core.FieldType]): Seq[hydra.core.FieldType] =
+def reorderDefs(defs: Seq[hydra.module.Definition]): Seq[hydra.module.Definition] =
   {
-  def makeOptional(f: hydra.core.FieldType): hydra.core.FieldType =
-    {
-    lazy val fn: hydra.core.Name = (f.name)
-    lazy val ft: hydra.core.Type = (f.`type`)
-    hydra.core.FieldType(fn, hydra.rewriting.mapBeneathTypeAnnotations((x: hydra.core.Type) => hydra.core.Type.maybe(x))(ft))
-  }
-  hydra.lib.lists.map[hydra.core.FieldType, hydra.core.FieldType](makeOptional)(rt)
+  lazy val partitioned: Tuple2[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]] = hydra.schemas.partitionDefinitions(defs)
+  lazy val typeDefsRaw: Seq[hydra.module.TypeDefinition] = hydra.lib.pairs.first[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]](partitioned)
+  lazy val nameFirst: Seq[hydra.module.TypeDefinition] = hydra.lib.lists.filter[hydra.module.TypeDefinition]((td: hydra.module.TypeDefinition) =>
+    hydra.lib.equality.equal[hydra.core.Name](td.name)("hydra.core.Name"))(typeDefsRaw)
+  lazy val nameRest: Seq[hydra.module.TypeDefinition] = hydra.lib.lists.filter[hydra.module.TypeDefinition]((td: hydra.module.TypeDefinition) =>
+    hydra.lib.logic.not(hydra.lib.equality.equal[hydra.core.Name](td.name)("hydra.core.Name")))(typeDefsRaw)
+  lazy val typeDefs: Seq[hydra.module.Definition] = hydra.lib.lists.concat[hydra.module.Definition](Seq(hydra.lib.lists.map[hydra.module.TypeDefinition, hydra.module.Definition]((td: hydra.module.TypeDefinition) => hydra.module.Definition.`type`(td))(nameFirst), hydra.lib.lists.map[hydra.module.TypeDefinition, hydra.module.Definition]((td: hydra.module.TypeDefinition) => hydra.module.Definition.`type`(td))(nameRest)))
+  lazy val termDefsWrapped: Seq[hydra.module.Definition] = hydra.lib.lists.map[hydra.module.TermDefinition, hydra.module.Definition]((td: hydra.module.TermDefinition) => hydra.module.Definition.term(td))(hydra.lib.pairs.second[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]](partitioned))
+  lazy val sortedTermDefs: Seq[hydra.module.Definition] = hydra.lib.lists.concat[hydra.module.Definition](hydra.sorting.topologicalSortNodes((d: hydra.module.Definition) =>
+    d match
+    case hydra.module.Definition.term(v_Definition_term_td) => (v_Definition_term_td.name))((d: hydra.module.Definition) =>
+    d match
+    case hydra.module.Definition.term(v_Definition_term_td) => hydra.lib.sets.toList[hydra.core.Name](hydra.rewriting.freeVariablesInTerm(v_Definition_term_td.term))
+    case _ => Seq())(termDefsWrapped))
+  hydra.lib.lists.concat[hydra.module.Definition](Seq(typeDefs, sortedTermDefs))
 }
 
-def commentsFromElement(cx: hydra.context.Context)(g: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error], Option[scala.Predef.String]] = hydra.annotations.getTermDescription(cx)(g)(b.term)
+def commentsFromBinding(cx: hydra.context.Context)(g: hydra.graph.Graph)(b: hydra.core.Binding): Either[hydra.context.InContext[hydra.errors.Error], Option[scala.Predef.String]] = hydra.annotations.getTermDescription(cx)(g)(b.term)
 
 def commentsFromFieldType(cx: hydra.context.Context)(g: hydra.graph.Graph)(ft: hydra.core.FieldType): Either[hydra.context.InContext[hydra.errors.Error], Option[scala.Predef.String]] = hydra.annotations.getTypeDescription(cx)(g)(ft.`type`)
 
@@ -359,3 +367,22 @@ def analyzeFunctionTermWith_gather[T0, T1](cx: hydra.context.Context)(forBinding
     }
   }
   case _ => hydra.coderUtils.analyzeFunctionTermWith_finish(cx)(getTC)(gEnv)(tparams)(args)(bindings)(doms)(tapps)(t)
+
+def reorderDefs(defs: Seq[hydra.module.Definition]): Seq[hydra.module.Definition] =
+  {
+  lazy val partitioned: Tuple2[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]] = hydra.schemas.partitionDefinitions(defs)
+  lazy val typeDefsRaw: Seq[hydra.module.TypeDefinition] = hydra.lib.pairs.first[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]](partitioned)
+  lazy val nameFirst: Seq[hydra.module.TypeDefinition] = hydra.lib.lists.filter[hydra.module.TypeDefinition]((td: hydra.module.TypeDefinition) =>
+    hydra.lib.equality.equal[hydra.core.Name](td.name)("hydra.core.Name"))(typeDefsRaw)
+  lazy val nameRest: Seq[hydra.module.TypeDefinition] = hydra.lib.lists.filter[hydra.module.TypeDefinition]((td: hydra.module.TypeDefinition) =>
+    hydra.lib.logic.not(hydra.lib.equality.equal[hydra.core.Name](td.name)("hydra.core.Name")))(typeDefsRaw)
+  lazy val typeDefs: Seq[hydra.module.Definition] = hydra.lib.lists.concat[hydra.module.Definition](Seq(hydra.lib.lists.map[hydra.module.TypeDefinition, hydra.module.Definition]((td: hydra.module.TypeDefinition) => hydra.module.Definition.`type`(td))(nameFirst), hydra.lib.lists.map[hydra.module.TypeDefinition, hydra.module.Definition]((td: hydra.module.TypeDefinition) => hydra.module.Definition.`type`(td))(nameRest)))
+  lazy val termDefsWrapped: Seq[hydra.module.Definition] = hydra.lib.lists.map[hydra.module.TermDefinition, hydra.module.Definition]((td: hydra.module.TermDefinition) => hydra.module.Definition.term(td))(hydra.lib.pairs.second[Seq[hydra.module.TypeDefinition], Seq[hydra.module.TermDefinition]](partitioned))
+  lazy val sortedTermDefs: Seq[hydra.module.Definition] = hydra.lib.lists.concat[hydra.module.Definition](hydra.sorting.topologicalSortNodes((d: hydra.module.Definition) =>
+    d match
+    case hydra.module.Definition.term(v_Definition_term_td) => (v_Definition_term_td.name))((d: hydra.module.Definition) =>
+    d match
+    case hydra.module.Definition.term(v_Definition_term_td) => hydra.lib.sets.toList[hydra.core.Name](hydra.rewriting.freeVariablesInTerm(v_Definition_term_td.term))
+    case _ => Seq())(termDefsWrapped))
+  hydra.lib.lists.concat[hydra.module.Definition](Seq(typeDefs, sortedTermDefs))
+}

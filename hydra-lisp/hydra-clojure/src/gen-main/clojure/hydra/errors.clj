@@ -7,7 +7,7 @@
 (defrecord hydra_errors_decoding_error [value])
 (defn make-hydra_errors_decoding_error [value] (->hydra_errors_decoding_error value))
 
-(def hydra_errors_error-variants (list :checking :decoding :duplicate_binding :duplicate_field :other :undefined_field :undefined_term :undefined_type :unexpected_term_variant :unexpected_type_variant :unification))
+(def hydra_errors_error-variants (list :checking :decoding :duplicate_binding :duplicate_field :other :undefined_field :undefined_term_variable :untyped_term_variable :unexpected_term_variant :unexpected_type_variant :unification))
 
 (defrecord hydra_errors_other_error [value])
 (defn make-hydra_errors_other_error [value] (->hydra_errors_other_error value))

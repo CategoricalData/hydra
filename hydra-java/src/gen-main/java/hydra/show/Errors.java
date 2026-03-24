@@ -99,13 +99,13 @@ public interface Errors {
       }
 
       @Override
-      public String visit(hydra.errors.Error_.UndefinedTerm v1) {
-        return hydra.show.error.Core.undefinedTermError((v1).value);
+      public String visit(hydra.errors.Error_.UndefinedTermVariable v1) {
+        return hydra.show.error.Core.undefinedTermVariableError((v1).value);
       }
 
       @Override
-      public String visit(hydra.errors.Error_.UndefinedType v1) {
-        return hydra.show.error.Core.undefinedTypeError((v1).value);
+      public String visit(hydra.errors.Error_.UntypedTermVariable v1) {
+        return hydra.show.error.Core.untypedTermVariableError((v1).value);
       }
 
       @Override

@@ -634,6 +634,7 @@ public interface Testing {
 
   static hydra.core.Term validateCoreTermTestCase(hydra.testing.ValidateCoreTermTestCase x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.ValidateCoreTermTestCase"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("typed"), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_((x).typed))),
       new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.Core.term((x).input)),
       new hydra.core.Field(new hydra.core.Name("output"), new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
         hydra.encode.error.Core::invalidTermError,

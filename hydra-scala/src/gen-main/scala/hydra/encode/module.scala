@@ -21,7 +21,7 @@ def fileExtension(x: hydra.module.FileExtension): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.module.FileExtension", hydra.core.Term.literal(hydra.core.Literal.string(x))))
 
 def module(x: hydra.module.Module): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.module.Module", Seq(hydra.core.Field("namespace", hydra.encode.module.namespace(x.namespace)), hydra.core.Field("elements", hydra.core.Term.list(hydra.lib.lists.map[hydra.core.Binding, hydra.core.Term](hydra.encode.core.binding)(x.elements))), hydra.core.Field("termDependencies", hydra.core.Term.list(hydra.lib.lists.map[hydra.module.Namespace, hydra.core.Term](hydra.encode.module.namespace)(x.termDependencies))), hydra.core.Field("typeDependencies", hydra.core.Term.list(hydra.lib.lists.map[hydra.module.Namespace, hydra.core.Term](hydra.encode.module.namespace)(x.typeDependencies))), hydra.core.Field("description", hydra.core.Term.maybe(hydra.lib.maybes.map[scala.Predef.String, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(x.description))))))
+  hydra.core.Term.record(hydra.core.Record("hydra.module.Module", Seq(hydra.core.Field("namespace", hydra.encode.module.namespace(x.namespace)), hydra.core.Field("definitions", hydra.core.Term.list(hydra.lib.lists.map[hydra.module.Definition, hydra.core.Term](hydra.encode.module.definition)(x.definitions))), hydra.core.Field("termDependencies", hydra.core.Term.list(hydra.lib.lists.map[hydra.module.Namespace, hydra.core.Term](hydra.encode.module.namespace)(x.termDependencies))), hydra.core.Field("typeDependencies", hydra.core.Term.list(hydra.lib.lists.map[hydra.module.Namespace, hydra.core.Term](hydra.encode.module.namespace)(x.typeDependencies))), hydra.core.Field("description", hydra.core.Term.maybe(hydra.lib.maybes.map[scala.Predef.String, hydra.core.Term]((x2: scala.Predef.String) => hydra.core.Term.literal(hydra.core.Literal.string(x2)))(x.description))))))
 
 def namespace(x: hydra.module.Namespace): hydra.core.Term =
   hydra.core.Term.wrap(hydra.core.WrappedTerm("hydra.module.Namespace", hydra.core.Term.literal(hydra.core.Literal.string(x))))
@@ -33,7 +33,7 @@ def qualifiedName(x: hydra.module.QualifiedName): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.module.QualifiedName", Seq(hydra.core.Field("namespace", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.module.Namespace, hydra.core.Term](hydra.encode.module.namespace)(x.namespace))), hydra.core.Field("local", hydra.core.Term.literal(hydra.core.Literal.string(x.local))))))
 
 def termDefinition(x: hydra.module.TermDefinition): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.module.TermDefinition", Seq(hydra.core.Field("name", hydra.encode.core.name(x.name)), hydra.core.Field("term", hydra.encode.core.term(x.term)), hydra.core.Field("type", hydra.encode.core.typeScheme(x.`type`)))))
+  hydra.core.Term.record(hydra.core.Record("hydra.module.TermDefinition", Seq(hydra.core.Field("name", hydra.encode.core.name(x.name)), hydra.core.Field("term", hydra.encode.core.term(x.term)), hydra.core.Field("type", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.core.TypeScheme, hydra.core.Term](hydra.encode.core.typeScheme)(x.`type`))))))
 
 def typeDefinition(x: hydra.module.TypeDefinition): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.module.TypeDefinition", Seq(hydra.core.Field("name", hydra.encode.core.name(x.name)), hydra.core.Field("type", hydra.encode.core.`type`(x.`type`)))))

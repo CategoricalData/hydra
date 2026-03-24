@@ -2319,7 +2319,8 @@ encodeElimination env marg dom cod elm cx g =
             in (encodeTerm env typedLambda cx g)) (\jarg ->
             let prim = Utils.javaExpressionToJavaPrimary jarg
                 consId = innerClassRef aliases tname Names.partialVisitorName
-            in (Eithers.bind (encodeType aliases Sets.empty cod cx g) (\jcod -> Eithers.bind (Utils.javaTypeToJavaReferenceType jcod cx) (\rt -> Eithers.bind (domTypeArgs aliases dom cx g) (\domArgs ->
+                effectiveCod = cod
+            in (Eithers.bind (encodeType aliases Sets.empty effectiveCod cx g) (\jcod -> Eithers.bind (Utils.javaTypeToJavaReferenceType jcod cx) (\rt -> Eithers.bind (domTypeArgs aliases dom cx g) (\domArgs ->
               let targs = typeArgsOrDiamond (Lists.concat2 domArgs [
                     Syntax.TypeArgumentReference rt])
               in (Eithers.bind (Maybes.cases def_ (Right []) (\d -> Eithers.bind (otherwiseBranch env aliases dom cod tname jcod domArgs d cx g) (\b -> Right [
@@ -2872,7 +2873,11 @@ encodeTermDefinition env tdef cx g =
 
       let name = Module.termDefinitionName tdef
           term0 = Module.termDefinitionTerm tdef
-          ts = Maybes.maybe (Core.TypeScheme [] (Core.TypeVariable (Core.Name "hydra.core.Unit")) Nothing) (\x -> x) (Module.termDefinitionType tdef)
+          ts =
+                  Maybes.maybe (Core.TypeScheme {
+                    Core.typeSchemeVariables = [],
+                    Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
+                    Core.typeSchemeConstraints = Nothing}) (\x -> x) (Module.termDefinitionType tdef)
           term = Rewriting.unshadowVariables term0
       in (Eithers.bind (analyzeJavaFunction env term cx g) (\fs ->
         let schemeVars = Lists.filter (\v -> isSimpleName v) (Core.typeSchemeVariables ts)

@@ -40,11 +40,11 @@ def error(v1: hydra.errors.Error) -> hydra.core.Term:
         case hydra.errors.ErrorUndefinedField(value=y6):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.errors.Error"), hydra.core.Field(hydra.core.Name("undefinedField"), hydra.encode.error.core.undefined_field_error(y6)))))
 
-        case hydra.errors.ErrorUndefinedTerm(value=y7):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.errors.Error"), hydra.core.Field(hydra.core.Name("undefinedTerm"), hydra.encode.error.core.undefined_term_error(y7)))))
+        case hydra.errors.ErrorUndefinedTermVariable(value=y7):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.errors.Error"), hydra.core.Field(hydra.core.Name("undefinedTermVariable"), hydra.encode.error.core.undefined_term_variable_error(y7)))))
 
-        case hydra.errors.ErrorUndefinedType(value=y8):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.errors.Error"), hydra.core.Field(hydra.core.Name("undefinedType"), hydra.encode.error.core.undefined_type_error(y8)))))
+        case hydra.errors.ErrorUntypedTermVariable(value=y8):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.errors.Error"), hydra.core.Field(hydra.core.Name("untypedTermVariable"), hydra.encode.error.core.untyped_term_variable_error(y8)))))
 
         case hydra.errors.ErrorUnexpectedTermVariant(value=y9):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.errors.Error"), hydra.core.Field(hydra.core.Name("unexpectedTermVariant"), hydra.encode.error.core.unexpected_term_variant_error(y9)))))

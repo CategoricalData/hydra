@@ -5,7 +5,7 @@ r"""Python test code generation codec for pytest-based generation tests."""
 from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import Either, Right, frozenlist
+from hydra.dsl.python import Either, Just, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.coders
 import hydra.constants
@@ -113,7 +113,7 @@ def namespaces_for_python_module(mod: hydra.module.Module, graph_: hydra.graph.G
         return hydra.lexical.graph_to_bindings(graph_)
     @lru_cache(1)
     def defs() -> frozenlist[hydra.module.Definition]:
-        return hydra.lib.maybes.map_maybe((lambda b: hydra.lib.maybes.map((lambda ts: cast(hydra.module.Definition, hydra.module.DefinitionTerm(hydra.module.TermDefinition(b.name, b.term, ts)))), b.type)), bindings())
+        return hydra.lib.maybes.map_maybe((lambda b: hydra.lib.maybes.map((lambda ts: cast(hydra.module.Definition, hydra.module.DefinitionTerm(hydra.module.TermDefinition(b.name, b.term, Just(ts))))), b.type)), bindings())
     return Right(hydra.ext.python.utils.find_namespaces(mod.namespace, defs()))
 
 def namespace_to_python_module_name(ns_: hydra.module.Namespace) -> str:

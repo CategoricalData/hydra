@@ -5,7 +5,6 @@
 module Hydra.Ext.Shacl.Coder where
 
 import qualified Hydra.Annotations as Annotations
-import qualified Hydra.Module.Compat as Compat
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
@@ -54,7 +53,10 @@ unexpectedE cx expected found =
 shaclCoder :: Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Errors.Error) (Model.ShapesGraph, Context.Context)
 shaclCoder mod cx g =
 
-      let typeEls = Lists.filter Annotations.isNativeType (Compat.moduleBindings mod)
+      let typeEls =
+              Maybes.cat (Lists.map (\d -> case d of
+                Module.DefinitionType v0 -> Just (Annotations.typeElement (Module.typeDefinitionName v0) (Module.typeDefinitionType v0))
+                _ -> Nothing) (Module.moduleDefinitions mod))
           toShape =
                   \el -> Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
                     Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))),
@@ -248,9 +250,9 @@ encodeType tname typ cx =
             Model.CommonConstraintProperty (Sets.fromList [
               Model.ReferenceDefinition _p])])) _props))]) (Eithers.mapList (\_ft -> encodeFieldType tname Nothing _ft cx) v0)
         Core.TypeUnit -> any
-        Core.TypeVariable vname -> Right (common [
+        Core.TypeVariable v0 -> Right (common [
           Model.CommonConstraintNode (Sets.fromList [
-            Model.ReferenceNamed (Utils.nameToIri vname)])])
+            Model.ReferenceNamed (Utils.nameToIri v0)])])
         _ -> unexpectedE cx "type" "unsupported type variant"
 
 -- | Construct a SHACL node shape from a list of common constraints
@@ -270,25 +272,21 @@ property iri =
       Model.propertyShapeOrder = Nothing,
       Model.propertyShapePath = iri}
 
--- | Add an rdf:type triple to an RDF Description.
--- Note: literals cannot be RDF subjects, so we skip the type triple for literal descriptions.
+-- | Add an rdf:type triple to an RDF Description
 withType :: Core.Name -> Syntax.Description -> Syntax.Description
 withType name desc =
 
       let subj = Syntax.descriptionSubject desc
           triples = Syntax.unGraph (Syntax.descriptionGraph desc)
-      in case subj of
-        Syntax.NodeLiteral _ -> desc  -- Literals cannot be RDF subjects; return as-is
-        _ ->
-          let subjRes =
+          subjRes =
                   case subj of
                     Syntax.NodeIri v0 -> Syntax.ResourceIri v0
                     Syntax.NodeBnode v0 -> Syntax.ResourceBnode v0
-              triple =
+          triple =
                   Syntax.Triple {
                     Syntax.tripleSubject = subjRes,
                     Syntax.triplePredicate = (Utils.rdfIri "type"),
                     Syntax.tripleObject = (Syntax.NodeIri (Utils.nameToIri name))}
-          in Syntax.Description {
-            Syntax.descriptionSubject = subj,
-            Syntax.descriptionGraph = (Syntax.Graph (Sets.insert triple triples))}
+      in Syntax.Description {
+        Syntax.descriptionSubject = subj,
+        Syntax.descriptionGraph = (Syntax.Graph (Sets.insert triple triples))}

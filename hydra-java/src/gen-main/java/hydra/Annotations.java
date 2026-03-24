@@ -142,17 +142,17 @@ public interface Annotations {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.core.Term>> peel = new java.util.concurrent.atomic.AtomicReference<>();
     peel.set((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> (t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> otherwise(hydra.core.Term instance) {
+      public hydra.core.Term otherwise(hydra.core.Term instance) {
         return t;
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> visit(hydra.core.Term.TypeLambda tl) {
+      public hydra.core.Term visit(hydra.core.Term.TypeLambda tl) {
         return peel.get().apply((tl).value.body);
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.Maybe<String>> visit(hydra.core.Term.TypeApplication ta) {
+      public hydra.core.Term visit(hydra.core.Term.TypeApplication ta) {
         return peel.get().apply((ta).value.body);
       }
     })));
@@ -421,12 +421,12 @@ public interface Annotations {
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> termAnnotationInternal(hydra.core.Term term) {
     java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.AnnotatedTerm>> getAnn = (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.AnnotatedTerm>>) (t -> (t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> otherwise(hydra.core.Term instance) {
+      public hydra.util.Maybe<hydra.core.AnnotatedTerm> otherwise(hydra.core.Term instance) {
         return (hydra.util.Maybe<hydra.core.AnnotatedTerm>) (hydra.util.Maybe.<hydra.core.AnnotatedTerm>nothing());
       }
 
       @Override
-      public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> visit(hydra.core.Term.Annotated a) {
+      public hydra.util.Maybe<hydra.core.AnnotatedTerm> visit(hydra.core.Term.Annotated a) {
         return hydra.util.Maybe.just((a).value);
       }
     }));
@@ -440,12 +440,12 @@ public interface Annotations {
   static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> typeAnnotationInternal(hydra.core.Type typ) {
     java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.AnnotatedType>> getAnn = (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.AnnotatedType>>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> otherwise(hydra.core.Type instance) {
+      public hydra.util.Maybe<hydra.core.AnnotatedType> otherwise(hydra.core.Type instance) {
         return (hydra.util.Maybe<hydra.core.AnnotatedType>) (hydra.util.Maybe.<hydra.core.AnnotatedType>nothing());
       }
 
       @Override
-      public hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> visit(hydra.core.Type.Annotated a) {
+      public hydra.util.Maybe<hydra.core.AnnotatedType> visit(hydra.core.Type.Annotated a) {
         return hydra.util.Maybe.just((a).value);
       }
     }));
