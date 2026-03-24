@@ -1,0 +1,4 @@
+<urn:hydra:genpg:vertex:invalid_emp> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Employee> .
+<urn:hydra:genpg:vertex:invalid_emp> <urn:hydra:genpg:email> "bad@example.com"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:invalid_prod> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Product> .
+<urn:hydra:genpg:vertex:invalid_prod> <urn:hydra:genpg:name> "42"^^<http://www.w3.org/2001/XMLSchema#integer> .

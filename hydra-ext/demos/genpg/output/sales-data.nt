@@ -1,0 +1,304 @@
+<urn:hydra:genpg:vertex:call_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:CustomerInteraction> .
+<urn:hydra:genpg:vertex:call_1> <urn:hydra:genpg:customer> <urn:hydra:genpg:vertex:customer_5> .
+<urn:hydra:genpg:vertex:call_1> <urn:hydra:genpg:customerInitiated> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:call_1> <urn:hydra:genpg:durationMinutes> "15"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:call_1> <urn:hydra:genpg:employee> <urn:hydra:genpg:vertex:employee_3> .
+<urn:hydra:genpg:vertex:call_1> <urn:hydra:genpg:followUpRequired> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:call_1> <urn:hydra:genpg:interactionDate> "2025-01-10"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:call_1> <urn:hydra:genpg:interactionType> "Call"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:call_1> <urn:hydra:genpg:notes> "Explained the importance of carrying towels in their stores"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:call_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:CustomerInteraction> .
+<urn:hydra:genpg:vertex:call_2> <urn:hydra:genpg:customer> <urn:hydra:genpg:vertex:customer_4> .
+<urn:hydra:genpg:vertex:call_2> <urn:hydra:genpg:customerInitiated> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:call_2> <urn:hydra:genpg:durationMinutes> "90"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:call_2> <urn:hydra:genpg:employee> <urn:hydra:genpg:vertex:employee_8> .
+<urn:hydra:genpg:vertex:call_2> <urn:hydra:genpg:interactionDate> "2025-03-30"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:call_2> <urn:hydra:genpg:interactionType> "Call"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:call_2> <urn:hydra:genpg:notes> "Listened to poetry (reluctantly)"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:call_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:CustomerInteraction> .
+<urn:hydra:genpg:vertex:call_3> <urn:hydra:genpg:customer> <urn:hydra:genpg:vertex:customer_1> .
+<urn:hydra:genpg:vertex:call_3> <urn:hydra:genpg:customerInitiated> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:call_3> <urn:hydra:genpg:durationMinutes> "35"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:call_3> <urn:hydra:genpg:employee> <urn:hydra:genpg:vertex:employee_3> .
+<urn:hydra:genpg:vertex:call_3> <urn:hydra:genpg:followUpRequired> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:call_3> <urn:hydra:genpg:interactionDate> "2025-03-12"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:call_3> <urn:hydra:genpg:interactionType> "Call"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:call_3> <urn:hydra:genpg:notes> "Technical support for malfunctioning doors"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:call_4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:CustomerInteraction> .
+<urn:hydra:genpg:vertex:call_4> <urn:hydra:genpg:customer> <urn:hydra:genpg:vertex:customer_2> .
+<urn:hydra:genpg:vertex:call_4> <urn:hydra:genpg:customerInitiated> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:call_4> <urn:hydra:genpg:durationMinutes> "25"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:call_4> <urn:hydra:genpg:employee> <urn:hydra:genpg:vertex:employee_1> .
+<urn:hydra:genpg:vertex:call_4> <urn:hydra:genpg:followUpRequired> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:call_4> <urn:hydra:genpg:interactionDate> "2025-03-25"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:call_4> <urn:hydra:genpg:interactionType> "Call"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:call_4> <urn:hydra:genpg:notes> "Reservation inquiry for end of universe party"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Customer> .
+<urn:hydra:genpg:vertex:customer_1> <urn:hydra:genpg:companyName> "Sirius Cybernetics Corporation"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_1> <urn:hydra:genpg:contactName> "Hactar"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_1> <urn:hydra:genpg:email> "hactar@sirius.com"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_1> <urn:hydra:genpg:phone> "+42-5551234"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_1> <urn:hydra:genpg:purchased> <urn:hydra:genpg:vertex:sale_2> .
+<urn:hydra:genpg:vertex:customer_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Customer> .
+<urn:hydra:genpg:vertex:customer_2> <urn:hydra:genpg:companyName> "Milliways Restaurant"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_2> <urn:hydra:genpg:contactName> "Max Quordlepleen"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_2> <urn:hydra:genpg:email> "max@endofuniverse.com"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_2> <urn:hydra:genpg:phone> "+42-5557890"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_2> <urn:hydra:genpg:purchased> <urn:hydra:genpg:vertex:sale_5> .
+<urn:hydra:genpg:vertex:customer_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Customer> .
+<urn:hydra:genpg:vertex:customer_3> <urn:hydra:genpg:companyName> "Magrathean Planetary Design"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_3> <urn:hydra:genpg:contactName> "Deep Thought"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_3> <urn:hydra:genpg:email> "thought@magrathea.com"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_3> <urn:hydra:genpg:purchased> <urn:hydra:genpg:vertex:sale_3> .
+<urn:hydra:genpg:vertex:customer_3> <urn:hydra:genpg:purchased> <urn:hydra:genpg:vertex:sale_4> .
+<urn:hydra:genpg:vertex:customer_4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Customer> .
+<urn:hydra:genpg:vertex:customer_4> <urn:hydra:genpg:companyName> "Vogon Poetry Appreciation"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_4> <urn:hydra:genpg:contactName> "Prostetnic Jeltz"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_4> <urn:hydra:genpg:email> "poetry@vogon.gov"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_4> <urn:hydra:genpg:phone> "+42-5552468"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_5> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Customer> .
+<urn:hydra:genpg:vertex:customer_5> <urn:hydra:genpg:companyName> "Betelgeusian Trading Co."^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_5> <urn:hydra:genpg:contactName> "Hotblack Desiato"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_5> <urn:hydra:genpg:phone> "+42-5551357"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:customer_5> <urn:hydra:genpg:purchased> <urn:hydra:genpg:vertex:sale_1> .
+<urn:hydra:genpg:vertex:department_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Department> .
+<urn:hydra:genpg:vertex:department_1> <urn:hydra:genpg:name> "Executive Office"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:department_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Department> .
+<urn:hydra:genpg:vertex:department_2> <urn:hydra:genpg:name> "Research & Development"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:department_2> <urn:hydra:genpg:parentDepartment> <urn:hydra:genpg:vertex:department_1> .
+<urn:hydra:genpg:vertex:department_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Department> .
+<urn:hydra:genpg:vertex:department_3> <urn:hydra:genpg:name> "Field Research"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:department_3> <urn:hydra:genpg:parentDepartment> <urn:hydra:genpg:vertex:department_2> .
+<urn:hydra:genpg:vertex:department_4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Department> .
+<urn:hydra:genpg:vertex:department_4> <urn:hydra:genpg:name> "Robotics"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:department_4> <urn:hydra:genpg:parentDepartment> <urn:hydra:genpg:vertex:department_2> .
+<urn:hydra:genpg:vertex:department_5> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Department> .
+<urn:hydra:genpg:vertex:department_5> <urn:hydra:genpg:name> "Custom Design"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:department_6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Department> .
+<urn:hydra:genpg:vertex:department_6> <urn:hydra:genpg:name> "Megadodo Publications"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:department_7> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Department> .
+<urn:hydra:genpg:vertex:department_7> <urn:hydra:genpg:name> "Vogon Constructor Fleet"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:department_7> <urn:hydra:genpg:parentDepartment> <urn:hydra:genpg:vertex:department_6> .
+<urn:hydra:genpg:vertex:department_8> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Department> .
+<urn:hydra:genpg:vertex:department_8> <urn:hydra:genpg:name> "Restaurant Division"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:department_9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Department> .
+<urn:hydra:genpg:vertex:department_9> <urn:hydra:genpg:name> "Marketing"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:department_9> <urn:hydra:genpg:parentDepartment> <urn:hydra:genpg:vertex:department_1> .
+<urn:hydra:genpg:vertex:email_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:CustomerInteraction> .
+<urn:hydra:genpg:vertex:email_1> <urn:hydra:genpg:customer> <urn:hydra:genpg:vertex:customer_3> .
+<urn:hydra:genpg:vertex:email_1> <urn:hydra:genpg:customerInitiated> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:email_1> <urn:hydra:genpg:durationMinutes> "30"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:email_1> <urn:hydra:genpg:employee> <urn:hydra:genpg:vertex:employee_6> .
+<urn:hydra:genpg:vertex:email_1> <urn:hydra:genpg:followUpRequired> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:email_1> <urn:hydra:genpg:interactionDate> "2025-04-05"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:email_1> <urn:hydra:genpg:interactionType> "Email"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:email_1> <urn:hydra:genpg:notes> "Sent custom planet designs with fjords"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:email_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:CustomerInteraction> .
+<urn:hydra:genpg:vertex:email_2> <urn:hydra:genpg:customer> <urn:hydra:genpg:vertex:customer_1> .
+<urn:hydra:genpg:vertex:email_2> <urn:hydra:genpg:customerInitiated> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:email_2> <urn:hydra:genpg:durationMinutes> "10"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:email_2> <urn:hydra:genpg:employee> <urn:hydra:genpg:vertex:employee_5> .
+<urn:hydra:genpg:vertex:email_2> <urn:hydra:genpg:followUpRequired> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:email_2> <urn:hydra:genpg:interactionDate> "2025-02-18"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:email_2> <urn:hydra:genpg:interactionType> "Email"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:email_2> <urn:hydra:genpg:notes> "Complained about door personality modules"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:email_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:CustomerInteraction> .
+<urn:hydra:genpg:vertex:email_3> <urn:hydra:genpg:customer> <urn:hydra:genpg:vertex:customer_2> .
+<urn:hydra:genpg:vertex:email_3> <urn:hydra:genpg:customerInitiated> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:email_3> <urn:hydra:genpg:employee> <urn:hydra:genpg:vertex:employee_3> .
+<urn:hydra:genpg:vertex:email_3> <urn:hydra:genpg:followUpRequired> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:email_3> <urn:hydra:genpg:interactionDate> "2025-03-20"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:email_3> <urn:hydra:genpg:interactionType> "Email"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:email_3> <urn:hydra:genpg:notes> "Request for restaurant menu samples"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:email_4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:CustomerInteraction> .
+<urn:hydra:genpg:vertex:email_4> <urn:hydra:genpg:customer> <urn:hydra:genpg:vertex:customer_4> .
+<urn:hydra:genpg:vertex:email_4> <urn:hydra:genpg:customerInitiated> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:email_4> <urn:hydra:genpg:employee> <urn:hydra:genpg:vertex:employee_7> .
+<urn:hydra:genpg:vertex:email_4> <urn:hydra:genpg:followUpRequired> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:email_4> <urn:hydra:genpg:interactionDate> "2025-02-28"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:email_4> <urn:hydra:genpg:interactionType> "Email"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:email_4> <urn:hydra:genpg:notes> "Poetry submission for review"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Employee> .
+<urn:hydra:genpg:vertex:employee_1> <urn:hydra:genpg:belongsTo> <urn:hydra:genpg:vertex:department_1> .
+<urn:hydra:genpg:vertex:employee_1> <urn:hydra:genpg:email> "z.beeblebrox@heartofgold.com"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_1> <urn:hydra:genpg:firstName> "Zaphod"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_1> <urn:hydra:genpg:hireDate> "1979-10-12"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_1> <urn:hydra:genpg:lastName> "Beeblebrox"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_1> <urn:hydra:genpg:manages> <urn:hydra:genpg:vertex:employee_2> .
+<urn:hydra:genpg:vertex:employee_1> <urn:hydra:genpg:manages> <urn:hydra:genpg:vertex:employee_3> .
+<urn:hydra:genpg:vertex:employee_1> <urn:hydra:genpg:manages> <urn:hydra:genpg:vertex:employee_4> .
+<urn:hydra:genpg:vertex:employee_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Employee> .
+<urn:hydra:genpg:vertex:employee_2> <urn:hydra:genpg:belongsTo> <urn:hydra:genpg:vertex:department_2> .
+<urn:hydra:genpg:vertex:employee_2> <urn:hydra:genpg:email> "a.dent@heartofgold.com"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_2> <urn:hydra:genpg:firstName> "Arthur"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_2> <urn:hydra:genpg:hireDate> "2005-06-22"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_2> <urn:hydra:genpg:lastName> "Dent"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_2> <urn:hydra:genpg:sold> <urn:hydra:genpg:vertex:sale_2> .
+<urn:hydra:genpg:vertex:employee_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Employee> .
+<urn:hydra:genpg:vertex:employee_3> <urn:hydra:genpg:belongsTo> <urn:hydra:genpg:vertex:department_3> .
+<urn:hydra:genpg:vertex:employee_3> <urn:hydra:genpg:email> "f.prefect@heartofgold.com"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_3> <urn:hydra:genpg:firstName> "Ford"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_3> <urn:hydra:genpg:hireDate> "1980-03-08"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_3> <urn:hydra:genpg:lastName> "Prefect"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_3> <urn:hydra:genpg:manages> <urn:hydra:genpg:vertex:employee_6> .
+<urn:hydra:genpg:vertex:employee_3> <urn:hydra:genpg:sold> <urn:hydra:genpg:vertex:sale_1> .
+<urn:hydra:genpg:vertex:employee_3> <urn:hydra:genpg:sold> <urn:hydra:genpg:vertex:sale_5> .
+<urn:hydra:genpg:vertex:employee_4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Employee> .
+<urn:hydra:genpg:vertex:employee_4> <urn:hydra:genpg:belongsTo> <urn:hydra:genpg:vertex:department_2> .
+<urn:hydra:genpg:vertex:employee_4> <urn:hydra:genpg:email> "t.astra@heartofgold.com"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_4> <urn:hydra:genpg:firstName> "Trillian"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_4> <urn:hydra:genpg:hireDate> "1997-11-30"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_4> <urn:hydra:genpg:lastName> "Astra"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_4> <urn:hydra:genpg:manages> <urn:hydra:genpg:vertex:employee_5> .
+<urn:hydra:genpg:vertex:employee_4> <urn:hydra:genpg:sold> <urn:hydra:genpg:vertex:sale_3> .
+<urn:hydra:genpg:vertex:employee_5> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Employee> .
+<urn:hydra:genpg:vertex:employee_5> <urn:hydra:genpg:belongsTo> <urn:hydra:genpg:vertex:department_4> .
+<urn:hydra:genpg:vertex:employee_5> <urn:hydra:genpg:email> "m.android@heartofgold.com"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_5> <urn:hydra:genpg:firstName> "Marvin"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_5> <urn:hydra:genpg:hireDate> "1981-02-14"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_5> <urn:hydra:genpg:lastName> "Android"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Employee> .
+<urn:hydra:genpg:vertex:employee_6> <urn:hydra:genpg:belongsTo> <urn:hydra:genpg:vertex:department_5> .
+<urn:hydra:genpg:vertex:employee_6> <urn:hydra:genpg:email> "s.magrathea@heartofgold.com"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_6> <urn:hydra:genpg:firstName> "Slartibartfast"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_6> <urn:hydra:genpg:lastName> "Magrathea"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_6> <urn:hydra:genpg:sold> <urn:hydra:genpg:vertex:sale_4> .
+<urn:hydra:genpg:vertex:employee_7> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Employee> .
+<urn:hydra:genpg:vertex:employee_7> <urn:hydra:genpg:belongsTo> <urn:hydra:genpg:vertex:department_6> .
+<urn:hydra:genpg:vertex:employee_7> <urn:hydra:genpg:email> "z.vann@heartofgold.com"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_7> <urn:hydra:genpg:firstName> "Zarniwoop"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_7> <urn:hydra:genpg:hireDate> "1984-09-27"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_7> <urn:hydra:genpg:lastName> "Vann"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_7> <urn:hydra:genpg:manages> <urn:hydra:genpg:vertex:employee_8> .
+<urn:hydra:genpg:vertex:employee_8> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Employee> .
+<urn:hydra:genpg:vertex:employee_8> <urn:hydra:genpg:belongsTo> <urn:hydra:genpg:vertex:department_7> .
+<urn:hydra:genpg:vertex:employee_8> <urn:hydra:genpg:email> "p.jeltz@vogon.gov"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_8> <urn:hydra:genpg:firstName> "Prostetnic"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_8> <urn:hydra:genpg:hireDate> "2010-12-05"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:employee_8> <urn:hydra:genpg:lastName> "Jeltz"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:meeting_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:CustomerInteraction> .
+<urn:hydra:genpg:vertex:meeting_1> <urn:hydra:genpg:customer> <urn:hydra:genpg:vertex:customer_1> .
+<urn:hydra:genpg:vertex:meeting_1> <urn:hydra:genpg:customerInitiated> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:meeting_1> <urn:hydra:genpg:durationMinutes> "45"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:meeting_1> <urn:hydra:genpg:employee> <urn:hydra:genpg:vertex:employee_2> .
+<urn:hydra:genpg:vertex:meeting_1> <urn:hydra:genpg:followUpRequired> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:meeting_1> <urn:hydra:genpg:interactionDate> "2025-02-15"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:meeting_1> <urn:hydra:genpg:interactionType> "Meeting"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:meeting_1> <urn:hydra:genpg:notes> "Discussed the improbability of their newest product line"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:meeting_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:CustomerInteraction> .
+<urn:hydra:genpg:vertex:meeting_2> <urn:hydra:genpg:customer> <urn:hydra:genpg:vertex:customer_2> .
+<urn:hydra:genpg:vertex:meeting_2> <urn:hydra:genpg:customerInitiated> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:meeting_2> <urn:hydra:genpg:durationMinutes> "60"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:meeting_2> <urn:hydra:genpg:employee> <urn:hydra:genpg:vertex:employee_4> .
+<urn:hydra:genpg:vertex:meeting_2> <urn:hydra:genpg:followUpRequired> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:meeting_2> <urn:hydra:genpg:interactionDate> "2025-04-22"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:meeting_2> <urn:hydra:genpg:interactionType> "Meeting"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:meeting_2> <urn:hydra:genpg:notes> "Proposed special menu items for Time Travelers Week"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:meeting_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:CustomerInteraction> .
+<urn:hydra:genpg:vertex:meeting_3> <urn:hydra:genpg:customer> <urn:hydra:genpg:vertex:customer_3> .
+<urn:hydra:genpg:vertex:meeting_3> <urn:hydra:genpg:customerInitiated> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:meeting_3> <urn:hydra:genpg:durationMinutes> "120"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:meeting_3> <urn:hydra:genpg:employee> <urn:hydra:genpg:vertex:employee_1> .
+<urn:hydra:genpg:vertex:meeting_3> <urn:hydra:genpg:followUpRequired> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:meeting_3> <urn:hydra:genpg:interactionDate> "2025-03-15"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:meeting_3> <urn:hydra:genpg:interactionType> "Meeting"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:meeting_3> <urn:hydra:genpg:notes> "Annual planetary design review"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:meeting_4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:CustomerInteraction> .
+<urn:hydra:genpg:vertex:meeting_4> <urn:hydra:genpg:customer> <urn:hydra:genpg:vertex:customer_5> .
+<urn:hydra:genpg:vertex:meeting_4> <urn:hydra:genpg:customerInitiated> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:meeting_4> <urn:hydra:genpg:durationMinutes> "60"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:meeting_4> <urn:hydra:genpg:employee> <urn:hydra:genpg:vertex:employee_6> .
+<urn:hydra:genpg:vertex:meeting_4> <urn:hydra:genpg:followUpRequired> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<urn:hydra:genpg:vertex:meeting_4> <urn:hydra:genpg:interactionDate> "2025-03-05"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:meeting_4> <urn:hydra:genpg:interactionType> "Meeting"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:meeting_4> <urn:hydra:genpg:notes> "Discussion about towel promotional event"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:product_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Product> .
+<urn:hydra:genpg:vertex:product_1> <urn:hydra:genpg:name> "Infinite Improbability Drive"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:product_1> <urn:hydra:genpg:price> "999999.99"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:product_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Product> .
+<urn:hydra:genpg:vertex:product_2> <urn:hydra:genpg:name> "Hitchhiker's Guide Mark II"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:product_2> <urn:hydra:genpg:price> "42.0"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:product_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Product> .
+<urn:hydra:genpg:vertex:product_3> <urn:hydra:genpg:name> "Super-Absorbent Towel"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:product_3> <urn:hydra:genpg:price> "19.99"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:product_4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Product> .
+<urn:hydra:genpg:vertex:product_4> <urn:hydra:genpg:name> "Babel Fish Translator"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:product_4> <urn:hydra:genpg:price> "149.5"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:product_5> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Product> .
+<urn:hydra:genpg:vertex:product_5> <urn:hydra:genpg:name> "Perfect Cup of Tea Simulator"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:product_5> <urn:hydra:genpg:price> "239.95"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:product_6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Product> .
+<urn:hydra:genpg:vertex:product_6> <urn:hydra:genpg:name> "Pan Galactic Gargle Blaster Kit"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:product_6> <urn:hydra:genpg:price> "59.99"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:product_7> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Product> .
+<urn:hydra:genpg:vertex:product_7> <urn:hydra:genpg:name> "Electronic Thumb"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:product_7> <urn:hydra:genpg:price> "29.95"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:product_8> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Product> .
+<urn:hydra:genpg:vertex:product_8> <urn:hydra:genpg:name> "Digital Watch (Amazingly Complicated)"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:product_8> <urn:hydra:genpg:price> "24.95"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:product_9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Product> .
+<urn:hydra:genpg:vertex:product_9> <urn:hydra:genpg:name> "Nutrimatic Drink Dispenser"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:saleItem_10> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:SaleItem> .
+<urn:hydra:genpg:vertex:saleItem_10> <urn:hydra:genpg:containsProduct> <urn:hydra:genpg:vertex:product_4> .
+<urn:hydra:genpg:vertex:saleItem_10> <urn:hydra:genpg:itemPrice> "149.5"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:saleItem_10> <urn:hydra:genpg:quantity> "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:saleItem_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:SaleItem> .
+<urn:hydra:genpg:vertex:saleItem_1> <urn:hydra:genpg:containsProduct> <urn:hydra:genpg:vertex:product_3> .
+<urn:hydra:genpg:vertex:saleItem_1> <urn:hydra:genpg:itemPrice> "19.99"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:saleItem_1> <urn:hydra:genpg:quantity> "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:saleItem_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:SaleItem> .
+<urn:hydra:genpg:vertex:saleItem_2> <urn:hydra:genpg:containsProduct> <urn:hydra:genpg:vertex:product_7> .
+<urn:hydra:genpg:vertex:saleItem_2> <urn:hydra:genpg:itemPrice> "29.95"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:saleItem_2> <urn:hydra:genpg:quantity> "2"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:saleItem_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:SaleItem> .
+<urn:hydra:genpg:vertex:saleItem_3> <urn:hydra:genpg:containsProduct> <urn:hydra:genpg:vertex:product_8> .
+<urn:hydra:genpg:vertex:saleItem_3> <urn:hydra:genpg:itemPrice> "24.95"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:saleItem_3> <urn:hydra:genpg:quantity> "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:saleItem_4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:SaleItem> .
+<urn:hydra:genpg:vertex:saleItem_4> <urn:hydra:genpg:containsProduct> <urn:hydra:genpg:vertex:product_1> .
+<urn:hydra:genpg:vertex:saleItem_4> <urn:hydra:genpg:itemPrice> "999999.99"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:saleItem_4> <urn:hydra:genpg:quantity> "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:saleItem_5> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:SaleItem> .
+<urn:hydra:genpg:vertex:saleItem_5> <urn:hydra:genpg:containsProduct> <urn:hydra:genpg:vertex:product_9> .
+<urn:hydra:genpg:vertex:saleItem_5> <urn:hydra:genpg:itemPrice> "399.99"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:saleItem_5> <urn:hydra:genpg:quantity> "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:saleItem_6> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:SaleItem> .
+<urn:hydra:genpg:vertex:saleItem_6> <urn:hydra:genpg:containsProduct> <urn:hydra:genpg:vertex:product_2> .
+<urn:hydra:genpg:vertex:saleItem_6> <urn:hydra:genpg:itemPrice> "42.0"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:saleItem_6> <urn:hydra:genpg:quantity> "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:saleItem_7> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:SaleItem> .
+<urn:hydra:genpg:vertex:saleItem_7> <urn:hydra:genpg:containsProduct> <urn:hydra:genpg:vertex:product_1> .
+<urn:hydra:genpg:vertex:saleItem_7> <urn:hydra:genpg:itemPrice> "999999.99"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:saleItem_7> <urn:hydra:genpg:quantity> "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:saleItem_8> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:SaleItem> .
+<urn:hydra:genpg:vertex:saleItem_8> <urn:hydra:genpg:containsProduct> <urn:hydra:genpg:vertex:product_5> .
+<urn:hydra:genpg:vertex:saleItem_8> <urn:hydra:genpg:itemPrice> "239.95"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:saleItem_8> <urn:hydra:genpg:quantity> "1"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:saleItem_9> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:SaleItem> .
+<urn:hydra:genpg:vertex:saleItem_9> <urn:hydra:genpg:containsProduct> <urn:hydra:genpg:vertex:product_6> .
+<urn:hydra:genpg:vertex:saleItem_9> <urn:hydra:genpg:itemPrice> "59.99"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:saleItem_9> <urn:hydra:genpg:quantity> "2"^^<http://www.w3.org/2001/XMLSchema#int> .
+<urn:hydra:genpg:vertex:sale_1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Sale> .
+<urn:hydra:genpg:vertex:sale_1> <urn:hydra:genpg:includes> <urn:hydra:genpg:vertex:saleItem_1> .
+<urn:hydra:genpg:vertex:sale_1> <urn:hydra:genpg:includes> <urn:hydra:genpg:vertex:saleItem_2> .
+<urn:hydra:genpg:vertex:sale_1> <urn:hydra:genpg:includes> <urn:hydra:genpg:vertex:saleItem_3> .
+<urn:hydra:genpg:vertex:sale_1> <urn:hydra:genpg:saleDate> "2025-01-15"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:sale_1> <urn:hydra:genpg:totalAmount> "189.97"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:sale_2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Sale> .
+<urn:hydra:genpg:vertex:sale_2> <urn:hydra:genpg:includes> <urn:hydra:genpg:vertex:saleItem_4> .
+<urn:hydra:genpg:vertex:sale_2> <urn:hydra:genpg:includes> <urn:hydra:genpg:vertex:saleItem_5> .
+<urn:hydra:genpg:vertex:sale_2> <urn:hydra:genpg:saleDate> "2025-02-22"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:sale_2> <urn:hydra:genpg:totalAmount> "1000229.93"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:sale_3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Sale> .
+<urn:hydra:genpg:vertex:sale_3> <urn:hydra:genpg:includes> <urn:hydra:genpg:vertex:saleItem_6> .
+<urn:hydra:genpg:vertex:sale_3> <urn:hydra:genpg:saleDate> "2025-03-05"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:sale_3> <urn:hydra:genpg:totalAmount> "42.0"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:sale_4> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Sale> .
+<urn:hydra:genpg:vertex:sale_4> <urn:hydra:genpg:includes> <urn:hydra:genpg:vertex:saleItem_7> .
+<urn:hydra:genpg:vertex:sale_4> <urn:hydra:genpg:saleDate> "2025-04-10"^^<http://www.w3.org/2001/XMLSchema#string> .
+<urn:hydra:genpg:vertex:sale_4> <urn:hydra:genpg:totalAmount> "999999.99"^^<http://www.w3.org/2001/XMLSchema#double> .
+<urn:hydra:genpg:vertex:sale_5> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:hydra:genpg:Sale> .
+<urn:hydra:genpg:vertex:sale_5> <urn:hydra:genpg:includes> <urn:hydra:genpg:vertex:saleItem_10> .
+<urn:hydra:genpg:vertex:sale_5> <urn:hydra:genpg:includes> <urn:hydra:genpg:vertex:saleItem_8> .
+<urn:hydra:genpg:vertex:sale_5> <urn:hydra:genpg:includes> <urn:hydra:genpg:vertex:saleItem_9> .
+<urn:hydra:genpg:vertex:sale_5> <urn:hydra:genpg:saleDate> "2025-05-01"^^<http://www.w3.org/2001/XMLSchema#string> .
