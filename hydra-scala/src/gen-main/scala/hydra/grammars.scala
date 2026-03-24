@@ -51,19 +51,18 @@ def grammarToModule(ns: hydra.module.Namespace)(grammar: hydra.grammar.Grammar)(
     hydra.lib.pairs.second[scala.Predef.String, hydra.grammar.Pattern](pair))(prodPairs)
   lazy val elementPairs: Seq[Tuple2[scala.Predef.String, hydra.core.Type]] = hydra.lib.lists.concat[Tuple2[scala.Predef.String, hydra.core.Type]](hydra.lib.lists.zipWith[scala.Predef.String, hydra.grammar.Pattern, Seq[Tuple2[scala.Predef.String, hydra.core.Type]]]((v1: scala.Predef.String) =>
     (v2: hydra.grammar.Pattern) => hydra.grammars.makeElements(false)(ns)(v1)(v2))(capitalizedNames)(patterns))
-  lazy val elements: Seq[hydra.core.Binding] = hydra.lib.lists.map[Tuple2[scala.Predef.String, hydra.core.Type], hydra.core.Binding]((pair: Tuple2[scala.Predef.String, hydra.core.Type]) =>
+  lazy val typeDefs: Seq[hydra.module.Definition] = hydra.lib.lists.map[Tuple2[scala.Predef.String, hydra.core.Type], hydra.module.Definition]((pair: Tuple2[scala.Predef.String, hydra.core.Type]) =>
     {
     lazy val lname: scala.Predef.String = hydra.lib.pairs.first[scala.Predef.String, hydra.core.Type](pair)
     {
       lazy val elName: hydra.core.Name = hydra.grammars.toName(ns)(lname)
       {
         lazy val typ: hydra.core.Type = hydra.grammars.replacePlaceholders(elName)(hydra.grammars.wrapType(hydra.lib.pairs.second[scala.Predef.String, hydra.core.Type](pair)))
-        hydra.annotations.typeElement(elName)(typ)
+        hydra.module.Definition.`type`(hydra.module.TypeDefinition(elName, typ))
       }
     }
   })(elementPairs)
-  hydra.module.Module(ns, hydra.lib.lists.map[hydra.core.Binding, hydra.module.Definition]((b: hydra.core.Binding) =>
-    hydra.module.Definition.term(hydra.module.TermDefinition(b.name, (b.term), None)))(elements), Seq(), Seq(), desc)
+  hydra.module.Module(ns, typeDefs, Seq(), Seq(), desc)
 }
 
 def isComplex(pat: hydra.grammar.Pattern): Boolean =
