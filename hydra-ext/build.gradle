@@ -31,6 +31,17 @@ generateGrammarSource {
 
 compileJava {
     dependsOn generateGrammarSource
+    // Exclude generated files with duplicate class names pending code generator fix
+    exclude '**/hydra/ext/io/shex/syntax/**'
+    exclude '**/hydra/ext/org/w3/owl/**'
+    exclude '**/hydra/ext/org/w3/xml/schema/Integer.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/Boolean.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/Byte.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/Double.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/Float.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/Long.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/Short.java'
+    exclude '**/hydra/ext/org/w3/xml/schema/String.java'
 }
 
 publishing {

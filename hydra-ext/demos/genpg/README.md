@@ -1,7 +1,12 @@
 # GenPG demo - property graph generation from CSV tables
 
 This demo demonstrates end-to-end transformation of relational CSV data into
-a property graph in GraphSON format. This is a translingual application which can be run in either Haskell or Python.
+a property graph. Two output formats are supported:
+
+- **GraphSON** (JSON Lines) for import into TinkerPop-compatible graph databases
+- **RDF/SHACL** (N-Triples) for Semantic Web tooling and SPARQL queries
+
+Both output paths are translingual: they run in Haskell, Java, and Python.
 
 There is a demo video [here](https://drive.google.com/file/d/10HCElcG7n0tprOTdtX4bSa5yWYs08nV-/view?usp=sharing).
 
@@ -18,6 +23,8 @@ The GenPG demo:
 hydra-ext/
 ├── demos/genpg/
 │   ├── README.md                 # This file
+│   ├── bin/run.sh                   # Run GraphSON demo (all hosts)
+│   ├── bin/run-rdf.sh               # Run RDF/SHACL demo (all hosts)
 │   ├── bin/generate-python.ghci      # Script to generate Python modules
 │   ├── bin/generate-java.ghci        # Script to generate Java modules
 │   ├── data/
@@ -27,7 +34,8 @@ hydra-ext/
 ├── src/
 │   ├── main/
 │   │   ├── haskell/Hydra/Ext/Demos/GenPG/
-│   │   │   ├── Demo.hs           # Haskell demo driver
+│   │   │   ├── Demo.hs           # Haskell GraphSON driver
+│   │   │   ├── Rdf.hs            # Haskell RDF/SHACL driver
 │   │   │   ├── Modules.hs        # Shared module definitions (sales/health)
 │   │   │   ├── GeneratePython.hs # Python code generation
 │   │   │   ├── GenerateJava.hs   # Java code generation
@@ -41,10 +49,12 @@ hydra-ext/
 │   │   │           ├── GraphSchema.hs
 │   │   │           └── Mapping.hs
 │   │   ├── python/hydra/demos/genpg/
-│   │   │   ├── demo.py           # Python demo driver
+│   │   │   ├── demo.py           # Python GraphSON driver
+│   │   │   ├── rdf.py            # Python RDF/SHACL driver
 │   │   │   └── generate_prompt.py # LLM prompt generator
 │   │   └── java/hydra/demos/genpg/
-│   │       └── Demo.java         # Java demo driver
+│   │       ├── Demo.java         # Java GraphSON driver
+│   │       └── RdfDemo.java      # Java RDF/SHACL driver
 │   └── gen-main/
 │       ├── haskell/Hydra/Pg/
 │       │   ├── Model.hs          # Generated: property graph model
@@ -123,6 +133,75 @@ java -cp $(../gradlew :hydra-ext:printClasspath -q 2>/dev/null || echo "build/cl
 Or run directly via Gradle if an `application` plugin or JavaExec task is configured.
 
 All three modes read from `demos/genpg/data/sources/` and write to `demos/genpg/output/`.
+
+### Translingual run script (GraphSON)
+
+Run all three hosts and compare outputs:
+
+```bash
+cd hydra-ext
+demos/genpg/bin/run.sh sales
+```
+
+## RDF/SHACL output
+
+The RDF output path converts the same property graph to:
+- **SHACL shapes** (`*-shapes.nt`) derived from the graph schema, with property constraints (datatypes, cardinality) and edge constraints (target vertex classes)
+- **RDF instance data** (`*-data.nt`) encoding vertices as typed resources with property triples, and edges as relationship triples
+- **Invalid test data** (`*-invalid.nt`) with intentional violations for negative validation
+
+### Running the RDF demo
+
+#### All hosts via run script
+
+```bash
+cd hydra-ext
+demos/genpg/bin/run-rdf.sh sales
+```
+
+This runs Haskell, Java, and Python, compares outputs across hosts, and validates
+with [pyshacl](https://github.com/RDFLib/pySHACL) if installed.
+
+#### Individual hosts
+
+Haskell (GHCi):
+```haskell
+:l Hydra.Ext.Demos.GenPG.Rdf
+generateSalesRdf
+```
+
+Python:
+```bash
+python3 src/main/python/hydra/demos/genpg/rdf.py sales
+```
+
+Java (after `./gradlew :hydra-ext:compileJava`):
+```bash
+java -cp <classpath> hydra.demos.genpg.RdfDemo sales
+```
+
+### SHACL validation
+
+Install pyshacl (`pip install pyshacl` or into `.venv`), then validate:
+
+```bash
+# Conforming data should pass
+pyshacl -s demos/genpg/output/sales-shapes.nt -sf nt -df nt demos/genpg/output/sales-data.nt
+
+# Invalid data should fail with 3 violations
+pyshacl -s demos/genpg/output/sales-shapes.nt -sf nt -df nt demos/genpg/output/sales-invalid.nt
+```
+
+### RDF output format
+
+The shapes graph uses the [SHACL](https://www.w3.org/TR/shacl/) vocabulary to constrain RDF instance data.
+Each vertex type becomes a `sh:NodeShape` with:
+- `sh:targetClass` matching the vertex label
+- `sh:property` shapes for each property (with `sh:datatype` and optional `sh:minCount`)
+- `sh:property` shapes for each outgoing edge type (with `sh:node` referencing the target vertex class)
+
+The instance data uses a `urn:hydra:genpg:` namespace. Vertices have `rdf:type` triples and
+property triples with XSD-typed literals. Edges become direct triples from source to target vertex.
 
 ## LLM-assisted schema generation
 
@@ -265,8 +344,10 @@ Note: `hydra.pg.model` types are already generated in `hydra-java/src/gen-main/j
 2. **Read CSV files**: Parse CSV tables from `data/sources/`
 3. **Decode values**: Convert string values to typed terms based on column types
 4. **Transform rows**: Apply mapping specifications to generate vertices and edges
-5. **Encode GraphSON**: Convert property graph elements to GraphSON JSON format
-6. **Write output**: Produce JSONL file suitable for graph database import
+5. **Encode output**: Convert property graph elements to GraphSON or RDF format
+6. **Write output**: Produce JSONL (GraphSON) or N-Triples (RDF/SHACL) files
+
+Steps 1-4 are shared between GraphSON and RDF output. Only the encoding and serialization differ.
 
 ### Python path resolution
 
@@ -290,9 +371,11 @@ Both use namespace packages (`pkgutil.extend_path`) to allow `hydra.*` to span d
 ### Health dataset (`data/sources/health/`)
 - Alternative dataset with medical domain (doctors, patients, appointments, etc.)
 
-## Output format
+## Output formats
 
-The output is GraphSON 3.0 format (JSON Lines), suitable for import into:
+### GraphSON
+
+The GraphSON output is GraphSON 3.0 format (JSON Lines), suitable for import into:
 - Apache TinkerPop / Gremlin Server
 - JanusGraph
 - Amazon Neptune
@@ -310,3 +393,11 @@ g.io("/path/to/hydra/hydra-ext/demos/genpg/output/health.jsonl").read().iterate(
 ```
 
 Run a Gremlin query like `g.E()`, and off you go.
+
+### RDF/SHACL
+
+The RDF output consists of N-Triples files suitable for use with:
+- SPARQL endpoints (Apache Jena, Blazegraph, GraphDB, etc.)
+- RDF validation tools (pyshacl, TopBraid, etc.)
+- Linked Data platforms
+- Any tool that consumes RDF 1.1
