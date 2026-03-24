@@ -104,17 +104,17 @@ def isSimpleAssignment(term: hydra.core.Term): Boolean =
   term match
   case hydra.core.Term.annotated(v_Term_annotated_at) => hydra.coderUtils.isSimpleAssignment(v_Term_annotated_at.body)
   case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-    case hydra.core.Function.lambda => false
+    case hydra.core.Function.lambda() => false
     case _ => true
-  case hydra.core.Term.let => false
-  case hydra.core.Term.typeLambda => false
+  case hydra.core.Term.let() => false
+  case hydra.core.Term.typeLambda() => false
   case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => hydra.coderUtils.isSimpleAssignment(v_Term_typeApplication_ta.body)
   case _ => {
     lazy val baseTerm: hydra.core.Term = hydra.lib.pairs.first[hydra.core.Term, Seq[hydra.core.Term]](hydra.coderUtils.gatherArgs(term)(Seq()))
     baseTerm match
       case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
         case hydra.core.Function.elimination(v_Function_elimination_elim) => v_Function_elimination_elim match
-          case hydra.core.Elimination.union => false
+          case hydra.core.Elimination.union() => false
           case _ => true
         case _ => true
       case _ => true
@@ -122,9 +122,9 @@ def isSimpleAssignment(term: hydra.core.Term): Boolean =
 
 def isComplexTerm(tc: hydra.graph.Graph)(t: hydra.core.Term): Boolean =
   t match
-  case hydra.core.Term.let => true
-  case hydra.core.Term.typeApplication => true
-  case hydra.core.Term.typeLambda => true
+  case hydra.core.Term.let() => true
+  case hydra.core.Term.typeApplication() => true
+  case hydra.core.Term.typeLambda() => true
   case hydra.core.Term.variable(v_Term_variable_name) => hydra.coderUtils.isComplexVariable(tc)(v_Term_variable_name)
   case _ => hydra.lib.lists.foldl[Boolean, hydra.core.Term]((b: Boolean) =>
     (sub: hydra.core.Term) =>
@@ -159,9 +159,9 @@ def isComplexBinding(tc: hydra.graph.Graph)(b: hydra.core.Binding): Boolean =
 
 def isTrivialTerm(t: hydra.core.Term): Boolean =
   hydra.rewriting.deannotateTerm(t) match
-  case hydra.core.Term.literal => true
-  case hydra.core.Term.variable => true
-  case hydra.core.Term.unit => true
+  case hydra.core.Term.literal() => true
+  case hydra.core.Term.variable() => true
+  case hydra.core.Term.unit() => true
   case hydra.core.Term.application(v_Term_application_app) => {
     lazy val fun: hydra.core.Term = (v_Term_application_app.function)
     {
@@ -169,8 +169,8 @@ def isTrivialTerm(t: hydra.core.Term): Boolean =
       fun match
         case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
           case hydra.core.Function.elimination(v_Function_elimination_e) => v_Function_elimination_e match
-            case hydra.core.Elimination.record => hydra.coderUtils.isTrivialTerm(arg)
-            case hydra.core.Elimination.wrap => hydra.coderUtils.isTrivialTerm(arg)
+            case hydra.core.Elimination.record() => hydra.coderUtils.isTrivialTerm(arg)
+            case hydra.core.Elimination.wrap() => hydra.coderUtils.isTrivialTerm(arg)
             case _ => false
           case _ => false
         case _ => false
@@ -195,7 +195,7 @@ def isTailRecursiveInTailPosition(funcName: hydra.core.Name)(term: hydra.core.Te
   {
   lazy val stripped: hydra.core.Term = hydra.rewriting.deannotateAndDetypeTerm(term)
   stripped match
-    case hydra.core.Term.application => {
+    case hydra.core.Term.application() => {
       lazy val gathered: Tuple2[Seq[hydra.core.Term], hydra.core.Term] = hydra.coderUtils.gatherApplications(stripped)
       {
         lazy val gatherArgs: Seq[hydra.core.Term] = hydra.lib.pairs.first[Seq[hydra.core.Term], hydra.core.Term](gathered)

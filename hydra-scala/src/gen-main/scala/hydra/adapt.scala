@@ -40,9 +40,9 @@ def adaptFloatType(constraints: hydra.coders.LanguageConstraints)(ft: hydra.core
   def alt(v1: hydra.core.FloatType): Option[hydra.core.FloatType] = hydra.adapt.adaptFloatType(constraints)(v1)
   def forUnsupported(ft2: hydra.core.FloatType): Option[hydra.core.FloatType] =
     ft2 match
-    case hydra.core.FloatType.bigfloat => alt(hydra.core.FloatType.float64)
-    case hydra.core.FloatType.float32 => alt(hydra.core.FloatType.float64)
-    case hydra.core.FloatType.float64 => alt(hydra.core.FloatType.bigfloat)
+    case hydra.core.FloatType.bigfloat() => alt(hydra.core.FloatType.float64)
+    case hydra.core.FloatType.float32() => alt(hydra.core.FloatType.float64)
+    case hydra.core.FloatType.float64() => alt(hydra.core.FloatType.bigfloat)
   hydra.lib.logic.ifElse[Option[hydra.core.FloatType]](supported)(Some(ft))(forUnsupported(ft))
 }
 
@@ -114,15 +114,15 @@ def adaptIntegerType(constraints: hydra.coders.LanguageConstraints)(it: hydra.co
   def alt(v1: hydra.core.IntegerType): Option[hydra.core.IntegerType] = hydra.adapt.adaptIntegerType(constraints)(v1)
   def forUnsupported(it2: hydra.core.IntegerType): Option[hydra.core.IntegerType] =
     it2 match
-    case hydra.core.IntegerType.bigint => None
-    case hydra.core.IntegerType.int8 => alt(hydra.core.IntegerType.uint16)
-    case hydra.core.IntegerType.int16 => alt(hydra.core.IntegerType.uint32)
-    case hydra.core.IntegerType.int32 => alt(hydra.core.IntegerType.uint64)
-    case hydra.core.IntegerType.int64 => alt(hydra.core.IntegerType.bigint)
-    case hydra.core.IntegerType.uint8 => alt(hydra.core.IntegerType.int16)
-    case hydra.core.IntegerType.uint16 => alt(hydra.core.IntegerType.int32)
-    case hydra.core.IntegerType.uint32 => alt(hydra.core.IntegerType.int64)
-    case hydra.core.IntegerType.uint64 => alt(hydra.core.IntegerType.bigint)
+    case hydra.core.IntegerType.bigint() => None
+    case hydra.core.IntegerType.int8() => alt(hydra.core.IntegerType.uint16)
+    case hydra.core.IntegerType.int16() => alt(hydra.core.IntegerType.uint32)
+    case hydra.core.IntegerType.int32() => alt(hydra.core.IntegerType.uint64)
+    case hydra.core.IntegerType.int64() => alt(hydra.core.IntegerType.bigint)
+    case hydra.core.IntegerType.uint8() => alt(hydra.core.IntegerType.int16)
+    case hydra.core.IntegerType.uint16() => alt(hydra.core.IntegerType.int32)
+    case hydra.core.IntegerType.uint32() => alt(hydra.core.IntegerType.int64)
+    case hydra.core.IntegerType.uint64() => alt(hydra.core.IntegerType.bigint)
   hydra.lib.logic.ifElse[Option[hydra.core.IntegerType]](supported)(Some(it))(forUnsupported(it))
 }
 
@@ -139,7 +139,7 @@ def adaptLambdaDomains[T0](constraints: hydra.coders.LanguageConstraints)(litmap
 def adaptLiteral(lt: hydra.core.LiteralType)(l: hydra.core.Literal): hydra.core.Literal =
   l match
   case hydra.core.Literal.binary(v_Literal_binary_b) => lt match
-    case hydra.core.LiteralType.string => hydra.core.Literal.string(hydra.lib.literals.binaryToString(v_Literal_binary_b))
+    case hydra.core.LiteralType.string() => hydra.core.Literal.string(hydra.lib.literals.binaryToString(v_Literal_binary_b))
   case hydra.core.Literal.boolean(v_Literal_boolean_b) => lt match
     case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.core.Literal.integer(hydra.literals.bigintToIntegerValue(v_LiteralType_integer_it)(hydra.lib.logic.ifElse[BigInt](v_Literal_boolean_b)(BigInt(1L))(BigInt(0L))))
   case hydra.core.Literal.float(v_Literal_float_f) => lt match
@@ -151,8 +151,8 @@ def adaptLiteralType(constraints: hydra.coders.LanguageConstraints)(lt: hydra.co
   {
   def forUnsupported(lt2: hydra.core.LiteralType): Option[hydra.core.LiteralType] =
     lt2 match
-    case hydra.core.LiteralType.binary => Some(hydra.core.LiteralType.string)
-    case hydra.core.LiteralType.boolean => hydra.lib.maybes.map[hydra.core.IntegerType, hydra.core.LiteralType]((x: hydra.core.IntegerType) => hydra.core.LiteralType.integer(x))(hydra.adapt.adaptIntegerType(constraints)(hydra.core.IntegerType.int8))
+    case hydra.core.LiteralType.binary() => Some(hydra.core.LiteralType.string)
+    case hydra.core.LiteralType.boolean() => hydra.lib.maybes.map[hydra.core.IntegerType, hydra.core.LiteralType]((x: hydra.core.IntegerType) => hydra.core.LiteralType.integer(x))(hydra.adapt.adaptIntegerType(constraints)(hydra.core.IntegerType.int8))
     case hydra.core.LiteralType.float(v_LiteralType_float_ft) => hydra.lib.maybes.map[hydra.core.FloatType, hydra.core.LiteralType]((x: hydra.core.FloatType) => hydra.core.LiteralType.float(x))(hydra.adapt.adaptFloatType(constraints)(v_LiteralType_float_ft))
     case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.lib.maybes.map[hydra.core.IntegerType, hydra.core.LiteralType]((x: hydra.core.IntegerType) => hydra.core.LiteralType.integer(x))(hydra.adapt.adaptIntegerType(constraints)(v_LiteralType_integer_it))
     case _ => None
@@ -217,7 +217,7 @@ def adaptTerm(constraints: hydra.coders.LanguageConstraints)(litmap: Map[hydra.c
       term1 match
       case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => hydra.lib.eithers.bind[scala.Predef.String, hydra.core.Type, hydra.core.Term](hydra.adapt.adaptType(constraints)(litmap)(v_Term_typeApplication_ta.`type`))((atyp: hydra.core.Type) =>
         Right(hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(v_Term_typeApplication_ta.body, atyp))))
-      case hydra.core.Term.typeLambda => Right(term1)
+      case hydra.core.Term.typeLambda() => Right(term1)
       case _ => hydra.lib.eithers.bind[scala.Predef.String, Option[hydra.core.Term], hydra.core.Term](tryTerm(term1))((mterm: Option[hydra.core.Term]) =>
         hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], hydra.core.Term](Left(hydra.lib.strings.cat2("no alternatives for term: ")(hydra.show.core.term(term1))))((term2: hydra.core.Term) => Right(term2))(mterm)))
   }
@@ -371,7 +371,7 @@ def literalTypeSupported(constraints: hydra.coders.LanguageConstraints)(lt: hydr
 
 def prepareFloatType(ft: hydra.core.FloatType): Tuple2[hydra.core.FloatType, Tuple2[(hydra.core.FloatValue => hydra.core.FloatValue), scala.collection.immutable.Set[scala.Predef.String]]] =
   ft match
-  case hydra.core.FloatType.bigfloat => Tuple2(hydra.core.FloatType.float64, Tuple2((v: hydra.core.FloatValue) =>
+  case hydra.core.FloatType.bigfloat() => Tuple2(hydra.core.FloatType.float64, Tuple2((v: hydra.core.FloatValue) =>
     v match
     case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_d) => hydra.core.FloatValue.float64(hydra.lib.literals.bigfloatToFloat64(v_FloatValue_bigfloat_d))
     case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"))))
@@ -379,19 +379,19 @@ def prepareFloatType(ft: hydra.core.FloatType): Tuple2[hydra.core.FloatType, Tup
 
 def prepareIntegerType(it: hydra.core.IntegerType): Tuple2[hydra.core.IntegerType, Tuple2[(hydra.core.IntegerValue => hydra.core.IntegerValue), scala.collection.immutable.Set[scala.Predef.String]]] =
   it match
-  case hydra.core.IntegerType.bigint => Tuple2(hydra.core.IntegerType.int64, Tuple2((v: hydra.core.IntegerValue) =>
+  case hydra.core.IntegerType.bigint() => Tuple2(hydra.core.IntegerType.int64, Tuple2((v: hydra.core.IntegerValue) =>
     v match
     case hydra.core.IntegerValue.bigint(v_IntegerValue_bigint_i) => hydra.core.IntegerValue.int64(hydra.lib.literals.bigintToInt64(v_IntegerValue_bigint_i))
     case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace arbitrary-precision integers with 64-bit integers"))))
-  case hydra.core.IntegerType.uint8 => Tuple2(hydra.core.IntegerType.int8, Tuple2((v: hydra.core.IntegerValue) =>
+  case hydra.core.IntegerType.uint8() => Tuple2(hydra.core.IntegerType.int8, Tuple2((v: hydra.core.IntegerValue) =>
     v match
     case hydra.core.IntegerValue.uint8(v_IntegerValue_uint8_i) => hydra.core.IntegerValue.int8(hydra.lib.literals.bigintToInt8(hydra.lib.literals.uint8ToBigint(v_IntegerValue_uint8_i)))
     case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace unsigned 8-bit integers with signed 8-bit integers"))))
-  case hydra.core.IntegerType.uint32 => Tuple2(hydra.core.IntegerType.int32, Tuple2((v: hydra.core.IntegerValue) =>
+  case hydra.core.IntegerType.uint32() => Tuple2(hydra.core.IntegerType.int32, Tuple2((v: hydra.core.IntegerValue) =>
     v match
     case hydra.core.IntegerValue.uint32(v_IntegerValue_uint32_i) => hydra.core.IntegerValue.int32(hydra.lib.literals.bigintToInt32(hydra.lib.literals.uint32ToBigint(v_IntegerValue_uint32_i)))
     case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace unsigned 32-bit integers with signed 32-bit integers"))))
-  case hydra.core.IntegerType.uint64 => Tuple2(hydra.core.IntegerType.int64, Tuple2((v: hydra.core.IntegerValue) =>
+  case hydra.core.IntegerType.uint64() => Tuple2(hydra.core.IntegerType.int64, Tuple2((v: hydra.core.IntegerValue) =>
     v match
     case hydra.core.IntegerValue.uint64(v_IntegerValue_uint64_i) => hydra.core.IntegerValue.int64(hydra.lib.literals.bigintToInt64(hydra.lib.literals.uint64ToBigint(v_IntegerValue_uint64_i)))
     case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace unsigned 64-bit integers with signed 64-bit integers"))))
@@ -399,7 +399,7 @@ def prepareIntegerType(it: hydra.core.IntegerType): Tuple2[hydra.core.IntegerTyp
 
 def prepareLiteralType(at: hydra.core.LiteralType): Tuple2[hydra.core.LiteralType, Tuple2[(hydra.core.Literal => hydra.core.Literal), scala.collection.immutable.Set[scala.Predef.String]]] =
   at match
-  case hydra.core.LiteralType.binary => Tuple2(hydra.core.LiteralType.string, Tuple2((v: hydra.core.Literal) =>
+  case hydra.core.LiteralType.binary() => Tuple2(hydra.core.LiteralType.string, Tuple2((v: hydra.core.Literal) =>
     v match
     case hydra.core.Literal.binary(v_Literal_binary_b) => hydra.core.Literal.string(hydra.lib.literals.binaryToString(v_Literal_binary_b))
     case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace binary strings with character strings"))))
@@ -497,7 +497,7 @@ def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
       }
       case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.core.Term.typeLambda(hydra.core.TypeLambda(v_Term_typeLambda_ta.parameter, go(v_Term_typeLambda_ta.body)))
       case hydra.core.Term.union(v_Term_union_i) => hydra.core.Term.union(hydra.core.Injection(v_Term_union_i.typeName, forField(v_Term_union_i.field)))
-      case hydra.core.Term.unit => hydra.core.Term.unit
+      case hydra.core.Term.unit() => hydra.core.Term.unit
       case hydra.core.Term.variable(v_Term_variable_v) => hydra.core.Term.variable(v_Term_variable_v)
       case hydra.core.Term.wrap(v_Term_wrap_wt) => hydra.core.Term.wrap(hydra.core.WrappedTerm(v_Term_wrap_wt.typeName, go(v_Term_wrap_wt.body)))
   }
@@ -564,7 +564,7 @@ def termAlternatives(cx: hydra.context.Context)(graph: hydra.graph.Graph)(term: 
       }
     }
   }
-  case hydra.core.Term.unit => Right(Seq(hydra.core.Term.literal(hydra.core.Literal.boolean(true))))
+  case hydra.core.Term.unit() => Right(Seq(hydra.core.Term.literal(hydra.core.Literal.boolean(true))))
   case hydra.core.Term.wrap(v_Term_wrap_wt) => {
     lazy val term2: hydra.core.Term = (v_Term_wrap_wt.body)
     Right(Seq(term2))
@@ -585,6 +585,6 @@ def typeAlternatives(`type`: hydra.core.Type): Seq[hydra.core.Type] =
       Seq(hydra.core.Type.record(optFields))
     }
   }
-  case hydra.core.Type.unit => Seq(hydra.core.Type.literal(hydra.core.LiteralType.boolean))
-  case hydra.core.Type.void => Seq(hydra.core.Type.unit)
+  case hydra.core.Type.unit() => Seq(hydra.core.Type.literal(hydra.core.LiteralType.boolean))
+  case hydra.core.Type.void() => Seq(hydra.core.Type.unit)
   case _ => Seq()

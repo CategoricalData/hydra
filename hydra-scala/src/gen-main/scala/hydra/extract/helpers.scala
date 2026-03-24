@@ -62,7 +62,7 @@ def decodeSet[T0](elemDecoder: (hydra.graph.Graph => hydra.core.Term => Either[h
 def decodeUnit(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.DecodingError, Unit] =
   hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, Unit](hydra.lib.eithers.bimap[scala.Predef.String, hydra.core.Term, hydra.errors.DecodingError, hydra.core.Term]((x: scala.Predef.String) => x)((x: hydra.core.Term) => x)(hydra.lexical.stripAndDereferenceTermEither(g)(term)))((stripped: hydra.core.Term) =>
   stripped match
-  case hydra.core.Term.unit => Right(())
+  case hydra.core.Term.unit() => Right(())
   case _ => Left("expected a unit value"))
 
 def decodeWrapped[T0](bodyDecoder: (hydra.graph.Graph => hydra.core.Term => Either[hydra.errors.DecodingError, T0]))(g: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.errors.DecodingError, T0] =

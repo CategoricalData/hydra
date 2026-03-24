@@ -22,26 +22,26 @@ def termAccessor(accessor: hydra.accessors.TermAccessor): Option[scala.Predef.St
   def idxSuff[T0](suffix: scala.Predef.String)(i: T0): Option[scala.Predef.String] =
     hydra.lib.maybes.map[scala.Predef.String, scala.Predef.String]((s: scala.Predef.String) => hydra.lib.strings.cat2(s)(suffix))(idx(i))
   accessor match
-    case hydra.accessors.TermAccessor.annotatedBody => None
-    case hydra.accessors.TermAccessor.applicationFunction => Some("fun")
-    case hydra.accessors.TermAccessor.applicationArgument => Some("arg")
-    case hydra.accessors.TermAccessor.lambdaBody => Some("body")
-    case hydra.accessors.TermAccessor.unionCasesDefault => Some("default")
+    case hydra.accessors.TermAccessor.annotatedBody() => None
+    case hydra.accessors.TermAccessor.applicationFunction() => Some("fun")
+    case hydra.accessors.TermAccessor.applicationArgument() => Some("arg")
+    case hydra.accessors.TermAccessor.lambdaBody() => Some("body")
+    case hydra.accessors.TermAccessor.unionCasesDefault() => Some("default")
     case hydra.accessors.TermAccessor.unionCasesBranch(v_TermAccessor_unionCasesBranch_name) => Some(hydra.lib.strings.cat2(".")(v_TermAccessor_unionCasesBranch_name))
-    case hydra.accessors.TermAccessor.letBody => Some("in")
+    case hydra.accessors.TermAccessor.letBody() => Some("in")
     case hydra.accessors.TermAccessor.letBinding(v_TermAccessor_letBinding_name) => Some(hydra.lib.strings.cat2(v_TermAccessor_letBinding_name)("="))
     case hydra.accessors.TermAccessor.listElement(v_TermAccessor_listElement_i) => idx(v_TermAccessor_listElement_i)
     case hydra.accessors.TermAccessor.mapKey(v_TermAccessor_mapKey_i) => idxSuff(".key")(v_TermAccessor_mapKey_i)
     case hydra.accessors.TermAccessor.mapValue(v_TermAccessor_mapValue_i) => idxSuff(".value")(v_TermAccessor_mapValue_i)
-    case hydra.accessors.TermAccessor.maybeTerm => Some("just")
+    case hydra.accessors.TermAccessor.maybeTerm() => Some("just")
     case hydra.accessors.TermAccessor.productTerm(v_TermAccessor_productTerm_i) => idx(v_TermAccessor_productTerm_i)
     case hydra.accessors.TermAccessor.recordField(v_TermAccessor_recordField_name) => Some(hydra.lib.strings.cat2(".")(v_TermAccessor_recordField_name))
     case hydra.accessors.TermAccessor.setElement(v_TermAccessor_setElement_i) => idx(v_TermAccessor_setElement_i)
-    case hydra.accessors.TermAccessor.sumTerm => None
-    case hydra.accessors.TermAccessor.typeLambdaBody => None
-    case hydra.accessors.TermAccessor.typeApplicationTerm => None
-    case hydra.accessors.TermAccessor.injectionTerm => None
-    case hydra.accessors.TermAccessor.wrappedTerm => None
+    case hydra.accessors.TermAccessor.sumTerm() => None
+    case hydra.accessors.TermAccessor.typeLambdaBody() => None
+    case hydra.accessors.TermAccessor.typeApplicationTerm() => None
+    case hydra.accessors.TermAccessor.injectionTerm() => None
+    case hydra.accessors.TermAccessor.wrappedTerm() => None
 }
 
 def termToAccessorGraph(namespaces: Map[hydra.module.Namespace, scala.Predef.String])(term: hydra.core.Term): hydra.accessors.AccessorGraph =

@@ -139,7 +139,7 @@ def inferGraphTypes(fcx0: hydra.context.Context)(bindings0: Seq[hydra.core.Bindi
       hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Term, Tuple2[Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]], hydra.context.Context]](hydra.inference.finalizeInferredTerm(fcx2)(g0)(term))((finalized: hydra.core.Term) =>
         finalized match
         case hydra.core.Term.let(v_Term_let_l) => Right(Tuple2(fromLetTerm(v_Term_let_l), fcx2))
-        case hydra.core.Term.variable => Left(hydra.context.InContext(hydra.errors.Error.other("Expected inferred graph as let term"), fcx2)))
+        case hydra.core.Term.variable() => Left(hydra.context.InContext(hydra.errors.Error.other("Expected inferred graph as let term"), fcx2)))
     }
   })
 }
@@ -1012,7 +1012,7 @@ def inferTypeOfTerm(fcx: hydra.context.Context)(cx: hydra.graph.Graph)(term: hyd
     case hydra.core.Term.typeApplication(v_Term_typeApplication_tt) => hydra.inference.inferTypeOfTypeApplication(fcx2)(cx)(v_Term_typeApplication_tt)
     case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => hydra.inference.inferTypeOfTypeLambda(fcx2)(cx)(v_Term_typeLambda_ta)
     case hydra.core.Term.union(v_Term_union_i) => hydra.inference.inferTypeOfInjection(fcx2)(cx)(v_Term_union_i)
-    case hydra.core.Term.unit => Right(hydra.inference.inferTypeOfUnit(fcx2))
+    case hydra.core.Term.unit() => Right(hydra.inference.inferTypeOfUnit(fcx2))
     case hydra.core.Term.variable(v_Term_variable_name) => hydra.inference.inferTypeOfVariable(fcx2)(cx)(v_Term_variable_name)
     case hydra.core.Term.wrap(v_Term_wrap_w) => hydra.inference.inferTypeOfWrappedTerm(fcx2)(cx)(v_Term_wrap_w)
 }

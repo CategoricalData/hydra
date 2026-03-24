@@ -6,21 +6,21 @@ import hydra.lib.literals
 
 def bigfloatToFloatValue(ft: hydra.core.FloatType)(bf: BigDecimal): hydra.core.FloatValue =
   ft match
-  case hydra.core.FloatType.bigfloat => hydra.core.FloatValue.bigfloat(bf)
-  case hydra.core.FloatType.float32 => hydra.core.FloatValue.float32(hydra.lib.literals.bigfloatToFloat32(bf))
-  case hydra.core.FloatType.float64 => hydra.core.FloatValue.float64(hydra.lib.literals.bigfloatToFloat64(bf))
+  case hydra.core.FloatType.bigfloat() => hydra.core.FloatValue.bigfloat(bf)
+  case hydra.core.FloatType.float32() => hydra.core.FloatValue.float32(hydra.lib.literals.bigfloatToFloat32(bf))
+  case hydra.core.FloatType.float64() => hydra.core.FloatValue.float64(hydra.lib.literals.bigfloatToFloat64(bf))
 
 def bigintToIntegerValue(it: hydra.core.IntegerType)(bi: BigInt): hydra.core.IntegerValue =
   it match
-  case hydra.core.IntegerType.bigint => hydra.core.IntegerValue.bigint(bi)
-  case hydra.core.IntegerType.int8 => hydra.core.IntegerValue.int8(hydra.lib.literals.bigintToInt8(bi))
-  case hydra.core.IntegerType.int16 => hydra.core.IntegerValue.int16(hydra.lib.literals.bigintToInt16(bi))
-  case hydra.core.IntegerType.int32 => hydra.core.IntegerValue.int32(hydra.lib.literals.bigintToInt32(bi))
-  case hydra.core.IntegerType.int64 => hydra.core.IntegerValue.int64(hydra.lib.literals.bigintToInt64(bi))
-  case hydra.core.IntegerType.uint8 => hydra.core.IntegerValue.uint8(hydra.lib.literals.bigintToUint8(bi))
-  case hydra.core.IntegerType.uint16 => hydra.core.IntegerValue.uint16(hydra.lib.literals.bigintToUint16(bi))
-  case hydra.core.IntegerType.uint32 => hydra.core.IntegerValue.uint32(hydra.lib.literals.bigintToUint32(bi))
-  case hydra.core.IntegerType.uint64 => hydra.core.IntegerValue.uint64(hydra.lib.literals.bigintToUint64(bi))
+  case hydra.core.IntegerType.bigint() => hydra.core.IntegerValue.bigint(bi)
+  case hydra.core.IntegerType.int8() => hydra.core.IntegerValue.int8(hydra.lib.literals.bigintToInt8(bi))
+  case hydra.core.IntegerType.int16() => hydra.core.IntegerValue.int16(hydra.lib.literals.bigintToInt16(bi))
+  case hydra.core.IntegerType.int32() => hydra.core.IntegerValue.int32(hydra.lib.literals.bigintToInt32(bi))
+  case hydra.core.IntegerType.int64() => hydra.core.IntegerValue.int64(hydra.lib.literals.bigintToInt64(bi))
+  case hydra.core.IntegerType.uint8() => hydra.core.IntegerValue.uint8(hydra.lib.literals.bigintToUint8(bi))
+  case hydra.core.IntegerType.uint16() => hydra.core.IntegerValue.uint16(hydra.lib.literals.bigintToUint16(bi))
+  case hydra.core.IntegerType.uint32() => hydra.core.IntegerValue.uint32(hydra.lib.literals.bigintToUint32(bi))
+  case hydra.core.IntegerType.uint64() => hydra.core.IntegerValue.uint64(hydra.lib.literals.bigintToUint64(bi))
 
 def floatValueToBigfloat(v1: hydra.core.FloatValue): BigDecimal =
   v1 match

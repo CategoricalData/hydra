@@ -40,7 +40,7 @@ def yamlToJson(node: hydra.ext.org.yaml.model.Node): Either[scala.Predef.String,
     case hydra.ext.org.yaml.model.Scalar.bool(v_Scalar_bool_b) => Right(hydra.json.model.Value.boolean(v_Scalar_bool_b))
     case hydra.ext.org.yaml.model.Scalar.float(v_Scalar_float_f) => Right(hydra.json.model.Value.number(v_Scalar_float_f))
     case hydra.ext.org.yaml.model.Scalar.int(v_Scalar_int_i) => Right(hydra.json.model.Value.number(hydra.lib.literals.bigintToBigfloat(v_Scalar_int_i)))
-    case hydra.ext.org.yaml.model.Scalar.`null` => Right(hydra.json.model.Value.`null`)
+    case hydra.ext.org.yaml.model.Scalar.`null`() => Right(hydra.json.model.Value.`null`)
     case hydra.ext.org.yaml.model.Scalar.str(v_Scalar_str_str) => Right(hydra.json.model.Value.string(v_Scalar_str_str))
   case hydra.ext.org.yaml.model.Node.sequence(v_Node_sequence_nodes) => {
     lazy val results: Either[scala.Predef.String, Seq[hydra.json.model.Value]] = hydra.lib.eithers.mapList[hydra.ext.org.yaml.model.Node, hydra.json.model.Value, scala.Predef.String]((n: hydra.ext.org.yaml.model.Node) => hydra.json.yaml.decode.yamlToJson(n))(v_Node_sequence_nodes)

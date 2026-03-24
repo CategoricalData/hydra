@@ -355,12 +355,10 @@ writePat = define "writePat" $
       Scala._Pat_extract>>: lambda "pe" $ lets [
         "fun">: project Scala._Pat_Extract Scala._Pat_Extract_fun @@ var "pe",
         "args">: project Scala._Pat_Extract Scala._Pat_Extract_args @@ var "pe"] $
-        -- Omit parens for nullary patterns (unit-typed enum cases)
-        Logic.ifElse (Lists.null (var "args"))
-          (writeTerm @@ var "fun")
-          (Serialization.noSep @@ list [
-            writeTerm @@ var "fun",
-            Serialization.parenList @@ false @@ (Lists.map writePat (var "args"))]),
+        -- Always include parens for extract patterns (required for Scala 3 enum case matching)
+        Serialization.noSep @@ list [
+          writeTerm @@ var "fun",
+          Serialization.parenList @@ false @@ (Lists.map writePat (var "args"))],
       Scala._Pat_var>>: lambda "pv" $
         writeData_Name @@ (project Scala._Pat_Var Scala._Pat_Var_name @@ var "pv"),
       Scala._Pat_wildcard>>: constant (Serialization.cst @@ string "_")]
