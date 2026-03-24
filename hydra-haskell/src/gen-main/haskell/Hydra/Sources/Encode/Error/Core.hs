@@ -49,7 +49,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateBindingError"),
@@ -109,7 +109,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateFieldError"),
@@ -349,7 +349,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.ConstantConditionError"),
@@ -420,7 +420,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyCaseStatementError"),
@@ -480,7 +480,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyLetBindingsError"),
@@ -523,7 +523,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyTermAnnotationError"),
@@ -566,7 +566,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyTypeNameInTermError"),
@@ -609,7 +609,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidLambdaParameterNameError"),
@@ -669,7 +669,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidLetBindingNameError"),
@@ -729,7 +729,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidTypeLambdaParameterNameError"),
@@ -789,7 +789,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.NestedTermAnnotationError"),
@@ -832,7 +832,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.RedundantWrapUnwrapError"),
@@ -892,7 +892,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.SelfApplicationError"),
@@ -952,7 +952,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.TermVariableShadowingError"),
@@ -1012,7 +1012,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInTypeLambdaError"),
@@ -1072,7 +1072,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTermVariableError"),
@@ -1132,7 +1132,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInBindingTypeError"),
@@ -1192,7 +1192,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"),
@@ -1252,7 +1252,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"),
@@ -1312,7 +1312,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.UnknownPrimitiveNameError"),
@@ -1372,7 +1372,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.UnnecessaryIdentityApplicationError"),
@@ -1415,7 +1415,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.UntypedTermVariableError"),
@@ -2191,7 +2191,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateRecordTypeFieldNamesError"),
@@ -2251,7 +2251,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateUnionTypeFieldNamesError"),
@@ -2311,7 +2311,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyRecordTypeError"),
@@ -2354,7 +2354,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyTypeAnnotationError"),
@@ -2397,7 +2397,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyUnionTypeError"),
@@ -2440,7 +2440,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidForallParameterNameError"),
@@ -2500,7 +2500,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidTypeSchemeVariableNameError"),
@@ -2560,7 +2560,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.NestedTypeAnnotationError"),
@@ -2603,7 +2603,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.NonComparableMapKeyTypeError"),
@@ -2663,7 +2663,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.NonComparableSetElementTypeError"),
@@ -2723,7 +2723,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.SingleVariantUnionError"),
@@ -2783,7 +2783,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInForallError"),
@@ -2843,7 +2843,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableError"),
@@ -2903,7 +2903,7 @@ module_ =
                             Core.Field {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.accessors.accessorPath")),
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.paths.subtermPath")),
                                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                     Core.projectionTypeName = (Core.Name "hydra.error.core.VoidInNonBottomPositionError"),
@@ -3376,7 +3376,7 @@ module_ =
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))}))],
       Module.moduleTermDependencies = [
-        Module.Namespace "hydra.encode.accessors",
+        Module.Namespace "hydra.encode.paths",
         (Module.Namespace "hydra.encode.core"),
         (Module.Namespace "hydra.encode.variants")],
       Module.moduleTypeDependencies = [

@@ -64,23 +64,23 @@ untypedCase :: String -> TTerm Term -> TTerm (Maybe InvalidTermError) -> TTerm T
 untypedCase name = validateCoreTermCase name (Phantoms.boolean False)
 
 -- Empty accessor path
-emptyPath :: TTerm AccessorPath
-emptyPath = Phantoms.wrap _AccessorPath (Phantoms.list ([] :: [TTerm TermAccessor]))
+emptyPath :: TTerm SubtermPath
+emptyPath = Phantoms.wrap _SubtermPath (Phantoms.list ([] :: [TTerm SubtermStep]))
 
 -- Error constructors
 
-dupBinding :: [TTerm TermAccessor] -> String -> TTerm (Maybe InvalidTermError)
+dupBinding :: [TTerm SubtermStep] -> String -> TTerm (Maybe InvalidTermError)
 dupBinding path name = justError $
   Phantoms.inject _InvalidTermError _InvalidTermError_duplicateBinding $
     Phantoms.record _DuplicateBindingError [
-      unName _DuplicateBindingError_location Phantoms.>: Phantoms.wrap _AccessorPath (Phantoms.list path),
+      unName _DuplicateBindingError_location Phantoms.>: Phantoms.wrap _SubtermPath (Phantoms.list path),
       unName _DuplicateBindingError_name Phantoms.>: nm name]
 
-dupField :: [TTerm TermAccessor] -> String -> TTerm (Maybe InvalidTermError)
+dupField :: [TTerm SubtermStep] -> String -> TTerm (Maybe InvalidTermError)
 dupField path name = justError $
   Phantoms.inject _InvalidTermError _InvalidTermError_duplicateField $
     Phantoms.record _DuplicateFieldError [
-      unName _DuplicateFieldError_location Phantoms.>: Phantoms.wrap _AccessorPath (Phantoms.list path),
+      unName _DuplicateFieldError_location Phantoms.>: Phantoms.wrap _SubtermPath (Phantoms.list path),
       unName _DuplicateFieldError_name Phantoms.>: nm name]
 
 emptyLetErr :: TTerm (Maybe InvalidTermError)
@@ -162,15 +162,15 @@ invalidLetNameErr name = justError $
       unName _InvalidLetBindingNameError_location Phantoms.>: emptyPath,
       unName _InvalidLetBindingNameError_name Phantoms.>: nm name]
 
--- TermAccessor helpers
-accLambdaBody :: TTerm TermAccessor
-accLambdaBody = Phantoms.inject _TermAccessor _TermAccessor_lambdaBody Phantoms.unit
+-- SubtermStep helpers
+accLambdaBody :: TTerm SubtermStep
+accLambdaBody = Phantoms.inject _SubtermStep _SubtermStep_lambdaBody Phantoms.unit
 
-accLetBody :: TTerm TermAccessor
-accLetBody = Phantoms.inject _TermAccessor _TermAccessor_letBody Phantoms.unit
+accLetBody :: TTerm SubtermStep
+accLetBody = Phantoms.inject _SubtermStep _SubtermStep_letBody Phantoms.unit
 
-accLetBinding :: String -> TTerm TermAccessor
-accLetBinding name = Phantoms.inject _TermAccessor _TermAccessor_letBinding (nm name)
+accLetBinding :: String -> TTerm SubtermStep
+accLetBinding name = Phantoms.inject _SubtermStep _SubtermStep_letBinding (nm name)
 
 -- Term construction helpers
 

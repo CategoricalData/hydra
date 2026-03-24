@@ -17,14 +17,14 @@ public class UntypedTermVariableError implements Serializable, Comparable<Untype
   /**
    * The path to the untyped variable within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The name of the untyped variable
    */
   public final hydra.core.Name name;
 
-  public UntypedTermVariableError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public UntypedTermVariableError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class UntypedTermVariableError implements Serializable, Comparable<Untype
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public UntypedTermVariableError withLocation(hydra.accessors.AccessorPath location) {
+  public UntypedTermVariableError withLocation(hydra.paths.SubtermPath location) {
     return new UntypedTermVariableError(location, name);
   }
 

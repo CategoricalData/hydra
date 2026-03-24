@@ -1244,29 +1244,29 @@ public class TestSuiteRunner {
             input);
     }
 
-    private static java.util.function.Function<Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, Term>, Boolean> predicateFn(
+    private static java.util.function.Function<Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, Term>, Boolean> predicateFn(
             HoistPredicate pred) {
         return pred.accept(new HoistPredicate.Visitor<>() {
             @Override
-            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
+            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, Term>, Boolean> visit(
                     HoistPredicate.Nothing instance) {
                 return pair -> false;
             }
 
             @Override
-            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
+            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, Term>, Boolean> visit(
                     HoistPredicate.Lists instance) {
                 return pair -> pair.second instanceof Term.List;
             }
 
             @Override
-            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
+            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, Term>, Boolean> visit(
                     HoistPredicate.Applications instance) {
                 return pair -> pair.second instanceof Term.Application;
             }
 
             @Override
-            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
+            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, Term>, Boolean> visit(
                     HoistPredicate.CaseStatements instance) {
                 return pair -> pair.second instanceof Term.Function
                     && ((Term.Function) pair.second).value instanceof Function.Elimination;

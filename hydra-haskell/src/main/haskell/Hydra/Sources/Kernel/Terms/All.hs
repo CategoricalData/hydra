@@ -30,7 +30,7 @@ import qualified Hydra.Sources.Kernel.Terms.Reflect         as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting       as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas         as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Accessors  as ShowAccessors
+import qualified Hydra.Sources.Kernel.Terms.Show.Paths      as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors      as ShowErrors
 import qualified Hydra.Sources.Kernel.Terms.Show.Error.Core as ShowErrorCore
@@ -46,7 +46,7 @@ import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
 import qualified Hydra.Sources.Kernel.Terms.Validate.Core  as ValidateCore
 
 -- Secondary, generated decoding modules
-import qualified Hydra.Sources.Decode.Accessors     as DecodeAccessors
+import qualified Hydra.Sources.Decode.Paths          as DecodePaths
 import qualified Hydra.Sources.Decode.Ast           as DecodeAst
 import qualified Hydra.Sources.Decode.Classes       as DecodeClasses
 import qualified Hydra.Sources.Decode.Coders        as DecodeCoders
@@ -69,7 +69,7 @@ import qualified Hydra.Sources.Decode.Util          as DecodeUtil
 import qualified Hydra.Sources.Decode.Variants      as DecodeVariants
 
 -- Secondary, generated encoding modules
-import qualified Hydra.Sources.Encode.Accessors     as EncodeAccessors
+import qualified Hydra.Sources.Encode.Paths          as EncodePaths
 import qualified Hydra.Sources.Encode.Ast           as EncodeAst
 import qualified Hydra.Sources.Encode.Classes       as EncodeClasses
 import qualified Hydra.Sources.Encode.Coders        as EncodeCoders
@@ -124,7 +124,7 @@ kernelPrimaryTermsModules = [
   Rewriting.module_,
   Schemas.module_,
   Serialization.module_,
-  ShowAccessors.module_,
+  ShowPaths.module_,
   ShowCore.module_,
   ShowErrors.module_,
   ShowErrorCore.module_,
@@ -141,7 +141,7 @@ kernelPrimaryTermsModules = [
 
 kernelDecodingModules :: [Module]
 kernelDecodingModules = [
-  DecodeAccessors.module_,
+  DecodePaths.module_,
   DecodeAst.module_,
   DecodeClasses.module_,
   DecodeCoders.module_,
@@ -165,7 +165,7 @@ kernelDecodingModules = [
 
 kernelEncodingModules :: [Module]
 kernelEncodingModules = [
-  EncodeAccessors.module_,
+  EncodePaths.module_,
   EncodeAst.module_,
   EncodeClasses.module_,
   EncodeCoders.module_,

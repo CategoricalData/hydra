@@ -17,14 +17,14 @@ public class UndefinedTermVariableError implements Serializable, Comparable<Unde
   /**
    * The path to the undefined variable within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The name of the undefined variable
    */
   public final hydra.core.Name name;
 
-  public UndefinedTermVariableError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public UndefinedTermVariableError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class UndefinedTermVariableError implements Serializable, Comparable<Unde
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public UndefinedTermVariableError withLocation(hydra.accessors.AccessorPath location) {
+  public UndefinedTermVariableError withLocation(hydra.paths.SubtermPath location) {
     return new UndefinedTermVariableError(location, name);
   }
 

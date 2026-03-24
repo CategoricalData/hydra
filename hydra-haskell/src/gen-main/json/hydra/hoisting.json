@@ -5010,7 +5010,7 @@
                 "@key": "description",
                 "@value": {
                   "literal": {
-                    "string": "Hoist subterms into local let bindings based on a path-aware predicate. The predicate receives a pair of (path, term) where path is the list of TermAccessors from the root to the current term, and returns True if the term should be hoisted. For each let term found, the immediate subterms (binding values and body) are processed: matching subterms within each immediate subterm are collected and hoisted into a local let that wraps that immediate subterm. If a hoisted term contains free variables that are lambda-bound at an enclosing scope, the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables."}}}],
+                    "string": "Hoist subterms into local let bindings based on a path-aware predicate. The predicate receives a pair of (path, term) where path is the list of SubtermSteps from the root to the current term, and returns True if the term should be hoisted. For each let term found, the immediate subterms (binding values and body) are processed: matching subterms within each immediate subterm are collected and hoisted into a local let that wraps that immediate subterm. If a hoisted term contains free variables that are lambda-bound at an enclosing scope, the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables."}}}],
             "body": {
               "function": {
                 "lambda": {
@@ -5286,11 +5286,11 @@
                                                                                                                                                                         "function": {
                                                                                                                                                                           "typeApplication": {
                                                                                                                                                                             "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                                            "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                                                 "type": [
                                                                                                                                                                   {
                                                                                                                                                                     "constraints": null,
-                                                                                                                                                                    "type": {"list": {"variable": "hydra.accessors.TermAccessor"}},
+                                                                                                                                                                    "type": {"list": {"variable": "hydra.paths.SubtermStep"}},
                                                                                                                                                                     "variables": []}]}],
                                                                                                                                                             "body": {
                                                                                                                                                               "application": {
@@ -5732,7 +5732,7 @@
                                                                                                                                                                                       "pair": {
                                                                                                                                                                                         "@first": {"variable": "fullPath"},
                                                                                                                                                                                         "@second": {"variable": "processedTerm"}}},
-                                                                                                                                                                                    "type": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                                                                                                                                                                    "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                                                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                                                             "function": {"variable": "shouldHoist"}}},
                                                                                                                                                                         "function": {
@@ -5756,7 +5756,7 @@
                                                                                                         "parameter": "acc"}}},
                                                                                                   "domain": [{"variable": "hydra.graph.Graph"}],
                                                                                                   "parameter": "cxInner"}}},
-                                                                                            "domain": [{"list": {"variable": "hydra.accessors.TermAccessor"}}],
+                                                                                            "domain": [{"list": {"variable": "hydra.paths.SubtermStep"}}],
                                                                                             "parameter": "path"}}},
                                                                                       "domain": [
                                                                                         {
@@ -5802,7 +5802,7 @@
                                                                                                         "first": {"literal": {"integer": {"int32": {}}}},
                                                                                                         "second": {"list": {"variable": "hydra.core.Binding"}}}}}},
                                                                                                 "domain": {"variable": "hydra.graph.Graph"}}},
-                                                                                            "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                                                                            "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                                                         "domain": {
                                                                                           "function": {
                                                                                             "codomain": {
@@ -6025,7 +6025,7 @@
                                                                                                                     "second": {"variable": "hydra.core.Term"}}}}}}}}}}}}}}}}}}}}}}}}},
                                                                     "domain": [{"variable": "hydra.core.Term"}],
                                                                     "parameter": "subterm"}}},
-                                                              "domain": [{"list": {"variable": "hydra.accessors.TermAccessor"}}],
+                                                              "domain": [{"list": {"variable": "hydra.paths.SubtermStep"}}],
                                                               "parameter": "pathPrefix"}}},
                                                         "domain": [{"literal": {"string": {}}}],
                                                         "parameter": "namePrefix"}}},
@@ -6051,7 +6051,7 @@
                                                                   "first": {"literal": {"integer": {"int32": {}}}},
                                                                   "second": {"variable": "hydra.core.Term"}}},
                                                               "domain": {"variable": "hydra.core.Term"}}},
-                                                          "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                                          "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                       "domain": {"literal": {"string": {}}}}},
                                                   "domain": {"literal": {"integer": {"int32": {}}}}}},
                                               "domain": {"variable": "hydra.graph.Graph"}}},
@@ -6168,18 +6168,18 @@
                                                                                                                                 "function": {
                                                                                                                                   "function": {
                                                                                                                                     "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}}},
-                                                                                                                          "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                          "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                   "function": {
                                                                                                                     "application": {
                                                                                                                       "argument": {"variable": "path"},
                                                                                                                       "function": {
                                                                                                                         "typeApplication": {
                                                                                                                           "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                          "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                          "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                               "type": [
                                                                                                                 {
                                                                                                                   "constraints": null,
-                                                                                                                  "type": {"list": {"variable": "hydra.accessors.TermAccessor"}},
+                                                                                                                  "type": {"list": {"variable": "hydra.paths.SubtermStep"}},
                                                                                                                   "variables": []}]}],
                                                                                                           "body": {
                                                                                                             "let": {
@@ -6347,18 +6347,18 @@
                                                                                                           {
                                                                                                             "union": {
                                                                                                               "field": {"name": "letBody", "term": {"unit": {}}},
-                                                                                                              "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                              "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                       "function": {
                                                                                                         "application": {
                                                                                                           "argument": {"variable": "path"},
                                                                                                           "function": {
                                                                                                             "typeApplication": {
                                                                                                               "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                              "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                              "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                   "type": [
                                                                                                     {
                                                                                                       "constraints": null,
-                                                                                                      "type": {"list": {"variable": "hydra.accessors.TermAccessor"}},
+                                                                                                      "type": {"list": {"variable": "hydra.paths.SubtermStep"}},
                                                                                                       "variables": []}]}],
                                                                                               "body": {
                                                                                                 "let": {
@@ -6505,7 +6505,7 @@
                                                                                                                   "type": {"variable": "hydra.core.Term"}}}}}}}}}}}}}}}}}}}}}}},
                                                                       "domain": [{"variable": "hydra.core.Let"}],
                                                                       "parameter": "lt"}}},
-                                                                "domain": [{"list": {"variable": "hydra.accessors.TermAccessor"}}],
+                                                                "domain": [{"list": {"variable": "hydra.paths.SubtermStep"}}],
                                                                 "parameter": "path"}}},
                                                           "domain": [{"variable": "t0"}],
                                                           "parameter": "counter"}}},
@@ -6528,7 +6528,7 @@
                                                                   "first": {"variable": "t0"},
                                                                   "second": {"variable": "hydra.core.Term"}}},
                                                               "domain": {"variable": "hydra.core.Let"}}},
-                                                          "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                                          "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                       "domain": {"variable": "t0"}}},
                                                   "domain": {"variable": "hydra.graph.Graph"}}},
                                               "variables": ["t0"]}]}],
@@ -6683,7 +6683,7 @@
                                                                               "parameter": "counter"}}},
                                                                         "domain": [{"variable": "hydra.graph.Graph"}],
                                                                         "parameter": "cx"}}},
-                                                                  "domain": [{"list": {"variable": "hydra.accessors.TermAccessor"}}],
+                                                                  "domain": [{"list": {"variable": "hydra.paths.SubtermStep"}}],
                                                                   "parameter": "path"}}},
                                                             "domain": [
                                                               {
@@ -6719,7 +6719,7 @@
                                                                       "domain": {"variable": "hydra.core.Term"}}},
                                                                   "domain": {"variable": "t0"}}},
                                                               "domain": {"variable": "hydra.graph.Graph"}}},
-                                                          "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                                          "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                       "domain": {
                                                         "function": {
                                                           "codomain": {
@@ -6772,7 +6772,7 @@
                         "codomain": {"literal": {"boolean": {}}},
                         "domain": {
                           "pair": {
-                            "first": {"list": {"variable": "hydra.accessors.TermAccessor"}},
+                            "first": {"list": {"variable": "hydra.paths.SubtermStep"}},
                             "second": {"variable": "hydra.core.Term"}}}}}],
                   "parameter": "shouldHoist"}}}}},
         "type": [
@@ -6792,7 +6792,7 @@
                     "codomain": {"literal": {"boolean": {}}},
                     "domain": {
                       "pair": {
-                        "first": {"list": {"variable": "hydra.accessors.TermAccessor"}},
+                        "first": {"list": {"variable": "hydra.paths.SubtermStep"}},
                         "second": {"variable": "hydra.core.Term"}}}}}}},
             "variables": []}]}},
     {
@@ -6818,8 +6818,8 @@
                                     "domain": [{"unit": {}}],
                                     "parameter": "_"}}}}],
                           "default": [{"literal": {"boolean": false}}],
-                          "typeName": "hydra.accessors.TermAccessor"}}}}}},
-              "domain": [{"variable": "hydra.accessors.TermAccessor"}],
+                          "typeName": "hydra.paths.SubtermStep"}}}}}},
+              "domain": [{"variable": "hydra.paths.SubtermStep"}],
               "parameter": "acc"}}},
         "type": [
           {
@@ -6827,7 +6827,7 @@
             "type": {
               "function": {
                 "codomain": {"literal": {"boolean": {}}},
-                "domain": {"variable": "hydra.accessors.TermAccessor"}}},
+                "domain": {"variable": "hydra.paths.SubtermStep"}}},
             "variables": []}]}},
     {
       "term": {
@@ -6909,8 +6909,8 @@
                                     "domain": [{"unit": {}}],
                                     "parameter": "_"}}}}],
                           "default": [{"literal": {"boolean": false}}],
-                          "typeName": "hydra.accessors.TermAccessor"}}}}}},
-              "domain": [{"variable": "hydra.accessors.TermAccessor"}],
+                          "typeName": "hydra.paths.SubtermStep"}}}}}},
+              "domain": [{"variable": "hydra.paths.SubtermStep"}],
               "parameter": "acc"}}},
         "type": [
           {
@@ -6918,7 +6918,7 @@
             "type": {
               "function": {
                 "codomain": {"literal": {"boolean": {}}},
-                "domain": {"variable": "hydra.accessors.TermAccessor"}}},
+                "domain": {"variable": "hydra.paths.SubtermStep"}}},
             "variables": []}]}},
     {
       "term": {
@@ -7053,11 +7053,11 @@
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"function": {"primitive": "hydra.lib.lists.head"}},
-                                                    "type": {"variable": "hydra.accessors.TermAccessor"}}}}},
+                                                    "type": {"variable": "hydra.paths.SubtermStep"}}}}},
                                             "type": [
                                               {
                                                 "constraints": null,
-                                                "type": {"variable": "hydra.accessors.TermAccessor"},
+                                                "type": {"variable": "hydra.paths.SubtermStep"},
                                                 "variables": []}]}],
                                         "body": {
                                           "let": {
@@ -7072,15 +7072,15 @@
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {"function": {"primitive": "hydra.lib.lists.tail"}},
-                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}}}},
+                                                            "type": {"variable": "hydra.paths.SubtermStep"}}}}},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {"function": {"primitive": "hydra.lib.lists.head"}},
-                                                        "type": {"variable": "hydra.accessors.TermAccessor"}}}}},
+                                                        "type": {"variable": "hydra.paths.SubtermStep"}}}}},
                                                 "type": [
                                                   {
                                                     "constraints": null,
-                                                    "type": {"variable": "hydra.accessors.TermAccessor"},
+                                                    "type": {"variable": "hydra.paths.SubtermStep"},
                                                     "variables": []}]}],
                                             "body": {
                                               "let": {
@@ -7095,15 +7095,15 @@
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {"function": {"primitive": "hydra.lib.lists.tail"}},
-                                                                "type": {"variable": "hydra.accessors.TermAccessor"}}}}},
+                                                                "type": {"variable": "hydra.paths.SubtermStep"}}}}},
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {"function": {"primitive": "hydra.lib.lists.tail"}},
-                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}}}},
+                                                            "type": {"variable": "hydra.paths.SubtermStep"}}}}},
                                                     "type": [
                                                       {
                                                         "constraints": null,
-                                                        "type": {"list": {"variable": "hydra.accessors.TermAccessor"}},
+                                                        "type": {"list": {"variable": "hydra.paths.SubtermStep"}},
                                                         "variables": []}]}],
                                                 "body": {
                                                   "application": {
@@ -7117,7 +7117,7 @@
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {"function": {"primitive": "hydra.lib.lists.tail"}},
-                                                                    "type": {"variable": "hydra.accessors.TermAccessor"}}}}},
+                                                                    "type": {"variable": "hydra.paths.SubtermStep"}}}}},
                                                             "function": {"variable": "go"}}},
                                                         "function": {
                                                           "application": {
@@ -7125,7 +7125,7 @@
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
-                                                                "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {
@@ -7137,11 +7137,11 @@
                                                                 "argument": {
                                                                   "union": {
                                                                     "field": {"name": "letBody", "term": {"unit": {}}},
-                                                                    "typeName": "hydra.accessors.TermAccessor"}},
+                                                                    "typeName": "hydra.paths.SubtermStep"}},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
-                                                                    "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                    "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
@@ -7160,7 +7160,7 @@
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
-                                                                "type": {"list": {"variable": "hydra.accessors.TermAccessor"}}}}}}}}}}}}}}}},
+                                                                "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}}}}}}}}}}}},
                                     "function": {
                                       "application": {
                                         "argument": {"variable": "remaining"},
@@ -7176,11 +7176,11 @@
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {"function": {"primitive": "hydra.lib.lists.tail"}},
-                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}}}},
+                                                            "type": {"variable": "hydra.paths.SubtermStep"}}}}},
                                                     "function": {
                                                       "typeApplication": {
                                                         "body": {"function": {"primitive": "hydra.lib.lists.null"}},
-                                                        "type": {"variable": "hydra.accessors.TermAccessor"}}}}},
+                                                        "type": {"variable": "hydra.paths.SubtermStep"}}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
@@ -7189,33 +7189,33 @@
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {"function": {"primitive": "hydra.lib.lists.null"}},
-                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}}}},
+                                                            "type": {"variable": "hydra.paths.SubtermStep"}}}}},
                                                     "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
-                                                "type": {"list": {"variable": "hydra.accessors.TermAccessor"}}}}}}}}}},
-                                "domain": [{"list": {"variable": "hydra.accessors.TermAccessor"}}],
+                                                "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}}}}}},
+                                "domain": [{"list": {"variable": "hydra.paths.SubtermStep"}}],
                                 "parameter": "remaining"}}},
                           "type": [
                             {
                               "constraints": null,
                               "type": {
                                 "function": {
-                                  "codomain": {"list": {"variable": "hydra.accessors.TermAccessor"}},
-                                  "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                  "codomain": {"list": {"variable": "hydra.paths.SubtermStep"}},
+                                  "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                               "variables": []}]}],
                       "body": {
                         "application": {"argument": {"variable": "path"}, "function": {"variable": "go"}}}}},
-                  "domain": [{"list": {"variable": "hydra.accessors.TermAccessor"}}],
+                  "domain": [{"list": {"variable": "hydra.paths.SubtermStep"}}],
                   "parameter": "path"}}}}},
         "type": [
           {
             "constraints": null,
             "type": {
               "function": {
-                "codomain": {"list": {"variable": "hydra.accessors.TermAccessor"}},
-                "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                "codomain": {"list": {"variable": "hydra.paths.SubtermStep"}},
+                "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
             "variables": []}]}},
     {
       "term": {
@@ -7283,12 +7283,12 @@
                                   "body": {
                                     "typeApplication": {
                                       "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                      "type": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                      "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                   "type": {"variable": "hydra.core.Term"}}}}},
                           "type": [
                             {
                               "constraints": null,
-                              "type": {"list": {"variable": "hydra.accessors.TermAccessor"}},
+                              "type": {"list": {"variable": "hydra.paths.SubtermStep"}},
                               "variables": []}]}],
                       "body": {
                         "let": {
@@ -7303,7 +7303,7 @@
                                       "body": {
                                         "typeApplication": {
                                           "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
-                                          "type": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                          "type": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                       "type": {"variable": "hydra.core.Term"}}}}},
                               "type": [
                                 {
@@ -7347,7 +7347,7 @@
                                                                     "application": {
                                                                       "argument": {"variable": "acc"},
                                                                       "function": {"variable": "hydra.hoisting.updateHoistState"}}}}},
-                                                              "domain": [{"variable": "hydra.accessors.TermAccessor"}],
+                                                              "domain": [{"variable": "hydra.paths.SubtermStep"}],
                                                               "parameter": "acc"}}},
                                                         "domain": [
                                                           {
@@ -7364,7 +7364,7 @@
                                                             "pair": {
                                                               "first": {"literal": {"boolean": {}}},
                                                               "second": {"literal": {"boolean": {}}}}}}},
-                                                      "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}}}},
+                                                      "type": {"variable": "hydra.paths.SubtermStep"}}}}}}}}},
                                       "type": [
                                         {
                                           "constraints": null,
@@ -7414,7 +7414,7 @@
                   "domain": [
                     {
                       "pair": {
-                        "first": {"list": {"variable": "hydra.accessors.TermAccessor"}},
+                        "first": {"list": {"variable": "hydra.paths.SubtermStep"}},
                         "second": {"variable": "hydra.core.Term"}}}],
                   "parameter": "pathAndTerm"}}}}},
         "type": [
@@ -7425,7 +7425,7 @@
                 "codomain": {"literal": {"boolean": {}}},
                 "domain": {
                   "pair": {
-                    "first": {"list": {"variable": "hydra.accessors.TermAccessor"}},
+                    "first": {"list": {"variable": "hydra.paths.SubtermStep"}},
                     "second": {"variable": "hydra.core.Term"}}}}},
             "variables": []}]}},
     {
@@ -7786,7 +7786,7 @@
                                                               "@second": {"variable": "usedApp"}}},
                                                           "type": {"literal": {"boolean": {}}}}},
                                                       "type": {"literal": {"boolean": {}}}}}],
-                                                "typeName": "hydra.accessors.TermAccessor"}}}}}},
+                                                "typeName": "hydra.paths.SubtermStep"}}}}}},
                                     "function": {
                                       "application": {
                                         "argument": {
@@ -7818,7 +7818,7 @@
                               "first": {"literal": {"boolean": {}}},
                               "second": {"literal": {"boolean": {}}}}}],
                         "parameter": "state"}}},
-                  "domain": [{"variable": "hydra.accessors.TermAccessor"}],
+                  "domain": [{"variable": "hydra.paths.SubtermStep"}],
                   "parameter": "accessor"}}}}},
         "type": [
           {
@@ -7835,7 +7835,7 @@
                       "pair": {
                         "first": {"literal": {"boolean": {}}},
                         "second": {"literal": {"boolean": {}}}}}}},
-                "domain": {"variable": "hydra.accessors.TermAccessor"}}},
+                "domain": {"variable": "hydra.paths.SubtermStep"}}},
             "variables": []}]}}],
   "description": [
     "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms."],
@@ -7847,7 +7847,7 @@
     "hydra.sorting",
     "hydra.substitution"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

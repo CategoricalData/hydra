@@ -1947,7 +1947,7 @@
   "namespace": "hydra.tarjan",
   "termDependencies": ["hydra.constants"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

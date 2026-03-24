@@ -1918,7 +1918,7 @@
   "namespace": "hydra.extract.helpers",
   "termDependencies": ["hydra.lexical"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

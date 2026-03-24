@@ -15,9 +15,9 @@ public class EmptyUnionTypeError implements Serializable, Comparable<EmptyUnionT
   /**
    * The path to the empty union type
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
-  public EmptyUnionTypeError (hydra.accessors.AccessorPath location) {
+  public EmptyUnionTypeError (hydra.paths.SubtermPath location) {
     this.location = location;
   }
 

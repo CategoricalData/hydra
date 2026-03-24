@@ -10222,8 +10222,8 @@
                                                                                               "body": {
                                                                                                 "typeApplication": {
                                                                                                   "body": {"list": []},
-                                                                                                  "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                              "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                                                  "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                              "typeName": "hydra.paths.SubtermPath"}}},
                                                                                         {"name": "name", "term": {"variable": "name"}}],
                                                                                       "typeName": "hydra.error.core.UndefinedTermVariableError"}}},
                                                                                 "typeName": "hydra.errors.Error"}}},
@@ -12905,8 +12905,8 @@
                                                                                               "body": {
                                                                                                 "typeApplication": {
                                                                                                   "body": {"list": []},
-                                                                                                  "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                              "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                                                  "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                              "typeName": "hydra.paths.SubtermPath"}}},
                                                                                         {"name": "name", "term": {"variable": "name"}}],
                                                                                       "typeName": "hydra.error.core.UntypedTermVariableError"}}},
                                                                                 "typeName": "hydra.errors.Error"}}},
@@ -13512,7 +13512,7 @@
     "hydra.show.meta",
     "hydra.substitution"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

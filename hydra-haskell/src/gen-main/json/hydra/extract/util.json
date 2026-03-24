@@ -257,7 +257,7 @@
   "namespace": "hydra.extract.util",
   "termDependencies": ["hydra.extract.core", "hydra.show.errors"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

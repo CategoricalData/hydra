@@ -17,14 +17,14 @@ public class UndefinedTypeVariableError implements Serializable, Comparable<Unde
   /**
    * The path to the undefined type variable
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The name of the undefined type variable
    */
   public final hydra.core.Name name;
 
-  public UndefinedTypeVariableError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public UndefinedTypeVariableError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class UndefinedTypeVariableError implements Serializable, Comparable<Unde
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public UndefinedTypeVariableError withLocation(hydra.accessors.AccessorPath location) {
+  public UndefinedTypeVariableError withLocation(hydra.paths.SubtermPath location) {
     return new UndefinedTypeVariableError(location, name);
   }
 

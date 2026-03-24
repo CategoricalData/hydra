@@ -15,9 +15,9 @@ public class EmptyTypeNameInTermError implements Serializable, Comparable<EmptyT
   /**
    * The path to the term with the empty type name
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
-  public EmptyTypeNameInTermError (hydra.accessors.AccessorPath location) {
+  public EmptyTypeNameInTermError (hydra.paths.SubtermPath location) {
     this.location = location;
   }
 

@@ -253,7 +253,7 @@
   "namespace": "hydra.ext.org.json.schema.language",
   "termDependencies": ["hydra.reflect"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

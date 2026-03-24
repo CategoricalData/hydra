@@ -429,8 +429,8 @@
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {"list": []},
-                                                                    "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                    "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                "typeName": "hydra.paths.SubtermPath"}}},
                                                           {
                                                             "name": "name",
                                                             "term": {
@@ -592,8 +592,8 @@
                                                                     {
                                                                       "union": {
                                                                         "field": {"name": "lambdaBody", "term": {"unit": {}}},
-                                                                        "typeName": "hydra.accessors.TermAccessor"}}]},
-                                                                "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                        "typeName": "hydra.paths.SubtermStep"}}]},
+                                                                "typeName": "hydra.paths.SubtermPath"}}},
                                                           {
                                                             "name": "name",
                                                             "term": {
@@ -776,8 +776,8 @@
                                                                     {
                                                                       "union": {
                                                                         "field": {"name": "letBody", "term": {"unit": {}}},
-                                                                        "typeName": "hydra.accessors.TermAccessor"}}]},
-                                                                "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                        "typeName": "hydra.paths.SubtermStep"}}]},
+                                                                "typeName": "hydra.paths.SubtermPath"}}},
                                                           {
                                                             "name": "name",
                                                             "term": {
@@ -956,8 +956,8 @@
                                                                           "name": "letBinding",
                                                                           "term": {
                                                                             "wrap": {"body": {"literal": {"string": "x"}}, "typeName": "hydra.core.Name"}}},
-                                                                        "typeName": "hydra.accessors.TermAccessor"}}]},
-                                                                "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                        "typeName": "hydra.paths.SubtermStep"}}]},
+                                                                "typeName": "hydra.paths.SubtermPath"}}},
                                                           {
                                                             "name": "name",
                                                             "term": {
@@ -1388,8 +1388,8 @@
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {"list": []},
-                                                                    "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                    "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                "typeName": "hydra.paths.SubtermPath"}}},
                                                           {
                                                             "name": "name",
                                                             "term": {
@@ -1536,8 +1536,8 @@
                                                                     {
                                                                       "union": {
                                                                         "field": {"name": "lambdaBody", "term": {"unit": {}}},
-                                                                        "typeName": "hydra.accessors.TermAccessor"}}]},
-                                                                "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                        "typeName": "hydra.paths.SubtermStep"}}]},
+                                                                "typeName": "hydra.paths.SubtermPath"}}},
                                                           {
                                                             "name": "name",
                                                             "term": {
@@ -1705,8 +1705,8 @@
                                                                     {
                                                                       "union": {
                                                                         "field": {"name": "letBody", "term": {"unit": {}}},
-                                                                        "typeName": "hydra.accessors.TermAccessor"}}]},
-                                                                "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                        "typeName": "hydra.paths.SubtermStep"}}]},
+                                                                "typeName": "hydra.paths.SubtermPath"}}},
                                                           {
                                                             "name": "name",
                                                             "term": {
@@ -1905,8 +1905,8 @@
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {"list": []},
-                                                                    "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                "typeName": "hydra.accessors.AccessorPath"}}}],
+                                                                    "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                "typeName": "hydra.paths.SubtermPath"}}}],
                                                         "typeName": "hydra.error.core.EmptyLetBindingsError"}}},
                                                   "typeName": "hydra.error.core.InvalidTermError"}}]}}],
                                       "typeName": "hydra.testing.ValidateCoreTermTestCase"}}},
@@ -2143,8 +2143,8 @@
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {"list": []},
-                                                                    "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                "typeName": "hydra.accessors.AccessorPath"}}}],
+                                                                    "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                "typeName": "hydra.paths.SubtermPath"}}}],
                                                         "typeName": "hydra.error.core.UnnecessaryIdentityApplicationError"}}},
                                                   "typeName": "hydra.error.core.InvalidTermError"}}]}}],
                                       "typeName": "hydra.testing.ValidateCoreTermTestCase"}}},
@@ -2464,7 +2464,7 @@
   "namespace": "hydra.test.validate.core",
   "termDependencies": [],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

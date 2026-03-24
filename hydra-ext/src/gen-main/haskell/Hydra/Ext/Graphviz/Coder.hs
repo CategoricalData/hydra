@@ -4,7 +4,6 @@
 
 module Hydra.Ext.Graphviz.Coder where
 
-import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Org.Graphviz.Dot as Dot
 import qualified Hydra.Lib.Equality as Equality
@@ -18,8 +17,9 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Show.Accessors as Accessors_
+import qualified Hydra.Show.Paths as Paths_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -159,39 +159,6 @@ termLabel compact namespaces term =
           ")"])
         _ -> simpleLabel "?"
 
--- | Convert a term to an accessor-style DOT graph
-termToAccessorDotGraph :: Core.Term -> Dot.Graph
-termToAccessorDotGraph term =
-    Dot.Graph {
-      Dot.graphStrict = False,
-      Dot.graphDirected = True,
-      Dot.graphId = Nothing,
-      Dot.graphStatements = (termToAccessorDotStmts standardNamespaces term)}
-
--- | Convert a term to accessor-style DOT statements
-termToAccessorDotStmts :: M.Map Module.Namespace String -> Core.Term -> [Dot.Stmt]
-termToAccessorDotStmts namespaces term =
-
-      let accessorGraph = Accessors_.termToAccessorGraph namespaces term
-          nodes = Accessors.accessorGraphNodes accessorGraph
-          edges = Accessors.accessorGraphEdges accessorGraph
-          nodeStmt =
-                  \node -> Dot.StmtNode (Dot.NodeStmt {
-                    Dot.nodeStmtId = (toNodeId (Dot.Id (Accessors.accessorNodeId node))),
-                    Dot.nodeStmtAttributes = (Just (Dot.AttrList [
-                      [
-                        labelAttr (Accessors.accessorNodeLabel node)]]))})
-          edgeStmt =
-                  \edge ->
-                    let lab1 = Accessors.accessorNodeId (Accessors.accessorEdgeSource edge)
-                        lab2 = Accessors.accessorNodeId (Accessors.accessorEdgeTarget edge)
-                        pathAccessors = Accessors.unAccessorPath (Accessors.accessorEdgePath edge)
-                        showPath = Strings.intercalate "/" (Maybes.cat (Lists.map Accessors_.termAccessor pathAccessors))
-                    in (toEdgeStmt (Dot.Id lab1) (Dot.Id lab2) (Just (Dot.AttrList [
-                      [
-                        labelAttr showPath]])))
-      in (Lists.concat2 (Lists.map nodeStmt nodes) (Lists.map edgeStmt edges))
-
 -- | Convert a term to a full DOT graph
 termToDotGraph :: Core.Term -> Dot.Graph
 termToDotGraph term =
@@ -231,7 +198,7 @@ termToDotStmts namespaces term =
                               Dot.nodeStmtId = (toNodeId selfId),
                               Dot.nodeStmtAttributes = (Just (labelAttrs nodeStyle rawLabel))})
                     toAccessorEdgeStmt =
-                            \acc -> \sty -> \i1 -> \i2 -> toEdgeStmt i1 i2 (Maybes.map (\s -> labelAttrs sty s) (Accessors_.termAccessor acc))
+                            \acc -> \sty -> \i1 -> \i2 -> toEdgeStmt i1 i2 (Maybes.map (\s -> labelAttrs sty s) (Paths_.subtermStep acc))
                     edgeAttrs =
                             \lab -> Dot.AttrList [
                               [
@@ -246,8 +213,7 @@ termToDotStmts namespaces term =
                               [
                                 nodeStmt],
                               parentStmt]
-                    dflt =
-                            Lists.foldl (encode Nothing False ids (Just selfId)) (selfStmts, selfVisited) (Rewriting.subtermsWithAccessors currentTerm)
+                    dflt = Lists.foldl (encode Nothing False ids (Just selfId)) (selfStmts, selfVisited) (Rewriting.subtermsWithSteps currentTerm)
                 in case currentTerm of
                   Core.TermFunction v0 -> case v0 of
                     Core.FunctionLambda v1 ->
@@ -272,7 +238,7 @@ termToDotStmts namespaces term =
                         selfStmts,
                         [
                           varNodeStmt,
-                          varEdgeStmt]], visited1) (Accessors.TermAccessorLambdaBody, body))
+                          varEdgeStmt]], visited1) (Paths.SubtermStepLambdaBody, body))
                     _ -> dflt
                   Core.TermLet v0 ->
                     let bindings = Core.letBindings v0
@@ -293,13 +259,46 @@ termToDotStmts namespaces term =
                                   let bname = Core.bindingName binding
                                       bterm = Core.bindingTerm binding
                                       blab = Dot.unId (Maybes.fromMaybe (Dot.Id "?") (Maps.lookup bname ids1))
-                                  in (encode (Just (blab, nodeStyleElement)) True ids1 (Just selfId) stVis (Accessors.TermAccessorLetBinding bname, bterm))
+                                  in (encode (Just (blab, nodeStyleElement)) True ids1 (Just selfId) stVis (Paths.SubtermStepLetBinding bname, bterm))
                         stmts1 = Lists.foldl addBindingTerm (selfStmts, selfVisited) bindings
-                    in (encode Nothing False ids1 (Just selfId) stmts1 (Accessors.TermAccessorLetBody, env))
+                    in (encode Nothing False ids1 (Just selfId) stmts1 (Paths.SubtermStepLetBody, env))
                   Core.TermVariable v0 -> Maybes.maybe dflt (\i -> (Lists.concat2 stmts [
                     toAccessorEdgeStmt accessor style (Maybes.fromMaybe selfId mparent) i], visited)) (Maps.lookup v0 ids)
                   _ -> dflt
-      in (Pairs.first (encode Nothing False Maps.empty Nothing ([], Sets.empty) (Accessors.TermAccessorAnnotatedBody, term)))
+      in (Pairs.first (encode Nothing False Maps.empty Nothing ([], Sets.empty) (Paths.SubtermStepAnnotatedBody, term)))
+
+-- | Convert a term to an subterm-style DOT graph
+termToSubtermDotGraph :: Core.Term -> Dot.Graph
+termToSubtermDotGraph term =
+    Dot.Graph {
+      Dot.graphStrict = False,
+      Dot.graphDirected = True,
+      Dot.graphId = Nothing,
+      Dot.graphStatements = (termToSubtermDotStmts standardNamespaces term)}
+
+-- | Convert a term to subterm-style DOT statements
+termToSubtermDotStmts :: M.Map Module.Namespace String -> Core.Term -> [Dot.Stmt]
+termToSubtermDotStmts namespaces term =
+
+      let accessorGraph = Paths_.termToSubtermGraph namespaces term
+          nodes = Paths.subtermGraphNodes accessorGraph
+          edges = Paths.subtermGraphEdges accessorGraph
+          nodeStmt =
+                  \node -> Dot.StmtNode (Dot.NodeStmt {
+                    Dot.nodeStmtId = (toNodeId (Dot.Id (Paths.subtermNodeId node))),
+                    Dot.nodeStmtAttributes = (Just (Dot.AttrList [
+                      [
+                        labelAttr (Paths.subtermNodeLabel node)]]))})
+          edgeStmt =
+                  \edge ->
+                    let lab1 = Paths.subtermNodeId (Paths.subtermEdgeSource edge)
+                        lab2 = Paths.subtermNodeId (Paths.subtermEdgeTarget edge)
+                        pathAccessors = Paths.unSubtermPath (Paths.subtermEdgePath edge)
+                        showPath = Strings.intercalate "/" (Maybes.cat (Lists.map Paths_.subtermStep pathAccessors))
+                    in (toEdgeStmt (Dot.Id lab1) (Dot.Id lab2) (Just (Dot.AttrList [
+                      [
+                        labelAttr showPath]])))
+      in (Lists.concat2 (Lists.map nodeStmt nodes) (Lists.map edgeStmt edges))
 
 -- | Create a DOT edge statement
 toEdgeStmt :: Dot.Id -> Dot.Id -> Maybe Dot.AttrList -> Dot.Stmt

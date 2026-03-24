@@ -8,79 +8,79 @@ package hydra.encode.error;
 public interface Core {
   static hydra.core.Term constantConditionError(hydra.error.core.ConstantConditionError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.ConstantConditionError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("value"), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_((x).value))))));
   }
 
   static hydra.core.Term duplicateBindingError(hydra.error.core.DuplicateBindingError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.DuplicateBindingError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term duplicateFieldError(hydra.error.core.DuplicateFieldError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.DuplicateFieldError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term duplicateRecordTypeFieldNamesError(hydra.error.core.DuplicateRecordTypeFieldNamesError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.DuplicateRecordTypeFieldNamesError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term duplicateUnionTypeFieldNamesError(hydra.error.core.DuplicateUnionTypeFieldNamesError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.DuplicateUnionTypeFieldNamesError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term emptyCaseStatementError(hydra.error.core.EmptyCaseStatementError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.EmptyCaseStatementError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("typeName"), hydra.encode.Core.name((x).typeName)))));
   }
 
   static hydra.core.Term emptyLetBindingsError(hydra.error.core.EmptyLetBindingsError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.EmptyLetBindingsError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.EmptyLetBindingsError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)))));
   }
 
   static hydra.core.Term emptyRecordTypeError(hydra.error.core.EmptyRecordTypeError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.EmptyRecordTypeError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.EmptyRecordTypeError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)))));
   }
 
   static hydra.core.Term emptyTermAnnotationError(hydra.error.core.EmptyTermAnnotationError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.EmptyTermAnnotationError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.EmptyTermAnnotationError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)))));
   }
 
   static hydra.core.Term emptyTypeAnnotationError(hydra.error.core.EmptyTypeAnnotationError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.EmptyTypeAnnotationError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.EmptyTypeAnnotationError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)))));
   }
 
   static hydra.core.Term emptyTypeNameInTermError(hydra.error.core.EmptyTypeNameInTermError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.EmptyTypeNameInTermError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.EmptyTypeNameInTermError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)))));
   }
 
   static hydra.core.Term emptyUnionTypeError(hydra.error.core.EmptyUnionTypeError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.EmptyUnionTypeError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.EmptyUnionTypeError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)))));
   }
 
   static hydra.core.Term invalidForallParameterNameError(hydra.error.core.InvalidForallParameterNameError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.InvalidForallParameterNameError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term invalidLambdaParameterNameError(hydra.error.core.InvalidLambdaParameterNameError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.InvalidLambdaParameterNameError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term invalidLetBindingNameError(hydra.error.core.InvalidLetBindingNameError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.InvalidLetBindingNameError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
@@ -274,69 +274,69 @@ public interface Core {
 
   static hydra.core.Term invalidTypeLambdaParameterNameError(hydra.error.core.InvalidTypeLambdaParameterNameError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.InvalidTypeLambdaParameterNameError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term invalidTypeSchemeVariableNameError(hydra.error.core.InvalidTypeSchemeVariableNameError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.InvalidTypeSchemeVariableNameError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term nestedTermAnnotationError(hydra.error.core.NestedTermAnnotationError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.NestedTermAnnotationError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.NestedTermAnnotationError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)))));
   }
 
   static hydra.core.Term nestedTypeAnnotationError(hydra.error.core.NestedTypeAnnotationError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.NestedTypeAnnotationError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.NestedTypeAnnotationError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)))));
   }
 
   static hydra.core.Term nonComparableMapKeyTypeError(hydra.error.core.NonComparableMapKeyTypeError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.NonComparableMapKeyTypeError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("keyType"), hydra.encode.Core.type((x).keyType)))));
   }
 
   static hydra.core.Term nonComparableSetElementTypeError(hydra.error.core.NonComparableSetElementTypeError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.NonComparableSetElementTypeError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("elementType"), hydra.encode.Core.type((x).elementType)))));
   }
 
   static hydra.core.Term redundantWrapUnwrapError(hydra.error.core.RedundantWrapUnwrapError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.RedundantWrapUnwrapError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("typeName"), hydra.encode.Core.name((x).typeName)))));
   }
 
   static hydra.core.Term selfApplicationError(hydra.error.core.SelfApplicationError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.SelfApplicationError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term singleVariantUnionError(hydra.error.core.SingleVariantUnionError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.SingleVariantUnionError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("fieldName"), hydra.encode.Core.name((x).fieldName)))));
   }
 
   static hydra.core.Term termVariableShadowingError(hydra.error.core.TermVariableShadowingError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.TermVariableShadowingError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term typeVariableShadowingInForallError(hydra.error.core.TypeVariableShadowingInForallError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.TypeVariableShadowingInForallError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term typeVariableShadowingInTypeLambdaError(hydra.error.core.TypeVariableShadowingInTypeLambdaError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.TypeVariableShadowingInTypeLambdaError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
@@ -348,31 +348,31 @@ public interface Core {
 
   static hydra.core.Term undefinedTermVariableError(hydra.error.core.UndefinedTermVariableError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.UndefinedTermVariableError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term undefinedTypeVariableError(hydra.error.core.UndefinedTypeVariableError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.UndefinedTypeVariableError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term undefinedTypeVariableInBindingTypeError(hydra.error.core.UndefinedTypeVariableInBindingTypeError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.UndefinedTypeVariableInBindingTypeError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term undefinedTypeVariableInLambdaDomainError(hydra.error.core.UndefinedTypeVariableInLambdaDomainError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.UndefinedTypeVariableInLambdaDomainError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term undefinedTypeVariableInTypeApplicationError(hydra.error.core.UndefinedTypeVariableInTypeApplicationError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.UndefinedTypeVariableInTypeApplicationError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
@@ -390,21 +390,21 @@ public interface Core {
 
   static hydra.core.Term unknownPrimitiveNameError(hydra.error.core.UnknownPrimitiveNameError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.UnknownPrimitiveNameError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term unnecessaryIdentityApplicationError(hydra.error.core.UnnecessaryIdentityApplicationError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.UnnecessaryIdentityApplicationError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.UnnecessaryIdentityApplicationError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)))));
   }
 
   static hydra.core.Term untypedTermVariableError(hydra.error.core.UntypedTermVariableError x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.UntypedTermVariableError"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)),
+      new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)),
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.Core.name((x).name)))));
   }
 
   static hydra.core.Term voidInNonBottomPositionError(hydra.error.core.VoidInNonBottomPositionError x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.VoidInNonBottomPositionError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Accessors.accessorPath((x).location)))));
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.error.core.VoidInNonBottomPositionError"), hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("location"), hydra.encode.Paths.subtermPath((x).location)))));
   }
 }

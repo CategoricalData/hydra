@@ -15,9 +15,9 @@ public class EmptyLetBindingsError implements Serializable, Comparable<EmptyLetB
   /**
    * The path to the empty let expression within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
-  public EmptyLetBindingsError (hydra.accessors.AccessorPath location) {
+  public EmptyLetBindingsError (hydra.paths.SubtermPath location) {
     this.location = location;
   }
 

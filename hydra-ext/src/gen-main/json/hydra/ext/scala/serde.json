@@ -3872,7 +3872,7 @@
   "termDependencies": ["hydra.serialization"],
   "typeDependencies": [
     "hydra.ext.scala.syntax",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

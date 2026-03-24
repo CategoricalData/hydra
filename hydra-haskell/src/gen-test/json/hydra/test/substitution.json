@@ -1694,7 +1694,7 @@
   "namespace": "hydra.test.substitution",
   "termDependencies": [],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

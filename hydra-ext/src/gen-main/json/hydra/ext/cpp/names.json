@@ -1187,7 +1187,7 @@
   "typeDependencies": [
     "hydra.ext.cpp.environment",
     "hydra.ext.cpp.syntax",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

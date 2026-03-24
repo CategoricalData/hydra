@@ -17,14 +17,14 @@ public class InvalidTypeLambdaParameterNameError implements Serializable, Compar
   /**
    * The path to the type lambda within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The invalid type lambda parameter name
    */
   public final hydra.core.Name name;
 
-  public InvalidTypeLambdaParameterNameError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public InvalidTypeLambdaParameterNameError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class InvalidTypeLambdaParameterNameError implements Serializable, Compar
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public InvalidTypeLambdaParameterNameError withLocation(hydra.accessors.AccessorPath location) {
+  public InvalidTypeLambdaParameterNameError withLocation(hydra.paths.SubtermPath location) {
     return new InvalidTypeLambdaParameterNameError(location, name);
   }
 

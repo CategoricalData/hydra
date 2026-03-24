@@ -4,7 +4,6 @@
 
 module Hydra.Hoisting where
 
-import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
@@ -18,6 +17,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Sorting as Sorting
@@ -295,8 +295,8 @@ hoistPolymorphicLetBindings isParentBinding let0 =
                 Graph.graphTypeVariables = Sets.empty}
       in (hoistLetBindingsWithPredicate isParentBinding shouldHoistPolymorphic emptyCx let0)
 
--- | Hoist subterms into local let bindings based on a path-aware predicate. The predicate receives a pair of (path, term) where path is the list of TermAccessors from the root to the current term, and returns True if the term should be hoisted. For each let term found, the immediate subterms (binding values and body) are processed: matching subterms within each immediate subterm are collected and hoisted into a local let that wraps that immediate subterm. If a hoisted term contains free variables that are lambda-bound at an enclosing scope, the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables.
-hoistSubterms :: (([Accessors.TermAccessor], Core.Term) -> Bool) -> Graph.Graph -> Core.Term -> Core.Term
+-- | Hoist subterms into local let bindings based on a path-aware predicate. The predicate receives a pair of (path, term) where path is the list of SubtermSteps from the root to the current term, and returns True if the term should be hoisted. For each let term found, the immediate subterms (binding values and body) are processed: matching subterms within each immediate subterm are collected and hoisted into a local let that wraps that immediate subterm. If a hoisted term contains free variables that are lambda-bound at an enclosing scope, the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables.
+hoistSubterms :: (([Paths.SubtermStep], Core.Term) -> Bool) -> Graph.Graph -> Core.Term -> Core.Term
 hoistSubterms shouldHoist cx0 term0 =
 
       let processImmediateSubterm =
@@ -366,7 +366,7 @@ hoistSubterms shouldHoist cx0 term0 =
                                 \acc -> \binding ->
                                   let namePrefix = Strings.intercalate "_" (Strings.splitOn "." (Core.unName (Core.bindingName binding)))
                                       bindingPathPrefix = Lists.concat2 path [
-                                            Accessors.TermAccessorLetBinding (Core.bindingName binding)]
+                                            Paths.SubtermStepLetBinding (Core.bindingName binding)]
                                       result = processImmediateSubterm cx 1 namePrefix bindingPathPrefix (Core.bindingTerm binding)
                                       newValue = Pairs.second result
                                       newBinding =
@@ -378,7 +378,7 @@ hoistSubterms shouldHoist cx0 term0 =
                         newBindingsReversed = Lists.foldl processBinding [] bindings
                         newBindings = Lists.reverse newBindingsReversed
                         bodyPathPrefix = Lists.concat2 path [
-                              Accessors.TermAccessorLetBody]
+                              Paths.SubtermStepLetBody]
                         firstBindingName =
                                 Maybes.maybe "body" (\b -> Strings.intercalate "_" (Strings.splitOn "." (Core.unName (Core.bindingName b)))) (Lists.safeHead bindings)
                         bodyPrefix = Strings.cat2 firstBindingName "_body"
@@ -399,10 +399,10 @@ hoistSubterms shouldHoist cx0 term0 =
                     _ -> recurse counter term
       in (Pairs.second (Rewriting.rewriteAndFoldTermWithGraphAndPath rewrite cx0 1 term0))
 
-isApplicationFunction :: Accessors.TermAccessor -> Bool
+isApplicationFunction :: Paths.SubtermStep -> Bool
 isApplicationFunction acc =
     case acc of
-      Accessors.TermAccessorApplicationFunction -> True
+      Paths.SubtermStepApplicationFunction -> True
       _ -> False
 
 -- | Check if a function is a union elimination
@@ -414,10 +414,10 @@ isEliminationUnion f =
         _ -> False
       _ -> False
 
-isLambdaBody :: Accessors.TermAccessor -> Bool
+isLambdaBody :: Paths.SubtermStep -> Bool
 isLambdaBody acc =
     case acc of
-      Accessors.TermAccessorLambdaBody -> True
+      Paths.SubtermStepLambdaBody -> True
       _ -> False
 
 -- | Check if a term is a union elimination (case statement)
@@ -435,7 +435,7 @@ isUnionEliminationApplication term =
       _ -> False
 
 -- | Normalize a path for hoisting by treating immediately-applied lambdas as let bindings. Replaces [applicationFunction, lambdaBody, ...] with [letBody, ...].
-normalizePathForHoisting :: [Accessors.TermAccessor] -> [Accessors.TermAccessor]
+normalizePathForHoisting :: [Paths.SubtermStep] -> [Paths.SubtermStep]
 normalizePathForHoisting path =
 
       let go =
@@ -443,7 +443,7 @@ normalizePathForHoisting path =
                 let first = Lists.head remaining
                     second = Lists.head (Lists.tail remaining)
                     rest = Lists.tail (Lists.tail remaining)
-                in (Logic.ifElse (Logic.and (isApplicationFunction first) (isLambdaBody second)) (Lists.cons Accessors.TermAccessorLetBody (go rest)) (Lists.cons first (go (Lists.tail remaining)))))
+                in (Logic.ifElse (Logic.and (isApplicationFunction first) (isLambdaBody second)) (Lists.cons Paths.SubtermStepLetBody (go rest)) (Lists.cons first (go (Lists.tail remaining)))))
       in (go path)
 
 -- | Predicate that always returns True, for hoisting all bindings unconditionally.
@@ -451,7 +451,7 @@ shouldHoistAll :: t0 -> t1 -> Bool
 shouldHoistAll _ _ = True
 
 -- | Predicate for case statement hoisting. Returns True if term is a union elimination (bare case function) or a case statement application (union elimination applied to an argument) AND not at top level. Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS. Once through an app LHS, lambda bodies no longer pass through.
-shouldHoistCaseStatement :: ([Accessors.TermAccessor], Core.Term) -> Bool
+shouldHoistCaseStatement :: ([Paths.SubtermStep], Core.Term) -> Bool
 shouldHoistCaseStatement pathAndTerm =
 
       let path = Pairs.first pathAndTerm
@@ -465,18 +465,18 @@ shouldHoistPolymorphic :: Graph.Graph -> Core.Binding -> Bool
 shouldHoistPolymorphic cx binding = Logic.or (bindingIsPolymorphic binding) (bindingUsesContextTypeVars cx binding)
 
 -- | Update hoisting state when traversing an accessor. State is (atTopLevel, usedAppLHS). Returns updated state.
-updateHoistState :: Accessors.TermAccessor -> (Bool, Bool) -> (Bool, Bool)
+updateHoistState :: Paths.SubtermStep -> (Bool, Bool) -> (Bool, Bool)
 updateHoistState accessor state =
 
       let atTop = Pairs.first state
           usedApp = Pairs.second state
       in (Logic.ifElse (Logic.not atTop) (False, usedApp) (case accessor of
-        Accessors.TermAccessorAnnotatedBody -> (True, usedApp)
-        Accessors.TermAccessorLetBody -> (True, usedApp)
-        Accessors.TermAccessorLetBinding _ -> (True, usedApp)
-        Accessors.TermAccessorLambdaBody -> Logic.ifElse usedApp (False, True) (True, False)
-        Accessors.TermAccessorUnionCasesBranch _ -> Logic.ifElse usedApp (False, True) (True, False)
-        Accessors.TermAccessorUnionCasesDefault -> Logic.ifElse usedApp (False, True) (True, False)
-        Accessors.TermAccessorApplicationFunction -> Logic.ifElse usedApp (False, True) (True, True)
-        Accessors.TermAccessorApplicationArgument -> (False, usedApp)
+        Paths.SubtermStepAnnotatedBody -> (True, usedApp)
+        Paths.SubtermStepLetBody -> (True, usedApp)
+        Paths.SubtermStepLetBinding _ -> (True, usedApp)
+        Paths.SubtermStepLambdaBody -> Logic.ifElse usedApp (False, True) (True, False)
+        Paths.SubtermStepUnionCasesBranch _ -> Logic.ifElse usedApp (False, True) (True, False)
+        Paths.SubtermStepUnionCasesDefault -> Logic.ifElse usedApp (False, True) (True, False)
+        Paths.SubtermStepApplicationFunction -> Logic.ifElse usedApp (False, True) (True, True)
+        Paths.SubtermStepApplicationArgument -> (False, usedApp)
         _ -> (False, usedApp)))

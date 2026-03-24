@@ -4565,7 +4565,7 @@
   "typeDependencies": [
     "hydra.ext.org.w3.shacl.model",
     "hydra.ext.org.w3.rdf.syntax",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

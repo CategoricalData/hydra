@@ -17,14 +17,14 @@ public class EmptyCaseStatementError implements Serializable, Comparable<EmptyCa
   /**
    * The path to the empty case statement within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The name of the union type being matched
    */
   public final hydra.core.Name typeName;
 
-  public EmptyCaseStatementError (hydra.accessors.AccessorPath location, hydra.core.Name typeName) {
+  public EmptyCaseStatementError (hydra.paths.SubtermPath location, hydra.core.Name typeName) {
     this.location = location;
     this.typeName = typeName;
   }
@@ -58,7 +58,7 @@ public class EmptyCaseStatementError implements Serializable, Comparable<EmptyCa
     return ((Comparable) typeName).compareTo(other.typeName);
   }
 
-  public EmptyCaseStatementError withLocation(hydra.accessors.AccessorPath location) {
+  public EmptyCaseStatementError withLocation(hydra.paths.SubtermPath location) {
     return new EmptyCaseStatementError(location, typeName);
   }
 

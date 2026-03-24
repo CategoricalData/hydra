@@ -17,14 +17,14 @@ public class RedundantWrapUnwrapError implements Serializable, Comparable<Redund
   /**
    * The path to the redundant wrap/unwrap within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The type name of the wrapper
    */
   public final hydra.core.Name typeName;
 
-  public RedundantWrapUnwrapError (hydra.accessors.AccessorPath location, hydra.core.Name typeName) {
+  public RedundantWrapUnwrapError (hydra.paths.SubtermPath location, hydra.core.Name typeName) {
     this.location = location;
     this.typeName = typeName;
   }
@@ -58,7 +58,7 @@ public class RedundantWrapUnwrapError implements Serializable, Comparable<Redund
     return ((Comparable) typeName).compareTo(other.typeName);
   }
 
-  public RedundantWrapUnwrapError withLocation(hydra.accessors.AccessorPath location) {
+  public RedundantWrapUnwrapError withLocation(hydra.paths.SubtermPath location) {
     return new RedundantWrapUnwrapError(location, typeName);
   }
 

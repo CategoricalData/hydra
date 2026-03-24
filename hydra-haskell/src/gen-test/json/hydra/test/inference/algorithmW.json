@@ -3524,7 +3524,7 @@
   "namespace": "hydra.test.inference.algorithmW",
   "termDependencies": ["hydra.test.testGraph"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

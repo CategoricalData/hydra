@@ -39,7 +39,7 @@
   "namespace": "hydra.test.hoisting.all",
   "termDependencies": ["hydra.test.hoisting.cases", "hydra.test.hoisting.let"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

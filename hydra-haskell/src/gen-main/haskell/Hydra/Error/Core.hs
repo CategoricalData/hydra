@@ -4,8 +4,8 @@
 
 module Hydra.Error.Core where
 
-import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Core as Core
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -18,7 +18,7 @@ import qualified Data.Set as S
 data DuplicateBindingError =
   DuplicateBindingError {
     -- | The path to the duplicate binding within the term
-    duplicateBindingErrorLocation :: Accessors.AccessorPath,
+    duplicateBindingErrorLocation :: Paths.SubtermPath,
     -- | The duplicated binding name
     duplicateBindingErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -33,7 +33,7 @@ _DuplicateBindingError_name = Core.Name "name"
 data DuplicateFieldError =
   DuplicateFieldError {
     -- | The path to the duplicate field within the term
-    duplicateFieldErrorLocation :: Accessors.AccessorPath,
+    duplicateFieldErrorLocation :: Paths.SubtermPath,
     -- | The duplicated field name
     duplicateFieldErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -93,7 +93,7 @@ _UnexpectedTypeVariantError_actualType = Core.Name "actualType"
 data ConstantConditionError =
   ConstantConditionError {
     -- | The path to the constant condition within the term
-    constantConditionErrorLocation :: Accessors.AccessorPath,
+    constantConditionErrorLocation :: Paths.SubtermPath,
     -- | The constant boolean value of the condition
     constantConditionErrorValue :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -108,7 +108,7 @@ _ConstantConditionError_value = Core.Name "value"
 data EmptyCaseStatementError =
   EmptyCaseStatementError {
     -- | The path to the empty case statement within the term
-    emptyCaseStatementErrorLocation :: Accessors.AccessorPath,
+    emptyCaseStatementErrorLocation :: Paths.SubtermPath,
     -- | The name of the union type being matched
     emptyCaseStatementErrorTypeName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -123,7 +123,7 @@ _EmptyCaseStatementError_typeName = Core.Name "typeName"
 data EmptyLetBindingsError =
   EmptyLetBindingsError {
     -- | The path to the empty let expression within the term
-    emptyLetBindingsErrorLocation :: Accessors.AccessorPath}
+    emptyLetBindingsErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
 
 _EmptyLetBindingsError = Core.Name "hydra.error.core.EmptyLetBindingsError"
@@ -134,7 +134,7 @@ _EmptyLetBindingsError_location = Core.Name "location"
 data EmptyTermAnnotationError =
   EmptyTermAnnotationError {
     -- | The path to the empty annotation within the term
-    emptyTermAnnotationErrorLocation :: Accessors.AccessorPath}
+    emptyTermAnnotationErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
 
 _EmptyTermAnnotationError = Core.Name "hydra.error.core.EmptyTermAnnotationError"
@@ -145,7 +145,7 @@ _EmptyTermAnnotationError_location = Core.Name "location"
 data EmptyTypeNameInTermError =
   EmptyTypeNameInTermError {
     -- | The path to the term with the empty type name
-    emptyTypeNameInTermErrorLocation :: Accessors.AccessorPath}
+    emptyTypeNameInTermErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
 
 _EmptyTypeNameInTermError = Core.Name "hydra.error.core.EmptyTypeNameInTermError"
@@ -156,7 +156,7 @@ _EmptyTypeNameInTermError_location = Core.Name "location"
 data InvalidLambdaParameterNameError =
   InvalidLambdaParameterNameError {
     -- | The path to the lambda within the term
-    invalidLambdaParameterNameErrorLocation :: Accessors.AccessorPath,
+    invalidLambdaParameterNameErrorLocation :: Paths.SubtermPath,
     -- | The invalid parameter name
     invalidLambdaParameterNameErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -171,7 +171,7 @@ _InvalidLambdaParameterNameError_name = Core.Name "name"
 data InvalidLetBindingNameError =
   InvalidLetBindingNameError {
     -- | The path to the binding within the term
-    invalidLetBindingNameErrorLocation :: Accessors.AccessorPath,
+    invalidLetBindingNameErrorLocation :: Paths.SubtermPath,
     -- | The invalid binding name
     invalidLetBindingNameErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -186,7 +186,7 @@ _InvalidLetBindingNameError_name = Core.Name "name"
 data InvalidTypeLambdaParameterNameError =
   InvalidTypeLambdaParameterNameError {
     -- | The path to the type lambda within the term
-    invalidTypeLambdaParameterNameErrorLocation :: Accessors.AccessorPath,
+    invalidTypeLambdaParameterNameErrorLocation :: Paths.SubtermPath,
     -- | The invalid type lambda parameter name
     invalidTypeLambdaParameterNameErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -201,7 +201,7 @@ _InvalidTypeLambdaParameterNameError_name = Core.Name "name"
 data NestedTermAnnotationError =
   NestedTermAnnotationError {
     -- | The path to the outer annotation within the term
-    nestedTermAnnotationErrorLocation :: Accessors.AccessorPath}
+    nestedTermAnnotationErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
 
 _NestedTermAnnotationError = Core.Name "hydra.error.core.NestedTermAnnotationError"
@@ -212,7 +212,7 @@ _NestedTermAnnotationError_location = Core.Name "location"
 data RedundantWrapUnwrapError =
   RedundantWrapUnwrapError {
     -- | The path to the redundant wrap/unwrap within the term
-    redundantWrapUnwrapErrorLocation :: Accessors.AccessorPath,
+    redundantWrapUnwrapErrorLocation :: Paths.SubtermPath,
     -- | The type name of the wrapper
     redundantWrapUnwrapErrorTypeName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -227,7 +227,7 @@ _RedundantWrapUnwrapError_typeName = Core.Name "typeName"
 data SelfApplicationError =
   SelfApplicationError {
     -- | The path to the self-application within the term
-    selfApplicationErrorLocation :: Accessors.AccessorPath,
+    selfApplicationErrorLocation :: Paths.SubtermPath,
     -- | The name of the variable applied to itself
     selfApplicationErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -242,7 +242,7 @@ _SelfApplicationError_name = Core.Name "name"
 data TermVariableShadowingError =
   TermVariableShadowingError {
     -- | The path to the shadowing binding within the term
-    termVariableShadowingErrorLocation :: Accessors.AccessorPath,
+    termVariableShadowingErrorLocation :: Paths.SubtermPath,
     -- | The name of the shadowed variable
     termVariableShadowingErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -257,7 +257,7 @@ _TermVariableShadowingError_name = Core.Name "name"
 data TypeVariableShadowingInTypeLambdaError =
   TypeVariableShadowingInTypeLambdaError {
     -- | The path to the type lambda within the term
-    typeVariableShadowingInTypeLambdaErrorLocation :: Accessors.AccessorPath,
+    typeVariableShadowingInTypeLambdaErrorLocation :: Paths.SubtermPath,
     -- | The name of the shadowed type variable
     typeVariableShadowingInTypeLambdaErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -272,7 +272,7 @@ _TypeVariableShadowingInTypeLambdaError_name = Core.Name "name"
 data UndefinedTermVariableError =
   UndefinedTermVariableError {
     -- | The path to the undefined variable within the term
-    undefinedTermVariableErrorLocation :: Accessors.AccessorPath,
+    undefinedTermVariableErrorLocation :: Paths.SubtermPath,
     -- | The name of the undefined variable
     undefinedTermVariableErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -287,7 +287,7 @@ _UndefinedTermVariableError_name = Core.Name "name"
 data UndefinedTypeVariableInBindingTypeError =
   UndefinedTypeVariableInBindingTypeError {
     -- | The path to the binding within the term
-    undefinedTypeVariableInBindingTypeErrorLocation :: Accessors.AccessorPath,
+    undefinedTypeVariableInBindingTypeErrorLocation :: Paths.SubtermPath,
     -- | The name of the undefined type variable
     undefinedTypeVariableInBindingTypeErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -302,7 +302,7 @@ _UndefinedTypeVariableInBindingTypeError_name = Core.Name "name"
 data UndefinedTypeVariableInLambdaDomainError =
   UndefinedTypeVariableInLambdaDomainError {
     -- | The path to the lambda within the term
-    undefinedTypeVariableInLambdaDomainErrorLocation :: Accessors.AccessorPath,
+    undefinedTypeVariableInLambdaDomainErrorLocation :: Paths.SubtermPath,
     -- | The name of the undefined type variable
     undefinedTypeVariableInLambdaDomainErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -317,7 +317,7 @@ _UndefinedTypeVariableInLambdaDomainError_name = Core.Name "name"
 data UndefinedTypeVariableInTypeApplicationError =
   UndefinedTypeVariableInTypeApplicationError {
     -- | The path to the type application within the term
-    undefinedTypeVariableInTypeApplicationErrorLocation :: Accessors.AccessorPath,
+    undefinedTypeVariableInTypeApplicationErrorLocation :: Paths.SubtermPath,
     -- | The name of the undefined type variable
     undefinedTypeVariableInTypeApplicationErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -332,7 +332,7 @@ _UndefinedTypeVariableInTypeApplicationError_name = Core.Name "name"
 data UnknownPrimitiveNameError =
   UnknownPrimitiveNameError {
     -- | The path to the primitive reference within the term
-    unknownPrimitiveNameErrorLocation :: Accessors.AccessorPath,
+    unknownPrimitiveNameErrorLocation :: Paths.SubtermPath,
     -- | The unknown primitive name
     unknownPrimitiveNameErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -347,7 +347,7 @@ _UnknownPrimitiveNameError_name = Core.Name "name"
 data UnnecessaryIdentityApplicationError =
   UnnecessaryIdentityApplicationError {
     -- | The path to the identity application within the term
-    unnecessaryIdentityApplicationErrorLocation :: Accessors.AccessorPath}
+    unnecessaryIdentityApplicationErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
 
 _UnnecessaryIdentityApplicationError = Core.Name "hydra.error.core.UnnecessaryIdentityApplicationError"
@@ -358,7 +358,7 @@ _UnnecessaryIdentityApplicationError_location = Core.Name "location"
 data UntypedTermVariableError =
   UntypedTermVariableError {
     -- | The path to the untyped variable within the term
-    untypedTermVariableErrorLocation :: Accessors.AccessorPath,
+    untypedTermVariableErrorLocation :: Paths.SubtermPath,
     -- | The name of the untyped variable
     untypedTermVariableErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -467,7 +467,7 @@ _InvalidTermError_untypedTermVariable = Core.Name "untypedTermVariable"
 data DuplicateRecordTypeFieldNamesError =
   DuplicateRecordTypeFieldNamesError {
     -- | The path to the record type with duplicate fields
-    duplicateRecordTypeFieldNamesErrorLocation :: Accessors.AccessorPath,
+    duplicateRecordTypeFieldNamesErrorLocation :: Paths.SubtermPath,
     -- | The duplicated field name
     duplicateRecordTypeFieldNamesErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -482,7 +482,7 @@ _DuplicateRecordTypeFieldNamesError_name = Core.Name "name"
 data DuplicateUnionTypeFieldNamesError =
   DuplicateUnionTypeFieldNamesError {
     -- | The path to the union type with duplicate fields
-    duplicateUnionTypeFieldNamesErrorLocation :: Accessors.AccessorPath,
+    duplicateUnionTypeFieldNamesErrorLocation :: Paths.SubtermPath,
     -- | The duplicated field name
     duplicateUnionTypeFieldNamesErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -497,7 +497,7 @@ _DuplicateUnionTypeFieldNamesError_name = Core.Name "name"
 data EmptyRecordTypeError =
   EmptyRecordTypeError {
     -- | The path to the empty record type
-    emptyRecordTypeErrorLocation :: Accessors.AccessorPath}
+    emptyRecordTypeErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
 
 _EmptyRecordTypeError = Core.Name "hydra.error.core.EmptyRecordTypeError"
@@ -508,7 +508,7 @@ _EmptyRecordTypeError_location = Core.Name "location"
 data EmptyTypeAnnotationError =
   EmptyTypeAnnotationError {
     -- | The path to the empty annotation
-    emptyTypeAnnotationErrorLocation :: Accessors.AccessorPath}
+    emptyTypeAnnotationErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
 
 _EmptyTypeAnnotationError = Core.Name "hydra.error.core.EmptyTypeAnnotationError"
@@ -519,7 +519,7 @@ _EmptyTypeAnnotationError_location = Core.Name "location"
 data EmptyUnionTypeError =
   EmptyUnionTypeError {
     -- | The path to the empty union type
-    emptyUnionTypeErrorLocation :: Accessors.AccessorPath}
+    emptyUnionTypeErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
 
 _EmptyUnionTypeError = Core.Name "hydra.error.core.EmptyUnionTypeError"
@@ -530,7 +530,7 @@ _EmptyUnionTypeError_location = Core.Name "location"
 data InvalidForallParameterNameError =
   InvalidForallParameterNameError {
     -- | The path to the forall type
-    invalidForallParameterNameErrorLocation :: Accessors.AccessorPath,
+    invalidForallParameterNameErrorLocation :: Paths.SubtermPath,
     -- | The invalid parameter name
     invalidForallParameterNameErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -545,7 +545,7 @@ _InvalidForallParameterNameError_name = Core.Name "name"
 data InvalidTypeSchemeVariableNameError =
   InvalidTypeSchemeVariableNameError {
     -- | The path to the type scheme
-    invalidTypeSchemeVariableNameErrorLocation :: Accessors.AccessorPath,
+    invalidTypeSchemeVariableNameErrorLocation :: Paths.SubtermPath,
     -- | The invalid variable name
     invalidTypeSchemeVariableNameErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -560,7 +560,7 @@ _InvalidTypeSchemeVariableNameError_name = Core.Name "name"
 data NestedTypeAnnotationError =
   NestedTypeAnnotationError {
     -- | The path to the outer annotation
-    nestedTypeAnnotationErrorLocation :: Accessors.AccessorPath}
+    nestedTypeAnnotationErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
 
 _NestedTypeAnnotationError = Core.Name "hydra.error.core.NestedTypeAnnotationError"
@@ -571,7 +571,7 @@ _NestedTypeAnnotationError_location = Core.Name "location"
 data NonComparableMapKeyTypeError =
   NonComparableMapKeyTypeError {
     -- | The path to the map type
-    nonComparableMapKeyTypeErrorLocation :: Accessors.AccessorPath,
+    nonComparableMapKeyTypeErrorLocation :: Paths.SubtermPath,
     -- | The non-comparable key type
     nonComparableMapKeyTypeErrorKeyType :: Core.Type}
   deriving (Eq, Ord, Read, Show)
@@ -586,7 +586,7 @@ _NonComparableMapKeyTypeError_keyType = Core.Name "keyType"
 data NonComparableSetElementTypeError =
   NonComparableSetElementTypeError {
     -- | The path to the set type
-    nonComparableSetElementTypeErrorLocation :: Accessors.AccessorPath,
+    nonComparableSetElementTypeErrorLocation :: Paths.SubtermPath,
     -- | The non-comparable element type
     nonComparableSetElementTypeErrorElementType :: Core.Type}
   deriving (Eq, Ord, Read, Show)
@@ -601,7 +601,7 @@ _NonComparableSetElementTypeError_elementType = Core.Name "elementType"
 data SingleVariantUnionError =
   SingleVariantUnionError {
     -- | The path to the single-variant union type
-    singleVariantUnionErrorLocation :: Accessors.AccessorPath,
+    singleVariantUnionErrorLocation :: Paths.SubtermPath,
     -- | The name of the single field
     singleVariantUnionErrorFieldName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -616,7 +616,7 @@ _SingleVariantUnionError_fieldName = Core.Name "fieldName"
 data TypeVariableShadowingInForallError =
   TypeVariableShadowingInForallError {
     -- | The path to the shadowing forall type
-    typeVariableShadowingInForallErrorLocation :: Accessors.AccessorPath,
+    typeVariableShadowingInForallErrorLocation :: Paths.SubtermPath,
     -- | The name of the shadowed type variable
     typeVariableShadowingInForallErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -631,7 +631,7 @@ _TypeVariableShadowingInForallError_name = Core.Name "name"
 data UndefinedTypeVariableError =
   UndefinedTypeVariableError {
     -- | The path to the undefined type variable
-    undefinedTypeVariableErrorLocation :: Accessors.AccessorPath,
+    undefinedTypeVariableErrorLocation :: Paths.SubtermPath,
     -- | The name of the undefined type variable
     undefinedTypeVariableErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
@@ -646,7 +646,7 @@ _UndefinedTypeVariableError_name = Core.Name "name"
 data VoidInNonBottomPositionError =
   VoidInNonBottomPositionError {
     -- | The path to the void type in a non-bottom position
-    voidInNonBottomPositionErrorLocation :: Accessors.AccessorPath}
+    voidInNonBottomPositionErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
 
 _VoidInNonBottomPositionError = Core.Name "hydra.error.core.VoidInNonBottomPositionError"

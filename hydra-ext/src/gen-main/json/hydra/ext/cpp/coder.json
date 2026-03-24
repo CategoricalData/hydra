@@ -7221,7 +7221,7 @@
     "hydra.encode.core"],
   "typeDependencies": [
     "hydra.ext.cpp.syntax",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

@@ -8155,7 +8155,7 @@
   "typeDependencies": [
     "hydra.pg.model",
     "hydra.pg.mapping",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

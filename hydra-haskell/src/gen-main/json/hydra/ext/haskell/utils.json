@@ -2097,7 +2097,7 @@
     "hydra.names"],
   "typeDependencies": [
     "hydra.ext.haskell.syntax",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

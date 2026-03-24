@@ -17,14 +17,14 @@ public class TermVariableShadowingError implements Serializable, Comparable<Term
   /**
    * The path to the shadowing binding within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The name of the shadowed variable
    */
   public final hydra.core.Name name;
 
-  public TermVariableShadowingError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public TermVariableShadowingError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class TermVariableShadowingError implements Serializable, Comparable<Term
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public TermVariableShadowingError withLocation(hydra.accessors.AccessorPath location) {
+  public TermVariableShadowingError withLocation(hydra.paths.SubtermPath location) {
     return new TermVariableShadowingError(location, name);
   }
 

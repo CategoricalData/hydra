@@ -17,14 +17,14 @@ public class InvalidTypeSchemeVariableNameError implements Serializable, Compara
   /**
    * The path to the type scheme
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The invalid variable name
    */
   public final hydra.core.Name name;
 
-  public InvalidTypeSchemeVariableNameError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public InvalidTypeSchemeVariableNameError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class InvalidTypeSchemeVariableNameError implements Serializable, Compara
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public InvalidTypeSchemeVariableNameError withLocation(hydra.accessors.AccessorPath location) {
+  public InvalidTypeSchemeVariableNameError withLocation(hydra.paths.SubtermPath location) {
     return new InvalidTypeSchemeVariableNameError(location, name);
   }
 

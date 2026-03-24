@@ -63,7 +63,7 @@
   "namespace": "hydra.show.graph",
   "termDependencies": ["hydra.show.core"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

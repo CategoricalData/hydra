@@ -1579,7 +1579,7 @@
   "namespace": "hydra.pg.graphson.utils",
   "termDependencies": ["hydra.pg.graphson.construct", "hydra.rewriting"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

@@ -1,0 +1,630 @@
+{
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.paths.SubtermEdge",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "An edge in a subterm graph, connecting two nodes via a path"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "source",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The source node of the edge"}}}],
+                      "body": {"variable": "hydra.paths.SubtermNode"}}}},
+                {
+                  "name": "path",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "The subterm path connecting source to target"}}}],
+                      "body": {"variable": "hydra.paths.SubtermPath"}}}},
+                {
+                  "name": "target",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The target node of the edge"}}}],
+                      "body": {"variable": "hydra.paths.SubtermNode"}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.paths.SubtermGraph",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A graph of subterm nodes and edges, representing term access patterns"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "nodes",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                      "body": {"list": {"variable": "hydra.paths.SubtermNode"}}}}},
+                {
+                  "name": "edges",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "All edges in the graph"}}}],
+                      "body": {"list": {"variable": "hydra.paths.SubtermEdge"}}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.paths.SubtermNode",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A node in a subterm graph, representing a term or subterm"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "name",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The qualified name of the term"}}}],
+                      "body": {"variable": "hydra.core.Name"}}}},
+                {
+                  "name": "label",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                      "body": {"literal": {"string": {}}}}}},
+                {
+                  "name": "id",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                      "body": {"literal": {"string": {}}}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.paths.SubtermPath",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A sequence of subterm steps forming a path through a term"}}}],
+            "body": {"wrap": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}}},
+    {
+      "type": {
+        "name": "hydra.paths.SubtermStep",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A function which maps from a term to a particular immediate subterm"}}}],
+            "body": {
+              "union": [
+                {
+                  "name": "annotatedBody",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the body of an annotated term"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "applicationFunction",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the function of an application term"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "applicationArgument",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the argument of an application term"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "lambdaBody",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the body of a lambda term"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "unionCasesDefault",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "Access the default case of a union elimination"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "unionCasesBranch",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "Access a specific branch of a union elimination by field name"}}}],
+                      "body": {"variable": "hydra.core.Name"}}}},
+                {
+                  "name": "letBody",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the body of a let term"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "letBinding",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "Access a specific binding in a let term by variable name"}}}],
+                      "body": {"variable": "hydra.core.Name"}}}},
+                {
+                  "name": "listElement",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access an element of a list by index"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}}},
+                {
+                  "name": "mapKey",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access a key in a map by index"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}}},
+                {
+                  "name": "mapValue",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access a value in a map by index"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}}},
+                {
+                  "name": "maybeTerm",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the term inside a Just value"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "productTerm",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "Access an element of a product (tuple) by index"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}}},
+                {
+                  "name": "recordField",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access a field of a record by field name"}}}],
+                      "body": {"variable": "hydra.core.Name"}}}},
+                {
+                  "name": "setElement",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access an element of a set by index"}}}],
+                      "body": {"literal": {"integer": {"int32": {}}}}}}},
+                {
+                  "name": "sumTerm",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the term inside a sum variant"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "typeLambdaBody",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the body of a type lambda term"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "typeApplicationTerm",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the term being applied to a type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "injectionTerm",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the term inside a union injection"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "wrappedTerm",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the term inside a wrapped term"}}}],
+                      "body": {"unit": {}}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.paths.SubtypeEdge",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "An edge in a subtype graph, connecting two nodes via a path"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "source",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The source node of the edge"}}}],
+                      "body": {"variable": "hydra.paths.SubtypeNode"}}}},
+                {
+                  "name": "path",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "The subtype path connecting source to target"}}}],
+                      "body": {"variable": "hydra.paths.SubtypePath"}}}},
+                {
+                  "name": "target",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The target node of the edge"}}}],
+                      "body": {"variable": "hydra.paths.SubtypeNode"}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.paths.SubtypeGraph",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A graph of subtype nodes and edges, representing type access patterns"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "nodes",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "All nodes in the graph"}}}],
+                      "body": {"list": {"variable": "hydra.paths.SubtypeNode"}}}}},
+                {
+                  "name": "edges",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "All edges in the graph"}}}],
+                      "body": {"list": {"variable": "hydra.paths.SubtypeEdge"}}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.paths.SubtypeNode",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A node in a subtype graph, representing a type or subtype"}}}],
+            "body": {
+              "record": [
+                {
+                  "name": "name",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "The qualified name of the type"}}}],
+                      "body": {"variable": "hydra.core.Name"}}}},
+                {
+                  "name": "label",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "A human-readable label for the node"}}}],
+                      "body": {"literal": {"string": {}}}}}},
+                {
+                  "name": "id",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "A unique identifier for the node"}}}],
+                      "body": {"literal": {"string": {}}}}}}]}}}}},
+    {
+      "type": {
+        "name": "hydra.paths.SubtypePath",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A sequence of subtype steps forming a path through a type"}}}],
+            "body": {"wrap": {"list": {"variable": "hydra.paths.SubtypeStep"}}}}}}},
+    {
+      "type": {
+        "name": "hydra.paths.SubtypeStep",
+        "type": {
+          "annotated": {
+            "annotation": [
+              {
+                "@key": "description",
+                "@value": {
+                  "literal": {
+                    "string": "A function which maps from a type to a particular immediate subtype"}}}],
+            "body": {
+              "union": [
+                {
+                  "name": "annotatedBody",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the body of an annotated type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "applicationFunction",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the function of an application type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "applicationArgument",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the argument of an application type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "eitherLeft",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the left type of an either type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "eitherRight",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the right type of an either type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "forallBody",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "Access the body of a universally quantified type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "functionDomain",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the domain type of a function type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "functionCodomain",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the codomain type of a function type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "listElement",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the element type of a list type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "mapKeys",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the key type of a map type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "mapValues",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the value type of a map type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "maybeElement",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the element type of an optional type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "pairFirst",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the first type of a pair type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "pairSecond",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the second type of a pair type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "recordField",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "Access a field type of a record type by field name"}}}],
+                      "body": {"variable": "hydra.core.Name"}}}},
+                {
+                  "name": "setElement",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the element type of a set type"}}}],
+                      "body": {"unit": {}}}}},
+                {
+                  "name": "unionField",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "Access a field type of a union type by field name"}}}],
+                      "body": {"variable": "hydra.core.Name"}}}},
+                {
+                  "name": "wrappedType",
+                  "type": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Access the type inside a wrapped type"}}}],
+                      "body": {"unit": {}}}}}]}}}}}],
+  "description": ["A model for subterm and subtype access patterns"],
+  "namespace": "hydra.paths",
+  "termDependencies": ["hydra.core"],
+  "typeDependencies": ["hydra.core"]}

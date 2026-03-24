@@ -88,7 +88,7 @@
                                             "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}},
                         "domain": [{"list": {"variable": "hydra.core.Binding"}}],
                         "parameter": "bindings"}}},
-                  "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                  "domain": [{"variable": "hydra.paths.SubtermPath"}],
                   "parameter": "path"}}}}},
         "type": [
           {
@@ -99,7 +99,7 @@
                   "function": {
                     "codomain": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}},
                     "domain": {"list": {"variable": "hydra.core.Binding"}}}},
-                "domain": {"variable": "hydra.accessors.AccessorPath"}}},
+                "domain": {"variable": "hydra.paths.SubtermPath"}}},
             "variables": []}]}},
     {
       "term": {
@@ -164,7 +164,7 @@
                                         "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}},
                         "domain": [{"list": {"variable": "hydra.core.Name"}}],
                         "parameter": "names"}}},
-                  "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                  "domain": [{"variable": "hydra.paths.SubtermPath"}],
                   "parameter": "path"}}}}},
         "type": [
           {
@@ -175,7 +175,7 @@
                   "function": {
                     "codomain": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}},
                     "domain": {"list": {"variable": "hydra.core.Name"}}}},
-                "domain": {"variable": "hydra.accessors.AccessorPath"}}},
+                "domain": {"variable": "hydra.paths.SubtermPath"}}},
             "variables": []}]}},
     {
       "term": {
@@ -440,7 +440,7 @@
                               "parameter": "names"}}},
                         "domain": [{"variable": "hydra.graph.Graph"}],
                         "parameter": "cx"}}},
-                  "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                  "domain": [{"variable": "hydra.paths.SubtermPath"}],
                   "parameter": "path"}}}}},
         "type": [
           {
@@ -454,7 +454,7 @@
                         "codomain": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}},
                         "domain": {"list": {"variable": "hydra.core.Name"}}}},
                     "domain": {"variable": "hydra.graph.Graph"}}},
-                "domain": {"variable": "hydra.accessors.AccessorPath"}}},
+                "domain": {"variable": "hydra.paths.SubtermPath"}}},
             "variables": []}]}},
     {
       "term": {
@@ -1435,7 +1435,7 @@
                                                                                                                                     "typeApplication": {
                                                                                                                                       "body": {
                                                                                                                                         "variable": "hydra.validate.core.checkUndefinedTypeVariablesInTypeScheme"},
-                                                                                                                                      "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                                                                                      "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                                                                                   "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}},
                                                                                                               "domain": [{"variable": "hydra.core.TypeScheme"}],
                                                                                                               "parameter": "ts"}}},
@@ -1714,7 +1714,7 @@
                                                                                                                                   "body": {
                                                                                                                                     "typeApplication": {
                                                                                                                                       "body": {"variable": "hydra.validate.core.checkUndefinedTypeVariablesInType"},
-                                                                                                                                      "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                                                                                      "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                                                                                   "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}},
                                                                                                               "domain": [{"variable": "hydra.core.Type"}],
                                                                                                               "parameter": "dom"}}},
@@ -2123,7 +2123,7 @@
                                                                                       "body": {
                                                                                         "typeApplication": {
                                                                                           "body": {"variable": "hydra.validate.core.checkUndefinedTypeVariablesInType"},
-                                                                                          "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                                          "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                                       "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -2429,7 +2429,7 @@
                                     "parameter": "term"}}},
                               "domain": [{"variable": "hydra.graph.Graph"}],
                               "parameter": "cx"}}},
-                        "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                        "domain": [{"variable": "hydra.paths.SubtermPath"}],
                         "parameter": "path"}}},
                   "domain": [{"literal": {"boolean": {}}}],
                   "parameter": "typed"}}}}},
@@ -2447,7 +2447,7 @@
                             "codomain": {"maybe": {"variable": "hydra.error.core.InvalidTermError"}},
                             "domain": {"variable": "hydra.core.Term"}}},
                         "domain": {"variable": "hydra.graph.Graph"}}},
-                    "domain": {"variable": "hydra.accessors.AccessorPath"}}},
+                    "domain": {"variable": "hydra.paths.SubtermPath"}}},
                 "domain": {"literal": {"boolean": {}}}}},
             "variables": []}]}},
     {
@@ -2543,8 +2543,8 @@
                                                                                             "body": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"list": []},
-                                                                                                "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                            "typeName": "hydra.accessors.AccessorPath"}}}],
+                                                                                                "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                            "typeName": "hydra.paths.SubtermPath"}}}],
                                                                                     "typeName": "hydra.error.core.EmptyTypeAnnotationError"}}},
                                                                               "typeName": "hydra.error.core.InvalidTypeError"}}]},
                                                                       "function": {
@@ -2592,8 +2592,8 @@
                                                                                                           "body": {
                                                                                                             "typeApplication": {
                                                                                                               "body": {"list": []},
-                                                                                                              "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                                          "typeName": "hydra.accessors.AccessorPath"}}}],
+                                                                                                              "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                                          "typeName": "hydra.paths.SubtermPath"}}}],
                                                                                                   "typeName": "hydra.error.core.NestedTypeAnnotationError"}}},
                                                                                             "typeName": "hydra.error.core.InvalidTypeError"}}]},
                                                                                     "domain": [{"variable": "hydra.core.AnnotatedType"}],
@@ -2693,8 +2693,8 @@
                                                                                         "body": {
                                                                                           "typeApplication": {
                                                                                             "body": {"list": []},
-                                                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                        "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                                            "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                        "typeName": "hydra.paths.SubtermPath"}}},
                                                                                   {"name": "name", "term": {"variable": "paramName"}}],
                                                                                 "typeName": "hydra.error.core.TypeVariableShadowingInForallError"}}},
                                                                           "typeName": "hydra.error.core.InvalidTypeError"}}]},
@@ -2732,8 +2732,8 @@
                                                                                     "body": {
                                                                                       "typeApplication": {
                                                                                         "body": {"list": []},
-                                                                                        "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                    "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                    "typeName": "hydra.paths.SubtermPath"}}},
                                                                               {"name": "name", "term": {"variable": "paramName"}}],
                                                                             "typeName": "hydra.error.core.InvalidForallParameterNameError"}}},
                                                                       "typeName": "hydra.error.core.InvalidTypeError"}}]},
@@ -2841,8 +2841,8 @@
                                                                                                       "body": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {"list": []},
-                                                                                                          "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                                      "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                                                          "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                                      "typeName": "hydra.paths.SubtermPath"}}},
                                                                                                 {"name": "keyType", "term": {"variable": "keyType"}}],
                                                                                               "typeName": "hydra.error.core.NonComparableMapKeyTypeError"}}},
                                                                                         "typeName": "hydra.error.core.InvalidTypeError"}}]},
@@ -2939,8 +2939,8 @@
                                                                                     "body": {
                                                                                       "typeApplication": {
                                                                                         "body": {"list": []},
-                                                                                        "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                    "typeName": "hydra.accessors.AccessorPath"}}}],
+                                                                                        "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                    "typeName": "hydra.paths.SubtermPath"}}}],
                                                                             "typeName": "hydra.error.core.EmptyRecordTypeError"}}},
                                                                       "typeName": "hydra.error.core.InvalidTypeError"}}]},
                                                               "function": {
@@ -2977,8 +2977,8 @@
                                                                                       "body": {
                                                                                         "typeApplication": {
                                                                                           "body": {"list": []},
-                                                                                          "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                      "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                                          "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                      "typeName": "hydra.paths.SubtermPath"}}},
                                                                                 {"name": "name", "term": {"variable": "dupName"}}],
                                                                               "typeName": "hydra.error.core.DuplicateRecordTypeFieldNamesError"}}},
                                                                         "typeName": "hydra.error.core.InvalidTypeError"}}]},
@@ -3067,8 +3067,8 @@
                                                                                                   "body": {
                                                                                                     "typeApplication": {
                                                                                                       "body": {"list": []},
-                                                                                                      "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                                  "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                                                      "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                                  "typeName": "hydra.paths.SubtermPath"}}},
                                                                                             {"name": "elementType", "term": {"variable": "elemType"}}],
                                                                                           "typeName": "hydra.error.core.NonComparableSetElementTypeError"}}},
                                                                                     "typeName": "hydra.error.core.InvalidTypeError"}}]},
@@ -3123,8 +3123,8 @@
                                                                                     "body": {
                                                                                       "typeApplication": {
                                                                                         "body": {"list": []},
-                                                                                        "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                    "typeName": "hydra.accessors.AccessorPath"}}}],
+                                                                                        "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                    "typeName": "hydra.paths.SubtermPath"}}}],
                                                                             "typeName": "hydra.error.core.EmptyUnionTypeError"}}},
                                                                       "typeName": "hydra.error.core.InvalidTypeError"}}]},
                                                               "function": {
@@ -3181,8 +3181,8 @@
                                                                                         "body": {
                                                                                           "typeApplication": {
                                                                                             "body": {"list": []},
-                                                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                        "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                                            "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                        "typeName": "hydra.paths.SubtermPath"}}},
                                                                                   {
                                                                                     "name": "fieldName",
                                                                                     "term": {
@@ -3236,8 +3236,8 @@
                                                                                       "body": {
                                                                                         "typeApplication": {
                                                                                           "body": {"list": []},
-                                                                                          "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                      "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                                          "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                      "typeName": "hydra.paths.SubtermPath"}}},
                                                                                 {"name": "name", "term": {"variable": "dupName"}}],
                                                                               "typeName": "hydra.error.core.DuplicateUnionTypeFieldNamesError"}}},
                                                                         "typeName": "hydra.error.core.InvalidTypeError"}}]},
@@ -3311,8 +3311,8 @@
                                                                         "body": {
                                                                           "typeApplication": {
                                                                             "body": {"list": []},
-                                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                        "typeName": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                        "typeName": "hydra.paths.SubtermPath"}}},
                                                                   {"name": "name", "term": {"variable": "varName"}}],
                                                                 "typeName": "hydra.error.core.UndefinedTypeVariableError"}}},
                                                           "typeName": "hydra.error.core.InvalidTypeError"}}]},
@@ -3697,8 +3697,8 @@
                                                               "body": {
                                                                 "typeApplication": {
                                                                   "body": {"list": []},
-                                                                  "type": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                              "typeName": "hydra.accessors.AccessorPath"}}}],
+                                                                  "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                              "typeName": "hydra.paths.SubtermPath"}}}],
                                                       "typeName": "hydra.error.core.VoidInNonBottomPositionError"}}},
                                                 "typeName": "hydra.error.core.InvalidTypeError"}}]},
                                         "domain": [{"unit": {}}],
@@ -4400,9 +4400,7 @@
                                                                                                     "function": {
                                                                                                       "application": {
                                                                                                         "argument": {
-                                                                                                          "wrap": {
-                                                                                                            "body": {"variable": "path"},
-                                                                                                            "typeName": "hydra.accessors.AccessorPath"}},
+                                                                                                          "wrap": {"body": {"variable": "path"}, "typeName": "hydra.paths.SubtermPath"}},
                                                                                                         "function": {
                                                                                                           "application": {
                                                                                                             "argument": {"variable": "typed"},
@@ -4458,7 +4456,7 @@
                                                                       "parameter": "acc"}}},
                                                                 "domain": [{"variable": "hydra.graph.Graph"}],
                                                                 "parameter": "cx"}}},
-                                                          "domain": [{"list": {"variable": "hydra.accessors.TermAccessor"}}],
+                                                          "domain": [{"list": {"variable": "hydra.paths.SubtermStep"}}],
                                                           "parameter": "path"}}},
                                                     "domain": [
                                                       {
@@ -4982,7 +4980,7 @@
   "namespace": "hydra.validate.core",
   "termDependencies": ["hydra.rewriting"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

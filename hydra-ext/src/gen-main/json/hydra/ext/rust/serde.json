@@ -12575,7 +12575,7 @@
   "termDependencies": ["hydra.constants", "hydra.serialization", "hydra.ext.rust.operators"],
   "typeDependencies": [
     "hydra.ext.rust.syntax",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

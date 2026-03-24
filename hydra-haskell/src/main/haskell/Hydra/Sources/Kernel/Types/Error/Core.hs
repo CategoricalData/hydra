@@ -5,7 +5,7 @@ import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:))
 import qualified Hydra.Dsl.Types as T
-import qualified Hydra.Sources.Kernel.Types.Accessors as Accessors
+import qualified Hydra.Sources.Kernel.Types.Paths as Paths
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 
@@ -17,7 +17,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns (map toTypeDef elements) [Accessors.ns, Core.ns, Variants.ns] [Accessors.ns, Core.ns, Variants.ns] $
+module_ = Module ns (map toTypeDef elements) [Paths.ns, Core.ns, Variants.ns] [Paths.ns, Core.ns, Variants.ns] $
     Just "Error types for core type and term validation"
   where
     elements = [
@@ -78,7 +78,7 @@ duplicateBindingError = define "DuplicateBindingError" $
   T.record [
     "location">:
       doc "The path to the duplicate binding within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The duplicated binding name" $
       Core.name]
@@ -89,7 +89,7 @@ duplicateFieldError = define "DuplicateFieldError" $
   T.record [
     "location">:
       doc "The path to the duplicate field within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The duplicated field name" $
       Core.name]
@@ -138,7 +138,7 @@ emptyLetBindingsError = define "EmptyLetBindingsError" $
   T.record [
     "location">:
       doc "The path to the empty let expression within the term" $
-      Accessors.accessorPath]
+      Paths.subtermPath]
 
 -- T2. DuplicateLetBindingNamesError — covered by existing DuplicateBindingError
 
@@ -153,7 +153,7 @@ emptyTypeNameInTermError = define "EmptyTypeNameInTermError" $
   T.record [
     "location">:
       doc "The path to the term with the empty type name" $
-      Accessors.accessorPath]
+      Paths.subtermPath]
 
 -- T6. EmptyCaseStatementError (optional)
 emptyCaseStatementError :: Binding
@@ -162,7 +162,7 @@ emptyCaseStatementError = define "EmptyCaseStatementError" $
   T.record [
     "location">:
       doc "The path to the empty case statement within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "typeName">:
       doc "The name of the union type being matched" $
       Core.name]
@@ -174,7 +174,7 @@ undefinedTermVariableError = define "UndefinedTermVariableError" $
   T.record [
     "location">:
       doc "The path to the undefined variable within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The name of the undefined variable" $
       Core.name]
@@ -186,7 +186,7 @@ undefinedTypeVariableInLambdaDomainError = define "UndefinedTypeVariableInLambda
   T.record [
     "location">:
       doc "The path to the lambda within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The name of the undefined type variable" $
       Core.name]
@@ -198,7 +198,7 @@ undefinedTypeVariableInTypeApplicationError = define "UndefinedTypeVariableInTyp
   T.record [
     "location">:
       doc "The path to the type application within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The name of the undefined type variable" $
       Core.name]
@@ -210,7 +210,7 @@ undefinedTypeVariableInBindingTypeError = define "UndefinedTypeVariableInBinding
   T.record [
     "location">:
       doc "The path to the binding within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The name of the undefined type variable" $
       Core.name]
@@ -222,7 +222,7 @@ termVariableShadowingError = define "TermVariableShadowingError" $
   T.record [
     "location">:
       doc "The path to the shadowing binding within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The name of the shadowed variable" $
       Core.name]
@@ -234,7 +234,7 @@ typeVariableShadowingInTypeLambdaError = define "TypeVariableShadowingInTypeLamb
   T.record [
     "location">:
       doc "The path to the type lambda within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The name of the shadowed type variable" $
       Core.name]
@@ -246,7 +246,7 @@ constantConditionError = define "ConstantConditionError" $
   T.record [
     "location">:
       doc "The path to the constant condition within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "value">:
       doc "The constant boolean value of the condition" $
       T.boolean]
@@ -258,7 +258,7 @@ redundantWrapUnwrapError = define "RedundantWrapUnwrapError" $
   T.record [
     "location">:
       doc "The path to the redundant wrap/unwrap within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "typeName">:
       doc "The type name of the wrapper" $
       Core.name]
@@ -270,7 +270,7 @@ selfApplicationError = define "SelfApplicationError" $
   T.record [
     "location">:
       doc "The path to the self-application within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The name of the variable applied to itself" $
       Core.name]
@@ -282,7 +282,7 @@ unnecessaryIdentityApplicationError = define "UnnecessaryIdentityApplicationErro
   T.record [
     "location">:
       doc "The path to the identity application within the term" $
-      Accessors.accessorPath]
+      Paths.subtermPath]
 
 -- T17. InvalidLambdaParameterNameError (optional)
 invalidLambdaParameterNameError :: Binding
@@ -291,7 +291,7 @@ invalidLambdaParameterNameError = define "InvalidLambdaParameterNameError" $
   T.record [
     "location">:
       doc "The path to the lambda within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The invalid parameter name" $
       Core.name]
@@ -303,7 +303,7 @@ invalidLetBindingNameError = define "InvalidLetBindingNameError" $
   T.record [
     "location">:
       doc "The path to the binding within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The invalid binding name" $
       Core.name]
@@ -315,7 +315,7 @@ invalidTypeLambdaParameterNameError = define "InvalidTypeLambdaParameterNameErro
   T.record [
     "location">:
       doc "The path to the type lambda within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The invalid type lambda parameter name" $
       Core.name]
@@ -327,7 +327,7 @@ nestedTermAnnotationError = define "NestedTermAnnotationError" $
   T.record [
     "location">:
       doc "The path to the outer annotation within the term" $
-      Accessors.accessorPath]
+      Paths.subtermPath]
 
 -- T21. EmptyTermAnnotationError (optional)
 emptyTermAnnotationError :: Binding
@@ -336,7 +336,7 @@ emptyTermAnnotationError = define "EmptyTermAnnotationError" $
   T.record [
     "location">:
       doc "The path to the empty annotation within the term" $
-      Accessors.accessorPath]
+      Paths.subtermPath]
 
 -- T22. UnknownPrimitiveNameError
 unknownPrimitiveNameError :: Binding
@@ -345,7 +345,7 @@ unknownPrimitiveNameError = define "UnknownPrimitiveNameError" $
   T.record [
     "location">:
       doc "The path to the primitive reference within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The unknown primitive name" $
       Core.name]
@@ -357,7 +357,7 @@ untypedTermVariableError = define "UntypedTermVariableError" $
   T.record [
     "location">:
       doc "The path to the untyped variable within the term" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The name of the untyped variable" $
       Core.name]
@@ -445,7 +445,7 @@ emptyRecordTypeError = define "EmptyRecordTypeError" $
   T.record [
     "location">:
       doc "The path to the empty record type" $
-      Accessors.accessorPath]
+      Paths.subtermPath]
 
 -- Y2. EmptyUnionTypeError (optional)
 emptyUnionTypeError :: Binding
@@ -454,7 +454,7 @@ emptyUnionTypeError = define "EmptyUnionTypeError" $
   T.record [
     "location">:
       doc "The path to the empty union type" $
-      Accessors.accessorPath]
+      Paths.subtermPath]
 
 -- Y3. SingleVariantUnionError (optional)
 singleVariantUnionError :: Binding
@@ -463,7 +463,7 @@ singleVariantUnionError = define "SingleVariantUnionError" $
   T.record [
     "location">:
       doc "The path to the single-variant union type" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "fieldName">:
       doc "The name of the single field" $
       Core.name]
@@ -475,7 +475,7 @@ duplicateRecordTypeFieldNamesError = define "DuplicateRecordTypeFieldNamesError"
   T.record [
     "location">:
       doc "The path to the record type with duplicate fields" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The duplicated field name" $
       Core.name]
@@ -487,7 +487,7 @@ duplicateUnionTypeFieldNamesError = define "DuplicateUnionTypeFieldNamesError" $
   T.record [
     "location">:
       doc "The path to the union type with duplicate fields" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The duplicated field name" $
       Core.name]
@@ -499,7 +499,7 @@ undefinedTypeVariableError = define "UndefinedTypeVariableError" $
   T.record [
     "location">:
       doc "The path to the undefined type variable" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The name of the undefined type variable" $
       Core.name]
@@ -511,7 +511,7 @@ typeVariableShadowingInForallError = define "TypeVariableShadowingInForallError"
   T.record [
     "location">:
       doc "The path to the shadowing forall type" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The name of the shadowed type variable" $
       Core.name]
@@ -523,7 +523,7 @@ nestedTypeAnnotationError = define "NestedTypeAnnotationError" $
   T.record [
     "location">:
       doc "The path to the outer annotation" $
-      Accessors.accessorPath]
+      Paths.subtermPath]
 
 -- Y9. EmptyTypeAnnotationError (optional)
 emptyTypeAnnotationError :: Binding
@@ -532,7 +532,7 @@ emptyTypeAnnotationError = define "EmptyTypeAnnotationError" $
   T.record [
     "location">:
       doc "The path to the empty annotation" $
-      Accessors.accessorPath]
+      Paths.subtermPath]
 
 -- Y10. VoidInNonBottomPositionError (optional)
 voidInNonBottomPositionError :: Binding
@@ -541,7 +541,7 @@ voidInNonBottomPositionError = define "VoidInNonBottomPositionError" $
   T.record [
     "location">:
       doc "The path to the void type in a non-bottom position" $
-      Accessors.accessorPath]
+      Paths.subtermPath]
 
 -- Y11. NonComparableMapKeyTypeError
 nonComparableMapKeyTypeError :: Binding
@@ -550,7 +550,7 @@ nonComparableMapKeyTypeError = define "NonComparableMapKeyTypeError" $
   T.record [
     "location">:
       doc "The path to the map type" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "keyType">:
       doc "The non-comparable key type" $
       Core.type_]
@@ -562,7 +562,7 @@ nonComparableSetElementTypeError = define "NonComparableSetElementTypeError" $
   T.record [
     "location">:
       doc "The path to the set type" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "elementType">:
       doc "The non-comparable element type" $
       Core.type_]
@@ -574,7 +574,7 @@ invalidForallParameterNameError = define "InvalidForallParameterNameError" $
   T.record [
     "location">:
       doc "The path to the forall type" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The invalid parameter name" $
       Core.name]
@@ -586,7 +586,7 @@ invalidTypeSchemeVariableNameError = define "InvalidTypeSchemeVariableNameError"
   T.record [
     "location">:
       doc "The path to the type scheme" $
-      Accessors.accessorPath,
+      Paths.subtermPath,
     "name">:
       doc "The invalid variable name" $
       Core.name]

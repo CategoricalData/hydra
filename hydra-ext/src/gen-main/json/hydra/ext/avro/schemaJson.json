@@ -2165,7 +2165,7 @@
   "typeDependencies": [
     "hydra.ext.org.apache.avro.schema",
     "hydra.json.model",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

@@ -323,13 +323,13 @@ runTypeRewriter TypeRewriterReplaceStringWithInt32 = Rewriting.rewriteType rewri
       _ -> recurse typ
 
 -- | Run hoistSubterms with the given predicate
--- The predicate receives (path, term) where path is the list of TermAccessors from root
+-- The predicate receives (path, term) where path is the list of SubtermSteps from root
 runHoistSubterms :: HoistPredicate -> Term -> Term
 runHoistSubterms pred term = Hoisting.hoistSubterms (predicateFn pred) emptyGraph term
   where
     -- A predicate returns True if the term should be hoisted.
     -- The predicate receives (path, term) for path-aware hoisting decisions.
-    predicateFn :: HoistPredicate -> ([TermAccessor], Term) -> Bool
+    predicateFn :: HoistPredicate -> ([SubtermStep], Term) -> Bool
     predicateFn HoistPredicateNothing _ = False
     predicateFn HoistPredicateLists (_, t) = case t of
       TermList _ -> True

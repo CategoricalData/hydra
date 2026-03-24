@@ -4,7 +4,6 @@
 
 module Hydra.Rewriting where
 
-import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
@@ -20,6 +19,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Sorting as Sorting
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -284,7 +284,7 @@ foldOverType order fld b0 typ =
       Coders.TraversalOrderPost -> fld (Lists.foldl (foldOverType order fld) b0 (subtypes typ)) typ
 
 -- | Fold over a term to produce a value, with both Graph and accessor path tracked. Like rewriteAndFoldTermWithGraphAndPath, but only folds without rewriting. The Graph is automatically updated when descending into lambdas, lets, and type lambdas.
-foldTermWithGraphAndPath :: ((t0 -> Core.Term -> t0) -> [Accessors.TermAccessor] -> Graph.Graph -> t0 -> Core.Term -> t0) -> Graph.Graph -> t0 -> Core.Term -> t0
+foldTermWithGraphAndPath :: ((t0 -> Core.Term -> t0) -> [Paths.SubtermStep] -> Graph.Graph -> t0 -> Core.Term -> t0) -> Graph.Graph -> t0 -> Core.Term -> t0
 foldTermWithGraphAndPath f cx0 val0 term0 =
 
       let wrapper =
@@ -826,8 +826,8 @@ rewriteAndFoldTermWithGraph f cx0 val0 term0 =
           result = rewriteAndFoldTerm wrapper (val0, cx0) term0
       in (Pairs.first (Pairs.first result), (Pairs.second result))
 
--- | Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of TermAccessors representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas.
-rewriteAndFoldTermWithGraphAndPath :: ((t0 -> Core.Term -> (t0, Core.Term)) -> [Accessors.TermAccessor] -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)
+-- | Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of SubtermSteps representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas.
+rewriteAndFoldTermWithGraphAndPath :: ((t0 -> Core.Term -> (t0, Core.Term)) -> [Paths.SubtermStep] -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)
 rewriteAndFoldTermWithGraphAndPath f cx0 val0 term0 =
 
       let wrapper =
@@ -851,8 +851,8 @@ rewriteAndFoldTermWithGraphAndPath f cx0 val0 term0 =
           result = rewriteAndFoldTermWithPath wrapper (cx0, val0) term0
       in (Pairs.second (Pairs.first result), (Pairs.second result))
 
--- | Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of TermAccessors from root to current position.
-rewriteAndFoldTermWithPath :: (([Accessors.TermAccessor] -> t0 -> Core.Term -> (t0, Core.Term)) -> [Accessors.TermAccessor] -> t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term)
+-- | Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of SubtermSteps from root to current position.
+rewriteAndFoldTermWithPath :: (([Paths.SubtermStep] -> t0 -> Core.Term -> (t0, Core.Term)) -> [Paths.SubtermStep] -> t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term)
 rewriteAndFoldTermWithPath f term0 =
 
       let fsub =
@@ -888,9 +888,8 @@ rewriteAndFoldTermWithPath f term0 =
                               in (Pairs.first rv, (Pairs.second rk, (Pairs.second rv)))
                     forBindingWithAccessor =
                             \val -> \binding ->
-                              let r =
-                                      recurse (Lists.concat2 path [
-                                        Accessors.TermAccessorLetBinding (Core.bindingName binding)]) val (Core.bindingTerm binding)
+                              let r = recurse (Lists.concat2 path [
+                                    Paths.SubtermStepLetBinding (Core.bindingName binding)]) val (Core.bindingTerm binding)
                               in (Pairs.first r, Core.Binding {
                                 Core.bindingName = (Core.bindingName binding),
                                 Core.bindingTerm = (Pairs.second r),
@@ -902,10 +901,10 @@ rewriteAndFoldTermWithPath f term0 =
                                         Core.EliminationUnion v0 ->
                                           let rmd =
                                                   Maybes.map (\def -> recurse (Lists.concat2 path [
-                                                    Accessors.TermAccessorUnionCasesDefault]) val def) (Core.caseStatementDefault v0)
+                                                    Paths.SubtermStepUnionCasesDefault]) val def) (Core.caseStatementDefault v0)
                                               val1 = Maybes.maybe val Pairs.first rmd
                                               rcases =
-                                                      forManyWithAccessors recurse (\x -> x) val1 (Lists.map (\f -> (Accessors.TermAccessorUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v0))
+                                                      forManyWithAccessors recurse (\x -> x) val1 (Lists.map (\f -> (Paths.SubtermStepUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v0))
                                           in (Pairs.first rcases, (Core.EliminationUnion (Core.CaseStatement {
                                             Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
                                             Core.caseStatementDefault = (Maybes.map Pairs.second rmd),
@@ -921,7 +920,7 @@ rewriteAndFoldTermWithPath f term0 =
                                 in (Pairs.first re, (Core.FunctionElimination (Pairs.second re)))
                               Core.FunctionLambda v0 ->
                                 let rl = recurse (Lists.concat2 path [
-                                      Accessors.TermAccessorLambdaBody]) val (Core.lambdaBody v0)
+                                      Paths.SubtermStepLambdaBody]) val (Core.lambdaBody v0)
                                 in (Pairs.first rl, (Core.FunctionLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.lambdaParameter v0),
                                   Core.lambdaDomain = (Core.lambdaDomain v0),
@@ -931,29 +930,28 @@ rewriteAndFoldTermWithPath f term0 =
                 in case term0 of
                   Core.TermAnnotated v0 -> forSingleWithAccessor recurse (\t -> Core.TermAnnotated (Core.AnnotatedTerm {
                     Core.annotatedTermBody = t,
-                    Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})) Accessors.TermAccessorAnnotatedBody val0 (Core.annotatedTermBody v0)
+                    Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})) Paths.SubtermStepAnnotatedBody val0 (Core.annotatedTermBody v0)
                   Core.TermApplication v0 ->
                     let rlhs = recurse (Lists.concat2 path [
-                          Accessors.TermAccessorApplicationFunction]) val0 (Core.applicationFunction v0)
-                        rrhs =
-                                recurse (Lists.concat2 path [
-                                  Accessors.TermAccessorApplicationArgument]) (Pairs.first rlhs) (Core.applicationArgument v0)
+                          Paths.SubtermStepApplicationFunction]) val0 (Core.applicationFunction v0)
+                        rrhs = recurse (Lists.concat2 path [
+                              Paths.SubtermStepApplicationArgument]) (Pairs.first rlhs) (Core.applicationArgument v0)
                     in (Pairs.first rrhs, (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Pairs.second rlhs),
                       Core.applicationArgument = (Pairs.second rrhs)})))
                   Core.TermEither v0 -> Eithers.either (\l ->
                     let rl = recurse (Lists.concat2 path [
-                          Accessors.TermAccessorSumTerm]) val0 l
+                          Paths.SubtermStepSumTerm]) val0 l
                     in (Pairs.first rl, (Core.TermEither (Left (Pairs.second rl))))) (\r ->
                     let rr = recurse (Lists.concat2 path [
-                          Accessors.TermAccessorSumTerm]) val0 r
+                          Paths.SubtermStepSumTerm]) val0 r
                     in (Pairs.first rr, (Core.TermEither (Right (Pairs.second rr))))) v0
                   Core.TermFunction v0 ->
                     let rf = forFunction val0 v0
                     in (Pairs.first rf, (Core.TermFunction (Pairs.second rf)))
                   Core.TermLet v0 ->
                     let renv = recurse (Lists.concat2 path [
-                          Accessors.TermAccessorLetBody]) val0 (Core.letBody v0)
+                          Paths.SubtermStepLetBody]) val0 (Core.letBody v0)
                         rbindings =
                                 Lists.foldl (\r -> \binding ->
                                   let rb = forBindingWithAccessor (Pairs.first r) binding
@@ -966,30 +964,29 @@ rewriteAndFoldTermWithPath f term0 =
                         rr =
                                 Lists.foldl (\r -> \el ->
                                   let r2 = recurse (Lists.concat2 path [
-                                        Accessors.TermAccessorListElement (Pairs.first r)]) (Pairs.first (Pairs.second r)) el
+                                        Paths.SubtermStepListElement (Pairs.first r)]) (Pairs.first (Pairs.second r)) el
                                   in (Math.add (Pairs.first r) 1, (Pairs.first r2, (Lists.cons (Pairs.second r2) (Pairs.second (Pairs.second r)))))) (idx, (val0, [])) v0
                     in (Pairs.first (Pairs.second rr), (Core.TermList (Lists.reverse (Pairs.second (Pairs.second rr)))))
                   Core.TermMap v0 ->
                     let idx = 0
                         rr =
                                 Lists.foldl (\r -> \kv ->
-                                  let rk =
-                                          recurse (Lists.concat2 path [
-                                            Accessors.TermAccessorMapKey (Pairs.first r)]) (Pairs.first (Pairs.second r)) (Pairs.first kv)
+                                  let rk = recurse (Lists.concat2 path [
+                                        Paths.SubtermStepMapKey (Pairs.first r)]) (Pairs.first (Pairs.second r)) (Pairs.first kv)
                                       rv = recurse (Lists.concat2 path [
-                                            Accessors.TermAccessorMapValue (Pairs.first r)]) (Pairs.first rk) (Pairs.second kv)
+                                            Paths.SubtermStepMapValue (Pairs.first r)]) (Pairs.first rk) (Pairs.second kv)
                                   in (Math.add (Pairs.first r) 1, (Pairs.first rv, (Lists.cons (Pairs.second rk, (Pairs.second rv)) (Pairs.second (Pairs.second r)))))) (idx, (val0, [])) (Maps.toList v0)
                     in (Pairs.first (Pairs.second rr), (Core.TermMap (Maps.fromList (Lists.reverse (Pairs.second (Pairs.second rr))))))
-                  Core.TermMaybe v0 -> Maybes.maybe dflt (\t -> forSingleWithAccessor recurse (\t1 -> Core.TermMaybe (Just t1)) Accessors.TermAccessorMaybeTerm val0 t) v0
+                  Core.TermMaybe v0 -> Maybes.maybe dflt (\t -> forSingleWithAccessor recurse (\t1 -> Core.TermMaybe (Just t1)) Paths.SubtermStepMaybeTerm val0 t) v0
                   Core.TermPair v0 ->
                     let rf = recurse (Lists.concat2 path [
-                          Accessors.TermAccessorProductTerm 0]) val0 (Pairs.first v0)
+                          Paths.SubtermStepProductTerm 0]) val0 (Pairs.first v0)
                         rs = recurse (Lists.concat2 path [
-                              Accessors.TermAccessorProductTerm 1]) (Pairs.first rf) (Pairs.second v0)
+                              Paths.SubtermStepProductTerm 1]) (Pairs.first rf) (Pairs.second v0)
                     in (Pairs.first rs, (Core.TermPair (Pairs.second rf, (Pairs.second rs))))
                   Core.TermRecord v0 ->
                     let rfields =
-                            forManyWithAccessors recurse (\x -> x) val0 (Lists.map (\f -> (Accessors.TermAccessorRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v0))
+                            forManyWithAccessors recurse (\x -> x) val0 (Lists.map (\f -> (Paths.SubtermStepRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v0))
                     in (Pairs.first rfields, (Core.TermRecord (Core.Record {
                       Core.recordTypeName = (Core.recordTypeName v0),
                       Core.recordFields = (Lists.map (\ft -> Core.Field {
@@ -1000,23 +997,23 @@ rewriteAndFoldTermWithPath f term0 =
                         rr =
                                 Lists.foldl (\r -> \el ->
                                   let r2 = recurse (Lists.concat2 path [
-                                        Accessors.TermAccessorSetElement (Pairs.first r)]) (Pairs.first (Pairs.second r)) el
+                                        Paths.SubtermStepSetElement (Pairs.first r)]) (Pairs.first (Pairs.second r)) el
                                   in (Math.add (Pairs.first r) 1, (Pairs.first r2, (Lists.cons (Pairs.second r2) (Pairs.second (Pairs.second r)))))) (idx, (val0, [])) (Sets.toList v0)
                     in (Pairs.first (Pairs.second rr), (Core.TermSet (Sets.fromList (Lists.reverse (Pairs.second (Pairs.second rr))))))
                   Core.TermTypeApplication v0 -> forSingleWithAccessor recurse (\t -> Core.TermTypeApplication (Core.TypeApplicationTerm {
                     Core.typeApplicationTermBody = t,
-                    Core.typeApplicationTermType = (Core.typeApplicationTermType v0)})) Accessors.TermAccessorTypeApplicationTerm val0 (Core.typeApplicationTermBody v0)
+                    Core.typeApplicationTermType = (Core.typeApplicationTermType v0)})) Paths.SubtermStepTypeApplicationTerm val0 (Core.typeApplicationTermBody v0)
                   Core.TermTypeLambda v0 -> forSingleWithAccessor recurse (\t -> Core.TermTypeLambda (Core.TypeLambda {
                     Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
-                    Core.typeLambdaBody = t})) Accessors.TermAccessorTypeLambdaBody val0 (Core.typeLambdaBody v0)
+                    Core.typeLambdaBody = t})) Paths.SubtermStepTypeLambdaBody val0 (Core.typeLambdaBody v0)
                   Core.TermUnion v0 -> forSingleWithAccessor recurse (\t -> Core.TermUnion (Core.Injection {
                     Core.injectionTypeName = (Core.injectionTypeName v0),
                     Core.injectionField = Core.Field {
                       Core.fieldName = (Core.fieldName (Core.injectionField v0)),
-                      Core.fieldTerm = t}})) Accessors.TermAccessorInjectionTerm val0 (Core.fieldTerm (Core.injectionField v0))
+                      Core.fieldTerm = t}})) Paths.SubtermStepInjectionTerm val0 (Core.fieldTerm (Core.injectionField v0))
                   Core.TermWrap v0 -> forSingleWithAccessor recurse (\t -> Core.TermWrap (Core.WrappedTerm {
                     Core.wrappedTermTypeName = (Core.wrappedTermTypeName v0),
-                    Core.wrappedTermBody = t})) Accessors.TermAccessorWrappedTerm val0 (Core.wrappedTermBody v0)
+                    Core.wrappedTermBody = t})) Paths.SubtermStepWrappedTerm val0 (Core.wrappedTermBody v0)
                   _ -> dflt
           recurse = f (fsub recurse)
       in (recurse [] term0)
@@ -1651,44 +1648,44 @@ subterms x =
         Core.wrappedTermBody v0]
 
 -- | Find the children of a given term
-subtermsWithAccessors :: Core.Term -> [(Accessors.TermAccessor, Core.Term)]
-subtermsWithAccessors x =
+subtermsWithSteps :: Core.Term -> [(Paths.SubtermStep, Core.Term)]
+subtermsWithSteps x =
     case x of
       Core.TermAnnotated v0 -> [
-        (Accessors.TermAccessorAnnotatedBody, (Core.annotatedTermBody v0))]
+        (Paths.SubtermStepAnnotatedBody, (Core.annotatedTermBody v0))]
       Core.TermApplication v0 -> [
-        (Accessors.TermAccessorApplicationFunction, (Core.applicationFunction v0)),
-        (Accessors.TermAccessorApplicationArgument, (Core.applicationArgument v0))]
+        (Paths.SubtermStepApplicationFunction, (Core.applicationFunction v0)),
+        (Paths.SubtermStepApplicationArgument, (Core.applicationArgument v0))]
       Core.TermEither _ -> []
       Core.TermFunction v0 -> case v0 of
         Core.FunctionElimination v1 -> case v1 of
           Core.EliminationUnion v2 -> Lists.concat2 (Maybes.maybe [] (\t -> [
-            (Accessors.TermAccessorUnionCasesDefault, t)]) (Core.caseStatementDefault v2)) (Lists.map (\f -> (Accessors.TermAccessorUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v2))
+            (Paths.SubtermStepUnionCasesDefault, t)]) (Core.caseStatementDefault v2)) (Lists.map (\f -> (Paths.SubtermStepUnionCasesBranch (Core.fieldName f), (Core.fieldTerm f))) (Core.caseStatementCases v2))
           _ -> []
         Core.FunctionLambda v1 -> [
-          (Accessors.TermAccessorLambdaBody, (Core.lambdaBody v1))]
+          (Paths.SubtermStepLambdaBody, (Core.lambdaBody v1))]
         _ -> []
-      Core.TermLet v0 -> Lists.cons (Accessors.TermAccessorLetBody, (Core.letBody v0)) (Lists.map (\b -> (Accessors.TermAccessorLetBinding (Core.bindingName b), (Core.bindingTerm b))) (Core.letBindings v0))
-      Core.TermList v0 -> Lists.map (\e -> (Accessors.TermAccessorListElement 0, e)) v0
+      Core.TermLet v0 -> Lists.cons (Paths.SubtermStepLetBody, (Core.letBody v0)) (Lists.map (\b -> (Paths.SubtermStepLetBinding (Core.bindingName b), (Core.bindingTerm b))) (Core.letBindings v0))
+      Core.TermList v0 -> Lists.map (\e -> (Paths.SubtermStepListElement 0, e)) v0
       Core.TermLiteral _ -> []
       Core.TermMap v0 -> Lists.concat (Lists.map (\p -> [
-        (Accessors.TermAccessorMapKey 0, (Pairs.first p)),
-        (Accessors.TermAccessorMapValue 0, (Pairs.second p))]) (Maps.toList v0))
+        (Paths.SubtermStepMapKey 0, (Pairs.first p)),
+        (Paths.SubtermStepMapValue 0, (Pairs.second p))]) (Maps.toList v0))
       Core.TermMaybe v0 -> Maybes.maybe [] (\t -> [
-        (Accessors.TermAccessorMaybeTerm, t)]) v0
+        (Paths.SubtermStepMaybeTerm, t)]) v0
       Core.TermPair _ -> []
-      Core.TermRecord v0 -> Lists.map (\f -> (Accessors.TermAccessorRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v0)
-      Core.TermSet v0 -> Lists.map (\e -> (Accessors.TermAccessorListElement 0, e)) (Sets.toList v0)
+      Core.TermRecord v0 -> Lists.map (\f -> (Paths.SubtermStepRecordField (Core.fieldName f), (Core.fieldTerm f))) (Core.recordFields v0)
+      Core.TermSet v0 -> Lists.map (\e -> (Paths.SubtermStepListElement 0, e)) (Sets.toList v0)
       Core.TermTypeApplication v0 -> [
-        (Accessors.TermAccessorTypeApplicationTerm, (Core.typeApplicationTermBody v0))]
+        (Paths.SubtermStepTypeApplicationTerm, (Core.typeApplicationTermBody v0))]
       Core.TermTypeLambda v0 -> [
-        (Accessors.TermAccessorTypeLambdaBody, (Core.typeLambdaBody v0))]
+        (Paths.SubtermStepTypeLambdaBody, (Core.typeLambdaBody v0))]
       Core.TermUnion v0 -> [
-        (Accessors.TermAccessorInjectionTerm, (Core.fieldTerm (Core.injectionField v0)))]
+        (Paths.SubtermStepInjectionTerm, (Core.fieldTerm (Core.injectionField v0)))]
       Core.TermUnit -> []
       Core.TermVariable _ -> []
       Core.TermWrap v0 -> [
-        (Accessors.TermAccessorWrappedTerm, (Core.wrappedTermBody v0))]
+        (Paths.SubtermStepWrappedTerm, (Core.wrappedTermBody v0))]
 
 -- | Find the children of a given type expression
 subtypes :: Core.Type -> [Core.Type]

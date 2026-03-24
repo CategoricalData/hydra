@@ -731,7 +731,7 @@
   "namespace": "hydra.json.writer",
   "termDependencies": ["hydra.serialization"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

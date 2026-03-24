@@ -17,14 +17,14 @@ public class SingleVariantUnionError implements Serializable, Comparable<SingleV
   /**
    * The path to the single-variant union type
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The name of the single field
    */
   public final hydra.core.Name fieldName;
 
-  public SingleVariantUnionError (hydra.accessors.AccessorPath location, hydra.core.Name fieldName) {
+  public SingleVariantUnionError (hydra.paths.SubtermPath location, hydra.core.Name fieldName) {
     this.location = location;
     this.fieldName = fieldName;
   }
@@ -58,7 +58,7 @@ public class SingleVariantUnionError implements Serializable, Comparable<SingleV
     return ((Comparable) fieldName).compareTo(other.fieldName);
   }
 
-  public SingleVariantUnionError withLocation(hydra.accessors.AccessorPath location) {
+  public SingleVariantUnionError withLocation(hydra.paths.SubtermPath location) {
     return new SingleVariantUnionError(location, fieldName);
   }
 

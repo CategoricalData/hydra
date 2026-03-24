@@ -17,14 +17,14 @@ public class DuplicateRecordTypeFieldNamesError implements Serializable, Compara
   /**
    * The path to the record type with duplicate fields
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The duplicated field name
    */
   public final hydra.core.Name name;
 
-  public DuplicateRecordTypeFieldNamesError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public DuplicateRecordTypeFieldNamesError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class DuplicateRecordTypeFieldNamesError implements Serializable, Compara
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public DuplicateRecordTypeFieldNamesError withLocation(hydra.accessors.AccessorPath location) {
+  public DuplicateRecordTypeFieldNamesError withLocation(hydra.paths.SubtermPath location) {
     return new DuplicateRecordTypeFieldNamesError(location, name);
   }
 

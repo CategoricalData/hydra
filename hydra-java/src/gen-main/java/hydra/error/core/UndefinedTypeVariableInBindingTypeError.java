@@ -17,14 +17,14 @@ public class UndefinedTypeVariableInBindingTypeError implements Serializable, Co
   /**
    * The path to the binding within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The name of the undefined type variable
    */
   public final hydra.core.Name name;
 
-  public UndefinedTypeVariableInBindingTypeError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public UndefinedTypeVariableInBindingTypeError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class UndefinedTypeVariableInBindingTypeError implements Serializable, Co
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public UndefinedTypeVariableInBindingTypeError withLocation(hydra.accessors.AccessorPath location) {
+  public UndefinedTypeVariableInBindingTypeError withLocation(hydra.paths.SubtermPath location) {
     return new UndefinedTypeVariableInBindingTypeError(location, name);
   }
 

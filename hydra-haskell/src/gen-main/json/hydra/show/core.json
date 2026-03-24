@@ -3575,7 +3575,7 @@
   "namespace": "hydra.show.core",
   "termDependencies": [],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

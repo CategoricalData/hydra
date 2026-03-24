@@ -1413,7 +1413,7 @@
   "namespace": "hydra.pg.graphson.construct",
   "termDependencies": ["hydra.pg.graphson.coder"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

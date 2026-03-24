@@ -5,8 +5,8 @@
 module Hydra.Decode.Error.Core where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Decode.Accessors as Accessors
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Decode.Paths as Paths
 import qualified Hydra.Decode.Variants as Variants
 import qualified Hydra.Error.Core as Core__
 import qualified Hydra.Errors as Errors
@@ -29,7 +29,7 @@ constantConditionError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "value" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "value" (\cx -> \raw -> Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralBoolean v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected boolean literal")
@@ -43,7 +43,7 @@ duplicateBindingError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.DuplicateBindingError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.DuplicateBindingError {
           Core__.duplicateBindingErrorLocation = field_location,
           Core__.duplicateBindingErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -53,7 +53,7 @@ duplicateFieldError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.DuplicateFieldError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.DuplicateFieldError {
           Core__.duplicateFieldErrorLocation = field_location,
           Core__.duplicateFieldErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -63,7 +63,7 @@ duplicateRecordTypeFieldNamesError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.DuplicateRecordTypeFieldNamesError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.DuplicateRecordTypeFieldNamesError {
           Core__.duplicateRecordTypeFieldNamesErrorLocation = field_location,
           Core__.duplicateRecordTypeFieldNamesErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -73,7 +73,7 @@ duplicateUnionTypeFieldNamesError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.DuplicateUnionTypeFieldNamesError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.DuplicateUnionTypeFieldNamesError {
           Core__.duplicateUnionTypeFieldNamesErrorLocation = field_location,
           Core__.duplicateUnionTypeFieldNamesErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -83,7 +83,7 @@ emptyCaseStatementError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "typeName" Core_.name fieldMap cx) (\field_typeName -> Right (Core__.EmptyCaseStatementError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "typeName" Core_.name fieldMap cx) (\field_typeName -> Right (Core__.EmptyCaseStatementError {
           Core__.emptyCaseStatementErrorLocation = field_location,
           Core__.emptyCaseStatementErrorTypeName = field_typeName}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -93,7 +93,7 @@ emptyLetBindingsError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Right (Core__.EmptyLetBindingsError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.EmptyLetBindingsError {
           Core__.emptyLetBindingsErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
@@ -102,7 +102,7 @@ emptyRecordTypeError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Right (Core__.EmptyRecordTypeError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.EmptyRecordTypeError {
           Core__.emptyRecordTypeErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
@@ -111,7 +111,7 @@ emptyTermAnnotationError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Right (Core__.EmptyTermAnnotationError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.EmptyTermAnnotationError {
           Core__.emptyTermAnnotationErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
@@ -120,7 +120,7 @@ emptyTypeAnnotationError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Right (Core__.EmptyTypeAnnotationError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.EmptyTypeAnnotationError {
           Core__.emptyTypeAnnotationErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
@@ -129,7 +129,7 @@ emptyTypeNameInTermError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Right (Core__.EmptyTypeNameInTermError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.EmptyTypeNameInTermError {
           Core__.emptyTypeNameInTermErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
@@ -138,7 +138,7 @@ emptyUnionTypeError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Right (Core__.EmptyUnionTypeError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.EmptyUnionTypeError {
           Core__.emptyUnionTypeErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
@@ -147,7 +147,7 @@ invalidForallParameterNameError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidForallParameterNameError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidForallParameterNameError {
           Core__.invalidForallParameterNameErrorLocation = field_location,
           Core__.invalidForallParameterNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -157,7 +157,7 @@ invalidLambdaParameterNameError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidLambdaParameterNameError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidLambdaParameterNameError {
           Core__.invalidLambdaParameterNameErrorLocation = field_location,
           Core__.invalidLambdaParameterNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -167,7 +167,7 @@ invalidLetBindingNameError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidLetBindingNameError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidLetBindingNameError {
           Core__.invalidLetBindingNameErrorLocation = field_location,
           Core__.invalidLetBindingNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -243,7 +243,7 @@ invalidTypeLambdaParameterNameError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidTypeLambdaParameterNameError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidTypeLambdaParameterNameError {
           Core__.invalidTypeLambdaParameterNameErrorLocation = field_location,
           Core__.invalidTypeLambdaParameterNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -253,7 +253,7 @@ invalidTypeSchemeVariableNameError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidTypeSchemeVariableNameError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.InvalidTypeSchemeVariableNameError {
           Core__.invalidTypeSchemeVariableNameErrorLocation = field_location,
           Core__.invalidTypeSchemeVariableNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -263,7 +263,7 @@ nestedTermAnnotationError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Right (Core__.NestedTermAnnotationError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.NestedTermAnnotationError {
           Core__.nestedTermAnnotationErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
@@ -272,7 +272,7 @@ nestedTypeAnnotationError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Right (Core__.NestedTypeAnnotationError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.NestedTypeAnnotationError {
           Core__.nestedTypeAnnotationErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
@@ -281,7 +281,7 @@ nonComparableMapKeyTypeError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "keyType" Core_.type_ fieldMap cx) (\field_keyType -> Right (Core__.NonComparableMapKeyTypeError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "keyType" Core_.type_ fieldMap cx) (\field_keyType -> Right (Core__.NonComparableMapKeyTypeError {
           Core__.nonComparableMapKeyTypeErrorLocation = field_location,
           Core__.nonComparableMapKeyTypeErrorKeyType = field_keyType}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -291,7 +291,7 @@ nonComparableSetElementTypeError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "elementType" Core_.type_ fieldMap cx) (\field_elementType -> Right (Core__.NonComparableSetElementTypeError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "elementType" Core_.type_ fieldMap cx) (\field_elementType -> Right (Core__.NonComparableSetElementTypeError {
           Core__.nonComparableSetElementTypeErrorLocation = field_location,
           Core__.nonComparableSetElementTypeErrorElementType = field_elementType}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -301,7 +301,7 @@ redundantWrapUnwrapError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "typeName" Core_.name fieldMap cx) (\field_typeName -> Right (Core__.RedundantWrapUnwrapError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "typeName" Core_.name fieldMap cx) (\field_typeName -> Right (Core__.RedundantWrapUnwrapError {
           Core__.redundantWrapUnwrapErrorLocation = field_location,
           Core__.redundantWrapUnwrapErrorTypeName = field_typeName}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -311,7 +311,7 @@ selfApplicationError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.SelfApplicationError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.SelfApplicationError {
           Core__.selfApplicationErrorLocation = field_location,
           Core__.selfApplicationErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -321,7 +321,7 @@ singleVariantUnionError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "fieldName" Core_.name fieldMap cx) (\field_fieldName -> Right (Core__.SingleVariantUnionError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "fieldName" Core_.name fieldMap cx) (\field_fieldName -> Right (Core__.SingleVariantUnionError {
           Core__.singleVariantUnionErrorLocation = field_location,
           Core__.singleVariantUnionErrorFieldName = field_fieldName}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -331,7 +331,7 @@ termVariableShadowingError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.TermVariableShadowingError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.TermVariableShadowingError {
           Core__.termVariableShadowingErrorLocation = field_location,
           Core__.termVariableShadowingErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -341,7 +341,7 @@ typeVariableShadowingInForallError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.TypeVariableShadowingInForallError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.TypeVariableShadowingInForallError {
           Core__.typeVariableShadowingInForallErrorLocation = field_location,
           Core__.typeVariableShadowingInForallErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -351,7 +351,7 @@ typeVariableShadowingInTypeLambdaError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.TypeVariableShadowingInTypeLambdaError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.TypeVariableShadowingInTypeLambdaError {
           Core__.typeVariableShadowingInTypeLambdaErrorLocation = field_location,
           Core__.typeVariableShadowingInTypeLambdaErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -371,7 +371,7 @@ undefinedTermVariableError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTermVariableError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTermVariableError {
           Core__.undefinedTermVariableErrorLocation = field_location,
           Core__.undefinedTermVariableErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -381,7 +381,7 @@ undefinedTypeVariableError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTypeVariableError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTypeVariableError {
           Core__.undefinedTypeVariableErrorLocation = field_location,
           Core__.undefinedTypeVariableErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -391,7 +391,7 @@ undefinedTypeVariableInBindingTypeError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTypeVariableInBindingTypeError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTypeVariableInBindingTypeError {
           Core__.undefinedTypeVariableInBindingTypeErrorLocation = field_location,
           Core__.undefinedTypeVariableInBindingTypeErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -401,7 +401,7 @@ undefinedTypeVariableInLambdaDomainError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTypeVariableInLambdaDomainError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTypeVariableInLambdaDomainError {
           Core__.undefinedTypeVariableInLambdaDomainErrorLocation = field_location,
           Core__.undefinedTypeVariableInLambdaDomainErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -411,7 +411,7 @@ undefinedTypeVariableInTypeApplicationError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTypeVariableInTypeApplicationError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UndefinedTypeVariableInTypeApplicationError {
           Core__.undefinedTypeVariableInTypeApplicationErrorLocation = field_location,
           Core__.undefinedTypeVariableInTypeApplicationErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -441,7 +441,7 @@ unknownPrimitiveNameError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UnknownPrimitiveNameError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UnknownPrimitiveNameError {
           Core__.unknownPrimitiveNameErrorLocation = field_location,
           Core__.unknownPrimitiveNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -451,7 +451,7 @@ unnecessaryIdentityApplicationError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Right (Core__.UnnecessaryIdentityApplicationError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.UnnecessaryIdentityApplicationError {
           Core__.unnecessaryIdentityApplicationErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
@@ -460,7 +460,7 @@ untypedTermVariableError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UntypedTermVariableError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Right (Core__.UntypedTermVariableError {
           Core__.untypedTermVariableErrorLocation = field_location,
           Core__.untypedTermVariableErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
@@ -470,6 +470,6 @@ voidInNonBottomPositionError cx raw =
     Eithers.either (\err -> Left (Errors.DecodingError err)) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = Helpers.toFieldMap v0
-        in (Eithers.bind (Helpers.requireField "location" Accessors.accessorPath fieldMap cx) (\field_location -> Right (Core__.VoidInNonBottomPositionError {
+        in (Eithers.bind (Helpers.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Right (Core__.VoidInNonBottomPositionError {
           Core__.voidInNonBottomPositionErrorLocation = field_location})))
       _ -> Left (Errors.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)

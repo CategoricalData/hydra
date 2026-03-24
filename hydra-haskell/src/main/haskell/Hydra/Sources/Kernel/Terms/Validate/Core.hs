@@ -4,7 +4,7 @@ module Hydra.Sources.Kernel.Terms.Validate.Core where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Accessors    as Accessors
+import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
@@ -122,7 +122,7 @@ term = define "term" $
       -- If we already found an error, short-circuit
       Maybes.cases (var "acc")
         -- No error yet: check the current term, then recurse into subterms
-        ("checkResult" <~ (checkTerm @@ var "typed" @@ (wrap _AccessorPath $ var "path") @@ var "cx" @@ var "trm") $
+        ("checkResult" <~ (checkTerm @@ var "typed" @@ (wrap _SubtermPath $ var "path") @@ var "cx" @@ var "trm") $
           Maybes.cases (var "checkResult")
             -- No error at this term: let the framework recurse into subterms
             (var "recurse" @@ noError @@ var "trm")
@@ -136,7 +136,7 @@ term = define "term" $
 
 -- | Check a single term node for validation errors (without recursing into subterms).
 -- The Graph provides bound variable information; the typed flag controls System F checks.
-checkTerm :: TBinding (Bool -> AccessorPath -> Graph -> Term -> Maybe InvalidTermError)
+checkTerm :: TBinding (Bool -> SubtermPath -> Graph -> Term -> Maybe InvalidTermError)
 checkTerm = define "checkTerm" $
   doc "Check a single term node for validation errors" $
   "typed" ~> "path" ~> "cx" ~> "term" ~>
@@ -429,7 +429,7 @@ checkTerm = define "checkTerm" $
         noError]
 
 -- | Check a list of names for shadowing against the current graph scope
-checkShadowing :: TBinding (AccessorPath -> Graph -> [Name] -> Maybe InvalidTermError)
+checkShadowing :: TBinding (SubtermPath -> Graph -> [Name] -> Maybe InvalidTermError)
 checkShadowing = define "checkShadowing" $
   doc "Check if any name in a list shadows a variable already in scope" $
   "path" ~> "cx" ~> "names" ~>
@@ -452,7 +452,7 @@ checkShadowing = define "checkShadowing" $
   var "result"
 
 -- | Check a list of bindings for duplicate names
-checkDuplicateBindings :: TBinding (AccessorPath -> [Binding] -> Maybe InvalidTermError)
+checkDuplicateBindings :: TBinding (SubtermPath -> [Binding] -> Maybe InvalidTermError)
 checkDuplicateBindings = define "checkDuplicateBindings" $
   doc "Check for duplicate binding names in a list of bindings" $
   "path" ~> "bindings" ~>
@@ -466,7 +466,7 @@ checkDuplicateBindings = define "checkDuplicateBindings" $
     (var "dup")
 
 -- | Check a list of field names for duplicates
-checkDuplicateFields :: TBinding (AccessorPath -> [Name] -> Maybe InvalidTermError)
+checkDuplicateFields :: TBinding (SubtermPath -> [Name] -> Maybe InvalidTermError)
 checkDuplicateFields = define "checkDuplicateFields" $
   doc "Check for duplicate field names in a list of fields" $
   "path" ~> "names" ~>
@@ -509,7 +509,7 @@ isValidName = define "isValidName" $
 -- | Check a type for undefined type variables against the current graph scope.
 -- Takes a path, graph, type, and a handler function that receives the first undefined variable name
 -- and returns an error. Returns Nothing if all type variables are defined.
-checkUndefinedTypeVariablesInType :: TBinding (AccessorPath -> Graph -> Type -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
+checkUndefinedTypeVariablesInType :: TBinding (SubtermPath -> Graph -> Type -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
 checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
   doc "Check a type for type variables not bound in the current scope" $
   "path" ~> "cx" ~> "typ" ~> "mkError" ~>
@@ -522,7 +522,7 @@ checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
 
 -- | Check a type scheme for undefined type variables against the current graph scope.
 -- The scheme's own bound variables are excluded before checking.
-checkUndefinedTypeVariablesInTypeScheme :: TBinding (AccessorPath -> Graph -> TypeScheme -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
+checkUndefinedTypeVariablesInTypeScheme :: TBinding (SubtermPath -> Graph -> TypeScheme -> (Name -> Maybe InvalidTermError) -> Maybe InvalidTermError)
 checkUndefinedTypeVariablesInTypeScheme = define "checkUndefinedTypeVariablesInTypeScheme" $
   doc "Check a type scheme for type variables not bound by the scheme or the current scope" $
   "path" ~> "cx" ~> "ts" ~> "mkError" ~>
@@ -619,7 +619,7 @@ checkVoid = define "checkVoid" $
     _Type_void>>: constant $
       mkJustType $ inject _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition $
         record _VoidInNonBottomPositionError [
-          _VoidInNonBottomPositionError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor]))]]
+          _VoidInNonBottomPositionError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))]]
 
 -- | Check a single type node for validation errors (without recursing into subtypes).
 validateTypeNode :: TBinding (S.Set Name -> Type -> Maybe InvalidTypeError)
@@ -637,14 +637,14 @@ validateTypeNode = define "validateTypeNode" $
         Logic.ifElse (Maps.null $ var "annMap")
           (mkJustType $ inject _InvalidTypeError _InvalidTypeError_emptyTypeAnnotation $
             record _EmptyTypeAnnotationError [
-              _EmptyTypeAnnotationError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor]))])
+              _EmptyTypeAnnotationError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))])
           noTypeError,
         -- Y8. NestedTypeAnnotationError
         cases _Type (var "body") (Just noTypeError) [
           _Type_annotated>>: constant $
             mkJustType $ inject _InvalidTypeError _InvalidTypeError_nestedTypeAnnotation $
               record _NestedTypeAnnotationError [
-                _NestedTypeAnnotationError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor]))]]],
+                _NestedTypeAnnotationError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))]]],
 
     -- Y10: TypeEither — void in either components
     _Type_either>>: "et" ~>
@@ -660,7 +660,7 @@ validateTypeNode = define "validateTypeNode" $
         Logic.ifElse (Sets.member (var "paramName") (var "boundVars"))
           (mkJustType $ inject _InvalidTypeError _InvalidTypeError_typeVariableShadowingInForall $
             record _TypeVariableShadowingInForallError [
-              _TypeVariableShadowingInForallError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+              _TypeVariableShadowingInForallError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
               _TypeVariableShadowingInForallError_name>>: var "paramName"])
           noTypeError,
         -- Y13. InvalidForallParameterNameError
@@ -668,7 +668,7 @@ validateTypeNode = define "validateTypeNode" $
           noTypeError
           (mkJustType $ inject _InvalidTypeError _InvalidTypeError_invalidForallParameterName $
             record _InvalidForallParameterNameError [
-              _InvalidForallParameterNameError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+              _InvalidForallParameterNameError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
               _InvalidForallParameterNameError_name>>: var "paramName"])],
 
     -- Y10: TypeFunction — void in codomain
@@ -686,7 +686,7 @@ validateTypeNode = define "validateTypeNode" $
           _Type_function>>: constant $
             mkJustType $ inject _InvalidTypeError _InvalidTypeError_nonComparableMapKeyType $
               record _NonComparableMapKeyTypeError [
-                _NonComparableMapKeyTypeError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+                _NonComparableMapKeyTypeError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
                 _NonComparableMapKeyTypeError_keyType>>: var "keyType"]],
         checkVoid @@ var "keyType",
         checkVoid @@ (Core.mapTypeValues $ var "mt")],
@@ -704,14 +704,14 @@ validateTypeNode = define "validateTypeNode" $
         Logic.ifElse (Lists.null $ var "fields")
           (mkJustType $ inject _InvalidTypeError _InvalidTypeError_emptyRecordType $
             record _EmptyRecordTypeError [
-              _EmptyRecordTypeError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor]))])
+              _EmptyRecordTypeError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))])
           noTypeError,
         -- Y4. DuplicateRecordTypeFieldNamesError
         checkDuplicateFieldTypes @@ (var "fields")
           @@ ("dupName" ~>
             mkJustType $ inject _InvalidTypeError _InvalidTypeError_duplicateRecordTypeFieldNames $
               record _DuplicateRecordTypeFieldNamesError [
-                _DuplicateRecordTypeFieldNamesError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+                _DuplicateRecordTypeFieldNamesError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
                 _DuplicateRecordTypeFieldNamesError_name>>: var "dupName"]),
         -- Y10. VoidInNonBottomPositionError — check field types
         firstTypeError @@ (Lists.map
@@ -725,7 +725,7 @@ validateTypeNode = define "validateTypeNode" $
           _Type_function>>: constant $
             mkJustType $ inject _InvalidTypeError _InvalidTypeError_nonComparableSetElementType $
               record _NonComparableSetElementTypeError [
-                _NonComparableSetElementTypeError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+                _NonComparableSetElementTypeError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
                 _NonComparableSetElementTypeError_elementType>>: var "elemType"]],
         checkVoid @@ var "elemType"],
 
@@ -736,14 +736,14 @@ validateTypeNode = define "validateTypeNode" $
         Logic.ifElse (Lists.null $ var "fields")
           (mkJustType $ inject _InvalidTypeError _InvalidTypeError_emptyUnionType $
             record _EmptyUnionTypeError [
-              _EmptyUnionTypeError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor]))])
+              _EmptyUnionTypeError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep]))])
           noTypeError,
         -- Y3. SingleVariantUnionError
         Logic.ifElse (Equality.equal (Lists.length $ var "fields") (int32 1))
           ("singleField" <~ Lists.head (var "fields") $
             mkJustType $ inject _InvalidTypeError _InvalidTypeError_singleVariantUnion $
               record _SingleVariantUnionError [
-                _SingleVariantUnionError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+                _SingleVariantUnionError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
                 _SingleVariantUnionError_fieldName>>: Core.fieldTypeName (var "singleField")])
           noTypeError,
         -- Y5. DuplicateUnionTypeFieldNamesError
@@ -751,7 +751,7 @@ validateTypeNode = define "validateTypeNode" $
           @@ ("dupName" ~>
             mkJustType $ inject _InvalidTypeError _InvalidTypeError_duplicateUnionTypeFieldNames $
               record _DuplicateUnionTypeFieldNamesError [
-                _DuplicateUnionTypeFieldNamesError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+                _DuplicateUnionTypeFieldNamesError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
                 _DuplicateUnionTypeFieldNamesError_name>>: var "dupName"]),
         -- Y10. VoidInNonBottomPositionError — check field types
         firstTypeError @@ (Lists.map
@@ -764,7 +764,7 @@ validateTypeNode = define "validateTypeNode" $
         noTypeError
         (mkJustType $ inject _InvalidTypeError _InvalidTypeError_undefinedTypeVariable $
           record _UndefinedTypeVariableError [
-            _UndefinedTypeVariableError_location>>: wrap _AccessorPath (list ([] :: [TTerm TermAccessor])),
+            _UndefinedTypeVariableError_location>>: wrap _SubtermPath (list ([] :: [TTerm SubtermStep])),
             _UndefinedTypeVariableError_name>>: var "varName"])]
 
 -- | Check a list of FieldType for duplicate names, calling a handler on the first duplicate found

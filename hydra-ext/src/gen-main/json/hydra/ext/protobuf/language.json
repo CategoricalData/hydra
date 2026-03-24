@@ -453,7 +453,7 @@
   "namespace": "hydra.ext.protobuf.language",
   "termDependencies": ["hydra.lexical", "hydra.rewriting"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

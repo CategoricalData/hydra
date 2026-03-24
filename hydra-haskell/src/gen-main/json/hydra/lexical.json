@@ -3792,7 +3792,7 @@
   "namespace": "hydra.lexical",
   "termDependencies": ["hydra.rewriting", "hydra.show.core", "hydra.show.errors"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

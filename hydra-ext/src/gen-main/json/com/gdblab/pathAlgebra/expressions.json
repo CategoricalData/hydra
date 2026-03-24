@@ -674,7 +674,7 @@
   "namespace": "com.gdblab.pathAlgebra.expressions",
   "termDependencies": [],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

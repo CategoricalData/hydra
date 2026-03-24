@@ -405,7 +405,7 @@ public interface Rewriting {
     });
   }
 
-  static <T0> T0 foldTermWithGraphAndPath(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>>>> f, hydra.graph.Graph cx0, T0 val0, hydra.core.Term term0) {
+  static <T0> T0 foldTermWithGraphAndPath(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>>>> f, hydra.graph.Graph cx0, T0 val0, hydra.core.Term term0) {
     return hydra.lib.pairs.First.apply(hydra.Rewriting.<T0>foldTermWithGraphAndPath_result(
       f,
       cx0,
@@ -424,9 +424,9 @@ public interface Rewriting {
       valIn));
   }
 
-  static <T0> hydra.util.Pair<T0, hydra.core.Term> foldTermWithGraphAndPath_result(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>>>> f, hydra.graph.Graph cx0, hydra.core.Term term0, T0 val0) {
+  static <T0> hydra.util.Pair<T0, hydra.core.Term> foldTermWithGraphAndPath_result(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>>>> f, hydra.graph.Graph cx0, hydra.core.Term term0, T0 val0) {
     return hydra.Rewriting.<T0>rewriteAndFoldTermWithGraphAndPath(
-      (java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>>>) (v1 -> (java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>>) (v2 -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>) (v3 -> (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>) (v4 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>) (v5 -> hydra.Rewriting.foldTermWithGraphAndPath_wrapper(
+      (java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>>>) (v1 -> (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>>) (v2 -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>) (v3 -> (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>) (v4 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>) (v5 -> hydra.Rewriting.foldTermWithGraphAndPath_wrapper(
         f,
         v1,
         v2,
@@ -438,7 +438,7 @@ public interface Rewriting {
       term0);
   }
 
-  static <T0, T1> hydra.util.Pair<T0, hydra.core.Term> foldTermWithGraphAndPath_wrapper(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>>>> f, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, T1>>> recurse, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.graph.Graph cx, T0 val, hydra.core.Term term) {
+  static <T0, T1> hydra.util.Pair<T0, hydra.core.Term> foldTermWithGraphAndPath_wrapper(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>>>> f, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, T1>>> recurse, hydra.util.ConsList<hydra.paths.SubtermStep> path, hydra.graph.Graph cx, T0 val, hydra.core.Term term) {
     return (hydra.util.Pair<T0, hydra.core.Term>) ((hydra.util.Pair<T0, hydra.core.Term>) (new hydra.util.Pair<T0, hydra.core.Term>((f).apply((java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>) (v1 -> (java.util.function.Function<hydra.core.Term, T0>) (v2 -> hydra.Rewriting.<T0, T1>foldTermWithGraphAndPath_recurseForUser(
       recurse,
       v1,
@@ -1347,7 +1347,7 @@ public interface Rewriting {
     return (hydra.util.Pair<T0, hydra.core.Term>) ((hydra.util.Pair<T0, hydra.core.Term>) (new hydra.util.Pair<T0, hydra.core.Term>(hydra.lib.pairs.First.apply(hydra.lib.pairs.First.apply(result.get())), hydra.lib.pairs.Second.apply(result.get()))));
   }
 
-  static <T0> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTermWithGraphAndPath(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>>> f, hydra.graph.Graph cx0, T0 val0, hydra.core.Term term0) {
+  static <T0> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTermWithGraphAndPath(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>>> f, hydra.graph.Graph cx0, T0 val0, hydra.core.Term term0) {
     hydra.util.Lazy<hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term>> result = new hydra.util.Lazy<>(() -> hydra.Rewriting.<T0>rewriteAndFoldTermWithGraphAndPath_result(
       f,
       (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.Rewriting.extendGraphForLambda(
@@ -1366,11 +1366,11 @@ public interface Rewriting {
     return (hydra.util.Pair<T0, hydra.core.Term>) ((hydra.util.Pair<T0, hydra.core.Term>) (new hydra.util.Pair<T0, hydra.core.Term>(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result.get())), hydra.lib.pairs.Second.apply(result.get()))));
   }
 
-  static <T0> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTermWithGraphAndPath_fResult(hydra.graph.Graph cx1, java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>>> f, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>> recurseForUser, hydra.core.Term term, T0 val) {
+  static <T0> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTermWithGraphAndPath_fResult(hydra.graph.Graph cx1, java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>>> f, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>> recurseForUser, hydra.core.Term term, T0 val) {
     return (f).apply(recurseForUser).apply(path).apply(cx1).apply(val).apply(term);
   }
 
-  static <T0, T1> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTermWithGraphAndPath_recurseForUser(hydra.graph.Graph cx1, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<T1, T0>, hydra.core.Term>>>> recurse, T0 valIn, hydra.core.Term termIn) {
+  static <T0, T1> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTermWithGraphAndPath_recurseForUser(hydra.graph.Graph cx1, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<T1, T0>, hydra.core.Term>>>> recurse, T0 valIn, hydra.core.Term termIn) {
     hydra.util.Lazy<hydra.util.Pair<hydra.util.Pair<T1, T0>, hydra.core.Term>> result = new hydra.util.Lazy<>(() -> hydra.Rewriting.<T0, T1>rewriteAndFoldTermWithGraphAndPath_result2(
       cx1,
       path,
@@ -1380,9 +1380,9 @@ public interface Rewriting {
     return (hydra.util.Pair<T0, hydra.core.Term>) ((hydra.util.Pair<T0, hydra.core.Term>) (new hydra.util.Pair<T0, hydra.core.Term>(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result.get())), hydra.lib.pairs.Second.apply(result.get()))));
   }
 
-  static <T0> hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term> rewriteAndFoldTermWithGraphAndPath_result(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>>> f, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_rewriting_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_rewriting_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_rewriting_extendGraphForTypeLambda2, hydra.graph.Graph cx0, hydra.core.Term term0, T0 val0) {
+  static <T0> hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term> rewriteAndFoldTermWithGraphAndPath_result(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>>> f, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_rewriting_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_rewriting_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_rewriting_extendGraphForTypeLambda2, hydra.graph.Graph cx0, hydra.core.Term term0, T0 val0) {
     return hydra.Rewriting.rewriteAndFoldTermWithPath(
-      (java.util.function.Function<java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term>>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term>>>>>) (v1 -> (java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term>>>>) (v2 -> (java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term>>>) (v3 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term>>) (v4 -> hydra.Rewriting.rewriteAndFoldTermWithGraphAndPath_wrapper(
+      (java.util.function.Function<java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term>>>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term>>>>>) (v1 -> (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term>>>>) (v2 -> (java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term>>>) (v3 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term>>) (v4 -> hydra.Rewriting.rewriteAndFoldTermWithGraphAndPath_wrapper(
         f,
         hydra_rewriting_extendGraphForLambda2,
         hydra_rewriting_extendGraphForLet2,
@@ -1395,7 +1395,7 @@ public interface Rewriting {
       term0);
   }
 
-  static <T0, T1> hydra.util.Pair<hydra.util.Pair<T1, T0>, hydra.core.Term> rewriteAndFoldTermWithGraphAndPath_result2(hydra.graph.Graph cx1, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<T1, T0>, hydra.core.Term>>>> recurse, hydra.core.Term termIn, T0 valIn) {
+  static <T0, T1> hydra.util.Pair<hydra.util.Pair<T1, T0>, hydra.core.Term> rewriteAndFoldTermWithGraphAndPath_result2(hydra.graph.Graph cx1, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<T1, T0>, hydra.core.Term>>>> recurse, hydra.core.Term termIn, T0 valIn) {
     return (recurse).apply(path).apply((hydra.util.Pair<hydra.graph.Graph, T0>) ((hydra.util.Pair<hydra.graph.Graph, T0>) (new hydra.util.Pair<hydra.graph.Graph, T0>(cx1, valIn)))).apply(termIn);
   }
 
@@ -1403,7 +1403,7 @@ public interface Rewriting {
     return hydra.lib.pairs.Second.apply(cxAndVal);
   }
 
-  static <T0, T1> hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term> rewriteAndFoldTermWithGraphAndPath_wrapper(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>>> f, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_rewriting_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_rewriting_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_rewriting_extendGraphForTypeLambda2, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<T1, T0>, hydra.core.Term>>>> recurse, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.util.Pair<hydra.graph.Graph, T0> cxAndVal, hydra.core.Term term) {
+  static <T0, T1> hydra.util.Pair<hydra.util.Pair<hydra.graph.Graph, T0>, hydra.core.Term> rewriteAndFoldTermWithGraphAndPath_wrapper(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>>> f, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_rewriting_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_rewriting_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_rewriting_extendGraphForTypeLambda2, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<T1, T0>, hydra.core.Term>>>> recurse, hydra.util.ConsList<hydra.paths.SubtermStep> path, hydra.util.Pair<hydra.graph.Graph, T0> cxAndVal, hydra.core.Term term) {
     hydra.util.Lazy<hydra.graph.Graph> cx = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(cxAndVal));
     hydra.util.Lazy<hydra.graph.Graph> cx1 = new hydra.util.Lazy<>(() -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -1532,10 +1532,10 @@ public interface Rewriting {
     return (hydra.util.Pair<hydra.util.Pair<T0, hydra.graph.Graph>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.Pair<T0, hydra.graph.Graph>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.Pair<T0, hydra.graph.Graph>, hydra.core.Term>((hydra.util.Pair<T0, hydra.graph.Graph>) ((hydra.util.Pair<T0, hydra.graph.Graph>) (new hydra.util.Pair<T0, hydra.graph.Graph>(hydra.lib.pairs.First.apply(fResult.get()), cx.get()))), hydra.lib.pairs.Second.apply(fResult.get()))));
   }
 
-  static <T0> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTermWithPath(java.util.function.Function<java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>> f, T0 term0, hydra.core.Term v1) {
+  static <T0> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTermWithPath(java.util.function.Function<java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>> f, T0 term0, hydra.core.Term v1) {
     return hydra.Rewriting.<T0>rewriteAndFoldTermWithPath_recurse(
       f,
-      (hydra.util.ConsList<hydra.accessors.TermAccessor>) (hydra.util.ConsList.<hydra.accessors.TermAccessor>empty()),
+      (hydra.util.ConsList<hydra.paths.SubtermStep>) (hydra.util.ConsList.<hydra.paths.SubtermStep>empty()),
       term0,
       v1);
   }
@@ -1544,7 +1544,7 @@ public interface Rewriting {
     return (hydra.util.Pair<T1, hydra.core.Term>) ((hydra.util.Pair<T1, hydra.core.Term>) (new hydra.util.Pair<T1, hydra.core.Term>(val0, term0)));
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Binding> rewriteAndFoldTermWithPath_forBindingWithAccessor(hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val, hydra.core.Binding binding) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Binding> rewriteAndFoldTermWithPath_forBindingWithAccessor(hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val, hydra.core.Binding binding) {
     hydra.util.Lazy<hydra.util.Pair<T1, hydra.core.Term>> r = new hydra.util.Lazy<>(() -> hydra.Rewriting.<T1>rewriteAndFoldTermWithPath_r3(
       binding,
       path,
@@ -1553,7 +1553,7 @@ public interface Rewriting {
     return (hydra.util.Pair<T1, hydra.core.Binding>) ((hydra.util.Pair<T1, hydra.core.Binding>) (new hydra.util.Pair<T1, hydra.core.Binding>(hydra.lib.pairs.First.apply(r.get()), new hydra.core.Binding((binding).name, hydra.lib.pairs.Second.apply(r.get()), (binding).type))));
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Elimination> rewriteAndFoldTermWithPath_forElimination(hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val, hydra.core.Elimination elm) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Elimination> rewriteAndFoldTermWithPath_forElimination(hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val, hydra.core.Elimination elm) {
     hydra.util.Lazy<hydra.util.Pair<T1, hydra.core.Elimination>> r = new hydra.util.Lazy<>(() -> hydra.Rewriting.<T1>rewriteAndFoldTermWithPath_r(
       elm,
       path,
@@ -1562,7 +1562,7 @@ public interface Rewriting {
     return (hydra.util.Pair<T1, hydra.core.Elimination>) ((hydra.util.Pair<T1, hydra.core.Elimination>) (new hydra.util.Pair<T1, hydra.core.Elimination>(hydra.lib.pairs.First.apply(r.get()), hydra.lib.pairs.Second.apply(r.get()))));
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Field> rewriteAndFoldTermWithPath_forFieldWithAccessor(hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, java.util.function.Function<hydra.core.Name, hydra.accessors.TermAccessor> mkAccessor, T1 val, hydra.core.Field field) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Field> rewriteAndFoldTermWithPath_forFieldWithAccessor(hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, java.util.function.Function<hydra.core.Name, hydra.paths.SubtermStep> mkAccessor, T1 val, hydra.core.Field field) {
     hydra.util.Lazy<hydra.util.Pair<T1, hydra.core.Term>> r = new hydra.util.Lazy<>(() -> hydra.Rewriting.<T1>rewriteAndFoldTermWithPath_r4(
       field,
       mkAccessor,
@@ -1572,16 +1572,16 @@ public interface Rewriting {
     return (hydra.util.Pair<T1, hydra.core.Field>) ((hydra.util.Pair<T1, hydra.core.Field>) (new hydra.util.Pair<T1, hydra.core.Field>(hydra.lib.pairs.First.apply(r.get()), new hydra.core.Field((field).name, hydra.lib.pairs.Second.apply(r.get())))));
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Field>> rewriteAndFoldTermWithPath_forFieldsWithAccessor(hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<java.util.function.Function<hydra.core.Name, hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>>> forFieldWithAccessor, java.util.function.Function<hydra.core.Name, hydra.accessors.TermAccessor> mkAccessor, T1 v1, hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Field>> v2) {
+  static <T1> hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Field>> rewriteAndFoldTermWithPath_forFieldsWithAccessor(hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<java.util.function.Function<hydra.core.Name, hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>>> forFieldWithAccessor, java.util.function.Function<hydra.core.Name, hydra.paths.SubtermStep> mkAccessor, T1 v1, hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Field>> v2) {
     return hydra.Rewriting.rewriteAndFoldTermWithPath_forManyWithAccessors(
       path,
-      (java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>>>) (path1 -> (java.util.function.Function<T1, java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>>) (val1 -> (java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>) (field1 -> (forFieldWithAccessor).apply(mkAccessor).apply(val1).apply(field1)))),
+      (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>>>) (path1 -> (java.util.function.Function<T1, java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>>) (val1 -> (java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>) (field1 -> (forFieldWithAccessor).apply(mkAccessor).apply(val1).apply(field1)))),
       (java.util.function.Function<hydra.util.ConsList<hydra.core.Field>, hydra.util.ConsList<hydra.core.Field>>) (x -> x),
       v1,
       v2);
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Function> rewriteAndFoldTermWithPath_forFunction(java.util.function.Function<T1, java.util.function.Function<hydra.core.Elimination, hydra.util.Pair<T1, hydra.core.Elimination>>> forElimination, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val, hydra.core.Function fun) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Function> rewriteAndFoldTermWithPath_forFunction(java.util.function.Function<T1, java.util.function.Function<hydra.core.Elimination, hydra.util.Pair<T1, hydra.core.Elimination>>> forElimination, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val, hydra.core.Function fun) {
     return (fun).accept(new hydra.core.Function.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<T1, hydra.core.Function> otherwise(hydra.core.Function instance) {
@@ -1609,7 +1609,7 @@ public interface Rewriting {
     });
   }
 
-  static <T2, T3, T4, T5> hydra.util.Pair<T2, T5> rewriteAndFoldTermWithPath_forManyWithAccessors(hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T2, T4>>>> rec, java.util.function.Function<hydra.util.ConsList<T4>, T5> cons, T2 val, hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, T3>> accessorTermPairs) {
+  static <T2, T3, T4, T5> hydra.util.Pair<T2, T5> rewriteAndFoldTermWithPath_forManyWithAccessors(hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T2, T4>>>> rec, java.util.function.Function<hydra.util.ConsList<T4>, T5> cons, T2 val, hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, T3>> accessorTermPairs) {
     hydra.util.Lazy<hydra.util.Pair<T2, hydra.util.ConsList<T4>>> rr = new hydra.util.Lazy<>(() -> hydra.Rewriting.<T2, T3, T4>rewriteAndFoldTermWithPath_rr5(
       accessorTermPairs,
       path,
@@ -1618,7 +1618,7 @@ public interface Rewriting {
     return (hydra.util.Pair<T2, T5>) ((hydra.util.Pair<T2, T5>) (new hydra.util.Pair<T2, T5>(hydra.lib.pairs.First.apply(rr.get()), (cons).apply(hydra.lib.lists.Reverse.apply(hydra.lib.pairs.Second.apply(rr.get()))))));
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.util.Pair<hydra.core.Term, hydra.core.Term>> rewriteAndFoldTermWithPath_forPairWithAccessors(hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.accessors.TermAccessor keyAccessor, hydra.accessors.TermAccessor valAccessor, T1 val, hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv) {
+  static <T1> hydra.util.Pair<T1, hydra.util.Pair<hydra.core.Term, hydra.core.Term>> rewriteAndFoldTermWithPath_forPairWithAccessors(hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.paths.SubtermStep keyAccessor, hydra.paths.SubtermStep valAccessor, T1 val, hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv) {
     hydra.util.Lazy<hydra.util.Pair<T1, hydra.core.Term>> rk = new hydra.util.Lazy<>(() -> hydra.Rewriting.<T1>rewriteAndFoldTermWithPath_rk2(
       keyAccessor,
       kv,
@@ -1634,7 +1634,7 @@ public interface Rewriting {
     return (hydra.util.Pair<T1, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) ((hydra.util.Pair<T1, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (new hydra.util.Pair<T1, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>(hydra.lib.pairs.First.apply(rv.get()), (hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(hydra.lib.pairs.Second.apply(rk.get()), hydra.lib.pairs.Second.apply(rv.get())))))));
   }
 
-  static <T2, T3, T4, T5, T6> hydra.util.Pair<T4, T6> rewriteAndFoldTermWithPath_forSingleWithAccessor(hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T4, T5>>>> rec, java.util.function.Function<T5, T6> cons, hydra.accessors.TermAccessor accessor, T2 val, T3 term) {
+  static <T2, T3, T4, T5, T6> hydra.util.Pair<T4, T6> rewriteAndFoldTermWithPath_forSingleWithAccessor(hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T4, T5>>>> rec, java.util.function.Function<T5, T6> cons, hydra.paths.SubtermStep accessor, T2 val, T3 term) {
     hydra.util.Lazy<hydra.util.Pair<T4, T5>> r = new hydra.util.Lazy<>(() -> hydra.Rewriting.<T2, T3, T4, T5>rewriteAndFoldTermWithPath_r5(
       accessor,
       path,
@@ -1644,7 +1644,7 @@ public interface Rewriting {
     return (hydra.util.Pair<T4, T6>) ((hydra.util.Pair<T4, T6>) (new hydra.util.Pair<T4, T6>(hydra.lib.pairs.First.apply(r.get()), (cons).apply(hydra.lib.pairs.Second.apply(r.get())))));
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_fsub(java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.ConsList<hydra.accessors.TermAccessor> path, T1 val0, hydra.core.Term term0) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_fsub(java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.ConsList<hydra.paths.SubtermStep> path, T1 val0, hydra.core.Term term0) {
     hydra.util.Lazy<hydra.util.Pair<T1, hydra.core.Term>> dflt = new hydra.util.Lazy<>(() -> hydra.Rewriting.<T1>rewriteAndFoldTermWithPath_dflt(
       term0,
       val0));
@@ -1660,7 +1660,7 @@ public interface Rewriting {
           path,
           recurse,
           (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(t, (at).value.annotation))),
-          new hydra.accessors.TermAccessor.AnnotatedBody(),
+          new hydra.paths.SubtermStep.AnnotatedBody(),
           val0,
           (at).value.body);
       }
@@ -1770,7 +1770,7 @@ public interface Rewriting {
             path,
             recurse,
             (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t1 -> new hydra.core.Term.Maybe(hydra.util.Maybe.just(t1))),
-            new hydra.accessors.TermAccessor.MaybeTerm(),
+            new hydra.paths.SubtermStep.MaybeTerm(),
             val0,
             t)),
           (mt).value);
@@ -1825,7 +1825,7 @@ public interface Rewriting {
           path,
           recurse,
           (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(t, (ta).value.type))),
-          new hydra.accessors.TermAccessor.TypeApplicationTerm(),
+          new hydra.paths.SubtermStep.TypeApplicationTerm(),
           val0,
           (ta).value.body);
       }
@@ -1836,7 +1836,7 @@ public interface Rewriting {
           path,
           recurse,
           (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda((tl).value.parameter, t))),
-          new hydra.accessors.TermAccessor.TypeLambdaBody(),
+          new hydra.paths.SubtermStep.TypeLambdaBody(),
           val0,
           (tl).value.body);
       }
@@ -1847,7 +1847,7 @@ public interface Rewriting {
           path,
           recurse,
           (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Union(new hydra.core.Injection((inj).value.typeName, new hydra.core.Field((inj).value.field.name, t)))),
-          new hydra.accessors.TermAccessor.InjectionTerm(),
+          new hydra.paths.SubtermStep.InjectionTerm(),
           val0,
           (inj).value.field.term);
       }
@@ -1858,14 +1858,14 @@ public interface Rewriting {
           path,
           recurse,
           (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Wrap(new hydra.core.WrappedTerm((wt).value.typeName, t))),
-          new hydra.accessors.TermAccessor.WrappedTerm(),
+          new hydra.paths.SubtermStep.WrappedTerm(),
           val0,
           (wt).value.body);
       }
     });
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Elimination> rewriteAndFoldTermWithPath_r(hydra.core.Elimination elm, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Elimination> rewriteAndFoldTermWithPath_r(hydra.core.Elimination elm, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
     return (elm).accept(new hydra.core.Elimination.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<T1, hydra.core.Elimination> otherwise(hydra.core.Elimination instance) {
@@ -1899,37 +1899,37 @@ public interface Rewriting {
     });
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_r2(hydra.core.Term el, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>> r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_r2(hydra.core.Term el, hydra.util.ConsList<hydra.paths.SubtermStep> path, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>> r, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ListElement(hydra.lib.pairs.First.apply(r))))).apply(hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(r))).apply(el);
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.ListElement(hydra.lib.pairs.First.apply(r))))).apply(hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(r))).apply(el);
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_r22(hydra.core.Term el, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>> r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_r22(hydra.core.Term el, hydra.util.ConsList<hydra.paths.SubtermStep> path, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>> r, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.SetElement(hydra.lib.pairs.First.apply(r))))).apply(hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(r))).apply(el);
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.SetElement(hydra.lib.pairs.First.apply(r))))).apply(hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(r))).apply(el);
   }
 
-  static <T2, T3, T4> hydra.util.Pair<T2, T4> rewriteAndFoldTermWithPath_r23(hydra.util.Pair<hydra.accessors.TermAccessor, T3> atp, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.util.Pair<T2, hydra.util.ConsList<T4>> r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T2, T4>>>> rec) {
+  static <T2, T3, T4> hydra.util.Pair<T2, T4> rewriteAndFoldTermWithPath_r23(hydra.util.Pair<hydra.paths.SubtermStep, T3> atp, hydra.util.ConsList<hydra.paths.SubtermStep> path, hydra.util.Pair<T2, hydra.util.ConsList<T4>> r, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T2, T4>>>> rec) {
     return (rec).apply(hydra.lib.lists.Concat2.apply(
       path,
       hydra.util.ConsList.of(hydra.lib.pairs.First.apply(atp)))).apply(hydra.lib.pairs.First.apply(r)).apply(hydra.lib.pairs.Second.apply(atp));
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_r3(hydra.core.Binding binding, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_r3(hydra.core.Binding binding, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.LetBinding((binding).name)))).apply(val).apply((binding).term);
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.LetBinding((binding).name)))).apply(val).apply((binding).term);
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_r4(hydra.core.Field field, java.util.function.Function<hydra.core.Name, hydra.accessors.TermAccessor> mkAccessor, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_r4(hydra.core.Field field, java.util.function.Function<hydra.core.Name, hydra.paths.SubtermStep> mkAccessor, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
       hydra.util.ConsList.of((mkAccessor).apply((field).name)))).apply(val).apply((field).term);
   }
 
-  static <T2, T3, T4, T5> hydra.util.Pair<T4, T5> rewriteAndFoldTermWithPath_r5(hydra.accessors.TermAccessor accessor, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T4, T5>>>> rec, T3 term, T2 val) {
+  static <T2, T3, T4, T5> hydra.util.Pair<T4, T5> rewriteAndFoldTermWithPath_r5(hydra.paths.SubtermStep accessor, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T4, T5>>>> rec, T3 term, T2 val) {
     return (rec).apply(hydra.lib.lists.Concat2.apply(
       path,
       hydra.util.ConsList.of(accessor))).apply(val).apply(term);
@@ -1954,14 +1954,14 @@ public interface Rewriting {
       (l).bindings);
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>> rewriteAndFoldTermWithPath_rcases(hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.core.CaseStatement cs, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val1) {
+  static <T1> hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>> rewriteAndFoldTermWithPath_rcases(hydra.util.ConsList<hydra.paths.SubtermStep> path, hydra.core.CaseStatement cs, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val1) {
     return hydra.Rewriting.rewriteAndFoldTermWithPath_forManyWithAccessors(
       path,
       recurse,
       (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>) (x -> x),
       val1,
       hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (f -> (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.UnionCasesBranch((f).name), (f).term)))),
+        (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (f -> (hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.UnionCasesBranch((f).name), (f).term)))),
         (cs).cases));
   }
 
@@ -1969,9 +1969,9 @@ public interface Rewriting {
     return (forElimination).apply(val).apply(elm);
   }
 
-  static <T0> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTermWithPath_recurse(java.util.function.Function<java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>> f, hydra.util.ConsList<hydra.accessors.TermAccessor> v1, T0 v2, hydra.core.Term v3) {
-    return (f).apply((java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>) (v12 -> (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>) (v22 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>) (v32 -> hydra.Rewriting.<T0>rewriteAndFoldTermWithPath_fsub(
-      (java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>) (v13 -> (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>) (v23 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>) (v33 -> hydra.Rewriting.<T0>rewriteAndFoldTermWithPath_recurse(
+  static <T0> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTermWithPath_recurse(java.util.function.Function<java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>> f, hydra.util.ConsList<hydra.paths.SubtermStep> v1, T0 v2, hydra.core.Term v3) {
+    return (f).apply((java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>) (v12 -> (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>) (v22 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>) (v32 -> hydra.Rewriting.<T0>rewriteAndFoldTermWithPath_fsub(
+      (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>) (v13 -> (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>) (v23 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>) (v33 -> hydra.Rewriting.<T0>rewriteAndFoldTermWithPath_recurse(
         f,
         v13,
         v23,
@@ -1981,78 +1981,78 @@ public interface Rewriting {
       v32))))).apply(v1).apply(v2).apply(v3);
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_renv(hydra.core.Let l, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_renv(hydra.core.Let l, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.LetBody()))).apply(val0).apply((l).body);
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.LetBody()))).apply(val0).apply((l).body);
   }
 
   static <T1> hydra.util.Pair<T1, hydra.core.Function> rewriteAndFoldTermWithPath_rf(hydra.core.Function f, java.util.function.Function<T1, java.util.function.Function<hydra.core.Function, hydra.util.Pair<T1, hydra.core.Function>>> forFunction, T1 val0) {
     return (forFunction).apply(val0).apply(f);
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rf2(hydra.util.Pair<hydra.core.Term, hydra.core.Term> p, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rf2(hydra.util.Pair<hydra.core.Term, hydra.core.Term> p, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ProductTerm(0)))).apply(val0).apply(hydra.lib.pairs.First.apply(p));
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.ProductTerm(0)))).apply(val0).apply(hydra.lib.pairs.First.apply(p));
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>> rewriteAndFoldTermWithPath_rfields(hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.core.Record r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
+  static <T1> hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>> rewriteAndFoldTermWithPath_rfields(hydra.util.ConsList<hydra.paths.SubtermStep> path, hydra.core.Record r, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
     return hydra.Rewriting.rewriteAndFoldTermWithPath_forManyWithAccessors(
       path,
       recurse,
       (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.ConsList<hydra.core.Term>>) (x -> x),
       val0,
       hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (f -> (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.RecordField((f).name), (f).term)))),
+        (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (f -> (hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.RecordField((f).name), (f).term)))),
         (r).fields));
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rk(hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>> r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rk(hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, hydra.util.ConsList<hydra.paths.SubtermStep> path, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>> r, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.MapKey(hydra.lib.pairs.First.apply(r))))).apply(hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(r))).apply(hydra.lib.pairs.First.apply(kv));
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.MapKey(hydra.lib.pairs.First.apply(r))))).apply(hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(r))).apply(hydra.lib.pairs.First.apply(kv));
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rk2(hydra.accessors.TermAccessor keyAccessor, hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rk2(hydra.paths.SubtermStep keyAccessor, hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
       hydra.util.ConsList.of(keyAccessor))).apply(val).apply(hydra.lib.pairs.First.apply(kv));
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rl(hydra.core.Term l, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rl(hydra.core.Term l, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.SumTerm()))).apply(val0).apply(l);
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.SumTerm()))).apply(val0).apply(l);
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rl2(hydra.core.Lambda l, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rl2(hydra.core.Lambda l, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.LambdaBody()))).apply(val).apply((l).body);
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.LambdaBody()))).apply(val).apply((l).body);
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rlhs(hydra.core.Application a, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rlhs(hydra.core.Application a, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ApplicationFunction()))).apply(val0).apply((a).function);
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.ApplicationFunction()))).apply(val0).apply((a).function);
   }
 
-  static <T1> hydra.util.Maybe<hydra.util.Pair<T1, hydra.core.Term>> rewriteAndFoldTermWithPath_rmd(hydra.core.CaseStatement cs, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
+  static <T1> hydra.util.Maybe<hydra.util.Pair<T1, hydra.core.Term>> rewriteAndFoldTermWithPath_rmd(hydra.core.CaseStatement cs, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
     return hydra.lib.maybes.Map.apply(
       (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>) (def -> (recurse).apply(hydra.lib.lists.Concat2.apply(
         path,
-        hydra.util.ConsList.of(new hydra.accessors.TermAccessor.UnionCasesDefault()))).apply(val).apply(def)),
+        hydra.util.ConsList.of(new hydra.paths.SubtermStep.UnionCasesDefault()))).apply(val).apply(def)),
       (cs).default_);
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rr(hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.core.Term r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rr(hydra.util.ConsList<hydra.paths.SubtermStep> path, hydra.core.Term r, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.SumTerm()))).apply(val0).apply(r);
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.SumTerm()))).apply(val0).apply(r);
   }
 
-  static <T1> hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>> rewriteAndFoldTermWithPath_rr2(hydra.util.ConsList<hydra.core.Term> els, Integer idx, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
+  static <T1> hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>> rewriteAndFoldTermWithPath_rr2(hydra.util.ConsList<hydra.core.Term> els, Integer idx, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>>>) (r -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>>) (el -> {
         hydra.util.Lazy<hydra.util.Pair<T1, hydra.core.Term>> r2 = new hydra.util.Lazy<>(() -> hydra.Rewriting.<T1>rewriteAndFoldTermWithPath_r2(
@@ -2070,7 +2070,7 @@ public interface Rewriting {
       els);
   }
 
-  static <T1> hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>> rewriteAndFoldTermWithPath_rr3(Integer idx, hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term> m, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
+  static <T1> hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>> rewriteAndFoldTermWithPath_rr3(Integer idx, hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term> m, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>>, java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>>>>) (r -> (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>>>) (kv -> {
         hydra.util.Lazy<hydra.util.Pair<T1, hydra.core.Term>> rk = new hydra.util.Lazy<>(() -> hydra.Rewriting.<T1>rewriteAndFoldTermWithPath_rk(
@@ -2094,7 +2094,7 @@ public interface Rewriting {
       hydra.lib.maps.ToList.apply(m));
   }
 
-  static <T1> hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>> rewriteAndFoldTermWithPath_rr4(hydra.util.PersistentSet<hydra.core.Term> els, Integer idx, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
+  static <T1> hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>> rewriteAndFoldTermWithPath_rr4(hydra.util.PersistentSet<hydra.core.Term> els, Integer idx, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>>>) (r -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>>) (el -> {
         hydra.util.Lazy<hydra.util.Pair<T1, hydra.core.Term>> r2 = new hydra.util.Lazy<>(() -> hydra.Rewriting.<T1>rewriteAndFoldTermWithPath_r22(
@@ -2112,9 +2112,9 @@ public interface Rewriting {
       hydra.lib.sets.ToList.apply(els));
   }
 
-  static <T2, T3, T4> hydra.util.Pair<T2, hydra.util.ConsList<T4>> rewriteAndFoldTermWithPath_rr5(hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, T3>> accessorTermPairs, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T2, T4>>>> rec, T2 val) {
+  static <T2, T3, T4> hydra.util.Pair<T2, hydra.util.ConsList<T4>> rewriteAndFoldTermWithPath_rr5(hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, T3>> accessorTermPairs, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T2, T4>>>> rec, T2 val) {
     return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.util.Pair<T2, hydra.util.ConsList<T4>>, java.util.function.Function<hydra.util.Pair<hydra.accessors.TermAccessor, T3>, hydra.util.Pair<T2, hydra.util.ConsList<T4>>>>) (r -> (java.util.function.Function<hydra.util.Pair<hydra.accessors.TermAccessor, T3>, hydra.util.Pair<T2, hydra.util.ConsList<T4>>>) (atp -> {
+      (java.util.function.Function<hydra.util.Pair<T2, hydra.util.ConsList<T4>>, java.util.function.Function<hydra.util.Pair<hydra.paths.SubtermStep, T3>, hydra.util.Pair<T2, hydra.util.ConsList<T4>>>>) (r -> (java.util.function.Function<hydra.util.Pair<hydra.paths.SubtermStep, T3>, hydra.util.Pair<T2, hydra.util.ConsList<T4>>>) (atp -> {
         hydra.util.Lazy<hydra.util.Pair<T2, T4>> r2 = new hydra.util.Lazy<>(() -> hydra.Rewriting.<T2, T3, T4>rewriteAndFoldTermWithPath_r23(
           atp,
           path,
@@ -2128,25 +2128,25 @@ public interface Rewriting {
       accessorTermPairs);
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rrhs(hydra.core.Application a, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rlhs) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rrhs(hydra.core.Application a, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rlhs) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ApplicationArgument()))).apply(hydra.lib.pairs.First.apply(rlhs)).apply((a).argument);
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.ApplicationArgument()))).apply(hydra.lib.pairs.First.apply(rlhs)).apply((a).argument);
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rs(hydra.util.Pair<hydra.core.Term, hydra.core.Term> p, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rf) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rs(hydra.util.Pair<hydra.core.Term, hydra.core.Term> p, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rf) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ProductTerm(1)))).apply(hydra.lib.pairs.First.apply(rf)).apply(hydra.lib.pairs.Second.apply(p));
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.ProductTerm(1)))).apply(hydra.lib.pairs.First.apply(rf)).apply(hydra.lib.pairs.Second.apply(p));
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rv(hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>> r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rk) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rv(hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, hydra.util.ConsList<hydra.paths.SubtermStep> path, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>> r, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rk) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.MapValue(hydra.lib.pairs.First.apply(r))))).apply(hydra.lib.pairs.First.apply(rk)).apply(hydra.lib.pairs.Second.apply(kv));
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.MapValue(hydra.lib.pairs.First.apply(r))))).apply(hydra.lib.pairs.First.apply(rk)).apply(hydra.lib.pairs.Second.apply(kv));
   }
 
-  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rv2(hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rk, hydra.accessors.TermAccessor valAccessor) {
+  static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rv2(hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, hydra.util.ConsList<hydra.paths.SubtermStep> path, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rk, hydra.paths.SubtermStep valAccessor) {
     return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
       hydra.util.ConsList.of(valAccessor))).apply(hydra.lib.pairs.First.apply(rk)).apply(hydra.lib.pairs.Second.apply(kv));
@@ -4203,147 +4203,147 @@ public interface Rewriting {
     });
   }
 
-  static hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> subtermsWithAccessors(hydra.core.Term v1) {
+  static hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> subtermsWithSteps(hydra.core.Term v1) {
     return (v1).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Annotated at) {
-        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.AnnotatedBody(), (at).value.body))));
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Annotated at) {
+        return hydra.util.ConsList.of((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.AnnotatedBody(), (at).value.body))));
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Application p) {
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Application p) {
         return hydra.util.ConsList.of(
-          (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.ApplicationFunction(), (p).value.function))),
-          (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.ApplicationArgument(), (p).value.argument))));
+          (hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.ApplicationFunction(), (p).value.function))),
+          (hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.ApplicationArgument(), (p).value.argument))));
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Either e) {
-        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Either e) {
+        return (hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>empty());
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Function v12) {
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Function v12) {
         return (v12).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
-          public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> otherwise(hydra.core.Function instance) {
-            return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
+          public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> otherwise(hydra.core.Function instance) {
+            return (hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>empty());
           }
 
           @Override
-          public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Function.Elimination v13) {
+          public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Function.Elimination v13) {
             return (v13).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
               @Override
-              public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> otherwise(hydra.core.Elimination instance) {
-                return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
+              public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> otherwise(hydra.core.Elimination instance) {
+                return (hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>empty());
               }
 
               @Override
-              public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Elimination.Union cs) {
+              public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Elimination.Union cs) {
                 return hydra.lib.lists.Concat2.apply(
                   hydra.lib.maybes.Maybe.applyLazy(
-                    () -> (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty()),
-                    (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>>) (t -> hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.UnionCasesDefault(), t))))),
+                    () -> (hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>empty()),
+                    (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>>) (t -> hydra.util.ConsList.of((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.UnionCasesDefault(), t))))),
                     (cs).value.default_),
                   hydra.lib.lists.Map.apply(
-                    (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (f -> (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.UnionCasesBranch((f).name), (f).term)))),
+                    (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (f -> (hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.UnionCasesBranch((f).name), (f).term)))),
                     (cs).value.cases));
               }
             });
           }
 
           @Override
-          public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Function.Lambda l) {
-            return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.LambdaBody(), (l).value.body))));
+          public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Function.Lambda l) {
+            return hydra.util.ConsList.of((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.LambdaBody(), (l).value.body))));
           }
         });
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Let lt) {
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Let lt) {
         return hydra.lib.lists.Cons.apply(
-          (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.LetBody(), (lt).value.body))),
+          (hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.LetBody(), (lt).value.body))),
           hydra.lib.lists.Map.apply(
-            (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (b -> (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.LetBinding((b).name), (b).term)))),
+            (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (b -> (hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.LetBinding((b).name), (b).term)))),
             (lt).value.bindings));
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.List l) {
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.List l) {
         return hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (e -> (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.ListElement(0), e)))),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (e -> (hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.ListElement(0), e)))),
           (l).value);
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Literal ignored) {
-        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Literal ignored) {
+        return (hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>empty());
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Map m) {
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Map m) {
         return hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>>) (p -> hydra.util.ConsList.of(
-            (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.MapKey(0), hydra.lib.pairs.First.apply(p)))),
-            (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.MapValue(0), hydra.lib.pairs.Second.apply(p)))))),
+          (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>>) (p -> hydra.util.ConsList.of(
+            (hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.MapKey(0), hydra.lib.pairs.First.apply(p)))),
+            (hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.MapValue(0), hydra.lib.pairs.Second.apply(p)))))),
           hydra.lib.maps.ToList.apply((m).value)));
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Maybe m) {
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Maybe m) {
         return hydra.lib.maybes.Maybe.applyLazy(
-          () -> (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty()),
-          (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>>) (t -> hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.MaybeTerm(), t))))),
+          () -> (hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>empty()),
+          (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>>) (t -> hydra.util.ConsList.of((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.MaybeTerm(), t))))),
           (m).value);
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Pair p) {
-        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Pair p) {
+        return (hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>empty());
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Record rt) {
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Record rt) {
         return hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (f -> (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.RecordField((f).name), (f).term)))),
+          (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (f -> (hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.RecordField((f).name), (f).term)))),
           (rt).value.fields);
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Set s) {
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Set s) {
         return hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (e -> (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.ListElement(0), e)))),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (e -> (hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.ListElement(0), e)))),
           hydra.lib.sets.ToList.apply((s).value));
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.TypeApplication ta) {
-        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.TypeApplicationTerm(), (ta).value.body))));
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.TypeApplication ta) {
+        return hydra.util.ConsList.of((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.TypeApplicationTerm(), (ta).value.body))));
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.TypeLambda ta) {
-        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.TypeLambdaBody(), (ta).value.body))));
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.TypeLambda ta) {
+        return hydra.util.ConsList.of((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.TypeLambdaBody(), (ta).value.body))));
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Union ut) {
-        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.InjectionTerm(), (ut).value.field.term))));
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Union ut) {
+        return hydra.util.ConsList.of((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.InjectionTerm(), (ut).value.field.term))));
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Unit ignored) {
-        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Unit ignored) {
+        return (hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>empty());
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Variable ignored) {
-        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Variable ignored) {
+        return (hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>>empty());
       }
 
       @Override
-      public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Wrap n) {
-        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.WrappedTerm(), (n).value.body))));
+      public hydra.util.ConsList<hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>> visit(hydra.core.Term.Wrap n) {
+        return hydra.util.ConsList.of((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) ((hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>) (new hydra.util.Pair<hydra.paths.SubtermStep, hydra.core.Term>(new hydra.paths.SubtermStep.WrappedTerm(), (n).value.body))));
       }
     });
   }

@@ -2840,7 +2840,7 @@
   "termDependencies": ["hydra.json.writer"],
   "typeDependencies": [
     "hydra.ext.org.json.schema",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

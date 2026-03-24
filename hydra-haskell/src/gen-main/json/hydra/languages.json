@@ -172,7 +172,7 @@
   "namespace": "hydra.languages",
   "termDependencies": ["hydra.reflect"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

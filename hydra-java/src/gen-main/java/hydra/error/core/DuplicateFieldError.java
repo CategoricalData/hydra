@@ -17,14 +17,14 @@ public class DuplicateFieldError implements Serializable, Comparable<DuplicateFi
   /**
    * The path to the duplicate field within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The duplicated field name
    */
   public final hydra.core.Name name;
 
-  public DuplicateFieldError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public DuplicateFieldError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class DuplicateFieldError implements Serializable, Comparable<DuplicateFi
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public DuplicateFieldError withLocation(hydra.accessors.AccessorPath location) {
+  public DuplicateFieldError withLocation(hydra.paths.SubtermPath location) {
     return new DuplicateFieldError(location, name);
   }
 
