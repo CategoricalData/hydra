@@ -166,7 +166,7 @@
   "namespace": "hydra.eval.lib.sets",
   "termDependencies": ["hydra.extract.core", "hydra.show.core"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

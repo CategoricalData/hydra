@@ -737,7 +737,7 @@
   "typeDependencies": [
     "hydra.ext.org.json.schema",
     "hydra.json.model",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

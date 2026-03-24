@@ -9396,7 +9396,7 @@
   "typeDependencies": [
     "hydra.ext.java.environment",
     "hydra.ext.java.syntax",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

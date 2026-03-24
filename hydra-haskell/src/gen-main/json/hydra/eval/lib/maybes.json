@@ -1225,7 +1225,7 @@
   "namespace": "hydra.eval.lib.maybes",
   "termDependencies": ["hydra.extract.core", "hydra.show.core"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

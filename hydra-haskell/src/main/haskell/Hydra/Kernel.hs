@@ -15,7 +15,7 @@ Note: the following modules are part of the kernel, but they are not default imp
 -}
 
 module Hydra.Kernel (
-  module Hydra.Accessors,
+  module Hydra.Paths,
   module Hydra.Adapt,
   module Hydra.Annotations,
   module Hydra.Arity,
@@ -58,7 +58,7 @@ module Hydra.Kernel (
   module Hydra.Variants,
 ) where
 
-import Hydra.Accessors
+import Hydra.Paths
 import Hydra.Adapt
 import Hydra.Annotations
 import Hydra.Arity

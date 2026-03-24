@@ -17,14 +17,14 @@ public class InvalidForallParameterNameError implements Serializable, Comparable
   /**
    * The path to the forall type
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The invalid parameter name
    */
   public final hydra.core.Name name;
 
-  public InvalidForallParameterNameError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public InvalidForallParameterNameError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class InvalidForallParameterNameError implements Serializable, Comparable
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public InvalidForallParameterNameError withLocation(hydra.accessors.AccessorPath location) {
+  public InvalidForallParameterNameError withLocation(hydra.paths.SubtermPath location) {
     return new InvalidForallParameterNameError(location, name);
   }
 

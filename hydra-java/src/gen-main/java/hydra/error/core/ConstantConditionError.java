@@ -17,14 +17,14 @@ public class ConstantConditionError implements Serializable, Comparable<Constant
   /**
    * The path to the constant condition within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The constant boolean value of the condition
    */
   public final Boolean value;
 
-  public ConstantConditionError (hydra.accessors.AccessorPath location, Boolean value) {
+  public ConstantConditionError (hydra.paths.SubtermPath location, Boolean value) {
     this.location = location;
     this.value = value;
   }
@@ -58,7 +58,7 @@ public class ConstantConditionError implements Serializable, Comparable<Constant
     return ((Comparable) value).compareTo(other.value);
   }
 
-  public ConstantConditionError withLocation(hydra.accessors.AccessorPath location) {
+  public ConstantConditionError withLocation(hydra.paths.SubtermPath location) {
     return new ConstantConditionError(location, value);
   }
 

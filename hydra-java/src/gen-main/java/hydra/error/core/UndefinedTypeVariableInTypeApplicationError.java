@@ -17,14 +17,14 @@ public class UndefinedTypeVariableInTypeApplicationError implements Serializable
   /**
    * The path to the type application within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The name of the undefined type variable
    */
   public final hydra.core.Name name;
 
-  public UndefinedTypeVariableInTypeApplicationError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public UndefinedTypeVariableInTypeApplicationError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class UndefinedTypeVariableInTypeApplicationError implements Serializable
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public UndefinedTypeVariableInTypeApplicationError withLocation(hydra.accessors.AccessorPath location) {
+  public UndefinedTypeVariableInTypeApplicationError withLocation(hydra.paths.SubtermPath location) {
     return new UndefinedTypeVariableInTypeApplicationError(location, name);
   }
 

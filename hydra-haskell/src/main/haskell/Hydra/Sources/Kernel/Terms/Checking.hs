@@ -39,7 +39,7 @@ import Hydra.Kernel hiding (
   typeOfVariable, typeOfVariableE,
   typeOfWrappedTerm, typeOfWrappedTermE)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Accessors    as Accessors
+import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
@@ -78,7 +78,7 @@ import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Util         as Util
 import qualified Hydra.Dsl.Meta.Variants     as Variants
-import qualified Hydra.Dsl.Accessors         as Accessors
+import qualified Hydra.Dsl.Paths         as Paths
 import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Errors            as Error
 import qualified Hydra.Dsl.Error.Checking   as ErrorsChecking
@@ -727,7 +727,7 @@ typeOfPrimitive = define "typeOfPrimitive" $
   "rawTs" <~ Maybes.map ("_p" ~> Graph.primitiveType (var "_p"))
     (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx")) $
   Maybes.maybe
-    (Ctx.failInContext (Error.errorUndefinedTermVariable $ ErrorsCore.undefinedTermVariableError (Accessors.accessorPath $ list ([] :: [TTerm TermAccessor])) (var "name")) (var "cx"))
+    (Ctx.failInContext (Error.errorUndefinedTermVariable $ ErrorsCore.undefinedTermVariableError (Paths.subtermPath $ list ([] :: [TTerm SubtermStep])) (var "name")) (var "cx"))
     ("tsRaw" ~>
       "instResult" <~ Schemas.instantiateTypeScheme @@ var "cx" @@ var "tsRaw" $
       "ts" <~ Pairs.first (var "instResult") $
@@ -856,7 +856,7 @@ typeOfVariable = define "typeOfVariable" $
   "cx" ~> "tx" ~> "typeArgs" ~> "name" ~>
   "rawTypeScheme" <~ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx") $
   Maybes.maybe
-    (Ctx.failInContext (Error.errorUntypedTermVariable $ ErrorsCore.untypedTermVariableError (Accessors.accessorPath $ list ([] :: [TTerm TermAccessor])) (var "name")) (var "cx"))
+    (Ctx.failInContext (Error.errorUntypedTermVariable $ ErrorsCore.untypedTermVariableError (Paths.subtermPath $ list ([] :: [TTerm SubtermStep])) (var "name")) (var "cx"))
     ("ts" ~>
       "tResult" <~ Logic.ifElse (Lists.null $ var "typeArgs")
         (Schemas.instantiateType @@ var "cx" @@ (Rewriting.typeSchemeToFType @@ var "ts"))

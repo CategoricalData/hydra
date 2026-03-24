@@ -15927,7 +15927,7 @@
   "typeDependencies": [
     "hydra.ext.scala.syntax",
     "hydra.ext.scala.language",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

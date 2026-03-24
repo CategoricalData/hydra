@@ -7,7 +7,7 @@ import Hydra.Kernel hiding (
   javaStyleComment, mapFirstLetter, nonAlnumToUnderscores, sanitizeWithUnderscores,
   showList, stripLeadingAndTrailingWhitespace, withCharacterAliases, wrapLine)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Accessors    as Accessors
+import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap

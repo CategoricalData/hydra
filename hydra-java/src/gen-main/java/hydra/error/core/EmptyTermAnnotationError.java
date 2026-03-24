@@ -15,9 +15,9 @@ public class EmptyTermAnnotationError implements Serializable, Comparable<EmptyT
   /**
    * The path to the empty annotation within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
-  public EmptyTermAnnotationError (hydra.accessors.AccessorPath location) {
+  public EmptyTermAnnotationError (hydra.paths.SubtermPath location) {
     this.location = location;
   }
 

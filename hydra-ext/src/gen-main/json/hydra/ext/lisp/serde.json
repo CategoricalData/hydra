@@ -9779,7 +9779,7 @@
   "termDependencies": ["hydra.constants", "hydra.formatting", "hydra.serialization"],
   "typeDependencies": [
     "hydra.ext.lisp.syntax",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

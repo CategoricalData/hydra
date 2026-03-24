@@ -9,7 +9,7 @@ import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
 import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
 import qualified Hydra.Dsl.Literals                        as Literals
-import qualified Hydra.Dsl.Accessors                  as Accessors
+import qualified Hydra.Dsl.Paths                      as Paths
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders
@@ -62,7 +62,7 @@ import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Accessors as ShowAccessors
+import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
 import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
@@ -90,7 +90,7 @@ ns = Namespace "hydra.ext.graphviz.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [ShowAccessors.ns, Names.ns, Rewriting.ns]
+    [ShowPaths.ns, Names.ns, Rewriting.ns]
     (DotSyntax.ns:kernelTypesNamespaces) $
     Just "Functions for converting Hydra terms to Graphviz DOT graphs"
   where
@@ -106,8 +106,8 @@ module_ = Module ns elements
       toTermDefinition toNodeId,
       toTermDefinition toNodeOrSubgraph,
       toTermDefinition termLabel,
-      toTermDefinition termToAccessorDotStmts,
-      toTermDefinition termToAccessorDotGraph,
+      toTermDefinition termToSubtermDotStmts,
+      toTermDefinition termToSubtermDotGraph,
       toTermDefinition termToDotStmts,
       toTermDefinition termToDotGraph]
 
@@ -272,37 +272,37 @@ termLabel = define "termLabel" $
           string ")"])]
       @@ var "term"
 
--- | Convert a term to accessor-style DOT statements
-termToAccessorDotStmts :: TBinding (M.Map Namespace String -> Term -> [Dot.Stmt])
-termToAccessorDotStmts = define "termToAccessorDotStmts" $
-  doc "Convert a term to accessor-style DOT statements" $
+-- | Convert a term to subterm-style DOT statements
+termToSubtermDotStmts :: TBinding (M.Map Namespace String -> Term -> [Dot.Stmt])
+termToSubtermDotStmts = define "termToSubtermDotStmts" $
+  doc "Convert a term to subterm-style DOT statements" $
   "namespaces" ~> "term" ~> lets [
-    "accessorGraph">: ShowAccessors.termToAccessorGraph @@ var "namespaces" @@ var "term",
-    "nodes">: project _AccessorGraph _AccessorGraph_nodes @@ var "accessorGraph",
-    "edges">: project _AccessorGraph _AccessorGraph_edges @@ var "accessorGraph",
+    "accessorGraph">: ShowPaths.termToSubtermGraph @@ var "namespaces" @@ var "term",
+    "nodes">: project _SubtermGraph _SubtermGraph_nodes @@ var "accessorGraph",
+    "edges">: project _SubtermGraph _SubtermGraph_edges @@ var "accessorGraph",
     "nodeStmt">: "node" ~>
       inject Dot._Stmt Dot._Stmt_node (record Dot._NodeStmt [
-        Dot._NodeStmt_id>>: toNodeId @@ wrap Dot._Id (project _AccessorNode _AccessorNode_id @@ var "node"),
-        Dot._NodeStmt_attributes>>: just $ wrap Dot._AttrList (list [list [labelAttr @@ (project _AccessorNode _AccessorNode_label @@ var "node")]])]),
+        Dot._NodeStmt_id>>: toNodeId @@ wrap Dot._Id (project _SubtermNode _SubtermNode_id @@ var "node"),
+        Dot._NodeStmt_attributes>>: just $ wrap Dot._AttrList (list [list [labelAttr @@ (project _SubtermNode _SubtermNode_label @@ var "node")]])]),
     "edgeStmt">: "edge" ~> lets [
-      "lab1">: project _AccessorNode _AccessorNode_id @@ (project _AccessorEdge _AccessorEdge_source @@ var "edge"),
-      "lab2">: project _AccessorNode _AccessorNode_id @@ (project _AccessorEdge _AccessorEdge_target @@ var "edge"),
-      "pathAccessors">: unwrap _AccessorPath @@ (project _AccessorEdge _AccessorEdge_path @@ var "edge"),
-      "showPath">: Strings.intercalate (string "/") (Maybes.cat (Lists.map ShowAccessors.termAccessor (var "pathAccessors")))]
+      "lab1">: project _SubtermNode _SubtermNode_id @@ (project _SubtermEdge _SubtermEdge_source @@ var "edge"),
+      "lab2">: project _SubtermNode _SubtermNode_id @@ (project _SubtermEdge _SubtermEdge_target @@ var "edge"),
+      "pathAccessors">: unwrap _SubtermPath @@ (project _SubtermEdge _SubtermEdge_path @@ var "edge"),
+      "showPath">: Strings.intercalate (string "/") (Maybes.cat (Lists.map ShowPaths.subtermStep (var "pathAccessors")))]
       $ toEdgeStmt @@ wrap Dot._Id (var "lab1") @@ wrap Dot._Id (var "lab2") @@
           (just $ wrap Dot._AttrList (list [list [labelAttr @@ var "showPath"]]))]
     $ Lists.concat2 (Lists.map (var "nodeStmt") (var "nodes")) (Lists.map (var "edgeStmt") (var "edges"))
 
--- | Convert a term to an accessor-style DOT graph
-termToAccessorDotGraph :: TBinding (Term -> Dot.Graph)
-termToAccessorDotGraph = define "termToAccessorDotGraph" $
-  doc "Convert a term to an accessor-style DOT graph" $
+-- | Convert a term to an subterm-style DOT graph
+termToSubtermDotGraph :: TBinding (Term -> Dot.Graph)
+termToSubtermDotGraph = define "termToSubtermDotGraph" $
+  doc "Convert a term to an subterm-style DOT graph" $
   "term" ~>
     record Dot._Graph [
       Dot._Graph_strict>>: false,
       Dot._Graph_directed>>: true,
       Dot._Graph_id>>: nothing,
-      Dot._Graph_statements>>: termToAccessorDotStmts @@ standardNamespaces @@ var "term"]
+      Dot._Graph_statements>>: termToSubtermDotStmts @@ standardNamespaces @@ var "term"]
 
 -- | Convert a term to full DOT statements with structural detail
 termToDotStmts :: TBinding (M.Map Namespace String -> Term -> [Dot.Stmt])
@@ -346,7 +346,7 @@ termToDotStmts = define "termToDotStmts" $
       -- Edge to parent (accessor edge)
       "toAccessorEdgeStmt">: lambdas ["acc", "sty", "i1", "i2"] $
         toEdgeStmt @@ var "i1" @@ var "i2" @@
-          (Maybes.map ("s" ~> labelAttrs @@ var "sty" @@ var "s") (ShowAccessors.termAccessor @@ var "acc")),
+          (Maybes.map ("s" ~> labelAttrs @@ var "sty" @@ var "s") (ShowPaths.subtermStep @@ var "acc")),
       "edgeAttrs">: "lab" ~>
         wrap Dot._AttrList (list [list [record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "label"), Dot._EqualityPair_right>>: wrap Dot._Id (var "lab")]]]),
       "parentStmt">: Maybes.maybe
@@ -358,7 +358,7 @@ termToDotStmts = define "termToDotStmts" $
       "dflt">: Lists.foldl
         (var "encode" @@ nothing @@ false @@ var "ids" @@ just (var "selfId"))
         (pair (var "selfStmts") (var "selfVisited"))
-        (Rewriting.subtermsWithAccessors @@ var "currentTerm")]
+        (Rewriting.subtermsWithSteps @@ var "currentTerm")]
       -- Main case dispatch on the current term
       $ match _Term (Just $ var "dflt") [
           _Term_function>>: "fun" ~>
@@ -380,7 +380,7 @@ termToDotStmts = define "termToDotStmts" $
                   Dot._EdgeStmt_attributes>>: just $ var "edgeAttrs" @@ string "var"])]
                 $ var "encode" @@ nothing @@ false @@ var "ids1" @@ just (var "selfId")
                     @@ pair (Lists.concat (list [var "selfStmts", list [var "varNodeStmt", var "varEdgeStmt"]])) (var "visited1")
-                    @@ pair Accessors.termAccessorLambdaBody (var "body")]
+                    @@ pair Paths.subtermStepLambdaBody (var "body")]
               @@ var "fun",
           _Term_let>>: "letExpr" ~> lets [
             "bindings">: Core.letBindings $ var "letExpr",
@@ -405,12 +405,12 @@ termToDotStmts = define "termToDotStmts" $
               $ var "encode"
                   @@ just (pair (var "blab") nodeStyleElement) @@ true @@ var "ids1" @@ just (var "selfId")
                   @@ var "stVis"
-                  @@ pair (Accessors.termAccessorLetBinding (var "bname")) (var "bterm"),
+                  @@ pair (Paths.subtermStepLetBinding (var "bname")) (var "bterm"),
             "stmts1">: Lists.foldl (var "addBindingTerm") (pair (var "selfStmts") (var "selfVisited")) (var "bindings")]
             -- Encode the let body
             $ var "encode" @@ nothing @@ false @@ var "ids1" @@ just (var "selfId")
                 @@ var "stmts1"
-                @@ pair Accessors.termAccessorLetBody (var "env"),
+                @@ pair Paths.subtermStepLetBody (var "env"),
           _Term_variable>>: "name" ~>
             Maybes.maybe
               (var "dflt")
@@ -422,7 +422,7 @@ termToDotStmts = define "termToDotStmts" $
     $ Pairs.first $ var "encode"
         @@ nothing @@ false @@ Maps.empty @@ nothing
         @@ pair (list ([] :: [TTerm Dot.Stmt])) Sets.empty
-        @@ pair Accessors.termAccessorAnnotatedBody (var "term")
+        @@ pair Paths.subtermStepAnnotatedBody (var "term")
 
 -- | Convert a term to a full DOT graph
 termToDotGraph :: TBinding (Term -> Dot.Graph)

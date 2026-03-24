@@ -9132,7 +9132,7 @@
     "hydra.coderUtils"],
   "typeDependencies": [
     "hydra.ext.lisp.syntax",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

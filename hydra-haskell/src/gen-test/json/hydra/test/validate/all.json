@@ -36,7 +36,7 @@
   "namespace": "hydra.test.validate.all",
   "termDependencies": ["hydra.test.validate.core"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

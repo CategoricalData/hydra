@@ -473,16 +473,16 @@ public interface Hoisting {
       let0);
   }
 
-  static hydra.core.Term hoistSubterms(java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, hydra.core.Term>, Boolean> shouldHoist, hydra.graph.Graph cx0, hydra.core.Term term0) {
-    java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>> processImmediateSubterm = (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>>) (cx -> (java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>) (counter -> (java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>) (namePrefix -> (java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>) (pathPrefix -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>) (subterm -> {
+  static hydra.core.Term hoistSubterms(java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, hydra.core.Term>, Boolean> shouldHoist, hydra.graph.Graph cx0, hydra.core.Term term0) {
+    java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>> processImmediateSubterm = (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>>) (cx -> (java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>) (counter -> (java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>) (namePrefix -> (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>) (pathPrefix -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>) (subterm -> {
       hydra.util.PersistentSet<hydra.core.Name> baselineLambdaVars = (cx).lambdaVariables;
-      java.util.function.Function<java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>>>> collectAndReplace = (java.util.function.Function<java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>>>>) (recurse -> (java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>>>) (path -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>>) (cxInner -> (java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (term -> {
+      java.util.function.Function<java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>>>> collectAndReplace = (java.util.function.Function<java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>>>>) (recurse -> (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>>>) (path -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>>) (cxInner -> (java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (term -> {
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> collectedBindings = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(acc));
         hydra.util.Lazy<Integer> currentCounter = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(acc));
         return (term).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
           public hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term> otherwise(hydra.core.Term instance) {
-            hydra.util.Lazy<hydra.util.ConsList<hydra.accessors.TermAccessor>> fullPath = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+            hydra.util.Lazy<hydra.util.ConsList<hydra.paths.SubtermStep>> fullPath = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
               pathPrefix,
               path));
             hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term> result2 = (recurse).apply(acc).apply(term);
@@ -491,7 +491,7 @@ public interface Hoisting {
             hydra.util.Lazy<Integer> newCounter = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(newAcc.get()));
             hydra.util.Lazy<hydra.core.Term> processedTerm = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result2));
             return hydra.lib.logic.IfElse.lazy(
-              (shouldHoist).apply((hydra.util.Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, hydra.core.Term>(fullPath.get(), processedTerm.get())))),
+              (shouldHoist).apply((hydra.util.Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, hydra.core.Term>(fullPath.get(), processedTerm.get())))),
               () -> ((java.util.function.Supplier<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
                 hydra.core.Name proposedName = new hydra.core.Name(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
                   "_hoist_",
@@ -592,7 +592,7 @@ public interface Hoisting {
         })).get());
     })))));
     return hydra.lib.pairs.Second.apply(hydra.Rewriting.rewriteAndFoldTermWithGraphAndPath(
-      (java.util.function.Function<java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>>) (v1 -> (java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>) (v2 -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>) (v3 -> (java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>) (v4 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>) (v5 -> hydra.Hoisting.hoistSubterms_rewrite(
+      (java.util.function.Function<java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>>) (v1 -> (java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>) (v2 -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>) (v3 -> (java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>) (v4 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>) (v5 -> hydra.Hoisting.hoistSubterms_rewrite(
         processImmediateSubterm,
         v1,
         v2,
@@ -608,12 +608,12 @@ public interface Hoisting {
     return hydra.lib.pairs.First.apply(recursed);
   }
 
-  static <T0> hydra.util.Pair<T0, hydra.core.Term> hoistSubterms_processLetTerm(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>> processImmediateSubterm, hydra.graph.Graph cx, T0 counter, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.core.Let lt) {
+  static <T0> hydra.util.Pair<T0, hydra.core.Term> hoistSubterms_processLetTerm(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>> processImmediateSubterm, hydra.graph.Graph cx, T0 counter, hydra.util.ConsList<hydra.paths.SubtermStep> path, hydra.core.Let lt) {
     hydra.util.ConsList<hydra.core.Binding> bindings = (lt).bindings;
     hydra.core.Term body = (lt).body;
-    hydra.util.Lazy<hydra.util.ConsList<hydra.accessors.TermAccessor>> bodyPathPrefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+    hydra.util.Lazy<hydra.util.ConsList<hydra.paths.SubtermStep>> bodyPathPrefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.LetBody())));
+      hydra.util.ConsList.of(new hydra.paths.SubtermStep.LetBody())));
     hydra.util.Lazy<String> firstBindingName = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
       () -> "body",
       (java.util.function.Function<hydra.core.Binding, String>) (b -> hydra.lib.strings.Intercalate.apply(
@@ -627,9 +627,9 @@ public interface Hoisting {
       "_body");
     hydra.util.Pair<Integer, hydra.core.Term> bodyResult = (processImmediateSubterm).apply(cx).apply(1).apply(bodyPrefix).apply(bodyPathPrefix.get()).apply(body);
     java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, java.util.function.Function<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>> processBinding = (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, java.util.function.Function<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>>) (acc -> (java.util.function.Function<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>) (binding -> {
-      hydra.util.Lazy<hydra.util.ConsList<hydra.accessors.TermAccessor>> bindingPathPrefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+      hydra.util.Lazy<hydra.util.ConsList<hydra.paths.SubtermStep>> bindingPathPrefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
         path,
-        hydra.util.ConsList.of(new hydra.accessors.TermAccessor.LetBinding((binding).name))));
+        hydra.util.ConsList.of(new hydra.paths.SubtermStep.LetBinding((binding).name))));
       String namePrefix = hydra.lib.strings.Intercalate.apply(
         "_",
         hydra.lib.strings.SplitOn.apply(
@@ -655,7 +655,7 @@ public interface Hoisting {
     return (recurse).apply(counter).apply(term);
   }
 
-  static <T0, T1> hydra.util.Pair<T1, hydra.core.Term> hoistSubterms_rewrite(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>> processImmediateSubterm, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.graph.Graph cx, T0 counter, hydra.core.Term term) {
+  static <T0, T1> hydra.util.Pair<T1, hydra.core.Term> hoistSubterms_rewrite(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, java.util.function.Function<hydra.core.Term, hydra.util.Pair<Integer, hydra.core.Term>>>>>> processImmediateSubterm, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, hydra.util.ConsList<hydra.paths.SubtermStep> path, hydra.graph.Graph cx, T0 counter, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<T1, hydra.core.Term> otherwise(hydra.core.Term instance) {
@@ -690,15 +690,15 @@ public interface Hoisting {
     });
   }
 
-  static Boolean isApplicationFunction(hydra.accessors.TermAccessor acc) {
-    return (acc).accept(new hydra.accessors.TermAccessor.PartialVisitor<>() {
+  static Boolean isApplicationFunction(hydra.paths.SubtermStep acc) {
+    return (acc).accept(new hydra.paths.SubtermStep.PartialVisitor<>() {
       @Override
-      public Boolean otherwise(hydra.accessors.TermAccessor instance) {
+      public Boolean otherwise(hydra.paths.SubtermStep instance) {
         return false;
       }
 
       @Override
-      public Boolean visit(hydra.accessors.TermAccessor.ApplicationFunction ignored) {
+      public Boolean visit(hydra.paths.SubtermStep.ApplicationFunction ignored) {
         return true;
       }
     });
@@ -728,15 +728,15 @@ public interface Hoisting {
     });
   }
 
-  static Boolean isLambdaBody(hydra.accessors.TermAccessor acc) {
-    return (acc).accept(new hydra.accessors.TermAccessor.PartialVisitor<>() {
+  static Boolean isLambdaBody(hydra.paths.SubtermStep acc) {
+    return (acc).accept(new hydra.paths.SubtermStep.PartialVisitor<>() {
       @Override
-      public Boolean otherwise(hydra.accessors.TermAccessor instance) {
+      public Boolean otherwise(hydra.paths.SubtermStep instance) {
         return false;
       }
 
       @Override
-      public Boolean visit(hydra.accessors.TermAccessor.LambdaBody ignored) {
+      public Boolean visit(hydra.paths.SubtermStep.LambdaBody ignored) {
         return true;
       }
     });
@@ -770,25 +770,25 @@ public interface Hoisting {
     });
   }
 
-  static hydra.util.ConsList<hydra.accessors.TermAccessor> normalizePathForHoisting(hydra.util.ConsList<hydra.accessors.TermAccessor> path) {
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, hydra.util.ConsList<hydra.accessors.TermAccessor>>> go = new java.util.concurrent.atomic.AtomicReference<>();
-    go.set((java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, hydra.util.ConsList<hydra.accessors.TermAccessor>>) (remaining -> hydra.lib.logic.IfElse.lazy(
+  static hydra.util.ConsList<hydra.paths.SubtermStep> normalizePathForHoisting(hydra.util.ConsList<hydra.paths.SubtermStep> path) {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, hydra.util.ConsList<hydra.paths.SubtermStep>>> go = new java.util.concurrent.atomic.AtomicReference<>();
+    go.set((java.util.function.Function<hydra.util.ConsList<hydra.paths.SubtermStep>, hydra.util.ConsList<hydra.paths.SubtermStep>>) (remaining -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.Or.apply(
         hydra.lib.lists.Null.apply(remaining),
         hydra.lib.lists.Null.apply(hydra.lib.lists.Tail.apply(remaining))),
       () -> remaining,
-      () -> ((java.util.function.Supplier<hydra.util.ConsList<hydra.accessors.TermAccessor>>) (() -> {
-        hydra.util.Lazy<hydra.accessors.TermAccessor> first = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(remaining));
-        return ((java.util.function.Supplier<hydra.util.ConsList<hydra.accessors.TermAccessor>>) (() -> {
-          hydra.util.Lazy<hydra.accessors.TermAccessor> second = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(hydra.lib.lists.Tail.apply(remaining)));
-          return ((java.util.function.Supplier<hydra.util.ConsList<hydra.accessors.TermAccessor>>) (() -> {
-            hydra.util.Lazy<hydra.util.ConsList<hydra.accessors.TermAccessor>> rest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(hydra.lib.lists.Tail.apply(remaining)));
+      () -> ((java.util.function.Supplier<hydra.util.ConsList<hydra.paths.SubtermStep>>) (() -> {
+        hydra.util.Lazy<hydra.paths.SubtermStep> first = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(remaining));
+        return ((java.util.function.Supplier<hydra.util.ConsList<hydra.paths.SubtermStep>>) (() -> {
+          hydra.util.Lazy<hydra.paths.SubtermStep> second = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(hydra.lib.lists.Tail.apply(remaining)));
+          return ((java.util.function.Supplier<hydra.util.ConsList<hydra.paths.SubtermStep>>) (() -> {
+            hydra.util.Lazy<hydra.util.ConsList<hydra.paths.SubtermStep>> rest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(hydra.lib.lists.Tail.apply(remaining)));
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.logic.And.apply(
                 hydra.Hoisting.isApplicationFunction(first.get()),
                 hydra.Hoisting.isLambdaBody(second.get())),
               () -> hydra.lib.lists.Cons.apply(
-                new hydra.accessors.TermAccessor.LetBody(),
+                new hydra.paths.SubtermStep.LetBody(),
                 go.get().apply(rest.get())),
               () -> hydra.lib.lists.Cons.apply(
                 first.get(),
@@ -803,8 +803,8 @@ public interface Hoisting {
     return true;
   }
 
-  static Boolean shouldHoistCaseStatement(hydra.util.Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, hydra.core.Term> pathAndTerm) {
-    hydra.util.Lazy<hydra.util.ConsList<hydra.accessors.TermAccessor>> path = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pathAndTerm));
+  static Boolean shouldHoistCaseStatement(hydra.util.Pair<hydra.util.ConsList<hydra.paths.SubtermStep>, hydra.core.Term> pathAndTerm) {
+    hydra.util.Lazy<hydra.util.ConsList<hydra.paths.SubtermStep>> path = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pathAndTerm));
     hydra.util.Lazy<hydra.core.Term> term = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pathAndTerm));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.Not.apply(hydra.lib.logic.Or.apply(
@@ -813,7 +813,7 @@ public interface Hoisting {
       () -> false,
       () -> ((java.util.function.Supplier<Boolean>) (() -> {
         hydra.util.Lazy<hydra.util.Pair<Boolean, Boolean>> finalState = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-          (java.util.function.Function<hydra.util.Pair<Boolean, Boolean>, java.util.function.Function<hydra.accessors.TermAccessor, hydra.util.Pair<Boolean, Boolean>>>) (st -> (java.util.function.Function<hydra.accessors.TermAccessor, hydra.util.Pair<Boolean, Boolean>>) (acc -> hydra.Hoisting.updateHoistState(
+          (java.util.function.Function<hydra.util.Pair<Boolean, Boolean>, java.util.function.Function<hydra.paths.SubtermStep, hydra.util.Pair<Boolean, Boolean>>>) (st -> (java.util.function.Function<hydra.paths.SubtermStep, hydra.util.Pair<Boolean, Boolean>>) (acc -> hydra.Hoisting.updateHoistState(
             acc,
             st))),
           (hydra.util.Pair<Boolean, Boolean>) ((hydra.util.Pair<Boolean, Boolean>) (new hydra.util.Pair<Boolean, Boolean>(true, false))),
@@ -830,35 +830,35 @@ public interface Hoisting {
         binding));
   }
 
-  static hydra.util.Pair<Boolean, Boolean> updateHoistState(hydra.accessors.TermAccessor accessor, hydra.util.Pair<Boolean, Boolean> state) {
+  static hydra.util.Pair<Boolean, Boolean> updateHoistState(hydra.paths.SubtermStep accessor, hydra.util.Pair<Boolean, Boolean> state) {
     hydra.util.Lazy<Boolean> atTop = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(state));
     hydra.util.Lazy<Boolean> usedApp = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(state));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.Not.apply(atTop.get()),
       () -> (hydra.util.Pair<Boolean, Boolean>) ((hydra.util.Pair<Boolean, Boolean>) (new hydra.util.Pair<Boolean, Boolean>(false, usedApp.get()))),
-      () -> (accessor).accept(new hydra.accessors.TermAccessor.PartialVisitor<>() {
+      () -> (accessor).accept(new hydra.paths.SubtermStep.PartialVisitor<>() {
         @Override
-        public hydra.util.Pair<Boolean, Boolean> otherwise(hydra.accessors.TermAccessor instance) {
+        public hydra.util.Pair<Boolean, Boolean> otherwise(hydra.paths.SubtermStep instance) {
           return (hydra.util.Pair<Boolean, Boolean>) ((hydra.util.Pair<Boolean, Boolean>) (new hydra.util.Pair<Boolean, Boolean>(false, usedApp.get())));
         }
 
         @Override
-        public hydra.util.Pair<Boolean, Boolean> visit(hydra.accessors.TermAccessor.AnnotatedBody ignored) {
+        public hydra.util.Pair<Boolean, Boolean> visit(hydra.paths.SubtermStep.AnnotatedBody ignored) {
           return (hydra.util.Pair<Boolean, Boolean>) ((hydra.util.Pair<Boolean, Boolean>) (new hydra.util.Pair<Boolean, Boolean>(true, usedApp.get())));
         }
 
         @Override
-        public hydra.util.Pair<Boolean, Boolean> visit(hydra.accessors.TermAccessor.LetBody ignored) {
+        public hydra.util.Pair<Boolean, Boolean> visit(hydra.paths.SubtermStep.LetBody ignored) {
           return (hydra.util.Pair<Boolean, Boolean>) ((hydra.util.Pair<Boolean, Boolean>) (new hydra.util.Pair<Boolean, Boolean>(true, usedApp.get())));
         }
 
         @Override
-        public hydra.util.Pair<Boolean, Boolean> visit(hydra.accessors.TermAccessor.LetBinding ignored) {
+        public hydra.util.Pair<Boolean, Boolean> visit(hydra.paths.SubtermStep.LetBinding ignored) {
           return (hydra.util.Pair<Boolean, Boolean>) ((hydra.util.Pair<Boolean, Boolean>) (new hydra.util.Pair<Boolean, Boolean>(true, usedApp.get())));
         }
 
         @Override
-        public hydra.util.Pair<Boolean, Boolean> visit(hydra.accessors.TermAccessor.LambdaBody ignored) {
+        public hydra.util.Pair<Boolean, Boolean> visit(hydra.paths.SubtermStep.LambdaBody ignored) {
           return hydra.lib.logic.IfElse.lazy(
             usedApp.get(),
             () -> (hydra.util.Pair<Boolean, Boolean>) ((hydra.util.Pair<Boolean, Boolean>) (new hydra.util.Pair<Boolean, Boolean>(false, true))),
@@ -866,7 +866,7 @@ public interface Hoisting {
         }
 
         @Override
-        public hydra.util.Pair<Boolean, Boolean> visit(hydra.accessors.TermAccessor.UnionCasesBranch ignored) {
+        public hydra.util.Pair<Boolean, Boolean> visit(hydra.paths.SubtermStep.UnionCasesBranch ignored) {
           return hydra.lib.logic.IfElse.lazy(
             usedApp.get(),
             () -> (hydra.util.Pair<Boolean, Boolean>) ((hydra.util.Pair<Boolean, Boolean>) (new hydra.util.Pair<Boolean, Boolean>(false, true))),
@@ -874,7 +874,7 @@ public interface Hoisting {
         }
 
         @Override
-        public hydra.util.Pair<Boolean, Boolean> visit(hydra.accessors.TermAccessor.UnionCasesDefault ignored) {
+        public hydra.util.Pair<Boolean, Boolean> visit(hydra.paths.SubtermStep.UnionCasesDefault ignored) {
           return hydra.lib.logic.IfElse.lazy(
             usedApp.get(),
             () -> (hydra.util.Pair<Boolean, Boolean>) ((hydra.util.Pair<Boolean, Boolean>) (new hydra.util.Pair<Boolean, Boolean>(false, true))),
@@ -882,7 +882,7 @@ public interface Hoisting {
         }
 
         @Override
-        public hydra.util.Pair<Boolean, Boolean> visit(hydra.accessors.TermAccessor.ApplicationFunction ignored) {
+        public hydra.util.Pair<Boolean, Boolean> visit(hydra.paths.SubtermStep.ApplicationFunction ignored) {
           return hydra.lib.logic.IfElse.lazy(
             usedApp.get(),
             () -> (hydra.util.Pair<Boolean, Boolean>) ((hydra.util.Pair<Boolean, Boolean>) (new hydra.util.Pair<Boolean, Boolean>(false, true))),
@@ -890,7 +890,7 @@ public interface Hoisting {
         }
 
         @Override
-        public hydra.util.Pair<Boolean, Boolean> visit(hydra.accessors.TermAccessor.ApplicationArgument ignored) {
+        public hydra.util.Pair<Boolean, Boolean> visit(hydra.paths.SubtermStep.ApplicationArgument ignored) {
           return (hydra.util.Pair<Boolean, Boolean>) ((hydra.util.Pair<Boolean, Boolean>) (new hydra.util.Pair<Boolean, Boolean>(false, usedApp.get())));
         }
       }));

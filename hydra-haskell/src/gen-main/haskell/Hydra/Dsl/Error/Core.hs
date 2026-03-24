@@ -4,9 +4,9 @@
 
 module Hydra.Dsl.Error.Core where
 
-import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Core as Core_
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -16,7 +16,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-constantConditionError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Bool -> Phantoms.TTerm Core_.ConstantConditionError
+constantConditionError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Bool -> Phantoms.TTerm Core_.ConstantConditionError
 constantConditionError location value =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.ConstantConditionError"),
@@ -28,7 +28,7 @@ constantConditionError location value =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Phantoms.unTTerm value)}]}))
 
-constantConditionErrorLocation :: Phantoms.TTerm Core_.ConstantConditionError -> Phantoms.TTerm Accessors.AccessorPath
+constantConditionErrorLocation :: Phantoms.TTerm Core_.ConstantConditionError -> Phantoms.TTerm Paths.SubtermPath
 constantConditionErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -44,7 +44,7 @@ constantConditionErrorValue x =
         Core.projectionField = (Core.Name "value")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-constantConditionErrorWithLocation :: Phantoms.TTerm Core_.ConstantConditionError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.ConstantConditionError
+constantConditionErrorWithLocation :: Phantoms.TTerm Core_.ConstantConditionError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.ConstantConditionError
 constantConditionErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.ConstantConditionError"),
@@ -76,7 +76,7 @@ constantConditionErrorWithValue original newVal =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-duplicateBindingError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.DuplicateBindingError
+duplicateBindingError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.DuplicateBindingError
 duplicateBindingError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.DuplicateBindingError"),
@@ -88,7 +88,7 @@ duplicateBindingError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-duplicateBindingErrorLocation :: Phantoms.TTerm Core_.DuplicateBindingError -> Phantoms.TTerm Accessors.AccessorPath
+duplicateBindingErrorLocation :: Phantoms.TTerm Core_.DuplicateBindingError -> Phantoms.TTerm Paths.SubtermPath
 duplicateBindingErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -104,7 +104,7 @@ duplicateBindingErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-duplicateBindingErrorWithLocation :: Phantoms.TTerm Core_.DuplicateBindingError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.DuplicateBindingError
+duplicateBindingErrorWithLocation :: Phantoms.TTerm Core_.DuplicateBindingError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.DuplicateBindingError
 duplicateBindingErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.DuplicateBindingError"),
@@ -136,7 +136,7 @@ duplicateBindingErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-duplicateFieldError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.DuplicateFieldError
+duplicateFieldError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.DuplicateFieldError
 duplicateFieldError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.DuplicateFieldError"),
@@ -148,7 +148,7 @@ duplicateFieldError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-duplicateFieldErrorLocation :: Phantoms.TTerm Core_.DuplicateFieldError -> Phantoms.TTerm Accessors.AccessorPath
+duplicateFieldErrorLocation :: Phantoms.TTerm Core_.DuplicateFieldError -> Phantoms.TTerm Paths.SubtermPath
 duplicateFieldErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -164,7 +164,7 @@ duplicateFieldErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-duplicateFieldErrorWithLocation :: Phantoms.TTerm Core_.DuplicateFieldError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.DuplicateFieldError
+duplicateFieldErrorWithLocation :: Phantoms.TTerm Core_.DuplicateFieldError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.DuplicateFieldError
 duplicateFieldErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.DuplicateFieldError"),
@@ -196,7 +196,7 @@ duplicateFieldErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-duplicateRecordTypeFieldNamesError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.DuplicateRecordTypeFieldNamesError
+duplicateRecordTypeFieldNamesError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.DuplicateRecordTypeFieldNamesError
 duplicateRecordTypeFieldNamesError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.DuplicateRecordTypeFieldNamesError"),
@@ -208,7 +208,7 @@ duplicateRecordTypeFieldNamesError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-duplicateRecordTypeFieldNamesErrorLocation :: Phantoms.TTerm Core_.DuplicateRecordTypeFieldNamesError -> Phantoms.TTerm Accessors.AccessorPath
+duplicateRecordTypeFieldNamesErrorLocation :: Phantoms.TTerm Core_.DuplicateRecordTypeFieldNamesError -> Phantoms.TTerm Paths.SubtermPath
 duplicateRecordTypeFieldNamesErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -224,7 +224,7 @@ duplicateRecordTypeFieldNamesErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-duplicateRecordTypeFieldNamesErrorWithLocation :: Phantoms.TTerm Core_.DuplicateRecordTypeFieldNamesError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.DuplicateRecordTypeFieldNamesError
+duplicateRecordTypeFieldNamesErrorWithLocation :: Phantoms.TTerm Core_.DuplicateRecordTypeFieldNamesError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.DuplicateRecordTypeFieldNamesError
 duplicateRecordTypeFieldNamesErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.DuplicateRecordTypeFieldNamesError"),
@@ -256,7 +256,7 @@ duplicateRecordTypeFieldNamesErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-duplicateUnionTypeFieldNamesError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.DuplicateUnionTypeFieldNamesError
+duplicateUnionTypeFieldNamesError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.DuplicateUnionTypeFieldNamesError
 duplicateUnionTypeFieldNamesError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.DuplicateUnionTypeFieldNamesError"),
@@ -268,7 +268,7 @@ duplicateUnionTypeFieldNamesError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-duplicateUnionTypeFieldNamesErrorLocation :: Phantoms.TTerm Core_.DuplicateUnionTypeFieldNamesError -> Phantoms.TTerm Accessors.AccessorPath
+duplicateUnionTypeFieldNamesErrorLocation :: Phantoms.TTerm Core_.DuplicateUnionTypeFieldNamesError -> Phantoms.TTerm Paths.SubtermPath
 duplicateUnionTypeFieldNamesErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -284,7 +284,7 @@ duplicateUnionTypeFieldNamesErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-duplicateUnionTypeFieldNamesErrorWithLocation :: Phantoms.TTerm Core_.DuplicateUnionTypeFieldNamesError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.DuplicateUnionTypeFieldNamesError
+duplicateUnionTypeFieldNamesErrorWithLocation :: Phantoms.TTerm Core_.DuplicateUnionTypeFieldNamesError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.DuplicateUnionTypeFieldNamesError
 duplicateUnionTypeFieldNamesErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.DuplicateUnionTypeFieldNamesError"),
@@ -316,7 +316,7 @@ duplicateUnionTypeFieldNamesErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-emptyCaseStatementError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.EmptyCaseStatementError
+emptyCaseStatementError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.EmptyCaseStatementError
 emptyCaseStatementError location typeName =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyCaseStatementError"),
@@ -328,7 +328,7 @@ emptyCaseStatementError location typeName =
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Phantoms.unTTerm typeName)}]}))
 
-emptyCaseStatementErrorLocation :: Phantoms.TTerm Core_.EmptyCaseStatementError -> Phantoms.TTerm Accessors.AccessorPath
+emptyCaseStatementErrorLocation :: Phantoms.TTerm Core_.EmptyCaseStatementError -> Phantoms.TTerm Paths.SubtermPath
 emptyCaseStatementErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -344,7 +344,7 @@ emptyCaseStatementErrorTypeName x =
         Core.projectionField = (Core.Name "typeName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-emptyCaseStatementErrorWithLocation :: Phantoms.TTerm Core_.EmptyCaseStatementError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.EmptyCaseStatementError
+emptyCaseStatementErrorWithLocation :: Phantoms.TTerm Core_.EmptyCaseStatementError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.EmptyCaseStatementError
 emptyCaseStatementErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyCaseStatementError"),
@@ -376,7 +376,7 @@ emptyCaseStatementErrorWithTypeName original newVal =
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-emptyLetBindingsError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.EmptyLetBindingsError
+emptyLetBindingsError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.EmptyLetBindingsError
 emptyLetBindingsError location =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyLetBindingsError"),
@@ -385,7 +385,7 @@ emptyLetBindingsError location =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm location)}]}))
 
-emptyLetBindingsErrorLocation :: Phantoms.TTerm Core_.EmptyLetBindingsError -> Phantoms.TTerm Accessors.AccessorPath
+emptyLetBindingsErrorLocation :: Phantoms.TTerm Core_.EmptyLetBindingsError -> Phantoms.TTerm Paths.SubtermPath
 emptyLetBindingsErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -393,7 +393,7 @@ emptyLetBindingsErrorLocation x =
         Core.projectionField = (Core.Name "location")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-emptyLetBindingsErrorWithLocation :: Phantoms.TTerm Core_.EmptyLetBindingsError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.EmptyLetBindingsError
+emptyLetBindingsErrorWithLocation :: Phantoms.TTerm Core_.EmptyLetBindingsError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.EmptyLetBindingsError
 emptyLetBindingsErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyLetBindingsError"),
@@ -402,7 +402,7 @@ emptyLetBindingsErrorWithLocation original newVal =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-emptyRecordTypeError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.EmptyRecordTypeError
+emptyRecordTypeError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.EmptyRecordTypeError
 emptyRecordTypeError location =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyRecordTypeError"),
@@ -411,7 +411,7 @@ emptyRecordTypeError location =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm location)}]}))
 
-emptyRecordTypeErrorLocation :: Phantoms.TTerm Core_.EmptyRecordTypeError -> Phantoms.TTerm Accessors.AccessorPath
+emptyRecordTypeErrorLocation :: Phantoms.TTerm Core_.EmptyRecordTypeError -> Phantoms.TTerm Paths.SubtermPath
 emptyRecordTypeErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -419,7 +419,7 @@ emptyRecordTypeErrorLocation x =
         Core.projectionField = (Core.Name "location")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-emptyRecordTypeErrorWithLocation :: Phantoms.TTerm Core_.EmptyRecordTypeError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.EmptyRecordTypeError
+emptyRecordTypeErrorWithLocation :: Phantoms.TTerm Core_.EmptyRecordTypeError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.EmptyRecordTypeError
 emptyRecordTypeErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyRecordTypeError"),
@@ -428,7 +428,7 @@ emptyRecordTypeErrorWithLocation original newVal =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-emptyTermAnnotationError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.EmptyTermAnnotationError
+emptyTermAnnotationError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.EmptyTermAnnotationError
 emptyTermAnnotationError location =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyTermAnnotationError"),
@@ -437,7 +437,7 @@ emptyTermAnnotationError location =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm location)}]}))
 
-emptyTermAnnotationErrorLocation :: Phantoms.TTerm Core_.EmptyTermAnnotationError -> Phantoms.TTerm Accessors.AccessorPath
+emptyTermAnnotationErrorLocation :: Phantoms.TTerm Core_.EmptyTermAnnotationError -> Phantoms.TTerm Paths.SubtermPath
 emptyTermAnnotationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -445,7 +445,7 @@ emptyTermAnnotationErrorLocation x =
         Core.projectionField = (Core.Name "location")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-emptyTermAnnotationErrorWithLocation :: Phantoms.TTerm Core_.EmptyTermAnnotationError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.EmptyTermAnnotationError
+emptyTermAnnotationErrorWithLocation :: Phantoms.TTerm Core_.EmptyTermAnnotationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.EmptyTermAnnotationError
 emptyTermAnnotationErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyTermAnnotationError"),
@@ -454,7 +454,7 @@ emptyTermAnnotationErrorWithLocation original newVal =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-emptyTypeAnnotationError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.EmptyTypeAnnotationError
+emptyTypeAnnotationError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.EmptyTypeAnnotationError
 emptyTypeAnnotationError location =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyTypeAnnotationError"),
@@ -463,7 +463,7 @@ emptyTypeAnnotationError location =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm location)}]}))
 
-emptyTypeAnnotationErrorLocation :: Phantoms.TTerm Core_.EmptyTypeAnnotationError -> Phantoms.TTerm Accessors.AccessorPath
+emptyTypeAnnotationErrorLocation :: Phantoms.TTerm Core_.EmptyTypeAnnotationError -> Phantoms.TTerm Paths.SubtermPath
 emptyTypeAnnotationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -471,7 +471,7 @@ emptyTypeAnnotationErrorLocation x =
         Core.projectionField = (Core.Name "location")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-emptyTypeAnnotationErrorWithLocation :: Phantoms.TTerm Core_.EmptyTypeAnnotationError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.EmptyTypeAnnotationError
+emptyTypeAnnotationErrorWithLocation :: Phantoms.TTerm Core_.EmptyTypeAnnotationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.EmptyTypeAnnotationError
 emptyTypeAnnotationErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyTypeAnnotationError"),
@@ -480,7 +480,7 @@ emptyTypeAnnotationErrorWithLocation original newVal =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-emptyTypeNameInTermError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.EmptyTypeNameInTermError
+emptyTypeNameInTermError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.EmptyTypeNameInTermError
 emptyTypeNameInTermError location =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyTypeNameInTermError"),
@@ -489,7 +489,7 @@ emptyTypeNameInTermError location =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm location)}]}))
 
-emptyTypeNameInTermErrorLocation :: Phantoms.TTerm Core_.EmptyTypeNameInTermError -> Phantoms.TTerm Accessors.AccessorPath
+emptyTypeNameInTermErrorLocation :: Phantoms.TTerm Core_.EmptyTypeNameInTermError -> Phantoms.TTerm Paths.SubtermPath
 emptyTypeNameInTermErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -497,7 +497,7 @@ emptyTypeNameInTermErrorLocation x =
         Core.projectionField = (Core.Name "location")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-emptyTypeNameInTermErrorWithLocation :: Phantoms.TTerm Core_.EmptyTypeNameInTermError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.EmptyTypeNameInTermError
+emptyTypeNameInTermErrorWithLocation :: Phantoms.TTerm Core_.EmptyTypeNameInTermError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.EmptyTypeNameInTermError
 emptyTypeNameInTermErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyTypeNameInTermError"),
@@ -506,7 +506,7 @@ emptyTypeNameInTermErrorWithLocation original newVal =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-emptyUnionTypeError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.EmptyUnionTypeError
+emptyUnionTypeError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.EmptyUnionTypeError
 emptyUnionTypeError location =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyUnionTypeError"),
@@ -515,7 +515,7 @@ emptyUnionTypeError location =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm location)}]}))
 
-emptyUnionTypeErrorLocation :: Phantoms.TTerm Core_.EmptyUnionTypeError -> Phantoms.TTerm Accessors.AccessorPath
+emptyUnionTypeErrorLocation :: Phantoms.TTerm Core_.EmptyUnionTypeError -> Phantoms.TTerm Paths.SubtermPath
 emptyUnionTypeErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -523,7 +523,7 @@ emptyUnionTypeErrorLocation x =
         Core.projectionField = (Core.Name "location")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-emptyUnionTypeErrorWithLocation :: Phantoms.TTerm Core_.EmptyUnionTypeError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.EmptyUnionTypeError
+emptyUnionTypeErrorWithLocation :: Phantoms.TTerm Core_.EmptyUnionTypeError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.EmptyUnionTypeError
 emptyUnionTypeErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.EmptyUnionTypeError"),
@@ -532,7 +532,7 @@ emptyUnionTypeErrorWithLocation original newVal =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-invalidForallParameterNameError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.InvalidForallParameterNameError
+invalidForallParameterNameError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.InvalidForallParameterNameError
 invalidForallParameterNameError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.InvalidForallParameterNameError"),
@@ -544,7 +544,7 @@ invalidForallParameterNameError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-invalidForallParameterNameErrorLocation :: Phantoms.TTerm Core_.InvalidForallParameterNameError -> Phantoms.TTerm Accessors.AccessorPath
+invalidForallParameterNameErrorLocation :: Phantoms.TTerm Core_.InvalidForallParameterNameError -> Phantoms.TTerm Paths.SubtermPath
 invalidForallParameterNameErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -560,7 +560,7 @@ invalidForallParameterNameErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-invalidForallParameterNameErrorWithLocation :: Phantoms.TTerm Core_.InvalidForallParameterNameError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.InvalidForallParameterNameError
+invalidForallParameterNameErrorWithLocation :: Phantoms.TTerm Core_.InvalidForallParameterNameError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.InvalidForallParameterNameError
 invalidForallParameterNameErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.InvalidForallParameterNameError"),
@@ -592,7 +592,7 @@ invalidForallParameterNameErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-invalidLambdaParameterNameError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.InvalidLambdaParameterNameError
+invalidLambdaParameterNameError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.InvalidLambdaParameterNameError
 invalidLambdaParameterNameError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.InvalidLambdaParameterNameError"),
@@ -604,7 +604,7 @@ invalidLambdaParameterNameError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-invalidLambdaParameterNameErrorLocation :: Phantoms.TTerm Core_.InvalidLambdaParameterNameError -> Phantoms.TTerm Accessors.AccessorPath
+invalidLambdaParameterNameErrorLocation :: Phantoms.TTerm Core_.InvalidLambdaParameterNameError -> Phantoms.TTerm Paths.SubtermPath
 invalidLambdaParameterNameErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -620,7 +620,7 @@ invalidLambdaParameterNameErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-invalidLambdaParameterNameErrorWithLocation :: Phantoms.TTerm Core_.InvalidLambdaParameterNameError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.InvalidLambdaParameterNameError
+invalidLambdaParameterNameErrorWithLocation :: Phantoms.TTerm Core_.InvalidLambdaParameterNameError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.InvalidLambdaParameterNameError
 invalidLambdaParameterNameErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.InvalidLambdaParameterNameError"),
@@ -652,7 +652,7 @@ invalidLambdaParameterNameErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-invalidLetBindingNameError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.InvalidLetBindingNameError
+invalidLetBindingNameError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.InvalidLetBindingNameError
 invalidLetBindingNameError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.InvalidLetBindingNameError"),
@@ -664,7 +664,7 @@ invalidLetBindingNameError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-invalidLetBindingNameErrorLocation :: Phantoms.TTerm Core_.InvalidLetBindingNameError -> Phantoms.TTerm Accessors.AccessorPath
+invalidLetBindingNameErrorLocation :: Phantoms.TTerm Core_.InvalidLetBindingNameError -> Phantoms.TTerm Paths.SubtermPath
 invalidLetBindingNameErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -680,7 +680,7 @@ invalidLetBindingNameErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-invalidLetBindingNameErrorWithLocation :: Phantoms.TTerm Core_.InvalidLetBindingNameError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.InvalidLetBindingNameError
+invalidLetBindingNameErrorWithLocation :: Phantoms.TTerm Core_.InvalidLetBindingNameError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.InvalidLetBindingNameError
 invalidLetBindingNameErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.InvalidLetBindingNameError"),
@@ -1000,7 +1000,7 @@ invalidTypeErrorVoidInNonBottomPosition x =
         Core.fieldName = (Core.Name "voidInNonBottomPosition"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-invalidTypeLambdaParameterNameError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.InvalidTypeLambdaParameterNameError
+invalidTypeLambdaParameterNameError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.InvalidTypeLambdaParameterNameError
 invalidTypeLambdaParameterNameError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.InvalidTypeLambdaParameterNameError"),
@@ -1012,7 +1012,7 @@ invalidTypeLambdaParameterNameError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-invalidTypeLambdaParameterNameErrorLocation :: Phantoms.TTerm Core_.InvalidTypeLambdaParameterNameError -> Phantoms.TTerm Accessors.AccessorPath
+invalidTypeLambdaParameterNameErrorLocation :: Phantoms.TTerm Core_.InvalidTypeLambdaParameterNameError -> Phantoms.TTerm Paths.SubtermPath
 invalidTypeLambdaParameterNameErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1028,7 +1028,7 @@ invalidTypeLambdaParameterNameErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-invalidTypeLambdaParameterNameErrorWithLocation :: Phantoms.TTerm Core_.InvalidTypeLambdaParameterNameError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.InvalidTypeLambdaParameterNameError
+invalidTypeLambdaParameterNameErrorWithLocation :: Phantoms.TTerm Core_.InvalidTypeLambdaParameterNameError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.InvalidTypeLambdaParameterNameError
 invalidTypeLambdaParameterNameErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.InvalidTypeLambdaParameterNameError"),
@@ -1060,7 +1060,7 @@ invalidTypeLambdaParameterNameErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-invalidTypeSchemeVariableNameError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.InvalidTypeSchemeVariableNameError
+invalidTypeSchemeVariableNameError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.InvalidTypeSchemeVariableNameError
 invalidTypeSchemeVariableNameError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.InvalidTypeSchemeVariableNameError"),
@@ -1072,7 +1072,7 @@ invalidTypeSchemeVariableNameError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-invalidTypeSchemeVariableNameErrorLocation :: Phantoms.TTerm Core_.InvalidTypeSchemeVariableNameError -> Phantoms.TTerm Accessors.AccessorPath
+invalidTypeSchemeVariableNameErrorLocation :: Phantoms.TTerm Core_.InvalidTypeSchemeVariableNameError -> Phantoms.TTerm Paths.SubtermPath
 invalidTypeSchemeVariableNameErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1088,7 +1088,7 @@ invalidTypeSchemeVariableNameErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-invalidTypeSchemeVariableNameErrorWithLocation :: Phantoms.TTerm Core_.InvalidTypeSchemeVariableNameError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.InvalidTypeSchemeVariableNameError
+invalidTypeSchemeVariableNameErrorWithLocation :: Phantoms.TTerm Core_.InvalidTypeSchemeVariableNameError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.InvalidTypeSchemeVariableNameError
 invalidTypeSchemeVariableNameErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.InvalidTypeSchemeVariableNameError"),
@@ -1120,7 +1120,7 @@ invalidTypeSchemeVariableNameErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-nestedTermAnnotationError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.NestedTermAnnotationError
+nestedTermAnnotationError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.NestedTermAnnotationError
 nestedTermAnnotationError location =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.NestedTermAnnotationError"),
@@ -1129,7 +1129,7 @@ nestedTermAnnotationError location =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm location)}]}))
 
-nestedTermAnnotationErrorLocation :: Phantoms.TTerm Core_.NestedTermAnnotationError -> Phantoms.TTerm Accessors.AccessorPath
+nestedTermAnnotationErrorLocation :: Phantoms.TTerm Core_.NestedTermAnnotationError -> Phantoms.TTerm Paths.SubtermPath
 nestedTermAnnotationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1137,7 +1137,7 @@ nestedTermAnnotationErrorLocation x =
         Core.projectionField = (Core.Name "location")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-nestedTermAnnotationErrorWithLocation :: Phantoms.TTerm Core_.NestedTermAnnotationError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.NestedTermAnnotationError
+nestedTermAnnotationErrorWithLocation :: Phantoms.TTerm Core_.NestedTermAnnotationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.NestedTermAnnotationError
 nestedTermAnnotationErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.NestedTermAnnotationError"),
@@ -1146,7 +1146,7 @@ nestedTermAnnotationErrorWithLocation original newVal =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-nestedTypeAnnotationError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.NestedTypeAnnotationError
+nestedTypeAnnotationError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.NestedTypeAnnotationError
 nestedTypeAnnotationError location =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.NestedTypeAnnotationError"),
@@ -1155,7 +1155,7 @@ nestedTypeAnnotationError location =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm location)}]}))
 
-nestedTypeAnnotationErrorLocation :: Phantoms.TTerm Core_.NestedTypeAnnotationError -> Phantoms.TTerm Accessors.AccessorPath
+nestedTypeAnnotationErrorLocation :: Phantoms.TTerm Core_.NestedTypeAnnotationError -> Phantoms.TTerm Paths.SubtermPath
 nestedTypeAnnotationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1163,7 +1163,7 @@ nestedTypeAnnotationErrorLocation x =
         Core.projectionField = (Core.Name "location")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-nestedTypeAnnotationErrorWithLocation :: Phantoms.TTerm Core_.NestedTypeAnnotationError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.NestedTypeAnnotationError
+nestedTypeAnnotationErrorWithLocation :: Phantoms.TTerm Core_.NestedTypeAnnotationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.NestedTypeAnnotationError
 nestedTypeAnnotationErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.NestedTypeAnnotationError"),
@@ -1172,7 +1172,7 @@ nestedTypeAnnotationErrorWithLocation original newVal =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-nonComparableMapKeyTypeError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Core_.NonComparableMapKeyTypeError
+nonComparableMapKeyTypeError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Core_.NonComparableMapKeyTypeError
 nonComparableMapKeyTypeError location keyType =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.NonComparableMapKeyTypeError"),
@@ -1192,7 +1192,7 @@ nonComparableMapKeyTypeErrorKeyType x =
         Core.projectionField = (Core.Name "keyType")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-nonComparableMapKeyTypeErrorLocation :: Phantoms.TTerm Core_.NonComparableMapKeyTypeError -> Phantoms.TTerm Accessors.AccessorPath
+nonComparableMapKeyTypeErrorLocation :: Phantoms.TTerm Core_.NonComparableMapKeyTypeError -> Phantoms.TTerm Paths.SubtermPath
 nonComparableMapKeyTypeErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1216,7 +1216,7 @@ nonComparableMapKeyTypeErrorWithKeyType original newVal =
           Core.fieldName = (Core.Name "keyType"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-nonComparableMapKeyTypeErrorWithLocation :: Phantoms.TTerm Core_.NonComparableMapKeyTypeError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.NonComparableMapKeyTypeError
+nonComparableMapKeyTypeErrorWithLocation :: Phantoms.TTerm Core_.NonComparableMapKeyTypeError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.NonComparableMapKeyTypeError
 nonComparableMapKeyTypeErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.NonComparableMapKeyTypeError"),
@@ -1232,7 +1232,7 @@ nonComparableMapKeyTypeErrorWithLocation original newVal =
               Core.projectionField = (Core.Name "keyType")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-nonComparableSetElementTypeError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Core_.NonComparableSetElementTypeError
+nonComparableSetElementTypeError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Core_.NonComparableSetElementTypeError
 nonComparableSetElementTypeError location elementType =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.NonComparableSetElementTypeError"),
@@ -1252,7 +1252,7 @@ nonComparableSetElementTypeErrorElementType x =
         Core.projectionField = (Core.Name "elementType")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-nonComparableSetElementTypeErrorLocation :: Phantoms.TTerm Core_.NonComparableSetElementTypeError -> Phantoms.TTerm Accessors.AccessorPath
+nonComparableSetElementTypeErrorLocation :: Phantoms.TTerm Core_.NonComparableSetElementTypeError -> Phantoms.TTerm Paths.SubtermPath
 nonComparableSetElementTypeErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1276,7 +1276,7 @@ nonComparableSetElementTypeErrorWithElementType original newVal =
           Core.fieldName = (Core.Name "elementType"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-nonComparableSetElementTypeErrorWithLocation :: Phantoms.TTerm Core_.NonComparableSetElementTypeError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.NonComparableSetElementTypeError
+nonComparableSetElementTypeErrorWithLocation :: Phantoms.TTerm Core_.NonComparableSetElementTypeError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.NonComparableSetElementTypeError
 nonComparableSetElementTypeErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.NonComparableSetElementTypeError"),
@@ -1292,7 +1292,7 @@ nonComparableSetElementTypeErrorWithLocation original newVal =
               Core.projectionField = (Core.Name "elementType")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-redundantWrapUnwrapError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.RedundantWrapUnwrapError
+redundantWrapUnwrapError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.RedundantWrapUnwrapError
 redundantWrapUnwrapError location typeName =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.RedundantWrapUnwrapError"),
@@ -1304,7 +1304,7 @@ redundantWrapUnwrapError location typeName =
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Phantoms.unTTerm typeName)}]}))
 
-redundantWrapUnwrapErrorLocation :: Phantoms.TTerm Core_.RedundantWrapUnwrapError -> Phantoms.TTerm Accessors.AccessorPath
+redundantWrapUnwrapErrorLocation :: Phantoms.TTerm Core_.RedundantWrapUnwrapError -> Phantoms.TTerm Paths.SubtermPath
 redundantWrapUnwrapErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1320,7 +1320,7 @@ redundantWrapUnwrapErrorTypeName x =
         Core.projectionField = (Core.Name "typeName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-redundantWrapUnwrapErrorWithLocation :: Phantoms.TTerm Core_.RedundantWrapUnwrapError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.RedundantWrapUnwrapError
+redundantWrapUnwrapErrorWithLocation :: Phantoms.TTerm Core_.RedundantWrapUnwrapError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.RedundantWrapUnwrapError
 redundantWrapUnwrapErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.RedundantWrapUnwrapError"),
@@ -1352,7 +1352,7 @@ redundantWrapUnwrapErrorWithTypeName original newVal =
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-selfApplicationError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.SelfApplicationError
+selfApplicationError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.SelfApplicationError
 selfApplicationError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.SelfApplicationError"),
@@ -1364,7 +1364,7 @@ selfApplicationError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-selfApplicationErrorLocation :: Phantoms.TTerm Core_.SelfApplicationError -> Phantoms.TTerm Accessors.AccessorPath
+selfApplicationErrorLocation :: Phantoms.TTerm Core_.SelfApplicationError -> Phantoms.TTerm Paths.SubtermPath
 selfApplicationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1380,7 +1380,7 @@ selfApplicationErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-selfApplicationErrorWithLocation :: Phantoms.TTerm Core_.SelfApplicationError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.SelfApplicationError
+selfApplicationErrorWithLocation :: Phantoms.TTerm Core_.SelfApplicationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.SelfApplicationError
 selfApplicationErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.SelfApplicationError"),
@@ -1412,7 +1412,7 @@ selfApplicationErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-singleVariantUnionError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.SingleVariantUnionError
+singleVariantUnionError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.SingleVariantUnionError
 singleVariantUnionError location fieldName =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.SingleVariantUnionError"),
@@ -1432,7 +1432,7 @@ singleVariantUnionErrorFieldName x =
         Core.projectionField = (Core.Name "fieldName")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-singleVariantUnionErrorLocation :: Phantoms.TTerm Core_.SingleVariantUnionError -> Phantoms.TTerm Accessors.AccessorPath
+singleVariantUnionErrorLocation :: Phantoms.TTerm Core_.SingleVariantUnionError -> Phantoms.TTerm Paths.SubtermPath
 singleVariantUnionErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1456,7 +1456,7 @@ singleVariantUnionErrorWithFieldName original newVal =
           Core.fieldName = (Core.Name "fieldName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-singleVariantUnionErrorWithLocation :: Phantoms.TTerm Core_.SingleVariantUnionError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.SingleVariantUnionError
+singleVariantUnionErrorWithLocation :: Phantoms.TTerm Core_.SingleVariantUnionError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.SingleVariantUnionError
 singleVariantUnionErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.SingleVariantUnionError"),
@@ -1472,7 +1472,7 @@ singleVariantUnionErrorWithLocation original newVal =
               Core.projectionField = (Core.Name "fieldName")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-termVariableShadowingError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.TermVariableShadowingError
+termVariableShadowingError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.TermVariableShadowingError
 termVariableShadowingError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.TermVariableShadowingError"),
@@ -1484,7 +1484,7 @@ termVariableShadowingError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-termVariableShadowingErrorLocation :: Phantoms.TTerm Core_.TermVariableShadowingError -> Phantoms.TTerm Accessors.AccessorPath
+termVariableShadowingErrorLocation :: Phantoms.TTerm Core_.TermVariableShadowingError -> Phantoms.TTerm Paths.SubtermPath
 termVariableShadowingErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1500,7 +1500,7 @@ termVariableShadowingErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-termVariableShadowingErrorWithLocation :: Phantoms.TTerm Core_.TermVariableShadowingError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.TermVariableShadowingError
+termVariableShadowingErrorWithLocation :: Phantoms.TTerm Core_.TermVariableShadowingError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.TermVariableShadowingError
 termVariableShadowingErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.TermVariableShadowingError"),
@@ -1532,7 +1532,7 @@ termVariableShadowingErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-typeVariableShadowingInForallError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.TypeVariableShadowingInForallError
+typeVariableShadowingInForallError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.TypeVariableShadowingInForallError
 typeVariableShadowingInForallError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInForallError"),
@@ -1544,7 +1544,7 @@ typeVariableShadowingInForallError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-typeVariableShadowingInForallErrorLocation :: Phantoms.TTerm Core_.TypeVariableShadowingInForallError -> Phantoms.TTerm Accessors.AccessorPath
+typeVariableShadowingInForallErrorLocation :: Phantoms.TTerm Core_.TypeVariableShadowingInForallError -> Phantoms.TTerm Paths.SubtermPath
 typeVariableShadowingInForallErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1560,7 +1560,7 @@ typeVariableShadowingInForallErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-typeVariableShadowingInForallErrorWithLocation :: Phantoms.TTerm Core_.TypeVariableShadowingInForallError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.TypeVariableShadowingInForallError
+typeVariableShadowingInForallErrorWithLocation :: Phantoms.TTerm Core_.TypeVariableShadowingInForallError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.TypeVariableShadowingInForallError
 typeVariableShadowingInForallErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInForallError"),
@@ -1592,7 +1592,7 @@ typeVariableShadowingInForallErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-typeVariableShadowingInTypeLambdaError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.TypeVariableShadowingInTypeLambdaError
+typeVariableShadowingInTypeLambdaError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.TypeVariableShadowingInTypeLambdaError
 typeVariableShadowingInTypeLambdaError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInTypeLambdaError"),
@@ -1604,7 +1604,7 @@ typeVariableShadowingInTypeLambdaError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-typeVariableShadowingInTypeLambdaErrorLocation :: Phantoms.TTerm Core_.TypeVariableShadowingInTypeLambdaError -> Phantoms.TTerm Accessors.AccessorPath
+typeVariableShadowingInTypeLambdaErrorLocation :: Phantoms.TTerm Core_.TypeVariableShadowingInTypeLambdaError -> Phantoms.TTerm Paths.SubtermPath
 typeVariableShadowingInTypeLambdaErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1620,7 +1620,7 @@ typeVariableShadowingInTypeLambdaErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-typeVariableShadowingInTypeLambdaErrorWithLocation :: Phantoms.TTerm Core_.TypeVariableShadowingInTypeLambdaError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.TypeVariableShadowingInTypeLambdaError
+typeVariableShadowingInTypeLambdaErrorWithLocation :: Phantoms.TTerm Core_.TypeVariableShadowingInTypeLambdaError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.TypeVariableShadowingInTypeLambdaError
 typeVariableShadowingInTypeLambdaErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInTypeLambdaError"),
@@ -1712,7 +1712,7 @@ undefinedFieldErrorWithTypeName original newVal =
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-undefinedTermVariableError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UndefinedTermVariableError
+undefinedTermVariableError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UndefinedTermVariableError
 undefinedTermVariableError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTermVariableError"),
@@ -1724,7 +1724,7 @@ undefinedTermVariableError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-undefinedTermVariableErrorLocation :: Phantoms.TTerm Core_.UndefinedTermVariableError -> Phantoms.TTerm Accessors.AccessorPath
+undefinedTermVariableErrorLocation :: Phantoms.TTerm Core_.UndefinedTermVariableError -> Phantoms.TTerm Paths.SubtermPath
 undefinedTermVariableErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1740,7 +1740,7 @@ undefinedTermVariableErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-undefinedTermVariableErrorWithLocation :: Phantoms.TTerm Core_.UndefinedTermVariableError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.UndefinedTermVariableError
+undefinedTermVariableErrorWithLocation :: Phantoms.TTerm Core_.UndefinedTermVariableError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.UndefinedTermVariableError
 undefinedTermVariableErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTermVariableError"),
@@ -1772,7 +1772,7 @@ undefinedTermVariableErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-undefinedTypeVariableError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UndefinedTypeVariableError
+undefinedTypeVariableError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UndefinedTypeVariableError
 undefinedTypeVariableError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableError"),
@@ -1784,7 +1784,7 @@ undefinedTypeVariableError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-undefinedTypeVariableErrorLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableError -> Phantoms.TTerm Accessors.AccessorPath
+undefinedTypeVariableErrorLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableError -> Phantoms.TTerm Paths.SubtermPath
 undefinedTypeVariableErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1800,7 +1800,7 @@ undefinedTypeVariableErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-undefinedTypeVariableErrorWithLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.UndefinedTypeVariableError
+undefinedTypeVariableErrorWithLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.UndefinedTypeVariableError
 undefinedTypeVariableErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableError"),
@@ -1832,7 +1832,7 @@ undefinedTypeVariableErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-undefinedTypeVariableInBindingTypeError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UndefinedTypeVariableInBindingTypeError
+undefinedTypeVariableInBindingTypeError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UndefinedTypeVariableInBindingTypeError
 undefinedTypeVariableInBindingTypeError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInBindingTypeError"),
@@ -1844,7 +1844,7 @@ undefinedTypeVariableInBindingTypeError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-undefinedTypeVariableInBindingTypeErrorLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableInBindingTypeError -> Phantoms.TTerm Accessors.AccessorPath
+undefinedTypeVariableInBindingTypeErrorLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableInBindingTypeError -> Phantoms.TTerm Paths.SubtermPath
 undefinedTypeVariableInBindingTypeErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1860,7 +1860,7 @@ undefinedTypeVariableInBindingTypeErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-undefinedTypeVariableInBindingTypeErrorWithLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableInBindingTypeError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.UndefinedTypeVariableInBindingTypeError
+undefinedTypeVariableInBindingTypeErrorWithLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableInBindingTypeError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.UndefinedTypeVariableInBindingTypeError
 undefinedTypeVariableInBindingTypeErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInBindingTypeError"),
@@ -1892,7 +1892,7 @@ undefinedTypeVariableInBindingTypeErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-undefinedTypeVariableInLambdaDomainError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UndefinedTypeVariableInLambdaDomainError
+undefinedTypeVariableInLambdaDomainError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UndefinedTypeVariableInLambdaDomainError
 undefinedTypeVariableInLambdaDomainError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"),
@@ -1904,7 +1904,7 @@ undefinedTypeVariableInLambdaDomainError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-undefinedTypeVariableInLambdaDomainErrorLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableInLambdaDomainError -> Phantoms.TTerm Accessors.AccessorPath
+undefinedTypeVariableInLambdaDomainErrorLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableInLambdaDomainError -> Phantoms.TTerm Paths.SubtermPath
 undefinedTypeVariableInLambdaDomainErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1920,7 +1920,7 @@ undefinedTypeVariableInLambdaDomainErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-undefinedTypeVariableInLambdaDomainErrorWithLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableInLambdaDomainError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.UndefinedTypeVariableInLambdaDomainError
+undefinedTypeVariableInLambdaDomainErrorWithLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableInLambdaDomainError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.UndefinedTypeVariableInLambdaDomainError
 undefinedTypeVariableInLambdaDomainErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"),
@@ -1952,7 +1952,7 @@ undefinedTypeVariableInLambdaDomainErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-undefinedTypeVariableInTypeApplicationError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UndefinedTypeVariableInTypeApplicationError
+undefinedTypeVariableInTypeApplicationError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UndefinedTypeVariableInTypeApplicationError
 undefinedTypeVariableInTypeApplicationError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"),
@@ -1964,7 +1964,7 @@ undefinedTypeVariableInTypeApplicationError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-undefinedTypeVariableInTypeApplicationErrorLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableInTypeApplicationError -> Phantoms.TTerm Accessors.AccessorPath
+undefinedTypeVariableInTypeApplicationErrorLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableInTypeApplicationError -> Phantoms.TTerm Paths.SubtermPath
 undefinedTypeVariableInTypeApplicationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -1980,7 +1980,7 @@ undefinedTypeVariableInTypeApplicationErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-undefinedTypeVariableInTypeApplicationErrorWithLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableInTypeApplicationError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.UndefinedTypeVariableInTypeApplicationError
+undefinedTypeVariableInTypeApplicationErrorWithLocation :: Phantoms.TTerm Core_.UndefinedTypeVariableInTypeApplicationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.UndefinedTypeVariableInTypeApplicationError
 undefinedTypeVariableInTypeApplicationErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"),
@@ -2132,7 +2132,7 @@ unexpectedTypeVariantErrorWithExpectedVariant original newVal =
               Core.projectionField = (Core.Name "actualType")})))),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-unknownPrimitiveNameError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UnknownPrimitiveNameError
+unknownPrimitiveNameError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UnknownPrimitiveNameError
 unknownPrimitiveNameError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UnknownPrimitiveNameError"),
@@ -2144,7 +2144,7 @@ unknownPrimitiveNameError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-unknownPrimitiveNameErrorLocation :: Phantoms.TTerm Core_.UnknownPrimitiveNameError -> Phantoms.TTerm Accessors.AccessorPath
+unknownPrimitiveNameErrorLocation :: Phantoms.TTerm Core_.UnknownPrimitiveNameError -> Phantoms.TTerm Paths.SubtermPath
 unknownPrimitiveNameErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -2160,7 +2160,7 @@ unknownPrimitiveNameErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unknownPrimitiveNameErrorWithLocation :: Phantoms.TTerm Core_.UnknownPrimitiveNameError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.UnknownPrimitiveNameError
+unknownPrimitiveNameErrorWithLocation :: Phantoms.TTerm Core_.UnknownPrimitiveNameError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.UnknownPrimitiveNameError
 unknownPrimitiveNameErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UnknownPrimitiveNameError"),
@@ -2192,7 +2192,7 @@ unknownPrimitiveNameErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-unnecessaryIdentityApplicationError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.UnnecessaryIdentityApplicationError
+unnecessaryIdentityApplicationError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.UnnecessaryIdentityApplicationError
 unnecessaryIdentityApplicationError location =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UnnecessaryIdentityApplicationError"),
@@ -2201,7 +2201,7 @@ unnecessaryIdentityApplicationError location =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm location)}]}))
 
-unnecessaryIdentityApplicationErrorLocation :: Phantoms.TTerm Core_.UnnecessaryIdentityApplicationError -> Phantoms.TTerm Accessors.AccessorPath
+unnecessaryIdentityApplicationErrorLocation :: Phantoms.TTerm Core_.UnnecessaryIdentityApplicationError -> Phantoms.TTerm Paths.SubtermPath
 unnecessaryIdentityApplicationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -2209,7 +2209,7 @@ unnecessaryIdentityApplicationErrorLocation x =
         Core.projectionField = (Core.Name "location")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unnecessaryIdentityApplicationErrorWithLocation :: Phantoms.TTerm Core_.UnnecessaryIdentityApplicationError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.UnnecessaryIdentityApplicationError
+unnecessaryIdentityApplicationErrorWithLocation :: Phantoms.TTerm Core_.UnnecessaryIdentityApplicationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.UnnecessaryIdentityApplicationError
 unnecessaryIdentityApplicationErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UnnecessaryIdentityApplicationError"),
@@ -2218,7 +2218,7 @@ unnecessaryIdentityApplicationErrorWithLocation original newVal =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-untypedTermVariableError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UntypedTermVariableError
+untypedTermVariableError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core_.UntypedTermVariableError
 untypedTermVariableError location name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UntypedTermVariableError"),
@@ -2230,7 +2230,7 @@ untypedTermVariableError location name =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm name)}]}))
 
-untypedTermVariableErrorLocation :: Phantoms.TTerm Core_.UntypedTermVariableError -> Phantoms.TTerm Accessors.AccessorPath
+untypedTermVariableErrorLocation :: Phantoms.TTerm Core_.UntypedTermVariableError -> Phantoms.TTerm Paths.SubtermPath
 untypedTermVariableErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -2246,7 +2246,7 @@ untypedTermVariableErrorName x =
         Core.projectionField = (Core.Name "name")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-untypedTermVariableErrorWithLocation :: Phantoms.TTerm Core_.UntypedTermVariableError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.UntypedTermVariableError
+untypedTermVariableErrorWithLocation :: Phantoms.TTerm Core_.UntypedTermVariableError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.UntypedTermVariableError
 untypedTermVariableErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.UntypedTermVariableError"),
@@ -2278,7 +2278,7 @@ untypedTermVariableErrorWithName original newVal =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-voidInNonBottomPositionError :: Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.VoidInNonBottomPositionError
+voidInNonBottomPositionError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.VoidInNonBottomPositionError
 voidInNonBottomPositionError location =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.VoidInNonBottomPositionError"),
@@ -2287,7 +2287,7 @@ voidInNonBottomPositionError location =
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Phantoms.unTTerm location)}]}))
 
-voidInNonBottomPositionErrorLocation :: Phantoms.TTerm Core_.VoidInNonBottomPositionError -> Phantoms.TTerm Accessors.AccessorPath
+voidInNonBottomPositionErrorLocation :: Phantoms.TTerm Core_.VoidInNonBottomPositionError -> Phantoms.TTerm Paths.SubtermPath
 voidInNonBottomPositionErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
@@ -2295,7 +2295,7 @@ voidInNonBottomPositionErrorLocation x =
         Core.projectionField = (Core.Name "location")})))),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-voidInNonBottomPositionErrorWithLocation :: Phantoms.TTerm Core_.VoidInNonBottomPositionError -> Phantoms.TTerm Accessors.AccessorPath -> Phantoms.TTerm Core_.VoidInNonBottomPositionError
+voidInNonBottomPositionErrorWithLocation :: Phantoms.TTerm Core_.VoidInNonBottomPositionError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core_.VoidInNonBottomPositionError
 voidInNonBottomPositionErrorWithLocation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.core.VoidInNonBottomPositionError"),

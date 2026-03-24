@@ -17,14 +17,14 @@ public class NonComparableMapKeyTypeError implements Serializable, Comparable<No
   /**
    * The path to the map type
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The non-comparable key type
    */
   public final hydra.core.Type keyType;
 
-  public NonComparableMapKeyTypeError (hydra.accessors.AccessorPath location, hydra.core.Type keyType) {
+  public NonComparableMapKeyTypeError (hydra.paths.SubtermPath location, hydra.core.Type keyType) {
     this.location = location;
     this.keyType = keyType;
   }
@@ -58,7 +58,7 @@ public class NonComparableMapKeyTypeError implements Serializable, Comparable<No
     return ((Comparable) keyType).compareTo(other.keyType);
   }
 
-  public NonComparableMapKeyTypeError withLocation(hydra.accessors.AccessorPath location) {
+  public NonComparableMapKeyTypeError withLocation(hydra.paths.SubtermPath location) {
     return new NonComparableMapKeyTypeError(location, keyType);
   }
 

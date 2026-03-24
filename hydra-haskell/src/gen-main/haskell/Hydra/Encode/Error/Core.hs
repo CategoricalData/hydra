@@ -5,8 +5,8 @@
 module Hydra.Encode.Error.Core where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Encode.Accessors as Accessors
 import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Encode.Paths as Paths
 import qualified Hydra.Encode.Variants as Variants
 import qualified Hydra.Error.Core as Core__
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -23,7 +23,7 @@ constantConditionError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.constantConditionErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.constantConditionErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Core__.constantConditionErrorValue x))}]})
@@ -35,7 +35,7 @@ duplicateBindingError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.duplicateBindingErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.duplicateBindingErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.duplicateBindingErrorName x))}]})
@@ -47,7 +47,7 @@ duplicateFieldError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.duplicateFieldErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.duplicateFieldErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.duplicateFieldErrorName x))}]})
@@ -59,7 +59,7 @@ duplicateRecordTypeFieldNamesError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.duplicateRecordTypeFieldNamesErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.duplicateRecordTypeFieldNamesErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.duplicateRecordTypeFieldNamesErrorName x))}]})
@@ -71,7 +71,7 @@ duplicateUnionTypeFieldNamesError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.duplicateUnionTypeFieldNamesErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.duplicateUnionTypeFieldNamesErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.duplicateUnionTypeFieldNamesErrorName x))}]})
@@ -83,7 +83,7 @@ emptyCaseStatementError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.emptyCaseStatementErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.emptyCaseStatementErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core_.name (Core__.emptyCaseStatementErrorTypeName x))}]})
@@ -95,7 +95,7 @@ emptyLetBindingsError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.emptyLetBindingsErrorLocation x))}]})
+          Core.fieldTerm = (Paths.subtermPath (Core__.emptyLetBindingsErrorLocation x))}]})
 
 emptyRecordTypeError :: Core__.EmptyRecordTypeError -> Core.Term
 emptyRecordTypeError x =
@@ -104,7 +104,7 @@ emptyRecordTypeError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.emptyRecordTypeErrorLocation x))}]})
+          Core.fieldTerm = (Paths.subtermPath (Core__.emptyRecordTypeErrorLocation x))}]})
 
 emptyTermAnnotationError :: Core__.EmptyTermAnnotationError -> Core.Term
 emptyTermAnnotationError x =
@@ -113,7 +113,7 @@ emptyTermAnnotationError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.emptyTermAnnotationErrorLocation x))}]})
+          Core.fieldTerm = (Paths.subtermPath (Core__.emptyTermAnnotationErrorLocation x))}]})
 
 emptyTypeAnnotationError :: Core__.EmptyTypeAnnotationError -> Core.Term
 emptyTypeAnnotationError x =
@@ -122,7 +122,7 @@ emptyTypeAnnotationError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.emptyTypeAnnotationErrorLocation x))}]})
+          Core.fieldTerm = (Paths.subtermPath (Core__.emptyTypeAnnotationErrorLocation x))}]})
 
 emptyTypeNameInTermError :: Core__.EmptyTypeNameInTermError -> Core.Term
 emptyTypeNameInTermError x =
@@ -131,7 +131,7 @@ emptyTypeNameInTermError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.emptyTypeNameInTermErrorLocation x))}]})
+          Core.fieldTerm = (Paths.subtermPath (Core__.emptyTypeNameInTermErrorLocation x))}]})
 
 emptyUnionTypeError :: Core__.EmptyUnionTypeError -> Core.Term
 emptyUnionTypeError x =
@@ -140,7 +140,7 @@ emptyUnionTypeError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.emptyUnionTypeErrorLocation x))}]})
+          Core.fieldTerm = (Paths.subtermPath (Core__.emptyUnionTypeErrorLocation x))}]})
 
 invalidForallParameterNameError :: Core__.InvalidForallParameterNameError -> Core.Term
 invalidForallParameterNameError x =
@@ -149,7 +149,7 @@ invalidForallParameterNameError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.invalidForallParameterNameErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.invalidForallParameterNameErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.invalidForallParameterNameErrorName x))}]})
@@ -161,7 +161,7 @@ invalidLambdaParameterNameError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.invalidLambdaParameterNameErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.invalidLambdaParameterNameErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.invalidLambdaParameterNameErrorName x))}]})
@@ -173,7 +173,7 @@ invalidLetBindingNameError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.invalidLetBindingNameErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.invalidLetBindingNameErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.invalidLetBindingNameErrorName x))}]})
@@ -373,7 +373,7 @@ invalidTypeLambdaParameterNameError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.invalidTypeLambdaParameterNameErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.invalidTypeLambdaParameterNameErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.invalidTypeLambdaParameterNameErrorName x))}]})
@@ -385,7 +385,7 @@ invalidTypeSchemeVariableNameError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.invalidTypeSchemeVariableNameErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.invalidTypeSchemeVariableNameErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.invalidTypeSchemeVariableNameErrorName x))}]})
@@ -397,7 +397,7 @@ nestedTermAnnotationError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.nestedTermAnnotationErrorLocation x))}]})
+          Core.fieldTerm = (Paths.subtermPath (Core__.nestedTermAnnotationErrorLocation x))}]})
 
 nestedTypeAnnotationError :: Core__.NestedTypeAnnotationError -> Core.Term
 nestedTypeAnnotationError x =
@@ -406,7 +406,7 @@ nestedTypeAnnotationError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.nestedTypeAnnotationErrorLocation x))}]})
+          Core.fieldTerm = (Paths.subtermPath (Core__.nestedTypeAnnotationErrorLocation x))}]})
 
 nonComparableMapKeyTypeError :: Core__.NonComparableMapKeyTypeError -> Core.Term
 nonComparableMapKeyTypeError x =
@@ -415,7 +415,7 @@ nonComparableMapKeyTypeError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.nonComparableMapKeyTypeErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.nonComparableMapKeyTypeErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "keyType"),
           Core.fieldTerm = (Core_.type_ (Core__.nonComparableMapKeyTypeErrorKeyType x))}]})
@@ -427,7 +427,7 @@ nonComparableSetElementTypeError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.nonComparableSetElementTypeErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.nonComparableSetElementTypeErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "elementType"),
           Core.fieldTerm = (Core_.type_ (Core__.nonComparableSetElementTypeErrorElementType x))}]})
@@ -439,7 +439,7 @@ redundantWrapUnwrapError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.redundantWrapUnwrapErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.redundantWrapUnwrapErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core_.name (Core__.redundantWrapUnwrapErrorTypeName x))}]})
@@ -451,7 +451,7 @@ selfApplicationError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.selfApplicationErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.selfApplicationErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.selfApplicationErrorName x))}]})
@@ -463,7 +463,7 @@ singleVariantUnionError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.singleVariantUnionErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.singleVariantUnionErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "fieldName"),
           Core.fieldTerm = (Core_.name (Core__.singleVariantUnionErrorFieldName x))}]})
@@ -475,7 +475,7 @@ termVariableShadowingError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.termVariableShadowingErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.termVariableShadowingErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.termVariableShadowingErrorName x))}]})
@@ -487,7 +487,7 @@ typeVariableShadowingInForallError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.typeVariableShadowingInForallErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.typeVariableShadowingInForallErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.typeVariableShadowingInForallErrorName x))}]})
@@ -499,7 +499,7 @@ typeVariableShadowingInTypeLambdaError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.typeVariableShadowingInTypeLambdaErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.typeVariableShadowingInTypeLambdaErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.typeVariableShadowingInTypeLambdaErrorName x))}]})
@@ -523,7 +523,7 @@ undefinedTermVariableError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTermVariableErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.undefinedTermVariableErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.undefinedTermVariableErrorName x))}]})
@@ -535,7 +535,7 @@ undefinedTypeVariableError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTypeVariableErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.undefinedTypeVariableErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.undefinedTypeVariableErrorName x))}]})
@@ -547,7 +547,7 @@ undefinedTypeVariableInBindingTypeError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTypeVariableInBindingTypeErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.undefinedTypeVariableInBindingTypeErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.undefinedTypeVariableInBindingTypeErrorName x))}]})
@@ -559,7 +559,7 @@ undefinedTypeVariableInLambdaDomainError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTypeVariableInLambdaDomainErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.undefinedTypeVariableInLambdaDomainErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.undefinedTypeVariableInLambdaDomainErrorName x))}]})
@@ -571,7 +571,7 @@ undefinedTypeVariableInTypeApplicationError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.undefinedTypeVariableInTypeApplicationErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.undefinedTypeVariableInTypeApplicationErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.undefinedTypeVariableInTypeApplicationErrorName x))}]})
@@ -607,7 +607,7 @@ unknownPrimitiveNameError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.unknownPrimitiveNameErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.unknownPrimitiveNameErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.unknownPrimitiveNameErrorName x))}]})
@@ -619,7 +619,7 @@ unnecessaryIdentityApplicationError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.unnecessaryIdentityApplicationErrorLocation x))}]})
+          Core.fieldTerm = (Paths.subtermPath (Core__.unnecessaryIdentityApplicationErrorLocation x))}]})
 
 untypedTermVariableError :: Core__.UntypedTermVariableError -> Core.Term
 untypedTermVariableError x =
@@ -628,7 +628,7 @@ untypedTermVariableError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.untypedTermVariableErrorLocation x))},
+          Core.fieldTerm = (Paths.subtermPath (Core__.untypedTermVariableErrorLocation x))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core_.name (Core__.untypedTermVariableErrorName x))}]})
@@ -640,4 +640,4 @@ voidInNonBottomPositionError x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "location"),
-          Core.fieldTerm = (Accessors.accessorPath (Core__.voidInNonBottomPositionErrorLocation x))}]})
+          Core.fieldTerm = (Paths.subtermPath (Core__.voidInNonBottomPositionErrorLocation x))}]})

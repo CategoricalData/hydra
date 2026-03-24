@@ -1808,7 +1808,7 @@
   "namespace": "hydra.show.error.core",
   "termDependencies": ["hydra.show.core", "hydra.show.meta"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

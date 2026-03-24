@@ -17,14 +17,14 @@ public class UndefinedTypeVariableInLambdaDomainError implements Serializable, C
   /**
    * The path to the lambda within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The name of the undefined type variable
    */
   public final hydra.core.Name name;
 
-  public UndefinedTypeVariableInLambdaDomainError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public UndefinedTypeVariableInLambdaDomainError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class UndefinedTypeVariableInLambdaDomainError implements Serializable, C
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public UndefinedTypeVariableInLambdaDomainError withLocation(hydra.accessors.AccessorPath location) {
+  public UndefinedTypeVariableInLambdaDomainError withLocation(hydra.paths.SubtermPath location) {
     return new UndefinedTypeVariableInLambdaDomainError(location, name);
   }
 

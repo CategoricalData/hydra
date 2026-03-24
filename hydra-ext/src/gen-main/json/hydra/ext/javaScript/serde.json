@@ -8093,7 +8093,7 @@
     "hydra.ext.javaScript.operators"],
   "typeDependencies": [
     "hydra.ext.javaScript.syntax",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

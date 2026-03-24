@@ -19450,7 +19450,7 @@
     "hydra.substitution",
     "hydra.unification"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

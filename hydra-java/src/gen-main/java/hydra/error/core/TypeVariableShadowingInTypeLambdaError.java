@@ -17,14 +17,14 @@ public class TypeVariableShadowingInTypeLambdaError implements Serializable, Com
   /**
    * The path to the type lambda within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The name of the shadowed type variable
    */
   public final hydra.core.Name name;
 
-  public TypeVariableShadowingInTypeLambdaError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public TypeVariableShadowingInTypeLambdaError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class TypeVariableShadowingInTypeLambdaError implements Serializable, Com
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public TypeVariableShadowingInTypeLambdaError withLocation(hydra.accessors.AccessorPath location) {
+  public TypeVariableShadowingInTypeLambdaError withLocation(hydra.paths.SubtermPath location) {
     return new TypeVariableShadowingInTypeLambdaError(location, name);
   }
 

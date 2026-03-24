@@ -11,7 +11,7 @@ import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
 import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
 import qualified Hydra.Dsl.Literals                        as Literals
-import qualified Hydra.Dsl.Accessors                  as Accessors
+import qualified Hydra.Dsl.Paths                  as Paths
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders

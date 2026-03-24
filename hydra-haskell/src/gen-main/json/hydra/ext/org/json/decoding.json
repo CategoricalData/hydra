@@ -495,7 +495,7 @@
   "namespace": "hydra.ext.org.json.decoding",
   "termDependencies": [],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

@@ -15,9 +15,9 @@ public class EmptyRecordTypeError implements Serializable, Comparable<EmptyRecor
   /**
    * The path to the empty record type
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
-  public EmptyRecordTypeError (hydra.accessors.AccessorPath location) {
+  public EmptyRecordTypeError (hydra.paths.SubtermPath location) {
     this.location = location;
   }
 

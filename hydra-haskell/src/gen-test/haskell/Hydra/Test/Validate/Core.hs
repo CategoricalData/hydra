@@ -4,9 +4,9 @@
 
 module Hydra.Test.Validate.Core where
 
-import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Core as Core_
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -92,7 +92,7 @@ duplicateBindingsTests =
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "x"))})),
             Testing.validateCoreTermTestCaseOutput = (Just (Core_.InvalidTermErrorDuplicateBinding (Core_.DuplicateBindingError {
-              Core_.duplicateBindingErrorLocation = (Accessors.AccessorPath []),
+              Core_.duplicateBindingErrorLocation = (Paths.SubtermPath []),
               Core_.duplicateBindingErrorName = (Core.Name "x")})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -115,8 +115,8 @@ duplicateBindingsTests =
                     Core.bindingType = Nothing}],
                 Core.letBody = (Core.TermVariable (Core.Name "a"))}))}))),
             Testing.validateCoreTermTestCaseOutput = (Just (Core_.InvalidTermErrorDuplicateBinding (Core_.DuplicateBindingError {
-              Core_.duplicateBindingErrorLocation = (Accessors.AccessorPath [
-                Accessors.TermAccessorLambdaBody]),
+              Core_.duplicateBindingErrorLocation = (Paths.SubtermPath [
+                Paths.SubtermStepLambdaBody]),
               Core_.duplicateBindingErrorName = (Core.Name "a")})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -142,8 +142,8 @@ duplicateBindingsTests =
                     Core.bindingType = Nothing}],
                 Core.letBody = (Core.TermVariable (Core.Name "y"))}))})),
             Testing.validateCoreTermTestCaseOutput = (Just (Core_.InvalidTermErrorDuplicateBinding (Core_.DuplicateBindingError {
-              Core_.duplicateBindingErrorLocation = (Accessors.AccessorPath [
-                Accessors.TermAccessorLetBody]),
+              Core_.duplicateBindingErrorLocation = (Paths.SubtermPath [
+                Paths.SubtermStepLetBody]),
               Core_.duplicateBindingErrorName = (Core.Name "y")})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -169,8 +169,8 @@ duplicateBindingsTests =
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "x"))})),
             Testing.validateCoreTermTestCaseOutput = (Just (Core_.InvalidTermErrorDuplicateBinding (Core_.DuplicateBindingError {
-              Core_.duplicateBindingErrorLocation = (Accessors.AccessorPath [
-                Accessors.TermAccessorLetBinding (Core.Name "x")]),
+              Core_.duplicateBindingErrorLocation = (Paths.SubtermPath [
+                Paths.SubtermStepLetBinding (Core.Name "x")]),
               Core_.duplicateBindingErrorName = (Core.Name "a")})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -240,7 +240,7 @@ duplicateFieldsTests =
                   Core.fieldName = (Core.Name "x"),
                   Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]})),
             Testing.validateCoreTermTestCaseOutput = (Just (Core_.InvalidTermErrorDuplicateField (Core_.DuplicateFieldError {
-              Core_.duplicateFieldErrorLocation = (Accessors.AccessorPath []),
+              Core_.duplicateFieldErrorLocation = (Paths.SubtermPath []),
               Core_.duplicateFieldErrorName = (Core.Name "x")})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -261,8 +261,8 @@ duplicateFieldsTests =
                     Core.fieldName = (Core.Name "x"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}))}))),
             Testing.validateCoreTermTestCaseOutput = (Just (Core_.InvalidTermErrorDuplicateField (Core_.DuplicateFieldError {
-              Core_.duplicateFieldErrorLocation = (Accessors.AccessorPath [
-                Accessors.TermAccessorLambdaBody]),
+              Core_.duplicateFieldErrorLocation = (Paths.SubtermPath [
+                Paths.SubtermStepLambdaBody]),
               Core_.duplicateFieldErrorName = (Core.Name "x")})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []},
@@ -286,8 +286,8 @@ duplicateFieldsTests =
                     Core.fieldName = (Core.Name "x"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}))})),
             Testing.validateCoreTermTestCaseOutput = (Just (Core_.InvalidTermErrorDuplicateField (Core_.DuplicateFieldError {
-              Core_.duplicateFieldErrorLocation = (Accessors.AccessorPath [
-                Accessors.TermAccessorLetBody]),
+              Core_.duplicateFieldErrorLocation = (Paths.SubtermPath [
+                Paths.SubtermStepLetBody]),
               Core_.duplicateFieldErrorName = (Core.Name "x")})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
@@ -321,7 +321,7 @@ emptyLetBindingsTests =
               Core.letBindings = [],
               Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
             Testing.validateCoreTermTestCaseOutput = (Just (Core_.InvalidTermErrorEmptyLetBindings (Core_.EmptyLetBindingsError {
-              Core_.emptyLetBindingsErrorLocation = (Accessors.AccessorPath [])})))})),
+              Core_.emptyLetBindingsErrorLocation = (Paths.SubtermPath [])})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 
@@ -356,7 +356,7 @@ identityApplicationTests =
                 Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
             Testing.validateCoreTermTestCaseOutput = (Just (Core_.InvalidTermErrorUnnecessaryIdentityApplication (Core_.UnnecessaryIdentityApplicationError {
-              Core_.unnecessaryIdentityApplicationErrorLocation = (Accessors.AccessorPath [])})))})),
+              Core_.unnecessaryIdentityApplicationErrorLocation = (Paths.SubtermPath [])})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 

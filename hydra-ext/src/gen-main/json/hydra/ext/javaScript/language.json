@@ -602,7 +602,7 @@
   "namespace": "hydra.ext.javaScript.language",
   "termDependencies": ["hydra.lexical"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

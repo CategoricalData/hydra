@@ -2490,7 +2490,7 @@
   "namespace": "hydra.test.inference.kernelExamples",
   "termDependencies": ["hydra.test.testGraph"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

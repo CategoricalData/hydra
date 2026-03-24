@@ -1480,7 +1480,7 @@
   "namespace": "hydra.test.transform",
   "termDependencies": ["hydra.formatting", "hydra.sorting"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

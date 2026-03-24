@@ -10731,7 +10731,7 @@
     "hydra.show.errors",
     "hydra.show.graph"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

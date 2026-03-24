@@ -15,9 +15,9 @@ public class VoidInNonBottomPositionError implements Serializable, Comparable<Vo
   /**
    * The path to the void type in a non-bottom position
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
-  public VoidInNonBottomPositionError (hydra.accessors.AccessorPath location) {
+  public VoidInNonBottomPositionError (hydra.paths.SubtermPath location) {
     this.location = location;
   }
 

@@ -290,7 +290,7 @@
   "namespace": "hydra.constants",
   "termDependencies": [],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

@@ -15,9 +15,9 @@ public class UnnecessaryIdentityApplicationError implements Serializable, Compar
   /**
    * The path to the identity application within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
-  public UnnecessaryIdentityApplicationError (hydra.accessors.AccessorPath location) {
+  public UnnecessaryIdentityApplicationError (hydra.paths.SubtermPath location) {
     this.location = location;
   }
 

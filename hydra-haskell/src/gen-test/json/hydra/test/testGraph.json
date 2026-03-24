@@ -306,7 +306,7 @@
   "namespace": "hydra.test.testGraph",
   "termDependencies": ["hydra.test.testTerms", "hydra.test.testTypes"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

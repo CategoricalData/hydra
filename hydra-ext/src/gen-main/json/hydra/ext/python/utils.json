@@ -5694,7 +5694,7 @@
   "typeDependencies": [
     "hydra.ext.python.environment",
     "hydra.ext.python.syntax",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

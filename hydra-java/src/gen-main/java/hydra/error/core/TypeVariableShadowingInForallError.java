@@ -17,14 +17,14 @@ public class TypeVariableShadowingInForallError implements Serializable, Compara
   /**
    * The path to the shadowing forall type
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The name of the shadowed type variable
    */
   public final hydra.core.Name name;
 
-  public TypeVariableShadowingInForallError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public TypeVariableShadowingInForallError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class TypeVariableShadowingInForallError implements Serializable, Compara
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public TypeVariableShadowingInForallError withLocation(hydra.accessors.AccessorPath location) {
+  public TypeVariableShadowingInForallError withLocation(hydra.paths.SubtermPath location) {
     return new TypeVariableShadowingInForallError(location, name);
   }
 

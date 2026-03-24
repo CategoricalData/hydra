@@ -538,7 +538,7 @@
   "namespace": "hydra.test.utils",
   "termDependencies": ["hydra.inference", "hydra.show.errors", "hydra.lexical"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

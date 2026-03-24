@@ -113,7 +113,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.DuplicateBindingError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -125,7 +125,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -138,7 +138,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -147,7 +147,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.DuplicateBindingError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -330,7 +330,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.DuplicateFieldError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -342,7 +342,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -355,7 +355,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -364,7 +364,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.DuplicateFieldError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -1324,7 +1324,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"literal": {"boolean": {}}}}},
                                                                                   "type": {"variable": "hydra.error.core.ConstantConditionError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -1336,7 +1336,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -1349,7 +1349,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -1358,7 +1358,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.ConstantConditionError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -1541,7 +1541,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.EmptyCaseStatementError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -1553,7 +1553,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -1566,7 +1566,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -1575,7 +1575,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.EmptyCaseStatementError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -1715,7 +1715,7 @@
                                                                                       "typeName": "hydra.error.core.EmptyLetBindingsError"}}}},
                                                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                           "type": {"variable": "hydra.error.core.EmptyLetBindingsError"}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -1727,7 +1727,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -1740,7 +1740,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -1749,7 +1749,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.EmptyLetBindingsError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -1889,7 +1889,7 @@
                                                                                       "typeName": "hydra.error.core.EmptyTermAnnotationError"}}}},
                                                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                           "type": {"variable": "hydra.error.core.EmptyTermAnnotationError"}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -1901,7 +1901,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -1914,7 +1914,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -1923,7 +1923,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.EmptyTermAnnotationError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -2063,7 +2063,7 @@
                                                                                       "typeName": "hydra.error.core.EmptyTypeNameInTermError"}}}},
                                                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                           "type": {"variable": "hydra.error.core.EmptyTypeNameInTermError"}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -2075,7 +2075,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -2088,7 +2088,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -2097,7 +2097,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.EmptyTypeNameInTermError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -2280,7 +2280,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.InvalidLambdaParameterNameError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -2292,7 +2292,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -2305,7 +2305,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -2314,7 +2314,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.InvalidLambdaParameterNameError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -2497,7 +2497,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.InvalidLetBindingNameError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -2509,7 +2509,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -2522,7 +2522,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -2531,7 +2531,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.InvalidLetBindingNameError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -2714,7 +2714,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.InvalidTypeLambdaParameterNameError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -2726,7 +2726,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -2739,7 +2739,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -2748,7 +2748,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.InvalidTypeLambdaParameterNameError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -2888,7 +2888,7 @@
                                                                                       "typeName": "hydra.error.core.NestedTermAnnotationError"}}}},
                                                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                           "type": {"variable": "hydra.error.core.NestedTermAnnotationError"}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -2900,7 +2900,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -2913,7 +2913,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -2922,7 +2922,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.NestedTermAnnotationError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -3105,7 +3105,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.RedundantWrapUnwrapError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -3117,7 +3117,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -3130,7 +3130,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -3139,7 +3139,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.RedundantWrapUnwrapError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -3322,7 +3322,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.SelfApplicationError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -3334,7 +3334,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -3347,7 +3347,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -3356,7 +3356,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.SelfApplicationError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -3539,7 +3539,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.TermVariableShadowingError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -3551,7 +3551,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -3564,7 +3564,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -3573,7 +3573,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.TermVariableShadowingError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -3758,7 +3758,7 @@
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {
                                                                                     "variable": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -3770,7 +3770,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -3783,7 +3783,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -3792,7 +3792,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {
                                                                           "variable": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
@@ -3980,7 +3980,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.UndefinedTermVariableError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -3992,7 +3992,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -4005,7 +4005,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -4014,7 +4014,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.UndefinedTermVariableError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -4199,7 +4199,7 @@
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {
                                                                                     "variable": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -4211,7 +4211,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -4224,7 +4224,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -4233,7 +4233,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {
                                                                           "variable": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
@@ -4423,7 +4423,7 @@
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {
                                                                                     "variable": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -4435,7 +4435,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -4448,7 +4448,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -4457,7 +4457,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {
                                                                           "variable": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
@@ -4647,7 +4647,7 @@
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {
                                                                                     "variable": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -4659,7 +4659,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -4672,7 +4672,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -4681,7 +4681,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {
                                                                           "variable": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
@@ -4869,7 +4869,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.UnknownPrimitiveNameError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -4881,7 +4881,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -4894,7 +4894,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -4903,7 +4903,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.UnknownPrimitiveNameError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -5043,7 +5043,7 @@
                                                                                       "typeName": "hydra.error.core.UnnecessaryIdentityApplicationError"}}}},
                                                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                           "type": {"variable": "hydra.error.core.UnnecessaryIdentityApplicationError"}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -5055,7 +5055,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -5068,7 +5068,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -5077,7 +5077,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.UnnecessaryIdentityApplicationError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -5260,7 +5260,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.UntypedTermVariableError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -5272,7 +5272,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -5285,7 +5285,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -5294,7 +5294,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.UntypedTermVariableError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -6926,7 +6926,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.DuplicateRecordTypeFieldNamesError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -6938,7 +6938,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -6951,7 +6951,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -6960,7 +6960,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.DuplicateRecordTypeFieldNamesError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -7143,7 +7143,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.DuplicateUnionTypeFieldNamesError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -7155,7 +7155,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -7168,7 +7168,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -7177,7 +7177,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.DuplicateUnionTypeFieldNamesError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -7317,7 +7317,7 @@
                                                                                       "typeName": "hydra.error.core.EmptyRecordTypeError"}}}},
                                                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                           "type": {"variable": "hydra.error.core.EmptyRecordTypeError"}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -7329,7 +7329,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -7342,7 +7342,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -7351,7 +7351,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.EmptyRecordTypeError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -7491,7 +7491,7 @@
                                                                                       "typeName": "hydra.error.core.EmptyTypeAnnotationError"}}}},
                                                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                           "type": {"variable": "hydra.error.core.EmptyTypeAnnotationError"}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -7503,7 +7503,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -7516,7 +7516,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -7525,7 +7525,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.EmptyTypeAnnotationError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -7665,7 +7665,7 @@
                                                                                       "typeName": "hydra.error.core.EmptyUnionTypeError"}}}},
                                                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                           "type": {"variable": "hydra.error.core.EmptyUnionTypeError"}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -7677,7 +7677,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -7690,7 +7690,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -7699,7 +7699,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.EmptyUnionTypeError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -7882,7 +7882,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.InvalidForallParameterNameError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -7894,7 +7894,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -7907,7 +7907,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -7916,7 +7916,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.InvalidForallParameterNameError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -8099,7 +8099,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.InvalidTypeSchemeVariableNameError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -8111,7 +8111,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -8124,7 +8124,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -8133,7 +8133,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.InvalidTypeSchemeVariableNameError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -8273,7 +8273,7 @@
                                                                                       "typeName": "hydra.error.core.NestedTypeAnnotationError"}}}},
                                                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                           "type": {"variable": "hydra.error.core.NestedTypeAnnotationError"}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -8285,7 +8285,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -8298,7 +8298,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -8307,7 +8307,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.NestedTypeAnnotationError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -8490,7 +8490,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Type"}}},
                                                                                   "type": {"variable": "hydra.error.core.NonComparableMapKeyTypeError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -8502,7 +8502,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -8515,7 +8515,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -8524,7 +8524,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.NonComparableMapKeyTypeError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -8707,7 +8707,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Type"}}},
                                                                                   "type": {"variable": "hydra.error.core.NonComparableSetElementTypeError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -8719,7 +8719,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -8732,7 +8732,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -8741,7 +8741,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.NonComparableSetElementTypeError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -8924,7 +8924,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.SingleVariantUnionError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -8936,7 +8936,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -8949,7 +8949,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -8958,7 +8958,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.SingleVariantUnionError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -9141,7 +9141,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.TypeVariableShadowingInForallError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -9153,7 +9153,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -9166,7 +9166,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -9175,7 +9175,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.TypeVariableShadowingInForallError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -9358,7 +9358,7 @@
                                                                                           "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                       "type": {"variable": "hydra.core.Name"}}},
                                                                                   "type": {"variable": "hydra.error.core.UndefinedTypeVariableError"}}}}}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -9370,7 +9370,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -9383,7 +9383,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -9392,7 +9392,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.UndefinedTypeVariableError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -9532,7 +9532,7 @@
                                                                                       "typeName": "hydra.error.core.VoidInNonBottomPositionError"}}}},
                                                                               "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                           "type": {"variable": "hydra.error.core.VoidInNonBottomPositionError"}}},
-                                                                      "domain": [{"variable": "hydra.accessors.AccessorPath"}],
+                                                                      "domain": [{"variable": "hydra.paths.SubtermPath"}],
                                                                       "parameter": "field_location"}}},
                                                                 "function": {
                                                                   "application": {
@@ -9544,7 +9544,7 @@
                                                                             "argument": {"variable": "fieldMap"},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.decode.accessors.accessorPath"},
+                                                                                "argument": {"variable": "hydra.decode.paths.subtermPath"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"literal": {"string": "location"}},
@@ -9557,7 +9557,7 @@
                                                                                                 "body": {"variable": "hydra.extract.helpers.requireField"},
                                                                                                 "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"variable": "hydra.accessors.AccessorPath"}}}}}}}}}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermPath"}}}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -9566,7 +9566,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.accessors.AccessorPath"}}},
+                                                                            "type": {"variable": "hydra.paths.SubtermPath"}}},
                                                                         "type": {"variable": "hydra.error.core.VoidInNonBottomPositionError"}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Record"}],
                                                         "parameter": "record"}}}}],
@@ -10646,7 +10646,7 @@
     "hydra.extract.helpers",
     "hydra.lexical",
     "hydra.rewriting",
-    "hydra.decode.accessors",
+    "hydra.decode.paths",
     "hydra.decode.core",
     "hydra.decode.variants"],
   "typeDependencies": ["hydra.error.core", "hydra.util"]}

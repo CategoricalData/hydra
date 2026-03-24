@@ -686,7 +686,7 @@
   "namespace": "hydra.json.yaml.decode",
   "termDependencies": ["hydra.json.decode", "hydra.ext.org.yaml.model"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

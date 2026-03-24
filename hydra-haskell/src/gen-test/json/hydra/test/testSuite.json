@@ -96,7 +96,7 @@
     "hydra.test.unification",
     "hydra.test.validate.all"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

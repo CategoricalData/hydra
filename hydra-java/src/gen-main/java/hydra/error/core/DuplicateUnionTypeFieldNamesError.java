@@ -17,14 +17,14 @@ public class DuplicateUnionTypeFieldNamesError implements Serializable, Comparab
   /**
    * The path to the union type with duplicate fields
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The duplicated field name
    */
   public final hydra.core.Name name;
 
-  public DuplicateUnionTypeFieldNamesError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public DuplicateUnionTypeFieldNamesError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class DuplicateUnionTypeFieldNamesError implements Serializable, Comparab
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public DuplicateUnionTypeFieldNamesError withLocation(hydra.accessors.AccessorPath location) {
+  public DuplicateUnionTypeFieldNamesError withLocation(hydra.paths.SubtermPath location) {
     return new DuplicateUnionTypeFieldNamesError(location, name);
   }
 

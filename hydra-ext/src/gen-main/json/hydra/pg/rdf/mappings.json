@@ -2078,7 +2078,7 @@
   "namespace": "hydra.pg.rdf.mappings",
   "termDependencies": ["hydra.ext.rdf.utils"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

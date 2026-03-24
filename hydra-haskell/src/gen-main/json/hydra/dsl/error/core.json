@@ -85,7 +85,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the duplicate binding within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -118,7 +118,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the duplicate binding within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -198,7 +198,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the duplicate binding within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -405,7 +405,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the duplicate binding within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -434,7 +434,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the duplicate binding within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -677,7 +677,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the duplicate field within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -710,7 +710,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the duplicate field within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -790,7 +790,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the duplicate field within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -997,7 +997,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the duplicate field within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -1026,7 +1026,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the duplicate field within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -3035,7 +3035,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the constant condition within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -3068,7 +3068,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the constant condition within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -3148,7 +3148,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the constant condition within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -3355,7 +3355,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the constant condition within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -3384,7 +3384,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the constant condition within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -3627,7 +3627,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the empty case statement within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -3660,7 +3660,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the empty case statement within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -3740,7 +3740,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the empty case statement within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -3947,7 +3947,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the empty case statement within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -3976,7 +3976,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the empty case statement within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -4188,7 +4188,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the empty let expression within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -4209,7 +4209,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the empty let expression within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -4289,7 +4289,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the empty let expression within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -4353,7 +4353,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the empty let expression within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -4382,7 +4382,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the empty let expression within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -4443,7 +4443,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the empty annotation within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -4464,7 +4464,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the empty annotation within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -4544,7 +4544,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the empty annotation within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -4608,7 +4608,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the empty annotation within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -4637,7 +4637,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the empty annotation within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -4698,7 +4698,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the term with the empty type name"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -4719,7 +4719,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the term with the empty type name"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -4799,7 +4799,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the term with the empty type name"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -4863,7 +4863,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the term with the empty type name"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -4892,7 +4892,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the term with the empty type name"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -4984,7 +4984,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the lambda within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -5016,7 +5016,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the lambda within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -5096,7 +5096,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the lambda within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -5305,7 +5305,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the lambda within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -5333,7 +5333,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the lambda within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -5577,7 +5577,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the binding within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -5609,7 +5609,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the binding within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -5688,7 +5688,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the binding within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -5894,7 +5894,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the binding within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -5922,7 +5922,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the binding within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -6165,7 +6165,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the type lambda within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -6197,7 +6197,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the type lambda within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -6277,7 +6277,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the type lambda within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -6486,7 +6486,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the type lambda within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -6514,7 +6514,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the type lambda within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -6728,7 +6728,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the outer annotation within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -6749,7 +6749,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the outer annotation within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -6829,7 +6829,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the outer annotation within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -6893,7 +6893,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the outer annotation within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -6922,7 +6922,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the outer annotation within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -7014,7 +7014,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the redundant wrap/unwrap within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -7047,7 +7047,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the redundant wrap/unwrap within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -7127,7 +7127,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the redundant wrap/unwrap within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -7334,7 +7334,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the redundant wrap/unwrap within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -7363,7 +7363,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the redundant wrap/unwrap within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -7606,7 +7606,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the self-application within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -7639,7 +7639,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the self-application within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -7719,7 +7719,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the self-application within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -7926,7 +7926,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the self-application within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -7955,7 +7955,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the self-application within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -8198,7 +8198,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the shadowing binding within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -8231,7 +8231,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the shadowing binding within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -8311,7 +8311,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the shadowing binding within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -8518,7 +8518,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the shadowing binding within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -8547,7 +8547,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the shadowing binding within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -8790,7 +8790,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the type lambda within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -8823,7 +8823,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the type lambda within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -8904,7 +8904,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the type lambda within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -9116,7 +9116,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the type lambda within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -9146,7 +9146,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the type lambda within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -9395,7 +9395,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the undefined variable within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -9428,7 +9428,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the undefined variable within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -9508,7 +9508,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the undefined variable within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -9715,7 +9715,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the undefined variable within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -9744,7 +9744,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the undefined variable within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -9987,7 +9987,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the binding within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -10020,7 +10020,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the binding within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -10101,7 +10101,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the binding within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -10313,7 +10313,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the binding within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -10343,7 +10343,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the binding within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -10593,7 +10593,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the lambda within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -10626,7 +10626,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the lambda within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -10708,7 +10708,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the lambda within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -10923,7 +10923,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the lambda within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -10953,7 +10953,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the lambda within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -11206,7 +11206,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the type application within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -11240,7 +11240,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the type application within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -11323,7 +11323,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the type application within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -11539,7 +11539,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the type application within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -11570,7 +11570,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the type application within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -11821,7 +11821,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the primitive reference within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -11854,7 +11854,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the primitive reference within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -11934,7 +11934,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the primitive reference within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -12141,7 +12141,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the primitive reference within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -12170,7 +12170,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the primitive reference within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -12383,7 +12383,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the identity application within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -12404,7 +12404,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the identity application within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -12485,7 +12485,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the identity application within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -12550,7 +12550,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the identity application within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -12579,7 +12579,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the identity application within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -12671,7 +12671,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the untyped variable within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -12704,7 +12704,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the untyped variable within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -12784,7 +12784,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the untyped variable within the term"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -12991,7 +12991,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the untyped variable within the term"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -13020,7 +13020,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the untyped variable within the term"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -14950,7 +14950,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the record type with duplicate fields"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -14983,7 +14983,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the record type with duplicate fields"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -15064,7 +15064,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the record type with duplicate fields"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -15274,7 +15274,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the record type with duplicate fields"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -15303,7 +15303,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the record type with duplicate fields"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -15549,7 +15549,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the union type with duplicate fields"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -15582,7 +15582,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the union type with duplicate fields"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -15663,7 +15663,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the union type with duplicate fields"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -15873,7 +15873,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the union type with duplicate fields"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -15902,7 +15902,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the union type with duplicate fields"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -16115,7 +16115,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the empty record type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -16135,7 +16135,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the empty record type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -16214,7 +16214,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the empty record type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -16277,7 +16277,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the empty record type"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -16305,7 +16305,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the empty record type"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -16365,7 +16365,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the empty annotation"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -16385,7 +16385,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the empty annotation"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -16464,7 +16464,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the empty annotation"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -16527,7 +16527,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the empty annotation"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -16555,7 +16555,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the empty annotation"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -16615,7 +16615,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the empty union type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -16635,7 +16635,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the empty union type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -16714,7 +16714,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the empty union type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -16777,7 +16777,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the empty union type"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -16805,7 +16805,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the empty union type"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -16897,7 +16897,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the forall type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -16929,7 +16929,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the forall type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -17009,7 +17009,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the forall type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -17218,7 +17218,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the forall type"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -17246,7 +17246,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the forall type"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -17491,7 +17491,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the type scheme"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -17523,7 +17523,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the type scheme"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -17603,7 +17603,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the type scheme"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -17812,7 +17812,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the type scheme"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -17840,7 +17840,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the type scheme"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -18053,7 +18053,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the outer annotation"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -18073,7 +18073,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the outer annotation"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -18152,7 +18152,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the outer annotation"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -18215,7 +18215,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the outer annotation"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -18243,7 +18243,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the outer annotation"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -18335,7 +18335,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the map type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -18367,7 +18367,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the map type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -18447,7 +18447,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the map type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -18656,7 +18656,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the map type"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -18684,7 +18684,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the map type"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -18929,7 +18929,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the set type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -18961,7 +18961,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the set type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -19041,7 +19041,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the set type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -19250,7 +19250,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the set type"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -19278,7 +19278,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the set type"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -19522,7 +19522,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the single-variant union type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -19554,7 +19554,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the single-variant union type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -19633,7 +19633,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the single-variant union type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -19839,7 +19839,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the single-variant union type"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -19867,7 +19867,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the single-variant union type"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -20110,7 +20110,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the shadowing forall type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -20142,7 +20142,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the shadowing forall type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -20222,7 +20222,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the shadowing forall type"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -20431,7 +20431,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the shadowing forall type"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -20459,7 +20459,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the shadowing forall type"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -20703,7 +20703,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the undefined type variable"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -20735,7 +20735,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the undefined type variable"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -20814,7 +20814,7 @@
                           {
                             "@key": "description",
                             "@value": {"literal": {"string": "The path to the undefined type variable"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -21020,7 +21020,7 @@
                                 {
                                   "@key": "description",
                                   "@value": {"literal": {"string": "The path to the undefined type variable"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -21048,7 +21048,7 @@
                               {
                                 "@key": "description",
                                 "@value": {"literal": {"string": "The path to the undefined type variable"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -21261,7 +21261,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the void type in a non-bottom position"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}],
               "parameter": "location"}}},
         "type": [
@@ -21282,7 +21282,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the void type in a non-bottom position"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}}}},
             "variables": []}]}},
     {
@@ -21363,7 +21363,7 @@
                             "@key": "description",
                             "@value": {
                               "literal": {"string": "The path to the void type in a non-bottom position"}}}],
-                        "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                        "body": {"variable": "hydra.paths.SubtermPath"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "domain": {
                   "application": {
@@ -21428,7 +21428,7 @@
                                   "@key": "description",
                                   "@value": {
                                     "literal": {"string": "The path to the void type in a non-bottom position"}}}],
-                              "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                              "body": {"variable": "hydra.paths.SubtermPath"}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}],
                     "parameter": "newVal"}}},
               "domain": [
@@ -21457,7 +21457,7 @@
                                 "@key": "description",
                                 "@value": {
                                   "literal": {"string": "The path to the void type in a non-bottom position"}}}],
-                            "body": {"variable": "hydra.accessors.AccessorPath"}}},
+                            "body": {"variable": "hydra.paths.SubtermPath"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                 "domain": {
                   "application": {
@@ -22530,10 +22530,10 @@
             "variables": []}]}}],
   "description": ["DSL functions for hydra.error.core"],
   "namespace": "hydra.dsl.error.core",
-  "termDependencies": ["hydra.dsl.accessors", "hydra.dsl.core", "hydra.dsl.variants"],
+  "termDependencies": ["hydra.dsl.paths", "hydra.dsl.core", "hydra.dsl.variants"],
   "typeDependencies": [
     "hydra.error.core",
     "hydra.phantoms",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.core",
     "hydra.variants"]}

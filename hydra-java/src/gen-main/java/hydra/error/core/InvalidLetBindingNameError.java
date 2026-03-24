@@ -17,14 +17,14 @@ public class InvalidLetBindingNameError implements Serializable, Comparable<Inva
   /**
    * The path to the binding within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The invalid binding name
    */
   public final hydra.core.Name name;
 
-  public InvalidLetBindingNameError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public InvalidLetBindingNameError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class InvalidLetBindingNameError implements Serializable, Comparable<Inva
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public InvalidLetBindingNameError withLocation(hydra.accessors.AccessorPath location) {
+  public InvalidLetBindingNameError withLocation(hydra.paths.SubtermPath location) {
     return new InvalidLetBindingNameError(location, name);
   }
 

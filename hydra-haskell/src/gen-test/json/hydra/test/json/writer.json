@@ -1471,7 +1471,7 @@
   "namespace": "hydra.test.json.writer",
   "termDependencies": [],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

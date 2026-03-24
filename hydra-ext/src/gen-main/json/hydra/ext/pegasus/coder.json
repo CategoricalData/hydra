@@ -5445,7 +5445,7 @@
     "hydra.show.core"],
   "typeDependencies": [
     "hydra.ext.pegasus.pdl",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

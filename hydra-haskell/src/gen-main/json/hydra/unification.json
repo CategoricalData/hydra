@@ -2481,7 +2481,7 @@
   "namespace": "hydra.unification",
   "termDependencies": ["hydra.rewriting", "hydra.show.core", "hydra.substitution"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

@@ -15,9 +15,9 @@ public class NestedTypeAnnotationError implements Serializable, Comparable<Neste
   /**
    * The path to the outer annotation
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
-  public NestedTypeAnnotationError (hydra.accessors.AccessorPath location) {
+  public NestedTypeAnnotationError (hydra.paths.SubtermPath location) {
     this.location = location;
   }
 

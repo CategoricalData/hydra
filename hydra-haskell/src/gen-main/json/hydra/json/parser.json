@@ -1862,7 +1862,7 @@
   "namespace": "hydra.json.parser",
   "termDependencies": ["hydra.parsers"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

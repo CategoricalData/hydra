@@ -4570,7 +4570,7 @@
   "namespace": "hydra.json.decode",
   "termDependencies": ["hydra.rewriting", "hydra.literals", "hydra.extract.core"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

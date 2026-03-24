@@ -2264,7 +2264,7 @@
   "termDependencies": ["hydra.formatting", "hydra.serialization"],
   "typeDependencies": [
     "hydra.ext.protobuf.proto3",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

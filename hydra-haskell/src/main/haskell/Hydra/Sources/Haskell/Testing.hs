@@ -12,7 +12,7 @@ import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
 import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
 import qualified Hydra.Dsl.Literals                        as Literals
-import qualified Hydra.Dsl.Accessors                  as Accessors
+import qualified Hydra.Dsl.Paths                  as Paths
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders
@@ -67,7 +67,7 @@ import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Show.Accessors as ShowAccessors
+import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors    as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph

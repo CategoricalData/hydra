@@ -51,7 +51,7 @@
     "hydra.test.inference.kernelExamples",
     "hydra.test.inference.nominalTypes"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

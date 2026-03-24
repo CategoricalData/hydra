@@ -1041,7 +1041,7 @@
   "termDependencies": ["hydra.rewriting"],
   "typeDependencies": [
     "hydra.ext.org.apache.tinkerpop.features",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

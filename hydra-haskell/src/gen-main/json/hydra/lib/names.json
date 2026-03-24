@@ -3040,7 +3040,7 @@
   "namespace": "hydra.lib.names",
   "termDependencies": [],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

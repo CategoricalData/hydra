@@ -13193,7 +13193,7 @@
   "termDependencies": ["hydra.constants", "hydra.serialization"],
   "typeDependencies": [
     "hydra.ext.java.syntax",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

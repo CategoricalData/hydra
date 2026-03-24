@@ -49,7 +49,7 @@
     "hydra.test.checking.fundamentals",
     "hydra.test.checking.nominalTypes"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

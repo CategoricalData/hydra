@@ -17,14 +17,14 @@ public class NonComparableSetElementTypeError implements Serializable, Comparabl
   /**
    * The path to the set type
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The non-comparable element type
    */
   public final hydra.core.Type elementType;
 
-  public NonComparableSetElementTypeError (hydra.accessors.AccessorPath location, hydra.core.Type elementType) {
+  public NonComparableSetElementTypeError (hydra.paths.SubtermPath location, hydra.core.Type elementType) {
     this.location = location;
     this.elementType = elementType;
   }
@@ -58,7 +58,7 @@ public class NonComparableSetElementTypeError implements Serializable, Comparabl
     return ((Comparable) elementType).compareTo(other.elementType);
   }
 
-  public NonComparableSetElementTypeError withLocation(hydra.accessors.AccessorPath location) {
+  public NonComparableSetElementTypeError withLocation(hydra.paths.SubtermPath location) {
     return new NonComparableSetElementTypeError(location, elementType);
   }
 

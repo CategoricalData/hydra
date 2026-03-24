@@ -3195,7 +3195,7 @@
                                                                             "parameter": "val"}}},
                                                                       "domain": [{"variable": "hydra.graph.Graph"}],
                                                                       "parameter": "cx"}}},
-                                                                "domain": [{"list": {"variable": "hydra.accessors.TermAccessor"}}],
+                                                                "domain": [{"list": {"variable": "hydra.paths.SubtermStep"}}],
                                                                 "parameter": "path"}}},
                                                           "domain": [
                                                             {
@@ -3227,7 +3227,7 @@
                                                                         "domain": {"variable": "hydra.core.Term"}}},
                                                                     "domain": {"variable": "t0"}}},
                                                                 "domain": {"variable": "hydra.graph.Graph"}}},
-                                                            "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                                            "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                         "domain": {
                                                           "function": {
                                                             "codomain": {
@@ -3299,7 +3299,7 @@
                                             "domain": {"variable": "hydra.core.Term"}}},
                                         "domain": {"variable": "t0"}}},
                                     "domain": {"variable": "hydra.graph.Graph"}}},
-                                "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                             "domain": {
                               "function": {
                                 "codomain": {
@@ -3338,7 +3338,7 @@
                                     "domain": {"variable": "hydra.core.Term"}}},
                                 "domain": {"variable": "t0"}}},
                             "domain": {"variable": "hydra.graph.Graph"}}},
-                        "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                        "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                     "domain": {
                       "function": {
                         "codomain": {
@@ -12061,7 +12061,7 @@
                     "@key": "description",
                     "@value": {
                       "literal": {
-                        "string": "Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of TermAccessors representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas."}}}],
+                        "string": "Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of SubtermSteps representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas."}}}],
                 "body": {
                   "function": {
                     "lambda": {
@@ -12395,7 +12395,7 @@
                                                                             "first": {"variable": "hydra.graph.Graph"},
                                                                             "second": {"variable": "t0"}}}],
                                                                       "parameter": "cxAndVal"}}},
-                                                                "domain": [{"list": {"variable": "hydra.accessors.TermAccessor"}}],
+                                                                "domain": [{"list": {"variable": "hydra.paths.SubtermStep"}}],
                                                                 "parameter": "path"}}},
                                                           "domain": [
                                                             {
@@ -12413,7 +12413,7 @@
                                                                       "pair": {
                                                                         "first": {"variable": "hydra.graph.Graph"},
                                                                         "second": {"variable": "t0"}}}}},
-                                                                "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}}],
+                                                                "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}}],
                                                           "parameter": "recurse"}}},
                                                     "parameter": "t1"}},
                                                 "type": [
@@ -12439,7 +12439,7 @@
                                                                   "pair": {
                                                                     "first": {"variable": "hydra.graph.Graph"},
                                                                     "second": {"variable": "t0"}}}}},
-                                                            "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                                            "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                                         "domain": {
                                                           "function": {
                                                             "codomain": {
@@ -12455,7 +12455,7 @@
                                                                   "pair": {
                                                                     "first": {"variable": "hydra.graph.Graph"},
                                                                     "second": {"variable": "t0"}}}}},
-                                                            "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}}}},
+                                                            "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}},
                                                     "variables": ["t1"]}]}],
                                             "body": {
                                               "let": {
@@ -12566,7 +12566,7 @@
                                             "domain": {"variable": "hydra.core.Term"}}},
                                         "domain": {"variable": "t0"}}},
                                     "domain": {"variable": "hydra.graph.Graph"}}},
-                                "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                             "domain": {
                               "function": {
                                 "codomain": {
@@ -12614,7 +12614,7 @@
                                     "domain": {"variable": "hydra.core.Term"}}},
                                 "domain": {"variable": "t0"}}},
                             "domain": {"variable": "hydra.graph.Graph"}}},
-                        "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                        "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                     "domain": {
                       "function": {
                         "codomain": {
@@ -12638,7 +12638,7 @@
                     "@key": "description",
                     "@value": {
                       "literal": {
-                        "string": "Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of TermAccessors from root to current position."}}}],
+                        "string": "Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of SubtermSteps from root to current position."}}}],
                 "body": {
                   "function": {
                     "lambda": {
@@ -12716,7 +12716,7 @@
                                                                                                                                                       "function": {
                                                                                                                                                         "typeApplication": {
                                                                                                                                                           "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                          "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                          "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                               "function": {"variable": "rec"}}}}}}},
                                                                                                                                   "type": [
                                                                                                                                     {
@@ -12758,7 +12758,7 @@
                                                                                                                           "parameter": "term"}}},
                                                                                                                     "domain": [{"variable": "t2"}],
                                                                                                                     "parameter": "val"}}},
-                                                                                                              "domain": [{"variable": "hydra.accessors.TermAccessor"}],
+                                                                                                              "domain": [{"variable": "hydra.paths.SubtermStep"}],
                                                                                                               "parameter": "accessor"}}},
                                                                                                         "domain": [
                                                                                                           {
@@ -12774,7 +12774,7 @@
                                                                                                                 "codomain": {"pair": {"first": {"variable": "t4"}, "second": {"variable": "t5"}}},
                                                                                                                 "domain": {"variable": "t3"}}},
                                                                                                             "domain": {"variable": "t2"}}},
-                                                                                                        "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}}],
+                                                                                                        "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}}],
                                                                                                   "parameter": "rec"}}},
                                                                                             "parameter": "t6"}},
                                                                                         "parameter": "t5"}},
@@ -12797,7 +12797,7 @@
                                                                                                 "codomain": {"pair": {"first": {"variable": "t4"}, "second": {"variable": "t6"}}},
                                                                                                 "domain": {"variable": "t3"}}},
                                                                                             "domain": {"variable": "t2"}}},
-                                                                                        "domain": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                                        "domain": {"variable": "hydra.paths.SubtermStep"}}},
                                                                                     "domain": {
                                                                                       "function": {"codomain": {"variable": "t6"}, "domain": {"variable": "t5"}}}}},
                                                                                 "domain": {
@@ -12809,7 +12809,7 @@
                                                                                             "codomain": {"pair": {"first": {"variable": "t4"}, "second": {"variable": "t5"}}},
                                                                                             "domain": {"variable": "t3"}}},
                                                                                         "domain": {"variable": "t2"}}},
-                                                                                    "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}}}},
+                                                                                    "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}},
                                                                             "variables": ["t2", "t3", "t4", "t5", "t6"]}]}],
                                                                     "body": {
                                                                       "let": {
@@ -12880,7 +12880,7 @@
                                                                                                                                                                         "body": {
                                                                                                                                                                           "typeApplication": {
                                                                                                                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
-                                                                                                                                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                                                                                                                            "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                                                                                                                                         "type": {"variable": "t3"}}}}},
                                                                                                                                                                 "function": {
                                                                                                                                                                   "application": {
@@ -12908,7 +12908,7 @@
                                                                                                                                                                                         "body": {
                                                                                                                                                                                           "typeApplication": {
                                                                                                                                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                                                                                                                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                                                                                                                                            "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                                                                                                                                                         "type": {"variable": "t3"}}}}}]},
                                                                                                                                                                             "function": {
                                                                                                                                                                               "application": {
@@ -12916,7 +12916,7 @@
                                                                                                                                                                                 "function": {
                                                                                                                                                                                   "typeApplication": {
                                                                                                                                                                                     "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                                                    "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                                                    "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                                                         "function": {"variable": "rec"}}}}}}},
                                                                                                                                                             "type": [
                                                                                                                                                               {
@@ -12972,7 +12972,7 @@
                                                                                                                                                     "domain": [
                                                                                                                                                       {
                                                                                                                                                         "pair": {
-                                                                                                                                                          "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                                                                                          "first": {"variable": "hydra.paths.SubtermStep"},
                                                                                                                                                           "second": {"variable": "t3"}}}],
                                                                                                                                                     "parameter": "atp"}}},
                                                                                                                                               "domain": [
@@ -12988,7 +12988,7 @@
                                                                                                                                                   "pair": {"first": {"variable": "t2"}, "second": {"list": {"variable": "t4"}}}}}},
                                                                                                                                             "type": {
                                                                                                                                               "pair": {
-                                                                                                                                                "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                                                                                "first": {"variable": "hydra.paths.SubtermStep"},
                                                                                                                                                 "second": {"variable": "t3"}}}}}}}}}}},
                                                                                                                             "type": [
                                                                                                                               {
@@ -13037,7 +13037,7 @@
                                                                                                                       {
                                                                                                                         "list": {
                                                                                                                           "pair": {
-                                                                                                                            "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                                                            "first": {"variable": "hydra.paths.SubtermStep"},
                                                                                                                             "second": {"variable": "t3"}}}}],
                                                                                                                     "parameter": "accessorTermPairs"}}},
                                                                                                               "domain": [{"variable": "t2"}],
@@ -13058,7 +13058,7 @@
                                                                                                                 "codomain": {"pair": {"first": {"variable": "t2"}, "second": {"variable": "t4"}}},
                                                                                                                 "domain": {"variable": "t3"}}},
                                                                                                             "domain": {"variable": "t2"}}},
-                                                                                                        "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}}],
+                                                                                                        "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}}],
                                                                                                   "parameter": "rec"}}},
                                                                                             "parameter": "t5"}},
                                                                                         "parameter": "t4"}},
@@ -13079,7 +13079,7 @@
                                                                                                 "domain": {
                                                                                                   "list": {
                                                                                                     "pair": {
-                                                                                                      "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                                      "first": {"variable": "hydra.paths.SubtermStep"},
                                                                                                       "second": {"variable": "t3"}}}}}},
                                                                                             "domain": {"variable": "t2"}}},
                                                                                         "domain": {
@@ -13095,7 +13095,7 @@
                                                                                                 "codomain": {"pair": {"first": {"variable": "t2"}, "second": {"variable": "t4"}}},
                                                                                                 "domain": {"variable": "t3"}}},
                                                                                             "domain": {"variable": "t2"}}},
-                                                                                        "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}}}},
+                                                                                        "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}},
                                                                                 "variables": ["t2", "t3", "t4", "t5"]}]}],
                                                                         "body": {
                                                                           "let": {
@@ -13148,7 +13148,7 @@
                                                                                                                               "function": {
                                                                                                                                 "typeApplication": {
                                                                                                                                   "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                  "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                  "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                       "function": {"variable": "recurse"}}}}}}},
                                                                                                           "type": [
                                                                                                             {
@@ -13207,7 +13207,7 @@
                                                                                       "domain": [
                                                                                         {
                                                                                           "function": {
-                                                                                            "codomain": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                            "codomain": {"variable": "hydra.paths.SubtermStep"},
                                                                                             "domain": {"variable": "hydra.core.Name"}}}],
                                                                                       "parameter": "mkAccessor"}}},
                                                                                 "type": [
@@ -13227,7 +13227,7 @@
                                                                                             "domain": {"variable": "t1"}}},
                                                                                         "domain": {
                                                                                           "function": {
-                                                                                            "codomain": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                            "codomain": {"variable": "hydra.paths.SubtermStep"},
                                                                                             "domain": {"variable": "hydra.core.Name"}}}}},
                                                                                     "variables": []}]}],
                                                                             "body": {
@@ -13271,7 +13271,7 @@
                                                                                                                     "parameter": "field1"}}},
                                                                                                               "domain": [{"variable": "t1"}],
                                                                                                               "parameter": "val1"}}},
-                                                                                                        "domain": [{"list": {"variable": "hydra.accessors.TermAccessor"}}],
+                                                                                                        "domain": [{"list": {"variable": "hydra.paths.SubtermStep"}}],
                                                                                                         "parameter": "path1"}}},
                                                                                                   "function": {
                                                                                                     "typeApplication": {
@@ -13289,7 +13289,7 @@
                                                                                           "domain": [
                                                                                             {
                                                                                               "function": {
-                                                                                                "codomain": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                                "codomain": {"variable": "hydra.paths.SubtermStep"},
                                                                                                 "domain": {"variable": "hydra.core.Name"}}}],
                                                                                           "parameter": "mkAccessor"}}},
                                                                                     "type": [
@@ -13308,12 +13308,12 @@
                                                                                                     "domain": {
                                                                                                       "list": {
                                                                                                         "pair": {
-                                                                                                          "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                                          "first": {"variable": "hydra.paths.SubtermStep"},
                                                                                                           "second": {"variable": "hydra.core.Field"}}}}}},
                                                                                                 "domain": {"variable": "t1"}}},
                                                                                             "domain": {
                                                                                               "function": {
-                                                                                                "codomain": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                                "codomain": {"variable": "hydra.paths.SubtermStep"},
                                                                                                 "domain": {"variable": "hydra.core.Name"}}}}},
                                                                                         "variables": []}]}],
                                                                                 "body": {
@@ -13364,7 +13364,7 @@
                                                                                                                                             "function": {
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                     "function": {"variable": "recurse"}}}}}}},
                                                                                                                         "type": [
                                                                                                                           {
@@ -13414,7 +13414,7 @@
                                                                                                                                                 "function": {
                                                                                                                                                   "typeApplication": {
                                                                                                                                                     "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                    "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                    "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                         "function": {"variable": "recurse"}}}}}}},
                                                                                                                             "type": [
                                                                                                                               {
@@ -13481,9 +13481,9 @@
                                                                                                                 "parameter": "kv"}}},
                                                                                                           "domain": [{"variable": "t1"}],
                                                                                                           "parameter": "val"}}},
-                                                                                                    "domain": [{"variable": "hydra.accessors.TermAccessor"}],
+                                                                                                    "domain": [{"variable": "hydra.paths.SubtermStep"}],
                                                                                                     "parameter": "valAccessor"}}},
-                                                                                              "domain": [{"variable": "hydra.accessors.TermAccessor"}],
+                                                                                              "domain": [{"variable": "hydra.paths.SubtermStep"}],
                                                                                               "parameter": "keyAccessor"}}},
                                                                                         "type": [
                                                                                           {
@@ -13508,8 +13508,8 @@
                                                                                                                 "first": {"variable": "hydra.core.Term"},
                                                                                                                 "second": {"variable": "hydra.core.Term"}}}}},
                                                                                                         "domain": {"variable": "t1"}}},
-                                                                                                    "domain": {"variable": "hydra.accessors.TermAccessor"}}},
-                                                                                                "domain": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                                                    "domain": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                                "domain": {"variable": "hydra.paths.SubtermStep"}}},
                                                                                             "variables": []}]}],
                                                                                     "body": {
                                                                                       "let": {
@@ -13554,14 +13554,14 @@
                                                                                                                                               "function": {
                                                                                                                                                 "function": {
                                                                                                                                                   "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}}},
-                                                                                                                                        "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                        "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                 "function": {
                                                                                                                                   "application": {
                                                                                                                                     "argument": {"variable": "path"},
                                                                                                                                     "function": {
                                                                                                                                       "typeApplication": {
                                                                                                                                         "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                        "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                        "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                             "function": {"variable": "recurse"}}}}}}},
                                                                                                                 "type": [
                                                                                                                   {
@@ -13702,14 +13702,14 @@
                                                                                                                                                                                     {
                                                                                                                                                                                       "union": {
                                                                                                                                                                                         "field": {"name": "unionCasesDefault", "term": {"unit": {}}},
-                                                                                                                                                                                        "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                                                                        "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                                                                 "function": {
                                                                                                                                                                                   "application": {
                                                                                                                                                                                     "argument": {"variable": "path"},
                                                                                                                                                                                     "function": {
                                                                                                                                                                                       "typeApplication": {
                                                                                                                                                                                         "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                                                        "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                                                        "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                                                             "function": {"variable": "recurse"}}}}}}},
                                                                                                                                                                 "domain": [{"variable": "hydra.core.Term"}],
                                                                                                                                                                 "parameter": "def"}}},
@@ -13799,14 +13799,14 @@
                                                                                                                                                                                                   "function": {
                                                                                                                                                                                                     "function": {
                                                                                                                                                                                                       "elimination": {"record": {"field": "name", "typeName": "hydra.core.Field"}}}}}}},
-                                                                                                                                                                                            "typeName": "hydra.accessors.TermAccessor"}},
+                                                                                                                                                                                            "typeName": "hydra.paths.SubtermStep"}},
                                                                                                                                                                                         "@second": {
                                                                                                                                                                                           "application": {
                                                                                                                                                                                             "argument": {"variable": "f"},
                                                                                                                                                                                             "function": {
                                                                                                                                                                                               "function": {
                                                                                                                                                                                                 "elimination": {"record": {"field": "term", "typeName": "hydra.core.Field"}}}}}}}},
-                                                                                                                                                                                    "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                                                                                                                                    "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                                                                                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                                                             "domain": [{"variable": "hydra.core.Field"}],
                                                                                                                                                                             "parameter": "f"}}},
@@ -13818,7 +13818,7 @@
                                                                                                                                                                               "type": {"variable": "hydra.core.Field"}}},
                                                                                                                                                                           "type": {
                                                                                                                                                                             "pair": {
-                                                                                                                                                                              "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                                                                                                              "first": {"variable": "hydra.paths.SubtermStep"},
                                                                                                                                                                               "second": {"variable": "hydra.core.Term"}}}}}}}}},
                                                                                                                                                               "function": {
                                                                                                                                                                 "application": {
@@ -14184,14 +14184,14 @@
                                                                                                                                                                   {
                                                                                                                                                                     "union": {
                                                                                                                                                                       "field": {"name": "lambdaBody", "term": {"unit": {}}},
-                                                                                                                                                                      "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                                                      "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                                               "function": {
                                                                                                                                                                 "application": {
                                                                                                                                                                   "argument": {"variable": "path"},
                                                                                                                                                                   "function": {
                                                                                                                                                                     "typeApplication": {
                                                                                                                                                                       "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                                      "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                                      "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                                           "function": {"variable": "recurse"}}}}}}},
                                                                                                                                               "type": [
                                                                                                                                                 {
@@ -14336,7 +14336,7 @@
                                                                                                                                       "argument": {
                                                                                                                                         "union": {
                                                                                                                                           "field": {"name": "annotatedBody", "term": {"unit": {}}},
-                                                                                                                                          "typeName": "hydra.accessors.TermAccessor"}},
+                                                                                                                                          "typeName": "hydra.paths.SubtermStep"}},
                                                                                                                                       "function": {
                                                                                                                                         "application": {
                                                                                                                                           "argument": {
@@ -14415,14 +14415,14 @@
                                                                                                                                                       {
                                                                                                                                                         "union": {
                                                                                                                                                           "field": {"name": "applicationFunction", "term": {"unit": {}}},
-                                                                                                                                                          "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                                          "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                                   "function": {
                                                                                                                                                     "application": {
                                                                                                                                                       "argument": {"variable": "path"},
                                                                                                                                                       "function": {
                                                                                                                                                         "typeApplication": {
                                                                                                                                                           "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                          "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                          "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                               "function": {"variable": "recurse"}}}}}}},
                                                                                                                                   "type": [
                                                                                                                                     {
@@ -14467,14 +14467,14 @@
                                                                                                                                                           {
                                                                                                                                                             "union": {
                                                                                                                                                               "field": {"name": "applicationArgument", "term": {"unit": {}}},
-                                                                                                                                                              "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                                              "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                                       "function": {
                                                                                                                                                         "application": {
                                                                                                                                                           "argument": {"variable": "path"},
                                                                                                                                                           "function": {
                                                                                                                                                             "typeApplication": {
                                                                                                                                                               "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                              "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                              "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                                   "function": {"variable": "recurse"}}}}}}},
                                                                                                                                       "type": [
                                                                                                                                         {
@@ -14570,14 +14570,14 @@
                                                                                                                                                                     {
                                                                                                                                                                       "union": {
                                                                                                                                                                         "field": {"name": "sumTerm", "term": {"unit": {}}},
-                                                                                                                                                                        "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                                                        "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                                                 "function": {
                                                                                                                                                                   "application": {
                                                                                                                                                                     "argument": {"variable": "path"},
                                                                                                                                                                     "function": {
                                                                                                                                                                       "typeApplication": {
                                                                                                                                                                         "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                                        "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                                        "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                                             "function": {"variable": "recurse"}}}}}}},
                                                                                                                                                 "type": [
                                                                                                                                                   {
@@ -14655,14 +14655,14 @@
                                                                                                                                                                         {
                                                                                                                                                                           "union": {
                                                                                                                                                                             "field": {"name": "sumTerm", "term": {"unit": {}}},
-                                                                                                                                                                            "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                                                            "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                                                     "function": {
                                                                                                                                                                       "application": {
                                                                                                                                                                         "argument": {"variable": "path"},
                                                                                                                                                                         "function": {
                                                                                                                                                                           "typeApplication": {
                                                                                                                                                                             "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                                            "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                                                 "function": {"variable": "recurse"}}}}}}},
                                                                                                                                                     "type": [
                                                                                                                                                       {
@@ -14824,14 +14824,14 @@
                                                                                                                                                       {
                                                                                                                                                         "union": {
                                                                                                                                                           "field": {"name": "letBody", "term": {"unit": {}}},
-                                                                                                                                                          "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                                          "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                                   "function": {
                                                                                                                                                     "application": {
                                                                                                                                                       "argument": {"variable": "path"},
                                                                                                                                                       "function": {
                                                                                                                                                         "typeApplication": {
                                                                                                                                                           "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                          "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                          "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                               "function": {"variable": "recurse"}}}}}}},
                                                                                                                                   "type": [
                                                                                                                                     {
@@ -15156,14 +15156,14 @@
                                                                                                                                                                                                           "pair": {
                                                                                                                                                                                                             "first": {"variable": "t1"},
                                                                                                                                                                                                             "second": {"list": {"variable": "hydra.core.Term"}}}}}}}}},
-                                                                                                                                                                                              "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                                                                              "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                                                                       "function": {
                                                                                                                                                                                         "application": {
                                                                                                                                                                                           "argument": {"variable": "path"},
                                                                                                                                                                                           "function": {
                                                                                                                                                                                             "typeApplication": {
                                                                                                                                                                                               "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                                                              "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                                                              "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                                                                   "function": {"variable": "recurse"}}}}}}},
                                                                                                                                                                       "type": [
                                                                                                                                                                         {
@@ -15516,14 +15516,14 @@
                                                                                                                                                                                                                 "pair": {
                                                                                                                                                                                                                   "first": {"variable": "hydra.core.Term"},
                                                                                                                                                                                                                   "second": {"variable": "hydra.core.Term"}}}}}}}}}}},
-                                                                                                                                                                                              "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                                                                              "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                                                                       "function": {
                                                                                                                                                                                         "application": {
                                                                                                                                                                                           "argument": {"variable": "path"},
                                                                                                                                                                                           "function": {
                                                                                                                                                                                             "typeApplication": {
                                                                                                                                                                                               "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                                                              "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                                                              "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                                                                   "function": {"variable": "recurse"}}}}}}},
                                                                                                                                                                       "type": [
                                                                                                                                                                         {
@@ -15589,14 +15589,14 @@
                                                                                                                                                                                                                     "pair": {
                                                                                                                                                                                                                       "first": {"variable": "hydra.core.Term"},
                                                                                                                                                                                                                       "second": {"variable": "hydra.core.Term"}}}}}}}}}}},
-                                                                                                                                                                                                  "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                                                                                  "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                                                                           "function": {
                                                                                                                                                                                             "application": {
                                                                                                                                                                                               "argument": {"variable": "path"},
                                                                                                                                                                                               "function": {
                                                                                                                                                                                                 "typeApplication": {
                                                                                                                                                                                                   "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                                                                  "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                                                                  "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                                                                       "function": {"variable": "recurse"}}}}}}},
                                                                                                                                                                           "type": [
                                                                                                                                                                             {
@@ -15910,7 +15910,7 @@
                                                                                                                                                     "argument": {
                                                                                                                                                       "union": {
                                                                                                                                                         "field": {"name": "maybeTerm", "term": {"unit": {}}},
-                                                                                                                                                        "typeName": "hydra.accessors.TermAccessor"}},
+                                                                                                                                                        "typeName": "hydra.paths.SubtermStep"}},
                                                                                                                                                     "function": {
                                                                                                                                                       "application": {
                                                                                                                                                         "argument": {
@@ -15994,14 +15994,14 @@
                                                                                                                                                           "field": {
                                                                                                                                                             "name": "productTerm",
                                                                                                                                                             "term": {"literal": {"integer": {"int32": 0}}}},
-                                                                                                                                                          "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                                          "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                                   "function": {
                                                                                                                                                     "application": {
                                                                                                                                                       "argument": {"variable": "path"},
                                                                                                                                                       "function": {
                                                                                                                                                         "typeApplication": {
                                                                                                                                                           "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                          "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                          "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                               "function": {"variable": "recurse"}}}}}}},
                                                                                                                                   "type": [
                                                                                                                                     {
@@ -16051,14 +16051,14 @@
                                                                                                                                                               "field": {
                                                                                                                                                                 "name": "productTerm",
                                                                                                                                                                 "term": {"literal": {"integer": {"int32": 1}}}},
-                                                                                                                                                              "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                                              "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                                       "function": {
                                                                                                                                                         "application": {
                                                                                                                                                           "argument": {"variable": "path"},
                                                                                                                                                           "function": {
                                                                                                                                                             "typeApplication": {
                                                                                                                                                               "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                              "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                              "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                                   "function": {"variable": "recurse"}}}}}}},
                                                                                                                                       "type": [
                                                                                                                                         {
@@ -16166,14 +16166,14 @@
                                                                                                                                                                           "function": {
                                                                                                                                                                             "function": {
                                                                                                                                                                               "elimination": {"record": {"field": "name", "typeName": "hydra.core.Field"}}}}}}},
-                                                                                                                                                                    "typeName": "hydra.accessors.TermAccessor"}},
+                                                                                                                                                                    "typeName": "hydra.paths.SubtermStep"}},
                                                                                                                                                                 "@second": {
                                                                                                                                                                   "application": {
                                                                                                                                                                     "argument": {"variable": "f"},
                                                                                                                                                                     "function": {
                                                                                                                                                                       "function": {
                                                                                                                                                                         "elimination": {"record": {"field": "term", "typeName": "hydra.core.Field"}}}}}}}},
-                                                                                                                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                                                                                                            "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                                                                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                                     "domain": [{"variable": "hydra.core.Field"}],
                                                                                                                                                     "parameter": "f"}}},
@@ -16185,7 +16185,7 @@
                                                                                                                                                       "type": {"variable": "hydra.core.Field"}}},
                                                                                                                                                   "type": {
                                                                                                                                                     "pair": {
-                                                                                                                                                      "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                                                                                      "first": {"variable": "hydra.paths.SubtermStep"},
                                                                                                                                                       "second": {"variable": "hydra.core.Term"}}}}}}}}},
                                                                                                                                       "function": {
                                                                                                                                         "application": {
@@ -16471,14 +16471,14 @@
                                                                                                                                                                                                           "pair": {
                                                                                                                                                                                                             "first": {"variable": "t1"},
                                                                                                                                                                                                             "second": {"list": {"variable": "hydra.core.Term"}}}}}}}}},
-                                                                                                                                                                                              "typeName": "hydra.accessors.TermAccessor"}}]},
+                                                                                                                                                                                              "typeName": "hydra.paths.SubtermStep"}}]},
                                                                                                                                                                                       "function": {
                                                                                                                                                                                         "application": {
                                                                                                                                                                                           "argument": {"variable": "path"},
                                                                                                                                                                                           "function": {
                                                                                                                                                                                             "typeApplication": {
                                                                                                                                                                                               "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                                                                              "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                                                                                                                                              "type": {"variable": "hydra.paths.SubtermStep"}}}}}}},
                                                                                                                                                                                   "function": {"variable": "recurse"}}}}}}},
                                                                                                                                                                       "type": [
                                                                                                                                                                         {
@@ -16704,7 +16704,7 @@
                                                                                                                                       "argument": {
                                                                                                                                         "union": {
                                                                                                                                           "field": {"name": "typeApplicationTerm", "term": {"unit": {}}},
-                                                                                                                                          "typeName": "hydra.accessors.TermAccessor"}},
+                                                                                                                                          "typeName": "hydra.paths.SubtermStep"}},
                                                                                                                                       "function": {
                                                                                                                                         "application": {
                                                                                                                                           "argument": {
@@ -16773,7 +16773,7 @@
                                                                                                                                       "argument": {
                                                                                                                                         "union": {
                                                                                                                                           "field": {"name": "typeLambdaBody", "term": {"unit": {}}},
-                                                                                                                                          "typeName": "hydra.accessors.TermAccessor"}},
+                                                                                                                                          "typeName": "hydra.paths.SubtermStep"}},
                                                                                                                                       "function": {
                                                                                                                                         "application": {
                                                                                                                                           "argument": {
@@ -16847,7 +16847,7 @@
                                                                                                                                       "argument": {
                                                                                                                                         "union": {
                                                                                                                                           "field": {"name": "injectionTerm", "term": {"unit": {}}},
-                                                                                                                                          "typeName": "hydra.accessors.TermAccessor"}},
+                                                                                                                                          "typeName": "hydra.paths.SubtermStep"}},
                                                                                                                                       "function": {
                                                                                                                                         "application": {
                                                                                                                                           "argument": {
@@ -16934,7 +16934,7 @@
                                                                                                                                       "argument": {
                                                                                                                                         "union": {
                                                                                                                                           "field": {"name": "wrappedTerm", "term": {"unit": {}}},
-                                                                                                                                          "typeName": "hydra.accessors.TermAccessor"}},
+                                                                                                                                          "typeName": "hydra.paths.SubtermStep"}},
                                                                                                                                       "function": {
                                                                                                                                         "application": {
                                                                                                                                           "argument": {
@@ -16988,7 +16988,7 @@
                                                                 "parameter": "term0"}}},
                                                           "domain": [{"variable": "t1"}],
                                                           "parameter": "val0"}}},
-                                                    "domain": [{"list": {"variable": "hydra.accessors.TermAccessor"}}],
+                                                    "domain": [{"list": {"variable": "hydra.paths.SubtermStep"}}],
                                                     "parameter": "path"}}},
                                               "domain": [
                                                 {
@@ -17003,7 +17003,7 @@
                                                                 "second": {"variable": "hydra.core.Term"}}},
                                                             "domain": {"variable": "hydra.core.Term"}}},
                                                         "domain": {"variable": "t1"}}},
-                                                    "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}}],
+                                                    "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}}],
                                               "parameter": "recurse"}}},
                                         "parameter": "t1"}},
                                     "type": [
@@ -17023,7 +17023,7 @@
                                                             "second": {"variable": "hydra.core.Term"}}},
                                                         "domain": {"variable": "hydra.core.Term"}}},
                                                     "domain": {"variable": "t1"}}},
-                                                "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                                "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                             "domain": {
                                               "function": {
                                                 "codomain": {
@@ -17036,7 +17036,7 @@
                                                             "second": {"variable": "hydra.core.Term"}}},
                                                         "domain": {"variable": "hydra.core.Term"}}},
                                                     "domain": {"variable": "t1"}}},
-                                                "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}}}},
+                                                "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}},
                                         "variables": ["t1"]}]}],
                                 "body": {
                                   "let": {
@@ -17066,7 +17066,7 @@
                                                             "second": {"variable": "hydra.core.Term"}}},
                                                         "domain": {"variable": "hydra.core.Term"}}},
                                                     "domain": {"variable": "t0"}}},
-                                                "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                                "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                                             "variables": []}]}],
                                     "body": {
                                       "application": {
@@ -17076,7 +17076,7 @@
                                             "argument": {
                                               "typeApplication": {
                                                 "body": {"list": []},
-                                                "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                "type": {"variable": "hydra.paths.SubtermStep"}}},
                                             "function": {"variable": "recurse"}}}}}}}}},
                             "domain": [{"variable": "t0"}],
                             "parameter": "term0"}}},
@@ -17095,7 +17095,7 @@
                                             "second": {"variable": "hydra.core.Term"}}},
                                         "domain": {"variable": "hydra.core.Term"}}},
                                     "domain": {"variable": "t0"}}},
-                                "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                             "domain": {
                               "function": {
                                 "codomain": {
@@ -17108,7 +17108,7 @@
                                             "second": {"variable": "hydra.core.Term"}}},
                                         "domain": {"variable": "hydra.core.Term"}}},
                                     "domain": {"variable": "t0"}}},
-                                "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}}}}],
+                                "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}}],
                       "parameter": "f"}}}}},
             "parameter": "t0"}},
         "type": [
@@ -17140,7 +17140,7 @@
                                     "second": {"variable": "hydra.core.Term"}}},
                                 "domain": {"variable": "hydra.core.Term"}}},
                             "domain": {"variable": "t0"}}},
-                        "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                        "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}},
                     "domain": {
                       "function": {
                         "codomain": {
@@ -17153,7 +17153,7 @@
                                     "second": {"variable": "hydra.core.Term"}}},
                                 "domain": {"variable": "hydra.core.Term"}}},
                             "domain": {"variable": "t0"}}},
-                        "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}}}}}},
+                        "domain": {"list": {"variable": "hydra.paths.SubtermStep"}}}}}}}},
             "variables": ["t0"]}]}},
     {
       "term": {
@@ -27876,7 +27876,7 @@
             "variables": []}]}},
     {
       "term": {
-        "name": "hydra.rewriting.subtermsWithAccessors",
+        "name": "hydra.rewriting.subtermsWithSteps",
         "term": {
           "annotated": {
             "annotation": [
@@ -27904,14 +27904,14 @@
                                               "@first": {
                                                 "union": {
                                                   "field": {"name": "annotatedBody", "term": {"unit": {}}},
-                                                  "typeName": "hydra.accessors.TermAccessor"}},
+                                                  "typeName": "hydra.paths.SubtermStep"}},
                                               "@second": {
                                                 "application": {
                                                   "argument": {"variable": "at"},
                                                   "function": {
                                                     "function": {
                                                       "elimination": {"record": {"field": "body", "typeName": "hydra.core.AnnotatedTerm"}}}}}}}},
-                                          "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                          "type": {"variable": "hydra.paths.SubtermStep"}}},
                                       "type": {"variable": "hydra.core.Term"}}}]},
                               "domain": [{"variable": "hydra.core.AnnotatedTerm"}],
                               "parameter": "at"}}}},
@@ -27931,7 +27931,7 @@
                                               "@first": {
                                                 "union": {
                                                   "field": {"name": "applicationFunction", "term": {"unit": {}}},
-                                                  "typeName": "hydra.accessors.TermAccessor"}},
+                                                  "typeName": "hydra.paths.SubtermStep"}},
                                               "@second": {
                                                 "application": {
                                                   "argument": {"variable": "p"},
@@ -27939,7 +27939,7 @@
                                                     "function": {
                                                       "elimination": {
                                                         "record": {"field": "function", "typeName": "hydra.core.Application"}}}}}}}},
-                                          "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                          "type": {"variable": "hydra.paths.SubtermStep"}}},
                                       "type": {"variable": "hydra.core.Term"}}},
                                   {
                                     "typeApplication": {
@@ -27950,7 +27950,7 @@
                                               "@first": {
                                                 "union": {
                                                   "field": {"name": "applicationArgument", "term": {"unit": {}}},
-                                                  "typeName": "hydra.accessors.TermAccessor"}},
+                                                  "typeName": "hydra.paths.SubtermStep"}},
                                               "@second": {
                                                 "application": {
                                                   "argument": {"variable": "p"},
@@ -27958,7 +27958,7 @@
                                                     "function": {
                                                       "elimination": {
                                                         "record": {"field": "argument", "typeName": "hydra.core.Application"}}}}}}}},
-                                          "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                          "type": {"variable": "hydra.paths.SubtermStep"}}},
                                       "type": {"variable": "hydra.core.Term"}}}]},
                               "domain": [{"variable": "hydra.core.Application"}],
                               "parameter": "p"}}}},
@@ -27972,7 +27972,7 @@
                                   "body": {"list": []},
                                   "type": {
                                     "pair": {
-                                      "first": {"variable": "hydra.accessors.TermAccessor"},
+                                      "first": {"variable": "hydra.paths.SubtermStep"},
                                       "second": {"variable": "hydra.core.Term"}}}}},
                               "domain": [
                                 {
@@ -28030,14 +28030,14 @@
                                                                                               "function": {
                                                                                                 "function": {
                                                                                                   "elimination": {"record": {"field": "name", "typeName": "hydra.core.Field"}}}}}}},
-                                                                                        "typeName": "hydra.accessors.TermAccessor"}},
+                                                                                        "typeName": "hydra.paths.SubtermStep"}},
                                                                                     "@second": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "f"},
                                                                                         "function": {
                                                                                           "function": {
                                                                                             "elimination": {"record": {"field": "term", "typeName": "hydra.core.Field"}}}}}}}},
-                                                                                "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                                "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "domain": [{"variable": "hydra.core.Field"}],
                                                                         "parameter": "f"}}},
@@ -28049,7 +28049,7 @@
                                                                           "type": {"variable": "hydra.core.Field"}}},
                                                                       "type": {
                                                                         "pair": {
-                                                                          "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                                          "first": {"variable": "hydra.paths.SubtermStep"},
                                                                           "second": {"variable": "hydra.core.Term"}}}}}}}}},
                                                           "function": {
                                                             "application": {
@@ -28078,9 +28078,9 @@
                                                                                             "@first": {
                                                                                               "union": {
                                                                                                 "field": {"name": "unionCasesDefault", "term": {"unit": {}}},
-                                                                                                "typeName": "hydra.accessors.TermAccessor"}},
+                                                                                                "typeName": "hydra.paths.SubtermStep"}},
                                                                                             "@second": {"variable": "t"}}},
-                                                                                        "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                                        "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                                                     "type": {"variable": "hydra.core.Term"}}}]},
                                                                             "domain": [{"variable": "hydra.core.Term"}],
                                                                             "parameter": "t"}}},
@@ -28091,7 +28091,7 @@
                                                                               "body": {"list": []},
                                                                               "type": {
                                                                                 "pair": {
-                                                                                  "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                  "first": {"variable": "hydra.paths.SubtermStep"},
                                                                                   "second": {"variable": "hydra.core.Term"}}}}},
                                                                           "function": {
                                                                             "typeApplication": {
@@ -28101,7 +28101,7 @@
                                                                                   "type": {
                                                                                     "list": {
                                                                                       "pair": {
-                                                                                        "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                        "first": {"variable": "hydra.paths.SubtermStep"},
                                                                                         "second": {"variable": "hydra.core.Term"}}}}}},
                                                                               "type": {"variable": "hydra.core.Term"}}}}}}}}},
                                                               "function": {
@@ -28109,7 +28109,7 @@
                                                                   "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
                                                                   "type": {
                                                                     "pair": {
-                                                                      "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                                      "first": {"variable": "hydra.paths.SubtermStep"},
                                                                       "second": {"variable": "hydra.core.Term"}}}}}}}}},
                                                       "domain": [{"variable": "hydra.core.CaseStatement"}],
                                                       "parameter": "cs"}}}}],
@@ -28119,7 +28119,7 @@
                                                   "body": {"list": []},
                                                   "type": {
                                                     "pair": {
-                                                      "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                      "first": {"variable": "hydra.paths.SubtermStep"},
                                                       "second": {"variable": "hydra.core.Term"}}}}}],
                                             "typeName": "hydra.core.Elimination"}}}}},
                                   {
@@ -28138,14 +28138,14 @@
                                                           "@first": {
                                                             "union": {
                                                               "field": {"name": "lambdaBody", "term": {"unit": {}}},
-                                                              "typeName": "hydra.accessors.TermAccessor"}},
+                                                              "typeName": "hydra.paths.SubtermStep"}},
                                                           "@second": {
                                                             "application": {
                                                               "argument": {"variable": "l"},
                                                               "function": {
                                                                 "function": {
                                                                   "elimination": {"record": {"field": "body", "typeName": "hydra.core.Lambda"}}}}}}}},
-                                                      "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                      "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                   "type": {"variable": "hydra.core.Term"}}}]},
                                           "domain": [{"variable": "hydra.core.Lambda"}],
                                           "parameter": "l"}}}}],
@@ -28155,7 +28155,7 @@
                                       "body": {"list": []},
                                       "type": {
                                         "pair": {
-                                          "first": {"variable": "hydra.accessors.TermAccessor"},
+                                          "first": {"variable": "hydra.paths.SubtermStep"},
                                           "second": {"variable": "hydra.core.Term"}}}}}],
                                 "typeName": "hydra.core.Function"}}}}},
                       {
@@ -28194,14 +28194,14 @@
                                                                       "function": {
                                                                         "function": {
                                                                           "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}}},
-                                                                "typeName": "hydra.accessors.TermAccessor"}},
+                                                                "typeName": "hydra.paths.SubtermStep"}},
                                                             "@second": {
                                                               "application": {
                                                                 "argument": {"variable": "b"},
                                                                 "function": {
                                                                   "function": {
                                                                     "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}}}},
-                                                        "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                        "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                     "type": {"variable": "hydra.core.Term"}}},
                                                 "domain": [{"variable": "hydra.core.Binding"}],
                                                 "parameter": "b"}}},
@@ -28213,7 +28213,7 @@
                                                   "type": {"variable": "hydra.core.Binding"}}},
                                               "type": {
                                                 "pair": {
-                                                  "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                  "first": {"variable": "hydra.paths.SubtermStep"},
                                                   "second": {"variable": "hydra.core.Term"}}}}}}}}},
                                   "function": {
                                     "application": {
@@ -28226,21 +28226,21 @@
                                                   "@first": {
                                                     "union": {
                                                       "field": {"name": "letBody", "term": {"unit": {}}},
-                                                      "typeName": "hydra.accessors.TermAccessor"}},
+                                                      "typeName": "hydra.paths.SubtermStep"}},
                                                   "@second": {
                                                     "application": {
                                                       "argument": {"variable": "lt"},
                                                       "function": {
                                                         "function": {
                                                           "elimination": {"record": {"field": "body", "typeName": "hydra.core.Let"}}}}}}}},
-                                              "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                              "type": {"variable": "hydra.paths.SubtermStep"}}},
                                           "type": {"variable": "hydra.core.Term"}}},
                                       "function": {
                                         "typeApplication": {
                                           "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
                                           "type": {
                                             "pair": {
-                                              "first": {"variable": "hydra.accessors.TermAccessor"},
+                                              "first": {"variable": "hydra.paths.SubtermStep"},
                                               "second": {"variable": "hydra.core.Term"}}}}}}}}},
                               "domain": [{"variable": "hydra.core.Let"}],
                               "parameter": "lt"}}}},
@@ -28268,9 +28268,9 @@
                                                             "field": {
                                                               "name": "listElement",
                                                               "term": {"literal": {"integer": {"int32": 0}}}},
-                                                            "typeName": "hydra.accessors.TermAccessor"}},
+                                                            "typeName": "hydra.paths.SubtermStep"}},
                                                         "@second": {"variable": "e"}}},
-                                                    "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                    "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                 "type": {"variable": "hydra.core.Term"}}},
                                             "domain": [{"variable": "hydra.core.Term"}],
                                             "parameter": "e"}}},
@@ -28282,7 +28282,7 @@
                                               "type": {"variable": "hydra.core.Term"}}},
                                           "type": {
                                             "pair": {
-                                              "first": {"variable": "hydra.accessors.TermAccessor"},
+                                              "first": {"variable": "hydra.paths.SubtermStep"},
                                               "second": {"variable": "hydra.core.Term"}}}}}}}}},
                               "domain": [{"list": {"variable": "hydra.core.Term"}}],
                               "parameter": "l"}}}},
@@ -28296,7 +28296,7 @@
                                   "body": {"list": []},
                                   "type": {
                                     "pair": {
-                                      "first": {"variable": "hydra.accessors.TermAccessor"},
+                                      "first": {"variable": "hydra.paths.SubtermStep"},
                                       "second": {"variable": "hydra.core.Term"}}}}},
                               "domain": [{"variable": "hydra.core.Literal"}],
                               "parameter": "_"}}}},
@@ -28335,7 +28335,7 @@
                                                                 "@first": {
                                                                   "union": {
                                                                     "field": {"name": "mapKey", "term": {"literal": {"integer": {"int32": 0}}}},
-                                                                    "typeName": "hydra.accessors.TermAccessor"}},
+                                                                    "typeName": "hydra.paths.SubtermStep"}},
                                                                 "@second": {
                                                                   "application": {
                                                                     "argument": {"variable": "p"},
@@ -28346,7 +28346,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.Term"}}}}}}},
-                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                            "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                         "type": {"variable": "hydra.core.Term"}}},
                                                     {
                                                       "typeApplication": {
@@ -28357,7 +28357,7 @@
                                                                 "@first": {
                                                                   "union": {
                                                                     "field": {"name": "mapValue", "term": {"literal": {"integer": {"int32": 0}}}},
-                                                                    "typeName": "hydra.accessors.TermAccessor"}},
+                                                                    "typeName": "hydra.paths.SubtermStep"}},
                                                                 "@second": {
                                                                   "application": {
                                                                     "argument": {"variable": "p"},
@@ -28368,7 +28368,7 @@
                                                                             "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
                                                                         "type": {"variable": "hydra.core.Term"}}}}}}},
-                                                            "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                            "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                         "type": {"variable": "hydra.core.Term"}}}]},
                                                 "domain": [
                                                   {
@@ -28388,14 +28388,14 @@
                                               "type": {
                                                 "list": {
                                                   "pair": {
-                                                    "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                    "first": {"variable": "hydra.paths.SubtermStep"},
                                                     "second": {"variable": "hydra.core.Term"}}}}}}}}}},
                                   "function": {
                                     "typeApplication": {
                                       "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
                                       "type": {
                                         "pair": {
-                                          "first": {"variable": "hydra.accessors.TermAccessor"},
+                                          "first": {"variable": "hydra.paths.SubtermStep"},
                                           "second": {"variable": "hydra.core.Term"}}}}}}},
                               "domain": [
                                 {
@@ -28427,9 +28427,9 @@
                                                             "@first": {
                                                               "union": {
                                                                 "field": {"name": "maybeTerm", "term": {"unit": {}}},
-                                                                "typeName": "hydra.accessors.TermAccessor"}},
+                                                                "typeName": "hydra.paths.SubtermStep"}},
                                                             "@second": {"variable": "t"}}},
-                                                        "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                        "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                     "type": {"variable": "hydra.core.Term"}}}]},
                                             "domain": [{"variable": "hydra.core.Term"}],
                                             "parameter": "t"}}},
@@ -28440,7 +28440,7 @@
                                               "body": {"list": []},
                                               "type": {
                                                 "pair": {
-                                                  "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                  "first": {"variable": "hydra.paths.SubtermStep"},
                                                   "second": {"variable": "hydra.core.Term"}}}}},
                                           "function": {
                                             "typeApplication": {
@@ -28450,7 +28450,7 @@
                                                   "type": {
                                                     "list": {
                                                       "pair": {
-                                                        "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                        "first": {"variable": "hydra.paths.SubtermStep"},
                                                         "second": {"variable": "hydra.core.Term"}}}}}},
                                               "type": {"variable": "hydra.core.Term"}}}}}}}}},
                               "domain": [{"maybe": {"variable": "hydra.core.Term"}}],
@@ -28465,7 +28465,7 @@
                                   "body": {"list": []},
                                   "type": {
                                     "pair": {
-                                      "first": {"variable": "hydra.accessors.TermAccessor"},
+                                      "first": {"variable": "hydra.paths.SubtermStep"},
                                       "second": {"variable": "hydra.core.Term"}}}}},
                               "domain": [
                                 {
@@ -28507,14 +28507,14 @@
                                                                   "function": {
                                                                     "function": {
                                                                       "elimination": {"record": {"field": "name", "typeName": "hydra.core.Field"}}}}}}},
-                                                            "typeName": "hydra.accessors.TermAccessor"}},
+                                                            "typeName": "hydra.paths.SubtermStep"}},
                                                         "@second": {
                                                           "application": {
                                                             "argument": {"variable": "f"},
                                                             "function": {
                                                               "function": {
                                                                 "elimination": {"record": {"field": "term", "typeName": "hydra.core.Field"}}}}}}}},
-                                                    "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                    "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                 "type": {"variable": "hydra.core.Term"}}},
                                             "domain": [{"variable": "hydra.core.Field"}],
                                             "parameter": "f"}}},
@@ -28526,7 +28526,7 @@
                                               "type": {"variable": "hydra.core.Field"}}},
                                           "type": {
                                             "pair": {
-                                              "first": {"variable": "hydra.accessors.TermAccessor"},
+                                              "first": {"variable": "hydra.paths.SubtermStep"},
                                               "second": {"variable": "hydra.core.Term"}}}}}}}}},
                               "domain": [{"variable": "hydra.core.Record"}],
                               "parameter": "rt"}}}},
@@ -28560,9 +28560,9 @@
                                                             "field": {
                                                               "name": "listElement",
                                                               "term": {"literal": {"integer": {"int32": 0}}}},
-                                                            "typeName": "hydra.accessors.TermAccessor"}},
+                                                            "typeName": "hydra.paths.SubtermStep"}},
                                                         "@second": {"variable": "e"}}},
-                                                    "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                    "type": {"variable": "hydra.paths.SubtermStep"}}},
                                                 "type": {"variable": "hydra.core.Term"}}},
                                             "domain": [{"variable": "hydra.core.Term"}],
                                             "parameter": "e"}}},
@@ -28574,7 +28574,7 @@
                                               "type": {"variable": "hydra.core.Term"}}},
                                           "type": {
                                             "pair": {
-                                              "first": {"variable": "hydra.accessors.TermAccessor"},
+                                              "first": {"variable": "hydra.paths.SubtermStep"},
                                               "second": {"variable": "hydra.core.Term"}}}}}}}}},
                               "domain": [{"set": {"variable": "hydra.core.Term"}}],
                               "parameter": "s"}}}},
@@ -28594,7 +28594,7 @@
                                               "@first": {
                                                 "union": {
                                                   "field": {"name": "typeApplicationTerm", "term": {"unit": {}}},
-                                                  "typeName": "hydra.accessors.TermAccessor"}},
+                                                  "typeName": "hydra.paths.SubtermStep"}},
                                               "@second": {
                                                 "application": {
                                                   "argument": {"variable": "ta"},
@@ -28602,7 +28602,7 @@
                                                     "function": {
                                                       "elimination": {
                                                         "record": {"field": "body", "typeName": "hydra.core.TypeApplicationTerm"}}}}}}}},
-                                          "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                          "type": {"variable": "hydra.paths.SubtermStep"}}},
                                       "type": {"variable": "hydra.core.Term"}}}]},
                               "domain": [{"variable": "hydra.core.TypeApplicationTerm"}],
                               "parameter": "ta"}}}},
@@ -28622,14 +28622,14 @@
                                               "@first": {
                                                 "union": {
                                                   "field": {"name": "typeLambdaBody", "term": {"unit": {}}},
-                                                  "typeName": "hydra.accessors.TermAccessor"}},
+                                                  "typeName": "hydra.paths.SubtermStep"}},
                                               "@second": {
                                                 "application": {
                                                   "argument": {"variable": "ta"},
                                                   "function": {
                                                     "function": {
                                                       "elimination": {"record": {"field": "body", "typeName": "hydra.core.TypeLambda"}}}}}}}},
-                                          "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                          "type": {"variable": "hydra.paths.SubtermStep"}}},
                                       "type": {"variable": "hydra.core.Term"}}}]},
                               "domain": [{"variable": "hydra.core.TypeLambda"}],
                               "parameter": "ta"}}}},
@@ -28649,7 +28649,7 @@
                                               "@first": {
                                                 "union": {
                                                   "field": {"name": "injectionTerm", "term": {"unit": {}}},
-                                                  "typeName": "hydra.accessors.TermAccessor"}},
+                                                  "typeName": "hydra.paths.SubtermStep"}},
                                               "@second": {
                                                 "application": {
                                                   "argument": {
@@ -28661,7 +28661,7 @@
                                                   "function": {
                                                     "function": {
                                                       "elimination": {"record": {"field": "term", "typeName": "hydra.core.Field"}}}}}}}},
-                                          "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                          "type": {"variable": "hydra.paths.SubtermStep"}}},
                                       "type": {"variable": "hydra.core.Term"}}}]},
                               "domain": [{"variable": "hydra.core.Injection"}],
                               "parameter": "ut"}}}},
@@ -28675,7 +28675,7 @@
                                   "body": {"list": []},
                                   "type": {
                                     "pair": {
-                                      "first": {"variable": "hydra.accessors.TermAccessor"},
+                                      "first": {"variable": "hydra.paths.SubtermStep"},
                                       "second": {"variable": "hydra.core.Term"}}}}},
                               "domain": [{"unit": {}}],
                               "parameter": "_"}}}},
@@ -28689,7 +28689,7 @@
                                   "body": {"list": []},
                                   "type": {
                                     "pair": {
-                                      "first": {"variable": "hydra.accessors.TermAccessor"},
+                                      "first": {"variable": "hydra.paths.SubtermStep"},
                                       "second": {"variable": "hydra.core.Term"}}}}},
                               "domain": [{"variable": "hydra.core.Name"}],
                               "parameter": "_"}}}},
@@ -28709,14 +28709,14 @@
                                               "@first": {
                                                 "union": {
                                                   "field": {"name": "wrappedTerm", "term": {"unit": {}}},
-                                                  "typeName": "hydra.accessors.TermAccessor"}},
+                                                  "typeName": "hydra.paths.SubtermStep"}},
                                               "@second": {
                                                 "application": {
                                                   "argument": {"variable": "n"},
                                                   "function": {
                                                     "function": {
                                                       "elimination": {"record": {"field": "body", "typeName": "hydra.core.WrappedTerm"}}}}}}}},
-                                          "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                          "type": {"variable": "hydra.paths.SubtermStep"}}},
                                       "type": {"variable": "hydra.core.Term"}}}]},
                               "domain": [{"variable": "hydra.core.WrappedTerm"}],
                               "parameter": "n"}}}}],
@@ -28730,7 +28730,7 @@
                 "codomain": {
                   "list": {
                     "pair": {
-                      "first": {"variable": "hydra.accessors.TermAccessor"},
+                      "first": {"variable": "hydra.paths.SubtermStep"},
                       "second": {"variable": "hydra.core.Term"}}}},
                 "domain": {"variable": "hydra.core.Term"}}},
             "variables": []}]}},
@@ -31191,7 +31191,7 @@
   "namespace": "hydra.rewriting",
   "termDependencies": ["hydra.names", "hydra.sorting"],
   "typeDependencies": [
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

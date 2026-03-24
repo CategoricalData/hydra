@@ -6,7 +6,7 @@ import Hydra.Kernel hiding (
   compactName, localNameOf, namespaceOf, namespaceToFilePath, qname, qualifyName,
   uniqueLabel, unqualifyName)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Accessors    as Accessors
+import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap

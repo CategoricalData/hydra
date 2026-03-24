@@ -17,14 +17,14 @@ public class DuplicateBindingError implements Serializable, Comparable<Duplicate
   /**
    * The path to the duplicate binding within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The duplicated binding name
    */
   public final hydra.core.Name name;
 
-  public DuplicateBindingError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public DuplicateBindingError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class DuplicateBindingError implements Serializable, Comparable<Duplicate
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public DuplicateBindingError withLocation(hydra.accessors.AccessorPath location) {
+  public DuplicateBindingError withLocation(hydra.paths.SubtermPath location) {
     return new DuplicateBindingError(location, name);
   }
 

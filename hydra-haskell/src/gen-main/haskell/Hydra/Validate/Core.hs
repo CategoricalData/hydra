@@ -4,7 +4,6 @@
 
 module Hydra.Validate.Core where
 
-import qualified Hydra.Accessors as Accessors
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Core as Core_
 import qualified Hydra.Graph as Graph
@@ -15,6 +14,7 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
+import qualified Hydra.Paths as Paths
 import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -24,7 +24,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Check for duplicate binding names in a list of bindings
-checkDuplicateBindings :: Accessors.AccessorPath -> [Core.Binding] -> Maybe Core_.InvalidTermError
+checkDuplicateBindings :: Paths.SubtermPath -> [Core.Binding] -> Maybe Core_.InvalidTermError
 checkDuplicateBindings path bindings =
 
       let names = Lists.map Core.bindingName bindings
@@ -42,7 +42,7 @@ checkDuplicateFieldTypes fields mkError =
       in (Maybes.cases dup Nothing (\name -> mkError name))
 
 -- | Check for duplicate field names in a list of fields
-checkDuplicateFields :: Accessors.AccessorPath -> [Core.Name] -> Maybe Core_.InvalidTermError
+checkDuplicateFields :: Paths.SubtermPath -> [Core.Name] -> Maybe Core_.InvalidTermError
 checkDuplicateFields path names =
 
       let dup = findDuplicate names
@@ -51,7 +51,7 @@ checkDuplicateFields path names =
         Core_.duplicateFieldErrorName = name})) dup)
 
 -- | Check if any name in a list shadows a variable already in scope
-checkShadowing :: Accessors.AccessorPath -> Graph.Graph -> [Core.Name] -> Maybe Core_.InvalidTermError
+checkShadowing :: Paths.SubtermPath -> Graph.Graph -> [Core.Name] -> Maybe Core_.InvalidTermError
 checkShadowing path cx names =
 
       let result =
@@ -61,7 +61,7 @@ checkShadowing path cx names =
       in result
 
 -- | Check a single term node for validation errors
-checkTerm :: Bool -> Accessors.AccessorPath -> Graph.Graph -> Core.Term -> Maybe Core_.InvalidTermError
+checkTerm :: Bool -> Paths.SubtermPath -> Graph.Graph -> Core.Term -> Maybe Core_.InvalidTermError
 checkTerm typed path cx term =
     case term of
       Core.TermAnnotated v0 ->
@@ -225,7 +225,7 @@ checkVoid :: Core.Type -> Maybe Core_.InvalidTypeError
 checkVoid typ =
     case typ of
       Core.TypeVoid -> Just (Core_.InvalidTypeErrorVoidInNonBottomPosition (Core_.VoidInNonBottomPositionError {
-        Core_.voidInNonBottomPositionErrorLocation = (Accessors.AccessorPath [])}))
+        Core_.voidInNonBottomPositionErrorLocation = (Paths.SubtermPath [])}))
       _ -> Nothing
 
 -- | Find the first duplicate name in a list
@@ -266,7 +266,7 @@ isValidName name = Logic.not (Equality.equal (Core.unName name) "")
 term :: Bool -> Graph.Graph -> Core.Term -> Maybe Core_.InvalidTermError
 term typed g t =
     Rewriting.foldTermWithGraphAndPath (\recurse -> \path -> \cx -> \acc -> \trm -> Maybes.cases acc (
-      let checkResult = checkTerm typed (Accessors.AccessorPath path) cx trm
+      let checkResult = checkTerm typed (Paths.SubtermPath path) cx trm
       in (Maybes.cases checkResult (recurse Nothing trm) (\err -> Just err))) (\_ -> acc)) g Nothing t
 
 -- | Validate a type, returning the first error found or nothing if valid. The first argument is the set of type variables already in scope.
@@ -311,10 +311,10 @@ validateTypeNode boundVars typ =
             annMap = Core.annotatedTypeAnnotation v0
         in (firstTypeError [
           Logic.ifElse (Maps.null annMap) (Just (Core_.InvalidTypeErrorEmptyTypeAnnotation (Core_.EmptyTypeAnnotationError {
-            Core_.emptyTypeAnnotationErrorLocation = (Accessors.AccessorPath [])}))) Nothing,
+            Core_.emptyTypeAnnotationErrorLocation = (Paths.SubtermPath [])}))) Nothing,
           case body of
             Core.TypeAnnotated _ -> Just (Core_.InvalidTypeErrorNestedTypeAnnotation (Core_.NestedTypeAnnotationError {
-              Core_.nestedTypeAnnotationErrorLocation = (Accessors.AccessorPath [])}))
+              Core_.nestedTypeAnnotationErrorLocation = (Paths.SubtermPath [])}))
             _ -> Nothing])
       Core.TypeEither v0 -> firstTypeError [
         checkVoid (Core.eitherTypeLeft v0),
@@ -323,10 +323,10 @@ validateTypeNode boundVars typ =
         let paramName = Core.forallTypeParameter v0
         in (firstTypeError [
           Logic.ifElse (Sets.member paramName boundVars) (Just (Core_.InvalidTypeErrorTypeVariableShadowingInForall (Core_.TypeVariableShadowingInForallError {
-            Core_.typeVariableShadowingInForallErrorLocation = (Accessors.AccessorPath []),
+            Core_.typeVariableShadowingInForallErrorLocation = (Paths.SubtermPath []),
             Core_.typeVariableShadowingInForallErrorName = paramName}))) Nothing,
           (Logic.ifElse (isValidName paramName) Nothing (Just (Core_.InvalidTypeErrorInvalidForallParameterName (Core_.InvalidForallParameterNameError {
-            Core_.invalidForallParameterNameErrorLocation = (Accessors.AccessorPath []),
+            Core_.invalidForallParameterNameErrorLocation = (Paths.SubtermPath []),
             Core_.invalidForallParameterNameErrorName = paramName}))))])
       Core.TypeFunction v0 -> checkVoid (Core.functionTypeCodomain v0)
       Core.TypeList v0 -> checkVoid v0
@@ -335,7 +335,7 @@ validateTypeNode boundVars typ =
         in (firstTypeError [
           case keyType of
             Core.TypeFunction _ -> Just (Core_.InvalidTypeErrorNonComparableMapKeyType (Core_.NonComparableMapKeyTypeError {
-              Core_.nonComparableMapKeyTypeErrorLocation = (Accessors.AccessorPath []),
+              Core_.nonComparableMapKeyTypeErrorLocation = (Paths.SubtermPath []),
               Core_.nonComparableMapKeyTypeErrorKeyType = keyType}))
             _ -> Nothing,
           (checkVoid keyType),
@@ -345,31 +345,31 @@ validateTypeNode boundVars typ =
         (checkVoid (Core.pairTypeSecond v0))]
       Core.TypeRecord v0 -> firstTypeError [
         Logic.ifElse (Lists.null v0) (Just (Core_.InvalidTypeErrorEmptyRecordType (Core_.EmptyRecordTypeError {
-          Core_.emptyRecordTypeErrorLocation = (Accessors.AccessorPath [])}))) Nothing,
+          Core_.emptyRecordTypeErrorLocation = (Paths.SubtermPath [])}))) Nothing,
         (checkDuplicateFieldTypes v0 (\dupName -> Just (Core_.InvalidTypeErrorDuplicateRecordTypeFieldNames (Core_.DuplicateRecordTypeFieldNamesError {
-          Core_.duplicateRecordTypeFieldNamesErrorLocation = (Accessors.AccessorPath []),
+          Core_.duplicateRecordTypeFieldNamesErrorLocation = (Paths.SubtermPath []),
           Core_.duplicateRecordTypeFieldNamesErrorName = dupName})))),
         (firstTypeError (Lists.map (\f -> checkVoid (Core.fieldTypeType f)) v0))]
       Core.TypeSet v0 -> firstTypeError [
         case v0 of
           Core.TypeFunction _ -> Just (Core_.InvalidTypeErrorNonComparableSetElementType (Core_.NonComparableSetElementTypeError {
-            Core_.nonComparableSetElementTypeErrorLocation = (Accessors.AccessorPath []),
+            Core_.nonComparableSetElementTypeErrorLocation = (Paths.SubtermPath []),
             Core_.nonComparableSetElementTypeErrorElementType = v0}))
           _ -> Nothing,
         (checkVoid v0)]
       Core.TypeUnion v0 -> firstTypeError [
         Logic.ifElse (Lists.null v0) (Just (Core_.InvalidTypeErrorEmptyUnionType (Core_.EmptyUnionTypeError {
-          Core_.emptyUnionTypeErrorLocation = (Accessors.AccessorPath [])}))) Nothing,
+          Core_.emptyUnionTypeErrorLocation = (Paths.SubtermPath [])}))) Nothing,
         (Logic.ifElse (Equality.equal (Lists.length v0) 1) (
           let singleField = Lists.head v0
           in (Just (Core_.InvalidTypeErrorSingleVariantUnion (Core_.SingleVariantUnionError {
-            Core_.singleVariantUnionErrorLocation = (Accessors.AccessorPath []),
+            Core_.singleVariantUnionErrorLocation = (Paths.SubtermPath []),
             Core_.singleVariantUnionErrorFieldName = (Core.fieldTypeName singleField)})))) Nothing),
         (checkDuplicateFieldTypes v0 (\dupName -> Just (Core_.InvalidTypeErrorDuplicateUnionTypeFieldNames (Core_.DuplicateUnionTypeFieldNamesError {
-          Core_.duplicateUnionTypeFieldNamesErrorLocation = (Accessors.AccessorPath []),
+          Core_.duplicateUnionTypeFieldNamesErrorLocation = (Paths.SubtermPath []),
           Core_.duplicateUnionTypeFieldNamesErrorName = dupName})))),
         (firstTypeError (Lists.map (\f -> checkVoid (Core.fieldTypeType f)) v0))]
       Core.TypeVariable v0 -> Logic.ifElse (Sets.member v0 boundVars) Nothing (Just (Core_.InvalidTypeErrorUndefinedTypeVariable (Core_.UndefinedTypeVariableError {
-        Core_.undefinedTypeVariableErrorLocation = (Accessors.AccessorPath []),
+        Core_.undefinedTypeVariableErrorLocation = (Paths.SubtermPath []),
         Core_.undefinedTypeVariableErrorName = v0})))
       _ -> Nothing

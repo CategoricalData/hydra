@@ -17,14 +17,14 @@ public class SelfApplicationError implements Serializable, Comparable<SelfApplic
   /**
    * The path to the self-application within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The name of the variable applied to itself
    */
   public final hydra.core.Name name;
 
-  public SelfApplicationError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public SelfApplicationError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class SelfApplicationError implements Serializable, Comparable<SelfApplic
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public SelfApplicationError withLocation(hydra.accessors.AccessorPath location) {
+  public SelfApplicationError withLocation(hydra.paths.SubtermPath location) {
     return new SelfApplicationError(location, name);
   }
 

@@ -10,7 +10,7 @@ import Hydra.Kernel hiding (
   normalizePathForHoisting,
   shouldHoistAll, shouldHoistCaseStatement, shouldHoistPolymorphic, updateHoistState)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Accessors    as Accessors
+import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
@@ -591,7 +591,7 @@ wrapLetInsideLambdas = define "wrapLetInsideLambdas" $
 -- | Update state when traversing an accessor in the path for hoisting logic.
 -- State is (stillAtTopLevel, haveUsedAppLHS).
 -- Returns updated state after processing one accessor.
-updateHoistState :: TBinding (TermAccessor -> (Bool, Bool) -> (Bool, Bool))
+updateHoistState :: TBinding (SubtermStep -> (Bool, Bool) -> (Bool, Bool))
 updateHoistState = define "updateHoistState" $
   doc ("Update hoisting state when traversing an accessor."
     <> " State is (atTopLevel, usedAppLHS). Returns updated state.") $
@@ -602,42 +602,42 @@ updateHoistState = define "updateHoistState" $
   Logic.ifElse (Logic.not $ var "atTop")
     (pair false (var "usedApp"))
     -- Check this accessor
-    (cases _TermAccessor (var "accessor")
+    (cases _SubtermStep (var "accessor")
       -- Default: any other accessor takes us out of top level
       (Just $ pair false (var "usedApp")) [
       -- Annotations are transparent
-      _TermAccessor_annotatedBody>>: constant $ pair true (var "usedApp"),
+      _SubtermStep_annotatedBody>>: constant $ pair true (var "usedApp"),
       -- Let body and binding are pass-through
-      _TermAccessor_letBody>>: constant $ pair true (var "usedApp"),
-      _TermAccessor_letBinding>>: constant $ pair true (var "usedApp"),
+      _SubtermStep_letBody>>: constant $ pair true (var "usedApp"),
+      _SubtermStep_letBinding>>: constant $ pair true (var "usedApp"),
       -- Lambda body: pass-through if we haven't used app LHS yet
-      _TermAccessor_lambdaBody>>: constant $
+      _SubtermStep_lambdaBody>>: constant $
         Logic.ifElse (var "usedApp")
           (pair false true)   -- After app LHS, lambda body is not pass-through
           (pair true false),  -- Before app LHS, lambda body is pass-through
       -- Case branches: same rules as lambda body
-      _TermAccessor_unionCasesBranch>>: constant $
+      _SubtermStep_unionCasesBranch>>: constant $
         Logic.ifElse (var "usedApp")
           (pair false true)
           (pair true false),
-      _TermAccessor_unionCasesDefault>>: constant $
+      _SubtermStep_unionCasesDefault>>: constant $
         Logic.ifElse (var "usedApp")
           (pair false true)
           (pair true false),
       -- Application function (LHS): mark usedApp=true
-      _TermAccessor_applicationFunction>>: constant $
+      _SubtermStep_applicationFunction>>: constant $
         Logic.ifElse (var "usedApp")
           (pair false true)  -- Already used app, not at top level
           (pair true true),  -- First app, still at top level but mark usedApp
       -- Application argument: takes us out of top level
-      _TermAccessor_applicationArgument>>: constant $ pair false (var "usedApp")])
+      _SubtermStep_applicationArgument>>: constant $ pair false (var "usedApp")])
 
 -- | Normalize a path by handling immediately-applied lambdas.
 -- The pattern [applicationFunction, lambdaBody, ...] represents (\x -> ...) arg
 -- which is semantically equivalent to let x = arg in ...
 -- We replace applicationFunction followed by lambdaBody with just letBody,
 -- which allows the case inside to remain at "top level".
-normalizePathForHoisting :: TBinding ([TermAccessor] -> [TermAccessor])
+normalizePathForHoisting :: TBinding ([SubtermStep] -> [SubtermStep])
 normalizePathForHoisting = define "normalizePathForHoisting" $
   doc ("Normalize a path for hoisting by treating immediately-applied lambdas as let bindings."
     <> " Replaces [applicationFunction, lambdaBody, ...] with [letBody, ...].") $
@@ -655,25 +655,25 @@ normalizePathForHoisting = define "normalizePathForHoisting" $
        Logic.ifElse (Logic.and (isApplicationFunction @@ var "first")
                                (isLambdaBody @@ var "second"))
          -- Replace with letBody and continue
-         (Lists.cons (inject _TermAccessor _TermAccessor_letBody unit)
+         (Lists.cons (inject _SubtermStep _SubtermStep_letBody unit)
                      (var "go" @@ var "rest"))
          -- Keep first element and continue
          (Lists.cons (var "first") (var "go" @@ Lists.tail (var "remaining"))))) $
   var "go" @@ var "path"
 
 -- | Check if an accessor is applicationFunction
-isApplicationFunction :: TBinding (TermAccessor -> Bool)
+isApplicationFunction :: TBinding (SubtermStep -> Bool)
 isApplicationFunction = define "isApplicationFunction" $
-  "acc" ~> cases _TermAccessor (var "acc")
+  "acc" ~> cases _SubtermStep (var "acc")
     (Just false) [
-    _TermAccessor_applicationFunction>>: constant true]
+    _SubtermStep_applicationFunction>>: constant true]
 
 -- | Check if an accessor is lambdaBody
-isLambdaBody :: TBinding (TermAccessor -> Bool)
+isLambdaBody :: TBinding (SubtermStep -> Bool)
 isLambdaBody = define "isLambdaBody" $
-  "acc" ~> cases _TermAccessor (var "acc")
+  "acc" ~> cases _SubtermStep (var "acc")
     (Just false) [
-    _TermAccessor_lambdaBody>>: constant true]
+    _SubtermStep_lambdaBody>>: constant true]
 
 -- | Predicate for hoisting case statement applications (union elimination applied to an argument).
 -- Returns True if the term is a case statement application AND it is NOT at "top level".
@@ -692,7 +692,7 @@ isLambdaBody = define "isLambdaBody" $
 --   - "atRoot": can pass through annotations, let body/binding, lambda body, or ONE app LHS
 --   - "afterAppLHS": have used the one app LHS, can only pass through annotations
 --   - Any other accessor: not at top level, should hoist if it's a case
-shouldHoistCaseStatement :: TBinding (([TermAccessor], Term) -> Bool)
+shouldHoistCaseStatement :: TBinding (([SubtermStep], Term) -> Bool)
 shouldHoistCaseStatement = define "shouldHoistCaseStatement" $
   doc ("Predicate for case statement hoisting."
     <> " Returns True if term is a union elimination (bare case function) or a case statement application"
@@ -715,10 +715,10 @@ shouldHoistCaseStatement = define "shouldHoistCaseStatement" $
     -- If still at top level, don't hoist. If not at top level, hoist.
     Logic.not $ Pairs.first $ var "finalState")
 
-hoistSubterms :: TBinding ((([TermAccessor], Term) -> Bool) -> Graph -> Term -> Term)
+hoistSubterms :: TBinding ((([SubtermStep], Term) -> Bool) -> Graph -> Term -> Term)
 hoistSubterms = define "hoistSubterms" $
   doc ("Hoist subterms into local let bindings based on a path-aware predicate."
-    <> " The predicate receives a pair of (path, term) where path is the list of TermAccessors"
+    <> " The predicate receives a pair of (path, term) where path is the list of SubtermSteps"
     <> " from the root to the current term, and returns True if the term should be hoisted."
     <> " For each let term found, the immediate subterms (binding values and body) are processed:"
     <> " matching subterms within each immediate subterm are collected and hoisted into a local let"
@@ -748,7 +748,7 @@ hoistSubterms = define "hoistSubterms" $
     --
     -- The user function receives:
     --   recurse :: a -> Term -> (a, Term) - framework handles subterm iteration
-    --   path :: [TermAccessor]
+    --   path :: [SubtermStep]
     --   cx :: Graph
     --   acc :: (counter, [Binding])
     --   term :: Term
@@ -845,7 +845,7 @@ hoistSubterms = define "hoistSubterms" $
       -- Replace dots with underscores to avoid creating module-like names
       "namePrefix" <~ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "binding")))) $
       -- Build the pathPrefix for this binding: outer path + letBinding accessor
-      "bindingPathPrefix" <~ Lists.concat2 (var "path") (list [inject _TermAccessor _TermAccessor_letBinding (Core.bindingName $ var "binding")]) $
+      "bindingPathPrefix" <~ Lists.concat2 (var "path") (list [inject _SubtermStep _SubtermStep_letBinding (Core.bindingName $ var "binding")]) $
       -- Each sibling starts fresh with counter 1 - prefix makes names unique
       "result" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ var "namePrefix" @@ var "bindingPathPrefix" @@ (Core.bindingTerm (var "binding")) $
       "newValue" <~ Pairs.second (var "result") $
@@ -856,7 +856,7 @@ hoistSubterms = define "hoistSubterms" $
     "newBindings" <~ Lists.reverse (var "newBindingsReversed") $
     -- Process the body with a unique prefix, also starting with counter 1
     -- Build the pathPrefix for the body: outer path + letBody accessor
-    "bodyPathPrefix" <~ Lists.concat2 (var "path") (list [inject _TermAccessor _TermAccessor_letBody unit]) $
+    "bodyPathPrefix" <~ Lists.concat2 (var "path") (list [inject _SubtermStep _SubtermStep_letBody unit]) $
     -- Use the first binding's name to disambiguate the body prefix across nesting levels
     "firstBindingName" <~ Maybes.maybe (string "body") (lambda "b" $ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) (Lists.safeHead (var "bindings")) $
     "bodyPrefix" <~ Strings.cat2 (var "firstBindingName") (string "_body") $

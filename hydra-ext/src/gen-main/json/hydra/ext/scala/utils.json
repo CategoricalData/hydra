@@ -1477,7 +1477,7 @@
   "termDependencies": ["hydra.ext.scala.language", "hydra.names", "hydra.formatting"],
   "typeDependencies": [
     "hydra.ext.scala.syntax",
-    "hydra.accessors",
+    "hydra.paths",
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",

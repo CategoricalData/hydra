@@ -17,14 +17,14 @@ public class UnknownPrimitiveNameError implements Serializable, Comparable<Unkno
   /**
    * The path to the primitive reference within the term
    */
-  public final hydra.accessors.AccessorPath location;
+  public final hydra.paths.SubtermPath location;
 
   /**
    * The unknown primitive name
    */
   public final hydra.core.Name name;
 
-  public UnknownPrimitiveNameError (hydra.accessors.AccessorPath location, hydra.core.Name name) {
+  public UnknownPrimitiveNameError (hydra.paths.SubtermPath location, hydra.core.Name name) {
     this.location = location;
     this.name = name;
   }
@@ -58,7 +58,7 @@ public class UnknownPrimitiveNameError implements Serializable, Comparable<Unkno
     return ((Comparable) name).compareTo(other.name);
   }
 
-  public UnknownPrimitiveNameError withLocation(hydra.accessors.AccessorPath location) {
+  public UnknownPrimitiveNameError withLocation(hydra.paths.SubtermPath location) {
     return new UnknownPrimitiveNameError(location, name);
   }
 
