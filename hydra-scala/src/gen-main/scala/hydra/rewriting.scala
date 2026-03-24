@@ -279,7 +279,7 @@ def freeTypeVariablesInTerm(term0: hydra.core.Term): scala.collection.immutable.
     lazy val dflt: scala.collection.immutable.Set[hydra.core.Name] = allOf(hydra.lib.lists.map[hydra.core.Term, scala.collection.immutable.Set[hydra.core.Name]](recurse)(hydra.rewriting.subterms(term)))
     term match
       case hydra.core.Term.function(v_Term_function_f) => v_Term_function_f match
-        case hydra.core.Function.elimination(v_Function_elimination_e) => dflt
+        case hydra.core.Function.elimination => dflt
         case hydra.core.Function.lambda(v_Function_lambda_l) => {
           lazy val domt: scala.collection.immutable.Set[hydra.core.Name] = hydra.lib.maybes.maybe[scala.collection.immutable.Set[hydra.core.Name], hydra.core.Type](hydra.lib.sets.empty[hydra.core.Name])((v1: hydra.core.Type) => tryType(vars)(v1))(v_Function_lambda_l.domain)
           hydra.lib.sets.union[hydra.core.Name](domt)(recurse(v_Function_lambda_l.body))
@@ -379,7 +379,7 @@ def isFreeVariableInTerm(v: hydra.core.Name)(term: hydra.core.Term): Boolean =
 def isLambda(term: hydra.core.Term): Boolean =
   hydra.rewriting.deannotateTerm(term) match
   case hydra.core.Term.function(v_Term_function_v1) => v_Term_function_v1 match
-    case hydra.core.Function.lambda(v_Function_lambda__) => true
+    case hydra.core.Function.lambda => true
     case _ => false
   case hydra.core.Term.let(v_Term_let_lt) => hydra.rewriting.isLambda(v_Term_let_lt.body)
   case _ => false
@@ -433,7 +433,7 @@ def normalizeTypeVariablesInTerm(term: hydra.core.Term): hydra.core.Term =
     def rewrite(recurse: (hydra.core.Term => hydra.core.Term))(term2: hydra.core.Term): hydra.core.Term =
       term2 match
       case hydra.core.Term.function(v_Term_function_v1) => v_Term_function_v1 match
-        case hydra.core.Function.elimination(v_Function_elimination__) => recurse(term2)
+        case hydra.core.Function.elimination => recurse(term2)
         case hydra.core.Function.lambda(v_Function_lambda_l) => {
           lazy val domain: Option[hydra.core.Type] = (v_Function_lambda_l.domain)
           hydra.core.Term.function(hydra.core.Function.lambda(hydra.core.Lambda(v_Function_lambda_l.parameter, hydra.lib.maybes.map[hydra.core.Type, hydra.core.Type]((v12: hydra.core.Type) => substType(subst)(v12))(domain), rewriteWithSubst(Tuple2(Tuple2(subst, boundVars), next))(v_Function_lambda_l.body))))
@@ -608,14 +608,14 @@ def replaceTypedefs(types: Map[hydra.core.Name, hydra.core.TypeScheme])(typ0: hy
   def rewrite(recurse: (hydra.core.Type => hydra.core.Type))(typ: hydra.core.Type): hydra.core.Type =
     typ match
     case hydra.core.Type.annotated(v_Type_annotated_at) => hydra.core.Type.annotated(hydra.core.AnnotatedType(rewrite(recurse)(v_Type_annotated_at.body), (v_Type_annotated_at.annotation)))
-    case hydra.core.Type.record(v_Type_record__) => typ
-    case hydra.core.Type.union(v_Type_union__) => typ
+    case hydra.core.Type.record => typ
+    case hydra.core.Type.union => typ
     case hydra.core.Type.variable(v_Type_variable_v) => {
       def forMono(t: hydra.core.Type): hydra.core.Type =
         t match
-        case hydra.core.Type.record(v_Type_record__) => typ
-        case hydra.core.Type.union(v_Type_union__) => typ
-        case hydra.core.Type.wrap(v_Type_wrap__) => typ
+        case hydra.core.Type.record => typ
+        case hydra.core.Type.union => typ
+        case hydra.core.Type.wrap => typ
         case _ => rewrite(recurse)(t)
       {
         def forTypeScheme(ts: hydra.core.TypeScheme): hydra.core.Type =
@@ -626,7 +626,7 @@ def replaceTypedefs(types: Map[hydra.core.Name, hydra.core.TypeScheme])(typ0: hy
         hydra.lib.maybes.maybe[hydra.core.Type, hydra.core.TypeScheme](typ)((ts: hydra.core.TypeScheme) => forTypeScheme(ts))(hydra.lib.maps.lookup[hydra.core.Name, hydra.core.TypeScheme](v_Type_variable_v)(types))
       }
     }
-    case hydra.core.Type.wrap(v_Type_wrap__) => typ
+    case hydra.core.Type.wrap => typ
     case _ => recurse(typ)
   hydra.rewriting.rewriteType(rewrite)(typ0)
 }
@@ -1527,7 +1527,7 @@ def subterms(v1: hydra.core.Term): Seq[hydra.core.Term] =
     case _ => Seq()
   case hydra.core.Term.let(v_Term_let_lt) => hydra.lib.lists.cons[hydra.core.Term](v_Term_let_lt.body)(hydra.lib.lists.map[hydra.core.Binding, hydra.core.Term]((x: hydra.core.Binding) => (x.term))(v_Term_let_lt.bindings))
   case hydra.core.Term.list(v_Term_list_l) => v_Term_list_l
-  case hydra.core.Term.literal(v_Term_literal__) => Seq()
+  case hydra.core.Term.literal => Seq()
   case hydra.core.Term.map(v_Term_map_m) => hydra.lib.lists.concat[hydra.core.Term](hydra.lib.lists.map[Tuple2[hydra.core.Term, hydra.core.Term], Seq[hydra.core.Term]]((p: Tuple2[hydra.core.Term, hydra.core.Term]) =>
     Seq(hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](p), hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](p)))(hydra.lib.maps.toList[hydra.core.Term, hydra.core.Term](v_Term_map_m)))
   case hydra.core.Term.maybe(v_Term_maybe_m) => hydra.lib.maybes.maybe[Seq[hydra.core.Term], hydra.core.Term](Seq())((t: hydra.core.Term) => Seq(t))(v_Term_maybe_m)
@@ -1538,14 +1538,14 @@ def subterms(v1: hydra.core.Term): Seq[hydra.core.Term] =
   case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => Seq(v_Term_typeLambda_ta.body)
   case hydra.core.Term.union(v_Term_union_ut) => Seq(v_Term_union_ut.field.term)
   case hydra.core.Term.unit => Seq()
-  case hydra.core.Term.variable(v_Term_variable__) => Seq()
+  case hydra.core.Term.variable => Seq()
   case hydra.core.Term.wrap(v_Term_wrap_n) => Seq(v_Term_wrap_n.body)
 
 def subtermsWithAccessors(v1: hydra.core.Term): Seq[Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]] =
   v1 match
   case hydra.core.Term.annotated(v_Term_annotated_at) => Seq(Tuple2(hydra.accessors.TermAccessor.annotatedBody, (v_Term_annotated_at.body)))
   case hydra.core.Term.application(v_Term_application_p) => Seq(Tuple2(hydra.accessors.TermAccessor.applicationFunction, (v_Term_application_p.function)), Tuple2(hydra.accessors.TermAccessor.applicationArgument, (v_Term_application_p.argument)))
-  case hydra.core.Term.either(v_Term_either_e) => Seq()
+  case hydra.core.Term.either => Seq()
   case hydra.core.Term.function(v_Term_function_v12) => v_Term_function_v12 match
     case hydra.core.Function.elimination(v_Function_elimination_v13) => v_Function_elimination_v13 match
       case hydra.core.Elimination.union(v_Elimination_union_cs) => hydra.lib.lists.concat2[Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]](hydra.lib.maybes.maybe[Seq[Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]], hydra.core.Term](Seq())((t: hydra.core.Term) =>
@@ -1557,11 +1557,11 @@ def subtermsWithAccessors(v1: hydra.core.Term): Seq[Tuple2[hydra.accessors.TermA
   case hydra.core.Term.let(v_Term_let_lt) => hydra.lib.lists.cons[Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]](Tuple2(hydra.accessors.TermAccessor.letBody, (v_Term_let_lt.body)))(hydra.lib.lists.map[hydra.core.Binding, Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]]((b: hydra.core.Binding) =>
     Tuple2(hydra.accessors.TermAccessor.letBinding(b.name), (b.term)))(v_Term_let_lt.bindings))
   case hydra.core.Term.list(v_Term_list_l) => hydra.lib.lists.map[hydra.core.Term, Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]]((e: hydra.core.Term) => Tuple2(hydra.accessors.TermAccessor.listElement(0), e))(v_Term_list_l)
-  case hydra.core.Term.literal(v_Term_literal__) => Seq()
+  case hydra.core.Term.literal => Seq()
   case hydra.core.Term.map(v_Term_map_m) => hydra.lib.lists.concat[Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]](hydra.lib.lists.map[Tuple2[hydra.core.Term, hydra.core.Term], Seq[Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]]]((p: Tuple2[hydra.core.Term, hydra.core.Term]) =>
     Seq(Tuple2(hydra.accessors.TermAccessor.mapKey(0), hydra.lib.pairs.first[hydra.core.Term, hydra.core.Term](p)), Tuple2(hydra.accessors.TermAccessor.mapValue(0), hydra.lib.pairs.second[hydra.core.Term, hydra.core.Term](p))))(hydra.lib.maps.toList[hydra.core.Term, hydra.core.Term](v_Term_map_m)))
   case hydra.core.Term.maybe(v_Term_maybe_m) => hydra.lib.maybes.maybe[Seq[Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]], hydra.core.Term](Seq())((t: hydra.core.Term) => Seq(Tuple2(hydra.accessors.TermAccessor.maybeTerm, t)))(v_Term_maybe_m)
-  case hydra.core.Term.pair(v_Term_pair_p) => Seq()
+  case hydra.core.Term.pair => Seq()
   case hydra.core.Term.record(v_Term_record_rt) => hydra.lib.lists.map[hydra.core.Field, Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]]((f: hydra.core.Field) =>
     Tuple2(hydra.accessors.TermAccessor.recordField(f.name), (f.term)))(v_Term_record_rt.fields)
   case hydra.core.Term.set(v_Term_set_s) => hydra.lib.lists.map[hydra.core.Term, Tuple2[hydra.accessors.TermAccessor, hydra.core.Term]]((e: hydra.core.Term) => Tuple2(hydra.accessors.TermAccessor.listElement(0), e))(hydra.lib.sets.toList[hydra.core.Term](v_Term_set_s))
@@ -1569,7 +1569,7 @@ def subtermsWithAccessors(v1: hydra.core.Term): Seq[Tuple2[hydra.accessors.TermA
   case hydra.core.Term.typeLambda(v_Term_typeLambda_ta) => Seq(Tuple2(hydra.accessors.TermAccessor.typeLambdaBody, (v_Term_typeLambda_ta.body)))
   case hydra.core.Term.union(v_Term_union_ut) => Seq(Tuple2(hydra.accessors.TermAccessor.injectionTerm, (v_Term_union_ut.field.term)))
   case hydra.core.Term.unit => Seq()
-  case hydra.core.Term.variable(v_Term_variable__) => Seq()
+  case hydra.core.Term.variable => Seq()
   case hydra.core.Term.wrap(v_Term_wrap_n) => Seq(Tuple2(hydra.accessors.TermAccessor.wrappedTerm, (v_Term_wrap_n.body)))
 
 def subtypes(v1: hydra.core.Type): Seq[hydra.core.Type] =
@@ -1581,14 +1581,14 @@ def subtypes(v1: hydra.core.Type): Seq[hydra.core.Type] =
   case hydra.core.Type.function(v_Type_function_ft) => Seq(v_Type_function_ft.domain, (v_Type_function_ft.codomain))
   case hydra.core.Type.forall(v_Type_forall_lt) => Seq(v_Type_forall_lt.body)
   case hydra.core.Type.list(v_Type_list_lt) => Seq(v_Type_list_lt)
-  case hydra.core.Type.literal(v_Type_literal__) => Seq()
+  case hydra.core.Type.literal => Seq()
   case hydra.core.Type.map(v_Type_map_mt) => Seq(v_Type_map_mt.keys, (v_Type_map_mt.values))
   case hydra.core.Type.maybe(v_Type_maybe_ot) => Seq(v_Type_maybe_ot)
   case hydra.core.Type.record(v_Type_record_rt) => hydra.lib.lists.map[hydra.core.FieldType, hydra.core.Type]((x: hydra.core.FieldType) => (x.`type`))(v_Type_record_rt)
   case hydra.core.Type.set(v_Type_set_st) => Seq(v_Type_set_st)
   case hydra.core.Type.union(v_Type_union_rt) => hydra.lib.lists.map[hydra.core.FieldType, hydra.core.Type]((x: hydra.core.FieldType) => (x.`type`))(v_Type_union_rt)
   case hydra.core.Type.unit => Seq()
-  case hydra.core.Type.variable(v_Type_variable__) => Seq()
+  case hydra.core.Type.variable => Seq()
   case hydra.core.Type.void => Seq()
   case hydra.core.Type.wrap(v_Type_wrap_nt) => Seq(v_Type_wrap_nt)
 

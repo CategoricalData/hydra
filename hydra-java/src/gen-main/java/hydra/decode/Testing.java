@@ -2768,24 +2768,55 @@ public interface Testing {
           hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.Helpers.requireField(
-              "input",
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Term>>>) (p0 -> p1 -> hydra.decode.Core.term(
-                p0,
-                p1)),
+              "typed",
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, Boolean>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, Boolean>>) (raw2 -> hydra.lib.eithers.Either.apply(
+                (java.util.function.Function<String, hydra.util.Either<hydra.errors.DecodingError, Boolean>>) (err -> hydra.util.Either.<hydra.errors.DecodingError, Boolean>left(new hydra.errors.DecodingError(err))),
+                (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, Boolean>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
+                  @Override
+                  public hydra.util.Either<hydra.errors.DecodingError, Boolean> otherwise(hydra.core.Term instance) {
+                    return hydra.util.Either.<hydra.errors.DecodingError, Boolean>left(new hydra.errors.DecodingError("expected literal"));
+                  }
+
+                  @Override
+                  public hydra.util.Either<hydra.errors.DecodingError, Boolean> visit(hydra.core.Term.Literal v) {
+                    return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
+                      @Override
+                      public hydra.util.Either<hydra.errors.DecodingError, Boolean> otherwise(hydra.core.Literal instance) {
+                        return hydra.util.Either.<hydra.errors.DecodingError, Boolean>left(new hydra.errors.DecodingError("expected boolean literal"));
+                      }
+
+                      @Override
+                      public hydra.util.Either<hydra.errors.DecodingError, Boolean> visit(hydra.core.Literal.Boolean_ b) {
+                        return hydra.util.Either.<hydra.errors.DecodingError, Boolean>right((b).value);
+                      }
+                    });
+                  }
+                })),
+                hydra.Lexical.stripAndDereferenceTermEither(
+                  cx2,
+                  raw2)))),
               fieldMap,
               cx),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.testing.ValidateCoreTermTestCase>>) (field_input -> hydra.lib.eithers.Bind.apply(
+            (java.util.function.Function<Boolean, hydra.util.Either<hydra.errors.DecodingError, hydra.testing.ValidateCoreTermTestCase>>) (field_typed -> hydra.lib.eithers.Bind.apply(
               hydra.extract.Helpers.requireField(
-                "output",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>) (v2 -> hydra.extract.Helpers.decodeMaybe(
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.error.core.InvalidTermError>>>) (p0 -> p1 -> hydra.decode.error.Core.invalidTermError(
-                    p0,
-                    p1)),
-                  v1,
-                  v2))),
+                "input",
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.core.Term>>>) (p0 -> p1 -> hydra.decode.Core.term(
+                  p0,
+                  p1)),
                 fieldMap,
                 cx),
-              (java.util.function.Function<hydra.util.Maybe<hydra.error.core.InvalidTermError>, hydra.util.Either<hydra.errors.DecodingError, hydra.testing.ValidateCoreTermTestCase>>) (field_output -> hydra.util.Either.<hydra.errors.DecodingError, hydra.testing.ValidateCoreTermTestCase>right(new hydra.testing.ValidateCoreTermTestCase(field_input, field_output))))));
+              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.testing.ValidateCoreTermTestCase>>) (field_input -> hydra.lib.eithers.Bind.apply(
+                hydra.extract.Helpers.requireField(
+                  "output",
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.util.Maybe<hydra.error.core.InvalidTermError>>>) (v2 -> hydra.extract.Helpers.decodeMaybe(
+                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.errors.DecodingError, hydra.error.core.InvalidTermError>>>) (p0 -> p1 -> hydra.decode.error.Core.invalidTermError(
+                      p0,
+                      p1)),
+                    v1,
+                    v2))),
+                  fieldMap,
+                  cx),
+                (java.util.function.Function<hydra.util.Maybe<hydra.error.core.InvalidTermError>, hydra.util.Either<hydra.errors.DecodingError, hydra.testing.ValidateCoreTermTestCase>>) (field_output -> hydra.util.Either.<hydra.errors.DecodingError, hydra.testing.ValidateCoreTermTestCase>right(new hydra.testing.ValidateCoreTermTestCase(field_typed, field_input, field_output))))))));
         }
       })),
       hydra.Lexical.stripAndDereferenceTermEither(

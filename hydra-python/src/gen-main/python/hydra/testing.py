@@ -784,9 +784,11 @@ class JoinTypesTestCase:
 class ValidateCoreTermTestCase:
     r"""A test case which validates a term and compares the result with an expected Maybe InvalidTermError."""
 
+    typed: Annotated[bool, "Whether to expect System F (typed) terms. When true, type variable binding checks and UntypedTermVariableError are active."]
     input: Annotated[hydra.core.Term, "The term to validate"]
     output: Annotated[Maybe[hydra.error.core.InvalidTermError], "The expected validation result (Nothing if valid, Just error if invalid)"]
 
     TYPE_ = hydra.core.Name("hydra.testing.ValidateCoreTermTestCase")
+    TYPED = hydra.core.Name("typed")
     INPUT = hydra.core.Name("input")
     OUTPUT = hydra.core.Name("output")

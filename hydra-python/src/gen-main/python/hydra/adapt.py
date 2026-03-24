@@ -600,7 +600,7 @@ def data_graph_to_definitions(constraints: hydra.coders.LanguageConstraints, do_
     @lru_cache(1)
     def bins1() -> frozenlist[hydra.core.Binding]:
         return hydra.lib.logic.if_else(do_hoist_case_statements, (lambda : hoist_cases(bins0)), (lambda : bins0))
-    return hydra.lib.eithers.bind(hydra.lib.logic.if_else(do_infer, (lambda : hydra.lib.eithers.map((lambda result: hydra.lib.pairs.second(hydra.lib.pairs.first(result))), hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda x: x), hydra.inference.infer_graph_types(cx, bins1(), rebuild_graph(bins1()))))), (lambda : check_bindings_typed("after case hoisting", bins1()))), (lambda bins2: hydra.lib.eithers.bind(hydra.lib.logic.if_else(do_hoist_polymorphic_let_bindings, (lambda : check_bindings_typed("after let hoisting", hoist_poly(bins2))), (lambda : Right(bins2))), (lambda bins3: hydra.lib.eithers.bind(adapt_data_graph(constraints, do_expand, bins3, cx, rebuild_graph(bins3)), (lambda adapt_result: (adapted := hydra.lib.pairs.first(adapt_result), adapted_bindings := hydra.lib.pairs.second(adapt_result), hydra.lib.eithers.bind(check_bindings_typed("after adaptation", adapted_bindings), (lambda bins4: (bins5 := normalize_bindings(bins4), to_def := (lambda el: hydra.lib.maybes.map((lambda ts: hydra.module.TermDefinition(el.name, el.term, ts)), el.type)), selected_elements := hydra.lib.lists.filter((lambda el: hydra.lib.maybes.maybe((lambda : False), (lambda ns: hydra.lib.sets.member(ns, namespaces_set())), hydra.names.namespace_of(el.name))), bins5), elements_by_namespace := hydra.lib.lists.foldl((lambda acc, el: hydra.lib.maybes.maybe((lambda : acc), (lambda ns: (existing := hydra.lib.maybes.maybe((lambda : ()), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(ns, acc)), hydra.lib.maps.insert(ns, hydra.lib.lists.concat2(existing, (el,)), acc))[1]), hydra.names.namespace_of(el.name))), hydra.lib.maps.empty(), selected_elements), defs_grouped := hydra.lib.lists.map((lambda ns: (els_for_ns := hydra.lib.maybes.maybe((lambda : ()), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(ns, elements_by_namespace)), hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: to_def(x1)), els_for_ns)))[1]), namespaces), g := hydra.lexical.build_graph(bins5, hydra.lib.maps.empty(), adapted.primitives), Right((hydra.graph.Graph(g.bound_terms, g.bound_types, g.class_constraints, g.lambda_variables, g.metadata, g.primitives, adapted.schema_types, g.type_variables), defs_grouped)))[6])))[2]))))))
+    return hydra.lib.eithers.bind(hydra.lib.logic.if_else(do_infer, (lambda : hydra.lib.eithers.map((lambda result: hydra.lib.pairs.second(hydra.lib.pairs.first(result))), hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda x: x), hydra.inference.infer_graph_types(cx, bins1(), rebuild_graph(bins1()))))), (lambda : check_bindings_typed("after case hoisting", bins1()))), (lambda bins2: hydra.lib.eithers.bind(hydra.lib.logic.if_else(do_hoist_polymorphic_let_bindings, (lambda : check_bindings_typed("after let hoisting", hoist_poly(bins2))), (lambda : Right(bins2))), (lambda bins3: hydra.lib.eithers.bind(adapt_data_graph(constraints, do_expand, bins3, cx, rebuild_graph(bins3)), (lambda adapt_result: (adapted := hydra.lib.pairs.first(adapt_result), adapted_bindings := hydra.lib.pairs.second(adapt_result), hydra.lib.eithers.bind(check_bindings_typed("after adaptation", adapted_bindings), (lambda bins4: (bins5 := normalize_bindings(bins4), to_def := (lambda el: hydra.lib.maybes.map((lambda ts: hydra.module.TermDefinition(el.name, el.term, Just(ts))), el.type)), selected_elements := hydra.lib.lists.filter((lambda el: hydra.lib.maybes.maybe((lambda : False), (lambda ns: hydra.lib.sets.member(ns, namespaces_set())), hydra.names.namespace_of(el.name))), bins5), elements_by_namespace := hydra.lib.lists.foldl((lambda acc, el: hydra.lib.maybes.maybe((lambda : acc), (lambda ns: (existing := hydra.lib.maybes.maybe((lambda : ()), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(ns, acc)), hydra.lib.maps.insert(ns, hydra.lib.lists.concat2(existing, (el,)), acc))[1]), hydra.names.namespace_of(el.name))), hydra.lib.maps.empty(), selected_elements), defs_grouped := hydra.lib.lists.map((lambda ns: (els_for_ns := hydra.lib.maybes.maybe((lambda : ()), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(ns, elements_by_namespace)), hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: to_def(x1)), els_for_ns)))[1]), namespaces), g := hydra.lexical.build_graph(bins5, hydra.lib.maps.empty(), adapted.primitives), Right((hydra.graph.Graph(g.bound_terms, g.bound_types, g.class_constraints, g.lambda_variables, g.metadata, g.primitives, adapted.schema_types, g.type_variables), defs_grouped)))[6])))[2]))))))
 
 def prepare_same(x: T0) -> tuple[T0, tuple[Callable[[T1], T1], frozenset[T2]]]:
     r"""Return a value unchanged with identity transform and no messages."""
@@ -692,14 +692,14 @@ def prepare_literal_type(at: hydra.core.LiteralType):
             @lru_cache(1)
             def msgs() -> frozenset[str]:
                 return hydra.lib.pairs.second(hydra.lib.pairs.second(result()))
-            def _hoist_body_1(v, v1):
+            def _hoist_result_body_1(v, v1):
                 match v1:
                     case hydra.core.LiteralFloat(value=fv):
                         return cast(hydra.core.Literal, hydra.core.LiteralFloat(rep(fv)))
 
                     case _:
                         return v
-            return (cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(rtyp())), ((lambda v: _hoist_body_1(v, v)), msgs()))
+            return (cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(rtyp())), ((lambda v: _hoist_result_body_1(v, v)), msgs()))
 
         case hydra.core.LiteralTypeInteger(value=it):
             @lru_cache(1)
@@ -714,14 +714,14 @@ def prepare_literal_type(at: hydra.core.LiteralType):
             @lru_cache(1)
             def msgs() -> frozenset[str]:
                 return hydra.lib.pairs.second(hydra.lib.pairs.second(result()))
-            def _hoist_body_1(v, v1):
+            def _hoist_result_body_1(v, v1):
                 match v1:
                     case hydra.core.LiteralInteger(value=iv):
                         return cast(hydra.core.Literal, hydra.core.LiteralInteger(rep(iv)))
 
                     case _:
                         return v
-            return (cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(rtyp())), ((lambda v: _hoist_body_1(v, v)), msgs()))
+            return (cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(rtyp())), ((lambda v: _hoist_result_body_1(v, v)), msgs()))
 
         case _:
             return prepare_same(at)
@@ -743,14 +743,14 @@ def prepare_type(cx: T0, typ: hydra.core.Type):
             @lru_cache(1)
             def msgs() -> frozenset[str]:
                 return hydra.lib.pairs.second(hydra.lib.pairs.second(result()))
-            def _hoist_body_1(v, v1):
+            def _hoist_result_body_1(v, v1):
                 match v1:
                     case hydra.core.TermLiteral(value=av):
                         return cast(hydra.core.Term, hydra.core.TermLiteral(rep(av)))
 
                     case _:
                         return v
-            return (cast(hydra.core.Type, hydra.core.TypeLiteral(rtyp())), ((lambda v: _hoist_body_1(v, v)), msgs()))
+            return (cast(hydra.core.Type, hydra.core.TypeLiteral(rtyp())), ((lambda v: _hoist_result_body_1(v, v)), msgs()))
 
         case _:
             return prepare_same(typ)

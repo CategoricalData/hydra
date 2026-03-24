@@ -231,4 +231,4 @@ def joinTypesTestCase(x: hydra.testing.JoinTypesTestCase): hydra.core.Term =
   hydra.core.Term.list(hydra.lib.lists.map[hydra.typing.TypeConstraint, hydra.core.Term](hydra.encode.typing.typeConstraint)(xs)))(x.expected))))))
 
 def validateCoreTermTestCase(x: hydra.testing.ValidateCoreTermTestCase): hydra.core.Term =
-  hydra.core.Term.record(hydra.core.Record("hydra.testing.ValidateCoreTermTestCase", Seq(hydra.core.Field("input", hydra.encode.core.term(x.input)), hydra.core.Field("output", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.error.core.InvalidTermError, hydra.core.Term](hydra.encode.error.core.invalidTermError)(x.output))))))
+  hydra.core.Term.record(hydra.core.Record("hydra.testing.ValidateCoreTermTestCase", Seq(hydra.core.Field("typed", hydra.core.Term.literal(hydra.core.Literal.boolean(x.typed))), hydra.core.Field("input", hydra.encode.core.term(x.input)), hydra.core.Field("output", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.error.core.InvalidTermError, hydra.core.Term](hydra.encode.error.core.invalidTermError)(x.output))))))

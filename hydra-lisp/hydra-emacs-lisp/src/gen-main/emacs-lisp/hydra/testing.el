@@ -118,6 +118,6 @@
 
 (cl-defstruct hydra_testing_join_types_test_case left right expected)
 
-(cl-defstruct hydra_testing_validate_core_term_test_case input output)
+(cl-defstruct hydra_testing_validate_core_term_test_case typed input output)
 
 (provide 'hydra.testing)

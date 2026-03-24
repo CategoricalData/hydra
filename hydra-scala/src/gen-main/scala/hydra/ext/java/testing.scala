@@ -1,4 +1,4 @@
-package hydra.ext.java.testCodec
+package hydra.ext.java.testing
 
 import hydra.coders.*
 
@@ -6,7 +6,7 @@ import hydra.context.*
 
 import hydra.core.*
 
-import hydra.ext.java.helpers.*
+import hydra.ext.java.environment.*
 
 import hydra.module.*
 
@@ -30,11 +30,11 @@ import hydra.lib.strings
 
 def termToJava(term: hydra.core.Term)(g: hydra.graph.Graph): Either[scala.Predef.String, scala.Predef.String] =
   hydra.lib.eithers.bimap[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.Expression, scala.Predef.String, scala.Predef.String]((ic: hydra.context.InContext[hydra.errors.Error]) => hydra.show.errors.error(ic.`object`))((`arg_`: hydra.ext.java.syntax.Expression) =>
-  hydra.serialization.printExpr(hydra.serialization.parenthesize(hydra.ext.java.serde.writeExpression(`arg_`))))(hydra.ext.java.coder.encodeTerm(hydra.ext.java.helpers.JavaEnvironment(hydra.ext.java.helpers.Aliases("test", hydra.lib.maps.empty[hydra.module.Namespace, hydra.ext.java.syntax.PackageName], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name, hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name, hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], None, hydra.lib.sets.empty[hydra.core.Name]), g))(term)(hydra.lexical.emptyContext)(g))
+  hydra.serialization.printExpr(hydra.serialization.parenthesize(hydra.ext.java.serde.writeExpression(`arg_`))))(hydra.ext.java.coder.encodeTerm(hydra.ext.java.environment.JavaEnvironment(hydra.ext.java.environment.Aliases("test", hydra.lib.maps.empty[hydra.module.Namespace, hydra.ext.java.syntax.PackageName], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name, hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name, hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], None, hydra.lib.sets.empty[hydra.core.Name]), g))(term)(hydra.lexical.emptyContext)(g))
 
 def typeToJava[T0, T1, T2](_t: T0)(_g: T1): Either[T2, scala.Predef.String] = Right("Object")
 
-lazy val javaTestCodec: hydra.testing.TestCodec = hydra.testing.TestCodec("java", "java", hydra.ext.java.testCodec.termToJava, hydra.ext.java.testCodec.typeToJava, hydra.ext.java.testCodec.formatJavaTestName, hydra.ext.java.testCodec.namespaceToJavaClassName, hydra.ext.java.testCodec.javaTestCaseTemplate, hydra.ext.java.testCodec.javaTestGroupTemplate, hydra.ext.java.testCodec.javaModuleTemplate, hydra.ext.java.testCodec.javaImportTemplate, (_names: scala.collection.immutable.Set[hydra.core.Name]) => hydra.ext.java.testCodec.findJavaImports)
+lazy val javaTestCodec: hydra.testing.TestCodec = hydra.testing.TestCodec("java", "java", hydra.ext.java.testing.termToJava, hydra.ext.java.testing.typeToJava, hydra.ext.java.testing.formatJavaTestName, hydra.ext.java.testing.namespaceToJavaClassName, hydra.ext.java.testing.javaTestCaseTemplate, hydra.ext.java.testing.javaTestGroupTemplate, hydra.ext.java.testing.javaModuleTemplate, hydra.ext.java.testing.javaImportTemplate, (_names: scala.collection.immutable.Set[hydra.core.Name]) => hydra.ext.java.testing.findJavaImports)
 
 def formatJavaTestName(name: scala.Predef.String): scala.Predef.String =
   {
@@ -63,13 +63,13 @@ def generateJavaTestGroupHierarchy(g: hydra.graph.Graph)(codec: hydra.testing.Te
   lazy val subgroups: Seq[hydra.testing.TestGroup] = (testGroup.subgroups)
   hydra.lib.eithers.bind[scala.Predef.String, scala.Predef.String, scala.Predef.String](hydra.lib.eithers.map[Seq[Seq[scala.Predef.String]], scala.Predef.String, scala.Predef.String]((`lines_`: Seq[Seq[scala.Predef.String]]) =>
     hydra.lib.strings.intercalate("\n\n")(hydra.lib.lists.concat[scala.Predef.String](`lines_`)))(hydra.lib.eithers.mapList[hydra.testing.TestCaseWithMetadata, Seq[scala.Predef.String], scala.Predef.String]((tc: hydra.testing.TestCaseWithMetadata) =>
-    hydra.ext.java.testCodec.generateJavaTestCase(g)(codec)(groupPath)(tc))(`cases_`)))((testCasesStr: scala.Predef.String) =>
+    hydra.ext.java.testing.generateJavaTestCase(g)(codec)(groupPath)(tc))(`cases_`)))((testCasesStr: scala.Predef.String) =>
     hydra.lib.eithers.map[scala.Predef.String, scala.Predef.String, scala.Predef.String]((subgroupsStr: scala.Predef.String) =>
     hydra.lib.strings.cat(Seq(testCasesStr, hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.logic.or(hydra.lib.equality.equal[scala.Predef.String](testCasesStr)(""))(hydra.lib.equality.equal[scala.Predef.String](subgroupsStr)("")))("")("\n\n"), subgroupsStr)))(hydra.lib.eithers.map[Seq[scala.Predef.String], scala.Predef.String, scala.Predef.String]((blocks: Seq[scala.Predef.String]) => hydra.lib.strings.intercalate("\n\n")(blocks))(hydra.lib.eithers.mapList[hydra.testing.TestGroup, scala.Predef.String, scala.Predef.String]((subgroup: hydra.testing.TestGroup) =>
     {
     lazy val groupName: scala.Predef.String = (subgroup.name)
     lazy val header: scala.Predef.String = hydra.lib.strings.cat2("    // ")(groupName)
-    hydra.lib.eithers.map[scala.Predef.String, scala.Predef.String, scala.Predef.String]((content: scala.Predef.String) => hydra.lib.strings.cat(Seq(header, "\n\n", content)))(hydra.ext.java.testCodec.generateJavaTestGroupHierarchy(g)(codec)(hydra.lib.lists.concat2[scala.Predef.String](groupPath)(Seq(groupName)))(subgroup))
+    hydra.lib.eithers.map[scala.Predef.String, scala.Predef.String, scala.Predef.String]((content: scala.Predef.String) => hydra.lib.strings.cat(Seq(header, "\n\n", content)))(hydra.ext.java.testing.generateJavaTestGroupHierarchy(g)(codec)(hydra.lib.lists.concat2[scala.Predef.String](groupPath)(Seq(groupName)))(subgroup))
   })(subgroups))))
 }
 
@@ -83,14 +83,14 @@ def generateJavaTestCase(g: hydra.graph.Graph)(codec: hydra.testing.TestCodec)(g
       lazy val `output_`: hydra.core.Term = (v_TestCase_delegatedEvaluation_delCase.output)
       lazy val fullName: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.lists.`null`[scala.Predef.String](groupPath))(`name_`)(hydra.lib.strings.intercalate("_")(hydra.lib.lists.concat2[scala.Predef.String](groupPath)(Seq(`name_`))))
       lazy val formattedName: scala.Predef.String = codec.formatTestName(fullName)
-      lazy val assertType: scala.Predef.String = hydra.ext.java.testCodec.getAssertionType(`output_`)
+      lazy val assertType: scala.Predef.String = hydra.ext.java.testing.getAssertionType(`output_`)
       {
-        lazy val typeVars: Seq[hydra.core.Name] = hydra.lib.lists.sort[hydra.core.Name](hydra.lib.lists.filter[hydra.core.Name](hydra.ext.java.testCodec.isInferenceVar)(hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.union[hydra.core.Name](hydra.rewriting.freeTypeVariablesInTerm(`input_`))(hydra.rewriting.freeTypeVariablesInTerm(`output_`)))))
+        lazy val typeVars: Seq[hydra.core.Name] = hydra.lib.lists.sort[hydra.core.Name](hydra.lib.lists.filter[hydra.core.Name](hydra.ext.java.testing.isInferenceVar)(hydra.lib.sets.toList[hydra.core.Name](hydra.lib.sets.union[hydra.core.Name](hydra.rewriting.freeTypeVariablesInTerm(`input_`))(hydra.rewriting.freeTypeVariablesInTerm(`output_`)))))
         lazy val typeParamsStr: scala.Predef.String = hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.lists.`null`[hydra.core.Name](typeVars))("")(hydra.lib.strings.cat(Seq("<", hydra.lib.strings.intercalate(", ")(hydra.lib.lists.map[hydra.core.Name, scala.Predef.String]((`n_`: hydra.core.Name) => hydra.formatting.capitalize(`n_`))(typeVars)), "> ")))
         hydra.lib.eithers.bind[scala.Predef.String, scala.Predef.String, Seq[scala.Predef.String]](codec.encodeTerm(`input_`)(g))((inputCode: scala.Predef.String) =>
           hydra.lib.eithers.map[scala.Predef.String, Seq[scala.Predef.String], scala.Predef.String]((outputCode: scala.Predef.String) =>
           {
-          lazy val assertionLines: Seq[scala.Predef.String] = hydra.ext.java.testCodec.generateAssertion(assertType)(outputCode)(inputCode)
+          lazy val assertionLines: Seq[scala.Predef.String] = hydra.ext.java.testing.generateAssertion(assertType)(outputCode)(inputCode)
           hydra.lib.lists.concat2[scala.Predef.String](Seq("    @Test", hydra.lib.strings.cat(Seq("    public ", typeParamsStr, "void ", formattedName, "() {"))))(hydra.lib.lists.concat2[scala.Predef.String](assertionLines)(Seq("    }")))
         })(codec.encodeTerm(`output_`)(g)))
       }
@@ -101,9 +101,9 @@ def generateJavaTestCase(g: hydra.graph.Graph)(codec: hydra.testing.TestCodec)(g
 def getAssertionType(term: hydra.core.Term): scala.Predef.String =
   hydra.rewriting.deannotateTerm(term) match
   case hydra.core.Term.literal(v_Term_literal_lit) => v_Term_literal_lit match
-    case hydra.core.Literal.binary(v_Literal_binary__b) => "assertArrayEquals"
+    case hydra.core.Literal.binary => "assertArrayEquals"
     case hydra.core.Literal.float(v_Literal_float_fv) => v_Literal_float_fv match
-      case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat__bf) => "assertBigDecimalEquals"
+      case hydra.core.FloatValue.bigfloat => "assertBigDecimalEquals"
       case _ => "assertDoubleEquals"
     case _ => "assertEquals"
   case _ => "assertEquals"
@@ -122,7 +122,7 @@ def isInferenceVar(n: hydra.core.Name): Boolean =
 def generateTestFileWithJavaCodec(codec: hydra.testing.TestCodec)(testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(g: hydra.graph.Graph): Either[scala.Predef.String, Tuple2[scala.Predef.String, scala.Predef.String]] =
   hydra.lib.eithers.map[scala.Predef.String, Tuple2[scala.Predef.String, scala.Predef.String], scala.Predef.String]((testBody: scala.Predef.String) =>
   {
-  lazy val testModuleContent: scala.Predef.String = hydra.ext.java.testCodec.buildJavaTestModule(codec)(testModule)(testGroup)(testBody)
+  lazy val testModuleContent: scala.Predef.String = hydra.ext.java.testing.buildJavaTestModule(codec)(testModule)(testGroup)(testBody)
   lazy val `ns_`: hydra.module.Namespace = (testModule.namespace)
   lazy val parts: Seq[scala.Predef.String] = hydra.lib.strings.splitOn(".")(`ns_`)
   lazy val dirParts: Seq[scala.Predef.String] = hydra.lib.lists.drop[scala.Predef.String](1)(hydra.lib.lists.init[scala.Predef.String](parts))
@@ -130,7 +130,7 @@ def generateTestFileWithJavaCodec(codec: hydra.testing.TestCodec)(testModule: hy
   lazy val fileName: scala.Predef.String = hydra.lib.strings.cat2(`className_`)(".java")
   lazy val filePath: scala.Predef.String = hydra.lib.strings.cat(Seq(hydra.lib.strings.intercalate("/")(dirParts), "/", fileName))
   Tuple2(filePath, testModuleContent)
-})(hydra.ext.java.testCodec.generateJavaTestGroupHierarchy(g)(codec)(Seq())(testGroup))
+})(hydra.ext.java.testing.generateJavaTestGroupHierarchy(g)(codec)(Seq())(testGroup))
 
 def buildJavaTestModule[T0](codec: T0)(testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(testBody: scala.Predef.String): scala.Predef.String =
   {
@@ -146,4 +146,4 @@ def buildJavaTestModule[T0](codec: T0)(testModule: hydra.module.Module)(testGrou
 
 def generateJavaTestFile(testModule: hydra.module.Module)(testGroup: hydra.testing.TestGroup)(g: hydra.graph.Graph): Either[scala.Predef.String, Tuple2[scala.Predef.String, scala.Predef.String]] =
   hydra.lib.eithers.bind[scala.Predef.String, hydra.testing.TestGroup, Tuple2[scala.Predef.String, scala.Predef.String]](hydra.test.utils.inferTestGroupTerms(g)(testGroup))((inferredTestGroup: hydra.testing.TestGroup) =>
-  hydra.ext.java.testCodec.generateTestFileWithJavaCodec(hydra.ext.java.testCodec.javaTestCodec)(testModule)(inferredTestGroup)(g))
+  hydra.ext.java.testing.generateTestFileWithJavaCodec(hydra.ext.java.testing.javaTestCodec)(testModule)(inferredTestGroup)(g))

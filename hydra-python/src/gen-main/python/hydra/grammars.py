@@ -5,7 +5,7 @@ r"""A utility for converting a BNF grammar to a Hydra module."""
 from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import FrozenDict, Just, Maybe, frozenlist
+from hydra.dsl.python import FrozenDict, Just, Maybe, Nothing, frozenlist
 from typing import TypeVar, cast
 import hydra.annotations
 import hydra.core
@@ -258,4 +258,4 @@ def grammar_to_module(ns: hydra.module.Namespace, grammar: hydra.grammar.Grammar
     @lru_cache(1)
     def elements() -> frozenlist[hydra.core.Binding]:
         return hydra.lib.lists.map((lambda pair: (lname := hydra.lib.pairs.first(pair), el_name := to_name(ns, lname), typ := replace_placeholders(el_name, wrap_type(hydra.lib.pairs.second(pair))), hydra.annotations.type_element(el_name, typ))[3]), element_pairs())
-    return hydra.module.Module(ns, elements(), (), (), desc)
+    return hydra.module.Module(ns, hydra.lib.lists.map((lambda b: cast(hydra.module.Definition, hydra.module.DefinitionTerm(hydra.module.TermDefinition(b.name, b.term, Nothing())))), elements()), (), (), desc)

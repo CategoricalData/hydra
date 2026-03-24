@@ -52,12 +52,16 @@ graphqlLanguage =
           Variants.TermVariantUnion]
     typeVariants =
         Sets.fromList [
+          Variants.TypeVariantApplication,
           Variants.TypeVariantEither,
+          Variants.TypeVariantForall,
+          Variants.TypeVariantFunction,
           Variants.TypeVariantList,
           Variants.TypeVariantLiteral,
           Variants.TypeVariantMap,
           Variants.TypeVariantPair,
           Variants.TypeVariantSet,
+          Variants.TypeVariantUnit,
           Variants.TypeVariantWrap,
           Variants.TypeVariantMaybe,
           Variants.TypeVariantRecord,

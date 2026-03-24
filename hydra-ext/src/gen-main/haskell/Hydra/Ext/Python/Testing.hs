@@ -181,7 +181,7 @@ namespacesForPythonModule mod graph_ =
                   Maybes.mapMaybe (\b -> Maybes.map (\ts -> Module.DefinitionTerm (Module.TermDefinition {
                     Module.termDefinitionName = (Core.bindingName b),
                     Module.termDefinitionTerm = (Core.bindingTerm b),
-                    Module.termDefinitionType = Just ts})) (Core.bindingType b)) bindings
+                    Module.termDefinitionType = (Just ts)})) (Core.bindingType b)) bindings
       in (Right (Utils.findNamespaces (Module.moduleNamespace mod) defs))
 
 -- | Generate test hierarchy for Python with nested subgroups

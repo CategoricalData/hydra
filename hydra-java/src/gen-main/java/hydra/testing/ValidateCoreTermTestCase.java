@@ -10,9 +10,16 @@ import java.io.Serializable;
 public class ValidateCoreTermTestCase implements Serializable, Comparable<ValidateCoreTermTestCase> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.ValidateCoreTermTestCase");
 
+  public static final hydra.core.Name TYPED = new hydra.core.Name("typed");
+
   public static final hydra.core.Name INPUT = new hydra.core.Name("input");
 
   public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
+
+  /**
+   * Whether to expect System F (typed) terms. When true, type variable binding checks and UntypedTermVariableError are active.
+   */
+  public final Boolean typed;
 
   /**
    * The term to validate
@@ -24,7 +31,8 @@ public class ValidateCoreTermTestCase implements Serializable, Comparable<Valida
    */
   public final hydra.util.Maybe<hydra.error.core.InvalidTermError> output;
 
-  public ValidateCoreTermTestCase (hydra.core.Term input, hydra.util.Maybe<hydra.error.core.InvalidTermError> output) {
+  public ValidateCoreTermTestCase (Boolean typed, hydra.core.Term input, hydra.util.Maybe<hydra.error.core.InvalidTermError> output) {
+    this.typed = typed;
     this.input = input;
     this.output = output;
   }
@@ -36,6 +44,8 @@ public class ValidateCoreTermTestCase implements Serializable, Comparable<Valida
     }
     ValidateCoreTermTestCase o = (ValidateCoreTermTestCase) other;
     return java.util.Objects.equals(
+      this.typed,
+      o.typed) && java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
       this.output,
@@ -44,13 +54,17 @@ public class ValidateCoreTermTestCase implements Serializable, Comparable<Valida
 
   @Override
   public int hashCode() {
-    return 2 * java.util.Objects.hashCode(input) + 3 * java.util.Objects.hashCode(output);
+    return 2 * java.util.Objects.hashCode(typed) + 3 * java.util.Objects.hashCode(input) + 5 * java.util.Objects.hashCode(output);
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ValidateCoreTermTestCase other) {
     int cmp = 0;
+    cmp = ((Comparable) typed).compareTo(other.typed);
+    if (cmp != 0) {
+      return cmp;
+    }
     cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
@@ -58,11 +72,15 @@ public class ValidateCoreTermTestCase implements Serializable, Comparable<Valida
     return ((Comparable) output).compareTo(other.output);
   }
 
+  public ValidateCoreTermTestCase withTyped(Boolean typed) {
+    return new ValidateCoreTermTestCase(typed, input, output);
+  }
+
   public ValidateCoreTermTestCase withInput(hydra.core.Term input) {
-    return new ValidateCoreTermTestCase(input, output);
+    return new ValidateCoreTermTestCase(typed, input, output);
   }
 
   public ValidateCoreTermTestCase withOutput(hydra.util.Maybe<hydra.error.core.InvalidTermError> output) {
-    return new ValidateCoreTermTestCase(input, output);
+    return new ValidateCoreTermTestCase(typed, input, output);
   }
 }

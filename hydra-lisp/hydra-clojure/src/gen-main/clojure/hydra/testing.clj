@@ -145,5 +145,5 @@
 (defrecord hydra_testing_join_types_test_case [left right expected])
 (defn make-hydra_testing_join_types_test_case [left right expected] (->hydra_testing_join_types_test_case left right expected))
 
-(defrecord hydra_testing_validate_core_term_test_case [input output])
-(defn make-hydra_testing_validate_core_term_test_case [input output] (->hydra_testing_validate_core_term_test_case input output))
+(defrecord hydra_testing_validate_core_term_test_case [typed input output])
+(defn make-hydra_testing_validate_core_term_test_case [typed input output] (->hydra_testing_validate_core_term_test_case typed input output))

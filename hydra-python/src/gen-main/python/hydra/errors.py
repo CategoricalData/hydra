@@ -34,11 +34,11 @@ class ErrorOther(Node["OtherError"]):
 class ErrorUndefinedField(Node["hydra.error.core.UndefinedFieldError"]):
     r"""A reference to an undefined field"""
 
-class ErrorUndefinedTerm(Node["hydra.error.core.UndefinedTermError"]):
-    r"""A reference to an undefined term"""
+class ErrorUndefinedTermVariable(Node["hydra.error.core.UndefinedTermVariableError"]):
+    r"""A reference to an undefined term variable"""
 
-class ErrorUndefinedType(Node["hydra.error.core.UndefinedTypeError"]):
-    r"""A reference to an undefined type"""
+class ErrorUntypedTermVariable(Node["hydra.error.core.UntypedTermVariableError"]):
+    r"""A term variable whose type is not known"""
 
 class ErrorUnexpectedTermVariant(Node["hydra.error.core.UnexpectedTermVariantError"]):
     r"""An unexpected term variant"""
@@ -55,7 +55,7 @@ class _ErrorMeta(type):
 
 # An error of any kind, with kernel errors particularly differentiated.
 class Error(metaclass=_ErrorMeta):
-    r"""ErrorChecking | ErrorDecoding | ErrorDuplicateBinding | ErrorDuplicateField | ErrorOther | ErrorUndefinedField | ErrorUndefinedTerm | ErrorUndefinedType | ErrorUnexpectedTermVariant | ErrorUnexpectedTypeVariant | ErrorUnification"""
+    r"""ErrorChecking | ErrorDecoding | ErrorDuplicateBinding | ErrorDuplicateField | ErrorOther | ErrorUndefinedField | ErrorUndefinedTermVariable | ErrorUntypedTermVariable | ErrorUnexpectedTermVariant | ErrorUnexpectedTypeVariant | ErrorUnification"""
 
     TYPE_ = hydra.core.Name("hydra.errors.Error")
     CHECKING = hydra.core.Name("checking")
@@ -64,8 +64,8 @@ class Error(metaclass=_ErrorMeta):
     DUPLICATE_FIELD = hydra.core.Name("duplicateField")
     OTHER = hydra.core.Name("other")
     UNDEFINED_FIELD = hydra.core.Name("undefinedField")
-    UNDEFINED_TERM = hydra.core.Name("undefinedTerm")
-    UNDEFINED_TYPE = hydra.core.Name("undefinedType")
+    UNDEFINED_TERM_VARIABLE = hydra.core.Name("undefinedTermVariable")
+    UNTYPED_TERM_VARIABLE = hydra.core.Name("untypedTermVariable")
     UNEXPECTED_TERM_VARIANT = hydra.core.Name("unexpectedTermVariant")
     UNEXPECTED_TYPE_VARIANT = hydra.core.Name("unexpectedTypeVariant")
     UNIFICATION = hydra.core.Name("unification")

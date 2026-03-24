@@ -569,13 +569,15 @@ public interface Testing {
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> testBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.core.Term, hydra.core.Binding>) (term -> new hydra.core.Binding(new hydra.core.Name("_test_"), term, (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))),
       testTerms.get()));
-    hydra.module.Module tempModule = new hydra.module.Module((mod).namespace, testBindings.get(), (mod).termDependencies, (mod).typeDependencies, (mod).description);
+    hydra.util.Lazy<hydra.module.Module> tempModule = new hydra.util.Lazy<>(() -> new hydra.module.Module((mod).namespace, hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.core.Binding, hydra.module.Definition>) (b -> new hydra.module.Definition.Term(new hydra.module.TermDefinition((b).name, (b).term, (b).type))),
+      testBindings.get()), (mod).termDependencies, (mod).typeDependencies, (mod).description));
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.Bimap.apply(
         (java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, String>) (ic -> hydra.show.Errors.error(((java.util.function.Function<hydra.context.InContext<hydra.errors.Error_>, hydra.errors.Error_>) (projected -> projected.object)).apply(ic))),
         (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>>) (a -> a),
         hydra.ext.haskell.Utils.namespacesForModule(
-          tempModule,
+          tempModule.get(),
           hydra.Lexical.emptyContext(),
           graph_)),
       (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>, hydra.util.Either<String, hydra.module.Namespaces<hydra.ext.haskell.syntax.ModuleName>>>) (baseNamespaces -> {

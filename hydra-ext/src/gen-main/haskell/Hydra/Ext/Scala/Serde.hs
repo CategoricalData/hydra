@@ -5,6 +5,7 @@
 module Hydra.Ext.Scala.Serde where
 
 import qualified Hydra.Ast as Ast
+import qualified Hydra.Ext.Java.Serde as Serde
 import qualified Hydra.Ext.Scala.Syntax as Syntax
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -109,7 +110,8 @@ writeDefn def =
           (Maybes.pure (Serialization.cst "=")),
           (Maybes.pure (writeType body))]))
       Syntax.DefnVal v0 ->
-        let pats = Syntax.defn_ValPats v0
+        let mods = Syntax.defn_ValMods v0
+            pats = Syntax.defn_ValPats v0
             typ = Syntax.defn_ValDecltpe v0
             rhs = Syntax.defn_ValRhs v0
             firstPat = Lists.head pats
@@ -121,8 +123,9 @@ writeDefn def =
                     Maybes.maybe (Serialization.cst nameStr) (\t -> Serialization.spaceSep [
                       Serialization.cst (Strings.cat2 nameStr ":"),
                       (writeType t)]) typ
+            valKeyword = Logic.ifElse (Lists.null mods) "val" "lazy val"
         in (Serialization.spaceSep [
-          Serialization.cst "val",
+          Serialization.cst valKeyword,
           nameAndType,
           (Serialization.cst "="),
           (writeTerm rhs)])
@@ -232,7 +235,7 @@ writeLit lit =
       Syntax.LitFloat v0 -> Serialization.cst (Strings.cat2 (Literals.showFloat32 v0) "f")
       Syntax.LitDouble v0 -> Serialization.cst (Literals.showFloat64 v0)
       Syntax.LitUnit -> Serialization.cst "()"
-      Syntax.LitString v0 -> Serialization.cst (Literals.showString v0)
+      Syntax.LitString v0 -> Serialization.cst (Strings.cat2 "\"" (Strings.cat2 (Serde.escapeJavaString v0) "\""))
       _ -> Serialization.cst "TODO:literal"
 
 -- | Convert a name to an expression

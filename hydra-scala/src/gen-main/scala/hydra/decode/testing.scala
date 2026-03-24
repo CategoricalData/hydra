@@ -35,8 +35,8 @@ def evaluationStyle(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.e
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle]](Seq(Tuple2("eager", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.EvaluationStyle, hydra.errors.DecodingError]((t: Unit) => hydra.testing.EvaluationStyle.eager)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("lazy", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.EvaluationStyle, hydra.errors.DecodingError]((t: Unit) => hydra.testing.EvaluationStyle.`lazy`)(hydra.extract.helpers.decodeUnit(cx)(input)))))
+      hydra.lib.eithers.map[Unit, hydra.testing.EvaluationStyle, hydra.errors.DecodingError]((t: Unit) => hydra.testing.EvaluationStyle.eager(t))(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("lazy", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.EvaluationStyle, hydra.errors.DecodingError]((t: Unit) => hydra.testing.EvaluationStyle.`lazy`(t))(hydra.extract.helpers.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.EvaluationStyle]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -131,9 +131,9 @@ def foldOperation(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.err
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.FoldOperation])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.FoldOperation]](Seq(Tuple2("sumInt32Literals", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.FoldOperation, hydra.errors.DecodingError]((t: Unit) => hydra.testing.FoldOperation.sumInt32Literals)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("collectListLengths", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.FoldOperation, hydra.errors.DecodingError]((t: Unit) => hydra.testing.FoldOperation.collectListLengths)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("collectLabels", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.FoldOperation, hydra.errors.DecodingError]((t: Unit) => hydra.testing.FoldOperation.collectLabels)(hydra.extract.helpers.decodeUnit(cx)(input)))))
+      hydra.lib.eithers.map[Unit, hydra.testing.FoldOperation, hydra.errors.DecodingError]((t: Unit) => hydra.testing.FoldOperation.sumInt32Literals(t))(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("collectListLengths", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.FoldOperation, hydra.errors.DecodingError]((t: Unit) => hydra.testing.FoldOperation.collectListLengths(t))(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("collectLabels", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.FoldOperation, hydra.errors.DecodingError]((t: Unit) => hydra.testing.FoldOperation.collectLabels(t))(hydra.extract.helpers.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.FoldOperation], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.FoldOperation]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.FoldOperation])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.FoldOperation]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -172,10 +172,10 @@ def hoistPredicate(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.er
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate]](Seq(Tuple2("caseStatements", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.caseStatements)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("applications", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.applications)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("lists", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.lists)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("nothing", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.nothing)(hydra.extract.helpers.decodeUnit(cx)(input)))))
+      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.caseStatements(t))(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("applications", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.applications(t))(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("lists", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.lists(t))(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("nothing", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.HoistPredicate, hydra.errors.DecodingError]((t: Unit) => hydra.testing.HoistPredicate.nothing(t))(hydra.extract.helpers.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.HoistPredicate]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -233,8 +233,8 @@ def termRewriter(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.TermRewriter])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TermRewriter]](Seq(Tuple2("replaceFooWithBar", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.TermRewriter, hydra.errors.DecodingError]((t: Unit) => hydra.testing.TermRewriter.replaceFooWithBar)(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("replaceInt32WithInt64", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.TermRewriter, hydra.errors.DecodingError]((t: Unit) => hydra.testing.TermRewriter.replaceInt32WithInt64)(hydra.extract.helpers.decodeUnit(cx)(input)))))
+      hydra.lib.eithers.map[Unit, hydra.testing.TermRewriter, hydra.errors.DecodingError]((t: Unit) => hydra.testing.TermRewriter.replaceFooWithBar(t))(hydra.extract.helpers.decodeUnit(cx)(input))), Tuple2("replaceInt32WithInt64", (input: hydra.core.Term) =>
+      hydra.lib.eithers.map[Unit, hydra.testing.TermRewriter, hydra.errors.DecodingError]((t: Unit) => hydra.testing.TermRewriter.replaceInt32WithInt64(t))(hydra.extract.helpers.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.TermRewriter], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TermRewriter]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.TermRewriter])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TermRewriter]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -259,7 +259,7 @@ def typeRewriter(cx: hydra.graph.Graph)(raw: hydra.core.Term): Either[hydra.erro
     lazy val fname: hydra.core.Name = (field.name)
     lazy val fterm: hydra.core.Term = (field.term)
     lazy val variantMap: Map[hydra.core.Name, (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter])] = hydra.lib.maps.fromList[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter]](Seq(Tuple2("replaceStringWithInt32", (input: hydra.core.Term) =>
-      hydra.lib.eithers.map[Unit, hydra.testing.TypeRewriter, hydra.errors.DecodingError]((t: Unit) => hydra.testing.TypeRewriter.replaceStringWithInt32)(hydra.extract.helpers.decodeUnit(cx)(input)))))
+      hydra.lib.eithers.map[Unit, hydra.testing.TypeRewriter, hydra.errors.DecodingError]((t: Unit) => hydra.testing.TypeRewriter.replaceStringWithInt32(t))(hydra.extract.helpers.decodeUnit(cx)(input)))))
     hydra.lib.maybes.maybe[Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter], (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter]](Left(hydra.lib.strings.cat(Seq("no such field ", fname, " in union"))))((f: (hydra.core.Term => Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter])) => f(fterm))(hydra.lib.maps.lookup[hydra.core.Name, (hydra.core.Term) => Either[hydra.errors.DecodingError, hydra.testing.TypeRewriter]](fname)(variantMap))
   }
   case _ => Left("expected union"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))
@@ -832,10 +832,18 @@ def validateCoreTermTestCase(cx: hydra.graph.Graph)(raw: hydra.core.Term): Eithe
   stripped match
   case hydra.core.Term.record(v_Term_record_record) => {
     lazy val fieldMap: Map[hydra.core.Name, hydra.core.Term] = hydra.extract.helpers.toFieldMap(v_Term_record_record)
-    hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, hydra.testing.ValidateCoreTermTestCase](hydra.extract.helpers.requireField("input")(hydra.decode.core.term)(fieldMap)(cx))((field_input: hydra.core.Term) =>
+    hydra.lib.eithers.bind[hydra.errors.DecodingError, Boolean, hydra.testing.ValidateCoreTermTestCase](hydra.extract.helpers.requireField("typed")((cx2: hydra.graph.Graph) =>
+      (raw2: hydra.core.Term) =>
+      hydra.lib.eithers.either[scala.Predef.String, hydra.core.Term, Either[hydra.errors.DecodingError, Boolean]]((err: scala.Predef.String) => Left(err))((stripped2: hydra.core.Term) =>
+      stripped2 match
+      case hydra.core.Term.literal(v_Term_literal_v) => v_Term_literal_v match
+        case hydra.core.Literal.boolean(v_Literal_boolean_b) => Right(v_Literal_boolean_b)
+        case _ => Left("expected boolean literal")
+      case _ => Left("expected literal"))(hydra.lexical.stripAndDereferenceTermEither(cx2)(raw2)))(fieldMap)(cx))((field_typed: Boolean) =>
+      hydra.lib.eithers.bind[hydra.errors.DecodingError, hydra.core.Term, hydra.testing.ValidateCoreTermTestCase](hydra.extract.helpers.requireField("input")(hydra.decode.core.term)(fieldMap)(cx))((field_input: hydra.core.Term) =>
       hydra.lib.eithers.bind[hydra.errors.DecodingError, Option[hydra.error.core.InvalidTermError], hydra.testing.ValidateCoreTermTestCase](hydra.extract.helpers.requireField("output")((v1: hydra.graph.Graph) =>
       (v2: hydra.core.Term) =>
       hydra.extract.helpers.decodeMaybe(hydra.decode.error.core.invalidTermError)(v1)(v2))(fieldMap)(cx))((field_output: Option[hydra.error.core.InvalidTermError]) =>
-      Right(hydra.testing.ValidateCoreTermTestCase(field_input, field_output))))
+      Right(hydra.testing.ValidateCoreTermTestCase(field_typed, field_input, field_output)))))
   }
   case _ => Left("expected record"))(hydra.lexical.stripAndDereferenceTermEither(cx)(raw))

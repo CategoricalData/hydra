@@ -50,7 +50,7 @@ def transformTestCase(tcm: hydra.testing.TestCaseWithMetadata): Option[hydra.tes
       lazy val `output_`: hydra.core.Term = (v_TestCase_evaluation_ecase.output)
       Some(hydra.testing.TestCaseWithMetadata(`name_`, hydra.testing.TestCase.delegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(`input_`, `output_`)), desc, `tags_`))
     }
-    case hydra.testing.TestCase.delegatedEvaluation(v_TestCase_delegatedEvaluation__) => Some(tcm)
+    case hydra.testing.TestCase.delegatedEvaluation => Some(tcm)
     case hydra.testing.TestCase.topologicalSort(v_TestCase_topologicalSort_tscase) => {
       lazy val adjList: Seq[Tuple2[Int, Seq[Int]]] = (v_TestCase_topologicalSort_tscase.adjacencyList)
       lazy val expected: Either[Seq[Seq[Int]], Seq[Int]] = (v_TestCase_topologicalSort_tscase.expected)
@@ -61,7 +61,7 @@ def transformTestCase(tcm: hydra.testing.TestCaseWithMetadata): Option[hydra.tes
       lazy val expected: Seq[Seq[Int]] = (v_TestCase_topologicalSortSCC_scccase.expected)
       Some(hydra.testing.TestCaseWithMetadata(`name_`, hydra.testing.TestCase.delegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(hydra.test.transform.buildTopologicalSortSCCCall(adjList), hydra.test.transform.encodeListList(expected))), desc, `tags_`))
     }
-    case hydra.testing.TestCase.validateCoreTerm(v_TestCase_validateCoreTerm__) => Some(tcm)
+    case hydra.testing.TestCase.validateCoreTerm => Some(tcm)
     case _ => None
 }
 
@@ -78,7 +78,7 @@ def encodeCaseConvention(conv: hydra.util.CaseConvention): hydra.core.Term =
 def addGenerationPrefix(`ns_`: hydra.module.Namespace): hydra.module.Namespace = hydra.lib.strings.cat2("generation.")(`ns_`)
 
 def transformModule(m: hydra.module.Module): hydra.module.Module =
-  hydra.module.Module(hydra.test.transform.addGenerationPrefix(m.namespace), (m.elements), (m.termDependencies), (m.typeDependencies), (m.description))
+  hydra.module.Module(hydra.test.transform.addGenerationPrefix(m.namespace), (m.definitions), (m.termDependencies), (m.typeDependencies), (m.description))
 
 def collectTestCases(tg: hydra.testing.TestGroup): Seq[hydra.testing.TestCaseWithMetadata] =
   hydra.lib.lists.concat2[hydra.testing.TestCaseWithMetadata](tg.cases)(hydra.lib.lists.concat[hydra.testing.TestCaseWithMetadata](hydra.lib.lists.map[hydra.testing.TestGroup, Seq[hydra.testing.TestCaseWithMetadata]]((sg: hydra.testing.TestGroup) => hydra.test.transform.collectTestCases(sg))(tg.subgroups)))

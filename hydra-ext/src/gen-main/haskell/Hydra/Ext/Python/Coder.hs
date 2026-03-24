@@ -38,6 +38,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -1148,7 +1149,11 @@ encodeDefinition cx env def_ =
       Module.DefinitionTerm v0 ->
         let name = Module.termDefinitionName v0
             term = Module.termDefinitionTerm v0
-            typ = Maybes.maybe (Core.TypeScheme [] (Core.TypeVariable (Core.Name "hydra.core.Unit")) Nothing) (\x -> x) (Module.termDefinitionType v0)
+            typ =
+                    Maybes.maybe (Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Unit")),
+                      Core.typeSchemeConstraints = Nothing}) (\x -> x) (Module.termDefinitionType v0)
         in (Eithers.bind (Annotations.getTermDescription cx (pythonEnvironmentGetGraph env) term) (\comment ->
           let normComment = Maybes.map CoderUtils.normalizeComment comment
           in (Eithers.bind (encodeTermAssignment cx env name term typ normComment) (\stmt -> Right [
@@ -2524,8 +2529,7 @@ gatherMetadata focusNs defs =
                   \meta -> \def -> case def of
                     Module.DefinitionTerm v0 ->
                       let term = Module.termDefinitionTerm v0
-                          typScheme = Maybes.maybe (Core.TypeScheme [] (Core.TypeVariable (Core.Name "hydra.core.Unit")) Nothing) (\x -> x) (Module.termDefinitionType v0)
-                          typ = Core.typeSchemeType typScheme
+                          typ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeType (Module.termDefinitionType v0)
                           meta2 = extendMetaForType True True typ meta
                       in (extendMetaForTerm True meta2 term)
                     Module.DefinitionType v0 ->

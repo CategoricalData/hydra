@@ -43,13 +43,13 @@ public interface Errors {
       }
 
       @Override
-      public hydra.core.Term visit(hydra.errors.Error_.UndefinedTerm y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("undefinedTerm"), hydra.encode.error.Core.undefinedTermError((y).value))));
+      public hydra.core.Term visit(hydra.errors.Error_.UndefinedTermVariable y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("undefinedTermVariable"), hydra.encode.error.Core.undefinedTermVariableError((y).value))));
       }
 
       @Override
-      public hydra.core.Term visit(hydra.errors.Error_.UndefinedType y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("undefinedType"), hydra.encode.error.Core.undefinedTypeError((y).value))));
+      public hydra.core.Term visit(hydra.errors.Error_.UntypedTermVariable y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("untypedTermVariable"), hydra.encode.error.Core.untypedTermVariableError((y).value))));
       }
 
       @Override

@@ -82,9 +82,9 @@ def writeArrayCreationExpression(ace: hydra.ext.java.syntax.ArrayCreationExpress
     lazy val ai: hydra.ext.java.syntax.ArrayInitializer = (v_ArrayCreationExpression_primitiveArray_pa.array)
     hydra.serialization.spaceSep(Seq(hydra.serialization.cst("new"), hydra.serialization.noSep(Seq(hydra.ext.java.serde.writePrimitiveTypeWithAnnotations(pt), hydra.serialization.cst("[]"))), hydra.ext.java.serde.writeArrayInitializer(ai)))
   }
-  case hydra.ext.java.syntax.ArrayCreationExpression.classOrInterfaceArray(v_ArrayCreationExpression_classOrInterfaceArray__) => hydra.serialization.cst("STUB:ArrayCreationExpression")
-  case hydra.ext.java.syntax.ArrayCreationExpression.primitive(v_ArrayCreationExpression_primitive__) => hydra.serialization.cst("STUB:ArrayCreationExpression")
-  case hydra.ext.java.syntax.ArrayCreationExpression.classOrInterface(v_ArrayCreationExpression_classOrInterface__) => hydra.serialization.cst("STUB:ArrayCreationExpression")
+  case hydra.ext.java.syntax.ArrayCreationExpression.classOrInterfaceArray => hydra.serialization.cst("STUB:ArrayCreationExpression")
+  case hydra.ext.java.syntax.ArrayCreationExpression.primitive => hydra.serialization.cst("STUB:ArrayCreationExpression")
+  case hydra.ext.java.syntax.ArrayCreationExpression.classOrInterface => hydra.serialization.cst("STUB:ArrayCreationExpression")
 
 def writeArrayInitializer(ai: hydra.ext.java.syntax.ArrayInitializer): hydra.ast.Expr =
   {
@@ -442,9 +442,9 @@ def writeIfThenElseStatement[T0](_x: T0): hydra.ast.Expr = hydra.serialization.c
 def writeImportDeclaration(imp: hydra.ext.java.syntax.ImportDeclaration): hydra.ast.Expr =
   imp match
   case hydra.ext.java.syntax.ImportDeclaration.singleType(v_ImportDeclaration_singleType_st) => hydra.serialization.withSemi(hydra.serialization.spaceSep(Seq(hydra.serialization.cst("import"), hydra.ext.java.serde.writeTypeName(v_ImportDeclaration_singleType_st))))
-  case hydra.ext.java.syntax.ImportDeclaration.typeImportOnDemand(v_ImportDeclaration_typeImportOnDemand__) => hydra.serialization.cst("STUB:ImportDeclarationTypeImportOnDemand")
-  case hydra.ext.java.syntax.ImportDeclaration.singleStaticImport(v_ImportDeclaration_singleStaticImport__) => hydra.serialization.cst("STUB:ImportDeclarationSingleStaticImport")
-  case hydra.ext.java.syntax.ImportDeclaration.staticImportOnDemand(v_ImportDeclaration_staticImportOnDemand__) => hydra.serialization.cst("STUB:ImportDeclarationStaticImportOnDemand")
+  case hydra.ext.java.syntax.ImportDeclaration.typeImportOnDemand => hydra.serialization.cst("STUB:ImportDeclarationTypeImportOnDemand")
+  case hydra.ext.java.syntax.ImportDeclaration.singleStaticImport => hydra.serialization.cst("STUB:ImportDeclarationSingleStaticImport")
+  case hydra.ext.java.syntax.ImportDeclaration.staticImportOnDemand => hydra.serialization.cst("STUB:ImportDeclarationStaticImportOnDemand")
 
 def writeInclusiveOrExpression(ioe: hydra.ext.java.syntax.InclusiveOrExpression): hydra.ast.Expr =
   hydra.serialization.infixWsList("|")(hydra.lib.lists.map[hydra.ext.java.syntax.ExclusiveOrExpression, hydra.ast.Expr](hydra.ext.java.serde.writeExclusiveOrExpression)(ioe))

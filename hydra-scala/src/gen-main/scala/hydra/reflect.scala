@@ -10,9 +10,9 @@ import hydra.lib.lists
 
 def eliminationVariant(v1: hydra.core.Elimination): hydra.variants.EliminationVariant =
   v1 match
-  case hydra.core.Elimination.record(v_Elimination_record__) => hydra.variants.EliminationVariant.record
-  case hydra.core.Elimination.union(v_Elimination_union__) => hydra.variants.EliminationVariant.union
-  case hydra.core.Elimination.wrap(v_Elimination_wrap__) => hydra.variants.EliminationVariant.wrap
+  case hydra.core.Elimination.record => hydra.variants.EliminationVariant.record
+  case hydra.core.Elimination.union => hydra.variants.EliminationVariant.union
+  case hydra.core.Elimination.wrap => hydra.variants.EliminationVariant.wrap
 
 lazy val eliminationVariants: Seq[hydra.variants.EliminationVariant] = Seq(hydra.variants.EliminationVariant.record, hydra.variants.EliminationVariant.union, hydra.variants.EliminationVariant.wrap)
 
@@ -26,15 +26,15 @@ lazy val floatTypes: Seq[hydra.core.FloatType] = Seq(hydra.core.FloatType.bigflo
 
 def floatValueType(v1: hydra.core.FloatValue): hydra.core.FloatType =
   v1 match
-  case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat__) => hydra.core.FloatType.bigfloat
-  case hydra.core.FloatValue.float32(v_FloatValue_float32__) => hydra.core.FloatType.float32
-  case hydra.core.FloatValue.float64(v_FloatValue_float64__) => hydra.core.FloatType.float64
+  case hydra.core.FloatValue.bigfloat => hydra.core.FloatType.bigfloat
+  case hydra.core.FloatValue.float32 => hydra.core.FloatType.float32
+  case hydra.core.FloatValue.float64 => hydra.core.FloatType.float64
 
 def functionVariant(v1: hydra.core.Function): hydra.variants.FunctionVariant =
   v1 match
-  case hydra.core.Function.elimination(v_Function_elimination__) => hydra.variants.FunctionVariant.elimination
-  case hydra.core.Function.lambda(v_Function_lambda__) => hydra.variants.FunctionVariant.lambda
-  case hydra.core.Function.primitive(v_Function_primitive__) => hydra.variants.FunctionVariant.primitive
+  case hydra.core.Function.elimination => hydra.variants.FunctionVariant.elimination
+  case hydra.core.Function.lambda => hydra.variants.FunctionVariant.lambda
+  case hydra.core.Function.primitive => hydra.variants.FunctionVariant.primitive
 
 lazy val functionVariants: Seq[hydra.variants.FunctionVariant] = Seq(hydra.variants.FunctionVariant.elimination, hydra.variants.FunctionVariant.lambda, hydra.variants.FunctionVariant.primitive)
 
@@ -66,30 +66,30 @@ lazy val integerTypes: Seq[hydra.core.IntegerType] = Seq(hydra.core.IntegerType.
 
 def integerValueType(v1: hydra.core.IntegerValue): hydra.core.IntegerType =
   v1 match
-  case hydra.core.IntegerValue.bigint(v_IntegerValue_bigint__) => hydra.core.IntegerType.bigint
-  case hydra.core.IntegerValue.int8(v_IntegerValue_int8__) => hydra.core.IntegerType.int8
-  case hydra.core.IntegerValue.int16(v_IntegerValue_int16__) => hydra.core.IntegerType.int16
-  case hydra.core.IntegerValue.int32(v_IntegerValue_int32__) => hydra.core.IntegerType.int32
-  case hydra.core.IntegerValue.int64(v_IntegerValue_int64__) => hydra.core.IntegerType.int64
-  case hydra.core.IntegerValue.uint8(v_IntegerValue_uint8__) => hydra.core.IntegerType.uint8
-  case hydra.core.IntegerValue.uint16(v_IntegerValue_uint16__) => hydra.core.IntegerType.uint16
-  case hydra.core.IntegerValue.uint32(v_IntegerValue_uint32__) => hydra.core.IntegerType.uint32
-  case hydra.core.IntegerValue.uint64(v_IntegerValue_uint64__) => hydra.core.IntegerType.uint64
+  case hydra.core.IntegerValue.bigint => hydra.core.IntegerType.bigint
+  case hydra.core.IntegerValue.int8 => hydra.core.IntegerType.int8
+  case hydra.core.IntegerValue.int16 => hydra.core.IntegerType.int16
+  case hydra.core.IntegerValue.int32 => hydra.core.IntegerType.int32
+  case hydra.core.IntegerValue.int64 => hydra.core.IntegerType.int64
+  case hydra.core.IntegerValue.uint8 => hydra.core.IntegerType.uint8
+  case hydra.core.IntegerValue.uint16 => hydra.core.IntegerType.uint16
+  case hydra.core.IntegerValue.uint32 => hydra.core.IntegerType.uint32
+  case hydra.core.IntegerValue.uint64 => hydra.core.IntegerType.uint64
 
 def literalType(v1: hydra.core.Literal): hydra.core.LiteralType =
   v1 match
-  case hydra.core.Literal.binary(v_Literal_binary__) => hydra.core.LiteralType.binary
-  case hydra.core.Literal.boolean(v_Literal_boolean__) => hydra.core.LiteralType.boolean
+  case hydra.core.Literal.binary => hydra.core.LiteralType.binary
+  case hydra.core.Literal.boolean => hydra.core.LiteralType.boolean
   case hydra.core.Literal.float(v_Literal_float_arg_) => hydra.core.LiteralType.float(hydra.reflect.floatValueType(`v_Literal_float_arg_`))
   case hydra.core.Literal.integer(v_Literal_integer_arg_) => hydra.core.LiteralType.integer(hydra.reflect.integerValueType(`v_Literal_integer_arg_`))
-  case hydra.core.Literal.string(v_Literal_string__) => hydra.core.LiteralType.string
+  case hydra.core.Literal.string => hydra.core.LiteralType.string
 
 def literalTypeVariant(v1: hydra.core.LiteralType): hydra.variants.LiteralVariant =
   v1 match
   case hydra.core.LiteralType.binary => hydra.variants.LiteralVariant.binary
   case hydra.core.LiteralType.boolean => hydra.variants.LiteralVariant.boolean
-  case hydra.core.LiteralType.float(v_LiteralType_float__) => hydra.variants.LiteralVariant.float
-  case hydra.core.LiteralType.integer(v_LiteralType_integer__) => hydra.variants.LiteralVariant.integer
+  case hydra.core.LiteralType.float => hydra.variants.LiteralVariant.float
+  case hydra.core.LiteralType.integer => hydra.variants.LiteralVariant.integer
   case hydra.core.LiteralType.string => hydra.variants.LiteralVariant.string
 
 lazy val literalTypes: Seq[hydra.core.LiteralType] = hydra.lib.lists.concat[hydra.core.LiteralType](Seq(Seq(hydra.core.LiteralType.binary, hydra.core.LiteralType.boolean), hydra.lib.lists.map[hydra.core.FloatType, hydra.core.LiteralType]((x: hydra.core.FloatType) => hydra.core.LiteralType.float(x))(hydra.reflect.floatTypes), hydra.lib.lists.map[hydra.core.IntegerType, hydra.core.LiteralType]((x: hydra.core.IntegerType) => hydra.core.LiteralType.integer(x))(hydra.reflect.integerTypes), Seq(hydra.core.LiteralType.string)))
@@ -100,45 +100,45 @@ lazy val literalVariants: Seq[hydra.variants.LiteralVariant] = Seq(hydra.variant
 
 def termVariant(v1: hydra.core.Term): hydra.variants.TermVariant =
   v1 match
-  case hydra.core.Term.annotated(v_Term_annotated__) => hydra.variants.TermVariant.annotated
-  case hydra.core.Term.application(v_Term_application__) => hydra.variants.TermVariant.application
-  case hydra.core.Term.either(v_Term_either__) => hydra.variants.TermVariant.either
-  case hydra.core.Term.function(v_Term_function__) => hydra.variants.TermVariant.function
-  case hydra.core.Term.let(v_Term_let__) => hydra.variants.TermVariant.let
-  case hydra.core.Term.list(v_Term_list__) => hydra.variants.TermVariant.list
-  case hydra.core.Term.literal(v_Term_literal__) => hydra.variants.TermVariant.literal
-  case hydra.core.Term.map(v_Term_map__) => hydra.variants.TermVariant.map
-  case hydra.core.Term.maybe(v_Term_maybe__) => hydra.variants.TermVariant.maybe
-  case hydra.core.Term.pair(v_Term_pair__) => hydra.variants.TermVariant.pair
-  case hydra.core.Term.record(v_Term_record__) => hydra.variants.TermVariant.record
-  case hydra.core.Term.set(v_Term_set__) => hydra.variants.TermVariant.set
-  case hydra.core.Term.typeApplication(v_Term_typeApplication__) => hydra.variants.TermVariant.typeApplication
-  case hydra.core.Term.typeLambda(v_Term_typeLambda__) => hydra.variants.TermVariant.typeLambda
-  case hydra.core.Term.union(v_Term_union__) => hydra.variants.TermVariant.union
+  case hydra.core.Term.annotated => hydra.variants.TermVariant.annotated
+  case hydra.core.Term.application => hydra.variants.TermVariant.application
+  case hydra.core.Term.either => hydra.variants.TermVariant.either
+  case hydra.core.Term.function => hydra.variants.TermVariant.function
+  case hydra.core.Term.let => hydra.variants.TermVariant.let
+  case hydra.core.Term.list => hydra.variants.TermVariant.list
+  case hydra.core.Term.literal => hydra.variants.TermVariant.literal
+  case hydra.core.Term.map => hydra.variants.TermVariant.map
+  case hydra.core.Term.maybe => hydra.variants.TermVariant.maybe
+  case hydra.core.Term.pair => hydra.variants.TermVariant.pair
+  case hydra.core.Term.record => hydra.variants.TermVariant.record
+  case hydra.core.Term.set => hydra.variants.TermVariant.set
+  case hydra.core.Term.typeApplication => hydra.variants.TermVariant.typeApplication
+  case hydra.core.Term.typeLambda => hydra.variants.TermVariant.typeLambda
+  case hydra.core.Term.union => hydra.variants.TermVariant.union
   case hydra.core.Term.unit => hydra.variants.TermVariant.unit
-  case hydra.core.Term.variable(v_Term_variable__) => hydra.variants.TermVariant.variable
-  case hydra.core.Term.wrap(v_Term_wrap__) => hydra.variants.TermVariant.wrap
+  case hydra.core.Term.variable => hydra.variants.TermVariant.variable
+  case hydra.core.Term.wrap => hydra.variants.TermVariant.wrap
 
 lazy val termVariants: Seq[hydra.variants.TermVariant] = Seq(hydra.variants.TermVariant.annotated, hydra.variants.TermVariant.application, hydra.variants.TermVariant.either, hydra.variants.TermVariant.function, hydra.variants.TermVariant.list, hydra.variants.TermVariant.literal, hydra.variants.TermVariant.map, hydra.variants.TermVariant.maybe, hydra.variants.TermVariant.pair, hydra.variants.TermVariant.record, hydra.variants.TermVariant.set, hydra.variants.TermVariant.typeLambda, hydra.variants.TermVariant.typeApplication, hydra.variants.TermVariant.union, hydra.variants.TermVariant.unit, hydra.variants.TermVariant.variable, hydra.variants.TermVariant.wrap)
 
 def typeVariant(v1: hydra.core.Type): hydra.variants.TypeVariant =
   v1 match
-  case hydra.core.Type.annotated(v_Type_annotated__) => hydra.variants.TypeVariant.annotated
-  case hydra.core.Type.application(v_Type_application__) => hydra.variants.TypeVariant.application
-  case hydra.core.Type.either(v_Type_either__) => hydra.variants.TypeVariant.either
-  case hydra.core.Type.function(v_Type_function__) => hydra.variants.TypeVariant.function
-  case hydra.core.Type.forall(v_Type_forall__) => hydra.variants.TypeVariant.forall
-  case hydra.core.Type.list(v_Type_list__) => hydra.variants.TypeVariant.list
-  case hydra.core.Type.literal(v_Type_literal__) => hydra.variants.TypeVariant.literal
-  case hydra.core.Type.map(v_Type_map__) => hydra.variants.TypeVariant.map
-  case hydra.core.Type.maybe(v_Type_maybe__) => hydra.variants.TypeVariant.maybe
-  case hydra.core.Type.pair(v_Type_pair__) => hydra.variants.TypeVariant.pair
-  case hydra.core.Type.record(v_Type_record__) => hydra.variants.TypeVariant.record
-  case hydra.core.Type.set(v_Type_set__) => hydra.variants.TypeVariant.set
-  case hydra.core.Type.union(v_Type_union__) => hydra.variants.TypeVariant.union
+  case hydra.core.Type.annotated => hydra.variants.TypeVariant.annotated
+  case hydra.core.Type.application => hydra.variants.TypeVariant.application
+  case hydra.core.Type.either => hydra.variants.TypeVariant.either
+  case hydra.core.Type.function => hydra.variants.TypeVariant.function
+  case hydra.core.Type.forall => hydra.variants.TypeVariant.forall
+  case hydra.core.Type.list => hydra.variants.TypeVariant.list
+  case hydra.core.Type.literal => hydra.variants.TypeVariant.literal
+  case hydra.core.Type.map => hydra.variants.TypeVariant.map
+  case hydra.core.Type.maybe => hydra.variants.TypeVariant.maybe
+  case hydra.core.Type.pair => hydra.variants.TypeVariant.pair
+  case hydra.core.Type.record => hydra.variants.TypeVariant.record
+  case hydra.core.Type.set => hydra.variants.TypeVariant.set
+  case hydra.core.Type.union => hydra.variants.TypeVariant.union
   case hydra.core.Type.unit => hydra.variants.TypeVariant.unit
-  case hydra.core.Type.variable(v_Type_variable__) => hydra.variants.TypeVariant.variable
+  case hydra.core.Type.variable => hydra.variants.TypeVariant.variable
   case hydra.core.Type.void => hydra.variants.TypeVariant.void
-  case hydra.core.Type.wrap(v_Type_wrap__) => hydra.variants.TypeVariant.wrap
+  case hydra.core.Type.wrap => hydra.variants.TypeVariant.wrap
 
 lazy val typeVariants: Seq[hydra.variants.TypeVariant] = Seq(hydra.variants.TypeVariant.annotated, hydra.variants.TypeVariant.application, hydra.variants.TypeVariant.either, hydra.variants.TypeVariant.function, hydra.variants.TypeVariant.forall, hydra.variants.TypeVariant.list, hydra.variants.TypeVariant.literal, hydra.variants.TypeVariant.map, hydra.variants.TypeVariant.wrap, hydra.variants.TypeVariant.maybe, hydra.variants.TypeVariant.pair, hydra.variants.TypeVariant.record, hydra.variants.TypeVariant.set, hydra.variants.TypeVariant.union, hydra.variants.TypeVariant.unit, hydra.variants.TypeVariant.variable, hydra.variants.TypeVariant.void)

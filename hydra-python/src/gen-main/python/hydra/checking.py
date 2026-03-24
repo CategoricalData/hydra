@@ -7,6 +7,7 @@ from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
+import hydra.accessors
 import hydra.coders
 import hydra.constants
 import hydra.context
@@ -183,7 +184,7 @@ def type_of_primitive(cx: hydra.context.Context, tx: hydra.graph.Graph, type_arg
     @lru_cache(1)
     def raw_ts() -> Maybe[hydra.core.TypeScheme]:
         return hydra.lib.maybes.map((lambda _p: _p.type), hydra.lib.maps.lookup(name, tx.primitives))
-    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorUndefinedTerm(hydra.error.core.UndefinedTermError(name))), cx))), (lambda ts_raw: (inst_result := hydra.schemas.instantiate_type_scheme(cx, ts_raw), ts := hydra.lib.pairs.first(inst_result), cx2 := hydra.lib.pairs.second(inst_result), t := hydra.rewriting.type_scheme_to_f_type(ts), hydra.lib.eithers.bind(apply_type_arguments_to_type(cx2, tx, type_args, t), (lambda applied: Right((applied, cx2)))))[4]), raw_ts())
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorUndefinedTermVariable(hydra.error.core.UndefinedTermVariableError(hydra.accessors.AccessorPath(()), name))), cx))), (lambda ts_raw: (inst_result := hydra.schemas.instantiate_type_scheme(cx, ts_raw), ts := hydra.lib.pairs.first(inst_result), cx2 := hydra.lib.pairs.second(inst_result), t := hydra.rewriting.type_scheme_to_f_type(ts), hydra.lib.eithers.bind(apply_type_arguments_to_type(cx2, tx, type_args, t), (lambda applied: Right((applied, cx2)))))[4]), raw_ts())
 
 def type_of_projection(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenlist[hydra.core.Type], p: hydra.core.Projection) -> Either[hydra.context.InContext[hydra.errors.Error], tuple[hydra.core.Type, hydra.context.Context]]:
     r"""Reconstruct the type of a record projection (Either/Context version)."""
@@ -208,7 +209,7 @@ def type_of_variable(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args
     @lru_cache(1)
     def raw_type_scheme() -> Maybe[hydra.core.TypeScheme]:
         return hydra.lib.maps.lookup(name, tx.bound_types)
-    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorUndefinedType(hydra.error.core.UndefinedTypeError(name))), cx))), (lambda ts: (t_result := hydra.lib.logic.if_else(hydra.lib.lists.null(type_args), (lambda : hydra.schemas.instantiate_type(cx, hydra.rewriting.type_scheme_to_f_type(ts))), (lambda : (hydra.rewriting.type_scheme_to_f_type(ts), cx))), t := hydra.lib.pairs.first(t_result), cx2 := hydra.lib.pairs.second(t_result), hydra.lib.eithers.bind(apply_type_arguments_to_type(cx2, tx, type_args, t), (lambda applied: Right((applied, cx2)))))[3]), raw_type_scheme())
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.errors.Error, hydra.errors.ErrorUntypedTermVariable(hydra.error.core.UntypedTermVariableError(hydra.accessors.AccessorPath(()), name))), cx))), (lambda ts: (t_result := hydra.lib.logic.if_else(hydra.lib.lists.null(type_args), (lambda : hydra.schemas.instantiate_type(cx, hydra.rewriting.type_scheme_to_f_type(ts))), (lambda : (hydra.rewriting.type_scheme_to_f_type(ts), cx))), t := hydra.lib.pairs.first(t_result), cx2 := hydra.lib.pairs.second(t_result), hydra.lib.eithers.bind(apply_type_arguments_to_type(cx2, tx, type_args, t), (lambda applied: Right((applied, cx2)))))[3]), raw_type_scheme())
 
 def type_of(cx: hydra.context.Context, tx: hydra.graph.Graph, type_args: frozenlist[hydra.core.Type], term: hydra.core.Term):
     r"""Given a type context, reconstruct the type of a System F term."""

@@ -139,7 +139,7 @@ def inferGraphTypes(fcx0: hydra.context.Context)(bindings0: Seq[hydra.core.Bindi
       hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Term, Tuple2[Tuple2[hydra.graph.Graph, Seq[hydra.core.Binding]], hydra.context.Context]](hydra.inference.finalizeInferredTerm(fcx2)(g0)(term))((finalized: hydra.core.Term) =>
         finalized match
         case hydra.core.Term.let(v_Term_let_l) => Right(Tuple2(fromLetTerm(v_Term_let_l), fcx2))
-        case hydra.core.Term.variable(v_Term_variable__) => Left(hydra.context.InContext(hydra.errors.Error.other("Expected inferred graph as let term"), fcx2)))
+        case hydra.core.Term.variable => Left(hydra.context.InContext(hydra.errors.Error.other("Expected inferred graph as let term"), fcx2)))
     }
   })
 }

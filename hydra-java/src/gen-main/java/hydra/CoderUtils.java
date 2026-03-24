@@ -917,4 +917,98 @@ public interface CoderUtils {
   static <T0> T0 analyzeFunctionTermWith_gather_newEnv3(T0 gEnv, java.util.function.Function<T0, hydra.graph.Graph> getTC, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_rewriting_extendGraphForTypeLambda2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, T0>> setTC, hydra.core.TypeLambda tl) {
     return (setTC).apply((hydra_rewriting_extendGraphForTypeLambda2).apply((getTC).apply(gEnv)).apply(tl)).apply(gEnv);
   }
+
+  static hydra.util.ConsList<hydra.module.Definition> reorderDefs(hydra.util.ConsList<hydra.module.Definition> defs) {
+    hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>> partitioned = hydra.Schemas.partitionDefinitions(defs);
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> typeDefsRaw = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> nameFirst = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+      (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> hydra.lib.equality.Equal.apply(
+        (td).name,
+        new hydra.core.Name("hydra.core.Name"))),
+      typeDefsRaw.get()));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> nameRest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+      (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
+        (td).name,
+        new hydra.core.Name("hydra.core.Name")))),
+      typeDefsRaw.get()));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> termDefsWrapped = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.TermDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Term(td)),
+      hydra.lib.pairs.Second.apply(partitioned)));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> sortedTermDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.Sorting.topologicalSortNodes(
+      (java.util.function.Function<hydra.module.Definition, hydra.core.Name>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.core.Name visit(hydra.module.Definition.Term td) {
+          return (td).value.name;
+        }
+      })),
+      (java.util.function.Function<hydra.module.Definition, hydra.util.ConsList<hydra.core.Name>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.module.Definition instance) {
+          return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty());
+        }
+
+        @Override
+        public hydra.util.ConsList<hydra.core.Name> visit(hydra.module.Definition.Term td) {
+          return hydra.lib.sets.ToList.apply(hydra.Rewriting.freeVariablesInTerm((td).value.term));
+        }
+      })),
+      termDefsWrapped.get())));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+      hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.TypeDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Type(td)),
+        nameFirst.get()),
+      hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.TypeDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Type(td)),
+        nameRest.get()))));
+    return hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+      typeDefs.get(),
+      sortedTermDefs.get()));
+  }
+
+  static hydra.util.ConsList<hydra.module.Definition> reorderDefs(hydra.util.ConsList<hydra.module.Definition> defs) {
+    hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>> partitioned = hydra.Schemas.partitionDefinitions(defs);
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> typeDefsRaw = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> nameFirst = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+      (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> hydra.lib.equality.Equal.apply(
+        (td).name,
+        new hydra.core.Name("hydra.core.Name"))),
+      typeDefsRaw.get()));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> nameRest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+      (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
+        (td).name,
+        new hydra.core.Name("hydra.core.Name")))),
+      typeDefsRaw.get()));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> termDefsWrapped = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.TermDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Term(td)),
+      hydra.lib.pairs.Second.apply(partitioned)));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> sortedTermDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.Sorting.topologicalSortNodes(
+      (java.util.function.Function<hydra.module.Definition, hydra.core.Name>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.core.Name visit(hydra.module.Definition.Term td) {
+          return (td).value.name;
+        }
+      })),
+      (java.util.function.Function<hydra.module.Definition, hydra.util.ConsList<hydra.core.Name>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.module.Definition instance) {
+          return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty());
+        }
+
+        @Override
+        public hydra.util.ConsList<hydra.core.Name> visit(hydra.module.Definition.Term td) {
+          return hydra.lib.sets.ToList.apply(hydra.Rewriting.freeVariablesInTerm((td).value.term));
+        }
+      })),
+      termDefsWrapped.get())));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+      hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.TypeDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Type(td)),
+        nameFirst.get()),
+      hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.module.TypeDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Type(td)),
+        nameRest.get()))));
+    return hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+      typeDefs.get(),
+      sortedTermDefs.get()));
+  }
 }

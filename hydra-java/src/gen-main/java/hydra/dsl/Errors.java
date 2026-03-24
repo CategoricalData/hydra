@@ -38,12 +38,12 @@ public interface Errors {
     return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("undefinedField"), (x).value))));
   }
 
-  static hydra.phantoms.TTerm<hydra.errors.Error_> errorUndefinedTerm(hydra.phantoms.TTerm<hydra.error.core.UndefinedTermError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("undefinedTerm"), (x).value))));
+  static hydra.phantoms.TTerm<hydra.errors.Error_> errorUndefinedTermVariable(hydra.phantoms.TTerm<hydra.error.core.UndefinedTermVariableError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("undefinedTermVariable"), (x).value))));
   }
 
-  static hydra.phantoms.TTerm<hydra.errors.Error_> errorUndefinedType(hydra.phantoms.TTerm<hydra.error.core.UndefinedTypeError> x) {
-    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("undefinedType"), (x).value))));
+  static hydra.phantoms.TTerm<hydra.errors.Error_> errorUntypedTermVariable(hydra.phantoms.TTerm<hydra.error.core.UntypedTermVariableError> x) {
+    return new hydra.phantoms.TTerm(new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.errors.Error"), new hydra.core.Field(new hydra.core.Name("untypedTermVariable"), (x).value))));
   }
 
   static hydra.phantoms.TTerm<hydra.errors.Error_> errorUnexpectedTermVariant(hydra.phantoms.TTerm<hydra.error.core.UnexpectedTermVariantError> x) {

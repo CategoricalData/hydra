@@ -94,7 +94,7 @@
 
 (def hydra_encode_testing_unshadow_variables_test_case (fn [x] (list :record (->hydra_core_record "hydra.testing.UnshadowVariablesTestCase" (list (->hydra_core_field "input" (hydra_encode_core_term ((fn [v] (:input v)) x))) (->hydra_core_field "output" (hydra_encode_core_term ((fn [v] (:output v)) x))))))))
 
-(def hydra_encode_testing_validate_core_term_test_case (fn [x] (list :record (->hydra_core_record "hydra.testing.ValidateCoreTermTestCase" (list (->hydra_core_field "input" (hydra_encode_core_term ((fn [v] (:input v)) x))) (->hydra_core_field "output" ((fn [opt] (list :maybe ((hydra_lib_maybes_map hydra_encode_error_core_invalid_term_error) opt))) ((fn [v] (:output v)) x))))))))
+(def hydra_encode_testing_validate_core_term_test_case (fn [x] (list :record (->hydra_core_record "hydra.testing.ValidateCoreTermTestCase" (list (->hydra_core_field "typed" ((fn [x] (list :literal (list :boolean x))) ((fn [v] (:typed v)) x))) (->hydra_core_field "input" (hydra_encode_core_term ((fn [v] (:input v)) x))) (->hydra_core_field "output" ((fn [opt] (list :maybe ((hydra_lib_maybes_map hydra_encode_error_core_invalid_term_error) opt))) ((fn [v] (:output v)) x))))))))
 
 (def hydra_encode_testing_variable_occurs_in_type_test_case (fn [x] (list :record (->hydra_core_record "hydra.testing.VariableOccursInTypeTestCase" (list (->hydra_core_field "variable" (hydra_encode_core_name ((fn [v] (:variable v)) x))) (->hydra_core_field "type" (hydra_encode_core_type ((fn [v] (:type v)) x))) (->hydra_core_field "expected" ((fn [x] (list :literal (list :boolean x))) ((fn [v] (:expected v)) x))))))))
 

@@ -10,7 +10,7 @@
 
 (cl-defstruct hydra_module_library namespace prefix primitives)
 
-(cl-defstruct hydra_module_module namespace elements term_dependencies type_dependencies description)
+(cl-defstruct hydra_module_module namespace definitions term_dependencies type_dependencies description)
 
 (cl-defstruct hydra_module_namespace value)
 

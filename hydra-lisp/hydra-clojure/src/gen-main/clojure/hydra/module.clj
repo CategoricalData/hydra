@@ -12,8 +12,8 @@
 (defrecord hydra_module_library [namespace prefix primitives])
 (defn make-hydra_module_library [namespace prefix primitives] (->hydra_module_library namespace prefix primitives))
 
-(defrecord hydra_module_module [namespace elements term_dependencies type_dependencies description])
-(defn make-hydra_module_module [namespace elements term_dependencies type_dependencies description] (->hydra_module_module namespace elements term_dependencies type_dependencies description))
+(defrecord hydra_module_module [namespace definitions term_dependencies type_dependencies description])
+(defn make-hydra_module_module [namespace definitions term_dependencies type_dependencies description] (->hydra_module_module namespace definitions term_dependencies type_dependencies description))
 
 (defrecord hydra_module_namespace [value])
 (defn make-hydra_module_namespace [value] (->hydra_module_namespace value))

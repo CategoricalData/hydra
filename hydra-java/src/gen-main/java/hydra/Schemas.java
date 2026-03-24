@@ -668,20 +668,53 @@ public interface Schemas {
           });
         }
       }))));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> defTerms = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Term>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.util.Maybe<hydra.core.Term> otherwise(hydra.module.Definition instance) {
+          return (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing());
+        }
+
+        @Override
+        public hydra.util.Maybe<hydra.core.Term> visit(hydra.module.Definition.Term td) {
+          return hydra.util.Maybe.just((td).value.term);
+        }
+      })),
+      (mod).definitions)));
     java.util.function.Function<hydra.core.Term, Boolean> termContainsBinary = (java.util.function.Function<hydra.core.Term, Boolean>) (term -> hydra.Rewriting.foldOverTerm(
       new hydra.coders.TraversalOrder.Pre(),
       checkTerm,
       false,
       term));
     return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Binding, Boolean>>) (acc -> (java.util.function.Function<hydra.core.Binding, Boolean>) (el -> hydra.lib.logic.Or.apply(
+      (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>>) (acc -> (java.util.function.Function<hydra.core.Term, Boolean>) (t -> hydra.lib.logic.Or.apply(
         acc,
-        (termContainsBinary).apply((el).term)))),
+        (termContainsBinary).apply(t)))),
       false,
-      (mod).elements);
+      defTerms.get());
   }
 
   static hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.util.PersistentSet<hydra.module.Namespace>> moduleDependencyNamespaces(hydra.context.Context cx, hydra.graph.Graph graph, Boolean binds, Boolean withPrims, Boolean withNoms, Boolean withSchema, hydra.module.Module mod) {
+    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> allBindings = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.core.Binding>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
+        @Override
+        public hydra.util.Maybe<hydra.core.Binding> otherwise(hydra.module.Definition instance) {
+          return (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing());
+        }
+
+        @Override
+        public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Type td) {
+          return hydra.util.Maybe.just(hydra.Annotations.typeElement(
+            (td).value.name,
+            (td).value.type));
+        }
+
+        @Override
+        public hydra.util.Maybe<hydra.core.Binding> visit(hydra.module.Definition.Term td) {
+          return hydra.util.Maybe.just(new hydra.core.Binding((td).value.name, (td).value.term, (td).value.type));
+        }
+      })),
+      (mod).definitions)));
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.PersistentSet<hydra.module.Namespace>>) (deps -> hydra.lib.sets.Delete.apply(
         (mod).namespace,
@@ -693,7 +726,7 @@ public interface Schemas {
         withPrims,
         withNoms,
         withSchema,
-        (mod).elements));
+        allBindings.get()));
   }
 
   static <T0> hydra.module.Namespaces<T0> namespacesForDefinitions(java.util.function.Function<hydra.module.Namespace, T0> encodeNamespace, hydra.module.Namespace focusNs, hydra.util.ConsList<hydra.module.Definition> defs) {

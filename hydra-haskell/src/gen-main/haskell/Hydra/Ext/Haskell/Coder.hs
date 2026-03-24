@@ -172,7 +172,8 @@ encodeCaseExpression depth namespaces stmt scrutinee cx g =
                                   Core.applicationArgument = (Core.TermVariable (Core.Name v0))})
                         rhsTerm = Rewriting.simplifyTerm raw
                         v1 = Logic.ifElse (Rewriting.isFreeVariableInTerm (Core.Name v0) rhsTerm) Constants.ignoredVariable v0
-                        hname = Utils.unionFieldReference (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) namespaces dn fn
+                        hname =
+                                Utils.unionFieldReference (Sets.union (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) (Sets.fromList (Maps.keys (Graph.graphSchemaTypes g)))) namespaces dn fn
                     in (Eithers.bind (Maybes.cases (Maps.lookup fn fieldMap) (Left (Context.InContext {
                       Context.inContextObject = (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                         "field ",
@@ -340,7 +341,7 @@ encodeTerm depth namespaces term cx g =
               fn = Core.fieldName field
               ft = Core.fieldTerm field
               lhs =
-                      Syntax.ExpressionVariable (Utils.unionFieldReference (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) namespaces sname fn)
+                      Syntax.ExpressionVariable (Utils.unionFieldReference (Sets.union (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) (Sets.fromList (Maps.keys (Graph.graphSchemaTypes g)))) namespaces sname fn)
               dflt = Eithers.map (Utils.hsapp lhs) (encode ft)
           in (Eithers.bind (Schemas.requireUnionField cx g sname fn) (\ftyp -> case (Rewriting.deannotateType ftyp) of
             Core.TypeUnit -> Right lhs

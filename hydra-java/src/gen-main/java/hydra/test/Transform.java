@@ -116,7 +116,7 @@ public interface Transform {
   }
 
   static hydra.module.Module transformModule(hydra.module.Module m) {
-    return new hydra.module.Module(hydra.test.Transform.addGenerationPrefix((m).namespace), (m).elements, (m).termDependencies, (m).typeDependencies, (m).description);
+    return new hydra.module.Module(hydra.test.Transform.addGenerationPrefix((m).namespace), (m).definitions, (m).termDependencies, (m).typeDependencies, (m).description);
   }
 
   static hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> collectTestCases(hydra.testing.TestGroup tg) {

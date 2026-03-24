@@ -1440,8 +1440,10 @@ def encode_definition(cx: hydra.context.Context, env: hydra.ext.python.environme
         case hydra.module.DefinitionTerm(value=td):
             name = td.name
             term = td.term
-            typ = td.type
-            return hydra.lib.eithers.bind(hydra.annotations.get_term_description(cx, python_environment_get_graph(env), term), (lambda comment: (norm_comment := hydra.lib.maybes.map(hydra.coder_utils.normalize_comment, comment), hydra.lib.eithers.bind(encode_term_assignment(cx, env, name, term, typ, norm_comment), (lambda stmt: Right(((stmt,),)))))[1]))
+            @lru_cache(1)
+            def typ() -> hydra.core.TypeScheme:
+                return hydra.lib.maybes.maybe((lambda : hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Unit"))), Nothing())), (lambda x: x), td.type)
+            return hydra.lib.eithers.bind(hydra.annotations.get_term_description(cx, python_environment_get_graph(env), term), (lambda comment: (norm_comment := hydra.lib.maybes.map(hydra.coder_utils.normalize_comment, comment), hydra.lib.eithers.bind(encode_term_assignment(cx, env, name, term, typ(), norm_comment), (lambda stmt: Right(((stmt,),)))))[1]))
 
         case hydra.module.DefinitionType(value=td2):
             name = td2.name
@@ -1666,11 +1668,12 @@ def gather_metadata(focus_ns: hydra.module.Namespace, defs: frozenlist[hydra.mod
         match def_:
             case hydra.module.DefinitionTerm(value=term_def):
                 term = term_def.term
-                typ_scheme = term_def.type
-                typ = typ_scheme.type
+                @lru_cache(1)
+                def typ() -> hydra.core.Type:
+                    return hydra.lib.maybes.maybe((lambda : cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Unit")))), (lambda v1: v1.type), term_def.type)
                 @lru_cache(1)
                 def meta2() -> hydra.ext.python.environment.PythonModuleMetadata:
-                    return extend_meta_for_type(True, True, typ, meta)
+                    return extend_meta_for_type(True, True, typ(), meta)
                 return extend_meta_for_term(True, meta2(), term)
 
             case hydra.module.DefinitionType(value=type_def):
@@ -1759,7 +1762,7 @@ def with_definitions(env: hydra.ext.python.environment.PythonEnvironment, defs: 
         def _hoist_bindings_1(v1):
             match v1:
                 case hydra.module.DefinitionTerm(value=td):
-                    return Just(hydra.core.Binding(td.name, td.term, Just(td.type)))
+                    return Just(hydra.core.Binding(td.name, td.term, td.type))
 
                 case hydra.module.DefinitionType():
                     return Nothing()

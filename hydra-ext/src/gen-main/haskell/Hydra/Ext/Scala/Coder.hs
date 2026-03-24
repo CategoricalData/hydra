@@ -676,9 +676,8 @@ encodeTermDefinition cx g td =
 
       let name = Module.termDefinitionName td
           term = Module.termDefinitionTerm td
-          typ = Maybes.maybe (Core.TypeScheme [] (Core.TypeVariable (Core.Name "hydra.core.Unit")) Nothing) (\x -> x) (Module.termDefinitionType td)
           lname = Utils.scalaEscapeName (Names.localNameOf name)
-          typ_ = Core.typeSchemeType typ
+          typ_ = Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeType (Module.termDefinitionType td)
           isFunctionType =
                   case (Rewriting.deannotateType typ_) of
                     Core.TypeFunction _ -> True
@@ -687,7 +686,8 @@ encodeTermDefinition cx g td =
                       _ -> False
                     _ -> False
       in (Logic.ifElse isFunctionType (encodeComplexTermDef cx g lname term typ_) (Eithers.bind (encodeType cx g typ_) (\stype -> Eithers.bind (encodeTerm cx g term) (\rhs -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.Defn_Val {
-        Syntax.defn_ValMods = [],
+        Syntax.defn_ValMods = [
+          Syntax.ModLazy],
         Syntax.defn_ValPats = [
           Syntax.PatVar (Syntax.Pat_Var {
             Syntax.pat_VarName = Syntax.Data_Name {
@@ -869,7 +869,8 @@ encodeLetBinding cx g outerTypeVars b =
                       _ -> False
                     _ -> False) mts
       in (Maybes.maybe (Eithers.bind (encodeTerm cx g bterm) (\srhs -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.Defn_Val {
-        Syntax.defn_ValMods = [],
+        Syntax.defn_ValMods = [
+          Syntax.ModLazy],
         Syntax.defn_ValPats = [
           Syntax.PatVar (Syntax.Pat_Var {
             Syntax.pat_VarName = Syntax.Data_Name {
@@ -879,7 +880,8 @@ encodeLetBinding cx g outerTypeVars b =
         let newVars = Lists.filter (\v -> Logic.not (Sets.member v outerTypeVars)) (Core.typeSchemeVariables ts)
             useDef = Logic.or isFn (Logic.not (Lists.null newVars))
         in (Logic.ifElse useDef (encodeLocalDef cx g outerTypeVars bname bterm (Core.typeSchemeType ts)) (Eithers.bind (encodeTerm cx g bterm) (\srhs -> Eithers.bind (encodeType cx g (Core.typeSchemeType ts)) (\styp -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.Defn_Val {
-          Syntax.defn_ValMods = [],
+          Syntax.defn_ValMods = [
+            Syntax.ModLazy],
           Syntax.defn_ValPats = [
             Syntax.PatVar (Syntax.Pat_Var {
               Syntax.pat_VarName = Syntax.Data_Name {

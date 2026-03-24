@@ -217,7 +217,7 @@ def adaptTerm(constraints: hydra.coders.LanguageConstraints)(litmap: Map[hydra.c
       term1 match
       case hydra.core.Term.typeApplication(v_Term_typeApplication_ta) => hydra.lib.eithers.bind[scala.Predef.String, hydra.core.Type, hydra.core.Term](hydra.adapt.adaptType(constraints)(litmap)(v_Term_typeApplication_ta.`type`))((atyp: hydra.core.Type) =>
         Right(hydra.core.Term.typeApplication(hydra.core.TypeApplicationTerm(v_Term_typeApplication_ta.body, atyp))))
-      case hydra.core.Term.typeLambda(v_Term_typeLambda__) => Right(term1)
+      case hydra.core.Term.typeLambda => Right(term1)
       case _ => hydra.lib.eithers.bind[scala.Predef.String, Option[hydra.core.Term], hydra.core.Term](tryTerm(term1))((mterm: Option[hydra.core.Term]) =>
         hydra.lib.maybes.maybe[Either[scala.Predef.String, hydra.core.Term], hydra.core.Term](Left(hydra.lib.strings.cat2("no alternatives for term: ")(hydra.show.core.term(term1))))((term2: hydra.core.Term) => Right(term2))(mterm)))
   }
@@ -327,7 +327,7 @@ def dataGraphToDefinitions(constraints: hydra.coders.LanguageConstraints)(doInfe
         lazy val bins5: Seq[hydra.core.Binding] = normalizeBindings(bins4)
         {
           def toDef(el: hydra.core.Binding): Option[hydra.module.TermDefinition] =
-            hydra.lib.maybes.map[hydra.core.TypeScheme, hydra.module.TermDefinition]((ts: hydra.core.TypeScheme) => hydra.module.TermDefinition(el.name, (el.term), ts))(el.`type`)
+            hydra.lib.maybes.map[hydra.core.TypeScheme, hydra.module.TermDefinition]((ts: hydra.core.TypeScheme) => hydra.module.TermDefinition(el.name, (el.term), Some(ts)))(el.`type`)
           {
             lazy val selectedElements: Seq[hydra.core.Binding] = hydra.lib.lists.filter[hydra.core.Binding]((el: hydra.core.Binding) =>
               hydra.lib.maybes.maybe[Boolean, hydra.module.Namespace](false)((ns: hydra.module.Namespace) =>
@@ -368,6 +368,81 @@ def literalTypeSupported(constraints: hydra.coders.LanguageConstraints)(lt: hydr
     case _ => true
   hydra.lib.logic.ifElse[Boolean](hydra.lib.sets.member[hydra.variants.LiteralVariant](hydra.reflect.literalTypeVariant(lt))(constraints.literalVariants))(forType(lt))(false)
 }
+
+def prepareFloatType(ft: hydra.core.FloatType): Tuple2[hydra.core.FloatType, Tuple2[(hydra.core.FloatValue => hydra.core.FloatValue), scala.collection.immutable.Set[scala.Predef.String]]] =
+  ft match
+  case hydra.core.FloatType.bigfloat => Tuple2(hydra.core.FloatType.float64, Tuple2((v: hydra.core.FloatValue) =>
+    v match
+    case hydra.core.FloatValue.bigfloat(v_FloatValue_bigfloat_d) => hydra.core.FloatValue.float64(hydra.lib.literals.bigfloatToFloat64(v_FloatValue_bigfloat_d))
+    case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"))))
+  case _ => hydra.adapt.prepareSame(ft)
+
+def prepareIntegerType(it: hydra.core.IntegerType): Tuple2[hydra.core.IntegerType, Tuple2[(hydra.core.IntegerValue => hydra.core.IntegerValue), scala.collection.immutable.Set[scala.Predef.String]]] =
+  it match
+  case hydra.core.IntegerType.bigint => Tuple2(hydra.core.IntegerType.int64, Tuple2((v: hydra.core.IntegerValue) =>
+    v match
+    case hydra.core.IntegerValue.bigint(v_IntegerValue_bigint_i) => hydra.core.IntegerValue.int64(hydra.lib.literals.bigintToInt64(v_IntegerValue_bigint_i))
+    case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace arbitrary-precision integers with 64-bit integers"))))
+  case hydra.core.IntegerType.uint8 => Tuple2(hydra.core.IntegerType.int8, Tuple2((v: hydra.core.IntegerValue) =>
+    v match
+    case hydra.core.IntegerValue.uint8(v_IntegerValue_uint8_i) => hydra.core.IntegerValue.int8(hydra.lib.literals.bigintToInt8(hydra.lib.literals.uint8ToBigint(v_IntegerValue_uint8_i)))
+    case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace unsigned 8-bit integers with signed 8-bit integers"))))
+  case hydra.core.IntegerType.uint32 => Tuple2(hydra.core.IntegerType.int32, Tuple2((v: hydra.core.IntegerValue) =>
+    v match
+    case hydra.core.IntegerValue.uint32(v_IntegerValue_uint32_i) => hydra.core.IntegerValue.int32(hydra.lib.literals.bigintToInt32(hydra.lib.literals.uint32ToBigint(v_IntegerValue_uint32_i)))
+    case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace unsigned 32-bit integers with signed 32-bit integers"))))
+  case hydra.core.IntegerType.uint64 => Tuple2(hydra.core.IntegerType.int64, Tuple2((v: hydra.core.IntegerValue) =>
+    v match
+    case hydra.core.IntegerValue.uint64(v_IntegerValue_uint64_i) => hydra.core.IntegerValue.int64(hydra.lib.literals.bigintToInt64(hydra.lib.literals.uint64ToBigint(v_IntegerValue_uint64_i)))
+    case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace unsigned 64-bit integers with signed 64-bit integers"))))
+  case _ => hydra.adapt.prepareSame(it)
+
+def prepareLiteralType(at: hydra.core.LiteralType): Tuple2[hydra.core.LiteralType, Tuple2[(hydra.core.Literal => hydra.core.Literal), scala.collection.immutable.Set[scala.Predef.String]]] =
+  at match
+  case hydra.core.LiteralType.binary => Tuple2(hydra.core.LiteralType.string, Tuple2((v: hydra.core.Literal) =>
+    v match
+    case hydra.core.Literal.binary(v_Literal_binary_b) => hydra.core.Literal.string(hydra.lib.literals.binaryToString(v_Literal_binary_b))
+    case _ => v, hydra.lib.sets.fromList[scala.Predef.String](Seq("replace binary strings with character strings"))))
+  case hydra.core.LiteralType.float(v_LiteralType_float_ft) => {
+    lazy val result: Tuple2[hydra.core.FloatType, Tuple2[(hydra.core.FloatValue => hydra.core.FloatValue), scala.collection.immutable.Set[scala.Predef.String]]] = hydra.adapt.prepareFloatType(v_LiteralType_float_ft)
+    lazy val rtyp: hydra.core.FloatType = hydra.lib.pairs.first[hydra.core.FloatType, Tuple2[(hydra.core.FloatValue) => hydra.core.FloatValue, scala.collection.immutable.Set[scala.Predef.String]]](result)
+    def rep: (hydra.core.FloatValue => hydra.core.FloatValue) =
+      hydra.lib.pairs.first[(hydra.core.FloatValue) => hydra.core.FloatValue, scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.FloatType, Tuple2[(hydra.core.FloatValue) => hydra.core.FloatValue, scala.collection.immutable.Set[scala.Predef.String]]](result))
+    lazy val msgs: scala.collection.immutable.Set[scala.Predef.String] = hydra.lib.pairs.second[(hydra.core.FloatValue) => hydra.core.FloatValue, scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.FloatType, Tuple2[(hydra.core.FloatValue) => hydra.core.FloatValue, scala.collection.immutable.Set[scala.Predef.String]]](result))
+    Tuple2(hydra.core.LiteralType.float(rtyp), Tuple2((v: hydra.core.Literal) =>
+      v match
+      case hydra.core.Literal.float(v_Literal_float_fv) => hydra.core.Literal.float(rep(v_Literal_float_fv))
+      case _ => v, msgs))
+  }
+  case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => {
+    lazy val result: Tuple2[hydra.core.IntegerType, Tuple2[(hydra.core.IntegerValue => hydra.core.IntegerValue), scala.collection.immutable.Set[scala.Predef.String]]] = hydra.adapt.prepareIntegerType(v_LiteralType_integer_it)
+    lazy val rtyp: hydra.core.IntegerType = hydra.lib.pairs.first[hydra.core.IntegerType, Tuple2[(hydra.core.IntegerValue) => hydra.core.IntegerValue, scala.collection.immutable.Set[scala.Predef.String]]](result)
+    def rep: (hydra.core.IntegerValue => hydra.core.IntegerValue) =
+      hydra.lib.pairs.first[(hydra.core.IntegerValue) => hydra.core.IntegerValue, scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.IntegerType, Tuple2[(hydra.core.IntegerValue) => hydra.core.IntegerValue, scala.collection.immutable.Set[scala.Predef.String]]](result))
+    lazy val msgs: scala.collection.immutable.Set[scala.Predef.String] = hydra.lib.pairs.second[(hydra.core.IntegerValue) => hydra.core.IntegerValue, scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.IntegerType, Tuple2[(hydra.core.IntegerValue) => hydra.core.IntegerValue, scala.collection.immutable.Set[scala.Predef.String]]](result))
+    Tuple2(hydra.core.LiteralType.integer(rtyp), Tuple2((v: hydra.core.Literal) =>
+      v match
+      case hydra.core.Literal.integer(v_Literal_integer_iv) => hydra.core.Literal.integer(rep(v_Literal_integer_iv))
+      case _ => v, msgs))
+  }
+  case _ => hydra.adapt.prepareSame(at)
+
+def prepareType[T0](cx: T0)(typ: hydra.core.Type): Tuple2[hydra.core.Type, Tuple2[(hydra.core.Term => hydra.core.Term), scala.collection.immutable.Set[scala.Predef.String]]] =
+  hydra.rewriting.deannotateType(typ) match
+  case hydra.core.Type.literal(v_Type_literal_at) => {
+    lazy val result: Tuple2[hydra.core.LiteralType, Tuple2[(hydra.core.Literal => hydra.core.Literal), scala.collection.immutable.Set[scala.Predef.String]]] = hydra.adapt.prepareLiteralType(v_Type_literal_at)
+    lazy val rtyp: hydra.core.LiteralType = hydra.lib.pairs.first[hydra.core.LiteralType, Tuple2[(hydra.core.Literal) => hydra.core.Literal, scala.collection.immutable.Set[scala.Predef.String]]](result)
+    def rep: (hydra.core.Literal => hydra.core.Literal) =
+      hydra.lib.pairs.first[(hydra.core.Literal) => hydra.core.Literal, scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.LiteralType, Tuple2[(hydra.core.Literal) => hydra.core.Literal, scala.collection.immutable.Set[scala.Predef.String]]](result))
+    lazy val msgs: scala.collection.immutable.Set[scala.Predef.String] = hydra.lib.pairs.second[(hydra.core.Literal) => hydra.core.Literal, scala.collection.immutable.Set[scala.Predef.String]](hydra.lib.pairs.second[hydra.core.LiteralType, Tuple2[(hydra.core.Literal) => hydra.core.Literal, scala.collection.immutable.Set[scala.Predef.String]]](result))
+    Tuple2(hydra.core.Type.literal(rtyp), Tuple2((v: hydra.core.Term) =>
+      v match
+      case hydra.core.Term.literal(v_Term_literal_av) => hydra.core.Term.literal(rep(v_Term_literal_av))
+      case _ => v, msgs))
+  }
+  case _ => hydra.adapt.prepareSame(typ)
+
+def prepareSame[T0, T1, T2](x: T0): Tuple2[T0, Tuple2[(T1 => T1), scala.collection.immutable.Set[T2]]] = Tuple2(x, Tuple2((y: T1) => y, hydra.lib.sets.empty[T2]))
 
 def pushTypeAppsInward(term: hydra.core.Term): hydra.core.Term =
   {

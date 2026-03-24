@@ -1310,38 +1310,6 @@ public interface Coder {
     });
   }
 
-  static hydra.util.ConsList<hydra.module.Definition> reorderDefs(hydra.util.ConsList<hydra.module.Definition> defs) {
-    hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>> partitioned = hydra.Schemas.partitionDefinitions(defs);
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> termDefsWrapped = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.module.TermDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Term(td)),
-      hydra.lib.pairs.Second.apply(partitioned)));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> sortedTermDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.Sorting.topologicalSortNodes(
-      (java.util.function.Function<hydra.module.Definition, hydra.core.Name>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
-        @Override
-        public hydra.core.Name visit(hydra.module.Definition.Term td) {
-          return (td).value.name;
-        }
-      })),
-      (java.util.function.Function<hydra.module.Definition, hydra.util.ConsList<hydra.core.Name>>) (d -> (d).accept(new hydra.module.Definition.PartialVisitor<>() {
-        @Override
-        public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.module.Definition instance) {
-          return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty());
-        }
-
-        @Override
-        public hydra.util.ConsList<hydra.core.Name> visit(hydra.module.Definition.Term td) {
-          return hydra.lib.sets.ToList.apply(hydra.Rewriting.freeVariablesInTerm((td).value.term));
-        }
-      })),
-      termDefsWrapped.get())));
-    hydra.util.Lazy<hydra.util.ConsList<hydra.module.Definition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.module.TypeDefinition, hydra.module.Definition>) (td -> new hydra.module.Definition.Type(td)),
-      hydra.lib.pairs.First.apply(partitioned)));
-    return hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
-      typeDefs.get(),
-      sortedTermDefs.get()));
-  }
-
   static hydra.util.ConsList<hydra.ext.lisp.syntax.ImportDeclaration> moduleImports(hydra.module.Namespace focusNs, hydra.util.ConsList<hydra.module.Definition> defs) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.module.Namespace>> depNss = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Delete.apply(
       focusNs,
@@ -1399,7 +1367,7 @@ public interface Coder {
   }
 
   static <T0, T1, T2> hydra.util.Either<T2, hydra.ext.lisp.syntax.Program> moduleToLisp(hydra.ext.lisp.syntax.Dialect dialect, hydra.module.Module mod, hydra.util.ConsList<hydra.module.Definition> defs0, T0 cx, T1 g) {
-    hydra.util.ConsList<hydra.module.Definition> defs = hydra.ext.lisp.Coder.reorderDefs(defs0);
+    hydra.util.ConsList<hydra.module.Definition> defs = hydra.CoderUtils.reorderDefs(defs0);
     hydra.util.Pair<hydra.util.ConsList<hydra.module.TypeDefinition>, hydra.util.ConsList<hydra.module.TermDefinition>> partitioned = hydra.Schemas.partitionDefinitions(defs);
     hydra.util.Lazy<hydra.util.ConsList<hydra.module.TypeDefinition>> allTypeDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
     hydra.util.Lazy<hydra.util.ConsList<hydra.module.TermDefinition>> termDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(partitioned));

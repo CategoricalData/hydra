@@ -460,12 +460,35 @@ def module_contains_binary_literals(mod: hydra.module.Module) -> bool:
         return hydra.lib.logic.or_(found, _hoist_check_term_2(term))
     def term_contains_binary(term: hydra.core.Term) -> bool:
         return hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda x1, x2: check_term(x1, x2)), False, term)
-    return hydra.lib.lists.foldl((lambda acc, el: hydra.lib.logic.or_(acc, term_contains_binary(el.term))), False, mod.elements)
+    @lru_cache(1)
+    def def_terms():
+        def _hoist_def_terms_1(v1):
+            match v1:
+                case hydra.module.DefinitionTerm(value=td):
+                    return Just(td.term)
+
+                case _:
+                    return Nothing()
+        return hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_def_terms_1(d)), mod.definitions))
+    return hydra.lib.lists.foldl((lambda acc, t: hydra.lib.logic.or_(acc, term_contains_binary(t))), False, def_terms())
 
 def module_dependency_namespaces(cx: hydra.context.Context, graph: hydra.graph.Graph, binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, mod: hydra.module.Module) -> Either[hydra.context.InContext[hydra.errors.Error], frozenset[hydra.module.Namespace]]:
     r"""Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)."""
 
-    return hydra.lib.eithers.map((lambda deps: hydra.lib.sets.delete(mod.namespace, deps)), dependency_namespaces(cx, graph, binds, with_prims, with_noms, with_schema, mod.elements))
+    @lru_cache(1)
+    def all_bindings():
+        def _hoist_all_bindings_1(v1):
+            match v1:
+                case hydra.module.DefinitionType(value=td):
+                    return Just(hydra.annotations.type_element(td.name, td.type))
+
+                case hydra.module.DefinitionTerm(value=td):
+                    return Just(hydra.core.Binding(td.name, td.term, td.type))
+
+                case _:
+                    return Nothing()
+        return hydra.lib.maybes.cat(hydra.lib.lists.map((lambda d: _hoist_all_bindings_1(d)), mod.definitions))
+    return hydra.lib.eithers.map((lambda deps: hydra.lib.sets.delete(mod.namespace, deps)), dependency_namespaces(cx, graph, binds, with_prims, with_noms, with_schema, all_bindings()))
 
 def namespaces_for_definitions(encode_namespace: Callable[[hydra.module.Namespace], T0], focus_ns: hydra.module.Namespace, defs: frozenlist[hydra.module.Definition]) -> hydra.module.Namespaces[T0]:
     r"""Create namespaces mapping for definitions."""

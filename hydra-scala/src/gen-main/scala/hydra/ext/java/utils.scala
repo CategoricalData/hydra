@@ -6,7 +6,7 @@ import hydra.core.*
 
 import hydra.errors.*
 
-import hydra.ext.java.helpers.*
+import hydra.ext.java.environment.*
 
 import hydra.ext.java.syntax.*
 
@@ -273,7 +273,7 @@ def javaTypeToJavaResult(jt: hydra.ext.java.syntax.Type): hydra.ext.java.syntax.
 def javaTypeToJavaTypeArgument(t: hydra.ext.java.syntax.Type): hydra.ext.java.syntax.TypeArgument =
   t match
   case hydra.ext.java.syntax.Type.reference(v_Type_reference_rt) => hydra.ext.java.syntax.TypeArgument.reference(v_Type_reference_rt)
-  case hydra.ext.java.syntax.Type.primitive(v_Type_primitive__) => hydra.ext.java.syntax.TypeArgument.wildcard(hydra.ext.java.syntax.Wildcard(Seq(), None))
+  case hydra.ext.java.syntax.Type.primitive => hydra.ext.java.syntax.TypeArgument.wildcard(hydra.ext.java.syntax.Wildcard(Seq(), None))
 
 def referenceTypeToResult(rt: hydra.ext.java.syntax.ReferenceType): hydra.ext.java.syntax.Result =
   hydra.ext.java.utils.javaTypeToJavaResult(hydra.ext.java.syntax.Type.reference(rt))
@@ -374,7 +374,7 @@ def addExpressions(exprs: Seq[hydra.ext.java.syntax.MultiplicativeExpression]): 
 
 def javaRelationalExpressionToJavaEqualityExpression(re: hydra.ext.java.syntax.RelationalExpression): hydra.ext.java.syntax.EqualityExpression = hydra.ext.java.syntax.EqualityExpression.unary(re)
 
-def nameToQualifiedJavaName(aliases: hydra.ext.java.helpers.Aliases)(qualify: Boolean)(name: hydra.core.Name)(mlocal: Option[scala.Predef.String]): Tuple2[hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier] =
+def nameToQualifiedJavaName(aliases: hydra.ext.java.environment.Aliases)(qualify: Boolean)(name: hydra.core.Name)(mlocal: Option[scala.Predef.String]): Tuple2[hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier] =
   {
   lazy val qn: hydra.module.QualifiedName = hydra.names.qualifyName(name)
   lazy val `ns_`: Option[hydra.module.Namespace] = (qn.namespace)
@@ -387,7 +387,7 @@ def nameToQualifiedJavaName(aliases: hydra.ext.java.helpers.Aliases)(qualify: Bo
   Tuple2(jid, pkg)
 }
 
-def nameToJavaClassType(aliases: hydra.ext.java.helpers.Aliases)(qualify: Boolean)(args: Seq[hydra.ext.java.syntax.TypeArgument])(name: hydra.core.Name)(mlocal: Option[scala.Predef.String]): hydra.ext.java.syntax.ClassType =
+def nameToJavaClassType(aliases: hydra.ext.java.environment.Aliases)(qualify: Boolean)(args: Seq[hydra.ext.java.syntax.TypeArgument])(name: hydra.core.Name)(mlocal: Option[scala.Predef.String]): hydra.ext.java.syntax.ClassType =
   {
   lazy val result: Tuple2[hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier] = hydra.ext.java.utils.nameToQualifiedJavaName(aliases)(qualify)(name)(mlocal)
   lazy val id: hydra.ext.java.syntax.TypeIdentifier = hydra.lib.pairs.first[hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier](result)
@@ -395,10 +395,10 @@ def nameToJavaClassType(aliases: hydra.ext.java.helpers.Aliases)(qualify: Boolea
   hydra.ext.java.syntax.ClassType(Seq(), pkg, id, args)
 }
 
-def nameToJavaReferenceType(aliases: hydra.ext.java.helpers.Aliases)(qualify: Boolean)(args: Seq[hydra.ext.java.syntax.TypeArgument])(name: hydra.core.Name)(mlocal: Option[scala.Predef.String]): hydra.ext.java.syntax.ReferenceType =
+def nameToJavaReferenceType(aliases: hydra.ext.java.environment.Aliases)(qualify: Boolean)(args: Seq[hydra.ext.java.syntax.TypeArgument])(name: hydra.core.Name)(mlocal: Option[scala.Predef.String]): hydra.ext.java.syntax.ReferenceType =
   hydra.ext.java.syntax.ReferenceType.classOrInterface(hydra.ext.java.syntax.ClassOrInterfaceType.`class`(hydra.ext.java.utils.nameToJavaClassType(aliases)(qualify)(args)(name)(mlocal)))
 
-def nameToJavaName(aliases: hydra.ext.java.helpers.Aliases)(name: hydra.core.Name): hydra.ext.java.syntax.Identifier =
+def nameToJavaName(aliases: hydra.ext.java.environment.Aliases)(name: hydra.core.Name): hydra.ext.java.syntax.Identifier =
   {
   lazy val qn: hydra.module.QualifiedName = hydra.names.qualifyName(name)
   lazy val `ns_`: Option[hydra.module.Namespace] = (qn.namespace)
@@ -412,10 +412,10 @@ def nameToJavaName(aliases: hydra.ext.java.helpers.Aliases)(name: hydra.core.Nam
   }))
 }
 
-def nameToJavaTypeIdentifier(aliases: hydra.ext.java.helpers.Aliases)(qualify: Boolean)(name: hydra.core.Name): hydra.ext.java.syntax.TypeIdentifier =
+def nameToJavaTypeIdentifier(aliases: hydra.ext.java.environment.Aliases)(qualify: Boolean)(name: hydra.core.Name): hydra.ext.java.syntax.TypeIdentifier =
   hydra.lib.pairs.first[hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier](hydra.ext.java.utils.nameToQualifiedJavaName(aliases)(qualify)(name)(None))
 
-def javaTypeFromTypeName(aliases: hydra.ext.java.helpers.Aliases)(elName: hydra.core.Name): hydra.ext.java.syntax.Type =
+def javaTypeFromTypeName(aliases: hydra.ext.java.environment.Aliases)(elName: hydra.core.Name): hydra.ext.java.syntax.Type =
   hydra.ext.java.utils.javaTypeVariableToType(hydra.ext.java.syntax.TypeVariable(Seq(), hydra.ext.java.utils.nameToJavaTypeIdentifier(aliases)(false)(elName)))
 
 def javaDoubleCastExpression(rawRt: hydra.ext.java.syntax.ReferenceType)(targetRt: hydra.ext.java.syntax.ReferenceType)(expr: hydra.ext.java.syntax.UnaryExpression): hydra.ext.java.syntax.CastExpression =
@@ -431,7 +431,7 @@ lazy val javaBytePrimitiveType: hydra.ext.java.syntax.PrimitiveTypeWithAnnotatio
 
 lazy val visitorTypeVariable: hydra.ext.java.syntax.ReferenceType = hydra.ext.java.utils.javaTypeVariable("r")
 
-def lookupJavaVarName(aliases: hydra.ext.java.helpers.Aliases)(name: hydra.core.Name): hydra.core.Name =
+def lookupJavaVarName(aliases: hydra.ext.java.environment.Aliases)(name: hydra.core.Name): hydra.core.Name =
   hydra.lib.maybes.cases[hydra.core.Name, hydra.core.Name](hydra.lib.maps.lookup[hydra.core.Name, hydra.core.Name](name)(aliases.varRenames))(name)((renamed: hydra.core.Name) => renamed)
 
 def variantClassName(qualify: Boolean)(elName: hydra.core.Name)(fname: hydra.core.Name): hydra.core.Name =
@@ -484,17 +484,17 @@ def toAssignStmt(fname: hydra.core.Name): hydra.ext.java.syntax.Statement =
 
 def unTypeParameter(tp: hydra.ext.java.syntax.TypeParameter): scala.Predef.String = (tp.identifier)
 
-def importAliasesForModule(mod: hydra.module.Module): hydra.ext.java.helpers.Aliases =
-  hydra.ext.java.helpers.Aliases(mod.namespace, hydra.lib.maps.empty[hydra.module.Namespace, hydra.ext.java.syntax.PackageName], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name, hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name, hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], None, hydra.lib.sets.empty[hydra.core.Name])
+def importAliasesForModule(mod: hydra.module.Module): hydra.ext.java.environment.Aliases =
+  hydra.ext.java.environment.Aliases(mod.namespace, hydra.lib.maps.empty[hydra.module.Namespace, hydra.ext.java.syntax.PackageName], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name, hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], hydra.lib.maps.empty[hydra.core.Name, hydra.core.Name], hydra.lib.sets.empty[hydra.core.Name], None, hydra.lib.sets.empty[hydra.core.Name])
 
-def javaClassDeclaration(aliases: hydra.ext.java.helpers.Aliases)(tparams: Seq[hydra.ext.java.syntax.TypeParameter])(elName: hydra.core.Name)(mods: Seq[hydra.ext.java.syntax.ClassModifier])(supname: Option[hydra.core.Name])(impls: Seq[hydra.ext.java.syntax.InterfaceType])(bodyDecls: Seq[hydra.ext.java.syntax.ClassBodyDeclarationWithComments]): hydra.ext.java.syntax.ClassDeclaration =
+def javaClassDeclaration(aliases: hydra.ext.java.environment.Aliases)(tparams: Seq[hydra.ext.java.syntax.TypeParameter])(elName: hydra.core.Name)(mods: Seq[hydra.ext.java.syntax.ClassModifier])(supname: Option[hydra.core.Name])(impls: Seq[hydra.ext.java.syntax.InterfaceType])(bodyDecls: Seq[hydra.ext.java.syntax.ClassBodyDeclarationWithComments]): hydra.ext.java.syntax.ClassDeclaration =
   {
   lazy val `extends_`: Option[hydra.ext.java.syntax.ClassType] = hydra.lib.maybes.map[hydra.core.Name, hydra.ext.java.syntax.ClassType]((n: hydra.core.Name) =>
     hydra.ext.java.utils.nameToJavaClassType(aliases)(true)(Seq())(n)(None))(supname)
   hydra.ext.java.syntax.ClassDeclaration.normal(hydra.ext.java.syntax.NormalClassDeclaration(mods, hydra.ext.java.utils.javaDeclName(elName), tparams, `extends_`, impls, bodyDecls))
 }
 
-def makeConstructor(aliases: hydra.ext.java.helpers.Aliases)(elName: hydra.core.Name)(`private`: Boolean)(params: Seq[hydra.ext.java.syntax.FormalParameter])(stmts: Seq[hydra.ext.java.syntax.BlockStatement]): hydra.ext.java.syntax.ClassBodyDeclaration =
+def makeConstructor(aliases: hydra.ext.java.environment.Aliases)(elName: hydra.core.Name)(`private`: Boolean)(params: Seq[hydra.ext.java.syntax.FormalParameter])(stmts: Seq[hydra.ext.java.syntax.BlockStatement]): hydra.ext.java.syntax.ClassBodyDeclaration =
   {
   lazy val nm: hydra.ext.java.syntax.SimpleTypeName = hydra.ext.java.utils.nameToJavaTypeIdentifier(aliases)(false)(elName)
   lazy val cons: hydra.ext.java.syntax.ConstructorDeclarator = hydra.ext.java.syntax.ConstructorDeclarator(Seq(), nm, None, params)
@@ -528,13 +528,13 @@ def toJavaArrayType(t: hydra.ext.java.syntax.Type)(cx: hydra.context.Context): E
       lazy val variant: hydra.ext.java.syntax.ArrayType_Variant = (v_ReferenceType_array_at.variant)
       Right(hydra.ext.java.syntax.Type.reference(hydra.ext.java.syntax.ReferenceType.array(hydra.ext.java.syntax.ArrayType(newDims, variant))))
     }
-    case hydra.ext.java.syntax.ReferenceType.variable(v_ReferenceType_variable__) => Left(hydra.context.InContext(hydra.errors.Error.other("don't know how to make Java reference type into array type"), cx))
-  case hydra.ext.java.syntax.Type.primitive(v_Type_primitive__) => Left(hydra.context.InContext(hydra.errors.Error.other("don't know how to make Java type into array type"), cx))
+    case hydra.ext.java.syntax.ReferenceType.variable => Left(hydra.context.InContext(hydra.errors.Error.other("don't know how to make Java reference type into array type"), cx))
+  case hydra.ext.java.syntax.Type.primitive => Left(hydra.context.InContext(hydra.errors.Error.other("don't know how to make Java type into array type"), cx))
 
 def javaTypeToJavaReferenceType(t: hydra.ext.java.syntax.Type)(cx: hydra.context.Context): Either[hydra.context.InContext[hydra.errors.Error], hydra.ext.java.syntax.ReferenceType] =
   t match
   case hydra.ext.java.syntax.Type.reference(v_Type_reference_rt) => Right(v_Type_reference_rt)
-  case hydra.ext.java.syntax.Type.primitive(v_Type_primitive__) => Left(hydra.context.InContext(hydra.errors.Error.other("expected a Java reference type"), cx))
+  case hydra.ext.java.syntax.Type.primitive => Left(hydra.context.InContext(hydra.errors.Error.other("expected a Java reference type"), cx))
 
 def javaReferenceTypeToRawType(rt: hydra.ext.java.syntax.ReferenceType): hydra.ext.java.syntax.ReferenceType =
   rt match
@@ -565,26 +565,26 @@ def addJavaTypeParameter(rt: hydra.ext.java.syntax.ReferenceType)(t: hydra.ext.j
         lazy val args: Seq[hydra.ext.java.syntax.TypeArgument] = (v_ClassOrInterfaceType_class_ct.arguments)
         Right(hydra.ext.java.syntax.Type.reference(hydra.ext.java.syntax.ReferenceType.classOrInterface(hydra.ext.java.syntax.ClassOrInterfaceType.`class`(hydra.ext.java.syntax.ClassType(anns, qual, id, hydra.lib.lists.concat2[hydra.ext.java.syntax.TypeArgument](args)(Seq(hydra.ext.java.syntax.TypeArgument.reference(rt))))))))
       }
-      case hydra.ext.java.syntax.ClassOrInterfaceType.interface(v_ClassOrInterfaceType_interface__) => Left(hydra.context.InContext(hydra.errors.Error.other("expected a Java class type"), cx))
+      case hydra.ext.java.syntax.ClassOrInterfaceType.interface => Left(hydra.context.InContext(hydra.errors.Error.other("expected a Java class type"), cx))
     case hydra.ext.java.syntax.ReferenceType.variable(v_ReferenceType_variable_tv) => Right(hydra.ext.java.utils.javaTypeVariableToType(v_ReferenceType_variable_tv))
-    case hydra.ext.java.syntax.ReferenceType.array(v_ReferenceType_array__) => Left(hydra.context.InContext(hydra.errors.Error.other("expected a Java class or interface type, or a variable"), cx))
-  case hydra.ext.java.syntax.Type.primitive(v_Type_primitive__) => Left(hydra.context.InContext(hydra.errors.Error.other("expected a reference type"), cx))
+    case hydra.ext.java.syntax.ReferenceType.array => Left(hydra.context.InContext(hydra.errors.Error.other("expected a Java class or interface type, or a variable"), cx))
+  case hydra.ext.java.syntax.Type.primitive => Left(hydra.context.InContext(hydra.errors.Error.other("expected a reference type"), cx))
 
-def uniqueVarName(aliases: hydra.ext.java.helpers.Aliases)(name: hydra.core.Name): hydra.core.Name =
+def uniqueVarName(aliases: hydra.ext.java.environment.Aliases)(name: hydra.core.Name): hydra.core.Name =
   hydra.lib.logic.ifElse[hydra.core.Name](hydra.lib.sets.member[hydra.core.Name](name)(aliases.inScopeJavaVars))(hydra.ext.java.utils.uniqueVarName_go(aliases)(name)(2))(name)
 
-def uniqueVarName_go(aliases: hydra.ext.java.helpers.Aliases)(base: scala.Predef.String)(n: Int): hydra.core.Name =
+def uniqueVarName_go(aliases: hydra.ext.java.environment.Aliases)(base: scala.Predef.String)(n: Int): hydra.core.Name =
   {
   lazy val candidate: hydra.core.Name = hydra.lib.strings.cat2(base)(hydra.lib.literals.showInt32(n))
   hydra.lib.logic.ifElse[hydra.core.Name](hydra.lib.sets.member[hydra.core.Name](candidate)(aliases.inScopeJavaVars))(hydra.ext.java.utils.uniqueVarName_go(aliases)(base)(hydra.lib.math.add(n)(1)))(candidate)
 }
 
-def addInScopeVar(name: hydra.core.Name)(aliases: hydra.ext.java.helpers.Aliases): hydra.ext.java.helpers.Aliases =
-  hydra.ext.java.helpers.Aliases(aliases.currentNamespace, (aliases.packages), (aliases.branchVars), (aliases.recursiveVars), (aliases.inScopeTypeParams), (aliases.polymorphicLocals), hydra.lib.sets.insert[hydra.core.Name](name)(aliases.inScopeJavaVars), (aliases.varRenames), (aliases.lambdaVars), (aliases.typeVarSubst), (aliases.trustedTypeVars), (aliases.methodCodomain), (aliases.thunkedVars))
+def addInScopeVar(name: hydra.core.Name)(aliases: hydra.ext.java.environment.Aliases): hydra.ext.java.environment.Aliases =
+  hydra.ext.java.environment.Aliases(aliases.currentNamespace, (aliases.packages), (aliases.branchVars), (aliases.recursiveVars), (aliases.inScopeTypeParams), (aliases.polymorphicLocals), hydra.lib.sets.insert[hydra.core.Name](name)(aliases.inScopeJavaVars), (aliases.varRenames), (aliases.lambdaVars), (aliases.typeVarSubst), (aliases.trustedTypeVars), (aliases.methodCodomain), (aliases.thunkedVars))
 
-def addInScopeVars(names: Seq[hydra.core.Name])(aliases: hydra.ext.java.helpers.Aliases): hydra.ext.java.helpers.Aliases =
-  hydra.lib.lists.foldl[hydra.ext.java.helpers.Aliases, hydra.core.Name]((a: hydra.ext.java.helpers.Aliases) =>
+def addInScopeVars(names: Seq[hydra.core.Name])(aliases: hydra.ext.java.environment.Aliases): hydra.ext.java.environment.Aliases =
+  hydra.lib.lists.foldl[hydra.ext.java.environment.Aliases, hydra.core.Name]((a: hydra.ext.java.environment.Aliases) =>
   (n: hydra.core.Name) => hydra.ext.java.utils.addInScopeVar(n)(a))(aliases)(names)
 
-def addVarRename(original: hydra.core.Name)(renamed: hydra.core.Name)(aliases: hydra.ext.java.helpers.Aliases): hydra.ext.java.helpers.Aliases =
-  hydra.ext.java.helpers.Aliases(aliases.currentNamespace, (aliases.packages), (aliases.branchVars), (aliases.recursiveVars), (aliases.inScopeTypeParams), (aliases.polymorphicLocals), (aliases.inScopeJavaVars), hydra.lib.maps.insert[hydra.core.Name, hydra.core.Name](original)(renamed)(aliases.varRenames), (aliases.lambdaVars), (aliases.typeVarSubst), (aliases.trustedTypeVars), (aliases.methodCodomain), (aliases.thunkedVars))
+def addVarRename(original: hydra.core.Name)(renamed: hydra.core.Name)(aliases: hydra.ext.java.environment.Aliases): hydra.ext.java.environment.Aliases =
+  hydra.ext.java.environment.Aliases(aliases.currentNamespace, (aliases.packages), (aliases.branchVars), (aliases.recursiveVars), (aliases.inScopeTypeParams), (aliases.polymorphicLocals), (aliases.inScopeJavaVars), hydra.lib.maps.insert[hydra.core.Name, hydra.core.Name](original)(renamed)(aliases.varRenames), (aliases.lambdaVars), (aliases.typeVarSubst), (aliases.trustedTypeVars), (aliases.methodCodomain), (aliases.thunkedVars))

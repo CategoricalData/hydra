@@ -21,8 +21,8 @@ enum Error :
    case duplicateField(value: hydra.error.core.DuplicateFieldError) extends Error
    case other(value: hydra.errors.OtherError) extends Error
    case undefinedField(value: hydra.error.core.UndefinedFieldError) extends Error
-   case undefinedTerm(value: hydra.error.core.UndefinedTermError) extends Error
-   case undefinedType(value: hydra.error.core.UndefinedTypeError) extends Error
+   case undefinedTermVariable(value: hydra.error.core.UndefinedTermVariableError) extends Error
+   case untypedTermVariable(value: hydra.error.core.UntypedTermVariableError) extends Error
    case unexpectedTermVariant(value: hydra.error.core.UnexpectedTermVariantError) extends Error
    case unexpectedTypeVariant(value: hydra.error.core.UnexpectedTypeVariantError) extends Error
    case unification(value: hydra.errors.UnificationError) extends Error

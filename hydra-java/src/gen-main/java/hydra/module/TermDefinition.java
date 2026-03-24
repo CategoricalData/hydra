@@ -29,9 +29,9 @@ public class TermDefinition implements Serializable, Comparable<TermDefinition> 
   /**
    * The type scheme of the term, including any class constraints
    */
-  public final hydra.core.TypeScheme type;
+  public final hydra.util.Maybe<hydra.core.TypeScheme> type;
 
-  public TermDefinition (hydra.core.Name name, hydra.core.Term term, hydra.core.TypeScheme type) {
+  public TermDefinition (hydra.core.Name name, hydra.core.Term term, hydra.util.Maybe<hydra.core.TypeScheme> type) {
     this.name = name;
     this.term = term;
     this.type = type;
@@ -80,7 +80,7 @@ public class TermDefinition implements Serializable, Comparable<TermDefinition> 
     return new TermDefinition(name, term, type);
   }
 
-  public TermDefinition withType(hydra.core.TypeScheme type) {
+  public TermDefinition withType(hydra.util.Maybe<hydra.core.TypeScheme> type) {
     return new TermDefinition(name, term, type);
   }
 }

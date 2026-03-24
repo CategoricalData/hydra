@@ -22,9 +22,9 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
 
   public static final hydra.core.Name UNDEFINED_FIELD = new hydra.core.Name("undefinedField");
 
-  public static final hydra.core.Name UNDEFINED_TERM = new hydra.core.Name("undefinedTerm");
+  public static final hydra.core.Name UNDEFINED_TERM_VARIABLE = new hydra.core.Name("undefinedTermVariable");
 
-  public static final hydra.core.Name UNDEFINED_TYPE = new hydra.core.Name("undefinedType");
+  public static final hydra.core.Name UNTYPED_TERM_VARIABLE = new hydra.core.Name("untypedTermVariable");
 
   public static final hydra.core.Name UNEXPECTED_TERM_VARIANT = new hydra.core.Name("unexpectedTermVariant");
 
@@ -51,9 +51,9 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
 
     R visit(UndefinedField instance) ;
 
-    R visit(UndefinedTerm instance) ;
+    R visit(UndefinedTermVariable instance) ;
 
-    R visit(UndefinedType instance) ;
+    R visit(UntypedTermVariable instance) ;
 
     R visit(UnexpectedTermVariant instance) ;
 
@@ -91,11 +91,11 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
       return otherwise(instance);
     }
 
-    default R visit(UndefinedTerm instance) {
+    default R visit(UndefinedTermVariable instance) {
       return otherwise(instance);
     }
 
-    default R visit(UndefinedType instance) {
+    default R visit(UntypedTermVariable instance) {
       return otherwise(instance);
     }
 
@@ -371,21 +371,21 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
   }
 
   /**
-   * A reference to an undefined term
+   * A reference to an undefined term variable
    */
-  public static final class UndefinedTerm extends hydra.errors.Error_ implements Serializable {
-    public final hydra.error.core.UndefinedTermError value;
+  public static final class UndefinedTermVariable extends hydra.errors.Error_ implements Serializable {
+    public final hydra.error.core.UndefinedTermVariableError value;
 
-    public UndefinedTerm (hydra.error.core.UndefinedTermError value) {
+    public UndefinedTermVariable (hydra.error.core.UndefinedTermVariableError value) {
       this.value = value;
     }
 
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof UndefinedTerm)) {
+      if (!(other instanceof UndefinedTermVariable)) {
         return false;
       }
-      UndefinedTerm o = (UndefinedTerm) other;
+      UndefinedTermVariable o = (UndefinedTermVariable) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -403,7 +403,7 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
       if (tagCmp != 0) {
         return tagCmp;
       }
-      UndefinedTerm o = (UndefinedTerm) other;
+      UndefinedTermVariable o = (UndefinedTermVariable) other;
       return ((Comparable) value).compareTo(o.value);
     }
 
@@ -414,21 +414,21 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
   }
 
   /**
-   * A reference to an undefined type
+   * A term variable whose type is not known
    */
-  public static final class UndefinedType extends hydra.errors.Error_ implements Serializable {
-    public final hydra.error.core.UndefinedTypeError value;
+  public static final class UntypedTermVariable extends hydra.errors.Error_ implements Serializable {
+    public final hydra.error.core.UntypedTermVariableError value;
 
-    public UndefinedType (hydra.error.core.UndefinedTypeError value) {
+    public UntypedTermVariable (hydra.error.core.UntypedTermVariableError value) {
       this.value = value;
     }
 
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof UndefinedType)) {
+      if (!(other instanceof UntypedTermVariable)) {
         return false;
       }
-      UndefinedType o = (UndefinedType) other;
+      UntypedTermVariable o = (UntypedTermVariable) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -446,7 +446,7 @@ public abstract class Error_ implements Serializable, Comparable<Error_> {
       if (tagCmp != 0) {
         return tagCmp;
       }
-      UndefinedType o = (UndefinedType) other;
+      UntypedTermVariable o = (UntypedTermVariable) other;
       return ((Comparable) value).compareTo(o.value);
     }
 

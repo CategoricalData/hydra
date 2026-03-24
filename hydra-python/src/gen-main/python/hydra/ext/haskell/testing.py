@@ -94,8 +94,10 @@ def build_namespaces_for_test_group(mod: hydra.module.Module, tgroup: hydra.test
     @lru_cache(1)
     def test_bindings() -> frozenlist[hydra.core.Binding]:
         return hydra.lib.lists.map((lambda term: hydra.core.Binding(hydra.core.Name("_test_"), term, Nothing())), test_terms())
-    temp_module = hydra.module.Module(mod.namespace, test_bindings(), mod.term_dependencies, mod.type_dependencies, mod.description)
-    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda a: a), hydra.ext.haskell.utils.namespaces_for_module(temp_module, hydra.lexical.empty_context(), graph_)), (lambda base_namespaces: (encoded_names := hydra.lib.sets.unions(hydra.lib.lists.map((lambda t: extract_encoded_term_variable_names(graph_, t)), test_terms())), Right(add_namespaces_to_namespaces(base_namespaces, encoded_names)))[1]))
+    @lru_cache(1)
+    def temp_module() -> hydra.module.Module:
+        return hydra.module.Module(mod.namespace, hydra.lib.lists.map((lambda b: cast(hydra.module.Definition, hydra.module.DefinitionTerm(hydra.module.TermDefinition(b.name, b.term, b.type)))), test_bindings()), mod.term_dependencies, mod.type_dependencies, mod.description)
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: hydra.show.errors.error(ic.object)), (lambda a: a), hydra.ext.haskell.utils.namespaces_for_module(temp_module(), hydra.lexical.empty_context(), graph_)), (lambda base_namespaces: (encoded_names := hydra.lib.sets.unions(hydra.lib.lists.map((lambda t: extract_encoded_term_variable_names(graph_, t)), test_terms())), Right(add_namespaces_to_namespaces(base_namespaces, encoded_names)))[1]))
 
 def build_test_module_with_codec(codec: hydra.testing.TestCodec, test_module: hydra.module.Module, test_group: hydra.testing.TestGroup, test_body: str, namespaces: T0) -> str:
     r"""Build the complete test module using a TestCodec."""
