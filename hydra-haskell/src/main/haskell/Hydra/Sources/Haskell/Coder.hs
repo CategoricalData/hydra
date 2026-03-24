@@ -266,7 +266,7 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
       "v1">: Logic.ifElse (Rewriting.isFreeVariableInTerm @@ (wrap _Name $ var "v0") @@ var "rhsTerm")
         (Constants.ignoredVariable)
         (var "v0"),
-      "hname">: HaskellUtils.unionFieldReference @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "namespaces" @@ var "dn" @@ var "fn"] $
+      "hname">: HaskellUtils.unionFieldReference @@ (Sets.union (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) (Sets.fromList (Maps.keys (Graph.graphSchemaTypes $ var "g")))) @@ var "namespaces" @@ var "dn" @@ var "fn"] $
           "args" <<~ (Maybes.cases (Maps.lookup (var "fn") (var "fieldMap"))
               (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "field ", Literals.showString $ (Core.unName $ var "fn"),
                 string " not found in ", Literals.showString $ (Core.unName $ var "dn")])) (var "cx")) $
@@ -502,7 +502,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         "field">: Core.injectionField $ var "injection",
         "fn">: Core.fieldName $ var "field",
         "ft">: Core.fieldTerm $ var "field",
-        "lhs">: inject H._Expression H._Expression_variable $ HaskellUtils.unionFieldReference @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "namespaces" @@ var "sname" @@ var "fn",
+        "lhs">: inject H._Expression H._Expression_variable $ HaskellUtils.unionFieldReference @@ (Sets.union (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) (Sets.fromList (Maps.keys (Graph.graphSchemaTypes $ var "g")))) @@ var "namespaces" @@ var "sname" @@ var "fn",
         "dflt">: Eithers.map (HaskellUtils.hsapp @@ var "lhs") (var "encode" @@ var "ft")] $
         "ftyp" <<~ Schemas.requireUnionField_ @@ var "cx" @@ var "g" @@ var "sname" @@ var "fn" $
         cases _Type (Rewriting.deannotateType @@ var "ftyp")
