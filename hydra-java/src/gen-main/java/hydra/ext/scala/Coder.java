@@ -1279,24 +1279,6 @@ public interface Coder {
       }
 
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data> visit(hydra.core.Term.TypeApplication ta) {
-        return hydra.ext.scala.Coder.encodeTerm(
-          cx,
-          g,
-          (ta).value.body);
-      }
-
-      @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data> visit(hydra.core.Term.TypeLambda tl) {
-        return hydra.ext.scala.Coder.encodeTerm(
-          cx,
-          hydra.Rewriting.extendGraphForTypeLambda(
-            g,
-            (tl).value),
-          (tl).value.body);
-      }
-
-      @Override
       public hydra.util.Either<hydra.context.InContext<hydra.errors.Error_>, hydra.ext.scala.syntax.Data> visit(hydra.core.Term.Let lt) {
         hydra.util.ConsList<hydra.core.Binding> bindings = (lt).value.bindings;
         hydra.core.Term body = (lt).value.body;

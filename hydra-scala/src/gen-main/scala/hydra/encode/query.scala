@@ -10,12 +10,12 @@ import hydra.lib.maybes
 
 def comparisonConstraint(v1: hydra.query.ComparisonConstraint): hydra.core.Term =
   v1 match
-  case hydra.query.ComparisonConstraint.equal() => hydra.core.Term.union(hydra.core.Injection("hydra.query.ComparisonConstraint", hydra.core.Field("equal", hydra.core.Term.unit)))
-  case hydra.query.ComparisonConstraint.notEqual() => hydra.core.Term.union(hydra.core.Injection("hydra.query.ComparisonConstraint", hydra.core.Field("notEqual", hydra.core.Term.unit)))
-  case hydra.query.ComparisonConstraint.lessThan() => hydra.core.Term.union(hydra.core.Injection("hydra.query.ComparisonConstraint", hydra.core.Field("lessThan", hydra.core.Term.unit)))
-  case hydra.query.ComparisonConstraint.greaterThan() => hydra.core.Term.union(hydra.core.Injection("hydra.query.ComparisonConstraint", hydra.core.Field("greaterThan", hydra.core.Term.unit)))
-  case hydra.query.ComparisonConstraint.lessThanOrEqual() => hydra.core.Term.union(hydra.core.Injection("hydra.query.ComparisonConstraint", hydra.core.Field("lessThanOrEqual", hydra.core.Term.unit)))
-  case hydra.query.ComparisonConstraint.greaterThanOrEqual() => hydra.core.Term.union(hydra.core.Injection("hydra.query.ComparisonConstraint", hydra.core.Field("greaterThanOrEqual", hydra.core.Term.unit)))
+  case hydra.query.ComparisonConstraint.equal => hydra.core.Term.union(hydra.core.Injection("hydra.query.ComparisonConstraint", hydra.core.Field("equal", hydra.core.Term.unit)))
+  case hydra.query.ComparisonConstraint.notEqual => hydra.core.Term.union(hydra.core.Injection("hydra.query.ComparisonConstraint", hydra.core.Field("notEqual", hydra.core.Term.unit)))
+  case hydra.query.ComparisonConstraint.lessThan => hydra.core.Term.union(hydra.core.Injection("hydra.query.ComparisonConstraint", hydra.core.Field("lessThan", hydra.core.Term.unit)))
+  case hydra.query.ComparisonConstraint.greaterThan => hydra.core.Term.union(hydra.core.Injection("hydra.query.ComparisonConstraint", hydra.core.Field("greaterThan", hydra.core.Term.unit)))
+  case hydra.query.ComparisonConstraint.lessThanOrEqual => hydra.core.Term.union(hydra.core.Injection("hydra.query.ComparisonConstraint", hydra.core.Field("lessThanOrEqual", hydra.core.Term.unit)))
+  case hydra.query.ComparisonConstraint.greaterThanOrEqual => hydra.core.Term.union(hydra.core.Injection("hydra.query.ComparisonConstraint", hydra.core.Field("greaterThanOrEqual", hydra.core.Term.unit)))
 
 def edge(x: hydra.query.Edge): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.query.Edge", Seq(hydra.core.Field("type", hydra.encode.core.name(x.`type`)), hydra.core.Field("out", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.core.Name, hydra.core.Term](hydra.encode.core.name)(x.out))), hydra.core.Field("in", hydra.core.Term.maybe(hydra.lib.maybes.map[hydra.core.Name, hydra.core.Term](hydra.encode.core.name)(x.in))))))
@@ -27,7 +27,7 @@ def node(v1: hydra.query.Node): hydra.core.Term =
   v1 match
   case hydra.query.Node.term(v_Node_term_y) => hydra.core.Term.union(hydra.core.Injection("hydra.query.Node", hydra.core.Field("term", hydra.encode.core.term(v_Node_term_y))))
   case hydra.query.Node.variable(v_Node_variable_y) => hydra.core.Term.union(hydra.core.Injection("hydra.query.Node", hydra.core.Field("variable", hydra.encode.query.variable(v_Node_variable_y))))
-  case hydra.query.Node.wildcard() => hydra.core.Term.union(hydra.core.Injection("hydra.query.Node", hydra.core.Field("wildcard", hydra.core.Term.unit)))
+  case hydra.query.Node.wildcard => hydra.core.Term.union(hydra.core.Injection("hydra.query.Node", hydra.core.Field("wildcard", hydra.core.Term.unit)))
 
 def path(v1: hydra.query.Path): hydra.core.Term =
   v1 match
@@ -57,10 +57,10 @@ def range(x: hydra.query.Range): hydra.core.Term =
 
 def regexQuantifier(v1: hydra.query.RegexQuantifier): hydra.core.Term =
   v1 match
-  case hydra.query.RegexQuantifier.one() => hydra.core.Term.union(hydra.core.Injection("hydra.query.RegexQuantifier", hydra.core.Field("one", hydra.core.Term.unit)))
-  case hydra.query.RegexQuantifier.zeroOrOne() => hydra.core.Term.union(hydra.core.Injection("hydra.query.RegexQuantifier", hydra.core.Field("zeroOrOne", hydra.core.Term.unit)))
-  case hydra.query.RegexQuantifier.zeroOrMore() => hydra.core.Term.union(hydra.core.Injection("hydra.query.RegexQuantifier", hydra.core.Field("zeroOrMore", hydra.core.Term.unit)))
-  case hydra.query.RegexQuantifier.oneOrMore() => hydra.core.Term.union(hydra.core.Injection("hydra.query.RegexQuantifier", hydra.core.Field("oneOrMore", hydra.core.Term.unit)))
+  case hydra.query.RegexQuantifier.one => hydra.core.Term.union(hydra.core.Injection("hydra.query.RegexQuantifier", hydra.core.Field("one", hydra.core.Term.unit)))
+  case hydra.query.RegexQuantifier.zeroOrOne => hydra.core.Term.union(hydra.core.Injection("hydra.query.RegexQuantifier", hydra.core.Field("zeroOrOne", hydra.core.Term.unit)))
+  case hydra.query.RegexQuantifier.zeroOrMore => hydra.core.Term.union(hydra.core.Injection("hydra.query.RegexQuantifier", hydra.core.Field("zeroOrMore", hydra.core.Term.unit)))
+  case hydra.query.RegexQuantifier.oneOrMore => hydra.core.Term.union(hydra.core.Injection("hydra.query.RegexQuantifier", hydra.core.Field("oneOrMore", hydra.core.Term.unit)))
   case hydra.query.RegexQuantifier.exactly(v_RegexQuantifier_exactly_y) => hydra.core.Term.union(hydra.core.Injection("hydra.query.RegexQuantifier", hydra.core.Field("exactly", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(v_RegexQuantifier_exactly_y))))))
   case hydra.query.RegexQuantifier.atLeast(v_RegexQuantifier_atLeast_y) => hydra.core.Term.union(hydra.core.Injection("hydra.query.RegexQuantifier", hydra.core.Field("atLeast", hydra.core.Term.literal(hydra.core.Literal.integer(hydra.core.IntegerValue.int32(v_RegexQuantifier_atLeast_y))))))
   case hydra.query.RegexQuantifier.range(v_RegexQuantifier_range_y) => hydra.core.Term.union(hydra.core.Injection("hydra.query.RegexQuantifier", hydra.core.Field("range", hydra.encode.query.range(v_RegexQuantifier_range_y))))

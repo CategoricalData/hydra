@@ -49,7 +49,7 @@ def valueToExpr(value: hydra.json.model.Value): hydra.ast.Expr =
   value match
   case hydra.json.model.Value.array(v_Value_array_arr) => hydra.serialization.bracketListAdaptive(hydra.lib.lists.map[hydra.json.model.Value, hydra.ast.Expr](hydra.json.writer.valueToExpr)(v_Value_array_arr))
   case hydra.json.model.Value.boolean(v_Value_boolean_b) => hydra.serialization.cst(hydra.lib.logic.ifElse[scala.Predef.String](v_Value_boolean_b)("true")("false"))
-  case hydra.json.model.Value.`null`() => hydra.serialization.cst("null")
+  case hydra.json.model.Value.`null` => hydra.serialization.cst("null")
   case hydra.json.model.Value.number(v_Value_number_n) => {
     lazy val rounded: BigInt = hydra.lib.literals.bigfloatToBigint(v_Value_number_n)
     hydra.serialization.cst(hydra.lib.logic.ifElse[scala.Predef.String](hydra.lib.equality.equal[BigDecimal](v_Value_number_n)(hydra.lib.literals.bigintToBigfloat(rounded)))(hydra.lib.literals.showBigint(rounded))(hydra.lib.literals.showBigfloat(v_Value_number_n)))

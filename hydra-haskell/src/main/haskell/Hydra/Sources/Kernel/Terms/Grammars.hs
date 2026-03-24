@@ -131,7 +131,7 @@ grammarToModule = define "grammarToModule" $
     ("pair" ~>
       "lname" <~ Pairs.first (var "pair") $
       "elName" <~ toName @@ var "ns" @@ var "lname" $
-      "typ" <~ replacePlaceholders @@ var "elName" @@ (wrapType @@ (Pairs.second (var "pair"))) $
+      "typ" <~ wrapType @@ (Pairs.second (var "pair")) $
       Module.definitionType (Module.typeDefinition (var "elName") (var "typ")))
     (var "elementPairs") $
   Module.module_ (var "ns")
@@ -242,6 +242,7 @@ toName = define "toName" $
   doc "Convert local name to qualified name" $
   "ns" ~> "local" ~>
   Names.unqualifyName @@ (Module.qualifiedName (just (var "ns")) (var "local"))
+
 
 replacePlaceholders :: TBinding (Name -> Type -> Type)
 replacePlaceholders = define "replacePlaceholders" $

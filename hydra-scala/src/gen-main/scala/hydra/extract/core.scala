@@ -378,7 +378,7 @@ def unionType[T0](cx: hydra.context.Context)(ename: T0)(typ: hydra.core.Type): E
 
 def unit(cx: hydra.context.Context)(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error], Unit] =
   term match
-  case hydra.core.Term.unit() => Right(())
+  case hydra.core.Term.unit => Right(())
   case _ => Left(hydra.context.InContext(hydra.errors.Error.other(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ")("unit"))(" but found "))(hydra.show.core.term(term))), cx))
 
 def unitVariant(cx: hydra.context.Context)(tname: hydra.core.Name)(graph: hydra.graph.Graph)(term: hydra.core.Term): Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Name] =

@@ -251,9 +251,9 @@ writePat pat =
       Syntax.PatExtract v0 ->
         let fun = Syntax.pat_ExtractFun v0
             args = Syntax.pat_ExtractArgs v0
-        in (Serialization.noSep [
+        in (Logic.ifElse (Lists.null args) (writeTerm fun) (Serialization.noSep [
           writeTerm fun,
-          (Serialization.parenList False (Lists.map writePat args))])
+          (Serialization.parenList False (Lists.map writePat args))]))
       Syntax.PatVar v0 -> writeData_Name (Syntax.pat_VarName v0)
       Syntax.PatWildcard -> Serialization.cst "_"
 

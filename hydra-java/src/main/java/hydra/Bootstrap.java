@@ -125,7 +125,7 @@ public class Bootstrap {
 
         int totalBindings = 0;
         for (Module m : mainMods) {
-            totalBindings += m.elements.size();
+            totalBindings += m.definitions.size();
         }
         System.out.println("  Loaded " + mainMods.size() + " modules (" + totalBindings + " bindings).");
         System.out.println("  Time: " + formatTime(stepTime));
@@ -258,7 +258,7 @@ public class Bootstrap {
 
             int testBindings = 0;
             for (Module m : testMods) {
-                testBindings += m.elements.size();
+                testBindings += m.definitions.size();
             }
             System.out.println("  Loaded " + testMods.size() + " test modules (" + testBindings + " bindings).");
             System.out.println("  Time: " + formatTime(stepTime));

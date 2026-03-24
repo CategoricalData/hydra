@@ -879,8 +879,7 @@ insertBranchVar = def "insertBranchVar" $
             project JavaHelpers._Aliases JavaHelpers._Aliases_typeVarSubst @@ var "aliases",
           JavaHelpers._Aliases_trustedTypeVars>>:
             project JavaHelpers._Aliases JavaHelpers._Aliases_trustedTypeVars @@ var "aliases",
-          JavaHelpers._Aliases_methodCodomain>>:
-            project JavaHelpers._Aliases JavaHelpers._Aliases_methodCodomain @@ var "aliases",
+          JavaHelpers._Aliases_methodCodomain>>: nothing,
           JavaHelpers._Aliases_thunkedVars>>:
             project JavaHelpers._Aliases JavaHelpers._Aliases_thunkedVars @@ var "aliases"],
       JavaHelpers._JavaEnvironment_graph>>:
@@ -4321,7 +4320,9 @@ encodeElimination = def "encodeElimination" $
           (lambda "jarg" $
             "prim" <~ (JavaUtilsSource.javaExpressionToJavaPrimary @@ var "jarg") $
             "consId" <~ (innerClassRef @@ var "aliases" @@ var "tname" @@ asTerm JavaNamesSource.partialVisitorName) $
-            "effectiveCod" <~ (var "cod") $
+            -- Use methodCodomain when available (cleared in inner lambdas)
+            "effectiveCod" <~ Maybes.maybe (var "cod") ("mc" ~> var "mc")
+              (project JavaHelpers._Aliases JavaHelpers._Aliases_methodCodomain @@ var "aliases") $
             "jcod" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "effectiveCod" @@ var "cx" @@ var "g") $
             "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jcod" @@ var "cx") $
             "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ var "dom" @@ var "cx" @@ var "g") $

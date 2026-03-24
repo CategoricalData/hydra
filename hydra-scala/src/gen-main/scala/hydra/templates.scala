@@ -36,32 +36,32 @@ def instantiateTemplate(cx: hydra.context.Context)(minimal: Boolean)(schema: Map
     Left(hydra.context.InContext(hydra.errors.Error.other("Polymorphic and function types are not currently supported"), cx))
   def forFloat(ft: hydra.core.FloatType): hydra.core.FloatValue =
     ft match
-    case hydra.core.FloatType.bigfloat() => hydra.core.FloatValue.bigfloat(BigDecimal(0.0))
-    case hydra.core.FloatType.float32() => hydra.core.FloatValue.float32(0.0f)
-    case hydra.core.FloatType.float64() => hydra.core.FloatValue.float64(0.0)
+    case hydra.core.FloatType.bigfloat => hydra.core.FloatValue.bigfloat(BigDecimal(0.0))
+    case hydra.core.FloatType.float32 => hydra.core.FloatValue.float32(0.0f)
+    case hydra.core.FloatType.float64 => hydra.core.FloatValue.float64(0.0)
   def forInteger(it: hydra.core.IntegerType): hydra.core.IntegerValue =
     it match
-    case hydra.core.IntegerType.bigint() => hydra.core.IntegerValue.bigint(BigInt(0L))
-    case hydra.core.IntegerType.int8() => hydra.core.IntegerValue.int8(0.toByte)
-    case hydra.core.IntegerType.int16() => hydra.core.IntegerValue.int16(0.toShort)
-    case hydra.core.IntegerType.int32() => hydra.core.IntegerValue.int32(0)
-    case hydra.core.IntegerType.int64() => hydra.core.IntegerValue.int64(0L)
-    case hydra.core.IntegerType.uint8() => hydra.core.IntegerValue.uint8(0.toByte)
-    case hydra.core.IntegerType.uint16() => hydra.core.IntegerValue.uint16(0)
-    case hydra.core.IntegerType.uint32() => hydra.core.IntegerValue.uint32(0L)
-    case hydra.core.IntegerType.uint64() => hydra.core.IntegerValue.uint64(BigInt(0L))
+    case hydra.core.IntegerType.bigint => hydra.core.IntegerValue.bigint(BigInt(0L))
+    case hydra.core.IntegerType.int8 => hydra.core.IntegerValue.int8(0.toByte)
+    case hydra.core.IntegerType.int16 => hydra.core.IntegerValue.int16(0.toShort)
+    case hydra.core.IntegerType.int32 => hydra.core.IntegerValue.int32(0)
+    case hydra.core.IntegerType.int64 => hydra.core.IntegerValue.int64(0L)
+    case hydra.core.IntegerType.uint8 => hydra.core.IntegerValue.uint8(0.toByte)
+    case hydra.core.IntegerType.uint16 => hydra.core.IntegerValue.uint16(0)
+    case hydra.core.IntegerType.uint32 => hydra.core.IntegerValue.uint32(0L)
+    case hydra.core.IntegerType.uint64 => hydra.core.IntegerValue.uint64(BigInt(0L))
   def forLiteral(lt: hydra.core.LiteralType): hydra.core.Literal =
     lt match
-    case hydra.core.LiteralType.binary() => hydra.core.Literal.string("")
-    case hydra.core.LiteralType.boolean() => hydra.core.Literal.boolean(false)
+    case hydra.core.LiteralType.binary => hydra.core.Literal.string("")
+    case hydra.core.LiteralType.boolean => hydra.core.Literal.boolean(false)
     case hydra.core.LiteralType.integer(v_LiteralType_integer_it) => hydra.core.Literal.integer(forInteger(v_LiteralType_integer_it))
     case hydra.core.LiteralType.float(v_LiteralType_float_ft) => hydra.core.Literal.float(forFloat(v_LiteralType_float_ft))
-    case hydra.core.LiteralType.string() => hydra.core.Literal.string("")
+    case hydra.core.LiteralType.string => hydra.core.Literal.string("")
   t match
     case hydra.core.Type.annotated(v_Type_annotated_at) => inst(tname)(v_Type_annotated_at.body)
-    case hydra.core.Type.application() => noPoly
-    case hydra.core.Type.function() => noPoly
-    case hydra.core.Type.forall() => noPoly
+    case hydra.core.Type.application(_) => noPoly
+    case hydra.core.Type.function(_) => noPoly
+    case hydra.core.Type.forall(_) => noPoly
     case hydra.core.Type.list(v_Type_list_et) => hydra.lib.logic.ifElse[Either[hydra.context.InContext[hydra.errors.Error], hydra.core.Term]](minimal)(Right(hydra.core.Term.list(Seq())))(hydra.lib.eithers.bind[hydra.context.InContext[hydra.errors.Error], hydra.core.Term, hydra.core.Term](inst(tname)(v_Type_list_et))((e: hydra.core.Term) => Right(hydra.core.Term.list(Seq(e)))))
     case hydra.core.Type.literal(v_Type_literal_lt) => Right(hydra.core.Term.literal(forLiteral(v_Type_literal_lt)))
     case hydra.core.Type.map(v_Type_map_mt) => {

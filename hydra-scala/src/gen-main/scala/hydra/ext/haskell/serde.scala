@@ -76,8 +76,8 @@ def constructorWithCommentsToExpr(consWithComments: hydra.ext.haskell.syntax.Con
 
 def dataOrNewtypeToExpr(kw: hydra.ext.haskell.syntax.DataOrNewtype): hydra.ast.Expr =
   kw match
-  case hydra.ext.haskell.syntax.DataOrNewtype.data() => hydra.serialization.cst("data")
-  case hydra.ext.haskell.syntax.DataOrNewtype.newtype() => hydra.serialization.cst("newtype")
+  case hydra.ext.haskell.syntax.DataOrNewtype.data => hydra.serialization.cst("data")
+  case hydra.ext.haskell.syntax.DataOrNewtype.newtype => hydra.serialization.cst("newtype")
 
 def declarationHeadToExpr(hd: hydra.ext.haskell.syntax.DeclarationHead): hydra.ast.Expr =
   hd match
@@ -262,7 +262,7 @@ def patternToExpr(pat: hydra.ext.haskell.syntax.Pattern): hydra.ast.Expr =
   case hydra.ext.haskell.syntax.Pattern.name(v_Pattern_name_name) => hydra.ext.haskell.serde.nameToExpr(v_Pattern_name_name)
   case hydra.ext.haskell.syntax.Pattern.parens(v_Pattern_parens_pat_) => hydra.serialization.parenthesize(hydra.ext.haskell.serde.patternToExpr(`v_Pattern_parens_pat_`))
   case hydra.ext.haskell.syntax.Pattern.tuple(v_Pattern_tuple_pats) => hydra.serialization.parenList(false)(hydra.lib.lists.map[hydra.ext.haskell.syntax.Pattern, hydra.ast.Expr](hydra.ext.haskell.serde.patternToExpr)(v_Pattern_tuple_pats))
-  case hydra.ext.haskell.syntax.Pattern.wildcard() => hydra.serialization.cst("_")
+  case hydra.ext.haskell.syntax.Pattern.wildcard => hydra.serialization.cst("_")
 
 def rightHandSideToExpr(rhs: hydra.ext.haskell.syntax.RightHandSide): hydra.ast.Expr = hydra.ext.haskell.serde.expressionToExpr(rhs)
 

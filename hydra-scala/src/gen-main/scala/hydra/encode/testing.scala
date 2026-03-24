@@ -19,8 +19,8 @@ def alphaConversionTestCase(x: hydra.testing.AlphaConversionTestCase): hydra.cor
 
 def evaluationStyle(v1: hydra.testing.EvaluationStyle): hydra.core.Term =
   v1 match
-  case hydra.testing.EvaluationStyle.eager() => hydra.core.Term.union(hydra.core.Injection("hydra.testing.EvaluationStyle", hydra.core.Field("eager", hydra.core.Term.unit)))
-  case hydra.testing.EvaluationStyle.`lazy`() => hydra.core.Term.union(hydra.core.Injection("hydra.testing.EvaluationStyle", hydra.core.Field("lazy", hydra.core.Term.unit)))
+  case hydra.testing.EvaluationStyle.eager => hydra.core.Term.union(hydra.core.Injection("hydra.testing.EvaluationStyle", hydra.core.Field("eager", hydra.core.Term.unit)))
+  case hydra.testing.EvaluationStyle.`lazy` => hydra.core.Term.union(hydra.core.Injection("hydra.testing.EvaluationStyle", hydra.core.Field("lazy", hydra.core.Term.unit)))
 
 def caseConversionTestCase(x: hydra.testing.CaseConversionTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.CaseConversionTestCase", Seq(hydra.core.Field("fromConvention", hydra.encode.util.caseConvention(x.fromConvention)), hydra.core.Field("toConvention", hydra.encode.util.caseConvention(x.toConvention)), hydra.core.Field("fromString", hydra.core.Term.literal(hydra.core.Literal.string(x.fromString))), hydra.core.Field("toString", hydra.core.Term.literal(hydra.core.Literal.string(x.`toString_`))))))
@@ -42,9 +42,9 @@ def flattenLetTermsTestCase(x: hydra.testing.FlattenLetTermsTestCase): hydra.cor
 
 def foldOperation(v1: hydra.testing.FoldOperation): hydra.core.Term =
   v1 match
-  case hydra.testing.FoldOperation.sumInt32Literals() => hydra.core.Term.union(hydra.core.Injection("hydra.testing.FoldOperation", hydra.core.Field("sumInt32Literals", hydra.core.Term.unit)))
-  case hydra.testing.FoldOperation.collectListLengths() => hydra.core.Term.union(hydra.core.Injection("hydra.testing.FoldOperation", hydra.core.Field("collectListLengths", hydra.core.Term.unit)))
-  case hydra.testing.FoldOperation.collectLabels() => hydra.core.Term.union(hydra.core.Injection("hydra.testing.FoldOperation", hydra.core.Field("collectLabels", hydra.core.Term.unit)))
+  case hydra.testing.FoldOperation.sumInt32Literals => hydra.core.Term.union(hydra.core.Injection("hydra.testing.FoldOperation", hydra.core.Field("sumInt32Literals", hydra.core.Term.unit)))
+  case hydra.testing.FoldOperation.collectListLengths => hydra.core.Term.union(hydra.core.Injection("hydra.testing.FoldOperation", hydra.core.Field("collectListLengths", hydra.core.Term.unit)))
+  case hydra.testing.FoldOperation.collectLabels => hydra.core.Term.union(hydra.core.Injection("hydra.testing.FoldOperation", hydra.core.Field("collectLabels", hydra.core.Term.unit)))
 
 def foldOverTermTestCase(x: hydra.testing.FoldOverTermTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.FoldOverTermTestCase", Seq(hydra.core.Field("input", hydra.encode.core.term(x.input)), hydra.core.Field("traversalOrder", hydra.encode.coders.traversalOrder(x.traversalOrder)), hydra.core.Field("operation", hydra.encode.testing.foldOperation(x.operation)), hydra.core.Field("output", hydra.encode.core.term(x.output)))))
@@ -54,10 +54,10 @@ def freeVariablesTestCase(x: hydra.testing.FreeVariablesTestCase): hydra.core.Te
 
 def hoistPredicate(v1: hydra.testing.HoistPredicate): hydra.core.Term =
   v1 match
-  case hydra.testing.HoistPredicate.caseStatements() => hydra.core.Term.union(hydra.core.Injection("hydra.testing.HoistPredicate", hydra.core.Field("caseStatements", hydra.core.Term.unit)))
-  case hydra.testing.HoistPredicate.applications() => hydra.core.Term.union(hydra.core.Injection("hydra.testing.HoistPredicate", hydra.core.Field("applications", hydra.core.Term.unit)))
-  case hydra.testing.HoistPredicate.lists() => hydra.core.Term.union(hydra.core.Injection("hydra.testing.HoistPredicate", hydra.core.Field("lists", hydra.core.Term.unit)))
-  case hydra.testing.HoistPredicate.nothing() => hydra.core.Term.union(hydra.core.Injection("hydra.testing.HoistPredicate", hydra.core.Field("nothing", hydra.core.Term.unit)))
+  case hydra.testing.HoistPredicate.caseStatements => hydra.core.Term.union(hydra.core.Injection("hydra.testing.HoistPredicate", hydra.core.Field("caseStatements", hydra.core.Term.unit)))
+  case hydra.testing.HoistPredicate.applications => hydra.core.Term.union(hydra.core.Injection("hydra.testing.HoistPredicate", hydra.core.Field("applications", hydra.core.Term.unit)))
+  case hydra.testing.HoistPredicate.lists => hydra.core.Term.union(hydra.core.Injection("hydra.testing.HoistPredicate", hydra.core.Field("lists", hydra.core.Term.unit)))
+  case hydra.testing.HoistPredicate.nothing => hydra.core.Term.union(hydra.core.Injection("hydra.testing.HoistPredicate", hydra.core.Field("nothing", hydra.core.Term.unit)))
 
 def hoistLetBindingsTestCase(x: hydra.testing.HoistLetBindingsTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.HoistLetBindingsTestCase", Seq(hydra.core.Field("input", hydra.encode.core.let(x.input)), hydra.core.Field("output", hydra.encode.core.let(x.output)))))
@@ -73,15 +73,15 @@ def hoistCaseStatementsTestCase(x: hydra.testing.HoistCaseStatementsTestCase): h
 
 def termRewriter(v1: hydra.testing.TermRewriter): hydra.core.Term =
   v1 match
-  case hydra.testing.TermRewriter.replaceFooWithBar() => hydra.core.Term.union(hydra.core.Injection("hydra.testing.TermRewriter", hydra.core.Field("replaceFooWithBar", hydra.core.Term.unit)))
-  case hydra.testing.TermRewriter.replaceInt32WithInt64() => hydra.core.Term.union(hydra.core.Injection("hydra.testing.TermRewriter", hydra.core.Field("replaceInt32WithInt64", hydra.core.Term.unit)))
+  case hydra.testing.TermRewriter.replaceFooWithBar => hydra.core.Term.union(hydra.core.Injection("hydra.testing.TermRewriter", hydra.core.Field("replaceFooWithBar", hydra.core.Term.unit)))
+  case hydra.testing.TermRewriter.replaceInt32WithInt64 => hydra.core.Term.union(hydra.core.Injection("hydra.testing.TermRewriter", hydra.core.Field("replaceInt32WithInt64", hydra.core.Term.unit)))
 
 def rewriteTermTestCase(x: hydra.testing.RewriteTermTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.RewriteTermTestCase", Seq(hydra.core.Field("input", hydra.encode.core.term(x.input)), hydra.core.Field("rewriter", hydra.encode.testing.termRewriter(x.rewriter)), hydra.core.Field("output", hydra.encode.core.term(x.output)))))
 
 def typeRewriter(v1: hydra.testing.TypeRewriter): hydra.core.Term =
   v1 match
-  case hydra.testing.TypeRewriter.replaceStringWithInt32() => hydra.core.Term.union(hydra.core.Injection("hydra.testing.TypeRewriter", hydra.core.Field("replaceStringWithInt32", hydra.core.Term.unit)))
+  case hydra.testing.TypeRewriter.replaceStringWithInt32 => hydra.core.Term.union(hydra.core.Injection("hydra.testing.TypeRewriter", hydra.core.Field("replaceStringWithInt32", hydra.core.Term.unit)))
 
 def rewriteTypeTestCase(x: hydra.testing.RewriteTypeTestCase): hydra.core.Term =
   hydra.core.Term.record(hydra.core.Record("hydra.testing.RewriteTypeTestCase", Seq(hydra.core.Field("input", hydra.encode.core.`type`(x.input)), hydra.core.Field("rewriter", hydra.encode.testing.typeRewriter(x.rewriter)), hydra.core.Field("output", hydra.encode.core.`type`(x.output)))))
